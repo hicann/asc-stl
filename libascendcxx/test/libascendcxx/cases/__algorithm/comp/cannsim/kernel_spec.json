@@ -1,0 +1,8 @@
+{
+  "dtype": "float",
+  "element_op_code": "out0_val = asc::std::__less{}(in0_val, in1_val) ? 1.0f : 0.0f;",
+  "gm_inputs": 2,
+  "gm_outputs": 1,
+  "golden_code": "expected0 = (in0_ref < in1_ref) ? 1.0f : 0.0f;",
+  "input_init": "h_in0[i] = static_cast<float>(i % 97) - 40.0f; h_in1[i] = static_cast<float>((i * 7) % 97) - 50.0f;"
+}

@@ -17,17 +17,17 @@ ColumnLimit: 120
 AccessModifierOffset: -4
 SortIncludes: false
 
-BreakBeforeBraces: Attach
+BreakBeforeBraces: Custom
 
 BraceWrapping:
   AfterCaseLabel: false
-  AfterClass: true
+  AfterClass: false
   AfterControlStatement: false
-  AfterEnum: true
+  AfterEnum: false
   AfterFunction: true
   AfterNamespace: false
-  AfterStruct: true
-  AfterUnion: true
+  AfterStruct: false
+  AfterUnion: false
   AfterExternBlock: false
   BeforeCatch: false
   BeforeElse: false
@@ -36,9 +36,9 @@ BraceWrapping:
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
 
-AlignAfterOpenBracket: AlwaysBreak
+AlignAfterOpenBracket: DontAlign
 AlignEscapedNewlines: Left
-AlignOperands: true
+AlignOperands: DontAlign
 AlignTrailingComments: true
 AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
@@ -47,6 +47,7 @@ AlwaysBreakTemplateDeclarations: true
 
 BinPackArguments: true
 BreakBeforeTernaryOperators: false
+ContinuationIndentWidth: 4
 SpacesBeforeTrailingComments: 2
 
 DerivePointerAlignment: false

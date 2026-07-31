@@ -35,4 +35,6 @@ CMAKE_BUILD_DIR="$(cmake_path "$BUILD_DIR")"
 
 cmake -S "$CMAKE_ROOT" -B "$CMAKE_BUILD_DIR" -DCMAKE_BUILD_TYPE=Release
 cmake --build "$CMAKE_BUILD_DIR"
-ctest --test-dir "$CMAKE_BUILD_DIR" --output-on-failure
+ctest --test-dir "$CMAKE_BUILD_DIR" \
+    -L "metadata|static-rules|header-host|semantic-host|affected-regression" \
+    --output-on-failure

@@ -18,7 +18,20 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-echo "Step 1: check clang-format"
+echo "Step 1: check canonical license headers"
+
+LICENSE_SOURCES="$({
+    git ls-files --cached --others --exclude-standard \
+        '*.c' '*.cc' '*.cpp' '*.cxx' '*.h' '*.hpp' '*.cuh' '*.py' '*.sh' '*.bash' '*.cmake' '*.cpp.in'
+    git ls-files --cached --others --exclude-standard -- 'CMakeLists.txt' '*/CMakeLists.txt' '*/__config'
+} 2>/dev/null | sort -u)"
+
+if [ -n "$LICENSE_SOURCES" ]; then
+    printf '%s\n' "$LICENSE_SOURCES" | xargs python3 scripts/add_license_header.py --check
+fi
+echo "canonical license headers passed"
+
+echo "Step 2: check clang-format"
 
 CLANG_FORMAT=""
 for version in 18 17 16 15 14; do
@@ -29,7 +42,11 @@ for version in 18 17 16 15 14; do
 done
 CLANG_FORMAT="${CLANG_FORMAT:-clang-format}"
 
-SOURCES="$(git ls-files '*.h' '*.hpp' '*.cuh' '*.cc' '*.cpp' '*.cxx' 2>/dev/null || true)"
+SOURCES="$({
+    git ls-files --cached --others --exclude-standard \
+        '*.h' '*.hpp' '*.cuh' '*.cc' '*.cpp' '*.cxx' '*.cpp.in'
+    git ls-files --cached --others --exclude-standard -- '*/__config'
+} 2>/dev/null | sort -u)"
 
 if [ -z "$SOURCES" ]; then
     echo "No C/C++ source files found; skip clang-format and cpplint."
@@ -41,14 +58,17 @@ if ! command -v "$CLANG_FORMAT" >/dev/null 2>&1; then
     exit 1
 fi
 
-echo "$SOURCES" | xargs "$CLANG_FORMAT" --dry-run --Werror
+printf '%s\n' "$SOURCES" | xargs "$CLANG_FORMAT" --dry-run --Werror
 echo "clang-format passed"
 
-echo "Step 2: check cpplint"
+echo "Step 3: check cpplint"
 if ! command -v cpplint >/dev/null 2>&1; then
     echo "Missing cpplint. Install it with: python -m pip install cpplint"
     exit 1
 fi
 
-echo "$SOURCES" | xargs cpplint --extensions=h,hpp,cuh,cc,cpp,cxx --quiet
+CPPLINT_SOURCES="$(printf '%s\n' "$SOURCES" | grep -E '\.(h|hpp|cuh|cc|cpp|cxx)$' || true)"
+if [ -n "$CPPLINT_SOURCES" ]; then
+    printf '%s\n' "$CPPLINT_SOURCES" | xargs cpplint --extensions=h,hpp,cuh,cc,cpp,cxx --quiet
+fi
 echo "cpplint passed"

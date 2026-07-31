@@ -19,7 +19,7 @@ repos:
         name: Add Apache-2.0 license header
         entry: python scripts/add_license_header.py
         language: system
-        files: \.(cpp|cc|cxx|h|hpp|cuh|py|sh|cmake)$|^CMakeLists\.txt$
+        files: \.(cpp|cc|cxx|h|hpp|cuh|py|sh|cmake|cpp\.in)$|(^|/)CMakeLists\.txt$|(^|/)__config$
         stages: [pre-commit]
 
       - id: asc-stl-style-check

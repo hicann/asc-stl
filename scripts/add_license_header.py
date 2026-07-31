@@ -14,12 +14,15 @@
 # limitations under the License.
 
 import argparse
-from pathlib import Path
 import logging
+from pathlib import Path
+import re
 
 
 SOURCE_SUFFIXES = {".c", ".cc", ".cpp", ".cxx", ".h", ".hpp", ".cuh"}
 SCRIPT_SUFFIXES = {".py", ".sh", ".bash", ".cmake"}
+EXTENSIONLESS_SOURCE_NAMES = {"__config"}
+SOURCE_TEMPLATE_SUFFIXES = (".cpp.in",)
 
 
 def read_author(root_dir: Path) -> str:
@@ -46,14 +49,18 @@ def plain_header(author: str) -> str:
 
 
 def has_license_header(text: str) -> bool:
-    return "Copyright 2026 EJaven" in text and "Apache License, Version 2.0" in text
+    return "Copyright 2026" in text and "Apache License, Version 2.0" in text
 
 
 def comment_header(text: str, path: Path) -> str:
     lines = text.splitlines()
     suffix = path.suffix.lower()
 
-    if suffix in SOURCE_SUFFIXES:
+    if (
+        suffix in SOURCE_SUFFIXES
+        or path.name in EXTENSIONLESS_SOURCE_NAMES
+        or path.name.endswith(SOURCE_TEMPLATE_SUFFIXES)
+    ):
         body = ["/*"]
         body.extend(f" * {line}" if line else " *" for line in lines)
         body.append(" */")
@@ -65,6 +72,64 @@ def comment_header(text: str, path: Path) -> str:
     return "\n".join(f"# {line}" if line else "#" for line in lines)
 
 
+def split_shebang(content: str, path: Path) -> tuple[str, str]:
+    if content.startswith("#!"):
+        first, separator, remainder = content.partition("\n")
+        return first + separator + "\n", remainder.lstrip("\n")
+    return "", content
+
+
+def strip_leading_license(content: str, path: Path) -> str:
+    suffix = path.suffix.lower()
+    if (
+        suffix in SOURCE_SUFFIXES
+        or path.name in EXTENSIONLESS_SOURCE_NAMES
+        or path.name.endswith(SOURCE_TEMPLATE_SUFFIXES)
+    ):
+        match = re.match(r"\A\s*(/\*.*?\*/\s*)", content, re.DOTALL)
+        if match and has_license_header(match.group(1)):
+            return content[match.end():].lstrip()
+        return content
+
+    lines = content.splitlines(keepends=True)
+    index = 0
+    while index < len(lines) and lines[index].startswith("#"):
+        index += 1
+    candidate = "".join(lines[:index])
+    return "".join(lines[index:]).lstrip() if has_license_header(candidate) else content
+
+
+def strip_leading_licenses(content: str, path: Path) -> str:
+    while True:
+        stripped = strip_leading_license(content, path)
+        if stripped == content:
+            return content
+        content = stripped
+
+
+def canonical_content(path: Path, content: str, header: str) -> str:
+    prefix, body = split_shebang(content, path)
+    wrapped = comment_header(header, path)
+    if body.startswith(wrapped):
+        remainder = body[len(wrapped):].lstrip()
+        cleaned = strip_leading_licenses(remainder, path)
+        if cleaned == remainder:
+            return content
+        body = cleaned
+    else:
+        body = strip_leading_licenses(body, path)
+    return prefix + wrapped + ("\n\n" if body.strip() else "") + body
+
+
+def has_canonical_header(path: Path, content: str, header: str) -> bool:
+    _, body = split_shebang(content, path)
+    wrapped = comment_header(header, path)
+    if not body.startswith(wrapped):
+        return False
+    remainder = body[len(wrapped):].lstrip()
+    return strip_leading_license(remainder, path) == remainder
+
+
 def add_header(path: Path, header: str) -> bool:
     if not path.exists() or not path.is_file():
         return False
@@ -74,38 +139,55 @@ def add_header(path: Path, header: str) -> bool:
     except UnicodeDecodeError:
         return False
 
-    if has_license_header(content):
+    new_content = canonical_content(path, content, header)
+    if new_content == content:
         return False
 
-    wrapped = comment_header(header, path)
-    if path.suffix == ".sh" and content.startswith("#!"):
-        lines = content.splitlines()
-        new_content = "\n".join([lines[0], "", wrapped, *lines[1:]])
-    else:
-        new_content = wrapped + ("\n\n" if content.strip() else "") + content
-
     path.write_text(new_content, encoding="utf-8")
+    return True
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Add asc-stl Apache-2.0 license headers.")
+    parser.add_argument("--check", action="store_true", help="Fail if any file lacks the canonical header.")
+    parser.add_argument("files", nargs="+")
+    return parser.parse_args()
+
+
+def check_header(path: Path, header: str, logger) -> bool:
+    try:
+        content = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        logger.error("Cannot inspect license header: %s", path)
+        return False
+    if has_canonical_header(path, content, header):
+        return True
+    logger.error("Non-canonical license header: %s", path)
+    return False
+
+
+def process_path(path: Path, header: str, check: bool, logger) -> bool:
+    if check:
+        return not check_header(path, header, logger)
+    if not add_header(path, header):
+        return False
+    logger.info("Normalized license header: %s", path)
     return True
 
 
 def main() -> int:
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
-
-    parser = argparse.ArgumentParser(description="Add asc-stl Apache-2.0 license headers.")
-    parser.add_argument("files", nargs="+")
-    args = parser.parse_args()
+    args = parse_args()
 
     root_dir = Path(__file__).resolve().parent.parent
     header = plain_header(read_author(root_dir))
+    changed = sum(process_path(Path(item), header, args.check, logger) for item in args.files)
 
-    changed = 0
-    for item in args.files:
-        if add_header(Path(item), header):
-            changed += 1
-            logger.info(f"Added license header: {item}")
-
-    logger.info(f"License header update complete, changed={changed}")
+    if args.check:
+        logger.info("License header check complete, errors=%d", changed)
+        return 1 if changed else 0
+    logger.info("License header update complete, changed=%d", changed)
     return 0
 
 

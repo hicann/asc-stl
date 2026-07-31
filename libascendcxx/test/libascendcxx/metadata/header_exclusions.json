@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "allowed_categories": [
+    "implementation_fragment",
+    "paired_header",
+    "generated_header",
+    "external_header",
+    "special_context"
+  ],
+  "exclusions": []
+}
