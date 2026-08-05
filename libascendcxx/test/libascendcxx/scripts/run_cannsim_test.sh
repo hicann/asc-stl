@@ -59,23 +59,47 @@ if [ "$CANNSIM_STATUS" -ne 0 ]; then
     exit 1
 fi
 
-mapfile -t CANNSIM_LOGS < <(find "$RESULT_DIR" -type f -name cannsim.log -print)
+mapfile -t CANNSIM_LOGS < <(
+    find "$RESULT_DIR" -type f \( -name cannsim.log -o -name npusim.log \) -print
+)
 if [ "${#CANNSIM_LOGS[@]}" -ne 1 ]; then
-    echo "Expected exactly one cannsim.log, found ${#CANNSIM_LOGS[@]}; results preserved at $RESULT_DIR" >&2
+    echo "Expected exactly one supported simulator log (cannsim.log or npusim.log), found ${#CANNSIM_LOGS[@]}; results preserved at $RESULT_DIR" >&2
     exit 1
 fi
 
-CANNSIM_LOG="${CANNSIM_LOGS[0]}"
-sed -n '1,240p' "$CANNSIM_LOG"
-if grep -Fq "Mismatch at" "$CANNSIM_LOG"; then
+SIMULATOR_LOG="${CANNSIM_LOGS[0]}"
+SIMULATOR_LOG_NAME="$(basename "$SIMULATOR_LOG")"
+sed -n '1,240p' "$SIMULATOR_LOG"
+if grep -Fq "Mismatch at" "$SIMULATOR_LOG"; then
     echo "Cannsim golden output mismatch; results preserved at $RESULT_DIR" >&2
     exit 1
 fi
-if ! grep -Fq "sendStarsSQE" "$CANNSIM_LOG"; then
-    echo "Cannsim log has no simulated kernel dispatch evidence; results preserved at $RESULT_DIR" >&2
-    exit 1
-fi
-PASS_MARKER_COUNT="$(grep -Fxc "$PASS_MARKER" "$CANNSIM_LOG" || true)"
+
+case "$SIMULATOR_LOG_NAME" in
+    cannsim.log)
+        if ! grep -Fq "sendStarsSQE" "$SIMULATOR_LOG"; then
+            echo "Cannsim log has no simulated kernel dispatch evidence; results preserved at $RESULT_DIR" >&2
+            exit 1
+        fi
+        PASS_MARKER_COUNT="$(grep -Fxc "$PASS_MARKER" "$SIMULATOR_LOG" || true)"
+        ;;
+    npusim.log)
+        if ! grep -Fq "sendStarsSQE" "$SIMULATOR_LOG"; then
+            echo "Npusim log has no simulated kernel dispatch evidence; results preserved at $RESULT_DIR" >&2
+            exit 1
+        fi
+        if ! grep -Fq "[TASK_BEGIN]" "$SIMULATOR_LOG"; then
+            echo "Npusim log has no simulated task begin evidence; results preserved at $RESULT_DIR" >&2
+            exit 1
+        fi
+        if ! grep -Fq "[TASK_DONE]" "$SIMULATOR_LOG"; then
+            echo "Npusim log has no completed simulated task evidence; results preserved at $RESULT_DIR" >&2
+            exit 1
+        fi
+        PASS_MARKER_COUNT="$(grep -Fo -- "$PASS_MARKER" "$SIMULATOR_LOG" | wc -l)"
+        ;;
+esac
+
 if [ "$PASS_MARKER_COUNT" -ne 1 ]; then
     echo "Expected one cannsim PASS marker, found $PASS_MARKER_COUNT; results preserved at $RESULT_DIR" >&2
     exit 1
