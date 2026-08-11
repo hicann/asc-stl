@@ -5,7 +5,7 @@
     "version": "3.5.0"
   },
   "migration_source": {
-    "checkout_commit": "894e5123a1f77e82ad49b1ee01be9785c2a6738b",
+    "checkout_commit": "f1b5e100b8c72101fa6e2dc5a40b89d649ee766d",
     "repository": "ASC_AGENT/repos/accl"
   },
   "runtime_backend": {
@@ -178,6 +178,152 @@
       }
     },
     {
+      "id": "execution_space",
+      "source": "libascendcxx/include/asc/std/__asc/execution_space.h",
+      "source_commit": "894e5123a1f77e82ad49b1ee01be9785c2a6738b",
+      "target": "asc/std/__asc/execution_space.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__cccl/execution_space.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__asc.execution_space",
+        "device_header": "header.device.__asc.execution_space"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": false,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "notes": "Internal execution-space layer; Host and CCE expansion is exercised through detail/__config.",
+      "gate_status": {
+        "G0": {
+          "status": "passed",
+          "evidence": "Metadata validation accepted execution_space provenance and its direct __config dependency on 2026-07-28."
+        },
+        "G1": {
+          "status": "passed",
+          "evidence": "License, gate.static-rules, clang-format, and cpplint passed locally on 2026-07-28."
+        },
+        "G2_host": {
+          "status": "passed",
+          "evidence": "header.host.__asc.execution_space passed on 2026-07-28."
+        },
+        "G2_device": {
+          "status": "passed",
+          "evidence": "header.device.__asc.execution_space passed with CANN Toolkit 9.0.0 and Ascend950PR_9599 on 2026-07-28."
+        },
+        "G3": {
+          "status": "not_applicable",
+          "evidence": "Execution-space macro infrastructure has no standalone Host runtime API."
+        },
+        "G4": {
+          "status": "not_applicable",
+          "evidence": "The Device-call contract is tested at the composed detail/__config layer."
+        },
+        "G5": {
+          "status": "not_applicable",
+          "evidence": "Execution-space macro infrastructure has no runtime behavior."
+        },
+        "G6": {
+          "status": "not_applicable",
+          "evidence": "This is internal configuration infrastructure."
+        },
+        "G7_host": {
+          "status": "passed",
+          "evidence": "All 15 Host affected-regression CTests passed locally on 2026-07-28."
+        },
+        "G7_device": {
+          "status": "passed",
+          "evidence": "All 14 Device compile CTests and all four cannsim CTests passed locally on 2026-07-28."
+        }
+      },
+      "last_validation": {
+        "date": "2026-07-28",
+        "result": "passed",
+        "notes": "Host/CCE execution-space layer passed header gates and the composed Device contract probe."
+      }
+    },
+    {
+      "id": "visibility",
+      "source": "libascendcxx/include/asc/std/__asc/visibility.h",
+      "source_commit": "894e5123a1f77e82ad49b1ee01be9785c2a6738b",
+      "target": "asc/std/__asc/visibility.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/__asc/execution_space.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__cccl/visibility.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__asc.visibility",
+        "device_header": "header.device.__asc.visibility"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": false,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "notes": "Internal API annotation layer; semantic expansion is exercised through detail/__config.",
+      "gate_status": {
+        "G0": {
+          "status": "passed",
+          "evidence": "Metadata validation accepted visibility provenance and its direct execution_space dependency on 2026-07-28."
+        },
+        "G1": {
+          "status": "passed",
+          "evidence": "License, gate.static-rules, clang-format, and cpplint passed locally on 2026-07-28."
+        },
+        "G2_host": {
+          "status": "passed",
+          "evidence": "header.host.__asc.visibility passed on 2026-07-28."
+        },
+        "G2_device": {
+          "status": "passed",
+          "evidence": "header.device.__asc.visibility passed with CANN Toolkit 9.0.0 and Ascend950PR_9599 on 2026-07-28."
+        },
+        "G3": {
+          "status": "not_applicable",
+          "evidence": "Visibility macro infrastructure has no standalone Host runtime API."
+        },
+        "G4": {
+          "status": "not_applicable",
+          "evidence": "The _ASC_API Device-call contract is tested at the composed detail/__config layer."
+        },
+        "G5": {
+          "status": "not_applicable",
+          "evidence": "Visibility macro infrastructure has no runtime behavior."
+        },
+        "G6": {
+          "status": "not_applicable",
+          "evidence": "This is internal configuration infrastructure."
+        },
+        "G7_host": {
+          "status": "passed",
+          "evidence": "All 15 Host affected-regression CTests passed locally on 2026-07-28."
+        },
+        "G7_device": {
+          "status": "passed",
+          "evidence": "All 14 Device compile CTests and all four cannsim CTests passed locally on 2026-07-28."
+        }
+      },
+      "last_validation": {
+        "date": "2026-07-28",
+        "result": "passed",
+        "notes": "The _ASC_API definition passed Host/Device header gates and the composed Device contract probe."
+      }
+    },
+    {
       "id": "blsr",
       "source": "libascendcxx/include/asc/std/__bit/blsr.h",
       "target": "asc/std/__bit/blsr.h",
@@ -328,226 +474,64 @@
       }
     },
     {
-      "id": "execution_space",
-      "source": "libascendcxx/include/asc/std/__asc/execution_space.h",
-      "source_commit": "894e5123a1f77e82ad49b1ee01be9785c2a6738b",
-      "target": "asc/std/__asc/execution_space.h",
+      "id": "always_false",
+      "source": "libascendcxx/include/asc/std/__type_traits/always_false.h",
+      "target": "asc/std/__type_traits/always_false.h",
       "kind": "internal",
       "dependencies": [
         "asc/std/__config"
       ],
       "apis": [],
-      "upstream": "libcudacxx/include/cuda/std/__cccl/execution_space.h",
+      "upstream": "libcudacxx/include/cuda/std/__type_traits/always_false.h",
       "upstream_tests": [],
       "tests": {
-        "host_header": "header.host.__asc.execution_space",
-        "device_header": "header.device.__asc.execution_space"
-      },
-      "applicability": {
-        "host_header": true,
-        "host_semantic": false,
-        "device_header": true,
-        "device_compile": false,
-        "cannsim_runtime": false,
-        "public_aggregation": false
-      },
-      "notes": "Internal execution-space layer; Host and CCE expansion is exercised through detail/__config.",
-      "gate_status": {
-        "G0": {
-          "status": "passed",
-          "evidence": "Metadata validation accepted execution_space provenance and its direct __config dependency on 2026-07-28."
-        },
-        "G1": {
-          "status": "passed",
-          "evidence": "License, gate.static-rules, clang-format, and cpplint passed locally on 2026-07-28."
-        },
-        "G2_host": {
-          "status": "passed",
-          "evidence": "header.host.__asc.execution_space passed on 2026-07-28."
-        },
-        "G2_device": {
-          "status": "passed",
-          "evidence": "header.device.__asc.execution_space passed with CANN Toolkit 9.0.0 and Ascend950PR_9599 on 2026-07-28."
-        },
-        "G3": {
-          "status": "not_applicable",
-          "evidence": "Execution-space macro infrastructure has no standalone Host runtime API."
-        },
-        "G4": {
-          "status": "not_applicable",
-          "evidence": "The Device-call contract is tested at the composed detail/__config layer."
-        },
-        "G5": {
-          "status": "not_applicable",
-          "evidence": "Execution-space macro infrastructure has no runtime behavior."
-        },
-        "G6": {
-          "status": "not_applicable",
-          "evidence": "This is internal configuration infrastructure."
-        },
-        "G7_host": {
-          "status": "passed",
-          "evidence": "All 15 Host affected-regression CTests passed locally on 2026-07-28."
-        },
-        "G7_device": {
-          "status": "passed",
-          "evidence": "All 14 Device compile CTests and all four cannsim CTests passed locally on 2026-07-28."
-        }
-      },
-      "last_validation": {
-        "date": "2026-07-28",
-        "result": "passed",
-        "notes": "Host/CCE execution-space layer passed header gates and the composed Device contract probe."
-      }
-    },
-    {
-      "id": "visibility",
-      "source": "libascendcxx/include/asc/std/__asc/visibility.h",
-      "source_commit": "894e5123a1f77e82ad49b1ee01be9785c2a6738b",
-      "target": "asc/std/__asc/visibility.h",
-      "kind": "internal",
-      "dependencies": [
-        "asc/std/__asc/execution_space.h"
-      ],
-      "apis": [],
-      "upstream": "libcudacxx/include/cuda/std/__cccl/visibility.h",
-      "upstream_tests": [],
-      "tests": {
-        "host_header": "header.host.__asc.visibility",
-        "device_header": "header.device.__asc.visibility"
-      },
-      "applicability": {
-        "host_header": true,
-        "host_semantic": false,
-        "device_header": true,
-        "device_compile": false,
-        "cannsim_runtime": false,
-        "public_aggregation": false
-      },
-      "notes": "Internal API annotation layer; semantic expansion is exercised through detail/__config.",
-      "gate_status": {
-        "G0": {
-          "status": "passed",
-          "evidence": "Metadata validation accepted visibility provenance and its direct execution_space dependency on 2026-07-28."
-        },
-        "G1": {
-          "status": "passed",
-          "evidence": "License, gate.static-rules, clang-format, and cpplint passed locally on 2026-07-28."
-        },
-        "G2_host": {
-          "status": "passed",
-          "evidence": "header.host.__asc.visibility passed on 2026-07-28."
-        },
-        "G2_device": {
-          "status": "passed",
-          "evidence": "header.device.__asc.visibility passed with CANN Toolkit 9.0.0 and Ascend950PR_9599 on 2026-07-28."
-        },
-        "G3": {
-          "status": "not_applicable",
-          "evidence": "Visibility macro infrastructure has no standalone Host runtime API."
-        },
-        "G4": {
-          "status": "not_applicable",
-          "evidence": "The _ASC_API Device-call contract is tested at the composed detail/__config layer."
-        },
-        "G5": {
-          "status": "not_applicable",
-          "evidence": "Visibility macro infrastructure has no runtime behavior."
-        },
-        "G6": {
-          "status": "not_applicable",
-          "evidence": "This is internal configuration infrastructure."
-        },
-        "G7_host": {
-          "status": "passed",
-          "evidence": "All 15 Host affected-regression CTests passed locally on 2026-07-28."
-        },
-        "G7_device": {
-          "status": "passed",
-          "evidence": "All 14 Device compile CTests and all four cannsim CTests passed locally on 2026-07-28."
-        }
-      },
-      "last_validation": {
-        "date": "2026-07-28",
-        "result": "passed",
-        "notes": "The _ASC_API definition passed Host/Device header gates and the composed Device contract probe."
-      }
-    },
-    {
-      "id": "detail_config",
-      "source": "libascendcxx/include/asc/std/detail/__config",
-      "source_commit": "894e5123a1f77e82ad49b1ee01be9785c2a6738b",
-      "target": "asc/std/detail/__config",
-      "kind": "internal",
-      "dependencies": [
-        "asc/std/__config",
-        "asc/std/__asc/visibility.h"
-      ],
-      "apis": [],
-      "upstream": "libcudacxx/include/cuda/std/detail/__config",
-      "upstream_tests": [],
-      "tests": {
-        "host_header": "header.host.detail.__config",
-        "host_semantic": "semantic.host.detail.__config",
-        "device_header": "header.device.detail.__config",
-        "device_compile": "semantic.device.detail.__config"
+        "host_header": "header.host.__type_traits.always_false",
+        "host_semantic": "semantic.host.__type_traits.always_false",
+        "device_header": "header.device.__type_traits.always_false"
       },
       "applicability": {
         "host_header": true,
         "host_semantic": true,
         "device_header": true,
-        "device_compile": true,
+        "device_compile": false,
         "cannsim_runtime": false,
         "public_aggregation": false
       },
-      "notes": "Canonical configuration entry for ordinary migrated headers; probes verify _ASC_API on Host and CCE.",
-      "gate_status": {
-        "G0": {
-          "status": "passed",
-          "evidence": "Metadata validation accepted detail_config provenance, direct dependencies, applicability, and canonical probes on 2026-07-28."
-        },
-        "G1": {
-          "status": "passed",
-          "evidence": "License, gate.static-rules, clang-format, and cpplint passed locally on 2026-07-28."
-        },
-        "G2_host": {
-          "status": "passed",
-          "evidence": "header.host.detail.__config passed on 2026-07-28."
-        },
-        "G2_device": {
-          "status": "passed",
-          "evidence": "header.device.detail.__config passed with CANN Toolkit 9.0.0 and Ascend950PR_9599 on 2026-07-28."
-        },
-        "G3": {
-          "status": "passed",
-          "evidence": "semantic.host.detail.__config proved _ASC_API remains constexpr-callable on Host on 2026-07-28."
-        },
-        "G4": {
-          "status": "passed",
-          "evidence": "semantic.device.detail.__config proved an _ASC_API function is callable from an __aicore__ kernel on 2026-07-28."
-        },
-        "G5": {
-          "status": "not_applicable",
-          "evidence": "The configuration entry has compile-time execution-space semantics but no standalone runtime result."
-        },
-        "G6": {
-          "status": "not_applicable",
-          "evidence": "This is internal configuration infrastructure."
-        },
-        "G7_host": {
-          "status": "passed",
-          "evidence": "All 15 Host affected-regression CTests passed locally on 2026-07-28."
-        },
-        "G7_device": {
-          "status": "passed",
-          "evidence": "All 14 Device compile CTests and all four cannsim CTests passed locally on 2026-07-28."
-        }
+      "delivery": {
+        "header_id": "HDR-6778080d709a59e2",
+        "progress_id": "PRG-1d7db6d14d1c220a"
       },
-      "last_validation": {
-        "date": "2026-07-28",
-        "result": "passed",
-        "notes": "Canonical _ASC_API entry passed Host constexpr and real CCE Device-call probes plus full affected regression."
-      }
+      "source_commit": "f1b5e100b8c72101fa6e2dc5a40b89d649ee766d"
+    },
+    {
+      "id": "dependent_type",
+      "source": "libascendcxx/include/asc/std/__type_traits/dependent_type.h",
+      "target": "asc/std/__type_traits/dependent_type.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__type_traits/dependent_type.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__type_traits.dependent_type",
+        "host_semantic": "semantic.host.__type_traits.dependent_type",
+        "device_header": "header.device.__type_traits.dependent_type"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "delivery": {
+        "header_id": "HDR-4cca34047afd97d7",
+        "progress_id": "PRG-da703a34c35505a5"
+      },
+      "source_commit": "f1b5e100b8c72101fa6e2dc5a40b89d649ee766d"
     },
     {
       "id": "integral_constant",
@@ -706,6 +690,172 @@
         "date": "2026-07-28",
         "result": "passed",
         "notes": "Layered _ASC_API configuration revalidation passed: Host 15/15, Device compile 14/14, and cannsim 4/4; G5 remains not applicable to this compile-time trait."
+      }
+    },
+    {
+      "id": "lazy",
+      "source": "libascendcxx/include/asc/std/__type_traits/lazy.h",
+      "target": "asc/std/__type_traits/lazy.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__type_traits/lazy.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__type_traits.lazy",
+        "host_semantic": "semantic.host.__type_traits.lazy",
+        "device_header": "header.device.__type_traits.lazy"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "delivery": {
+        "header_id": "HDR-872db9799db49252",
+        "progress_id": "PRG-25461c3432b4dc55"
+      },
+      "source_commit": "f1b5e100b8c72101fa6e2dc5a40b89d649ee766d"
+    },
+    {
+      "id": "nat",
+      "source": "libascendcxx/include/asc/std/__type_traits/nat.h",
+      "target": "asc/std/__type_traits/nat.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__type_traits/nat.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__type_traits.nat",
+        "host_semantic": "semantic.host.__type_traits.nat",
+        "device_header": "header.device.__type_traits.nat"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "delivery": {
+        "header_id": "HDR-9529b1c787a81fa3",
+        "progress_id": "PRG-a861638c4f1bf863"
+      },
+      "source_commit": "f1b5e100b8c72101fa6e2dc5a40b89d649ee766d"
+    },
+    {
+      "id": "undefined",
+      "source": "libascendcxx/include/asc/std/__utility/undefined.h",
+      "target": "asc/std/__utility/undefined.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__utility/undefined.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__utility.undefined",
+        "host_semantic": "semantic.host.__utility.undefined",
+        "device_header": "header.device.__utility.undefined"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "delivery": {
+        "header_id": "HDR-ad34370cbf0917f6",
+        "progress_id": "PRG-ad679ea9971c0cb8"
+      },
+      "source_commit": "f1b5e100b8c72101fa6e2dc5a40b89d649ee766d"
+    },
+    {
+      "id": "detail_config",
+      "source": "libascendcxx/include/asc/std/detail/__config",
+      "source_commit": "894e5123a1f77e82ad49b1ee01be9785c2a6738b",
+      "target": "asc/std/detail/__config",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/__config",
+        "asc/std/__asc/visibility.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/detail/__config",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.detail.__config",
+        "host_semantic": "semantic.host.detail.__config",
+        "device_header": "header.device.detail.__config",
+        "device_compile": "semantic.device.detail.__config"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "notes": "Canonical configuration entry for ordinary migrated headers; probes verify _ASC_API on Host and CCE.",
+      "gate_status": {
+        "G0": {
+          "status": "passed",
+          "evidence": "Metadata validation accepted detail_config provenance, direct dependencies, applicability, and canonical probes on 2026-07-28."
+        },
+        "G1": {
+          "status": "passed",
+          "evidence": "License, gate.static-rules, clang-format, and cpplint passed locally on 2026-07-28."
+        },
+        "G2_host": {
+          "status": "passed",
+          "evidence": "header.host.detail.__config passed on 2026-07-28."
+        },
+        "G2_device": {
+          "status": "passed",
+          "evidence": "header.device.detail.__config passed with CANN Toolkit 9.0.0 and Ascend950PR_9599 on 2026-07-28."
+        },
+        "G3": {
+          "status": "passed",
+          "evidence": "semantic.host.detail.__config proved _ASC_API remains constexpr-callable on Host on 2026-07-28."
+        },
+        "G4": {
+          "status": "passed",
+          "evidence": "semantic.device.detail.__config proved an _ASC_API function is callable from an __aicore__ kernel on 2026-07-28."
+        },
+        "G5": {
+          "status": "not_applicable",
+          "evidence": "The configuration entry has compile-time execution-space semantics but no standalone runtime result."
+        },
+        "G6": {
+          "status": "not_applicable",
+          "evidence": "This is internal configuration infrastructure."
+        },
+        "G7_host": {
+          "status": "passed",
+          "evidence": "All 15 Host affected-regression CTests passed locally on 2026-07-28."
+        },
+        "G7_device": {
+          "status": "passed",
+          "evidence": "All 14 Device compile CTests and all four cannsim CTests passed locally on 2026-07-28."
+        }
+      },
+      "last_validation": {
+        "date": "2026-07-28",
+        "result": "passed",
+        "notes": "Canonical _ASC_API entry passed Host constexpr and real CCE Device-call probes plus full affected regression."
       }
     }
   ]
