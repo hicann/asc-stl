@@ -29,8 +29,10 @@ ALLOWED_STATUSES = {
     "not_run",
 }
 FORBIDDEN_HEADER_PATTERNS = {
-    "cuda::std": re.compile(r"cuda::std"),
-    "cuda/std include": re.compile(r"[<\"]cuda/std/"),
+    "CUDA namespace": re.compile(r"\bcuda::"),
+    "CUDA include": re.compile(r"[<\"]cuda/"),
+    "NVIDIA namespace": re.compile(r"\bnv::"),
+    "NVIDIA include": re.compile(r"[<\"]nv/"),
     "CCCL macro": re.compile(r"\b_CCCL_[A-Za-z0-9_]*"),
     "libcudacxx macro": re.compile(r"\b_LIBCUDACXX_[A-Za-z0-9_]*"),
     "retired ascend namespace": re.compile(r"ascend::std"),
@@ -90,11 +92,36 @@ def add_unique(value, seen, label, errors):
     seen.add(value)
 
 
+def is_valid_target_api(api: str):
+    if api.startswith("asc::std::"):
+        return len(api) > len("asc::std::")
+    if api.startswith("asc::"):
+        return len(api) > len("asc::")
+    if api.startswith("hw::"):
+        return len(api) > len("hw::")
+    return re.fullmatch(
+        r"(?:[A-Z][A-Z0-9_]*|assert|offsetof|__accl_lib_<[A-Za-z0-9_]+>)",
+        api,
+    ) is not None
+
+
 def get_case_identity(target: str):
-    case_relative = target.removeprefix("asc/std/")
-    if case_relative.endswith(".h"):
-        case_relative = case_relative[:-2]
-    return case_relative, case_relative.replace("/", ".")
+    for prefix, public_group, internal_group in (
+        ("asc/std/", "public", None),
+        ("asc/", "public_entry", "extension"),
+        ("hw/", "public_entry", "hw"),
+    ):
+        if not target.startswith(prefix):
+            continue
+        case_relative = target.removeprefix(prefix)
+        if case_relative.endswith(".h"):
+            case_relative = case_relative[:-2]
+        if "/" not in case_relative and not case_relative.startswith("_"):
+            case_relative = f"{public_group}/{case_relative}"
+        elif internal_group:
+            case_relative = f"{internal_group}/{case_relative}"
+        return case_relative, case_relative.replace("/", ".")
+    raise ValueError(f"unsupported ASC-STL header domain: {target}")
 
 
 def validate_required_infrastructure(test_root: Path, errors):
@@ -238,7 +265,7 @@ def validate_header_rules(path: Path, relative_path: str, canonical_copyright: s
             errors.append(f"{relative_path}: contains forbidden {label}")
 
     for include in re.findall(r"^\s*#\s*include\s+([^\s]+)", text, re.MULTILINE):
-        if include.startswith('"asc/std/'):
+        if re.match(r'"(?:asc/std|asc|hw)/', include):
             errors.append(f"{relative_path}: project includes must use angle brackets: {include}")
 
 
@@ -324,12 +351,15 @@ def validate_header_identity(header, prefix, state, errors):
         errors.append(f"{prefix}: id must match [a-z][a-z0-9_]*")
     else:
         add_unique(header_id, state["ids"], "header id", errors)
-    if not isinstance(source, str) or not source.startswith("libascendcxx/include/asc/std/"):
+    valid_source = isinstance(source, str) and re.match(
+        r"libascendcxx/include/(?:asc/std|asc|hw)/", source
+    )
+    if not valid_source:
         errors.append(f"{prefix}: source must be an ASC_AGENT libascendcxx include path")
     if not COMMIT_PATTERN.fullmatch(str(source_commit or "")):
         errors.append(f"{prefix}: source_commit must be a full Git commit")
-    if not isinstance(target, str) or not target.startswith("asc/std/"):
-        errors.append(f"{prefix}: target must start with asc/std/")
+    if not isinstance(target, str) or not re.match(r"(?:asc/std|asc|hw)/", target):
+        errors.append(f"{prefix}: target must start with asc/std/, asc/, or hw/")
         return None
     if source != f"libascendcxx/include/{target}":
         errors.append(f"{prefix}: source and target header paths do not correspond")
@@ -368,7 +398,11 @@ def validate_header_dependencies(header, prefix, resolved, state, errors):
     if not target_path.is_file():
         return
     header_text = target_path.read_text(encoding="utf-8")
-    included = re.findall(r'^\s*#\s*include\s+<(?P<path>asc/std/[^>]+)>', header_text, re.MULTILINE)
+    included = re.findall(
+        r'^\s*#\s*include\s+<(?P<path>(?:asc/std|asc|hw)/[^>]+)>',
+        header_text,
+        re.MULTILINE,
+    )
     if dependencies != included:
         errors.append(
             f"{prefix}: dependencies do not match direct ASC-STL includes: "
@@ -382,10 +416,12 @@ def validate_header_provenance(header, prefix, errors):
     upstream_tests = header.get("upstream_tests")
     if not isinstance(apis, list) or not all(isinstance(api, str) and api for api in apis):
         errors.append(f"{prefix}: apis must be a string list")
-    elif any(not api.startswith("asc::std::") for api in apis):
-        errors.append(f"{prefix}: APIs must use the asc::std namespace")
-    if not isinstance(upstream, str) or not upstream.startswith("libcudacxx/include/cuda/std/"):
-        errors.append(f"{prefix}: upstream must be a CCCL repository-relative cuda/std path")
+    elif any(not is_valid_target_api(api) for api in apis):
+        errors.append(f"{prefix}: APIs must use an approved ASC-STL target domain")
+    if not isinstance(upstream, str) or not re.match(
+        r"libcudacxx/include/(?:cuda/std|cuda|nv)/", upstream
+    ):
+        errors.append(f"{prefix}: upstream must be a CCCL repository-relative include path")
     valid_tests = isinstance(upstream_tests, list) and all(
         isinstance(test, str) and test for test in upstream_tests
     )
@@ -521,8 +557,8 @@ def validate_exclusion_entry(exclusion, index, include_root, allowed, state):
         errors.append(f"{prefix}: exclusion entries must be objects")
         return
     target = exclusion.get("target")
-    if not isinstance(target, str) or not target.startswith("asc/std/"):
-        errors.append(f"{prefix}: target must start with asc/std/")
+    if not isinstance(target, str) or not re.match(r"(?:asc/std|asc|hw)/", target):
+        errors.append(f"{prefix}: target must start with asc/std/, asc/, or hw/")
         return
     add_unique(target, excluded, "excluded target", errors)
     target_path = include_root / target
