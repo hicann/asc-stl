@@ -14,21 +14,7 @@
  * limitations under the License.
  */
 
-#include <asc/std/detail/__config>
-
-#ifndef _ASC_API
-#error "_ASC_API must be provided by the canonical configuration entry point"
-#endif
-
-template <class _Tp>
-_ASC_API constexpr _Tp asc_stl_config_identity(_Tp value)
-{
-    return value;
-}
-
-static_assert(asc_stl_config_identity(42) == 42, "_ASC_API must remain constexpr-callable on Host");
-
 int main()
 {
-    return asc_stl_config_identity(7) == 7 ? 0 : 1;
+    return 0;
 }

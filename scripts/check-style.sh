@@ -20,11 +20,15 @@ cd "$ROOT"
 
 echo "Step 1: check canonical license headers"
 
+# Limit discovery to repository-owned source roots. Online CI injects an
+# untracked top-level CI/ directory that must not be treated as ASC-STL source.
+SOURCE_ROOTS=(CMakeLists.txt cmake include scripts test)
+
 LICENSE_SOURCES="$({
-    git ls-files --cached --others --exclude-standard \
-        '*.c' '*.cc' '*.cpp' '*.cxx' '*.h' '*.hpp' '*.cuh' '*.py' '*.sh' '*.bash' '*.cmake' '*.cpp.in'
-    git ls-files --cached --others --exclude-standard -- 'CMakeLists.txt' '*/CMakeLists.txt' '*/__config'
+    git ls-files --cached --others --exclude-standard -- "${SOURCE_ROOTS[@]}"
 } 2>/dev/null | sort -u)"
+
+LICENSE_SOURCES="$(printf '%s\n' "$LICENSE_SOURCES" | grep -E '\.(asc|c|cc|cpp|cxx|h|hpp|cuh|py|sh|bash|cmake|cmake\.in|cpp\.in)$|(^|/)CMakeLists\.txt$|(^|/)__config$' || true)"
 
 if [ -n "$LICENSE_SOURCES" ]; then
     printf '%s\n' "$LICENSE_SOURCES" | xargs python3 scripts/add_license_header.py --check
@@ -43,10 +47,10 @@ done
 CLANG_FORMAT="${CLANG_FORMAT:-clang-format}"
 
 SOURCES="$({
-    git ls-files --cached --others --exclude-standard \
-        '*.h' '*.hpp' '*.cuh' '*.cc' '*.cpp' '*.cxx' '*.cpp.in'
-    git ls-files --cached --others --exclude-standard -- '*/__config'
+    git ls-files --cached --others --exclude-standard -- "${SOURCE_ROOTS[@]}"
 } 2>/dev/null | sort -u)"
+
+SOURCES="$(printf '%s\n' "$SOURCES" | grep -E '\.(asc|h|hpp|cuh|cc|cpp|cxx|cpp\.in)$|(^|/)__config$' || true)"
 
 if [ -z "$SOURCES" ]; then
     echo "No C/C++ source files found; skip clang-format and cpplint."

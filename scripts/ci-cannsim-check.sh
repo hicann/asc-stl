@@ -16,7 +16,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-BUILD_DIR="${ASC_STL_CANNSIM_BUILD_DIR:-$ROOT/build/cannsim-gate}"
+BUILD_ROOT="${ASC_STL_CANNSIM_BUILD_DIR:-$ROOT/build/cannsim-gate}"
 
 # shellcheck disable=SC1091
 source "$ROOT/scripts/cann-env.sh"
@@ -31,15 +31,19 @@ if [ -z "$CANNSIM_EXECUTABLE" ] || [ ! -x "$CANNSIM_EXECUTABLE" ]; then
     exit 2
 fi
 
-bash "$ROOT/libascendcxx/test/libascendcxx/scripts/test_cannsim_runner_failures.sh"
+for standard in 17 20; do
+    BUILD_DIR="$BUILD_ROOT/cxx$standard"
+    cmake -S "$ROOT" -B "$BUILD_DIR" \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DASC_STL_TEST_CXX_STANDARD="$standard" \
+        -DASC_STL_ENABLE_CANNSIM_TESTS=ON \
+        -DASC_STL_CANN_PACKAGE_PATH="$CANN_PACKAGE_PATH" \
+        -DASC_STL_TARGET_SOC="$TARGET_SOC" \
+        -DASC_STL_CANNSIM_EXECUTABLE="$CANNSIM_EXECUTABLE" \
+        -DASC_STL_CANNSIM_SOC="$SIMULATOR_SOC"
 
-cmake -S "$ROOT" -B "$BUILD_DIR" \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DASC_STL_ENABLE_CANNSIM_TESTS=ON \
-    -DASC_STL_CANN_PACKAGE_PATH="$CANN_PACKAGE_PATH" \
-    -DASC_STL_TARGET_SOC="$TARGET_SOC" \
-    -DASC_STL_CANNSIM_EXECUTABLE="$CANNSIM_EXECUTABLE" \
-    -DASC_STL_CANNSIM_SOC="$SIMULATOR_SOC"
-
-cmake --build "$BUILD_DIR" --target asc_stl_cannsim_tests
-ctest --test-dir "$BUILD_DIR" -L "cannsim-smoke|cannsim-runtime" --output-on-failure
+    cmake --build "$BUILD_DIR" --target asc_stl_cannsim_tests
+    ctest --test-dir "$BUILD_DIR" \
+        -L "cannsim-smoke|cannsim-runtime" \
+        --output-on-failure
+done

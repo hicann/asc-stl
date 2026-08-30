@@ -12,17 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(libascendcxx INTERFACE)
-add_library(asc::libascendcxx ALIAS libascendcxx)
+@PACKAGE_INIT@
 
-target_compile_features(libascendcxx INTERFACE cxx_std_17)
-target_include_directories(
-    libascendcxx
-    INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-)
-
-if(BUILD_TESTING)
-    add_subdirectory(test/libascendcxx)
-endif()
+include("${CMAKE_CURRENT_LIST_DIR}/asc_stlTargets.cmake")
+check_required_components(asc_stl)

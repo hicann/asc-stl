@@ -23,6 +23,7 @@ source "$ROOT/scripts/cann-env.sh"
 
 CANN_PACKAGE_PATH="${ASC_STL_CANN_PACKAGE_PATH:-${ASCEND_HOME_PATH:-}}"
 TARGET_SOC="${ASC_STL_TARGET_SOC:-Ascend950PR_9599}"
+NPU_ARCH="${ASC_STL_NPU_ARCH:-dav-3510}"
 
 if [ -z "$CANN_PACKAGE_PATH" ] || [ ! -d "$CANN_PACKAGE_PATH" ]; then
     echo "BLOCKED_ENVIRONMENT: set ASC_STL_CANN_PACKAGE_PATH or ASCEND_HOME_PATH to an installed CANN package."
@@ -33,6 +34,7 @@ cmake -S "$ROOT" -B "$BUILD_DIR" \
     -DCMAKE_BUILD_TYPE=Release \
     -DASC_STL_ENABLE_DEVICE_COMPILE_TESTS=ON \
     -DASC_STL_CANN_PACKAGE_PATH="$CANN_PACKAGE_PATH" \
-    -DASC_STL_TARGET_SOC="$TARGET_SOC"
+    -DASC_STL_TARGET_SOC="$TARGET_SOC" \
+    -DASC_STL_NPU_ARCH="$NPU_ARCH"
 
 ctest --test-dir "$BUILD_DIR" -L "header-device|device-compile" --output-on-failure

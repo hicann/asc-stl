@@ -16,6 +16,49 @@ cmake_minimum_required(VERSION 3.20)
 
 project(asc_stl VERSION 0.1.0 LANGUAGES CXX)
 
-include(CTest)
+include(CMakePackageConfigHelpers)
 
-add_subdirectory(libascendcxx)
+add_library(asc_stl INTERFACE)
+add_library(asc_stl::asc_stl ALIAS asc_stl)
+target_compile_features(asc_stl INTERFACE cxx_std_17)
+target_include_directories(
+    asc_stl
+    INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+)
+
+include(CTest)
+if(BUILD_TESTING)
+    add_subdirectory(test)
+endif()
+
+install(
+    DIRECTORY include/
+    DESTINATION include
+    PATTERN ".*" EXCLUDE
+)
+install(TARGETS asc_stl EXPORT asc_stlTargets)
+install(
+    EXPORT asc_stlTargets
+    FILE asc_stlTargets.cmake
+    NAMESPACE asc_stl::
+    DESTINATION lib/cmake/asc_stl
+)
+
+configure_package_config_file(
+    cmake/asc_stlConfig.cmake.in
+    "${CMAKE_CURRENT_BINARY_DIR}/asc_stlConfig.cmake"
+    INSTALL_DESTINATION lib/cmake/asc_stl
+)
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/asc_stlConfigVersion.cmake"
+    VERSION "${PROJECT_VERSION}"
+    COMPATIBILITY SameMajorVersion
+)
+install(
+    FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/asc_stlConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/asc_stlConfigVersion.cmake"
+    DESTINATION lib/cmake/asc_stl
+)
