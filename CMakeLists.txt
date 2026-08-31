@@ -16,6 +16,18 @@ cmake_minimum_required(VERSION 3.20)
 
 project(asc_stl VERSION 0.1.0 LANGUAGES CXX)
 
-include(CTest)
+add_library(asc_stl INTERFACE)
+add_library(asc_stl::asc_stl ALIAS asc_stl)
 
-add_subdirectory(libascendcxx)
+target_compile_features(asc_stl INTERFACE cxx_std_17)
+target_include_directories(
+    asc_stl
+    INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+)
+
+include(CTest)
+if(BUILD_TESTING)
+    add_subdirectory(test)
+endif()

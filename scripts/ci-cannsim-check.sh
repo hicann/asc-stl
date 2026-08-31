@@ -31,7 +31,7 @@ if [ -z "$CANNSIM_EXECUTABLE" ] || [ ! -x "$CANNSIM_EXECUTABLE" ]; then
     exit 2
 fi
 
-bash "$ROOT/libascendcxx/test/libascendcxx/scripts/test_cannsim_runner_failures.sh"
+bash "$ROOT/test/scripts/test_cannsim_runner_failures.sh"
 
 cmake -S "$ROOT" -B "$BUILD_DIR" \
     -DCMAKE_BUILD_TYPE=Release \

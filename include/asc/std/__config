@@ -1,0 +1,252 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_STD_CONFIG
+#define CANN_ASC_STL_STD_CONFIG
+
+// ---------------------------------------------------------------------------
+// Compiler and language detection
+// ---------------------------------------------------------------------------
+
+// The CCE toolchain flags SIMT in two different senses: the compilation MODE
+// is pure SIMT only under __NPU_COMPILER_INTERNAL_PURE_SIMT__, while
+// __CCE_AICORE_SUPPORT_SIMT__ / __ENABLE_ASC_PURESIMT__ merely advertise that
+// SIMT support is available (also true in mixed-mode builds). Keep the mode
+// flag and the capability flag separate so mixed-mode builds are not
+// misclassified as pure SIMT.
+#if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) || defined(__CCE_AICORE_SUPPORT_SIMT__) || \
+    defined(__ENABLE_ASC_PURESIMT__)
+#define CANN_ASC_STL_DETAIL_COMPILER_CCE 1
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#define CANN_ASC_STL_DETAIL_COMPILER_PURE_SIMT 1
+#endif
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) || defined(__CCE_AICORE_SUPPORT_SIMT__) || \
+    defined(__ENABLE_ASC_PURESIMT__)
+#define CANN_ASC_STL_DETAIL_COMPILER_SIMT_SUPPORT 1
+#endif
+#elif defined(__clang__)
+#define CANN_ASC_STL_DETAIL_COMPILER_CLANG 1
+#elif defined(__GNUC__)
+#define CANN_ASC_STL_DETAIL_COMPILER_GCC 1
+#elif defined(_MSC_VER)
+#define CANN_ASC_STL_DETAIL_COMPILER_MSVC 1
+#else
+#define CANN_ASC_STL_DETAIL_COMPILER_UNKNOWN 1
+#endif
+
+// CANN normally provides this spelling through kernel_operator.h. Keep ASC-STL
+// headers self-contained when they are included before that umbrella header.
+#if defined(CANN_ASC_STL_DETAIL_COMPILER_CCE) && !defined(__aicore__)
+#define __aicore__ [aicore]
+#endif
+
+#if defined(_MSVC_LANG)
+#define CANN_ASC_STL_DETAIL_STD_CPLUSPLUS _MSVC_LANG
+#else
+#define CANN_ASC_STL_DETAIL_STD_CPLUSPLUS __cplusplus
+#endif
+
+#if CANN_ASC_STL_DETAIL_STD_CPLUSPLUS >= 201703L
+#define CANN_ASC_STL_DETAIL_STD_HAS_CXX17 1
+#else
+#define CANN_ASC_STL_DETAIL_STD_HAS_CXX17 0
+#endif
+
+#if CANN_ASC_STL_DETAIL_STD_CPLUSPLUS >= 202002L
+#define CANN_ASC_STL_DETAIL_STD_HAS_CXX20 1
+#else
+#define CANN_ASC_STL_DETAIL_STD_HAS_CXX20 0
+#endif
+
+#if CANN_ASC_STL_DETAIL_STD_CPLUSPLUS >= 202302L
+#define CANN_ASC_STL_DETAIL_STD_HAS_CXX23 1
+#else
+#define CANN_ASC_STL_DETAIL_STD_HAS_CXX23 0
+#endif
+
+// ---------------------------------------------------------------------------
+// Feature probes
+// ---------------------------------------------------------------------------
+
+#if defined(__has_attribute)
+#define CANN_ASC_STL_DETAIL_HAS_ATTRIBUTE(_name) __has_attribute(_name)
+#else
+#define CANN_ASC_STL_DETAIL_HAS_ATTRIBUTE(_name) 0
+#endif
+
+#if defined(__has_builtin)
+#define CANN_ASC_STL_DETAIL_HAS_BUILTIN(_name) __has_builtin(_name)
+#else
+#define CANN_ASC_STL_DETAIL_HAS_BUILTIN(_name) 0
+#endif
+
+#if defined(__has_cpp_attribute)
+#define CANN_ASC_STL_DETAIL_HAS_CPP_ATTRIBUTE(_name) __has_cpp_attribute(_name)
+#else
+#define CANN_ASC_STL_DETAIL_HAS_CPP_ATTRIBUTE(_name) 0
+#endif
+
+// ---------------------------------------------------------------------------
+// Platform detection
+// ---------------------------------------------------------------------------
+
+#if defined(__aarch64__) && (defined(__ASCEND__) || defined(ASCEND_PLATFORM))
+#define CANN_ASC_STL_DETAIL_PLATFORM 1
+#endif
+
+#if defined(CANN_ASC_STL_DETAIL_PLATFORM)
+#define CANN_ASC_STL_DETAIL_PLATFORM_ASCEND 1
+#else
+#define CANN_ASC_STL_DETAIL_PLATFORM_ASCEND 0
+#endif
+
+// ---------------------------------------------------------------------------
+// Diagnostics
+// ---------------------------------------------------------------------------
+
+#define CANN_ASC_STL_DETAIL_PRAGMA_IMPL(_x) _Pragma(#_x)
+#define CANN_ASC_STL_DETAIL_PRAGMA(_x) CANN_ASC_STL_DETAIL_PRAGMA_IMPL(_x)
+
+#if defined(CANN_ASC_STL_DETAIL_COMPILER_CLANG) || defined(CANN_ASC_STL_DETAIL_COMPILER_CCE)
+// Bisheng CCE is a clang frontend and accepts the clang diagnostic pragmas.
+#define CANN_ASC_STL_DETAIL_DIAG_PUSH CANN_ASC_STL_DETAIL_PRAGMA(clang diagnostic push)
+#define CANN_ASC_STL_DETAIL_DIAG_POP CANN_ASC_STL_DETAIL_PRAGMA(clang diagnostic pop)
+#define CANN_ASC_STL_DETAIL_DIAG_SUPPRESS_CLANG(_warning) CANN_ASC_STL_DETAIL_PRAGMA(clang diagnostic ignored _warning)
+#else
+#define CANN_ASC_STL_DETAIL_DIAG_SUPPRESS_CLANG(_warning)
+#endif
+
+#if defined(CANN_ASC_STL_DETAIL_COMPILER_GCC)
+#define CANN_ASC_STL_DETAIL_DIAG_PUSH CANN_ASC_STL_DETAIL_PRAGMA(GCC diagnostic push)
+#define CANN_ASC_STL_DETAIL_DIAG_POP CANN_ASC_STL_DETAIL_PRAGMA(GCC diagnostic pop)
+#define CANN_ASC_STL_DETAIL_DIAG_SUPPRESS_GCC(_warning) CANN_ASC_STL_DETAIL_PRAGMA(GCC diagnostic ignored _warning)
+#else
+#define CANN_ASC_STL_DETAIL_DIAG_SUPPRESS_GCC(_warning)
+#endif
+
+#if defined(CANN_ASC_STL_DETAIL_COMPILER_MSVC)
+#define CANN_ASC_STL_DETAIL_DIAG_PUSH __pragma(warning(push))
+#define CANN_ASC_STL_DETAIL_DIAG_POP __pragma(warning(pop))
+#define CANN_ASC_STL_DETAIL_DIAG_SUPPRESS_MSVC(_warning) __pragma(warning(disable : _warning))
+#else
+#define CANN_ASC_STL_DETAIL_DIAG_SUPPRESS_MSVC(_warning)
+#endif
+
+#if !defined(CANN_ASC_STL_DETAIL_DIAG_PUSH)
+#define CANN_ASC_STL_DETAIL_DIAG_PUSH
+#endif
+
+#if !defined(CANN_ASC_STL_DETAIL_DIAG_POP)
+#define CANN_ASC_STL_DETAIL_DIAG_POP
+#endif
+
+#if defined(CANN_ASC_STL_DETAIL_COMPILER_CCE)
+#define CANN_ASC_STL_DETAIL_DIAG_SUPPRESS_CCE(_warning) CANN_ASC_STL_DETAIL_PRAGMA(clang diagnostic ignored _warning)
+#else
+#define CANN_ASC_STL_DETAIL_DIAG_SUPPRESS_CCE(_warning)
+#endif
+
+// ---------------------------------------------------------------------------
+// Function annotations
+// ---------------------------------------------------------------------------
+
+#if defined(CANN_ASC_STL_DETAIL_COMPILER_CCE)
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+// Pure-SIMT mode uses the CUDA-style host/device attribute pair.
+#define CANN_ASC_STL_HOST_DEVICE __host__ __aicore__
+#else
+// Mixed-mode CCE provides the dual annotation used by CANN's
+// ASCENDC_HOST_AICORE for declarations callable from both sides.
+#define CANN_ASC_STL_HOST_DEVICE [ host, aicore ]
+#endif
+#else
+#define CANN_ASC_STL_HOST_DEVICE
+#endif
+
+#if defined(CANN_ASC_STL_DETAIL_COMPILER_CCE)
+#define CANN_ASC_STL_DETAIL_AICORE_FN __aicore__ inline
+#else
+#define CANN_ASC_STL_DETAIL_AICORE_FN inline
+#endif
+
+#if defined(CANN_ASC_STL_DETAIL_COMPILER_CCE)
+// The vector-core annotation historically used the __aiv__ attribute spelling;
+// CANN 9.x toolchains no longer define it, so vector-core functions share the
+// aicore annotation until a dedicated spelling returns.
+#define CANN_ASC_STL_DETAIL_AIV_FN __aicore__ inline
+#else
+#define CANN_ASC_STL_DETAIL_AIV_FN inline
+#endif
+
+// ---------------------------------------------------------------------------
+// Exception policy
+// ---------------------------------------------------------------------------
+
+#ifndef CANN_ASC_STL_DETAIL_STD_NO_EXCEPTIONS
+#define CANN_ASC_STL_DETAIL_STD_NO_EXCEPTIONS 1
+#endif
+
+#if CANN_ASC_STL_DETAIL_STD_NO_EXCEPTIONS
+#define CANN_ASC_STL_DETAIL_EXCEPTIONS_ENABLED 0
+#else
+#define CANN_ASC_STL_DETAIL_EXCEPTIONS_ENABLED 1
+#endif
+
+// ---------------------------------------------------------------------------
+// Namespace control
+// ---------------------------------------------------------------------------
+
+#define CANN_ASC_STL_DETAIL_ACCL_STD asc::std
+
+#define CANN_ASC_STL_BEGIN_NAMESPACE \
+    namespace asc {                  \
+    namespace std {
+#define CANN_ASC_STL_END_NAMESPACE \
+    }                              \
+    }
+
+// ---------------------------------------------------------------------------
+// Compatibility macros (consumed by pre-existing dev-branch headers and tests)
+// ---------------------------------------------------------------------------
+
+#if defined(__CCE__) && !defined(CANN_ASC_STL_DETAIL_ACCL_COMPILER_CCE)
+#define CANN_ASC_STL_DETAIL_ACCL_COMPILER_CCE
+#elif defined(__clang__) && !defined(CANN_ASC_STL_DETAIL_ACCL_COMPILER_CLANG)
+#define CANN_ASC_STL_DETAIL_ACCL_COMPILER_CLANG
+#elif defined(__GNUC__) && !defined(CANN_ASC_STL_DETAIL_ACCL_COMPILER_GCC)
+#define CANN_ASC_STL_DETAIL_ACCL_COMPILER_GCC
+#elif defined(_MSC_VER) && !defined(CANN_ASC_STL_DETAIL_ACCL_COMPILER_MSVC)
+#define CANN_ASC_STL_DETAIL_ACCL_COMPILER_MSVC
+#endif
+
+#if defined(__aarch64__) && (defined(__ASCEND__) || defined(ASCEND_PLATFORM)) && \
+    !defined(CANN_ASC_STL_DETAIL_ACCL_PLATFORM)
+#define CANN_ASC_STL_DETAIL_ACCL_PLATFORM 1
+#endif
+
+#if defined(CANN_ASC_STL_DETAIL_ACCL_COMPILER_CCE) && !defined(CANN_ASC_STL_DETAIL_ACCL_AICORE_FN)
+#define CANN_ASC_STL_DETAIL_ACCL_AICORE_FN __aicore__ inline
+#define CANN_ASC_STL_DETAIL_ACCL_AIV_FN __aicore__ inline
+#elif !defined(CANN_ASC_STL_DETAIL_ACCL_AICORE_FN)
+#define CANN_ASC_STL_DETAIL_ACCL_AICORE_FN inline
+#define CANN_ASC_STL_DETAIL_ACCL_AIV_FN inline
+#endif
+
+#ifndef CANN_ASC_STL_DETAIL_ACCL_STD_NO_EXCEPTIONS
+#define CANN_ASC_STL_DETAIL_ACCL_STD_NO_EXCEPTIONS 1
+#endif
+
+#endif  // CANN_ASC_STL_STD_CONFIG

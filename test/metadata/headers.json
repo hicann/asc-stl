@@ -1,0 +1,818 @@
+{
+    "schema_version": 1,
+    "cccl_baseline": {
+        "commit": "9bffa830fcdf1bec1c7b6fef1d013d6c0ee69f79",
+        "version": "3.5.0"
+    },
+    "migration_source": {
+        "checkout_commit": "f1b5e100b8c72101fa6e2dc5a40b89d649ee766d",
+        "repository": "ASC_AGENT/repos/accl"
+    },
+    "runtime_backend": {
+        "name": "cannsim",
+        "toolkit_version": "9.0.0",
+        "toolkit_sha256": "946d7bfd3c3f7b45e511126d67507d1dba57004243a18175148c582106b0dfa1",
+        "compile_soc": "Ascend950PR_9599",
+        "simulator_soc": "Ascend950",
+        "smoke_test": "cannsim.smoke",
+        "fixture": "asc_stl_cannsim_ready"
+    },
+    "headers": [
+        {
+            "id": "execution_space",
+            "source": "include/asc/std/__asc/execution_space.h",
+            "target": "asc/std/__asc/execution_space.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/system_header.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/execution_space.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.execution_space",
+                "host_semantic": "semantic.host.__asc.execution_space",
+                "device_header": "header.device.__asc.execution_space"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "visibility",
+            "source": "include/asc/std/__asc/visibility.h",
+            "target": "asc/std/__asc/visibility.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/system_header.h",
+                "asc/std/__asc/attributes.h",
+                "asc/std/__asc/asc_capabilities.h",
+                "asc/std/__asc/execution_space.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/visibility.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.visibility",
+                "host_semantic": "semantic.host.__asc.visibility",
+                "device_header": "header.device.__asc.visibility"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "config",
+            "source": "include/asc/std/__config",
+            "target": "asc/std/__config",
+            "kind": "internal",
+            "dependencies": [],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/detail/__config",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__config",
+                "host_semantic": "semantic.host.__config",
+                "device_header": "header.device.__config"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "detail_config",
+            "source": "include/asc/std/detail/__config",
+            "source_commit": "894e5123a1f77e82ad49b1ee01be9785c2a6738b",
+            "target": "asc/std/detail/__config",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__config",
+                "asc/std/__asc/visibility.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/detail/__config",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.detail.__config",
+                "host_semantic": "semantic.host.detail.__config",
+                "device_header": "header.device.detail.__config",
+                "device_compile": "semantic.device.detail.__config"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": true,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "notes":
+                "Canonical configuration entry for ordinary migrated headers; probes verify CANN_ASC_STL_API on Host and CCE.",
+            "gate_status": {
+                "G0": {
+                    "status": "passed",
+                    "evidence":
+                        "Metadata validation accepted detail_config provenance, direct dependencies, applicability, and canonical probes on 2026-07-28."
+                },
+                "G1": {
+                    "status": "passed",
+                    "evidence": "License, gate.static-rules, clang-format, and cpplint passed locally on 2026-07-28."
+                },
+                "G2_host": {
+                    "status": "passed",
+                    "evidence": "header.host.detail.__config passed on 2026-07-28."
+                },
+                "G2_device": {
+                    "status": "passed",
+                    "evidence":
+                        "header.device.detail.__config passed with CANN Toolkit 9.0.0 and Ascend950PR_9599 on 2026-07-28."
+                },
+                "G3": {
+                    "status": "passed",
+                    "evidence":
+                        "semantic.host.detail.__config proved CANN_ASC_STL_API remains constexpr-callable on Host on 2026-07-28."
+                },
+                "G4": {
+                    "status": "passed",
+                    "evidence":
+                        "semantic.device.detail.__config proved an CANN_ASC_STL_API function is callable from an __aicore__ kernel on 2026-07-28."
+                },
+                "G5": {
+                    "status": "not_applicable",
+                    "evidence":
+                        "The configuration entry has compile-time execution-space semantics but no standalone runtime result."
+                },
+                "G6": {
+                    "status": "not_applicable",
+                    "evidence": "This is internal configuration infrastructure."
+                },
+                "G7_host": {
+                    "status": "passed",
+                    "evidence": "All 15 Host affected-regression CTests passed locally on 2026-07-28."
+                },
+                "G7_device": {
+                    "status": "passed",
+                    "evidence": "All 14 Device compile CTests and all four cannsim CTests passed locally on 2026-07-28."
+                }
+            },
+            "last_validation": {
+                "date": "2026-07-28",
+                "result": "passed",
+                "notes":
+                    "Canonical CANN_ASC_STL_API entry passed Host constexpr and real CCE Device-call probes plus full affected regression."
+            }
+        },
+        {
+            "id": "os",
+            "source": "include/asc/std/__asc/os.h",
+            "target": "asc/std/__asc/os.h",
+            "kind": "internal",
+            "dependencies": [],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/os.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.os",
+                "host_semantic": "semantic.host.__asc.os",
+                "device_header": "header.device.__asc.os"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "preprocessor",
+            "source": "include/asc/std/__asc/preprocessor.h",
+            "target": "asc/std/__asc/preprocessor.h",
+            "kind": "internal",
+            "dependencies": [],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/preprocessor.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.preprocessor",
+                "host_semantic": "semantic.host.__asc.preprocessor",
+                "device_header": "header.device.__asc.preprocessor"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "version",
+            "source": "include/asc/std/__asc/version.h",
+            "target": "asc/std/__asc/version.h",
+            "kind": "internal",
+            "dependencies": [],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/version.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.version",
+                "host_semantic": "semantic.host.__asc.version",
+                "device_header": "header.device.__asc.version"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "compiler",
+            "source": "include/asc/std/__asc/compiler.h",
+            "target": "asc/std/__asc/compiler.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__config",
+                "asc/std/__asc/preprocessor.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/compiler.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.compiler",
+                "host_semantic": "semantic.host.__asc.compiler",
+                "device_header": "header.device.__asc.compiler"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "architecture",
+            "source": "include/asc/std/__asc/architecture.h",
+            "target": "asc/std/__asc/architecture.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/preprocessor.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/architecture.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.architecture",
+                "host_semantic": "semantic.host.__asc.architecture",
+                "device_header": "header.device.__asc.architecture"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "is_non_narrowing_convertible",
+            "source": "include/asc/std/__asc/is_non_narrowing_convertible.h",
+            "target": "asc/std/__asc/is_non_narrowing_convertible.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/is_non_narrowing_convertible.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.is_non_narrowing_convertible",
+                "host_semantic": "semantic.host.__asc.is_non_narrowing_convertible",
+                "device_header": "header.device.__asc.is_non_narrowing_convertible"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "system_header",
+            "source": "include/asc/std/__asc/system_header.h",
+            "target": "asc/std/__asc/system_header.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/is_non_narrowing_convertible.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/system_header.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.system_header",
+                "host_semantic": "semantic.host.__asc.system_header",
+                "device_header": "header.device.__asc.system_header"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "asc_toolkit",
+            "source": "include/asc/std/__asc/asc_toolkit.h",
+            "target": "asc/std/__asc/asc_toolkit.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/system_header.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/cuda_toolkit.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.asc_toolkit",
+                "host_semantic": "semantic.host.__asc.asc_toolkit",
+                "device_header": "header.device.__asc.asc_toolkit"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "diagnostic",
+            "source": "include/asc/std/__asc/diagnostic.h",
+            "target": "asc/std/__asc/diagnostic.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/system_header.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/diagnostic.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.diagnostic",
+                "host_semantic": "semantic.host.__asc.diagnostic",
+                "device_header": "header.device.__asc.diagnostic"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "host_std_lib",
+            "source": "include/asc/std/__asc/host_std_lib.h",
+            "target": "asc/std/__asc/host_std_lib.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/preprocessor.h",
+                "asc/std/__asc/system_header.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/host_std_lib.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.host_std_lib",
+                "host_semantic": "semantic.host.__asc.host_std_lib",
+                "device_header": "header.device.__asc.host_std_lib"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "sequence_access",
+            "source": "include/asc/std/__asc/sequence_access.h",
+            "target": "asc/std/__asc/sequence_access.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/system_header.h",
+                "asc/std/__asc/visibility.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/sequence_access.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.sequence_access",
+                "host_semantic": "semantic.host.__asc.sequence_access",
+                "device_header": "header.device.__asc.sequence_access"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "unreachable",
+            "source": "include/asc/std/__asc/unreachable.h",
+            "target": "asc/std/__asc/unreachable.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/system_header.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/unreachable.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.unreachable",
+                "host_semantic": "semantic.host.__asc.unreachable",
+                "device_header": "header.device.__asc.unreachable"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "asc_capabilities",
+            "source": "include/asc/std/__asc/asc_capabilities.h",
+            "target": "asc/std/__asc/asc_capabilities.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/system_header.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/cuda_capabilities.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.asc_capabilities",
+                "host_semantic": "semantic.host.__asc.asc_capabilities",
+                "device_header": "header.device.__asc.asc_capabilities",
+                "device_compile": "semantic.device.__asc.asc_capabilities"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": true,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "extended_data_types",
+            "source": "include/asc/std/__asc/extended_data_types.h",
+            "target": "asc/std/__asc/extended_data_types.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/system_header.h",
+                "asc/std/__asc/architecture.h",
+                "asc/std/__asc/asc_capabilities.h",
+                "asc/std/__asc/asc_toolkit.h",
+                "asc/std/__asc/diagnostic.h",
+                "asc/std/__asc/os.h",
+                "asc/std/__asc/preprocessor.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/extended_data_types.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.extended_data_types",
+                "host_semantic": "semantic.host.__asc.extended_data_types",
+                "device_header": "header.device.__asc.extended_data_types",
+                "device_compile": "semantic.device.__asc.extended_data_types"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": true,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "builtin",
+            "source": "include/asc/std/__asc/builtin.h",
+            "target": "asc/std/__asc/builtin.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/preprocessor.h",
+                "asc/std/__asc/system_header.h",
+                "asc/std/__asc/asc_capabilities.h",
+                "asc/std/__asc/extended_data_types.h",
+                "asc/std/__asc/host_std_lib.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/builtin.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.builtin",
+                "host_semantic": "semantic.host.__asc.builtin",
+                "device_header": "header.device.__asc.builtin"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "exceptions",
+            "source": "include/asc/std/__asc/exceptions.h",
+            "target": "asc/std/__asc/exceptions.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/execution_space.h",
+                "asc/std/__asc/system_header.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/exceptions.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.exceptions",
+                "host_semantic": "semantic.host.__asc.exceptions",
+                "device_header": "header.device.__asc.exceptions"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "dialect",
+            "source": "include/asc/std/__asc/dialect.h",
+            "target": "asc/std/__asc/dialect.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/system_header.h",
+                "asc/std/__asc/builtin.h",
+                "asc/std/__asc/execution_space.h",
+                "asc/std/__asc/host_std_lib.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/dialect.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.dialect",
+                "host_semantic": "semantic.host.__asc.dialect",
+                "device_header": "header.device.__asc.dialect"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "rtti",
+            "source": "include/asc/std/__asc/rtti.h",
+            "target": "asc/std/__asc/rtti.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/system_header.h",
+                "asc/std/__asc/builtin.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/rtti.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.rtti",
+                "host_semantic": "semantic.host.__asc.rtti",
+                "device_header": "header.device.__asc.rtti"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "attributes",
+            "source": "include/asc/std/__asc/attributes.h",
+            "target": "asc/std/__asc/attributes.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/system_header.h",
+                "asc/std/__asc/builtin.h",
+                "asc/std/__asc/diagnostic.h",
+                "asc/std/__asc/dialect.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/attributes.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.attributes",
+                "host_semantic": "semantic.host.__asc.attributes",
+                "device_header": "header.device.__asc.attributes"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "assert",
+            "source": "include/asc/std/__asc/assert.h",
+            "target": "asc/std/__asc/assert.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/system_header.h",
+                "asc/std/__asc/attributes.h",
+                "asc/std/__asc/builtin.h",
+                "asc/std/__asc/execution_space.h",
+                "asc/std/__asc/preprocessor.h",
+                "asc/std/__asc/os.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/assert.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.assert",
+                "host_semantic": "semantic.host.__asc.assert",
+                "device_header": "header.device.__asc.assert"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "deprecated",
+            "source": "include/asc/std/__asc/deprecated.h",
+            "target": "asc/std/__asc/deprecated.h",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/attributes.h",
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/dialect.h",
+                "asc/std/__asc/system_header.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/std/__cccl/deprecated.h",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.__asc.deprecated",
+                "host_semantic": "semantic.host.__asc.deprecated",
+                "device_header": "header.device.__asc.deprecated"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        },
+        {
+            "id": "accl_config",
+            "source": "include/asc/__accl_config",
+            "target": "asc/__accl_config",
+            "kind": "internal",
+            "dependencies": [
+                "asc/std/__asc/architecture.h",
+                "asc/std/__asc/assert.h",
+                "asc/std/__asc/attributes.h",
+                "asc/std/__asc/builtin.h",
+                "asc/std/__asc/compiler.h",
+                "asc/std/__asc/asc_capabilities.h",
+                "asc/std/__asc/asc_toolkit.h",
+                "asc/std/__asc/deprecated.h",
+                "asc/std/__asc/diagnostic.h",
+                "asc/std/__asc/dialect.h",
+                "asc/std/__asc/exceptions.h",
+                "asc/std/__asc/execution_space.h",
+                "asc/std/__asc/extended_data_types.h",
+                "asc/std/__asc/host_std_lib.h",
+                "asc/std/__asc/os.h",
+                "asc/std/__asc/preprocessor.h",
+                "asc/std/__asc/rtti.h",
+                "asc/std/__asc/sequence_access.h",
+                "asc/std/__asc/system_header.h",
+                "asc/std/__asc/unreachable.h",
+                "asc/std/__asc/version.h",
+                "asc/std/__asc/visibility.h"
+            ],
+            "apis": [],
+            "upstream": "libcudacxx/include/cuda/__cccl_config",
+            "upstream_tests": [],
+            "tests": {
+                "host_header": "header.host.extension.__accl_config",
+                "host_semantic": "semantic.host.extension.__accl_config",
+                "device_header": "header.device.extension.__accl_config"
+            },
+            "applicability": {
+                "host_header": true,
+                "host_semantic": true,
+                "device_header": true,
+                "device_compile": false,
+                "cannsim_runtime": false,
+                "public_aggregation": false
+            },
+            "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+        }
+    ]
+}
