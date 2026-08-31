@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
+#include <asc/std/cassert>
+
 int main()
 {
+    assert(false);
     return 0;
 }

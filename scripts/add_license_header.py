@@ -19,10 +19,14 @@ from pathlib import Path
 import re
 
 
-SOURCE_SUFFIXES = {".c", ".cc", ".cpp", ".cxx", ".h", ".hpp", ".cuh"}
+SOURCE_SUFFIXES = {".asc", ".c", ".cc", ".cpp", ".cxx", ".h", ".hpp", ".cuh"}
 SCRIPT_SUFFIXES = {".py", ".sh", ".bash", ".cmake"}
-EXTENSIONLESS_SOURCE_NAMES = {"__config"}
 SOURCE_TEMPLATE_SUFFIXES = (".cpp.in",)
+
+
+def is_product_header(path: Path) -> bool:
+    parts = path.as_posix().split("/")
+    return any(parts[index:index + 2] == ["include", "asc"] for index in range(len(parts) - 1))
 
 
 def read_author(root_dir: Path) -> str:
@@ -58,7 +62,7 @@ def comment_header(text: str, path: Path) -> str:
 
     if (
         suffix in SOURCE_SUFFIXES
-        or path.name in EXTENSIONLESS_SOURCE_NAMES
+        or is_product_header(path)
         or path.name.endswith(SOURCE_TEMPLATE_SUFFIXES)
     ):
         body = ["/*"]
@@ -83,7 +87,7 @@ def strip_leading_license(content: str, path: Path) -> str:
     suffix = path.suffix.lower()
     if (
         suffix in SOURCE_SUFFIXES
-        or path.name in EXTENSIONLESS_SOURCE_NAMES
+        or is_product_header(path)
         or path.name.endswith(SOURCE_TEMPLATE_SUFFIXES)
     ):
         match = re.match(r"\A\s*(/\*.*?\*/\s*)", content, re.DOTALL)

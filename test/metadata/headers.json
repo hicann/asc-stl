@@ -1,4 +1,369 @@
 {
   "schema_version": 2,
-  "headers": []
+  "case_layout": "cases/<target-path-without-extension>",
+  "headers": [
+    {
+      "target": "asc/__config",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__detail/attributes.h",
+        "asc/__detail/builtin.h",
+        "asc/__detail/compiler.h",
+        "asc/__detail/diagnostics.h",
+        "asc/__detail/execution_space.h",
+        "asc/__detail/feature_detection.h",
+        "asc/__detail/preprocessor.h",
+        "asc/__detail/visibility.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "additional_cases": [
+        "cxx17.pass.cpp"
+      ]
+    },
+    {
+      "target": "asc/__detail/attributes.h",
+      "visibility": "private",
+      "dependencies": [],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": false,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__detail/builtin.h",
+      "visibility": "private",
+      "dependencies": [],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": false,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__detail/compiler.h",
+      "visibility": "private",
+      "dependencies": [],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": false,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__detail/diagnostics.h",
+      "visibility": "private",
+      "dependencies": [],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": false,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__detail/execution_space.h",
+      "visibility": "private",
+      "dependencies": [],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": false,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__detail/feature_detection.h",
+      "visibility": "private",
+      "dependencies": [],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": false,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__detail/preprocessor.h",
+      "visibility": "private",
+      "dependencies": [],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": false,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__detail/visibility.h",
+      "visibility": "private",
+      "dependencies": [],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": false,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/execution.determinism.h",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/execution.tie_break.h",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__concepts/concept_macros.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__cstddef/types.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__utility/ctad_support.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__utility/piecewise_construct.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__utility/undefined.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__utility/unreachable.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/cassert",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "additional_cases": [
+        "ndebug.pass.cpp",
+        "failure.fail.cpp"
+      ]
+    },
+    {
+      "target": "asc/std/cfloat",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/ciso646",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": false,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/climits",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/cstdalign",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": false,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/cstdbool",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": false,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/version",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    }
+  ]
 }
