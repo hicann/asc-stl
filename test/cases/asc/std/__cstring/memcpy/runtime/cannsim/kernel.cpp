@@ -1,0 +1,27 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include "../semantics.h"
+#include "basic_api/kernel_tensor.h"
+extern "C" __global__ __aicore__ void asc_stl_foundation_cannsim(GM_ADDR output)
+{
+    AscendC::GlobalTensor<asc::std::uint32_t> result;
+    result.SetGlobalBuffer(reinterpret_cast<__gm__ asc::std::uint32_t*>(output), 16);
+    asc::std::uint32_t local[16] = {};
+    asc_stl_foundation_runtime::evaluate(local);
+    for (int index = 0; index < 16; ++index)
+        result.SetValue(index, local[index]);
+}

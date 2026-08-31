@@ -87,7 +87,7 @@ def runtime_assets(row: dict, test_root: Path) -> set[Path]:
         expected.add(root / "semantics.h")
         expected.update(
             root / "cannsim" / name
-            for name in ("CMakeLists.txt", "kernel.cpp", "launcher.cpp", "main.cpp")
+            for name in ("CMakeLists.txt", "kernel.cpp", "launcher.cpp", "launcher.h", "main.cpp")
         )
     if applicability["hardware_runtime"]:
         expected.update(

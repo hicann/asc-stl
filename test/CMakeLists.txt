@@ -151,6 +151,37 @@ asc_stl_add_host_case("asc.std.cassert" "asc/std/cassert/host.pass.cpp")
 asc_stl_add_host_case("asc.std.cfloat" "asc/std/cfloat/host.pass.cpp")
 asc_stl_add_host_case("asc.std.climits" "asc/std/climits/host.pass.cpp")
 asc_stl_add_host_case("asc.std.version" "asc/std/version/host.pass.cpp")
+asc_stl_add_host_case("asc.execution.output_ordering" "asc/execution.output_ordering/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__cstring.memcpy" "asc/std/__cstring/memcpy/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__cstring.memset" "asc/std/__cstring/memset/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__memory.addressof" "asc/std/__memory/addressof/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__tuple.tuple_element" "asc/std/__tuple/tuple_element/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.add_const" "asc/std/__type_traits/add_const/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.add_cv" "asc/std/__type_traits/add_cv/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.add_volatile" "asc/std/__type_traits/add_volatile/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.always_false" "asc/std/__type_traits/always_false/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.conditional" "asc/std/__type_traits/conditional/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.dependent_type" "asc/std/__type_traits/dependent_type/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.enable_if" "asc/std/__type_traits/enable_if/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.integral_constant" "asc/std/__type_traits/integral_constant/host.pass.cpp")
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_constant_evaluated"
+    "asc/std/__type_traits/is_constant_evaluated/host.pass.cpp"
+)
+asc_stl_add_host_case("asc.std.__type_traits.lazy" "asc/std/__type_traits/lazy/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.nat" "asc/std/__type_traits/nat/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.remove_const" "asc/std/__type_traits/remove_const/host.pass.cpp")
+asc_stl_add_host_case(
+    "asc.std.__type_traits.remove_pointer" "asc/std/__type_traits/remove_pointer/host.pass.cpp"
+)
+asc_stl_add_host_case(
+    "asc.std.__type_traits.remove_volatile" "asc/std/__type_traits/remove_volatile/host.pass.cpp"
+)
+asc_stl_add_host_case("asc.std.__type_traits.type_identity" "asc/std/__type_traits/type_identity/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.void_t" "asc/std/__type_traits/void_t/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__utility.as_const" "asc/std/__utility/as_const/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__utility.declval" "asc/std/__utility/declval/host.pass.cpp")
+asc_stl_add_host_case("asc.std.cstdint" "asc/std/cstdint/host.pass.cpp")
 
 foreach(standard IN ITEMS 17 20)
     add_executable(
@@ -218,16 +249,38 @@ if(ASC_STL_ENABLE_DEVICE_COMPILE_TESTS)
 endif()
 
 if(ASC_STL_ENABLE_CANNSIM_TESTS)
-    add_custom_target(asc_stl_cannsim_tests)
-    add_test(
-        NAME asc_stl.cannsim.not_applicable
+    set(
+        foundation_cannsim_case_root
+        "${ASC_STL_CASES_ROOT}/asc/std/__cstring/memcpy/runtime/cannsim"
+    )
+    set(foundation_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/foundation-cannsim")
+    add_custom_target(
+        asc_stl_cannsim_tests
         COMMAND
-            "${Python3_EXECUTABLE}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/scripts/report_not_applicable.py"
-            "cannsim runtime"
+            "${CMAKE_COMMAND}" -S "${foundation_cannsim_case_root}"
+            -B "${foundation_cannsim_build_root}"
+            -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
+            -DASC_STL_CXX_STANDARD=${ASC_STL_TEST_CXX_STANDARD}
+            -DASC_STL_TARGET_SOC=${ASC_STL_TARGET_SOC}
+            -DCMAKE_BUILD_TYPE=Release
+        COMMAND
+            "${CMAKE_COMMAND}" --build "${foundation_cannsim_build_root}"
+            --target asc_stl_foundation_cannsim -j2
+        VERBATIM
+    )
+    add_test(
+        NAME semantic.cannsim.asc.std.foundation-runtime
+        COMMAND
+            "${ASC_STL_TEST_ROOT}/scripts/run_cannsim_test.sh"
+            "${ASC_STL_CANNSIM_EXECUTABLE}"
+            "${foundation_cannsim_build_root}/asc_stl_foundation_cannsim"
+            "${ASC_STL_CANNSIM_SOC}"
+            "${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/foundation"
+            "${foundation_cannsim_build_root}/lib"
+            ASC_STL_CANNSIM_FOUNDATION_PASS
     )
     set_tests_properties(
-        asc_stl.cannsim.not_applicable
-        PROPERTIES LABELS "cannsim-smoke;cannsim-runtime"
+        semantic.cannsim.asc.std.foundation-runtime
+        PROPERTIES LABELS "cannsim-smoke;cannsim-runtime" RUN_SERIAL TRUE
     )
 endif()
