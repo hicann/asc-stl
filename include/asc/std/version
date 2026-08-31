@@ -1,0 +1,48 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_STD_VERSION
+#define CANN_ASC_STL_STD_VERSION
+
+#include <asc/std/detail/__config>  // IWYU pragma: export
+
+CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER
+
+// ASC-STL feature-test macros describe facilities implemented by ASC-STL.
+// They must not be copied from the host <version> header: host facilities may
+// be unavailable in CCE/freestanding translation units and forward declarations
+// alone do not constitute an implementation.
+
+#define CANN_ASC_STL_DETAIL_LIB_bool_constant 201505L
+#define CANN_ASC_STL_DETAIL_LIB_integral_constant_callable 201304L
+
+#if CANN_ASC_STL_DETAIL_STD_VER >= 2017
+#define CANN_ASC_STL_DETAIL_LIB_void_t 201411L
+#endif
+
+#if CANN_ASC_STL_DETAIL_STD_VER >= 2020
+#define CANN_ASC_STL_DETAIL_LIB_endian 201907L
+#define CANN_ASC_STL_DETAIL_LIB_type_identity 201806L
+#if defined(CANN_ASC_STL_DETAIL_BUILTIN_IS_CONSTANT_EVALUATED)
+#define CANN_ASC_STL_DETAIL_LIB_is_constant_evaluated 201811L
+#endif
+#endif
+
+#if CANN_ASC_STL_DETAIL_STD_VER >= 2023
+#define CANN_ASC_STL_DETAIL_LIB_unreachable 202202L
+#endif
+
+#endif  // CANN_ASC_STL_STD_VERSION

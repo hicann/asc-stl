@@ -18,6 +18,12 @@
 #define CANN_ASC_STL_STD_DETAIL_CONFIG
 
 #include <asc/std/__config>
+#include <asc/std/__internal/atomic.h>
+#include <asc/std/__internal/cpp_dialect.h>
+#include <asc/std/__internal/features.h>
+#include <asc/std/__internal/namespaces.h>
+#include <asc/std/__internal/thread_api.h>
+#include <asc/std/__internal/version.h>
 #include <asc/std/__asc/visibility.h>
 
 #endif  // CANN_ASC_STL_STD_DETAIL_CONFIG

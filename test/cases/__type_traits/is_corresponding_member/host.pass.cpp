@@ -1,0 +1,65 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include <asc/std/__type_traits/is_corresponding_member.h>
+#include <iostream>
+
+static int g_failures = 0;
+
+static void expect_eq(const char* expr, bool got, bool expected)
+{
+    bool ok = (got == expected);
+    std::cout << "[host][is_corresponding_member] " << expr << " = " << (got ? "true" : "false") << " (expected "
+              << (expected ? "true" : "false") << ") " << (ok ? "OK" : "FAIL") << std::endl;
+    if (!ok)
+        ++g_failures;
+}
+
+struct S1 {
+    int a;
+    int b;
+};
+struct S2 {
+    int x;
+    int y;
+};
+
+int main()
+{
+    // Same struct type, same member -> true
+    expect_eq("is_corresponding_member(&S1::a, &S1::a)", asc::std::is_corresponding_member(&S1::a, &S1::a), true);
+
+    // Same struct type, different members -> false
+    expect_eq("is_corresponding_member(&S1::a, &S1::b)", asc::std::is_corresponding_member(&S1::a, &S1::b), false);
+
+    // Layout-compatible structs, corresponding members -> true
+    expect_eq("is_corresponding_member(&S1::a, &S2::x)", asc::std::is_corresponding_member(&S1::a, &S2::x), true);
+    expect_eq("is_corresponding_member(&S1::b, &S2::y)", asc::std::is_corresponding_member(&S1::b, &S2::y), true);
+
+    // Layout-compatible structs, non-corresponding members -> false
+    expect_eq("is_corresponding_member(&S1::a, &S2::y)", asc::std::is_corresponding_member(&S1::a, &S2::y), false);
+    expect_eq("is_corresponding_member(&S1::b, &S2::x)", asc::std::is_corresponding_member(&S1::b, &S2::x), false);
+
+    // Constexpr context
+    constexpr bool ce = asc::std::is_corresponding_member(&S1::a, &S2::x);
+    expect_eq("constexpr is_corresponding_member(&S1::a, &S2::x)", ce, true);
+
+    // noexcept property
+    expect_eq("noexcept(is_corresponding_member(&S1::a, &S1::a))",
+        noexcept(asc::std::is_corresponding_member(&S1::a, &S1::a)), true);
+
+    return g_failures == 0 ? 0 : 1;
+}
