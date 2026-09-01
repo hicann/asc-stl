@@ -227,6 +227,53 @@ asc_stl_add_host_case("asc.std.__type_traits.is_volatile" "asc/std/__type_traits
 asc_stl_add_host_case("asc.std.__type_traits.negation" "asc/std/__type_traits/negation/host.pass.cpp")
 asc_stl_add_host_case("asc.std.__type_traits.rank" "asc/std/__type_traits/rank/host.pass.cpp")
 asc_stl_add_host_case("asc.std.__type_traits.remove_cv" "asc/std/__type_traits/remove_cv/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__concepts.same_as" "asc/std/__concepts/same_as/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__cstddef.byte" "asc/std/__cstddef/byte/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__fwd.array" "asc/std/__fwd/array/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__fwd.span" "asc/std/__fwd/span/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__tuple.tuple_indices" "asc/std/__tuple/tuple_indices/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__tuple.tuple_size" "asc/std/__tuple/tuple_size/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.is_callable" "asc/std/__type_traits/is_callable/host.pass.cpp")
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_extended_floating_point"
+    "asc/std/__type_traits/is_extended_floating_point/host.pass.cpp"
+)
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_floating_point" "asc/std/__type_traits/is_floating_point/host.pass.cpp"
+)
+asc_stl_add_host_case("asc.std.__type_traits.is_function" "asc/std/__type_traits/is_function/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.is_integral" "asc/std/__type_traits/is_integral/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.is_pointer" "asc/std/__type_traits/is_pointer/host.pass.cpp")
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_referenceable" "asc/std/__type_traits/is_referenceable/host.pass.cpp"
+)
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_signed_integer" "asc/std/__type_traits/is_signed_integer/host.pass.cpp"
+)
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_trivially_default_constructible"
+    "asc/std/__type_traits/is_trivially_default_constructible/host.pass.cpp"
+)
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_unsigned_integer" "asc/std/__type_traits/is_unsigned_integer/host.pass.cpp"
+)
+asc_stl_add_host_case("asc.std.__type_traits.make_nbit_int" "asc/std/__type_traits/make_nbit_int/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.promote" "asc/std/__type_traits/promote/host.pass.cpp")
+asc_stl_add_host_case(
+    "asc.std.__type_traits.underlying_type" "asc/std/__type_traits/underlying_type/host.pass.cpp"
+)
+asc_stl_add_host_case(
+    "asc.std.__utility.convert_to_integral" "asc/std/__utility/convert_to_integral/host.pass.cpp"
+)
+asc_stl_add_host_case(
+    "asc.std.__utility.integer_sequence" "asc/std/__utility/integer_sequence/host.pass.cpp"
+)
+asc_stl_add_host_case("asc.std.__utility.priority_tag" "asc/std/__utility/priority_tag/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__utility.to_underlying" "asc/std/__utility/to_underlying/host.pass.cpp")
+asc_stl_add_host_case("asc.std.cstddef" "asc/std/cstddef/host.pass.cpp")
+asc_stl_add_host_case(
+    "asc.std.cstddef.deprecated_names" "asc/std/cstddef/deprecated_names.absence.pass.cpp"
+)
 
 foreach(standard IN ITEMS 17 20)
     add_executable(

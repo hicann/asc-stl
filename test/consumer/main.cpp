@@ -19,12 +19,15 @@
 #include <asc/std/cassert>
 #include <asc/std/cfloat>
 #include <asc/std/ciso646>
+#include <asc/std/cstddef>
 #include <asc/std/climits>
 #include <asc/std/cstdalign>
 #include <asc/std/cstdbool>
 #include <asc/std/ratio>
 #include <asc/std/source_location>
 #include <asc/std/version>
+
+#include "core_consumers.h"
 
 int main()
 {
@@ -36,5 +39,6 @@ int main()
     constexpr auto location = asc::std::source_location::current("consumer.cpp", "consumer", 77, 9);
     static_assert(location.line() == 77);
     static_assert(location.column() == 9);
-    return 0;
+    static_assert(asc::std::to_integer<int>(asc::std::byte{0x10} << 1) == 0x20);
+    return asc_stl_core_consumer_a() + asc_stl_core_consumer_b();
 }
