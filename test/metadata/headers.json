@@ -768,6 +768,492 @@
         "cannsim_runtime": false,
         "hardware_runtime": false
       }
+    },
+    {
+      "target": "asc/std/__type_traits/conjunction.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/disjunction.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/fold.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_abstract.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_base_of.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_class.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_complete.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/void_t.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_const.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_core_convertible.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_empty.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_enum.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_final.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_reference.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_same.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_standard_layout.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_trivial.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_trivially_assignable.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_trivially_constructible.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_trivially_copyable.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_unbounded_array.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_union.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_valid_expansion.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/is_volatile.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/negation.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/rank.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__cstddef/types.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__type_traits/remove_cv.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/remove_const.h",
+        "asc/std/__type_traits/remove_volatile.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/ratio",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/climits",
+        "asc/std/cstdint"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/source_location",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/cstdint",
+        "asc/std/version"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "negative_cases": [
+        "device.fail.string_literal.asc"
+      ]
     }
   ]
 }

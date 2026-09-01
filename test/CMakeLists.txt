@@ -182,6 +182,51 @@ asc_stl_add_host_case("asc.std.__type_traits.void_t" "asc/std/__type_traits/void
 asc_stl_add_host_case("asc.std.__utility.as_const" "asc/std/__utility/as_const/host.pass.cpp")
 asc_stl_add_host_case("asc.std.__utility.declval" "asc/std/__utility/declval/host.pass.cpp")
 asc_stl_add_host_case("asc.std.cstdint" "asc/std/cstdint/host.pass.cpp")
+asc_stl_add_host_case("asc.std.ratio" "asc/std/ratio/host.pass.cpp")
+asc_stl_add_host_case("asc.std.source_location" "asc/std/source_location/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.conjunction" "asc/std/__type_traits/conjunction/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.disjunction" "asc/std/__type_traits/disjunction/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.fold" "asc/std/__type_traits/fold/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.is_abstract" "asc/std/__type_traits/is_abstract/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.is_base_of" "asc/std/__type_traits/is_base_of/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.is_class" "asc/std/__type_traits/is_class/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.is_complete" "asc/std/__type_traits/is_complete/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.is_const" "asc/std/__type_traits/is_const/host.pass.cpp")
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_core_convertible" "asc/std/__type_traits/is_core_convertible/host.pass.cpp"
+)
+asc_stl_add_host_case("asc.std.__type_traits.is_empty" "asc/std/__type_traits/is_empty/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.is_enum" "asc/std/__type_traits/is_enum/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.is_final" "asc/std/__type_traits/is_final/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.is_reference" "asc/std/__type_traits/is_reference/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.is_same" "asc/std/__type_traits/is_same/host.pass.cpp")
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_standard_layout" "asc/std/__type_traits/is_standard_layout/host.pass.cpp"
+)
+asc_stl_add_host_case("asc.std.__type_traits.is_trivial" "asc/std/__type_traits/is_trivial/host.pass.cpp")
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_trivially_assignable"
+    "asc/std/__type_traits/is_trivially_assignable/host.pass.cpp"
+)
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_trivially_constructible"
+    "asc/std/__type_traits/is_trivially_constructible/host.pass.cpp"
+)
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_trivially_copyable"
+    "asc/std/__type_traits/is_trivially_copyable/host.pass.cpp"
+)
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_unbounded_array" "asc/std/__type_traits/is_unbounded_array/host.pass.cpp"
+)
+asc_stl_add_host_case("asc.std.__type_traits.is_union" "asc/std/__type_traits/is_union/host.pass.cpp")
+asc_stl_add_host_case(
+    "asc.std.__type_traits.is_valid_expansion" "asc/std/__type_traits/is_valid_expansion/host.pass.cpp"
+)
+asc_stl_add_host_case("asc.std.__type_traits.is_volatile" "asc/std/__type_traits/is_volatile/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.negation" "asc/std/__type_traits/negation/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.rank" "asc/std/__type_traits/rank/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__type_traits.remove_cv" "asc/std/__type_traits/remove_cv/host.pass.cpp")
 
 foreach(standard IN ITEMS 17 20)
     add_executable(
@@ -250,12 +295,27 @@ endif()
 
 if(ASC_STL_ENABLE_CANNSIM_TESTS)
     set(
+        source_location_cannsim_case_root
+        "${ASC_STL_CASES_ROOT}/asc/std/source_location/runtime/cannsim"
+    )
+    set(source_location_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/source-location-cannsim")
+    set(
         foundation_cannsim_case_root
         "${ASC_STL_CASES_ROOT}/asc/std/__cstring/memcpy/runtime/cannsim"
     )
     set(foundation_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/foundation-cannsim")
     add_custom_target(
         asc_stl_cannsim_tests
+        COMMAND
+            "${CMAKE_COMMAND}" -S "${source_location_cannsim_case_root}"
+            -B "${source_location_cannsim_build_root}"
+            -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
+            -DASC_STL_CXX_STANDARD=${ASC_STL_TEST_CXX_STANDARD}
+            -DASC_STL_TARGET_SOC=${ASC_STL_TARGET_SOC}
+            -DCMAKE_BUILD_TYPE=Release
+        COMMAND
+            "${CMAKE_COMMAND}" --build "${source_location_cannsim_build_root}"
+            --target asc_stl_source_location_cannsim -j2
         COMMAND
             "${CMAKE_COMMAND}" -S "${foundation_cannsim_case_root}"
             -B "${foundation_cannsim_build_root}"
@@ -267,6 +327,21 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
             "${CMAKE_COMMAND}" --build "${foundation_cannsim_build_root}"
             --target asc_stl_foundation_cannsim -j2
         VERBATIM
+    )
+    add_test(
+        NAME semantic.cannsim.asc.std.source-location
+        COMMAND
+            "${ASC_STL_TEST_ROOT}/scripts/run_cannsim_test.sh"
+            "${ASC_STL_CANNSIM_EXECUTABLE}"
+            "${source_location_cannsim_build_root}/asc_stl_source_location_cannsim"
+            "${ASC_STL_CANNSIM_SOC}"
+            "${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/source-location"
+            "${source_location_cannsim_build_root}/lib"
+            ASC_STL_CANNSIM_ASC_STD_SOURCE_LOCATION_PASS
+    )
+    set_tests_properties(
+        semantic.cannsim.asc.std.source-location
+        PROPERTIES LABELS "cannsim-smoke;cannsim-runtime" RUN_SERIAL TRUE
     )
     add_test(
         NAME semantic.cannsim.asc.std.foundation-runtime

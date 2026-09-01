@@ -22,6 +22,8 @@
 #include <asc/std/climits>
 #include <asc/std/cstdalign>
 #include <asc/std/cstdbool>
+#include <asc/std/ratio>
+#include <asc/std/source_location>
 #include <asc/std/version>
 
 int main()
@@ -30,5 +32,9 @@ int main()
     static_assert(asc::tie_break::prefer_smaller_index != asc::tie_break::prefer_larger_index);
     static_assert(CHAR_BIT >= 8);
     static_assert(DECIMAL_DIG >= 10);
+    static_assert(asc::std::ratio_equal_v<asc::std::ratio<2, 4>, asc::std::ratio<1, 2>>);
+    constexpr auto location = asc::std::source_location::current("consumer.cpp", "consumer", 77, 9);
+    static_assert(location.line() == 77);
+    static_assert(location.column() == 9);
     return 0;
 }

@@ -37,6 +37,7 @@
 #include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/as_const.h>
 #include <asc/std/__utility/declval.h>
+#include <asc/std/ratio>
 
 namespace asc_stl_foundation_test {
 template <class, class>
@@ -72,6 +73,14 @@ static_assert(same_type<asc::std::remove_volatile_t<volatile int>, int>);
 static_assert(same_type<asc::std::type_identity_t<int>, int>);
 static_assert(same_type<asc::std::void_t<int, long>, void>);
 static_assert(same_type<decltype(asc::std::declval<void>()), void>);
+static_assert(asc::std::ratio_equal_v<asc::std::ratio<2, 4>, asc::std::ratio<1, 2>>);
+static_assert(asc::std::ratio_add<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>::num == 5);
+static_assert(asc::std::ratio_subtract<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>::num == 1);
+static_assert(asc::std::ratio_multiply<asc::std::ratio<2, 3>, asc::std::ratio<3, 4>>::num == 1);
+static_assert(asc::std::ratio_divide<asc::std::ratio<2, 3>, asc::std::ratio<4, 5>>::num == 5);
+static_assert(asc::std::ratio_less_v<asc::std::milli, asc::std::centi>);
+static_assert(asc::std::atto::den == 1000000000000000000LL);
+static_assert(asc::std::exa::num == 1000000000000000000LL);
 
 CANN_ASC_STL_API int evaluate() noexcept
 {

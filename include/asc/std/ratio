@@ -1,0 +1,253 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_STD_RATIO
+#define CANN_ASC_STL_STD_RATIO
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__detail/attributes.h>
+#include <asc/std/__type_traits/integral_constant.h>
+#include <asc/std/climits>
+#include <asc/std/cstdint>
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+template <intmax_t X, intmax_t Y>
+struct __ratio_gcd_value {
+    static constexpr intmax_t value = __ratio_gcd_value<Y, X % Y>::value;
+};
+template <intmax_t X>
+struct __ratio_gcd_value<X, 0> {
+    static constexpr intmax_t value = X;
+};
+template <>
+struct __ratio_gcd_value<0, 0> {
+    static constexpr intmax_t value = 1;
+};
+
+template <intmax_t Value>
+struct __ratio_abs {
+    static_assert(Value != INTMAX_MIN, "ratio value is out of range");
+    static constexpr intmax_t value = Value < 0 ? -Value : Value;
+};
+template <intmax_t Value>
+struct __ratio_sign {
+    static constexpr intmax_t value = Value == 0 ? 0 : (Value < 0 ? -1 : 1);
+};
+
+template <intmax_t X, intmax_t Y, intmax_t Sign = __ratio_sign<Y>::value>
+struct __ratio_add_value;
+template <intmax_t X, intmax_t Y>
+struct __ratio_add_value<X, Y, 1> {
+    static_assert(X <= INTMAX_MAX - Y, "ratio addition overflow");
+    static constexpr intmax_t value = X + Y;
+};
+template <intmax_t X, intmax_t Y>
+struct __ratio_add_value<X, Y, 0> {
+    static constexpr intmax_t value = X;
+};
+template <intmax_t X, intmax_t Y>
+struct __ratio_add_value<X, Y, -1> {
+    static_assert(INTMAX_MIN - Y <= X, "ratio addition overflow");
+    static constexpr intmax_t value = X + Y;
+};
+
+template <intmax_t X, intmax_t Y, intmax_t Sign = __ratio_sign<Y>::value>
+struct __ratio_sub_value;
+template <intmax_t X, intmax_t Y>
+struct __ratio_sub_value<X, Y, 1> {
+    static_assert(INTMAX_MIN + Y <= X, "ratio subtraction overflow");
+    static constexpr intmax_t value = X - Y;
+};
+template <intmax_t X, intmax_t Y>
+struct __ratio_sub_value<X, Y, 0> {
+    static constexpr intmax_t value = X;
+};
+template <intmax_t X, intmax_t Y>
+struct __ratio_sub_value<X, Y, -1> {
+    static_assert(X <= INTMAX_MAX + Y, "ratio subtraction overflow");
+    static constexpr intmax_t value = X - Y;
+};
+
+template <intmax_t X, intmax_t Y>
+struct __ratio_mul_value {
+    static constexpr intmax_t abs_x = __ratio_abs<X>::value;
+    static constexpr intmax_t abs_y = __ratio_abs<Y>::value;
+    static_assert(abs_x <= INTMAX_MAX / abs_y, "ratio multiplication overflow");
+    static constexpr intmax_t value = X * Y;
+};
+template <intmax_t Y>
+struct __ratio_mul_value<0, Y> {
+    static constexpr intmax_t value = 0;
+};
+template <intmax_t X>
+struct __ratio_mul_value<X, 0> {
+    static constexpr intmax_t value = 0;
+};
+template <>
+struct __ratio_mul_value<0, 0> {
+    static constexpr intmax_t value = 0;
+};
+
+template <intmax_t Numerator, intmax_t Denominator = 1>
+class ratio {
+    static_assert(Denominator != 0, "ratio denominator cannot be zero");
+    static constexpr intmax_t numerator_abs = __ratio_abs<Numerator>::value;
+    static constexpr intmax_t denominator_abs = __ratio_abs<Denominator>::value;
+    static constexpr intmax_t sign = __ratio_sign<Numerator>::value * __ratio_sign<Denominator>::value;
+    static constexpr intmax_t divisor = __ratio_gcd_value<numerator_abs, denominator_abs>::value;
+
+public:
+    static constexpr intmax_t num = sign * numerator_abs / divisor;
+    static constexpr intmax_t den = denominator_abs / divisor;
+    using type = ratio<num, den>;
+};
+
+using atto = ratio<1LL, 1000000000000000000LL>;
+using femto = ratio<1LL, 1000000000000000LL>;
+using pico = ratio<1LL, 1000000000000LL>;
+using nano = ratio<1LL, 1000000000LL>;
+using micro = ratio<1LL, 1000000LL>;
+using milli = ratio<1LL, 1000LL>;
+using centi = ratio<1LL, 100LL>;
+using deci = ratio<1LL, 10LL>;
+using deca = ratio<10LL, 1LL>;
+using hecto = ratio<100LL, 1LL>;
+using kilo = ratio<1000LL, 1LL>;
+using mega = ratio<1000000LL, 1LL>;
+using giga = ratio<1000000000LL, 1LL>;
+using tera = ratio<1000000000000LL, 1LL>;
+using peta = ratio<1000000000000000LL, 1LL>;
+using exa = ratio<1000000000000000000LL, 1LL>;
+
+template <class R1, class R2>
+struct __ratio_multiply {
+    static constexpr intmax_t gcd_n1_d2 = __ratio_gcd_value<R1::num, R2::den>::value;
+    static constexpr intmax_t gcd_d1_n2 = __ratio_gcd_value<R1::den, R2::num>::value;
+    using type = typename ratio<__ratio_mul_value<R1::num / gcd_n1_d2, R2::num / gcd_d1_n2>::value,
+        __ratio_mul_value<R2::den / gcd_n1_d2, R1::den / gcd_d1_n2>::value>::type;
+};
+template <class R1, class R2>
+using ratio_multiply = typename __ratio_multiply<R1, R2>::type;
+
+template <class R1, class R2>
+struct __ratio_divide {
+    static constexpr intmax_t gcd_n1_n2 = __ratio_gcd_value<R1::num, R2::num>::value;
+    static constexpr intmax_t gcd_d1_d2 = __ratio_gcd_value<R1::den, R2::den>::value;
+    using type = typename ratio<__ratio_mul_value<R1::num / gcd_n1_n2, R2::den / gcd_d1_d2>::value,
+        __ratio_mul_value<R2::num / gcd_n1_n2, R1::den / gcd_d1_d2>::value>::type;
+};
+template <class R1, class R2>
+using ratio_divide = typename __ratio_divide<R1, R2>::type;
+
+template <class R1, class R2>
+struct __ratio_add {
+    static constexpr intmax_t gcd_n1_n2 = __ratio_gcd_value<R1::num, R2::num>::value;
+    static constexpr intmax_t gcd_d1_d2 = __ratio_gcd_value<R1::den, R2::den>::value;
+    using type = typename ratio_multiply<ratio<gcd_n1_n2, R1::den / gcd_d1_d2>,
+        ratio<__ratio_add_value<__ratio_mul_value<R1::num / gcd_n1_n2, R2::den / gcd_d1_d2>::value,
+                  __ratio_mul_value<R2::num / gcd_n1_n2, R1::den / gcd_d1_d2>::value>::value,
+            R2::den>>::type;
+};
+template <class R1, class R2>
+using ratio_add = typename __ratio_add<R1, R2>::type;
+
+template <class R1, class R2>
+struct __ratio_subtract {
+    static constexpr intmax_t gcd_n1_n2 = __ratio_gcd_value<R1::num, R2::num>::value;
+    static constexpr intmax_t gcd_d1_d2 = __ratio_gcd_value<R1::den, R2::den>::value;
+    using type = typename ratio_multiply<ratio<gcd_n1_n2, R1::den / gcd_d1_d2>,
+        ratio<__ratio_sub_value<__ratio_mul_value<R1::num / gcd_n1_n2, R2::den / gcd_d1_d2>::value,
+                  __ratio_mul_value<R2::num / gcd_n1_n2, R1::den / gcd_d1_d2>::value>::value,
+            R2::den>>::type;
+};
+template <class R1, class R2>
+using ratio_subtract = typename __ratio_subtract<R1, R2>::type;
+
+template <class R1, class R2>
+struct ratio_equal : bool_constant<(R1::num == R2::num && R1::den == R2::den)> {};
+template <class R1, class R2>
+struct ratio_not_equal : bool_constant<!ratio_equal<R1, R2>::value> {};
+
+template <class R1, class R2, bool Odd = false, intmax_t Q1 = R1::num / R1::den, intmax_t M1 = R1::num % R1::den,
+    intmax_t Q2 = R2::num / R2::den, intmax_t M2 = R2::num % R2::den>
+struct __ratio_less_positive {
+    static constexpr bool value = Odd ? Q2 < Q1 : Q1 < Q2;
+};
+template <class R1, class R2, bool Odd, intmax_t Q>
+struct __ratio_less_positive<R1, R2, Odd, Q, 0, Q, 0> {
+    static constexpr bool value = false;
+};
+template <class R1, class R2, bool Odd, intmax_t Q, intmax_t M2>
+struct __ratio_less_positive<R1, R2, Odd, Q, 0, Q, M2> {
+    static constexpr bool value = !Odd;
+};
+template <class R1, class R2, bool Odd, intmax_t Q, intmax_t M1>
+struct __ratio_less_positive<R1, R2, Odd, Q, M1, Q, 0> {
+    static constexpr bool value = Odd;
+};
+template <class R1, class R2, bool Odd, intmax_t Q, intmax_t M1, intmax_t M2>
+struct __ratio_less_positive<R1, R2, Odd, Q, M1, Q, M2> {
+    static constexpr bool value = __ratio_less_positive<ratio<R1::den, M1>, ratio<R2::den, M2>, !Odd>::value;
+};
+
+template <class R1, class R2, intmax_t S1 = __ratio_sign<R1::num>::value, intmax_t S2 = __ratio_sign<R2::num>::value>
+struct __ratio_less_value {
+    static constexpr bool value = S1 < S2;
+};
+template <class R1, class R2>
+struct __ratio_less_value<R1, R2, 1, 1> {
+    static constexpr bool value = __ratio_less_positive<R1, R2>::value;
+};
+template <class R1, class R2>
+struct __ratio_less_value<R1, R2, -1, -1> {
+    static constexpr bool value = __ratio_less_positive<ratio<-R2::num, R2::den>, ratio<-R1::num, R1::den>>::value;
+};
+
+template <class R1, class R2>
+struct ratio_less : bool_constant<__ratio_less_value<R1, R2>::value> {};
+template <class R1, class R2>
+struct ratio_less_equal : bool_constant<!ratio_less<R2, R1>::value> {};
+template <class R1, class R2>
+struct ratio_greater : bool_constant<ratio_less<R2, R1>::value> {};
+template <class R1, class R2>
+struct ratio_greater_equal : bool_constant<!ratio_less<R1, R2>::value> {};
+
+template <class R1, class R2>
+inline constexpr bool ratio_equal_v = ratio_equal<R1, R2>::value;
+template <class R1, class R2>
+inline constexpr bool ratio_not_equal_v = ratio_not_equal<R1, R2>::value;
+template <class R1, class R2>
+inline constexpr bool ratio_less_v = ratio_less<R1, R2>::value;
+template <class R1, class R2>
+inline constexpr bool ratio_less_equal_v = ratio_less_equal<R1, R2>::value;
+template <class R1, class R2>
+inline constexpr bool ratio_greater_v = ratio_greater<R1, R2>::value;
+template <class R1, class R2>
+inline constexpr bool ratio_greater_equal_v = ratio_greater_equal<R1, R2>::value;
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_STD_RATIO
