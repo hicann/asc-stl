@@ -22,8 +22,9 @@
 
 namespace {
 constexpr int kDeviceId = 0;
-constexpr std::array<std::uint32_t, 16> kExpected = {0x13579BDFU, 0x1001U, 0U, 0x1002U, 17U, 0x1003U, 365U, 0x1004U,
-    314U, 0x1005U, 1U, 0x1006U, 1U, 0xA5A5A5A5U, 0x5A5A5A5AU, 0x2468ACE0U};
+constexpr std::array<std::uint32_t, 32> kExpected = {0x13579BDFU, 0x1001U, 0U, 0x1002U, 17U, 0x1003U, 365U, 0x1004U,
+    314U, 0x1005U, 1U, 0x1006U, 1U, 0xA5A5A5A5U, 0x5A5A5A5AU, 0x2468ACE0U, 0x1007U, 1U, 0x1008U, 1U, 0x1009U, 1U,
+    0x100AU, 1U, 0x100BU, 1U, 0x100CU, 1U, 0x100DU, 1U, 0x100EU, 1U};
 bool check(aclError result, const char* operation)
 {
     if (result == ACL_SUCCESS)
@@ -34,7 +35,7 @@ bool check(aclError result, const char* operation)
 }  // namespace
 int main()
 {
-    std::array<std::uint32_t, 16> actual{};
+    std::array<std::uint32_t, 32> actual{};
     void* device_output = nullptr;
     aclrtStream stream = nullptr;
     bool passed = check(aclInit(nullptr), "aclInit") && check(aclrtSetDevice(kDeviceId), "aclrtSetDevice") &&

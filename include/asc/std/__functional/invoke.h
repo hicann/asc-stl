@@ -1,0 +1,215 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+#ifndef CANN_ASC_STL_ASC_STDDETAIL__FUNCTIONAL_INVOKE_H
+#define CANN_ASC_STL_ASC_STDDETAIL__FUNCTIONAL_INVOKE_H
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__detail/attributes.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__fwd/reference_wrapper.h>
+#include <asc/std/__type_traits/decay.h>
+#include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/integral_constant.h>
+#include <asc/std/__type_traits/is_base_of.h>
+#include <asc/std/__type_traits/is_core_convertible.h>
+#include <asc/std/__type_traits/is_member_function_pointer.h>
+#include <asc/std/__type_traits/is_member_object_pointer.h>
+#include <asc/std/__type_traits/is_void.h>
+#include <asc/std/__type_traits/remove_cvref.h>
+#include <asc/std/__type_traits/void_t.h>
+#include <asc/std/__utility/declval.h>
+#include <asc/std/__utility/forward.h>
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+template <class T>
+struct __member_pointer_class_type {};
+template <class R, class C>
+struct __member_pointer_class_type<R C::*> {
+    using type = C;
+};
+template <class T>
+using __member_pointer_class_type_t = typename __member_pointer_class_type<T>::type;
+
+template <class F, class A0, class DecayF = decay_t<F>, class DecayA0 = decay_t<A0>,
+    class ClassT = __member_pointer_class_type_t<DecayF>>
+using __enable_if_bullet1 = enable_if_t<is_member_function_pointer_v<DecayF> && is_base_of_v<ClassT, DecayA0>>;
+
+template <class F, class A0, class DecayF = decay_t<F>, class DecayA0 = decay_t<A0>>
+using __enable_if_bullet2 =
+    enable_if_t<is_member_function_pointer_v<DecayF> && __is_asc_std_reference_wrapper_v<DecayA0>>;
+
+template <class F, class A0, class DecayF = decay_t<F>, class DecayA0 = decay_t<A0>,
+    class ClassT = __member_pointer_class_type_t<DecayF>>
+using __enable_if_bullet3 = enable_if_t<is_member_function_pointer_v<DecayF> && !is_base_of_v<ClassT, DecayA0> &&
+    !__is_asc_std_reference_wrapper_v<DecayA0>>;
+
+template <class F, class A0, class DecayF = decay_t<F>, class DecayA0 = decay_t<A0>,
+    class ClassT = __member_pointer_class_type_t<DecayF>>
+using __enable_if_bullet4 = enable_if_t<is_member_object_pointer_v<DecayF> && is_base_of_v<ClassT, DecayA0>>;
+
+template <class F, class A0, class DecayF = decay_t<F>, class DecayA0 = decay_t<A0>>
+using __enable_if_bullet5 =
+    enable_if_t<is_member_object_pointer_v<DecayF> && __is_asc_std_reference_wrapper_v<DecayA0>>;
+
+template <class F, class A0, class DecayF = decay_t<F>, class DecayA0 = decay_t<A0>,
+    class ClassT = __member_pointer_class_type_t<DecayF>>
+using __enable_if_bullet6 = enable_if_t<is_member_object_pointer_v<DecayF> && !is_base_of_v<ClassT, DecayA0> &&
+    !__is_asc_std_reference_wrapper_v<DecayA0>>;
+
+template <class F, class A0, class... Args, class = __enable_if_bullet1<F, A0>>
+CANN_ASC_STL_API constexpr auto __invoke(F&& function, A0&& object, Args&&... arguments) noexcept(
+    noexcept((::asc::std::forward<A0>(object).*function)(::asc::std::forward<Args>(arguments)...)))
+    -> decltype((::asc::std::forward<A0>(object).*function)(::asc::std::forward<Args>(arguments)...))
+{
+    return (::asc::std::forward<A0>(object).*function)(::asc::std::forward<Args>(arguments)...);
+}
+
+template <class F, class A0, class... Args, class = __enable_if_bullet2<F, A0>>
+CANN_ASC_STL_API constexpr auto __invoke(F&& function, A0&& object, Args&&... arguments) noexcept(
+    noexcept((object.get().*function)(::asc::std::forward<Args>(
+        arguments)...))) -> decltype((object.get().*function)(::asc::std::forward<Args>(arguments)...))
+{
+    return (object.get().*function)(::asc::std::forward<Args>(arguments)...);
+}
+
+template <class F, class A0, class... Args, class = __enable_if_bullet3<F, A0>>
+CANN_ASC_STL_API constexpr auto __invoke(F&& function, A0&& object, Args&&... arguments) noexcept(
+    noexcept(((*::asc::std::forward<A0>(object)).*function)(::asc::std::forward<Args>(arguments)...)))
+    -> decltype(((*::asc::std::forward<A0>(object)).*function)(::asc::std::forward<Args>(arguments)...))
+{
+    return ((*::asc::std::forward<A0>(object)).*function)(::asc::std::forward<Args>(arguments)...);
+}
+
+template <class F, class A0, class = __enable_if_bullet4<F, A0>>
+CANN_ASC_STL_API constexpr auto __invoke(F&& function, A0&& object) noexcept(
+    noexcept(::asc::std::forward<A0>(object).*function)) -> decltype(::asc::std::forward<A0>(object).*function)
+{
+    return ::asc::std::forward<A0>(object).*function;
+}
+
+template <class F, class A0, class = __enable_if_bullet5<F, A0>>
+CANN_ASC_STL_API constexpr auto __invoke(F&& function, A0&& object) noexcept(
+    noexcept(object.get().*function)) -> decltype(object.get().*function)
+{
+    return object.get().*function;
+}
+
+template <class F, class A0, class = __enable_if_bullet6<F, A0>>
+CANN_ASC_STL_API constexpr auto __invoke(F&& function, A0&& object) noexcept(
+    noexcept((*::asc::std::forward<A0>(object)).*function)) -> decltype((*::asc::std::forward<A0>(object)).*function)
+{
+    return (*::asc::std::forward<A0>(object)).*function;
+}
+
+template <class F, class... Args>
+CANN_ASC_STL_API constexpr auto __invoke(F&& function, Args&&... arguments) noexcept(
+    noexcept(::asc::std::forward<F>(function)(::asc::std::forward<Args>(
+        arguments)...))) -> decltype(::asc::std::forward<F>(function)(::asc::std::forward<Args>(arguments)...))
+{
+    return ::asc::std::forward<F>(function)(::asc::std::forward<Args>(arguments)...);
+}
+
+template <class, class F, class... Args>
+struct __invoke_result_impl {
+    static constexpr bool __is_invocable = false;
+};
+
+template <class F, class... Args>
+struct __invoke_result_impl<
+    void_t<decltype(::asc::std::__invoke(::asc::std::declval<F>(), ::asc::std::declval<Args>()...))>, F, Args...> {
+    using type = decltype(::asc::std::__invoke(::asc::std::declval<F>(), ::asc::std::declval<Args>()...));
+    static constexpr bool __is_invocable = true;
+};
+
+template <class F, class... Args>
+using __invoke_result = __invoke_result_impl<void, F, Args...>;
+template <class F, class... Args>
+using __invoke_result_t = typename __invoke_result<F, Args...>::type;
+template <class F, class... Args>
+inline constexpr bool __is_invocable_v = __invoke_result<F, Args...>::__is_invocable;
+template <bool, class R, class F, class... Args>
+inline constexpr bool __is_invocable_r_impl = false;
+template <class R, class F, class... Args>
+inline constexpr bool __is_invocable_r_impl<true, R, F, Args...> =
+    is_void_v<R> || __is_core_convertible<__invoke_result_t<F, Args...>, R>::value;
+template <class R, class F, class... Args>
+inline constexpr bool __is_invocable_r_v = __is_invocable_r_impl<__is_invocable_v<F, Args...>, R, F, Args...>;
+template <class F, class... Args>
+struct invoke_result : __invoke_result<F, Args...> {};
+template <class F, class... Args>
+using invoke_result_t = typename invoke_result<F, Args...>::type;
+template <class F, class... Args>
+struct is_invocable : bool_constant<__is_invocable_v<F, Args...>> {};
+template <class R, class F, class... Args>
+struct is_invocable_r : bool_constant<__is_invocable_r_v<R, F, Args...>> {};
+template <class F, class... Args>
+inline constexpr bool is_invocable_v = __is_invocable_v<F, Args...>;
+template <class R, class F, class... Args>
+inline constexpr bool is_invocable_r_v = __is_invocable_r_v<R, F, Args...>;
+template <class T>
+CANN_ASC_STL_API constexpr void __asc_test_noexcept_conversion(T) noexcept;
+template <bool IsInvocable, bool IsVoid, class R, class F, class... Args>
+inline constexpr bool __nothrow_invocable_r_impl = false;
+template <class R, class F, class... Args>
+inline constexpr bool __nothrow_invocable_r_impl<true, false, R, F, Args...> =
+    noexcept(::asc::std::__asc_test_noexcept_conversion<R>(
+        ::asc::std::__invoke(::asc::std::declval<F>(), ::asc::std::declval<Args>()...)));
+template <class R, class F, class... Args>
+inline constexpr bool __nothrow_invocable_r_impl<true, true, R, F, Args...> =
+    noexcept(::asc::std::__invoke(::asc::std::declval<F>(), ::asc::std::declval<Args>()...));
+template <class F, class... Args>
+inline constexpr bool is_nothrow_invocable_v =
+    __nothrow_invocable_r_impl<__is_invocable_v<F, Args...>, true, void, F, Args...>;
+template <class R, class F, class... Args>
+inline constexpr bool is_nothrow_invocable_r_v =
+    __nothrow_invocable_r_impl<__is_invocable_r_v<R, F, Args...>, is_void_v<R>, R, F, Args...>;
+template <class F, class... Args>
+struct is_nothrow_invocable : bool_constant<is_nothrow_invocable_v<F, Args...>> {};
+template <class R, class F, class... Args>
+struct is_nothrow_invocable_r : bool_constant<is_nothrow_invocable_r_v<R, F, Args...>> {};
+template <class F, class... Args>
+CANN_ASC_STL_API constexpr invoke_result_t<F, Args...> invoke(F&& function, Args&&... arguments) noexcept(
+    is_nothrow_invocable_v<F, Args...>)
+{
+    return ::asc::std::__invoke(::asc::std::forward<F>(function), ::asc::std::forward<Args>(arguments)...);
+}
+template <class R, class F, class... Args>
+CANN_ASC_STL_API constexpr auto invoke_r(F&& function, Args&&... arguments) noexcept(
+    is_nothrow_invocable_r_v<R, F, Args...>) -> enable_if_t<is_invocable_r_v<R, F, Args...>, R>
+{
+    if constexpr (is_void_v<R>) {
+        ::asc::std::__invoke(::asc::std::forward<F>(function), ::asc::std::forward<Args>(arguments)...);
+    } else {
+        return ::asc::std::__invoke(::asc::std::forward<F>(function),  // NOLINT(build/include_what_you_use)
+            ::asc::std::forward<Args>(arguments)...);                  // NOLINT(build/include_what_you_use)
+    }
+}
+template <class Invocable, class Input, class Init = Input>
+using __accumulator_t = decay_t<invoke_result_t<Invocable, Init, Input>>;
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_ASC_STDDETAIL__FUNCTIONAL_INVOKE_H

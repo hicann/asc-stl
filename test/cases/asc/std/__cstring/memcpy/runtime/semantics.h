@@ -16,12 +16,17 @@
 
 #ifndef ASC_STL_TEST_FOUNDATION_RUNTIME_SEMANTICS_H
 #define ASC_STL_TEST_FOUNDATION_RUNTIME_SEMANTICS_H
+#include <asc/std/__bit/bit_cast.h>
 #include <asc/std/__cstring/memcpy.h>
 #include <asc/std/__cstring/memset.h>
+#include <asc/std/__floating_point/storage.h>
 #include <asc/std/__memory/addressof.h>
 #include <asc/std/__type_traits/is_constant_evaluated.h>
 #include <asc/std/__utility/as_const.h>
+#include <asc/std/__utility/forward.h>
+#include <asc/std/__utility/forward_like.h>
 #include <asc/std/cstdint>
+#include <asc/std/numbers>
 namespace asc_stl_foundation_runtime {
 struct address_probe {
     CANN_ASC_STL_API address_probe* operator&() noexcept  // NOLINT(runtime/operator)
@@ -53,6 +58,36 @@ CANN_ASC_STL_API void evaluate(asc::std::uint32_t* output) noexcept
     output[13] = 0xA5A5A5A5U;
     output[14] = 0x5A5A5A5AU;
     output[15] = 0x2468ACE0U;
+    // forward/forward_like: reference identity is a language property and the
+    // expected values below are independent Host goldens.
+    int forward_base = 41;
+    output[16] = 0x1007U;
+    int& forwarded_lvalue = asc::std::forward<int&>(forward_base);  // NOLINT(build/include_what_you_use)
+    output[17] = &forwarded_lvalue == &forward_base ? 1U : 0U;
+    output[18] = 0x1008U;
+    int&& forwarded_rvalue = asc::std::forward<int>(forward_base);  // NOLINT(build/include_what_you_use)
+    output[19] = &forwarded_rvalue == &forward_base ? 1U : 0U;
+    output[20] = 0x1009U;
+    const int& const_borrowed = asc::std::forward_like<const long&>(forward_base);
+    output[21] = &const_borrowed == &forward_base ? 1U : 0U;
+    output[22] = 0x100AU;
+    int&& move_borrowed = asc::std::forward_like<long&&>(forward_base);
+    output[23] = &move_borrowed == &forward_base ? 1U : 0U;
+    // bit_cast / fp storage / numbers: IEEE 754 bit patterns are
+    // the independent goldens, and the numbers paths stay constant-folded or
+    // float because ordinary AICore does not deliver runtime double
+    // operations.
+    output[24] = 0x100BU;
+    output[25] = asc::std::bit_cast<asc::std::uint32_t>(2.0f) == 0x40000000u ? 1U : 0U;
+    output[26] = 0x100CU;
+    output[27] = asc::std::__fp_get_storage(4.0f) == 0x40800000u ? 1U : 0U;
+    output[28] = 0x100DU;
+    output[29] = asc::std::__fp_from_storage<float>(0x40800000u) == 4.0f ? 1U : 0U;
+    output[30] = 0x100EU;
+    output[31] = static_cast<unsigned>(asc::std::pi_v<float> * 100.0f) == 314u &&
+            static_cast<unsigned>(static_cast<float>(asc::std::numbers::e) * 100.0f) == 271u ?
+        1U :
+        0U;
 }
 }  // namespace asc_stl_foundation_runtime
 #endif

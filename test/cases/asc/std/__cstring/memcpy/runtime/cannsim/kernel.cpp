@@ -19,9 +19,9 @@
 extern "C" __global__ __aicore__ void asc_stl_foundation_cannsim(GM_ADDR output)
 {
     AscendC::GlobalTensor<asc::std::uint32_t> result;
-    result.SetGlobalBuffer(reinterpret_cast<__gm__ asc::std::uint32_t*>(output), 16);
-    asc::std::uint32_t local[16] = {};
+    result.SetGlobalBuffer(reinterpret_cast<__gm__ asc::std::uint32_t*>(output), 32);
+    asc::std::uint32_t local[32] = {};
     asc_stl_foundation_runtime::evaluate(local);
-    for (int index = 0; index < 16; ++index)
+    for (int index = 0; index < 32; ++index)
         result.SetValue(index, local[index]);
 }

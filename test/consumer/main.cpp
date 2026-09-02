@@ -23,6 +23,7 @@
 #include <asc/std/climits>
 #include <asc/std/cstdalign>
 #include <asc/std/cstdbool>
+#include <asc/std/cstdint>
 #include <asc/std/ratio>
 #include <asc/std/source_location>
 #include <asc/std/version>
@@ -39,6 +40,11 @@ int main()
     constexpr auto location = asc::std::source_location::current("consumer.cpp", "consumer", 77, 9);
     static_assert(location.line() == 77);
     static_assert(location.column() == 9);
+    static_assert(sizeof(asc::std::uint32_t) == 4);
     static_assert(asc::std::to_integer<int>(asc::std::byte{0x10} << 1) == 0x20);
-    return asc_stl_core_consumer_a() + asc_stl_core_consumer_b();
+    return asc_stl_type_transform_consumer_a() + asc_stl_type_transform_consumer_b() +
+        asc_stl_constructibility_consumer_a() + asc_stl_constructibility_consumer_b() +
+        asc_stl_execution_properties_consumer_a() + asc_stl_type_traits_consumer_a() +
+        asc_stl_type_traits_consumer_b() + asc_stl_core_consumer_a() + asc_stl_core_consumer_b() +
+        asc_stl_vocabulary_consumer_a() + asc_stl_vocabulary_consumer_b() + asc_stl_concepts_limits_consumer_a();
 }

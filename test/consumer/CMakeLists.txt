@@ -18,6 +18,23 @@ project(asc_stl_installed_consumer LANGUAGES CXX)
 
 find_package(asc_stl CONFIG REQUIRED)
 
-add_executable(asc_stl_installed_consumer main.cpp core_a.cpp core_b.cpp)
+add_executable(
+    asc_stl_installed_consumer
+    main.cpp
+    type_traits_a.cpp
+    type_traits_b.cpp
+    core_a.cpp
+    core_b.cpp
+    vocabulary_a.cpp
+    vocabulary_b.cpp
+    type_transform_a.cpp
+    type_transform_b.cpp
+    constructibility_a.cpp
+    constructibility_b.cpp
+    execution_properties_a.cpp
+    execution_properties_b.cpp
+    concepts_limits_a.cpp
+    concepts_limits_b.cpp
+)
 target_link_libraries(asc_stl_installed_consumer PRIVATE asc_stl::asc_stl)
 target_compile_options(asc_stl_installed_consumer PRIVATE -Wall -Wextra -Werror -pedantic)

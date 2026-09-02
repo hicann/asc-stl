@@ -1,0 +1,162 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+#ifndef CANN_ASC_STL_STD_NUMBERS
+#define CANN_ASC_STL_STD_NUMBERS
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__detail/attributes.h>
+#include <asc/std/__floating_point/storage.h>
+#include <asc/std/__type_traits/always_false.h>
+#include <asc/std/version>
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+// The delivered *_v contract places the float variable templates directly in
+// asc::std (the frozen qualified names are asc::std::e_v and so on); the
+// double and long double specializations are excluded this phase, and the
+// extended __asc_fp specializations join with the future extended
+// floating-point definition batch. Instantiating the primary template of a
+// mathematical constant variable template remains ill-formed.
+template <class Tp>
+struct __numbers {
+    static_assert(__always_false_v<Tp>,
+        "[math.constants] A program that instantiates a primary template of a mathematical constant "
+        "variable template is ill-formed.");
+};
+
+// The accessors are plain constexpr: CANN_ASC_STL_API expands to a
+// Device-only function in pure SIMT, and CCE rejects references to __device__
+// functions in the namespace-scope *_v initializers.
+template <>
+struct __numbers<float> {
+    static constexpr float __e() noexcept
+    {
+        return 0x1.5bf0a8b1457695355fb8ac404e7ap+1f;
+    }
+    static constexpr float __log2e() noexcept
+    {
+        return 0x1.71547652b82fe1777d0ffda0d23ap+0f;
+    }
+    static constexpr float __log10e() noexcept
+    {
+        return 0x1.bcb7b1526e50e32a6ab7555f5a68p-2f;
+    }
+    static constexpr float __pi() noexcept
+    {
+        return 0x1.921fb54442d18469898cc51701b8p+1f;
+    }
+    static constexpr float __inv_pi() noexcept
+    {
+        return 0x1.45f306dc9c882a53f84eafa3ea6ap-2f;
+    }
+    static constexpr float __inv_sqrtpi() noexcept
+    {
+        return 0x1.20dd750429b6d11ae3a914fed7fep-1f;
+    }
+    static constexpr float __ln2() noexcept
+    {
+        return 0x1.62e42fefa39ef35793c7673007e6p-1f;
+    }
+    static constexpr float __ln10() noexcept
+    {
+        return 0x1.26bb1bbb5551582dd4adac5705a6p+1f;
+    }
+    static constexpr float __sqrt2() noexcept
+    {
+        return 0x1.6a09e667f3bcc908b2fb1366ea95p+0f;
+    }
+    static constexpr float __sqrt3() noexcept
+    {
+        return 0x1.bb67ae8584caa73b25742d7078b8p+0f;
+    }
+    static constexpr float __inv_sqrt3() noexcept
+    {
+        return 0x1.279a74590331c4d218f81e4afb25p-1f;
+    }
+    static constexpr float __egamma() noexcept
+    {
+        return 0x1.2788cfc6fb618f49a37c7f0202a6p-1f;
+    }
+    static constexpr float __phi() noexcept
+    {
+        return 0x1.9e3779b97f4a7c15f39cc0605ceep+0f;
+    }
+};
+
+namespace numbers {
+
+// The named double constants are H+D-SIMT full values spelled directly as
+// hexadecimal literals because the double __numbers specialization is
+// excluded this phase; ordinary-AICore runtime double usage remains a
+// compiler-enforced negative boundary.
+inline constexpr double e = 0x1.5bf0a8b1457695355fb8ac404e7ap+1;
+inline constexpr double log2e = 0x1.71547652b82fe1777d0ffda0d23ap+0;
+inline constexpr double log10e = 0x1.bcb7b1526e50e32a6ab7555f5a68p-2;
+inline constexpr double pi = 0x1.921fb54442d18469898cc51701b8p+1;
+inline constexpr double inv_pi = 0x1.45f306dc9c882a53f84eafa3ea6ap-2;
+inline constexpr double inv_sqrtpi = 0x1.20dd750429b6d11ae3a914fed7fep-1;
+inline constexpr double ln2 = 0x1.62e42fefa39ef35793c7673007e6p-1;
+inline constexpr double ln10 = 0x1.26bb1bbb5551582dd4adac5705a6p+1;
+inline constexpr double sqrt2 = 0x1.6a09e667f3bcc908b2fb1366ea95p+0;
+inline constexpr double sqrt3 = 0x1.bb67ae8584caa73b25742d7078b8p+0;
+inline constexpr double inv_sqrt3 = 0x1.279a74590331c4d218f81e4afb25p-1;
+inline constexpr double egamma = 0x1.2788cfc6fb618f49a37c7f0202a6p-1;
+inline constexpr double phi = 0x1.9e3779b97f4a7c15f39cc0605ceep+0;
+
+}  // namespace numbers
+
+// The delivered *_v contract is the float specialization spelled at the
+// frozen asc::std scope; double and long double specializations are excluded
+// this phase.
+template <class Tp>
+inline constexpr Tp e_v = __numbers<Tp>::__e();
+template <class Tp>
+inline constexpr Tp log2e_v = __numbers<Tp>::__log2e();
+template <class Tp>
+inline constexpr Tp log10e_v = __numbers<Tp>::__log10e();
+template <class Tp>
+inline constexpr Tp pi_v = __numbers<Tp>::__pi();
+template <class Tp>
+inline constexpr Tp inv_pi_v = __numbers<Tp>::__inv_pi();
+template <class Tp>
+inline constexpr Tp inv_sqrtpi_v = __numbers<Tp>::__inv_sqrtpi();
+template <class Tp>
+inline constexpr Tp ln2_v = __numbers<Tp>::__ln2();
+template <class Tp>
+inline constexpr Tp ln10_v = __numbers<Tp>::__ln10();
+template <class Tp>
+inline constexpr Tp sqrt2_v = __numbers<Tp>::__sqrt2();
+template <class Tp>
+inline constexpr Tp sqrt3_v = __numbers<Tp>::__sqrt3();
+template <class Tp>
+inline constexpr Tp inv_sqrt3_v = __numbers<Tp>::__inv_sqrt3();
+template <class Tp>
+inline constexpr Tp egamma_v = __numbers<Tp>::__egamma();
+template <class Tp>
+inline constexpr Tp phi_v = __numbers<Tp>::__phi();
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_STD_NUMBERS
