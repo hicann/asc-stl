@@ -19,20 +19,27 @@
 
 #include <asc/std/detail/__config>
 
-CANN_ASC_STL_BEGIN_NAMESPACE
+CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER
 
-template <typename _Tp>
-CANN_ASC_STL_API constexpr const _Tp& clamp(const _Tp& __value, const _Tp& __low, const _Tp& __high)
+#include <asc/std/__algorithm/comp.h>
+
+CANN_ASC_STL_DETAIL_ACCL_BEGIN_NAMESPACE_ASC_STD
+
+template <class _Tp, class _Compare>
+[[nodiscard]] CANN_ASC_STL_API constexpr const _Tp& clamp(
+    const _Tp& __v, const _Tp& __lo, const _Tp& __hi, _Compare __comp)
 {
-    return (__value < __low) ? __low : (__high < __value) ? __high : __value;
+    CANN_ASC_STL_DETAIL_ASSERT(!__comp(__hi, __lo), "Bad bounds passed to asc::std::clamp");
+    return __comp(__v, __lo) ? __lo : __comp(__hi, __v) ? __hi : __v;
 }
 
-template <typename _Tp, typename _Compare>
-CANN_ASC_STL_API constexpr const _Tp& clamp(const _Tp& __value, const _Tp& __low, const _Tp& __high, _Compare __compare)
+template <class _Tp>
+[[nodiscard]] CANN_ASC_STL_API constexpr const _Tp& clamp(const _Tp& __v, const _Tp& __lo, const _Tp& __hi)
 {
-    return __compare(__value, __low) ? __low : __compare(__high, __value) ? __high : __value;
+    CANN_ASC_STL_DETAIL_ASSERT(!(__hi < __lo), "Bad bounds passed to asc::std::clamp");
+    return __v < __lo ? __lo : __hi < __v ? __hi : __v;
 }
 
-CANN_ASC_STL_END_NAMESPACE
+CANN_ASC_STL_DETAIL_ACCL_END_NAMESPACE_ASC_STD
 
 #endif  // CANN_ASC_STL_STD_DETAIL_ALGORITHM_CLAMP_H

@@ -1315,7 +1315,8 @@
       "target": "asc/std/__algorithm/clamp.h",
       "kind": "internal",
       "dependencies": [
-        "asc/std/detail/__config"
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h"
       ],
       "apis": [
         "asc::std::clamp"
@@ -1394,7 +1395,8 @@
       "target": "asc/std/__algorithm/comp.h",
       "kind": "internal",
       "dependencies": [
-        "asc/std/detail/__config"
+        "asc/std/detail/__config",
+        "asc/std/__type_traits/integral_constant.h"
       ],
       "apis": [],
       "upstream": "libcudacxx/include/cuda/std/__algorithm/comp.h",
@@ -9071,6 +9073,2118 @@
         "host_header": "header.host.__concepts.equality_comparable",
         "host_semantic": "semantic.host.__concepts.equality_comparable",
         "device_header": "header.device.__concepts.equality_comparable"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "relation",
+      "source": "include/asc/std/__concepts/relation.h",
+      "target": "asc/std/__concepts/relation.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/predicate.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__concepts/relation.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__concepts.relation",
+        "host_semantic": "semantic.host.__concepts.relation",
+        "device_header": "header.device.__concepts.relation"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "exception_guard",
+      "source": "include/asc/std/__utility/exception_guard.h",
+      "target": "asc/std/__utility/exception_guard.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__utility/exchange.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__utility/exception_guard.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__utility.exception_guard",
+        "host_semantic": "semantic.host.__utility.exception_guard",
+        "device_header": "header.device.__utility.exception_guard"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "swappable",
+      "source": "include/asc/std/__concepts/swappable.h",
+      "target": "asc/std/__concepts/swappable.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/class_or_enum.h",
+        "asc/std/__concepts/common_reference_with.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__type_traits/extent.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_nothrow_move_assignable.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/type_identity.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/exchange.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__concepts/swappable.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__concepts.swappable",
+        "host_semantic": "semantic.host.__concepts.swappable",
+        "device_header": "header.device.__concepts.swappable"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "totally_ordered",
+      "source": "include/asc/std/__concepts/totally_ordered.h",
+      "target": "asc/std/__concepts/totally_ordered.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/boolean_testable.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/equality_comparable.h",
+        "asc/std/__type_traits/common_reference.h",
+        "asc/std/__type_traits/make_const_lvalue_ref.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__concepts/totally_ordered.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__concepts.totally_ordered",
+        "host_semantic": "semantic.host.__concepts.totally_ordered",
+        "device_header": "header.device.__concepts.totally_ordered"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "integral_constant_like",
+      "source": "include/asc/std/__type_traits/integral_constant_like.h",
+      "target": "asc/std/__type_traits/integral_constant_like.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__concepts/equality_comparable.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/void_t.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__type_traits/integral_constant_like.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__type_traits.integral_constant_like",
+        "host_semantic": "semantic.host.__type_traits.integral_constant_like",
+        "device_header": "header.device.__type_traits.integral_constant_like"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "movable",
+      "source": "include/asc/std/__concepts/movable.h",
+      "target": "asc/std/__concepts/movable.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/swappable.h",
+        "asc/std/__type_traits/is_object.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__concepts/movable.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__concepts.movable",
+        "host_semantic": "semantic.host.__concepts.movable",
+        "device_header": "header.device.__concepts.movable"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "ranges_operations",
+      "source": "include/asc/std/__functional/ranges_operations.h",
+      "target": "asc/std/__functional/ranges_operations.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/equality_comparable.h",
+        "asc/std/__concepts/totally_ordered.h",
+        "asc/std/__utility/forward.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__functional/ranges_operations.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__functional.ranges_operations",
+        "host_semantic": "semantic.host.__functional.ranges_operations",
+        "device_header": "header.device.__functional.ranges_operations"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "copyable",
+      "source": "include/asc/std/__concepts/copyable.h",
+      "target": "asc/std/__concepts/copyable.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/movable.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__concepts/copyable.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__concepts.copyable",
+        "host_semantic": "semantic.host.__concepts.copyable",
+        "device_header": "header.device.__concepts.copyable"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "semiregular",
+      "source": "include/asc/std/__concepts/semiregular.h",
+      "target": "asc/std/__concepts/semiregular.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/copyable.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__concepts/semiregular.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__concepts.semiregular",
+        "host_semantic": "semantic.host.__concepts.semiregular",
+        "device_header": "header.device.__concepts.semiregular"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "regular",
+      "source": "include/asc/std/__concepts/regular.h",
+      "target": "asc/std/__concepts/regular.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/equality_comparable.h",
+        "asc/std/__concepts/semiregular.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__concepts/regular.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__concepts.regular",
+        "host_semantic": "semantic.host.__concepts.regular",
+        "device_header": "header.device.__concepts.regular"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "concepts",
+      "source": "include/asc/std/concepts",
+      "target": "asc/std/concepts",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/arithmetic.h",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/boolean_testable.h",
+        "asc/std/__concepts/class_or_enum.h",
+        "asc/std/__concepts/common_reference_with.h",
+        "asc/std/__concepts/common_with.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__concepts/copyable.h",
+        "asc/std/__concepts/derived_from.h",
+        "asc/std/__concepts/destructible.h",
+        "asc/std/__concepts/different_from.h",
+        "asc/std/__concepts/equality_comparable.h",
+        "asc/std/__concepts/invocable.h",
+        "asc/std/__concepts/movable.h",
+        "asc/std/__concepts/predicate.h",
+        "asc/std/__concepts/regular.h",
+        "asc/std/__concepts/relation.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__concepts/semiregular.h",
+        "asc/std/__concepts/swappable.h",
+        "asc/std/__concepts/totally_ordered.h",
+        "asc/std/version"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/concepts",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.concepts",
+        "host_semantic": "semantic.host.public.concepts",
+        "device_header": "header.device.public.concepts"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "all_of",
+      "source": "include/asc/std/__algorithm/all_of.h",
+      "target": "asc/std/__algorithm/all_of.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/all_of.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.all_of",
+        "host_semantic": "semantic.host.__algorithm.all_of",
+        "device_header": "header.device.__algorithm.all_of"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "any_of",
+      "source": "include/asc/std/__algorithm/any_of.h",
+      "target": "asc/std/__algorithm/any_of.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/any_of.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.any_of",
+        "host_semantic": "semantic.host.__algorithm.any_of",
+        "device_header": "header.device.__algorithm.any_of"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "copy_if",
+      "source": "include/asc/std/__algorithm/copy_if.h",
+      "target": "asc/std/__algorithm/copy_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/copy_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.copy_if",
+        "host_semantic": "semantic.host.__algorithm.copy_if",
+        "device_header": "header.device.__algorithm.copy_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "find_if",
+      "source": "include/asc/std/__algorithm/find_if.h",
+      "target": "asc/std/__algorithm/find_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/find_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.find_if",
+        "host_semantic": "semantic.host.__algorithm.find_if",
+        "device_header": "header.device.__algorithm.find_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "find_if_not",
+      "source": "include/asc/std/__algorithm/find_if_not.h",
+      "target": "asc/std/__algorithm/find_if_not.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/find_if_not.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.find_if_not",
+        "host_semantic": "semantic.host.__algorithm.find_if_not",
+        "device_header": "header.device.__algorithm.find_if_not"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "for_each",
+      "source": "include/asc/std/__algorithm/for_each.h",
+      "target": "asc/std/__algorithm/for_each.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/for_each.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.for_each",
+        "host_semantic": "semantic.host.__algorithm.for_each",
+        "device_header": "header.device.__algorithm.for_each"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "generate",
+      "source": "include/asc/std/__algorithm/generate.h",
+      "target": "asc/std/__algorithm/generate.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/generate.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.generate",
+        "host_semantic": "semantic.host.__algorithm.generate",
+        "device_header": "header.device.__algorithm.generate"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "is_partitioned",
+      "source": "include/asc/std/__algorithm/is_partitioned.h",
+      "target": "asc/std/__algorithm/is_partitioned.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/is_partitioned.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.is_partitioned",
+        "host_semantic": "semantic.host.__algorithm.is_partitioned",
+        "device_header": "header.device.__algorithm.is_partitioned"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "none_of",
+      "source": "include/asc/std/__algorithm/none_of.h",
+      "target": "asc/std/__algorithm/none_of.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/none_of.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.none_of",
+        "host_semantic": "semantic.host.__algorithm.none_of",
+        "device_header": "header.device.__algorithm.none_of"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "remove_copy",
+      "source": "include/asc/std/__algorithm/remove_copy.h",
+      "target": "asc/std/__algorithm/remove_copy.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/remove_copy.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.remove_copy",
+        "host_semantic": "semantic.host.__algorithm.remove_copy",
+        "device_header": "header.device.__algorithm.remove_copy"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "remove_copy_if",
+      "source": "include/asc/std/__algorithm/remove_copy_if.h",
+      "target": "asc/std/__algorithm/remove_copy_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/remove_copy_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.remove_copy_if",
+        "host_semantic": "semantic.host.__algorithm.remove_copy_if",
+        "device_header": "header.device.__algorithm.remove_copy_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "replace",
+      "source": "include/asc/std/__algorithm/replace.h",
+      "target": "asc/std/__algorithm/replace.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/replace.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.replace",
+        "host_semantic": "semantic.host.__algorithm.replace",
+        "device_header": "header.device.__algorithm.replace"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "replace_copy",
+      "source": "include/asc/std/__algorithm/replace_copy.h",
+      "target": "asc/std/__algorithm/replace_copy.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/replace_copy.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.replace_copy",
+        "host_semantic": "semantic.host.__algorithm.replace_copy",
+        "device_header": "header.device.__algorithm.replace_copy"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "replace_copy_if",
+      "source": "include/asc/std/__algorithm/replace_copy_if.h",
+      "target": "asc/std/__algorithm/replace_copy_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/replace_copy_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.replace_copy_if",
+        "host_semantic": "semantic.host.__algorithm.replace_copy_if",
+        "device_header": "header.device.__algorithm.replace_copy_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "replace_if",
+      "source": "include/asc/std/__algorithm/replace_if.h",
+      "target": "asc/std/__algorithm/replace_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/replace_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.replace_if",
+        "host_semantic": "semantic.host.__algorithm.replace_if",
+        "device_header": "header.device.__algorithm.replace_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "reverse_copy",
+      "source": "include/asc/std/__algorithm/reverse_copy.h",
+      "target": "asc/std/__algorithm/reverse_copy.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/reverse_copy.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.reverse_copy",
+        "host_semantic": "semantic.host.__algorithm.reverse_copy",
+        "device_header": "header.device.__algorithm.reverse_copy"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "transform",
+      "source": "include/asc/std/__algorithm/transform.h",
+      "target": "asc/std/__algorithm/transform.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/transform.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.transform",
+        "host_semantic": "semantic.host.__algorithm.transform",
+        "device_header": "header.device.__algorithm.transform"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "default_sentinel",
+      "source": "include/asc/std/__iterator/default_sentinel.h",
+      "target": "asc/std/__iterator/default_sentinel.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/default_sentinel.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.default_sentinel",
+        "host_semantic": "semantic.host.__iterator.default_sentinel",
+        "device_header": "header.device.__iterator.default_sentinel"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "erase_if_container",
+      "source": "include/asc/std/__iterator/erase_if_container.h",
+      "target": "asc/std/__iterator/erase_if_container.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/erase_if_container.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.erase_if_container",
+        "host_semantic": "semantic.host.__iterator.erase_if_container",
+        "device_header": "header.device.__iterator.erase_if_container"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "iota",
+      "source": "include/asc/std/__numeric/iota.h",
+      "target": "asc/std/__numeric/iota.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__numeric/iota.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__numeric.iota",
+        "host_semantic": "semantic.host.__numeric.iota",
+        "device_header": "header.device.__numeric.iota"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "transform_exclusive_scan",
+      "source": "include/asc/std/__numeric/transform_exclusive_scan.h",
+      "target": "asc/std/__numeric/transform_exclusive_scan.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__numeric/transform_exclusive_scan.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__numeric.transform_exclusive_scan",
+        "host_semantic": "semantic.host.__numeric.transform_exclusive_scan",
+        "device_header": "header.device.__numeric.transform_exclusive_scan"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_all_of",
+      "source": "include/asc/std/algorithm.all_of.h",
+      "target": "asc/std/algorithm.all_of.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/all_of.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.all_of.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.all_of",
+        "host_semantic": "semantic.host.public.algorithm.all_of",
+        "device_header": "header.device.public.algorithm.all_of"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_any_of",
+      "source": "include/asc/std/algorithm.any_of.h",
+      "target": "asc/std/algorithm.any_of.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/any_of.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.any_of.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.any_of",
+        "host_semantic": "semantic.host.public.algorithm.any_of",
+        "device_header": "header.device.public.algorithm.any_of"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_copy_if",
+      "source": "include/asc/std/algorithm.copy_if.h",
+      "target": "asc/std/algorithm.copy_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/copy_if.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.copy_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.copy_if",
+        "host_semantic": "semantic.host.public.algorithm.copy_if",
+        "device_header": "header.device.public.algorithm.copy_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_find_if",
+      "source": "include/asc/std/algorithm.find_if.h",
+      "target": "asc/std/algorithm.find_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/find_if.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.find_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.find_if",
+        "host_semantic": "semantic.host.public.algorithm.find_if",
+        "device_header": "header.device.public.algorithm.find_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_find_if_not",
+      "source": "include/asc/std/algorithm.find_if_not.h",
+      "target": "asc/std/algorithm.find_if_not.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/find_if_not.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.find_if_not.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.find_if_not",
+        "host_semantic": "semantic.host.public.algorithm.find_if_not",
+        "device_header": "header.device.public.algorithm.find_if_not"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_for_each",
+      "source": "include/asc/std/algorithm.for_each.h",
+      "target": "asc/std/algorithm.for_each.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/for_each.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.for_each.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.for_each",
+        "host_semantic": "semantic.host.public.algorithm.for_each",
+        "device_header": "header.device.public.algorithm.for_each"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_generate",
+      "source": "include/asc/std/algorithm.generate.h",
+      "target": "asc/std/algorithm.generate.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/generate.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.generate.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.generate",
+        "host_semantic": "semantic.host.public.algorithm.generate",
+        "device_header": "header.device.public.algorithm.generate"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_is_partitioned",
+      "source": "include/asc/std/algorithm.is_partitioned.h",
+      "target": "asc/std/algorithm.is_partitioned.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/is_partitioned.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.is_partitioned.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.is_partitioned",
+        "host_semantic": "semantic.host.public.algorithm.is_partitioned",
+        "device_header": "header.device.public.algorithm.is_partitioned"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_none_of",
+      "source": "include/asc/std/algorithm.none_of.h",
+      "target": "asc/std/algorithm.none_of.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/none_of.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.none_of.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.none_of",
+        "host_semantic": "semantic.host.public.algorithm.none_of",
+        "device_header": "header.device.public.algorithm.none_of"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_remove_copy",
+      "source": "include/asc/std/algorithm.remove_copy.h",
+      "target": "asc/std/algorithm.remove_copy.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/remove_copy.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.remove_copy.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.remove_copy",
+        "host_semantic": "semantic.host.public.algorithm.remove_copy",
+        "device_header": "header.device.public.algorithm.remove_copy"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_remove_copy_if",
+      "source": "include/asc/std/algorithm.remove_copy_if.h",
+      "target": "asc/std/algorithm.remove_copy_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/remove_copy_if.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.remove_copy_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.remove_copy_if",
+        "host_semantic": "semantic.host.public.algorithm.remove_copy_if",
+        "device_header": "header.device.public.algorithm.remove_copy_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_replace",
+      "source": "include/asc/std/algorithm.replace.h",
+      "target": "asc/std/algorithm.replace.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/replace.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.replace.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.replace",
+        "host_semantic": "semantic.host.public.algorithm.replace",
+        "device_header": "header.device.public.algorithm.replace"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_replace_copy",
+      "source": "include/asc/std/algorithm.replace_copy.h",
+      "target": "asc/std/algorithm.replace_copy.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/replace_copy.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.replace_copy.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.replace_copy",
+        "host_semantic": "semantic.host.public.algorithm.replace_copy",
+        "device_header": "header.device.public.algorithm.replace_copy"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_replace_copy_if",
+      "source": "include/asc/std/algorithm.replace_copy_if.h",
+      "target": "asc/std/algorithm.replace_copy_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/replace_copy_if.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.replace_copy_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.replace_copy_if",
+        "host_semantic": "semantic.host.public.algorithm.replace_copy_if",
+        "device_header": "header.device.public.algorithm.replace_copy_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_replace_if",
+      "source": "include/asc/std/algorithm.replace_if.h",
+      "target": "asc/std/algorithm.replace_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/replace_if.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.replace_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.replace_if",
+        "host_semantic": "semantic.host.public.algorithm.replace_if",
+        "device_header": "header.device.public.algorithm.replace_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_reverse_copy",
+      "source": "include/asc/std/algorithm.reverse_copy.h",
+      "target": "asc/std/algorithm.reverse_copy.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/reverse_copy.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.reverse_copy.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.reverse_copy",
+        "host_semantic": "semantic.host.public.algorithm.reverse_copy",
+        "device_header": "header.device.public.algorithm.reverse_copy"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_transform",
+      "source": "include/asc/std/algorithm.transform.h",
+      "target": "asc/std/algorithm.transform.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/transform.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.transform.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.transform",
+        "host_semantic": "semantic.host.public.algorithm.transform",
+        "device_header": "header.device.public.algorithm.transform"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "adjacent_find",
+      "source": "include/asc/std/__algorithm/adjacent_find.h",
+      "target": "asc/std/__algorithm/adjacent_find.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/adjacent_find.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.adjacent_find",
+        "host_semantic": "semantic.host.__algorithm.adjacent_find",
+        "device_header": "header.device.__algorithm.adjacent_find"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "comp_ref_type",
+      "source": "include/asc/std/__algorithm/comp_ref_type.h",
+      "target": "asc/std/__algorithm/comp_ref_type.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__utility/declval.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/comp_ref_type.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.comp_ref_type",
+        "host_semantic": "semantic.host.__algorithm.comp_ref_type",
+        "device_header": "header.device.__algorithm.comp_ref_type"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "find_first_of",
+      "source": "include/asc/std/__algorithm/find_first_of.h",
+      "target": "asc/std/__algorithm/find_first_of.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/find_first_of.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.find_first_of",
+        "host_semantic": "semantic.host.__algorithm.find_first_of",
+        "device_header": "header.device.__algorithm.find_first_of"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_adjacent_find",
+      "source": "include/asc/std/algorithm.adjacent_find.h",
+      "target": "asc/std/algorithm.adjacent_find.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/adjacent_find.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.adjacent_find.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.adjacent_find",
+        "host_semantic": "semantic.host.public.algorithm.adjacent_find",
+        "device_header": "header.device.public.algorithm.adjacent_find"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_clamp",
+      "source": "include/asc/std/algorithm.clamp.h",
+      "target": "asc/std/algorithm.clamp.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/clamp.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.clamp.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.clamp",
+        "host_semantic": "semantic.host.public.algorithm.clamp",
+        "device_header": "header.device.public.algorithm.clamp"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_find_first_of",
+      "source": "include/asc/std/algorithm.find_first_of.h",
+      "target": "asc/std/algorithm.find_first_of.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/find_first_of.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.find_first_of.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.find_first_of",
+        "host_semantic": "semantic.host.public.algorithm.find_first_of",
+        "device_header": "header.device.public.algorithm.find_first_of"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "for_each_n",
+      "source": "include/asc/std/__algorithm/for_each_n.h",
+      "target": "asc/std/__algorithm/for_each_n.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__utility/convert_to_integral.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/for_each_n.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.for_each_n",
+        "host_semantic": "semantic.host.__algorithm.for_each_n",
+        "device_header": "header.device.__algorithm.for_each_n"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "generate_n",
+      "source": "include/asc/std/__algorithm/generate_n.h",
+      "target": "asc/std/__algorithm/generate_n.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__utility/convert_to_integral.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/generate_n.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.generate_n",
+        "host_semantic": "semantic.host.__algorithm.generate_n",
+        "device_header": "header.device.__algorithm.generate_n"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "access",
+      "source": "include/asc/std/__iterator/access.h",
+      "target": "asc/std/__iterator/access.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/access.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.access",
+        "host_semantic": "semantic.host.__iterator.access",
+        "device_header": "header.device.__iterator.access"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "data",
+      "source": "include/asc/std/__iterator/data.h",
+      "target": "asc/std/__iterator/data.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/cstddef",
+        "asc/std/initializer_list"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/data.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.data",
+        "host_semantic": "semantic.host.__iterator.data",
+        "device_header": "header.device.__iterator.data"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "empty",
+      "source": "include/asc/std/__iterator/empty.h",
+      "target": "asc/std/__iterator/empty.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/cstddef",
+        "asc/std/initializer_list"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/empty.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.empty",
+        "host_semantic": "semantic.host.__iterator.empty",
+        "device_header": "header.device.__iterator.empty"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "iterator_entry",
+      "source": "include/asc/std/__iterator/iterator.h",
+      "target": "asc/std/__iterator/iterator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/iterator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.iterator",
+        "host_semantic": "semantic.host.__iterator.iterator",
+        "device_header": "header.device.__iterator.iterator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_for_each_n",
+      "source": "include/asc/std/algorithm.for_each_n.h",
+      "target": "asc/std/algorithm.for_each_n.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/for_each_n.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.for_each_n.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.for_each_n",
+        "host_semantic": "semantic.host.public.algorithm.for_each_n",
+        "device_header": "header.device.public.algorithm.for_each_n"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_generate_n",
+      "source": "include/asc/std/algorithm.generate_n.h",
+      "target": "asc/std/algorithm.generate_n.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/generate_n.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.generate_n.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.generate_n",
+        "host_semantic": "semantic.host.public.algorithm.generate_n",
+        "device_header": "header.device.public.algorithm.generate_n"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "find",
+      "source": "include/asc/std/__algorithm/find.h",
+      "target": "asc/std/__algorithm/find.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__functional/invoke.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/find.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.find",
+        "host_semantic": "semantic.host.__algorithm.find",
+        "device_header": "header.device.__algorithm.find"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "in_fun_result",
+      "source": "include/asc/std/__algorithm/in_fun_result.h",
+      "target": "asc/std/__algorithm/in_fun_result.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/in_fun_result.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.in_fun_result",
+        "host_semantic": "semantic.host.__algorithm.in_fun_result",
+        "device_header": "header.device.__algorithm.in_fun_result"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "remove",
+      "source": "include/asc/std/__algorithm/remove.h",
+      "target": "asc/std/__algorithm/remove.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/find.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/remove.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.remove",
+        "host_semantic": "semantic.host.__algorithm.remove",
+        "device_header": "header.device.__algorithm.remove"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "remove_if",
+      "source": "include/asc/std/__algorithm/remove_if.h",
+      "target": "asc/std/__algorithm/remove_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/find_if.h",
+        "asc/std/__type_traits/add_lvalue_reference.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/remove_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.remove_if",
+        "host_semantic": "semantic.host.__algorithm.remove_if",
+        "device_header": "header.device.__algorithm.remove_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "accumulate",
+      "source": "include/asc/std/__numeric/accumulate.h",
+      "target": "asc/std/__numeric/accumulate.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__numeric/accumulate.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__numeric.accumulate",
+        "host_semantic": "semantic.host.__numeric.accumulate",
+        "device_header": "header.device.__numeric.accumulate"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "exclusive_scan",
+      "source": "include/asc/std/__numeric/exclusive_scan.h",
+      "target": "asc/std/__numeric/exclusive_scan.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__functional/operations.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__numeric/exclusive_scan.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__numeric.exclusive_scan",
+        "host_semantic": "semantic.host.__numeric.exclusive_scan",
+        "device_header": "header.device.__numeric.exclusive_scan"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "inner_product",
+      "source": "include/asc/std/__numeric/inner_product.h",
+      "target": "asc/std/__numeric/inner_product.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__numeric/inner_product.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__numeric.inner_product",
+        "host_semantic": "semantic.host.__numeric.inner_product",
+        "device_header": "header.device.__numeric.inner_product"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_find",
+      "source": "include/asc/std/algorithm.find.h",
+      "target": "asc/std/algorithm.find.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/find.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.find.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.find",
+        "host_semantic": "semantic.host.public.algorithm.find",
+        "device_header": "header.device.public.algorithm.find"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "iter_swap",
+      "source": "include/asc/std/__algorithm/iter_swap.h",
+      "target": "asc/std/__algorithm/iter_swap.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/swap.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/iter_swap.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.iter_swap",
+        "host_semantic": "semantic.host.__algorithm.iter_swap",
+        "device_header": "header.device.__algorithm.iter_swap"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_remove",
+      "source": "include/asc/std/algorithm.remove.h",
+      "target": "asc/std/algorithm.remove.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/remove.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.remove.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.remove",
+        "host_semantic": "semantic.host.public.algorithm.remove",
+        "device_header": "header.device.public.algorithm.remove"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_remove_if",
+      "source": "include/asc/std/algorithm.remove_if.h",
+      "target": "asc/std/algorithm.remove_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/remove_if.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.remove_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.remove_if",
+        "host_semantic": "semantic.host.public.algorithm.remove_if",
+        "device_header": "header.device.public.algorithm.remove_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_iter_swap",
+      "source": "include/asc/std/algorithm.iter_swap.h",
+      "target": "asc/std/algorithm.iter_swap.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/iter_swap.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.iter_swap.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.iter_swap",
+        "host_semantic": "semantic.host.public.algorithm.iter_swap",
+        "device_header": "header.device.public.algorithm.iter_swap"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "move_sentinel",
+      "source": "include/asc/std/__iterator/move_sentinel.h",
+      "target": "asc/std/__iterator/move_sentinel.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__concepts/semiregular.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/move_sentinel.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.move_sentinel",
+        "host_semantic": "semantic.host.__iterator.move_sentinel",
+        "device_header": "header.device.__iterator.move_sentinel"
       },
       "applicability": {
         "host_header": true,

@@ -16,13 +16,18 @@
 
 #ifndef CANN_ASC_STL_STD_DETAIL_ALGORITHM_COMP_H
 #define CANN_ASC_STL_STD_DETAIL_ALGORITHM_COMP_H
+
 #include <asc/std/detail/__config>
 
-CANN_ASC_STL_BEGIN_NAMESPACE
+CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER
+
+#include <asc/std/__type_traits/integral_constant.h>
+
+CANN_ASC_STL_DETAIL_ACCL_BEGIN_NAMESPACE_ASC_STD
 
 struct __equal_to {
     template <class _T1, class _T2>
-    CANN_ASC_STL_API constexpr bool operator()(const _T1& __lhs, const _T2& __rhs) const
+    [[nodiscard]] CANN_ASC_STL_API constexpr bool operator()(const _T1& __lhs, const _T2& __rhs) const
         noexcept(noexcept(__lhs == __rhs))
     {
         return __lhs == __rhs;
@@ -30,14 +35,14 @@ struct __equal_to {
 };
 
 struct __less {
-    template <class _T1, class _T2>
-    CANN_ASC_STL_API constexpr bool operator()(const _T1& __lhs, const _T2& __rhs) const
+    template <class _Tp, class _Up>
+    [[nodiscard]] CANN_ASC_STL_API constexpr bool operator()(const _Tp& __lhs, const _Up& __rhs) const
         noexcept(noexcept(__lhs < __rhs))
     {
         return __lhs < __rhs;
     }
 };
 
-CANN_ASC_STL_END_NAMESPACE
+CANN_ASC_STL_DETAIL_ACCL_END_NAMESPACE_ASC_STD
 
 #endif  // CANN_ASC_STL_STD_DETAIL_ALGORITHM_COMP_H
