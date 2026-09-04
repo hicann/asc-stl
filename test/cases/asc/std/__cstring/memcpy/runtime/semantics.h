@@ -27,6 +27,8 @@
 #include <asc/std/__utility/forward_like.h>
 #include <asc/std/cstdint>
 #include <asc/std/numbers>
+#include "../../../../../../support/b010_semantics.h"
+#include "../../../../../../support/b011_semantics.h"
 namespace asc_stl_foundation_runtime {
 struct address_probe {
     CANN_ASC_STL_API address_probe* operator&() noexcept  // NOLINT(runtime/operator)
@@ -34,7 +36,8 @@ struct address_probe {
         return nullptr;
     }
 };
-CANN_ASC_STL_API void evaluate(asc::std::uint32_t* output) noexcept
+
+CANN_ASC_STL_API void evaluate_core(asc::std::uint32_t* output) noexcept
 {
     output[0] = 0x13579BDFU;
     output[1] = 0x1001U;
@@ -58,6 +61,10 @@ CANN_ASC_STL_API void evaluate(asc::std::uint32_t* output) noexcept
     output[13] = 0xA5A5A5A5U;
     output[14] = 0x5A5A5A5AU;
     output[15] = 0x2468ACE0U;
+}
+
+CANN_ASC_STL_API void evaluate_forwarding(asc::std::uint32_t* output) noexcept
+{
     // forward/forward_like: reference identity is a language property and the
     // expected values below are independent Host goldens.
     int forward_base = 41;
@@ -73,6 +80,10 @@ CANN_ASC_STL_API void evaluate(asc::std::uint32_t* output) noexcept
     output[22] = 0x100AU;
     int&& move_borrowed = asc::std::forward_like<long&&>(forward_base);
     output[23] = &move_borrowed == &forward_base ? 1U : 0U;
+}
+
+CANN_ASC_STL_API void evaluate_numeric(asc::std::uint32_t* output) noexcept
+{
     // bit_cast / fp storage / numbers: IEEE 754 bit patterns are
     // the independent goldens, and the numbers paths stay constant-folded or
     // float because ordinary AICore does not deliver runtime double
@@ -88,6 +99,31 @@ CANN_ASC_STL_API void evaluate(asc::std::uint32_t* output) noexcept
             static_cast<unsigned>(static_cast<float>(asc::std::numbers::e) * 100.0f) == 271u ?
         1U :
         0U;
+}
+
+CANN_ASC_STL_API void evaluate_w03(asc::std::uint32_t* output) noexcept
+{
+    output[32] = 0x100FU;
+    output[33] = asc_stl_b010_test::evaluate_runtime() == 0 ? 1U : 0U;
+    output[34] = 0x1010U;
+    output[35] = asc::std::__uabs(-23) == 23U ? 1U : 0U;
+    output[36] = 0x1011U;
+    int ordered[3] = {7, 8, 9};
+    auto bounded = asc::std::__make_bounded_iter(ordered + 1, ordered, ordered + 3);
+    output[37] = *bounded == 8 ? 1U : 0U;
+    output[38] = 0x1012U;
+    asc::std::pair<int, long> pair_value(11, 13);
+    output[39] = asc::std::get<0>(pair_value) == 11 && asc::std::get<long>(pair_value) == 13 ? 1U : 0U;
+    output[40] = 0x1013U;
+    output[41] = asc_stl_b011_test::evaluate_runtime_failures();
+}
+
+CANN_ASC_STL_API void evaluate(asc::std::uint32_t* output) noexcept
+{
+    evaluate_core(output);
+    evaluate_forwarding(output);
+    evaluate_numeric(output);
+    evaluate_w03(output);
 }
 }  // namespace asc_stl_foundation_runtime
 #endif

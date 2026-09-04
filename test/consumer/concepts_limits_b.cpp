@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
+#include <asc/std/concepts>
 #include <asc/std/limits>
+#include <asc/std/__iterator/data.h>
+#include <asc/std/__iterator/empty.h>
+#include <asc/std/__memory/allocator_arg_t.h>
 #include <asc/std/__utility/swap.h>
 #include <asc/std/__utility/exchange.h>
 #include <asc/std/__iterator/readable_traits.h>
@@ -33,8 +37,11 @@ int asc_stl_concepts_limits_consumer_b()
     static_assert(asc::std::numeric_limits<signed char>::digits == 7);
     static_assert(asc::std::numeric_limits<double>::lowest() < 0.0);
     static_assert(asc::std::is_swappable_v<int>);
+    static_assert(asc::std::copyable<int> && asc::std::semiregular<int>);
+    static_assert(asc::std::is_same_v<decltype(asc::std::allocator_arg), const asc::std::allocator_arg_t>);
     int left = 2;
     int right = 5;
+    int values[1] = {7};
     asc::std::swap(left, right);  // NOLINT(build/include_what_you_use)
-    return left == 5 && right == 2 ? 0 : 1;
+    return left == 5 && right == 2 && asc::std::data(values)[0] == 7 && !asc::std::empty(values) ? 0 : 1;
 }

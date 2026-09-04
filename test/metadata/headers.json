@@ -3666,6 +3666,2132 @@
         "cannsim_runtime": false,
         "hardware_runtime": false
       }
+    },
+    {
+      "target": "asc/std/__cmath/backend.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__cmath/neg.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__concepts/assignable.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/common_reference_with.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__type_traits/is_reference.h",
+        "asc/std/__type_traits/make_const_lvalue_ref.h",
+        "asc/std/__utility/forward.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__concepts/common_with.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/common_reference_with.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__type_traits/add_lvalue_reference.h",
+        "asc/std/__type_traits/common_type.h",
+        "asc/std/__utility/declval.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__concepts/copyable.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/movable.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__concepts/equality_comparable.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/boolean_testable.h",
+        "asc/std/__concepts/common_reference_with.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__type_traits/common_reference.h",
+        "asc/std/__type_traits/is_comparable.h",
+        "asc/std/__type_traits/make_const_lvalue_ref.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__concepts/movable.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/swappable.h",
+        "asc/std/__type_traits/is_object.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__concepts/regular.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/equality_comparable.h",
+        "asc/std/__concepts/semiregular.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__concepts/relation.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/predicate.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__concepts/semiregular.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/copyable.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__concepts/swappable.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/class_or_enum.h",
+        "asc/std/__concepts/common_reference_with.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__type_traits/extent.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_nothrow_move_assignable.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/type_identity.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/exchange.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__concepts/totally_ordered.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/boolean_testable.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/equality_comparable.h",
+        "asc/std/__type_traits/common_reference.h",
+        "asc/std/__type_traits/make_const_lvalue_ref.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__iterator/access.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__iterator/data.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "negative_cases": [
+        "initializer_list_excluded.fail.asc"
+      ],
+      "additional_cases": [
+        "initializer_list_excluded.fail.cpp"
+      ]
+    },
+    {
+      "target": "asc/std/__iterator/empty.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "negative_cases": [
+        "initializer_list_excluded.fail.asc"
+      ],
+      "additional_cases": [
+        "initializer_list_excluded.fail.cpp"
+      ]
+    },
+    {
+      "target": "asc/std/__iterator/iterator.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__iterator/iterator_traits.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/arithmetic.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__concepts/copyable.h",
+        "asc/std/__concepts/equality_comparable.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__concepts/totally_ordered.h",
+        "asc/std/__fwd/iterator.h",
+        "asc/std/__fwd/pair.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__iterator/readable_traits.h",
+        "asc/std/__type_traits/add_const.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_primary_template.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/priority_tag.h",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__memory/allocator_arg_t.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__memory/uses_allocator.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/forward.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__memory/pointer_traits.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/conjunction.h",
+        "asc/std/__type_traits/decay.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_class.h",
+        "asc/std/__type_traits/is_function.h",
+        "asc/std/__type_traits/is_void.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__memory/uses_allocator.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__fwd/tuple.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__tuple/make_tuple_types.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__fwd/array.h",
+        "asc/std/__fwd/complex.h",
+        "asc/std/__fwd/tuple.h",
+        "asc/std/__tuple/tuple_element.h",
+        "asc/std/__tuple/tuple_indices.h",
+        "asc/std/__tuple/tuple_size.h",
+        "asc/std/__tuple/tuple_types.h",
+        "asc/std/__type_traits/copy_cvref.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/remove_reference.h",
+        "asc/std/__type_traits/type_list.h",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__tuple/sfinae_helpers.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__fwd/tuple.h",
+        "asc/std/__type_traits/is_copy_assignable.h",
+        "asc/std/__type_traits/is_move_assignable.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__tuple/tuple_types.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__cstddef/types.h",
+        "asc/std/__tuple/tuple_element.h",
+        "asc/std/__tuple/tuple_size.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/type_list.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/concepts",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/__concepts/arithmetic.h",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/common_reference_with.h",
+        "asc/std/__concepts/common_with.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__concepts/copyable.h",
+        "asc/std/__concepts/derived_from.h",
+        "asc/std/__concepts/destructible.h",
+        "asc/std/__concepts/equality_comparable.h",
+        "asc/std/__concepts/invocable.h",
+        "asc/std/__concepts/movable.h",
+        "asc/std/__concepts/predicate.h",
+        "asc/std/__concepts/regular.h",
+        "asc/std/__concepts/relation.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__concepts/semiregular.h",
+        "asc/std/__concepts/swappable.h",
+        "asc/std/__concepts/totally_ordered.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/comp.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__cmath/sincos.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/__cmath/backend.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h",
+      "negative_cases": [
+        "simd_excluded.fail.asc"
+      ]
+    },
+    {
+      "target": "asc/std/__cmath/uabs.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/__cmath/neg.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__fwd/common_iterator.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/copyable.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__type_traits/enable_if.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__fwd/get.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/copyable.h",
+        "asc/std/__fwd/array.h",
+        "asc/std/__fwd/complex.h",
+        "asc/std/__fwd/pair.h",
+        "asc/std/__fwd/subrange.h",
+        "asc/std/__fwd/tuple.h",
+        "asc/std/__tuple/tuple_element.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__fwd/subrange.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__iterator/concepts.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__iterator/advance.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__utility/convert_to_integral.h",
+        "asc/std/__utility/move.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__iterator/bounded_iter.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__memory/pointer_traits.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__utility/move.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__iterator/concepts.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/arithmetic.h",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/common_reference_with.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/copyable.h",
+        "asc/std/__concepts/derived_from.h",
+        "asc/std/__concepts/equality_comparable.h",
+        "asc/std/__concepts/invocable.h",
+        "asc/std/__concepts/movable.h",
+        "asc/std/__concepts/predicate.h",
+        "asc/std/__concepts/regular.h",
+        "asc/std/__concepts/relation.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__concepts/semiregular.h",
+        "asc/std/__concepts/totally_ordered.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__iterator/iter_move.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__iterator/readable_traits.h",
+        "asc/std/__memory/pointer_traits.h",
+        "asc/std/__type_traits/add_pointer.h",
+        "asc/std/__type_traits/common_reference.h",
+        "asc/std/__type_traits/conjunction.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/forward.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__iterator/iter_move.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/class_or_enum.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_reference.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__iterator/iter_swap.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/class_or_enum.h",
+        "asc/std/__concepts/swappable.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/iter_move.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__iterator/readable_traits.h",
+        "asc/std/__type_traits/add_lvalue_reference.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__iterator/projected.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/remove_cvref.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__iterator/unreachable_sentinel.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__iterator/concepts.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__iterator/wrap_iter.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__memory/pointer_traits.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_trivially_copy_assignable.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__memory/construct_at.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__iterator/access.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__memory/voidify.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_arithmetic.h",
+        "asc/std/__type_traits/is_array.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_trivially_constructible.h",
+        "asc/std/__type_traits/is_trivially_destructible.h",
+        "asc/std/__type_traits/is_trivially_move_assignable.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__memory/voidify.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__memory/addressof.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__ranges/access.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/class_or_enum.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/readable_traits.h",
+        "asc/std/__ranges/enable_borrowed_range.h",
+        "asc/std/__type_traits/is_array.h",
+        "asc/std/__type_traits/is_reference.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/remove_reference.h",
+        "asc/std/__utility/auto_cast.h",
+        "asc/std/__utility/declval.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h",
+      "negative_cases": [
+        "initializer_list_excluded.fail.asc"
+      ],
+      "additional_cases": [
+        "initializer_list_excluded.fail.cpp"
+      ]
+    },
+    {
+      "target": "asc/std/__ranges/enable_borrowed_range.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__ranges/size.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/arithmetic.h",
+        "asc/std/__concepts/class_or_enum.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__memory/pointer_traits.h",
+        "asc/std/__ranges/access.h",
+        "asc/std/__type_traits/is_unbounded_array.h",
+        "asc/std/__type_traits/make_signed.h",
+        "asc/std/__type_traits/make_unsigned.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/auto_cast.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__tuple/tuple_constraints.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__fwd/get.h",
+        "asc/std/__fwd/pair.h",
+        "asc/std/__fwd/subrange.h",
+        "asc/std/__fwd/tuple.h",
+        "asc/std/__memory/allocator_arg_t.h",
+        "asc/std/__tuple/make_tuple_types.h",
+        "asc/std/__tuple/tuple_element.h",
+        "asc/std/__tuple/tuple_indices.h",
+        "asc/std/__tuple/tuple_like.h",
+        "asc/std/__tuple/tuple_size.h",
+        "asc/std/__tuple/tuple_types.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/disjunction.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_assignable.h",
+        "asc/std/__type_traits/is_comparable.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_copy_assignable.h",
+        "asc/std/__type_traits/is_copy_constructible.h",
+        "asc/std/__type_traits/is_default_constructible.h",
+        "asc/std/__type_traits/is_implicitly_default_constructible.h",
+        "asc/std/__type_traits/is_move_assignable.h",
+        "asc/std/__type_traits/is_move_constructible.h",
+        "asc/std/__type_traits/is_nothrow_assignable.h",
+        "asc/std/__type_traits/is_nothrow_constructible.h",
+        "asc/std/__type_traits/is_nothrow_copy_assignable.h",
+        "asc/std/__type_traits/is_nothrow_copy_constructible.h",
+        "asc/std/__type_traits/is_nothrow_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_move_assignable.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/lazy.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/remove_reference.h",
+        "asc/std/__utility/declval.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__tuple/tuple_like.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__fwd/array.h",
+        "asc/std/__fwd/complex.h",
+        "asc/std/__fwd/pair.h",
+        "asc/std/__fwd/subrange.h",
+        "asc/std/__fwd/tuple.h",
+        "asc/std/__tuple/tuple_size.h",
+        "asc/std/__tuple/tuple_types.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__tuple/vector_types.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__fwd/get.h",
+        "asc/std/__tuple/tuple_element.h",
+        "asc/std/__tuple/tuple_size.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__utility/auto_cast.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/__type_traits/decay.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__utility/pair.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__cstddef/types.h",
+        "asc/std/__functional/unwrap_ref.h",
+        "asc/std/__fwd/get.h",
+        "asc/std/__fwd/pair.h",
+        "asc/std/__fwd/subrange.h",
+        "asc/std/__fwd/tuple.h",
+        "asc/std/__tuple/sfinae_helpers.h",
+        "asc/std/__tuple/tuple_constraints.h",
+        "asc/std/__tuple/tuple_element.h",
+        "asc/std/__tuple/tuple_indices.h",
+        "asc/std/__tuple/tuple_like.h",
+        "asc/std/__tuple/tuple_size.h",
+        "asc/std/__type_traits/common_reference.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/decay.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_assignable.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_copy_assignable.h",
+        "asc/std/__type_traits/is_default_constructible.h",
+        "asc/std/__type_traits/is_implicitly_default_constructible.h",
+        "asc/std/__type_traits/is_move_assignable.h",
+        "asc/std/__type_traits/is_nothrow_assignable.h",
+        "asc/std/__type_traits/is_nothrow_constructible.h",
+        "asc/std/__type_traits/is_nothrow_copy_assignable.h",
+        "asc/std/__type_traits/is_nothrow_copy_constructible.h",
+        "asc/std/__type_traits/is_nothrow_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_move_assignable.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/is_swappable.h",
+        "asc/std/__type_traits/make_const_lvalue_ref.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h",
+        "asc/std/__utility/piecewise_construct.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/__memory/views.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h",
+      "negative_cases": [
+        "ub_span_dsimt.fail.asc"
+      ],
+      "additional_cases": [
+        "implicit_allocation.fail.cpp",
+        "managed_view.fail.cpp",
+        "raw_pointer_classification.fail.cpp"
+      ]
+    },
+    {
+      "target": "asc/memory",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config",
+        "asc/__memory/views.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__algorithm/comp_ref_type.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__utility/declval.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__algorithm/find_first_of.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__algorithm/comp.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__algorithm/iter_swap.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/swap.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/fma.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__cmath/backend.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_arithmetic.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/promote.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h",
+      "negative_cases": [
+        "simd_excluded.fail.asc"
+      ]
+    },
+    {
+      "target": "asc/std/__cmath/gamma.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/__detail/execution_space.h",
+        "asc/std/__cmath/backend.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_integral.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h",
+      "negative_cases": [
+        "simd_excluded.fail.asc"
+      ]
+    },
+    {
+      "target": "asc/std/__cmath/hyperbolic_functions.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/__detail/execution_space.h",
+        "asc/std/__cmath/backend.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_integral.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h",
+      "negative_cases": [
+        "simd_excluded.fail.asc"
+      ]
+    },
+    {
+      "target": "asc/std/__cmath/inverse_hyperbolic_functions.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/__detail/execution_space.h",
+        "asc/std/__cmath/backend.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_integral.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h",
+      "negative_cases": [
+        "simd_excluded.fail.asc"
+      ]
+    },
+    {
+      "target": "asc/std/__cmath/inverse_trigonometric_functions.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/__detail/execution_space.h",
+        "asc/std/__cmath/backend.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_arithmetic.h",
+        "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/promote.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h",
+      "negative_cases": [
+        "simd_excluded.fail.asc"
+      ]
+    },
+    {
+      "target": "asc/std/__cmath/remainder.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__cmath/backend.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_arithmetic.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/promote.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h",
+      "negative_cases": [
+        "simd_excluded.fail.asc"
+      ]
+    },
+    {
+      "target": "asc/std/__cmath/roots.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__cmath/backend.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_integral.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h",
+      "negative_cases": [
+        "simd_excluded.fail.asc"
+      ]
+    },
+    {
+      "target": "asc/std/__cmath/rounding_functions.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__cmath/backend.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_arithmetic.h",
+        "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/promote.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h",
+      "negative_cases": [
+        "simd_excluded.fail.asc"
+      ]
+    },
+    {
+      "target": "asc/std/__cmath/trigonometric_functions.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/__detail/execution_space.h",
+        "asc/std/__cmath/backend.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_integral.h",
+        "asc/std/cstdint"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h",
+      "negative_cases": [
+        "simd_excluded.fail.asc"
+      ]
+    },
+    {
+      "target": "asc/std/__floating_point/arithmetic.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__floating_point/mask.h",
+        "asc/std/__floating_point/native_type.h",
+        "asc/std/__floating_point/storage.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__floating_point/cast.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__floating_point/storage.h",
+        "asc/std/__type_traits/always_false.h",
+        "asc/std/__type_traits/is_same.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__floating_point/constants.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__floating_point/arithmetic.h",
+        "asc/std/__floating_point/decompose.h",
+        "asc/std/__floating_point/format.h",
+        "asc/std/__floating_point/mask.h",
+        "asc/std/__floating_point/native_type.h",
+        "asc/std/__floating_point/properties.h",
+        "asc/std/__floating_point/storage.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__floating_point/conversion_rank_order.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__floating_point/traits.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/is_same.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__floating_point/decompose.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__floating_point/format.h",
+        "asc/std/__floating_point/mask.h",
+        "asc/std/__floating_point/properties.h",
+        "asc/std/__floating_point/storage.h",
+        "asc/std/climits"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__floating_point/mask.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__floating_point/properties.h",
+        "asc/std/__floating_point/storage.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__floating_point/native_type.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__floating_point/format.h",
+        "asc/std/__floating_point/traits.h",
+        "asc/std/__type_traits/is_void.h",
+        "asc/std/cfloat"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__floating_point/overflow_handler.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__floating_point/arithmetic.h",
+        "asc/std/__floating_point/constants.h",
+        "asc/std/__floating_point/format.h",
+        "asc/std/__floating_point/properties.h",
+        "asc/std/__floating_point/storage.h",
+        "asc/std/__type_traits/always_false.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__iterator/size.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/common_type.h",
+        "asc/std/__type_traits/make_signed.h",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__ranges/enable_view.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/derived_from.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_class.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/void_t.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/__runtime/devices.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/cstdint"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/devices",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config",
+        "asc/__runtime/devices.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/ranges_iterator_concept.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/__iterator/iterator_traits.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__cmath/abs.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/copysign.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/error_functions.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__cmath/backend.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/exponential_functions.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__cmath/backend.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/fdim.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/fpclassify.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/hypot.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__cmath/backend.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/isfinite.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/isinf.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/isnan.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/isnormal.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/logarithms.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__cmath/backend.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/min_max.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/modulo.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__cmath/backend.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__cmath/signbit.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
+    },
+    {
+      "target": "asc/std/__complex/complex.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/is_same.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__complex/vector_support.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/__complex/complex.h",
+        "asc/std/__type_traits/is_same.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__floating_point/common_type.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/is_same.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__floating_point/fp.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/__floating_point/common_type.h",
+        "asc/std/__floating_point/format.h",
+        "asc/std/__floating_point/storage.h",
+        "asc/std/__floating_point/traits.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/__utility/in_place.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/cstddef"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/std/cmath",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/__cmath/abs.h",
+        "asc/std/__cmath/copysign.h",
+        "asc/std/__cmath/error_functions.h",
+        "asc/std/__cmath/exponential_functions.h",
+        "asc/std/__cmath/fdim.h",
+        "asc/std/__cmath/fma.h",
+        "asc/std/__cmath/fpclassify.h",
+        "asc/std/__cmath/gamma.h",
+        "asc/std/__cmath/hyperbolic_functions.h",
+        "asc/std/__cmath/hypot.h",
+        "asc/std/__cmath/inverse_hyperbolic_functions.h",
+        "asc/std/__cmath/inverse_trigonometric_functions.h",
+        "asc/std/__cmath/isfinite.h",
+        "asc/std/__cmath/isinf.h",
+        "asc/std/__cmath/isnan.h",
+        "asc/std/__cmath/isnormal.h",
+        "asc/std/__cmath/logarithms.h",
+        "asc/std/__cmath/min_max.h",
+        "asc/std/__cmath/modulo.h",
+        "asc/std/__cmath/remainder.h",
+        "asc/std/__cmath/roots.h",
+        "asc/std/__cmath/rounding_functions.h",
+        "asc/std/__cmath/signbit.h",
+        "asc/std/__cmath/trigonometric_functions.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      },
+      "runtime_case": "asc/std/__cstring/memcpy.h"
     }
   ]
 }

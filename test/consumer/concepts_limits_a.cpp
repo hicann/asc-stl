@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-#include <asc/std/__concepts/common_reference_with.h>
+#include <asc/std/concepts>
+#include <asc/std/__iterator/access.h>
+#include <asc/std/__iterator/iterator_traits.h>
+#include <asc/std/__memory/pointer_traits.h>
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__concepts/invocable.h>
 #include <asc/std/__concepts/predicate.h>
@@ -49,13 +52,18 @@ int asc_stl_concepts_limits_consumer_a()
     static_assert(asc::std::copy_constructible<int>);
     static_assert(asc::std::invocable<consumer_callable, int>);
     static_assert(asc::std::predicate<consumer_callable, int>);
+    static_assert(asc::std::regular<int> && asc::std::totally_ordered<int>);
+    static_assert(asc::std::is_same_v<asc::std::iterator_traits<int*>::value_type, int>);
+    static_assert(asc::std::is_same_v<asc::std::pointer_traits<int*>::rebind<long>, long*>);
     static_assert(asc::std::is_same_v<asc::std::iter_value_t<consumer_readable>, long>);
     static_assert(asc::std::is_same_v<asc::std::iter_difference_t<consumer_incrementable>, long long>);
     static_assert(asc::std::numeric_limits<unsigned int>::is_modulo);
     static_assert(asc::std::numeric_limits<float>::is_iec559);
     int value = 4;
+    int values[2] = {4, 8};
     int old = asc::std::exchange(value, 8);
-    return old == 4 && value == 8 && asc::std::invoke(consumer_callable{}, value) == 11 ?
+    return old == 4 && value == 8 && *asc::std::begin(values) == 4 &&
+            asc::std::invoke(consumer_callable{}, value) == 11 ?
         asc_stl_concepts_limits_consumer_b() :
         1;
 }

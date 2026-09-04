@@ -35,6 +35,8 @@ add_executable(
     execution_properties_b.cpp
     concepts_limits_a.cpp
     concepts_limits_b.cpp
+    memory_a.cpp
+    memory_b.cpp
 )
 target_link_libraries(asc_stl_installed_consumer PRIVATE asc_stl::asc_stl)
 target_compile_options(asc_stl_installed_consumer PRIVATE -Wall -Wextra -Werror -pedantic)
