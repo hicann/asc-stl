@@ -11195,6 +11195,4776 @@
         "public_aggregation": false
       },
       "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "unexpect",
+      "source": "include/asc/std/__expected/unexpect.h",
+      "target": "asc/std/__expected/unexpect.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__expected/unexpect.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__expected.unexpect",
+        "host_semantic": "semantic.host.__expected.unexpect",
+        "device_header": "header.device.__expected.unexpect"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "addressof",
+      "source": "include/asc/std/__memory/addressof.h",
+      "target": "asc/std/__memory/addressof.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__host_stdlib/memory"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__memory/addressof.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__memory.addressof",
+        "host_semantic": "semantic.host.__memory.addressof",
+        "device_header": "header.device.__memory.addressof"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "nullopt",
+      "source": "include/asc/std/__optional/nullopt.h",
+      "target": "asc/std/__optional/nullopt.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__optional/nullopt.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__optional.nullopt",
+        "host_semantic": "semantic.host.__optional.nullopt",
+        "device_header": "header.device.__optional.nullopt"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "ignore",
+      "source": "include/asc/std/__tuple_dir/ignore.h",
+      "target": "asc/std/__tuple_dir/ignore.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__tuple_dir/ignore.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__tuple_dir.ignore",
+        "host_semantic": "semantic.host.__tuple_dir.ignore",
+        "device_header": "header.device.__tuple_dir.ignore"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "from_chars_result",
+      "source": "include/asc/std/__charconv/from_chars_result.h",
+      "target": "asc/std/__charconv/from_chars_result.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__system_error/errc.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__charconv/from_chars_result.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__charconv.from_chars_result",
+        "host_semantic": "semantic.host.__charconv.from_chars_result",
+        "device_header": "header.device.__charconv.from_chars_result"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "to_chars_result",
+      "source": "include/asc/std/__charconv/to_chars_result.h",
+      "target": "asc/std/__charconv/to_chars_result.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__system_error/errc.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__charconv/to_chars_result.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__charconv.to_chars_result",
+        "host_semantic": "semantic.host.__charconv.to_chars_result",
+        "device_header": "header.device.__charconv.to_chars_result"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "runtime_assume_aligned",
+      "source": "include/asc/std/__memory/runtime_assume_aligned.h",
+      "target": "asc/std/__memory/runtime_assume_aligned.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__cstddef/types.h",
+        "asc/std/__type_traits/remove_volatile.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__memory/runtime_assume_aligned.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__memory.runtime_assume_aligned",
+        "host_semantic": "semantic.host.__memory.runtime_assume_aligned",
+        "device_header": "header.device.__memory.runtime_assume_aligned"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "voidify",
+      "source": "include/asc/std/__memory/voidify.h",
+      "target": "asc/std/__memory/voidify.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__memory/addressof.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__memory/voidify.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__memory.voidify",
+        "host_semantic": "semantic.host.__memory.voidify",
+        "device_header": "header.device.__memory.voidify"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "bad_optional_access",
+      "source": "include/asc/std/__optional/bad_optional_access.h",
+      "target": "asc/std/__optional/bad_optional_access.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__asc/exceptions.h",
+        "asc/std/__asc/unreachable.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__optional/bad_optional_access.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__optional.bad_optional_access",
+        "host_semantic": "semantic.host.__optional.bad_optional_access",
+        "device_header": "header.device.__optional.bad_optional_access"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "bad_variant_access",
+      "source": "include/asc/std/__variant/bad_variant_access.h",
+      "target": "asc/std/__variant/bad_variant_access.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__asc/exceptions.h",
+        "asc/std/__asc/unreachable.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__variant/bad_variant_access.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__variant.bad_variant_access",
+        "host_semantic": "semantic.host.__variant.bad_variant_access",
+        "device_header": "header.device.__variant.bad_variant_access"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "constexpr_c_functions",
+      "source": "include/asc/std/__string/constexpr_c_functions.h",
+      "target": "asc/std/__string/constexpr_c_functions.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__cstddef/types.h",
+        "asc/std/__type_traits/make_nbit_int.h",
+        "asc/std/__type_traits/remove_const.h",
+        "asc/std/climits"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__string/constexpr_c_functions.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__string.constexpr_c_functions",
+        "host_semantic": "semantic.host.__string.constexpr_c_functions",
+        "device_header": "header.device.__string.constexpr_c_functions"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "chars_format",
+      "source": "include/asc/std/__charconv/chars_format.h",
+      "target": "asc/std/__charconv/chars_format.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__utility/to_underlying.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__charconv/chars_format.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__charconv.chars_format",
+        "host_semantic": "semantic.host.__charconv.chars_format",
+        "device_header": "header.device.__charconv.chars_format"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "char_traits_impl",
+      "source": "include/asc/std/__string/char_traits.h",
+      "target": "asc/std/__string/char_traits.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__cstddef/types.h",
+        "asc/std/__fwd/char_traits.h",
+        "asc/std/__string/constexpr_c_functions.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/cstdint"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__string/char_traits.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__string.char_traits",
+        "host_semantic": "semantic.host.__string.char_traits",
+        "device_header": "header.device.__string.char_traits"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "string_view_impl",
+      "source": "include/asc/std/__string/string_view.h",
+      "target": "asc/std/__string/string_view.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__exception/exception_macros.h",
+        "asc/std/__host_stdlib/stdexcept",
+        "asc/std/__string/char_traits.h",
+        "asc/std/__type_traits/is_constant_evaluated.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__string/string_view.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__string.string_view",
+        "host_semantic": "semantic.host.__string.string_view",
+        "device_header": "header.device.__string.string_view"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "tuple_indices",
+      "source": "include/asc/std/__tuple_dir/tuple_indices.h",
+      "target": "asc/std/__tuple_dir/tuple_indices.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__utility/integer_sequence.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__tuple_dir/tuple_indices.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__tuple_dir.tuple_indices",
+        "host_semantic": "semantic.host.__tuple_dir.tuple_indices",
+        "device_header": "header.device.__tuple_dir.tuple_indices"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "typeid",
+      "source": "include/asc/std/__utility/typeid.h",
+      "target": "asc/std/__utility/typeid.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__string/string_view.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__utility/typeid.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__utility.typeid",
+        "host_semantic": "semantic.host.__utility.typeid",
+        "device_header": "header.device.__utility.typeid"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "lazy_call_or",
+      "source": "include/asc/__functional/lazy_call_or.h",
+      "target": "asc/__functional/lazy_call_or.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__tuple_dir/ignore.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_callable.h",
+        "asc/std/__utility/forward.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__functional/lazy_call_or.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__functional.lazy_call_or",
+        "host_semantic": "semantic.host.extension.__functional.lazy_call_or",
+        "device_header": "header.device.extension.__functional.lazy_call_or"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "static_for",
+      "source": "include/asc/__utility/static_for.h",
+      "target": "asc/__utility/static_for.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/integer_sequence.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__utility/static_for.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__utility.static_for",
+        "host_semantic": "semantic.host.extension.__utility.static_for",
+        "device_header": "header.device.extension.__utility.static_for"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "aggregate_members_all_of",
+      "source": "include/asc/std/__type_traits/aggregate_members_all_of.h",
+      "target": "asc/std/__type_traits/aggregate_members_all_of.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__cstddef/types.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_aggregate.h",
+        "asc/std/__type_traits/is_empty.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/integer_sequence.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__type_traits/aggregate_members_all_of.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__type_traits.aggregate_members_all_of",
+        "host_semantic": "semantic.host.__type_traits.aggregate_members_all_of",
+        "device_header": "header.device.__type_traits.aggregate_members_all_of"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "is_trivially_copyable_impl",
+      "source": "include/asc/__type_traits/is_trivially_copyable.h",
+      "target": "asc/__type_traits/is_trivially_copyable.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/__fwd/complex.h",
+        "asc/std/__cstddef/types.h",
+        "asc/std/__fwd/array.h",
+        "asc/std/__fwd/complex.h",
+        "asc/std/__fwd/pair.h",
+        "asc/std/__fwd/tuple.h",
+        "asc/std/__type_traits/aggregate_members_all_of.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_aggregate.h",
+        "asc/std/__type_traits/is_trivially_copyable.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__type_traits/is_trivially_copyable.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__type_traits.is_trivially_copyable",
+        "host_semantic": "semantic.host.extension.__type_traits.is_trivially_copyable",
+        "device_header": "header.device.extension.__type_traits.is_trivially_copyable"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "destruct_n",
+      "source": "include/asc/std/__memory/destruct_n.h",
+      "target": "asc/std/__memory/destruct_n.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_trivially_destructible.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__memory/destruct_n.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__memory.destruct_n",
+        "host_semantic": "semantic.host.__memory.destruct_n",
+        "device_header": "header.device.__memory.destruct_n"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "variant_access",
+      "source": "include/asc/std/__variant/variant_access.h",
+      "target": "asc/std/__variant/variant_access.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/in_place.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__variant/variant_access.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__variant.variant_access",
+        "host_semantic": "semantic.host.__variant.variant_access",
+        "device_header": "header.device.__variant.variant_access"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "uses_allocator",
+      "source": "include/asc/std/__memory/uses_allocator.h",
+      "target": "asc/std/__memory/uses_allocator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__fwd/tuple.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__memory/uses_allocator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__memory.uses_allocator",
+        "host_semantic": "semantic.host.__memory.uses_allocator",
+        "device_header": "header.device.__memory.uses_allocator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "allocator_arg_t",
+      "source": "include/asc/std/__memory/allocator_arg_t.h",
+      "target": "asc/std/__memory/allocator_arg_t.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__memory/uses_allocator.h",
+        "asc/std/__new/device_new.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/forward.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__memory/allocator_arg_t.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__memory.allocator_arg_t",
+        "host_semantic": "semantic.host.__memory.allocator_arg_t",
+        "device_header": "header.device.__memory.allocator_arg_t"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "pointer_traits",
+      "source": "include/asc/std/__memory/pointer_traits.h",
+      "target": "asc/std/__memory/pointer_traits.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/conjunction.h",
+        "asc/std/__type_traits/decay.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_class.h",
+        "asc/std/__type_traits/is_function.h",
+        "asc/std/__type_traits/is_void.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__memory/pointer_traits.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__memory.pointer_traits",
+        "host_semantic": "semantic.host.__memory.pointer_traits",
+        "device_header": "header.device.__memory.pointer_traits"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "sfinae_helpers",
+      "source": "include/asc/std/__tuple_dir/sfinae_helpers.h",
+      "target": "asc/std/__tuple_dir/sfinae_helpers.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__fwd/tuple.h",
+        "asc/std/__type_traits/is_copy_assignable.h",
+        "asc/std/__type_traits/is_move_assignable.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__tuple_dir/sfinae_helpers.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__tuple_dir.sfinae_helpers",
+        "host_semantic": "semantic.host.__tuple_dir.sfinae_helpers",
+        "device_header": "header.device.__tuple_dir.sfinae_helpers"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "pod_tuple",
+      "source": "include/asc/std/__utility/pod_tuple.h",
+      "target": "asc/std/__utility/pod_tuple.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__type_traits/decay.h",
+        "asc/std/__type_traits/is_callable.h",
+        "asc/std/__type_traits/remove_reference.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/integer_sequence.h",
+        "asc/std/__utility/undefined.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__utility/pod_tuple.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__utility.pod_tuple",
+        "host_semantic": "semantic.host.__utility.pod_tuple",
+        "device_header": "header.device.__utility.pod_tuple"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "call_or",
+      "source": "include/asc/__functional/call_or.h",
+      "target": "asc/__functional/call_or.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__tuple_dir/ignore.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_callable.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__functional/call_or.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__functional.call_or",
+        "host_semantic": "semantic.host.extension.__functional.call_or",
+        "device_header": "header.device.extension.__functional.call_or"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "sfinae_helpers_impl",
+      "source": "include/asc/std/__variant/sfinae_helpers.h",
+      "target": "asc/std/__variant/sfinae_helpers.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__tuple_dir/sfinae_helpers.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__variant/sfinae_helpers.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__variant.sfinae_helpers",
+        "host_semantic": "semantic.host.__variant.sfinae_helpers",
+        "device_header": "header.device.__variant.sfinae_helpers"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "variant_match",
+      "source": "include/asc/std/__variant/variant_match.h",
+      "target": "asc/std/__variant/variant_match.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__asc/is_non_narrowing_convertible.h",
+        "asc/std/__tuple_dir/tuple_indices.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_arithmetic.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/type_identity.h",
+        "asc/std/__utility/integer_sequence.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__variant/variant_match.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__variant.variant_match",
+        "host_semantic": "semantic.host.__variant.variant_match",
+        "device_header": "header.device.__variant.variant_match"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "variant_visit",
+      "source": "include/asc/std/__variant/variant_visit.h",
+      "target": "asc/std/__variant/variant_visit.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/integer_sequence.h",
+        "asc/std/__utility/unreachable.h",
+        "asc/std/__variant/variant_access.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__variant/variant_visit.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__variant.variant_visit",
+        "host_semantic": "semantic.host.__variant.variant_visit",
+        "device_header": "header.device.__variant.variant_visit"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "bad_expected_access",
+      "source": "include/asc/std/__expected/bad_expected_access.h",
+      "target": "asc/std/__expected/bad_expected_access.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__asc/exceptions.h",
+        "asc/std/__asc/unreachable.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__expected/bad_expected_access.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__expected.bad_expected_access",
+        "host_semantic": "semantic.host.__expected.bad_expected_access",
+        "device_header": "header.device.__expected.bad_expected_access"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "unexpected_impl",
+      "source": "include/asc/std/__expected/unexpected.h",
+      "target": "asc/std/__expected/unexpected.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__fwd/unexpected.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_array.h",
+        "asc/std/__type_traits/is_const.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_nothrow_constructible.h",
+        "asc/std/__type_traits/is_object.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/is_swappable.h",
+        "asc/std/__type_traits/is_volatile.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/in_place.h",
+        "asc/std/__utility/move.h",
+        "asc/std/__utility/swap.h",
+        "asc/std/initializer_list"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__expected/unexpected.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__expected.unexpected",
+        "host_semantic": "semantic.host.__expected.unexpected",
+        "device_header": "header.device.__expected.unexpected"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "reference_wrapper_impl",
+      "source": "include/asc/std/__functional/reference_wrapper.h",
+      "target": "asc/std/__functional/reference_wrapper.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__functional/weak_result_type.h",
+        "asc/std/__fwd/reference_wrapper.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/forward.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__functional/reference_wrapper.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__functional.reference_wrapper",
+        "host_semantic": "semantic.host.__functional.reference_wrapper",
+        "device_header": "header.device.__functional.reference_wrapper"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "construct_at",
+      "source": "include/asc/std/__memory/construct_at.h",
+      "target": "asc/std/__memory/construct_at.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__asc/is_non_narrowing_convertible.h",
+        "asc/std/__iterator/access.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__memory/voidify.h",
+        "asc/std/__new/device_new.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_arithmetic.h",
+        "asc/std/__type_traits/is_array.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_trivially_constructible.h",
+        "asc/std/__type_traits/is_trivially_destructible.h",
+        "asc/std/__type_traits/is_trivially_move_assignable.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h",
+        "asc/std/__host_stdlib/memory"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__memory/construct_at.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__memory.construct_at",
+        "host_semantic": "semantic.host.__memory.construct_at",
+        "device_header": "header.device.__memory.construct_at"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "identity",
+      "source": "include/asc/std/__functional/identity.h",
+      "target": "asc/std/__functional/identity.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__functional/reference_wrapper.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__utility/forward.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__functional/identity.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__functional.identity",
+        "host_semantic": "semantic.host.__functional.identity",
+        "device_header": "header.device.__functional.identity"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "optional_base",
+      "source": "include/asc/std/__optional/optional_base.h",
+      "target": "asc/std/__optional/optional_base.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__memory/construct_at.h",
+        "asc/std/__tuple_dir/sfinae_helpers.h",
+        "asc/std/__type_traits/is_copy_assignable.h",
+        "asc/std/__type_traits/is_copy_constructible.h",
+        "asc/std/__type_traits/is_destructible.h",
+        "asc/std/__type_traits/is_move_assignable.h",
+        "asc/std/__type_traits/is_move_constructible.h",
+        "asc/std/__type_traits/is_nothrow_constructible.h",
+        "asc/std/__type_traits/is_nothrow_copy_assignable.h",
+        "asc/std/__type_traits/is_nothrow_copy_constructible.h",
+        "asc/std/__type_traits/is_nothrow_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_move_assignable.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/is_object.h",
+        "asc/std/__type_traits/is_trivially_copy_assignable.h",
+        "asc/std/__type_traits/is_trivially_copy_constructible.h",
+        "asc/std/__type_traits/is_trivially_destructible.h",
+        "asc/std/__type_traits/is_trivially_move_assignable.h",
+        "asc/std/__type_traits/is_trivially_move_constructible.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/in_place.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__optional/optional_base.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__optional.optional_base",
+        "host_semantic": "semantic.host.__optional.optional_base",
+        "device_header": "header.device.__optional.optional_base"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "make_projected",
+      "source": "include/asc/std/__algorithm/make_projected.h",
+      "target": "asc/std/__algorithm/make_projected.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__functional/identity.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__type_traits/decay.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_member_pointer.h",
+        "asc/std/__utility/forward.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/make_projected.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.make_projected",
+        "host_semantic": "semantic.host.__algorithm.make_projected",
+        "device_header": "header.device.__algorithm.make_projected"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "optional_ref",
+      "source": "include/asc/std/__optional/optional_ref.h",
+      "target": "asc/std/__optional/optional_ref.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/invocable.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__fwd/optional.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__optional/bad_optional_access.h",
+        "asc/std/__optional/nullopt.h",
+        "asc/std/__optional/optional_base.h",
+        "asc/std/__type_traits/decay.h",
+        "asc/std/__type_traits/is_array.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_copy_constructible.h",
+        "asc/std/__type_traits/is_reference.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/reference_constructs_from_temporary.h",
+        "asc/std/__type_traits/reference_converts_from_temporary.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/remove_reference.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/in_place.h",
+        "asc/std/__utility/move.h",
+        "asc/std/__utility/swap.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__optional/optional_ref.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__optional.optional_ref",
+        "host_semantic": "semantic.host.__optional.optional_ref",
+        "device_header": "header.device.__optional.optional_ref"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "variant_like",
+      "source": "include/asc/std/__iterator/variant_like.h",
+      "target": "asc/std/__iterator/variant_like.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/swappable.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__memory/construct_at.h",
+        "asc/std/__type_traits/is_nothrow_constructible.h",
+        "asc/std/__type_traits/is_nothrow_copy_assignable.h",
+        "asc/std/__type_traits/is_nothrow_copy_constructible.h",
+        "asc/std/__type_traits/is_nothrow_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_move_assignable.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/is_swappable.h",
+        "asc/std/__type_traits/is_trivially_copy_assignable.h",
+        "asc/std/__type_traits/is_trivially_copy_constructible.h",
+        "asc/std/__type_traits/is_trivially_destructible.h",
+        "asc/std/__type_traits/is_trivially_move_assignable.h",
+        "asc/std/__type_traits/is_trivially_move_constructible.h",
+        "asc/std/__utility/delegate_constructors.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/variant_like.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.variant_like",
+        "host_semantic": "semantic.host.__iterator.variant_like",
+        "device_header": "header.device.__iterator.variant_like"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "type_list",
+      "source": "include/asc/std/__type_traits/type_list.h",
+      "target": "asc/std/__type_traits/type_list.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/type_identity.h",
+        "asc/std/__type_traits/type_set.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/integer_sequence.h",
+        "asc/std/__utility/undefined.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__type_traits/type_list.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__type_traits.type_list",
+        "host_semantic": "semantic.host.__type_traits.type_list",
+        "device_header": "header.device.__type_traits.type_list"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "basic_any_fwd",
+      "source": "include/asc/__utility/__basic_any/basic_any_fwd.h",
+      "target": "asc/__utility/__basic_any/basic_any_fwd.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/type_list.h",
+        "asc/std/cstddef",
+        "asc/std/cstdint"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__utility/__basic_any/basic_any_fwd.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__utility.__basic_any.basic_any_fwd",
+        "host_semantic": "semantic.host.extension.__utility.__basic_any.basic_any_fwd",
+        "device_header": "header.device.extension.__utility.__basic_any.basic_any_fwd"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "tuple_types",
+      "source": "include/asc/std/__tuple_dir/tuple_types.h",
+      "target": "asc/std/__tuple_dir/tuple_types.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__cstddef/types.h",
+        "asc/std/__tuple_dir/tuple_element.h",
+        "asc/std/__tuple_dir/tuple_size.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/type_list.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__tuple_dir/tuple_types.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__tuple_dir.tuple_types",
+        "host_semantic": "semantic.host.__tuple_dir.tuple_types",
+        "device_header": "header.device.__tuple_dir.tuple_types"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "aligned_storage",
+      "source": "include/asc/std/__type_traits/aligned_storage.h",
+      "target": "asc/std/__type_traits/aligned_storage.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/nat.h",
+        "asc/std/__type_traits/type_list.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__type_traits/aligned_storage.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__type_traits.aligned_storage",
+        "host_semantic": "semantic.host.__type_traits.aligned_storage",
+        "device_header": "header.device.__type_traits.aligned_storage"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "make_signed",
+      "source": "include/asc/std/__type_traits/make_signed.h",
+      "target": "asc/std/__type_traits/make_signed.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__type_traits/copy_cvref.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_enum.h",
+        "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/type_list.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__type_traits/make_signed.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__type_traits.make_signed",
+        "host_semantic": "semantic.host.__type_traits.make_signed",
+        "device_header": "header.device.__type_traits.make_signed"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "make_unsigned",
+      "source": "include/asc/std/__type_traits/make_unsigned.h",
+      "target": "asc/std/__type_traits/make_unsigned.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/copy_cvref.h",
+        "asc/std/__type_traits/is_enum.h",
+        "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/is_unsigned.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/type_list.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__type_traits/make_unsigned.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__type_traits.make_unsigned",
+        "host_semantic": "semantic.host.__type_traits.make_unsigned",
+        "device_header": "header.device.__type_traits.make_unsigned"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "overrides",
+      "source": "include/asc/__utility/__basic_any/overrides.h",
+      "target": "asc/__utility/__basic_any/overrides.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/__utility/__basic_any/basic_any_fwd.h",
+        "asc/std/__tuple_dir/ignore.h",
+        "asc/std/__type_traits/is_const.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__utility/__basic_any/overrides.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__utility.__basic_any.overrides",
+        "host_semantic": "semantic.host.extension.__utility.__basic_any.overrides",
+        "device_header": "header.device.extension.__utility.__basic_any.overrides"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "tagged_ptr",
+      "source": "include/asc/__utility/__basic_any/tagged_ptr.h",
+      "target": "asc/__utility/__basic_any/tagged_ptr.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/__utility/__basic_any/basic_any_fwd.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__utility/__basic_any/tagged_ptr.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__utility.__basic_any.tagged_ptr",
+        "host_semantic": "semantic.host.extension.__utility.__basic_any.tagged_ptr",
+        "device_header": "header.device.extension.__utility.__basic_any.tagged_ptr"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "half_positive",
+      "source": "include/asc/std/__algorithm/half_positive.h",
+      "target": "asc/std/__algorithm/half_positive.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/make_unsigned.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/half_positive.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.half_positive",
+        "host_semantic": "semantic.host.__algorithm.half_positive",
+        "device_header": "header.device.__algorithm.half_positive"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "make_tuple_types",
+      "source": "include/asc/std/__tuple_dir/make_tuple_types.h",
+      "target": "asc/std/__tuple_dir/make_tuple_types.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/__fwd/complex.h",
+        "asc/std/__fwd/array.h",
+        "asc/std/__fwd/complex.h",
+        "asc/std/__fwd/tuple.h",
+        "asc/std/__tuple_dir/tuple_element.h",
+        "asc/std/__tuple_dir/tuple_indices.h",
+        "asc/std/__tuple_dir/tuple_size.h",
+        "asc/std/__tuple_dir/tuple_types.h",
+        "asc/std/__type_traits/copy_cvref.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/remove_reference.h",
+        "asc/std/__type_traits/type_list.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__tuple_dir/make_tuple_types.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__tuple_dir.make_tuple_types",
+        "host_semantic": "semantic.host.__tuple_dir.make_tuple_types",
+        "device_header": "header.device.__tuple_dir.make_tuple_types"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "aligned_union",
+      "source": "include/asc/std/__type_traits/aligned_union.h",
+      "target": "asc/std/__type_traits/aligned_union.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__type_traits/aligned_storage.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__type_traits/aligned_union.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__type_traits.aligned_union",
+        "host_semantic": "semantic.host.__type_traits.aligned_union",
+        "device_header": "header.device.__type_traits.aligned_union"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "incrementable_traits",
+      "source": "include/asc/std/__iterator/incrementable_traits.h",
+      "target": "asc/std/__iterator/incrementable_traits.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/arithmetic.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__fwd/iterator.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_const.h",
+        "asc/std/__type_traits/is_object.h",
+        "asc/std/__type_traits/is_pointer.h",
+        "asc/std/__type_traits/is_primary_template.h",
+        "asc/std/__type_traits/make_signed.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/incrementable_traits.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.incrementable_traits",
+        "host_semantic": "semantic.host.__iterator.incrementable_traits",
+        "device_header": "header.device.__iterator.incrementable_traits"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "basic_any_from",
+      "source": "include/asc/__utility/__basic_any/basic_any_from.h",
+      "target": "asc/__utility/__basic_any/basic_any_from.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/__utility/__basic_any/basic_any_fwd.h",
+        "asc/std/__type_traits/decay.h",
+        "asc/std/__utility/declval.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__utility/__basic_any/basic_any_from.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__utility.__basic_any.basic_any_from",
+        "host_semantic": "semantic.host.extension.__utility.__basic_any.basic_any_from",
+        "device_header": "header.device.extension.__utility.__basic_any.basic_any_from"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "readable_traits",
+      "source": "include/asc/std/__iterator/readable_traits.h",
+      "target": "asc/std/__iterator/readable_traits.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__fwd/iterator.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_array.h",
+        "asc/std/__type_traits/is_const.h",
+        "asc/std/__type_traits/is_object.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/remove_extent.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/readable_traits.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.readable_traits",
+        "host_semantic": "semantic.host.__iterator.readable_traits",
+        "device_header": "header.device.__iterator.readable_traits"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "variant_traits",
+      "source": "include/asc/std/__variant/variant_traits.h",
+      "target": "asc/std/__variant/variant_traits.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__fwd/variant.h",
+        "asc/std/__type_traits/add_const.h",
+        "asc/std/__type_traits/add_cv.h",
+        "asc/std/__type_traits/add_volatile.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_copy_assignable.h",
+        "asc/std/__type_traits/is_copy_constructible.h",
+        "asc/std/__type_traits/is_destructible.h",
+        "asc/std/__type_traits/is_move_assignable.h",
+        "asc/std/__type_traits/is_move_constructible.h",
+        "asc/std/__type_traits/is_trivially_copy_assignable.h",
+        "asc/std/__type_traits/is_trivially_copy_constructible.h",
+        "asc/std/__type_traits/is_trivially_destructible.h",
+        "asc/std/__type_traits/is_trivially_move_assignable.h",
+        "asc/std/__type_traits/is_trivially_move_constructible.h",
+        "asc/std/__type_traits/type_list.h",
+        "asc/std/initializer_list"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__variant/variant_traits.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__variant.variant_traits",
+        "host_semantic": "semantic.host.__variant.variant_traits",
+        "device_header": "header.device.__variant.variant_traits"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "size",
+      "source": "include/asc/std/__iterator/size.h",
+      "target": "asc/std/__iterator/size.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__type_traits/common_type.h",
+        "asc/std/__type_traits/make_signed.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/size.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.size",
+        "host_semantic": "semantic.host.__iterator.size",
+        "device_header": "header.device.__iterator.size"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "variant_base",
+      "source": "include/asc/std/__variant/variant_base.h",
+      "target": "asc/std/__variant/variant_base.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__fwd/variant.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__memory/construct_at.h",
+        "asc/std/__type_traits/fold.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_nothrow_constructible.h",
+        "asc/std/__type_traits/is_nothrow_move_assignable.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/in_place.h",
+        "asc/std/__utility/move.h",
+        "asc/std/__utility/swap.h",
+        "asc/std/__variant/variant_access.h",
+        "asc/std/__variant/variant_traits.h",
+        "asc/std/__utility/unreachable.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__variant/variant_base.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__variant.variant_base",
+        "host_semantic": "semantic.host.__variant.variant_base",
+        "device_header": "header.device.__variant.variant_base"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "expected_base",
+      "source": "include/asc/std/__expected/expected_base.h",
+      "target": "asc/std/__expected/expected_base.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/invocable.h",
+        "asc/std/__expected/unexpect.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__memory/construct_at.h",
+        "asc/std/__tuple_dir/sfinae_helpers.h",
+        "asc/std/__type_traits/is_assignable.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_copy_assignable.h",
+        "asc/std/__type_traits/is_copy_constructible.h",
+        "asc/std/__type_traits/is_default_constructible.h",
+        "asc/std/__type_traits/is_move_assignable.h",
+        "asc/std/__type_traits/is_move_constructible.h",
+        "asc/std/__type_traits/is_nothrow_constructible.h",
+        "asc/std/__type_traits/is_nothrow_copy_assignable.h",
+        "asc/std/__type_traits/is_nothrow_copy_constructible.h",
+        "asc/std/__type_traits/is_nothrow_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_move_assignable.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/is_trivially_copy_assignable.h",
+        "asc/std/__type_traits/is_trivially_copy_constructible.h",
+        "asc/std/__type_traits/is_trivially_destructible.h",
+        "asc/std/__type_traits/is_trivially_move_assignable.h",
+        "asc/std/__type_traits/is_trivially_move_constructible.h",
+        "asc/std/__type_traits/is_void.h",
+        "asc/std/__utility/exception_guard.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/in_place.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__expected/expected_base.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__expected.expected_base",
+        "host_semantic": "semantic.host.__expected.expected_base",
+        "device_header": "header.device.__expected.expected_base"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "optional_impl",
+      "source": "include/asc/std/__optional/optional.h",
+      "target": "asc/std/__optional/optional.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/invocable.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__fwd/optional.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__optional/bad_optional_access.h",
+        "asc/std/__optional/nullopt.h",
+        "asc/std/__optional/optional_base.h",
+        "asc/std/__type_traits/disjunction.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_copy_constructible.h",
+        "asc/std/__type_traits/is_move_constructible.h",
+        "asc/std/__type_traits/is_object.h",
+        "asc/std/__type_traits/is_reference.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/reference_constructs_from_temporary.h",
+        "asc/std/__type_traits/reference_converts_from_temporary.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/in_place.h",
+        "asc/std/__utility/move.h",
+        "asc/std/__utility/swap.h",
+        "asc/std/initializer_list"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__optional/optional.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__optional.optional",
+        "host_semantic": "semantic.host.__optional.optional",
+        "device_header": "header.device.__optional.optional"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "type_traits",
+      "source": "include/asc/std/type_traits",
+      "target": "asc/std/type_traits",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/iter_swap.h",
+        "asc/std/__functional/identity.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__fwd/hash.h",
+        "asc/std/__fwd/pair.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__type_traits/add_const.h",
+        "asc/std/__type_traits/add_cv.h",
+        "asc/std/__type_traits/add_lvalue_reference.h",
+        "asc/std/__type_traits/add_pointer.h",
+        "asc/std/__type_traits/add_rvalue_reference.h",
+        "asc/std/__type_traits/add_volatile.h",
+        "asc/std/__type_traits/aligned_storage.h",
+        "asc/std/__type_traits/aligned_union.h",
+        "asc/std/__type_traits/alignment_of.h",
+        "asc/std/__type_traits/always_false.h",
+        "asc/std/__type_traits/can_extract_key.h",
+        "asc/std/__type_traits/common_reference.h",
+        "asc/std/__type_traits/common_type.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/conjunction.h",
+        "asc/std/__type_traits/copy_cv.h",
+        "asc/std/__type_traits/copy_cvref.h",
+        "asc/std/__type_traits/decay.h",
+        "asc/std/__type_traits/dependent_type.h",
+        "asc/std/__type_traits/disjunction.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/extent.h",
+        "asc/std/__type_traits/fold.h",
+        "asc/std/__type_traits/has_unique_object_representation.h",
+        "asc/std/__type_traits/has_virtual_destructor.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_abstract.h",
+        "asc/std/__type_traits/is_aggregate.h",
+        "asc/std/__type_traits/is_allocator.h",
+        "asc/std/__type_traits/is_arithmetic.h",
+        "asc/std/__type_traits/is_array.h",
+        "asc/std/__type_traits/is_assignable.h",
+        "asc/std/__type_traits/is_base_of.h",
+        "asc/std/__type_traits/is_bounded_array.h",
+        "asc/std/__type_traits/is_callable.h",
+        "asc/std/__type_traits/is_char_like_type.h",
+        "asc/std/__type_traits/is_class.h",
+        "asc/std/__type_traits/is_compound.h",
+        "asc/std/__type_traits/is_const.h",
+        "asc/std/__type_traits/is_constant_evaluated.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_copy_assignable.h",
+        "asc/std/__type_traits/is_copy_constructible.h",
+        "asc/std/__type_traits/is_core_convertible.h",
+        "asc/std/__type_traits/is_corresponding_member.h",
+        "asc/std/__type_traits/is_default_constructible.h",
+        "asc/std/__type_traits/is_destructible.h",
+        "asc/std/__type_traits/is_empty.h",
+        "asc/std/__type_traits/is_enum.h",
+        "asc/std/__type_traits/is_execution_policy.h",
+        "asc/std/__type_traits/is_extended_floating_point.h",
+        "asc/std/__type_traits/is_final.h",
+        "asc/std/__type_traits/is_floating_point.h",
+        "asc/std/__type_traits/is_function.h",
+        "asc/std/__type_traits/is_fundamental.h",
+        "asc/std/__type_traits/is_implicitly_default_constructible.h",
+        "asc/std/__type_traits/is_integer.h",
+        "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/is_layout_compatible.h",
+        "asc/std/__type_traits/is_literal_type.h",
+        "asc/std/__type_traits/is_member_function_pointer.h",
+        "asc/std/__type_traits/is_member_object_pointer.h",
+        "asc/std/__type_traits/is_member_pointer.h",
+        "asc/std/__type_traits/is_move_assignable.h",
+        "asc/std/__type_traits/is_move_constructible.h",
+        "asc/std/__type_traits/is_nothrow_assignable.h",
+        "asc/std/__type_traits/is_nothrow_constructible.h",
+        "asc/std/__type_traits/is_nothrow_convertible.h",
+        "asc/std/__type_traits/is_nothrow_copy_assignable.h",
+        "asc/std/__type_traits/is_nothrow_copy_constructible.h",
+        "asc/std/__type_traits/is_nothrow_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_destructible.h",
+        "asc/std/__type_traits/is_nothrow_move_assignable.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/is_null_pointer.h",
+        "asc/std/__type_traits/is_object.h",
+        "asc/std/__type_traits/is_one_of.h",
+        "asc/std/__type_traits/is_pod.h",
+        "asc/std/__type_traits/is_pointer.h",
+        "asc/std/__type_traits/is_pointer_interconvertible_base_of.h",
+        "asc/std/__type_traits/is_pointer_interconvertible_with_class.h",
+        "asc/std/__type_traits/is_polymorphic.h",
+        "asc/std/__type_traits/is_primary_template.h",
+        "asc/std/__type_traits/is_reference.h",
+        "asc/std/__type_traits/is_referenceable.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/is_scalar.h",
+        "asc/std/__type_traits/is_scoped_enum.h",
+        "asc/std/__type_traits/is_signed.h",
+        "asc/std/__type_traits/is_signed_integer.h",
+        "asc/std/__type_traits/is_standard_layout.h",
+        "asc/std/__type_traits/is_swappable.h",
+        "asc/std/__type_traits/is_trivial.h",
+        "asc/std/__type_traits/is_trivially_assignable.h",
+        "asc/std/__type_traits/is_trivially_constructible.h",
+        "asc/std/__type_traits/is_trivially_copy_assignable.h",
+        "asc/std/__type_traits/is_trivially_copy_constructible.h",
+        "asc/std/__type_traits/is_trivially_copyable.h",
+        "asc/std/__type_traits/is_trivially_default_constructible.h",
+        "asc/std/__type_traits/is_trivially_destructible.h",
+        "asc/std/__type_traits/is_trivially_move_assignable.h",
+        "asc/std/__type_traits/is_trivially_move_constructible.h",
+        "asc/std/__type_traits/is_unbounded_array.h",
+        "asc/std/__type_traits/is_union.h",
+        "asc/std/__type_traits/is_unsigned.h",
+        "asc/std/__type_traits/is_unsigned_integer.h",
+        "asc/std/__type_traits/is_valid_expansion.h",
+        "asc/std/__type_traits/is_void.h",
+        "asc/std/__type_traits/is_volatile.h",
+        "asc/std/__type_traits/lazy.h",
+        "asc/std/__type_traits/make_const_lvalue_ref.h",
+        "asc/std/__type_traits/make_nbit_int.h",
+        "asc/std/__type_traits/make_signed.h",
+        "asc/std/__type_traits/make_unsigned.h",
+        "asc/std/__type_traits/maybe_const.h",
+        "asc/std/__type_traits/nat.h",
+        "asc/std/__type_traits/negation.h",
+        "asc/std/__type_traits/num_bits.h",
+        "asc/std/__type_traits/promote.h",
+        "asc/std/__type_traits/rank.h",
+        "asc/std/__type_traits/reference_constructs_from_temporary.h",
+        "asc/std/__type_traits/reference_converts_from_temporary.h",
+        "asc/std/__type_traits/remove_all_extents.h",
+        "asc/std/__type_traits/remove_const.h",
+        "asc/std/__type_traits/remove_const_ref.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/remove_extent.h",
+        "asc/std/__type_traits/remove_pointer.h",
+        "asc/std/__type_traits/remove_reference.h",
+        "asc/std/__type_traits/remove_volatile.h",
+        "asc/std/__type_traits/result_of.h",
+        "asc/std/__type_traits/type_identity.h",
+        "asc/std/__type_traits/type_list.h",
+        "asc/std/__type_traits/underlying_type.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/convert_to_integral.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h",
+        "asc/std/__utility/swap.h",
+        "asc/std/cstddef",
+        "asc/std/cstdint",
+        "asc/std/version"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/type_traits",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.type_traits",
+        "host_semantic": "semantic.host.public.type_traits",
+        "device_header": "header.device.public.type_traits"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "expected_impl",
+      "source": "include/asc/std/__expected/expected.h",
+      "target": "asc/std/__expected/expected.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/invocable.h",
+        "asc/std/__expected/bad_expected_access.h",
+        "asc/std/__expected/expected_base.h",
+        "asc/std/__expected/unexpect.h",
+        "asc/std/__expected/unexpected.h",
+        "asc/std/__fwd/expected.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__memory/construct_at.h",
+        "asc/std/__type_traits/conjunction.h",
+        "asc/std/__type_traits/disjunction.h",
+        "asc/std/__type_traits/is_assignable.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_copy_assignable.h",
+        "asc/std/__type_traits/is_copy_constructible.h",
+        "asc/std/__type_traits/is_default_constructible.h",
+        "asc/std/__type_traits/is_function.h",
+        "asc/std/__type_traits/is_move_assignable.h",
+        "asc/std/__type_traits/is_move_constructible.h",
+        "asc/std/__type_traits/is_nothrow_constructible.h",
+        "asc/std/__type_traits/is_nothrow_copy_assignable.h",
+        "asc/std/__type_traits/is_nothrow_copy_constructible.h",
+        "asc/std/__type_traits/is_nothrow_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_move_assignable.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/is_reference.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/is_swappable.h",
+        "asc/std/__type_traits/is_trivially_copy_constructible.h",
+        "asc/std/__type_traits/is_trivially_destructible.h",
+        "asc/std/__type_traits/is_trivially_move_constructible.h",
+        "asc/std/__type_traits/is_void.h",
+        "asc/std/__type_traits/lazy.h",
+        "asc/std/__type_traits/negation.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/as_const.h",
+        "asc/std/__utility/exception_guard.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/in_place.h",
+        "asc/std/__utility/move.h",
+        "asc/std/__utility/swap.h",
+        "asc/std/initializer_list"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__expected/expected.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__expected.expected",
+        "host_semantic": "semantic.host.__expected.expected",
+        "device_header": "header.device.__expected.expected"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "hash_impl",
+      "source": "include/asc/std/__optional/hash.h",
+      "target": "asc/std/__optional/hash.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__fwd/hash.h",
+        "asc/std/__optional/optional.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__optional/hash.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__optional.hash",
+        "host_semantic": "semantic.host.__optional.hash",
+        "device_header": "header.device.__optional.hash"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "make_optional",
+      "source": "include/asc/std/__optional/make_optional.h",
+      "target": "asc/std/__optional/make_optional.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__optional/optional.h",
+        "asc/std/__type_traits/decay.h",
+        "asc/std/__type_traits/is_reference.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/in_place.h",
+        "asc/std/initializer_list"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__optional/make_optional.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__optional.make_optional",
+        "host_semantic": "semantic.host.__optional.make_optional",
+        "device_header": "header.device.__optional.make_optional"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "expected_entry",
+      "source": "include/asc/std/expected",
+      "target": "asc/std/expected",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__expected/bad_expected_access.h",
+        "asc/std/__expected/expected.h",
+        "asc/std/__expected/unexpect.h",
+        "asc/std/__expected/unexpected.h",
+        "asc/std/version"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/expected",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.expected",
+        "host_semantic": "semantic.host.public.expected",
+        "device_header": "header.device.public.expected"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "optional_entry",
+      "source": "include/asc/std/optional",
+      "target": "asc/std/optional",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__optional/bad_optional_access.h",
+        "asc/std/__optional/hash.h",
+        "asc/std/__optional/make_optional.h",
+        "asc/std/__optional/nullopt.h",
+        "asc/std/__optional/optional.h",
+        "asc/std/__optional/optional_base.h",
+        "asc/std/__optional/optional_ref.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/optional",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.optional",
+        "host_semantic": "semantic.host.public.optional",
+        "device_header": "header.device.public.optional"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "iterator_traits",
+      "source": "include/asc/std/__iterator/iterator_traits.h",
+      "target": "asc/std/__iterator/iterator_traits.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/arithmetic.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__concepts/copyable.h",
+        "asc/std/__concepts/equality_comparable.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__concepts/totally_ordered.h",
+        "asc/std/__fwd/iterator.h",
+        "asc/std/__fwd/pair.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__iterator/readable_traits.h",
+        "asc/std/__type_traits/add_const.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_primary_template.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/priority_tag.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/iterator_traits.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.iterator_traits",
+        "host_semantic": "semantic.host.__iterator.iterator_traits",
+        "device_header": "header.device.__iterator.iterator_traits"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "count",
+      "source": "include/asc/std/__algorithm/count.h",
+      "target": "asc/std/__algorithm/count.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/iterator_traits.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/count.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.count",
+        "host_semantic": "semantic.host.__algorithm.count",
+        "device_header": "header.device.__algorithm.count"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "count_if",
+      "source": "include/asc/std/__algorithm/count_if.h",
+      "target": "asc/std/__algorithm/count_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/iterator_traits.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/count_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.count_if",
+        "host_semantic": "semantic.host.__algorithm.count_if",
+        "device_header": "header.device.__algorithm.count_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "fill_n",
+      "source": "include/asc/std/__algorithm/fill_n.h",
+      "target": "asc/std/__algorithm/fill_n.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__utility/convert_to_integral.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/fill_n.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.fill_n",
+        "host_semantic": "semantic.host.__algorithm.fill_n",
+        "device_header": "header.device.__algorithm.fill_n"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "find_end",
+      "source": "include/asc/std/__algorithm/find_end.h",
+      "target": "asc/std/__algorithm/find_end.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__type_traits/add_lvalue_reference.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/find_end.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.find_end",
+        "host_semantic": "semantic.host.__algorithm.find_end",
+        "device_header": "header.device.__algorithm.find_end"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "includes",
+      "source": "include/asc/std/__algorithm/includes.h",
+      "target": "asc/std/__algorithm/includes.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h",
+        "asc/std/__algorithm/comp_ref_type.h",
+        "asc/std/__functional/identity.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__type_traits/is_callable.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/includes.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.includes",
+        "host_semantic": "semantic.host.__algorithm.includes",
+        "device_header": "header.device.__algorithm.includes"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "is_heap_until",
+      "source": "include/asc/std/__algorithm/is_heap_until.h",
+      "target": "asc/std/__algorithm/is_heap_until.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h",
+        "asc/std/__algorithm/comp_ref_type.h",
+        "asc/std/__iterator/iterator_traits.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/is_heap_until.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.is_heap_until",
+        "host_semantic": "semantic.host.__algorithm.is_heap_until",
+        "device_header": "header.device.__algorithm.is_heap_until"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "is_sorted_until",
+      "source": "include/asc/std/__algorithm/is_sorted_until.h",
+      "target": "asc/std/__algorithm/is_sorted_until.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h",
+        "asc/std/__algorithm/comp_ref_type.h",
+        "asc/std/__iterator/iterator_traits.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/is_sorted_until.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.is_sorted_until",
+        "host_semantic": "semantic.host.__algorithm.is_sorted_until",
+        "device_header": "header.device.__algorithm.is_sorted_until"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "lexicographical_compare",
+      "source": "include/asc/std/__algorithm/lexicographical_compare.h",
+      "target": "asc/std/__algorithm/lexicographical_compare.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h",
+        "asc/std/__algorithm/comp_ref_type.h",
+        "asc/std/__iterator/iterator_traits.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/lexicographical_compare.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.lexicographical_compare",
+        "host_semantic": "semantic.host.__algorithm.lexicographical_compare",
+        "device_header": "header.device.__algorithm.lexicographical_compare"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "max_element",
+      "source": "include/asc/std/__algorithm/max_element.h",
+      "target": "asc/std/__algorithm/max_element.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h",
+        "asc/std/__algorithm/comp_ref_type.h",
+        "asc/std/__iterator/iterator_traits.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/max_element.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.max_element",
+        "host_semantic": "semantic.host.__algorithm.max_element",
+        "device_header": "header.device.__algorithm.max_element"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "min_element",
+      "source": "include/asc/std/__algorithm/min_element.h",
+      "target": "asc/std/__algorithm/min_element.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h",
+        "asc/std/__algorithm/comp_ref_type.h",
+        "asc/std/__functional/identity.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__type_traits/is_callable.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/min_element.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.min_element",
+        "host_semantic": "semantic.host.__algorithm.min_element",
+        "device_header": "header.device.__algorithm.min_element"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "search_n",
+      "source": "include/asc/std/__algorithm/search_n.h",
+      "target": "asc/std/__algorithm/search_n.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__type_traits/add_lvalue_reference.h",
+        "asc/std/__utility/convert_to_integral.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/search_n.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.search_n",
+        "host_semantic": "semantic.host.__algorithm.search_n",
+        "device_header": "header.device.__algorithm.search_n"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "unwrap_iter",
+      "source": "include/asc/std/__algorithm/unwrap_iter.h",
+      "target": "asc/std/__algorithm/unwrap_iter.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__memory/pointer_traits.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_copy_constructible.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/unwrap_iter.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.unwrap_iter",
+        "host_semantic": "semantic.host.__algorithm.unwrap_iter",
+        "device_header": "header.device.__algorithm.unwrap_iter"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "back_insert_iterator",
+      "source": "include/asc/std/__iterator/back_insert_iterator.h",
+      "target": "asc/std/__iterator/back_insert_iterator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__fwd/iterator.h",
+        "asc/std/__iterator/iterator.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__utility/ctad_support.h",
+        "asc/std/__utility/move.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/back_insert_iterator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.back_insert_iterator",
+        "host_semantic": "semantic.host.__iterator.back_insert_iterator",
+        "device_header": "header.device.__iterator.back_insert_iterator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "bounded_iter",
+      "source": "include/asc/std/__iterator/bounded_iter.h",
+      "target": "asc/std/__iterator/bounded_iter.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__memory/pointer_traits.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/bounded_iter.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.bounded_iter",
+        "host_semantic": "semantic.host.__iterator.bounded_iter",
+        "device_header": "header.device.__iterator.bounded_iter"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "front_insert_iterator",
+      "source": "include/asc/std/__iterator/front_insert_iterator.h",
+      "target": "asc/std/__iterator/front_insert_iterator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/iterator.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__utility/ctad_support.h",
+        "asc/std/__utility/move.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/front_insert_iterator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.front_insert_iterator",
+        "host_semantic": "semantic.host.__iterator.front_insert_iterator",
+        "device_header": "header.device.__iterator.front_insert_iterator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "insert_iterator",
+      "source": "include/asc/std/__iterator/insert_iterator.h",
+      "target": "asc/std/__iterator/insert_iterator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/iterator.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__utility/move.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/insert_iterator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.insert_iterator",
+        "host_semantic": "semantic.host.__iterator.insert_iterator",
+        "device_header": "header.device.__iterator.insert_iterator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "istream_iterator",
+      "source": "include/asc/std/__iterator/istream_iterator.h",
+      "target": "asc/std/__iterator/istream_iterator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__fwd/char_traits.h",
+        "asc/std/__fwd/ios.h",
+        "asc/std/__host_stdlib/istream",
+        "asc/std/__iterator/default_sentinel.h",
+        "asc/std/__iterator/iterator.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/istream_iterator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.istream_iterator",
+        "host_semantic": "semantic.host.__iterator.istream_iterator",
+        "device_header": "header.device.__iterator.istream_iterator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "istreambuf_iterator",
+      "source": "include/asc/std/__iterator/istreambuf_iterator.h",
+      "target": "asc/std/__iterator/istreambuf_iterator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__fwd/ios.h",
+        "asc/std/__host_stdlib/istream",
+        "asc/std/__iterator/default_sentinel.h",
+        "asc/std/__iterator/iterator.h",
+        "asc/std/__iterator/iterator_traits.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/istreambuf_iterator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.istreambuf_iterator",
+        "host_semantic": "semantic.host.__iterator.istreambuf_iterator",
+        "device_header": "header.device.__iterator.istreambuf_iterator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "iter_move",
+      "source": "include/asc/std/__iterator/iter_move.h",
+      "target": "asc/std/__iterator/iter_move.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/class_or_enum.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_reference.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/iter_move.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.iter_move",
+        "host_semantic": "semantic.host.__iterator.iter_move",
+        "device_header": "header.device.__iterator.iter_move"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "ostream_iterator",
+      "source": "include/asc/std/__iterator/ostream_iterator.h",
+      "target": "asc/std/__iterator/ostream_iterator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__fwd/char_traits.h",
+        "asc/std/__fwd/ios.h",
+        "asc/std/__host_stdlib/ostream",
+        "asc/std/__iterator/iterator.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/ostream_iterator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.ostream_iterator",
+        "host_semantic": "semantic.host.__iterator.ostream_iterator",
+        "device_header": "header.device.__iterator.ostream_iterator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "ostreambuf_iterator",
+      "source": "include/asc/std/__iterator/ostreambuf_iterator.h",
+      "target": "asc/std/__iterator/ostreambuf_iterator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__fwd/ios.h",
+        "asc/std/__host_stdlib/ostream",
+        "asc/std/__iterator/iterator.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/ostreambuf_iterator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.ostreambuf_iterator",
+        "host_semantic": "semantic.host.__iterator.ostreambuf_iterator",
+        "device_header": "header.device.__iterator.ostreambuf_iterator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "wrap_iter",
+      "source": "include/asc/std/__iterator/wrap_iter.h",
+      "target": "asc/std/__iterator/wrap_iter.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__memory/pointer_traits.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_trivially_copy_assignable.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/wrap_iter.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.wrap_iter",
+        "host_semantic": "semantic.host.__iterator.wrap_iter",
+        "device_header": "header.device.__iterator.wrap_iter"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "adjacent_difference",
+      "source": "include/asc/std/__numeric/adjacent_difference.h",
+      "target": "asc/std/__numeric/adjacent_difference.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__numeric/adjacent_difference.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__numeric.adjacent_difference",
+        "host_semantic": "semantic.host.__numeric.adjacent_difference",
+        "device_header": "header.device.__numeric.adjacent_difference"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "inclusive_scan",
+      "source": "include/asc/std/__numeric/inclusive_scan.h",
+      "target": "asc/std/__numeric/inclusive_scan.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__functional/operations.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__numeric/inclusive_scan.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__numeric.inclusive_scan",
+        "host_semantic": "semantic.host.__numeric.inclusive_scan",
+        "device_header": "header.device.__numeric.inclusive_scan"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "partial_sum",
+      "source": "include/asc/std/__numeric/partial_sum.h",
+      "target": "asc/std/__numeric/partial_sum.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__numeric/partial_sum.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__numeric.partial_sum",
+        "host_semantic": "semantic.host.__numeric.partial_sum",
+        "device_header": "header.device.__numeric.partial_sum"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "reduce",
+      "source": "include/asc/std/__numeric/reduce.h",
+      "target": "asc/std/__numeric/reduce.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__functional/operations.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__numeric/reduce.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__numeric.reduce",
+        "host_semantic": "semantic.host.__numeric.reduce",
+        "device_header": "header.device.__numeric.reduce"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "transform_inclusive_scan",
+      "source": "include/asc/std/__numeric/transform_inclusive_scan.h",
+      "target": "asc/std/__numeric/transform_inclusive_scan.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/iterator_traits.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__numeric/transform_inclusive_scan.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__numeric.transform_inclusive_scan",
+        "host_semantic": "semantic.host.__numeric.transform_inclusive_scan",
+        "device_header": "header.device.__numeric.transform_inclusive_scan"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "transform_reduce",
+      "source": "include/asc/std/__numeric/transform_reduce.h",
+      "target": "asc/std/__numeric/transform_reduce.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__functional/operations.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__numeric/transform_reduce.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__numeric.transform_reduce",
+        "host_semantic": "semantic.host.__numeric.transform_reduce",
+        "device_header": "header.device.__numeric.transform_reduce"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "fill",
+      "source": "include/asc/std/__algorithm/fill.h",
+      "target": "asc/std/__algorithm/fill.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/fill_n.h",
+        "asc/std/__iterator/iterator_traits.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/fill.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.fill",
+        "host_semantic": "semantic.host.__algorithm.fill",
+        "device_header": "header.device.__algorithm.fill"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "is_heap",
+      "source": "include/asc/std/__algorithm/is_heap.h",
+      "target": "asc/std/__algorithm/is_heap.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h",
+        "asc/std/__algorithm/comp_ref_type.h",
+        "asc/std/__algorithm/is_heap_until.h",
+        "asc/std/__iterator/iterator_traits.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/is_heap.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.is_heap",
+        "host_semantic": "semantic.host.__algorithm.is_heap",
+        "device_header": "header.device.__algorithm.is_heap"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "is_sorted",
+      "source": "include/asc/std/__algorithm/is_sorted.h",
+      "target": "asc/std/__algorithm/is_sorted.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h",
+        "asc/std/__algorithm/comp_ref_type.h",
+        "asc/std/__algorithm/is_sorted_until.h",
+        "asc/std/__iterator/iterator_traits.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/is_sorted.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.is_sorted",
+        "host_semantic": "semantic.host.__algorithm.is_sorted",
+        "device_header": "header.device.__algorithm.is_sorted"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "max",
+      "source": "include/asc/std/__algorithm/max.h",
+      "target": "asc/std/__algorithm/max.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h",
+        "asc/std/__algorithm/comp_ref_type.h",
+        "asc/std/__algorithm/max_element.h",
+        "asc/std/initializer_list"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/max.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.max",
+        "host_semantic": "semantic.host.__algorithm.max",
+        "device_header": "header.device.__algorithm.max"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "min",
+      "source": "include/asc/std/__algorithm/min.h",
+      "target": "asc/std/__algorithm/min.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/comp.h",
+        "asc/std/__algorithm/comp_ref_type.h",
+        "asc/std/__algorithm/min_element.h",
+        "asc/std/initializer_list"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/min.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.min",
+        "host_semantic": "semantic.host.__algorithm.min",
+        "device_header": "header.device.__algorithm.min"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "concepts_impl",
+      "source": "include/asc/std/__iterator/concepts.h",
+      "target": "asc/std/__iterator/concepts.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/arithmetic.h",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/common_reference_with.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/copyable.h",
+        "asc/std/__concepts/derived_from.h",
+        "asc/std/__concepts/equality_comparable.h",
+        "asc/std/__concepts/invocable.h",
+        "asc/std/__concepts/movable.h",
+        "asc/std/__concepts/predicate.h",
+        "asc/std/__concepts/regular.h",
+        "asc/std/__concepts/relation.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__concepts/semiregular.h",
+        "asc/std/__concepts/totally_ordered.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__iterator/iter_move.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__iterator/readable_traits.h",
+        "asc/std/__memory/pointer_traits.h",
+        "asc/std/__type_traits/add_pointer.h",
+        "asc/std/__type_traits/common_reference.h",
+        "asc/std/__type_traits/conjunction.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/forward.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/concepts.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.concepts",
+        "host_semantic": "semantic.host.__iterator.concepts",
+        "device_header": "header.device.__iterator.concepts"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_count",
+      "source": "include/asc/std/algorithm.count.h",
+      "target": "asc/std/algorithm.count.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/count.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.count.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.count",
+        "host_semantic": "semantic.host.public.algorithm.count",
+        "device_header": "header.device.public.algorithm.count"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_count_if",
+      "source": "include/asc/std/algorithm.count_if.h",
+      "target": "asc/std/algorithm.count_if.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/count_if.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.count_if.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.count_if",
+        "host_semantic": "semantic.host.public.algorithm.count_if",
+        "device_header": "header.device.public.algorithm.count_if"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_fill_n",
+      "source": "include/asc/std/algorithm.fill_n.h",
+      "target": "asc/std/algorithm.fill_n.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/fill_n.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.fill_n.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.fill_n",
+        "host_semantic": "semantic.host.public.algorithm.fill_n",
+        "device_header": "header.device.public.algorithm.fill_n"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_find_end",
+      "source": "include/asc/std/algorithm.find_end.h",
+      "target": "asc/std/algorithm.find_end.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/find_end.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.find_end.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.find_end",
+        "host_semantic": "semantic.host.public.algorithm.find_end",
+        "device_header": "header.device.public.algorithm.find_end"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_includes",
+      "source": "include/asc/std/algorithm.includes.h",
+      "target": "asc/std/algorithm.includes.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/includes.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.includes.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.includes",
+        "host_semantic": "semantic.host.public.algorithm.includes",
+        "device_header": "header.device.public.algorithm.includes"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_is_heap_until",
+      "source": "include/asc/std/algorithm.is_heap_until.h",
+      "target": "asc/std/algorithm.is_heap_until.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/is_heap_until.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.is_heap_until.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.is_heap_until",
+        "host_semantic": "semantic.host.public.algorithm.is_heap_until",
+        "device_header": "header.device.public.algorithm.is_heap_until"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_is_sorted_until",
+      "source": "include/asc/std/algorithm.is_sorted_until.h",
+      "target": "asc/std/algorithm.is_sorted_until.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/is_sorted_until.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.is_sorted_until.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.is_sorted_until",
+        "host_semantic": "semantic.host.public.algorithm.is_sorted_until",
+        "device_header": "header.device.public.algorithm.is_sorted_until"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_lexicographical_compare",
+      "source": "include/asc/std/algorithm.lexicographical_compare.h",
+      "target": "asc/std/algorithm.lexicographical_compare.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/lexicographical_compare.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.lexicographical_compare.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.lexicographical_compare",
+        "host_semantic": "semantic.host.public.algorithm.lexicographical_compare",
+        "device_header": "header.device.public.algorithm.lexicographical_compare"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_max_element",
+      "source": "include/asc/std/algorithm.max_element.h",
+      "target": "asc/std/algorithm.max_element.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/max_element.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.max_element.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.max_element",
+        "host_semantic": "semantic.host.public.algorithm.max_element",
+        "device_header": "header.device.public.algorithm.max_element"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_min_element",
+      "source": "include/asc/std/algorithm.min_element.h",
+      "target": "asc/std/algorithm.min_element.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/min_element.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.min_element.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.min_element",
+        "host_semantic": "semantic.host.public.algorithm.min_element",
+        "device_header": "header.device.public.algorithm.min_element"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_search_n",
+      "source": "include/asc/std/algorithm.search_n.h",
+      "target": "asc/std/algorithm.search_n.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/search_n.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.search_n.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.search_n",
+        "host_semantic": "semantic.host.public.algorithm.search_n",
+        "device_header": "header.device.public.algorithm.search_n"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "iterator_impl",
+      "source": "include/asc/__fwd/iterator.h",
+      "target": "asc/__fwd/iterator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/__fwd/random.h",
+        "asc/std/__concepts/arithmetic.h",
+        "asc/std/__concepts/copyable.h",
+        "asc/std/__cstddef/types.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/type_identity.h",
+        "asc/std/cstdint"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__fwd/iterator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__fwd.iterator",
+        "host_semantic": "semantic.host.extension.__fwd.iterator",
+        "device_header": "header.device.extension.__fwd.iterator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "interfaces",
+      "source": "include/asc/__utility/__basic_any/interfaces.h",
+      "target": "asc/__utility/__basic_any/interfaces.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/__utility/__basic_any/basic_any_fwd.h",
+        "asc/__utility/__basic_any/overrides.h",
+        "asc/__utility/inherit.h",
+        "asc/std/__algorithm/find.h",
+        "asc/std/__algorithm/max.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__type_traits/is_callable.h",
+        "asc/std/__type_traits/is_class.h",
+        "asc/std/__type_traits/is_const.h",
+        "asc/std/__type_traits/remove_const.h",
+        "asc/std/__type_traits/type_set.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__utility/__basic_any/interfaces.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__utility.__basic_any.interfaces",
+        "host_semantic": "semantic.host.extension.__utility.__basic_any.interfaces",
+        "device_header": "header.device.extension.__utility.__basic_any.interfaces"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "storage",
+      "source": "include/asc/__utility/__basic_any/storage.h",
+      "target": "asc/__utility/__basic_any/storage.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/__utility/__basic_any/basic_any_fwd.h",
+        "asc/std/__algorithm/max.h",
+        "asc/std/__tuple_dir/ignore.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/type_identity.h",
+        "asc/std/__utility/swap.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__utility/__basic_any/storage.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__utility.__basic_any.storage",
+        "host_semantic": "semantic.host.extension.__utility.__basic_any.storage",
+        "device_header": "header.device.extension.__utility.__basic_any.storage"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "virtual_functions",
+      "source": "include/asc/__utility/__basic_any/virtual_functions.h",
+      "target": "asc/__utility/__basic_any/virtual_functions.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/__utility/__basic_any/basic_any_fwd.h",
+        "asc/std/__algorithm/max.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_base_of.h",
+        "asc/std/__type_traits/is_member_function_pointer.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/is_pointer.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/maybe_const.h",
+        "asc/std/__type_traits/remove_pointer.h",
+        "asc/std/__type_traits/type_identity.h",
+        "asc/std/__type_traits/type_list.h",
+        "asc/std/__utility/swap.h",
+        "asc/std/__utility/typeid.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__utility/__basic_any/virtual_functions.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__utility.__basic_any.virtual_functions",
+        "host_semantic": "semantic.host.extension.__utility.__basic_any.virtual_functions",
+        "device_header": "header.device.extension.__utility.__basic_any.virtual_functions"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "ranges_iterator_concept",
+      "source": "include/asc/std/__algorithm/ranges_iterator_concept.h",
+      "target": "asc/std/__algorithm/ranges_iterator_concept.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__type_traits/remove_cvref.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__algorithm/ranges_iterator_concept.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__algorithm.ranges_iterator_concept",
+        "host_semantic": "semantic.host.__algorithm.ranges_iterator_concept",
+        "device_header": "header.device.__algorithm.ranges_iterator_concept"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "common_iterator",
+      "source": "include/asc/std/__fwd/common_iterator.h",
+      "target": "asc/std/__fwd/common_iterator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/copyable.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__type_traits/enable_if.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__fwd/common_iterator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__fwd.common_iterator",
+        "host_semantic": "semantic.host.__fwd.common_iterator",
+        "device_header": "header.device.__fwd.common_iterator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "subrange",
+      "source": "include/asc/std/__fwd/subrange.h",
+      "target": "asc/std/__fwd/subrange.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/concepts.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__fwd/subrange.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__fwd.subrange",
+        "host_semantic": "semantic.host.__fwd.subrange",
+        "device_header": "header.device.__fwd.subrange"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "advance",
+      "source": "include/asc/std/__iterator/advance.h",
+      "target": "asc/std/__iterator/advance.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__utility/convert_to_integral.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/advance.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.advance",
+        "host_semantic": "semantic.host.__iterator.advance",
+        "device_header": "header.device.__iterator.advance"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "iter_swap_impl",
+      "source": "include/asc/std/__iterator/iter_swap.h",
+      "target": "asc/std/__iterator/iter_swap.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/class_or_enum.h",
+        "asc/std/__concepts/swappable.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/iter_move.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__iterator/readable_traits.h",
+        "asc/std/__type_traits/add_lvalue_reference.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/iter_swap.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.iter_swap",
+        "host_semantic": "semantic.host.__iterator.iter_swap",
+        "device_header": "header.device.__iterator.iter_swap"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "projected",
+      "source": "include/asc/std/__iterator/projected.h",
+      "target": "asc/std/__iterator/projected.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/remove_cvref.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/projected.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.projected",
+        "host_semantic": "semantic.host.__iterator.projected",
+        "device_header": "header.device.__iterator.projected"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "unreachable_sentinel",
+      "source": "include/asc/std/__iterator/unreachable_sentinel.h",
+      "target": "asc/std/__iterator/unreachable_sentinel.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/concepts.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/unreachable_sentinel.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.unreachable_sentinel",
+        "host_semantic": "semantic.host.__iterator.unreachable_sentinel",
+        "device_header": "header.device.__iterator.unreachable_sentinel"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "helper_functions",
+      "source": "include/asc/std/__string/helper_functions.h",
+      "target": "asc/std/__string/helper_functions.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/find.h",
+        "asc/std/__algorithm/find_end.h",
+        "asc/std/__algorithm/find_first_of.h",
+        "asc/std/__algorithm/min.h",
+        "asc/std/__cstddef/types.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__string/char_traits.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__string/helper_functions.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__string.helper_functions",
+        "host_semantic": "semantic.host.__string.helper_functions",
+        "device_header": "header.device.__string.helper_functions"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_fill",
+      "source": "include/asc/std/algorithm.fill.h",
+      "target": "asc/std/algorithm.fill.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/fill.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.fill.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.fill",
+        "host_semantic": "semantic.host.public.algorithm.fill",
+        "device_header": "header.device.public.algorithm.fill"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_is_heap",
+      "source": "include/asc/std/algorithm.is_heap.h",
+      "target": "asc/std/algorithm.is_heap.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/is_heap.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.is_heap.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.is_heap",
+        "host_semantic": "semantic.host.public.algorithm.is_heap",
+        "device_header": "header.device.public.algorithm.is_heap"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_is_sorted",
+      "source": "include/asc/std/algorithm.is_sorted.h",
+      "target": "asc/std/algorithm.is_sorted.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/is_sorted.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.is_sorted.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.is_sorted",
+        "host_semantic": "semantic.host.public.algorithm.is_sorted",
+        "device_header": "header.device.public.algorithm.is_sorted"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_max",
+      "source": "include/asc/std/algorithm.max.h",
+      "target": "asc/std/algorithm.max.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/max.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.max.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.max",
+        "host_semantic": "semantic.host.public.algorithm.max",
+        "device_header": "header.device.public.algorithm.max"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "algorithm_min",
+      "source": "include/asc/std/algorithm.min.h",
+      "target": "asc/std/algorithm.min.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__algorithm/min.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/algorithm.min.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.public.algorithm.min",
+        "host_semantic": "semantic.host.public.algorithm.min",
+        "device_header": "header.device.public.algorithm.min"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "address_stability",
+      "source": "include/asc/__functional/address_stability.h",
+      "target": "asc/__functional/address_stability.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/__functional/always_true_false.h",
+        "asc/__fwd/iterator.h",
+        "asc/std/__functional/not_fn.h",
+        "asc/std/__functional/operations.h",
+        "asc/std/__functional/ranges_operations.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_class.h",
+        "asc/std/__type_traits/is_enum.h",
+        "asc/std/__type_traits/is_void.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__functional/address_stability.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__functional.address_stability",
+        "host_semantic": "semantic.host.extension.__functional.address_stability",
+        "device_header": "header.device.extension.__functional.address_stability"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "basic_any_base",
+      "source": "include/asc/__utility/__basic_any/basic_any_base.h",
+      "target": "asc/__utility/__basic_any/basic_any_base.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/__utility/__basic_any/basic_any_fwd.h",
+        "asc/__utility/__basic_any/interfaces.h",
+        "asc/__utility/__basic_any/storage.h",
+        "asc/__utility/__basic_any/tagged_ptr.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__utility/__basic_any/basic_any_base.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__utility.__basic_any.basic_any_base",
+        "host_semantic": "semantic.host.extension.__utility.__basic_any.basic_any_base",
+        "device_header": "header.device.extension.__utility.__basic_any.basic_any_base"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "conversions",
+      "source": "include/asc/__utility/__basic_any/conversions.h",
+      "target": "asc/__utility/__basic_any/conversions.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/__utility/__basic_any/basic_any_fwd.h",
+        "asc/__utility/__basic_any/interfaces.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__type_traits/add_pointer.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/remove_reference.h",
+        "asc/std/__type_traits/type_list.h",
+        "asc/std/__utility/declval.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__utility/__basic_any/conversions.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__utility.__basic_any.conversions",
+        "host_semantic": "semantic.host.extension.__utility.__basic_any.conversions",
+        "device_header": "header.device.extension.__utility.__basic_any.conversions"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "virtual_ptrs",
+      "source": "include/asc/__utility/__basic_any/virtual_ptrs.h",
+      "target": "asc/__utility/__basic_any/virtual_ptrs.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/__utility/__basic_any/basic_any_fwd.h",
+        "asc/__utility/__basic_any/interfaces.h",
+        "asc/std/__exception/terminate.h",
+        "asc/std/__utility/typeid.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/__utility/__basic_any/virtual_ptrs.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.extension.__utility.__basic_any.virtual_ptrs",
+        "host_semantic": "semantic.host.extension.__utility.__basic_any.virtual_ptrs",
+        "device_header": "header.device.extension.__utility.__basic_any.virtual_ptrs"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "get",
+      "source": "include/asc/std/__fwd/get.h",
+      "target": "asc/std/__fwd/get.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/copyable.h",
+        "asc/std/__fwd/array.h",
+        "asc/std/__fwd/complex.h",
+        "asc/std/__fwd/pair.h",
+        "asc/std/__fwd/subrange.h",
+        "asc/std/__fwd/tuple.h",
+        "asc/std/__tuple_dir/tuple_element.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__fwd/get.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__fwd.get",
+        "host_semantic": "semantic.host.__fwd.get",
+        "device_header": "header.device.__fwd.get"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "common_iterator_impl",
+      "source": "include/asc/std/__iterator/common_iterator.h",
+      "target": "asc/std/__iterator/common_iterator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__concepts/copyable.h",
+        "asc/std/__concepts/equality_comparable.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__fwd/common_iterator.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__iterator/iter_move.h",
+        "asc/std/__iterator/iter_swap.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__iterator/readable_traits.h",
+        "asc/std/__iterator/variant_like.h",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_nothrow_constructible.h",
+        "asc/std/__type_traits/is_nothrow_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/common_iterator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.common_iterator",
+        "host_semantic": "semantic.host.__iterator.common_iterator",
+        "device_header": "header.device.__iterator.common_iterator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "counted_iterator",
+      "source": "include/asc/std/__iterator/counted_iterator.h",
+      "target": "asc/std/__iterator/counted_iterator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/common_with.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__exception/exception_macros.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/default_sentinel.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__iterator/iter_move.h",
+        "asc/std/__iterator/iter_swap.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__iterator/readable_traits.h",
+        "asc/std/__memory/pointer_traits.h",
+        "asc/std/__type_traits/add_pointer.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_nothrow_assignable.h",
+        "asc/std/__type_traits/is_nothrow_constructible.h",
+        "asc/std/__type_traits/is_nothrow_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/ctad_support.h",
+        "asc/std/__utility/exception_guard.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/counted_iterator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.counted_iterator",
+        "host_semantic": "semantic.host.__iterator.counted_iterator",
+        "device_header": "header.device.__iterator.counted_iterator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "indirectly_comparable",
+      "source": "include/asc/std/__iterator/indirectly_comparable.h",
+      "target": "asc/std/__iterator/indirectly_comparable.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__functional/identity.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/projected.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/indirectly_comparable.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.indirectly_comparable",
+        "host_semantic": "semantic.host.__iterator.indirectly_comparable",
+        "device_header": "header.device.__iterator.indirectly_comparable"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "mergeable",
+      "source": "include/asc/std/__iterator/mergeable.h",
+      "target": "asc/std/__iterator/mergeable.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__functional/identity.h",
+        "asc/std/__functional/ranges_operations.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/projected.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/mergeable.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.mergeable",
+        "host_semantic": "semantic.host.__iterator.mergeable",
+        "device_header": "header.device.__iterator.mergeable"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "move_iterator",
+      "source": "include/asc/std/__iterator/move_iterator.h",
+      "target": "asc/std/__iterator/move_iterator.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__concepts/derived_from.h",
+        "asc/std/__concepts/same_as.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__iterator/iter_move.h",
+        "asc/std/__iterator/iter_swap.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__iterator/move_sentinel.h",
+        "asc/std/__iterator/readable_traits.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/is_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_assignable.h",
+        "asc/std/__type_traits/is_nothrow_convertible.h",
+        "asc/std/__type_traits/is_nothrow_copy_constructible.h",
+        "asc/std/__type_traits/is_nothrow_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/is_reference.h",
+        "asc/std/__type_traits/remove_reference.h",
+        "asc/std/__utility/ctad_support.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/move.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/move_iterator.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.move_iterator",
+        "host_semantic": "semantic.host.__iterator.move_iterator",
+        "device_header": "header.device.__iterator.move_iterator"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "next",
+      "source": "include/asc/std/__iterator/next.h",
+      "target": "asc/std/__iterator/next.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/advance.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__type_traits/enable_if.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/next.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.next",
+        "host_semantic": "semantic.host.__iterator.next",
+        "device_header": "header.device.__iterator.next"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "permutable",
+      "source": "include/asc/std/__iterator/permutable.h",
+      "target": "asc/std/__iterator/permutable.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/iter_swap.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/permutable.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.permutable",
+        "host_semantic": "semantic.host.__iterator.permutable",
+        "device_header": "header.device.__iterator.permutable"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "prev",
+      "source": "include/asc/std/__iterator/prev.h",
+      "target": "asc/std/__iterator/prev.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__iterator/advance.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/incrementable_traits.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__type_traits/enable_if.h"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__iterator/prev.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__iterator.prev",
+        "host_semantic": "semantic.host.__iterator.prev",
+        "device_header": "header.device.__iterator.prev"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "tuple_like",
+      "source": "include/asc/std/__tuple_dir/tuple_like.h",
+      "target": "asc/std/__tuple_dir/tuple_like.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__fwd/tuple.h",
+        "asc/std/__fwd/pair.h",
+        "asc/std/__tuple_dir/tuple_size.h",
+        "asc/std/__tuple_dir/tuple_types.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__tuple_dir/tuple_like.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__tuple_dir.tuple_like",
+        "host_semantic": "semantic.host.__tuple_dir.tuple_like",
+        "device_header": "header.device.__tuple_dir.tuple_like"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "string__impl",
+      "source": "include/asc/std/__string_",
+      "target": "asc/std/__string_",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__string/char_traits.h",
+        "asc/std/__string/constexpr_c_functions.h",
+        "asc/std/__string/helper_functions.h",
+        "asc/std/version"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__string_",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__string_",
+        "host_semantic": "semantic.host.__string_",
+        "device_header": "header.device.__string_"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
     }
   ]
 }
