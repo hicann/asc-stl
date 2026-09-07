@@ -15965,6 +15965,108 @@
         "public_aggregation": false
       },
       "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "tuple_leaf",
+      "source": "include/asc/std/__tuple_dir/tuple_leaf.h",
+      "target": "asc/std/__tuple_dir/tuple_leaf.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__tuple_dir/make_tuple_types.h",
+        "asc/std/__tuple_dir/sfinae_helpers.h",
+        "asc/std/__tuple_dir/tuple_constraints.h",
+        "asc/std/__tuple_dir/tuple_element.h",
+        "asc/std/__tuple_dir/tuple_indices.h",
+        "asc/std/__tuple_dir/tuple_types.h",
+        "asc/std/__fwd/get.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_assignable.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_empty.h",
+        "asc/std/__type_traits/is_final.h",
+        "asc/std/__type_traits/is_nothrow_constructible.h",
+        "asc/std/__type_traits/is_nothrow_copy_constructible.h",
+        "asc/std/__type_traits/is_nothrow_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/is_swappable.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/remove_const.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h",
+        "asc/std/__utility/swap.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__tuple_dir/tuple_leaf.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__tuple_dir.tuple_leaf",
+        "host_semantic": "semantic.host.__tuple_dir.tuple_leaf",
+        "device_header": "header.device.__tuple_dir.tuple_leaf"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
+    },
+    {
+      "id": "tuple_constraints",
+      "source": "include/asc/std/__tuple_dir/tuple_constraints.h",
+      "target": "asc/std/__tuple_dir/tuple_constraints.h",
+      "kind": "internal",
+      "dependencies": [
+        "asc/std/detail/__config",
+        "asc/std/__tuple_dir/tuple_like.h",
+        "asc/std/__tuple_dir/tuple_size.h",
+        "asc/std/__tuple_dir/tuple_types.h",
+        "asc/std/__type_traits/is_assignable.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_copy_assignable.h",
+        "asc/std/__type_traits/is_copy_constructible.h",
+        "asc/std/__type_traits/is_default_constructible.h",
+        "asc/std/__type_traits/is_implicitly_default_constructible.h",
+        "asc/std/__type_traits/is_move_assignable.h",
+        "asc/std/__type_traits/is_move_constructible.h",
+        "asc/std/__type_traits/is_nothrow_assignable.h",
+        "asc/std/__type_traits/is_nothrow_constructible.h",
+        "asc/std/__type_traits/is_nothrow_copy_assignable.h",
+        "asc/std/__type_traits/is_nothrow_copy_constructible.h",
+        "asc/std/__type_traits/is_nothrow_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_move_assignable.h",
+        "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/remove_reference.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/cstddef"
+      ],
+      "apis": [],
+      "upstream": "libcudacxx/include/cuda/std/__tuple_dir/tuple_constraints.h",
+      "upstream_tests": [],
+      "tests": {
+        "host_header": "header.host.__tuple_dir.tuple_constraints",
+        "host_semantic": "semantic.host.__tuple_dir.tuple_constraints",
+        "device_header": "header.device.__tuple_dir.tuple_constraints"
+      },
+      "applicability": {
+        "host_header": true,
+        "host_semantic": true,
+        "device_header": true,
+        "device_compile": false,
+        "cannsim_runtime": false,
+        "public_aggregation": false
+      },
+      "source_commit": "58c33c70fc2b171aab062e0f2f88642c750125f5"
     }
   ]
 }
