@@ -19,6 +19,14 @@
 
 #include <asc/std/detail/__config>
 
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif  // no system header
+
 #include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/remove_cv.h>
 
@@ -28,7 +36,13 @@
 
 CANN_ASC_STL_DETAIL_ACCL_BEGIN_NAMESPACE_ASC_STD
 
-#if defined(CANN_ASC_STL_DETAIL_ACCL_BUILTIN_IS_POINTER) && !defined(CANN_ASC_STL_DETAIL_ACCL_USE_IS_POINTER_FALLBACK)
+// CCE 下禁用 __is_pointer 特性关键字快路径：libstdc++ bits/cpp_type_traits.h
+// 声明了同名模板，ASC 工具链的辅助编译遍（dav-c310-vec）里该声明会遮蔽特性
+// 关键字，使 __is_pointer(_Tp) 被解析为对模板的调用（950 真机 2026-09 复现，
+// 仅当宿主 <vector> 等先行包含时触发）。回退分支语义完备（_Tp* 特化 +
+// remove_cv），CCE 一律走回退；真 clang 的关键字优先级不受声明影响，保留快路径。
+#if defined(CANN_ASC_STL_DETAIL_ACCL_BUILTIN_IS_POINTER) && \
+    !defined(CANN_ASC_STL_DETAIL_ACCL_USE_IS_POINTER_FALLBACK) && !defined(CANN_ASC_STL_DETAIL_COMPILER_CCE)
 
 template <class _Tp>
 struct is_pointer : public bool_constant<CANN_ASC_STL_DETAIL_ACCL_BUILTIN_IS_POINTER(_Tp)> {};
