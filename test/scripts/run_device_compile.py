@@ -66,6 +66,13 @@ class DeviceCompiler:
         return process.stdout
 
 
+@dataclass
+class SemanticContext:
+    standards: list[str]
+    build_root: Path
+    seen: set[str]
+
+
 def case_root(test_root: Path, target: str) -> Path:
     relative = target[:-2] if target.endswith(".h") else target
     return test_root / "cases" / relative
@@ -81,6 +88,9 @@ NEGATIVE_DIAGNOSTIC_MARKERS = {
     "initializer_list_excluded.fail.asc": "no matching function",
     "simd_excluded.fail.asc": "__host__ function",
     "ub_span_dsimt.fail.asc": "ub_span",
+    "reference_alternative.fail.asc": "static assertion",
+    "unsupported_double.fail.asc": "static assertion",
+    "invalid_requirement_type.fail.asc": "no matching function",
 }
 
 
@@ -97,16 +107,24 @@ def compile_header_matrix(
 
 
 def compile_semantic(
-    device: DeviceCompiler, row: dict, index: int, standards: list[str], build_root: Path
+    device: DeviceCompiler, row: dict, index: int, context: SemanticContext
 ) -> bool:
     if not row["applicability"]["device_compile"]:
         return False
-    semantic = case_root(device.test_root, row["target"]) / "device.compile.asc"
-    applicable = ["c++20"] if row["target"].startswith("asc/std/__concepts/") else standards
+    semantic_target = row.get("semantic_case", row["target"])
+    if semantic_target in context.seen:
+        return False
+    context.seen.add(semantic_target)
+    semantic = case_root(device.test_root, semantic_target) / "device.compile.asc"
+    applicable = (
+        ["c++20"]
+        if row["target"].startswith("asc/std/__concepts/")
+        else context.standards
+    )
     for standard in applicable:
         suffix = standard.replace("+", "x")
         for mode, simt in (("simd", False), ("simt", True)):
-            output = build_root / f"semantic-{index}-{suffix}-{mode}.o"
+            output = context.build_root / f"semantic-{index}-{suffix}-{mode}.o"
             device.compile(semantic, output, CompileOptions(standard, simt))
     return True
 
@@ -131,6 +149,10 @@ def compile_negatives(device: DeviceCompiler, row: dict, index: int, build_root:
             )
             marker = NEGATIVE_DIAGNOSTIC_MARKERS.get(name, "deleted")
             expected = marker.lower() in output.lower()
+            if target == "asc/__atomic/scoped_atomic.h" and name == "simd_excluded.fail.asc":
+                expected = expected or "deleted" in output.lower()
+            if target == "asc/__atomic/scoped_atomic.h" and name == "unsupported_type.fail.asc":
+                expected = "supports exactly" in output.lower()
             if target == "asc/std/source_location":
                 expected = "cannot initialize a parameter" in output and "const char *" in output
             if not expected:
@@ -141,9 +163,10 @@ def run_cases(device: DeviceCompiler, rows: list[dict], standards: list[str]) ->
     semantic_count = 0
     with tempfile.TemporaryDirectory(prefix="asc-stl-device-") as value:
         build_root = Path(value)
+        context = SemanticContext(standards, build_root, set())
         for index, row in enumerate(rows):
             compile_header_matrix(device, row, index, standards, build_root)
-            semantic_count += compile_semantic(device, row, semantic_count, standards, build_root)
+            semantic_count += compile_semantic(device, row, semantic_count, context)
             compile_negatives(device, row, index, build_root)
     return semantic_count
 

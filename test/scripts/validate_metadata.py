@@ -87,8 +87,11 @@ def runtime_assets(row: dict, test_root: Path) -> set[Path]:
         expected.add(root / "semantics.h")
         expected.update(
             root / "cannsim" / name
-            for name in ("CMakeLists.txt", "kernel.cpp", "launcher.cpp", "launcher.h", "main.cpp")
+            for name in ("CMakeLists.txt", "kernel.cpp", "launcher.cpp", "main.cpp")
         )
+        optional_launcher = root / "cannsim" / "launcher.h"
+        if optional_launcher.is_file():
+            expected.add(optional_launcher)
     if applicability["hardware_runtime"]:
         expected.update(
             root / "hardware" / name
@@ -112,12 +115,17 @@ def validate_row(row: dict, registered: set[str], test_root: Path) -> tuple[int,
     unknown = sorted(set(dependencies) - registered)
     if unknown:
         raise ValueError(f"{target}: dependencies are not registered product Headers: {unknown}")
+    for field in ("semantic_case", "runtime_case"):
+        mapped = row.get(field, target)
+        if not isinstance(mapped, str) or mapped not in registered:
+            raise ValueError(f"{target}: {field} must name a registered product Header")
     root = case_path(test_root, target)
+    semantic_root = case_path(test_root, row.get("semantic_case", target))
     expected: set[Path] = set()
     if applicability["host_semantic"]:
-        expected.add(root / "host.pass.cpp")
+        expected.add(semantic_root / "host.pass.cpp")
     if applicability["device_compile"]:
-        expected.add(root / "device.compile.asc")
+        expected.add(semantic_root / "device.compile.asc")
     expected.update(runtime_assets(row, test_root))
     for field in ("negative_cases", "additional_cases"):
         for name in row.get(field, []):

@@ -472,6 +472,11 @@ asc_stl_add_host_case("asc.std.__floating_point.common_type" "asc/std/__floating
 asc_stl_add_host_case("asc.std.__floating_point.fp" "asc/std/__floating_point/fp/host.pass.cpp")
 asc_stl_add_host_case("asc.std.__utility.in_place" "asc/std/__utility/in_place/host.pass.cpp")
 asc_stl_add_host_case("asc.std.cmath" "asc/std/cmath/host.pass.cpp")
+asc_stl_add_host_case("asc.atomic.b013" "asc/atomic/host.pass.cpp")
+asc_stl_add_host_case("asc.stream.b014" "asc/stream/host.pass.cpp")
+asc_stl_add_host_case("asc.std.cstdlib.b014" "asc/std/cstdlib/host.pass.cpp")
+asc_stl_add_host_case("asc.execution.policy.b015" "asc/execution.policy/host.pass.cpp")
+asc_stl_add_host_case("asc.hierarchy.b016" "asc/hierarchy/host.pass.cpp")
 foreach(standard IN ITEMS 17 20)
     add_executable(
         asc_stl_host_cassert_ndebug_cxx${standard}
@@ -548,6 +553,12 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
         "${ASC_STL_CASES_ROOT}/asc/std/__cstring/memcpy/runtime/cannsim"
     )
     set(foundation_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/foundation-cannsim")
+    set(atomic_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/atomic/runtime/cannsim")
+    set(atomic_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/atomic-cannsim")
+    set(b014_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/std/cstdlib/runtime/cannsim")
+    set(b014_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/b014-cannsim")
+    set(b016_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/hierarchy/runtime/cannsim")
+    set(b016_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/b016-cannsim")
     add_custom_target(
         asc_stl_cannsim_tests
         COMMAND
@@ -570,6 +581,36 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
         COMMAND
             "${CMAKE_COMMAND}" --build "${foundation_cannsim_build_root}"
             --target asc_stl_foundation_cannsim -j2
+        COMMAND
+            "${CMAKE_COMMAND}" -S "${atomic_cannsim_case_root}"
+            -B "${atomic_cannsim_build_root}"
+            -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
+            -DASC_STL_CXX_STANDARD=${ASC_STL_TEST_CXX_STANDARD}
+            -DASC_STL_TARGET_SOC=${ASC_STL_TARGET_SOC}
+            -DCMAKE_BUILD_TYPE=Release
+        COMMAND
+            "${CMAKE_COMMAND}" --build "${atomic_cannsim_build_root}"
+            --target asc_stl_atomic_cannsim -j2
+        COMMAND
+            "${CMAKE_COMMAND}" -S "${b014_cannsim_case_root}"
+            -B "${b014_cannsim_build_root}"
+            -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
+            -DASC_STL_CXX_STANDARD=${ASC_STL_TEST_CXX_STANDARD}
+            -DASC_STL_TARGET_SOC=${ASC_STL_TARGET_SOC}
+            -DCMAKE_BUILD_TYPE=Release
+        COMMAND
+            "${CMAKE_COMMAND}" --build "${b014_cannsim_build_root}"
+            --target asc_stl_b014_cannsim -j2
+        COMMAND
+            "${CMAKE_COMMAND}" -S "${b016_cannsim_case_root}"
+            -B "${b016_cannsim_build_root}"
+            -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
+            -DASC_STL_CXX_STANDARD=${ASC_STL_TEST_CXX_STANDARD}
+            -DASC_STL_TARGET_SOC=${ASC_STL_TARGET_SOC}
+            -DCMAKE_BUILD_TYPE=Release
+        COMMAND
+            "${CMAKE_COMMAND}" --build "${b016_cannsim_build_root}"
+            --target asc_stl_b016_cannsim -j2
         VERBATIM
     )
     add_test(
@@ -600,6 +641,51 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
     )
     set_tests_properties(
         semantic.cannsim.asc.std.foundation-runtime
+        PROPERTIES LABELS "cannsim-smoke;cannsim-runtime" RUN_SERIAL TRUE
+    )
+    add_test(
+        NAME semantic.cannsim.asc.atomic
+        COMMAND
+            "${ASC_STL_TEST_ROOT}/scripts/run_cannsim_test.sh"
+            "${ASC_STL_CANNSIM_EXECUTABLE}"
+            "${atomic_cannsim_build_root}/asc_stl_atomic_cannsim"
+            "${ASC_STL_CANNSIM_SOC}"
+            "${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/atomic"
+            "${atomic_cannsim_build_root}"
+            ASC_STL_CANNSIM_ATOMIC_PASS
+    )
+    set_tests_properties(
+        semantic.cannsim.asc.atomic
+        PROPERTIES LABELS "cannsim-smoke;cannsim-runtime" RUN_SERIAL TRUE
+    )
+    add_test(
+        NAME semantic.cannsim.asc.std.b014
+        COMMAND
+            "${ASC_STL_TEST_ROOT}/scripts/run_cannsim_test.sh"
+            "${ASC_STL_CANNSIM_EXECUTABLE}"
+            "${b014_cannsim_build_root}/asc_stl_b014_cannsim"
+            "${ASC_STL_CANNSIM_SOC}"
+            "${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/b014"
+            "${b014_cannsim_build_root}"
+            ASC_STL_CANNSIM_B014_PASS
+    )
+    set_tests_properties(
+        semantic.cannsim.asc.std.b014
+        PROPERTIES LABELS "cannsim-smoke;cannsim-runtime" RUN_SERIAL TRUE
+    )
+    add_test(
+        NAME semantic.cannsim.asc.hierarchy.b016
+        COMMAND
+            "${ASC_STL_TEST_ROOT}/scripts/run_cannsim_test.sh"
+            "${ASC_STL_CANNSIM_EXECUTABLE}"
+            "${b016_cannsim_build_root}/asc_stl_b016_cannsim"
+            "${ASC_STL_CANNSIM_SOC}"
+            "${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/b016"
+            "${b016_cannsim_build_root}"
+            ASC_STL_CANNSIM_B016_PASS
+    )
+    set_tests_properties(
+        semantic.cannsim.asc.hierarchy.b016
         PROPERTIES LABELS "cannsim-smoke;cannsim-runtime" RUN_SERIAL TRUE
     )
 endif()

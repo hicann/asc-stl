@@ -33,5 +33,7 @@ int asc_stl_concepts_limits_consumer_a();
 int asc_stl_concepts_limits_consumer_b();
 int asc_stl_memory_consumer_a();
 int asc_stl_memory_consumer_b();
+int asc_stl_b016_consumer_a();
+int asc_stl_b016_consumer_b();
 
 #endif  // ASC_STL_TEST_CONSUMER_CORE_CONSUMERS_H

@@ -47,5 +47,5 @@ int main()
         asc_stl_execution_properties_consumer_a() + asc_stl_type_traits_consumer_a() +
         asc_stl_type_traits_consumer_b() + asc_stl_core_consumer_a() + asc_stl_core_consumer_b() +
         asc_stl_vocabulary_consumer_a() + asc_stl_vocabulary_consumer_b() + asc_stl_concepts_limits_consumer_a() +
-        asc_stl_memory_consumer_a();
+        asc_stl_memory_consumer_a() + asc_stl_b016_consumer_a();
 }
