@@ -36,8 +36,7 @@ CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER
 //     账），不提供定义——调用得到明确链接诊断。
 // 分支次序：SIMT TU 同时含 host+device，HOSTED() 在其中也为真，必须先判
 // SIMT 设备上下文。
-#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) || defined(__CCE_AICORE_SUPPORT_SIMT__) || \
-    defined(__ENABLE_ASC_PURESIMT__)
+#if CANN_ASC_STL_DETAIL_HAS_DEVICE_HEAP()
 // 自包含取版本号：SIMT 工程的编译命令不一定 -include devkit version 头
 #if defined(__has_include)
 #if __has_include(<version/asc_devkit_version.h>)

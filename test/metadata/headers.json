@@ -2385,6 +2385,7 @@
       "kind": "internal",
       "dependencies": [
         "asc/std/detail/__config",
+        "asc/std/__asc/asc_capabilities.h",
         "asc/std/__cstddef/types.h",
         "asc/std/__type_traits/integral_constant.h"
       ],

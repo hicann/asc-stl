@@ -179,4 +179,21 @@
 #define CANN_ASC_STL_DETAIL_HOSTED() 1
 #endif
 
+// ---------------------------------------------------------------------------
+// Device heap allocation capability
+// ---------------------------------------------------------------------------
+// CCE mixed-SIMD (aicore-lang) rejects general operator new/delete in AI Core
+// code (experimentally confirmed, 2026-09-09). The CANN pure-SIMT wrapper
+// mode lowers device new to dpp_alloc/dpp_dealloc calls; CANN 9.2 declares
+// the symbols in __clang_dpp_runtime_wrapper.h but does not yet ship a
+// library implementation. The compilation path and self-provided pool
+// allocator both work on real 950 hardware (heap new/delete for arrays and
+// class objects verified 2026-09-09). Gate allocation-dependent paths on this
+// capability rather than on HOSTED alone.
+#if defined(__CCE__) && __has_include("simt_api/cooperative_groups.h") && !defined(__APPLE__)
+#define CANN_ASC_STL_DETAIL_HAS_DEVICE_HEAP() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_DEVICE_HEAP() 0
+#endif
+
 #endif  // CANN_ASC_STL_STD_DETAIL_COMPILER_H

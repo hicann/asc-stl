@@ -21,12 +21,15 @@
 // Compiler and language detection
 // ---------------------------------------------------------------------------
 
-// The CCE toolchain flags SIMT in two different senses: the compilation MODE
-// is pure SIMT only under __NPU_COMPILER_INTERNAL_PURE_SIMT__, while
-// __CCE_AICORE_SUPPORT_SIMT__ / __ENABLE_ASC_PURESIMT__ merely advertise that
-// SIMT support is available (also true in mixed-mode builds). Keep the mode
-// flag and the capability flag separate so mixed-mode builds are not
-// misclassified as pure SIMT.
+// The SIMT compilation mode is flagged differently per target arch:
+// __NPU_COMPILER_INTERNAL_PURE_SIMT__ / __ENABLE_ASC_PURESIMT__ on the 950
+// family, __CCE_AICORE_SUPPORT_SIMT__ on others. Treat any of them as SIMT.
+// NOTE: __NPU_COMPILER_INTERNAL_PURE_SIMT__ is predefined by the shipped CANN
+// toolchains in NO mode at all (host / ordinary kernel compile /
+// -cce-enable-puresimt with the dpp runtime wrapper). It is kept below only
+// as a harmless belt-and-braces term; the live discriminators are __CCE__ /
+// __CCE_AICORE_SUPPORT_SIMT__ (ordinary kernel mode) and
+// __ENABLE_ASC_PURESIMT__ (explicit user opt-in).
 #if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) || defined(__CCE_AICORE_SUPPORT_SIMT__) || \
     defined(__ENABLE_ASC_PURESIMT__)
 #define CANN_ASC_STL_DETAIL_COMPILER_CCE 1
@@ -45,6 +48,28 @@
 #define CANN_ASC_STL_DETAIL_COMPILER_MSVC 1
 #else
 #define CANN_ASC_STL_DETAIL_COMPILER_UNKNOWN 1
+#endif
+
+// True pure-SIMT translation-unit mode (`bisheng -cce-enable-puresimt` with
+// the dpp runtime wrapper __clang_dpp_runtime_wrapper.h, which ships the
+// global ::dim3, the placement-new forms and the __host__/__aicore__
+// attribute pair). This is DISTINCT from CANN_ASC_STL_DETAIL_COMPILER_PURE_SIMT
+// above: that wide flag also fires in the ordinary kernel mode (where
+// __CCE_AICORE_SUPPORT_SIMT__ is predefined) and merely means "SIMT API
+// available". Empirical detection:
+// - the wrapper never predefines __NPU_COMPILER_INTERNAL_PURE_SIMT__ and is
+//   not auto-included at -fsyntax-only time;
+// - its include guard __CLANG_CCE_SIMT_INTRINSICS_H__ is ALSO defined by the
+//   compiler-injected <__clang_cce_simt_intrinsics.h> in ORDINARY kernel
+//   builds (preprocess/precompile passes), so the guard alone is NOT a
+//   puresimt signal — it must be combined with !__CCE__ (ordinary kernel
+//   passes always define __CCE__, while -cce-enable-puresimt does not);
+// - the documented -D__ENABLE_ASC_PURESIMT__ remains an explicit opt-in for
+//   builds that include the wrapper after ASC-STL headers.
+#if defined(__ENABLE_ASC_PURESIMT__) || (defined(__CLANG_CCE_SIMT_INTRINSICS_H__) && !defined(__CCE__))
+#define CANN_ASC_STL_DETAIL_PURE_SIMT_TU() 1
+#else
+#define CANN_ASC_STL_DETAIL_PURE_SIMT_TU() 0
 #endif
 
 // CANN normally provides this spelling through kernel_operator.h. Keep ASC-STL
@@ -164,8 +189,8 @@
 // ---------------------------------------------------------------------------
 
 #if defined(CANN_ASC_STL_DETAIL_COMPILER_CCE)
-#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
-// Pure-SIMT mode uses the CUDA-style host/device attribute pair.
+#if CANN_ASC_STL_DETAIL_PURE_SIMT_TU()
+// Pure-SIMT mode uses the __host__/__aicore__ attribute pair.
 #define CANN_ASC_STL_HOST_DEVICE __host__ __aicore__
 #else
 // Mixed-mode CCE provides the dual annotation used by CANN's

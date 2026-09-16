@@ -21,6 +21,7 @@
 
 CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER
 
+#include <asc/std/__asc/asc_capabilities.h>
 #include <asc/std/__cstddef/types.h>
 #include <asc/std/__type_traits/integral_constant.h>
 
@@ -76,10 +77,11 @@ inline constexpr ::asc::std::size_t vector_size_v<::float2> = 2;
 #endif
 
 #if CANN_ASC_STL_DETAIL_HAS_SIMT_DIM3()
-// dim3 拼写随模式：C310 混合为 CCE 内建命名空间 cce::dim3；纯 SIMT 为包装层
-// 全局 ::dim3（与 __tuple_dir/vector_types.h 同款条件化，修复门开时的硬错误；
-// 注意判据用原始宏：PURE_SIMT_COMPILATION() 的宽宏在 C310 混合模式也为真）。
-#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) || defined(__ENABLE_ASC_PURESIMT__)
+// dim3 拼写随模式：普通 kernel 模式为 CCE 内建命名空间 cce::dim3；纯 SIMT TU
+// 为包装层全局 ::dim3（与 __tuple_dir/vector_types.h 同款条件化）。判据用
+// PURE_SIMT_TU()：__NPU_COMPILER_INTERNAL_PURE_SIMT__ 任何模式都不预定义；
+// PURE_SIMT_COMPILATION() 的宽宏在普通 kernel 模式也为真。
+#if CANN_ASC_STL_DETAIL_PURE_SIMT_TU()
 template <>
 inline constexpr ::asc::std::size_t vector_size_v<::dim3> = 3;
 #else

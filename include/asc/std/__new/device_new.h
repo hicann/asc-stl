@@ -22,7 +22,15 @@
 // BiSheng device compilation does not expose the standard non-allocating
 // placement-new declarations. ASC-STL uses these overloads to construct an
 // object in caller-owned local storage; they never allocate device memory.
-#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// The true pure-SIMT wrapper mode (-cce-enable-puresimt + the dpp runtime
+// wrapper __clang_dpp_runtime_wrapper.h, which provides its own placement
+// forms — redeclaring them there would conflict) is detected via
+// CANN_ASC_STL_DETAIL_PURE_SIMT_TU(). __NPU_COMPILER_INTERNAL_PURE_SIMT__ is
+// NOT predefined by the shipped CANN toolchains in any mode and is no longer
+// consulted. Ordinary kernel mode (with
+// or without __CCE_AICORE_SUPPORT_SIMT__) provides no placement forms, so the
+// overloads must be declared there for in-place construction to compile.
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !CANN_ASC_STL_DETAIL_PURE_SIMT_TU()
 CANN_ASC_STL_DEVICE inline void* operator new(decltype(sizeof(0)), void* __ptr) noexcept
 {
     return __ptr;

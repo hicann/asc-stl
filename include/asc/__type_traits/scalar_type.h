@@ -81,10 +81,20 @@ struct scalar_type<::float2> {
 #endif  // CANN_ASC_STL_DETAIL_HAS_SIMT_FLOAT2()
 
 #if CANN_ASC_STL_DETAIL_HAS_SIMT_DIM3()
+// The dim3 spelling is mode-dependent: a pure-SIMT TU provides the global ::dim3
+// through the dpp runtime wrapper, while ordinary kernel mode provides cce::dim3
+// from the CCE built-in namespace (same conditional as vector_size.h).
+#if CANN_ASC_STL_DETAIL_PURE_SIMT_TU()
 template <>
 struct scalar_type<::dim3> {
     using type = unsigned;
 };
+#else
+template <>
+struct scalar_type<::cce::dim3> {
+    using type = unsigned;
+};
+#endif  // CANN_ASC_STL_DETAIL_PURE_SIMT_TU()
 #endif  // CANN_ASC_STL_DETAIL_HAS_SIMT_DIM3()
 
 #if CANN_ASC_STL_DETAIL_HAS_HALF2()

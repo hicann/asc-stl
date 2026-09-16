@@ -30,8 +30,18 @@ static_assert(CANN_ASC_STL_DETAIL_HAS_SIMT_INT2() == 1, "int2 is a builtin type 
 static_assert(CANN_ASC_STL_DETAIL_HAS_SIMT_FLOAT2() == 1, "float2 is a builtin type on the 950 family");
 static_assert(CANN_ASC_STL_DETAIL_HAS_SIMT_DIM3() == 1, "dim3 is a builtin type on the 950 family");
 #elif defined(__DAV_C310__) || defined(__DAV_C310_VEC__)
-static_assert(CANN_ASC_STL_DETAIL_AICORE_ARCH_IS_C310() == 1, "C310 toolchain macros must enable C310 detection");
-static_assert(CANN_ASC_STL_DETAIL_AICORE_ARCH_IS_950() == 0, "C310 must not be misread as the 950 family");
+// The dav-c310 toolchain macros identify the Ascend 950 dav-c310 generation. Real
+// hardware probes show the same device reports __NPU_ARCH__ 3101 under CANN 9.0 and
+// 3510 under CANN 9.2, so __NPU_ARCH__ is not a stable family key; the dedicated
+// toolchain macros are. The legacy C310 classification remains only as a fallback for
+// hypothetical non-950 dav toolchains.
+static_assert(CANN_ASC_STL_DETAIL_AICORE_ARCH_IS_950() == 1, "dav-c310 toolchain macros identify the 950 family");
+static_assert(
+    CANN_ASC_STL_DETAIL_AICORE_ARCH_IS_C310() == 0, "dav-c310 (950) must not be misread as the legacy C310 family");
+static_assert(CANN_ASC_STL_DETAIL_HAS_SIMT_VECTOR_TYPES() == 1, "the 950 family provides the short-vector family");
+static_assert(CANN_ASC_STL_DETAIL_HAS_SIMT_INT2() == 1, "int2 is a builtin type on the 950 family");
+static_assert(CANN_ASC_STL_DETAIL_HAS_SIMT_FLOAT2() == 1, "float2 is a builtin type on the 950 family");
+static_assert(CANN_ASC_STL_DETAIL_HAS_SIMT_DIM3() == 1, "dim3 is a builtin type on the 950 family");
 #endif
 
 extern "C" __global__ __aicore__ void asc_stl_asc_capabilities_device_kernel()
