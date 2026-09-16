@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+# Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,9 +32,9 @@ def is_product_header(path: Path) -> bool:
 def read_author(root_dir: Path) -> str:
     author_file = root_dir / ".author"
     if not author_file.exists():
-        return "湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)"
+        return "湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)"
     author = author_file.read_text(encoding="utf-8").strip()
-    return author or "湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)"
+    return author or "湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)"
 
 
 def plain_header(author: str) -> str:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+# Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -56,7 +56,8 @@ class DeviceCompiler:
             f"-I{self.test_root}",
         ]
         if options.simt:
-            command.append("--enable-simt")
+            # Keep CANN SDK attribute warnings visible without relaxing other diagnostics.
+            command.extend(["--enable-simt", "-Wno-error=ignored-attributes"])
         command.extend(["-c", str(source), "-o", str(output)])
         process = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False)
         if options.expect_failure and process.returncode == 0:

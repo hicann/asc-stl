@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-/* Copyright 2026 湖北多样性算力应用创新究院. Licensed under Apache-2.0. */
+/* Copyright 2026 湖北多样性算力应用创新研究院. Licensed under Apache-2.0. */
 int asc_stl_atomic_cannsim_launcher_contract = 0;

@@ -1,4 +1,4 @@
-# Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+# Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,5 +23,6 @@ set(ASC_STL_INCLUDE_DIR "" CACHE PATH "ASC-STL include directory")
 set_source_files_properties(kernel.cpp PROPERTIES LANGUAGE ASC)
 add_executable(asc_stl_b014_cannsim kernel.cpp launcher.cpp main.cpp)
 set_target_properties(asc_stl_b014_cannsim PROPERTIES LINKER_LANGUAGE ASC)
-target_compile_options(asc_stl_b014_cannsim PRIVATE $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES} --enable-simt -std=c++${ASC_STL_CXX_STANDARD} -Werror>)
+# Keep CANN SDK attribute warnings visible; other warnings remain errors.
+target_compile_options(asc_stl_b014_cannsim PRIVATE $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES} --enable-simt -std=c++${ASC_STL_CXX_STANDARD} -Werror -Wno-error=ignored-attributes>)
 target_include_directories(asc_stl_b014_cannsim PRIVATE "${ASC_STL_INCLUDE_DIR}" "${ASCEND_CANN_PACKAGE_LINUX_PATH}/asc" "${ASCEND_CANN_PACKAGE_LINUX_PATH}/asc/include" "$ENV{ASCEND_HOME_PATH}/include")

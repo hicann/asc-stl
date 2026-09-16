@@ -1,4 +1,4 @@
-# Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+# Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Copyright 2026 湖北多样性算力应用创新究院. Licensed under Apache-2.0.
+# Copyright 2026 湖北多样性算力应用创新研究院. Licensed under Apache-2.0.
 cmake_minimum_required(VERSION 3.16)
 set(CMAKE_ASC_ARCHITECTURES "dav-3510" CACHE STRING "NPU architecture")
 find_package(ASC REQUIRED)
@@ -27,7 +27,8 @@ set(common_includes "${ASC_STL_INCLUDE_DIR}" "${ASCEND_CANN_PACKAGE_LINUX_PATH}/
 set_source_files_properties(kernel.cpp PROPERTIES LANGUAGE ASC)
 add_executable(asc_stl_atomic_cannsim kernel.cpp launcher.cpp main.cpp)
 set_target_properties(asc_stl_atomic_cannsim PROPERTIES LINKER_LANGUAGE ASC)
+# Keep CANN SDK attribute warnings visible; other warnings remain errors.
 target_compile_options(asc_stl_atomic_cannsim PRIVATE
-    $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES} --enable-simt -std=c++${ASC_STL_CXX_STANDARD} -Werror>
+    $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES} --enable-simt -std=c++${ASC_STL_CXX_STANDARD} -Werror -Wno-error=ignored-attributes>
     $<$<COMPILE_LANGUAGE:CXX>:-Wall -Wextra -Werror>)
 target_include_directories(asc_stl_atomic_cannsim PRIVATE ${common_includes})
