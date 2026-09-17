@@ -56,12 +56,18 @@ def validate_compile_failures(compiler: str, include: Path, test_root: Path, tem
         ("cases/asc/std/__charconv/to_chars/float.fail.cpp", "ambiguous"),
         ("cases/asc/std/__charconv/to_chars/chars_format.fail.cpp", "chars_format"),
         ("cases/asc/std/__charconv/to_chars/result_bool.fail.cpp", "convert"),
+        ("cases/asc/std/__charconv/to_chars/to_chars_bool.fail.cpp", "deleted"),
+        ("cases/asc/std/__charconv/to_chars/chars_format_precision.fail.cpp", "chars_format"),
     )
-    for index, (relative, marker) in enumerate(cases):
+    for relative, marker in cases:
         negative = test_root / relative
-        process = compile_source(compiler, include, negative, temporary / f"negative-{index}.o", "c++20")
-        if process.returncode == 0 or marker not in process.stdout.lower():
-            raise RuntimeError(f"negative boundary was not rejected ({marker}): {negative}\n{process.stdout}")
+        for standard in ("c++17", "c++20"):
+            output = temporary / f"{negative.parent.name}-{negative.stem}-{standard}.o"
+            process = compile_source(compiler, include, negative, output, standard)
+            if process.returncode == 0 or marker not in process.stdout.lower():
+                raise RuntimeError(
+                    f"negative boundary was not rejected in {standard} ({marker}): {negative}\n{process.stdout}"
+                )
 
 
 def validate_empty_headers(compiler: str, include: Path, temporary: Path) -> None:

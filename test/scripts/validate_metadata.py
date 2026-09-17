@@ -100,6 +100,15 @@ def runtime_assets(row: dict, test_root: Path) -> set[Path]:
     return expected
 
 
+def validate_negative_languages(row: dict, target: str) -> None:
+    negative_languages = row.get("negative_case_languages", {})
+    if not isinstance(negative_languages, dict) or set(negative_languages) - set(row.get("negative_cases", [])):
+        raise ValueError(f"{target}: negative_case_languages must map registered negative cases")
+    for name, languages in negative_languages.items():
+        if not isinstance(languages, list) or not languages or set(languages) - {"c++17", "c++20"}:
+            raise ValueError(f"{target}: invalid language matrix for negative case {name}")
+
+
 def validate_row(row: dict, registered: set[str], test_root: Path) -> tuple[int, set[Path]]:
     target = row["target"]
     applicability = row.get("applicability")
@@ -132,6 +141,7 @@ def validate_row(row: dict, registered: set[str], test_root: Path) -> tuple[int,
             if Path(name).name != name:
                 raise ValueError(f"{target}: {field} entry must be a case-local filename: {name}")
             expected.add(root / name)
+    validate_negative_languages(row, target)
     return len(dependencies), expected
 
 

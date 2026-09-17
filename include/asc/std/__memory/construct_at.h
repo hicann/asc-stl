@@ -45,6 +45,8 @@
 #include <asc/std/__utility/forward.h>
 #include <asc/std/__utility/move.h>
 
+#ifndef CANN_ASC_STL_DETAIL_PLACEMENT_NEW_DECLARED
+#define CANN_ASC_STL_DETAIL_PLACEMENT_NEW_DECLARED
 #if CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
 CANN_ASC_STL_DEVICE_API void* operator new(__SIZE_TYPE__, void* address) noexcept
 {
@@ -52,6 +54,7 @@ CANN_ASC_STL_DEVICE_API void* operator new(__SIZE_TYPE__, void* address) noexcep
 }
 #else
 void* operator new(__SIZE_TYPE__, void* address) noexcept;
+#endif
 #endif
 
 CANN_ASC_STL_BEGIN_NAMESPACE

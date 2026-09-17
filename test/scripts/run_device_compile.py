@@ -92,6 +92,10 @@ NEGATIVE_DIAGNOSTIC_MARKERS = {
     "reference_alternative.fail.asc": "static assertion",
     "unsupported_double.fail.asc": "static assertion",
     "invalid_requirement_type.fail.asc": "no matching function",
+    "chars_format.fail.cpp": "chars_format",
+    "result_bool.fail.cpp": "convertible",
+    "chars_format_precision.fail.cpp": "chars_format",
+    "to_chars_bool.fail.cpp": "deleted",
 }
 
 
@@ -138,26 +142,36 @@ def negative_modes(target: str, name: str) -> tuple[tuple[str, bool], ...]:
     return (("simd", False), ("simt", True))
 
 
+def compile_negative_case(
+    device: DeviceCompiler, target: str, name: str, standard: str, build_root: Path,
+) -> None:
+    negative = case_root(device.test_root, target) / name
+    suffix = standard.replace("+", "x")
+    for mode, simt in negative_modes(target, name):
+        output = device.compile(
+            negative,
+            build_root / f"negative-{suffix}-{mode}-{negative.stem}.o",
+            CompileOptions(standard, simt, expect_failure=True),
+        )
+        marker = NEGATIVE_DIAGNOSTIC_MARKERS.get(name, "deleted")
+        expected = marker.lower() in output.lower()
+        if target == "asc/__atomic/scoped_atomic.h" and name == "simd_excluded.fail.asc":
+            expected = expected or "deleted" in output.lower()
+        if target == "asc/__atomic/scoped_atomic.h" and name == "unsupported_type.fail.asc":
+            expected = "supports exactly" in output.lower()
+        if target == "asc/std/source_location":
+            expected = "cannot initialize a parameter" in output and "const char *" in output
+        if not expected:
+            raise RuntimeError(f"unexpected Device negative diagnostic for {negative} in {standard}:\n{output}")
+
+
 def compile_negatives(device: DeviceCompiler, row: dict, index: int, build_root: Path) -> None:
+    del index
     target = row["target"]
     for name in row.get("negative_cases", []):
-        negative = case_root(device.test_root, target) / name
-        for mode, simt in negative_modes(target, name):
-            output = device.compile(
-                negative,
-                build_root / f"negative-{index}-{mode}.o",
-                CompileOptions("c++20", simt, expect_failure=True),
-            )
-            marker = NEGATIVE_DIAGNOSTIC_MARKERS.get(name, "deleted")
-            expected = marker.lower() in output.lower()
-            if target == "asc/__atomic/scoped_atomic.h" and name == "simd_excluded.fail.asc":
-                expected = expected or "deleted" in output.lower()
-            if target == "asc/__atomic/scoped_atomic.h" and name == "unsupported_type.fail.asc":
-                expected = "supports exactly" in output.lower()
-            if target == "asc/std/source_location":
-                expected = "cannot initialize a parameter" in output and "const char *" in output
-            if not expected:
-                raise RuntimeError(f"unexpected Device negative diagnostic for {negative}:\n{output}")
+        standards = row.get("negative_case_languages", {}).get(name, ["c++17", "c++20"])
+        for standard in standards:
+            compile_negative_case(device, target, name, standard, build_root)
 
 
 def run_cases(device: DeviceCompiler, rows: list[dict], standards: list[str]) -> int:

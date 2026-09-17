@@ -31,7 +31,10 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+#ifndef CANN_ASC_STL_DETAIL_ERRC_DEFINED
+#define CANN_ASC_STL_DETAIL_ERRC_DEFINED
 enum class errc { invalid_argument = 22, result_out_of_range = 34, value_too_large = 75 };
+#endif
 
 CANN_ASC_STL_END_NAMESPACE
 

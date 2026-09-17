@@ -33,25 +33,33 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// GCC rejects a builtin-trait alias such as __remove_cvref(T) once it expands
+// inside a function signature, so the alias routes through the trait struct's
+// nested type on the builtin branch as well.
 #if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__remove_cvref)
 
 template <class T>
-using remove_cvref_t = __remove_cvref(T);
+struct remove_cvref {
+    using type = __remove_cvref(T);
+};
+
+template <class T>
+using remove_cvref_t = typename remove_cvref<T>::type;
 
 #else
 
 template <class T>
-using remove_cvref_t = remove_cv_t<remove_reference_t<T>>;
+struct remove_cvref {
+    using type = remove_cv_t<remove_reference_t<T>>;
+};
+
+template <class T>
+using remove_cvref_t = typename remove_cvref<T>::type;
 
 #endif
 
 template <class T, class U>
 struct __is_same_uncvref : is_same<remove_cvref_t<T>, remove_cvref_t<U>> {};
-
-template <class T>
-struct remove_cvref {
-    using type = remove_cvref_t<T>;
-};
 
 CANN_ASC_STL_END_NAMESPACE
 

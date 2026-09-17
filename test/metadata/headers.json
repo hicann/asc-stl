@@ -5723,8 +5723,15 @@
       "visibility": "private",
       "dependencies": [
         "asc/__config",
+        "asc/std/__floating_point/arithmetic.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__floating_point/common_type.h",
+        "asc/std/__floating_point/constants.h",
+        "asc/std/__floating_point/conversion_rank_order.h",
+        "asc/std/__floating_point/decompose.h",
         "asc/std/__floating_point/format.h",
+        "asc/std/__floating_point/native_type.h",
+        "asc/std/__floating_point/overflow_handler.h",
         "asc/std/__floating_point/storage.h",
         "asc/std/__floating_point/traits.h"
       ],
@@ -7807,10 +7814,12 @@
         "asc/std/cstdint"
       ],
       "semantic_case": "asc/hierarchy",
-      "additional_cases": [
+      "negative_cases": [
         "float.fail.cpp",
         "chars_format.fail.cpp",
-        "result_bool.fail.cpp"
+        "result_bool.fail.cpp",
+        "to_chars_bool.fail.cpp",
+        "chars_format_precision.fail.cpp"
       ],
       "applicability": {
         "host_header": true,
