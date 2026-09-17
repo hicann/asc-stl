@@ -30,6 +30,7 @@ CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER
 #include <asc/std/__type_traits/conditional.h>
 #include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/is_assignable.h>
+#include <asc/std/__type_traits/is_base_of.h>
 #include <asc/std/__type_traits/is_constructible.h>
 #include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/is_empty.h>
@@ -57,12 +58,21 @@ enum class __tuple_leaf_specialization {
     __empty_non_final,
 };
 
+// 2026-09-16 根因修复（tuple 债二）：__tuple_impl 的递归实现以 __tuple_impl<> 作空尾终止基。
+// 空类型叶（__empty_non_final）私有继承元素以做 EBO——当元素本身是元组（tuple<tuple<空>...>、
+// bind_back 的 tuple<fn, tuple<closure>> 等）时，内层元组的 __tuple_impl<> 会经由
+// 「叶 → 元素 → 内层 impl」链成为外层 impl 的第二个子对象，使 __base_t 转换产生歧义基类。
+// __tuple_impl 以本标记为基，选择器对「已派生标记的元素」退回成员存储，切断第二条子对象路径；
+// 代价仅是「元组作元素」这一种情形不再 EBO（std 对此同样无布局保证）。
+struct __tuple_impl_base {};
+
 template <class _Tp>
 CANN_ASC_STL_API constexpr __tuple_leaf_specialization __tuple_leaf_choose()
 {
-    return is_empty_v<_Tp> && !is_final_v<_Tp> ? __tuple_leaf_specialization::__empty_non_final :
-        __must_synthesize_assignment_v<_Tp>    ? __tuple_leaf_specialization::__synthesize_assignment :
-                                                 __tuple_leaf_specialization::__default;
+    return is_empty_v<_Tp> && !is_final_v<_Tp> && !is_base_of_v<__tuple_impl_base, remove_cv_t<_Tp>> ?
+        __tuple_leaf_specialization::__empty_non_final :
+        __must_synthesize_assignment_v<_Tp> ? __tuple_leaf_specialization::__synthesize_assignment :
+                                              __tuple_leaf_specialization::__default;
 }
 
 template <size_t _Ip, class _Hp, __tuple_leaf_specialization = __tuple_leaf_choose<_Hp>()>
@@ -223,13 +233,17 @@ public:
     CANN_ASC_STL_API constexpr __tuple_leaf(_Hp&& __x) : _Hp(::asc::std::move(__x))
     {}
 
-    CANN_ASC_STL_API __tuple_leaf& operator=(const __tuple_leaf& __x)
+    // 约束模板赋值（对齐源侧）：非模板移动赋值会删除隐式拷贝构造，
+    // 导致含空类元素（如 range adaptor closure）的元组不可复制。
+    template <class _Tp, enable_if_t<is_assignable_v<_Hp&, const _Tp&>, int> = 0>
+    CANN_ASC_STL_API __tuple_leaf& operator=(const _Tp& __x) noexcept(is_nothrow_assignable_v<_Hp&, const _Tp&>)
     {
         _Hp::operator=(__x);
         return *this;
     }
 
-    CANN_ASC_STL_API __tuple_leaf& operator=(__tuple_leaf&& __x)
+    template <class _Tp, enable_if_t<is_assignable_v<_Hp&, _Tp>, int> = 0>
+    CANN_ASC_STL_API __tuple_leaf& operator=(_Tp&& __x) noexcept(is_nothrow_assignable_v<_Hp&, _Tp>)
     {
         _Hp::operator=(::asc::std::move(__x));
         return *this;

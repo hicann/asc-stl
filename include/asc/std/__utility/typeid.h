@@ -56,7 +56,22 @@ struct __pretty_name_begin {
 template <class _Tp>
 [[nodiscard]] CANN_ASC_STL_API constexpr __string_view __pretty_nameof_helper() noexcept
 {
+#if defined(__CCE__)
+    // Under CCE the __PRETTY_FUNCTION__ literal carries a global-memory address-space
+    // qualifier that cannot convert to a generic pointer, so the name is copied through
+    // a local buffer before constructing the view.
+    auto&& __pf = CANN_ASC_STL_DETAIL_BUILTIN_PRETTY_FUNCTION();
+    size_t __n = 0;
+    while (__pf[__n] != '\0')
+        ++__n;
+    char __buf[256];
+    for (size_t __i = 0; __i < __n && __i < 255; ++__i)
+        __buf[__i] = __pf[__i];
+    __buf[__n < 255 ? __n : 255] = '\0';
+    return __find_pretty_name(__string_view(__buf));
+#else
     return __find_pretty_name(__string_view(CANN_ASC_STL_DETAIL_BUILTIN_PRETTY_FUNCTION()));
+#endif
 }
 
 template <class _Tp>

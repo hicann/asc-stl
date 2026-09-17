@@ -27,6 +27,7 @@ CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER
 #include <asc/std/__tuple_dir/tuple_types.h>
 #include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/remove_cvref.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/cstddef>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
@@ -67,9 +68,17 @@ template <class _Tp>
 inline constexpr bool __tuple_like_v = __tuple_like_ext<remove_cvref_t<_Tp>>;
 
 //! @brief Concept constraining tuple-like types with exactly two elements.
+// 2026-09-16 修复：tuple_size<T> 对未特化类型（如 asc::std::byte）不完整，直接取 ::value
+// 是硬错误；源侧经 requires-expression 天然 SFINAE。这里用检测惯用法等价替代。
+template <class _Tp, class = void>
+inline constexpr bool __pair_like_size_is_2 = false;
+
 template <class _Tp>
-inline constexpr bool __pair_like_v =
-    __tuple_like_ext<remove_cvref_t<_Tp>> && (tuple_size<remove_cvref_t<_Tp>>::value == 2);
+inline constexpr bool __pair_like_size_is_2<_Tp, void_t<decltype(tuple_size<remove_cvref_t<_Tp>>::value)>> =
+    tuple_size<remove_cvref_t<_Tp>>::value == 2;
+
+template <class _Tp>
+inline constexpr bool __pair_like_v = __tuple_like_ext<remove_cvref_t<_Tp>> && __pair_like_size_is_2<_Tp>;
 
 CANN_ASC_STL_END_NAMESPACE
 
