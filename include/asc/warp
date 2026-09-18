@@ -1,0 +1,285 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
+#ifndef CANN_ASC_STL_ASC_WARP
+#define CANN_ASC_STL_ASC_WARP
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__warp/operations.h>
+#include <asc/hierarchy>
+
+namespace asc {
+class lane_mask {
+public:
+    CANN_ASC_STL_API constexpr explicit lane_mask(unsigned int value = 0) noexcept : value_(value)
+    {}
+    CANN_ASC_STL_API constexpr unsigned int value() const noexcept
+    {
+        return value_;
+    }
+    CANN_ASC_STL_API constexpr explicit operator unsigned int() const noexcept
+    {
+        return value_;
+    }
+    CANN_ASC_STL_API static constexpr lane_mask none() noexcept
+    {
+        return lane_mask{};
+    }
+    CANN_ASC_STL_API static constexpr lane_mask all() noexcept
+    {
+        return lane_mask{0xffffffffU};
+    }
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+    CANN_ASC_STL_SIMT_API static lane_mask all_active() noexcept
+    {
+        return lane_mask{detail::warp_active_mask()};
+    }
+    CANN_ASC_STL_SIMT_API static lane_mask this_lane() noexcept
+    {
+        return lane_mask{1U << lane_id()};
+    }
+    CANN_ASC_STL_SIMT_API static lane_mask all_less() noexcept
+    {
+        return lane_mask{detail::warp_active_mask() & detail::warp_lower_lanes(lane_id())};
+    }
+    CANN_ASC_STL_SIMT_API static lane_mask all_less_equal() noexcept
+    {
+        return lane_mask{all_less().value_ | this_lane().value_};
+    }
+    CANN_ASC_STL_SIMT_API static lane_mask all_greater() noexcept
+    {
+        return lane_mask{detail::warp_active_mask() & ~all_less_equal().value_};
+    }
+    CANN_ASC_STL_SIMT_API static lane_mask all_greater_equal() noexcept
+    {
+        return lane_mask{detail::warp_active_mask() & ~all_less().value_};
+    }
+    CANN_ASC_STL_SIMT_API static lane_mask all_not_equal() noexcept
+    {
+        return lane_mask{detail::warp_active_mask() & ~this_lane().value_};
+    }
+#endif
+    CANN_ASC_STL_API constexpr bool operator==(lane_mask other) const noexcept
+    {
+        return value_ == other.value_;
+    }
+    CANN_ASC_STL_API constexpr bool operator!=(lane_mask other) const noexcept
+    {
+        return value_ != other.value_;
+    }
+    CANN_ASC_STL_API constexpr lane_mask operator&(lane_mask other) const noexcept
+    {
+        return lane_mask{value_ & other.value_};
+    }
+    CANN_ASC_STL_API constexpr lane_mask operator|(lane_mask other) const noexcept
+    {
+        return lane_mask{value_ | other.value_};
+    }
+    CANN_ASC_STL_API constexpr lane_mask operator^(lane_mask other) const noexcept
+    {
+        return lane_mask{value_ ^ other.value_};
+    }
+    CANN_ASC_STL_API constexpr lane_mask operator~() const noexcept
+    {
+        return lane_mask{~value_};
+    }
+    CANN_ASC_STL_API constexpr lane_mask operator<<(int shift) const noexcept
+    {
+        return lane_mask{value_ << shift};
+    }
+    CANN_ASC_STL_API constexpr lane_mask operator>>(int shift) const noexcept
+    {
+        return lane_mask{value_ >> shift};
+    }
+    CANN_ASC_STL_API constexpr lane_mask& operator&=(lane_mask other) noexcept
+    {
+        value_ &= other.value_;
+        return *this;
+    }
+    CANN_ASC_STL_API constexpr lane_mask& operator|=(lane_mask other) noexcept
+    {
+        value_ |= other.value_;
+        return *this;
+    }
+    CANN_ASC_STL_API constexpr lane_mask& operator^=(lane_mask other) noexcept
+    {
+        value_ ^= other.value_;
+        return *this;
+    }
+    CANN_ASC_STL_API constexpr lane_mask& operator<<=(int shift) noexcept
+    {
+        value_ <<= shift;
+        return *this;
+    }
+    CANN_ASC_STL_API constexpr lane_mask& operator>>=(int shift) noexcept
+    {
+        value_ >>= shift;
+        return *this;
+    }
+
+private:
+    unsigned int value_;
+};
+
+template <class T>
+struct warp_shuffle_result {
+    T data;
+    bool valid;
+};
+
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+CANN_ASC_STL_SIMT_API lane_mask active_mask() noexcept
+{
+    return lane_mask{detail::warp_active_mask()};
+}
+CANN_ASC_STL_SIMT_API bool warp_all(bool predicate) noexcept
+{
+    return detail::warp_vote_all(predicate);
+}
+CANN_ASC_STL_SIMT_API bool warp_any(bool predicate) noexcept
+{
+    return detail::warp_vote_any(predicate);
+}
+CANN_ASC_STL_SIMT_API lane_mask warp_ballot(bool predicate) noexcept
+{
+    return lane_mask{detail::warp_vote_ballot(predicate)};
+}
+
+template <class T>
+CANN_ASC_STL_SIMT_API lane_mask __warp_match_any(T value, lane_mask participants) noexcept
+{
+    unsigned int result = 0;
+    for (int source = 0; source < 32; ++source) {
+        if (detail::warp_lane_is_active(participants.value(), static_cast<unsigned int>(source)) &&
+            detail::warp_bitwise_equal(value, detail::warp_shuffle_index<32>(value, source))) {
+            result |= 1U << source;
+        }
+    }
+    return lane_mask{result & detail::warp_active_mask()};
+}
+template <class T>
+CANN_ASC_STL_SIMT_API bool __warp_match_all(T value, lane_mask participants) noexcept
+{
+    return __warp_match_any(value, participants) == (participants & active_mask());
+}
+
+#define CANN_ASC_STL_WARP_MATCH_OVERLOADS(type)                                                                    \
+    CANN_ASC_STL_SIMT_API lane_mask warp_match_any(type value, lane_mask participants = lane_mask::all()) noexcept \
+    {                                                                                                              \
+        return __warp_match_any(value, participants);                                                              \
+    }                                                                                                              \
+    CANN_ASC_STL_SIMT_API bool warp_match_all(type value, lane_mask participants = lane_mask::all()) noexcept      \
+    {                                                                                                              \
+        return __warp_match_all(value, participants);                                                              \
+    }
+CANN_ASC_STL_WARP_MATCH_OVERLOADS(bool)
+CANN_ASC_STL_WARP_MATCH_OVERLOADS(int)
+CANN_ASC_STL_WARP_MATCH_OVERLOADS(unsigned int)
+CANN_ASC_STL_WARP_MATCH_OVERLOADS(long long)
+CANN_ASC_STL_WARP_MATCH_OVERLOADS(unsigned long long)
+CANN_ASC_STL_WARP_MATCH_OVERLOADS(float)
+#undef CANN_ASC_STL_WARP_MATCH_OVERLOADS
+
+template <int Width, class T>
+CANN_ASC_STL_SIMT_API bool __warp_shuffle_valid(int target, lane_mask participants) noexcept
+{
+    static_assert(Width == 1 || Width == 2 || Width == 4 || Width == 8 || Width == 16 || Width == 32,
+        "warp shuffle Width must be one of 1,2,4,8,16,32");
+    const int lane = static_cast<int>(lane_id());
+    return target >= 0 && target < 32 && target / Width == lane / Width &&
+        detail::warp_lane_is_active(participants.value(), static_cast<unsigned int>(lane)) &&
+        detail::warp_lane_is_active(participants.value(), static_cast<unsigned int>(target));
+}
+template <int Width = 32, class T>
+CANN_ASC_STL_SIMT_API warp_shuffle_result<T> __warp_shuffle_idx(
+    T value, int source_lane, lane_mask participants) noexcept
+{
+    const int target = static_cast<int>(lane_id() / Width) * Width + source_lane;
+    const bool valid = __warp_shuffle_valid<Width, T>(target, participants);
+    return {detail::warp_shuffle_index<Width>(value, source_lane), valid};
+}
+template <int Width = 32, class T>
+CANN_ASC_STL_SIMT_API warp_shuffle_result<T> __warp_shuffle_up(T value, int delta, lane_mask participants) noexcept
+{
+    const int target = static_cast<int>(lane_id()) - delta;
+    const bool valid = __warp_shuffle_valid<Width, T>(target, participants);
+    return {detail::warp_shuffle_up_value<Width>(value, delta), valid};
+}
+template <int Width = 32, class T>
+CANN_ASC_STL_SIMT_API warp_shuffle_result<T> __warp_shuffle_down(T value, int delta, lane_mask participants) noexcept
+{
+    const int target = static_cast<int>(lane_id()) + delta;
+    const bool valid = __warp_shuffle_valid<Width, T>(target, participants);
+    return {detail::warp_shuffle_down_value<Width>(value, delta), valid};
+}
+template <int Width = 32, class T>
+CANN_ASC_STL_SIMT_API warp_shuffle_result<T> __warp_shuffle_xor(T value, int xor_mask, lane_mask participants) noexcept
+{
+    const int target = static_cast<int>(lane_id()) ^ xor_mask;
+    const bool valid = __warp_shuffle_valid<Width, T>(target, participants);
+    return {detail::warp_shuffle_xor_value<Width>(value, xor_mask), valid};
+}
+
+#define CANN_ASC_STL_WARP_SHUFFLE_OVERLOADS(type)                                        \
+    template <int Width = 32>                                                            \
+    CANN_ASC_STL_SIMT_API warp_shuffle_result<type> warp_shuffle_idx(                    \
+        type value, int source_lane, lane_mask participants = lane_mask::all()) noexcept \
+    {                                                                                    \
+        return __warp_shuffle_idx<Width>(value, source_lane, participants);              \
+    }                                                                                    \
+    template <int Width = 32>                                                            \
+    CANN_ASC_STL_SIMT_API warp_shuffle_result<type> warp_shuffle_up(                     \
+        type value, int delta, lane_mask participants = lane_mask::all()) noexcept       \
+    {                                                                                    \
+        return __warp_shuffle_up<Width>(value, delta, participants);                     \
+    }                                                                                    \
+    template <int Width = 32>                                                            \
+    CANN_ASC_STL_SIMT_API warp_shuffle_result<type> warp_shuffle_down(                   \
+        type value, int delta, lane_mask participants = lane_mask::all()) noexcept       \
+    {                                                                                    \
+        return __warp_shuffle_down<Width>(value, delta, participants);                   \
+    }                                                                                    \
+    template <int Width = 32>                                                            \
+    CANN_ASC_STL_SIMT_API warp_shuffle_result<type> warp_shuffle_xor(                    \
+        type value, int xor_mask, lane_mask participants = lane_mask::all()) noexcept    \
+    {                                                                                    \
+        return __warp_shuffle_xor<Width>(value, xor_mask, participants);                 \
+    }
+CANN_ASC_STL_WARP_SHUFFLE_OVERLOADS(int)
+CANN_ASC_STL_WARP_SHUFFLE_OVERLOADS(unsigned int)
+CANN_ASC_STL_WARP_SHUFFLE_OVERLOADS(long long)
+CANN_ASC_STL_WARP_SHUFFLE_OVERLOADS(unsigned long long)
+CANN_ASC_STL_WARP_SHUFFLE_OVERLOADS(float)
+#undef CANN_ASC_STL_WARP_SHUFFLE_OVERLOADS
+
+#define CANN_ASC_STL_WARP_REDUCE_OVERLOADS(type)                    \
+    CANN_ASC_STL_SIMT_API type warp_reduce_add(type value) noexcept \
+    {                                                               \
+        return detail::warp_reduce_add_value(value);                \
+    }                                                               \
+    CANN_ASC_STL_SIMT_API type warp_reduce_min(type value) noexcept \
+    {                                                               \
+        return detail::warp_reduce_min_value(value);                \
+    }                                                               \
+    CANN_ASC_STL_SIMT_API type warp_reduce_max(type value) noexcept \
+    {                                                               \
+        return detail::warp_reduce_max_value(value);                \
+    }
+CANN_ASC_STL_WARP_REDUCE_OVERLOADS(int)
+CANN_ASC_STL_WARP_REDUCE_OVERLOADS(unsigned int)
+CANN_ASC_STL_WARP_REDUCE_OVERLOADS(float)
+#undef CANN_ASC_STL_WARP_REDUCE_OVERLOADS
+#endif
+}  // namespace asc
+
+#endif  // CANN_ASC_STL_ASC_WARP

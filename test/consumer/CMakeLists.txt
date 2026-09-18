@@ -39,6 +39,12 @@ add_executable(
     memory_b.cpp
     b016_a.cpp
     b016_b.cpp
+    b017_a.cpp
+    b017_b.cpp
+    b018_a.cpp
+    b018_b.cpp
+    b019_a.cpp
+    b019_b.cpp
 )
 target_link_libraries(asc_stl_installed_consumer PRIVATE asc_stl::asc_stl)
 target_compile_options(asc_stl_installed_consumer PRIVATE -Wall -Wextra -Werror -pedantic)

@@ -1,0 +1,21 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
+#ifndef CANN_ASC_STL_ASC_STD_CTGMATH
+#define CANN_ASC_STL_ASC_STD_CTGMATH
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/std/cmath>
+#include <asc/std/complex>
+
+#endif  // CANN_ASC_STL_ASC_STD_CTGMATH

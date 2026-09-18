@@ -103,7 +103,8 @@ set_tests_properties(boundary.host PROPERTIES LABELS "negative-boundary;static-r
 function(asc_stl_add_host_case case_id source)
     set(case_standards 17 20)
     if(case_id MATCHES "^asc\\.std\\.__concepts\\."
-       OR case_id STREQUAL "asc.std.__fwd.optional.value_members")
+       OR case_id STREQUAL "asc.std.__fwd.optional.value_members"
+           OR case_id STREQUAL "asc.std.optional.excluded_members")
         set(case_standards 20)
     endif()
     foreach(standard IN LISTS case_standards)
@@ -477,6 +478,25 @@ asc_stl_add_host_case("asc.stream.b014" "asc/stream/host.pass.cpp")
 asc_stl_add_host_case("asc.std.cstdlib.b014" "asc/std/cstdlib/host.pass.cpp")
 asc_stl_add_host_case("asc.execution.policy.b015" "asc/execution.policy/host.pass.cpp")
 asc_stl_add_host_case("asc.hierarchy.b016" "asc/hierarchy/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__algorithm.count_if.b020" "asc/std/__algorithm/count_if/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__algorithm.minmax_element.b020" "asc/std/__algorithm/minmax_element/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__algorithm.lower_bound.b020" "asc/std/__algorithm/lower_bound/host.pass.cpp")
+asc_stl_add_host_case("asc.std.__functional.bind_back.b020" "asc/std/__functional/bind_back/host.pass.cpp")
+asc_stl_add_host_case("asc.std.optional.b020" "asc/std/optional/host.pass.cpp")
+asc_stl_add_host_case("asc.std.optional.excluded_members" "asc/std/optional/excluded_members.absence.pass.cpp")
+asc_stl_add_host_case("asc.std.__ranges.movable_box.b020" "asc/std/__ranges/movable_box/host.pass.cpp")
+asc_stl_add_host_case("asc.execution.b019" "asc/execution/host.pass.cpp")
+asc_stl_add_host_case("asc.launch.b019" "asc/launch/host.pass.cpp")
+asc_stl_add_host_case("asc.std.move_iterator.b019" "asc/std/__iterator/move_iterator/host.pass.cpp")
+asc_stl_add_host_case("asc.algorithm.frontend.b019" "asc/__algorithm/frontend/host.pass.cpp")
+asc_stl_add_host_case("asc.parallel.find.b019" "asc/__parallel/find/host.pass.cpp")
+asc_stl_add_host_case("asc.parallel.for.b019" "asc/__parallel/for/host.pass.cpp")
+asc_stl_add_host_case("asc.parallel.partition.b019" "asc/__parallel/partition/host.pass.cpp")
+asc_stl_add_host_case("asc.parallel.reduce.b019" "asc/__parallel/reduce/host.pass.cpp")
+asc_stl_add_host_case("asc.parallel.transform.b019" "asc/__parallel/transform/host.pass.cpp")
+asc_stl_add_host_case("asc.collectives.b018" "asc/__collectives/block/host.pass.cpp")
+asc_stl_add_host_case("asc.std.array.b018" "asc/std/array/host.pass.cpp")
+asc_stl_add_host_case("asc.warp.b017" "asc/warp/host.pass.cpp")
 foreach(standard IN ITEMS 17 20)
     add_executable(
         asc_stl_host_cassert_ndebug_cxx${standard}
@@ -559,6 +579,12 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
     set(b014_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/b014-cannsim")
     set(b016_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/hierarchy/runtime/cannsim")
     set(b016_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/b016-cannsim")
+    set(b019_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/__algorithm/frontend/runtime/cannsim")
+    set(b019_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/b019-cannsim")
+    set(b018_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/__collectives/block/runtime/cannsim")
+    set(b018_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/b018-cannsim")
+    set(b017_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/warp/runtime/cannsim")
+    set(b017_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/b017-cannsim")
     add_custom_target(
         asc_stl_cannsim_tests
         COMMAND
@@ -611,6 +637,36 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
         COMMAND
             "${CMAKE_COMMAND}" --build "${b016_cannsim_build_root}"
             --target asc_stl_b016_cannsim -j2
+        COMMAND
+            "${CMAKE_COMMAND}" -S "${b017_cannsim_case_root}"
+            -B "${b017_cannsim_build_root}"
+            -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
+            -DASC_STL_CXX_STANDARD=${ASC_STL_TEST_CXX_STANDARD}
+            -DASC_STL_TARGET_SOC=${ASC_STL_TARGET_SOC}
+            -DCMAKE_BUILD_TYPE=Release
+        COMMAND
+            "${CMAKE_COMMAND}" --build "${b017_cannsim_build_root}"
+            --target asc_stl_b017_cannsim -j2
+        COMMAND
+            "${CMAKE_COMMAND}" -S "${b018_cannsim_case_root}"
+            -B "${b018_cannsim_build_root}"
+            -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
+            -DASC_STL_CXX_STANDARD=${ASC_STL_TEST_CXX_STANDARD}
+            -DASC_STL_TARGET_SOC=${ASC_STL_TARGET_SOC}
+            -DCMAKE_BUILD_TYPE=Release
+        COMMAND
+            "${CMAKE_COMMAND}" --build "${b018_cannsim_build_root}"
+            --target asc_stl_b018_cannsim -j2
+        COMMAND
+            "${CMAKE_COMMAND}" -S "${b019_cannsim_case_root}"
+            -B "${b019_cannsim_build_root}"
+            -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
+            -DASC_STL_CXX_STANDARD=${ASC_STL_TEST_CXX_STANDARD}
+            -DASC_STL_TARGET_SOC=${ASC_STL_TARGET_SOC}
+            -DCMAKE_BUILD_TYPE=Release
+        COMMAND
+            "${CMAKE_COMMAND}" --build "${b019_cannsim_build_root}"
+            --target asc_stl_b019_cannsim -j2
         VERBATIM
     )
     add_test(
@@ -686,6 +742,67 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
     )
     set_tests_properties(
         semantic.cannsim.asc.hierarchy.b016
+        PROPERTIES LABELS "cannsim-smoke;cannsim-runtime" RUN_SERIAL TRUE
+    )
+    add_test(
+        NAME semantic.cannsim.asc.warp.b017
+        COMMAND
+            "${ASC_STL_TEST_ROOT}/scripts/run_cannsim_test.sh"
+            "${ASC_STL_CANNSIM_EXECUTABLE}"
+            "${b017_cannsim_build_root}/asc_stl_b017_cannsim"
+            "${ASC_STL_CANNSIM_SOC}"
+            "${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/b017"
+            "${b017_cannsim_build_root}"
+            ASC_STL_CANNSIM_B017_PASS
+    )
+    set_tests_properties(
+        semantic.cannsim.asc.warp.b017
+        PROPERTIES LABELS "cannsim-smoke;cannsim-runtime" RUN_SERIAL TRUE
+    )
+    add_test(
+        NAME semantic.cannsim.asc.warp.b017.failure-injection
+        COMMAND
+            "${ASC_STL_TEST_ROOT}/scripts/run_cannsim_test.sh"
+            "${ASC_STL_CANNSIM_EXECUTABLE}"
+            "${b017_cannsim_build_root}/asc_stl_b017_cannsim"
+            "${ASC_STL_CANNSIM_SOC}"
+            "${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/b017-failure-injection"
+            "${b017_cannsim_build_root}"
+            ASC_STL_CANNSIM_B017_PASS
+    )
+    set_tests_properties(
+        semantic.cannsim.asc.warp.b017.failure-injection
+        PROPERTIES LABELS "cannsim-smoke;cannsim-runtime" RUN_SERIAL TRUE WILL_FAIL TRUE
+        ENVIRONMENT "ASC_STL_WARP_INJECT_FAILURE=1"
+    )
+    add_test(
+        NAME semantic.cannsim.asc.collectives.b018
+        COMMAND
+            "${ASC_STL_TEST_ROOT}/scripts/run_cannsim_test.sh"
+            "${ASC_STL_CANNSIM_EXECUTABLE}"
+            "${b018_cannsim_build_root}/asc_stl_b018_cannsim"
+            "${ASC_STL_CANNSIM_SOC}"
+            "${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/b018"
+            "${b018_cannsim_build_root}"
+            ASC_STL_CANNSIM_B018_PASS
+    )
+    set_tests_properties(
+        semantic.cannsim.asc.collectives.b018
+        PROPERTIES LABELS "cannsim-smoke;cannsim-runtime" RUN_SERIAL TRUE
+    )
+    add_test(
+        NAME semantic.cannsim.asc.algorithm.b019
+        COMMAND
+            "${ASC_STL_TEST_ROOT}/scripts/run_cannsim_test.sh"
+            "${ASC_STL_CANNSIM_EXECUTABLE}"
+            "${b019_cannsim_build_root}/asc_stl_b019_cannsim"
+            "${ASC_STL_CANNSIM_SOC}"
+            "${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/b019"
+            "${b019_cannsim_build_root}"
+            ASC_STL_CANNSIM_B019_PASS
+    )
+    set_tests_properties(
+        semantic.cannsim.asc.algorithm.b019
         PROPERTIES LABELS "cannsim-smoke;cannsim-runtime" RUN_SERIAL TRUE
     )
 endif()

@@ -1,0 +1,79 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_EXECUTION
+#define CANN_ASC_STL_ASC_EXECUTION
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/execution.determinism.h>
+#include <asc/execution.output_ordering.h>
+#include <asc/execution.policy.h>
+#include <asc/execution.require.h>
+#include <asc/execution.tie_break.h>
+
+namespace asc {
+
+enum class execution_errc : int {
+    success = 0,
+    invalid_argument = 1,
+    insufficient_storage = 2,
+    backend_error = 3,
+};
+
+class execution_status {
+public:
+    CANN_ASC_STL_HOST constexpr execution_status() noexcept = default;
+    CANN_ASC_STL_HOST constexpr explicit execution_status(execution_errc code, int native_code = 0) noexcept
+        : code_(code), native_code_(code == execution_errc::backend_error ? native_code : 0)
+    {}
+
+    CANN_ASC_STL_HOST constexpr bool success() const noexcept
+    {
+        return code_ == execution_errc::success;
+    }
+    CANN_ASC_STL_HOST constexpr execution_errc code() const noexcept
+    {
+        return code_;
+    }
+    CANN_ASC_STL_HOST constexpr int native_code() const noexcept
+    {
+        return native_code_;
+    }
+
+private:
+    execution_errc code_{execution_errc::success};
+    int native_code_{};
+};
+
+namespace detail {
+CANN_ASC_STL_HOST_API constexpr execution_status backend_status(int native_code) noexcept
+{
+    return native_code == 0 ? execution_status{} : execution_status{execution_errc::backend_error, native_code};
+}
+}  // namespace detail
+
+}  // namespace asc
+
+#endif  // CANN_ASC_STL_ASC_EXECUTION

@@ -1,0 +1,357 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_STD_ARRAY
+#define CANN_ASC_STL_ASC_STD_ARRAY
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__detail/attributes.h>
+#include <asc/std/__algorithm/equal.h>
+#include <asc/std/__algorithm/fill_n.h>
+#include <asc/std/__algorithm/lexicographical_compare.h>
+#include <asc/std/__algorithm/swap_ranges.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__fwd/array.h>
+#include <asc/std/__iterator/access.h>
+#include <asc/std/__iterator/data.h>
+#include <asc/std/__iterator/empty.h>
+#include <asc/std/__iterator/reverse_access.h>
+#include <asc/std/__iterator/reverse_iterator.h>
+#include <asc/std/__iterator/size.h>
+#include <asc/std/__tuple/sfinae_helpers.h>
+#include <asc/std/__tuple/tuple_element.h>
+#include <asc/std/__tuple/tuple_size.h>
+#include <asc/std/__type_traits/conditional.h>
+#include <asc/std/__type_traits/is_array.h>
+#include <asc/std/__type_traits/is_const.h>
+#include <asc/std/__type_traits/is_constructible.h>
+#include <asc/std/__type_traits/is_move_constructible.h>
+#include <asc/std/__type_traits/is_nothrow_constructible.h>
+#include <asc/std/__type_traits/is_nothrow_move_constructible.h>
+#include <asc/std/__type_traits/is_same.h>
+#include <asc/std/__type_traits/is_swappable.h>
+#include <asc/std/__type_traits/remove_cv.h>
+#include <asc/std/__utility/integer_sequence.h>
+#include <asc/std/__utility/move.h>
+#include <asc/std/__utility/unreachable.h>
+#include <asc/std/cstdint>
+#include <asc/std/limits>
+#include <asc/std/version>
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+template <class T, size_t Size>
+struct array {
+    using value_type = T;
+    using size_type = size_t;
+    using difference_type = ptrdiff_t;
+    using reference = value_type&;
+    using const_reference = const value_type&;
+    using pointer = value_type*;
+    using const_pointer = const value_type*;
+    using iterator = pointer;
+    using const_iterator = const_pointer;
+    using reverse_iterator = ::asc::std::reverse_iterator<iterator>;
+    using const_reverse_iterator = ::asc::std::reverse_iterator<const_iterator>;
+
+    T elements[Size];
+    CANN_ASC_STL_API constexpr reference operator[](size_type index) noexcept
+    {
+        return elements[index];
+    }
+    CANN_ASC_STL_API constexpr const_reference operator[](size_type index) const noexcept
+    {
+        return elements[index];
+    }
+    CANN_ASC_STL_API constexpr reference front() noexcept
+    {
+        return elements[0];
+    }
+    CANN_ASC_STL_API constexpr const_reference front() const noexcept
+    {
+        return elements[0];
+    }
+    CANN_ASC_STL_API constexpr reference back() noexcept
+    {
+        return elements[Size - 1];
+    }
+    CANN_ASC_STL_API constexpr const_reference back() const noexcept
+    {
+        return elements[Size - 1];
+    }
+    CANN_ASC_STL_API constexpr pointer data() noexcept
+    {
+        return elements;
+    }
+    CANN_ASC_STL_API constexpr const_pointer data() const noexcept
+    {
+        return elements;
+    }
+    CANN_ASC_STL_API constexpr iterator begin() noexcept
+    {
+        return elements;
+    }
+    CANN_ASC_STL_API constexpr const_iterator begin() const noexcept
+    {
+        return elements;
+    }
+    CANN_ASC_STL_API constexpr const_iterator cbegin() const noexcept
+    {
+        return elements;
+    }
+    CANN_ASC_STL_API constexpr iterator end() noexcept
+    {
+        return elements + Size;
+    }
+    CANN_ASC_STL_API constexpr const_iterator end() const noexcept
+    {
+        return elements + Size;
+    }
+    CANN_ASC_STL_API constexpr const_iterator cend() const noexcept
+    {
+        return elements + Size;
+    }
+    CANN_ASC_STL_API constexpr reverse_iterator rbegin() noexcept
+    {
+        return reverse_iterator(end());
+    }
+    CANN_ASC_STL_API constexpr const_reverse_iterator rbegin() const noexcept
+    {
+        return const_reverse_iterator(end());
+    }
+    CANN_ASC_STL_API constexpr const_reverse_iterator crbegin() const noexcept
+    {
+        return const_reverse_iterator(end());
+    }
+    CANN_ASC_STL_API constexpr reverse_iterator rend() noexcept
+    {
+        return reverse_iterator(begin());
+    }
+    CANN_ASC_STL_API constexpr const_reverse_iterator rend() const noexcept
+    {
+        return const_reverse_iterator(begin());
+    }
+    CANN_ASC_STL_API constexpr const_reverse_iterator crend() const noexcept
+    {
+        return const_reverse_iterator(begin());
+    }
+    CANN_ASC_STL_API constexpr bool empty() const noexcept
+    {
+        return false;
+    }
+    CANN_ASC_STL_API constexpr size_type size() const noexcept
+    {
+        return Size;
+    }
+    CANN_ASC_STL_API constexpr size_type max_size() const noexcept
+    {
+        return Size;
+    }
+    CANN_ASC_STL_API constexpr void fill(const T& value)
+    {
+        (void)::asc::std::fill_n(begin(), Size, value);
+    }
+    CANN_ASC_STL_API constexpr void swap(array& other) noexcept
+    {
+        (void)::asc::std::swap_ranges(begin(), end(), other.begin());
+    }
+};
+template <class T>
+struct array<T, 0> {
+    using value_type = T;
+    using size_type = size_t;
+    using difference_type = ptrdiff_t;
+    using reference = value_type&;
+    using const_reference = const value_type&;
+    using pointer = value_type*;
+    using const_pointer = const value_type*;
+    using iterator = pointer;
+    using const_iterator = const_pointer;
+    using reverse_iterator = ::asc::std::reverse_iterator<iterator>;
+    using const_reverse_iterator = ::asc::std::reverse_iterator<const_iterator>;
+    CANN_ASC_STL_API constexpr reference operator[](size_type) noexcept
+    {
+        return *static_cast<pointer>(nullptr);
+    }
+    CANN_ASC_STL_API constexpr const_reference operator[](size_type) const noexcept
+    {
+        return *static_cast<const_pointer>(nullptr);
+    }
+    CANN_ASC_STL_API constexpr reference front() noexcept
+    {
+        return *static_cast<pointer>(nullptr);
+    }
+    CANN_ASC_STL_API constexpr const_reference front() const noexcept
+    {
+        return *static_cast<const_pointer>(nullptr);
+    }
+    CANN_ASC_STL_API constexpr reference back() noexcept
+    {
+        return *static_cast<pointer>(nullptr);
+    }
+    CANN_ASC_STL_API constexpr const_reference back() const noexcept
+    {
+        return *static_cast<const_pointer>(nullptr);
+    }
+    CANN_ASC_STL_API constexpr pointer data() noexcept
+    {
+        return nullptr;
+    }
+    CANN_ASC_STL_API constexpr const_pointer data() const noexcept
+    {
+        return nullptr;
+    }
+    CANN_ASC_STL_API constexpr iterator begin() noexcept
+    {
+        return nullptr;
+    }
+    CANN_ASC_STL_API constexpr const_iterator begin() const noexcept
+    {
+        return nullptr;
+    }
+    CANN_ASC_STL_API constexpr const_iterator cbegin() const noexcept
+    {
+        return nullptr;
+    }
+    CANN_ASC_STL_API constexpr iterator end() noexcept
+    {
+        return nullptr;
+    }
+    CANN_ASC_STL_API constexpr const_iterator end() const noexcept
+    {
+        return nullptr;
+    }
+    CANN_ASC_STL_API constexpr const_iterator cend() const noexcept
+    {
+        return nullptr;
+    }
+    CANN_ASC_STL_API constexpr reverse_iterator rbegin() noexcept
+    {
+        return reverse_iterator(end());
+    }
+    CANN_ASC_STL_API constexpr const_reverse_iterator rbegin() const noexcept
+    {
+        return const_reverse_iterator(end());
+    }
+    CANN_ASC_STL_API constexpr const_reverse_iterator crbegin() const noexcept
+    {
+        return const_reverse_iterator(end());
+    }
+    CANN_ASC_STL_API constexpr reverse_iterator rend() noexcept
+    {
+        return reverse_iterator(begin());
+    }
+    CANN_ASC_STL_API constexpr const_reverse_iterator rend() const noexcept
+    {
+        return const_reverse_iterator(begin());
+    }
+    CANN_ASC_STL_API constexpr const_reverse_iterator crend() const noexcept
+    {
+        return const_reverse_iterator(begin());
+    }
+    CANN_ASC_STL_API constexpr bool empty() const noexcept
+    {
+        return true;
+    }
+    CANN_ASC_STL_API constexpr size_type size() const noexcept
+    {
+        return 0;
+    }
+    CANN_ASC_STL_API constexpr size_type max_size() const noexcept
+    {
+        return 0;
+    }
+    CANN_ASC_STL_API constexpr void fill(const T&) noexcept
+    {}
+    CANN_ASC_STL_API constexpr void swap(array&) noexcept
+    {}
+};
+template <class T, size_t Size>
+CANN_ASC_STL_API constexpr bool operator==(const array<T, Size>& left, const array<T, Size>& right)
+{
+    return ::asc::std::equal(left.begin(), left.end(), right.begin());
+}
+template <class T, size_t Size>
+CANN_ASC_STL_API constexpr bool operator!=(const array<T, Size>& left, const array<T, Size>& right)
+{
+    return !(left == right);
+}
+template <class T, size_t Size>
+CANN_ASC_STL_API constexpr bool operator<(const array<T, Size>& left, const array<T, Size>& right)
+{
+    return ::asc::std::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end());
+}
+template <size_t Index, class T, size_t Size>
+CANN_ASC_STL_API constexpr T& get(array<T, Size>& value) noexcept
+{
+    static_assert(Index < Size, "array get index out of bounds");
+    return value[Index];
+}
+template <size_t Index, class T, size_t Size>
+CANN_ASC_STL_API constexpr const T& get(const array<T, Size>& value) noexcept
+{
+    static_assert(Index < Size, "array get index out of bounds");
+    return value[Index];
+}
+template <size_t Index, class T, size_t Size>
+CANN_ASC_STL_API constexpr T&& get(array<T, Size>&& value) noexcept
+{
+    return ::asc::std::move(::asc::std::get<Index>(value));
+}
+template <size_t Index, class T, size_t Size>
+CANN_ASC_STL_API constexpr const T&& get(const array<T, Size>&& value) noexcept
+{
+    return ::asc::std::move(::asc::std::get<Index>(value));
+}
+template <class T, size_t Size>
+struct tuple_size<array<T, Size>> : integral_constant<size_t, Size> {};
+template <size_t Index, class T, size_t Size>
+struct tuple_element<Index, array<T, Size>> {
+    static_assert(Index < Size, "array tuple_element index out of bounds");
+    using type = T;
+};
+#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+template <class T, size_t Size>
+CANN_ASC_STL_API constexpr array<remove_cv_t<T>, Size> to_array(T (&source)[Size])
+{
+    array<remove_cv_t<T>, Size> result{};
+    for (size_t index = 0; index < Size; ++index)
+        result[index] = source[index];
+    return result;
+}
+template <class T, size_t Size>
+CANN_ASC_STL_API constexpr array<remove_cv_t<T>, Size> to_array(T (&&source)[Size]) noexcept(
+    is_nothrow_move_constructible_v<T>)
+{
+    array<remove_cv_t<T>, Size> result{};
+    for (size_t index = 0; index < Size; ++index)
+        result[index] = ::asc::std::move(source[index]);
+    return result;
+}
+#endif
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_ASC_STD_ARRAY

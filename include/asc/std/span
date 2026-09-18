@@ -1,0 +1,320 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_STD_SPAN
+#define CANN_ASC_STL_ASC_STD_SPAN
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__detail/attributes.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__concepts/convertible_to.h>
+#include <asc/std/__concepts/equality_comparable.h>
+#include <asc/std/__fwd/array.h>
+#include <asc/std/__fwd/span.h>
+#include <asc/std/__iterator/access.h>
+#include <asc/std/__iterator/concepts.h>
+#include <asc/std/__iterator/data.h>
+#include <asc/std/__iterator/distance.h>
+#include <asc/std/__iterator/empty.h>
+#include <asc/std/__iterator/reverse_access.h>
+#include <asc/std/__iterator/reverse_iterator.h>
+#include <asc/std/__iterator/size.h>
+#include <asc/std/__iterator/wrap_iter.h>
+#include <asc/std/__ranges/concepts.h>
+#include <asc/std/__ranges/data.h>
+#include <asc/std/__ranges/enable_borrowed_range.h>
+#include <asc/std/__ranges/enable_view.h>
+#include <asc/std/__ranges/size.h>
+#include <asc/std/__type_traits/integral_constant.h>
+#include <asc/std/__type_traits/integral_constant_like.h>
+#include <asc/std/__type_traits/is_array.h>
+#include <asc/std/__type_traits/is_const.h>
+#include <asc/std/__type_traits/is_convertible.h>
+#include <asc/std/__type_traits/is_integral.h>
+#include <asc/std/__type_traits/is_same.h>
+#include <asc/std/__type_traits/remove_const.h>
+#include <asc/std/__type_traits/remove_cv.h>
+#include <asc/std/__type_traits/remove_cvref.h>
+#include <asc/std/__type_traits/remove_reference.h>
+#include <asc/std/__type_traits/type_identity.h>
+#include <asc/std/array>
+#include <asc/std/cstddef>
+#include <asc/std/version>
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+template <class T, size_t Extent>
+class span {
+public:
+    using element_type = T;
+    using value_type = remove_const_t<T>;
+    using size_type = size_t;
+    using difference_type = ptrdiff_t;
+    using pointer = T*;
+    using const_pointer = const T*;
+    using reference = T&;
+    using const_reference = const T&;
+    using iterator = pointer;
+    using reverse_iterator = ::asc::std::reverse_iterator<iterator>;
+    static constexpr size_type extent = Extent;
+    template <size_t Value = Extent, class = decltype(sizeof(char[Value == 0 ? 1 : -1]))>
+    CANN_ASC_STL_API constexpr span() noexcept
+    {}
+    CANN_ASC_STL_API constexpr span(pointer first, size_type) noexcept : data_(first)
+    {}
+    CANN_ASC_STL_API constexpr span(pointer first, pointer) noexcept : data_(first)
+    {}
+    template <size_t Size>
+    CANN_ASC_STL_API constexpr span(element_type (&array_value)[Size]) noexcept : data_(array_value)
+    {
+        static_assert(Size == Extent, "fixed span extent mismatch");
+    }
+    template <class U, size_t Size>
+    CANN_ASC_STL_API constexpr span(array<U, Size>& value) noexcept : data_(value.data())
+    {
+        static_assert(Size == Extent, "fixed span extent mismatch");
+    }
+    template <class U, size_t OtherExtent>
+    CANN_ASC_STL_API constexpr span(const span<U, OtherExtent>& other) noexcept : data_(other.data())
+    {
+        static_assert(OtherExtent == Extent || OtherExtent == dynamic_extent, "fixed span extent mismatch");
+    }
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
+    template <ranges::contiguous_range Range>
+        requires ranges::sized_range<Range> && (ranges::borrowed_range<Range> || is_const_v<element_type>) &&
+        requires(Range& range) {
+            { ranges::data(range) } -> convertible_to<pointer>;
+        }
+    CANN_ASC_STL_API constexpr explicit span(Range&& range) noexcept : data_(ranges::data(range))
+    {}
+#endif
+    CANN_ASC_STL_API constexpr iterator begin() const noexcept
+    {
+        return data_;
+    }
+    CANN_ASC_STL_API constexpr iterator end() const noexcept
+    {
+        return data_ + Extent;
+    }
+    CANN_ASC_STL_API constexpr reverse_iterator rbegin() const noexcept
+    {
+        return reverse_iterator(end());
+    }
+    CANN_ASC_STL_API constexpr reverse_iterator rend() const noexcept
+    {
+        return reverse_iterator(begin());
+    }
+    CANN_ASC_STL_API constexpr reference front() const noexcept
+    {
+        return data_[0];
+    }
+    CANN_ASC_STL_API constexpr reference back() const noexcept
+    {
+        return data_[Extent - 1];
+    }
+    CANN_ASC_STL_API constexpr reference operator[](size_type index) const noexcept
+    {
+        return data_[index];
+    }
+    CANN_ASC_STL_API constexpr pointer data() const noexcept
+    {
+        return data_;
+    }
+    CANN_ASC_STL_API constexpr size_type size() const noexcept
+    {
+        return Extent;
+    }
+    CANN_ASC_STL_API constexpr size_type size_bytes() const noexcept
+    {
+        return Extent * sizeof(T);
+    }
+    CANN_ASC_STL_API constexpr bool empty() const noexcept
+    {
+        return Extent == 0;
+    }
+    template <size_t Count>
+    CANN_ASC_STL_API constexpr span<T, Count> first() const noexcept
+    {
+        return {data_, Count};
+    }
+    CANN_ASC_STL_API constexpr span<T, dynamic_extent> first(size_type count) const noexcept
+    {
+        return {data_, count};
+    }
+    template <size_t Count>
+    CANN_ASC_STL_API constexpr span<T, Count> last() const noexcept
+    {
+        return {data_ + Extent - Count, Count};
+    }
+    CANN_ASC_STL_API constexpr span<T, dynamic_extent> last(size_type count) const noexcept
+    {
+        return {data_ + Extent - count, count};
+    }
+    template <size_t Offset, size_t Count = dynamic_extent>
+    CANN_ASC_STL_API constexpr auto subspan() const noexcept
+        -> span<T, Count == dynamic_extent ? Extent - Offset : Count>
+    {
+        return {data_ + Offset, Count == dynamic_extent ? Extent - Offset : Count};
+    }
+    CANN_ASC_STL_API constexpr span<T, dynamic_extent> subspan(
+        size_type offset, size_type count = dynamic_extent) const noexcept
+    {
+        return {data_ + offset, count == dynamic_extent ? Extent - offset : count};
+    }
+
+private:
+    pointer data_{};
+};
+template <class T>
+class span<T, dynamic_extent> {
+public:
+    using element_type = T;
+    using value_type = remove_const_t<T>;
+    using size_type = size_t;
+    using difference_type = ptrdiff_t;
+    using pointer = T*;
+    using reference = T&;
+    using iterator = pointer;
+    using reverse_iterator = ::asc::std::reverse_iterator<iterator>;
+    static constexpr size_type extent = dynamic_extent;
+    CANN_ASC_STL_API constexpr span() noexcept = default;
+    CANN_ASC_STL_API constexpr span(pointer first, size_type count) noexcept : data_(first), size_(count)
+    {}
+    CANN_ASC_STL_API constexpr span(pointer first, pointer last) noexcept
+        : data_(first), size_(static_cast<size_type>(last - first))
+    {}
+    template <size_t Size>
+    CANN_ASC_STL_API constexpr span(element_type (&array_value)[Size]) noexcept : data_(array_value), size_(Size)
+    {}
+    template <class U, size_t Size>
+    CANN_ASC_STL_API constexpr span(array<U, Size>& value) noexcept : data_(value.data()), size_(Size)
+    {}
+    template <class U, size_t OtherExtent>
+    CANN_ASC_STL_API constexpr span(const span<U, OtherExtent>& other) noexcept
+        : data_(other.data()), size_(other.size())
+    {}
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
+    template <ranges::contiguous_range Range>
+        requires ranges::sized_range<Range> && (ranges::borrowed_range<Range> || is_const_v<element_type>) &&
+                     requires(Range& range) {
+                         { ranges::data(range) } -> convertible_to<pointer>;
+                     }
+    CANN_ASC_STL_API constexpr span(Range&& range) noexcept : data_(ranges::data(range)), size_(ranges::size(range))
+    {}
+#endif
+    CANN_ASC_STL_API constexpr iterator begin() const noexcept
+    {
+        return data_;
+    }
+    CANN_ASC_STL_API constexpr iterator end() const noexcept
+    {
+        return data_ + size_;
+    }
+    CANN_ASC_STL_API constexpr reverse_iterator rbegin() const noexcept
+    {
+        return reverse_iterator(end());
+    }
+    CANN_ASC_STL_API constexpr reverse_iterator rend() const noexcept
+    {
+        return reverse_iterator(begin());
+    }
+    CANN_ASC_STL_API constexpr reference front() const noexcept
+    {
+        return data_[0];
+    }
+    CANN_ASC_STL_API constexpr reference back() const noexcept
+    {
+        return data_[size_ - 1];
+    }
+    CANN_ASC_STL_API constexpr reference operator[](size_type index) const noexcept
+    {
+        return data_[index];
+    }
+    CANN_ASC_STL_API constexpr pointer data() const noexcept
+    {
+        return data_;
+    }
+    CANN_ASC_STL_API constexpr size_type size() const noexcept
+    {
+        return size_;
+    }
+    CANN_ASC_STL_API constexpr size_type size_bytes() const noexcept
+    {
+        return size_ * sizeof(T);
+    }
+    CANN_ASC_STL_API constexpr bool empty() const noexcept
+    {
+        return size_ == 0;
+    }
+    template <size_t Count>
+    CANN_ASC_STL_API constexpr span<T, Count> first() const noexcept
+    {
+        return {data_, Count};
+    }
+    CANN_ASC_STL_API constexpr span first(size_type count) const noexcept
+    {
+        return {data_, count};
+    }
+    template <size_t Count>
+    CANN_ASC_STL_API constexpr span<T, Count> last() const noexcept
+    {
+        return {data_ + size_ - Count, Count};
+    }
+    CANN_ASC_STL_API constexpr span last(size_type count) const noexcept
+    {
+        return {data_ + size_ - count, count};
+    }
+    template <size_t Offset, size_t Count = dynamic_extent>
+    CANN_ASC_STL_API constexpr auto subspan() const noexcept
+        -> span<T, Count == dynamic_extent ? dynamic_extent : Count>
+    {
+        return {data_ + Offset, Count == dynamic_extent ? size_ - Offset : Count};
+    }
+    CANN_ASC_STL_API constexpr span subspan(size_type offset, size_type count = dynamic_extent) const noexcept
+    {
+        return {data_ + offset, count == dynamic_extent ? size_ - offset : count};
+    }
+
+private:
+    pointer data_{};
+    size_type size_{};
+};
+template <class T, size_t Extent>
+CANN_ASC_STL_API constexpr auto as_bytes(
+    span<T, Extent> value) noexcept -> span<const byte, Extent == dynamic_extent ? dynamic_extent : Extent * sizeof(T)>
+{
+    return {reinterpret_cast<const byte*>(value.data()), value.size_bytes()};
+}
+template <class T, size_t Extent>
+CANN_ASC_STL_API constexpr auto as_writable_bytes(
+    span<T, Extent> value) noexcept -> span<byte, Extent == dynamic_extent ? dynamic_extent : Extent * sizeof(T)>
+{
+    static_assert(!is_const_v<T>, "as_writable_bytes requires writable elements");
+    return {reinterpret_cast<byte*>(value.data()), value.size_bytes()};
+}
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_ASC_STD_SPAN

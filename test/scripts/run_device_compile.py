@@ -58,6 +58,7 @@ class DeviceCompiler:
         if options.simt:
             # Keep CANN SDK attribute warnings visible without relaxing other diagnostics.
             command.extend(["--enable-simt", "-Wno-error=ignored-attributes"])
+        command.append(f"-DCANN_ASC_STL_USE_SIMT_LAUNCH={int(options.simt)}")
         command.extend(["-c", str(source), "-o", str(output)])
         process = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False)
         if options.expect_failure and process.returncode == 0:
@@ -96,6 +97,21 @@ NEGATIVE_DIAGNOSTIC_MARKERS = {
     "result_bool.fail.cpp": "convertible",
     "chars_format_precision.fail.cpp": "chars_format",
     "to_chars_bool.fail.cpp": "deleted",
+    "optional_reference.fail.cpp": "no matching constructor",
+    "and_then_lvalue.fail.cpp": "no member named",
+    "and_then_rvalue.fail.cpp": "no member named",
+    "and_then_const_lvalue.fail.cpp": "no member named",
+    "and_then_const_rvalue.fail.cpp": "no member named",
+    "transform_lvalue.fail.cpp": "no member named",
+    "transform_rvalue.fail.cpp": "no member named",
+    "transform_const_lvalue.fail.cpp": "no member named",
+    "transform_const_rvalue.fail.cpp": "no member named",
+    "or_else_rvalue.fail.cpp": "no member named",
+    "or_else_const_lvalue.fail.cpp": "no member named",
+    "value_lvalue.fail.cpp": "no member named",
+    "value_rvalue.fail.cpp": "no member named",
+    "value_const_lvalue.fail.cpp": "no member named",
+    "value_const_rvalue.fail.cpp": "no member named",
 }
 
 
@@ -120,17 +136,19 @@ def compile_semantic(
     if semantic_target in context.seen:
         return False
     context.seen.add(semantic_target)
-    semantic = case_root(device.test_root, semantic_target) / "device.compile.asc"
+    semantic_names = row.get("device_compile_cases", ["device.compile.asc"])
     applicable = (
         ["c++20"]
         if row["target"].startswith("asc/std/__concepts/")
         else context.standards
     )
-    for standard in applicable:
-        suffix = standard.replace("+", "x")
-        for mode, simt in (("simd", False), ("simt", True)):
-            output = context.build_root / f"semantic-{index}-{suffix}-{mode}.o"
-            device.compile(semantic, output, CompileOptions(standard, simt))
+    for name in semantic_names:
+        semantic = case_root(device.test_root, semantic_target) / name
+        for standard in applicable:
+            suffix = standard.replace("+", "x")
+            for mode, simt in (("simd", False), ("simt", True)):
+                output = context.build_root / f"semantic-{index}-{suffix}-{mode}.o"
+                device.compile(semantic, output, CompileOptions(standard, simt))
     return True
 
 
@@ -161,6 +179,12 @@ def compile_negative_case(
             expected = "supports exactly" in output.lower()
         if target == "asc/std/source_location":
             expected = "cannot initialize a parameter" in output and "const char *" in output
+        if target == "asc/launch" and name == "device_call.fail.asc":
+            expected = (
+                "call to __host__ function from __device__ function"
+                if simt
+                else "reference to __global__"
+            ) in output.lower()
         if not expected:
             raise RuntimeError(f"unexpected Device negative diagnostic for {negative} in {standard}:\n{output}")
 

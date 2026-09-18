@@ -1,0 +1,146 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_LAUNCH
+#define CANN_ASC_STL_ASC_LAUNCH
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__runtime/launch.h>
+#include <asc/execution>
+#include <asc/hierarchy>
+#include <asc/std/__type_traits/is_trivially_copyable.h>
+#include <asc/std/cstddef>
+#include <asc/stream>
+
+extern "C" int aclrtLaunchHostFunc(void* stream, void (*callback)(void*), void* data);
+
+namespace asc {
+
+struct simt_launch_config {
+    extent3d grid{};
+    extent3d block{};
+    ::asc::std::size_t dynamic_ub_bytes{};
+};
+
+struct aicore_launch_config {
+    ::asc::std::uint32_t blocks{};
+};
+
+using host_callback_t = void (*)(void*);
+
+namespace detail {
+CANN_ASC_STL_HOST_API constexpr bool valid_extent(extent3d value) noexcept
+{
+    if (value.x == 0 || value.y == 0 || value.z == 0) {
+        return false;
+    }
+    constexpr unsigned long long maximum = ~0ULL;
+    return value.x <= maximum / value.y && static_cast<unsigned long long>(value.x) * value.y <= maximum / value.z;
+}
+
+#if defined(__clang__) && defined(CANN_ASC_STL_USE_SIMT_LAUNCH)
+template <class Operation>
+#if CANN_ASC_STL_USE_SIMT_LAUNCH
+__global__ void parallel_operation_kernel(Operation operation)
+#else
+__vector__ __global__ __aicore__ void parallel_operation_kernel(Operation operation)
+#endif
+{
+#if CANN_ASC_STL_USE_SIMT_LAUNCH
+    if (blockIdx.x != 0 || blockIdx.y != 0 || blockIdx.z != 0 || threadIdx.x != 0 || threadIdx.y != 0 ||
+        threadIdx.z != 0) {
+        return;
+    }
+#else
+    if (block_idx != 0) {
+        return;
+    }
+#endif
+    operation();
+}
+#endif
+}  // namespace detail
+
+#if defined(__clang__) && defined(CANN_ASC_STL_USE_SIMT_LAUNCH)
+#if CANN_ASC_STL_USE_SIMT_LAUNCH
+template <auto Kernel, class... Args>
+CANN_ASC_STL_HOST_API execution_status launch(stream_ref stream, simt_launch_config config, Args... args) noexcept
+{
+    static_assert(
+        (::asc::std::is_trivially_copyable_v<Args> && ...), "ASC-STL launch arguments must be trivially copyable");
+    if (!stream || !detail::valid_extent(config.grid) || !detail::valid_extent(config.block)) {
+        return execution_status{execution_errc::invalid_argument};
+    }
+    dim3 grid(config.grid.x, config.grid.y, config.grid.z);
+    dim3 block(config.block.x, config.block.y, config.block.z);
+    Kernel<<<grid, block, config.dynamic_ub_bytes, stream.native_handle()>>>(args...);
+    return execution_status{};
+}
+#else
+template <auto Kernel, class... Args>
+CANN_ASC_STL_HOST_API execution_status launch(stream_ref stream, aicore_launch_config config, Args... args) noexcept
+{
+    static_assert(
+        (::asc::std::is_trivially_copyable_v<Args> && ...), "ASC-STL launch arguments must be trivially copyable");
+    if (!stream || config.blocks == 0) {
+        return execution_status{execution_errc::invalid_argument};
+    }
+    Kernel<<<config.blocks, 0, stream.native_handle()>>>(args...);
+    return execution_status{};
+}
+#endif
+#endif
+
+#if defined(__clang__) && defined(CANN_ASC_STL_USE_SIMT_LAUNCH)
+namespace detail {
+template <class Operation>
+CANN_ASC_STL_HOST_API execution_status submit_parallel_operation(stream_ref stream, Operation operation) noexcept
+{
+    if (!stream) {
+        return execution_status{execution_errc::invalid_argument};
+    }
+#if CANN_ASC_STL_USE_SIMT_LAUNCH
+    dim3 grid(1, 1, 1);
+    dim3 block(1, 1, 1);
+    parallel_operation_kernel<Operation><<<grid, block, 0, stream.native_handle()>>>(operation);
+#else
+    parallel_operation_kernel<Operation><<<1, 0, stream.native_handle()>>>(operation);
+#endif
+    return execution_status{};
+}
+}  // namespace detail
+#endif
+
+CANN_ASC_STL_HOST_API execution_status host_callback(stream_ref stream, host_callback_t callback, void* data) noexcept
+{
+    if (!stream || callback == nullptr) {
+        return execution_status{execution_errc::invalid_argument};
+    }
+    return detail::backend_status(::aclrtLaunchHostFunc(stream.native_handle(), callback, data));
+}
+
+}  // namespace asc
+
+#endif  // CANN_ASC_STL_ASC_LAUNCH
