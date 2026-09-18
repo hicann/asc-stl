@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,12 +58,16 @@ enum class __tuple_leaf_specialization {
     __empty_non_final,
 };
 
-// 2026-09-16 根因修复（tuple 债二）：__tuple_impl 的递归实现以 __tuple_impl<> 作空尾终止基。
-// 空类型叶（__empty_non_final）私有继承元素以做 EBO——当元素本身是元组（tuple<tuple<空>...>、
-// bind_back 的 tuple<fn, tuple<closure>> 等）时，内层元组的 __tuple_impl<> 会经由
-// 「叶 → 元素 → 内层 impl」链成为外层 impl 的第二个子对象，使 __base_t 转换产生歧义基类。
-// __tuple_impl 以本标记为基，选择器对「已派生标记的元素」退回成员存储，切断第二条子对象路径；
-// 代价仅是「元组作元素」这一种情形不再 EBO（std 对此同样无布局保证）。
+// The recursive __tuple_impl uses the empty __tuple_impl<> as its terminating base.
+// An empty-type leaf (the __empty_non_final path) privately inherits its element for
+// EBO — when the element is itself a tuple (tuple<tuple<empty>...>, bind_back's
+// tuple<fn, tuple<closure>>, etc.), the inner tuple's __tuple_impl<> reaches the
+// outer impl as a second base subobject through the leaf -> element -> inner-impl
+// chain, making the __base_t conversion ambiguous. Marking __tuple_impl with this
+// base and making the leaf selector fall back to member storage for elements derived
+// from the marker cuts that second subobject path; the cost is only that
+// tuple-as-element no longer gets EBO (std::tuple gives no layout guarantee there
+// either).
 struct __tuple_impl_base {};
 
 template <class _Tp>
@@ -167,12 +171,14 @@ public:
     }
 };
 
-// Synthesize assignment for reference and const types.
-// 2026-09 根因修复：原实现继承 __default 特化并声明 move assignment，导致
-// 隐式 copy ctor 被 deleted（C++ 规则：声明 move assignment 删除隐式 copy ctor）。
-// tuple<int&&> 等引用元组在整个 __tuple_cat 链上一旦被按值传递即编译失败或产生
-// 悬垂。改为独立类（照 CCCL 做法）：自行存储 _Hp __value_，提供完整的拷贝/移动
-// 构造/赋值，语义与 __default 一致但附加 synthesize assignment。
+// Synthesize assignment for reference and const types. The previous form inherited
+// the __default specialization and declared move assignment, which deletes the
+// implicit copy constructor (declaring move assignment deletes it per the C++
+// rules); reference tuples such as tuple<int&&> then failed to compile or dangled
+// as soon as they were passed by value anywhere in the __tuple_cat chain. This is
+// now a standalone class that stores _Hp __value_ itself and provides the complete
+// copy/move construction and assignment set — same semantics as __default plus the
+// synthesized assignment.
 template <size_t _Ip, class _Hp>
 class __tuple_leaf<_Ip, _Hp, __tuple_leaf_specialization::__synthesize_assignment> {
     _Hp __value_;
@@ -233,8 +239,9 @@ public:
     CANN_ASC_STL_API constexpr __tuple_leaf(_Hp&& __x) : _Hp(::asc::std::move(__x))
     {}
 
-    // 约束模板赋值（对齐源侧）：非模板移动赋值会删除隐式拷贝构造，
-    // 导致含空类元素（如 range adaptor closure）的元组不可复制。
+    // Constrained template assignment (mirrors the reference): a non-template move
+    // assignment would delete the implicit copy constructor and make tuples holding
+    // empty-class elements (e.g. range adaptor closures) non-copyable.
     template <class _Tp, enable_if_t<is_assignable_v<_Hp&, const _Tp&>, int> = 0>
     CANN_ASC_STL_API __tuple_leaf& operator=(const _Tp& __x) noexcept(is_nothrow_assignable_v<_Hp&, const _Tp&>)
     {

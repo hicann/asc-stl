@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 湖北多样性算力应用创新究院 (Hubei Institute for Heterogeneous Computing Applications)
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,8 +68,9 @@ template <class _Tp>
 inline constexpr bool __tuple_like_v = __tuple_like_ext<remove_cvref_t<_Tp>>;
 
 //! @brief Concept constraining tuple-like types with exactly two elements.
-// 2026-09-16 修复：tuple_size<T> 对未特化类型（如 asc::std::byte）不完整，直接取 ::value
-// 是硬错误；源侧经 requires-expression 天然 SFINAE。这里用检测惯用法等价替代。
+// tuple_size<T> is incomplete for unspecialized types (e.g. asc::std::byte), so
+// reading ::value directly is a hard error; the reference gets natural SFINAE from a
+// requires-expression. The detection-idiom form below is the equivalent.
 template <class _Tp, class = void>
 inline constexpr bool __pair_like_size_is_2 = false;
 
