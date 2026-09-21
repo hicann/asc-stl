@@ -25,9 +25,10 @@
 // The true pure-SIMT wrapper mode (-cce-enable-puresimt + the dpp runtime
 // wrapper __clang_dpp_runtime_wrapper.h, which provides its own placement
 // forms — redeclaring them there would conflict) is detected via
-// CANN_ASC_STL_DETAIL_PURE_SIMT_TU(). __NPU_COMPILER_INTERNAL_PURE_SIMT__ is
-// NOT predefined by the shipped CANN toolchains in any mode and is no longer
-// consulted. Ordinary kernel mode (with
+// CANN_ASC_STL_DETAIL_PURE_SIMT_TU(). __NPU_COMPILER_INTERNAL_PURE_SIMT__ was
+// dead on 9.0/9.2 toolchains (revalidated 2026-09-19: alive on 9.3.0 exactly per
+// documentation); the combined discriminator stays for version portability.
+// Ordinary kernel mode (with
 // or without __CCE_AICORE_SUPPORT_SIMT__) provides no placement forms, so the
 // overloads must be declared there for in-place construction to compile.
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !CANN_ASC_STL_DETAIL_PURE_SIMT_TU()

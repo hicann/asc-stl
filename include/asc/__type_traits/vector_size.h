@@ -79,7 +79,8 @@ inline constexpr ::asc::std::size_t vector_size_v<::float2> = 2;
 #if CANN_ASC_STL_DETAIL_HAS_SIMT_DIM3()
 // dim3 拼写随模式：普通 kernel 模式为 CCE 内建命名空间 cce::dim3；纯 SIMT TU
 // 为包装层全局 ::dim3（与 __tuple_dir/vector_types.h 同款条件化）。判据用
-// PURE_SIMT_TU()：__NPU_COMPILER_INTERNAL_PURE_SIMT__ 任何模式都不预定义；
+// PURE_SIMT_TU()：__NPU_COMPILER_INTERNAL_PURE_SIMT__ 在 9.0/9.2 工具链上曾为
+// 死宏（2026-09-19 复验：9.3.0 起按文档激活）；组合判据保持版本可移植；
 // PURE_SIMT_COMPILATION() 的宽宏在普通 kernel 模式也为真。
 #if CANN_ASC_STL_DETAIL_PURE_SIMT_TU()
 template <>

@@ -25,7 +25,15 @@ CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER
 
 #define CANN_ASC_STL_DETAIL_ACCL_HAS_CXX20_CHRONO_LITERALS() \
     (!CANN_ASC_STL_DETAIL_COMPILER(CLANG) || CANN_ASC_STL_DETAIL_STD_VER >= 2020)
+// 单调时钟可用性（2026-09-19 真机复验改写）：宿主侧 steady_clock 委托
+// ::std::chrono 的实现完整且一直在树上，此前整体置 0 使其不可达——历史
+// "无单调时钟后端"的主张不成立。设备侧 simt_api 提供 __asc_simt_vf::clock()
+// 且真机单调性实证（两次采样 delta>0），其接入作为独立后续项，暂保持关闭。
+#if CANN_ASC_STL_DETAIL_HOSTED()
+#define CANN_ASC_STL_DETAIL_ACCL_HAS_MONOTONIC_CLOCK() 1
+#else
 #define CANN_ASC_STL_DETAIL_ACCL_HAS_MONOTONIC_CLOCK() 0
+#endif
 #define CANN_ASC_STL_DETAIL_ACCL_HAS_SPACESHIP_OPERATOR() 0
 
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(__cpp_aligned_new) || __cpp_aligned_new < 201606

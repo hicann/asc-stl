@@ -58,6 +58,12 @@ static void expect_true(const char* expr, bool cond)
 #define EXPECTED_CONSTEXPR_COMPLEX 0
 #endif
 
+#if CANN_ASC_STL_DETAIL_HOSTED()
+#define EXPECTED_MONOTONIC_CLOCK 1
+#else
+#define EXPECTED_MONOTONIC_CLOCK 0
+#endif
+
 CANN_ASC_STL_DETAIL_ACCL_DIAGNOSE_WARNING(false, "test warning")
 static int diagnose_warning_probe()
 {
@@ -73,7 +79,8 @@ static int diagnose_error_probe()
 static void check_fixed_value_macros()
 {
     // ---- Fixed-value macros (always 0 in ASC-STL) ----
-    expect_eq("CANN_ASC_STL_DETAIL_ACCL_HAS_MONOTONIC_CLOCK()", CANN_ASC_STL_DETAIL_ACCL_HAS_MONOTONIC_CLOCK(), 0);
+    expect_eq("CANN_ASC_STL_DETAIL_ACCL_HAS_MONOTONIC_CLOCK()", CANN_ASC_STL_DETAIL_ACCL_HAS_MONOTONIC_CLOCK(),
+        EXPECTED_MONOTONIC_CLOCK);
     expect_eq(
         "CANN_ASC_STL_DETAIL_ACCL_HAS_SPACESHIP_OPERATOR()", CANN_ASC_STL_DETAIL_ACCL_HAS_SPACESHIP_OPERATOR(), 0);
     expect_eq("CANN_ASC_STL_DETAIL_ACCL_HAS_SIMD_F32X2_INTRINSICS()",

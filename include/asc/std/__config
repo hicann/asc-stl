@@ -24,12 +24,13 @@
 // The SIMT compilation mode is flagged differently per target arch:
 // __NPU_COMPILER_INTERNAL_PURE_SIMT__ / __ENABLE_ASC_PURESIMT__ on the 950
 // family, __CCE_AICORE_SUPPORT_SIMT__ on others. Treat any of them as SIMT.
-// NOTE: __NPU_COMPILER_INTERNAL_PURE_SIMT__ is predefined by the shipped CANN
-// toolchains in NO mode at all (host / ordinary kernel compile /
-// -cce-enable-puresimt with the dpp runtime wrapper). It is kept below only
-// as a harmless belt-and-braces term; the live discriminators are __CCE__ /
-// __CCE_AICORE_SUPPORT_SIMT__ (ordinary kernel mode) and
-// __ENABLE_ASC_PURESIMT__ (explicit user opt-in).
+// NOTE (revalidated 2026-09-19, CANN 9.3.0): __NPU_COMPILER_INTERNAL_PURE_SIMT__
+// is now predefined exactly where the documentation claims -- defined in pure
+// SIMT TUs, absent in mixed vector-kernel and host compilations (probe
+// c_b10_deadmacro). On 9.0/9.2 toolchains the macro was dead in every mode and
+// the discriminators below carried the load; the multi-term disjunction stays
+// as the version-portable form, with the macro as the first-class pure-SIMT
+// signal on current toolchains.
 #if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) || defined(__CCE_AICORE_SUPPORT_SIMT__) || \
     defined(__ENABLE_ASC_PURESIMT__)
 #define CANN_ASC_STL_DETAIL_COMPILER_CCE 1
