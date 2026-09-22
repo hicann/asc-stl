@@ -31,7 +31,7 @@
 
 - [README.md](README.md)：项目说明、能力域总览与版本状态；
 - [产品路线图](docs/roadmap/ROADMAP.md)：2026 年 10 月起双周发布计划与各版本能力范围；
-- [v1.0.0 细分路线图](docs/roadmap/ROADMAP-v1.0.0.md)：C++ 标准库能力全量的条目级交付内容；
+- [v1.0.0 细分路线图](docs/roadmap/ROADMAP-v1.0.0.md)：C++ 标准库能力全量的条目级说明；
 - API 参考文档（待定）。
 
 欢迎对以上资料进行纠错、补充和完善。
