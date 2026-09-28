@@ -1,0 +1,702 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_STD_ALGORITHM
+#define CANN_ASC_STL_ASC_STD_ALGORITHM
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/std/__algorithm/adjacent_find.h>
+#include <asc/std/__algorithm/all_of.h>
+#include <asc/std/__algorithm/any_of.h>
+#include <asc/std/__algorithm/binary_search.h>
+#include <asc/std/__algorithm/copy.h>
+#include <asc/std/__algorithm/copy_backward.h>
+#include <asc/std/__algorithm/copy_if.h>
+#include <asc/std/__algorithm/copy_n.h>
+#include <asc/std/__algorithm/count.h>
+#include <asc/std/__algorithm/count_if.h>
+#include <asc/std/__algorithm/device_policy.h>
+#include <asc/std/__algorithm/equal.h>
+#include <asc/std/__algorithm/equal_range.h>
+#include <asc/std/__algorithm/fill.h>
+#include <asc/std/__algorithm/fill_n.h>
+#include <asc/std/__algorithm/find.h>
+#include <asc/std/__algorithm/find_end.h>
+#include <asc/std/__algorithm/find_first_of.h>
+#include <asc/std/__algorithm/find_if.h>
+#include <asc/std/__algorithm/find_if_not.h>
+#include <asc/std/__algorithm/for_each.h>
+#include <asc/std/__algorithm/for_each_n.h>
+#include <asc/std/__algorithm/generate.h>
+#include <asc/std/__algorithm/generate_n.h>
+#include <asc/std/__algorithm/in_fun_result.h>
+#include <asc/std/__algorithm/includes.h>
+#include <asc/std/__algorithm/inplace_merge.h>
+#include <asc/std/__algorithm/is_heap.h>
+#include <asc/std/__algorithm/is_heap_until.h>
+#include <asc/std/__algorithm/is_partitioned.h>
+#include <asc/std/__algorithm/is_permutation.h>
+#include <asc/std/__algorithm/is_sorted.h>
+#include <asc/std/__algorithm/is_sorted_until.h>
+#include <asc/std/__algorithm/iter_swap.h>
+#include <asc/std/__algorithm/lexicographical_compare.h>
+#include <asc/std/__algorithm/lower_bound.h>
+#include <asc/std/__algorithm/make_heap.h>
+#include <asc/std/__algorithm/max.h>
+#include <asc/std/__algorithm/max_element.h>
+#include <asc/std/__algorithm/merge.h>
+#include <asc/std/__algorithm/min.h>
+#include <asc/std/__algorithm/min_element.h>
+#include <asc/std/__algorithm/minmax.h>
+#include <asc/std/__algorithm/minmax_element.h>
+#include <asc/std/__algorithm/mismatch.h>
+#include <asc/std/__algorithm/move.h>
+#include <asc/std/__algorithm/move_backward.h>
+#include <asc/std/__algorithm/next_permutation.h>
+#include <asc/std/__algorithm/none_of.h>
+#include <asc/std/__algorithm/nth_element.h>
+#include <asc/std/__algorithm/partial_sort.h>
+#include <asc/std/__algorithm/partial_sort_copy.h>
+#include <asc/std/__algorithm/partition.h>
+#include <asc/std/__algorithm/partition_copy.h>
+#include <asc/std/__algorithm/partition_point.h>
+#include <asc/std/__algorithm/pop_heap.h>
+#include <asc/std/__algorithm/prev_permutation.h>
+#include <asc/std/__algorithm/push_heap.h>
+#include <asc/std/__algorithm/ranges_find_if.h>
+#include <asc/std/__algorithm/ranges_find_if_not.h>
+#include <asc/std/__algorithm/ranges_for_each.h>
+#include <asc/std/__algorithm/ranges_for_each_n.h>
+#include <asc/std/__algorithm/ranges_min.h>
+#include <asc/std/__algorithm/ranges_min_element.h>
+#include <asc/std/__algorithm/remove.h>
+#include <asc/std/__algorithm/remove_copy.h>
+#include <asc/std/__algorithm/remove_copy_if.h>
+#include <asc/std/__algorithm/remove_if.h>
+#include <asc/std/__algorithm/replace.h>
+#include <asc/std/__algorithm/replace_copy.h>
+#include <asc/std/__algorithm/replace_copy_if.h>
+#include <asc/std/__algorithm/replace_if.h>
+#include <asc/std/__algorithm/reverse.h>
+#include <asc/std/__algorithm/reverse_copy.h>
+#include <asc/std/__algorithm/rotate.h>
+#include <asc/std/__algorithm/rotate_copy.h>
+#include <asc/std/__algorithm/sample.h>
+#include <asc/std/__algorithm/search.h>
+#include <asc/std/__algorithm/search_n.h>
+#include <asc/std/__algorithm/set_difference.h>
+#include <asc/std/__algorithm/set_intersection.h>
+#include <asc/std/__algorithm/set_symmetric_difference.h>
+#include <asc/std/__algorithm/set_union.h>
+#include <asc/std/__algorithm/shift_left.h>
+#include <asc/std/__algorithm/shift_right.h>
+#include <asc/std/__algorithm/shuffle.h>
+#include <asc/std/__algorithm/sort.h>
+#include <asc/std/__algorithm/sort_heap.h>
+#include <asc/std/__algorithm/stable_partition.h>
+#include <asc/std/__algorithm/stable_sort.h>
+#include <asc/std/__algorithm/swap_ranges.h>
+#include <asc/std/__algorithm/transform.h>
+#include <asc/std/__algorithm/unique.h>
+#include <asc/std/__algorithm/unique_copy.h>
+#include <asc/std/__algorithm/upper_bound.h>
+#include <asc/std/__exception/terminate.h>
+#include <asc/std/__string/char_traits.h>
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+template <class T, class Compare>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr const T& clamp(
+    const T& value, const T& lower, const T& upper, Compare compare)
+{
+    return compare(value, lower) ? lower : compare(upper, value) ? upper : value;
+}
+
+template <class T>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr const T& clamp(const T& value, const T& lower, const T& upper)
+{
+    return ::asc::std::clamp(value, lower, upper, __less{});
+}
+
+#if defined(__clang__) && defined(CANN_ASC_STL_USE_SIMT_LAUNCH)
+
+template <class Forward, class BinaryPredicate>
+CANN_ASC_STL_HOST_API Forward adjacent_find(
+    asc::device_policy policy, Forward first, Forward last, BinaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::adjacent_find(slot.backend_policy, first, last, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return first + slot.host_value;
+}
+
+template <class Input, class UnaryPredicate>
+CANN_ASC_STL_HOST_API bool all_of(asc::device_policy policy, Input first, Input last, UnaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::uint32_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::all_of(slot.backend_policy, first, last, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return slot.host_value != 0;
+}
+
+template <class Input, class UnaryPredicate>
+CANN_ASC_STL_HOST_API bool any_of(asc::device_policy policy, Input first, Input last, UnaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::uint32_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::any_of(slot.backend_policy, first, last, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return slot.host_value != 0;
+}
+
+template <class Input, class Output>
+CANN_ASC_STL_HOST_API Output copy(asc::device_policy policy, Input first, Input last, Output result)
+{
+    auto status = ::asc::parallel::copy(policy, first, last, result);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return result + (last - first);
+}
+
+template <class Input, class Output, class UnaryPredicate>
+CANN_ASC_STL_HOST_API Output copy_if(
+    asc::device_policy policy, Input first, Input last, Output result, UnaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::copy_if(slot.backend_policy, first, last, result, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return result + slot.host_value;
+}
+
+template <class Input, class Size, class Output>
+CANN_ASC_STL_HOST_API Output copy_n(asc::device_policy policy, Input first, Size count, Output result)
+{
+    auto status = ::asc::parallel::copy_n(policy, first, count, result);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return result + count;
+}
+
+template <class Input, class T>
+CANN_ASC_STL_HOST_API typename asc::std::iterator_traits<Input>::difference_type count(
+    asc::device_policy policy, Input first, Input last, const T& value)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::count(slot.backend_policy, first, last, value, slot.device_value);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return static_cast<typename iterator_traits<Input>::difference_type>(slot.host_value);
+}
+
+template <class Input, class UnaryPredicate>
+CANN_ASC_STL_HOST_API typename asc::std::iterator_traits<Input>::difference_type count_if(
+    asc::device_policy policy, Input first, Input last, UnaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::count_if(slot.backend_policy, first, last, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return static_cast<typename iterator_traits<Input>::difference_type>(slot.host_value);
+}
+
+template <class Input1, class Input2, class BinaryPredicate>
+CANN_ASC_STL_HOST_API bool equal(
+    asc::device_policy policy, Input1 first1, Input1 last1, Input2 first2, Input2 last2, BinaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::uint32_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status =
+        ::asc::parallel::equal(slot.backend_policy, first1, last1, first2, last2, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return slot.host_value != 0;
+}
+
+template <class Forward, class T>
+CANN_ASC_STL_HOST_API void fill(asc::device_policy policy, Forward first, Forward last, const T& value)
+{
+    auto status = ::asc::parallel::fill(policy, first, last, value);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+}
+
+template <class Output, class Size, class T>
+CANN_ASC_STL_HOST_API Output fill_n(asc::device_policy policy, Output first, Size count, const T& value)
+{
+    auto status = ::asc::parallel::fill_n(policy, first, count, value);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return first + count;
+}
+
+template <class Input, class T>
+CANN_ASC_STL_HOST_API Input find(asc::device_policy policy, Input first, Input last, const T& value)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::find(slot.backend_policy, first, last, value, slot.device_value);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return first + slot.host_value;
+}
+
+template <class Input, class UnaryPredicate>
+CANN_ASC_STL_HOST_API Input find_if(asc::device_policy policy, Input first, Input last, UnaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::find_if(slot.backend_policy, first, last, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return first + slot.host_value;
+}
+
+template <class Input, class UnaryPredicate>
+CANN_ASC_STL_HOST_API Input find_if_not(asc::device_policy policy, Input first, Input last, UnaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::find_if_not(slot.backend_policy, first, last, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return first + slot.host_value;
+}
+
+template <class Input, class Function>
+CANN_ASC_STL_HOST_API void for_each(asc::device_policy policy, Input first, Input last, Function function)
+{
+    auto status = ::asc::parallel::for_each(policy, first, last, function);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+}
+
+template <class Input, class Size, class Function>
+CANN_ASC_STL_HOST_API Input for_each_n(asc::device_policy policy, Input first, Size count, Function function)
+{
+    auto status = ::asc::parallel::for_each_n(policy, first, count, function);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return first + count;
+}
+
+template <class Forward, class Generator>
+CANN_ASC_STL_HOST_API void generate(asc::device_policy policy, Forward first, Forward last, Generator generator)
+{
+    auto status = ::asc::parallel::generate(policy, first, last, generator);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+}
+
+template <class Output, class Size, class Generator>
+CANN_ASC_STL_HOST_API Output generate_n(asc::device_policy policy, Output first, Size count, Generator generator)
+{
+    auto status = ::asc::parallel::generate_n(policy, first, count, generator);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return first + count;
+}
+
+template <class Random, class Compare>
+CANN_ASC_STL_HOST_API bool is_heap(asc::device_policy policy, Random first, Random last, Compare compare)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::uint32_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::is_heap(slot.backend_policy, first, last, slot.device_value, compare);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return slot.host_value != 0;
+}
+
+template <class Random, class Compare>
+CANN_ASC_STL_HOST_API Random is_heap_until(asc::device_policy policy, Random first, Random last, Compare compare)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::is_heap_until(slot.backend_policy, first, last, slot.device_value, compare);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return first + slot.host_value;
+}
+
+template <class Input, class UnaryPredicate>
+CANN_ASC_STL_HOST_API bool is_partitioned(asc::device_policy policy, Input first, Input last, UnaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::uint32_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::is_partitioned(slot.backend_policy, first, last, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return slot.host_value != 0;
+}
+
+template <class Forward, class Compare>
+CANN_ASC_STL_HOST_API bool is_sorted(asc::device_policy policy, Forward first, Forward last, Compare compare)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::uint32_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::is_sorted(slot.backend_policy, first, last, slot.device_value, compare);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return slot.host_value != 0;
+}
+
+template <class Forward, class Compare>
+CANN_ASC_STL_HOST_API Forward is_sorted_until(asc::device_policy policy, Forward first, Forward last, Compare compare)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::is_sorted_until(slot.backend_policy, first, last, slot.device_value, compare);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return first + slot.host_value;
+}
+
+template <class Forward, class Compare>
+CANN_ASC_STL_HOST_API Forward max_element(asc::device_policy policy, Forward first, Forward last, Compare compare)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::max_element(slot.backend_policy, first, last, slot.device_value, compare);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return first + slot.host_value;
+}
+
+template <class Input1, class Input2, class Output, class Compare>
+CANN_ASC_STL_HOST_API Output merge(
+    asc::device_policy policy, Input1 first1, Input1 last1, Input2 first2, Input2 last2, Output result, Compare compare)
+{
+    auto status = ::asc::parallel::merge(policy, first1, last1, first2, last2, result, compare);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return result + (last1 - first1) + (last2 - first2);
+}
+
+template <class Forward, class Compare>
+CANN_ASC_STL_HOST_API Forward min_element(asc::device_policy policy, Forward first, Forward last, Compare compare)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::min_element(slot.backend_policy, first, last, slot.device_value, compare);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return first + slot.host_value;
+}
+
+template <class Input1, class Input2, class BinaryPredicate>
+CANN_ASC_STL_HOST_API asc::std::pair<Input1, Input2> mismatch(
+    asc::device_policy policy, Input1 first1, Input1 last1, Input2 first2, Input2 last2, BinaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::detail::synchronous_indices>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::mismatch(
+        slot.backend_policy, first1, last1, first2, last2, slot.device_value->values, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return pair<Input1, Input2>(first1 + slot.host_value.values[0], first2 + slot.host_value.values[1]);
+}
+
+template <class Input, class UnaryPredicate>
+CANN_ASC_STL_HOST_API bool none_of(asc::device_policy policy, Input first, Input last, UnaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::uint32_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::none_of(slot.backend_policy, first, last, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return slot.host_value != 0;
+}
+
+template <class Forward, class UnaryPredicate>
+CANN_ASC_STL_HOST_API Forward partition(
+    asc::device_policy policy, Forward first, Forward last, UnaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::partition(slot.backend_policy, first, last, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return first + slot.host_value;
+}
+
+template <class Input, class Output1, class Output2, class UnaryPredicate>
+CANN_ASC_STL_HOST_API asc::std::pair<Output1, Output2> partition_copy(asc::device_policy policy, Input first,
+    Input last, Output1 true_result, Output2 false_result, UnaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::detail::synchronous_indices>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::partition_copy(
+        slot.backend_policy, first, last, true_result, false_result, slot.device_value->values, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return pair<Output1, Output2>(true_result + slot.host_value.values[0], false_result + slot.host_value.values[1]);
+}
+
+template <class Forward, class T>
+CANN_ASC_STL_HOST_API Forward remove(asc::device_policy policy, Forward first, Forward last, const T& value)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::remove(slot.backend_policy, first, last, value, slot.device_value);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return first + slot.host_value;
+}
+
+template <class Input, class Output, class T>
+CANN_ASC_STL_HOST_API Output remove_copy(
+    asc::device_policy policy, Input first, Input last, Output result, const T& value)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::remove_copy(slot.backend_policy, first, last, result, value, slot.device_value);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return result + slot.host_value;
+}
+
+template <class Input, class Output, class UnaryPredicate>
+CANN_ASC_STL_HOST_API Output remove_copy_if(
+    asc::device_policy policy, Input first, Input last, Output result, UnaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status =
+        ::asc::parallel::remove_copy_if(slot.backend_policy, first, last, result, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return result + slot.host_value;
+}
+
+template <class Forward, class UnaryPredicate>
+CANN_ASC_STL_HOST_API Forward remove_if(
+    asc::device_policy policy, Forward first, Forward last, UnaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::remove_if(slot.backend_policy, first, last, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return first + slot.host_value;
+}
+
+template <class Forward, class T>
+CANN_ASC_STL_HOST_API void replace(
+    asc::device_policy policy, Forward first, Forward last, const T& old_value, const T& new_value)
+{
+    auto status = ::asc::parallel::replace(policy, first, last, old_value, new_value);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+}
+
+template <class Input, class Output, class T>
+CANN_ASC_STL_HOST_API Output replace_copy(
+    asc::device_policy policy, Input first, Input last, Output result, const T& old_value, const T& new_value)
+{
+    auto status = ::asc::parallel::replace_copy(policy, first, last, result, old_value, new_value);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return result + (last - first);
+}
+
+template <class Input, class Output, class UnaryPredicate, class T>
+CANN_ASC_STL_HOST_API Output replace_copy_if(
+    asc::device_policy policy, Input first, Input last, Output result, UnaryPredicate predicate, const T& new_value)
+{
+    auto status = ::asc::parallel::replace_copy_if(policy, first, last, result, predicate, new_value);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return result + (last - first);
+}
+
+template <class Forward, class UnaryPredicate, class T>
+CANN_ASC_STL_HOST_API void replace_if(
+    asc::device_policy policy, Forward first, Forward last, UnaryPredicate predicate, const T& new_value)
+{
+    auto status = ::asc::parallel::replace_if(policy, first, last, predicate, new_value);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+}
+
+template <class Bidirectional>
+CANN_ASC_STL_HOST_API void reverse(asc::device_policy policy, Bidirectional first, Bidirectional last)
+{
+    auto status = ::asc::parallel::reverse(policy, first, last);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+}
+
+template <class Bidirectional, class Output>
+CANN_ASC_STL_HOST_API Output reverse_copy(
+    asc::device_policy policy, Bidirectional first, Bidirectional last, Output result)
+{
+    auto status = ::asc::parallel::reverse_copy(policy, first, last, result);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return result + (last - first);
+}
+
+template <class Forward>
+CANN_ASC_STL_HOST_API Forward rotate(asc::device_policy policy, Forward first, Forward middle, Forward last)
+{
+    auto status = ::asc::parallel::rotate(policy, first, middle, last);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return first + (last - middle);
+}
+
+template <class Forward, class Output>
+CANN_ASC_STL_HOST_API Output rotate_copy(
+    asc::device_policy policy, Forward first, Forward middle, Forward last, Output result)
+{
+    auto status = ::asc::parallel::rotate_copy(policy, first, middle, last, result);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return result + (last - first);
+}
+
+template <class Forward>
+CANN_ASC_STL_HOST_API Forward shift_left(asc::device_policy policy, Forward first, Forward last, asc::std::size_t count)
+{
+    auto status = ::asc::parallel::shift_left(policy, first, last, count);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return first + ((last - first) > count ? (last - first) - count : 0);
+}
+
+template <class Forward>
+CANN_ASC_STL_HOST_API Forward shift_right(
+    asc::device_policy policy, Forward first, Forward last, asc::std::size_t count)
+{
+    auto status = ::asc::parallel::shift_right(policy, first, last, count);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return first + ((last - first) > count ? count : (last - first));
+}
+
+template <class Random, class Compare>
+CANN_ASC_STL_HOST_API void sort(asc::device_policy policy, Random first, Random last, Compare compare)
+{
+    auto status = ::asc::parallel::sort(policy, first, last, compare);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+}
+
+template <class Bidirectional, class UnaryPredicate>
+CANN_ASC_STL_HOST_API Bidirectional stable_partition(
+    asc::device_policy policy, Bidirectional first, Bidirectional last, UnaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::stable_partition(slot.backend_policy, first, last, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return first + slot.host_value;
+}
+
+template <class Forward1, class Forward2>
+CANN_ASC_STL_HOST_API Forward2 swap_ranges(asc::device_policy policy, Forward1 first1, Forward1 last1, Forward2 first2)
+{
+    auto status = ::asc::parallel::swap_ranges(policy, first1, last1, first2);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return first2 + (last1 - first1);
+}
+
+template <class Input, class Output, class UnaryOperation>
+CANN_ASC_STL_HOST_API Output transform(
+    asc::device_policy policy, Input first, Input last, Output result, UnaryOperation operation)
+{
+    auto status = ::asc::parallel::transform(policy, first, last, result, operation);
+    if (!::asc::detail::finish_synchronous(policy, status).success())
+        ::asc::std::terminate();
+    return result + (last - first);
+}
+
+template <class Forward, class BinaryPredicate>
+CANN_ASC_STL_HOST_API Forward unique(asc::device_policy policy, Forward first, Forward last, BinaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::unique(slot.backend_policy, first, last, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return first + slot.host_value;
+}
+
+template <class Input, class Output, class BinaryPredicate>
+CANN_ASC_STL_HOST_API Output unique_copy(
+    asc::device_policy policy, Input first, Input last, Output result, BinaryPredicate predicate)
+{
+    auto slot = ::asc::detail::make_synchronous_slot<::asc::std::size_t>(policy);
+    if (!slot.status.success())
+        ::asc::std::terminate();
+    auto status = ::asc::parallel::unique_copy(slot.backend_policy, first, last, result, slot.device_value, predicate);
+    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
+        ::asc::std::terminate();
+    return result + slot.host_value;
+}
+
+#endif  // defined(__clang__) && defined(CANN_ASC_STL_USE_SIMT_LAUNCH)
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_ASC_STD_ALGORITHM

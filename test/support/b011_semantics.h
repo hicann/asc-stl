@@ -41,6 +41,7 @@
 #include <asc/std/__iterator/size.h>
 #include <asc/std/__ranges/enable_view.h>
 #include <asc/std/__type_traits/is_same.h>
+#include <asc/std/cmath>
 
 namespace asc_stl_b011_test {
 
@@ -120,7 +121,7 @@ CANN_ASC_STL_API constexpr int evaluate_constexpr() noexcept
 
 static_assert(evaluate_constexpr() == 0);
 
-CANN_ASC_STL_API unsigned evaluate_memory_failures() noexcept
+CANN_ASC_STL_API unsigned evaluate_runtime_failures() noexcept
 {
 #if !CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
     alignas(16) unsigned char storage[64] = {};
@@ -142,20 +143,6 @@ CANN_ASC_STL_API unsigned evaluate_memory_failures() noexcept
         temporary.space() == asc::memory_space::local;
     arena.reset();
     const bool lifecycle_ok = arena.used() == 0 && allocator == asc::arena_allocator<int>(arena);
-    unsigned failures = 0;
-    failures |= arena_ok ? 0U : 2U;
-    failures |= alias_ok ? 0U : 4U;
-    failures |= storage_ok ? 0U : 8U;
-    failures |= lifecycle_ok ? 0U : 16U;
-    return failures;
-#else
-    return 0;
-#endif
-}
-
-CANN_ASC_STL_API unsigned evaluate_transcendental_failures() noexcept
-{
-#if !CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
     int quotient = 0;
     const float nan = asc::std::__fp_nan<float>();
     const float infinity = asc::std::__fp_inf<float>();
@@ -173,30 +160,11 @@ CANN_ASC_STL_API unsigned evaluate_transcendental_failures() noexcept
         asc::std::atanhf(0.0F) == 0.0F;
     const bool roots_gamma_ok = asc::std::sqrt(9.0F) == 3.0F && asc::std::sqrtf(9.0F) == 3.0F &&
         asc::std::cbrt(8.0F) == 2.0F && asc::std::cbrtf(8.0F) == 2.0F && asc::std::tgamma(1.0F) == 1.0F &&
-        asc::std::tgammaf(1.0F) == 1.0F && asc::std::lgamma(1.0F) == 0.0F && asc::std::lgammaf(1.0F) == 0.0F;
+        asc::std::tgammaf(1.0F) == 1.0F && asc::std::lgamma(1.0F) == 0.0F && asc::std::lgammaf(1.0F) == 0.0F &&
+        asc::std::pow(2.0F, 3.0F) == 8.0F && asc::std::powf(2.0F, 3.0F) == 8.0F;
     const bool remainder_ok = asc::std::remainder(5.0F, 2.0F) == 1.0F && asc::std::remainderf(5.0F, 2.0F) == 1.0F &&
         asc::std::remquo(5.0F, 2.0F, &quotient) == 1.0F && asc::std::remquof(5.0F, 2.0F, &quotient) == 1.0F &&
         asc::std::nextafter(0.0F, 1.0F) > 0.0F && asc::std::nextafterf(0.0F, 1.0F) > 0.0F;
-    const bool sin_nan_ok = sin_nan != sin_nan;
-    const bool sqrt_nan_ok = sqrt_nan != sqrt_nan;
-    const bool sqrt_infinity_ok = asc::std::sqrt(infinity) == infinity;
-    unsigned failures = 0;
-    failures |= trig_ok ? 0U : 32U;
-    failures |= hyperbolic_ok ? 0U : 64U;
-    failures |= roots_gamma_ok ? 0U : 128U;
-    failures |= remainder_ok ? 0U : 256U;
-    failures |= sin_nan_ok ? 0U : 1024U;
-    failures |= sqrt_nan_ok ? 0U : 2048U;
-    failures |= sqrt_infinity_ok ? 0U : 4096U;
-    return failures;
-#else
-    return 0;
-#endif
-}
-
-CANN_ASC_STL_API unsigned evaluate_rounding_failures() noexcept
-{
-#if !CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
     const bool rounding_ok = asc::std::floor(2.75F) == 2.0F && asc::std::floorf(2.75F) == 2.0F &&
         asc::std::ceil(2.25F) == 3.0F && asc::std::ceilf(2.25F) == 3.0F && asc::std::trunc(-2.75F) == -2.0F &&
         asc::std::truncf(-2.75F) == -2.0F && asc::std::round(2.5F) == 3.0F && asc::std::roundf(-2.5F) == -3.0F &&
@@ -204,25 +172,38 @@ CANN_ASC_STL_API unsigned evaluate_rounding_failures() noexcept
         asc::std::nearbyintf(2.0F) == 2.0F && asc::std::lrint(2.0F) == 2L && asc::std::lrintf(2.0F) == 2L &&
         asc::std::llrint(2.0F) == 2LL && asc::std::llrintf(2.0F) == 2LL && asc::std::lround(2.5F) == 3L &&
         asc::std::lroundf(2.5F) == 3L && asc::std::llround(2.5F) == 3LL && asc::std::llroundf(2.5F) == 3LL;
+    const bool sin_nan_ok = sin_nan != sin_nan;
+    const bool sqrt_nan_ok = sqrt_nan != sqrt_nan;
+    const bool sqrt_infinity_ok = asc::std::sqrt(infinity) == infinity;
     const bool round_signed_zero_ok = asc::std::__fp_get_storage(asc::std::round(-0.0F)) == 0x80000000U;
     const bool floor_signed_zero_ok = asc::std::__fp_get_storage(asc::std::floor(-0.0F)) == 0x80000000U;
     const bool precision_ok = asc::std::fma(2.0F, 3.0F, 1.0F) == 7.0F && asc::std::fmaf(2.0F, 3.0F, 1.0F) == 7.0F;
+#else
+    const bool arena_ok = true;
+    const bool alias_ok = true;
+    const bool storage_ok = true;
+    const bool lifecycle_ok = true;
+#endif
     unsigned failures = 0;
+    failures |= evaluate_constexpr() == 0 ? 0U : 1U;
+    failures |= arena_ok ? 0U : 2U;
+    failures |= alias_ok ? 0U : 4U;
+    failures |= storage_ok ? 0U : 8U;
+    failures |= lifecycle_ok ? 0U : 16U;
+#if !CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+    failures |= trig_ok ? 0U : 32U;
+    failures |= hyperbolic_ok ? 0U : 64U;
+    failures |= roots_gamma_ok ? 0U : 128U;
+    failures |= remainder_ok ? 0U : 256U;
     failures |= rounding_ok ? 0U : 512U;
+    failures |= sin_nan_ok ? 0U : 1024U;
+    failures |= sqrt_nan_ok ? 0U : 2048U;
+    failures |= sqrt_infinity_ok ? 0U : 4096U;
     failures |= round_signed_zero_ok ? 0U : 8192U;
     failures |= floor_signed_zero_ok ? 0U : 16384U;
     failures |= precision_ok ? 0U : 32768U;
-    return failures;
-#else
-    return 0;
 #endif
-}
-
-CANN_ASC_STL_API unsigned evaluate_runtime_failures() noexcept
-{
-    const unsigned constexpr_failures = evaluate_constexpr() == 0 ? 0U : 1U;
-    return constexpr_failures | evaluate_memory_failures() | evaluate_transcendental_failures() |
-        evaluate_rounding_failures();
+    return failures;
 }
 
 CANN_ASC_STL_API int evaluate_runtime() noexcept

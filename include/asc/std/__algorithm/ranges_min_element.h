@@ -41,11 +41,10 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20() && !defined(CANN_ASC_STL_DETAIL_RANGES_MIN_ELEMENT_DEFINED)
-#define CANN_ASC_STL_DETAIL_RANGES_MIN_ELEMENT_DEFINED
 namespace ranges {
 struct __min_element_fn {
-    template <class Iterator, class Sentinel, class Projection = identity, class Compare = ranges::less>
+    template <class Iterator, class Sentinel, class Compare = ranges::less, class Projection = identity,
+        class = decltype(::asc::std::declval<Iterator&>() != ::asc::std::declval<Sentinel&>())>
     CANN_ASC_STL_API constexpr Iterator operator()(
         Iterator first, Sentinel last, Compare compare = {}, Projection projection = {}) const
     {
@@ -61,10 +60,17 @@ struct __min_element_fn {
         }
         return result;
     }
+    template <class Range, class Compare = ranges::less, class Projection = identity,
+        class = enable_if_t<is_invocable_v<Compare&, invoke_result_t<Projection&, iter_reference_t<iterator_t<Range>>>,
+            invoke_result_t<Projection&, iter_reference_t<iterator_t<Range>>>>>>
+    CANN_ASC_STL_API constexpr borrowed_iterator_t<Range> operator()(
+        Range&& range, Compare compare = {}, Projection projection = {}) const
+    {
+        return (*this)(ranges::begin(range), ranges::end(range), compare, projection);
+    }
 };
 inline constexpr __min_element_fn min_element{};
 }  // namespace ranges
-#endif
 
 CANN_ASC_STL_END_NAMESPACE
 

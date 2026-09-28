@@ -1,0 +1,310 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_STD_ATOMIC
+#define CANN_ASC_STL_ASC_STD_ATOMIC
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/std/__atomic/atomic.h>
+#include <asc/std/__atomic/atomic_flag.h>
+#include <asc/std/__atomic/atomic_ref.h>
+#include <asc/std/__atomic/backend.h>
+#include <asc/std/__atomic/memory_order.h>
+
+#define CANN_ASC_STL_ATOMIC_BOOL_LOCK_FREE 2
+#define CANN_ASC_STL_ATOMIC_CHAR_LOCK_FREE 2
+#define CANN_ASC_STL_ATOMIC_CHAR16_T_LOCK_FREE 2
+#define CANN_ASC_STL_ATOMIC_CHAR32_T_LOCK_FREE 2
+#define CANN_ASC_STL_ATOMIC_WCHAR_T_LOCK_FREE 2
+#define CANN_ASC_STL_ATOMIC_SHORT_LOCK_FREE 2
+#define CANN_ASC_STL_ATOMIC_INT_LOCK_FREE 2
+#define CANN_ASC_STL_ATOMIC_LONG_LOCK_FREE 2
+#define CANN_ASC_STL_ATOMIC_LLONG_LOCK_FREE 2
+#define CANN_ASC_STL_ATOMIC_POINTER_LOCK_FREE 0
+#define CANN_ASC_STL_ATOMIC_CHAR8_T_LOCK_FREE 2
+
+#define CANN_ASC_STL_ATOMIC_VAR_INIT(value) {value}
+#define CANN_ASC_STL_ATOMIC_FLAG_INIT \
+    {}
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+using atomic_bool = atomic<bool>;
+using atomic_char = atomic<char>;
+using atomic_schar = atomic<signed char>;
+using atomic_uchar = atomic<unsigned char>;
+using atomic_short = atomic<short>;
+using atomic_ushort = atomic<unsigned short>;
+using atomic_int = atomic<int>;
+using atomic_uint = atomic<unsigned int>;
+using atomic_long = atomic<long>;
+using atomic_ulong = atomic<unsigned long>;
+using atomic_llong = atomic<long long>;
+using atomic_ullong = atomic<unsigned long long>;
+using atomic_char16_t = atomic<char16_t>;
+using atomic_char32_t = atomic<char32_t>;
+using atomic_wchar_t = atomic<wchar_t>;
+#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+using atomic_char8_t = atomic<char8_t>;
+#endif
+using atomic_int8_t = atomic<__INT8_TYPE__>;
+using atomic_uint8_t = atomic<__UINT8_TYPE__>;
+using atomic_int16_t = atomic<__INT16_TYPE__>;
+using atomic_uint16_t = atomic<__UINT16_TYPE__>;
+using atomic_int32_t = atomic<__INT32_TYPE__>;
+using atomic_uint32_t = atomic<__UINT32_TYPE__>;
+using atomic_int64_t = atomic<__INT64_TYPE__>;
+using atomic_uint64_t = atomic<__UINT64_TYPE__>;
+using atomic_int_least8_t = atomic<__INT_LEAST8_TYPE__>;
+using atomic_uint_least8_t = atomic<__UINT_LEAST8_TYPE__>;
+using atomic_int_least16_t = atomic<__INT_LEAST16_TYPE__>;
+using atomic_uint_least16_t = atomic<__UINT_LEAST16_TYPE__>;
+using atomic_int_least32_t = atomic<__INT_LEAST32_TYPE__>;
+using atomic_uint_least32_t = atomic<__UINT_LEAST32_TYPE__>;
+using atomic_int_least64_t = atomic<__INT_LEAST64_TYPE__>;
+using atomic_uint_least64_t = atomic<__UINT_LEAST64_TYPE__>;
+using atomic_int_fast8_t = atomic<__INT_FAST8_TYPE__>;
+using atomic_uint_fast8_t = atomic<__UINT_FAST8_TYPE__>;
+using atomic_int_fast16_t = atomic<__INT_FAST16_TYPE__>;
+using atomic_uint_fast16_t = atomic<__UINT_FAST16_TYPE__>;
+using atomic_int_fast32_t = atomic<__INT_FAST32_TYPE__>;
+using atomic_uint_fast32_t = atomic<__UINT_FAST32_TYPE__>;
+using atomic_int_fast64_t = atomic<__INT_FAST64_TYPE__>;
+using atomic_uint_fast64_t = atomic<__UINT_FAST64_TYPE__>;
+using atomic_intptr_t = atomic<__INTPTR_TYPE__>;
+using atomic_uintptr_t = atomic<__UINTPTR_TYPE__>;
+using atomic_size_t = atomic<__SIZE_TYPE__>;
+using atomic_ptrdiff_t = atomic<__PTRDIFF_TYPE__>;
+using atomic_intmax_t = atomic<__INTMAX_TYPE__>;
+using atomic_uintmax_t = atomic<__UINTMAX_TYPE__>;
+using atomic_signed_lock_free = atomic<int>;
+using atomic_unsigned_lock_free = atomic<unsigned int>;
+
+template <class T>
+CANN_ASC_STL_API constexpr T kill_dependency(T value) noexcept
+{
+    return value;
+}
+
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+
+CANN_ASC_STL_SIMT_API void atomic_thread_fence(memory_order order) noexcept
+{
+    if (order == memory_order_relaxed) {
+        ::asc::detail::atomic_compiler_barrier();
+    } else if (order == memory_order_release) {
+        ::asc::detail::atomic_compiler_barrier();
+        asc_threadfence();
+        ::asc::detail::atomic_compiler_barrier();
+    } else {
+        // Addressless acquire/consume/acq_rel/seq_cst fences cannot reliably
+        // invalidate the consumer SIMT DCache, so the call traps explicitly.
+        ::asc::detail::atomic_trap();
+    }
+}
+
+#elif !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+
+inline void atomic_thread_fence(memory_order order) noexcept
+{
+    __atomic_thread_fence(static_cast<int>(order));
+}
+
+#endif
+
+template <class T>
+CANN_ASC_STL_API bool atomic_is_lock_free(const atomic<T>* object) noexcept
+{
+    return object->is_lock_free();
+}
+
+template <class T>
+CANN_ASC_STL_API void atomic_store(atomic<T>* object, T value) noexcept
+{
+    object->store(value);
+}
+
+template <class T>
+CANN_ASC_STL_API void atomic_store_explicit(atomic<T>* object, T value, memory_order order) noexcept
+{
+    object->store(value, order);
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_load(const atomic<T>* object) noexcept
+{
+    return object->load();
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_load_explicit(const atomic<T>* object, memory_order order) noexcept
+{
+    return object->load(order);
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_exchange(atomic<T>* object, T value) noexcept
+{
+    return object->exchange(value);
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_exchange_explicit(atomic<T>* object, T value, memory_order order) noexcept
+{
+    return object->exchange(value, order);
+}
+
+template <class T>
+CANN_ASC_STL_API bool atomic_compare_exchange_weak(atomic<T>* object, T* expected, T desired) noexcept
+{
+    return object->compare_exchange_weak(*expected, desired, memory_order_seq_cst, memory_order_seq_cst);
+}
+
+template <class T>
+CANN_ASC_STL_API bool atomic_compare_exchange_weak_explicit(
+    atomic<T>* object, T* expected, T desired, memory_order success, memory_order failure) noexcept
+{
+    return object->compare_exchange_weak(*expected, desired, success, failure);
+}
+
+template <class T>
+CANN_ASC_STL_API bool atomic_compare_exchange_strong(atomic<T>* object, T* expected, T desired) noexcept
+{
+    return object->compare_exchange_strong(*expected, desired, memory_order_seq_cst, memory_order_seq_cst);
+}
+
+template <class T>
+CANN_ASC_STL_API bool atomic_compare_exchange_strong_explicit(
+    atomic<T>* object, T* expected, T desired, memory_order success, memory_order failure) noexcept
+{
+    return object->compare_exchange_strong(*expected, desired, success, failure);
+}
+
+template <class T>
+CANN_ASC_STL_API void atomic_init(atomic<T>* object, T value) noexcept
+{
+    object->store(value, memory_order_relaxed);
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_fetch_add(atomic<T>* object, T value) noexcept
+{
+    return object->fetch_add(value);
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_fetch_add_explicit(atomic<T>* object, T value, memory_order order) noexcept
+{
+    return object->fetch_add(value, order);
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_fetch_sub(atomic<T>* object, T value) noexcept
+{
+    return object->fetch_sub(value);
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_fetch_sub_explicit(atomic<T>* object, T value, memory_order order) noexcept
+{
+    return object->fetch_sub(value, order);
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_fetch_and(atomic<T>* object, T value) noexcept
+{
+    return object->fetch_and(value);
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_fetch_and_explicit(atomic<T>* object, T value, memory_order order) noexcept
+{
+    return object->fetch_and(value, order);
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_fetch_or(atomic<T>* object, T value) noexcept
+{
+    return object->fetch_or(value);
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_fetch_or_explicit(atomic<T>* object, T value, memory_order order) noexcept
+{
+    return object->fetch_or(value, order);
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_fetch_xor(atomic<T>* object, T value) noexcept
+{
+    return object->fetch_xor(value);
+}
+
+template <class T>
+CANN_ASC_STL_API T atomic_fetch_xor_explicit(atomic<T>* object, T value, memory_order order) noexcept
+{
+    return object->fetch_xor(value, order);
+}
+
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION() || !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+
+// The concrete atomic_flag parameter makes these functions non-templates, so
+// they are compiled in every translation unit and must be absent in ordinary
+// AICore mode, where the atomic_flag members do not exist.
+CANN_ASC_STL_HOST_SIMT_API bool atomic_flag_test(const atomic_flag* object) noexcept
+{
+    return object->test();
+}
+
+CANN_ASC_STL_HOST_SIMT_API bool atomic_flag_test_explicit(const atomic_flag* object, memory_order order) noexcept
+{
+    return object->test(order);
+}
+
+CANN_ASC_STL_HOST_SIMT_API bool atomic_flag_test_and_set(atomic_flag* object) noexcept
+{
+    return object->test_and_set();
+}
+
+CANN_ASC_STL_HOST_SIMT_API bool atomic_flag_test_and_set_explicit(atomic_flag* object, memory_order order) noexcept
+{
+    return object->test_and_set(order);
+}
+
+CANN_ASC_STL_HOST_SIMT_API void atomic_flag_clear(atomic_flag* object) noexcept
+{
+    object->clear();
+}
+
+CANN_ASC_STL_HOST_SIMT_API void atomic_flag_clear_explicit(atomic_flag* object, memory_order order) noexcept
+{
+    object->clear(order);
+}
+
+#endif
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_ASC_STD_ATOMIC

@@ -1,0 +1,205 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_STD_FORMAT
+#define CANN_ASC_STL_ASC_STD_FORMAT
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/std/__format/format_integral.h>
+#include <asc/std/__format/format_string.h>
+#include <asc/std/__format/format_to.h>
+#include <asc/std/__format/format_to_n.h>
+#include <asc/std/__format/formatted_size.h>
+#include <asc/std/__format/formatters/bool.h>
+#include <asc/std/__format/formatters/char.h>
+#include <asc/std/__format/formatters/int.h>
+#include <asc/std/__format/formatters/str.h>
+#include <asc/std/__format/output_buffer.h>
+#include <asc/std/__format/validation.h>
+
+#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+namespace __format_detail {
+
+CANN_ASC_STL_API constexpr void write_text(output_buffer& buffer, input_pointer text) noexcept
+{
+    while (*text != '\0') {
+        buffer.put(*text++);
+    }
+}
+
+CANN_ASC_STL_API constexpr void write_argument(output_buffer& buffer, bool value, unsigned int, bool) noexcept
+{
+    write_text(buffer, value ? "true" : "false");
+}
+
+CANN_ASC_STL_API constexpr void write_argument(output_buffer& buffer, char value, unsigned int, bool) noexcept
+{
+    buffer.put(value);
+}
+
+CANN_ASC_STL_API constexpr void write_argument(output_buffer& buffer, const char* value, unsigned int, bool) noexcept
+{
+    while (*value != '\0') {
+        buffer.put(*value++);
+    }
+}
+
+CANN_ASC_STL_API constexpr void write_argument(
+    output_buffer& buffer, char* value, unsigned int base, bool upper) noexcept
+{
+    write_argument(buffer, static_cast<const char*>(value), base, upper);
+}
+
+template <__SIZE_TYPE__ Size>
+CANN_ASC_STL_API constexpr void write_argument(
+    output_buffer& buffer, const char (&value)[Size], unsigned int, bool) noexcept
+{
+    for (__SIZE_TYPE__ index = 0; index + 1 < Size; ++index) {
+        buffer.put(value[index]);
+    }
+}
+
+template <class T>
+CANN_ASC_STL_API constexpr void write_argument(output_buffer& buffer, T value, unsigned int base, bool upper) noexcept
+{
+    static_assert(is_integral<T>::value, "ASC-STL fixed-buffer format supports only integral values");
+    static_assert(
+        !is_same<T, bool>::value && !is_same<T, char>::value, "bool and char support only their default presentation");
+    char digits[65]{};
+    const __SIZE_TYPE__ count = integral_digits(digits, value, base, upper);
+    for (__SIZE_TYPE__ index = 0; index < count; ++index) {
+        buffer.put(digits[index]);
+    }
+}
+
+CANN_ASC_STL_API constexpr void render_tail(
+    output_buffer& buffer, input_pointer format, __SIZE_TYPE__ size, __SIZE_TYPE__ position) noexcept
+{
+    while (position < size) {
+        if (position + 1 < size && format[position] == '{' && format[position + 1] == '{') {
+            buffer.put('{');
+            position += 2;
+        } else if (position + 1 < size && format[position] == '}' && format[position + 1] == '}') {
+            buffer.put('}');
+            position += 2;
+        } else {
+            buffer.put(format[position++]);
+        }
+    }
+}
+
+template <class Argument, class... Rest>
+CANN_ASC_STL_API constexpr void render(output_buffer& buffer, input_pointer format, __SIZE_TYPE__ size,
+    __SIZE_TYPE__ position, Argument&& argument, Rest&&... rest) noexcept
+{
+    while (position < size) {
+        const char current = format[position++];
+        if (current == '{' && position < size && format[position] == '{') {
+            ++position;
+            buffer.put('{');
+            continue;
+        }
+        if (current == '}' && position < size && format[position] == '}') {
+            ++position;
+            buffer.put('}');
+            continue;
+        }
+        if (current != '{') {
+            buffer.put(current);
+            continue;
+        }
+        unsigned int base = 10;
+        bool upper = false;
+        if (position + 2 < size && format[position] == ':') {
+            const char presentation = format[position + 1];
+            position += 2;
+            base = presentation == 'x' || presentation == 'X' ?
+                16U :
+                (presentation == 'o' ? 8U : (presentation == 'b' ? 2U : 10U));
+            upper = presentation == 'X';
+        }
+        while (position < size && format[position] != '}') {
+            ++position;
+        }
+        if (position < size) {
+            ++position;
+        }
+        write_argument(buffer, static_cast<Argument&&>(argument), base, upper);
+        if constexpr (sizeof...(Rest) == 0) {
+            render_tail(buffer, format, size, position);
+        } else {
+            render(buffer, format, size, position, static_cast<Rest&&>(rest)...);
+        }
+        return;
+    }
+}
+
+template <class... Args>
+CANN_ASC_STL_API constexpr output_buffer render_all(
+    char* output, __SIZE_TYPE__ capacity, format_string<Args...> format, Args&&... args) noexcept
+{
+    output_buffer buffer{output, capacity, 0};
+    if constexpr (sizeof...(Args) == 0) {
+        render_tail(buffer, format.data(), format.size(), 0);
+    } else {
+        render(buffer, format.data(), format.size(), 0, static_cast<Args&&>(args)...);
+    }
+    return buffer;
+}
+
+}  // namespace __format_detail
+
+template <class... Args>
+CANN_ASC_STL_API constexpr char* format_to(char* output, format_string<Args...> format, Args&&... args) noexcept
+{
+    const auto result =
+        __format_detail::render_all(output, static_cast<__SIZE_TYPE__>(-1), format, static_cast<Args&&>(args)...);
+    return output + result.total;
+}
+
+template <class... Args>
+CANN_ASC_STL_API constexpr format_to_n_result<char*> format_to_n(
+    char* output, ptrdiff_t count, format_string<Args...> format, Args&&... args) noexcept
+{
+    const __SIZE_TYPE__ capacity = count < 0 ? 0 : static_cast<__SIZE_TYPE__>(count);
+    const auto result = __format_detail::render_all(output, capacity, format, static_cast<Args&&>(args)...);
+    const __SIZE_TYPE__ written = result.total < capacity ? result.total : capacity;
+    return {output + written, static_cast<ptrdiff_t>(result.total)};
+}
+
+template <class... Args>
+CANN_ASC_STL_API constexpr size_t formatted_size(format_string<Args...> format, Args&&... args) noexcept
+{
+    return __format_detail::render_all(nullptr, 0, format, static_cast<Args&&>(args)...).total;
+}
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_DETAIL_HAS_CXX20()
+
+#endif  // CANN_ASC_STL_ASC_STD_FORMAT

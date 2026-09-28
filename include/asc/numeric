@@ -1,0 +1,194 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_NUMERIC
+#define CANN_ASC_STL_ASC_NUMERIC
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__numeric/checked.h>
+
+namespace asc {
+
+namespace detail {
+template <class T>
+struct public_numeric_integer {
+    static constexpr bool value = false;
+};
+#define CANN_ASC_STL_DETAIL_PUBLIC_NUMERIC_INTEGER(Type) \
+    template <>                                          \
+    struct public_numeric_integer<Type> {                \
+        static constexpr bool value = true;              \
+    };
+CANN_ASC_STL_DETAIL_PUBLIC_NUMERIC_INTEGER(signed char)
+CANN_ASC_STL_DETAIL_PUBLIC_NUMERIC_INTEGER(unsigned char)
+CANN_ASC_STL_DETAIL_PUBLIC_NUMERIC_INTEGER(short)
+CANN_ASC_STL_DETAIL_PUBLIC_NUMERIC_INTEGER(unsigned short)
+CANN_ASC_STL_DETAIL_PUBLIC_NUMERIC_INTEGER(int)
+CANN_ASC_STL_DETAIL_PUBLIC_NUMERIC_INTEGER(unsigned int)
+CANN_ASC_STL_DETAIL_PUBLIC_NUMERIC_INTEGER(long)
+CANN_ASC_STL_DETAIL_PUBLIC_NUMERIC_INTEGER(unsigned long)
+CANN_ASC_STL_DETAIL_PUBLIC_NUMERIC_INTEGER(long long)
+CANN_ASC_STL_DETAIL_PUBLIC_NUMERIC_INTEGER(unsigned long long)
+#undef CANN_ASC_STL_DETAIL_PUBLIC_NUMERIC_INTEGER
+}  // namespace detail
+
+template <class T>
+struct overflow_result {
+    static_assert(detail::public_numeric_integer<T>::value, "ASC-STL checked numeric requires a standard integer type");
+    T value;
+    bool overflow;
+};
+
+template <class T>
+CANN_ASC_STL_API constexpr overflow_result<T> add_overflow(T left, T right) noexcept
+{
+    static_assert(detail::public_numeric_integer<T>::value, "ASC-STL checked numeric requires a standard integer type");
+    const auto result = detail::add_overflow_impl(left, right);
+    return {result.value, result.overflow};
+}
+template <class T>
+CANN_ASC_STL_API constexpr bool add_overflow(T left, T right, T& output) noexcept
+{
+    const auto result = ::asc::add_overflow(left, right);
+    output = result.value;
+    return result.overflow;
+}
+
+template <class T>
+CANN_ASC_STL_API constexpr overflow_result<T> sub_overflow(T left, T right) noexcept
+{
+    static_assert(detail::public_numeric_integer<T>::value, "ASC-STL checked numeric requires a standard integer type");
+    const auto result = detail::sub_overflow_impl(left, right);
+    return {result.value, result.overflow};
+}
+template <class T>
+CANN_ASC_STL_API constexpr bool sub_overflow(T left, T right, T& output) noexcept
+{
+    const auto result = ::asc::sub_overflow(left, right);
+    output = result.value;
+    return result.overflow;
+}
+
+template <class T>
+CANN_ASC_STL_API constexpr overflow_result<T> mul_overflow(T left, T right) noexcept
+{
+    static_assert(detail::public_numeric_integer<T>::value, "ASC-STL checked numeric requires a standard integer type");
+    const auto result = detail::mul_overflow_impl(left, right);
+    return {result.value, result.overflow};
+}
+template <class T>
+CANN_ASC_STL_API constexpr bool mul_overflow(T left, T right, T& output) noexcept
+{
+    const auto result = ::asc::mul_overflow(left, right);
+    output = result.value;
+    return result.overflow;
+}
+
+template <class T>
+CANN_ASC_STL_API constexpr overflow_result<T> div_overflow(T left, T right) noexcept
+{
+    static_assert(detail::public_numeric_integer<T>::value, "ASC-STL checked numeric requires a standard integer type");
+    const auto result = detail::div_overflow_impl(left, right);
+    return {result.value, result.overflow};
+}
+template <class T>
+CANN_ASC_STL_API constexpr bool div_overflow(T left, T right, T& output) noexcept
+{
+    const auto result = ::asc::div_overflow(left, right);
+    output = result.value;
+    return result.overflow;
+}
+
+template <class T>
+CANN_ASC_STL_API constexpr T saturating_add(T left, T right) noexcept
+{
+    static_assert(detail::public_numeric_integer<T>::value, "ASC-STL checked numeric requires a standard integer type");
+    return detail::saturating_add_impl(left, right).value;
+}
+template <class T>
+CANN_ASC_STL_API constexpr T saturating_sub(T left, T right) noexcept
+{
+    static_assert(detail::public_numeric_integer<T>::value, "ASC-STL checked numeric requires a standard integer type");
+    return detail::saturating_sub_impl(left, right).value;
+}
+template <class T>
+CANN_ASC_STL_API constexpr T saturating_mul(T left, T right) noexcept
+{
+    static_assert(detail::public_numeric_integer<T>::value, "ASC-STL checked numeric requires a standard integer type");
+    return detail::saturating_mul_impl(left, right).value;
+}
+template <class T>
+CANN_ASC_STL_API constexpr T saturating_div(T left, T right) noexcept
+{
+    static_assert(detail::public_numeric_integer<T>::value, "ASC-STL checked numeric requires a standard integer type");
+    return detail::saturating_div_impl(left, right).value;
+}
+
+template <class To, class From>
+CANN_ASC_STL_API constexpr overflow_result<To> overflow_cast(From value) noexcept
+{
+    static_assert(detail::public_numeric_integer<To>::value && detail::public_numeric_integer<From>::value,
+        "ASC-STL checked numeric requires standard integer source and destination types");
+    const To converted = static_cast<To>(value);
+    const bool sign_changed = (value < From{0}) != (converted < To{0});
+    const bool changed = static_cast<From>(converted) != value;
+    return {converted, sign_changed || changed};
+}
+
+template <class To, class From>
+CANN_ASC_STL_API constexpr To saturating_overflow_cast(From value) noexcept
+{
+    static_assert(detail::public_numeric_integer<To>::value && detail::public_numeric_integer<From>::value,
+        "ASC-STL checked numeric requires standard integer source and destination types");
+    const auto result = ::asc::overflow_cast<To>(value);
+    if (!result.overflow) {
+        return result.value;
+    }
+    return value < From{0} ? detail::checked_minimum<To>() : detail::checked_maximum<To>();
+}
+
+template <class To, class From>
+CANN_ASC_STL_API constexpr To narrow_cast(From value)
+{
+    static_assert(detail::public_numeric_integer<To>::value && detail::public_numeric_integer<From>::value,
+        "ASC-STL checked numeric requires standard integer source and destination types");
+    return static_cast<To>(value);
+}
+
+template <class To, class From>
+CANN_ASC_STL_API constexpr To narrow(From value)
+{
+    static_assert(detail::public_numeric_integer<To>::value && detail::public_numeric_integer<From>::value,
+        "ASC-STL checked numeric requires standard integer source and destination types");
+    const auto result = ::asc::overflow_cast<To>(value);
+    if (result.overflow) {
+        __builtin_trap();
+    }
+    return result.value;
+}
+
+}  // namespace asc
+
+#endif  // CANN_ASC_STL_ASC_NUMERIC

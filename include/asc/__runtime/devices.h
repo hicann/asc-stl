@@ -28,10 +28,20 @@
 #endif
 
 #include <asc/std/cstdint>
+
+#if !defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) && defined(__has_include)
+#if __has_include(<acl/acl_rt.h>)
+#include <acl/acl_rt.h>
+#define CANN_ASC_STL_DETAIL_HAS_ACL_DEVICE_RUNTIME 1
+#endif
+#endif
+
+#if !defined(CANN_ASC_STL_DETAIL_HAS_ACL_DEVICE_RUNTIME)
 extern "C" int aclrtGetDeviceCount(asc::std::uint32_t*);
 extern "C" int aclrtGetDevice(int*);
 extern "C" int aclrtSetDevice(int);
 extern "C" int aclrtGetDeviceInfo(asc::std::uint32_t, int, asc::std::int64_t*);
+#endif
 namespace asc {
 enum class npu_arch : std::uint32_t { unknown = 0, ascend_2201 = 2201, ascend_3101 = 3101, ascend_3510 = 3510 };
 struct device_properties {
@@ -100,7 +110,13 @@ inline bool set_current_device(device_ref device) noexcept
 }
 inline bool device_ref::properties(device_properties& output) const noexcept
 {
+#if defined(CANN_ASC_STL_DETAIL_HAS_ACL_DEVICE_RUNTIME)
+    constexpr aclrtDevAttr attrs[] = {ACL_DEV_ATTR_AICORE_CORE_NUM, ACL_DEV_ATTR_VECTOR_CORE_NUM,
+        ACL_DEV_ATTR_WARP_SIZE, ACL_DEV_ATTR_MAX_THREADS_PER_BLOCK, ACL_DEV_ATTR_UBUF_PER_VECTOR_CORE,
+        ACL_DEV_ATTR_TOTAL_GLOBAL_MEM_SIZE, ACL_DEV_ATTR_L2_CACHE_SIZE, ACL_DEV_ATTR_NPU_ARCH};
+#else
     constexpr int attrs[] = {101, 201, 202, 209, 204, 301, 302, 601};
+#endif
     std::int64_t values[8]{};
     for (std::uint32_t i = 0; i < 8; ++i)
         if (::aclrtGetDeviceInfo(ordinal_, attrs[i], &values[i]) != 0 || values[i] < 0)
@@ -122,5 +138,9 @@ inline bool device_ref::properties(device_properties& output) const noexcept
     return true;
 }
 }  // namespace asc
+
+#if defined(CANN_ASC_STL_DETAIL_HAS_ACL_DEVICE_RUNTIME)
+#undef CANN_ASC_STL_DETAIL_HAS_ACL_DEVICE_RUNTIME
+#endif
 
 #endif  // CANN_ASC_STL_ASC___RUNTIME_DEVICES_H

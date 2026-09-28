@@ -19,7 +19,7 @@ repos:
         name: Add Apache-2.0 license header
         entry: python scripts/add_license_header.py
         language: system
-        files: \.(cpp|cc|cxx|h|hpp|cuh|py|sh|cmake|cpp\.in)$|(^|/)CMakeLists\.txt$|(^|/)__config$
+        files: \.(asc|cpp|cc|cxx|h|hpp|cuh|py|sh|cmake|cmake\.in|cpp\.in)$|(^|/)CMakeLists\.txt$|(^|/)__config$
         stages: [pre-commit]
 
       - id: asc-stl-style-check
@@ -28,4 +28,18 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
+        stages: [pre-commit]
+
+      - id: asc-stl-python-logging
+        name: ASC-STL Python logging check
+        entry: python scripts/check_python_logging.py
+        language: system
+        files: \.py$
+        stages: [pre-commit]
+
+      - id: asc-stl-python-codecheck
+        name: ASC-STL Python CodeCheck mirror
+        entry: python scripts/check_python_codecheck.py
+        language: system
+        files: \.py$
         stages: [pre-commit]

@@ -40,7 +40,7 @@
 #include <asc/std/__utility/forward_like.h>
 #include <asc/std/cstddef>
 
-#include "core_consumers.h"
+int asc_stl_type_transform_consumer_b();
 
 namespace {
 struct member_host {};

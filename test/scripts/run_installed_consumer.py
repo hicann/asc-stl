@@ -34,22 +34,22 @@ def run(command: list[str], *, cwd: Path | None = None) -> None:
 
 
 def install_product(source: Path, compiler: str, temporary: Path) -> Path:
-    product_build = temporary / "product-build"
+    build = temporary / "product-build"
     prefix = temporary / "prefix"
     run([
-        "cmake", "-S", str(source), "-B", str(product_build), "-DBUILD_TESTING=OFF",
+        "cmake", "-S", str(source), "-B", str(build), "-DBUILD_TESTING=OFF",
         f"-DCMAKE_CXX_COMPILER={compiler}", f"-DCMAKE_INSTALL_PREFIX={prefix}",
     ])
-    run(["cmake", "--build", str(product_build)])
-    run(["cmake", "--install", str(product_build)])
+    run(["cmake", "--build", str(build)])
+    run(["cmake", "--install", str(build)])
     return prefix
 
 
 def validate_installed_headers(prefix: Path, expected: set[str]) -> Path:
-    installed_root = prefix / "include"
+    root = prefix / "include"
     installed = {
-        path.relative_to(installed_root).as_posix()
-        for path in (installed_root / "asc").rglob("*")
+        path.relative_to(root).as_posix()
+        for path in (root / "asc").rglob("*")
         if path.is_file() and not path.name.startswith(".")
     }
     if installed != expected:
@@ -57,7 +57,7 @@ def validate_installed_headers(prefix: Path, expected: set[str]) -> Path:
             f"installed Header mismatch: missing={sorted(expected - installed)}, "
             f"extra={sorted(installed - expected)}"
         )
-    return installed_root
+    return root
 
 
 def run_cxx20_consumer(consumer: Path, compiler: str, prefix: Path, temporary: Path) -> None:
@@ -71,17 +71,16 @@ def run_cxx20_consumer(consumer: Path, compiler: str, prefix: Path, temporary: P
     run([str(build / "asc_stl_installed_consumer")])
 
 
-def run_cxx17_consumer(compiler: str, installed_root: Path, headers: list[str], temporary: Path) -> None:
+def run_cxx17_consumer(compiler: str, root: Path, headers: list[str], temporary: Path) -> None:
     source = temporary / "installed-cxx17.cpp"
     source.write_text(
         "".join(f"#include <{header}>\n" for header in headers)
         + """
 static_assert(__cplusplus >= 201703L && __cplusplus < 202002L, "expected C++17 mode");
-static_assert(asc::determinism::run_to_run != asc::determinism::not_guaranteed);
-static_assert(asc::tie_break::prefer_smaller_index != asc::tie_break::prefer_larger_index);
+static_assert(asc::std::ratio_equal_v<asc::std::ratio<1, 2>, asc::std::ratio<2, 4>>);
 int main()
 {
-    return CHAR_BIT < 8;
+    return asc::std::source_location::current().line() == 0 ? 1 : 0;
 }
 """,
         encoding="utf-8",
@@ -89,7 +88,7 @@ int main()
     program = temporary / "installed-cxx17"
     run([
         compiler, "-std=c++17", "-Wall", "-Wextra", "-Werror", "-pedantic",
-        f"-I{installed_root}", str(source), "-o", str(program),
+        f"-I{root}", str(source), "-o", str(program),
     ])
     run([str(program)])
 
@@ -102,9 +101,13 @@ def main() -> int:
     parser.add_argument("--metadata", type=Path, required=True)
     parser.add_argument("--compiler", required=True)
     args = parser.parse_args()
+
     metadata = json.loads(args.metadata.read_text(encoding="utf-8"))
     expected = {row["target"] for row in metadata["headers"]}
-    public = sorted(row["target"] for row in metadata["headers"] if row["visibility"] == "public")
+    public = sorted(
+        row["target"] for row in metadata["headers"] if row["visibility"] == "public"
+    )
+
     with tempfile.TemporaryDirectory(prefix="asc-stl-install-") as value:
         temporary = Path(value)
         prefix = install_product(args.source.resolve(), args.compiler, temporary)

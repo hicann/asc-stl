@@ -1,0 +1,701 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_MEMORY_POOL
+#define CANN_ASC_STL_ASC_MEMORY_POOL
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__memory/pools.h>
+#include <asc/memory_resource>
+#include <asc/stream>
+
+// Software memory pools with stream-event-safe reuse. The implementation is
+// the confirmed six-step backend contract: new blocks come from the direct
+// CANN allocator through the delivered memory resources; deallocate_async
+// records an event after earlier work in the supplied stream; a pending
+// block is not reused until its event reports completion; collect moves
+// completed blocks into the available cache; trim_to frees only completed
+// cached blocks; and a Host lock protects the pool metadata. There is no
+// implicit process-global default pool, no native asynchronous allocation
+// promise and no managed pool: a busy block may grow retained storage up to
+// the configured maximum-cache and release-threshold policy.
+namespace asc {
+
+class memory_pool_statistics {
+public:
+    CANN_ASC_STL_HOST constexpr memory_pool_statistics() noexcept = default;
+    CANN_ASC_STL_HOST constexpr memory_pool_statistics(
+        unsigned long long reserved_bytes, unsigned long long used_bytes, unsigned long long cached_bytes) noexcept
+        : reserved_bytes_(reserved_bytes), used_bytes_(used_bytes), cached_bytes_(cached_bytes)
+    {}
+    CANN_ASC_STL_HOST constexpr unsigned long long reserved_bytes() const noexcept
+    {
+        return reserved_bytes_;
+    }
+    CANN_ASC_STL_HOST constexpr unsigned long long used_bytes() const noexcept
+    {
+        return used_bytes_;
+    }
+    CANN_ASC_STL_HOST constexpr unsigned long long cached_bytes() const noexcept
+    {
+        return cached_bytes_;
+    }
+
+private:
+    unsigned long long reserved_bytes_{};
+    unsigned long long used_bytes_{};
+    unsigned long long cached_bytes_{};
+};
+
+struct device_memory_pool_config {
+    int device_ordinal{};
+    unsigned long long maximum_cached_bytes{};
+    unsigned long long release_threshold{};
+};
+
+struct pinned_memory_pool_config {
+    unsigned long long maximum_cached_bytes{};
+    unsigned long long release_threshold{};
+};
+
+namespace detail {
+
+// Host metadata lock: a bounded spinlock over the compiler atomic builtins so
+// the facade stays inside its planned dependency closure in every compilation
+// mode.
+class pool_metadata_lock {
+public:
+    CANN_ASC_STL_HOST_API explicit pool_metadata_lock(unsigned char& flag) noexcept : flag_(flag)
+    {
+        while (__atomic_test_and_set(&flag_, __ATOMIC_ACQUIRE)) {
+            while (__atomic_load_n(&flag_, __ATOMIC_RELAXED) != 0) {
+            }
+        }
+    }
+    CANN_ASC_STL_HOST_API ~pool_metadata_lock()
+    {
+        __atomic_clear(&flag_, __ATOMIC_RELEASE);
+    }
+    pool_metadata_lock(const pool_metadata_lock&) = delete;
+    pool_metadata_lock& operator=(const pool_metadata_lock&) = delete;
+
+private:
+    unsigned char& flag_;
+};
+
+enum class pool_block_state : unsigned char { empty, in_use, pending, cached };
+
+struct pool_block_entry {
+    void* pointer{};
+    ::asc::std::size_t bytes{};
+    ::asc::std::size_t alignment{};
+    event retirement_event{};
+    pool_block_state state{pool_block_state::empty};
+};
+
+constexpr ::asc::std::size_t pool_table_capacity = 64;
+
+enum class pool_domain : unsigned char { device, pinned };
+
+CANN_ASC_STL_HOST_API execution_status pool_allocate(
+    pool_domain domain, void** output, ::asc::std::size_t bytes, ::asc::std::size_t alignment, int device_ordinal)
+{
+    if (domain == pool_domain::device) {
+        device_memory_resource resource{device_ordinal};
+        return resource.allocate(output, bytes, alignment);
+    }
+    pinned_memory_resource resource{};
+    return resource.allocate(output, bytes, alignment);
+}
+
+CANN_ASC_STL_HOST_API execution_status pool_deallocate(
+    pool_domain domain, void* pointer, ::asc::std::size_t bytes, ::asc::std::size_t alignment, int device_ordinal)
+{
+    if (domain == pool_domain::device) {
+        device_memory_resource resource{device_ordinal};
+        return resource.deallocate(pointer, bytes, alignment);
+    }
+    pinned_memory_resource resource{};
+    return resource.deallocate(pointer, bytes, alignment);
+}
+
+class memory_pool_core {
+public:
+    CANN_ASC_STL_HOST_API explicit memory_pool_core(pool_domain domain) noexcept : domain_(domain)
+    {}
+    memory_pool_core(const memory_pool_core&) = delete;
+    memory_pool_core& operator=(const memory_pool_core&) = delete;
+    CANN_ASC_STL_HOST_API memory_pool_core(memory_pool_core&& other) noexcept
+    {
+        move_from(other);
+    }
+    CANN_ASC_STL_HOST_API memory_pool_core& operator=(memory_pool_core&& other) noexcept
+    {
+        if (this != &other) {
+            if (!close().success()) {
+                return *this;
+            }
+            move_from(other);
+        }
+        return *this;
+    }
+    CANN_ASC_STL_HOST_API ~memory_pool_core()
+    {
+        (void)close();
+    }
+
+    CANN_ASC_STL_HOST_API constexpr bool valid() const noexcept
+    {
+        return active_;
+    }
+    CANN_ASC_STL_HOST_API constexpr int device_ordinal() const noexcept
+    {
+        return device_ordinal_;
+    }
+
+    CANN_ASC_STL_HOST_API execution_status allocate_async(
+        void** output, ::asc::std::size_t bytes, ::asc::std::size_t alignment, stream_ref stream)
+    {
+        if (output == nullptr || *output != nullptr || bytes == 0 || !stream) {
+            return execution_status{execution_errc::invalid_argument};
+        }
+        pool_metadata_lock lock{metadata_lock_};
+        if (!active_) {
+            return execution_status{execution_errc::invalid_argument};
+        }
+        const execution_status collected = collect_completed();
+        if (!collected.success()) {
+            return collected;
+        }
+        if (void* reused = cache_.acquire(bytes, alignment, ~static_cast<unsigned long long>(0))) {
+            pool_block_entry* entry = find_by_pointer(reused);
+            if (entry != nullptr && entry->state == pool_block_state::cached) {
+                entry->state = pool_block_state::in_use;
+                *output = reused;
+                return execution_status{};
+            }
+            // A cache entry that no longer matches the block table is consumed
+            // (marked unavailable) and reported as a miss; the table is truth.
+        }
+        void* fresh = nullptr;
+        const execution_status allocated = pool_allocate(domain_, &fresh, bytes, alignment, device_ordinal_);
+        if (!allocated.success()) {
+            return allocated;
+        }
+        pool_block_entry* slot = find_empty();
+        if (slot == nullptr) {
+            (void)pool_deallocate(domain_, fresh, bytes, alignment, device_ordinal_);
+            return execution_status{execution_errc::insufficient_storage};
+        }
+        slot->pointer = fresh;
+        slot->bytes = bytes;
+        slot->alignment = alignment;
+        slot->state = pool_block_state::in_use;
+        *output = fresh;
+        return execution_status{};
+    }
+
+    CANN_ASC_STL_HOST_API execution_status deallocate_async(void* pointer, stream_ref stream)
+    {
+        if (pointer == nullptr || !stream) {
+            return execution_status{execution_errc::invalid_argument};
+        }
+        pool_metadata_lock lock{metadata_lock_};
+        if (!active_) {
+            return execution_status{execution_errc::invalid_argument};
+        }
+        pool_block_entry* entry = find_by_pointer(pointer);
+        if (entry == nullptr || entry->state != pool_block_state::in_use) {
+            return execution_status{execution_errc::invalid_argument};
+        }
+        if (!entry->retirement_event) {
+            if (!make_event(entry->retirement_event)) {
+                return execution_status{execution_errc::backend_error};
+            }
+        }
+        if (!entry->retirement_event.record(stream)) {
+            return execution_status{execution_errc::backend_error};
+        }
+        entry->state = pool_block_state::pending;
+        return execution_status{};
+    }
+
+    CANN_ASC_STL_HOST_API execution_status collect()
+    {
+        pool_metadata_lock lock{metadata_lock_};
+        if (!active_) {
+            return execution_status{execution_errc::invalid_argument};
+        }
+        return collect_completed();
+    }
+
+    CANN_ASC_STL_HOST_API execution_status trim_to(unsigned long long minimum_cached_bytes)
+    {
+        pool_metadata_lock lock{metadata_lock_};
+        if (!active_) {
+            return execution_status{execution_errc::invalid_argument};
+        }
+        const execution_status collected = collect_completed();
+        if (!collected.success()) {
+            return collected;
+        }
+        execution_status result{};
+        unsigned long long kept = 0;
+        detail::software_pool<pool_table_capacity> fresh_cache;
+        for (pool_block_entry& entry : table_) {
+            if (entry.state != pool_block_state::cached) {
+                continue;
+            }
+            if (kept < minimum_cached_bytes || kept + entry.bytes <= release_threshold_) {
+                if (fresh_cache.register_block(entry.pointer, entry.bytes, entry.alignment)) {
+                    kept += entry.bytes;
+                    continue;
+                }
+            }
+            const execution_status freed =
+                pool_deallocate(domain_, entry.pointer, entry.bytes, entry.alignment, device_ordinal_);
+            if (!freed.success()) {
+                result = freed;
+                if (fresh_cache.register_block(entry.pointer, entry.bytes, entry.alignment)) {
+                    kept += entry.bytes;
+                }
+                continue;
+            }
+            entry.pointer = nullptr;
+            entry.bytes = 0;
+            entry.alignment = 0;
+            entry.retirement_event = event{};
+            entry.state = pool_block_state::empty;
+        }
+        cache_ = fresh_cache;
+        return result;
+    }
+
+    CANN_ASC_STL_HOST_API memory_pool_statistics statistics()
+    {
+        pool_metadata_lock lock{metadata_lock_};
+        (void)collect_completed();
+        unsigned long long reserved = 0;
+        unsigned long long used = 0;
+        for (const pool_block_entry& entry : table_) {
+            if (entry.state == pool_block_state::empty) {
+                continue;
+            }
+            reserved += entry.bytes;
+            if (entry.state == pool_block_state::in_use) {
+                used += entry.bytes;
+            }
+        }
+        return memory_pool_statistics{reserved, used, reserved - used};
+    }
+
+    CANN_ASC_STL_HOST_API execution_status close()
+    {
+        pool_metadata_lock lock{metadata_lock_};
+        execution_status result{};
+        for (pool_block_entry& entry : table_) {
+            if (entry.state == pool_block_state::in_use) {
+                result = execution_status{execution_errc::invalid_argument};
+                continue;
+            }
+            if (entry.state == pool_block_state::empty) {
+                continue;
+            }
+            if (entry.retirement_event) {
+                if (!entry.retirement_event.close()) {
+                    if (result.success()) {
+                        result = execution_status{execution_errc::backend_error};
+                    }
+                    continue;
+                }
+            }
+            const execution_status freed =
+                pool_deallocate(domain_, entry.pointer, entry.bytes, entry.alignment, device_ordinal_);
+            if (!freed.success() && result.success()) {
+                result = freed;
+            }
+            if (!freed.success()) {
+                continue;
+            }
+            entry.pointer = nullptr;
+            entry.bytes = 0;
+            entry.alignment = 0;
+            entry.retirement_event = event{};
+            entry.state = pool_block_state::empty;
+        }
+        detail::software_pool<pool_table_capacity> retained_cache;
+        for (pool_block_entry& entry : table_) {
+            if (entry.state == pool_block_state::cached) {
+                (void)retained_cache.register_block(entry.pointer, entry.bytes, entry.alignment);
+            }
+        }
+        cache_ = retained_cache;
+        if (result.success()) {
+            active_ = false;
+        }
+        return result;
+    }
+
+    CANN_ASC_STL_HOST_API void activate(
+        int device_ordinal, unsigned long long maximum_cached_bytes, unsigned long long release_threshold)
+    {
+        device_ordinal_ = device_ordinal;
+        maximum_cached_bytes_ = maximum_cached_bytes;
+        release_threshold_ = release_threshold;
+        active_ = true;
+    }
+
+private:
+    CANN_ASC_STL_HOST_API void move_from(memory_pool_core& other)
+    {
+        domain_ = other.domain_;
+        device_ordinal_ = other.device_ordinal_;
+        maximum_cached_bytes_ = other.maximum_cached_bytes_;
+        release_threshold_ = other.release_threshold_;
+        active_ = other.active_;
+        for (::asc::std::size_t index = 0; index < pool_table_capacity; ++index) {
+            table_[index] = static_cast<pool_block_entry&&>(other.table_[index]);
+            other.table_[index].state = pool_block_state::empty;
+            other.table_[index].pointer = nullptr;
+            other.table_[index].bytes = 0;
+            other.table_[index].alignment = 0;
+        }
+        cache_ = static_cast<detail::software_pool<pool_table_capacity>&&>(other.cache_);
+        other.cache_ = detail::software_pool<pool_table_capacity>{};
+        other.active_ = false;
+    }
+
+    CANN_ASC_STL_HOST_API pool_block_entry* find_by_pointer(void* pointer)
+    {
+        for (pool_block_entry& entry : table_) {
+            if (entry.pointer == pointer && entry.state != pool_block_state::empty) {
+                return &entry;
+            }
+        }
+        return nullptr;
+    }
+    CANN_ASC_STL_HOST_API pool_block_entry* find_empty()
+    {
+        for (pool_block_entry& entry : table_) {
+            if (entry.state == pool_block_state::empty) {
+                return &entry;
+            }
+        }
+        return nullptr;
+    }
+    CANN_ASC_STL_HOST_API execution_status collect_completed()
+    {
+        execution_status result{};
+        for (pool_block_entry& entry : table_) {
+            if (entry.state != pool_block_state::pending) {
+                continue;
+            }
+            bool done = false;
+            if (!entry.retirement_event || !entry.retirement_event.is_done(done)) {
+                if (result.success()) {
+                    result = execution_status{execution_errc::backend_error};
+                }
+                continue;
+            }
+            if (done) {
+                if (!entry.retirement_event.close()) {
+                    if (result.success()) {
+                        result = execution_status{execution_errc::backend_error};
+                    }
+                    continue;
+                }
+                unsigned long long cached_bytes = 0;
+                for (const pool_block_entry& cached : table_) {
+                    if (cached.state == pool_block_state::cached) {
+                        cached_bytes += cached.bytes;
+                    }
+                }
+                if (cached_bytes <= maximum_cached_bytes_ && entry.bytes <= maximum_cached_bytes_ - cached_bytes &&
+                    cache_.register_block(entry.pointer, entry.bytes, entry.alignment)) {
+                    entry.state = pool_block_state::cached;
+                } else {
+                    // The configured byte limit or bounded table cache is
+                    // full: retire the completed block immediately.
+                    const execution_status freed =
+                        pool_deallocate(domain_, entry.pointer, entry.bytes, entry.alignment, device_ordinal_);
+                    if (!freed.success()) {
+                        if (result.success()) {
+                            result = freed;
+                        }
+                        entry.state = pool_block_state::cached;
+                        (void)cache_.register_block(entry.pointer, entry.bytes, entry.alignment);
+                        continue;
+                    }
+                    entry.pointer = nullptr;
+                    entry.bytes = 0;
+                    entry.alignment = 0;
+                    entry.retirement_event = event{};
+                    entry.state = pool_block_state::empty;
+                }
+            }
+        }
+        return result;
+    }
+
+    pool_domain domain_{pool_domain::device};
+    int device_ordinal_{};
+    unsigned long long maximum_cached_bytes_{};
+    unsigned long long release_threshold_{};
+    bool active_{false};
+    unsigned char metadata_lock_{0};
+    pool_block_entry table_[pool_table_capacity]{};
+    detail::software_pool<pool_table_capacity> cache_{};
+};
+
+}  // namespace detail
+
+class device_memory_pool_ref;
+class pinned_memory_pool_ref;
+
+class device_memory_pool {
+public:
+    CANN_ASC_STL_HOST static execution_status create(
+        device_memory_pool& output, const device_memory_pool_config& configuration) noexcept
+    {
+        if (configuration.device_ordinal < 0) {
+            return execution_status{execution_errc::invalid_argument};
+        }
+        const execution_status closed = output.core_.close();
+        if (!closed.success()) {
+            return closed;
+        }
+        output.core_ = detail::memory_pool_core{detail::pool_domain::device};
+        output.core_.activate(
+            configuration.device_ordinal, configuration.maximum_cached_bytes, configuration.release_threshold);
+        return execution_status{};
+    }
+    device_memory_pool() noexcept = default;
+    device_memory_pool(const device_memory_pool&) = delete;
+    device_memory_pool& operator=(const device_memory_pool&) = delete;
+    CANN_ASC_STL_HOST device_memory_pool(device_memory_pool&& other) noexcept = default;
+    CANN_ASC_STL_HOST device_memory_pool& operator=(device_memory_pool&& other) noexcept = default;
+    CANN_ASC_STL_HOST ~device_memory_pool() = default;
+
+    CANN_ASC_STL_HOST bool valid() const noexcept
+    {
+        return core_.valid();
+    }
+    CANN_ASC_STL_HOST int device_ordinal() const noexcept
+    {
+        return core_.device_ordinal();
+    }
+    CANN_ASC_STL_HOST execution_status allocate_async(
+        void** output, ::asc::std::size_t bytes, ::asc::std::size_t alignment, stream_ref stream) noexcept
+    {
+        return core_.allocate_async(output, bytes, alignment, stream);
+    }
+    CANN_ASC_STL_HOST execution_status deallocate_async(void* pointer, stream_ref stream) noexcept
+    {
+        return core_.deallocate_async(pointer, stream);
+    }
+    CANN_ASC_STL_HOST execution_status collect() noexcept
+    {
+        return core_.collect();
+    }
+    CANN_ASC_STL_HOST execution_status trim_to(unsigned long long minimum_cached_bytes) noexcept
+    {
+        return core_.trim_to(minimum_cached_bytes);
+    }
+    CANN_ASC_STL_HOST memory_pool_statistics statistics() noexcept
+    {
+        return core_.statistics();
+    }
+    CANN_ASC_STL_HOST execution_status close() noexcept
+    {
+        return core_.close();
+    }
+    CANN_ASC_STL_HOST device_memory_pool_ref as_ref() noexcept;
+
+private:
+    friend class device_memory_pool_ref;
+    detail::memory_pool_core core_{detail::pool_domain::device};
+};
+
+class pinned_memory_pool {
+public:
+    CANN_ASC_STL_HOST static execution_status create(
+        pinned_memory_pool& output, const pinned_memory_pool_config& configuration) noexcept
+    {
+        const execution_status closed = output.core_.close();
+        if (!closed.success()) {
+            return closed;
+        }
+        output.core_ = detail::memory_pool_core{detail::pool_domain::pinned};
+        output.core_.activate(-1, configuration.maximum_cached_bytes, configuration.release_threshold);
+        return execution_status{};
+    }
+    pinned_memory_pool() noexcept = default;
+    pinned_memory_pool(const pinned_memory_pool&) = delete;
+    pinned_memory_pool& operator=(const pinned_memory_pool&) = delete;
+    CANN_ASC_STL_HOST pinned_memory_pool(pinned_memory_pool&& other) noexcept = default;
+    CANN_ASC_STL_HOST pinned_memory_pool& operator=(pinned_memory_pool&& other) noexcept = default;
+    CANN_ASC_STL_HOST ~pinned_memory_pool() = default;
+
+    CANN_ASC_STL_HOST bool valid() const noexcept
+    {
+        return core_.valid();
+    }
+    CANN_ASC_STL_HOST execution_status allocate_async(
+        void** output, ::asc::std::size_t bytes, ::asc::std::size_t alignment, stream_ref stream) noexcept
+    {
+        return core_.allocate_async(output, bytes, alignment, stream);
+    }
+    CANN_ASC_STL_HOST execution_status deallocate_async(void* pointer, stream_ref stream) noexcept
+    {
+        return core_.deallocate_async(pointer, stream);
+    }
+    CANN_ASC_STL_HOST execution_status collect() noexcept
+    {
+        return core_.collect();
+    }
+    CANN_ASC_STL_HOST execution_status trim_to(unsigned long long minimum_cached_bytes) noexcept
+    {
+        return core_.trim_to(minimum_cached_bytes);
+    }
+    CANN_ASC_STL_HOST memory_pool_statistics statistics() noexcept
+    {
+        return core_.statistics();
+    }
+    CANN_ASC_STL_HOST execution_status close() noexcept
+    {
+        return core_.close();
+    }
+    CANN_ASC_STL_HOST pinned_memory_pool_ref as_ref() noexcept;
+
+private:
+    friend class pinned_memory_pool_ref;
+    detail::memory_pool_core core_{detail::pool_domain::pinned};
+};
+
+class device_memory_pool_ref {
+public:
+    CANN_ASC_STL_HOST constexpr device_memory_pool_ref() noexcept = default;
+    CANN_ASC_STL_HOST constexpr explicit device_memory_pool_ref(device_memory_pool& pool) noexcept : pool_(&pool)
+    {}
+    CANN_ASC_STL_HOST constexpr bool valid() const noexcept
+    {
+        return pool_ != nullptr;
+    }
+    CANN_ASC_STL_HOST execution_status allocate_async(
+        void** output, ::asc::std::size_t bytes, ::asc::std::size_t alignment, stream_ref stream) const noexcept
+    {
+        return pool_ == nullptr ? execution_status{execution_errc::invalid_argument} :
+                                  pool_->allocate_async(output, bytes, alignment, stream);
+    }
+    CANN_ASC_STL_HOST execution_status deallocate_async(void* pointer, stream_ref stream) const noexcept
+    {
+        return pool_ == nullptr ? execution_status{execution_errc::invalid_argument} :
+                                  pool_->deallocate_async(pointer, stream);
+    }
+    CANN_ASC_STL_HOST execution_status collect() const noexcept
+    {
+        return pool_ == nullptr ? execution_status{execution_errc::invalid_argument} : pool_->collect();
+    }
+    CANN_ASC_STL_HOST execution_status trim_to(unsigned long long minimum_cached_bytes) const noexcept
+    {
+        return pool_ == nullptr ? execution_status{execution_errc::invalid_argument} :
+                                  pool_->trim_to(minimum_cached_bytes);
+    }
+    CANN_ASC_STL_HOST memory_pool_statistics statistics() const noexcept
+    {
+        return pool_ == nullptr ? memory_pool_statistics{} : pool_->statistics();
+    }
+    CANN_ASC_STL_HOST constexpr bool operator==(const device_memory_pool_ref& other) const noexcept
+    {
+        return pool_ == other.pool_;
+    }
+    CANN_ASC_STL_HOST constexpr bool operator!=(const device_memory_pool_ref& other) const noexcept
+    {
+        return !(*this == other);
+    }
+
+private:
+    device_memory_pool* pool_{};
+};
+
+class pinned_memory_pool_ref {
+public:
+    CANN_ASC_STL_HOST constexpr pinned_memory_pool_ref() noexcept = default;
+    CANN_ASC_STL_HOST constexpr explicit pinned_memory_pool_ref(pinned_memory_pool& pool) noexcept : pool_(&pool)
+    {}
+    CANN_ASC_STL_HOST constexpr bool valid() const noexcept
+    {
+        return pool_ != nullptr;
+    }
+    CANN_ASC_STL_HOST execution_status allocate_async(
+        void** output, ::asc::std::size_t bytes, ::asc::std::size_t alignment, stream_ref stream) const noexcept
+    {
+        return pool_ == nullptr ? execution_status{execution_errc::invalid_argument} :
+                                  pool_->allocate_async(output, bytes, alignment, stream);
+    }
+    CANN_ASC_STL_HOST execution_status deallocate_async(void* pointer, stream_ref stream) const noexcept
+    {
+        return pool_ == nullptr ? execution_status{execution_errc::invalid_argument} :
+                                  pool_->deallocate_async(pointer, stream);
+    }
+    CANN_ASC_STL_HOST execution_status collect() const noexcept
+    {
+        return pool_ == nullptr ? execution_status{execution_errc::invalid_argument} : pool_->collect();
+    }
+    CANN_ASC_STL_HOST execution_status trim_to(unsigned long long minimum_cached_bytes) const noexcept
+    {
+        return pool_ == nullptr ? execution_status{execution_errc::invalid_argument} :
+                                  pool_->trim_to(minimum_cached_bytes);
+    }
+    CANN_ASC_STL_HOST memory_pool_statistics statistics() const noexcept
+    {
+        return pool_ == nullptr ? memory_pool_statistics{} : pool_->statistics();
+    }
+    CANN_ASC_STL_HOST constexpr bool operator==(const pinned_memory_pool_ref& other) const noexcept
+    {
+        return pool_ == other.pool_;
+    }
+    CANN_ASC_STL_HOST constexpr bool operator!=(const pinned_memory_pool_ref& other) const noexcept
+    {
+        return !(*this == other);
+    }
+
+private:
+    pinned_memory_pool* pool_{};
+};
+
+CANN_ASC_STL_HOST inline device_memory_pool_ref device_memory_pool::as_ref() noexcept
+{
+    return device_memory_pool_ref{*this};
+}
+
+CANN_ASC_STL_HOST inline pinned_memory_pool_ref pinned_memory_pool::as_ref() noexcept
+{
+    return pinned_memory_pool_ref{*this};
+}
+
+}  // namespace asc
+
+#endif  // CANN_ASC_STL_ASC_MEMORY_POOL

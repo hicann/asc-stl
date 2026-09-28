@@ -1,0 +1,96 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_TENSOR_COPY
+#define CANN_ASC_STL_ASC_TENSOR_COPY
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__tensor_copy/backend.h>
+#include <asc/__tensor_copy/descriptor.h>
+#include <asc/memory>
+#include <asc/pipeline>
+
+#if CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+
+namespace asc {
+namespace detail {
+
+template <class Descriptor>
+CANN_ASC_STL_DEVICE_API bool tensor_copy_required_extent(
+    const Descriptor& descriptor, bool source_layout, bool padded, unsigned long long& result) noexcept
+{
+    result = 1;
+    for (unsigned dimension = 0; dimension < descriptor.rank(); ++dimension) {
+        unsigned long long count = descriptor.extent(dimension);
+        if (padded) {
+            count += descriptor.left_padding(dimension) + descriptor.right_padding(dimension);
+        }
+        const unsigned long long stride =
+            source_layout ? descriptor.source_stride(dimension) : descriptor.destination_stride(dimension);
+        const unsigned long long contribution = (count - 1) * stride;
+        if (contribution > ~0ULL - result) {
+            return false;
+        }
+        result += contribution;
+    }
+    return true;
+}
+
+}  // namespace detail
+
+template <class T, unsigned Rank>
+CANN_ASC_STL_DEVICE_API tensor_copy_status tensor_load_async(const pipeline_ref& pipeline, unsigned int stage,
+    ub_span<T> destination, gm_span<const T> source, const tensor_copy_descriptor<Rank>& descriptor,
+    T fill_value) noexcept
+{
+    const tensor_copy_status descriptor_status = descriptor.validate();
+    if (descriptor_status != tensor_copy_status::success) {
+        return descriptor_status;
+    }
+    if (stage >= pipeline.stages()) {
+        return tensor_copy_status::invalid_stage;
+    }
+    unsigned long long source_elements = 0;
+    unsigned long long destination_elements = 0;
+    if (!detail::tensor_copy_required_extent(descriptor, true, false, source_elements) ||
+        !detail::tensor_copy_required_extent(descriptor, false, true, destination_elements)) {
+        return tensor_copy_status::size_overflow;
+    }
+    if (source.size() < source_elements) {
+        return tensor_copy_status::insufficient_source;
+    }
+    if (destination.size() < destination_elements) {
+        return tensor_copy_status::insufficient_destination;
+    }
+    detail::tensor_copy_load_ndim(destination.data(), source.data(), descriptor, fill_value);
+    pipeline.producer_commit(stage);
+    return tensor_copy_status::success;
+}
+
+}  // namespace asc
+
+#endif  // D-SIMD tensor transfer
+
+#endif  // CANN_ASC_STL_ASC_TENSOR_COPY

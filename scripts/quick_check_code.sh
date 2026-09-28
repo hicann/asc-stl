@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 # Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,4 +16,23 @@
 
 set -euo pipefail
 
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+STATE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/asc-stl-codecheck.XXXXXX")"
+STAGE_DIR="$STATE_DIR/repo"
+trap 'rm -rf -- "$STATE_DIR"' EXIT
+mkdir -p "$STAGE_DIR"
+rsync -a --exclude '/.git/' --exclude '/build/' "$ROOT/" "$STAGE_DIR/"
+cd "$STAGE_DIR"
+git init --quiet
+git add --all
+git -c user.name=ASC-STL -c user.email=asc-stl@example.invalid \
+    commit --quiet -m "temporary CodeCheck stage" --no-verify
+git diff --binary -- >"$STATE_DIR/before.diff"
+pre-commit validate-config
 pre-commit run --all-files
+git diff --binary -- >"$STATE_DIR/after.diff"
+if ! cmp -s "$STATE_DIR/before.diff" "$STATE_DIR/after.diff"; then
+    echo "CodeCheck modified tracked files; apply the fixes before validation." >&2
+    exit 1
+fi
+echo "ASC_STL_CODECHECK_PASS"

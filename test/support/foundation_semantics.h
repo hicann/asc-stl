@@ -18,6 +18,7 @@
 #include <asc/std/__cstring/memcpy.h>
 #include <asc/std/__cstring/memset.h>
 #include <asc/std/__memory/addressof.h>
+#include <asc/std/__memory/voidify.h>
 #include <asc/std/__tuple/tuple_element.h>
 #include <asc/std/__type_traits/add_const.h>
 #include <asc/std/__type_traits/add_cv.h>
@@ -90,18 +91,20 @@ CANN_ASC_STL_API int evaluate() noexcept
     address_probe probe;
     if (asc::std::addressof(probe) == nullptr)
         return 2;
+    if (asc::std::__voidify(probe) != static_cast<void*>(asc::std::addressof(probe)))
+        return 3;
     unsigned char source[6] = {11, 22, 33, 44, 55, 66};
     unsigned char target[8] = {0xA5, 0, 0, 0, 0, 0, 0, 0x5A};
     if (asc::std::memcpy(target + 1, source, 6) != target + 1)
-        return 3;
-    if (target[0] != 0xA5 || target[7] != 0x5A || target[3] != 33)
         return 4;
-    if (asc::std::memset(target + 2, 0x7C, 3) != target + 2)
+    if (target[0] != 0xA5 || target[7] != 0x5A || target[3] != 33)
         return 5;
-    if (target[1] != 11 || target[2] != 0x7C || target[4] != 0x7C || target[5] != 55)
+    if (asc::std::memset(target + 2, 0x7C, 3) != target + 2)
         return 6;
-    if (asc::std::is_constant_evaluated())
+    if (target[1] != 11 || target[2] != 0x7C || target[4] != 0x7C || target[5] != 55)
         return 7;
+    if (asc::std::is_constant_evaluated())
+        return 8;
     return 0;
 }
 }  // namespace asc_stl_foundation_test

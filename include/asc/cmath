@@ -1,0 +1,273 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_CMATH
+#define CANN_ASC_STL_ASC_CMATH
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__cmath/operations.h>
+#include <asc/std/__cmath/backend.h>
+
+// Extension integer mathematics and sincos.  The integer tools cover the
+// standard 8/16/32/64-bit signed and unsigned integers in every execution
+// domain and retain the integer/enumeration mixed calls; bool is excluded by
+// each interface constraint.  sincos writes through two output pointers: the
+// three standard floating types are Host-only, float is additionally callable
+// in pure SIMT through the designated standard float-math backend, and no
+// scalar trigonometric form exists in ordinary AICore.
+
+namespace asc {
+
+namespace detail {
+
+template <class T, bool = __is_enum(T)>
+struct cmath_unwrapped {
+    using type = __underlying_type(T);
+};
+
+template <class T>
+struct cmath_unwrapped<T, false> {
+    using type = T;
+};
+
+template <class T>
+struct cmath_is_bool {
+    static constexpr bool value = false;
+};
+
+template <>
+struct cmath_is_bool<bool> {
+    static constexpr bool value = true;
+};
+
+template <class T>
+struct cmath_is_integer {
+    static constexpr bool value = false;
+};
+
+#define CANN_ASC_STL_DETAIL_CMATH_INTEGER(...) \
+    template <> \
+    struct cmath_is_integer<__VA_ARGS__> { \
+        static constexpr bool value = true; \
+    };
+CANN_ASC_STL_DETAIL_CMATH_INTEGER(signed char)
+CANN_ASC_STL_DETAIL_CMATH_INTEGER(unsigned char)
+CANN_ASC_STL_DETAIL_CMATH_INTEGER(short)
+CANN_ASC_STL_DETAIL_CMATH_INTEGER(unsigned short)
+CANN_ASC_STL_DETAIL_CMATH_INTEGER(int)
+CANN_ASC_STL_DETAIL_CMATH_INTEGER(unsigned int)
+CANN_ASC_STL_DETAIL_CMATH_INTEGER(long)
+CANN_ASC_STL_DETAIL_CMATH_INTEGER(unsigned long)
+CANN_ASC_STL_DETAIL_CMATH_INTEGER(long long)
+CANN_ASC_STL_DETAIL_CMATH_INTEGER(unsigned long long)
+#undef CANN_ASC_STL_DETAIL_CMATH_INTEGER
+
+template <class T, class U>
+CANN_ASC_STL_API constexpr bool cmath_arguments_valid() noexcept
+{
+    using A = typename cmath_unwrapped<T>::type;
+    using B = typename cmath_unwrapped<U>::type;
+    return (cmath_is_integer<A>::value || __is_enum(T)) && (cmath_is_integer<B>::value || __is_enum(U)) &&
+        !cmath_is_bool<T>::value && !cmath_is_bool<U>::value;
+}
+
+}  // namespace detail
+
+// Quotient rounded towards positive infinity.  Preconditions: b is positive
+// and a is non-negative whenever the type is signed.
+template <class T, class U>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto ceil_div(T a, U b) noexcept
+{
+    static_assert(detail::cmath_arguments_valid<T, U>(), "ceil_div requires integer or enumeration arguments");
+    const typename detail::cmath_unwrapped<T>::type x = static_cast<typename detail::cmath_unwrapped<T>::type>(a);
+    const typename detail::cmath_unwrapped<U>::type y = static_cast<typename detail::cmath_unwrapped<U>::type>(b);
+    return x / y + (x % y != 0);
+}
+
+// Quotient rounded towards negative infinity.  Precondition: b is non-zero
+// and the division itself is representable (a is not the minimum value when
+// b is -1).
+template <class T, class U>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto floor_div(T a, U b) noexcept
+{
+    static_assert(detail::cmath_arguments_valid<T, U>(), "floor_div requires integer or enumeration arguments");
+    const typename detail::cmath_unwrapped<T>::type x = static_cast<typename detail::cmath_unwrapped<T>::type>(a);
+    const typename detail::cmath_unwrapped<U>::type y = static_cast<typename detail::cmath_unwrapped<U>::type>(b);
+    const auto quotient = x / y;
+    const auto remainder = x % y;
+    return remainder != 0 && ((x < 0) != (y < 0)) ? quotient - 1 : quotient;
+}
+
+// Smallest multiple of b not below a.  Preconditions: b is positive, a is
+// non-negative whenever the type is signed, and the rounded result is
+// representable.
+template <class T, class U>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto round_up(T a, U b) noexcept
+{
+    static_assert(detail::cmath_arguments_valid<T, U>(), "round_up requires integer or enumeration arguments");
+    const typename detail::cmath_unwrapped<T>::type x = static_cast<typename detail::cmath_unwrapped<T>::type>(a);
+    const typename detail::cmath_unwrapped<U>::type y = static_cast<typename detail::cmath_unwrapped<U>::type>(b);
+    return (x / y + (x % y != 0)) * y;
+}
+
+// Floor of the base-2 logarithm.  Precondition: value is strictly positive.
+template <class T>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr int integer_log2(T value) noexcept
+{
+    using detail::cmath_is_bool;
+    using detail::cmath_is_integer;
+    static_assert(!cmath_is_bool<T>::value && (cmath_is_integer<typename detail::cmath_unwrapped<T>::type>::value ||
+                      __is_enum(T)),
+        "integer_log2 requires an integer or enumeration argument");
+    typename detail::cmath_unwrapped<T>::type remaining = static_cast<typename detail::cmath_unwrapped<T>::type>(value);
+    int result = 0;
+    for (; remaining > 1; remaining = static_cast<typename detail::cmath_unwrapped<T>::type>(remaining >> 1)) {
+        ++result;
+    }
+    return result;
+}
+
+// Integer square root: the largest r with r * r <= value.  Precondition:
+// value is non-negative whenever the type is signed.
+template <class T>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto integer_sqrt(T value) noexcept
+{
+    using detail::cmath_is_bool;
+    static_assert(!cmath_is_bool<T>::value, "integer_sqrt requires an integer or enumeration argument");
+    using A = typename detail::cmath_unwrapped<T>::type;
+    const int total_bits = static_cast<int>(sizeof(A)) * 8;
+    A rest = static_cast<A>(value);
+    A root = 0;
+    int shift = total_bits - 2;
+    if (total_bits % 2 != 0) {
+        shift -= 1;
+    }
+    A bit = static_cast<A>(A(1) << shift);
+    while (bit > rest) {
+        bit = static_cast<A>(bit >> 2);
+    }
+    while (bit != 0) {
+        if (rest >= root + bit) {
+            rest = static_cast<A>(rest - root - bit);
+            root = static_cast<A>((root >> 1) + bit);
+        } else {
+            root = static_cast<A>(root >> 1);
+        }
+        bit = static_cast<A>(bit >> 2);
+    }
+    return root;
+}
+
+// Base raised to a non-negative integer exponent.  Preconditions: the
+// exponent is non-negative whenever it is signed, and the base is non-zero
+// for a zero exponent only with a positive exponent.
+template <class T, class E>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr T integer_pow(T base, E exponent) noexcept
+{
+    static_assert(!detail::cmath_is_bool<T>::value && !detail::cmath_is_bool<E>::value,
+        "integer_pow requires integer or enumeration arguments");
+    typename detail::cmath_unwrapped<T>::type b = static_cast<typename detail::cmath_unwrapped<T>::type>(base);
+    typename detail::cmath_unwrapped<E>::type e = static_cast<typename detail::cmath_unwrapped<E>::type>(exponent);
+    typename detail::cmath_unwrapped<T>::type result = 1;
+    while (e > 0) {
+        if ((e & 1) != 0) {
+            result = static_cast<typename detail::cmath_unwrapped<T>::type>(result * b);
+        }
+        e = static_cast<typename detail::cmath_unwrapped<E>::type>(e >> 1);
+        if (e > 0) {
+            b = static_cast<typename detail::cmath_unwrapped<T>::type>(b * b);
+        }
+    }
+    return static_cast<T>(result);
+}
+
+// High half of the unsigned product.  Precondition: both operands have the
+// same unsigned integer type; no __int128 is involved.
+template <class T>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr T mul_hi(T left, T right) noexcept
+{
+    using detail::cmath_is_bool;
+    static_assert(!cmath_is_bool<T>::value && detail::cmath_is_integer<typename detail::cmath_unwrapped<T>::type>::value,
+        "mul_hi requires an unsigned integer argument");
+    using A = typename detail::cmath_unwrapped<T>::type;
+    static_assert(!(A(-1) < A(0)), "mul_hi requires an unsigned integer argument");
+    const int half = static_cast<int>(sizeof(A)) * 4;
+    const A a = static_cast<A>(left);
+    const A b = static_cast<A>(right);
+    const A half_mask = static_cast<A>((A(1) << half) - 1);
+    const A a_low = static_cast<A>(a & half_mask);
+    const A a_high = static_cast<A>(a >> half);
+    const A b_low = static_cast<A>(b & half_mask);
+    const A b_high = static_cast<A>(b >> half);
+    const A low = static_cast<A>(a_low * b_low);
+    const A cross1 = static_cast<A>(a_low * b_high);
+    const A cross2 = static_cast<A>(a_high * b_low);
+    const A high = static_cast<A>(a_high * b_high);
+    const A low_sum = static_cast<A>((low >> half) + (cross1 & half_mask) + (cross2 & half_mask));
+    return static_cast<T>(static_cast<A>(high + (cross1 >> half) + (cross2 >> half) + (low_sum >> half)));
+}
+
+// Simultaneous sine and cosine through two output pointers.  float is
+// available on Host and in pure SIMT; no scalar form exists at all in
+// ordinary AICore, and double, long double, plus the integer-to-double
+// convenience form are Host-only.
+#if !CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+CANN_ASC_STL_HOST_SIMT_API void sincos(float value, float* sin_out, float* cos_out) noexcept
+{
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+    *sin_out = ::sinf(value);
+    *cos_out = ::cosf(value);
+#else
+    *sin_out = __builtin_sinf(value);
+    *cos_out = __builtin_cosf(value);
+#endif
+}
+#endif
+
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+CANN_ASC_STL_HOST_API void sincos(double value, double* sin_out, double* cos_out) noexcept
+{
+    *sin_out = __builtin_sin(value);
+    *cos_out = __builtin_cos(value);
+}
+
+CANN_ASC_STL_HOST_API void sincos(long double value, long double* sin_out, long double* cos_out) noexcept
+{
+    *sin_out = __builtin_sinl(value);
+    *cos_out = __builtin_cosl(value);
+}
+
+template <class T>
+CANN_ASC_STL_HOST_API void sincos(T value, double* sin_out, double* cos_out) noexcept
+{
+    static_assert(detail::cmath_is_integer<typename detail::cmath_unwrapped<T>::type>::value || __is_enum(T),
+        "the integer convenience sincos requires an integer or enumeration argument");
+    sincos(static_cast<double>(value), sin_out, cos_out);
+}
+#endif
+
+}  // namespace asc
+
+#endif  // CANN_ASC_STL_ASC_CMATH

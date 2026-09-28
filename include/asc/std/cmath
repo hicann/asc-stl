@@ -91,6 +91,18 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API bool isunordered(float x, floa
 
 CANN_ASC_STL_END_NAMESPACE
 
+#ifndef FP_ILOGB0
+#define FP_ILOGB0 (-2147483647 - 1)
+#endif
+#ifndef FP_ILOGBNAN
+#define FP_ILOGBNAN 2147483647
+#endif
+#ifndef FP_LLOGB0
+#define FP_LLOGB0 (-9223372036854775807LL - 1)
+#endif
+#ifndef FP_LLOGBNAN
+#define FP_LLOGBNAN 9223372036854775807LL
+#endif
 #ifndef FP_INFINITE
 #define FP_INFINITE 1
 #define FP_NAN 0

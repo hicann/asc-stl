@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-#include "launcher.h"
+#include <cstdint>
 
-#include <asc_stl_source_location_cannsim_kernel/aclrtlaunch_asc_stl_source_location_cannsim.h>
+extern "C" std::uint32_t aclrtlaunch_asc_stl_source_location_cannsim(
+    std::uint32_t block_count, void* stream, void* output);
 
 std::uint32_t launch_asc_stl_source_location_cannsim(void* stream, void* output)
 {

@@ -21,11 +21,13 @@
 #include <asc/std/__cstring/memset.h>
 #include <asc/std/__floating_point/storage.h>
 #include <asc/std/__memory/addressof.h>
+#include <asc/std/__memory/voidify.h>
 #include <asc/std/__type_traits/is_constant_evaluated.h>
 #include <asc/std/__utility/as_const.h>
 #include <asc/std/__utility/forward.h>
 #include <asc/std/__utility/forward_like.h>
 #include <asc/std/cstdint>
+#include <asc/std/cmath>
 #include <asc/std/numbers>
 #include "../../../../../../support/b010_semantics.h"
 #include "../../../../../../support/b011_semantics.h"
@@ -36,8 +38,7 @@ struct address_probe {
         return nullptr;
     }
 };
-
-CANN_ASC_STL_API void evaluate_core(asc::std::uint32_t* output) noexcept
+CANN_ASC_STL_API void evaluate(asc::std::uint32_t* output) noexcept
 {
     output[0] = 0x13579BDFU;
     output[1] = 0x1001U;
@@ -57,14 +58,10 @@ CANN_ASC_STL_API void evaluate_core(asc::std::uint32_t* output) noexcept
     output[9] = 0x1005U;
     output[10] = asc::std::addressof(probe) != nullptr ? 1U : 0U;
     output[11] = 0x1006U;
-    output[12] = asc::std::addressof(asc::std::as_const(value)) == asc::std::addressof(value) ? 1U : 0U;
+    output[12] = asc::std::__voidify(probe) == static_cast<void*>(asc::std::addressof(probe)) ? 1U : 0U;
     output[13] = 0xA5A5A5A5U;
     output[14] = 0x5A5A5A5AU;
     output[15] = 0x2468ACE0U;
-}
-
-CANN_ASC_STL_API void evaluate_forwarding(asc::std::uint32_t* output) noexcept
-{
     // forward/forward_like: reference identity is a language property and the
     // expected values below are independent Host goldens.
     int forward_base = 41;
@@ -80,10 +77,6 @@ CANN_ASC_STL_API void evaluate_forwarding(asc::std::uint32_t* output) noexcept
     output[22] = 0x100AU;
     int&& move_borrowed = asc::std::forward_like<long&&>(forward_base);
     output[23] = &move_borrowed == &forward_base ? 1U : 0U;
-}
-
-CANN_ASC_STL_API void evaluate_numeric(asc::std::uint32_t* output) noexcept
-{
     // bit_cast / fp storage / numbers: IEEE 754 bit patterns are
     // the independent goldens, and the numbers paths stay constant-folded or
     // float because ordinary AICore does not deliver runtime double
@@ -99,10 +92,6 @@ CANN_ASC_STL_API void evaluate_numeric(asc::std::uint32_t* output) noexcept
             static_cast<unsigned>(static_cast<float>(asc::std::numbers::e) * 100.0f) == 271u ?
         1U :
         0U;
-}
-
-CANN_ASC_STL_API void evaluate_w03(asc::std::uint32_t* output) noexcept
-{
     output[32] = 0x100FU;
     output[33] = asc_stl_b010_test::evaluate_runtime() == 0 ? 1U : 0U;
     output[34] = 0x1010U;
@@ -116,14 +105,30 @@ CANN_ASC_STL_API void evaluate_w03(asc::std::uint32_t* output) noexcept
     output[39] = asc::std::get<0>(pair_value) == 11 && asc::std::get<long>(pair_value) == 13 ? 1U : 0U;
     output[40] = 0x1013U;
     output[41] = asc_stl_b011_test::evaluate_runtime_failures();
-}
-
-CANN_ASC_STL_API void evaluate(asc::std::uint32_t* output) noexcept
-{
-    evaluate_core(output);
-    evaluate_forwarding(output);
-    evaluate_numeric(output);
-    evaluate_w03(output);
+    output[42] = 0x1014U;
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+    unsigned failures = 0;
+    failures |= static_cast<unsigned>(asc::std::abs(-2.0F) != 2.0F) << 0U;
+    failures |= static_cast<unsigned>(asc::std::copysign(2.0F, -1.0F) != -2.0F) << 1U;
+    failures |= static_cast<unsigned>(asc::std::erf(0.0F) != 0.0F) << 2U;
+    failures |= static_cast<unsigned>(asc::std::exp(0.0F) != 1.0F) << 3U;
+    failures |= static_cast<unsigned>(asc::std::fdim(5.0F, 3.0F) != 2.0F) << 4U;
+    failures |= static_cast<unsigned>(asc::std::fpclassify(0.0F) != FP_ZERO) << 5U;
+    failures |= static_cast<unsigned>(asc::std::hypot(3.0F, 4.0F) != 5.0F) << 6U;
+    failures |= static_cast<unsigned>(!asc::std::isfinite(1.0F)) << 7U;
+    failures |= static_cast<unsigned>(!asc::std::isinf(INFINITY)) << 8U;
+    failures |= static_cast<unsigned>(!asc::std::isnan(NAN)) << 9U;
+    failures |= static_cast<unsigned>(!asc::std::isnormal(1.0F)) << 10U;
+    failures |= static_cast<unsigned>(asc::std::log(1.0F) != 0.0F) << 11U;
+    failures |= static_cast<unsigned>(asc::std::fmax(2.0F, 3.0F) != 3.0F) << 12U;
+    failures |= static_cast<unsigned>(asc::std::fmin(2.0F, 3.0F) != 2.0F) << 13U;
+    failures |= static_cast<unsigned>(asc::std::fmod(5.0F, 2.0F) != 1.0F) << 14U;
+    failures |= static_cast<unsigned>(!asc::std::signbit(-0.0F)) << 15U;
+    failures |= static_cast<unsigned>(asc::std::lerp(2.0F, 6.0F, 0.5F) != 4.0F) << 16U;
+    output[43] = failures;
+#else
+    output[43] = 0xFFFFFFFFU;
+#endif
 }
 }  // namespace asc_stl_foundation_runtime
 #endif

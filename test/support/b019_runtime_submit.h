@@ -18,20 +18,9 @@
 #define ASC_STL_TEST_B019_RUNTIME_SUBMIT_H
 
 #include <asc/__algorithm/byte_operations.h>
-#include <asc/__algorithm/frontend.h>
-#include <asc/execution>
-#include <asc/__parallel/adjacent_difference.h>
-#include <asc/__parallel/find.h>
-#include <asc/__parallel/for.h>
-#include <asc/__parallel/merge.h>
-#include <asc/__parallel/merge_sort.h>
-#include <asc/__parallel/partition.h>
-#include <asc/__parallel/radix_sort.h>
-#include <asc/__parallel/reduce.h>
-#include <asc/__parallel/scan.h>
-#include <asc/__parallel/select.h>
-#include <asc/__parallel/temporary_storage.h>
-#include <asc/__parallel/transform.h>
+#include <asc/algorithm>
+#include <asc/std/algorithm>
+#include <asc/std/numeric>
 
 namespace asc_stl_b019_runtime {
 
@@ -67,6 +56,20 @@ struct even_int {
     __aicore__ bool operator()(int value) const noexcept
     {
         return value % 2 == 0;
+    }
+};
+
+struct positive_int {
+    __aicore__ bool operator()(int value) const noexcept
+    {
+        return value > 0;
+    }
+};
+
+struct equal_int {
+    __aicore__ bool operator()(int left, int right) const noexcept
+    {
+        return left == right;
     }
 };
 
@@ -131,6 +134,34 @@ inline int submit(int* input, int* output, void* workspace, void* stream, int* c
             policy, input, input + 4, output + 22, reinterpret_cast<asc::std::size_t*>(output + 32), even_int{});
     if (status.success())
         status = asc::parallel::find(policy, input, input + 4, 3, reinterpret_cast<asc::std::size_t*>(output + 34));
+    if (status.success()) {
+        stage = 90;
+        if (asc::std::copy(policy, input, input + 4, output + 40) != output + 44)
+            return 9001;
+        if (asc::std::find(policy, input, input + 4, 3) != input + 2)
+            return 9002;
+        if (asc::std::count(policy, input, input + 4, 2) != 1)
+            return 9003;
+        if (!asc::std::all_of(policy, input, input + 4, positive_int{}))
+            return 9004;
+        if (asc::std::reduce(policy, input, input + 4, 0, plus_int{}) != 10)
+            return 9005;
+        if (asc::std::exclusive_scan(policy, input, input + 4, output + 44, 0, plus_int{}) != output + 48)
+            return 9006;
+        const auto partitioned =
+            asc::std::partition_copy(policy, input, input + 4, output + 48, output + 52, even_int{});
+        if (partitioned.first != output + 50 || partitioned.second != output + 54)
+            return 9007;
+        const auto mismatch = asc::std::mismatch(policy, input, input + 4, input, input + 4, equal_int{});
+        if (mismatch.first != input + 4 || mismatch.second != input + 4)
+            return 9008;
+        asc::std::sort(policy, input + 12, input + 16, less_int{});                // NOLINT(build/include_what_you_use)
+        if (asc::std::copy(policy, input, input + 4, output + 54) != output + 58)  // NOLINT(build/include_what_you_use)
+            return 9009;
+        asc::std::replace(policy, output + 54, output + 58, 2, 8);
+        if (asc::std::replace_copy(policy, output + 54, output + 58, output + 58, 3, 9) != output + 62)
+            return 9010;
+    }
     if (status.success()) {
         stage = 99;
         status = asc::host_callback(stream_reference, increment_callback, callback_count);

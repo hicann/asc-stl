@@ -1,0 +1,94 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC___TYPE_TRAITS_EXTENSIONS_H
+#define CANN_ASC_STL_ASC___TYPE_TRAITS_EXTENSIONS_H
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+// Extension trait vocabulary for the later public <asc/type_traits>.  The
+// traits are documented customization points: a user specialization must keep
+// the documented semantic precondition, and the value vocabulary stays
+// self-contained because this root has no trait-header dependencies.
+
+namespace asc {
+
+// True when comparing object representations byte by byte gives the same
+// answer as comparing values with operator==.  Standard integer types satisfy
+// the precondition; floating-point types do not (signed zero and NaN), and no
+// CCE register-vector type is classified.
+template <class _Tp>
+struct is_bitwise_comparable {
+    static constexpr bool value = false;
+};
+
+template <class _Tp>
+inline constexpr bool is_bitwise_comparable_v = is_bitwise_comparable<_Tp>::value;
+
+#define CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(...) \
+    template <>                                     \
+    struct is_bitwise_comparable<__VA_ARGS__> {     \
+        static constexpr bool value = true;         \
+    };
+CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(bool)
+CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(char)
+CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(signed char)
+CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(unsigned char)
+CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(short)
+CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(unsigned short)
+CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(int)
+CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(unsigned int)
+CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(long)
+CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(unsigned long)
+CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(long long)
+CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(unsigned long long)
+#undef CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE
+
+// True for extended floating-point types beyond the three standard ones.  No
+// such type is part of the delivered public surface yet; low-precision types
+// opt in when their public contract is approved.
+template <class _Tp>
+struct is_extended_floating_point {
+    static constexpr bool value = false;
+};
+
+template <class _Tp>
+inline constexpr bool is_extended_floating_point_v = is_extended_floating_point<_Tp>::value;
+
+// True when relocation (destroy the source, bitwise copy to the destination)
+// is equivalent to moving the object with memcpy.  Trivially copyable types
+// satisfy the precondition because trivial copyability already requires a
+// trivial, non-deleted destructor.  A type with custom copy/destruction whose
+// object is still memcpy-safe may opt in through an explicit specialization.
+template <class _Tp>
+struct is_trivially_relocatable {
+    static constexpr bool value = __is_trivially_copyable(_Tp);
+};
+
+template <class _Tp>
+inline constexpr bool is_trivially_relocatable_v = is_trivially_relocatable<_Tp>::value;
+
+}  // namespace asc
+
+#endif  // CANN_ASC_STL_ASC___TYPE_TRAITS_EXTENSIONS_H

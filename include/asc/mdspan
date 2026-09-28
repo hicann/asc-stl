@@ -1,0 +1,439 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_MDSPAN
+#define CANN_ASC_STL_ASC_MDSPAN
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__mdspan/accessors.h>
+#include <asc/memory>
+#include <asc/std/mdspan>
+
+#if defined(__has_include)
+#if __has_include(<dlpack/dlpack.h>)
+#include <dlpack/dlpack.h>
+#define CANN_ASC_STL_HAS_DLPACK 1
+#endif
+#endif
+
+namespace asc {
+
+inline constexpr __PTRDIFF_TYPE__ dynamic_stride = -__PTRDIFF_MAX__ - 1;
+
+template <class OffsetType, __PTRDIFF_TYPE__... StaticStrides>
+class strides {
+public:
+    using offset_type = OffsetType;
+    using size_type = __SIZE_TYPE__;
+    using rank_type = __SIZE_TYPE__;
+
+    CANN_ASC_STL_API constexpr strides() noexcept
+    {
+        const __PTRDIFF_TYPE__ values[rank() == 0 ? 1 : rank()] = {StaticStrides...};
+        for (rank_type i = 0; i < rank(); ++i) {
+            values_[i] = values[i] == dynamic_stride ? offset_type{} : static_cast<offset_type>(values[i]);
+        }
+    }
+
+    template <class... Values>
+    CANN_ASC_STL_API constexpr explicit strides(Values... values) noexcept
+    {
+        static_assert(sizeof...(Values) == rank() || sizeof...(Values) == rank_dynamic(),
+            "strides construction requires rank() or rank_dynamic() values");
+        const offset_type supplied[sizeof...(Values) == 0 ? 1 : sizeof...(Values)] = {
+            static_cast<offset_type>(values)...};
+        const __PTRDIFF_TYPE__ declared[rank() == 0 ? 1 : rank()] = {StaticStrides...};
+        rank_type dynamic_index = 0;
+        for (rank_type i = 0; i < rank(); ++i) {
+            values_[i] = declared[i] == dynamic_stride ? supplied[sizeof...(Values) == rank() ? i : dynamic_index++] :
+                                                         static_cast<offset_type>(declared[i]);
+        }
+    }
+
+    CANN_ASC_STL_API static constexpr rank_type rank() noexcept
+    {
+        return sizeof...(StaticStrides);
+    }
+    CANN_ASC_STL_API static constexpr rank_type rank_dynamic() noexcept
+    {
+        const __PTRDIFF_TYPE__ values[rank() == 0 ? 1 : rank()] = {StaticStrides...};
+        rank_type count = 0;
+        for (rank_type i = 0; i < rank(); ++i)
+            count += values[i] == dynamic_stride ? 1 : 0;
+        return count;
+    }
+    CANN_ASC_STL_API static constexpr __PTRDIFF_TYPE__ static_stride(rank_type index) noexcept
+    {
+        const __PTRDIFF_TYPE__ values[rank() == 0 ? 1 : rank()] = {StaticStrides...};
+        return values[index];
+    }
+    CANN_ASC_STL_API constexpr offset_type stride(rank_type index) const noexcept
+    {
+        return values_[index];
+    }
+
+private:
+    offset_type values_[rank() == 0 ? 1 : rank()]{};
+};
+
+namespace detail {
+
+template <class OffsetType, class Sequence>
+struct make_dstrides_sequence;
+
+template <class OffsetType, __SIZE_TYPE__... I>
+struct make_dstrides_sequence<OffsetType, asc::std::index_sequence<I...>> {
+    using type = strides<OffsetType, (static_cast<void>(I), dynamic_stride)...>;
+};
+
+template <class OffsetType, __SIZE_TYPE__ Rank>
+struct make_dstrides {
+    using type = typename make_dstrides_sequence<OffsetType, asc::std::make_index_sequence<Rank>>::type;
+};
+
+}  // namespace detail
+
+template <class OffsetType, __SIZE_TYPE__ Rank>
+using dstrides = typename detail::make_dstrides<OffsetType, Rank>::type;
+
+template <__SIZE_TYPE__ Rank, class OffsetType = __PTRDIFF_TYPE__>
+using steps = dstrides<OffsetType, Rank>;
+
+struct layout_stride_relaxed {
+    template <class Extents, class Strides = dstrides<__PTRDIFF_TYPE__, Extents::rank()>,
+        class OffsetType = __PTRDIFF_TYPE__>
+    class mapping {
+    public:
+        using extents_type = Extents;
+        using strides_type = Strides;
+        using index_type = typename Extents::index_type;
+        using size_type = typename Extents::size_type;
+        using rank_type = typename Extents::rank_type;
+        using offset_type = OffsetType;
+        using layout_type = layout_stride_relaxed;
+
+        CANN_ASC_STL_API constexpr mapping() noexcept = default;
+        CANN_ASC_STL_API constexpr mapping(
+            const Extents& extents, const Strides& stride_values, OffsetType offset = 0) noexcept
+            : extents_(extents), strides_(stride_values), offset_(offset)
+        {}
+
+        template <class OtherMapping>
+        CANN_ASC_STL_API constexpr explicit mapping(const OtherMapping& other) noexcept
+            : extents_(other.extents()), strides_(make_strides(other)), offset_(0)
+        {}
+
+        template <class... Indices>
+        CANN_ASC_STL_API constexpr offset_type operator()(Indices... indices) const noexcept
+        {
+            static_assert(sizeof...(Indices) == Extents::rank(), "incorrect mdspan rank");
+            const offset_type supplied[Extents::rank() == 0 ? 1 : Extents::rank()] = {
+                static_cast<offset_type>(indices)...};
+            offset_type result = offset_;
+            for (rank_type i = 0; i < Extents::rank(); ++i)
+                result += supplied[i] * strides_.stride(i);
+            return result;
+        }
+
+        CANN_ASC_STL_API constexpr const Extents& extents() const noexcept
+        {
+            return extents_;
+        }
+        CANN_ASC_STL_API constexpr const Strides& strides() const noexcept
+        {
+            return strides_;
+        }
+        CANN_ASC_STL_API constexpr offset_type offset() const noexcept
+        {
+            return offset_;
+        }
+        CANN_ASC_STL_API constexpr offset_type stride(rank_type index) const noexcept
+        {
+            return strides_.stride(index);
+        }
+        CANN_ASC_STL_API constexpr size_type required_span_size() const noexcept
+        {
+            offset_type low = offset_;
+            offset_type high = offset_;
+            for (rank_type i = 0; i < Extents::rank(); ++i) {
+                if (extents_.extent(i) == 0)
+                    return 0;
+                const offset_type delta = static_cast<offset_type>(extents_.extent(i) - 1) * stride(i);
+                if (delta < 0)
+                    low += delta;
+                else
+                    high += delta;
+            }
+            return static_cast<size_type>(high - low + 1);
+        }
+        CANN_ASC_STL_API static constexpr bool is_always_unique() noexcept
+        {
+            return false;
+        }
+        CANN_ASC_STL_API static constexpr bool is_always_exhaustive() noexcept
+        {
+            return false;
+        }
+        CANN_ASC_STL_API static constexpr bool is_always_strided() noexcept
+        {
+            return true;
+        }
+        CANN_ASC_STL_API constexpr bool is_unique() const noexcept
+        {
+            offset_type deltas[Extents::rank() == 0 ? 1 : Extents::rank()]{};
+            offset_type limits[Extents::rank() == 0 ? 1 : Extents::rank()]{};
+            for (rank_type i = 0; i < Extents::rank(); ++i) {
+                if (extents_.extent(i) == 0)
+                    return true;
+                limits[i] = static_cast<offset_type>(extents_.extent(i) - 1);
+                deltas[i] = -limits[i];
+            }
+            for (;;) {
+                offset_type difference = 0;
+                bool changed = false;
+                for (rank_type i = 0; i < Extents::rank(); ++i) {
+                    difference += deltas[i] * stride(i);
+                    changed = changed || deltas[i] != 0;
+                }
+                if (changed && difference == 0)
+                    return false;
+                bool advanced = false;
+                for (rank_type i = Extents::rank(); i > 0; --i) {
+                    if (deltas[i - 1] < limits[i - 1]) {
+                        ++deltas[i - 1];
+                        advanced = true;
+                        break;
+                    }
+                    deltas[i - 1] = -limits[i - 1];
+                }
+                if (!advanced)
+                    return true;
+            }
+        }
+        CANN_ASC_STL_API constexpr bool is_exhaustive() const noexcept
+        {
+            return false;
+        }
+        CANN_ASC_STL_API constexpr bool is_strided() const noexcept
+        {
+            return true;
+        }
+
+    private:
+        template <class OtherMapping, __SIZE_TYPE__... I>
+        CANN_ASC_STL_API static constexpr Strides make_strides_impl(
+            const OtherMapping& other, asc::std::index_sequence<I...>) noexcept
+        {
+            return Strides(other.stride(I)...);
+        }
+        template <class OtherMapping>
+        CANN_ASC_STL_API static constexpr Strides make_strides(const OtherMapping& other) noexcept
+        {
+            return make_strides_impl(other, asc::std::make_index_sequence<Extents::rank()>{});
+        }
+        Extents extents_{};
+        Strides strides_{};
+        OffsetType offset_{};
+    };
+};
+
+template <class Element, class Extents, class Layout = asc::std::layout_right,
+    class Accessor = asc::std::default_accessor<Element>>
+using host_mdspan = asc::std::mdspan<Element, Extents, Layout, host_accessor<Accessor>>;
+
+template <class Element, class Extents, class Layout = asc::std::layout_right,
+    class Accessor = asc::std::default_accessor<Element>>
+using gm_mdspan = asc::std::mdspan<Element, Extents, Layout, gm_accessor<Accessor>>;
+
+#if !CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+template <class Element, class Extents, class Layout = asc::std::layout_right,
+    class Accessor = asc::std::default_accessor<Element>>
+using ub_mdspan = asc::std::mdspan<Element, Extents, Layout, ub_accessor<Accessor>>;
+#endif
+
+template <class Element, class Extents, class Layout = asc::std::layout_right,
+    class Accessor = asc::std::default_accessor<Element>>
+using restrict_mdspan = asc::std::mdspan<Element, Extents, Layout, restrict_accessor<Accessor>>;
+
+template <class T>
+inline constexpr bool is_host_mdspan_v = false;
+template <class E, class X, class L, class A>
+inline constexpr bool is_host_mdspan_v<asc::std::mdspan<E, X, L, A>> = is_host_accessor_v<A>;
+template <class T>
+inline constexpr bool is_gm_mdspan_v = false;
+template <class E, class X, class L, class A>
+inline constexpr bool is_gm_mdspan_v<asc::std::mdspan<E, X, L, A>> = is_gm_accessor_v<A>;
+template <class T>
+inline constexpr bool is_ub_mdspan_v = false;
+#if !CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+template <class E, class X, class L, class A>
+inline constexpr bool is_ub_mdspan_v<asc::std::mdspan<E, X, L, A>> = is_ub_accessor_v<A>;
+#endif
+template <class T>
+inline constexpr bool is_restrict_mdspan_v = false;
+template <class E, class X, class L, class A>
+inline constexpr bool is_restrict_mdspan_v<asc::std::mdspan<E, X, L, A>> = is_restrict_accessor_v<A>;
+template <class T>
+inline constexpr bool is_host_accessible_v = is_host_mdspan_v<T>;
+template <class T>
+inline constexpr bool is_device_accessible_v = is_gm_mdspan_v<T> || is_ub_mdspan_v<T>;
+
+#if defined(CANN_ASC_STL_HAS_DLPACK)
+namespace detail {
+
+template <class Element>
+inline constexpr bool dlpack_dtype_supported =
+    __is_same(Element, float) || __is_same(Element, double) || __is_same(Element, signed char) ||
+    __is_same(Element, unsigned char) || __is_same(Element, short) || __is_same(Element, unsigned short) ||
+    __is_same(Element, int) || __is_same(Element, unsigned int) || __is_same(Element, long) ||
+    __is_same(Element, unsigned long) || __is_same(Element, long long) || __is_same(Element, unsigned long long);
+
+template <class Element>
+CANN_ASC_STL_HOST constexpr DLDataType dlpack_dtype() noexcept
+{
+    constexpr uint8_t code = __is_same(Element, float) || __is_same(Element, double) ?
+        kDLFloat :
+        (__is_same(Element, signed char) || __is_same(Element, short) || __is_same(Element, int) ||
+                    __is_same(Element, long) || __is_same(Element, long long) ?
+                kDLInt :
+                kDLUInt);
+    return DLDataType{code, static_cast<uint8_t>(sizeof(Element) * 8), 1};
+}
+
+template <class Element>
+CANN_ASC_STL_HOST constexpr bool dlpack_dtype_matches(const DLDataType& dtype) noexcept
+{
+    const DLDataType expected = dlpack_dtype<Element>();
+    return dtype.code == expected.code && dtype.bits == expected.bits && dtype.lanes == expected.lanes;
+}
+
+template <class Extents>
+CANN_ASC_STL_HOST constexpr __PTRDIFF_TYPE__ dlpack_stride(
+    const Extents& extents, const DLTensor& tensor, __SIZE_TYPE__ index) noexcept
+{
+    if (tensor.strides != nullptr)
+        return static_cast<__PTRDIFF_TYPE__>(tensor.strides[index]);
+    __PTRDIFF_TYPE__ result = 1;
+    for (__SIZE_TYPE__ i = Extents::rank(); i > index + 1; --i)
+        result *= static_cast<__PTRDIFF_TYPE__>(extents.extent(i - 1));
+    return result;
+}
+
+template <class Extents, __SIZE_TYPE__... I>
+CANN_ASC_STL_HOST constexpr auto make_dlpack_mapping(
+    const Extents& extents, const DLTensor& tensor, asc::std::index_sequence<I...>) noexcept
+{
+    using stride_type = asc::steps<Extents::rank()>;
+    return asc::layout_stride_relaxed::mapping<Extents, stride_type>(
+        extents, stride_type(dlpack_stride(extents, tensor, I)...), 0);
+}
+
+}  // namespace detail
+
+template <__SIZE_TYPE__ Rank>
+class dlpack_tensor {
+public:
+    CANN_ASC_STL_HOST constexpr dlpack_tensor() noexcept = default;
+    CANN_ASC_STL_HOST DLTensor get() const noexcept
+    {
+        DLTensor result = tensor_;
+        result.shape = Rank == 0 ? nullptr : const_cast<int64_t*>(shape_);
+        result.strides = Rank == 0 ? nullptr : const_cast<int64_t*>(strides_);
+        return result;
+    }
+    int64_t shape_[Rank == 0 ? 1 : Rank]{};
+    int64_t strides_[Rank == 0 ? 1 : Rank]{};
+    DLTensor tensor_{};
+};
+
+template <class Element, __SIZE_TYPE__ Rank, class Layout = layout_stride_relaxed>
+CANN_ASC_STL_HOST bool to_host_mdspan(
+    const DLTensor& tensor, host_mdspan<Element, asc::std::dextents<asc::std::size_t, Rank>, Layout>& output) noexcept
+{
+    if (tensor.device.device_type != kDLCPU || tensor.ndim != static_cast<int>(Rank) ||
+        (Rank != 0 && tensor.shape == nullptr) || !detail::dlpack_dtype_supported<Element> ||
+        !detail::dlpack_dtype_matches<Element>(tensor.dtype) || tensor.data == nullptr ||
+        tensor.byte_offset % alignof(Element) != 0)
+        return false;
+    asc::std::array<asc::std::size_t, Rank> extents{};
+    for (__SIZE_TYPE__ i = 0; i < Rank; ++i) {
+        if (tensor.shape[i] < 0)
+            return false;
+        extents[i] = static_cast<asc::std::size_t>(tensor.shape[i]);
+    }
+    using extents_type = asc::std::dextents<asc::std::size_t, Rank>;
+    const extents_type converted_extents(extents);
+    const auto mapping = detail::make_dlpack_mapping(converted_extents, tensor, asc::std::make_index_sequence<Rank>{});
+    auto* data = static_cast<unsigned char*>(tensor.data) + tensor.byte_offset;
+    output = host_mdspan<Element, extents_type, Layout>(reinterpret_cast<Element*>(data), mapping);
+    return true;
+}
+
+template <class Element, __SIZE_TYPE__ Rank, class Layout = layout_stride_relaxed>
+CANN_ASC_STL_HOST bool to_gm_mdspan(
+    const DLTensor& tensor, gm_mdspan<Element, asc::std::dextents<asc::std::size_t, Rank>, Layout>& output) noexcept
+{
+    if (tensor.device.device_type != kDLExtDev || tensor.ndim != static_cast<int>(Rank) ||
+        (Rank != 0 && tensor.shape == nullptr) || !detail::dlpack_dtype_supported<Element> ||
+        !detail::dlpack_dtype_matches<Element>(tensor.dtype) || tensor.data == nullptr ||
+        tensor.byte_offset % alignof(Element) != 0)
+        return false;
+    asc::std::array<asc::std::size_t, Rank> extents{};
+    for (__SIZE_TYPE__ i = 0; i < Rank; ++i) {
+        if (tensor.shape[i] < 0)
+            return false;
+        extents[i] = static_cast<asc::std::size_t>(tensor.shape[i]);
+    }
+    using extents_type = asc::std::dextents<asc::std::size_t, Rank>;
+    const extents_type converted_extents(extents);
+    const auto mapping = detail::make_dlpack_mapping(converted_extents, tensor, asc::std::make_index_sequence<Rank>{});
+    auto* data = static_cast<unsigned char*>(tensor.data) + tensor.byte_offset;
+    output = gm_mdspan<Element, extents_type, Layout>(reinterpret_cast<Element*>(data), mapping);
+    return true;
+}
+
+template <class Element, class Extents, class Layout, class Accessor>
+CANN_ASC_STL_HOST bool to_dlpack_tensor(const asc::std::mdspan<Element, Extents, Layout, Accessor>& view,
+    DLDeviceType device_type, int device_id, dlpack_tensor<Extents::rank()>& output) noexcept
+{
+    if (!detail::dlpack_dtype_supported<Element> || view.data_handle() == nullptr ||
+        (device_type != kDLCPU && device_type != kDLExtDev))
+        return false;
+    output.tensor_.data = const_cast<void*>(static_cast<const void*>(view.data_handle()));
+    output.tensor_.device = DLDevice{device_type, device_id};
+    output.tensor_.ndim = static_cast<int>(Extents::rank());
+    output.tensor_.dtype = detail::dlpack_dtype<Element>();
+    output.tensor_.byte_offset = 0;
+    for (__SIZE_TYPE__ i = 0; i < Extents::rank(); ++i) {
+        output.shape_[i] = static_cast<int64_t>(view.extent(i));
+        output.strides_[i] = static_cast<int64_t>(view.stride(i));
+    }
+    return true;
+}
+#endif
+
+}  // namespace asc
+
+#endif  // CANN_ASC_STL_ASC_MDSPAN

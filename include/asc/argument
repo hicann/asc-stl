@@ -1,0 +1,155 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_ARGUMENT
+#define CANN_ASC_STL_ASC_ARGUMENT
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__argument/wrappers.h>
+
+namespace asc::args {
+
+struct no_bounds {};
+
+template <auto Lower, auto Upper>
+class static_bounds {
+public:
+    static_assert(Lower <= Upper, "lower bound must not exceed upper bound");
+    CANN_ASC_STL_API static constexpr decltype(Lower) lower() noexcept
+    {
+        return Lower;
+    }
+    CANN_ASC_STL_API static constexpr decltype(Upper) upper() noexcept
+    {
+        return Upper;
+    }
+};
+
+template <class T>
+class runtime_bounds {
+public:
+    CANN_ASC_STL_API constexpr runtime_bounds() noexcept : lower_{}, upper_{}
+    {}
+    CANN_ASC_STL_API constexpr runtime_bounds(T lower, T upper) noexcept : lower_(lower), upper_(upper)
+    {}
+    CANN_ASC_STL_API constexpr T lower() const noexcept
+    {
+        return lower_;
+    }
+    CANN_ASC_STL_API constexpr T upper() const noexcept
+    {
+        return upper_;
+    }
+
+private:
+    T lower_;
+    T upper_;
+};
+
+template <auto Value>
+class constant {
+public:
+    CANN_ASC_STL_API static constexpr decltype(Value) value() noexcept
+    {
+        return Value;
+    }
+};
+
+template <class T, class Bounds = no_bounds>
+class immediate {
+public:
+    CANN_ASC_STL_API constexpr explicit immediate(T value) noexcept : value_(value), bounds_{}
+    {}
+    CANN_ASC_STL_API constexpr immediate(T value, Bounds bounds) noexcept : value_(value), bounds_(bounds)
+    {}
+    CANN_ASC_STL_API constexpr T& value() & noexcept
+    {
+        return value_;
+    }
+    CANN_ASC_STL_API constexpr const T& value() const& noexcept
+    {
+        return value_;
+    }
+
+private:
+    T value_;
+    Bounds bounds_;
+};
+
+template <class T, class Bounds = no_bounds>
+class deferred {
+public:
+    CANN_ASC_STL_API constexpr explicit deferred(const T* data) noexcept : data_(data), bounds_{}
+    {}
+    CANN_ASC_STL_API constexpr deferred(const T* data, Bounds bounds) noexcept : data_(data), bounds_(bounds)
+    {}
+    CANN_ASC_STL_API constexpr const T* data() const noexcept
+    {
+        return data_;
+    }
+
+private:
+    const T* data_;
+    Bounds bounds_;
+};
+
+template <class T, class Bounds = no_bounds>
+class deferred_sequence {
+public:
+    CANN_ASC_STL_API constexpr deferred_sequence(const T* data, __SIZE_TYPE__ size) noexcept
+        : data_(data), size_(size), bounds_{}
+    {}
+    CANN_ASC_STL_API constexpr deferred_sequence(const T* data, __SIZE_TYPE__ size, Bounds bounds) noexcept
+        : data_(data), size_(size), bounds_(bounds)
+    {}
+    CANN_ASC_STL_API constexpr const T* data() const noexcept
+    {
+        return data_;
+    }
+    CANN_ASC_STL_API constexpr __SIZE_TYPE__ size() const noexcept
+    {
+        return size_;
+    }
+
+private:
+    const T* data_;
+    __SIZE_TYPE__ size_;
+    Bounds bounds_;
+};
+
+template <auto Lower, auto Upper>
+CANN_ASC_STL_API constexpr static_bounds<Lower, Upper> bounds() noexcept
+{
+    return {};
+}
+template <class T>
+CANN_ASC_STL_API constexpr runtime_bounds<T> bounds(T lower, T upper) noexcept
+{
+    return {lower, upper};
+}
+
+}  // namespace asc::args
+
+#endif  // CANN_ASC_STL_ASC_ARGUMENT

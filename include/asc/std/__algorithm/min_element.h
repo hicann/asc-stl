@@ -61,31 +61,6 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr ForwardIterator min_element(
     return ::asc::std::min_element(first, last, __less{});  // NOLINT(build/include_what_you_use)
 }
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20() && !defined(CANN_ASC_STL_DETAIL_RANGES_MIN_ELEMENT_DEFINED)
-#define CANN_ASC_STL_DETAIL_RANGES_MIN_ELEMENT_DEFINED
-namespace ranges {
-struct __min_element_fn {
-    template <class Iterator, class Sentinel, class Projection = identity, class Compare = __less>
-    CANN_ASC_STL_API constexpr Iterator operator()(
-        Iterator first, Sentinel last, Compare compare = {}, Projection projection = {}) const
-    {
-        if (first == last) {
-            return first;
-        }
-        Iterator result = first;
-        while (++first != last) {
-            if (::asc::std::invoke(
-                    compare, ::asc::std::invoke(projection, *first), ::asc::std::invoke(projection, *result))) {
-                result = first;
-            }
-        }
-        return result;
-    }
-};
-inline constexpr __min_element_fn min_element{};
-}  // namespace ranges
-#endif
-
 CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STD___ALGORITHM_MIN_ELEMENT_H

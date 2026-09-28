@@ -1,0 +1,146 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_PIPELINE
+#define CANN_ASC_STL_ASC_PIPELINE
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__pipeline/pipeline.h>
+#include <asc/memory>
+
+#if CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+
+namespace asc {
+
+// Caller-owned hardware event identifier handed to the borrowed coordinator.
+// The caller guarantees that each ID is exclusively owned for the lifetime of
+// the pipeline so it cannot collide with an existing TPipe/TQue instance.
+using pipeline_event_id = unsigned int;
+
+// Borrowed one/two-stage coordinator between global and unified-buffer
+// storage.  It owns no resource: storage, event IDs and the balanced stage
+// protocol belong to the caller.
+class pipeline_ref {
+public:
+    CANN_ASC_STL_DEVICE_API explicit pipeline_ref(pipeline_event_id load_event, pipeline_event_id store_event) noexcept
+        : state_{1, {static_cast<unsigned char>(load_event), 0}, {static_cast<unsigned char>(store_event), 0}}
+    {}
+
+    CANN_ASC_STL_DEVICE_API pipeline_ref(pipeline_event_id load_event0, pipeline_event_id store_event0,
+        pipeline_event_id load_event1, pipeline_event_id store_event1) noexcept
+        : state_{2, {static_cast<unsigned char>(load_event0), static_cast<unsigned char>(load_event1)},
+              {static_cast<unsigned char>(store_event0), static_cast<unsigned char>(store_event1)}}
+    {}
+
+    CANN_ASC_STL_DEVICE_API pipeline_ref(const pipeline_ref&) noexcept = default;
+    CANN_ASC_STL_DEVICE_API pipeline_ref& operator=(const pipeline_ref&) noexcept = default;
+
+    CANN_ASC_STL_DEVICE_API unsigned int stages() const noexcept
+    {
+        return state_.stages;
+    }
+
+    CANN_ASC_STL_DEVICE_API pipeline_event_id load_event(unsigned int stage) const noexcept
+    {
+        return state_.load_events[stage];
+    }
+
+    CANN_ASC_STL_DEVICE_API pipeline_event_id store_event(unsigned int stage) const noexcept
+    {
+        return state_.store_events[stage];
+    }
+
+    // Producer side: wait until the stage's store buffer was drained, then
+    // publish that the stage's store slot may be refilled.
+    CANN_ASC_STL_DEVICE_API void producer_acquire(unsigned int stage) const noexcept
+    {
+        detail::pipeline_producer_acquire(state_.store_events[stage]);
+    }
+
+    CANN_ASC_STL_DEVICE_API void producer_commit(unsigned int stage) const noexcept
+    {
+        detail::pipeline_load_commit(state_.load_events[stage]);
+    }
+
+    // Consumer side: wait until the stage's load is available, then publish
+    // that the stage's store buffer was drained.
+    CANN_ASC_STL_DEVICE_API void consumer_wait(unsigned int stage) const noexcept
+    {
+        detail::pipeline_load_wait(state_.load_events[stage]);
+    }
+
+    CANN_ASC_STL_DEVICE_API void consumer_release(unsigned int stage) const noexcept
+    {
+        detail::pipeline_store_release(state_.store_events[stage]);
+    }
+
+    // Drain every pipeline after the last asynchronous transfer.
+    CANN_ASC_STL_DEVICE_API void wait() const noexcept
+    {
+        detail::pipeline_drain();
+    }
+
+private:
+    detail::pipeline_state state_;
+};
+
+CANN_ASC_STL_DEVICE_API pipeline_ref make_pipeline(pipeline_event_id load_event, pipeline_event_id store_event) noexcept
+{
+    return pipeline_ref(load_event, store_event);
+}
+
+CANN_ASC_STL_DEVICE_API pipeline_ref make_pipeline(pipeline_event_id load_event0, pipeline_event_id store_event0,
+    pipeline_event_id load_event1, pipeline_event_id store_event1) noexcept
+{
+    return pipeline_ref(load_event0, store_event0, load_event1, store_event1);
+}
+
+// Type-safe asynchronous transfers restricted to the approved scalar set and
+// the two supported directions.  Both ranges must meet the C API alignment
+// requirement and hold equal element counts whose byte size fits a 32-bit
+// transfer length.
+template <class T>
+CANN_ASC_STL_DEVICE_API void copy_async(
+    const pipeline_ref& pipeline, unsigned int stage, ub_span<T> destination, gm_span<const T> source) noexcept
+{
+    detail::pipeline_copy_gm2ub<T>(
+        destination.data(), source.data(), static_cast<unsigned int>(destination.size_bytes()));
+    (void)pipeline;
+    (void)stage;
+}
+
+template <class T>
+CANN_ASC_STL_DEVICE_API void copy_async(
+    const pipeline_ref& pipeline, unsigned int stage, gm_span<T> destination, ub_span<const T> source) noexcept
+{
+    detail::pipeline_copy_ub2gm<T>(static_cast<unsigned char>(pipeline.store_event(stage)), destination.data(),
+        source.data(), static_cast<unsigned int>(source.size_bytes()));
+}
+
+}  // namespace asc
+
+#endif
+
+#endif  // CANN_ASC_STL_ASC_PIPELINE

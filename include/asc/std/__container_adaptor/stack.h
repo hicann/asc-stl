@@ -1,0 +1,121 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_STD___CONTAINER_ADAPTOR_STACK_H
+#define CANN_ASC_STL_ASC_STD___CONTAINER_ADAPTOR_STACK_H
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+template <class T, class Container>
+class stack {
+public:
+    using container_type = Container;
+    using value_type = typename Container::value_type;
+    using size_type = typename Container::size_type;
+    using reference = typename Container::reference;
+    using const_reference = typename Container::const_reference;
+
+    CANN_ASC_STL_API constexpr stack() = default;
+    CANN_ASC_STL_API constexpr explicit stack(const Container& container) : c(container)
+    {}
+    CANN_ASC_STL_API constexpr explicit stack(Container&& container) : c(static_cast<Container&&>(container))
+    {}
+    template <class Alloc>
+    CANN_ASC_STL_API constexpr explicit stack(const Alloc& allocator) : c(allocator)
+    {}
+    template <class Alloc>
+    CANN_ASC_STL_API constexpr stack(const Container& container, const Alloc& allocator) : c(container, allocator)
+    {}
+    template <class Alloc>
+    CANN_ASC_STL_API constexpr stack(Container&& container, const Alloc& allocator)
+        : c(static_cast<Container&&>(container), allocator)
+    {}
+    template <class Alloc>
+    CANN_ASC_STL_API constexpr stack(const stack& other, const Alloc& allocator) : c(other.c, allocator)
+    {}
+    template <class Alloc>
+    CANN_ASC_STL_API constexpr stack(stack&& other, const Alloc& allocator)
+        : c(static_cast<Container&&>(other.c), allocator)
+    {}
+    CANN_ASC_STL_API constexpr bool empty() const
+    {
+        return c.empty();
+    }
+    CANN_ASC_STL_API constexpr size_type size() const
+    {
+        return c.size();
+    }
+    CANN_ASC_STL_API constexpr reference top()
+    {
+        return c.back();
+    }
+    CANN_ASC_STL_API constexpr const_reference top() const
+    {
+        return c.back();
+    }
+    CANN_ASC_STL_API constexpr void push(const value_type& value)
+    {
+        c.push_back(value);
+    }
+    CANN_ASC_STL_API constexpr void push(value_type&& value)
+    {
+        c.push_back(static_cast<value_type&&>(value));
+    }
+    template <class... Args>
+    CANN_ASC_STL_API constexpr decltype(auto) emplace(Args&&... args)
+    {
+        return c.emplace_back(static_cast<Args&&>(args)...);
+    }
+    CANN_ASC_STL_API constexpr void pop()
+    {
+        c.pop_back();
+    }
+    CANN_ASC_STL_API constexpr void swap(stack& other) noexcept(  // NOLINT(build/include_what_you_use)
+        noexcept(c.swap(other.c)))
+    {
+        c.swap(other.c);
+    }
+
+protected:
+    Container c{};
+};
+
+template <class Container>
+CANN_ASC_STL_HOST_DEVICE stack(Container) -> stack<typename Container::value_type, Container>;
+template <class Container, class Alloc>
+CANN_ASC_STL_HOST_DEVICE stack(Container, Alloc) -> stack<typename Container::value_type, Container>;
+
+template <class T, class Container>
+CANN_ASC_STL_API constexpr void swap(  // NOLINT(build/include_what_you_use)
+    stack<T, Container>& left,
+    stack<T, Container>& right) noexcept(noexcept(left.swap(right)))  // NOLINT(build/include_what_you_use)
+{
+    left.swap(right);
+}
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_ASC_STD___CONTAINER_ADAPTOR_STACK_H

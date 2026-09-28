@@ -29,8 +29,6 @@
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__concepts/common_reference_with.h>
 
-#include "core_consumers.h"
-
 int asc_stl_concepts_limits_consumer_b()
 {
     static_assert(asc::std::numeric_limits<const unsigned long long>::is_specialized);

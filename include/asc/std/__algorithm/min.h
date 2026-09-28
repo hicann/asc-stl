@@ -44,20 +44,6 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr const T& min(const T& left, co
 {
     return ::asc::std::min(left, right, __less{});  // NOLINT(build/include_what_you_use)
 }
-#if !defined(CANN_ASC_STL_DETAIL_RANGES_MIN_DEFINED)
-#define CANN_ASC_STL_DETAIL_RANGES_MIN_DEFINED
-namespace ranges {
-struct __min_fn {
-    template <class T, class Compare = __less>
-    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr const T& operator()(
-        const T& left, const T& right, Compare compare = {}) const
-    {
-        return ::asc::std::min(left, right, compare);  // NOLINT(build/include_what_you_use)
-    }
-};
-inline constexpr __min_fn min{};
-}  // namespace ranges
-#endif
 
 CANN_ASC_STL_END_NAMESPACE
 

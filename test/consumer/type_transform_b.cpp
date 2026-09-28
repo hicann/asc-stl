@@ -40,8 +40,6 @@
 #include <asc/std/__floating_point/properties.h>
 #include <asc/std/cstddef>
 
-#include "core_consumers.h"
-
 namespace {
 struct member_host {};
 }  // namespace

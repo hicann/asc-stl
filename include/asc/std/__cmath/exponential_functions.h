@@ -45,6 +45,14 @@ CANN_ASC_STL_DETAIL_UNARY_FLOAT(exp)
 CANN_ASC_STL_DETAIL_UNARY_FLOAT(exp2)
 CANN_ASC_STL_DETAIL_UNARY_FLOAT(expm1)
 #undef CANN_ASC_STL_DETAIL_UNARY_FLOAT
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API float pow(float base, float exponent) noexcept
+{
+    return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(powf, __builtin_powf, (base, exponent));
+}
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API float powf(float base, float exponent) noexcept
+{
+    return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(powf, __builtin_powf, (base, exponent));
+}
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API float frexp(float x, int* e) noexcept
 {
     return __builtin_frexpf(x, e);

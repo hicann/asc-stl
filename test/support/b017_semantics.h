@@ -25,7 +25,7 @@
 #include <asc/std/__algorithm/swap_ranges.h>
 #include <asc/std/__optional/make_optional.h>
 #include <asc/std/__ranges/empty.h>
-#include <asc/std/__atomic/atomic_ref.h>
+#include <asc/std/atomic>
 #include <asc/std/complex>
 #include <asc/std/ctgmath>
 #include <asc/warp>

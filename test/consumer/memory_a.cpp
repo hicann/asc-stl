@@ -16,7 +16,7 @@
 
 #include <asc/memory>
 
-#include "core_consumers.h"
+int asc_stl_memory_consumer_b();
 
 int asc_stl_memory_consumer_a()
 {

@@ -28,7 +28,7 @@
 #include <asc/std/__utility/swap.h>
 #include <asc/std/limits>
 
-#include "core_consumers.h"
+int asc_stl_concepts_limits_consumer_b();
 
 namespace {
 struct consumer_callable {

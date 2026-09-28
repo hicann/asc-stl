@@ -41,6 +41,7 @@
 #include <asc/std/__utility/auto_cast.h>
 #include <asc/std/__utility/pair.h>
 #include <asc/std/__type_traits/is_same.h>
+#include <asc/std/functional>
 
 namespace asc_stl_b010_test {
 
@@ -110,6 +111,14 @@ static_assert(asc::std::__uabs(static_cast<unsigned short>(9)) == 9U);
 static_assert(asc::std::is_same_v<decltype(asc::std::__uabs(-1LL)), unsigned long long>);
 static_assert(asc::std::tuple_size<asc::std::pair<int, long>>::value == 2);
 static_assert(asc::std::is_same_v<asc::std::tuple_element_t<1, asc::std::pair<int, long>>, long>);
+static_assert(asc::std::is_same_v<asc::std::unwrap_reference_t<asc::std::reference_wrapper<int>>, int&>);
+static_assert(asc::std::is_same_v<asc::std::unwrap_ref_decay_t<asc::std::reference_wrapper<int>>, int&>);
+static_assert(asc::std::is_same_v<asc::std::unwrap_ref_decay_t<const int&>, int>);
+static_assert(asc::std::pair<int, int>{1, 2} != asc::std::pair<int, int>{1, 3});
+static_assert(asc::std::pair<int, int>{1, 2} < asc::std::pair<int, int>{1, 3});
+static_assert(asc::std::pair<int, int>{1, 3} > asc::std::pair<int, int>{1, 2});
+static_assert(asc::std::pair<int, int>{1, 2} <= asc::std::pair<int, int>{1, 3});
+static_assert(asc::std::pair<int, int>{1, 3} >= asc::std::pair<int, int>{1, 2});
 static_assert(asc::std::is_same_v<typename asc::std::projected<int*, identity>::value_type, int>);
 static_assert(asc::std::is_same_v<asc::std::ranges::iterator_t<member_range>, int*>);
 static_assert(CANN_ASC_STL_DETAIL_AUTO_CAST(7) == 7);

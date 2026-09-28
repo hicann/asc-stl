@@ -145,6 +145,9 @@ CANN_ASC_STL_API int evaluate_common() noexcept
     int failures = 0;
     asc::std::array<int, 4> values{{1, 2, 2, 4}};
     failures += values.size() != 4 || asc::std::get<1>(values) != 2;
+    int source[3] = {3, 5, 7};
+    const auto copied = asc::std::to_array(source);
+    failures += copied[0] != 3 || copied[1] != 5 || copied[2] != 7;
     failures += asc::std::adjacent_find(values.begin(), values.end()) != values.begin() + 1;
     failures += asc::std::__half_positive(7) != 3;
     asc::std::span<int, 4> fixed(values);

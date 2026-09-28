@@ -45,6 +45,25 @@ add_executable(
     b018_b.cpp
     b019_a.cpp
     b019_b.cpp
-)
+    b021_a.cpp
+    b021_b.cpp
+    b022_a.cpp
+    b022_b.cpp
+    b023_a.cpp
+    b023_b.cpp
+    b024_a.cpp
+    b024_b.cpp
+    b025_a.cpp
+    b025_b.cpp
+    b026_a.cpp
+    b026_b.cpp
+    b028_a.cpp
+    b028_b.cpp
+    w08_a.cpp
+    w08_b.cpp
+    w09_w10_a.cpp
+    w09_w10_b.cpp
+    w13_w14_a.cpp
+    w13_w14_b.cpp)
 target_link_libraries(asc_stl_installed_consumer PRIVATE asc_stl::asc_stl)
 target_compile_options(asc_stl_installed_consumer PRIVATE -Wall -Wextra -Werror -pedantic)

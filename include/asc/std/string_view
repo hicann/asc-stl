@@ -1,0 +1,431 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_STD_STRING_VIEW
+#define CANN_ASC_STL_ASC_STD_STRING_VIEW
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__detail/attributes.h>
+#include <asc/std/__algorithm/min.h>
+#include <asc/std/__cstddef/types.h>
+#include <asc/std/__functional/hash.h>
+#include <asc/std/__fwd/char_traits.h>
+#include <asc/std/__fwd/string_view.h>
+#include <asc/std/__iterator/access.h>
+#include <asc/std/__iterator/bounded_iter.h>
+#include <asc/std/__iterator/concepts.h>
+#include <asc/std/__iterator/data.h>
+#include <asc/std/__iterator/empty.h>
+#include <asc/std/__iterator/iterator_traits.h>
+#include <asc/std/__iterator/reverse_access.h>
+#include <asc/std/__iterator/reverse_iterator.h>
+#include <asc/std/__iterator/size.h>
+#include <asc/std/__memory/pointer_traits.h>
+#include <asc/std/__ranges/concepts.h>
+#include <asc/std/__ranges/data.h>
+#include <asc/std/__ranges/enable_borrowed_range.h>
+#include <asc/std/__ranges/enable_view.h>
+#include <asc/std/__ranges/size.h>
+#include <asc/std/__string/char_traits.h>
+#include <asc/std/__string/helper_functions.h>
+#include <asc/std/__type_traits/is_array.h>
+#include <asc/std/__type_traits/is_convertible.h>
+#include <asc/std/__type_traits/is_same.h>
+#include <asc/std/__type_traits/is_standard_layout.h>
+#include <asc/std/__type_traits/is_trivially_copyable.h>
+#include <asc/std/__type_traits/is_trivially_default_constructible.h>
+#include <asc/std/__type_traits/remove_cvref.h>
+#include <asc/std/__type_traits/type_identity.h>
+#include <asc/std/__utility/ctad_support.h>
+#include <asc/std/__utility/declval.h>
+#include <asc/std/limits>
+#include <asc/std/version>
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+template <class Character, class Traits>
+class basic_string_view {
+public:
+    using traits_type = Traits;
+    using value_type = Character;
+    using pointer = Character*;
+    using const_pointer = const Character*;
+    using reference = Character&;
+    using const_reference = const Character&;
+    using const_iterator = const_pointer;
+    using iterator = const_iterator;
+    using const_reverse_iterator = ::asc::std::reverse_iterator<const_iterator>;
+    using reverse_iterator = const_reverse_iterator;
+    using size_type = size_t;
+    using difference_type = ptrdiff_t;
+    static constexpr size_type npos = static_cast<size_type>(-1);
+
+    CANN_ASC_STL_API constexpr basic_string_view() noexcept = default;
+    CANN_ASC_STL_API constexpr basic_string_view(const Character* text, size_type count) noexcept
+        : data_(text), size_(count)
+    {}
+    CANN_ASC_STL_API constexpr basic_string_view(const Character* text) noexcept
+        : data_(text), size_(Traits::length(text))
+    {}
+
+    CANN_ASC_STL_API constexpr const_iterator begin() const noexcept
+    {
+        return data_;
+    }
+    CANN_ASC_STL_API constexpr const_iterator end() const noexcept
+    {
+        return data_ + size_;
+    }
+    CANN_ASC_STL_API constexpr const_iterator cbegin() const noexcept
+    {
+        return begin();
+    }
+    CANN_ASC_STL_API constexpr const_iterator cend() const noexcept
+    {
+        return end();
+    }
+    CANN_ASC_STL_API constexpr const_reverse_iterator rbegin() const noexcept
+    {
+        return const_reverse_iterator(end());
+    }
+    CANN_ASC_STL_API constexpr const_reverse_iterator rend() const noexcept
+    {
+        return const_reverse_iterator(begin());
+    }
+    CANN_ASC_STL_API constexpr const_reverse_iterator crbegin() const noexcept
+    {
+        return rbegin();
+    }
+    CANN_ASC_STL_API constexpr const_reverse_iterator crend() const noexcept
+    {
+        return rend();
+    }
+    CANN_ASC_STL_API constexpr size_type size() const noexcept
+    {
+        return size_;
+    }
+    CANN_ASC_STL_API constexpr size_type length() const noexcept
+    {
+        return size_;
+    }
+    CANN_ASC_STL_API constexpr size_type max_size() const noexcept
+    {
+        return static_cast<size_type>(-1) / sizeof(Character);
+    }
+    CANN_ASC_STL_API constexpr bool empty() const noexcept
+    {
+        return size_ == 0;
+    }
+    CANN_ASC_STL_API constexpr const_reference operator[](size_type position) const noexcept
+    {
+        return data_[position];
+    }
+    CANN_ASC_STL_API constexpr const_reference front() const noexcept
+    {
+        return data_[0];
+    }
+    CANN_ASC_STL_API constexpr const_reference back() const noexcept
+    {
+        return data_[size_ - 1];
+    }
+    CANN_ASC_STL_API constexpr const_pointer data() const noexcept
+    {
+        return data_;
+    }
+
+    CANN_ASC_STL_API constexpr void remove_prefix(size_type count) noexcept
+    {
+        data_ += count;
+        size_ -= count;
+    }
+    CANN_ASC_STL_API constexpr void remove_suffix(size_type count) noexcept
+    {
+        size_ -= count;
+    }
+    CANN_ASC_STL_API constexpr void swap(basic_string_view& other) noexcept
+    {
+        const_pointer pointer_value = data_;
+        size_type size_value = size_;
+        data_ = other.data_;
+        size_ = other.size_;
+        other.data_ = pointer_value;
+        other.size_ = size_value;
+    }
+
+    CANN_ASC_STL_API constexpr int compare(basic_string_view other) const noexcept
+    {
+        const size_type count = size_ < other.size_ ? size_ : other.size_;
+        const int result = Traits::compare(data_, other.data_, count);
+        return result != 0 ? result : (size_ < other.size_ ? -1 : (size_ > other.size_ ? 1 : 0));
+    }
+
+    CANN_ASC_STL_API constexpr bool starts_with(basic_string_view value) const noexcept
+    {
+        return size_ >= value.size_ && basic_string_view(data_, value.size_) == value;
+    }
+    CANN_ASC_STL_API constexpr bool starts_with(Character value) const noexcept
+    {
+        return !empty() && Traits::eq(front(), value);
+    }
+    CANN_ASC_STL_API constexpr bool starts_with(const Character* value) const noexcept
+    {
+        return starts_with(basic_string_view(value));
+    }
+    CANN_ASC_STL_API constexpr bool ends_with(basic_string_view value) const noexcept
+    {
+        return size_ >= value.size_ && basic_string_view(data_ + size_ - value.size_, value.size_) == value;
+    }
+    CANN_ASC_STL_API constexpr bool ends_with(Character value) const noexcept
+    {
+        return !empty() && Traits::eq(back(), value);
+    }
+    CANN_ASC_STL_API constexpr bool ends_with(const Character* value) const noexcept
+    {
+        return ends_with(basic_string_view(value));
+    }
+
+    CANN_ASC_STL_API constexpr size_type find(basic_string_view value, size_type position = 0) const noexcept
+    {
+        if (value.size_ == 0)
+            return position <= size_ ? position : npos;
+        if (position > size_ || value.size_ > size_ - position)
+            return npos;
+        for (size_type index = position; index + value.size_ <= size_; ++index)
+            if (Traits::compare(data_ + index, value.data_, value.size_) == 0)
+                return index;
+        return npos;
+    }
+    CANN_ASC_STL_API constexpr size_type find(Character value, size_type position = 0) const noexcept
+    {
+        return find(basic_string_view(&value, 1), position);
+    }
+    CANN_ASC_STL_API constexpr size_type find(
+        const Character* value, size_type position, size_type count) const noexcept
+    {
+        return find(basic_string_view(value, count), position);
+    }
+    CANN_ASC_STL_API constexpr size_type find(const Character* value, size_type position = 0) const noexcept
+    {
+        return find(basic_string_view(value), position);
+    }
+
+    CANN_ASC_STL_API constexpr size_type rfind(basic_string_view value, size_type position = npos) const noexcept
+    {
+        if (value.size_ > size_)
+            return npos;
+        size_type index = position < size_ - value.size_ ? position : size_ - value.size_;
+        do {
+            if (Traits::compare(data_ + index, value.data_, value.size_) == 0)
+                return index;
+        } while (index-- != 0);
+        return npos;
+    }
+    CANN_ASC_STL_API constexpr size_type rfind(Character value, size_type position = npos) const noexcept
+    {
+        return rfind(basic_string_view(&value, 1), position);
+    }
+    CANN_ASC_STL_API constexpr size_type rfind(
+        const Character* value, size_type position, size_type count) const noexcept
+    {
+        return rfind(basic_string_view(value, count), position);
+    }
+    CANN_ASC_STL_API constexpr size_type rfind(const Character* value, size_type position = npos) const noexcept
+    {
+        return rfind(basic_string_view(value), position);
+    }
+
+private:
+    CANN_ASC_STL_API constexpr bool __contains(Character value) const noexcept
+    {
+        return Traits::find(data_, size_, value) != nullptr;
+    }
+
+public:
+    CANN_ASC_STL_API constexpr size_type find_first_of(basic_string_view set, size_type position = 0) const noexcept
+    {
+        for (size_type i = position; i < size_; ++i)
+            if (set.__contains(data_[i]))
+                return i;
+        return npos;
+    }
+    CANN_ASC_STL_API constexpr size_type find_last_of(basic_string_view set, size_type position = npos) const noexcept
+    {
+        if (empty())
+            return npos;
+        size_type i = position < size_ ? position : size_ - 1;
+        do {
+            if (set.__contains(data_[i]))
+                return i;
+        } while (i-- != 0);
+        return npos;
+    }
+    CANN_ASC_STL_API constexpr size_type find_first_not_of(basic_string_view set, size_type position = 0) const noexcept
+    {
+        for (size_type i = position; i < size_; ++i)
+            if (!set.__contains(data_[i]))
+                return i;
+        return npos;
+    }
+    CANN_ASC_STL_API constexpr size_type find_last_not_of(
+        basic_string_view set, size_type position = npos) const noexcept
+    {
+        if (empty())
+            return npos;
+        size_type i = position < size_ ? position : size_ - 1;
+        do {
+            if (!set.__contains(data_[i]))
+                return i;
+        } while (i-- != 0);
+        return npos;
+    }
+#define CANN_ASC_STL_DETAIL_STRING_VIEW_SET_OVERLOADS(name, default_position)                                        \
+    CANN_ASC_STL_API constexpr size_type name(Character value, size_type position = default_position) const noexcept \
+    {                                                                                                                \
+        return name(basic_string_view(&value, 1), position);                                                         \
+    }                                                                                                                \
+    CANN_ASC_STL_API constexpr size_type name(const Character* value, size_type position, size_type count)           \
+        const noexcept                                                                                               \
+    {                                                                                                                \
+        return name(basic_string_view(value, count), position);                                                      \
+    }                                                                                                                \
+    CANN_ASC_STL_API constexpr size_type name(const Character* value, size_type position = default_position)         \
+        const noexcept                                                                                               \
+    {                                                                                                                \
+        return name(basic_string_view(value), position);                                                             \
+    }
+    CANN_ASC_STL_DETAIL_STRING_VIEW_SET_OVERLOADS(find_first_of, 0)
+    CANN_ASC_STL_DETAIL_STRING_VIEW_SET_OVERLOADS(find_last_of, npos)
+    CANN_ASC_STL_DETAIL_STRING_VIEW_SET_OVERLOADS(find_first_not_of, 0)
+    CANN_ASC_STL_DETAIL_STRING_VIEW_SET_OVERLOADS(find_last_not_of, npos)
+#undef CANN_ASC_STL_DETAIL_STRING_VIEW_SET_OVERLOADS
+
+private:
+    const_pointer data_{};
+    size_type size_{};
+};
+
+template <class C, class T>
+CANN_ASC_STL_API constexpr bool operator==(basic_string_view<C, T> left, basic_string_view<C, T> right) noexcept
+{
+    return left.compare(right) == 0;
+}
+template <class C, class T>
+CANN_ASC_STL_API constexpr bool operator!=(basic_string_view<C, T> left, basic_string_view<C, T> right) noexcept
+{
+    return !(left == right);
+}
+template <class C, class T>
+CANN_ASC_STL_API constexpr bool operator<(basic_string_view<C, T> left, basic_string_view<C, T> right) noexcept
+{
+    return left.compare(right) < 0;
+}
+template <class C, class T>
+CANN_ASC_STL_API constexpr bool operator>(basic_string_view<C, T> left, basic_string_view<C, T> right) noexcept
+{
+    return right < left;
+}
+template <class C, class T>
+CANN_ASC_STL_API constexpr bool operator<=(basic_string_view<C, T> left, basic_string_view<C, T> right) noexcept
+{
+    return !(right < left);
+}
+template <class C, class T>
+CANN_ASC_STL_API constexpr bool operator>=(basic_string_view<C, T> left, basic_string_view<C, T> right) noexcept
+{
+    return !(left < right);
+}
+
+#define CANN_ASC_STL_DETAIL_STRING_VIEW_COMPARISON_OVERLOADS(op)                               \
+    template <class C, class T, int = 1>                                                       \
+    CANN_ASC_STL_API constexpr bool operator op(                                               \
+        basic_string_view<C, T> left, type_identity_t<basic_string_view<C, T>> right) noexcept \
+    {                                                                                          \
+        return left op right;                                                                  \
+    }                                                                                          \
+    template <class C, class T, unsigned int = 2>                                              \
+    CANN_ASC_STL_API constexpr bool operator op(                                               \
+        type_identity_t<basic_string_view<C, T>> left, basic_string_view<C, T> right) noexcept \
+    {                                                                                          \
+        return left op right;                                                                  \
+    }
+
+CANN_ASC_STL_DETAIL_STRING_VIEW_COMPARISON_OVERLOADS(==)
+CANN_ASC_STL_DETAIL_STRING_VIEW_COMPARISON_OVERLOADS(!=)
+CANN_ASC_STL_DETAIL_STRING_VIEW_COMPARISON_OVERLOADS(<)
+CANN_ASC_STL_DETAIL_STRING_VIEW_COMPARISON_OVERLOADS(>)
+CANN_ASC_STL_DETAIL_STRING_VIEW_COMPARISON_OVERLOADS(<=)
+CANN_ASC_STL_DETAIL_STRING_VIEW_COMPARISON_OVERLOADS(>=)
+
+#undef CANN_ASC_STL_DETAIL_STRING_VIEW_COMPARISON_OVERLOADS
+
+template <class C, class T>
+struct hash<basic_string_view<C, T>> {
+    CANN_ASC_STL_API constexpr size_t operator()(basic_string_view<C, T> value) const noexcept
+    {
+        size_t result = sizeof(size_t) == 8 ? static_cast<size_t>(1469598103934665603ULL) : 2166136261U;
+        const size_t prime = sizeof(size_t) == 8 ? static_cast<size_t>(1099511628211ULL) : 16777619U;
+        for (C character : value)
+            result = (result ^ static_cast<size_t>(character)) * prime;
+        return result;
+    }
+};
+
+CANN_ASC_STL_DETAIL_DIAGNOSTIC_PUSH()
+#if defined(__clang__)
+CANN_ASC_STL_DETAIL_DIAGNOSTIC_IGNORE("-Wuser-defined-literals")
+#elif defined(__GNUC__)
+CANN_ASC_STL_DETAIL_DIAGNOSTIC_IGNORE("-Wliteral-suffix")
+#endif
+inline namespace literals {
+inline namespace string_view_literals {
+CANN_ASC_STL_API constexpr string_view operator"" sv(const char* text, size_t count) noexcept
+{
+    return {text, count};
+}
+CANN_ASC_STL_API constexpr u16string_view operator"" sv(const char16_t* text, size_t count) noexcept
+{
+    return {text, count};
+}
+CANN_ASC_STL_API constexpr u32string_view operator"" sv(const char32_t* text, size_t count) noexcept
+{
+    return {text, count};
+}
+CANN_ASC_STL_API constexpr wstring_view operator"" sv(const wchar_t* text, size_t count) noexcept
+{
+    return {text, count};
+}
+#if CANN_ASC_STL_DETAIL_HAS_CHAR8_T()
+CANN_ASC_STL_API constexpr u8string_view operator"" sv(const char8_t* text, size_t count) noexcept
+{
+    return {text, count};
+}
+#endif
+}  // namespace string_view_literals
+}  // namespace literals
+CANN_ASC_STL_DETAIL_DIAGNOSTIC_POP()
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_ASC_STD_STRING_VIEW

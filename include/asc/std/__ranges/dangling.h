@@ -45,12 +45,10 @@ template <class R, class = void>
 struct __borrowed_iterator {
     using type = dangling;
 };
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class R>
-struct __borrowed_iterator<R, enable_if_t<borrowed_range<R>>> {
+struct __borrowed_iterator<R, enable_if_t<is_lvalue_reference_v<R> || enable_borrowed_range<remove_cvref_t<R>>>> {
     using type = iterator_t<R>;
 };
-#endif
 template <class R>
 using borrowed_iterator_t = typename __borrowed_iterator<R>::type;
 }  // namespace ranges

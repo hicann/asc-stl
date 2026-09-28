@@ -1,0 +1,75 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_LATCH
+#define CANN_ASC_STL_ASC_LATCH
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__synchronization/latch.h>
+#include <asc/atomic>
+
+namespace asc {
+template <memory_scope Scope>
+class latch {
+public:
+    latch(const latch&) = delete;
+    latch& operator=(const latch&) = delete;
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+    CANN_ASC_STL_SIMT_API constexpr explicit latch(__PTRDIFF_TYPE__ expected) noexcept
+        : state_{static_cast<__INT64_TYPE__>(expected)}
+    {}
+    CANN_ASC_STL_SIMT_API void count_down(__PTRDIFF_TYPE__ update = 1) noexcept
+    {
+        atomic_ref<__INT64_TYPE__, Scope> counter(state_.count);
+        (void)counter.fetch_sub(static_cast<__INT64_TYPE__>(update), std::memory_order_release);
+    }
+    CANN_ASC_STL_SIMT_API bool try_wait() const noexcept
+    {
+        atomic_ref<__INT64_TYPE__, Scope> counter(const_cast<__INT64_TYPE__&>(state_.count));
+        return counter.load(std::memory_order_acquire) == 0;
+    }
+    CANN_ASC_STL_SIMT_API void wait() const noexcept
+    {
+        while (!try_wait()) {
+        }
+    }
+    CANN_ASC_STL_SIMT_API void arrive_and_wait(__PTRDIFF_TYPE__ update = 1) noexcept
+    {
+        count_down(update);
+        wait();
+    }
+    CANN_ASC_STL_SIMT_API static constexpr __PTRDIFF_TYPE__ max() noexcept
+    {
+        return 2147483647;
+    }
+#else
+    explicit latch(__PTRDIFF_TYPE__) = delete;
+#endif
+private:
+    detail::latch_state state_;
+};
+}  // namespace asc
+
+#endif  // CANN_ASC_STL_ASC_LATCH

@@ -18,8 +18,6 @@
 #include <asc/execution.output_ordering.h>
 #include <asc/execution.determinism.h>
 
-#include "core_consumers.h"
-
 int asc_stl_execution_properties_consumer_b()
 {
     constexpr auto repeatability = asc::determinism::device_to_device;

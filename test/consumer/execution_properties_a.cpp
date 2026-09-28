@@ -18,7 +18,7 @@
 #include <asc/execution.output_ordering.h>
 #include <asc/execution.tie_break.h>
 
-#include "core_consumers.h"
+int asc_stl_execution_properties_consumer_b();
 
 int asc_stl_execution_properties_consumer_a()
 {

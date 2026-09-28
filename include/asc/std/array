@@ -332,7 +332,6 @@ struct tuple_element<Index, array<T, Size>> {
     static_assert(Index < Size, "array tuple_element index out of bounds");
     using type = T;
 };
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
 template <class T, size_t Size>
 CANN_ASC_STL_API constexpr array<remove_cv_t<T>, Size> to_array(T (&source)[Size])
 {
@@ -350,7 +349,6 @@ CANN_ASC_STL_API constexpr array<remove_cv_t<T>, Size> to_array(T (&&source)[Siz
         result[index] = ::asc::std::move(source[index]);
     return result;
 }
-#endif
 
 CANN_ASC_STL_END_NAMESPACE
 

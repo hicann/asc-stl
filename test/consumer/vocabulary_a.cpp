@@ -40,7 +40,7 @@
 #include <asc/std/__type_traits/is_trivially_move_constructible.h>
 #include <asc/std/__type_traits/is_unsigned.h>
 
-#include "core_consumers.h"
+int asc_stl_vocabulary_consumer_b();
 
 int asc_stl_vocabulary_consumer_a()
 {

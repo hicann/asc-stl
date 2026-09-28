@@ -39,13 +39,9 @@
 #include <asc/std/__utility/to_underlying.h>
 #include <asc/std/cstddef>
 
-#include "core_consumers.h"
-
 int asc_stl_core_consumer_a()
 {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
     static_assert(asc::std::same_as<int, int>);
-#endif
     static_assert(asc::std::to_integer<int>(asc::std::byte{0x21} | asc::std::byte{0x82}) == (0x21 | 0x82));
     static_assert(asc::std::dynamic_extent == static_cast<asc::std::size_t>(-1));
     static_assert(asc::std::is_integral_v<long long>);

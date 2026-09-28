@@ -49,7 +49,7 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class T>
-struct hash {
+struct __hash_object_representation {
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API size_t operator()(const T& value) const noexcept
     {
         const auto* bytes = reinterpret_cast<const unsigned char*>(&value);
@@ -61,6 +61,65 @@ struct hash {
         return result;
     }
 };
+
+template <class T, bool = is_enum_v<T>>
+struct __hash_enum {};
+
+template <class T>
+struct __hash_enum<T, true> {
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API size_t operator()(T value) const noexcept
+    {
+        using underlying = underlying_type_t<T>;
+        return hash<underlying>{}(static_cast<underlying>(value));
+    }
+};
+
+template <class T>
+struct hash : __hash_enum<T> {};
+
+template <>
+struct hash<bool> : __hash_object_representation<bool> {};
+template <>
+struct hash<char> : __hash_object_representation<char> {};
+template <>
+struct hash<signed char> : __hash_object_representation<signed char> {};
+template <>
+struct hash<unsigned char> : __hash_object_representation<unsigned char> {};
+template <>
+struct hash<wchar_t> : __hash_object_representation<wchar_t> {};
+template <>
+struct hash<char16_t> : __hash_object_representation<char16_t> {};
+template <>
+struct hash<char32_t> : __hash_object_representation<char32_t> {};
+#if CANN_ASC_STL_DETAIL_HAS_CHAR8_T()
+template <>
+struct hash<char8_t> : __hash_object_representation<char8_t> {};
+#endif
+template <>
+struct hash<short> : __hash_object_representation<short> {};
+template <>
+struct hash<unsigned short> : __hash_object_representation<unsigned short> {};
+template <>
+struct hash<int> : __hash_object_representation<int> {};
+template <>
+struct hash<unsigned int> : __hash_object_representation<unsigned int> {};
+template <>
+struct hash<long> : __hash_object_representation<long> {};
+template <>
+struct hash<unsigned long> : __hash_object_representation<unsigned long> {};
+template <>
+struct hash<long long> : __hash_object_representation<long long> {};
+template <>
+struct hash<unsigned long long> : __hash_object_representation<unsigned long long> {};
+template <>
+struct hash<float> : __hash_object_representation<float> {};
+template <>
+struct hash<double> : __hash_object_representation<double> {};
+template <>
+struct hash<long double> : __hash_object_representation<long double> {};
+
+template <class T>
+struct hash<T*> : __hash_object_representation<T*> {};
 
 CANN_ASC_STL_END_NAMESPACE
 

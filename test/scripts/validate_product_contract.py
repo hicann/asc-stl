@@ -55,11 +55,10 @@ def main() -> int:
         guards[first_guard] = relative
 
     execution_coordinate = re.compile(r"\bW\d{2}[-_]B\d{3}\b", re.IGNORECASE)
-    source_paths = [product_root / "CMakeLists.txt", product_root / "README.md"]
-    for source_root in ("cmake", "include", "scripts", "test"):
-        source_paths.extend(item for item in (product_root / source_root).rglob("*") if item.is_file())
-    for path in sorted(source_paths):
+    for path in sorted(item for item in product_root.rglob("*") if item.is_file()):
         relative = path.relative_to(product_root).as_posix()
+        if relative.startswith("build/"):
+            continue
         if execution_coordinate.search(relative):
             violations.append(f"{relative}: implementation execution coordinate leaked into product path")
             continue

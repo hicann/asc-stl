@@ -16,8 +16,6 @@
 
 #include <asc/memory>
 
-#include "core_consumers.h"
-
 int asc_stl_memory_consumer_b()
 {
     static_assert(asc::memory_space_of_v<asc::gm_span<int>> == asc::memory_space::global);

@@ -40,8 +40,6 @@
 #include <asc/std/__type_traits/rank.h>
 #include <asc/std/__type_traits/remove_cv.h>
 
-#include "core_consumers.h"
-
 int asc_stl_type_traits_consumer_a()
 {
     static_assert(asc::std::conjunction_v<asc::std::true_type>);

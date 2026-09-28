@@ -46,5 +46,45 @@ CANN_ASC_STL_SIMT_API void evaluate(__INT32_TYPE__* output) noexcept
     asc::atomic_thread_fence(asc::std::memory_order_release, asc::memory_scope::block);
     output[15] = value.load(asc::std::memory_order_relaxed);
 }
+
+CANN_ASC_STL_SIMT_API void evaluate_visibility(__INT32_TYPE__* output) noexcept
+{
+    if (threadIdx.x != 0U)
+        return;
+    constexpr unsigned int rounds = 20000U;
+    constexpr unsigned int spin_limit = 10000000U;
+    asc::atomic_ref<__INT32_TYPE__> published(output[17]);
+    asc::atomic_ref<__INT32_TYPE__> acknowledged(output[18]);
+    asc::atomic_ref<__INT32_TYPE__> errors(output[19]);
+    asc::atomic_ref<__INT32_TYPE__> timeouts(output[20]);
+    if (blockIdx.x == 0U) {
+        for (unsigned int round = 1; round <= rounds; ++round) {
+            output[16] = static_cast<int>(round ^ 0x13579BDFU);
+            published.store(static_cast<int>(round), asc::std::memory_order_release);
+            unsigned int spins = 0;
+            while (acknowledged.load(asc::std::memory_order_acquire) < static_cast<int>(round) && spins < spin_limit) {
+                ++spins;
+            }
+            if (spins == spin_limit) {
+                (void)timeouts.fetch_add(1, asc::std::memory_order_relaxed);
+                return;
+            }
+        }
+    } else if (blockIdx.x == 1U) {
+        for (unsigned int round = 1; round <= rounds; ++round) {
+            unsigned int spins = 0;
+            while (published.load(asc::std::memory_order_acquire) < static_cast<int>(round) && spins < spin_limit) {
+                ++spins;
+            }
+            if (spins == spin_limit) {
+                (void)timeouts.fetch_add(1, asc::std::memory_order_relaxed);
+                return;
+            }
+            if (output[16] != static_cast<int>(round ^ 0x13579BDFU))
+                (void)errors.fetch_add(1, asc::std::memory_order_relaxed);
+            acknowledged.store(static_cast<int>(round), asc::std::memory_order_release);
+        }
+    }
+}
 }  // namespace asc_stl_b013_runtime
 #endif

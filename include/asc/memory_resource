@@ -1,0 +1,237 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_MEMORY_RESOURCE
+#define CANN_ASC_STL_ASC_MEMORY_RESOURCE
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__memory/resources.h>
+#include <asc/execution>
+#include <asc/std/cstddef>
+
+namespace asc {
+
+class memory_resource_properties {
+public:
+    CANN_ASC_STL_HOST constexpr memory_resource_properties(
+        bool host_accessible, bool device_accessible, ::asc::std::size_t maximum_alignment) noexcept
+        : host_accessible_(host_accessible),
+          device_accessible_(device_accessible),
+          maximum_alignment_(maximum_alignment)
+    {}
+    CANN_ASC_STL_HOST constexpr bool host_accessible() const noexcept
+    {
+        return host_accessible_;
+    }
+    CANN_ASC_STL_HOST constexpr bool device_accessible() const noexcept
+    {
+        return device_accessible_;
+    }
+    CANN_ASC_STL_HOST constexpr ::asc::std::size_t maximum_alignment() const noexcept
+    {
+        return maximum_alignment_;
+    }
+
+private:
+    bool host_accessible_;
+    bool device_accessible_;
+    ::asc::std::size_t maximum_alignment_;
+};
+
+namespace detail {
+CANN_ASC_STL_HOST_API constexpr bool valid_resource_request(void** output, ::asc::std::size_t bytes,
+    ::asc::std::size_t alignment, ::asc::std::size_t maximum_alignment) noexcept
+{
+    return output != nullptr && *output == nullptr && bytes != 0 && alignment != 0 &&
+        (alignment & (alignment - 1)) == 0 && alignment <= maximum_alignment;
+}
+}  // namespace detail
+
+class device_memory_resource {
+public:
+    CANN_ASC_STL_HOST constexpr explicit device_memory_resource(int device_ordinal) noexcept
+        : device_ordinal_(device_ordinal)
+    {}
+    CANN_ASC_STL_HOST constexpr int device_ordinal() const noexcept
+    {
+        return device_ordinal_;
+    }
+    CANN_ASC_STL_HOST static constexpr memory_resource_properties properties() noexcept
+    {
+        return memory_resource_properties(false, true, 32);
+    }
+    CANN_ASC_STL_HOST_API execution_status allocate(
+        void** output, ::asc::std::size_t bytes, ::asc::std::size_t alignment = 32) const noexcept
+    {
+        if (!detail::valid_resource_request(output, bytes, alignment, properties().maximum_alignment()))
+            return execution_status(execution_errc::invalid_argument);
+        int current = -1;
+        const int status = detail::memory_current_device(&current);
+        if (status != 0)
+            return detail::backend_status(status);
+        if (current != device_ordinal_)
+            return execution_status(execution_errc::invalid_argument);
+        return detail::backend_status(detail::memory_allocate_device(output, bytes));
+    }
+    CANN_ASC_STL_HOST_API execution_status deallocate(
+        void* pointer, ::asc::std::size_t bytes, ::asc::std::size_t alignment = 32) const noexcept
+    {
+        if (pointer == nullptr)
+            return execution_status{};
+        if (bytes == 0 || alignment == 0 || (alignment & (alignment - 1)) != 0 ||
+            alignment > properties().maximum_alignment())
+            return execution_status(execution_errc::invalid_argument);
+        int current = -1;
+        const int status = detail::memory_current_device(&current);
+        if (status != 0)
+            return detail::backend_status(status);
+        if (current != device_ordinal_)
+            return execution_status(execution_errc::invalid_argument);
+        return detail::backend_status(detail::memory_deallocate_device(pointer));
+    }
+
+private:
+    int device_ordinal_;
+};
+
+class pinned_memory_resource {
+public:
+    CANN_ASC_STL_HOST constexpr pinned_memory_resource() noexcept = default;
+    CANN_ASC_STL_HOST static constexpr memory_resource_properties properties() noexcept
+    {
+        return memory_resource_properties(true, false, alignof(::asc::std::max_align_t));
+    }
+    CANN_ASC_STL_HOST_API execution_status allocate(void** output, ::asc::std::size_t bytes,
+        ::asc::std::size_t alignment = alignof(::asc::std::max_align_t)) const noexcept
+    {
+        if (!detail::valid_resource_request(output, bytes, alignment, properties().maximum_alignment()))
+            return execution_status(execution_errc::invalid_argument);
+        return detail::backend_status(detail::memory_allocate_pinned(output, bytes));
+    }
+    CANN_ASC_STL_HOST_API execution_status deallocate(void* pointer, ::asc::std::size_t bytes,
+        ::asc::std::size_t alignment = alignof(::asc::std::max_align_t)) const noexcept
+    {
+        if (pointer == nullptr)
+            return execution_status{};
+        if (bytes == 0 || alignment == 0 || (alignment & (alignment - 1)) != 0 ||
+            alignment > properties().maximum_alignment())
+            return execution_status(execution_errc::invalid_argument);
+        return detail::backend_status(detail::memory_deallocate_pinned(pointer));
+    }
+};
+
+class device_memory_resource_ref {
+public:
+    CANN_ASC_STL_HOST constexpr device_memory_resource_ref() noexcept = default;
+    CANN_ASC_STL_HOST constexpr explicit device_memory_resource_ref(device_memory_resource& resource) noexcept
+        : resource_(&resource)
+    {}
+    CANN_ASC_STL_HOST constexpr bool valid() const noexcept
+    {
+        return resource_ != nullptr;
+    }
+    CANN_ASC_STL_HOST constexpr memory_resource_properties properties() const noexcept
+    {
+        return device_memory_resource::properties();
+    }
+    CANN_ASC_STL_HOST constexpr int device_ordinal() const noexcept
+    {
+        return resource_ == nullptr ? -1 : resource_->device_ordinal();
+    }
+    CANN_ASC_STL_HOST_API execution_status allocate(
+        void** output, ::asc::std::size_t bytes, ::asc::std::size_t alignment = 32) const noexcept
+    {
+        if (resource_ == nullptr) {
+            if (output != nullptr)
+                *output = nullptr;
+            return execution_status(execution_errc::invalid_argument);
+        }
+        return resource_->allocate(output, bytes, alignment);
+    }
+    CANN_ASC_STL_HOST_API execution_status deallocate(
+        void* pointer, ::asc::std::size_t bytes, ::asc::std::size_t alignment = 32) const noexcept
+    {
+        return resource_ == nullptr ? execution_status(execution_errc::invalid_argument) :
+                                      resource_->deallocate(pointer, bytes, alignment);
+    }
+    CANN_ASC_STL_HOST constexpr bool operator==(const device_memory_resource_ref& other) const noexcept
+    {
+        return resource_ == other.resource_;
+    }
+    CANN_ASC_STL_HOST constexpr bool operator!=(const device_memory_resource_ref& other) const noexcept
+    {
+        return !(*this == other);
+    }
+
+private:
+    device_memory_resource* resource_{};
+};
+
+class pinned_memory_resource_ref {
+public:
+    CANN_ASC_STL_HOST constexpr pinned_memory_resource_ref() noexcept = default;
+    CANN_ASC_STL_HOST constexpr explicit pinned_memory_resource_ref(pinned_memory_resource& resource) noexcept
+        : resource_(&resource)
+    {}
+    CANN_ASC_STL_HOST constexpr bool valid() const noexcept
+    {
+        return resource_ != nullptr;
+    }
+    CANN_ASC_STL_HOST constexpr memory_resource_properties properties() const noexcept
+    {
+        return pinned_memory_resource::properties();
+    }
+    CANN_ASC_STL_HOST_API execution_status allocate(void** output, ::asc::std::size_t bytes,
+        ::asc::std::size_t alignment = alignof(::asc::std::max_align_t)) const noexcept
+    {
+        if (resource_ == nullptr) {
+            if (output != nullptr)
+                *output = nullptr;
+            return execution_status(execution_errc::invalid_argument);
+        }
+        return resource_->allocate(output, bytes, alignment);
+    }
+    CANN_ASC_STL_HOST_API execution_status deallocate(void* pointer, ::asc::std::size_t bytes,
+        ::asc::std::size_t alignment = alignof(::asc::std::max_align_t)) const noexcept
+    {
+        return resource_ == nullptr ? execution_status(execution_errc::invalid_argument) :
+                                      resource_->deallocate(pointer, bytes, alignment);
+    }
+    CANN_ASC_STL_HOST constexpr bool operator==(const pinned_memory_resource_ref& other) const noexcept
+    {
+        return resource_ == other.resource_;
+    }
+    CANN_ASC_STL_HOST constexpr bool operator!=(const pinned_memory_resource_ref& other) const noexcept
+    {
+        return !(*this == other);
+    }
+
+private:
+    pinned_memory_resource* resource_{};
+};
+
+}  // namespace asc
+
+#endif  // CANN_ASC_STL_ASC_MEMORY_RESOURCE

@@ -1,0 +1,198 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_WORK_QUEUE
+#define CANN_ASC_STL_ASC_WORK_QUEUE
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/atomic>
+#include <asc/hierarchy>
+#include <asc/__work_queue/cursor.h>
+
+// Dynamic work claiming over a caller-owned global-memory atomic cursor.
+// make_work_queue borrows a cursor the caller has initialized and keeps
+// alive; acquire_work advances it by the grain size with a relaxed
+// fetch-add and clips the result to the end bound, so every successful
+// acquisition returns one disjoint bounded chunk covering the initial cursor
+// value up to end.  Ordinary AICore blocks claim through the core path and
+// pure-SIMT warps claim through a warp leader before broadcasting; the queue
+// provides no block cancellation, fairness or ordering guarantee, persistent
+// kernel lifetime, or implicit grid barrier.  The first index set is
+// uint32_t and uint64_t; the grain size is positive and cursor + grain size
+// must not overflow.
+
+namespace asc {
+
+namespace detail {
+
+template <class T>
+struct work_index_supported {
+    // uint64_t may itself be unsigned long long; a predicate avoids duplicate
+    // explicit specializations while retaining both accepted 64-bit spellings.
+    static constexpr bool value = __is_same(T, __UINT32_TYPE__) || __is_same(T, __UINT64_TYPE__) ||
+        (sizeof(unsigned long long) == 8 && __is_same(T, unsigned long long));
+};
+
+}  // namespace detail
+
+template <class Index>
+class work_chunk {
+    static_assert(detail::work_index_supported<Index>::value, "work_chunk requires uint32_t or uint64_t");
+
+public:
+    Index begin{};
+    Index end{};
+
+    CANN_ASC_STL_API constexpr work_chunk() noexcept = default;
+    CANN_ASC_STL_API constexpr work_chunk(Index first, Index last) noexcept : begin(first), end(last)
+    {}
+
+    CANN_ASC_STL_API constexpr bool empty() const noexcept
+    {
+        return begin >= end;
+    }
+    CANN_ASC_STL_API constexpr Index size() const noexcept
+    {
+        return begin >= end ? Index(0) : Index(end - begin);
+    }
+};
+
+// The queue reference borrows the caller-owned global-memory cursor and
+// carries the end bound and grain size as plain values: concurrent claimers
+// must never re-read the bound fields that share the cursor's cache line with
+// the atomic cell, so only the cursor cell itself is touched during claiming.
+template <class Index>
+class work_queue_ref {
+    static_assert(detail::work_index_supported<Index>::value, "work_queue_ref requires uint32_t or uint64_t");
+
+public:
+    CANN_ASC_STL_API constexpr work_queue_ref() noexcept = default;
+
+    CANN_ASC_STL_API constexpr explicit work_queue_ref(detail::work_cursor& cursor) noexcept
+        : cursor_(&cursor),
+          end_(static_cast<Index>(cursor.end)),
+          grain_(cursor.grain_size > 0 ? static_cast<Index>(cursor.grain_size) : Index(1))
+    {}
+    CANN_ASC_STL_API constexpr work_queue_ref(detail::work_cursor& cursor, Index end, Index grain_size) noexcept
+        : cursor_(&cursor), end_(end), grain_(grain_size > 0 ? grain_size : Index(1))
+    {}
+
+    CANN_ASC_STL_API constexpr detail::work_cursor* cursor() const noexcept
+    {
+        return cursor_;
+    }
+    CANN_ASC_STL_API constexpr Index end_value() const noexcept
+    {
+        return end_;
+    }
+    CANN_ASC_STL_API constexpr Index grain_size() const noexcept
+    {
+        return grain_;
+    }
+
+private:
+    detail::work_cursor* cursor_{};
+    Index end_{};
+    Index grain_{1};
+};
+
+template <class Index>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr work_queue_ref<Index> make_work_queue(
+    detail::work_cursor& cursor, Index end, Index grain_size) noexcept
+{
+    return work_queue_ref<Index>(cursor, end, grain_size);
+}
+
+// Host and pure-SIMT acquisition borrow the cursor through the queue
+// reference and claim through the member primitive (adapter or compiler
+// builtin).  Ordinary AICore code must not call this form: its cursor cell
+// lives in global memory, which only the __gm__-qualified overload below can
+// reach.
+#if !CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+template <class Index>
+CANN_ASC_STL_API bool acquire_work(work_queue_ref<Index> queue, work_chunk<Index>& chunk) noexcept
+{
+    return acquire_work(queue.cursor(), queue.end_value(), queue.grain_size(), chunk);
+}
+
+// Host and pure-SIMT acquisition over the borrowed cursor cell: the claim
+// advances the caller-owned global-memory cursor with one atomic read-modify-
+// write while the bound and grain travel as plain values, so no concurrent
+// claimer ever re-reads the fields sharing the cursor's cache line.
+template <class Index>
+CANN_ASC_STL_API bool acquire_work(
+    detail::work_cursor* cursor, Index end, Index grain_size, work_chunk<Index>& chunk) noexcept
+{
+    if (cursor == nullptr) {
+        chunk = work_chunk<Index>();
+        return false;
+    }
+    const __UINT64_TYPE__ grain = static_cast<__UINT64_TYPE__>(grain_size > 0 ? grain_size : Index(1));
+    const __UINT64_TYPE__ bound = static_cast<__UINT64_TYPE__>(end);
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+    const __UINT64_TYPE__ current = detail::atomic_add(&cursor->next, grain);
+#else
+    const __UINT64_TYPE__ current = __atomic_fetch_add(&cursor->next, grain, __ATOMIC_RELAXED);
+#endif
+    if (!detail::work_uint64_less(current, bound)) {
+        chunk = work_chunk<Index>();
+        return false;
+    }
+    const __UINT64_TYPE__ claimed_stop = current + grain;
+    const __UINT64_TYPE__ claimed_end = detail::work_uint64_less(claimed_stop, bound) ? claimed_stop : bound;
+    chunk = work_chunk<Index>(static_cast<Index>(current), static_cast<Index>(claimed_end));
+    return true;
+}
+#endif
+
+#if CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+// Ordinary-AICore core acquisition: the caller owns the cursor in global
+// memory and the backend cannot select a generic fetch-add on it, so the
+// claim advances the __gm__-qualified cell through the CANN scalar atomic.
+template <class Index>
+CANN_ASC_STL_API bool acquire_work(
+    __gm__ detail::work_cursor* cursor, Index end, Index grain_size, work_chunk<Index>& chunk) noexcept
+{
+    if (cursor == nullptr) {
+        chunk = work_chunk<Index>();
+        return false;
+    }
+    const __UINT64_TYPE__ grain = static_cast<__UINT64_TYPE__>(grain_size > 0 ? grain_size : Index(1));
+    const __UINT64_TYPE__ bound = static_cast<__UINT64_TYPE__>(end);
+    const __UINT64_TYPE__ current = asc_atomic_add(&cursor->next, grain);
+    if (!detail::work_uint64_less(current, bound)) {
+        chunk = work_chunk<Index>();
+        return false;
+    }
+    const __UINT64_TYPE__ claimed_stop = current + grain;
+    const __UINT64_TYPE__ claimed_end = detail::work_uint64_less(claimed_stop, bound) ? claimed_stop : bound;
+    chunk = work_chunk<Index>(static_cast<Index>(current), static_cast<Index>(claimed_end));
+    return true;
+}
+#endif
+
+}  // namespace asc
+
+#endif  // CANN_ASC_STL_ASC_WORK_QUEUE

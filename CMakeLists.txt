@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.16)
 
 project(asc_stl VERSION 0.1.0 LANGUAGES CXX)
 
@@ -25,8 +25,7 @@ target_include_directories(
     asc_stl
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-)
+        $<INSTALL_INTERFACE:include>)
 
 include(CTest)
 if(BUILD_TESTING)
@@ -36,29 +35,24 @@ endif()
 install(
     DIRECTORY include/
     DESTINATION include
-    PATTERN ".*" EXCLUDE
-)
+    PATTERN ".*" EXCLUDE)
 install(TARGETS asc_stl EXPORT asc_stlTargets)
 install(
     EXPORT asc_stlTargets
     FILE asc_stlTargets.cmake
     NAMESPACE asc_stl::
-    DESTINATION lib/cmake/asc_stl
-)
+    DESTINATION lib/cmake/asc_stl)
 
 configure_package_config_file(
     cmake/asc_stlConfig.cmake.in
     "${CMAKE_CURRENT_BINARY_DIR}/asc_stlConfig.cmake"
-    INSTALL_DESTINATION lib/cmake/asc_stl
-)
+    INSTALL_DESTINATION lib/cmake/asc_stl)
 write_basic_package_version_file(
     "${CMAKE_CURRENT_BINARY_DIR}/asc_stlConfigVersion.cmake"
     VERSION "${PROJECT_VERSION}"
-    COMPATIBILITY SameMajorVersion
-)
+    COMPATIBILITY SameMajorVersion)
 install(
     FILES
         "${CMAKE_CURRENT_BINARY_DIR}/asc_stlConfig.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/asc_stlConfigVersion.cmake"
-    DESTINATION lib/cmake/asc_stl
-)
+    DESTINATION lib/cmake/asc_stl)

@@ -39,8 +39,6 @@
 #include <asc/std/__type_traits/is_assignable.h>
 #include <asc/std/__type_traits/add_pointer.h>
 
-#include "core_consumers.h"
-
 namespace {
 struct consumer_type_b {
     int value;

@@ -39,8 +39,6 @@
 #include <asc/std/__fwd/char_traits.h>
 #include <asc/std/__floating_point/format.h>
 
-#include "core_consumers.h"
-
 namespace {
 
 struct consumer_nontrivial_assign {

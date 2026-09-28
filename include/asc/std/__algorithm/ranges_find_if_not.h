@@ -55,11 +55,10 @@ CANN_ASC_STL_API constexpr InputIterator find_if_not(InputIterator first, InputI
     return first;
 }
 #endif
-#if CANN_ASC_STL_DETAIL_HAS_CXX20() && !defined(CANN_ASC_STL_DETAIL_FIND_IF_NOT_FN_DEFINED)
-#define CANN_ASC_STL_DETAIL_FIND_IF_NOT_FN_DEFINED
 namespace ranges {
 struct __find_if_not_fn {
-    template <class Iterator, class Sentinel, class Projection = identity, class Predicate>
+    template <class Iterator, class Sentinel, class Predicate, class Projection = identity,
+        class = decltype(::asc::std::declval<Iterator&>() != ::asc::std::declval<Sentinel&>())>
     CANN_ASC_STL_API constexpr Iterator operator()(
         Iterator first, Sentinel last, Predicate predicate, Projection projection = {}) const
     {
@@ -70,10 +69,17 @@ struct __find_if_not_fn {
         }
         return first;
     }
+    template <class Range, class Predicate, class Projection = identity,
+        class =
+            enable_if_t<is_invocable_v<Predicate&, invoke_result_t<Projection&, iter_reference_t<iterator_t<Range>>>>>>
+    CANN_ASC_STL_API constexpr borrowed_iterator_t<Range> operator()(
+        Range&& range, Predicate predicate, Projection projection = {}) const
+    {
+        return (*this)(ranges::begin(range), ranges::end(range), predicate, projection);
+    }
 };
 inline constexpr __find_if_not_fn find_if_not{};
 }  // namespace ranges
-#endif
 
 CANN_ASC_STL_END_NAMESPACE
 

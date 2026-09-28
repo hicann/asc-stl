@@ -17,7 +17,7 @@
 #ifndef ASC_STL_TEST_B019_STD_SEMANTICS_H
 #define ASC_STL_TEST_B019_STD_SEMANTICS_H
 
-#include <asc/std/__compare/ordering.h>
+#include <asc/std/compare>
 #include <asc/std/__execution/execution_policy.h>
 #include <asc/std/__execution/type_traits.h>
 #include <asc/std/__iterator/indirectly_comparable.h>
@@ -50,6 +50,13 @@ CANN_ASC_STL_API int evaluate_std() noexcept
     failures += !(asc::std::weak_ordering::less < 0);
     failures += !(0 < asc::std::partial_ordering::greater);
     failures += asc::std::partial_ordering::unordered >= 0;
+    failures += !asc::std::is_eq(asc::std::partial_ordering::equivalent);
+    failures += !asc::std::is_neq(asc::std::partial_ordering::unordered);
+    failures += !asc::std::is_lt(asc::std::partial_ordering::less);
+    failures += !asc::std::is_lteq(asc::std::partial_ordering::equivalent);
+    failures += !asc::std::is_gt(asc::std::partial_ordering::greater);
+    failures += !asc::std::is_gteq(asc::std::partial_ordering::equivalent);
+    failures += asc::std::is_lt(asc::std::partial_ordering::unordered);
     return failures;
 }
 

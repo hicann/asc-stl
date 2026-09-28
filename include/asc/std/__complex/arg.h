@@ -42,20 +42,10 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API float arg(float value) noexcep
 {
     return ::asc::std::atan2(0.0F, value);
 }
-CANN_ASC_STL_NODISCARD inline double arg(double value) noexcept
-{
-    return __builtin_atan2(0.0, value);
-}
-CANN_ASC_STL_NODISCARD inline long double arg(long double value) noexcept
-{
-    return __builtin_atan2l(0.0L, value);
-}
+CANN_ASC_STL_API double arg(double) = delete;
+CANN_ASC_STL_API long double arg(long double) = delete;
 template <class T>
-CANN_ASC_STL_NODISCARD inline double arg(T value) noexcept
-{
-    static_assert(is_integral_v<T>, "scalar complex arg overload requires an integral type");
-    return ::asc::std::arg(static_cast<double>(value));
-}
+CANN_ASC_STL_API double arg(T) = delete;
 
 CANN_ASC_STL_END_NAMESPACE
 

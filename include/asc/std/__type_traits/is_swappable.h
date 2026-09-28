@@ -86,20 +86,26 @@ template <class T>
 struct __is_swappable : bool_constant<__detail::__swappable_with<T&, T&>::value> {};
 template <class T>
 struct __is_nothrow_swappable : __detail::__nothrow_swappable_with<T&, T&> {};
+namespace __detail {
+template <class T, bool = __is_referenceable<T>::value>
+struct __is_swappable_value : false_type {};
+template <class T>
+struct __is_swappable_value<T, true>
+    : bool_constant<__swappable_with<add_lvalue_reference_t<T>, add_lvalue_reference_t<T>>::value> {};
+template <class T, bool = __is_referenceable<T>::value>
+struct __is_nothrow_swappable_value : false_type {};
+template <class T>
+struct __is_nothrow_swappable_value<T, true>
+    : bool_constant<__nothrow_swappable_with<add_lvalue_reference_t<T>, add_lvalue_reference_t<T>>::value> {};
+}  // namespace __detail
 template <class T, class U>
 inline constexpr bool is_swappable_with_v = __detail::__swappable_with<T, U>::value;
-template <class T, bool = __is_referenceable<T>::value>
-inline constexpr bool is_swappable_v = false;
 template <class T>
-inline constexpr bool is_swappable_v<T, true> =
-    is_swappable_with_v<add_lvalue_reference_t<T>, add_lvalue_reference_t<T>>;
+inline constexpr bool is_swappable_v = __detail::__is_swappable_value<T>::value;
 template <class T, class U>
 inline constexpr bool is_nothrow_swappable_with_v = __detail::__nothrow_swappable_with<T, U>::value;
-template <class T, bool = __is_referenceable<T>::value>
-inline constexpr bool is_nothrow_swappable_v = false;
 template <class T>
-inline constexpr bool is_nothrow_swappable_v<T, true> =
-    is_nothrow_swappable_with_v<add_lvalue_reference_t<T>, add_lvalue_reference_t<T>>;
+inline constexpr bool is_nothrow_swappable_v = __detail::__is_nothrow_swappable_value<T>::value;
 template <class T, class U>
 struct is_swappable_with : bool_constant<is_swappable_with_v<T, U>> {};
 template <class T>

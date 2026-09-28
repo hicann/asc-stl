@@ -20,7 +20,7 @@
 #include <cstdint>
 #include <iostream>
 
-#include "launcher.h"
+std::uint32_t launch_asc_stl_source_location_cannsim(void* stream, void* output);
 
 namespace {
 

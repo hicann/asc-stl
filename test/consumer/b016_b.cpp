@@ -18,7 +18,7 @@
 #include <asc/std/__chrono/duration.h>
 #include <asc/std/tuple>
 
-#include "core_consumers.h"
+int asc_stl_b016_consumer_a();
 
 int asc_stl_b016_consumer_b()
 {

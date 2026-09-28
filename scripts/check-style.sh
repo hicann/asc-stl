@@ -20,22 +20,26 @@ cd "$ROOT"
 
 echo "Step 1: check canonical license headers"
 
-# Limit discovery to repository-owned source roots. Online CI injects an
-# untracked top-level CI/ directory that must not be treated as ASC-STL source.
-SOURCE_ROOTS=(CMakeLists.txt cmake include scripts test)
+# Inspect only ASC-STL-owned source roots. Formal CI may inject untracked
+# top-level infrastructure (for example CI/) into its working directory.
+SOURCE_ROOTS=(CMakeLists.txt cmake docs include scripts test)
 
 LICENSE_SOURCES="$({
     git ls-files --cached --others --exclude-standard -- "${SOURCE_ROOTS[@]}"
-} 2>/dev/null | sort -u)"
-
-LICENSE_SOURCES="$(printf '%s\n' "$LICENSE_SOURCES" | grep -E '\.(asc|c|cc|cpp|cxx|h|hpp|cuh|py|sh|bash|cmake|cmake\.in|cpp\.in)$|(^|/)CMakeLists\.txt$|(^|/)__config$' || true)"
+} 2>/dev/null | grep -E '\.(asc|c|cc|cpp|cxx|h|hpp|cuh|py|sh|bash|cmake|cmake\.in|cpp\.in)$|(^|/)CMakeLists\.txt$|(^|/)__config$' | grep -v '/\.gitkeep$' | sort -u | while IFS= read -r path; do
+    if [ -f "$path" ]; then printf '%s\n' "$path"; fi
+done)"
 
 if [ -n "$LICENSE_SOURCES" ]; then
     printf '%s\n' "$LICENSE_SOURCES" | xargs python3 scripts/add_license_header.py --check
 fi
 echo "canonical license headers passed"
 
-echo "Step 2: check clang-format"
+echo "Step 2: check ASC-STL Header layout"
+python3 scripts/check_header_layout.py "$ROOT/include"
+echo "ASC-STL Header layout passed"
+
+echo "Step 3: check clang-format"
 
 CLANG_FORMAT=""
 for version in 18 17 16 15 14; do
@@ -48,9 +52,9 @@ CLANG_FORMAT="${CLANG_FORMAT:-clang-format}"
 
 SOURCES="$({
     git ls-files --cached --others --exclude-standard -- "${SOURCE_ROOTS[@]}"
-} 2>/dev/null | sort -u)"
-
-SOURCES="$(printf '%s\n' "$SOURCES" | grep -E '\.(asc|h|hpp|cuh|cc|cpp|cxx|cpp\.in)$|(^|/)__config$' || true)"
+} 2>/dev/null | grep -E '\.(asc|h|hpp|cuh|cc|cpp|cxx|cpp\.in)$|(^|/)__config$' | grep -v '/\.gitkeep$' | sort -u | while IFS= read -r path; do
+    if [ -f "$path" ]; then printf '%s\n' "$path"; fi
+done)"
 
 if [ -z "$SOURCES" ]; then
     echo "No C/C++ source files found; skip clang-format and cpplint."
@@ -65,7 +69,7 @@ fi
 printf '%s\n' "$SOURCES" | xargs "$CLANG_FORMAT" --dry-run --Werror
 echo "clang-format passed"
 
-echo "Step 3: check cpplint"
+echo "Step 4: check cpplint"
 if ! command -v cpplint >/dev/null 2>&1; then
     echo "Missing cpplint. Install it with: python -m pip install cpplint"
     exit 1

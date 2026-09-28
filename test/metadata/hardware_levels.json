@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "runtime_cases": {
+    "asc/__algorithm/frontend.h": "HW1",
+    "asc/__collectives/block.h": "HW1",
+    "asc/__tensor_copy/descriptor.h": "HW1",
+    "asc/algorithm": "HW0",
+    "asc/atomic": "HW1",
+    "asc/cmath": "HW1",
+    "asc/hierarchy": "HW1",
+    "asc/std/__complex/logarithms.h": "HW1",
+    "asc/std/__cstring/memcpy.h": "HW1",
+    "asc/std/atomic": "HW1",
+    "asc/std/bitset": "HW0",
+    "asc/std/cstdlib": "HW0",
+    "asc/std/ctime": "HW1",
+    "asc/std/exception": "HW1",
+    "asc/std/iterator": "HW1",
+    "asc/std/linalg": "HW1",
+    "asc/std/list": "HW1",
+    "asc/std/source_location": "HW0",
+    "asc/tensor_copy": "HW1",
+    "asc/warp": "HW1",
+    "asc/work_queue": "HW1"
+  }
+}

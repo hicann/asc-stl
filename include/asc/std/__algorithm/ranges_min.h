@@ -40,8 +40,6 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20() && !defined(CANN_ASC_STL_DETAIL_RANGES_MIN_DEFINED)
-#define CANN_ASC_STL_DETAIL_RANGES_MIN_DEFINED
 namespace ranges {
 struct __min_fn {
     template <class T, class Projection = identity, class Compare = ranges::less>
@@ -53,10 +51,26 @@ struct __min_fn {
             right :
             left;
     }
+    template <class Range, class Compare = ranges::less, class Projection = identity,
+        class = enable_if_t<is_invocable_v<Compare&, invoke_result_t<Projection&, iter_reference_t<iterator_t<Range>>>,
+            invoke_result_t<Projection&, iter_reference_t<iterator_t<Range>>>>>>
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr range_value_t<Range> operator()(
+        Range&& range, Compare compare = {}, Projection projection = {}) const
+    {
+        auto first = ranges::begin(range);
+        const auto last = ranges::end(range);
+        range_value_t<Range> result = *first;
+        while (++first != last) {
+            if (::asc::std::invoke(
+                    compare, ::asc::std::invoke(projection, *first), ::asc::std::invoke(projection, result))) {
+                result = *first;
+            }
+        }
+        return result;
+    }
 };
 inline constexpr __min_fn min{};
 }  // namespace ranges
-#endif
 
 CANN_ASC_STL_END_NAMESPACE
 

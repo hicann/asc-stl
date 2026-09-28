@@ -17,7 +17,7 @@
 /* Copyright 2026 湖北多样性算力应用创新研究院 */
 #ifndef ASC_STL_TEST_ASC_WARP_RUNTIME_SEMANTICS_H
 #define ASC_STL_TEST_ASC_WARP_RUNTIME_SEMANTICS_H
-#include <asc/std/__atomic/atomic_ref.h>
+#include <asc/std/atomic>
 #include <asc/warp>
 #include <acl/acl.h>
 #ifndef ASC_STL_ATOMIC_VISIBILITY_ROUNDS

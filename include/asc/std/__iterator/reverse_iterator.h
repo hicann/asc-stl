@@ -69,6 +69,10 @@ public:
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
     using iterator_concept =
         conditional_t<random_access_iterator<Iter>, random_access_iterator_tag, bidirectional_iterator_tag>;
+#else
+    using iterator_concept =
+        conditional_t<is_convertible_v<typename iterator_traits<Iter>::iterator_category, random_access_iterator_tag>,
+            random_access_iterator_tag, bidirectional_iterator_tag>;
 #endif
 
     CANN_ASC_STL_API constexpr reverse_iterator() noexcept(is_nothrow_default_constructible_v<Iter>) = default;

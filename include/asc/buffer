@@ -1,0 +1,474 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_BUFFER
+#define CANN_ASC_STL_ASC_BUFFER
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__algorithm/byte_operations.h>
+#include <asc/__memory/buffers.h>
+#include <asc/memory_resource>
+#include <asc/std/__type_traits/is_trivially_copyable.h>
+#include <asc/stream>
+
+// Move-only typed buffers of trivially copyable and trivially destructible
+// elements with nonthrowing factories. A buffer owns exactly one explicit
+// allocation and records no hidden work: the recorded stream and resource
+// references must outlive the buffer. Device value and range initialization
+// goes through the designated copy layer (one host-to-device copy plus
+// stream-ordered doubling copies), never through a hidden kernel-launch
+// framework; pinned initialization is a plain host loop over directly
+// accessible staging memory. No managed buffer, arbitrary nontrivial object
+// lifetime, exception-based access, allocator propagation or implicit stream
+// synchronization is delivered.
+namespace asc {
+
+template <class T>
+class device_buffer;
+template <class T>
+class pinned_buffer;
+
+template <class T>
+CANN_ASC_STL_HOST execution_status make_device_buffer(device_buffer<T>& output,
+    const device_memory_resource_ref& resource, stream_ref stream, ::asc::std::size_t element_count) noexcept;
+template <class T>
+CANN_ASC_STL_HOST execution_status make_pinned_buffer(pinned_buffer<T>& output,
+    const pinned_memory_resource_ref& resource, stream_ref stream, ::asc::std::size_t element_count) noexcept;
+
+namespace detail {
+
+CANN_ASC_STL_HOST_API constexpr ::asc::std::size_t buffer_request_alignment(
+    ::asc::std::size_t element_alignment, ::asc::std::size_t maximum_alignment) noexcept
+{
+    return element_alignment == 0 || element_alignment > maximum_alignment ? 0 : element_alignment;
+}
+
+// Device value initialization broadcasts one host-to-device copy through the
+// designated copy layer, then doubles the initialized prefix with
+// stream-ordered device-to-device copies; the number of submitted copies
+// grows with log2(element_count) and every operation is visible on the
+// recorded stream.
+CANN_ASC_STL_HOST_API execution_status device_buffer_fill(
+    stream_ref stream, void* data, const void* value, ::asc::std::size_t element_size, ::asc::std::size_t count)
+{
+    if (count == 0) {
+        return execution_status{};
+    }
+    unsigned char* base = static_cast<unsigned char*>(data);
+    execution_status status = copy_bytes(stream, base, value, element_size);
+    if (!status.success()) {
+        return status;
+    }
+    ::asc::std::size_t initialized = 1;
+    while (initialized < count) {
+        const ::asc::std::size_t chunk = initialized < count - initialized ? initialized : count - initialized;
+        status = copy_bytes(stream, base + initialized * element_size, base, chunk * element_size);
+        if (!status.success()) {
+            return status;
+        }
+        initialized += chunk;
+    }
+    return execution_status{};
+}
+
+// Reset a moved-from ownership record through plain field writes: the
+// backend state's own constructors carry device execution-space attributes
+// that a host-context reset must not call in pure SIMT compilation.
+CANN_ASC_STL_HOST_API void reset_moved_from(detail::buffer_state& state) noexcept
+{
+    state.data = nullptr;
+    state.bytes = 0;
+    state.alignment = 0;
+    state.owns = false;
+}
+
+}  // namespace detail
+
+template <class T>
+class device_buffer {
+    static_assert(::asc::std::is_trivially_copyable_v<T>, "device_buffer requires trivially copyable elements");
+
+public:
+    using element_type = T;
+
+    CANN_ASC_STL_HOST constexpr device_buffer() noexcept = default;
+    device_buffer(const device_buffer&) = delete;
+    device_buffer& operator=(const device_buffer&) = delete;
+    CANN_ASC_STL_HOST device_buffer(device_buffer&& other) noexcept
+        : state_(other.state_), stream_(other.stream_), resource_(other.resource_)
+    {
+        reset_moved_from(other.state_);
+        other.resource_ = device_memory_resource_ref{};
+    }
+    CANN_ASC_STL_HOST device_buffer& operator=(device_buffer&& other) noexcept
+    {
+        if (this != &other) {
+            (void)close();
+            state_ = other.state_;
+            stream_ = other.stream_;
+            resource_ = other.resource_;
+            reset_moved_from(other.state_);
+            other.resource_ = device_memory_resource_ref{};
+        }
+        return *this;
+    }
+    CANN_ASC_STL_HOST ~device_buffer()
+    {
+        (void)close();
+    }
+
+    CANN_ASC_STL_HOST constexpr explicit operator bool() const noexcept
+    {
+        return state_.data != nullptr && state_.owns;
+    }
+    CANN_ASC_STL_HOST constexpr T* data() const noexcept
+    {
+        return static_cast<T*>(state_.data);
+    }
+    CANN_ASC_STL_HOST constexpr ::asc::std::size_t size() const noexcept
+    {
+        return state_.bytes / sizeof(T);
+    }
+    CANN_ASC_STL_HOST constexpr ::asc::std::size_t size_bytes() const noexcept
+    {
+        return state_.bytes;
+    }
+    CANN_ASC_STL_HOST constexpr bool empty() const noexcept
+    {
+        return size() == 0;
+    }
+    CANN_ASC_STL_HOST constexpr stream_ref stream() const noexcept
+    {
+        return stream_;
+    }
+    CANN_ASC_STL_HOST constexpr device_memory_resource_ref resource() const noexcept
+    {
+        return resource_;
+    }
+    CANN_ASC_STL_HOST execution_status close() noexcept
+    {
+        if (state_.data == nullptr || !state_.owns) {
+            reset_moved_from(state_);
+            return execution_status{};
+        }
+        if (!resource_.valid()) {
+            return execution_status{execution_errc::invalid_argument};
+        }
+        const execution_status released = resource_.deallocate(state_.data, state_.bytes, state_.alignment);
+        if (released.success()) {
+            reset_moved_from(state_);
+            stream_ = stream_ref{};
+        }
+        return released;
+    }
+
+private:
+    friend CANN_ASC_STL_HOST execution_status make_device_buffer<>(
+        device_buffer<T>&, const device_memory_resource_ref&, stream_ref, ::asc::std::size_t) noexcept;
+
+    CANN_ASC_STL_HOST constexpr device_buffer(void* data, ::asc::std::size_t bytes, ::asc::std::size_t alignment,
+        stream_ref stream, const device_memory_resource_ref& resource) noexcept
+        : stream_(stream), resource_(resource)
+    {
+        state_.data = data;
+        state_.bytes = bytes;
+        state_.alignment = alignment;
+        state_.owns = data != nullptr;
+    }
+
+    detail::buffer_state state_{};
+    stream_ref stream_{};
+    device_memory_resource_ref resource_{};
+};
+
+template <class T>
+class pinned_buffer {
+    static_assert(::asc::std::is_trivially_copyable_v<T>, "pinned_buffer requires trivially copyable elements");
+
+public:
+    using element_type = T;
+
+    CANN_ASC_STL_HOST constexpr pinned_buffer() noexcept = default;
+    pinned_buffer(const pinned_buffer&) = delete;
+    pinned_buffer& operator=(const pinned_buffer&) = delete;
+    CANN_ASC_STL_HOST pinned_buffer(pinned_buffer&& other) noexcept
+        : state_(other.state_), stream_(other.stream_), resource_(other.resource_)
+    {
+        reset_moved_from(other.state_);
+        other.resource_ = pinned_memory_resource_ref{};
+    }
+    CANN_ASC_STL_HOST pinned_buffer& operator=(pinned_buffer&& other) noexcept
+    {
+        if (this != &other) {
+            (void)close();
+            state_ = other.state_;
+            stream_ = other.stream_;
+            resource_ = other.resource_;
+            reset_moved_from(other.state_);
+            other.resource_ = pinned_memory_resource_ref{};
+        }
+        return *this;
+    }
+    CANN_ASC_STL_HOST ~pinned_buffer()
+    {
+        (void)close();
+    }
+
+    CANN_ASC_STL_HOST constexpr explicit operator bool() const noexcept
+    {
+        return state_.data != nullptr && state_.owns;
+    }
+    CANN_ASC_STL_HOST constexpr T* data() const noexcept
+    {
+        return static_cast<T*>(state_.data);
+    }
+    CANN_ASC_STL_HOST constexpr ::asc::std::size_t size() const noexcept
+    {
+        return state_.bytes / sizeof(T);
+    }
+    CANN_ASC_STL_HOST constexpr ::asc::std::size_t size_bytes() const noexcept
+    {
+        return state_.bytes;
+    }
+    CANN_ASC_STL_HOST constexpr bool empty() const noexcept
+    {
+        return size() == 0;
+    }
+    CANN_ASC_STL_HOST constexpr stream_ref stream() const noexcept
+    {
+        return stream_;
+    }
+    CANN_ASC_STL_HOST constexpr pinned_memory_resource_ref resource() const noexcept
+    {
+        return resource_;
+    }
+    CANN_ASC_STL_HOST execution_status close() noexcept
+    {
+        if (state_.data == nullptr || !state_.owns) {
+            reset_moved_from(state_);
+            return execution_status{};
+        }
+        if (!resource_.valid()) {
+            return execution_status{execution_errc::invalid_argument};
+        }
+        const execution_status released = resource_.deallocate(state_.data, state_.bytes, state_.alignment);
+        if (released.success()) {
+            reset_moved_from(state_);
+            stream_ = stream_ref{};
+        }
+        return released;
+    }
+
+private:
+    friend CANN_ASC_STL_HOST execution_status make_pinned_buffer<>(
+        pinned_buffer<T>&, const pinned_memory_resource_ref&, stream_ref, ::asc::std::size_t) noexcept;
+
+    CANN_ASC_STL_HOST constexpr pinned_buffer(void* data, ::asc::std::size_t bytes, ::asc::std::size_t alignment,
+        stream_ref stream, const pinned_memory_resource_ref& resource) noexcept
+        : stream_(stream), resource_(resource)
+    {
+        state_.data = data;
+        state_.bytes = bytes;
+        state_.alignment = alignment;
+        state_.owns = data != nullptr;
+    }
+
+    detail::buffer_state state_{};
+    stream_ref stream_{};
+    pinned_memory_resource_ref resource_{};
+};
+
+// No-initialization form: allocate element_count elements without touching
+// their contents.
+template <class T>
+CANN_ASC_STL_HOST execution_status make_device_buffer(device_buffer<T>& output,
+    const device_memory_resource_ref& resource, stream_ref stream, ::asc::std::size_t element_count) noexcept
+{
+    (void)output.close();
+    if (element_count == 0 || !resource.valid() || !stream) {
+        return execution_status{execution_errc::invalid_argument};
+    }
+    const ::asc::std::size_t bytes = detail::buffer_element_bytes(sizeof(T), element_count);
+    const ::asc::std::size_t alignment =
+        detail::buffer_request_alignment(alignof(T), resource.properties().maximum_alignment());
+    if (bytes == 0 || alignment == 0) {
+        return execution_status{execution_errc::invalid_argument};
+    }
+    void* data = nullptr;
+    const execution_status allocated = resource.allocate(&data, bytes, alignment);
+    if (!allocated.success()) {
+        return allocated;
+    }
+    output = device_buffer<T>(data, bytes, alignment, stream, resource);
+    return execution_status{};
+}
+
+// Value form: fill element_count elements with repeated copies of value
+// through the designated copy layer on the recorded stream.
+template <class T>
+CANN_ASC_STL_HOST execution_status make_device_buffer(device_buffer<T>& output,
+    const device_memory_resource_ref& resource, stream_ref stream, ::asc::std::size_t element_count,
+    const T& value) noexcept
+{
+    const execution_status allocated = make_device_buffer(output, resource, stream, element_count);
+    if (!allocated.success()) {
+        return allocated;
+    }
+    const execution_status filled = detail::device_buffer_fill(stream, output.data(), &value, sizeof(T), element_count);
+    if (!filled.success()) {
+        (void)output.close();
+        return filled;
+    }
+    return execution_status{};
+}
+
+// Host range form: copy the contiguous host range [first, last) with one
+// asynchronous host-to-device copy on the recorded stream.
+template <class T>
+CANN_ASC_STL_HOST execution_status make_device_buffer(device_buffer<T>& output,
+    const device_memory_resource_ref& resource, stream_ref stream, const T* first, const T* last) noexcept
+{
+    if (first == nullptr || last == nullptr || last < first) {
+        return execution_status{execution_errc::invalid_argument};
+    }
+    const execution_status allocated =
+        make_device_buffer(output, resource, stream, static_cast<::asc::std::size_t>(last - first));
+    if (!allocated.success()) {
+        return allocated;
+    }
+    const execution_status copied = copy_bytes(stream, output.data(), first, output.size_bytes());
+    if (!copied.success()) {
+        (void)output.close();
+        return copied;
+    }
+    return execution_status{};
+}
+
+// Host range with size form: copy element_count contiguous host elements.
+template <class T>
+CANN_ASC_STL_HOST execution_status make_device_buffer(device_buffer<T>& output,
+    const device_memory_resource_ref& resource, stream_ref stream, const T* first,
+    ::asc::std::size_t element_count) noexcept
+{
+    if (first == nullptr) {
+        return execution_status{execution_errc::invalid_argument};
+    }
+    const execution_status allocated = make_device_buffer(output, resource, stream, element_count);
+    if (!allocated.success()) {
+        return allocated;
+    }
+    const execution_status copied = copy_bytes(stream, output.data(), first, output.size_bytes());
+    if (!copied.success()) {
+        (void)output.close();
+        return copied;
+    }
+    return execution_status{};
+}
+
+// Pinned no-initialization form.
+template <class T>
+CANN_ASC_STL_HOST execution_status make_pinned_buffer(pinned_buffer<T>& output,
+    const pinned_memory_resource_ref& resource, stream_ref stream, ::asc::std::size_t element_count) noexcept
+{
+    (void)output.close();
+    if (element_count == 0 || !resource.valid() || !stream) {
+        return execution_status{execution_errc::invalid_argument};
+    }
+    const ::asc::std::size_t bytes = detail::buffer_element_bytes(sizeof(T), element_count);
+    const ::asc::std::size_t alignment =
+        detail::buffer_request_alignment(alignof(T), resource.properties().maximum_alignment());
+    if (bytes == 0 || alignment == 0) {
+        return execution_status{execution_errc::invalid_argument};
+    }
+    void* data = nullptr;
+    const execution_status allocated = resource.allocate(&data, bytes, alignment);
+    if (!allocated.success()) {
+        return allocated;
+    }
+    output = pinned_buffer<T>(data, bytes, alignment, stream, resource);
+    return execution_status{};
+}
+
+// Pinned value form: pinned staging memory is directly host accessible, so
+// initialization is a plain host loop with no device submission.
+template <class T>
+CANN_ASC_STL_HOST execution_status make_pinned_buffer(pinned_buffer<T>& output,
+    const pinned_memory_resource_ref& resource, stream_ref stream, ::asc::std::size_t element_count,
+    const T& value) noexcept
+{
+    const execution_status allocated = make_pinned_buffer(output, resource, stream, element_count);
+    if (!allocated.success()) {
+        return allocated;
+    }
+    T* elements = output.data();
+    for (::asc::std::size_t index = 0; index < element_count; ++index) {
+        elements[index] = value;
+    }
+    return execution_status{};
+}
+
+// Pinned host range form.
+template <class T>
+CANN_ASC_STL_HOST execution_status make_pinned_buffer(pinned_buffer<T>& output,
+    const pinned_memory_resource_ref& resource, stream_ref stream, const T* first, const T* last) noexcept
+{
+    if (first == nullptr || last == nullptr || last < first) {
+        return execution_status{execution_errc::invalid_argument};
+    }
+    const execution_status allocated =
+        make_pinned_buffer(output, resource, stream, static_cast<::asc::std::size_t>(last - first));
+    if (!allocated.success()) {
+        return allocated;
+    }
+    T* elements = output.data();
+    for (const T* source = first; source != last; ++source, ++elements) {
+        *elements = *source;
+    }
+    return execution_status{};
+}
+
+// Pinned host range with size form.
+template <class T>
+CANN_ASC_STL_HOST execution_status make_pinned_buffer(pinned_buffer<T>& output,
+    const pinned_memory_resource_ref& resource, stream_ref stream, const T* first,
+    ::asc::std::size_t element_count) noexcept
+{
+    if (first == nullptr) {
+        return execution_status{execution_errc::invalid_argument};
+    }
+    const execution_status allocated = make_pinned_buffer(output, resource, stream, element_count);
+    if (!allocated.success()) {
+        return allocated;
+    }
+    T* elements = output.data();
+    for (::asc::std::size_t index = 0; index < element_count; ++index) {
+        elements[index] = first[index];
+    }
+    return execution_status{};
+}
+
+}  // namespace asc
+
+#endif  // CANN_ASC_STL_ASC_BUFFER

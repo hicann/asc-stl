@@ -39,8 +39,6 @@
 #include <asc/std/__cstddef/byte.h>
 #include <asc/std/__concepts/same_as.h>
 
-#include "core_consumers.h"
-
 namespace {
 
 enum consumer_enum : int { consumer_two = 2 };
@@ -63,10 +61,8 @@ struct tuple_size<consumer_pair_like> : integral_constant<size_t, 2> {};
 
 int asc_stl_core_consumer_b()
 {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
     static_assert(asc::std::same_as<double, double>);
     static_assert(!asc::std::same_as<double, float>);
-#endif
     static_assert(asc::std::to_integer<int>(asc::std::byte{0x0f} & asc::std::byte{0x06}) == (0x0f & 0x06));
     static_assert(asc::std::__is_asc_std_span_v<asc::std::span<int, 2>>);
     static_assert(!asc::std::__is_asc_std_array_v<int>);

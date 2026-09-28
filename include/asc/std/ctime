@@ -1,0 +1,75 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_STD_CTIME
+#define CANN_ASC_STL_ASC_STD_CTIME
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#if !defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#include <time.h>
+#endif
+#include <asc/__detail/attributes.h>
+#include <asc/std/__ctime/time_vocabulary.h>
+
+#if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#ifndef CLOCKS_PER_SEC
+#define CLOCKS_PER_SEC 1000000000L
+#endif
+#endif
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+#if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+using clock_t = long long;
+using time_t = long long;
+struct timespec {
+    time_t tv_sec;
+    long tv_nsec;
+};
+#else
+using ::clock_t;
+using ::time_t;
+using ::timespec;
+#endif
+
+CANN_ASC_STL_API clock_t clock() noexcept
+{
+#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+    return static_cast<clock_t>(::clock64());
+#elif defined(__CCE__)
+    return static_cast<clock_t>(get_sys_cnt());
+#else
+    return ::clock();
+#endif
+}
+
+CANN_ASC_STL_API constexpr double difftime(time_t end, time_t start) noexcept
+{
+    return static_cast<double>(end - start);
+}
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_ASC_STD_CTIME

@@ -65,5 +65,4 @@ add_executable(asc_stl_source_location_cannsim launcher.cpp main.cpp)
 target_link_libraries(
     asc_stl_source_location_cannsim
     PRIVATE host_intf_pub asc_stl_source_location_cannsim_kernel)
-target_include_directories(asc_stl_source_location_cannsim PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/include")
 target_compile_options(asc_stl_source_location_cannsim PRIVATE -Wall -Wextra -Werror)

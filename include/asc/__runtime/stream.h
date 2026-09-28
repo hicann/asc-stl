@@ -27,6 +27,14 @@
 #pragma system_header
 #endif
 
+#if !defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) && defined(__has_include)
+#if __has_include(<acl/acl_rt.h>)
+#include <acl/acl_rt.h>
+#define CANN_ASC_STL_DETAIL_HAS_ACL_STREAM_RUNTIME 1
+#endif
+#endif
+
+#if !defined(CANN_ASC_STL_DETAIL_HAS_ACL_STREAM_RUNTIME)
 extern "C" int aclrtSynchronizeStream(void* stream);
 extern "C" int aclrtStreamQuery(void* stream, int* status);
 extern "C" int aclrtStreamGetPriority(void* stream, unsigned int* priority);
@@ -39,6 +47,7 @@ extern "C" int aclrtDestroyStream(void* stream);
 extern "C" int aclrtCreateEvent(void** event);
 extern "C" int aclrtDestroyEvent(void* event);
 extern "C" int aclrtEventElapsedTime(float* milliseconds, void* start, void* end);
+#endif
 
 namespace asc::std {
 
@@ -73,11 +82,19 @@ public:
     }
     bool is_done(bool& output) const noexcept
     {
+#if defined(CANN_ASC_STL_DETAIL_HAS_ACL_STREAM_RUNTIME)
+        aclrtStreamStatus status = ACL_STREAM_STATUS_COMPLETE;
+#else
         int status = 0;
+#endif
         if (handle_ == nullptr || ::aclrtStreamQuery(handle_, &status) != 0) {
             return false;
         }
+#if defined(CANN_ASC_STL_DETAIL_HAS_ACL_STREAM_RUNTIME)
+        output = status == ACL_STREAM_STATUS_COMPLETE;
+#else
         output = status == 0;
+#endif
         return true;
     }
     bool priority(::asc::std::uint32_t& output) const noexcept
@@ -133,11 +150,19 @@ public:
     }
     bool is_done(bool& output) const noexcept
     {
+#if defined(CANN_ASC_STL_DETAIL_HAS_ACL_STREAM_RUNTIME)
+        aclrtEventRecordedStatus status = ACL_EVENT_RECORDED_STATUS_NOT_READY;
+#else
         int status = 0;
+#endif
         if (handle_ == nullptr || ::aclrtQueryEventStatus(handle_, &status) != 0) {
             return false;
         }
+#if defined(CANN_ASC_STL_DETAIL_HAS_ACL_STREAM_RUNTIME)
+        output = status == ACL_EVENT_RECORDED_STATUS_COMPLETE;
+#else
         output = status == 1;
+#endif
         return true;
     }
 
@@ -321,5 +346,9 @@ inline bool elapsed_time(event_ref start, event_ref end, float& milliseconds) no
 }
 
 }  // namespace asc
+
+#if defined(CANN_ASC_STL_DETAIL_HAS_ACL_STREAM_RUNTIME)
+#undef CANN_ASC_STL_DETAIL_HAS_ACL_STREAM_RUNTIME
+#endif
 
 #endif  // CANN_ASC_STL_ASC___RUNTIME_STREAM_H

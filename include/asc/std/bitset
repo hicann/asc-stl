@@ -1,0 +1,320 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_STD_BITSET
+#define CANN_ASC_STL_ASC_STD_BITSET
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/__detail/attributes.h>
+#include <asc/std/__algorithm/count.h>
+#include <asc/std/__algorithm/fill.h>
+#include <asc/std/__algorithm/find.h>
+#include <asc/std/__bit/reference.h>
+#include <asc/std/__functional/hash.h>
+#include <asc/std/__string/char_traits.h>
+#include <asc/std/__type_traits/is_char_like_type.h>
+#include <asc/std/__utility/cmp.h>
+#include <asc/std/climits>
+#include <asc/std/cstddef>
+#include <asc/std/string_view>
+#include <asc/std/version>
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+template <size_t Words, size_t Size>
+class __bitset {
+protected:
+    using storage_type = unsigned long long;
+    static constexpr size_t word_bits = sizeof(storage_type) * CHAR_BIT;
+    storage_type words_[Words == 0 ? 1 : Words]{};
+
+public:
+    class reference {
+    public:
+        CANN_ASC_STL_API constexpr reference& operator=(bool value) noexcept
+        {
+            if (value) {
+                *word_ |= mask_;
+            } else {
+                *word_ &= ~mask_;
+            }
+            return *this;
+        }
+        CANN_ASC_STL_API constexpr reference& operator=(const reference& other) noexcept
+        {
+            return *this = static_cast<bool>(other);
+        }
+        CANN_ASC_STL_API constexpr operator bool() const noexcept
+        {
+            return (*word_ & mask_) != 0;
+        }
+        CANN_ASC_STL_API constexpr bool operator~() const noexcept
+        {
+            return !static_cast<bool>(*this);
+        }
+        CANN_ASC_STL_API constexpr void flip() noexcept
+        {
+            *word_ ^= mask_;
+        }
+
+    private:
+        friend class __bitset;
+        CANN_ASC_STL_API constexpr reference(storage_type* word, storage_type mask) noexcept : word_(word), mask_(mask)
+        {}
+        storage_type* word_;
+        storage_type mask_;
+    };
+
+    using const_reference = bool;
+
+protected:
+    CANN_ASC_STL_API constexpr reference reference_at(size_t position) noexcept
+    {
+        return reference(words_ + position / word_bits, storage_type(1) << (position % word_bits));
+    }
+    CANN_ASC_STL_API constexpr bool value_at(size_t position) const noexcept
+    {
+        return (words_[position / word_bits] & (storage_type(1) << (position % word_bits))) != 0;
+    }
+};
+
+template <size_t Size>
+class bitset
+    : private __bitset<(Size + sizeof(unsigned long long) * CHAR_BIT - 1) / (sizeof(unsigned long long) * CHAR_BIT),
+          Size> {
+    static constexpr size_t word_bits = sizeof(unsigned long long) * CHAR_BIT;
+    static constexpr size_t word_count = (Size + word_bits - 1) / word_bits;
+
+public:
+    using base = __bitset<word_count, Size>;
+    using reference = typename base::reference;
+    using const_reference = typename base::const_reference;
+
+    CANN_ASC_STL_API constexpr bitset() noexcept = default;
+    CANN_ASC_STL_API constexpr bitset(unsigned long long value) noexcept
+    {
+        this->words_[0] = value;
+        clear_unused_bits();
+    }
+
+    CANN_ASC_STL_API constexpr bitset& operator&=(const bitset& other) noexcept
+    {
+        for (size_t index = 0; index < word_count; ++index) {
+            this->words_[index] &= other.words_[index];
+        }
+        return *this;
+    }
+    CANN_ASC_STL_API constexpr bitset& operator|=(const bitset& other) noexcept
+    {
+        for (size_t index = 0; index < word_count; ++index) {
+            this->words_[index] |= other.words_[index];
+        }
+        return *this;
+    }
+    CANN_ASC_STL_API constexpr bitset& operator^=(const bitset& other) noexcept
+    {
+        for (size_t index = 0; index < word_count; ++index) {
+            this->words_[index] ^= other.words_[index];
+        }
+        return *this;
+    }
+    CANN_ASC_STL_API constexpr bitset& operator<<=(size_t shift) noexcept
+    {
+        if (shift >= Size) {
+            return reset();
+        }
+        for (size_t position = Size; position-- > shift;) {
+            this->reference_at(position) = this->value_at(position - shift);
+        }
+        for (size_t position = 0; position < shift; ++position) {
+            this->reference_at(position) = false;
+        }
+        return *this;
+    }
+    CANN_ASC_STL_API constexpr bitset& operator>>=(size_t shift) noexcept
+    {
+        if (shift >= Size) {
+            return reset();
+        }
+        for (size_t position = 0; position + shift < Size; ++position) {
+            this->reference_at(position) = this->value_at(position + shift);
+        }
+        for (size_t position = Size - shift; position < Size; ++position) {
+            this->reference_at(position) = false;
+        }
+        return *this;
+    }
+    CANN_ASC_STL_API constexpr bitset operator<<(size_t shift) const noexcept
+    {
+        bitset result(*this);
+        result <<= shift;
+        return result;
+    }
+    CANN_ASC_STL_API constexpr bitset operator>>(size_t shift) const noexcept
+    {
+        bitset result(*this);
+        result >>= shift;
+        return result;
+    }
+    CANN_ASC_STL_API constexpr bitset& set() noexcept
+    {
+        for (size_t index = 0; index < word_count; ++index) {
+            this->words_[index] = ~0ULL;
+        }
+        clear_unused_bits();
+        return *this;
+    }
+    CANN_ASC_STL_API constexpr bitset& reset() noexcept
+    {
+        for (size_t index = 0; index < word_count; ++index) {
+            this->words_[index] = 0;
+        }
+        return *this;
+    }
+    CANN_ASC_STL_API constexpr bitset& flip() noexcept
+    {
+        for (size_t index = 0; index < word_count; ++index) {
+            this->words_[index] = ~this->words_[index];
+        }
+        clear_unused_bits();
+        return *this;
+    }
+    CANN_ASC_STL_API constexpr bitset operator~() const noexcept
+    {
+        bitset result(*this);
+        result.flip();
+        return result;
+    }
+    CANN_ASC_STL_API constexpr reference operator[](size_t position) noexcept
+    {
+        return this->reference_at(position);
+    }
+    CANN_ASC_STL_API constexpr const_reference operator[](size_t position) const noexcept
+    {
+        return this->value_at(position);
+    }
+    CANN_ASC_STL_API constexpr bool operator==(const bitset& other) const noexcept
+    {
+        for (size_t index = 0; index < word_count; ++index) {
+            if (this->words_[index] != other.words_[index]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    CANN_ASC_STL_API constexpr bool operator!=(const bitset& other) const noexcept
+    {
+        return !(*this == other);
+    }
+    CANN_ASC_STL_API constexpr bool all() const noexcept
+    {
+        return count() == Size;
+    }
+    CANN_ASC_STL_API constexpr bool any() const noexcept
+    {
+        for (size_t index = 0; index < word_count; ++index) {
+            if (this->words_[index] != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    CANN_ASC_STL_API constexpr bool none() const noexcept
+    {
+        return !any();
+    }
+    CANN_ASC_STL_API constexpr size_t count() const noexcept
+    {
+        size_t result = 0;
+        for (size_t position = 0; position < Size; ++position) {
+            result += this->value_at(position) ? 1 : 0;
+        }
+        return result;
+    }
+    CANN_ASC_STL_API static constexpr size_t size() noexcept
+    {
+        return Size;
+    }
+
+    template <size_t Width = Size, enable_if_t<(Width <= sizeof(unsigned long) * CHAR_BIT), int> = 0>
+    CANN_ASC_STL_API constexpr unsigned long to_ulong() const noexcept
+    {
+        return static_cast<unsigned long>(this->words_[0]);
+    }
+    template <size_t Width = Size, enable_if_t<(Width <= sizeof(unsigned long long) * CHAR_BIT), int> = 0>
+    CANN_ASC_STL_API constexpr unsigned long long to_ullong() const noexcept
+    {
+        return this->words_[0];
+    }
+
+private:
+    CANN_ASC_STL_API constexpr void clear_unused_bits() noexcept
+    {
+        if constexpr (word_count != 0 && Size % word_bits != 0) {
+            this->words_[word_count - 1] &= (1ULL << (Size % word_bits)) - 1;
+        }
+    }
+};
+
+template <size_t Size>
+CANN_ASC_STL_API constexpr bitset<Size> operator&(const bitset<Size>& left, const bitset<Size>& right) noexcept
+{
+    bitset<Size> result(left);
+    result &= right;
+    return result;
+}
+
+template <size_t Size>
+CANN_ASC_STL_API constexpr bitset<Size> operator|(const bitset<Size>& left, const bitset<Size>& right) noexcept
+{
+    bitset<Size> result(left);
+    result |= right;
+    return result;
+}
+
+template <size_t Size>
+CANN_ASC_STL_API constexpr bitset<Size> operator^(const bitset<Size>& left, const bitset<Size>& right) noexcept
+{
+    bitset<Size> result(left);
+    result ^= right;
+    return result;
+}
+
+template <size_t Size>
+struct hash<bitset<Size>> {
+    CANN_ASC_STL_API constexpr size_t operator()(const bitset<Size>& value) const noexcept
+    {
+        size_t result = sizeof(size_t) == 8 ? static_cast<size_t>(1469598103934665603ULL) : 2166136261U;
+        const size_t prime = sizeof(size_t) == 8 ? static_cast<size_t>(1099511628211ULL) : 16777619U;
+        for (size_t position = 0; position < Size; ++position) {
+            result = (result ^ static_cast<size_t>(value[position])) * prime;
+        }
+        return result;
+    }
+};
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_ASC_STD_BITSET

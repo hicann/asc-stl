@@ -39,8 +39,6 @@
 #include <asc/std/__floating_point/storage.h>
 #include <asc/std/numbers>
 
-#include "core_consumers.h"
-
 namespace {
 struct consumer_type {
     int value;

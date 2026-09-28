@@ -79,25 +79,16 @@ def validate_targets(headers: list[dict], include_root: Path) -> set[str]:
     return set(targets)
 
 
-def runtime_assets(row: dict, test_root: Path) -> set[Path]:
-    applicability = row["applicability"]
-    root = case_path(test_root, row.get("runtime_case", row["target"])) / "runtime"
-    expected: set[Path] = set()
-    if applicability["cannsim_runtime"]:
-        expected.add(root / "semantics.h")
-        expected.update(
-            root / "cannsim" / name
-            for name in ("CMakeLists.txt", "kernel.cpp", "launcher.cpp", "main.cpp")
-        )
-        optional_launcher = root / "cannsim" / "launcher.h"
-        if optional_launcher.is_file():
-            expected.add(optional_launcher)
-    if applicability["hardware_runtime"]:
-        expected.update(
-            root / "hardware" / name
-            for name in ("CMakeLists.txt", "kernel_simd.asc", "kernel_simt.asc", "main.cpp")
-        )
-    return expected
+def hardware_assets(runtime_root: Path) -> set[Path]:
+    root = runtime_root / "runtime" / "hardware"
+    result = {
+        root / name
+        for name in ("CMakeLists.txt", "kernel_simd.asc", "kernel_simt.asc", "main.cpp")
+    }
+    launch_header = root / "launch.h"
+    if launch_header.is_file():
+        result.add(launch_header)
+    return result
 
 
 def validate_negative_languages(row: dict, target: str) -> None:
@@ -120,7 +111,7 @@ def validate_applicability(row: dict, target: str) -> dict:
     return applicability
 
 
-def validate_dependencies(row: dict, target: str, registered: set[str]) -> list:
+def validate_dependencies(row: dict, target: str, registered: set[str]) -> list[str]:
     dependencies = row.get("dependencies")
     if not isinstance(dependencies, list) or len(dependencies) != len(set(dependencies)):
         raise ValueError(f"{target}: dependencies must be a unique list")
@@ -130,31 +121,15 @@ def validate_dependencies(row: dict, target: str, registered: set[str]) -> list:
     return dependencies
 
 
-def validate_mapped_targets(row: dict, target: str, registered: set[str]) -> None:
+def validate_case_mappings(row: dict, target: str, registered: set[str]) -> None:
     for field in ("semantic_case", "runtime_case"):
         mapped = row.get(field, target)
         if not isinstance(mapped, str) or mapped not in registered:
             raise ValueError(f"{target}: {field} must name a registered product Header")
 
 
-def semantic_case_assets(row: dict, target: str, semantic_root: Path) -> set[Path]:
-    expected: set[Path] = set()
-    applicability = row["applicability"]
-    if applicability["host_semantic"]:
-        expected.add(semantic_root / "host.pass.cpp")
-    if applicability["device_compile"]:
-        device_cases = row.get("device_compile_cases", ["device.compile.asc"])
-        if not isinstance(device_cases, list) or not device_cases:
-            raise ValueError(f"{target}: device_compile_cases must be a non-empty list")
-        for name in device_cases:
-            if Path(name).name != name:
-                raise ValueError(f"{target}: invalid device_compile_cases entry: {name!r}")
-            expected.add(semantic_root / name)
-    return expected
-
-
-def listed_case_assets(row: dict, target: str, root: Path) -> set[Path]:
-    expected: set[Path] = set()
+def registered_case_assets(row: dict, root: Path, target: str) -> set[Path]:
+    expected = set()
     for field in ("negative_cases", "additional_cases"):
         for name in row.get(field, []):
             if Path(name).name != name:
@@ -167,12 +142,29 @@ def validate_row(row: dict, registered: set[str], test_root: Path) -> tuple[int,
     target = row["target"]
     applicability = validate_applicability(row, target)
     dependencies = validate_dependencies(row, target, registered)
-    validate_mapped_targets(row, target, registered)
+    validate_case_mappings(row, target, registered)
     root = case_path(test_root, target)
     semantic_root = case_path(test_root, row.get("semantic_case", target))
-    expected = semantic_case_assets(row, target, semantic_root)
-    expected.update(runtime_assets(row, test_root))
-    expected.update(listed_case_assets(row, target, root))
+    runtime_root = case_path(test_root, row.get("runtime_case", target))
+    expected = registered_case_assets(row, root, target)
+    if applicability["host_semantic"]:
+        expected.add(semantic_root / "host.pass.cpp")
+    if applicability["device_compile"]:
+        device_cases = row.get("device_compile_cases", ["device.compile.asc"])
+        if not isinstance(device_cases, list) or not device_cases:
+            raise ValueError(f"{target}: device_compile_cases must be a non-empty list")
+        for name in device_cases:
+            if not isinstance(name, str) or Path(name).name != name or not name.endswith(".compile.asc"):
+                raise ValueError(f"{target}: invalid device_compile_cases entry: {name!r}")
+            expected.add(semantic_root / name)
+    if applicability["cannsim_runtime"]:
+        expected.add(runtime_root / "runtime" / "semantics.h")
+        expected.update(
+            runtime_root / "runtime" / "cannsim" / name
+            for name in ("CMakeLists.txt", "kernel.cpp", "launcher.cpp", "main.cpp")
+        )
+    if applicability["hardware_runtime"]:
+        expected.update(hardware_assets(runtime_root))
     validate_negative_languages(row, target)
     return len(dependencies), expected
 
@@ -181,10 +173,10 @@ def validate_case_inventory(test_root: Path, expected: set[Path]) -> None:
     missing = sorted(str(path.relative_to(test_root)) for path in expected if not path.is_file())
     if missing:
         raise ValueError(f"metadata-applicable case assets are missing: {missing}")
-    suffixes = (".pass.cpp", ".fail.cpp", ".compile.asc", ".fail.asc")
+    canonical_suffixes = (".pass.cpp", ".fail.cpp", ".compile.asc", ".fail.asc")
     observed = {
         path for path in (test_root / "cases").rglob("*")
-        if path.is_file() and (path.name.endswith(suffixes) or "runtime" in path.parts)
+        if path.is_file() and (path.name.endswith(canonical_suffixes) or "runtime" in path.parts)
     }
     unexpected = sorted(str(path.relative_to(test_root)) for path in observed - expected)
     if unexpected:
@@ -213,6 +205,18 @@ def main() -> int:
         count, expected = validate_row(row, registered, args.test_root)
         dependency_count += count
         expected_case_files.update(expected)
+    hardware_levels_path = args.manifest.with_name("hardware_levels.json")
+    hardware_levels = json.loads(hardware_levels_path.read_text(encoding="utf-8"))
+    if hardware_levels.get("schema_version") != 1:
+        raise ValueError("hardware level metadata schema_version must be 1")
+    runtime_cases = {
+        row.get("runtime_case", row["target"])
+        for row in headers
+        if row["applicability"]["hardware_runtime"]
+    }
+    levels = hardware_levels.get("runtime_cases")
+    if not isinstance(levels, dict) or set(levels) != runtime_cases or set(levels.values()) - {"HW0", "HW1"}:
+        raise ValueError("hardware level metadata must classify every applicable runtime_case exactly once")
     validate_case_inventory(args.test_root, expected_case_files)
 
     LOGGER.info(

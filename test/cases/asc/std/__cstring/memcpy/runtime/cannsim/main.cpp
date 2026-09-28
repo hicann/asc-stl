@@ -18,14 +18,13 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
-#include "launcher.h"
-
+std::uint32_t launch_asc_stl_foundation_cannsim(void* stream, void* output);
 namespace {
 constexpr int kDeviceId = 0;
-constexpr std::array<std::uint32_t, 42> kExpected = {0x13579BDFU, 0x1001U, 0U, 0x1002U, 17U, 0x1003U, 365U, 0x1004U,
+constexpr std::array<std::uint32_t, 44> kExpected = {0x13579BDFU, 0x1001U, 0U, 0x1002U, 17U, 0x1003U, 365U, 0x1004U,
     314U, 0x1005U, 1U, 0x1006U, 1U, 0xA5A5A5A5U, 0x5A5A5A5AU, 0x2468ACE0U, 0x1007U, 1U, 0x1008U, 1U, 0x1009U, 1U,
     0x100AU, 1U, 0x100BU, 1U, 0x100CU, 1U, 0x100DU, 1U, 0x100EU, 1U, 0x100FU, 1U, 0x1010U, 1U, 0x1011U, 1U, 0x1012U, 1U,
-    0x1013U, 0U};
+    0x1013U, 0U, 0x1014U, 0xFFFFFFFFU};
 bool check(aclError result, const char* operation)
 {
     if (result == ACL_SUCCESS)

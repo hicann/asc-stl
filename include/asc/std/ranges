@@ -1,0 +1,64 @@
+/*
+ * Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#ifndef CANN_ASC_STL_ASC_STD_RANGES
+#define CANN_ASC_STL_ASC_STD_RANGES
+
+#include <asc/__config>
+
+#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
+#pragma GCC system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#pragma clang system_header
+#elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#pragma system_header
+#endif
+
+#include <asc/std/__fwd/subrange.h>
+#include <asc/std/__iterator/iota_iterator.h>
+#include <asc/std/__ranges/access.h>
+#include <asc/std/__ranges/all.h>
+#include <asc/std/__ranges/common_view.h>
+#include <asc/std/__ranges/concepts.h>
+#include <asc/std/__ranges/counted.h>
+#include <asc/std/__ranges/dangling.h>
+#include <asc/std/__ranges/data.h>
+#include <asc/std/__ranges/drop_view.h>
+#include <asc/std/__ranges/drop_while_view.h>
+#include <asc/std/__ranges/empty.h>
+#include <asc/std/__ranges/empty_view.h>
+#include <asc/std/__ranges/enable_borrowed_range.h>
+#include <asc/std/__ranges/enable_view.h>
+#include <asc/std/__ranges/filter_view.h>
+#include <asc/std/__ranges/from_range.h>
+#include <asc/std/__ranges/iota_view.h>
+#include <asc/std/__ranges/owning_view.h>
+#include <asc/std/__ranges/range_adaptor.h>
+#include <asc/std/__ranges/rbegin.h>
+#include <asc/std/__ranges/ref_view.h>
+#include <asc/std/__ranges/rend.h>
+#include <asc/std/__ranges/repeat_view.h>
+#include <asc/std/__ranges/reverse_view.h>
+#include <asc/std/__ranges/single_view.h>
+#include <asc/std/__ranges/size.h>
+#include <asc/std/__ranges/subrange.h>
+#include <asc/std/__ranges/take_view.h>
+#include <asc/std/__ranges/take_while_view.h>
+#include <asc/std/__ranges/transform_view.h>
+#include <asc/std/__ranges/view_interface.h>
+#include <asc/std/__ranges/zip_view.h>
+
+#endif  // CANN_ASC_STL_ASC_STD_RANGES

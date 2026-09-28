@@ -18,5 +18,10 @@
 
 int main()
 {
-    return asc_stl_b008_test::evaluate();
+    static_assert(asc::std::is_same_v<decltype(asc::std::move(*static_cast<int*>(nullptr))), int&&>);
+    static_assert(noexcept(asc::std::move(*static_cast<int*>(nullptr))));
+    int value = 7;
+    int&& moved = asc::std::move(value);  // NOLINT(build/include_what_you_use)
+    moved = 9;
+    return value == 9 ? asc_stl_b008_test::evaluate() : 1;
 }

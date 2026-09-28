@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 # Copyright 2026 湖北多样性算力应用创新研究院 (Hubei Institute for Heterogeneous Computing Applications)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,12 +29,9 @@ if [ -n "${ASC_STL_CANN_ENV_SCRIPT:-}" ]; then
     fi
     # shellcheck disable=SC1090
     source "$ASC_STL_CANN_ENV_SCRIPT"
-elif [ -f /usr/local/Ascend/cann/set_env.sh ]; then
+elif [ -z "${ASCEND_HOME_PATH:-}" ] && [ -f /usr/local/Ascend/ascend-toolkit/set_env.sh ]; then
     # shellcheck disable=SC1091
-    source /usr/local/Ascend/cann/set_env.sh
-elif [ -f "$HOME/tools/Ascend/cann/set_env.sh" ]; then
-    # shellcheck disable=SC1091
-    source "$HOME/tools/Ascend/cann/set_env.sh"
+    source /usr/local/Ascend/ascend-toolkit/set_env.sh
 elif [ -z "${ASCEND_HOME_PATH:-}" ]; then
     echo "CANN environment is unavailable; set ASC_STL_CANN_ENV_SCRIPT." >&2
     return 2 2>/dev/null || exit 2
@@ -48,23 +46,7 @@ if [ -z "${ASCEND_HOME_PATH:-}" ] || [ ! -d "$ASCEND_HOME_PATH" ]; then
     return 2 2>/dev/null || exit 2
 fi
 
-ASC_STL_ASCENDC_CMAKE=""
-for candidate in \
-    "$ASCEND_HOME_PATH/compiler/tikcpp/ascendc_kernel_cmake/ascendc.cmake" \
-    "$ASCEND_HOME_PATH/tools/tikcpp/ascendc_kernel_cmake/ascendc.cmake"; do
-    if [ -f "$candidate" ]; then
-        ASC_STL_ASCENDC_CMAKE="$candidate"
-        break
-    fi
-done
-if [ -z "$ASC_STL_ASCENDC_CMAKE" ]; then
-    echo "Official CANN ascendc.cmake was not found below ASCEND_HOME_PATH." >&2
+if ! command -v bisheng >/dev/null 2>&1; then
+    echo "The BiSheng compiler is unavailable in the loaded CANN environment." >&2
     return 2 2>/dev/null || exit 2
 fi
-if [ ! -x "$ASCEND_HOME_PATH/x86_64-linux/bin/ccec" ] && \
-    [ ! -x "$ASCEND_HOME_PATH/compiler/ccec_compiler/bin/ccec" ]; then
-    echo "The AscendC compiler was not found below ASCEND_HOME_PATH." >&2
-    return 2 2>/dev/null || exit 2
-fi
-
-export ASC_STL_ASCENDC_CMAKE

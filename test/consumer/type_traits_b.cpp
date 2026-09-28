@@ -40,8 +40,6 @@
 #include <asc/std/__type_traits/disjunction.h>
 #include <asc/std/__type_traits/conjunction.h>
 
-#include "core_consumers.h"
-
 int asc_stl_type_traits_consumer_b()
 {
     static_assert(asc::std::disjunction_v<asc::std::false_type, asc::std::true_type>);
