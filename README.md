@@ -6,7 +6,7 @@
 
 ## 🔥 最新动态
 
-**[v1.0.0 · 计划 2026 年 10 月 16 日发布]** C++ 标准库能力全量提供：`asc::std` 接口层 16 类标准能力模块的全部公共头可用，Host 与 Device 代码共用同一套公共 Header 组织。
+**[v1.0.0 · 计划 2026 年 10 月 16 日发布]** 完整版本首发：`asc::std` 接口层 16 类标准能力模块、昇腾扩展接口（9 类）与 Runtime 接口（4 类）的全部公共头同步提供，共 29 类能力域，Host 与 Device 代码共用同一套公共 Header 组织。
 
 ### 🚀 版本计划
 
@@ -14,9 +14,9 @@
 
 | 版本 | 发布日期 | 能力范围 |
 | --- | --- | --- |
-| **v1.0.0** | **2026-10-16** | C++ 标准库能力全量（16 类标准能力模块） |
-| **v1.1.0** | **2026-10-30** | 设备/Stream/Event 管理、核函数调用、Device 执行策略、地址空间与内存视图、内存资源与数据搬运 |
-| **v1.1.1** | 待定 | 完整版本：设备原子操作与线程同步、设备执行层次与集体操作、Device 并行算法及配套组件 |
+| **v1.0.0** | **2026-10-16** | 完整版本：C++ 标准库接口（16 类标准能力模块）、昇腾扩展接口（9 类）与 Runtime 接口（4 类）全量提供 |
+| **v1.1.0** | **2026-10-30** | 完善计划第一批 · 质量与性能完善：测试覆盖与真机回归扩展、高频算法与数据搬运路径优化、边界用例补齐 |
+| **v1.1.1** | 待定 | 完善计划第二批 · 文档与易用性完善：API 参考文档、示例工程、错误诊断与编译体验优化 |
 
 ### 📖 文档
 
@@ -37,13 +37,13 @@
 | 接口 | 命名空间 / 包含路径 | 覆盖范围 | 随版本提供 |
 | --- | --- | --- | --- |
 | C++ 标准库接口 | `asc::std` · `<asc/std/...>` | 语言支持、概念、诊断、内存管理、元编程、通用工具、容器、迭代器、范围、算法、字符串、文本处理、数值、日期和时间、输入/输出、并发支持共 16 类 | v1.0.0 |
-| 昇腾扩展接口 | `asc` · `<asc/...>` | 设备原子操作与线程同步、异步数据搬运、地址空间与内存视图、多维数据视图与搬运、设备执行层次与集体操作、Device 并行算法及设备侧数值与类型工具共 9 类 | v1.1.0 起 |
-| Runtime 接口 | `asc` · `<asc/...>` | 设备/Stream/Event 管理、核函数调用、Device 执行策略与执行要求、内存资源/内存池/缓冲区共 4 类 | v1.1.0 |
+| 昇腾扩展接口 | `asc` · `<asc/...>` | 设备原子操作与线程同步、异步数据搬运、地址空间与内存视图、多维数据视图与搬运、设备执行层次与集体操作、Device 并行算法及设备侧数值与类型工具共 9 类 | v1.0.0 |
+| Runtime 接口 | `asc` · `<asc/...>` | 设备/Stream/Event 管理、核函数调用、Device 执行策略与执行要求、内存资源/内存池/缓冲区共 4 类 | v1.0.0 |
 
 
 ### 整体架构
 
-![图1 ASC-STL 设计架构](docs/images/asc-stl-design-architecture.png)
+![图1 ASC-STL 设计架构](docs/images/asc-stl-design-architecture-v3.png)
 
 - ASC-STL 为纯头文件 C++ 库，接口分为 C++ 标准库接口、昇腾扩展接口和 Runtime 接口三部分；
 - 设备侧编程能力基于 CANN Ascend C 提供，代码由毕昇编译器（基于 Clang 15.0.5）编译，运行于昇腾 950 处理器；
@@ -51,9 +51,9 @@
 
 ### 如何选择能力
 
-- 写通用的类型、算法、数值与同步逻辑 → 使用 **C++ 标准库接口**（v1.0.0 起提供）；
-- 操作 GM/UB 内存、设备原子与线程协作、Device 并行算法 → 使用 **昇腾扩展接口**（v1.1.0 起提供）；
-- 管理设备、Stream/Event 与核函数调用 → 使用 **Runtime 接口**（v1.1.0 起提供）。
+- 写通用的类型、算法、数值与同步逻辑 → 使用 **C++ 标准库接口**（v1.0.0 提供）；
+- 操作 GM/UB 内存、设备原子与线程协作、Device 并行算法 → 使用 **昇腾扩展接口**（v1.0.0 提供）；
+- 管理设备、Stream/Event 与核函数调用 → 使用 **Runtime 接口**（v1.0.0 提供）。
 
 ## 🔍 目录结构
 
@@ -66,13 +66,13 @@ asc-stl/
 │       ├── std/                     # C++ 标准库接口：<asc/std/...>（v1.0.0）
 │       │   ├── detail/              # 统一配置入口
 │       │   └── ...                  # 其余内部实现目录（__ 前缀）
-│       ├── algorithm                # Device 并行算法（v1.1.x）
-│       ├── atomic                   # 设备原子操作（v1.1.x）
-│       ├── collectives              # 线程组协作操作（v1.1.x）
-│       ├── execution                # Device 执行策略聚合入口（v1.1.x）
-│       ├── memory                   # GM、UB 和内存视图（v1.1.x）
-│       ├── stream                   # stream 和 event 管理（v1.1.x）
-│       └── ...                      # 其他设备能力公共 Header（v1.1.x）
+│       ├── algorithm                # Device 并行算法（v1.0.0）
+│       ├── atomic                   # 设备原子操作（v1.0.0）
+│       ├── collectives              # 线程组协作操作（v1.0.0）
+│       ├── execution                # Device 执行策略聚合入口（v1.0.0）
+│       ├── memory                   # GM、UB 和内存视图（v1.0.0）
+│       ├── stream                   # stream 和 event 管理（v1.0.0）
+│       └── ...                      # 其他设备能力公共 Header（v1.0.0）
 ├── docs/                            # 项目文档与产品路线图
 ├── test/                            # Host、Device 与仿真测试
 ├── cmake/                           # CMake 安装和导出配置
@@ -145,7 +145,7 @@ ln -sf build/compile_commands.json .
 
 ## 📊 版本状态与功能清单
 
-当前状态：**v1.0.0 开发中，计划于 2026 年 10 月 16 日发布**。
+当前状态：**v1.0.0（完整版本）开发中，计划于 2026 年 10 月 16 日发布**。
 
 | 能力域 | 关键公共头 | 随版本提供 |
 | --- | --- | --- |
@@ -157,11 +157,11 @@ ln -sf build/compile_commands.json .
 | 数值与时间 | `cmath` `complex` `random` `linalg` `numeric` `chrono` … | v1.0.0 |
 | 标准原子与同步 | `atomic` `barrier` `latch` `semaphore` `mutex` | v1.0.0 |
 | 内存管理 | `memory` `scoped_allocator` | v1.0.0 |
-| 设备与任务提交 | `devices` `stream` `launch` `execution.*` | v1.1.0 |
-| 内存资源与数据搬运 | `memory` `memory_resource` `memory_pool` `buffer` `mdspan` `tensor_copy` `pipeline` | v1.1.0 |
-| 设备原子与线程同步 | `atomic` `barrier` `latch` `semaphore` | v1.1.1 |
-| 设备执行层次与集体操作 | `hierarchy` `warp` `collectives` `work_queue` | v1.1.1 |
-| Device 并行算法与配套组件 | `algorithm` `argument` `functional` `iterator` `bit` `cmath` `numeric` `random` `type_traits` `utility` `version` | v1.1.1 |
+| 设备与任务提交 | `devices` `stream` `launch` `execution.*` | v1.0.0 |
+| 内存资源与数据搬运 | `memory` `memory_resource` `memory_pool` `buffer` `mdspan` `tensor_copy` `pipeline` | v1.0.0 |
+| 设备原子与线程同步 | `atomic` `barrier` `latch` `semaphore` | v1.0.0 |
+| 设备执行层次与集体操作 | `hierarchy` `warp` `collectives` `work_queue` | v1.0.0 |
+| Device 并行算法与配套组件 | `algorithm` `argument` `functional` `iterator` `bit` `cmath` `numeric` `random` `type_traits` `utility` `version` | v1.0.0 |
 
 ## 📖 相关资源
 
@@ -170,14 +170,14 @@ ln -sf build/compile_commands.json .
 | 文档 | 说明 |
 | --- | --- |
 | [产品路线图](docs/roadmap/ROADMAP.md) | 版本发布计划与各版本能力范围 |
-| [v1.0.0 细分路线图](docs/roadmap/ROADMAP-v1.0.0.md) | C++ 标准库能力全量的条目级说明 |
+| [v1.0.0 细分路线图](docs/roadmap/ROADMAP-v1.0.0.md) | 完整版本的条目级说明：C++ 标准库、昇腾扩展与 Runtime 能力 |
 | [贡献指南](CONTRIBUTING.md) | 贡献流程、贡献场景与代码/测试要求 |
 | api参考文档 | 待定 |
 
 ## 📌 相关规划
 
-- [ASC-STL 总路线图](docs/roadmap/ROADMAP.md)：库功能按周更新，版本自 2026 年 10 月第 2 周起以双周为节奏发布；10 月 16 日发布 v1.0.0（C++ 标准库能力全量）、10 月 30 日发布 v1.1.0，完整版本 v1.1.1 发布时间待定；
-- [v1.0.0 细分路线图](docs/roadmap/ROADMAP-v1.0.0.md)：类型系统、算法、容器视图、字符串文本、数值时间、标准同步与内存管理的条目级说明。
+- [ASC-STL 总路线图](docs/roadmap/ROADMAP.md)：库功能按周更新，版本自 2026 年 10 月第 2 周起以双周为节奏发布；10 月 16 日发布 v1.0.0 完整版本（C++ 标准库接口、昇腾扩展接口与 Runtime 接口全量），10 月 30 日发布 v1.1.0（完善计划第一批：质量与性能完善），后续完善批次发布时间待定；
+- [v1.0.0 细分路线图](docs/roadmap/ROADMAP-v1.0.0.md)：类型系统、算法、容器视图、字符串文本、数值时间、标准同步、内存管理及昇腾扩展与 Runtime 能力的条目级说明。
 
 ## 📝 相关信息
 
