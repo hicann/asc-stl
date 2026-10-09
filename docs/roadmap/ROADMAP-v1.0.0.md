@@ -30,8 +30,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
   - `concepts` 标准概念（concept）与模板参数约束
   - `compare` 三路比较结果类别与比较辅助工具
   - `version` 标准功能特性检测宏
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#22、#23
+- **PR**：[#29](https://gitcode.com/cann/asc-stl/pulls/29)、[#33](https://gitcode.com/cann/asc-stl/pulls/33)
 
 ### 值语义与函数对象
 
@@ -41,8 +41,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
   - `utility`（移动、转发、交换、整数序列）与 `functional` 函数对象族
   - `bit` 计数、旋转、字节交换与位级转换，`bitset` 固定长度位集合
   - `limits` / `source_location` 数值属性与源码位置描述
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#31
+- **PR**：[#38](https://gitcode.com/cann/asc-stl/pulls/38)、[#46](https://gitcode.com/cann/asc-stl/pulls/46)
 
 ### 错误表示与诊断
 
@@ -50,8 +50,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
 - **Key Features**：
   - `cassert` 断言宏与 `cerrno` 错误码宏
   - `system_error` 错误码 / 错误条件 / 错误类别
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#48
+- **PR**：[#60](https://gitcode.com/cann/asc-stl/pulls/60)
 
 ## 顺序算法、迭代器与范围
 
@@ -61,8 +61,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
 - **Key Features**：
   - 非修改 / 修改序列操作、排序与分区、二分查找、集合操作、堆操作等
   - `execution` 标准执行策略类型与常量
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#25
+- **PR**：[#35](https://gitcode.com/cann/asc-stl/pulls/35)、[#46](https://gitcode.com/cann/asc-stl/pulls/46)
 
 ### 迭代器与范围
 
@@ -70,8 +70,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
 - **Key Features**：
   - `iterator` 迭代器属性、迭代器适配器与遍历辅助
   - `ranges` 范围访问、过滤、变换与视图组合
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#25
+- **PR**：[#35](https://gitcode.com/cann/asc-stl/pulls/35)、[#46](https://gitcode.com/cann/asc-stl/pulls/46)
 
 ## 容器与视图
 
@@ -81,8 +81,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
 - **Key Features**：
   - `array` / `inplace_vector` / `bitset`
   - `span` 连续序列视图与 `mdspan` 多维数据视图
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#31
+- **PR**：[#38](https://gitcode.com/cann/asc-stl/pulls/38)
 
 ### 动态容器与适配器
 
@@ -91,8 +91,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
   - `vector` / `deque` / `list` / `forward_list`
   - `map` / `set` / `unordered_map` / `unordered_set`
   - `queue` / `stack`
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#31
+- **PR**：[#38](https://gitcode.com/cann/asc-stl/pulls/38)、[#53](https://gitcode.com/cann/asc-stl/pulls/53)
 
 ## 字符串与文本处理
 
@@ -102,8 +102,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
   - `cctype` / `cwctype` / `cwchar` / `cuchar` 字符分类与转换
   - `charconv` 不依赖区域设置的字符序列与数值转换
   - `format` 类型安全的格式化
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#48
+- **PR**：[#60](https://gitcode.com/cann/asc-stl/pulls/60)
 
 ## 数值与时间
 
@@ -112,8 +112,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
 - **Goal**：提供归约、扫描、内积等标准数值算法。
 - **Key Features**：
   - `numeric` 归约、扫描、内积、差分与序列生成
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#24、#48
+- **PR**：[#34](https://gitcode.com/cann/asc-stl/pulls/34)、[#60](https://gitcode.com/cann/asc-stl/pulls/60)
 
 ### 数学、复数与随机数
 
@@ -124,8 +124,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
   - `numbers` 标准数学常量
   - `linalg` 面向向量与矩阵视图的线性代数算法
   - `random` 随机数引擎、分布与生成辅助工具
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#26、#48
+- **PR**：[#37](https://gitcode.com/cann/asc-stl/pulls/37)、[#60](https://gitcode.com/cann/asc-stl/pulls/60)
 
 ### 时间
 
@@ -133,8 +133,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
 - **Key Features**：
   - `chrono` 时钟、时间点、时间段及其运算
   - `ctime` C 兼容日期时间类型与函数
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#48
+- **PR**：[#60](https://gitcode.com/cann/asc-stl/pulls/60)
 
 ## 标准原子与同步
 
@@ -144,8 +144,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
   - `barrier` / `latch` / `semaphore` 屏障、倒计数与信号量
   - `mutex` / `shared_mutex` 互斥访问与锁对象管理
   - 设备侧原子操作与线程同步（GM/UB 作用域）随 v1.0.0 一并提供，见下文「昇腾扩展接口」
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#32
+- **PR**：[#44](https://gitcode.com/cann/asc-stl/pulls/44)、[#47](https://gitcode.com/cann/asc-stl/pulls/47)
 
 ## 内存管理与语言支持
 
@@ -155,8 +155,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
 - **Key Features**：
   - `memory` 智能指针、分配器、对象构造与销毁、未初始化内存操作
   - `scoped_allocator` 向嵌套对象传递外层分配器
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#26
+- **PR**：[#37](https://gitcode.com/cann/asc-stl/pulls/37)
 
 ### 语言支持
 
@@ -165,8 +165,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
   - `cfloat` / `climits` / `cstdint` / `cstddef` / `cinttypes` 数值特征宏与基础类型
   - `exception` 异常基础类型、`new` 分配函数与 placement new
   - `ciso646` / `cstdalign` / `cstdbool` C 兼容拼写与定义
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#22
+- **PR**：[#29](https://gitcode.com/cann/asc-stl/pulls/29)
 
 ## 昇腾扩展接口
 
@@ -176,8 +176,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
 - **Key Features**：
   - `atomic` 线程块级/设备级整数原子操作与作用于 UB 的宽松原子操作
   - `barrier` / `latch` / `semaphore` Block/Device 作用域屏障、倒计数与信号量
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#32
+- **PR**：[#44](https://gitcode.com/cann/asc-stl/pulls/44)、[#47](https://gitcode.com/cann/asc-stl/pulls/47)
 
 ### 设备执行层次与集体操作
 
@@ -186,8 +186,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
   - `hierarchy` / `warp` Grid/Block/Warp/Thread 维度、规模与索引查询；线程束投票、匹配、数据交换与归约
   - `collectives` 线程块级归约、扫描、广播与条件判断
   - `work_queue` 基于 GM 原子游标的动态任务区间获取
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#36
+- **PR**：[#53](https://gitcode.com/cann/asc-stl/pulls/53)
 
 ### Device 并行算法与参数包装
 
@@ -196,8 +196,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
   - `algorithm` 并行变换、查找、归约、扫描、选择、分区、合并与排序
   - `argument` 常量、立即值、延迟求值等算法参数包装
   - `functional` / `iterator` 最小值/最大值函数对象与操作属性；常量、计数、跨步、变换、组合等迭代器适配器
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#36
+- **PR**：[#53](https://gitcode.com/cann/asc-stl/pulls/53)
 
 ### 地址空间、内存视图与数据搬运
 
@@ -206,8 +206,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
   - `memory` 全局内存（GM）与统一缓冲区（UB）非拥有内存视图、内存空间属性查询与对齐辅助
   - `mdspan` / `tensor_copy` 覆盖 Host、GM 与 UB 的多维数据视图（支持 DLPack 数据结构转换）；支持 1 至 5 维形状、步长与填充的 GM/UB 异步数据搬运
   - `pipeline` 基于事件 ID 组织的 GM 与 UB 异步搬运流水线
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#48
+- **PR**：[#60](https://gitcode.com/cann/asc-stl/pulls/60)
 
 ### 设备侧数值、位操作与类型工具
 
@@ -217,8 +217,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
   - `cmath` / `numeric` 整数取整、对数、平方根、幂与 `sincos`；溢出检测、饱和计算与窄化转换检查
   - `random` PCG64 伪随机数引擎与确定性双射
   - `type_traits` / `utility` / `version` 按位比较、扩展浮点、可平凡重定位等类型特征；`in_range` 与 `static_for` 工具；版本宏与扩展能力检测宏
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#48
+- **PR**：[#60](https://gitcode.com/cann/asc-stl/pulls/60)
 
 ## Runtime 接口
 
@@ -228,8 +228,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
 - **Key Features**：
   - `devices` 设备枚举、查询与选择
   - `stream` Stream/Event 创建与接管、同步与完成状态查询、Event 依赖与计时
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#32
+- **PR**：[#44](https://gitcode.com/cann/asc-stl/pulls/44)
 
 ### 核函数调用与执行策略
 
@@ -237,8 +237,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
 - **Key Features**：
   - `launch` 在指定 Stream 上异步调用核函数，按 Stream 顺序提交 Host 回调
   - `execution` 及其子头（`execution.policy.h` / `execution.require.h` / `execution.determinism.h` / `execution.output_ordering.h` / `execution.tie_break.h`）关联 Stream、工作空间与执行要求的执行策略；确定性、输出顺序、决胜规则等执行要求组合
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#32
+- **PR**：[#44](https://gitcode.com/cann/asc-stl/pulls/44)
 
 ### 内存资源、内存池与缓冲区
 
@@ -247,8 +247,8 @@ v1.0.0 的能力随 10 月前两周的代码更新合入：第 1 周补齐 C++ �
   - `memory_resource` Device 内存与 Host 锁页内存资源
   - `memory_pool` Event 完成后复用的内存池
   - `buffer` 连续内存缓冲区管理
-- **Issue**：#X（待定）
-- **PR**：#X（待定）
+- **Issue**：#48
+- **PR**：[#60](https://gitcode.com/cann/asc-stl/pulls/60)
 
 ## 获取与使用
 

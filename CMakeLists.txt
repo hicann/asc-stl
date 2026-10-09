@@ -12,14 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.20)
 
-project(asc_stl VERSION 0.1.0 LANGUAGES CXX)
+include(version.cmake)
+
+project(asc_stl VERSION ${ASC_STL_VERSION} LANGUAGES CXX)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(CMakePackageConfigHelpers)
 
 add_library(asc_stl INTERFACE)
 add_library(asc_stl::asc_stl ALIAS asc_stl)
+
 target_compile_features(asc_stl INTERFACE cxx_std_17)
 target_include_directories(
     asc_stl

@@ -2,7 +2,7 @@
 
 #### 面向昇腾设备编程的 C++ 标准库 —— 纯头文件实现，为 Host 与 Device 提供统一的公共 Header 组织
 
-[📖 api文档](#)（待定） | [📚 产品路线图](docs/roadmap/ROADMAP.md) | [🧪 示例](#)（待定） | [🛠 工具脚本](#)（待定） | [📄 LICENSE](LICENSE) | [🤝 贡献指南](CONTRIBUTING.md)
+[📖 api文档](#)（待定） | [📚 产品路线图](docs/roadmap/ROADMAP.md) | [📄 LICENSE](LICENSE) | [🤝 贡献指南](CONTRIBUTING.md)
 
 ## 🔥 最新动态
 
@@ -78,6 +78,8 @@ asc-stl/
 ├── cmake/                           # CMake 安装和导出配置
 ├── scripts/                         # 构建检查脚本
 ├── CMakeLists.txt                   # 顶层 CMake 配置
+├── version.cmake                    # 版本定义
+├── build.sh                         # 构建与测试入口脚本
 ├── README.md                        # 项目说明
 └── LICENSE                          # 产品许可证
 ```
@@ -93,7 +95,7 @@ asc-stl/
 | CANN | 9.2.0 |
 | 毕昇 CCE / clang | 15.0.5 |
 | g++ | 支持 C++17 的版本 |
-| CMake | ≥ 3.18 |
+| CMake | ≥ 3.20 |
 | 处理器 | 昇腾 950 处理器 |
 
 ### 直接包含（Host 示例）
@@ -125,16 +127,19 @@ target_link_libraries(your_target PRIVATE asc-stl)   # INTERFACE 目标，只传
 ### 构建与运行测试
 
 ```bash
-# 方式一：脚本直跑 Host 回归
-./run_host_test.sh
+# 方式一：构建入口脚本（默认安装头文件与 CMake 配置到 build/install）
+bash build.sh
 
-# 方式二：CMake + CTest（含 Host / Device 编译 / 仿真测试）
-cmake -B build && cmake --build build -j && cd build && ctest
+# 方式二：Host 门禁（风格检查、对外头文件自包含、Host 语义 UT；仅需 C++17 编译器与 Python 3）
+bash scripts/ci-quick-check.sh
+
+# 方式三：CMake + CTest（显式开启测试目标；设备编译与仿真门禁需 CANN 环境并通过 build.sh --device-compile / --cannsim 开启）
+cmake -B build -DBUILD_TESTING=ON && cmake --build build -j && cd build && ctest
 ```
 
 ## 🧰 IDE 支持
 
-工程已配置 `CMAKE_EXPORT_COMPILE_COMMANDS`，构建后会在构建目录生成 `compile_commands.json`，供 clangd / VS Code 等 IDE 使用：
+工程已配置 `CMAKE_EXPORT_COMPILE_COMMANDS`，构建后会在构建目录生成 `compile_commands.json`，供 clangd / VS Code 等 IDE 使用。纯头文件库自身没有编译单元，该数据库由测试编译目标产生：
 
 ```bash
 cmake -B build            # 生成 build/compile_commands.json
@@ -181,5 +186,5 @@ ln -sf build/compile_commands.json .
 
 ## 📝 相关信息
 
-- **安全声明**：待定；
-- **许可证**：待定。
+- **安全声明**：[SECURITY.md](SECURITY.md)；
+- **许可证**：[Apache License 2.0](LICENSE)。
