@@ -1,0 +1,73 @@
+# asc::std::unique_lock::~unique_lock
+
+## 产品支持情况
+
+<!-- npu="950" id1 -->
+- Ascend 950PR&950DT系列产品：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3系列产品：不支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2系列产品：不支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas推理系列产品AI Core：不支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas训练系列产品：不支持
+<!-- end id7 -->
+
+## 功能说明
+
+头文件路径为：`<asc/std/mutex>`。
+
+`asc::std::unique_lock::~unique_lock` 销毁 `unique_lock` 对象并结束其生命周期。
+
+标准语义参考：[cppreference `mutex`](https://en.cppreference.com/w/cpp/header/mutex)。
+
+## 函数原型
+
+```cpp
+~unique_lock();
+```
+
+## 参数说明
+
+无参数。
+
+## 约束说明
+
+- unique_lock<Mutex>的mutex_type，default/普通/defer/try/adopt构造、删除copy、move构造/赋值和析构
+- 有效状态上的lock/try_lock/unlock/swap/release/mutex/owns_lock/operator bool及非成员swap
+- 显式非抛Device Lockable域
+- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+
+## 调用示例
+
+以下片段要求 object 指向已构造的锁包装器；析构会按持有状态释放锁，存储由调用方管理。
+
+```cpp
+#include <asc/std/mutex>
+
+struct example_mutex {
+    void lock() {}
+    bool try_lock() { return true; }
+    void unlock() {}
+    void lock_shared() {}
+    bool try_lock_shared() { return true; }
+    void unlock_shared() {}
+};
+using example_object = asc::std::unique_lock<example_mutex>;
+void example(example_object* object)
+{
+    // object 指向已构造的锁包装器，析构后不得访问。
+    object->~example_object();
+}
+```

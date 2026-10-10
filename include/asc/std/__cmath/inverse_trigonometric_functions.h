@@ -51,6 +51,30 @@ CANN_ASC_STL_DETAIL_INV_TRIG(acos, __builtin_acosf, __builtin_acos, __builtin_ac
 CANN_ASC_STL_DETAIL_INV_TRIG(asin, __builtin_asinf, __builtin_asin, __builtin_asinl)
 CANN_ASC_STL_DETAIL_INV_TRIG(atan, __builtin_atanf, __builtin_atan, __builtin_atanl)
 
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API double acos(double value) noexcept
+{
+    return __builtin_acos(value);
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API long double acos(long double value) noexcept
+{
+    return __builtin_acosl(value);
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API long double acosl(long double value) noexcept
+{
+    return __builtin_acosl(value);
+}
+
+// Preserve the float result of integral calls accepted before the Host overloads.
+template <class Integer, enable_if_t<is_integral<Integer>::value, int> = 0>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API float acos(Integer value) noexcept
+{
+    return ::asc::std::acos(static_cast<float>(value));
+}
+#endif
+
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API float atan2(float y, float x) noexcept
 {
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(atan2f, __builtin_atan2f, (y, x));

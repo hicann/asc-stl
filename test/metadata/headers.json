@@ -12760,6 +12760,9 @@
   {
    "target": "asc/std/cmath",
    "visibility": "public",
+   "additional_cases": [
+    "acos_precision.pass.cpp"
+   ],
    "dependencies": [
     "asc/__config",
     "asc/std/__cmath/abs.h",

@@ -1,0 +1,156 @@
+# asc::std::to_chars（函数模板）
+
+## 产品支持情况
+
+<!-- npu="950" id1 -->
+- Ascend 950PR&950DT系列产品：支持
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3系列产品：不支持
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2系列产品：不支持
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2推理产品：不支持
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas推理系列产品AI Core：不支持
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas推理系列产品Vector Core：不支持
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas训练系列产品：不支持
+<!-- end id7 -->
+
+## 功能说明
+
+头文件路径为：`<asc/std/charconv>`。
+
+`asc::std::to_chars` 按指定进制把整数写入调用方提供的字符缓冲区。
+
+标准语义参考：[cppreference `charconv`](https://en.cppreference.com/w/cpp/header/charconv)。
+
+## 函数原型
+
+### 原型 1
+
+```cpp
+template<class T> [[nodiscard]] constexpr to_chars_result asc::std::to_chars(char* first, char* last, T value) noexcept;
+```
+
+### 原型 2
+
+```cpp
+template<class T> [[nodiscard]] constexpr to_chars_result asc::std::to_chars(char* first, char* last, T value, int base) noexcept;
+```
+
+### 原型 3
+
+```cpp
+template<class T> [[nodiscard]] constexpr to_chars_result asc::std::to_chars(char* first, char* last, signed char value, int base) noexcept;
+```
+
+### 原型 4
+
+```cpp
+template<class T> [[nodiscard]] constexpr to_chars_result asc::std::to_chars(char* first, char* last, unsigned char value, int base) noexcept;
+```
+
+## 参数说明
+
+### 原型 1 的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `first` | 输入 | 输入范围的起始迭代器或指针。 |
+| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
+| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+
+### 原型 2 的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `first` | 输入 | 输入范围的起始迭代器或指针。 |
+| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
+| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `base` | 输入 | 指定“按指定进制把整数写入调用方提供的字符缓冲区”使用的标量值；取值须满足声明和约束。 |
+
+### 原型 3 的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `first` | 输入 | 输入范围的起始迭代器或指针。 |
+| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
+| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `base` | 输入 | 指定“按指定进制把整数写入调用方提供的字符缓冲区”使用的标量值；取值须满足声明和约束。 |
+
+### 原型 4 的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `first` | 输入 | 输入范围的起始迭代器或指针。 |
+| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
+| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `base` | 输入 | 指定“按指定进制把整数写入调用方提供的字符缓冲区”使用的标量值；取值须满足声明和约束。 |
+
+## 返回值说明
+
+| 适用原型 | 返回值类型 | 含义 |
+| --- | --- | --- |
+| 原型 1 | `to_chars_result` | 返回写入停止位置和错误状态；字符写入调用方缓冲区。 |
+| 原型 2 | `to_chars_result` | 返回写入停止位置和错误状态；字符写入调用方缓冲区。 |
+| 原型 3 | `to_chars_result` | 返回写入停止位置和错误状态；字符写入调用方缓冲区。 |
+| 原型 4 | `to_chars_result` | 返回写入停止位置和错误状态；字符写入调用方缓冲区。 |
+
+## 约束说明
+
+- 支持所有标准有符号/无符号整数类型以及 2 至 36 进制
+- AI Core SIMD 编程 缓冲区必须是 local 或 generic 地址空间的普通 char 指针
+
+## 调用示例
+
+以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+
+```cpp
+#include <asc/std/charconv>
+
+template <class T>
+decltype(auto) example(char * first, char * last, T value)
+{
+    return asc::std::to_chars(first, last, value);
+}
+```
