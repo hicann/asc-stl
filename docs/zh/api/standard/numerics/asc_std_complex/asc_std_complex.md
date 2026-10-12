@@ -22,6 +22,7 @@
 | [asc::std::cos](../asc_std_cmath/cos.md) | 函数 | C++17+ | Host、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::cosh](../asc_std_cmath/cosh.md) | 函数 | C++17+ | Host、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::exp](../asc_std_cmath/exp.md) | 函数 | C++17+ | Host、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::literals::complex_literals::operator""if](literals_complex_literals_operator__if.md) | 函数 | `C++17+` | Host | Ascend 950 |
 | [asc::std::log](../asc_std_cmath/log.md) | 函数 | C++17+ | Host、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::log10](../asc_std_cmath/log10.md) | 函数 | C++17+ | Host、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::pow](../asc_std_cmath/pow.md) | 函数 | C++17+ | Host、AI Core SIMT 编程 | Ascend 950 |
