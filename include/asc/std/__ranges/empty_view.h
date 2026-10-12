@@ -32,8 +32,15 @@
 #include <asc/std/__ranges/view_interface.h>
 #include <asc/std/__type_traits/is_object.h>
 namespace asc::std::ranges {
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+template <class T>
+    requires is_object_v<T>
+class empty_view : public view_interface<empty_view<T>> {
+#else
 template <class T>
 class empty_view : public view_interface<empty_view<T>> {
+#endif
+
 public:
     CANN_ASC_STL_API static constexpr T* begin() noexcept
     {

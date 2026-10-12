@@ -45,8 +45,14 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 
+// 概念约束（equality_comparable_with / totally_ordered_with）按 [concept.equalitycomparable]/
+// [concept.totallyordered] 校验比较结果可布尔化；设备编译与非概念路径保持基座无约束形状。
+
 struct equal_to {
     template <class _Tp, class _Up>
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        requires equality_comparable_with<_Tp, _Up>
+#endif
     [[nodiscard]] CANN_ASC_STL_API constexpr bool operator()(_Tp&& __t, _Up&& __u) const
         noexcept(noexcept(static_cast<bool>(::asc::std::forward<_Tp>(__t) == ::asc::std::forward<_Up>(__u))))
     {
@@ -58,6 +64,9 @@ struct equal_to {
 
 struct not_equal_to {
     template <class _Tp, class _Up>
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        requires equality_comparable_with<_Tp, _Up>
+#endif
     [[nodiscard]] CANN_ASC_STL_API constexpr bool operator()(_Tp&& __t, _Up&& __u) const
         noexcept(noexcept(static_cast<bool>(!(::asc::std::forward<_Tp>(__t) == ::asc::std::forward<_Up>(__u)))))
     {
@@ -69,6 +78,9 @@ struct not_equal_to {
 
 struct less {
     template <class _Tp, class _Up>
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        requires totally_ordered_with<_Tp, _Up>
+#endif
     [[nodiscard]] CANN_ASC_STL_API constexpr bool operator()(_Tp&& __t, _Up&& __u) const
         noexcept(noexcept(static_cast<bool>(::asc::std::forward<_Tp>(__t) < ::asc::std::forward<_Up>(__u))))
     {
@@ -80,6 +92,9 @@ struct less {
 
 struct less_equal {
     template <class _Tp, class _Up>
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        requires totally_ordered_with<_Tp, _Up>
+#endif
     [[nodiscard]] CANN_ASC_STL_API constexpr bool operator()(_Tp&& __t, _Up&& __u) const
         noexcept(noexcept(static_cast<bool>(!(::asc::std::forward<_Up>(__u) < ::asc::std::forward<_Tp>(__t)))))
     {
@@ -91,6 +106,9 @@ struct less_equal {
 
 struct greater {
     template <class _Tp, class _Up>
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        requires totally_ordered_with<_Tp, _Up>
+#endif
     [[nodiscard]] CANN_ASC_STL_API constexpr bool operator()(_Tp&& __t, _Up&& __u) const
         noexcept(noexcept(static_cast<bool>(::asc::std::forward<_Up>(__u) < ::asc::std::forward<_Tp>(__t))))
     {
@@ -102,6 +120,9 @@ struct greater {
 
 struct greater_equal {
     template <class _Tp, class _Up>
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        requires totally_ordered_with<_Tp, _Up>
+#endif
     [[nodiscard]] CANN_ASC_STL_API constexpr bool operator()(_Tp&& __t, _Up&& __u) const
         noexcept(noexcept(static_cast<bool>(!(::asc::std::forward<_Tp>(__t) < ::asc::std::forward<_Up>(__u)))))
     {

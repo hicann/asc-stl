@@ -31,7 +31,9 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__add_rvalue_reference)
+// 纯 GCC 宿主编译禁止在函数签名中使用依赖签名模板参数的内建 trait，
+// 走库实现路径；Clang/CCE/BiSheng 家族（定义 __clang__）仍走内建快路径。
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__add_rvalue_reference) && (!defined(__GNUC__) || defined(__clang__))
 
 template <class T>
 using add_rvalue_reference_t = __add_rvalue_reference(T);

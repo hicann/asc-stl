@@ -32,10 +32,13 @@
 #include <asc/std/__tuple/tuple_indices.h>
 #include <asc/std/__type_traits/conditional.h>
 #include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/is_arithmetic.h>
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/remove_cvref.h>
 #include <asc/std/__type_traits/type_identity.h>
+#include <asc/std/__type_traits/void_t.h>
+#include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/integer_sequence.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
@@ -51,6 +54,96 @@ struct __variant_find_exact<T, Head, Tail...>
                                (__variant_find_exact<T, Tail...>::value == static_cast<__SIZE_TYPE__>(-1) ?
                                        static_cast<__SIZE_TYPE__>(-1) :
                                        1 + __variant_find_exact<T, Tail...>::value)> {};
+
+// 隐式转换探针：仅当 Source 能隐式转换为 Destination（函数形参式）且不发生
+// 列表初始化窄化时，重载决议匹配才放行该备选。
+template <class Destination>
+CANN_ASC_STL_API void __variant_accept_implicit_conversion(Destination) noexcept
+{}
+
+template <class Destination, class Source, class = void>
+struct __variant_is_non_narrowing_convertible : false_type {};
+
+template <class Destination, class Source>
+struct __variant_is_non_narrowing_convertible<Destination, Source,
+    void_t<decltype(::asc::std::__variant_accept_implicit_conversion<Destination>(::asc::std::declval<Source>())),
+        decltype(Destination{::asc::std::declval<Source>()})>> : true_type {};
+
+struct __variant_no_narrowing_check {
+    template <class Destination, class Source>
+    using apply = type_identity<Destination>;
+};
+
+struct __variant_narrowing_check {
+    template <class Destination, class Source,
+        bool NonNarrowing = __variant_is_non_narrowing_convertible<Destination, Source>::value>
+    struct conversion {};
+
+    template <class Destination, class Source>
+    struct conversion<Destination, Source, true> {
+        using type = type_identity<Destination>;
+    };
+
+    template <class Destination, class Source>
+    using apply = typename conversion<Destination, Source>::type;
+};
+
+// 算术备选按窄化检查参与匹配，其余备选仅需常规隐式转换。
+template <class Destination, class Source>
+using __variant_check_for_narrowing = typename conditional_t<is_arithmetic_v<Destination>, __variant_narrowing_check,
+    __variant_no_narrowing_check>::template apply<Destination, Source>;
+
+template <class T, __SIZE_TYPE__ Index>
+struct __variant_overload {
+    template <class Source>
+    CANN_ASC_STL_API auto operator()(T, Source&&) const -> __variant_check_for_narrowing<T, Source>;
+};
+
+// bool 备选只接受真正的 bool 实参，杜绝整型/指针经标准转换窃据 bool 位。
+template <class T, __SIZE_TYPE__>
+struct __variant_overload_bool {
+    template <class Source, class Arg = remove_cvref_t<Source>>
+    CANN_ASC_STL_API auto operator()(bool, Source&&) const -> enable_if_t<__is_same(Arg, bool), type_identity<T>>;
+};
+
+template <__SIZE_TYPE__ Index>
+struct __variant_overload<bool, Index> : __variant_overload_bool<bool, Index> {};
+template <__SIZE_TYPE__ Index>
+struct __variant_overload<bool const, Index> : __variant_overload_bool<bool const, Index> {};
+template <__SIZE_TYPE__ Index>
+struct __variant_overload<bool volatile, Index> : __variant_overload_bool<bool volatile, Index> {};
+template <__SIZE_TYPE__ Index>
+struct __variant_overload<bool const volatile, Index> : __variant_overload_bool<bool const volatile, Index> {};
+
+template <class... Bases>
+struct __variant_all_overloads : Bases... {
+    CANN_ASC_STL_API void operator()() const;
+    using Bases::operator()...;
+};
+
+template <class IndexSequence>
+struct __variant_make_overloads_imp;
+
+template <size_t... Indices>
+struct __variant_make_overloads_imp<__tuple_indices<Indices...>> {
+    template <class... Types>
+    using apply = __variant_all_overloads<__variant_overload<Types, Indices>...>;
+};
+
+template <class... Types>
+using __variant_make_overloads =
+    typename __variant_make_overloads_imp<__make_indices_imp<sizeof...(Types), 0>>::template apply<Types...>;
+
+// 以重载决议选出 T 的最佳匹配备选；歧义或无匹配时该别名不可用（SFINAE 友好）。
+template <class T, class... Types>
+using __variant_best_match_t = typename __invoke_result_t<__variant_make_overloads<Types...>, T, T>::type;
+
+template <class T, class Void, class... Types>
+struct __variant_best_match {};
+
+template <class T, class... Types>
+struct __variant_best_match<T, void_t<__variant_best_match_t<T, Types...>>, Types...>
+    : integral_constant<__SIZE_TYPE__, __variant_find_exact<__variant_best_match_t<T, Types...>, Types...>::value> {};
 
 CANN_ASC_STL_END_NAMESPACE
 

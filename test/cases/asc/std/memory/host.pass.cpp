@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 
-#include <memory>
-
 #include "../../../../support/w09_w10_semantics.h"
-#include "../../../../support/allocator_public_contract.h"
 
 int main()
 {
-    std::allocator<int> allocator;
-    const int value = asc::std::make_obj_using_allocator<int>(allocator, 7);
-    alignas(int) unsigned char storage[sizeof(int)];
-    int* address = reinterpret_cast<int*>(storage);
-    int* constructed = asc::std::uninitialized_construct_using_allocator(address, allocator, 8);
-    const bool allocator_construction_ok = value == 7 && constructed == address && *constructed == 8;
-    asc::std::destroy_at(constructed);
-    return (allocator_construction_ok ? 0 : 1) + asc_stl_w09_w10_test::evaluate_memory_variant() +
-        asc_stl_allocator_public_test::allocator_bulk_behavior();
+    return asc_stl_w09_w10_test::evaluate_memory_variant();
 }

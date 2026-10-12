@@ -39,80 +39,108 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+//! @brief 独立位引擎：把任意 URNG 的输出重组成指定位宽的无偏位流。
+//!
+//! __bit_log2/countl_zero 均为已迁移并在 950 真机验证的位设施；
+//! 全程无符号算术，host 与 AI-core 路径统一。拒绝上限按工作类型位宽
+//! （而非结果类型位宽）守卫，非二次幂范围引擎的同种子输出序列与
+//! libc++ 对齐。
 template <class Engine, class UIntType>
-class __asc_independent_bits_engine {
+class __independent_bits_engine {
+public:
+    // types
+    using result_type = UIntType;
+
+private:
     using engine_result_type = typename Engine::result_type;
     using working_result_type =
         conditional_t<(sizeof(engine_result_type) <= sizeof(UIntType)), UIntType, engine_result_type>;
-    static constexpr working_result_type range = Engine::max() - Engine::min() + working_result_type(1);
-    static constexpr size_t engine_bits = numeric_limits<engine_result_type>::digits;
-    static constexpr size_t result_bits = numeric_limits<UIntType>::digits;
-    static constexpr size_t usable_bits = range == 0 ? engine_bits : static_cast<size_t>(bit_width(range) - 1);
 
-public:
-    CANN_ASC_STL_API constexpr __asc_independent_bits_engine(Engine& engine, size_t width) noexcept
-        : engine_(engine),
-          width_(width),
-          chunks_(width / usable_bits + (width % usable_bits != 0)),
-          small_width_(width / chunks_)
-    {
-        small_limit_ = range == 0 || small_width_ >= result_bits ? 0 : (range >> small_width_) << small_width_;
-        if (range != 0 && range - small_limit_ > small_limit_ / chunks_) {
-            ++chunks_;
-            small_width_ = width_ / chunks_;
-            small_limit_ = small_width_ >= result_bits ? 0 : (range >> small_width_) << small_width_;
-        }
-        small_chunks_ = chunks_ - width_ % chunks_;
-        large_limit_ =
-            range == 0 || small_width_ >= result_bits - 1 ? 0 : (range >> (small_width_ + 1)) << (small_width_ + 1);
-        small_mask_ = small_width_ > 0 ?
-            static_cast<engine_result_type>(~engine_result_type(0)) >> (engine_bits - small_width_) :
-            engine_result_type(0);
-        large_mask_ = small_width_ < engine_bits - 1 ?
-            static_cast<engine_result_type>(~engine_result_type(0)) >> (engine_bits - (small_width_ + 1)) :
-            static_cast<engine_result_type>(~engine_result_type(0));
-    }
-
-    CANN_ASC_STL_API constexpr UIntType operator()() noexcept
-    {
-        UIntType result = 0;
-        for (size_t index = 0; index < small_chunks_; ++index) {
-            engine_result_type sample = engine_() - Engine::min();
-            while (range != 0 && sample >= small_limit_) {
-                sample = engine_() - Engine::min();
-            }
-            if (small_width_ < result_bits) {
-                result <<= small_width_;
-            } else {
-                result = 0;
-            }
-            result += static_cast<UIntType>(sample & small_mask_);
-        }
-        for (size_t index = small_chunks_; index < chunks_; ++index) {
-            engine_result_type sample = engine_() - Engine::min();
-            while (range != 0 && sample >= large_limit_) {
-                sample = engine_() - Engine::min();
-            }
-            if (small_width_ < result_bits - 1) {
-                result <<= small_width_ + 1;
-            } else {
-                result = 0;
-            }
-            result += static_cast<UIntType>(sample & large_mask_);
-        }
-        return result;
-    }
-
-private:
     Engine& engine_;
     size_t width_;
-    size_t chunks_;
-    size_t small_width_;
+    size_t small_width_{};
+    size_t chunks_{};
     size_t small_chunks_{};
     working_result_type small_limit_{};
     working_result_type large_limit_{};
     engine_result_type small_mask_{};
     engine_result_type large_mask_{};
+
+    static constexpr working_result_type range = Engine::max() - Engine::min() + working_result_type(1);
+    static constexpr size_t log2_range = static_cast<size_t>(::asc::std::__bit_log2(range));
+    static constexpr size_t working_digits = static_cast<size_t>(numeric_limits<working_result_type>::digits);
+    static constexpr size_t engine_digits = static_cast<size_t>(numeric_limits<engine_result_type>::digits);
+
+public:
+    CANN_ASC_STL_API constexpr __independent_bits_engine(Engine& engine, size_t width) noexcept
+        : engine_(engine), width_(width)
+    {
+        chunks_ = width_ / log2_range + (width_ % log2_range != 0);
+        small_width_ = width_ / chunks_;
+        if (range == 0) {
+            small_limit_ = range;
+        } else if (small_width_ < working_digits) {
+            small_limit_ = (range >> small_width_) << small_width_;
+        } else {
+            small_limit_ = 0;
+        }
+        if (range - small_limit_ > small_limit_ / chunks_) {
+            ++chunks_;
+            small_width_ = width_ / chunks_;
+            if (small_width_ < working_digits) {
+                small_limit_ = (range >> small_width_) << small_width_;
+            } else {
+                small_limit_ = 0;
+            }
+        }
+        small_chunks_ = chunks_ - width_ % chunks_;
+        if (small_width_ < working_digits - 1) {
+            large_limit_ = (range >> (small_width_ + 1)) << (small_width_ + 1);
+        } else {
+            large_limit_ = 0;
+        }
+        small_mask_ = small_width_ > 0 ?
+            static_cast<engine_result_type>(~engine_result_type(0)) >> (engine_digits - small_width_) :
+            engine_result_type(0);
+        large_mask_ = small_width_ < engine_digits - 1 ?
+            static_cast<engine_result_type>(~engine_result_type(0)) >> (engine_digits - (small_width_ + 1)) :
+            static_cast<engine_result_type>(~engine_result_type(0));
+    }
+
+    // generating functions
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr result_type operator()() noexcept
+    {
+        if (range == 0) {
+            return static_cast<result_type>(engine_() & small_mask_);
+        }
+        constexpr size_t result_width = static_cast<size_t>(numeric_limits<result_type>::digits);
+        result_type result = 0;
+        for (size_t index = 0; index < small_chunks_; ++index) {
+            engine_result_type sample = engine_() - Engine::min();
+            while (sample >= small_limit_) {
+                sample = engine_() - Engine::min();
+            }
+            if (small_width_ < result_width) {
+                result <<= small_width_;
+            } else {
+                result = 0;
+            }
+            result += static_cast<result_type>(sample & small_mask_);
+        }
+        for (size_t index = small_chunks_; index < chunks_; ++index) {
+            engine_result_type sample = engine_() - Engine::min();
+            while (sample >= large_limit_) {
+                sample = engine_() - Engine::min();
+            }
+            if (small_width_ < result_width - 1) {
+                result <<= small_width_ + 1;
+            } else {
+                result = 0;
+            }
+            result += static_cast<result_type>(sample & large_mask_);
+        }
+        return result;
+    }
 };
 
 template <class IntType = int>
@@ -159,7 +187,7 @@ public:
     CANN_ASC_STL_API explicit constexpr uniform_int_distribution(const param_type& parameters) noexcept
         : parameters_(parameters)
     {}
-    CANN_ASC_STL_API void reset() noexcept
+    CANN_ASC_STL_API constexpr void reset() noexcept
     {}
     template <class URng>
     CANN_ASC_STL_API constexpr result_type operator()(URng& generator) noexcept
@@ -179,8 +207,8 @@ public:
             return parameters.a();
         }
         if (span == 0) {
-            return static_cast<result_type>(__asc_independent_bits_engine<URng, UnsignedResult>(
-                generator, numeric_limits<UnsignedResult>::digits)());
+            return static_cast<result_type>(
+                __independent_bits_engine<URng, UnsignedResult>(generator, numeric_limits<UnsignedResult>::digits)());
         }
         constexpr size_t digits = numeric_limits<UnsignedResult>::digits;
         size_t width = digits - countl_zero(span) - 1;
@@ -188,14 +216,12 @@ public:
         if ((span & (maximum >> (digits - width))) != 0) {
             ++width;
         }
-        __asc_independent_bits_engine<URng, UnsignedResult> engine(generator, width);
+        __independent_bits_engine<URng, UnsignedResult> engine(generator, width);
         UnsignedResult sample = engine();
-        do {
-            if (sample < span) {
-                return static_cast<result_type>(sample + static_cast<UnsignedResult>(parameters.a()));
-            }
+        while (sample >= span) {
             sample = engine();
-        } while (true);
+        }
+        return static_cast<result_type>(sample + static_cast<UnsignedResult>(parameters.a()));
     }
     CANN_ASC_STL_API constexpr result_type a() const noexcept
     {

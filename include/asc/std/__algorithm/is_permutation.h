@@ -37,40 +37,6 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class _ForwardIterator1, class _ForwardIterator2, class _BinaryPredicate>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool __is_permutation_counts_match(_ForwardIterator1 __first1,
-    _ForwardIterator1 __last1, _ForwardIterator2 __first2, _ForwardIterator2 __last2, _BinaryPredicate __pred)
-{
-    using _Diff1 = typename iterator_traits<_ForwardIterator1>::difference_type;
-    for (_ForwardIterator1 __i = __first1; __i != __last1; ++__i) {
-        _ForwardIterator1 __match = __first1;
-        for (; __match != __i && !__pred(*__match, *__i); ++__match) {
-        }
-        if (__match != __i) {
-            continue;
-        }
-        _Diff1 __second_count = 0;
-        for (_ForwardIterator2 __j = __first2; __j != __last2; ++__j) {
-            if (__pred(*__i, *__j)) {
-                ++__second_count;
-            }
-        }
-        if (__second_count == 0) {
-            return false;
-        }
-        _Diff1 __first_count = 1;
-        for (_ForwardIterator1 __j = ::asc::std::next(__i); __j != __last1; ++__j) {
-            if (__pred(*__i, *__j)) {
-                ++__first_count;
-            }
-        }
-        if (__first_count != __second_count) {
-            return false;
-        }
-    }
-    return true;
-}
-
-template <class _ForwardIterator1, class _ForwardIterator2, class _BinaryPredicate>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool is_permutation(
     _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2, _BinaryPredicate __pred)
 {
@@ -90,7 +56,40 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool is_permutation(
         return false;
     }
     _ForwardIterator2 __last2 = ::asc::std::next(__first2, __l1);
-    return ::asc::std::__is_permutation_counts_match(__first1, __last1, __first2, __last2, __pred);
+    //  For each element in [f1, l1) see if there are the same number of
+    //  equal elements in [f2, l2)
+    for (_ForwardIterator1 __i = __first1; __i != __last1; ++__i) {
+        //  Have we already counted the number of *__i in [f1, l1)?
+        _ForwardIterator1 __match = __first1;
+        for (; __match != __i; ++__match) {
+            if (__pred(*__match, *__i)) {
+                break;
+            }
+        }
+        if (__match == __i) {
+            //  Count number of *__i in [f2, l2)
+            _Diff1 __c2 = 0;
+            for (_ForwardIterator2 __j = __first2; __j != __last2; ++__j) {
+                if (__pred(*__i, *__j)) {
+                    ++__c2;
+                }
+            }
+            if (__c2 == 0) {
+                return false;
+            }
+            //  Count number of *__i in [__i, l1) (we can start with 1)
+            _Diff1 __c1 = 1;
+            for (_ForwardIterator1 __j = ::asc::std::next(__i); __j != __last1; ++__j) {
+                if (__pred(*__i, *__j)) {
+                    ++__c1;
+                }
+            }
+            if (__c1 != __c2) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 template <class _ForwardIterator1, class _ForwardIterator2>
@@ -101,8 +100,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool is_permutation(
 }
 
 template <class _ForwardIterator1, class _ForwardIterator2, class _BinaryPredicate>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool __is_permutation_forward(_ForwardIterator1 __first1,
-    _ForwardIterator1 __last1, _ForwardIterator2 __first2, _ForwardIterator2 __last2, _BinaryPredicate __pred)
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool __is_permutation(_ForwardIterator1 __first1,
+    _ForwardIterator1 __last1, _ForwardIterator2 __first2, _ForwardIterator2 __last2, _BinaryPredicate __pred,
+    forward_iterator_tag, forward_iterator_tag)
 {
     //  shorten sequences as much as possible by lopping off any equal prefix
     for (; __first1 != __last1 && __first2 != __last2; ++__first1, (void)++__first2) {
@@ -128,21 +128,69 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool __is_permutation_forward(
         return false;
     }
 
-    return ::asc::std::__is_permutation_counts_match(__first1, __last1, __first2, __last2, __pred);
+    //  For each element in [f1, l1) see if there are the same number of
+    //  equal elements in [f2, l2)
+    for (_ForwardIterator1 __i = __first1; __i != __last1; ++__i) {
+        //  Have we already counted the number of *__i in [f1, l1)?
+        _ForwardIterator1 __match = __first1;
+        for (; __match != __i; ++__match) {
+            if (__pred(*__match, *__i)) {
+                break;
+            }
+        }
+        if (__match == __i) {
+            //  Count number of *__i in [f2, l2)
+            _Diff1 __c2 = 0;
+            for (_ForwardIterator2 __j = __first2; __j != __last2; ++__j) {
+                if (__pred(*__i, *__j)) {
+                    ++__c2;
+                }
+            }
+            if (__c2 == 0) {
+                return false;
+            }
+            //  Count number of *__i in [__i, l1) (we can start with 1)
+            _Diff1 __c1 = 1;
+            for (_ForwardIterator1 __j = ::asc::std::next(__i); __j != __last1; ++__j) {
+                if (__pred(*__i, *__j)) {
+                    ++__c1;
+                }
+            }
+            if (__c1 != __c2) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+template <class _RandomAccessIterator1, class _RandomAccessIterator2, class _BinaryPredicate>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool __is_permutation(_RandomAccessIterator1 __first1,
+    _RandomAccessIterator1 __last1, _RandomAccessIterator2 __first2, _RandomAccessIterator2 __last2,
+    _BinaryPredicate __pred, random_access_iterator_tag, random_access_iterator_tag)
+{
+    if (__last1 - __first1 != __last2 - __first2) {
+        return false;
+    }
+    return ::asc::std::is_permutation(__first1, __last1, __first2, __pred);
 }
 
 template <class _ForwardIterator1, class _ForwardIterator2, class _BinaryPredicate>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool is_permutation(_ForwardIterator1 __first1,
     _ForwardIterator1 __last1, _ForwardIterator2 __first2, _ForwardIterator2 __last2, _BinaryPredicate __pred)
 {
-    return ::asc::std::__is_permutation_forward(__first1, __last1, __first2, __last2, __pred);
+    return ::asc::std::__is_permutation(__first1, __last1, __first2, __last2, __pred,
+        typename iterator_traits<_ForwardIterator1>::iterator_category{},
+        typename iterator_traits<_ForwardIterator2>::iterator_category{});
 }
 
 template <class _ForwardIterator1, class _ForwardIterator2>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool is_permutation(
     _ForwardIterator1 __first1, _ForwardIterator1 __last1, _ForwardIterator2 __first2, _ForwardIterator2 __last2)
 {
-    return ::asc::std::__is_permutation_forward(__first1, __last1, __first2, __last2, __equal_to{});
+    return ::asc::std::__is_permutation(__first1, __last1, __first2, __last2, __equal_to{},
+        typename iterator_traits<_ForwardIterator1>::iterator_category{},
+        typename iterator_traits<_ForwardIterator2>::iterator_category{});
 }
 
 CANN_ASC_STL_END_NAMESPACE

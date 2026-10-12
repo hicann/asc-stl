@@ -29,10 +29,12 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__concepts/common_reference_with.h>
+#include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__concepts/same_as.h>
 #include <asc/std/__type_traits/add_lvalue_reference.h>
 #include <asc/std/__type_traits/common_type.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/declval.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
@@ -46,6 +48,21 @@ concept common_with = same_as<common_type_t<T, U>, common_type_t<U, T>> &&
     } && common_reference_with<add_lvalue_reference_t<const T>, add_lvalue_reference_t<const U>> &&
     common_reference_with<add_lvalue_reference_t<common_type_t<T, U>>,
         common_reference_t<add_lvalue_reference_t<const T>, add_lvalue_reference_t<const U>>>;
+#else
+template <class T, class U, class = void>
+inline constexpr bool __common_with_impl = false;
+
+template <class T, class U>
+inline constexpr bool __common_with_impl<T, U,
+    void_t<common_type_t<T, U>, common_type_t<U, T>,
+        decltype(static_cast<common_type_t<T, U>>(::asc::std::declval<T>())),
+        decltype(static_cast<common_type_t<T, U>>(::asc::std::declval<U>())),
+        common_reference_t<add_lvalue_reference_t<const T>, add_lvalue_reference_t<const U>>>> =
+    is_same_v<common_type_t<T, U>, common_type_t<U, T>> && is_same_v<common_type_t<U, T>, common_type_t<T, U>> &&
+    __common_reference_with_impl<add_lvalue_reference_t<const T>, add_lvalue_reference_t<const U>> &&
+    __common_reference_with_impl<add_lvalue_reference_t<common_type_t<T, U>>,
+        common_reference_t<add_lvalue_reference_t<const T>, add_lvalue_reference_t<const U>>>;
+
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

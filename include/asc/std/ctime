@@ -37,6 +37,9 @@
 #ifndef CLOCKS_PER_SEC
 #define CLOCKS_PER_SEC 1000000000L
 #endif
+#ifndef TIME_UTC
+#define TIME_UTC 1
+#endif
 #endif
 
 CANN_ASC_STL_BEGIN_NAMESPACE
@@ -44,12 +47,14 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 #if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
 using clock_t = long long;
 using time_t = long long;
+using size_t = __SIZE_TYPE__;
 struct timespec {
     time_t tv_sec;
     long tv_nsec;
 };
 #else
 using ::clock_t;
+using ::size_t;
 using ::time_t;
 using ::timespec;
 #endif
@@ -69,6 +74,21 @@ CANN_ASC_STL_API constexpr double difftime(time_t end, time_t start) noexcept
 {
     return static_cast<double>(end - start);
 }
+
+#if !defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+// Wall-clock entry points are Host-only: the device vocabulary provides the
+// monotonic clock() counter plus the difftime conversion, while calendar time
+// has no counterpart on the AI Core.
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API time_t time(time_t* timer) noexcept
+{
+    return ::time(timer);
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API int timespec_get(timespec* ts, int base) noexcept
+{
+    return ::timespec_get(ts, base);
+}
+#endif
 
 CANN_ASC_STL_END_NAMESPACE
 

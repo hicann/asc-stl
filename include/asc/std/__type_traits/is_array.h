@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_IS_ARRAY_H
 #define CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_IS_ARRAY_H
 
@@ -27,34 +28,21 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+
+#include <asc/std/__cstddef/types.h>
 #include <asc/std/__type_traits/integral_constant.h>
-#include <asc/std/cstddef>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_array)
-
-template <class T>
-struct is_array : bool_constant<__is_array(T)> {};
-
-template <class T>
-inline constexpr bool is_array_v = __is_array(T);
-
-#else
-
-template <class T>
+template <class _Tp>
 inline constexpr bool is_array_v = false;
+template <class _Tp>
+inline constexpr bool is_array_v<_Tp[]> = true;
+template <class _Tp, size_t _Np>
+inline constexpr bool is_array_v<_Tp[_Np]> = true;
 
-template <class T>
-inline constexpr bool is_array_v<T[]> = true;
-
-template <class T, size_t N>
-inline constexpr bool is_array_v<T[N]> = true;
-
-template <class T>
-struct is_array : bool_constant<is_array_v<T> > {};
-
-#endif
+template <class _Tp>
+struct is_array : bool_constant<is_array_v<_Tp>> {};
 
 CANN_ASC_STL_END_NAMESPACE
 

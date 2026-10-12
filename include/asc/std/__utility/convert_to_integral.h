@@ -32,6 +32,16 @@
 #include <asc/std/__type_traits/is_floating_point.h>
 #include <asc/std/__type_traits/underlying_type.h>
 
+// 基座 __config 未提供 CANN_ASC_STL_DETAIL_HAS_INT128（定义于合入源树的
+// extended_data_types.h）：内联其语义的最小等价，#ifndef 守卫以免与未来基座定义冲突。
+#ifndef CANN_ASC_STL_DETAIL_HAS_INT128
+#if !defined(ASC_DISABLE_INT128_SUPPORT) && defined(__linux__) && defined(__SIZEOF_INT128__)
+#define CANN_ASC_STL_DETAIL_HAS_INT128() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_INT128() 0
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HAS_INT128
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 CANN_ASC_STL_API constexpr int __convert_to_integral(int value)
@@ -69,6 +79,18 @@ CANN_ASC_STL_API constexpr enable_if_t<is_floating_point_v<Fp>, long long> __con
 {
     return value;
 }
+
+#if CANN_ASC_STL_DETAIL_HAS_INT128()
+CANN_ASC_STL_API constexpr __int128_t __convert_to_integral(__int128_t value)
+{
+    return value;
+}
+
+CANN_ASC_STL_API constexpr __uint128_t __convert_to_integral(__uint128_t value)
+{
+    return value;
+}
+#endif  // CANN_ASC_STL_DETAIL_HAS_INT128()
 
 template <class T, bool = is_enum_v<T>>
 struct __sfinae_underlying_type {

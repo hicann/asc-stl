@@ -31,6 +31,7 @@
 #include <asc/std/__concepts/same_as.h>
 #include <asc/std/__functional/identity.h>
 #include <asc/std/__functional/invoke.h>
+#include <asc/std/__functional/reference_wrapper.h>
 #include <asc/std/__type_traits/decay.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/integral_constant.h>
@@ -40,6 +41,18 @@
 #include <asc/std/__utility/forward.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
+
+//  Whether _Tp behaves as the identity projection: identity itself or a reference_wrapper around it.
+//  Inlined here because the identity header of this tree does not provide the trait.
+template <class _Tp>
+inline constexpr bool __is_identity_v = false;
+
+template <>
+inline constexpr bool __is_identity_v<identity> = true;
+template <>
+inline constexpr bool __is_identity_v<reference_wrapper<identity>> = true;
+template <>
+inline constexpr bool __is_identity_v<reference_wrapper<const identity>> = true;
 
 template <class _Pred, class _Proj>
 struct _ProjectedPred {
@@ -66,7 +79,7 @@ struct _ProjectedPred {
 };
 
 template <class _Pred, class _Proj,
-    enable_if_t<!(!is_member_pointer_v<decay_t<_Pred>> && is_same_v<decay_t<_Proj>, identity>), int> = 0>
+    enable_if_t<!(!is_member_pointer_v<decay_t<_Pred>> && __is_identity_v<decay_t<_Proj>>), int> = 0>
 CANN_ASC_STL_API constexpr _ProjectedPred<_Pred, _Proj> __make_projected(_Pred& __pred, _Proj& __proj)
 {
     return _ProjectedPred<_Pred, _Proj>(__pred, __proj);
@@ -76,7 +89,7 @@ CANN_ASC_STL_API constexpr _ProjectedPred<_Pred, _Proj> __make_projected(_Pred& 
 // optimizations that rely on the type of the comparator. Additionally, this results in less layers of indirection in
 // the call stack when the comparator is invoked, even in an unoptimized build.
 template <class _Pred, class _Proj,
-    enable_if_t<!is_member_pointer_v<decay_t<_Pred>> && is_same_v<decay_t<_Proj>, identity>, int> = 0>
+    enable_if_t<!is_member_pointer_v<decay_t<_Pred>> && __is_identity_v<decay_t<_Proj>>, int> = 0>
 CANN_ASC_STL_API constexpr _Pred& __make_projected(_Pred& __pred, _Proj&)
 {
     return __pred;

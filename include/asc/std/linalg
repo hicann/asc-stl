@@ -32,5 +32,6 @@
 #include <asc/std/__linalg/conjugated.h>
 #include <asc/std/__linalg/scaled.h>
 #include <asc/std/__linalg/transposed.h>
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_LINALG

@@ -29,11 +29,28 @@
 
 #include <asc/__detail/attributes.h>
 
+// 基座未提供下列宏（合入源树定义于 assert/unreachable 支撑头）：内联其语义的
+// 最小等价，#ifndef 守卫以免与未来基座定义冲突。
+#ifndef CANN_ASC_STL_DETAIL_ASSERT
+// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查。
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
+#else
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) \
+    ((expression) ? static_cast<void>(0) : (__builtin_trap(), static_cast<void>(0)))
+#endif
+#endif  // CANN_ASC_STL_DETAIL_ASSERT
+
+#ifndef CANN_ASC_STL_DETAIL_UNREACHABLE
+#define CANN_ASC_STL_DETAIL_UNREACHABLE() __builtin_unreachable()
+#endif  // CANN_ASC_STL_DETAIL_UNREACHABLE
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 CANN_ASC_STL_NORETURN CANN_ASC_STL_API void unreachable()
 {
-    CANN_ASC_STL_DETAIL_BUILTIN_UNREACHABLE();
+    CANN_ASC_STL_DETAIL_ASSERT(false, "unreachable");
+    CANN_ASC_STL_DETAIL_UNREACHABLE();
 }
 
 CANN_ASC_STL_END_NAMESPACE

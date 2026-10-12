@@ -29,18 +29,58 @@
 
 #include <asc/__detail/attributes.h>
 
+// Centralized endianness probing, inlined here with #ifndef guards (equivalent to the dev
+// __asc/architecture.h definitions) so a future centralized definition in <asc/__config> wins.
+// Determining the endianness
+#ifndef CANN_ASC_STL_DETAIL_ENDIAN_LITTLE
+#define CANN_ASC_STL_DETAIL_ENDIAN_LITTLE() 0xDEAD
+#endif  // CANN_ASC_STL_DETAIL_ENDIAN_LITTLE
+
+#ifndef CANN_ASC_STL_DETAIL_ENDIAN_BIG
+#define CANN_ASC_STL_DETAIL_ENDIAN_BIG() 0xFACE
+#endif  // CANN_ASC_STL_DETAIL_ENDIAN_BIG
+
+#ifndef CANN_ASC_STL_DETAIL_ENDIAN_PDP
+#define CANN_ASC_STL_DETAIL_ENDIAN_PDP() 0xBEEF
+#endif  // CANN_ASC_STL_DETAIL_ENDIAN_PDP
+
+#ifndef CANN_ASC_STL_DETAIL_ENDIAN_NATIVE
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || __LITTLE_ENDIAN__
+#define CANN_ASC_STL_DETAIL_ENDIAN_NATIVE() CANN_ASC_STL_DETAIL_ENDIAN_LITTLE()
+#elif __BIG_ENDIAN__
+#define CANN_ASC_STL_DETAIL_ENDIAN_NATIVE() CANN_ASC_STL_DETAIL_ENDIAN_BIG()
+#elif defined(__BYTE_ORDER__)
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#define CANN_ASC_STL_DETAIL_ENDIAN_NATIVE() CANN_ASC_STL_DETAIL_ENDIAN_LITTLE()
+#elif __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__
+#define CANN_ASC_STL_DETAIL_ENDIAN_NATIVE() CANN_ASC_STL_DETAIL_ENDIAN_PDP()
+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#define CANN_ASC_STL_DETAIL_ENDIAN_NATIVE() CANN_ASC_STL_DETAIL_ENDIAN_BIG()
+#endif  // __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#elif __has_include(<endian.h>)
+#include <endian.h>
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+#define CANN_ASC_STL_DETAIL_ENDIAN_NATIVE() CANN_ASC_STL_DETAIL_ENDIAN_LITTLE()
+#elif __BYTE_ORDER == __PDP_ENDIAN
+#define CANN_ASC_STL_DETAIL_ENDIAN_NATIVE() CANN_ASC_STL_DETAIL_ENDIAN_PDP()
+#elif __BYTE_ORDER == __BIG_ENDIAN
+#define CANN_ASC_STL_DETAIL_ENDIAN_NATIVE() CANN_ASC_STL_DETAIL_ENDIAN_BIG()
+#endif  // __BYTE_ORDER == __BIG_ENDIAN
+#endif  // ^^^ has endian.h ^^^
+
+#if !defined(CANN_ASC_STL_DETAIL_ENDIAN_NATIVE)
+// Failed to determine the endianness of the host architecture; default to little-endian like dev
+// does (dev additionally emits a warning here).
+#define CANN_ASC_STL_DETAIL_ENDIAN_NATIVE() CANN_ASC_STL_DETAIL_ENDIAN_LITTLE()
+#endif  // !defined(CANN_ASC_STL_DETAIL_ENDIAN_NATIVE)
+#endif  // CANN_ASC_STL_DETAIL_ENDIAN_NATIVE
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 enum class endian {
-#if defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__) && defined(__ORDER_BIG_ENDIAN__)
-    little = __ORDER_LITTLE_ENDIAN__,
-    big = __ORDER_BIG_ENDIAN__,
-    native = __BYTE_ORDER__,
-#else
-    little = 0,
-    big = 1,
-    native = 0,
-#endif
+    little = CANN_ASC_STL_DETAIL_ENDIAN_LITTLE(),
+    big = CANN_ASC_STL_DETAIL_ENDIAN_BIG(),
+    native = CANN_ASC_STL_DETAIL_ENDIAN_NATIVE(),
 };
 
 static_assert(endian::native == endian::little || endian::native == endian::big,

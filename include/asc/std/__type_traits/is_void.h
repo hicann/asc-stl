@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_IS_VOID_H
 #define CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_IS_VOID_H
 
@@ -27,29 +28,18 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+
 #include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/remove_cvref.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_void)
+template <class _Tp>
+inline constexpr bool is_void_v = is_same_v<remove_cv_t<_Tp>, void>;
 
-template <class T>
-struct is_void : bool_constant<__is_void(T)> {};
-
-template <class T>
-inline constexpr bool is_void_v = __is_void(T);
-
-#else
-
-template <class T>
-inline constexpr bool is_void_v = is_same_v<remove_cvref_t<T>, void>;
-
-template <class T>
-struct is_void : bool_constant<is_void_v<T> > {};
-
-#endif
+template <class _Tp>
+struct is_void : bool_constant<is_void_v<_Tp>> {};
 
 CANN_ASC_STL_END_NAMESPACE
 

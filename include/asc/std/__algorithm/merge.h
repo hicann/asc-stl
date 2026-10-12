@@ -29,27 +29,42 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__algorithm/comp.h>
+#include <asc/std/__algorithm/comp_ref_type.h>
+#include <asc/std/__algorithm/copy.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
+
+// 内部 merge：比较器按 __comp_ref_type 传引用（调试模式下为严格弱序断言包
+// 装），一侧取尽后尾段经 ::asc::std::copy 收尾，继承 copy 的快径实现。
+template <class _Compare, class _InputIterator1, class _InputIterator2, class _OutputIterator>
+CANN_ASC_STL_API constexpr _OutputIterator __merge(_InputIterator1 __first1, _InputIterator1 __last1,
+    _InputIterator2 __first2, _InputIterator2 __last2, _OutputIterator __result, _Compare __comp)
+{
+    bool __second_remains = true;
+    for (; __first1 != __last1; ++__result) {
+        if (__first2 == __last2) {
+            __second_remains = false;
+            break;
+        }
+        if (__comp(*__first2, *__first1)) {
+            *__result = *__first2;
+            ++__first2;
+        } else {
+            *__result = *__first1;
+            ++__first1;
+        }
+    }
+    if (__second_remains) {
+        return ::asc::std::copy(__first2, __last2, __result);  // NOLINT(build/include_what_you_use)
+    }
+    return ::asc::std::copy(__first1, __last1, __result);  // NOLINT(build/include_what_you_use)
+}
 
 template <class InputIterator1, class InputIterator2, class OutputIterator, class Compare>
 CANN_ASC_STL_API constexpr OutputIterator merge(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2,
     InputIterator2 last2, OutputIterator result, Compare compare)
 {
-    while (first1 != last1 && first2 != last2) {
-        if (compare(*first2, *first1)) {
-            *result++ = *first2++;
-        } else {
-            *result++ = *first1++;
-        }
-    }
-    while (first1 != last1) {
-        *result++ = *first1++;
-    }
-    while (first2 != last2) {
-        *result++ = *first2++;
-    }
-    return result;
+    return ::asc::std::__merge<__comp_ref_type<Compare>>(first1, last1, first2, last2, result, compare);
 }
 
 template <class InputIterator1, class InputIterator2, class OutputIterator>

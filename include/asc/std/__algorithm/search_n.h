@@ -31,9 +31,88 @@
 #include <asc/std/__algorithm/comp.h>
 #include <asc/std/__iterator/iterator_traits.h>
 #include <asc/std/__type_traits/add_lvalue_reference.h>
+#include <asc/std/__type_traits/is_convertible.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/convert_to_integral.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
+
+namespace __search_n_detail {
+
+// Minimal local equivalents of the traversal probes used by the migrated
+// implementation: a category probe against iterator_traits and a concept probe
+// against a member iterator_concept, both SFINAE-friendly in C++17 mode.
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_category_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool
+    __has_iterator_category_convertible_to<Iter, Tag, void_t<typename iterator_traits<Iter>::iterator_category>> =
+        is_convertible_v<typename iterator_traits<Iter>::iterator_category, Tag>;
+
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_concept_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool __has_iterator_concept_convertible_to<Iter, Tag, void_t<typename Iter::iterator_concept>> =
+    is_convertible_v<typename Iter::iterator_concept, Tag>;
+
+template <class Iter>
+inline constexpr bool __has_input_traversal = __has_iterator_category_convertible_to<Iter, input_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, input_iterator_tag>;
+
+template <class Iter>
+inline constexpr bool __has_forward_traversal = __has_iterator_category_convertible_to<Iter, forward_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, forward_iterator_tag>;
+
+template <class Iter>
+inline constexpr bool __has_bidirectional_traversal =
+    __has_iterator_category_convertible_to<Iter, bidirectional_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, bidirectional_iterator_tag>;
+
+template <class Iter>
+inline constexpr bool __has_random_access_traversal =
+    __has_iterator_category_convertible_to<Iter, random_access_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, random_access_iterator_tag>;
+
+template <class Iter>
+inline constexpr bool __has_contiguous_traversal =
+    __has_iterator_category_convertible_to<Iter, contiguous_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, contiguous_iterator_tag>;
+
+template <class Iter, class = void>
+inline constexpr bool __has_member_iterator_concept = false;
+
+template <class Iter>
+inline constexpr bool __has_member_iterator_concept<Iter, void_t<typename Iter::iterator_concept>> = true;
+
+// C++20 iterators do not always carry a C++17-compatible iterator_category;
+// deduce the effective category from the maximum of iterator_concept and
+// iterator_category, mirroring __iterator_traits_category_or_concept.
+template <class Iter>
+CANN_ASC_STL_API constexpr auto __iterator_traits_category_or_concept() noexcept
+{
+    if constexpr (!__has_member_iterator_concept<Iter>) {
+        return typename iterator_traits<Iter>::iterator_category{};
+    } else if constexpr (__has_contiguous_traversal<Iter>) {
+        return contiguous_iterator_tag{};
+    } else if constexpr (__has_random_access_traversal<Iter>) {
+        return random_access_iterator_tag{};
+    } else if constexpr (__has_bidirectional_traversal<Iter>) {
+        return bidirectional_iterator_tag{};
+    } else if constexpr (__has_forward_traversal<Iter>) {
+        return forward_iterator_tag{};
+    } else if constexpr (__has_input_traversal<Iter>) {
+        return input_iterator_tag{};
+    } else {
+        return typename Iter::iterator_category{};
+    }
+}
+
+template <class Iter>
+using __iterator_traits_category_or_concept_t = decltype(__iterator_traits_category_or_concept<Iter>());
+
+}  // namespace __search_n_detail
 
 template <class _BinaryPredicate, class _ForwardIterator, class _Size, class _Tp>
 [[nodiscard]] CANN_ASC_STL_API constexpr _ForwardIterator __search_n(_ForwardIterator __first, _ForwardIterator __last,
@@ -126,7 +205,7 @@ template <class _ForwardIterator, class _Size, class _Tp, class _BinaryPredicate
 {
     return ::asc::std::__search_n<add_lvalue_reference_t<_BinaryPredicate>>(__first, __last,
         __convert_to_integral(__count), __value_, __pred,
-        typename iterator_traits<_ForwardIterator>::iterator_category());
+        __search_n_detail::__iterator_traits_category_or_concept_t<_ForwardIterator>());
 }
 
 template <class _ForwardIterator, class _Size, class _Tp>

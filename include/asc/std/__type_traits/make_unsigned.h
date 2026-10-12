@@ -37,16 +37,25 @@
 #include <asc/std/__type_traits/type_list.h>
 #include <asc/std/cstddef>
 
+// Feature macro inlined from the dev dialect layer (not present in the base config).
+#ifndef CANN_ASC_STL_DETAIL_HAS_INT128
+#if !defined(ASC_DISABLE_INT128_SUPPORT) && defined(__linux__) && defined(__SIZEOF_INT128__)
+#define CANN_ASC_STL_DETAIL_HAS_INT128() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_INT128() 0
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HAS_INT128
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__make_unsigned)
-
-template <class T>
-using make_unsigned_t = __make_unsigned(T);
-
-#else
-
-using __unsigned_types = __type_list<unsigned char, unsigned short, unsigned int, unsigned long, unsigned long long>;
+// 见 make_signed.h：类型列表路径不依赖编译器版本差异，
+// 避免依赖编译器尚不稳定的内建类型变换。
+using __unsigned_types = __type_list<unsigned char, unsigned short, unsigned int, unsigned long, unsigned long long
+#if CANN_ASC_STL_DETAIL_HAS_INT128()
+    ,
+    __uint128_t
+#endif
+    >;
 
 template <class T, bool = is_integral_v<T> || is_enum_v<T>>
 struct __make_unsigned_impl {};
@@ -96,6 +105,17 @@ struct __make_unsigned_impl<unsigned long long, true> {
     using type = unsigned long long;
 };
 
+#if CANN_ASC_STL_DETAIL_HAS_INT128()
+template <>
+struct __make_unsigned_impl<__int128_t, true> {
+    using type = __uint128_t;
+};
+template <>
+struct __make_unsigned_impl<__uint128_t, true> {
+    using type = __uint128_t;
+};
+#endif  // CANN_ASC_STL_DETAIL_HAS_INT128()
+
 // CCE aicore rejects a device function signature that expands the
 // decltype(__apply_cvref<...>) detection of __copy_cvref_t, so the _t helper
 // is routed through a class member instead of a pure alias chain.
@@ -106,8 +126,6 @@ struct __make_unsigned_result {
 
 template <class T>
 using make_unsigned_t = typename __make_unsigned_result<T>::type;
-
-#endif
 
 template <class T>
 struct make_unsigned {

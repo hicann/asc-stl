@@ -28,32 +28,88 @@
 #endif
 
 #include <asc/__detail/attributes.h>
-#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/array>
 #include <asc/std/mdspan>
 
+// dev 版 <asc/std/__asc/assert.h> 断言链的最小等价内联（与已合入的
+// __algorithm/comp_ref_type.h 同款，#ifndef 守卫防重）：
+// debug 构建（_DEBUG/DEBUG）启用宿主断言；设备侧无断言机制，恒为 no-op。
+#ifndef CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
+#if defined(_DEBUG) || defined(DEBUG)
+#define CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
+#endif  // defined(_DEBUG) || defined(DEBUG)
+#endif  // !CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
+
+#ifndef ASC_ENABLE_ASSERTIONS
+#ifdef CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
+#define ASC_ENABLE_ASSERTIONS
+#endif  // CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
+#endif  // !ASC_ENABLE_ASSERTIONS
+
+#ifndef ASC_ENABLE_HOST_ASSERTIONS
+#ifdef ASC_ENABLE_ASSERTIONS
+#define ASC_ENABLE_HOST_ASSERTIONS
+#endif  // ASC_ENABLE_ASSERTIONS
+#endif  // !ASC_ENABLE_HOST_ASSERTIONS
+
+#ifndef CANN_ASC_STL_DETAIL_ASSERT
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// ASC 设备侧无断言机制
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
+#elif defined(ASC_ENABLE_HOST_ASSERTIONS)
+#ifdef NDEBUG
+// NDEBUG 下 <assert.h> 未必已包含，手工补声明
+extern "C" {
+void __assert_fail(const char* __assertion, const char* __file, unsigned int __line, const char* __function) noexcept
+    __attribute__((__noreturn__));
+}  // extern "C"
+#else
+#include <assert.h>
+#endif  // NDEBUG
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) \
+    __builtin_expect(static_cast<bool>(expression), 1) ? (void)0 : __assert_fail(message, __FILE__, __LINE__, __func__)
+#else
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
+#endif  // ASC_ENABLE_HOST_ASSERTIONS
+#endif  // !CANN_ASC_STL_DETAIL_ASSERT
+
 namespace asc::std::linalg {
 
 namespace __detail {
 
-template <class Extents>
-struct transpose_extents;
-
-template <class IndexType, size_t First, size_t Second>
-struct transpose_extents<asc::std::extents<IndexType, First, Second>> {
-    using type = asc::std::extents<IndexType, Second, First>;
+// 在别名本身施加 rank==2 约束（SFINAE 友好）。
+template <class Extents, enable_if_t<Extents::rank() == 2, int> = 0>
+struct __transpose_extents_t_impl {
+    using type = extents<typename Extents::index_type, Extents::static_extent(1), Extents::static_extent(0)>;
 };
 
 template <class Extents>
-using transpose_extents_t = typename transpose_extents<Extents>::type;
+using __transpose_extents_t = typename __transpose_extents_t_impl<Extents>::type;
 
 template <class Extents>
-CANN_ASC_STL_API constexpr transpose_extents_t<Extents> transpose_extents_value(const Extents& value)
+CANN_ASC_STL_API constexpr __transpose_extents_t<Extents> __transpose_extents(const Extents& e)
 {
-    static_assert(Extents::rank() == 2);
-    return transpose_extents_t<Extents>(value.extent(1), value.extent(0));
+    static_assert(is_same_v<typename __transpose_extents_t<Extents>::index_type, typename Extents::index_type>,
+        "Please fix __transpose_extents_t to account for P2553, which adds a template parameter SizeType to "
+        "extents.");
+    constexpr size_t ext0 = Extents::static_extent(0);
+    constexpr size_t ext1 = Extents::static_extent(1);
+    if constexpr (ext0 == dynamic_extent) {
+        if constexpr (ext1 == dynamic_extent) {
+            return __transpose_extents_t<Extents>{e.extent(1), e.extent(0)};
+        } else {
+            return __transpose_extents_t<Extents>{e.extent(0)};
+        }
+    } else {
+        if constexpr (ext1 == dynamic_extent) {
+            return __transpose_extents_t<Extents>{e.extent(1)};
+        } else {
+            return __transpose_extents_t<Extents>{};  // all extents are static
+        }
+    }
 }
 
 }  // namespace __detail
@@ -65,149 +121,219 @@ public:
 
     template <class Extents>
     class mapping {
+    private:
+        using nested_mapping_type = typename Layout::template mapping<__detail::__transpose_extents_t<Extents>>;
+
+        static constexpr bool required_span_size_noexcept = noexcept(nested_mapping_type{}.required_span_size());
+
+        static constexpr bool is_nested_unique_noexcept = noexcept(nested_mapping_type{}.is_unique());
+
+        static constexpr bool is_exhaustive_noexcept = noexcept(nested_mapping_type{}.is_exhaustive());
+
+        static constexpr bool is_strided_noexcept = noexcept(nested_mapping_type{}.is_strided());
+
     public:
         using extents_type = Extents;
-        using index_type = typename Extents::index_type;
-        using size_type = typename Extents::size_type;
-        using rank_type = typename Extents::rank_type;
+        using index_type = typename extents_type::index_type;
+        using size_type = typename extents_type::size_type;
+        using rank_type = typename extents_type::rank_type;
         using layout_type = layout_transpose;
-        using nested_mapping_type = typename Layout::template mapping<__detail::transpose_extents_t<Extents>>;
 
-        CANN_ASC_STL_API constexpr explicit mapping(const nested_mapping_type& nested)
-            : nested_(nested), extents_(__detail::transpose_extents_value(nested.extents()))
+        CANN_ASC_STL_API constexpr explicit mapping(const nested_mapping_type& map)
+            : nested_mapping_(map), extents_(__detail::__transpose_extents(map.extents()))
         {}
 
-        CANN_ASC_STL_API constexpr const Extents& extents() const noexcept
+        CANN_ASC_STL_API constexpr const extents_type& extents() const noexcept
         {
             return extents_;
         }
-        CANN_ASC_STL_API constexpr index_type required_span_size() const noexcept
+
+        CANN_ASC_STL_API constexpr index_type required_span_size() const noexcept(required_span_size_noexcept)
         {
-            return nested_.required_span_size();
+            return nested_mapping_.required_span_size();
         }
-        CANN_ASC_STL_API constexpr index_type operator()(index_type first, index_type second) const noexcept
+
+        template <class IndexType0, class IndexType1,
+            enable_if_t<is_convertible_v<IndexType0, index_type> && is_convertible_v<IndexType1, index_type>, int> = 0>
+        CANN_ASC_STL_API constexpr index_type operator()(IndexType0 i, IndexType1 j) const
         {
-            return nested_(second, first);
+            return nested_mapping_(j, i);
         }
+
         CANN_ASC_STL_API constexpr const nested_mapping_type& nested_mapping() const noexcept
         {
-            return nested_;
+            return nested_mapping_;
         }
+
         CANN_ASC_STL_API static constexpr bool is_always_unique() noexcept
         {
             return nested_mapping_type::is_always_unique();
         }
+
         CANN_ASC_STL_API static constexpr bool is_always_exhaustive() noexcept
         {
             return nested_mapping_type::is_always_exhaustive();
         }
+
         CANN_ASC_STL_API static constexpr bool is_always_strided() noexcept
         {
             return nested_mapping_type::is_always_strided();
         }
-        CANN_ASC_STL_API constexpr bool is_unique() const noexcept
+
+        CANN_ASC_STL_API constexpr bool is_unique() const noexcept(is_nested_unique_noexcept)
         {
-            return nested_.is_unique();
+            return nested_mapping_.is_unique();
         }
-        CANN_ASC_STL_API constexpr bool is_exhaustive() const noexcept
+
+        CANN_ASC_STL_API constexpr bool is_exhaustive() const noexcept(is_exhaustive_noexcept)
         {
-            return nested_.is_exhaustive();
+            return nested_mapping_.is_exhaustive();
         }
-        CANN_ASC_STL_API constexpr bool is_strided() const noexcept
+
+        CANN_ASC_STL_API constexpr bool is_strided() const noexcept(is_strided_noexcept)
         {
-            return nested_.is_strided();
+            return nested_mapping_.is_strided();
         }
-        CANN_ASC_STL_API constexpr index_type stride(size_t rank) const noexcept
+
+        CANN_ASC_STL_API constexpr index_type stride(size_t r) const
         {
-            return nested_.stride(rank == 0 ? 1 : 0);
+            CANN_ASC_STL_DETAIL_ASSERT(this->is_strided(), "layout must be strided");
+            CANN_ASC_STL_DETAIL_ASSERT(r < extents_type::rank(), "rank must be less than extents rank");
+            return nested_mapping_.stride(r == 0 ? 1 : 0);
         }
 
         template <class OtherExtents>
-        CANN_ASC_STL_API friend constexpr bool operator==(
-            const mapping& left, const mapping<OtherExtents>& right) noexcept
+        CANN_ASC_STL_API friend constexpr bool operator==(const mapping& lhs, const mapping<OtherExtents>& rhs) noexcept
         {
-            return left.nested_mapping() == right.nested_mapping();
+            return lhs.nested_mapping_ == rhs.nested_mapping_;
+        }
+
+        template <class OtherExtents>
+        CANN_ASC_STL_API friend constexpr bool operator!=(const mapping& lhs, const mapping<OtherExtents>& rhs) noexcept
+        {
+            return lhs.nested_mapping_ != rhs.nested_mapping_;
         }
 
     private:
-        nested_mapping_type nested_;
-        Extents extents_;
+        nested_mapping_type nested_mapping_;
+        extents_type extents_;
     };
 };
 
 namespace __detail {
 
+template <class ElementType, class Accessor>
+struct __transposed_element_accessor {
+    using element_type = ElementType;
+    using accessor_type = Accessor;
+
+    CANN_ASC_STL_API static constexpr accessor_type __accessor(const Accessor& a)
+    {
+        return accessor_type(a);
+    }
+};
+
+template <class ElementType>
+struct __transposed_element_accessor<ElementType, default_accessor<ElementType>> {
+    using element_type = ElementType;
+    using accessor_type = default_accessor<element_type>;
+
+    CANN_ASC_STL_API static constexpr accessor_type __accessor(const default_accessor<ElementType>& a)
+    {
+        return accessor_type(a);
+    }
+};
+
 template <class Layout>
-struct transposed_layout {
-    using type = layout_transpose<Layout>;
+struct __transposed_layout {
+    using layout_type = layout_transpose<Layout>;
 
-    template <class Mapping>
-    CANN_ASC_STL_API static constexpr auto make(const Mapping& mapping)
+    template <class OriginalMapping>
+    CANN_ASC_STL_API static constexpr auto __mapping(const OriginalMapping& orig_map)
     {
-        using result_extents = transpose_extents_t<typename Mapping::extents_type>;
-        return typename type::template mapping<result_extents>(mapping);
+        // 注意：嵌套映射的公开成员名是 extents_type、layout_transpose 的成员类是
+        // mapping（此处修正迁移残留的 __extents_type/__mapping 拼写，否则自定义或
+        // padded 布局路径一实例化即编译错误）。
+        using extents_type = __transpose_extents_t<typename OriginalMapping::extents_type>;
+        using return_mapping_type = typename layout_type::template mapping<extents_type>;
+        return return_mapping_type{orig_map};
     }
 };
 
 template <>
-struct transposed_layout<asc::std::layout_right> {
-    using type = asc::std::layout_left;
+struct __transposed_layout<layout_left> {
+    using layout_type = layout_right;
 
-    template <class Mapping>
-    CANN_ASC_STL_API static constexpr auto make(const Mapping& mapping)
+    template <class OriginalExtents>
+    CANN_ASC_STL_API static constexpr auto __mapping(
+        const typename layout_left::template mapping<OriginalExtents>& orig_map)
     {
-        using result_extents = transpose_extents_t<typename Mapping::extents_type>;
-        return typename type::template mapping<result_extents>(transpose_extents_value(mapping.extents()));
+        using original_mapping_type = typename layout_left::template mapping<OriginalExtents>;
+        using extents_type = __transpose_extents_t<typename original_mapping_type::extents_type>;
+        using return_mapping_type = typename layout_type::template mapping<extents_type>;
+        return return_mapping_type{__transpose_extents(orig_map.extents())};
     }
 };
 
 template <>
-struct transposed_layout<asc::std::layout_left> {
-    using type = asc::std::layout_right;
+struct __transposed_layout<layout_right> {
+    using layout_type = layout_left;
 
-    template <class Mapping>
-    CANN_ASC_STL_API static constexpr auto make(const Mapping& mapping)
+    template <class OriginalExtents>
+    CANN_ASC_STL_API static constexpr auto __mapping(
+        const typename layout_right::template mapping<OriginalExtents>& orig_map)
     {
-        using result_extents = transpose_extents_t<typename Mapping::extents_type>;
-        return typename type::template mapping<result_extents>(transpose_extents_value(mapping.extents()));
+        using original_mapping_type = typename layout_right::template mapping<OriginalExtents>;
+        using extents_type = __transpose_extents_t<typename original_mapping_type::extents_type>;
+        using return_mapping_type = typename layout_type::template mapping<extents_type>;
+        return return_mapping_type{__transpose_extents(orig_map.extents())};
     }
 };
 
 template <>
-struct transposed_layout<asc::std::layout_stride> {
-    using type = asc::std::layout_stride;
+struct __transposed_layout<layout_stride> {
+    using layout_type = layout_stride;
 
-    template <class Mapping>
-    CANN_ASC_STL_API static constexpr auto make(const Mapping& mapping)
+    template <class OriginalExtents>
+    CANN_ASC_STL_API static constexpr auto __mapping(
+        const typename layout_stride::template mapping<OriginalExtents>& orig_map)
     {
-        using result_extents = transpose_extents_t<typename Mapping::extents_type>;
-        const asc::std::array<typename result_extents::index_type, 2> strides{{mapping.stride(1), mapping.stride(0)}};
-        return typename type::template mapping<result_extents>(transpose_extents_value(mapping.extents()), strides);
+        using original_mapping_type = typename layout_stride::template mapping<OriginalExtents>;
+        using original_extents_type = typename original_mapping_type::extents_type;
+        using extents_type = __transpose_extents_t<original_extents_type>;
+        using return_mapping_type = typename layout_type::template mapping<extents_type>;
+        return return_mapping_type{__transpose_extents(orig_map.extents()),
+            array<typename extents_type::index_type, OriginalExtents::rank()>{orig_map.stride(1), orig_map.stride(0)}};
     }
 };
+
+// 后续可支持 padded 布局的专门优化，走主模板的 layout_transpose 包装路径。
 
 template <class NestedLayout>
-struct transposed_layout<layout_transpose<NestedLayout>> {
-    using type = NestedLayout;
+struct __transposed_layout<layout_transpose<NestedLayout>> {
+    using layout_type = NestedLayout;
 
-    template <class Extents>
-    CANN_ASC_STL_API static constexpr auto make(
-        const typename layout_transpose<NestedLayout>::template mapping<Extents>& mapping)
+    // 补回解包入口：恢复 transposed(transposed(m)) 双重转置往返。
+    template <class OriginalExtents>
+    CANN_ASC_STL_API static constexpr auto __mapping(
+        const typename layout_transpose<NestedLayout>::template mapping<OriginalExtents>& orig_map)
     {
-        return mapping.nested_mapping();
+        return orig_map.nested_mapping();
     }
 };
 
 }  // namespace __detail
 
-template <class Element, class Extents, class Layout, class Accessor>
-CANN_ASC_STL_API constexpr auto transposed(mdspan<Element, Extents, Layout, Accessor> input)
+template <class ElementType, class Extents, class Layout, class Accessor>
+CANN_ASC_STL_API constexpr auto transposed(mdspan<ElementType, Extents, Layout, Accessor> a)
 {
-    static_assert(Extents::rank() == 2);
-    using result_layout = typename __detail::transposed_layout<Layout>::type;
-    const auto result_mapping = __detail::transposed_layout<Layout>::make(input.mapping());
-    return mdspan<Element, typename decltype(result_mapping)::extents_type, result_layout, Accessor>(
-        input.data_handle(), result_mapping, input.accessor());
+    using element_type = typename __detail::__transposed_element_accessor<ElementType, Accessor>::element_type;
+    using layout_type = typename __detail::__transposed_layout<Layout>::layout_type;
+    using accessor_type = typename __detail::__transposed_element_accessor<ElementType, Accessor>::accessor_type;
+    auto mapping = __detail::__transposed_layout<Layout>::__mapping(a.mapping());
+    auto accessor = __detail::__transposed_element_accessor<ElementType, Accessor>::__accessor(a.accessor());
+    return mdspan<element_type, typename decltype(mapping)::extents_type, layout_type, accessor_type>{
+        a.data_handle(), mapping, accessor};
 }
 
 }  // namespace asc::std::linalg

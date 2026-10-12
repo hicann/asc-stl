@@ -27,10 +27,67 @@
 #pragma system_header
 #endif
 
+#include <asc/__detail/attributes.h>
 #include <asc/std/__charconv/from_chars.h>
 #include <asc/std/__charconv/from_chars_result.h>
 #include <asc/std/__charconv/to_chars.h>
 #include <asc/std/__charconv/to_chars_result.h>
 #include <asc/std/__system_error/errc.h>
+#include <asc/std/__utility/to_underlying.h>
+#include <asc/std/version>
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+// [charconv.syn] The portable formatting-vocabulary bitmask. The master tree
+// ships it only through this umbrella, so the enum is spelled here instead of
+// a dedicated __charconv subheader. The enumerator values stay independent of
+// the host standard library so hosted and device compilations share one
+// stable representation.
+enum class chars_format {
+    scientific = 0x1,
+    fixed = 0x2,
+    hex = 0x4,
+    general = fixed | scientific,
+};
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chars_format operator~(chars_format value) noexcept
+{
+    return chars_format(~::asc::std::to_underlying(value));
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chars_format operator&(chars_format lhs, chars_format rhs) noexcept
+{
+    return chars_format(::asc::std::to_underlying(lhs) & ::asc::std::to_underlying(rhs));
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chars_format operator|(chars_format lhs, chars_format rhs) noexcept
+{
+    return chars_format(::asc::std::to_underlying(lhs) | ::asc::std::to_underlying(rhs));
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chars_format operator^(chars_format lhs, chars_format rhs) noexcept
+{
+    return chars_format(::asc::std::to_underlying(lhs) ^ ::asc::std::to_underlying(rhs));
+}
+
+CANN_ASC_STL_API constexpr chars_format& operator&=(chars_format& lhs, chars_format rhs) noexcept
+{
+    lhs = lhs & rhs;
+    return lhs;
+}
+
+CANN_ASC_STL_API constexpr chars_format& operator|=(chars_format& lhs, chars_format rhs) noexcept
+{
+    lhs = lhs | rhs;
+    return lhs;
+}
+
+CANN_ASC_STL_API constexpr chars_format& operator^=(chars_format& lhs, chars_format rhs) noexcept
+{
+    lhs = lhs ^ rhs;
+    return lhs;
+}
+
+CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STD_CHARCONV

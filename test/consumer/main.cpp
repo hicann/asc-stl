@@ -71,9 +71,7 @@ int main()
     static_assert(sizeof(asc::std::uint32_t) == 4);
     static_assert(CHAR_BIT == 8);
     static_assert(DECIMAL_DIG >= 10);
-    if (location.file_name()[0] != 'c') {
-        return 1;
-    }
+    assert(location.file_name()[0] == 'c');
     static_assert(asc::std::to_integer<int>(asc::std::byte{0x10} << 1) == 0x20);
     return asc_stl_type_transform_consumer_a() + asc_stl_type_transform_consumer_b() +
         asc_stl_constructibility_consumer_a() + asc_stl_constructibility_consumer_b() +

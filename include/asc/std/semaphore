@@ -28,11 +28,6 @@
 #endif
 
 #include <asc/std/__semaphore/counting_semaphore.h>
-
-CANN_ASC_STL_BEGIN_NAMESPACE
-
-using binary_semaphore = counting_semaphore<1>;
-
-CANN_ASC_STL_END_NAMESPACE
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_SEMAPHORE

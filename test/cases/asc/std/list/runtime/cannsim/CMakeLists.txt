@@ -21,7 +21,7 @@ set(CMAKE_CXX_STANDARD ${ASC_STL_CXX_STANDARD})
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(ASC_STL_INCLUDE_DIR "" CACHE PATH "ASC-STL include directory")
 set_source_files_properties(kernel.cpp PROPERTIES LANGUAGE ASC)
-add_executable(asc_stl_b028_cannsim kernel.cpp launcher.cpp main.cpp)
+add_executable(asc_stl_b028_cannsim kernel.cpp main.cpp)
 set_target_properties(asc_stl_b028_cannsim PROPERTIES LINKER_LANGUAGE ASC)
 target_compile_options(asc_stl_b028_cannsim PRIVATE
     $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES} --enable-simt -Wno-error=ignored-attributes

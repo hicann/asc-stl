@@ -376,20 +376,6 @@ private:
     size_type size_;
 };
 
-template <class T, size_t Capacity, class U = T>
-CANN_ASC_STL_API constexpr typename inplace_vector<T, Capacity>::size_type erase(
-    inplace_vector<T, Capacity>& values, const U& value)
-{
-    return values.erase_if([&value](const T& element) { return element == value; });
-}
-
-template <class T, size_t Capacity, class Predicate>
-CANN_ASC_STL_API constexpr typename inplace_vector<T, Capacity>::size_type erase_if(
-    inplace_vector<T, Capacity>& values, Predicate predicate)
-{
-    return values.erase_if(predicate);
-}
-
 CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STD___INPLACE_VECTOR_INPLACE_VECTOR_H

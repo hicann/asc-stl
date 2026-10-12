@@ -18,6 +18,7 @@
 #define ASC_STL_TEST_B013_SEMANTICS_H
 
 #include <asc/__runtime/stream.h>
+#include <asc/std/__algorithm/copy_n.h>
 #include <asc/std/__algorithm/count.h>
 #include <asc/std/__algorithm/fill_n.h>
 #include <asc/std/__algorithm/find_end.h>
@@ -56,6 +57,18 @@ CANN_ASC_STL_API int evaluate_algorithms() noexcept
     failures += asc::std::count(values, values + 5, 2) != 2;
     failures += asc::std::fill_n(filled, 3, 7) != filled + 3;
     failures += filled[0] != 7 || filled[2] != 7;
+    failures += asc::std::fill_n(filled, -3LL, 9) != filled;
+    failures += asc::std::fill_n(filled, 0ULL, 9) != filled;
+    failures += filled[0] != 7 || filled[2] != 7;
+    failures += asc::std::fill_n(filled, 3ULL, 8) != filled + 3;
+    failures += filled[0] != 8 || filled[2] != 8;
+    int copied[3] = {0, 0, 0};
+    failures += asc::std::copy_n(values, true, copied) != copied + 1;
+    failures += copied[0] != 1 || copied[1] != 0;
+    failures += asc::std::copy_n(values, false, copied) != copied;
+    failures += asc::std::copy_n(values, -3LL, copied) != copied;
+    failures += asc::std::copy_n(values, 2ULL, copied) != copied + 2;
+    failures += copied[0] != 1 || copied[1] != 2 || copied[2] != 0;
     failures += asc::std::find_end(values, values + 5, pattern, pattern + 2) != values + 2;
     failures += !asc::std::lexicographical_compare(pattern, pattern + 2, values + 3, values + 5);
     failures += *asc::std::max_element(values, values + 5) != 3;

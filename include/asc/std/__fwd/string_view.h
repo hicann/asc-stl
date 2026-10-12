@@ -30,6 +30,26 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__fwd/char_traits.h>
 
+// Hosted ::std interoperation gate: a host standard library has been pulled in.
+#ifndef CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB
+#if defined(__GLIBCXX__) || defined(_LIBCPP_VERSION) || defined(_MSVC_STL_VERSION)
+#define CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB() 0
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB
+
+// std:: forward declarations
+
+#if CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB() && defined(__cpp_lib_string_view) && __cpp_lib_string_view >= 201606L
+namespace std {
+template <class, class>
+class basic_string_view;
+}  // namespace std
+#endif  // CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB() && __cpp_lib_string_view >= 201606L
+
+// asc::std:: forward declarations
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class Character, class Traits = char_traits<Character>>  // NOLINT(build/include_what_you_use)
@@ -42,7 +62,19 @@ using u16string_view = basic_string_view<char16_t>;
 using u32string_view = basic_string_view<char32_t>;
 using wstring_view = basic_string_view<wchar_t>;
 template <class T>
+inline constexpr bool __is_std_basic_string_view_v = false;
+#if CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB() && defined(__cpp_lib_string_view) && __cpp_lib_string_view >= 201606L
+template <class Character, class Traits>
+inline constexpr bool __is_std_basic_string_view_v<::std::basic_string_view<Character, Traits>> = true;
+#endif  // CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB() && __cpp_lib_string_view >= 201606L
+template <class T>
 inline constexpr bool __is_asc_std_basic_string_view_v = false;
+template <class T>
+inline constexpr bool __is_asc_std_basic_string_view_v<const T> = __is_asc_std_basic_string_view_v<T>;
+template <class T>
+inline constexpr bool __is_asc_std_basic_string_view_v<volatile T> = __is_asc_std_basic_string_view_v<T>;
+template <class T>
+inline constexpr bool __is_asc_std_basic_string_view_v<const volatile T> = __is_asc_std_basic_string_view_v<T>;
 template <class Character, class Traits>
 inline constexpr bool __is_asc_std_basic_string_view_v<basic_string_view<Character, Traits>> = true;
 

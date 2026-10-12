@@ -45,7 +45,9 @@
 #include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/is_primary_template.h>
 #include <asc/std/__type_traits/remove_cv.h>
+#include <asc/std/__type_traits/remove_cvref.h>
 #include <asc/std/__type_traits/void_t.h>
+#include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/priority_tag.h>
 #include <asc/std/cstddef>
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
@@ -97,6 +99,42 @@ struct iterator_traits<T*, enable_if_t<is_convertible_v<T (*)[], const volatile 
     using iterator_category = random_access_iterator_tag;
     using iterator_concept = contiguous_iterator_tag;
 };
+
+// 迭代器概念标签的内部推导机制：_ITER_TRAITS 缓存去引用限定后的 trait 选择结果；
+// _ITER_CONCEPT 按优先级阶梯（裸指针 -> iterator_traits::iterator_concept ->
+// iterator_traits::iterator_category）推导迭代器的概念标签，供迭代器概念家族
+// （input/forward/bidirectional/random_access/contiguous）做标签派生检查。
+// 三级皆不可用时缓存主模板不含 type，保持 SFINAE 友好（由概念侧的
+// requires { typename _ITER_CONCEPT<It>; } 先行探测）。
+template <class Iter>
+struct __iter_traits_cache {
+    using type = iterator_traits<remove_cvref_t<Iter>>;
+};
+
+template <class Iter>
+using _ITER_TRAITS = typename __iter_traits_cache<Iter>::type;
+
+// 仅以返回类型参与推导，不需要定义体。
+template <class Ty>
+auto __iter_concept_fn(Ty*, __priority_tag<3>) -> contiguous_iterator_tag;
+template <class Iter>
+auto __iter_concept_fn(Iter, __priority_tag<2>) -> typename _ITER_TRAITS<Iter>::iterator_concept;
+template <class Iter>
+auto __iter_concept_fn(Iter, __priority_tag<1>) -> typename _ITER_TRAITS<Iter>::iterator_category;
+
+template <class Iter>
+using __iter_concept_t = decltype(__iter_concept_fn(::asc::std::declval<Iter>(), __priority_tag<3>{}));
+
+template <class Iter, class = void>
+struct __iter_concept_cache {};
+
+template <class Iter>
+struct __iter_concept_cache<Iter, void_t<__iter_concept_t<Iter>>> {
+    using type = __iter_concept_t<Iter>;
+};
+
+template <class Iter>
+using _ITER_CONCEPT = typename __iter_concept_cache<Iter>::type;
 
 CANN_ASC_STL_END_NAMESPACE
 

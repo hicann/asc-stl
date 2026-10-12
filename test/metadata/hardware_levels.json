@@ -14,7 +14,6 @@
     "asc/std/bitset": "HW0",
     "asc/std/cstdlib": "HW0",
     "asc/std/ctime": "HW1",
-    "asc/std/exception": "HW1",
     "asc/std/iterator": "HW1",
     "asc/std/linalg": "HW1",
     "asc/std/list": "HW1",

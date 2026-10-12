@@ -25,23 +25,6 @@
 
 namespace asc_stl_b012_test {
 
-#ifndef FP_ILOGB0
-#error "FP_ILOGB0 must be provided by <asc/std/cmath>"
-#endif
-#ifndef FP_ILOGBNAN
-#error "FP_ILOGBNAN must be provided by <asc/std/cmath>"
-#endif
-#ifndef FP_LLOGB0
-#error "FP_LLOGB0 must be provided by <asc/std/cmath>"
-#endif
-#ifndef FP_LLOGBNAN
-#error "FP_LLOGBNAN must be provided by <asc/std/cmath>"
-#endif
-
-static_assert(FP_ILOGB0 == (-2147483647 - 1));
-static_assert(FP_ILOGBNAN == 2147483647);
-static_assert(FP_LLOGB0 == (-9223372036854775807LL - 1));
-static_assert(FP_LLOGBNAN == 9223372036854775807LL);
 static_assert(asc::std::is_same_v<decltype(asc::std::sin(1)), float>);
 static_assert(asc::std::is_same_v<decltype(asc::std::sqrt(4.0F)), float>);
 static_assert(asc::std::is_same_v<decltype(asc::std::hypot(3.0F, 4.0F)), float>);

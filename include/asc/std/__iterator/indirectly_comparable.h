@@ -28,6 +28,7 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/__detail/execution_space.h>
 #include <asc/std/__functional/identity.h>
 #include <asc/std/__iterator/concepts.h>
 #include <asc/std/__iterator/projected.h>
@@ -36,10 +37,17 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class Iter1, class Iter2, class BinaryPredicate, class Projection1 = identity, class Projection2 = identity>
-concept indirectly_comparable = indirectly_readable<Iter1> && indirectly_readable<Iter2> &&
-    copy_constructible<BinaryPredicate> && copy_constructible<Projection1> && copy_constructible<Projection2> &&
-    predicate<BinaryPredicate&, indirect_result_t<Projection1&, Iter1>, indirect_result_t<Projection2&, Iter2>>;
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+template <class _Iter1, class _Iter2, class _BinaryPred, class _Proj1 = identity, class _Proj2 = identity>
+concept indirectly_comparable =
+    indirect_binary_predicate<_BinaryPred, projected<_Iter1, _Proj1>, projected<_Iter2, _Proj2>>;
+#else
+// 设备编译下 projected 链的约束求值不可靠（iter_reference_t 硬错误），采用不经 projected 的等价公式。
+template <class _Iter1, class _Iter2, class _BinaryPred, class _Proj1 = identity, class _Proj2 = identity>
+concept indirectly_comparable = indirectly_readable<_Iter1> && indirectly_readable<_Iter2> &&
+    copy_constructible<_BinaryPred> && copy_constructible<_Proj1> && copy_constructible<_Proj2> &&
+    predicate<_BinaryPred&, indirect_result_t<_Proj1&, _Iter1>, indirect_result_t<_Proj2&, _Iter2>>;
+#endif
 
 CANN_ASC_STL_END_NAMESPACE
 

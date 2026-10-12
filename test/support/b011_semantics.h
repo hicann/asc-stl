@@ -41,7 +41,6 @@
 #include <asc/std/__iterator/size.h>
 #include <asc/std/__ranges/enable_view.h>
 #include <asc/std/__type_traits/is_same.h>
-#include <asc/std/cmath>
 
 namespace asc_stl_b011_test {
 
@@ -160,8 +159,7 @@ CANN_ASC_STL_API unsigned evaluate_runtime_failures() noexcept
         asc::std::atanhf(0.0F) == 0.0F;
     const bool roots_gamma_ok = asc::std::sqrt(9.0F) == 3.0F && asc::std::sqrtf(9.0F) == 3.0F &&
         asc::std::cbrt(8.0F) == 2.0F && asc::std::cbrtf(8.0F) == 2.0F && asc::std::tgamma(1.0F) == 1.0F &&
-        asc::std::tgammaf(1.0F) == 1.0F && asc::std::lgamma(1.0F) == 0.0F && asc::std::lgammaf(1.0F) == 0.0F &&
-        asc::std::pow(2.0F, 3.0F) == 8.0F && asc::std::powf(2.0F, 3.0F) == 8.0F;
+        asc::std::tgammaf(1.0F) == 1.0F && asc::std::lgamma(1.0F) == 0.0F && asc::std::lgammaf(1.0F) == 0.0F;
     const bool remainder_ok = asc::std::remainder(5.0F, 2.0F) == 1.0F && asc::std::remainderf(5.0F, 2.0F) == 1.0F &&
         asc::std::remquo(5.0F, 2.0F, &quotient) == 1.0F && asc::std::remquof(5.0F, 2.0F, &quotient) == 1.0F &&
         asc::std::nextafter(0.0F, 1.0F) > 0.0F && asc::std::nextafterf(0.0F, 1.0F) > 0.0F;

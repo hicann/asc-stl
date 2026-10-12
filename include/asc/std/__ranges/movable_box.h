@@ -160,8 +160,8 @@ struct __mb_optional_copy_assign<_Tp, true> : __mb_optional_destruct_base<_Tp> {
         is_nothrow_copy_constructible_v<_Tp>)
     {
         if (this != ::asc::std::addressof(__other)) {
-            if (__other.__has_value()) {
-                this->__val_.emplace(*__other);
+            if (__other.__val_.has_value()) {
+                this->__val_.emplace(*__other.__val_);
             } else {
                 this->__val_.reset();
             }
@@ -188,8 +188,8 @@ struct __mb_optional_move_assign<_Tp, false> : __mb_optional_copy_assign<_Tp> {
         is_nothrow_move_constructible_v<_Tp>)
     {
         if (this != ::asc::std::addressof(__other)) {
-            if (__other.__has_value()) {
-                this->__val_.emplace(::asc::std::move(*__other));
+            if (__other.__val_.has_value()) {
+                this->__val_.emplace(::asc::std::move(*__other.__val_));
             } else {
                 this->__val_.reset();
             }

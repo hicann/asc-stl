@@ -29,22 +29,26 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__algorithm/comp.h>
+#include <asc/std/__algorithm/comp_ref_type.h>
 #include <asc/std/__algorithm/lower_bound.h>
+#include <asc/std/__iterator/iterator_traits.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class ForwardIterator, class T, class Compare>
-CANN_ASC_STL_API constexpr bool binary_search(
-    ForwardIterator first, ForwardIterator last, const T& value, Compare compare)
+template <class _ForwardIterator, class _Tp, class _Compare>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool binary_search(
+    _ForwardIterator __first, _ForwardIterator __last, const _Tp& __value, _Compare __comp)
 {
-    const ForwardIterator result = ::asc::std::lower_bound(first, last, value, compare);
-    return result != last && !compare(value, *result);
+    __first =
+        ::asc::std::lower_bound<_ForwardIterator, _Tp, __comp_ref_type<_Compare>>(__first, __last, __value, __comp);
+    return __first != __last && !__comp(__value, *__first);
 }
 
-template <class ForwardIterator, class T>
-CANN_ASC_STL_API constexpr bool binary_search(ForwardIterator first, ForwardIterator last, const T& value)
+template <class _ForwardIterator, class _Tp>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool binary_search(
+    _ForwardIterator __first, _ForwardIterator __last, const _Tp& __value)
 {
-    return ::asc::std::binary_search(first, last, value, __less{});
+    return ::asc::std::binary_search(__first, __last, __value, __less{});
 }
 
 CANN_ASC_STL_END_NAMESPACE

@@ -37,5 +37,6 @@
 #include <asc/std/__variant/variant.h>
 #include <asc/std/__variant/variant_traits.h>
 #include <asc/std/__variant/visit.h>
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_VARIANT

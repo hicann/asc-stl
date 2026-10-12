@@ -39,23 +39,34 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// 策略化内部入口：供 partial_sort / ranges 等策略迁移头复用（经 __pop_heap<_AlgPolicy>）。
+template <class _AlgPolicy, class _Compare, class _RandomAccessIterator>
+CANN_ASC_STL_API constexpr void __sort_heap(
+    _RandomAccessIterator __first, _RandomAccessIterator __last, _Compare&& __comp)
+{
+    __comp_ref_type<_Compare> __comp_ref = __comp;
+
+    using difference_type = typename iterator_traits<_RandomAccessIterator>::difference_type;
+    for (difference_type __n = __last - __first; __n > 1; --__last, (void)--__n) {
+        ::asc::std::__pop_heap<_AlgPolicy>(__first, __last, __comp_ref, __n);
+    }
+}
+
 template <class _RandomAccessIterator, class _Compare>
 CANN_ASC_STL_API constexpr void sort_heap(_RandomAccessIterator __first, _RandomAccessIterator __last, _Compare __comp)
 {
     static_assert(is_copy_constructible_v<_RandomAccessIterator>, "Iterators must be copy constructible.");
     static_assert(is_copy_assignable_v<_RandomAccessIterator>, "Iterators must be copy assignable.");
 
-    __comp_ref_type<_Compare> __comp_ref = __comp;
-    using difference_type = typename iterator_traits<_RandomAccessIterator>::difference_type;
-    for (difference_type __n = __last - __first; __n > 1; --__last, (void)--__n) {
-        ::asc::std::pop_heap(__first, __last, __comp_ref);
-    }
+    ::asc::std::__sort_heap<__classic_algorithm_iterator_operations>(
+        ::asc::std::move(__first), ::asc::std::move(__last), __comp);
 }
 
 template <class _RandomAccessIterator>
 CANN_ASC_STL_API constexpr void sort_heap(_RandomAccessIterator __first, _RandomAccessIterator __last)
 {
-    ::asc::std::sort_heap(__first, __last, __less{});
+    ::asc::std::sort_heap(                                               // NOLINT(build/include_what_you_use)
+        ::asc::std::move(__first), ::asc::std::move(__last), __less{});  // NOLINT(build/include_what_you_use)
 }
 
 CANN_ASC_STL_END_NAMESPACE

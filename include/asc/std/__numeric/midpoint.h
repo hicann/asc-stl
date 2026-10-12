@@ -28,6 +28,7 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/__detail/execution_space.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_floating_point.h>
 #include <asc/std/__type_traits/is_integral.h>
@@ -40,6 +41,7 @@
 #include <asc/std/__type_traits/remove_pointer.h>
 #include <asc/std/cstddef>
 #include <asc/std/limits>
+#include <limits>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -48,12 +50,14 @@ CANN_ASC_STL_API constexpr enable_if_t<is_integral_v<T> && !is_same_v<bool, T> &
     T left, T right) noexcept
 {
     using unsigned_type = make_unsigned_t<T>;
+
     if (left > right) {
         const unsigned_type difference = unsigned_type(left) - unsigned_type(right);
         return static_cast<T>(left - static_cast<T>(difference / 2));
+    } else {
+        const unsigned_type difference = unsigned_type(right) - unsigned_type(left);
+        return static_cast<T>(left + static_cast<T>(difference / 2));
     }
-    const unsigned_type difference = unsigned_type(right) - unsigned_type(left);
-    return static_cast<T>(left + static_cast<T>(difference / 2));
 }
 
 template <class T, enable_if_t<is_object_v<T> && !is_void_v<T> && (sizeof(T) > 0), int> = 0>
@@ -63,7 +67,7 @@ CANN_ASC_STL_API constexpr T* midpoint(T* left, T* right) noexcept
 }
 
 template <class T>
-CANN_ASC_STL_API constexpr T __midpoint_abs(T value)
+CANN_ASC_STL_API constexpr T __fp_abs(T value) noexcept
 {
     return value >= 0 ? value : -value;
 }
@@ -71,18 +75,21 @@ CANN_ASC_STL_API constexpr T __midpoint_abs(T value)
 template <class T>
 CANN_ASC_STL_API constexpr enable_if_t<is_floating_point_v<T>, T> midpoint(T left, T right) noexcept
 {
-    constexpr T low =
-        (is_same_v<T, float> ? static_cast<T>(__FLT_MIN__) :
-                               (is_same_v<T, double> ? static_cast<T>(__DBL_MIN__) : static_cast<T>(__LDBL_MIN__))) *
-        2;
-    constexpr T high =
-        (is_same_v<T, float> ? static_cast<T>(__FLT_MAX__) :
-                               (is_same_v<T, double> ? static_cast<T>(__DBL_MAX__) : static_cast<T>(__LDBL_MAX__))) /
-        2;
-    return __midpoint_abs(left) <= high && __midpoint_abs(right) <= high ?
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    // 设备侧 numeric_limits 极值不可达，用编译器内建常量替代
+    constexpr T low = static_cast<T>(__DBL_MIN__) * 2;
+    constexpr T high = static_cast<T>(__DBL_MAX__) / 2;
+#else
+    constexpr T low = ::asc::std::numeric_limits<T>::min() * 2;
+    constexpr T high = ::asc::std::numeric_limits<T>::max() / 2;
+#endif
+    return ::asc::std::__fp_abs(left) <= high && ::asc::std::__fp_abs(right) <= high ?
+        // typical case: overflow is impossible
         (left + right) / 2 :
-        (__midpoint_abs(left) < low ? left + right / 2 :
-                                      (__midpoint_abs(right) < low ? left / 2 + right : left / 2 + right / 2));
+        // always correctly rounded
+        ::asc::std::__fp_abs(left) < low ? left + right / 2 :        // not safe to halve left
+            (::asc::std::__fp_abs(right) < low ? left / 2 + right :  // not safe to halve right
+                    left / 2 + right / 2);  // otherwise correct...  // NOLINT(whitespace/line_length)
 }
 
 CANN_ASC_STL_END_NAMESPACE

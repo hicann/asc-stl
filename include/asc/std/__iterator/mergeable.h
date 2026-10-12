@@ -28,6 +28,7 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/__detail/execution_space.h>
 #include <asc/std/__functional/identity.h>
 #include <asc/std/__functional/ranges_operations.h>
 #include <asc/std/__iterator/concepts.h>
@@ -37,12 +38,19 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class Input1, class Input2, class Output, class Compare = ::asc::std::ranges::less,
-    class Projection1 = identity, class Projection2 = identity>
-concept mergeable = input_iterator<Input1> && input_iterator<Input2> && weakly_incrementable<Output> &&
-    indirectly_copyable<Input1, Output> && indirectly_copyable<Input2, Output> && copy_constructible<Compare> &&
-    copy_constructible<Projection1> && copy_constructible<Projection2> &&
-    predicate<Compare&, indirect_result_t<Projection1&, Input1>, indirect_result_t<Projection2&, Input2>>;
+template <class _Input1, class _Input2, class _Output, class _Comp = ::asc::std::ranges::less, class _Proj1 = identity,
+    class _Proj2 = identity>
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+concept mergeable = input_iterator<_Input1> && input_iterator<_Input2> && weakly_incrementable<_Output> &&
+    indirectly_copyable<_Input1, _Output> && indirectly_copyable<_Input2, _Output> &&
+    indirect_strict_weak_order<_Comp, projected<_Input1, _Proj1>, projected<_Input2, _Proj2>>;
+#else
+// 设备编译下 projected 链的约束求值不可靠，采用不经 projected 的等价公式。
+concept mergeable = input_iterator<_Input1> && input_iterator<_Input2> && weakly_incrementable<_Output> &&
+    indirectly_copyable<_Input1, _Output> && indirectly_copyable<_Input2, _Output> && copy_constructible<_Comp> &&
+    copy_constructible<_Proj1> && copy_constructible<_Proj2> &&
+    predicate<_Comp&, indirect_result_t<_Proj1&, _Input1>, indirect_result_t<_Proj2&, _Input2>>;
+#endif
 
 CANN_ASC_STL_END_NAMESPACE
 

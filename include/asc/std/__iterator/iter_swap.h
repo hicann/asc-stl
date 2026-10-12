@@ -55,12 +55,13 @@ CANN_ASC_STL_API constexpr void iter_swap(I1 left, I2 right) noexcept(
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class I1, class I2 = I1>
-concept indirectly_swappable = indirectly_readable<I1> && indirectly_readable<I2> && requires(I1 left, I2 right) {
-    ::asc::std::iter_swap(left, left);
-    ::asc::std::iter_swap(right, right);
-    ::asc::std::iter_swap(left, right);
-    ::asc::std::iter_swap(right, left);
-};
+concept indirectly_swappable =
+    indirectly_readable<I1> && indirectly_readable<I2> && requires(const I1 left, const I2 right) {
+        ::asc::std::iter_swap(left, left);
+        ::asc::std::iter_swap(right, right);
+        ::asc::std::iter_swap(left, right);
+        ::asc::std::iter_swap(right, left);
+    };
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

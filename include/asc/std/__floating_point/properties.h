@@ -36,6 +36,9 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 template <__fp_format Fmt>
 inline constexpr bool __fp_is_signed_v = true;
 
+template <>
+inline constexpr bool __fp_is_signed_v<__fp_format::__fp8_e8m0> = false;
+
 // __fp_exp_nbits_v
 
 template <__fp_format Fmt>
@@ -59,6 +62,24 @@ inline constexpr int __fp_exp_nbits_v<__fp_format::__bfloat16> = 8;
 template <>
 inline constexpr int __fp_exp_nbits_v<__fp_format::__fp80_x86> = 15;
 
+template <>
+inline constexpr int __fp_exp_nbits_v<__fp_format::__fp8_e4m3> = 4;
+
+template <>
+inline constexpr int __fp_exp_nbits_v<__fp_format::__fp8_e5m2> = 5;
+
+template <>
+inline constexpr int __fp_exp_nbits_v<__fp_format::__fp8_e8m0> = 8;
+
+template <>
+inline constexpr int __fp_exp_nbits_v<__fp_format::__fp6_e2m3> = 2;
+
+template <>
+inline constexpr int __fp_exp_nbits_v<__fp_format::__fp6_e3m2> = 3;
+
+template <>
+inline constexpr int __fp_exp_nbits_v<__fp_format::__fp4_e2m1> = 2;
+
 // __fp_exp_bias_v
 
 template <__fp_format Fmt>
@@ -69,10 +90,28 @@ inline constexpr int __fp_exp_bias_v = (1 << (__fp_exp_nbits_v<Fmt> - 1)) - 1;
 template <__fp_format Fmt>
 inline constexpr int __fp_exp_min_v = 1 - __fp_exp_bias_v<Fmt>;
 
+template <>
+inline constexpr int __fp_exp_min_v<__fp_format::__fp8_e8m0> = -127;
+
 // __fp_exp_max_v
 
 template <__fp_format Fmt>
 inline constexpr int __fp_exp_max_v = (1 << __fp_exp_nbits_v<Fmt>)-2 - __fp_exp_bias_v<Fmt>;
+
+// The narrow vendor formats reserve exponent encodings differently from the
+// IEEE progression, so their maxima are stated per format.
+
+template <>
+inline constexpr int __fp_exp_max_v<__fp_format::__fp8_e4m3> = 8;
+
+template <>
+inline constexpr int __fp_exp_max_v<__fp_format::__fp6_e2m3> = 2;
+
+template <>
+inline constexpr int __fp_exp_max_v<__fp_format::__fp6_e3m2> = 4;
+
+template <>
+inline constexpr int __fp_exp_max_v<__fp_format::__fp4_e2m1> = 2;
 
 // __fp_mant_nbits_v
 
@@ -97,6 +136,24 @@ inline constexpr int __fp_mant_nbits_v<__fp_format::__bfloat16> = 7;
 template <>
 inline constexpr int __fp_mant_nbits_v<__fp_format::__fp80_x86> = 64;
 
+template <>
+inline constexpr int __fp_mant_nbits_v<__fp_format::__fp8_e4m3> = 3;
+
+template <>
+inline constexpr int __fp_mant_nbits_v<__fp_format::__fp8_e5m2> = 2;
+
+template <>
+inline constexpr int __fp_mant_nbits_v<__fp_format::__fp8_e8m0> = 0;
+
+template <>
+inline constexpr int __fp_mant_nbits_v<__fp_format::__fp6_e2m3> = 3;
+
+template <>
+inline constexpr int __fp_mant_nbits_v<__fp_format::__fp6_e3m2> = 2;
+
+template <>
+inline constexpr int __fp_mant_nbits_v<__fp_format::__fp4_e2m1> = 1;
+
 // __fp_has_implicit_bit_v
 
 template <__fp_format Fmt>
@@ -115,20 +172,62 @@ inline constexpr int __fp_digits_v = __fp_mant_nbits_v<Fmt> + static_cast<int>(_
 template <__fp_format Fmt>
 inline constexpr bool __fp_has_denorm_v = true;
 
+template <>
+inline constexpr bool __fp_has_denorm_v<__fp_format::__fp8_e8m0> = false;
+
 // __fp_has_inf_v
 
 template <__fp_format Fmt>
 inline constexpr bool __fp_has_inf_v = true;
+
+template <>
+inline constexpr bool __fp_has_inf_v<__fp_format::__fp8_e4m3> = false;
+
+template <>
+inline constexpr bool __fp_has_inf_v<__fp_format::__fp8_e8m0> = false;
+
+template <>
+inline constexpr bool __fp_has_inf_v<__fp_format::__fp6_e2m3> = false;
+
+template <>
+inline constexpr bool __fp_has_inf_v<__fp_format::__fp6_e3m2> = false;
+
+template <>
+inline constexpr bool __fp_has_inf_v<__fp_format::__fp4_e2m1> = false;
 
 // __fp_has_nan_v
 
 template <__fp_format Fmt>
 inline constexpr bool __fp_has_nan_v = true;
 
+template <>
+inline constexpr bool __fp_has_nan_v<__fp_format::__fp6_e2m3> = false;
+
+template <>
+inline constexpr bool __fp_has_nan_v<__fp_format::__fp6_e3m2> = false;
+
+template <>
+inline constexpr bool __fp_has_nan_v<__fp_format::__fp4_e2m1> = false;
+
 // __fp_has_nans_v
 
 template <__fp_format Fmt>
 inline constexpr bool __fp_has_nans_v = true;
+
+template <>
+inline constexpr bool __fp_has_nans_v<__fp_format::__fp8_e4m3> = false;
+
+template <>
+inline constexpr bool __fp_has_nans_v<__fp_format::__fp8_e8m0> = false;
+
+template <>
+inline constexpr bool __fp_has_nans_v<__fp_format::__fp6_e2m3> = false;
+
+template <>
+inline constexpr bool __fp_has_nans_v<__fp_format::__fp6_e3m2> = false;
+
+template <>
+inline constexpr bool __fp_has_nans_v<__fp_format::__fp4_e2m1> = false;
 
 CANN_ASC_STL_END_NAMESPACE
 

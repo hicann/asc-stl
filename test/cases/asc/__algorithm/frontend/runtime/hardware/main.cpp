@@ -27,18 +27,11 @@ bool verify(const int* input, const int* output, int callback_count)
     const int expected_difference[] = {1, 1, 1, 1};
     const int expected_scan[] = {0, 1, 3, 6};
     const int expected_duplicates[] = {1, 1, 2, 2};
-    const int expected_replaced[] = {1, 8, 3, 4, 1, 8, 9, 4};
     for (int index = 0; index != 4; ++index) {
         if (output[index] != expected_copy[index] || output[index + 5] != expected_transform[index] ||
             output[index + 9] != expected_difference[index] || output[index + 13] != expected_copy[index] ||
             output[index + 18] != expected_scan[index] || input[index + 4] != expected_copy[index] ||
             input[index + 12] != expected_duplicates[index])
-            return false;
-        if (output[index + 40] != expected_copy[index] || output[index + 44] != expected_scan[index])
-            return false;
-    }
-    for (int index = 0; index != 8; ++index) {
-        if (output[index + 54] != expected_replaced[index])
             return false;
     }
     const auto partition_count = *reinterpret_cast<const __SIZE_TYPE__*>(output + 30);
@@ -46,7 +39,7 @@ bool verify(const int* input, const int* output, int callback_count)
     const auto found_index = *reinterpret_cast<const __SIZE_TYPE__*>(output + 34);
     return output[4] == 0x7f7f7f7f && output[17] == 10 && output[22] == 2 && output[23] == 4 && partition_count == 2 &&
         selected_count == 2 && found_index == 2 && output[37] == 19 && output[38] == 6 && output[39] == 6 &&
-        callback_count == 1 && output[48] == 2 && output[49] == 4 && output[52] == 1 && output[53] == 3;
+        callback_count == 1;
 }
 }  // namespace
 

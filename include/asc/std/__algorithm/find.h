@@ -32,16 +32,24 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class InputIterator, class T>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr InputIterator find(
-    InputIterator first, InputIterator last, const T& value)
+template <class _Iter, class _Sent, class _Tp, class _Proj>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _Iter __find_impl(
+    _Iter __first, _Sent __last, const _Tp& __value, _Proj& __proj)
 {
-    for (; first != last; ++first) {
-        if (*first == value) {
-            return first;
-        }
-    }
-    return last;
+    for (; __first != __last; ++__first)
+        if (::asc::std::invoke(__proj, *__first) == __value)
+            break;
+    return __first;
+}
+
+template <class _InputIterator, class _Tp>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _InputIterator find(
+    _InputIterator __first, _InputIterator __last, const _Tp& __value)
+{
+    for (; __first != __last; ++__first)
+        if (*__first == __value)
+            break;
+    return __first;
 }
 
 CANN_ASC_STL_END_NAMESPACE

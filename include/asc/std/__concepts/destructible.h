@@ -40,6 +40,26 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class T>
 concept destructible = is_nothrow_destructible_v<T>;
+#else
+template <class T, class = void, class = void>
+inline constexpr bool __destructible_impl = false;
+
+template <class T>
+inline constexpr bool __destructible_impl<T, enable_if_t<is_object_v<T> >, enable_if_t<is_destructible_v<T> > > =
+    noexcept(::asc::std::declval<T>().~T());
+
+template <class T>
+inline constexpr bool __destructible = __destructible_impl<T>;
+
+template <class T>
+inline constexpr bool __destructible<T&> = true;
+
+template <class T>
+inline constexpr bool __destructible<T&&> = true;
+
+template <class T, size_t N>
+inline constexpr bool __destructible<T[N]> = __destructible<T>;
+
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

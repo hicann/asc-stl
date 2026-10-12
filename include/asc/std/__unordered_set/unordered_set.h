@@ -246,8 +246,9 @@ private:
 
     CANN_ASC_STL_API bool rehash_to(size_type count)
     {
-        if (count == 0)
+        if (count == 0) {
             return false;
+        }
         bucket_allocator bucket_nodes(allocator_);
         node** replacement = bucket_nodes.allocate(count);
         if (replacement == nullptr)

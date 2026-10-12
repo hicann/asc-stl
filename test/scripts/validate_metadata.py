@@ -100,7 +100,8 @@ def validate_negative_languages(row: dict, target: str) -> None:
             raise ValueError(f"{target}: invalid language matrix for negative case {name}")
 
 
-def validate_applicability(row: dict, target: str) -> dict:
+def validate_row(row: dict, registered: set[str], test_root: Path) -> tuple[int, set[Path]]:
+    target = row["target"]
     applicability = row.get("applicability")
     if not isinstance(applicability, dict) or set(applicability) != APPLICABILITY_KEYS:
         raise ValueError(f"{target}: applicability must define exactly {sorted(APPLICABILITY_KEYS)}")
@@ -108,45 +109,23 @@ def validate_applicability(row: dict, target: str) -> dict:
         raise ValueError(f"{target}: applicability values must be booleans")
     if not applicability["host_header"] or not applicability["device_header"]:
         raise ValueError(f"{target}: C++17/C++20 Host and Device Header gates are mandatory")
-    return applicability
 
-
-def validate_dependencies(row: dict, target: str, registered: set[str]) -> list[str]:
     dependencies = row.get("dependencies")
     if not isinstance(dependencies, list) or len(dependencies) != len(set(dependencies)):
         raise ValueError(f"{target}: dependencies must be a unique list")
     unknown = sorted(set(dependencies) - registered)
     if unknown:
         raise ValueError(f"{target}: dependencies are not registered product Headers: {unknown}")
-    return dependencies
 
-
-def validate_case_mappings(row: dict, target: str, registered: set[str]) -> None:
     for field in ("semantic_case", "runtime_case"):
         mapped = row.get(field, target)
         if not isinstance(mapped, str) or mapped not in registered:
             raise ValueError(f"{target}: {field} must name a registered product Header")
 
-
-def registered_case_assets(row: dict, root: Path, target: str) -> set[Path]:
-    expected = set()
-    for field in ("negative_cases", "additional_cases"):
-        for name in row.get(field, []):
-            if Path(name).name != name:
-                raise ValueError(f"{target}: {field} entry must be a case-local filename: {name}")
-            expected.add(root / name)
-    return expected
-
-
-def validate_row(row: dict, registered: set[str], test_root: Path) -> tuple[int, set[Path]]:
-    target = row["target"]
-    applicability = validate_applicability(row, target)
-    dependencies = validate_dependencies(row, target, registered)
-    validate_case_mappings(row, target, registered)
     root = case_path(test_root, target)
     semantic_root = case_path(test_root, row.get("semantic_case", target))
     runtime_root = case_path(test_root, row.get("runtime_case", target))
-    expected = registered_case_assets(row, root, target)
+    expected: set[Path] = set()
     if applicability["host_semantic"]:
         expected.add(semantic_root / "host.pass.cpp")
     if applicability["device_compile"]:
@@ -165,6 +144,11 @@ def validate_row(row: dict, registered: set[str], test_root: Path) -> tuple[int,
         )
     if applicability["hardware_runtime"]:
         expected.update(hardware_assets(runtime_root))
+    for field in ("negative_cases", "additional_cases"):
+        for name in row.get(field, []):
+            if Path(name).name != name:
+                raise ValueError(f"{target}: {field} entry must be a case-local filename: {name}")
+            expected.add(root / name)
     validate_negative_languages(row, target)
     return len(dependencies), expected
 

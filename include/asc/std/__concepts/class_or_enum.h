@@ -40,6 +40,11 @@ template <class T>
 concept __class_or_enum = is_class_v<T> || is_union_v<T> || is_enum_v<T>;
 template <class T>
 concept __workaround_52970 = is_class_v<remove_cvref_t<T>> || is_union_v<remove_cvref_t<T>>;
+#else
+template <class T>
+inline constexpr bool __class_or_enum = is_class_v<T> || is_union_v<T> || is_enum_v<T>;
+template <class T>
+inline constexpr bool __workaround_52970 = is_class_v<remove_cvref_t<T>> || is_union_v<remove_cvref_t<T>>;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

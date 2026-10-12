@@ -138,7 +138,7 @@ public:
     }
     CANN_ASC_STL_API constexpr void discard(unsigned long long count) noexcept
     {
-        for (unsigned long long discarded = 0; discarded < count; ++discarded) {
+        while (count-- != 0) {
             (void)(*this)();
         }
     }

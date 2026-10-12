@@ -29,6 +29,8 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__type_traits/void_t.h>
+// 源实现在此包含其 __fwd/extents.h；基座树没有该前置声明头（extents 定义
+// 在 __mdspan/extents.h），且本头正文不引用 extents，故不引入该包含。
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -55,6 +57,24 @@ template <class T>
 inline constexpr bool __is_asc_std_mdspan_v = false;
 template <class ElementType, class Extents, class LayoutPolicy, class AccessorPolicy>
 inline constexpr bool __is_asc_std_mdspan_v<mdspan<ElementType, Extents, LayoutPolicy, AccessorPolicy>> = true;
+
+// 布局映射判定特征（与源实现同形）：识别 layout_left/layout_right 的 mapping
+// 特化。源实现另有的 __mdspan_detail::__is_valid_layout_mapping 探测不在此
+// 重复定义——基座的 __mdspan/mdspan.h 已在同名命名空间持有该定义，重复
+// 会在两头同时包含时冲突。
+template <class Layout>
+inline constexpr bool __is_asc_std_layout_left_mapping_v = false;
+template <class Extents>
+inline constexpr bool __is_asc_std_layout_left_mapping_v<layout_left::mapping<Extents>> = true;
+
+template <class Layout>
+inline constexpr bool __is_asc_std_layout_right_mapping_v = false;
+template <class Extents>
+inline constexpr bool __is_asc_std_layout_right_mapping_v<layout_right::mapping<Extents>> = true;
+
+template <class Layout>
+inline constexpr bool __is_asc_std_layout_left_or_right_mapping_v =
+    __is_asc_std_layout_left_mapping_v<Layout> || __is_asc_std_layout_right_mapping_v<Layout>;
 
 CANN_ASC_STL_END_NAMESPACE
 

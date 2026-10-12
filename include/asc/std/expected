@@ -36,5 +36,6 @@
 #include <asc/std/__expected/unexpected.h>
 #include <asc/std/__fwd/expected.h>
 #include <asc/std/__fwd/unexpected.h>
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_EXPECTED

@@ -30,14 +30,32 @@
 #include <asc/std/__type_traits/remove_const.h>
 #include <asc/std/__type_traits/remove_volatile.h>
 
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__remove_cv)
+#define CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_CV(...) __remove_cv(__VA_ARGS__)
+#endif  // CANN_ASC_STL_DETAIL_HAS_BUILTIN(__remove_cv)
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class T>
+#if defined(CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_CV) && !defined(CANN_ASC_STL_DETAIL_USE_REMOVE_CV_FALLBACK)
+template <class _Tp>
 struct remove_cv {
-    using type = remove_volatile_t<remove_const_t<T>>;
+    using type = CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_CV(_Tp);
 };
-template <class T>
-using remove_cv_t = remove_volatile_t<remove_const_t<T>>;
+
+template <class _Tp>
+using remove_cv_t = typename remove_cv<_Tp>::type;
+
+#else
+
+template <class _Tp>
+struct remove_cv {
+    using type = remove_volatile_t<remove_const_t<_Tp> >;
+};
+
+template <class _Tp>
+using remove_cv_t = remove_volatile_t<remove_const_t<_Tp> >;
+
+#endif  // defined(CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_CV) && !defined(CANN_ASC_STL_DETAIL_USE_REMOVE_CV_FALLBACK)
 
 CANN_ASC_STL_END_NAMESPACE
 

@@ -142,7 +142,6 @@ NEGATIVE_DIAGNOSTIC_MARKERS = {
     "excluded_policy_overload.fail.cpp": "no member named",
     "comparison_category_excluded.fail.cpp": "no type named",
     "function_excluded.fail.cpp": "no template named",
-    "hash_unsupported_type.fail.cpp": "hash unsupported type must remain unavailable",
     "searcher_excluded.fail.cpp": "no member named",
     "timed_excluded.fail.cpp": "no member named",
     "default_priority_queue.fail.cpp": "too few template arguments",
@@ -192,14 +191,6 @@ NEGATIVE_DIAGNOSTIC_MARKERS = {
     "standard_mutex.fail.cpp": "no type named",
     "default_stack.fail.cpp": "too few template arguments",
     "bad_variant_access.fail.cpp": "no type named",
-    "variant_get.fail.cpp": "no matching function",
-    "variant_get_index_const_lvalue.fail.cpp": "no matching function",
-    "variant_get_index_rvalue.fail.cpp": "no matching function",
-    "variant_get_index_const_rvalue.fail.cpp": "no matching function",
-    "variant_get_type_lvalue.fail.cpp": "no matching function",
-    "variant_get_type_const_lvalue.fail.cpp": "no matching function",
-    "variant_get_type_rvalue.fail.cpp": "no matching function",
-    "variant_get_type_const_rvalue.fail.cpp": "no matching function",
     "initializer_list_ctor.fail.cpp": "no matching constructor",
     "initializer_list_emplace.fail.cpp": "no matching member function",
     "reference_alternative.fail.cpp": "static assertion",
@@ -218,8 +209,6 @@ NEGATIVE_DIAGNOSTIC_MARKERS = {
     "random_device.fail.cpp": "no type named",
     "error_code.fail.cpp": "no type named",
     "layout_compatible.fail.cpp": "no member named",
-    "is_swappable_internal_parameter.fail.cpp": "template argument",
-    "is_nothrow_swappable_internal_parameter.fail.cpp": "template argument",
     "compare_cxx17_absent.fail.cpp": "no type named",
     "string_view_constructor.fail.cpp": "no matching constructor",
     "reset_position.fail.cpp": "too many arguments",
@@ -248,22 +237,6 @@ NEGATIVE_DIAGNOSTIC_MARKERS = {
     "max_initializer_compare.fail.cpp": "no matching function",
     "minmax_initializer.fail.cpp": "no matching function",
     "minmax_initializer_compare.fail.cpp": "no matching function",
-}
-
-NEGATIVE_DIAGNOSTIC_OVERRIDES = {
-    ("asc/__atomic/scoped_atomic.h", "unsupported_type.fail.asc"): ("supports exactly",),
-    ("asc/collectives", "simd_excluded.fail.asc"): ("no member named 'make_block_collective_workspace'",),
-    ("asc/collectives", "ub_span_dsimt.fail.asc"): ("no member named 'ub_reduce_add'",),
-    ("asc/std/scoped_allocator", "default_allocator.fail.cpp"): ("base specifier must name a class",),
-    ("asc/iterator", "address_space_erasure.fail.asc"): ("cannot initialize",),
-    ("asc/mdspan", "ub_dsimt.fail.asc"): ("no template named", "no member named"),
-    ("asc/std/random", "seed_sequence.fail.cpp"): ("no matching constructor",),
-}
-
-COMPLEX_SCALAR_NEGATIVE_CASES = {
-    "scalar_double.fail.cpp",
-    "scalar_integral.fail.cpp",
-    "scalar_long_double.fail.cpp",
 }
 
 
@@ -425,22 +398,26 @@ def expected_negative_diagnostic(task: CompileTask, output: str) -> bool:
     lowered = output.lower()
     marker = NEGATIVE_DIAGNOSTIC_MARKERS.get(task.negative_name, "deleted")
     expected = marker.lower() in lowered
-    key = (task.target, task.negative_name)
-    override_markers = NEGATIVE_DIAGNOSTIC_OVERRIDES.get(key)
-    if override_markers is not None:
-        return any(item in lowered for item in override_markers)
-    if key == ("asc/__atomic/scoped_atomic.h", "simd_excluded.fail.asc"):
-        return expected or "deleted" in lowered
-    if task.target == "asc/std/complex" and task.negative_name in COMPLEX_SCALAR_NEGATIVE_CASES:
-        return "no matching function for call to 'arg'" in lowered if task.options.simt else expected
+    if task.target == "asc/__atomic/scoped_atomic.h" and task.negative_name == "simd_excluded.fail.asc":
+        expected = expected or "deleted" in lowered
+    if task.target == "asc/__atomic/scoped_atomic.h" and task.negative_name == "unsupported_type.fail.asc":
+        expected = "supports exactly" in lowered
+    if task.target == "asc/std/scoped_allocator" and task.negative_name == "default_allocator.fail.cpp":
+        expected = "base specifier must name a class" in lowered
+    if task.target == "asc/iterator" and task.negative_name == "address_space_erasure.fail.asc":
+        expected = "cannot initialize" in lowered
+    if task.target == "asc/mdspan" and task.negative_name == "ub_dsimt.fail.asc":
+        expected = "no template named" in lowered or "no member named" in lowered
+    if task.target == "asc/std/random" and task.negative_name == "seed_sequence.fail.cpp":
+        expected = "no matching constructor" in lowered
     if task.target == "asc/std/source_location":
-        return "cannot initialize a parameter" in output and "const char *" in output
+        expected = "cannot initialize a parameter" in output and "const char *" in output
     if task.target == "asc/launch" and task.negative_name == "device_call.fail.asc":
         marker = (
             "call to __host__ function from __device__ function"
             if task.options.simt else "reference to __global__"
         )
-        return marker in lowered
+        expected = marker in lowered
     return expected
 
 

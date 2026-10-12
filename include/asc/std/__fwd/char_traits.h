@@ -28,6 +28,26 @@
 
 #include <asc/__detail/attributes.h>
 
+// Hosted ::std interoperation gate: a host standard library has been pulled in.
+#ifndef CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB
+#if defined(__GLIBCXX__) || defined(_LIBCPP_VERSION) || defined(_MSVC_STL_VERSION)
+#define CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB() 0
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB
+
+// std:: forward declarations
+
+#if CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB()
+namespace std {
+template <class>
+struct char_traits;
+}  // namespace std
+#endif  // CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB()
+
+// asc::std:: forward declarations
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class T>
@@ -45,6 +65,13 @@ template <>
 struct char_traits<char32_t>;
 template <>
 struct char_traits<wchar_t>;
+
+template <class T>
+inline constexpr bool __is_std_char_traits_v = false;
+#if CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB()
+template <class T>
+inline constexpr bool __is_std_char_traits_v<::std::char_traits<T>> = true;
+#endif  // CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB()
 
 template <class T>
 inline constexpr bool __is_asc_std_char_traits_v = false;

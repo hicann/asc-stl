@@ -35,11 +35,23 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_fundamental)
+
+template <class _Tp>
+struct is_fundamental : bool_constant<__is_fundamental(_Tp)> {};
+
+template <class _Tp>
+inline constexpr bool is_fundamental_v = __is_fundamental(_Tp);
+
+#else
+
 template <class _Tp>
 inline constexpr bool is_fundamental_v = is_void_v<_Tp> || is_null_pointer_v<_Tp> || is_arithmetic_v<_Tp>;
 
 template <class _Tp>
-struct is_fundamental : bool_constant<is_fundamental_v<_Tp>> {};
+struct is_fundamental : bool_constant<is_fundamental_v<_Tp> > {};
+
+#endif  // CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_fundamental)
 
 CANN_ASC_STL_END_NAMESPACE
 

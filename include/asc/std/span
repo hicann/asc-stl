@@ -42,6 +42,7 @@
 #include <asc/std/__iterator/reverse_iterator.h>
 #include <asc/std/__iterator/size.h>
 #include <asc/std/__iterator/wrap_iter.h>
+#include <asc/std/__memory/pointer_traits.h>
 #include <asc/std/__ranges/concepts.h>
 #include <asc/std/__ranges/data.h>
 #include <asc/std/__ranges/enable_borrowed_range.h>
@@ -63,6 +64,18 @@
 #include <asc/std/cstddef>
 #include <asc/std/version>
 
+// 断言宏：基座无集中定义（方言层持有），按 __mdspan/empty_base.h 的同形内联，
+// #ifndef 守卫以免与未来集中定义冲突。
+#ifndef CANN_ASC_STL_DETAIL_ASSERT
+// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查。
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
+#else
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) \
+    ((expression) ? static_cast<void>(0) : (__builtin_trap(), static_cast<void>(0)))
+#endif
+#endif  // CANN_ASC_STL_DETAIL_ASSERT
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class T, size_t Extent>
@@ -82,8 +95,10 @@ public:
     template <size_t Value = Extent, class = decltype(sizeof(char[Value == 0 ? 1 : -1]))>
     CANN_ASC_STL_API constexpr span() noexcept
     {}
-    CANN_ASC_STL_API constexpr span(pointer first, size_type) noexcept : data_(first)
-    {}
+    CANN_ASC_STL_API constexpr span(pointer first, [[maybe_unused]] size_type count) noexcept : data_(first)
+    {
+        CANN_ASC_STL_DETAIL_ASSERT(count == Extent, "size mismatch in span's constructor (pointer, count)");
+    }
     CANN_ASC_STL_API constexpr span(pointer first, pointer) noexcept : data_(first)
     {}
     template <size_t Size>
@@ -96,11 +111,31 @@ public:
     {
         static_assert(Size == Extent, "fixed span extent mismatch");
     }
+    template <class U, size_t Size>
+    CANN_ASC_STL_API constexpr span(const array<U, Size>& value) noexcept : data_(value.data())
+    {
+        static_assert(Size == Extent, "fixed span extent mismatch");
+    }
     template <class U, size_t OtherExtent>
     CANN_ASC_STL_API constexpr span(const span<U, OtherExtent>& other) noexcept : data_(other.data())
     {
         static_assert(OtherExtent == Extent || OtherExtent == dynamic_extent, "fixed span extent mismatch");
+        if constexpr (OtherExtent == dynamic_extent) {
+            CANN_ASC_STL_DETAIL_ASSERT(other.size() == Extent, "size mismatch in span's constructor (other span)");
+        }
     }
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    // 迭代器 + 哨兵构造（P0122 标准面）。
+    template <class It, class End>
+        requires contiguous_iterator<It> && sized_sentinel_for<End, It> && (!is_convertible_v<End, size_type>) &&
+        is_convertible_v<remove_reference_t<iter_reference_t<It>> (*)[], element_type (*)[]>
+    CANN_ASC_STL_API constexpr explicit span(It first, [[maybe_unused]] End last) noexcept : data_(to_address(first))
+    {
+        CANN_ASC_STL_DETAIL_ASSERT(last - first >= 0, "invalid range in span's constructor (iterator, sentinel)");
+        CANN_ASC_STL_DETAIL_ASSERT(
+            last - first == Extent, "invalid range in span's constructor (iterator, sentinel): last - first != extent");
+    }
+#endif
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
     template <ranges::contiguous_range Range>
         requires ranges::sized_range<Range> && (ranges::borrowed_range<Range> || is_const_v<element_type>) &&
@@ -128,14 +163,17 @@ public:
     }
     CANN_ASC_STL_API constexpr reference front() const noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(!empty(), "span<T, N>::front() on empty span");
         return data_[0];
     }
     CANN_ASC_STL_API constexpr reference back() const noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(!empty(), "span<T, N>::back() on empty span");
         return data_[Extent - 1];
     }
     CANN_ASC_STL_API constexpr reference operator[](size_type index) const noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(index < size(), "span<T, N>::operator[](index): index out of range");
         return data_[index];
     }
     CANN_ASC_STL_API constexpr pointer data() const noexcept
@@ -157,30 +195,46 @@ public:
     template <size_t Count>
     CANN_ASC_STL_API constexpr span<T, Count> first() const noexcept
     {
+        // 三目式避免无符号数与零的无意义比较告警。
+        static_assert(Count == 0 ? true : Count <= Extent, "span<T, N>::first<Count>(): Count out of range");
         return {data_, Count};
     }
     CANN_ASC_STL_API constexpr span<T, dynamic_extent> first(size_type count) const noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(count <= size(), "span<T, N>::first(count): count out of range");
         return {data_, count};
     }
     template <size_t Count>
     CANN_ASC_STL_API constexpr span<T, Count> last() const noexcept
     {
+        // 三目式避免无符号数与零的无意义比较告警。
+        static_assert(Count == 0 ? true : Count <= Extent, "span<T, N>::last<Count>(): Count out of range");
         return {data_ + Extent - Count, Count};
     }
     CANN_ASC_STL_API constexpr span<T, dynamic_extent> last(size_type count) const noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(count <= size(), "span<T, N>::last(count): count out of range");
         return {data_ + Extent - count, count};
     }
     template <size_t Offset, size_t Count = dynamic_extent>
     CANN_ASC_STL_API constexpr auto subspan() const noexcept
         -> span<T, Count == dynamic_extent ? Extent - Offset : Count>
     {
+        // 三目式避免无符号数与零的无意义比较告警。
+        static_assert(
+            Offset == 0 ? true : Offset <= Extent, "span<T, N>::subspan<Offset, Count>(): Offset out of range");
+        static_assert(Count == 0 ? true : Count == dynamic_extent || Count <= Extent - Offset,
+            "span<T, N>::subspan<Offset, Count>(): Offset + Count out of range");
         return {data_ + Offset, Count == dynamic_extent ? Extent - Offset : Count};
     }
     CANN_ASC_STL_API constexpr span<T, dynamic_extent> subspan(
         size_type offset, size_type count = dynamic_extent) const noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(offset <= size(), "span<T, N>::subspan(offset, count): offset out of range");
+        CANN_ASC_STL_DETAIL_ASSERT(
+            count <= size() || count == dynamic_extent, "span<T, N>::subspan(offset, count): count out of range");
+        CANN_ASC_STL_DETAIL_ASSERT(count == dynamic_extent || count <= size() - offset,
+            "span<T, N>::subspan(offset, count): offset + count out of range");
         return {data_ + offset, count == dynamic_extent ? Extent - offset : count};
     }
 
@@ -200,7 +254,8 @@ public:
     using reverse_iterator = ::asc::std::reverse_iterator<iterator>;
     static constexpr size_type extent = dynamic_extent;
     CANN_ASC_STL_API constexpr span() noexcept = default;
-    CANN_ASC_STL_API constexpr span(pointer first, size_type count) noexcept : data_(first), size_(count)
+    CANN_ASC_STL_API constexpr span(pointer first, [[maybe_unused]] size_type count) noexcept
+        : data_(first), size_(count)
     {}
     CANN_ASC_STL_API constexpr span(pointer first, pointer last) noexcept
         : data_(first), size_(static_cast<size_type>(last - first))
@@ -211,10 +266,24 @@ public:
     template <class U, size_t Size>
     CANN_ASC_STL_API constexpr span(array<U, Size>& value) noexcept : data_(value.data()), size_(Size)
     {}
+    template <class U, size_t Size>
+    CANN_ASC_STL_API constexpr span(const array<U, Size>& value) noexcept : data_(value.data()), size_(Size)
+    {}
     template <class U, size_t OtherExtent>
     CANN_ASC_STL_API constexpr span(const span<U, OtherExtent>& other) noexcept
         : data_(other.data()), size_(other.size())
     {}
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    // 迭代器 + 哨兵构造（P0122 标准面）。
+    template <class It, class End>
+        requires contiguous_iterator<It> && sized_sentinel_for<End, It> && (!is_convertible_v<End, size_type>) &&
+                     is_convertible_v<remove_reference_t<iter_reference_t<It>> (*)[], element_type (*)[]>
+    CANN_ASC_STL_API constexpr span(It first, End last) noexcept
+        : data_(to_address(first)), size_(static_cast<size_type>(last - first))
+    {
+        CANN_ASC_STL_DETAIL_ASSERT(last - first >= 0, "invalid range in span's constructor (iterator, sentinel)");
+    }
+#endif
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
     template <ranges::contiguous_range Range>
         requires ranges::sized_range<Range> && (ranges::borrowed_range<Range> || is_const_v<element_type>) &&
@@ -242,14 +311,17 @@ public:
     }
     CANN_ASC_STL_API constexpr reference front() const noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(!empty(), "span<T>::front() on empty span");
         return data_[0];
     }
     CANN_ASC_STL_API constexpr reference back() const noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(!empty(), "span<T>::back() on empty span");
         return data_[size_ - 1];
     }
     CANN_ASC_STL_API constexpr reference operator[](size_type index) const noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(index < size(), "span<T>::operator[](index): index out of range");
         return data_[index];
     }
     CANN_ASC_STL_API constexpr pointer data() const noexcept
@@ -271,29 +343,44 @@ public:
     template <size_t Count>
     CANN_ASC_STL_API constexpr span<T, Count> first() const noexcept
     {
+        // 三目式避免无符号数与零的无意义比较告警。
+        static_assert(Count == 0 ? true : Count <= size(), "span<T>::first<Count>(): Count out of range");
         return {data_, Count};
     }
     CANN_ASC_STL_API constexpr span first(size_type count) const noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(count <= size(), "span<T>::first(count): count out of range");
         return {data_, count};
     }
     template <size_t Count>
     CANN_ASC_STL_API constexpr span<T, Count> last() const noexcept
     {
+        // 三目式避免无符号数与零的无意义比较告警。
+        static_assert(Count == 0 ? true : Count <= size(), "span<T>::last<Count>(): Count out of range");
         return {data_ + size_ - Count, Count};
     }
     CANN_ASC_STL_API constexpr span last(size_type count) const noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(count <= size(), "span<T>::last(count): count out of range");
         return {data_ + size_ - count, count};
     }
     template <size_t Offset, size_t Count = dynamic_extent>
     CANN_ASC_STL_API constexpr auto subspan() const noexcept
         -> span<T, Count == dynamic_extent ? dynamic_extent : Count>
     {
+        // 三目式避免无符号数与零的无意义比较告警。
+        static_assert(Offset == 0 ? true : Offset <= size(), "span<T>::subspan<Offset, Count>(): Offset out of range");
+        static_assert(Count == dynamic_extent || (Count == 0 ? true : Count <= size() - Offset),
+            "span<T>::subspan<Offset, Count>(): Offset + Count out of range");
         return {data_ + Offset, Count == dynamic_extent ? size_ - Offset : Count};
     }
     CANN_ASC_STL_API constexpr span subspan(size_type offset, size_type count = dynamic_extent) const noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(offset <= size(), "span<T>::subspan(offset, count): offset out of range");
+        CANN_ASC_STL_DETAIL_ASSERT(
+            count <= size() || count == dynamic_extent, "span<T>::subspan(offset, count): count out of range");
+        CANN_ASC_STL_DETAIL_ASSERT(count == dynamic_extent || count <= size() - offset,
+            "span<T>::subspan(offset, count): offset + count out of range");
         return {data_ + offset, count == dynamic_extent ? size_ - offset : count};
     }
 
@@ -314,6 +401,40 @@ CANN_ASC_STL_API constexpr auto as_writable_bytes(
     static_assert(!is_const_v<T>, "as_writable_bytes requires writable elements");
     return {reinterpret_cast<byte*>(value.data()), value.size_bytes()};
 }
+
+// CTAD 推导指引（P0122 标准面）。
+template <class T, size_t Size>
+span(T (&)[Size]) -> span<T, Size>;
+
+template <class T, size_t Size>
+span(array<T, Size>&) -> span<T, Size>;
+
+template <class T, size_t Size>
+span(const array<T, Size>&) -> span<const T, Size>;
+
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// 整数常量类哨兵/计数推导为固定 extent，否则 dynamic_extent。
+template <class EndOrSize, bool = __integral_constant_like<EndOrSize>>
+inline constexpr size_t __span_maybe_static_extent = dynamic_extent;
+template <class EndOrSize>
+inline constexpr size_t __span_maybe_static_extent<EndOrSize, true> = EndOrSize::value;
+
+template <class It, class EndOrSize>
+    requires contiguous_iterator<It>
+span(It, EndOrSize) -> span<remove_reference_t<iter_reference_t<It>>, __span_maybe_static_extent<EndOrSize>>;
+
+template <class Range>
+    requires ranges::contiguous_range<Range>
+span(Range&&) -> span<remove_reference_t<ranges::range_reference_t<Range>>>;
+#endif
+
+namespace ranges {
+template <class T, size_t Extent>
+inline constexpr bool enable_borrowed_range<span<T, Extent>> = true;
+
+template <class T, size_t Extent>
+inline constexpr bool enable_view<span<T, Extent>> = true;
+}  // namespace ranges
 
 CANN_ASC_STL_END_NAMESPACE
 

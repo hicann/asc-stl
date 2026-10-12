@@ -28,5 +28,6 @@
 #endif
 
 #include <asc/__version/product.h>
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_VERSION

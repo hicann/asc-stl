@@ -29,6 +29,7 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
+#include <asc/__numeric/checked.h>
 #include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__numeric/saturating_cast.h>
 #include <asc/std/__type_traits/is_integer.h>
@@ -37,40 +38,17 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-namespace __saturating_sub_detail {
-
-// Same bound-derivation and overflow-free comparison strategy as the
-// saturating addition root: the clamped limits come from the delivered
-// saturating_cast and every compared expression stays in range for the
-// operand signs that reach it.
-template <class T>
-CANN_ASC_STL_API constexpr T sub_maximum() noexcept
-{
-    return saturating_cast<T>(UINT64_MAX);
-}
-
-template <class T>
-CANN_ASC_STL_API constexpr T sub_minimum() noexcept
-{
-    return saturating_cast<T>(INT64_MIN);
-}
-
-}  // namespace __saturating_sub_detail
-
+// Delegates to the shared checked/saturating backend instead of deriving the
+// saturation bounds from a fixed 64-bit constant pair: the backend decides
+// overflow per operation in the unsigned domain, so every supported integer
+// width saturates exactly (the bounds no longer inherit any limit from the
+// saturating_cast width), and the overflow flag stays reusable. Valid in Host,
+// ordinary AICore and pure SIMT.
 template <class T>
 CANN_ASC_STL_API constexpr T saturating_sub(T left, T right) noexcept
 {
     static_assert(__is_integer_v<T>, "saturating_sub requires an integer type");
-    if constexpr (is_signed_v<T>) {
-        constexpr T maximum = __saturating_sub_detail::sub_maximum<T>();
-        constexpr T minimum = __saturating_sub_detail::sub_minimum<T>();
-        if (right < T(0) ? left > maximum + right : left < minimum + right) {
-            return right < T(0) ? maximum : minimum;
-        }
-        return T(left - right);
-    } else {
-        return right > left ? T(0) : T(left - right);
-    }
+    return ::asc::detail::saturating_sub_impl(left, right).value;
 }
 
 CANN_ASC_STL_END_NAMESPACE

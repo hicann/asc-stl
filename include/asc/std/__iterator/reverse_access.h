@@ -34,42 +34,44 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class C>
-CANN_ASC_STL_API constexpr auto rbegin(C& value) -> decltype(value.rbegin())
+CANN_ASC_STL_API constexpr auto rbegin(C& value) noexcept(noexcept(value.rbegin())) -> decltype(value.rbegin())
 {
     return value.rbegin();
 }
 template <class C>
-CANN_ASC_STL_API constexpr auto rbegin(const C& value) -> decltype(value.rbegin())
+CANN_ASC_STL_API constexpr auto rbegin(const C& value) noexcept(noexcept(value.rbegin())) -> decltype(value.rbegin())
 {
     return value.rbegin();
 }
 template <class T, size_t N>
-CANN_ASC_STL_API constexpr reverse_iterator<T*> rbegin(T (&array)[N])
+CANN_ASC_STL_API constexpr reverse_iterator<T*> rbegin(T (&array)[N]) noexcept
 {
     return reverse_iterator<T*>(array + N);
 }
 template <class C>
-CANN_ASC_STL_API constexpr auto rend(C& value) -> decltype(value.rend())
+CANN_ASC_STL_API constexpr auto rend(C& value) noexcept(noexcept(value.rend())) -> decltype(value.rend())
 {
     return value.rend();
 }
 template <class C>
-CANN_ASC_STL_API constexpr auto rend(const C& value) -> decltype(value.rend())
+CANN_ASC_STL_API constexpr auto rend(const C& value) noexcept(noexcept(value.rend())) -> decltype(value.rend())
 {
     return value.rend();
 }
 template <class T, size_t N>
-CANN_ASC_STL_API constexpr reverse_iterator<T*> rend(T (&array)[N])
+CANN_ASC_STL_API constexpr reverse_iterator<T*> rend(T (&array)[N]) noexcept
 {
     return reverse_iterator<T*>(array);
 }
 template <class C>
-CANN_ASC_STL_API constexpr auto crbegin(const C& value) -> decltype(::asc::std::rbegin(value))
+CANN_ASC_STL_API constexpr auto crbegin(const C& value) noexcept(
+    noexcept(::asc::std::rbegin(value))) -> decltype(::asc::std::rbegin(value))
 {
     return ::asc::std::rbegin(value);
 }
 template <class C>
-CANN_ASC_STL_API constexpr auto crend(const C& value) -> decltype(::asc::std::rend(value))
+CANN_ASC_STL_API constexpr auto crend(const C& value) noexcept(
+    noexcept(::asc::std::rend(value))) -> decltype(::asc::std::rend(value))
 {
     return ::asc::std::rend(value);
 }

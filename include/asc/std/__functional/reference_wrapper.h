@@ -79,6 +79,9 @@ private:
 };
 
 template <class T>
+reference_wrapper(T&) -> reference_wrapper<T>;
+
+template <class T>
 CANN_ASC_STL_API constexpr reference_wrapper<T> ref(T& value) noexcept
 {
     return reference_wrapper<T>(value);

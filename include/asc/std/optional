@@ -27,9 +27,31 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__fwd/hash.h>
 #include <asc/std/__fwd/optional.h>
+#include <asc/std/__functional/hash.h>
 #include <asc/std/__optional/make_optional.h>
 #include <asc/std/__optional/nullopt.h>
 #include <asc/std/__optional/optional.h>
+#include <asc/std/__type_traits/remove_const.h>
+
+// dev 侧 __optional/hash.h 为孤儿小件（基座无该子头），按小件内联规则落入本门面：
+// 空值哈希为 0，有值时委托给值类型的 hash 特化；未来若独立子头落地，此守卫让位。
+#ifndef CANN_ASC_STL_ASC_STD___OPTIONAL_HASH_H
+#define CANN_ASC_STL_ASC_STD___OPTIONAL_HASH_H
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+template <class T>
+struct hash<optional<T>> {
+    CANN_ASC_STL_API size_t operator()(const optional<T>& value) const
+    {
+        return static_cast<bool>(value) ? hash<remove_const_t<T>>{}(*value) : 0;
+    }
+};
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_ASC_STD___OPTIONAL_HASH_H
 
 #endif  // CANN_ASC_STL_ASC_STD_OPTIONAL

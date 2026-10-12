@@ -60,8 +60,7 @@ template <class ResultPointer, class InputPointer>
 CANN_ASC_STL_DEVICE_API void evaluate_simd(ResultPointer result, InputPointer input)
 {
     __ubuf__ unsigned int stage[24];
-    volatile unsigned int runtime_rows = 3;
-    const unsigned int extents[2] = {runtime_rows, 5};
+    const unsigned int extents[2] = {3, 5};
     const unsigned int source_strides[2] = {8, 1};
     const unsigned int destination_strides[2] = {8, 1};
     const unsigned int left_padding[2] = {0, 1};

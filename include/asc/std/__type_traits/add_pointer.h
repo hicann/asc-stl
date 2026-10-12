@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_ADD_POINTER_H
 #define CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_ADD_POINTER_H
 
@@ -27,39 +28,29 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+
 #include <asc/std/__type_traits/is_referenceable.h>
-#include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/is_void.h>
-#include <asc/std/__type_traits/remove_cv.h>
 #include <asc/std/__type_traits/remove_reference.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__add_pointer)
-
-template <class T>
-using add_pointer_t = __add_pointer(T);
-
-#else
-
-template <class T, bool = __is_referenceable<T>::value || is_void<T>::value>
+template <class _Tp, bool = __asc_is_referenceable<_Tp>::value || is_void<_Tp>::value>
 struct __add_pointer_impl {
-    using type = remove_reference_t<T>*;
+    using type = remove_reference_t<_Tp>*;
 };
 
-template <class T>
-struct __add_pointer_impl<T, false> {
-    using type = T;
+template <class _Tp>
+struct __add_pointer_impl<_Tp, false> {
+    using type = _Tp;
 };
 
-template <class T>
-using add_pointer_t = typename __add_pointer_impl<T>::type;
+template <class _Tp>
+using add_pointer_t = typename __add_pointer_impl<_Tp>::type;
 
-#endif
-
-template <class T>
+template <class _Tp>
 struct add_pointer {
-    using type = add_pointer_t<T>;
+    using type = add_pointer_t<_Tp>;
 };
 
 CANN_ASC_STL_END_NAMESPACE

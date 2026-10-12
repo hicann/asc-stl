@@ -39,6 +39,48 @@
 #include <asc/std/__type_traits/conditional.h>
 #include <asc/std/__utility/swap.h>
 
+// Migrated from dev __asc/dialect.h and __asc/diagnostic.h: base asc/__config
+// has no standard-version number macro and no MSVC diagnostic suppression.
+#ifndef CANN_ASC_STL_DETAIL_STD_VER
+#if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
+#define CANN_ASC_STL_DETAIL_STD_VER 2003
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201103L
+#define CANN_ASC_STL_DETAIL_STD_VER 2011
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201402L
+#define CANN_ASC_STL_DETAIL_STD_VER 2014
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201703L
+#define CANN_ASC_STL_DETAIL_STD_VER 2017
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202002L
+#define CANN_ASC_STL_DETAIL_STD_VER 2020
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202302L
+#define CANN_ASC_STL_DETAIL_STD_VER 2023
+#else
+#define CANN_ASC_STL_DETAIL_STD_VER 2024
+#endif
+#endif  // CANN_ASC_STL_DETAIL_STD_VER
+
+#ifndef CANN_ASC_STL_DETAIL_DIAG_PUSH
+#define CANN_ASC_STL_DETAIL_DIAG_PUSH CANN_ASC_STL_DETAIL_DIAGNOSTIC_PUSH()
+#define CANN_ASC_STL_DETAIL_DIAG_POP CANN_ASC_STL_DETAIL_DIAGNOSTIC_POP()
+#if defined(_MSC_VER)
+#define CANN_ASC_STL_DETAIL_DIAG_SUPPRESS_MSVC(x) __pragma(warning(disable : x))
+#else
+#define CANN_ASC_STL_DETAIL_DIAG_SUPPRESS_MSVC(x)
+#endif
+#endif  // CANN_ASC_STL_DETAIL_DIAG_PUSH
+
+// GCC pre-9 constexpr workaround gate, mirroring dev
+// CANN_ASC_STL_DETAIL_COMPILER(GCC, <, 9): genuine GCC only (never CCE,
+// pure-SIMT or clang, which may also define __GNUC__).
+#ifndef CANN_ASC_STL_DETAIL_BIT_REF_GCC_PRE9
+#if defined(__GNUC__) && !defined(__clang__) && !defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) && \
+    __GNUC__ < 9
+#define CANN_ASC_STL_DETAIL_BIT_REF_GCC_PRE9 1
+#else
+#define CANN_ASC_STL_DETAIL_BIT_REF_GCC_PRE9 0
+#endif
+#endif  // CANN_ASC_STL_DETAIL_BIT_REF_GCC_PRE9
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class _Cp>
@@ -63,7 +105,7 @@ class __bit_reference {
 public:
     using __container = typename _Cp::__self;
 
-    constexpr __bit_reference(const __bit_reference&) = default;
+    CANN_ASC_STL_API constexpr __bit_reference(const __bit_reference&) = default;
 
     CANN_ASC_STL_API constexpr operator bool() const noexcept
     {
@@ -83,6 +125,18 @@ public:
         }
         return *this;
     }
+
+#if CANN_ASC_STL_DETAIL_STD_VER >= 2023
+    CANN_ASC_STL_API constexpr const __bit_reference& operator=(bool x) const noexcept
+    {
+        if (x) {
+            *__seg_ |= __mask_;
+        } else {
+            *__seg_ &= ~__mask_;
+        }
+        return *this;
+    }
+#endif  // CANN_ASC_STL_DETAIL_STD_VER >= 2023
 
     CANN_ASC_STL_API constexpr __bit_reference& operator=(const __bit_reference& x) noexcept
     {
@@ -147,7 +201,7 @@ class __bit_const_reference {
 public:
     using __container = typename _Cp::__self;
 
-    constexpr __bit_const_reference(const __bit_const_reference&) = default;
+    CANN_ASC_STL_API __bit_const_reference(const __bit_const_reference&) = default;
 
     CANN_ASC_STL_API constexpr __bit_const_reference(const __bit_reference<_Cp>& x) noexcept
         : __seg_(x.__seg_), __mask_(x.__mask_)
@@ -398,9 +452,29 @@ CANN_ASC_STL_API constexpr __bit_iterator<_Cp, false> __copy_backward_aligned(
         // do last word
         if (n > 0) {
             __storage_type m = ~__storage_type(0) << (bits_per_word - n);
+#if CANN_ASC_STL_DETAIL_BIT_REF_GCC_PRE9
+            // workaround for GCC pre-9 being really bad at tracking one-past-the-end pointers at constexpr
+            // can't check for is-constant-evaluated, because GCC pre-9 also lacks _that_.
+            if (last.__seg_ == first.__seg_ + 1) {
+                last.__seg_ = first.__seg_;
+            } else {
+                --last.__seg_;
+            }
+#else   // GCC < 9
             --last.__seg_;
+#endif  // !GCC || GCC >= 9
             __storage_type b = *last.__seg_ & m;
+#if CANN_ASC_STL_DETAIL_BIT_REF_GCC_PRE9
+            // workaround for GCC pre-9 being really bad at tracking one-past-the-end pointers at constexpr
+            // can't check for is-constant-evaluated, because GCC pre-9 also lacks _that_.
+            if (result.__seg_ == first.__seg_ + 1) {
+                result.__seg_ = first.__seg_;
+            } else {
+                --result.__seg_;
+            }
+#else   // GCC < 9
             --result.__seg_;
+#endif  // !GCC || GCC >= 9
             *result.__seg_ &= ~m;
             *result.__seg_ |= b;
             result.__ctz_ = static_cast<unsigned>(-n & (bits_per_word - 1));
@@ -408,6 +482,9 @@ CANN_ASC_STL_API constexpr __bit_iterator<_Cp, false> __copy_backward_aligned(
     }
     return result;
 }
+
+CANN_ASC_STL_DETAIL_DIAG_PUSH
+CANN_ASC_STL_DETAIL_DIAG_SUPPRESS_MSVC(4146)  // unary minus applied to unsigned type
 
 template <class _Cp, bool _IsConst>
 CANN_ASC_STL_API constexpr __bit_iterator<_Cp, false> __copy_backward_unaligned(
@@ -442,8 +519,21 @@ CANN_ASC_STL_API constexpr __bit_iterator<_Cp, false> __copy_backward_unaligned(
             }
             if (dn > 0) {
                 // result.__ctz_ == 0
+#if CANN_ASC_STL_DETAIL_BIT_REF_GCC_PRE9
+                // workaround for GCC pre-9 being really bad at tracking one-past-the-end pointers at constexpr
+                // can't check for is-constant-evaluated, because GCC pre-9 also lacks _that_.
+                if (result.__seg_ == first.__seg_ + 1) {
+                    result.__seg_ = first.__seg_;
+                } else {
+                    --result.__seg_;
+                }
+#else   // GCC < 9
                 --result.__seg_;
+#endif  // !GCC || GCC >= 9
+                CANN_ASC_STL_DETAIL_DIAG_PUSH
+                CANN_ASC_STL_DETAIL_DIAG_SUPPRESS_MSVC(4146)  // unary minus applied to unsigned type
                 result.__ctz_ = static_cast<unsigned>(-dn & (bits_per_word - 1));
+                CANN_ASC_STL_DETAIL_DIAG_POP
                 m = ~__storage_type(0) << result.__ctz_;
                 *result.__seg_ &= ~m;
                 last.__ctz_ -= static_cast<unsigned>(dn + ddn);
@@ -486,6 +576,8 @@ CANN_ASC_STL_API constexpr __bit_iterator<_Cp, false> __copy_backward_unaligned(
     }
     return result;
 }
+
+CANN_ASC_STL_DETAIL_DIAG_POP
 
 template <class _Cp, bool _IsConst>
 CANN_ASC_STL_API constexpr __bit_iterator<_Cp, false> copy_backward(
@@ -916,7 +1008,6 @@ public:
     {}
 
     constexpr __bit_iterator(const __bit_iterator<_Cp, _IsConst>& it) = default;
-    constexpr __bit_iterator& operator=(const __bit_iterator<_Cp, _IsConst>& it) = default;
 
     template <bool _OtherIsConst, class = enable_if_t<_IsConst == true && _OtherIsConst == false>>
     CANN_ASC_STL_API constexpr __bit_iterator(const __bit_iterator<_Cp, _OtherIsConst>& it) noexcept
@@ -1003,6 +1094,12 @@ public:
 
     CANN_ASC_STL_API constexpr friend difference_type operator-(const __bit_iterator& x, const __bit_iterator& y)
     {
+#if CANN_ASC_STL_DETAIL_BIT_REF_GCC_PRE9 && __GNUC__ >= 8
+        // workaround for GCC 8 being really bad at tracking one-past-the-end pointers at constexpr
+        if (y.__seg_ && y.__seg_ != x.__seg_) {
+            return (x.__seg_ == y.__seg_ + 1 ? 1 : x.__seg_ - y.__seg_) * __bits_per_word + x.__ctz_ - y.__ctz_;
+        }
+#endif  // GCC [8, 9)
         return (x.__seg_ - y.__seg_) * __bits_per_word + x.__ctz_ - y.__ctz_;
     }
 
@@ -1095,6 +1192,12 @@ private:
     template <class _Dp, bool _IC1, bool _IC2>
     CANN_ASC_STL_API constexpr friend bool equal(
         __bit_iterator<_Dp, _IC1>, __bit_iterator<_Dp, _IC1>, __bit_iterator<_Dp, _IC2>);
+    template <bool _ToFind, class _Dp, bool _IC>
+    CANN_ASC_STL_API constexpr friend __bit_iterator<_Dp, _IC> __find_bool(
+        __bit_iterator<_Dp, _IC>, typename _Dp::size_type);
+    template <bool _ToCount, class _Dp, bool _IC>
+    CANN_ASC_STL_API constexpr friend typename __bit_iterator<_Dp, _IC>::difference_type __count_bool(
+        __bit_iterator<_Dp, _IC>, typename _Dp::size_type);
 };
 
 CANN_ASC_STL_END_NAMESPACE

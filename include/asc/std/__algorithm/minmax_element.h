@@ -33,9 +33,37 @@
 #include <asc/std/__functional/invoke.h>
 #include <asc/std/__iterator/iterator_traits.h>
 #include <asc/std/__type_traits/is_callable.h>
+#include <asc/std/__type_traits/is_convertible.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/pair.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
+
+namespace __minmax_element_detail {
+
+// dev 版在 <asc/std/__iterator/iterator_traits.h> 定义的遍历探针的最小等价内联
+// （基座 reverse_iterator.h 同款模式）：先探测 iterator_traits<Iter>::iterator_category，
+// 再探测 Iter::iterator_concept 成员，均 SFINAE 友好。
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_category_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool
+    __has_iterator_category_convertible_to<Iter, Tag, void_t<typename iterator_traits<Iter>::iterator_category>> =
+        is_convertible_v<typename iterator_traits<Iter>::iterator_category, Tag>;
+
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_concept_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool __has_iterator_concept_convertible_to<Iter, Tag, void_t<typename Iter::iterator_concept>> =
+    is_convertible_v<typename Iter::iterator_concept, Tag>;
+
+template <class Iter>
+inline constexpr bool __has_input_traversal = __has_iterator_category_convertible_to<Iter, input_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, input_iterator_tag>;
+
+}  // namespace __minmax_element_detail
 
 template <class _Comp, class _Proj>
 class _MinmaxElementLessFunc {
@@ -57,17 +85,12 @@ template <class _Iter, class _Sent, class _Proj, class _Comp>
 CANN_ASC_STL_API constexpr pair<_Iter, _Iter> __minmax_element_impl(
     _Iter __first, _Sent __last, _Comp& __comp, _Proj& __proj)
 {
-    pair<_Iter, _Iter> __result(__first, __first);
-
-    if (__first == __last) {
-        return __result;
-    }
-
-    if (++__first == __last) {
-        return __result;
-    }
-
     auto __less = _MinmaxElementLessFunc<_Comp, _Proj>(__comp, __proj);
+
+    pair<_Iter, _Iter> __result(__first, __first);
+    if (__first == __last || ++__first == __last) {
+        return __result;
+    }
 
     if (__less(__first, __result.first)) {
         __result.first = __first;
@@ -110,6 +133,8 @@ template <class _ForwardIterator, class _Compare>
 [[nodiscard]] CANN_ASC_STL_API constexpr pair<_ForwardIterator, _ForwardIterator> minmax_element(
     _ForwardIterator __first, _ForwardIterator __last, _Compare __comp)
 {
+    static_assert(__minmax_element_detail::__has_input_traversal<_ForwardIterator>,
+        "::asc::std::minmax_element requires a ForwardIterator");
     static_assert(
         __is_callable<_Compare, decltype(*__first), decltype(*__first)>::value, "The comparator has to be callable");
     auto __proj = identity();
@@ -117,11 +142,11 @@ template <class _ForwardIterator, class _Compare>
 }
 
 template <class _ForwardIterator>
-// NOLINTNEXTLINE(build/include_what_you_use)
-[[nodiscard]] CANN_ASC_STL_API constexpr pair<_ForwardIterator, _ForwardIterator> minmax_element(
+[[nodiscard]] CANN_ASC_STL_API constexpr pair<_ForwardIterator, _ForwardIterator>  // NOLINT(build/include_what_you_use)
+minmax_element(                                                                    // NOLINT(build/include_what_you_use)
     _ForwardIterator __first, _ForwardIterator __last)
 {
-    return ::asc::std::minmax_element(__first, __last, __less{});  // NOLINT(build/include_what_you_use)
+    return ::asc::std::minmax_element(__first, __last, __less{});
 }
 
 CANN_ASC_STL_END_NAMESPACE

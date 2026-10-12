@@ -41,5 +41,6 @@
 #include <asc/std/__mdspan/submdspan_extents.h>
 #include <asc/std/__mdspan/submdspan_helper.h>
 #include <asc/std/__mdspan/submdspan_mapping.h>
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_MDSPAN

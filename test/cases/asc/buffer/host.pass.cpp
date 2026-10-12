@@ -16,8 +16,7 @@
 #include <asc/buffer>
 #include <asc/memory_pool>
 #include <cassert>
-
-#include "../../../support/mock_memory.h"
+#include <cstring>
 
 namespace {
 alignas(64) unsigned char device_storage[4096];
@@ -114,17 +113,17 @@ int aclrtMemcpyAsync(
     (void)dsz;
     (void)stream;
     if (kind == 3) {
-        asc_stl_test::move_bytes(destination, source, bytes);
+        std::memmove(destination, source, bytes);
         return 0;
     }
-    asc_stl_test::copy_bytes(destination, source, bytes);
+    std::memcpy(destination, source, bytes);
     return 0;
 }
 int aclrtMemsetAsync(void* destination, __SIZE_TYPE__ dsz, int value, __SIZE_TYPE__ bytes, void* stream)
 {
     (void)dsz;
     (void)stream;
-    asc_stl_test::fill_bytes(destination, value, bytes);
+    std::memset(destination, value, bytes);
     return 0;
 }
 }

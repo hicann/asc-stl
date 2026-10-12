@@ -27,7 +27,6 @@
 #pragma system_header
 #endif
 
-#include <asc/__algorithm/byte_operations.h>
 #include <asc/__parallel/adjacent_difference.h>
 #include <asc/__parallel/find.h>
 #include <asc/__parallel/for.h>
@@ -83,66 +82,6 @@ CANN_ASC_STL_HOST_API execution_status submit(device_policy policy, Operation op
     static_assert(__is_trivially_copyable(Operation), "ASC-STL parallel operation state must be trivially copyable");
     execution_status status = validate_parallel_policy(policy);
     return status.success() ? submit_parallel_operation(policy.stream(), operation) : status;
-}
-
-template <class Value>
-struct synchronous_slot {
-    device_policy backend_policy{};
-    Value* device_value{};
-    Value host_value{};
-    execution_status status{};
-};
-
-struct synchronous_indices {
-    ::asc::std::size_t values[2]{};
-};
-
-template <class Value>
-CANN_ASC_STL_HOST_API synchronous_slot<Value> make_synchronous_slot(device_policy policy) noexcept
-{
-    synchronous_slot<Value> slot{};
-    temporary_storage_ref storage = policy.temporary_storage();
-    if (!policy.stream()) {
-        slot.status = execution_status{execution_errc::invalid_argument};
-        return slot;
-    }
-    if (storage.data() == nullptr || storage.space() != memory_space::global || storage.size_bytes() < sizeof(Value)) {
-        slot.status = execution_status{execution_errc::insufficient_storage};
-        return slot;
-    }
-    const auto begin = reinterpret_cast<__UINTPTR_TYPE__>(storage.data());
-    const auto end = begin + storage.size_bytes();
-    if (end < begin) {
-        slot.status = execution_status{execution_errc::invalid_argument};
-        return slot;
-    }
-    const auto address = (end - sizeof(Value)) & ~static_cast<__UINTPTR_TYPE__>(alignof(Value) - 1);
-    if (address < begin) {
-        slot.status = execution_status{execution_errc::insufficient_storage};
-        return slot;
-    }
-    slot.backend_policy = policy.with_temporary_storage(
-        temporary_storage_ref(storage.data(), static_cast<__SIZE_TYPE__>(address - begin), memory_space::global));
-    slot.device_value = reinterpret_cast<Value*>(address);
-    return slot;
-}
-
-CANN_ASC_STL_HOST_API execution_status finish_synchronous(device_policy policy, execution_status status) noexcept
-{
-    if (!status.success())
-        return status;
-    return policy.stream().synchronize() ? execution_status{} : execution_status{execution_errc::backend_error, -1};
-}
-
-template <class Value>
-CANN_ASC_STL_HOST_API execution_status finish_synchronous(
-    device_policy policy, execution_status status, synchronous_slot<Value>& slot) noexcept
-{
-    if (!status.success())
-        return status;
-    status = copy_bytes_runtime(
-        policy.stream(), &slot.host_value, slot.device_value, sizeof(Value), copy_direction::device_to_host);
-    return finish_synchronous(policy, status);
 }
 #endif
 
@@ -505,7 +444,8 @@ template <class Forward, class T>
 CANN_ASC_STL_HOST_API execution_status replace(
     device_policy policy, Forward first, Forward last, const T& old_value, const T& new_value) noexcept
 {
-    return detail::submit(policy, detail::replace_value_operation<Forward, T>{first, last, old_value, new_value});
+    return detail::submit(
+        policy, detail::replace_operation<Forward, T, detail::equal_value<T>>{first, last, {old_value}, new_value});
 }
 
 template <class Input, class Output, class T>
@@ -513,7 +453,7 @@ CANN_ASC_STL_HOST_API execution_status replace_copy(
     device_policy policy, Input first, Input last, Output result, const T& old_value, const T& new_value) noexcept
 {
     return detail::submit(policy,
-        detail::replace_copy_equal_operation<Input, Output, T, detail::equal_value<T>>{
+        detail::replace_copy_operation<Input, Output, T, detail::equal_value<T>>{
             first, last, result, {old_value}, new_value});
 }
 

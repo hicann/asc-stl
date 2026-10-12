@@ -28,37 +28,43 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/__detail/diagnostics.h>
 #include <asc/std/__type_traits/common_type.h>
 #include <asc/std/__type_traits/make_signed.h>
 #include <asc/std/cstddef>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class Container>
-CANN_ASC_STL_API constexpr auto size(const Container& value) noexcept(noexcept(value.size())) -> decltype(value.size())
+template <class _Cont>
+CANN_ASC_STL_API constexpr auto size(const _Cont& __c) noexcept(noexcept(__c.size())) -> decltype(__c.size())
 {
-    return value.size();
+    return __c.size();
 }
 
-template <class T, size_t Size>
-CANN_ASC_STL_API constexpr size_t size(const T (&)[Size]) noexcept
+template <class _Tp, size_t _Sz>
+CANN_ASC_STL_API constexpr size_t size(const _Tp (&)[_Sz]) noexcept
 {
-    return Size;
+    return _Sz;
 }
 
-template <class Container>
-CANN_ASC_STL_API constexpr auto ssize(
-    const Container& value) noexcept -> common_type_t<ptrdiff_t, make_signed_t<decltype(value.size())>>
+template <class _Cont>
+CANN_ASC_STL_API constexpr auto ssize(const _Cont& __c) noexcept(
+    noexcept(static_cast<common_type_t<ptrdiff_t, make_signed_t<decltype(__c.size())>>>(
+        __c.size()))) -> common_type_t<ptrdiff_t, make_signed_t<decltype(__c.size())>>
 {
-    using Result = common_type_t<ptrdiff_t, make_signed_t<decltype(value.size())>>;
-    return static_cast<Result>(value.size());
+    return static_cast<common_type_t<ptrdiff_t, make_signed_t<decltype(__c.size())>>>(__c.size());
 }
 
-template <class T, ptrdiff_t Size>
-CANN_ASC_STL_API constexpr ptrdiff_t ssize(const T (&)[Size]) noexcept
+// GCC warns about the conversion of the array bound from ptrdiff_t to size_t in the
+// parameter type; suppress it for the duration of this declaration.
+CANN_ASC_STL_DETAIL_DIAGNOSTIC_PUSH()
+CANN_ASC_STL_DETAIL_DIAGNOSTIC_IGNORE("-Wsign-conversion")
+template <class _Tp, ptrdiff_t _Sz>
+CANN_ASC_STL_API constexpr ptrdiff_t ssize(const _Tp (&)[_Sz]) noexcept
 {
-    return Size;
+    return _Sz;
 }
+CANN_ASC_STL_DETAIL_DIAGNOSTIC_POP()
 
 CANN_ASC_STL_END_NAMESPACE
 

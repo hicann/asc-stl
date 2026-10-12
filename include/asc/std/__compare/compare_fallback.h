@@ -214,7 +214,7 @@ CANN_ASC_STL_API constexpr partial_ordering partial_fallback(T&& left, U& right)
 
 }  // namespace detail
 
-struct __compare_strong_order_fallback_fn {
+struct compare_strong_order_fallback {
     template <class T, class U>
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr strong_ordering operator()(T&& left, U&& right) const
     {
@@ -222,7 +222,7 @@ struct __compare_strong_order_fallback_fn {
     }
 };
 
-struct __compare_weak_order_fallback_fn {
+struct compare_weak_order_fallback {
     template <class T, class U>
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr weak_ordering operator()(T&& left, U&& right) const
     {
@@ -230,17 +230,13 @@ struct __compare_weak_order_fallback_fn {
     }
 };
 
-struct __compare_partial_order_fallback_fn {
+struct compare_partial_order_fallback {
     template <class T, class U>
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr partial_ordering operator()(T&& left, U&& right) const
     {
         return ::asc::std::detail::partial_fallback(static_cast<T&&>(left), right);
     }
 };
-
-inline constexpr __compare_strong_order_fallback_fn compare_strong_order_fallback{};
-inline constexpr __compare_weak_order_fallback_fn compare_weak_order_fallback{};
-inline constexpr __compare_partial_order_fallback_fn compare_partial_order_fallback{};
 
 CANN_ASC_STL_END_NAMESPACE
 

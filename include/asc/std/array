@@ -79,10 +79,12 @@ struct array {
     T elements[Size];
     CANN_ASC_STL_API constexpr reference operator[](size_type index) noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(index < Size, "out-of-bounds access in std::array<T, N>");
         return elements[index];
     }
     CANN_ASC_STL_API constexpr const_reference operator[](size_type index) const noexcept
     {
+        CANN_ASC_STL_DETAIL_ASSERT(index < Size, "out-of-bounds access in std::array<T, N>");
         return elements[index];
     }
     CANN_ASC_STL_API constexpr reference front() noexcept
@@ -173,7 +175,8 @@ struct array {
     {
         (void)::asc::std::fill_n(begin(), Size, value);
     }
-    CANN_ASC_STL_API constexpr void swap(array& other) noexcept
+    // 标准契约：仅当元素交换不抛时 noexcept（无条件 noexcept 会让可抛交换 terminate）。
+    CANN_ASC_STL_API constexpr void swap(array& other) noexcept(is_nothrow_swappable_v<T>)
     {
         (void)::asc::std::swap_ranges(begin(), end(), other.begin());
     }
@@ -193,27 +196,39 @@ struct array<T, 0> {
     using const_reverse_iterator = ::asc::std::reverse_iterator<const_iterator>;
     CANN_ASC_STL_API constexpr reference operator[](size_type) noexcept
     {
-        return *static_cast<pointer>(nullptr);
+        CANN_ASC_STL_DETAIL_ASSERT(false, "cannot call array<T, 0>::operator[] on a zero-sized array");
+        CANN_ASC_STL_DETAIL_UNREACHABLE();
+        return *data();
     }
     CANN_ASC_STL_API constexpr const_reference operator[](size_type) const noexcept
     {
-        return *static_cast<const_pointer>(nullptr);
+        CANN_ASC_STL_DETAIL_ASSERT(false, "cannot call array<T, 0>::operator[] on a zero-sized array");
+        CANN_ASC_STL_DETAIL_UNREACHABLE();
+        return *data();
     }
     CANN_ASC_STL_API constexpr reference front() noexcept
     {
-        return *static_cast<pointer>(nullptr);
+        CANN_ASC_STL_DETAIL_ASSERT(false, "cannot call array<T, 0>::front() on a zero-sized array");
+        CANN_ASC_STL_DETAIL_UNREACHABLE();
+        return *data();
     }
     CANN_ASC_STL_API constexpr const_reference front() const noexcept
     {
-        return *static_cast<const_pointer>(nullptr);
+        CANN_ASC_STL_DETAIL_ASSERT(false, "cannot call array<T, 0>::front() on a zero-sized array");
+        CANN_ASC_STL_DETAIL_UNREACHABLE();
+        return *data();
     }
     CANN_ASC_STL_API constexpr reference back() noexcept
     {
-        return *static_cast<pointer>(nullptr);
+        CANN_ASC_STL_DETAIL_ASSERT(false, "cannot call array<T, 0>::back() on a zero-sized array");
+        CANN_ASC_STL_DETAIL_UNREACHABLE();
+        return *data();
     }
     CANN_ASC_STL_API constexpr const_reference back() const noexcept
     {
-        return *static_cast<const_pointer>(nullptr);
+        CANN_ASC_STL_DETAIL_ASSERT(false, "cannot call array<T, 0>::back() on a zero-sized array");
+        CANN_ASC_STL_DETAIL_UNREACHABLE();
+        return *data();
     }
     CANN_ASC_STL_API constexpr pointer data() noexcept
     {
@@ -284,9 +299,13 @@ struct array<T, 0> {
         return 0;
     }
     CANN_ASC_STL_API constexpr void fill(const T&) noexcept
-    {}
+    {
+        static_assert(!is_const_v<T>, "cannot fill zero-sized array of type 'const T'");
+    }
     CANN_ASC_STL_API constexpr void swap(array&) noexcept
-    {}
+    {
+        static_assert(!is_const_v<T>, "cannot swap zero-sized array of type 'const T'");
+    }
 };
 template <class T, size_t Size>
 CANN_ASC_STL_API constexpr bool operator==(const array<T, Size>& left, const array<T, Size>& right)
@@ -302,6 +321,30 @@ template <class T, size_t Size>
 CANN_ASC_STL_API constexpr bool operator<(const array<T, Size>& left, const array<T, Size>& right)
 {
     return ::asc::std::lexicographical_compare(left.begin(), left.end(), right.begin(), right.end());
+}
+template <class T, size_t Size>
+CANN_ASC_STL_API constexpr bool operator>(const array<T, Size>& left, const array<T, Size>& right)
+{
+    return right < left;
+}
+template <class T, size_t Size>
+CANN_ASC_STL_API constexpr bool operator<=(const array<T, Size>& left, const array<T, Size>& right)
+{
+    return !(right < left);
+}
+template <class T, size_t Size>
+CANN_ASC_STL_API constexpr bool operator>=(const array<T, Size>& left, const array<T, Size>& right)
+{
+    return !(left < right);
+}
+// CTAD 推导指引：array{v1, v2, ...}（同类型元素包）。
+template <class T, class... Args, enable_if_t<(is_same_v<T, Args> && ...), int> = 0>
+array(T, Args...) -> array<T, 1 + sizeof...(Args)>;
+// 自由 swap：仅元素交换不抛时参与重载。
+template <class T, size_t Size, enable_if_t<Size == 0 || is_nothrow_swappable_v<T>, int> = 0>
+CANN_ASC_STL_API constexpr void swap(array<T, Size>& left, array<T, Size>& right) noexcept(noexcept(left.swap(right)))
+{
+    left.swap(right);
 }
 template <size_t Index, class T, size_t Size>
 CANN_ASC_STL_API constexpr T& get(array<T, Size>& value) noexcept
@@ -332,23 +375,37 @@ struct tuple_element<Index, array<T, Size>> {
     static_assert(Index < Size, "array tuple_element index out of bounds");
     using type = T;
 };
-template <class T, size_t Size>
-CANN_ASC_STL_API constexpr array<remove_cv_t<T>, Size> to_array(T (&source)[Size])
+#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+// 直接花括号构造（经索引序列），不要求元素可默认构造。
+template <class T, size_t Size, size_t... Index>
+CANN_ASC_STL_API constexpr array<remove_cv_t<T>, Size> __to_array_lvalue_impl(
+    T (&source)[Size], index_sequence<Index...>)
 {
-    array<remove_cv_t<T>, Size> result{};
-    for (size_t index = 0; index < Size; ++index)
-        result[index] = source[index];
-    return result;
+    return {{source[Index]...}};
+}
+template <class T, size_t Size, size_t... Index>
+CANN_ASC_STL_API constexpr array<remove_cv_t<T>, Size> __to_array_rvalue_impl(
+    T (&&source)[Size], index_sequence<Index...>)
+{
+    return {{::asc::std::move(source[Index])...}};
+}
+template <class T, size_t Size>
+CANN_ASC_STL_API constexpr array<remove_cv_t<T>, Size> to_array(T (&source)[Size]) noexcept(
+    is_nothrow_constructible_v<T, T&>)
+{
+    static_assert(!is_array_v<T>, "to_array does not accept multidimensional arrays");
+    static_assert(is_constructible_v<T, T&>, "to_array requires copy constructible elements");
+    return ::asc::std::__to_array_lvalue_impl(source, make_index_sequence<Size>());
 }
 template <class T, size_t Size>
 CANN_ASC_STL_API constexpr array<remove_cv_t<T>, Size> to_array(T (&&source)[Size]) noexcept(
     is_nothrow_move_constructible_v<T>)
 {
-    array<remove_cv_t<T>, Size> result{};
-    for (size_t index = 0; index < Size; ++index)
-        result[index] = ::asc::std::move(source[index]);
-    return result;
+    static_assert(!is_array_v<T>, "to_array does not accept multidimensional arrays");
+    static_assert(is_move_constructible_v<T>, "to_array requires move constructible elements");
+    return ::asc::std::__to_array_rvalue_impl(::asc::std::move(source), make_index_sequence<Size>());
 }
+#endif
 
 CANN_ASC_STL_END_NAMESPACE
 

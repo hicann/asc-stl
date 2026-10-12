@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CANN_ASC_STL_ASC_STD___TYPE_TRAITS_MAYBE_CONST_H
-#define CANN_ASC_STL_ASC_STD___TYPE_TRAITS_MAYBE_CONST_H
+#ifndef CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_MAYBE_CONST_H
+#define CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_MAYBE_CONST_H
 
 #include <asc/__config>
 
@@ -28,13 +28,18 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+
 #include <asc/std/__type_traits/conditional.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <bool _Const, class _Tp>
-using maybe_const = conditional_t<_Const, const _Tp, _Tp>;
+using __maybe_const = conditional_t<_Const, const _Tp, _Tp>;
+
+// 兼容 master 侧既有消费方使用的旧名
+template <bool _Const, class _Tp>
+using maybe_const = __maybe_const<_Const, _Tp>;
 
 CANN_ASC_STL_END_NAMESPACE
 
-#endif  // CANN_ASC_STL_ASC_STD___TYPE_TRAITS_MAYBE_CONST_H
+#endif  // CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_MAYBE_CONST_H

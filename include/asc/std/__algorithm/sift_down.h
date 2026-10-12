@@ -28,6 +28,7 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__algorithm/comp_ref_type.h>
 #include <asc/std/__algorithm/iterator_operations.h>
 #include <asc/std/__iterator/iterator_traits.h>
 #include <asc/std/__utility/move.h>
@@ -95,6 +96,7 @@ CANN_ASC_STL_API constexpr _RandomAccessIterator __floyd_sift_down(_RandomAccess
     typename iterator_traits<_RandomAccessIterator>::difference_type __len)
 {
     using difference_type = typename iterator_traits<_RandomAccessIterator>::difference_type;
+    CANN_ASC_STL_DETAIL_ASSERT(__len >= 2, "shouldn't be called unless __len >= 2");
 
     _RandomAccessIterator __hole = __first;
     _RandomAccessIterator __child_i = __first;

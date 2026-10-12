@@ -46,8 +46,12 @@ void iter_move();
 template <class T, class = void>
 struct __has_adl_iter_move : false_type {};
 
+// 仅当 remove_cvref_t<T> 是类/联合/枚举类型时，ADL 找到的 iter_move 才构成定制点；
+// 标量类型的关联命名空间不含候选，保持走解引用分派路径。
 template <class T>
-struct __has_adl_iter_move<T, void_t<decltype(iter_move(::asc::std::declval<T>()))>> : true_type {};
+struct __has_adl_iter_move<T,
+    void_t<decltype(iter_move(::asc::std::declval<T>())), enable_if_t<__class_or_enum<remove_cvref_t<T>>>>>
+    : true_type {};
 
 template <class T, bool = is_lvalue_reference_v<decltype(*::asc::std::declval<T>())>>
 struct __deref_move;

@@ -31,6 +31,8 @@
 #include <asc/std/__linalg/conj_if_needed.h>
 #include <asc/std/__type_traits/add_const.h>
 #include <asc/std/__type_traits/is_arithmetic.h>
+#include <asc/std/__type_traits/is_constructible.h>
+#include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/remove_const.h>
 #include <asc/std/__utility/declval.h>
 #include <asc/std/mdspan>
@@ -39,58 +41,86 @@ namespace asc::std::linalg {
 
 template <class NestedAccessor>
 class conjugated_accessor {
-public:
+private:
     using nested_element_type = typename NestedAccessor::element_type;
-    using element_type = const decltype(conj_if_needed(::asc::std::declval<nested_element_type>()));
+    using conj_result_type = decltype(conj_if_needed(::asc::std::declval<nested_element_type>()));
+
+public:
+    using element_type = add_const_t<conj_result_type>;
     using reference = remove_const_t<element_type>;
     using data_handle_type = typename NestedAccessor::data_handle_type;
     using offset_policy = conjugated_accessor<typename NestedAccessor::offset_policy>;
 
     CANN_ASC_STL_API constexpr conjugated_accessor() = default;
-    CANN_ASC_STL_API constexpr explicit conjugated_accessor(const NestedAccessor& accessor) : accessor_(accessor)
+
+    CANN_ASC_STL_API constexpr conjugated_accessor(const NestedAccessor& accessor) : nested_accessor_(accessor)
     {}
 
-    template <class OtherNestedAccessor>
-    CANN_ASC_STL_API constexpr explicit conjugated_accessor(const conjugated_accessor<OtherNestedAccessor>& other)
-        : accessor_(other.nested_accessor())
+    // 嵌套访问器可隐式转换：非显式转换构造（mdspan 访问器组合转换的标准要求）。
+    template <class OtherNestedAccessor,
+        enable_if_t<is_constructible_v<NestedAccessor, const OtherNestedAccessor&> &&
+                is_convertible_v<OtherNestedAccessor, NestedAccessor>,
+            int> = 0>
+    CANN_ASC_STL_API constexpr conjugated_accessor(const conjugated_accessor<OtherNestedAccessor>& other)
+        : nested_accessor_(other.nested_accessor())
     {}
 
-    CANN_ASC_STL_API constexpr reference access(data_handle_type pointer, size_t index) const
+    // 嵌套访问器不可隐式转换：显式转换构造。
+    template <class OtherNestedAccessor,
+        enable_if_t<is_constructible_v<NestedAccessor, const OtherNestedAccessor&> &&
+                !is_convertible_v<OtherNestedAccessor, NestedAccessor>,
+            int> = 0>
+    CANN_ASC_STL_API explicit constexpr conjugated_accessor(const conjugated_accessor<OtherNestedAccessor>& other)
+        : nested_accessor_(other.nested_accessor())
+    {}
+
+    CANN_ASC_STL_API constexpr reference access(data_handle_type pointer, size_t index) const noexcept
     {
-        return conj_if_needed(nested_element_type(accessor_.access(pointer, index)));
+        return conj_if_needed(nested_element_type(nested_accessor_.access(pointer, index)));
     }
 
     CANN_ASC_STL_API constexpr typename offset_policy::data_handle_type offset(
-        data_handle_type pointer, size_t index) const
+        data_handle_type pointer, size_t index) const noexcept
     {
-        return accessor_.offset(pointer, index);
+        return nested_accessor_.offset(pointer, index);
     }
 
     CANN_ASC_STL_API constexpr const NestedAccessor& nested_accessor() const noexcept
     {
-        return accessor_;
+        return nested_accessor_;
     }
 
 private:
-    NestedAccessor accessor_{};
+    NestedAccessor nested_accessor_;
 };
 
 template <class Element, class Extents, class Layout, class Accessor>
 CANN_ASC_STL_API constexpr auto conjugated(mdspan<Element, Extents, Layout, Accessor> input)
 {
-    if constexpr (!is_arithmetic_v<Element>) {
-        using result_accessor = conjugated_accessor<Accessor>;
-        return mdspan<typename result_accessor::element_type, Extents, Layout, result_accessor>(
-            input.data_handle(), input.mapping(), result_accessor(input.accessor()));
-    } else {
+    using value_type = typename decltype(input)::value_type;
+    // P3050 优化：算术类型、或找不到限定 conj 的类型不额外包装 conjugated_accessor，
+    // 直接原样返回（仅嵌套 conjugated_accessor 场景由下方特化重载解包）。
+    // 算术分支先短路，避免求 _HasConj<算术> 时实例化本库 float-only 的
+    // complex<T>（标量 conj 重载返回 complex<T>）导致硬错误。
+    if constexpr (is_arithmetic_v<value_type>) {
         return mdspan<Element, Extents, Layout, Accessor>(input.data_handle(), input.mapping(), input.accessor());
+    } else if constexpr (!__conj_if_needed::_HasConj<value_type>) {
+        return mdspan<Element, Extents, Layout, Accessor>(input.data_handle(), input.mapping(), input.accessor());
+    } else {
+        using return_element_type = typename conjugated_accessor<Accessor>::element_type;
+        using return_accessor_type = conjugated_accessor<Accessor>;
+        return mdspan<return_element_type, Extents, Layout, return_accessor_type>{
+            input.data_handle(), input.mapping(), return_accessor_type(input.accessor())};
     }
 }
 
+// Conjugation is self-annihilating
 template <class Element, class Extents, class Layout, class NestedAccessor>
 CANN_ASC_STL_API constexpr auto conjugated(mdspan<Element, Extents, Layout, conjugated_accessor<NestedAccessor>> input)
 {
-    return mdspan<typename NestedAccessor::element_type, Extents, Layout, NestedAccessor>(
+    using return_element_type = typename NestedAccessor::element_type;
+    using return_accessor_type = NestedAccessor;
+    return mdspan<return_element_type, Extents, Layout, return_accessor_type>(
         input.data_handle(), input.mapping(), input.accessor().nested_accessor());
 }
 

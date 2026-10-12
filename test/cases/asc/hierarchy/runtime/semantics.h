@@ -19,6 +19,7 @@
 
 #include <asc/hierarchy>
 #include <acl/acl.h>
+#include "../../../../support/b016_semantics.h"
 
 void launch_asc_stl_b016_cannsim(int*, aclrtStream);
 void launch_asc_stl_b016(int*, aclrtStream);
@@ -38,7 +39,7 @@ CANN_ASC_STL_DEVICE_API void evaluate(OutputPointer output)
 #else
     failures += asc::sub_block_count() == 0 || asc::sub_block_index() >= asc::sub_block_count();
 #endif
-    output[0] = failures;
+    output[0] = failures + asc_stl_b016_test::evaluate_range_data() + asc_stl_b016_test::evaluate_chrono();
 }
 }  // namespace asc_stl_b016_runtime
 #endif

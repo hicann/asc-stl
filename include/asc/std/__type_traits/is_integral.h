@@ -30,6 +30,18 @@
 #include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/remove_cv.h>
 
+// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_INT128() gate (dev
+// __asc/extended_data_types.h; the base __config does not provide it): the
+// compiler-provided 128-bit integer types are available on LP64 Linux targets
+// unless explicitly disabled.
+#if !defined(CANN_ASC_STL_DETAIL_HAS_INT128)
+#if !defined(ASC_DISABLE_INT128_SUPPORT) && (defined(__linux__) || defined(__LP64__)) && defined(__SIZEOF_INT128__)
+#define CANN_ASC_STL_DETAIL_HAS_INT128() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_INT128() 0
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HAS_INT128
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 #if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_integral)
@@ -80,6 +92,11 @@ inline constexpr bool __is_integral_helper_v<long> = true;
 template <>
 inline constexpr bool __is_integral_helper_v<long long> = true;
 
+#if CANN_ASC_STL_DETAIL_HAS_INT128()
+template <>
+inline constexpr bool __is_integral_helper_v<__int128_t> = true;
+#endif  // CANN_ASC_STL_DETAIL_HAS_INT128()
+
 template <>
 inline constexpr bool __is_integral_helper_v<unsigned char> = true;
 
@@ -94,6 +111,11 @@ inline constexpr bool __is_integral_helper_v<unsigned long> = true;
 
 template <>
 inline constexpr bool __is_integral_helper_v<unsigned long long> = true;
+
+#if CANN_ASC_STL_DETAIL_HAS_INT128()
+template <>
+inline constexpr bool __is_integral_helper_v<__uint128_t> = true;
+#endif  // CANN_ASC_STL_DETAIL_HAS_INT128()
 
 template <class T>
 inline constexpr bool is_integral_v = __is_integral_helper_v<asc::std::remove_cv_t<T> >;

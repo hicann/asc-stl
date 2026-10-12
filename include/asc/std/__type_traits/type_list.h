@@ -403,11 +403,21 @@ struct __type_try_catch {
 // Implementation for indexing into a list of types:
 #if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__type_pack_element)
 
+namespace __detail {
+// On some versions of gcc, __type_pack_element cannot be mangled so
+// hide it behind a named template.
+template <size_t Ip>
+struct __type_index_fn {
+    template <class... Ts>
+    using __call = __type_pack_element<Ip, Ts...>;
+};
+}  // namespace __detail
+
 template <size_t Ip, class... Ts>
-using __type_index_c = __type_pack_element<Ip, Ts...>;
+using __type_index_c = __type_call<__detail::__type_index_fn<Ip>, Ts...>;
 
 template <class Ip, class... Ts>
-using __type_index = __type_index_c<Ip::value, Ts...>;
+using __type_index = __type_call<__detail::__type_index_fn<Ip::value>, Ts...>;
 
 #else
 
@@ -434,14 +444,132 @@ CANN_ASC_STL_API __type_tuple_elem<Ip, Ty> __type_tuple_get(__type_tuple_elem<Ip
 template <size_t Ip, class... Ts>
 using __type_tuple_element_t = __type<decltype(__detail::__type_tuple_get<Ip>(__type_tuple<Ts...>{}))>;
 
-struct __type_index_fn {
+// Slow path used for larger indices: resolves the element through the
+// inheritance-based tuple above.
+struct __type_index_large_size_fn {
     template <class Ip, class... Ts>
     using __call = __type_tuple_element_t<Ip::value, Ts...>;
+};
+
+// Fast path for small indices: a ladder of explicit specializations returns
+// the (N+1)-th parameter pack element directly, without instantiating the
+// inheritance-based tuple. The ladder covers indices < 16.
+template <size_t Ip>
+struct __type_index_small_size_fn;
+
+template <>
+struct __type_index_small_size_fn<0> {
+    template <class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<1> {
+    template <class, class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<2> {
+    template <class, class, class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<3> {
+    template <class, class, class, class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<4> {
+    template <class, class, class, class, class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<5> {
+    template <class, class, class, class, class, class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<6> {
+    template <class, class, class, class, class, class, class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<7> {
+    template <class, class, class, class, class, class, class, class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<8> {
+    template <class, class, class, class, class, class, class, class, class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<9> {
+    template <class, class, class, class, class, class, class, class, class, class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<10> {
+    template <class, class, class, class, class, class, class, class, class, class, class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<11> {
+    template <class, class, class, class, class, class, class, class, class, class, class, class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<12> {
+    template <class, class, class, class, class, class, class, class, class, class, class, class, class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<13> {
+    template <class, class, class, class, class, class, class, class, class, class, class, class, class, class Ty,
+        class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<14> {
+    template <class, class, class, class, class, class, class, class, class, class, class, class, class, class,
+        class Ty, class...>
+    using __call = Ty;
+};
+
+template <>
+struct __type_index_small_size_fn<15> {
+    template <class, class, class, class, class, class, class, class, class, class, class, class, class, class, class,
+        class Ty, class...>
+    using __call = Ty;
+};
+
+template <bool IsSmall>
+struct __type_index_select_fn : __type_index_large_size_fn  // Default for larger indices
+{};
+
+template <>
+struct __type_index_select_fn<true>  // Fast implementation for smaller indices
+{
+    template <class Ip, class... Ts>
+    using __call = __type_call_indirect<__type_index_small_size_fn<Ip::value>, Ts...>;
 };
 }  // namespace __detail
 
 template <class Ip, class... Ts>
-using __type_index = __type_call<__detail::__type_index_fn, Ip, Ts...>;
+using __type_index = __type_call<__detail::__type_index_select_fn<(Ip::value < 16)>, Ip, Ts...>;
 
 template <size_t Ip, class... Ts>
 using __type_index_c = __type_index<integral_constant<size_t, Ip>, Ts...>;

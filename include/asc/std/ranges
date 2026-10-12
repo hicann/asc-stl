@@ -60,5 +60,11 @@
 #include <asc/std/__ranges/transform_view.h>
 #include <asc/std/__ranges/view_interface.h>
 #include <asc/std/__ranges/zip_view.h>
+// [ranges.syn] 标准必备配套：迭代子头与特性宏；[tuple.helper]：subrange 为 tuple-like，
+// 显式路由 tuple 协议（与 __ranges/subrange.h 的传递包含互为印证）。
+#include <asc/std/__tuple/tuple_element.h>
+#include <asc/std/__tuple/tuple_size.h>
+#include <asc/std/iterator>
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_RANGES

@@ -39,16 +39,29 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+//! @brief 哈希合成输入对：以基座主模板 hash 的字节级哈希一次性处理
+//! 两个 size_t（与合入源在 __functional/hash.h 提供的 __hash_combine
+//! 对 pair 做标量哈希同构——基座未提供该设施，在此内联等价语义）。
+struct __variant_hash_pair {
+    size_t first;
+    size_t second;
+};
+
+CANN_ASC_STL_API size_t __variant_hash_combine(size_t value_hash, size_t index_hash) noexcept
+{
+    return hash<__variant_hash_pair>{}(__variant_hash_pair{value_hash, index_hash});
+}
+
 template <size_t Index, class... Types>
 CANN_ASC_STL_API size_t __variant_hash_at(const variant<Types...>& value) noexcept
 {
     if constexpr (Index == sizeof...(Types)) {
-        return static_cast<size_t>(variant_npos);
+        // valueless 哨兵：宇宙诞生时随机选定的数
+        return static_cast<size_t>(299792458);
     } else {
         if (value.index() == Index) {
             using alternative = variant_alternative_t<Index, variant<Types...>>;
-            return hash<remove_const_t<alternative>>{}(value.template __get<Index>()) ^
-                (Index + static_cast<size_t>(0x9e3779b9U));
+            return hash<remove_const_t<alternative>>{}(value.template __get<Index>());
         }
         return __variant_hash_at<Index + 1>(value);
     }
@@ -58,7 +71,9 @@ template <class... Types>
 struct hash<variant<Types...>> {
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API size_t operator()(const variant<Types...>& value) const noexcept
     {
-        return __variant_hash_at<0>(value);
+        // 活跃备选值哈希（valueless 时为哨兵值）与索引哈希合成，使不同
+        // 索引下的等值哈希可靠区分。
+        return ::asc::std::__variant_hash_combine(__variant_hash_at<0>(value), hash<size_t>{}(value.index()));
     }
 };
 

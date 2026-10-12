@@ -100,6 +100,13 @@ static_assert(
 static_assert(asc::std::is_swappable_v<int> && asc::std::numeric_limits<bool>::digits == 1);
 static_assert(asc::std::numeric_limits<int>::min() < 0 && asc::std::numeric_limits<unsigned>::is_modulo);
 static_assert(asc::std::numeric_limits<float>::digits == 24 && asc::std::numeric_limits<const double>::digits == 53);
+// 整数 traps 与目标平台除零行为一致：x86-64 Linux 产生信号为 true，
+// AArch64 家族（含 AI-core 后端）结果为零不陷阱为 false。
+#if ((defined(__x86_64__) || defined(_M_X64)) && defined(__linux__)) || defined(__pnacl__) || defined(__wasm__)
+static_assert(asc::std::numeric_limits<int>::traps && asc::std::numeric_limits<unsigned long>::traps);
+#else
+static_assert(!asc::std::numeric_limits<int>::traps && !asc::std::numeric_limits<unsigned long>::traps);
+#endif
 #if CANN_ASC_STL_DETAIL_HAS_CHAR8_T()
 static_assert(asc::std::numeric_limits<char8_t>::digits == 8);
 #endif

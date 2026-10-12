@@ -31,9 +31,45 @@
 #include <asc/std/__algorithm/iter_swap.h>
 #include <asc/std/__algorithm/iterator_operations.h>
 #include <asc/std/__iterator/iterator_traits.h>
+#include <asc/std/__type_traits/conditional.h>
+#include <asc/std/__type_traits/is_base_of.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/move.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
+
+namespace __reverse_alg_detail {
+
+// The legacy `iterator_traits<Iter>::iterator_category`, or `void` when the iterator has none.
+template <class _Iter, class = void>
+struct __legacy_iterator_category {
+    using type = void;
+};
+
+template <class _Iter>
+struct __legacy_iterator_category<_Iter, void_t<typename iterator_traits<_Iter>::iterator_category>> {
+    using type = typename iterator_traits<_Iter>::iterator_category;
+};
+
+// C++20 iterators commonly communicate their category via a member `iterator_concept` instead of the
+// legacy `iterator_traits<Iter>::iterator_category`. Deduce the actual category from the more
+// permissive of the two so that iterators which only provide `iterator_concept` dispatch correctly.
+template <class _Iter, class = void>
+struct __iterator_category_or_concept {
+    using type = typename iterator_traits<_Iter>::iterator_category;
+};
+
+template <class _Iter>
+struct __iterator_category_or_concept<_Iter, void_t<typename _Iter::iterator_concept>> {
+    using _Concept = typename _Iter::iterator_concept;
+    using _Category = typename __legacy_iterator_category<_Iter>::type;
+    using type = conditional_t<is_base_of_v<_Concept, _Category>, _Category, _Concept>;
+};
+
+template <class _Iter>
+using __iterator_traits_category_or_concept_t = typename __iterator_category_or_concept<_Iter>::type;
+
+}  // namespace __reverse_alg_detail
 
 template <class _AlgPolicy, class _BidirectionalIterator>
 CANN_ASC_STL_API constexpr void __reverse_impl(
@@ -62,7 +98,7 @@ CANN_ASC_STL_API constexpr void __reverse_impl(
 template <class _AlgPolicy, class _BidirectionalIterator, class _Sentinel>
 CANN_ASC_STL_API constexpr void __reverse(_BidirectionalIterator __first, _Sentinel __last)
 {
-    using _IterCategory = typename iterator_traits<_BidirectionalIterator>::iterator_category;
+    using _IterCategory = __reverse_alg_detail::__iterator_traits_category_or_concept_t<_BidirectionalIterator>;
     ::asc::std::__reverse_impl<_AlgPolicy>(::asc::std::move(__first), ::asc::std::move(__last), _IterCategory());
 }
 

@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
+#include <asc/std/__bit/countl.h>
+#include <asc/std/__bit/countr.h>
+#include <asc/std/__bit/has_single_bit.h>
 #include <asc/std/__bit/integral.h>
+#include <asc/std/__bit/popcount.h>
+#include <asc/std/__bit/rotate.h>
 #include <asc/std/__complex/exponential_functions.h>
 #include <asc/std/__complex/inverse_hyperbolic_functions.h>
 #include <asc/std/__complex/inverse_trigonometric_functions.h>
@@ -22,9 +27,22 @@
 #include <asc/std/__complex/trigonometric_functions.h>
 
 namespace asc_stl_b015_runtime {
-CANN_ASC_STL_API void evaluate(__INT32_TYPE__* output)
+CANN_ASC_STL_API int evaluate_bit() noexcept
 {
     int failures = asc::std::bit_ceil(11U) != 16U;
+    failures += asc::std::bit_floor(11U) != 8U;
+    failures += asc::std::bit_width(8U) != 4;
+    failures += asc::std::countl_zero(0U) != 32;
+    failures += asc::std::countr_zero(0U) != 32;
+    failures += asc::std::popcount(0xffffffffU) != 32;
+    failures += !asc::std::has_single_bit(8U) || asc::std::has_single_bit(7U);
+    failures += asc::std::rotl(1U, 1) != 2U || asc::std::rotr(2U, 1) != 1U;
+    return failures;
+}
+
+CANN_ASC_STL_API void evaluate(__INT32_TYPE__* output)
+{
+    int failures = evaluate_bit();
 #if !CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
     const asc::std::complex<float> value(1.0F, 0.5F);
     const auto round_trip = asc::std::exp(asc::std::log(value));

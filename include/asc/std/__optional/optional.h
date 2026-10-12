@@ -36,12 +36,14 @@
 #include <asc/std/__optional/nullopt.h>
 #include <asc/std/__optional/optional_base.h>
 #include <asc/std/__type_traits/disjunction.h>
+#include <asc/std/__type_traits/is_constructible.h>
 #include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/is_copy_constructible.h>
 #include <asc/std/__type_traits/is_move_constructible.h>
 #include <asc/std/__type_traits/is_object.h>
 #include <asc/std/__type_traits/is_reference.h>
 #include <asc/std/__type_traits/is_same.h>
+#include <asc/std/__type_traits/is_swappable.h>
 #include <asc/std/__type_traits/remove_cv.h>
 #include <asc/std/__type_traits/remove_cvref.h>
 #include <asc/std/__utility/declval.h>
@@ -49,8 +51,36 @@
 #include <asc/std/__utility/in_place.h>
 #include <asc/std/__utility/move.h>
 #include <asc/std/__utility/swap.h>
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// 就地列表构造/emplace 重载经宿主 initializer_list 提供（设备侧不参与）。
+#include <initializer_list>
+#endif
 
 CANN_ASC_STL_BEGIN_NAMESPACE
+
+// 转换构造约束件：值形态与 optional<U> 形态各自的可构造/可隐转判别。
+// optional<U> 四种值形态中任一路径能构造/转换出 T，即视为“T 与 optional 互转”，
+// 此类组合从转换构造中排除，杜绝嵌套 optional 的意外包裹。
+template <class T, class U>
+struct __opt_check_constructible_from_opt
+    : disjunction<is_constructible<T, optional<U>&>, is_constructible<T, const optional<U>&>,
+          is_constructible<T, optional<U>&&>, is_constructible<T, const optional<U>&&>, is_convertible<optional<U>&, T>,
+          is_convertible<const optional<U>&, T>, is_convertible<optional<U>&&, T>,
+          is_convertible<const optional<U>&&, T>> {};
+
+template <class T, class U>
+inline constexpr bool __opt_is_implicitly_constructible = is_constructible_v<T, U> && is_convertible_v<U, T>;
+
+template <class T, class U>
+inline constexpr bool __opt_is_explicitly_constructible = is_constructible_v<T, U> && !is_convertible_v<U, T>;
+
+template <class T, class U>
+inline constexpr bool __opt_is_constructible_from_value =
+    !is_same_v<remove_cvref_t<U>, in_place_t> && !is_same_v<remove_cvref_t<U>, optional<T>>;
+
+template <class T, class U>
+inline constexpr bool __opt_is_constructible_from_opt =
+    !is_same_v<U, T> && !__opt_check_constructible_from_opt<T, U>::value;
 
 template <class T>
 class optional : private __optional_base<T> {
@@ -79,27 +109,57 @@ public:
             this->construct(::asc::std::move(other.storage_.value_));
         }
     }
-    template <class U>
+    // 转换构造按可转换性分流：可隐转组合支持拷贝初始化，其余保持显式。
+    template <class U,
+        enable_if_t<__opt_is_constructible_from_opt<T, U> && __opt_is_implicitly_constructible<T, const U&>, int> = 0>
+    CANN_ASC_STL_API constexpr optional(const optional<U>& other)
+    {
+        if (other.engaged_) {
+            this->construct(other.storage_.value_);
+        }
+    }
+    template <class U,
+        enable_if_t<__opt_is_constructible_from_opt<T, U> && __opt_is_explicitly_constructible<T, const U&>, int> = 0>
     CANN_ASC_STL_API constexpr explicit optional(const optional<U>& other)
     {
         if (other.engaged_) {
             this->construct(other.storage_.value_);
         }
     }
-    template <class U>
+    template <class U,
+        enable_if_t<__opt_is_constructible_from_opt<T, U> && __opt_is_implicitly_constructible<T, U>, int> = 0>
+    CANN_ASC_STL_API constexpr optional(optional<U>&& other)
+    {
+        if (other.engaged_) {
+            this->construct(::asc::std::move(other.storage_.value_));
+        }
+    }
+    template <class U,
+        enable_if_t<__opt_is_constructible_from_opt<T, U> && __opt_is_explicitly_constructible<T, U>, int> = 0>
     CANN_ASC_STL_API constexpr explicit optional(optional<U>&& other)
     {
         if (other.engaged_) {
             this->construct(::asc::std::move(other.storage_.value_));
         }
     }
-    template <class U = T, enable_if_t<!__is_asc_std_optional_v<remove_cvref_t<U>>, int> = 0>
+    template <class U = T,
+        enable_if_t<__opt_is_constructible_from_value<T, U> && __opt_is_implicitly_constructible<T, U>, int> = 0>
+    CANN_ASC_STL_API constexpr optional(U&& value) : base(in_place, ::asc::std::forward<U>(value))
+    {}
+    template <class U = T,
+        enable_if_t<__opt_is_constructible_from_value<T, U> && __opt_is_explicitly_constructible<T, U>, int> = 0>
     CANN_ASC_STL_API constexpr explicit optional(U&& value) : base(in_place, ::asc::std::forward<U>(value))
     {}
     template <class... Args>
     CANN_ASC_STL_API constexpr explicit optional(in_place_t, Args&&... args)
         : base(in_place, ::asc::std::forward<Args>(args)...)
     {}
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    template <class U, class... Args, enable_if_t<is_constructible_v<T, ::std::initializer_list<U>&, Args...>, int> = 0>
+    CANN_ASC_STL_API constexpr explicit optional(in_place_t, ::std::initializer_list<U> list, Args&&... args)
+        : base(in_place, list, ::asc::std::forward<Args>(args)...)
+    {}
+#endif
 
     CANN_ASC_STL_API constexpr optional& operator=(nullopt_t) noexcept
     {
@@ -146,6 +206,14 @@ public:
         reset();
         return this->construct(::asc::std::forward<Args>(args)...);
     }
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    template <class U, class... Args, enable_if_t<is_constructible_v<T, ::std::initializer_list<U>&, Args...>, int> = 0>
+    CANN_ASC_STL_API constexpr T& emplace(::std::initializer_list<U> list, Args&&... args)
+    {
+        reset();
+        return this->construct(list, ::asc::std::forward<Args>(args)...);
+    }
+#endif
     CANN_ASC_STL_API constexpr void reset() noexcept
     {
         base::reset();
@@ -418,6 +486,15 @@ template <class T, class U>
 CANN_ASC_STL_API constexpr bool operator>=(const T& left, const optional<U>& right)
 {
     return !right || left >= *right;
+}
+
+// 自由函数 swap：ADL 与非限定 swap 调用点命中本重载并转发到成员 swap。
+// 受限 optional<T&> 特化无交换成员，刻意不参与（引用重绑定在冻结核之外）。
+template <class T>
+CANN_ASC_STL_API constexpr enable_if_t<is_move_constructible_v<T> && is_swappable_v<T>, void> swap(
+    optional<T>& left, optional<T>& right) noexcept(noexcept(left.swap(right)))
+{
+    left.swap(right);
 }
 
 CANN_ASC_STL_END_NAMESPACE

@@ -28,17 +28,91 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/__detail/execution_space.h>
+#include <asc/std/__floating_point/fp.h>
+#include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/is_extended_arithmetic.h>
+#include <asc/std/__type_traits/is_integral.h>
+#include <asc/std/limits>
+#include <limits>
+
+// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
+// (master __config does not provide it): long double is host-only — ASC device
+// compilation (AI Core) does not support long double (dev __asc/dialect.h).
+#if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
+#define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 0
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API float copysign(float x, float y) noexcept
+//! @brief Copies the sign of @p y onto the magnitude of @p x.
+//!
+//! Integral arguments widen to double and take the sign; unsigned types
+//! have no sign to take and return their magnitude unchanged. Floating
+//! arguments are rebuilt through their storage representation: exponent
+//! and mantissa of @p x combined with the sign bit of @p y — bit-exact
+//! with the source semantics, no arithmetic involved. Formats beyond the
+//! delivered storage vocabulary (x87 fp80 / binary128 native long double)
+//! recombine through the compiler's bit-exact copysign builtin, which is
+//! the same magnitude-of-x / sign-of-y bit operation.
+template <class Tp, ::asc::std::enable_if_t<__is_extended_arithmetic_v<Tp>, int> = 0>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto copysign(Tp x, Tp y) noexcept
 {
-    return __builtin_copysignf(x, y);
+    if constexpr (is_integral_v<Tp>) {
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        // The vector cores have no double-precision arithmetic: reject the
+        // integral widening instead of silently changing the contract. The
+        // gate covers every device context (mixed CCE and pure SIMT alike —
+        // __CCE__ alone is not defined in pure-SIMT TUs, where the unselected
+        // double-widening branch still parses inside the aicore-reachable
+        // template body and gets rejected; modulo.h real-machine finding).
+        static_assert(sizeof(Tp) == 0, "integral copysign widens to double, which AI-core TUs do not support");
+#else
+        if constexpr (!numeric_limits<Tp>::is_signed) {
+            return static_cast<double>(x);
+        } else {
+            const auto x_dbl = static_cast<double>(x);
+            if (y < 0) {
+                return (x < 0) ? x_dbl : -x_dbl;
+            } else {
+                return (x < 0) ? -x_dbl : x_dbl;
+            }
+        }
+#endif
+    } else {  // ^^^ integral ^^^ / vvv floating_point vvv
+        if constexpr (!numeric_limits<Tp>::is_signed) {
+            return x;
+        } else if constexpr (__fp_format_of_v<Tp> == __fp_format::__binary16 ||  // NOLINT(readability/braces)
+            __fp_format_of_v<Tp> == __fp_format::__bfloat16 || __fp_format_of_v<Tp> == __fp_format::__binary32 ||
+            __fp_format_of_v<Tp> == __fp_format::__binary64) {
+            const auto val = (::asc::std::__fp_get_storage(x) & __fp_exp_mant_mask_of_v<Tp>) |
+                (::asc::std::__fp_get_storage(y) & __fp_sign_mask_of_v<Tp>);
+            return ::asc::std::__fp_from_storage<Tp>(static_cast<__fp_storage_of_t<Tp>>(val));
+        } else {
+            // master 的 storage 词汇表未交付 >64 位格式（x87 fp80 /
+            // binary128 的宿主 long double）：位级符号重组改经编译器
+            // bit-exact copysign 内建（x 的指数+尾数、y 的符号位，同一
+            // 位运算语义）。
+            return __builtin_copysign(x, y);
+        }
+    }
 }
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API float copysignf(float x, float y) noexcept
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr float copysignf(float x, float y) noexcept
 {
-    return __builtin_copysignf(x, y);
+    return ::asc::std::copysign(x, y);
 }
+
+#if CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr long double copysignl(long double x, long double y) noexcept
+{
+    return ::asc::std::copysign(x, y);
+}
+#endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 CANN_ASC_STL_END_NAMESPACE
 

@@ -35,29 +35,47 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class Sentinel>
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+template <semiregular _Sent>
+#else   // !(CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION())
+template <class _Sent>
+#endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 class move_sentinel {
 public:
     CANN_ASC_STL_API constexpr move_sentinel() = default;
-    CANN_ASC_STL_API constexpr explicit move_sentinel(Sentinel sentinel)
-        : last_(::asc::std::move(sentinel))  // NOLINT(build/include_what_you_use)
+
+    CANN_ASC_STL_API constexpr explicit move_sentinel(_Sent __s)
+        : __last_(::asc::std::move(__s))  // NOLINT(build/include_what_you_use)
     {}
-    template <class Other>
-    CANN_ASC_STL_API constexpr move_sentinel(const move_sentinel<Other>& other) : last_(other.base())
+
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    template <class _S2>
+        requires convertible_to<const _S2&, _Sent>
+#else   // !(CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION())
+    template <class _S2>
+#endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    CANN_ASC_STL_API constexpr move_sentinel(const move_sentinel<_S2>& __s) : __last_(__s.base())
     {}
-    template <class Other>
-    CANN_ASC_STL_API constexpr move_sentinel& operator=(const move_sentinel<Other>& other)
+
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    template <class _S2>
+        requires assignable_from<const _S2&, _Sent>
+#else   // !(CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION())
+    template <class _S2>
+#endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    CANN_ASC_STL_API constexpr move_sentinel& operator=(const move_sentinel<_S2>& __s)
     {
-        last_ = other.base();
+        __last_ = __s.base();
         return *this;
     }
-    CANN_ASC_STL_API constexpr Sentinel base() const
+
+    CANN_ASC_STL_API constexpr _Sent base() const
     {
-        return last_;
+        return __last_;
     }
 
 private:
-    Sentinel last_{};
+    _Sent __last_ = _Sent();
 };
 
 CANN_ASC_STL_END_NAMESPACE

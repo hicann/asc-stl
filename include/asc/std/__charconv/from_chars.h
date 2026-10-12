@@ -41,9 +41,61 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/is_signed.h>
 #include <asc/std/__type_traits/make_unsigned.h>
+#include <asc/std/__utility/to_underlying.h>
 #include <asc/std/cstdint>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
+
+// [charconv.syn] chars_format：门面 <asc/std/charconv> 在场时由门面统一提供（门面守卫宏作为
+// 在场标志）；本头独立编译时经共享守卫内联同一份定义，两个 __charconv 子头共用，避免重定义。
+#if !defined(CANN_ASC_STL_ASC_STD_CHARCONV) && !defined(CANN_ASC_STL_DETAIL_CHARCONV_CHARS_FORMAT_DEFINED)
+#define CANN_ASC_STL_DETAIL_CHARCONV_CHARS_FORMAT_DEFINED
+// 枚举值与宿主标准库解耦，宿主与设备编译共享同一稳定表示。
+enum class chars_format {
+    scientific = 0x1,
+    fixed = 0x2,
+    hex = 0x4,
+    general = fixed | scientific,
+};
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chars_format operator~(chars_format value) noexcept
+{
+    return chars_format(~::asc::std::to_underlying(value));
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chars_format operator&(chars_format lhs, chars_format rhs) noexcept
+{
+    return chars_format(::asc::std::to_underlying(lhs) & ::asc::std::to_underlying(rhs));
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chars_format operator|(chars_format lhs, chars_format rhs) noexcept
+{
+    return chars_format(::asc::std::to_underlying(lhs) | ::asc::std::to_underlying(rhs));
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chars_format operator^(chars_format lhs, chars_format rhs) noexcept
+{
+    return chars_format(::asc::std::to_underlying(lhs) ^ ::asc::std::to_underlying(rhs));
+}
+
+CANN_ASC_STL_API constexpr chars_format& operator&=(chars_format& lhs, chars_format rhs) noexcept
+{
+    lhs = lhs & rhs;
+    return lhs;
+}
+
+CANN_ASC_STL_API constexpr chars_format& operator|=(chars_format& lhs, chars_format rhs) noexcept
+{
+    lhs = lhs | rhs;
+    return lhs;
+}
+
+CANN_ASC_STL_API constexpr chars_format& operator^=(chars_format& lhs, chars_format rhs) noexcept
+{
+    lhs = lhs ^ rhs;
+    return lhs;
+}
+#endif  // !CANN_ASC_STL_ASC_STD_CHARCONV && !CANN_ASC_STL_DETAIL_CHARCONV_CHARS_FORMAT_DEFINED
 
 namespace __charconv_detail {
 
@@ -67,7 +119,7 @@ CANN_ASC_STL_API constexpr int __from_chars_digit_value(char character) noexcept
 // result_out_of_range on overflow.  The accumulation uses the unsigned
 // counterpart so no signed-overflow undefined behaviour can occur.
 template <class T>
-CANN_ASC_STL_API from_chars_result __from_chars_integer(
+CANN_ASC_STL_API constexpr from_chars_result __from_chars_integer(
     const char* first, const char* last, T& value, int base) noexcept
 {
     static_assert(__is_integer_v<T> || is_same_v<T, char>,
@@ -116,24 +168,42 @@ CANN_ASC_STL_API from_chars_result __from_chars_integer(
 }  // namespace __charconv_detail
 
 template <class T, enable_if_t<__is_integer_v<T>, int> = 0>
-CANN_ASC_STL_API from_chars_result from_chars(const char* first, const char* last, T& value, int base = 10) noexcept
+CANN_ASC_STL_API constexpr from_chars_result from_chars(
+    const char* first, const char* last, T& value, int base = 10) noexcept
 {
     return __charconv_detail::__from_chars_integer(first, last, value, base);
 }
-CANN_ASC_STL_API from_chars_result from_chars(const char* first, const char* last, char& value, int base = 10) noexcept
+CANN_ASC_STL_API constexpr from_chars_result from_chars(
+    const char* first, const char* last, char& value, int base = 10) noexcept
 {
     return __charconv_detail::__from_chars_integer(first, last, value, base);
 }
-CANN_ASC_STL_API from_chars_result from_chars(
+CANN_ASC_STL_API constexpr from_chars_result from_chars(
     const char* first, const char* last, signed char& value, int base = 10) noexcept
 {
     return __charconv_detail::__from_chars_integer(first, last, value, base);
 }
-CANN_ASC_STL_API from_chars_result from_chars(
+CANN_ASC_STL_API constexpr from_chars_result from_chars(
     const char* first, const char* last, unsigned char& value, int base = 10) noexcept
 {
     return __charconv_detail::__from_chars_integer(first, last, value, base);
 }
+
+// 浮点解析为占位实现（与源实现一致的 static_assert 桩）：依赖上面的 chars_format，
+// 仅在本头独立编译（门面不在场）时声明；经 <asc/std/charconv> 使用时浮点重载暂不提供。
+#if !defined(CANN_ASC_STL_ASC_STD_CHARCONV)
+template <class T, enable_if_t<is_floating_point_v<T>, int> = 0>
+CANN_ASC_STL_API constexpr from_chars_result from_chars(
+    const char* first, const char* last, T& value, chars_format fmt = chars_format::general) noexcept
+{
+    static_assert(__always_false_v<T>, "asc::std::from_chars for floating point types is not yet implemented");
+    (void)first;
+    (void)last;
+    (void)value;
+    (void)fmt;
+    return {};
+}
+#endif  // !CANN_ASC_STL_ASC_STD_CHARCONV
 
 CANN_ASC_STL_END_NAMESPACE
 

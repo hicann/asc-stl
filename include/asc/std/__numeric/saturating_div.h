@@ -30,6 +30,20 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__type_traits/is_integer.h>
+#include <asc/std/__type_traits/is_signed.h>
+#include <asc/std/limits>
+
+// 基座 __config 未提供 CANN_ASC_STL_DETAIL_ASSERT：内联其语义的最小等价，
+// #ifndef 守卫以免与未来基座定义冲突。设备侧无断言机制恒为 no-op；宿主侧
+// 仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查。
+#ifndef CANN_ASC_STL_DETAIL_ASSERT
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
+#else
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) \
+    ((expression) ? static_cast<void>(0) : (__builtin_trap(), static_cast<void>(0)))
+#endif
+#endif  // CANN_ASC_STL_DETAIL_ASSERT
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -37,11 +51,11 @@ template <class T>
 CANN_ASC_STL_API constexpr T saturating_div(T left, T right) noexcept
 {
     static_assert(__is_integer_v<T>, "saturating_div requires an integer type");
-    if (T(-1) < T(0)) {
-        const T maximum = T((T(1) << (sizeof(T) * 8 - 2)) - 1 + (T(1) << (sizeof(T) * 8 - 2)));
-        const T minimum = T(-maximum - 1);
-        if (left == minimum && right == T(-1))
-            return maximum;
+    CANN_ASC_STL_DETAIL_ASSERT(right != T(0), "division by zero");
+    if constexpr (is_signed_v<T>) {
+        if (left == numeric_limits<T>::min() && right == T(-1)) {  // NOLINT(build/include_what_you_use)
+            return numeric_limits<T>::max();                       // NOLINT(build/include_what_you_use)
+        }
     }
     return static_cast<T>(left / right);
 }

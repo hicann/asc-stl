@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_IS_MEMBER_FUNCTION_POINTER_H
 #define CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_IS_MEMBER_FUNCTION_POINTER_H
 
@@ -27,6 +28,7 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+
 #include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/is_function.h>
 #include <asc/std/__type_traits/remove_cv.h>
@@ -34,36 +36,21 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class T>
+template <class _Tp>
 struct __asc_is_member_pointer {
     enum { __is_member = false, __is_func = false, __is_obj = false };
 };
-template <class T, class U>
-struct __asc_is_member_pointer<T U::*> {
-    enum {
-        __is_member = true,
-        __is_func = is_function_v<T>,
-        __is_obj = !__is_func,
-    };
+
+template <class _Tp, class _Up>
+struct __asc_is_member_pointer<_Tp _Up::*> {
+    enum { __is_member = true, __is_func = is_function_v<_Tp>, __is_obj = !__is_func };
 };
 
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_member_function_pointer)
+template <class _Tp>
+struct is_member_function_pointer : bool_constant<__asc_is_member_pointer<remove_cv_t<_Tp>>::__is_func> {};
 
-template <class T>
-struct is_member_function_pointer : integral_constant<bool, __is_member_function_pointer(T)> {};
-
-template <class T>
-inline constexpr bool is_member_function_pointer_v = __is_member_function_pointer(T);
-
-#else
-
-template <class T>
-struct is_member_function_pointer : integral_constant<bool, __asc_is_member_pointer<remove_cv_t<T> >::__is_func> {};
-
-template <class T>
-inline constexpr bool is_member_function_pointer_v = is_member_function_pointer<T>::value;
-
-#endif
+template <class _Tp>
+inline constexpr bool is_member_function_pointer_v = is_member_function_pointer<_Tp>::value;
 
 CANN_ASC_STL_END_NAMESPACE
 

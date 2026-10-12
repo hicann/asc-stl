@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-const char* asc_stl_b021_cannsim_launcher_identity() noexcept
-{
-    return "asc/std/ctime";
-}
+/* Copyright 2026 湖北多样性算力应用创新研究院 */
+
+// The cannsim kernel launch is intentionally emitted from kernel.cpp.

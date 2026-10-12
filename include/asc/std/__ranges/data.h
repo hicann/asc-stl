@@ -33,54 +33,93 @@
 #include <asc/std/__iterator/reverse_iterator.h>
 #include <asc/std/__memory/pointer_traits.h>
 #include <asc/std/__ranges/access.h>
+#include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/is_object.h>
 #include <asc/std/__type_traits/is_pointer.h>
 #include <asc/std/__type_traits/is_reference.h>
 #include <asc/std/__type_traits/remove_pointer.h>
 #include <asc/std/__type_traits/remove_reference.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/auto_cast.h>
+#include <asc/std/__utility/declval.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
+
+// [range.prim.data]
+
 namespace __data_detail {
+
 template <class T>
-CANN_ASC_STL_API constexpr auto __select(T& value, int) noexcept(noexcept(value.data())) -> decltype(value.data())
-{
-    return value.data();
-}
+inline constexpr bool __ptr_to_object = is_pointer_v<T> && is_object_v<remove_pointer_t<T>>;
+
+// 两级分派：成员 data()（返回指针指向对象） -> to_address(ranges::begin(t))。
+// 概念约束在此以基座惯用的 void_t 探测结构 + enable_if_t 展开，
+// 与 access.h/size.h 的基座写法保持一致，C++17 与设备路径同样可用。
+template <class T, class = void>
+struct __has_member_data : false_type {};
 template <class T>
-CANN_ASC_STL_API constexpr auto __select(T& value, long) noexcept(
-    noexcept(ranges::begin(value))) -> decltype(ranges::begin(value))
-{
-    return ranges::begin(value);
-}
+struct __has_member_data<T, void_t<decltype(::asc::std::declval<T>().data())>>
+    : bool_constant<__access_detail::__can_borrow<T> && __ptr_to_object<decltype(::asc::std::declval<T>().data())>> {};
+
+template <class T, class = void>
+struct __ranges_begin_invocable : false_type {};
+template <class T>
+struct __ranges_begin_invocable<T, void_t<decltype((void)::asc::std::ranges::__begin_cpo{}(::asc::std::declval<T>()))>>
+    : bool_constant<__access_detail::__can_borrow<T>> {};
+
 struct __fn {
-    template <class T, size_t N>
-    CANN_ASC_STL_API constexpr T* operator()(T (&array)[N]) const noexcept
+    template <class T, enable_if_t<__has_member_data<T>::value, int> = 0>
+    CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(noexcept(value.data()))
     {
-        return array;
+        return value.data();
     }
-    template <class T>
-    CANN_ASC_STL_API constexpr auto operator()(T& value) const
-        noexcept(noexcept(__select(value, 0))) -> decltype(__select(value, 0))
+
+    template <class T, enable_if_t<!__has_member_data<T>::value && __ranges_begin_invocable<T&&>::value, int> = 0>
+    CANN_ASC_STL_API constexpr auto operator()(T&& value) const
+        noexcept(noexcept(::asc::std::to_address(::asc::std::ranges::__begin_cpo{}(value))))
     {
-        return __select(value, 0);
+        return ::asc::std::to_address(::asc::std::ranges::__begin_cpo{}(value));
     }
 };
+
 }  // namespace __data_detail
+
 inline constexpr __data_detail::__fn data{};
+
+// 内部避免直接使用 CPO 对象（__tile__ 访问问题），统一走 __fn 类型。
+using __data_cpo = __data_detail::__fn;
+
+// [range.prim.cdata]
+
 namespace __cdata_detail {
+
 struct __fn {
-    template <class T>
-    CANN_ASC_STL_API constexpr auto operator()(T& value) const noexcept(
-        noexcept(ranges::data(static_cast<const T&>(value)))) -> decltype(ranges::data(static_cast<const T&>(value)))
+    template <class T, enable_if_t<is_lvalue_reference_v<T&&>, int> = 0>
+    CANN_ASC_STL_API constexpr auto operator()(T&& value) const
+        noexcept(noexcept(::asc::std::ranges::__data_cpo{}(static_cast<const remove_reference_t<T>&>(
+            value)))) -> decltype(::asc::std::ranges::__data_cpo{}(static_cast<const remove_reference_t<T>&>(value)))
     {
-        return ranges::data(static_cast<const T&>(value));
+        return ::asc::std::ranges::__data_cpo{}(static_cast<const remove_reference_t<T>&>(value));
+    }
+
+    template <class T, enable_if_t<is_rvalue_reference_v<T&&>, int> = 0>
+    CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(noexcept(::asc::std::ranges::__data_cpo{}(
+        static_cast<const T&&>(value)))) -> decltype(::asc::std::ranges::__data_cpo{}(static_cast<const T&&>(value)))
+    {
+        return ::asc::std::ranges::__data_cpo{}(static_cast<const T&&>(value));
     }
 };
+
 }  // namespace __cdata_detail
+
 inline constexpr __cdata_detail::__fn cdata{};
+
+// 内部避免直接使用 CPO 对象（__tile__ 访问问题），统一走 __fn 类型。
+using __cdata_cpo = __cdata_detail::__fn;
+
 }  // namespace ranges
 
 CANN_ASC_STL_END_NAMESPACE

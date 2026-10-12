@@ -28,10 +28,47 @@
 
 #include <asc/__detail/attributes.h>
 
+// Hosted ::std interoperation gate: a host standard library has been pulled in.
+#ifndef CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB
+#if defined(__GLIBCXX__) || defined(_LIBCPP_VERSION) || defined(_MSVC_STL_VERSION)
+#define CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB() 0
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB
+
+// std:: forward declarations
+
+#if CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB()
+namespace std {
+template <class>
+class complex;
+}  // namespace std
+#endif  // CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB()
+
+// asc::std:: forward declarations
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class T>
 class complex;
+
+// __is_std_complex_v
+
+template <class T>
+inline constexpr bool __is_std_complex_v = false;
+#if CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB()
+template <class T>
+inline constexpr bool __is_std_complex_v<const T> = __is_std_complex_v<T>;
+template <class T>
+inline constexpr bool __is_std_complex_v<volatile T> = __is_std_complex_v<T>;
+template <class T>
+inline constexpr bool __is_std_complex_v<const volatile T> = __is_std_complex_v<T>;
+template <class T>
+inline constexpr bool __is_std_complex_v<::std::complex<T>> = true;
+#endif  // CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB()
+
+// __is_asc_std_complex_v
 
 template <class T>
 inline constexpr bool __is_asc_std_complex_v = false;

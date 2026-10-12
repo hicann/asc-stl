@@ -31,7 +31,9 @@
 #include <asc/std/__concepts/derived_from.h>
 #include <asc/std/__concepts/same_as.h>
 #include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/is_base_of.h>
 #include <asc/std/__type_traits/is_class.h>
+#include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/remove_cv.h>
 #include <asc/std/__type_traits/void_t.h>
 
@@ -42,146 +44,37 @@ struct view_base {};
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class Derived>
     requires is_class_v<Derived> && same_as<Derived, remove_cv_t<Derived>>
-class view_interface {
-private:
-    CANN_ASC_STL_API constexpr Derived& __derived() noexcept
-    {
-        return static_cast<Derived&>(*this);
-    }
-    CANN_ASC_STL_API constexpr const Derived& __derived() const noexcept
-    {
-        return static_cast<const Derived&>(*this);
-    }
-
-public:
-    CANN_ASC_STL_API constexpr bool empty()
-    {
-        return __derived().begin() == __derived().end();
-    }
-    CANN_ASC_STL_API constexpr bool empty() const
-    {
-        return __derived().begin() == __derived().end();
-    }
-    CANN_ASC_STL_API constexpr auto data()
-    {
-        return __derived().begin();
-    }
-    CANN_ASC_STL_API constexpr auto data() const
-    {
-        return __derived().begin();
-    }
-    CANN_ASC_STL_API constexpr auto size()
-    {
-        return __derived().end() - __derived().begin();
-    }
-    CANN_ASC_STL_API constexpr auto size() const
-    {
-        return __derived().end() - __derived().begin();
-    }
-    CANN_ASC_STL_API constexpr decltype(auto) front()
-    {
-        return *__derived().begin();
-    }
-    CANN_ASC_STL_API constexpr decltype(auto) front() const
-    {
-        return *__derived().begin();
-    }
-    CANN_ASC_STL_API constexpr decltype(auto) back()
-    {
-        return *(__derived().end() - 1);
-    }
-    CANN_ASC_STL_API constexpr decltype(auto) back() const
-    {
-        return *(__derived().end() - 1);
-    }
-    template <class Difference>
-    CANN_ASC_STL_API constexpr decltype(auto) operator[](Difference index)
-    {
-        return __derived().begin()[index];
-    }
-    template <class Difference>
-    CANN_ASC_STL_API constexpr decltype(auto) operator[](Difference index) const
-    {
-        return __derived().begin()[index];
-    }
-};
+class view_interface;
 #else
 template <class Derived, enable_if_t<is_class_v<Derived> && is_same_v<Derived, remove_cv_t<Derived>>, int> = 0>
-class view_interface {
-private:
-    CANN_ASC_STL_API constexpr Derived& __derived() noexcept
-    {
-        return static_cast<Derived&>(*this);
-    }
-    CANN_ASC_STL_API constexpr const Derived& __derived() const noexcept
-    {
-        return static_cast<const Derived&>(*this);
-    }
-
-public:
-    CANN_ASC_STL_API constexpr bool empty()
-    {
-        return __derived().begin() == __derived().end();
-    }
-    CANN_ASC_STL_API constexpr bool empty() const
-    {
-        return __derived().begin() == __derived().end();
-    }
-    CANN_ASC_STL_API constexpr auto data()
-    {
-        return __derived().begin();
-    }
-    CANN_ASC_STL_API constexpr auto data() const
-    {
-        return __derived().begin();
-    }
-    CANN_ASC_STL_API constexpr auto size()
-    {
-        return __derived().end() - __derived().begin();
-    }
-    CANN_ASC_STL_API constexpr auto size() const
-    {
-        return __derived().end() - __derived().begin();
-    }
-    CANN_ASC_STL_API constexpr decltype(auto) front()
-    {
-        return *__derived().begin();
-    }
-    CANN_ASC_STL_API constexpr decltype(auto) front() const
-    {
-        return *__derived().begin();
-    }
-    CANN_ASC_STL_API constexpr decltype(auto) back()
-    {
-        return *(__derived().end() - 1);
-    }
-    CANN_ASC_STL_API constexpr decltype(auto) back() const
-    {
-        return *(__derived().end() - 1);
-    }
-    template <class Difference>
-    CANN_ASC_STL_API constexpr decltype(auto) operator[](Difference index)
-    {
-        return __derived().begin()[index];
-    }
-    template <class Difference>
-    CANN_ASC_STL_API constexpr decltype(auto) operator[](Difference index) const
-    {
-        return __derived().begin()[index];
-    }
-};
+class view_interface;
 #endif
 
-template <class Op, class Yp>
-CANN_ASC_STL_API auto __is_derived_from_view_interface(const Op*, const view_interface<Yp>*) -> void;
+template <class Op, class Yp, enable_if_t<is_convertible_v<Op*, view_interface<Yp>*>, int> = 0>
+CANN_ASC_STL_API void __is_derived_from_view_interface(const Op*, const view_interface<Yp>*);
 
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+template <class T>
+inline constexpr bool enable_view = derived_from<T, view_base> ||
+    requires { __is_derived_from_view_interface(static_cast<T*>(nullptr), static_cast<T*>(nullptr)); };
+#else
 template <class T, class = void>
-inline constexpr bool enable_view = is_base_of_v<view_base, T>;
+inline constexpr bool enable_view =
+    is_base_of_v<view_base, T> && is_convertible_v<const volatile T*, const volatile view_base*>;
 
 template <class T>
 inline constexpr bool enable_view<T,
     void_t<decltype(__is_derived_from_view_interface(static_cast<T*>(nullptr), static_cast<T*>(nullptr)))>> = true;
+#endif
 
 }  // namespace asc::std::ranges
+
+// 保持本头文件原有可观察行为：此前 view_interface 的完整定义随本文件交付，
+// 下游仅包含本文件即获得完整类型。定义已移至 view_interface.h，此处在
+// 前向声明之后引入；若正处在 concepts.h 的包含链中途则跳过（其正文中
+// 使用的概念名尚未可见），此时下游按惯例各自直接包含 view_interface.h。
+#ifndef CANN_ASC_STL_ASC_STD___RANGES_CONCEPTS_H
+#include <asc/std/__ranges/view_interface.h>
+#endif
 
 #endif  // CANN_ASC_STL_ASC_STD___RANGES_ENABLE_VIEW_H

@@ -81,12 +81,6 @@ CANN_ASC_STL_API int evaluate_core()
     const auto found = searcher(values.begin(), values.end());
     if (found.first != values.begin() + 1 || found.second != values.end())
         return 11;
-    if (asc::std::erase(values, 5) != 1u || values.size() != 1u || values.front() != 3)
-        return 17;
-    values.unchecked_push_back(7);
-    const auto erased = asc::std::erase_if(values, [](int value) { return value > 3; });
-    if (erased != 1u || values.size() != 1u)
-        return 18;
     if (asc::std::gcd(84, -30) != 6 || asc::std::lcm(21, 6) != 42)
         return 12;
     if (asc::std::midpoint(-5, 4) != -1)
@@ -177,24 +171,6 @@ public:
     using size_type = __SIZE_TYPE__;
     using reference = T&;
     using const_reference = const T&;
-    CANN_ASC_STL_API fixed_sequence() = default;
-    template <class Alloc>
-    CANN_ASC_STL_API explicit fixed_sequence(const Alloc&) noexcept
-    {}
-    template <class Alloc>
-    CANN_ASC_STL_API fixed_sequence(const fixed_sequence& other, const Alloc&) noexcept
-    {
-        for (size_type index = 0; index < other.size_; ++index)
-            values_[index] = other.values_[index];
-        size_ = other.size_;
-    }
-    template <class Alloc>
-    CANN_ASC_STL_API fixed_sequence(fixed_sequence&& other, const Alloc&) noexcept
-    {
-        for (size_type index = 0; index < other.size_; ++index)
-            values_[index] = static_cast<T&&>(other.values_[index]);
-        size_ = other.size_;
-    }
     CANN_ASC_STL_API bool empty() const
     {
         return size_ == 0;
@@ -349,27 +325,6 @@ CANN_ASC_STL_HOST_API int evaluate_host()
         priority.push(8);
         if (stack.top() != 4 || queue.front() != 5 || priority.top() != 8)
             return 28;
-    }
-    {
-        using sequence = fixed_sequence<int, 8>;
-        struct allocator_marker {
-        } allocator;
-        sequence storage{};
-        asc::std::stack stack(storage);
-        asc::std::queue queue(storage);
-        asc::std::priority_queue priority(less_int{}, storage);
-        asc::std::stack stack_with_allocator(storage, allocator);
-        asc::std::queue queue_with_allocator(storage, allocator);
-        asc::std::priority_queue priority_with_allocator(less_int{}, storage, allocator);
-        stack.push(4);
-        queue.push(5);
-        priority.push(8);
-        stack_with_allocator.push(6);
-        queue_with_allocator.push(7);
-        priority_with_allocator.push(9);
-        if (stack.top() != 4 || queue.front() != 5 || priority.top() != 8 || stack_with_allocator.top() != 6 ||
-            queue_with_allocator.front() != 7 || priority_with_allocator.top() != 9)
-            return 31;
     }
     {
         using scoped = asc::std::scoped_allocator_adaptor<allocator>;

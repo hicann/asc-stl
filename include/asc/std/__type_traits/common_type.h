@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_COMMON_TYPE_H
 #define CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_COMMON_TYPE_H
 
@@ -39,86 +40,94 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class... Tp>
+template <class... _Tp>
 struct common_type;
 
-template <class... Tp>
-using common_type_t = typename common_type<Tp...>::type;
+template <class... _Tp>
+using common_type_t = typename common_type<_Tp...>::type;
 
-template <class Tp, class Up>
-using __cond_type = decltype(false ? declval<Tp>() : declval<Up>());
+template <class _Tp, class _Up>
+using __cond_type = decltype(false ? declval<_Tp>() : declval<_Up>());
 
-template <class Tp, class Up, class = void>
+template <class _Tp, class _Up, class = void>
 struct __common_type_extended_floating_point {};
 
-template <class Tp, class Up>
-struct __common_type_extended_floating_point<Tp, Up,
-    enable_if_t<__is_extended_floating_point_v<remove_cvref_t<Tp>> && is_arithmetic_v<remove_cvref_t<Up>>>> {
-    using type = common_type_t<__copy_cvref_t<Tp, float>, Up>;
+template <class _Tp, class _Up>
+struct __common_type_extended_floating_point<_Tp, _Up,
+    enable_if_t<__is_extended_floating_point_v<remove_cvref_t<_Tp>> && is_arithmetic_v<remove_cvref_t<_Up>>>> {
+    using type = common_type_t<__copy_cvref_t<_Tp, float>, _Up>;
 };
 
-template <class Tp, class Up>
-struct __common_type_extended_floating_point<Tp, Up,
-    enable_if_t<is_arithmetic_v<remove_cvref_t<Tp>> && __is_extended_floating_point_v<remove_cvref_t<Up>>>> {
-    using type = common_type_t<Tp, __copy_cvref_t<Up, float>>;
+template <class _Tp, class _Up>
+struct __common_type_extended_floating_point<_Tp, _Up,
+    enable_if_t<is_arithmetic_v<remove_cvref_t<_Tp>> && __is_extended_floating_point_v<remove_cvref_t<_Up>>>> {
+    using type = common_type_t<_Tp, __copy_cvref_t<_Up, float>>;
 };
 
-template <class Tp, class Up, class = void>
-struct __common_type3 : __common_type_extended_floating_point<Tp, Up> {};
+template <class _Tp, class _Up, class = void>
+struct __common_type3 : __common_type_extended_floating_point<_Tp, _Up> {};
 
-// The approved common-reference conditional-expression fallback is provided
-// in both supported language modes.
-template <class Tp, class Up>
-struct __common_type3<Tp, Up, void_t<__cond_type<const Tp&, const Up&>>> {
-    using type = remove_cvref_t<__cond_type<const Tp&, const Up&>>;
+#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+template <class _Tp, class _Up>
+struct __common_type3<_Tp, _Up, void_t<__cond_type<const _Tp&, const _Up&>>> {
+    using type = remove_cvref_t<__cond_type<const _Tp&, const _Up&>>;
 };
+#endif
 
-template <class Tp, class Up, class = void>
-struct __common_type2_imp : __common_type3<Tp, Up> {};
+template <class _Tp, class _Up, class = void>
+struct __common_type2_imp : __common_type3<_Tp, _Up> {};
 
-template <class Tp, class Up>
-struct __common_type2_imp<Tp, Up, void_t<__cond_type<Tp, Up>>> {
-    using type = decay_t<__cond_type<Tp, Up>>;
+template <class _Tp, class _Up>
+using __msvc_declval_workaround =
+#if CANN_ASC_STL_DETAIL_COMPILER_MSVC
+    enable_if_t<is_same_v<__cond_type<_Tp, _Up>, __cond_type<_Up, _Tp>>>;
+#else
+    void;
+#endif
+
+template <class _Tp, class _Up>
+struct __common_type2_imp<_Tp, _Up, void_t<__cond_type<_Tp, _Up>, __msvc_declval_workaround<_Tp, _Up>>> {
+    using type = decay_t<__cond_type<_Tp, _Up>>;
 };
 
 template <class, class = void>
 struct __common_type_impl {};
 
-template <class... Tp>
+template <class... _Tp>
 struct __common_types;
 
-template <class Tp, class Up>
-struct __common_type_impl<__common_types<Tp, Up>, void_t<common_type_t<Tp, Up>>> {
-    using type = common_type_t<Tp, Up>;
+template <class _Tp, class _Up>
+struct __common_type_impl<__common_types<_Tp, _Up>, void_t<common_type_t<_Tp, _Up>>> {
+    using type = common_type_t<_Tp, _Up>;
 };
 
-template <class Tp, class Up, class Vp, class... Rest>
-struct __common_type_impl<__common_types<Tp, Up, Vp, Rest...>, void_t<common_type_t<Tp, Up>>>
-    : __common_type_impl<__common_types<common_type_t<Tp, Up>, Vp, Rest...>> {};
+template <class _Tp, class _Up, class _Vp, class... _Rest>
+struct __common_type_impl<__common_types<_Tp, _Up, _Vp, _Rest...>, void_t<common_type_t<_Tp, _Up>>>
+    : __common_type_impl<__common_types<common_type_t<_Tp, _Up>, _Vp, _Rest...>> {};
 
 template <>
 struct common_type<> {};
 
-template <class Tp>
-struct common_type<Tp> : public common_type<Tp, Tp> {};
+template <class _Tp>
+struct common_type<_Tp> : public common_type<_Tp, _Tp> {};
 
-template <class Tp, class Up, class D1 = decay_t<Tp>, class D2 = decay_t<Up>>
-struct __common_type2 : common_type<D1, D2> {};
+template <class _Tp, class _Up, class _D1 = decay_t<_Tp>, class _D2 = decay_t<_Up>>
+struct __common_type2 : common_type<_D1, _D2> {};
 
-template <class Tp, class Up>
-struct __common_type2<Tp, Up, Tp, Up> : __common_type2_imp<Tp, Up> {};
+template <class _Tp, class _Up>
+struct __common_type2<_Tp, _Up, _Tp, _Up> : __common_type2_imp<_Tp, _Up> {};
 
-template <class Tp, class Up>
-struct common_type<Tp, Up> : __common_type2<Tp, Up> {};
+template <class _Tp, class _Up>
+struct common_type<_Tp, _Up> : __common_type2<_Tp, _Up> {};
 
-template <class Tp, class Up, class Vp, class... Rest>
-struct common_type<Tp, Up, Vp, Rest...> : __common_type_impl<__common_types<Tp, Up, Vp, Rest...>> {};
+template <class _Tp, class _Up, class _Vp, class... _Rest>
+struct common_type<_Tp, _Up, _Vp, _Rest...> : __common_type_impl<__common_types<_Tp, _Up, _Vp, _Rest...>> {};
 
 template <class, class, class = void>
 inline constexpr bool __has_common_type = false;
 
-template <class Tp, class Up>
-inline constexpr bool __has_common_type<Tp, Up, void_t<common_type_t<Tp, Up>>> = true;
+template <class _Tp, class _Up>
+inline constexpr bool __has_common_type<_Tp, _Up, void_t<common_type_t<_Tp, _Up>>> = true;
 
 CANN_ASC_STL_END_NAMESPACE
 

@@ -30,6 +30,7 @@
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/diagnostics.h>
 #include <asc/std/__chrono/day.h>
+#include <asc/std/__chrono/duration.h>
 #include <asc/std/__chrono/year.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
@@ -43,6 +44,70 @@ CANN_ASC_STL_DETAIL_DIAGNOSTIC_IGNORE("-Wreserved-user-defined-literal")
 #else
 CANN_ASC_STL_DETAIL_DIAGNOSTIC_IGNORE("-Wliteral-suffix")
 #endif
+// duration 字面量 [time.duration.literals]
+CANN_ASC_STL_API constexpr chrono::hours operator"" h(unsigned long long value) noexcept
+{
+    return chrono::hours(static_cast<chrono::hours::rep>(value));
+}
+
+CANN_ASC_STL_API constexpr chrono::duration<double, ratio<3600, 1>> operator"" h(long double value) noexcept
+{
+    return chrono::duration<double, ratio<3600, 1>>(value);
+}
+
+CANN_ASC_STL_API constexpr chrono::minutes operator"" min(  // NOLINT(build/include_what_you_use)
+    unsigned long long value) noexcept
+{
+    return chrono::minutes(static_cast<chrono::minutes::rep>(value));
+}
+
+CANN_ASC_STL_API constexpr chrono::duration<double, ratio<60, 1>> operator"" min(  // NOLINT(build/include_what_you_use)
+    long double value) noexcept
+{
+    return chrono::duration<double, ratio<60, 1>>(value);
+}
+
+CANN_ASC_STL_API constexpr chrono::seconds operator"" s(unsigned long long value) noexcept
+{
+    return chrono::seconds(static_cast<chrono::seconds::rep>(value));
+}
+
+CANN_ASC_STL_API constexpr chrono::duration<double> operator"" s(long double value) noexcept
+{
+    return chrono::duration<double>(value);
+}
+
+CANN_ASC_STL_API constexpr chrono::milliseconds operator"" ms(unsigned long long value) noexcept
+{
+    return chrono::milliseconds(static_cast<chrono::milliseconds::rep>(value));
+}
+
+CANN_ASC_STL_API constexpr chrono::duration<double, milli> operator"" ms(long double value) noexcept
+{
+    return chrono::duration<double, milli>(value);
+}
+
+CANN_ASC_STL_API constexpr chrono::microseconds operator"" us(unsigned long long value) noexcept
+{
+    return chrono::microseconds(static_cast<chrono::microseconds::rep>(value));
+}
+
+CANN_ASC_STL_API constexpr chrono::duration<double, micro> operator"" us(long double value) noexcept
+{
+    return chrono::duration<double, micro>(value);
+}
+
+CANN_ASC_STL_API constexpr chrono::nanoseconds operator"" ns(unsigned long long value) noexcept
+{
+    return chrono::nanoseconds(static_cast<chrono::nanoseconds::rep>(value));
+}
+
+CANN_ASC_STL_API constexpr chrono::duration<double, nano> operator"" ns(long double value) noexcept
+{
+    return chrono::duration<double, nano>(value);
+}
+
+// 日历字面量 [time.calendar.literals]
 CANN_ASC_STL_API constexpr chrono::day operator"" d(unsigned long long value) noexcept
 {
     return chrono::day(static_cast<unsigned>(value));
@@ -54,6 +119,18 @@ CANN_ASC_STL_API constexpr chrono::year operator"" y(unsigned long long value) n
 CANN_ASC_STL_DETAIL_DIAGNOSTIC_POP()
 }  // namespace chrono_literals
 }  // namespace literals
+
+namespace chrono {
+// 将字面量 hoist 进 chrono 命名空间，与标准 std::chrono 的可见性形状一致
+using literals::chrono_literals::operator"" h;
+using literals::chrono_literals::operator"" min;
+using literals::chrono_literals::operator"" s;
+using literals::chrono_literals::operator"" ms;
+using literals::chrono_literals::operator"" us;
+using literals::chrono_literals::operator"" ns;
+using literals::chrono_literals::operator"" d;
+using literals::chrono_literals::operator"" y;
+}  // namespace chrono
 
 CANN_ASC_STL_END_NAMESPACE
 

@@ -29,18 +29,6 @@
 
 #include <asc/execution>
 #include <asc/launch>
-
-// BiSheng's optimized pure-SIMT lowering can stall on these two value-based
-// operations. Keep the workaround local to them; predicate overloads retain
-// their normal optimization path.
-#if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
-#define CANN_ASC_STL_DETAIL_REPLACE_NOINLINE __attribute__((noinline))
-#define CANN_ASC_STL_DETAIL_REPLACE_COPY_NOINLINE __attribute__((optnone, noinline))
-#else
-#define CANN_ASC_STL_DETAIL_REPLACE_NOINLINE
-#define CANN_ASC_STL_DETAIL_REPLACE_COPY_NOINLINE
-#endif
-
 namespace asc::detail {
 template <class T>
 CANN_ASC_STL_DEVICE_API void parallel_swap(T& left, T& right)
@@ -108,32 +96,6 @@ struct replace_copy_operation {
         for (Input current = first; current != last; ++current, ++result) {
             *result = predicate(*current) ? value : *current;
         }
-    }
-};
-template <class Input, class Output, class T, class Predicate>
-struct replace_copy_equal_operation {
-    Input first;
-    Input last;
-    Output result;
-    Predicate predicate;
-    T value;
-    CANN_ASC_STL_DEVICE_API CANN_ASC_STL_DETAIL_REPLACE_COPY_NOINLINE void operator()()
-    {
-        for (Input current = first; current != last; ++current, ++result)
-            *result = predicate(*current) ? value : *current;
-    }
-};
-template <class Forward, class T>
-struct replace_value_operation {
-    Forward first;
-    Forward last;
-    T old_value;
-    T new_value;
-    CANN_ASC_STL_DEVICE_API CANN_ASC_STL_DETAIL_REPLACE_NOINLINE void operator()()
-    {
-        for (Forward current = first; current != last; ++current)
-            if (*current == old_value)
-                *current = new_value;
     }
 };
 template <class Bidirectional>
@@ -245,8 +207,5 @@ struct swap_ranges_operation {
     }
 };
 }  // namespace asc::detail
-
-#undef CANN_ASC_STL_DETAIL_REPLACE_NOINLINE
-#undef CANN_ASC_STL_DETAIL_REPLACE_COPY_NOINLINE
 
 #endif  // CANN_ASC_STL_ASC___PARALLEL_TRANSFORM_H

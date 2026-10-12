@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef CANN_ASC_STL_STD_DETAIL_UTILITY_FORWARD_LIKE_H
 #define CANN_ASC_STL_STD_DETAIL_UTILITY_FORWARD_LIKE_H
 
@@ -27,27 +28,25 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+
 #include <asc/std/__type_traits/conditional.h>
 #include <asc/std/__type_traits/copy_cvref.h>
 #include <asc/std/__type_traits/remove_reference.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// CCE aicore rejects a device function signature that expands the
-// decltype(__apply_cvref<...>) detection of __copy_cvref_t, so the result
-// type is routed through a class member instead of a pure alias chain.
-template <class Ap, class Bp>
+template <class _Ap, class _Bp>
 struct __forward_like_result {
-    using type = __copy_cvref_t<Ap&&, remove_reference_t<Bp>>;
+    using type = __copy_cvref_t<_Ap&&, remove_reference_t<_Bp>>;
 };
 
-template <class Ap, class Bp>
-using _ForwardLike = typename __forward_like_result<Ap, Bp>::type;
+template <class _Ap, class _Bp>
+using _ForwardLike = typename __forward_like_result<_Ap, _Bp>::type;
 
-template <class T, class U>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto forward_like(U&& ux) noexcept -> _ForwardLike<T, U>
+template <class _Tp, class _Up>
+[[nodiscard]] CANN_ASC_STL_API constexpr auto forward_like(_Up&& __ux) noexcept -> _ForwardLike<_Tp, _Up>
 {
-    return static_cast<_ForwardLike<T, U>>(ux);
+    return static_cast<_ForwardLike<_Tp, _Up>>(__ux);
 }
 
 CANN_ASC_STL_END_NAMESPACE

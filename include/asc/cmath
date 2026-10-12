@@ -68,9 +68,9 @@ struct cmath_is_integer {
 };
 
 #define CANN_ASC_STL_DETAIL_CMATH_INTEGER(...) \
-    template <> \
-    struct cmath_is_integer<__VA_ARGS__> { \
-        static constexpr bool value = true; \
+    template <>                                \
+    struct cmath_is_integer<__VA_ARGS__> {     \
+        static constexpr bool value = true;    \
     };
 CANN_ASC_STL_DETAIL_CMATH_INTEGER(signed char)
 CANN_ASC_STL_DETAIL_CMATH_INTEGER(unsigned char)
@@ -138,8 +138,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr int integer_log2(T value) noex
 {
     using detail::cmath_is_bool;
     using detail::cmath_is_integer;
-    static_assert(!cmath_is_bool<T>::value && (cmath_is_integer<typename detail::cmath_unwrapped<T>::type>::value ||
-                      __is_enum(T)),
+    static_assert(!cmath_is_bool<T>::value &&
+            (cmath_is_integer<typename detail::cmath_unwrapped<T>::type>::value || __is_enum(T)),
         "integer_log2 requires an integer or enumeration argument");
     typename detail::cmath_unwrapped<T>::type remaining = static_cast<typename detail::cmath_unwrapped<T>::type>(value);
     int result = 0;
@@ -209,7 +209,8 @@ template <class T>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr T mul_hi(T left, T right) noexcept
 {
     using detail::cmath_is_bool;
-    static_assert(!cmath_is_bool<T>::value && detail::cmath_is_integer<typename detail::cmath_unwrapped<T>::type>::value,
+    static_assert(
+        !cmath_is_bool<T>::value && detail::cmath_is_integer<typename detail::cmath_unwrapped<T>::type>::value,
         "mul_hi requires an unsigned integer argument");
     using A = typename detail::cmath_unwrapped<T>::type;
     static_assert(!(A(-1) < A(0)), "mul_hi requires an unsigned integer argument");
@@ -269,5 +270,8 @@ CANN_ASC_STL_HOST_API void sincos(T value, double* sin_out, double* cos_out) noe
 #endif
 
 }  // namespace asc
+
+// Standard floating-point surfaces promoted through the top-level umbrella.
+#include <asc/std/cmath>
 
 #endif  // CANN_ASC_STL_ASC_CMATH

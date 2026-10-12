@@ -20,8 +20,6 @@
 #include <cstdint>
 #include <iostream>
 
-#include "launch.h"
-
 namespace {
 
 constexpr int kDeviceId = 0;
@@ -37,6 +35,12 @@ bool check(aclError result, const char* operation)
 }
 
 }  // namespace
+
+#if defined(ASC_STL_SOURCE_LOCATION_SIMD)
+void launch_asc_stl_source_location_simd(std::uint32_t*, aclrtStream);
+#else
+void launch_asc_stl_source_location_simt(std::uint32_t*, aclrtStream);
+#endif
 
 int main()
 {

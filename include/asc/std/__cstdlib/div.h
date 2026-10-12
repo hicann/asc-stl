@@ -28,6 +28,30 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/__detail/execution_space.h>
+
+// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HOSTED() gate (the master
+// config does not provide it): AI-core kernel compilation has no host
+// standard library and counts as freestanding, as does an explicit opt-out.
+#if !defined(CANN_ASC_STL_DETAIL_HOSTED)
+#if defined(CANN_ASC_STL_DETAIL_ENABLE_FREESTANDING) || defined(__CCE__)
+#define CANN_ASC_STL_DETAIL_HOSTED() 0
+#else
+#define CANN_ASC_STL_DETAIL_HOSTED() 1
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HOSTED
+
+// If available, use the host's div_t, ldiv_t, and lldiv_t types because the struct members order is
+// implementation-defined.
+#if CANN_ASC_STL_DETAIL_HOSTED()
+#include <cstdlib>
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+using ::div_t;
+using ::ldiv_t;
+using ::lldiv_t;
+#else   // ^^^ CANN_ASC_STL_DETAIL_HOSTED() ^^^ / vvv CANN_ASC_STL_DETAIL_FREESTANDING() vvv
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -35,34 +59,53 @@ struct div_t {
     int quot;
     int rem;
 };
+
 struct ldiv_t {
     long quot;
     long rem;
 };
+
 struct lldiv_t {
     long long quot;
     long long rem;
 };
+#endif  // CANN_ASC_STL_DETAIL_FREESTANDING()
 
 CANN_ASC_STL_API constexpr div_t div(int numerator, int denominator) noexcept
 {
-    return {numerator / denominator, numerator % denominator};
+    div_t result{};
+    const int __safe_denominator = (denominator == 0) ? 1 : denominator;
+    result.quot = numerator / __safe_denominator;
+    result.rem = numerator % __safe_denominator;
+    return result;
 }
-CANN_ASC_STL_API constexpr ldiv_t div(long numerator, long denominator) noexcept
-{
-    return {numerator / denominator, numerator % denominator};
-}
-CANN_ASC_STL_API constexpr lldiv_t div(long long numerator, long long denominator) noexcept
-{
-    return {numerator / denominator, numerator % denominator};
-}
+
 CANN_ASC_STL_API constexpr ldiv_t ldiv(long numerator, long denominator) noexcept
 {
-    return ::asc::std::div(numerator, denominator);
+    ldiv_t result{};
+    const long __safe_denominator = (denominator == 0) ? 1 : denominator;
+    result.quot = numerator / __safe_denominator;
+    result.rem = numerator % __safe_denominator;
+    return result;
 }
+
+CANN_ASC_STL_API constexpr ldiv_t div(long numerator, long denominator) noexcept
+{
+    return ::asc::std::ldiv(numerator, denominator);
+}
+
 CANN_ASC_STL_API constexpr lldiv_t lldiv(long long numerator, long long denominator) noexcept
 {
-    return ::asc::std::div(numerator, denominator);
+    lldiv_t result{};
+    const long long __safe_denominator = (denominator == 0) ? 1 : denominator;
+    result.quot = numerator / __safe_denominator;
+    result.rem = numerator % __safe_denominator;
+    return result;
+}
+
+CANN_ASC_STL_API constexpr lldiv_t div(long long numerator, long long denominator) noexcept
+{
+    return ::asc::std::lldiv(numerator, denominator);
 }
 
 CANN_ASC_STL_END_NAMESPACE

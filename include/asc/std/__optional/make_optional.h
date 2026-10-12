@@ -30,10 +30,15 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__optional/optional.h>
 #include <asc/std/__type_traits/decay.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_reference.h>
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__utility/forward.h>
 #include <asc/std/__utility/in_place.h>
+
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#include <initializer_list>
+#endif
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -42,11 +47,20 @@ CANN_ASC_STL_API constexpr optional<decay_t<T>> make_optional(T&& value)
 {
     return optional<decay_t<T>>(::asc::std::forward<T>(value));  // NOLINT(build/include_what_you_use)
 }
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <class T, class... Args>
 CANN_ASC_STL_API constexpr optional<T> make_optional(Args&&... args)
 {
     return optional<T>(in_place, ::asc::std::forward<Args>(args)...);  // NOLINT(build/include_what_you_use)
 }
+#endif
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+template <class T, class U, class... Args, enable_if_t<!is_reference_v<T>, int> = 0>
+CANN_ASC_STL_API constexpr optional<T> make_optional(::std::initializer_list<U> il, Args&&... args)
+{
+    return optional<T>(in_place, il, ::asc::std::forward<Args>(args)...);  // NOLINT(build/include_what_you_use)
+}
+#endif
 
 CANN_ASC_STL_END_NAMESPACE
 

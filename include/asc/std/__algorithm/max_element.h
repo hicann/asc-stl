@@ -31,30 +31,66 @@
 #include <asc/std/__algorithm/comp.h>
 #include <asc/std/__algorithm/comp_ref_type.h>
 #include <asc/std/__iterator/iterator_traits.h>
+#include <asc/std/__type_traits/is_convertible.h>
+#include <asc/std/__type_traits/void_t.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class ForwardIterator, class Compare>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr ForwardIterator max_element(
-    ForwardIterator first, ForwardIterator last, Compare compare)
+namespace __max_element_detail {
+
+// Minimal local equivalent of the input-traversal probe used by the migrated
+// implementation: a category probe against iterator_traits and a concept probe
+// against a member iterator_concept, both SFINAE-friendly in C++17 mode.
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_category_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool
+    __has_iterator_category_convertible_to<Iter, Tag, void_t<typename iterator_traits<Iter>::iterator_category>> =
+        is_convertible_v<typename iterator_traits<Iter>::iterator_category, Tag>;
+
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_concept_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool __has_iterator_concept_convertible_to<Iter, Tag, void_t<typename Iter::iterator_concept>> =
+    is_convertible_v<typename Iter::iterator_concept, Tag>;
+
+template <class Iter>
+inline constexpr bool __has_input_traversal = __has_iterator_category_convertible_to<Iter, input_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, input_iterator_tag>;
+
+}  // namespace __max_element_detail
+
+template <class _Compare, class _ForwardIterator>
+CANN_ASC_STL_API constexpr _ForwardIterator __max_element(
+    _ForwardIterator __first, _ForwardIterator __last, _Compare __comp)
 {
-    if (first == last) {
-        return last;
-    }
-    ForwardIterator result = first;
-    while (++first != last) {
-        if (compare(*result, *first)) {
-            result = first;
+    static_assert(__max_element_detail::__has_input_traversal<_ForwardIterator>,
+        "::asc::std::max_element requires a ForwardIterator");
+    if (__first != __last) {
+        _ForwardIterator __i = __first;
+        while (++__i != __last) {
+            if (__comp(*__first, *__i)) {
+                __first = __i;
+            }
         }
     }
-    return result;
+    return __first;
 }
 
-template <class ForwardIterator>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr ForwardIterator max_element(
-    ForwardIterator first, ForwardIterator last)
+template <class _ForwardIterator, class _Compare>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _ForwardIterator max_element(
+    _ForwardIterator __first, _ForwardIterator __last, _Compare __comp)
 {
-    return ::asc::std::max_element(first, last, __less{});
+    return ::asc::std::__max_element<__comp_ref_type<_Compare>>(__first, __last, __comp);
+}
+
+template <class _ForwardIterator>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _ForwardIterator max_element(
+    _ForwardIterator __first, _ForwardIterator __last)
+{
+    return ::asc::std::max_element(__first, __last, __less{});
 }
 
 CANN_ASC_STL_END_NAMESPACE

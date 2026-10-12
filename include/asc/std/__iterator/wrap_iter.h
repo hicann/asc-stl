@@ -34,146 +34,262 @@
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/is_trivially_copy_assignable.h>
+#include <asc/std/__type_traits/void_t.h>
+
+// Migrated from dev __asc/dialect.h: base asc/__config has no standard-version
+// number macro, so key it on CANN_ASC_STL_DETAIL_CPLUSPLUS instead.
+#ifndef CANN_ASC_STL_DETAIL_STD_VER
+#if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
+#define CANN_ASC_STL_DETAIL_STD_VER 2003
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201103L
+#define CANN_ASC_STL_DETAIL_STD_VER 2011
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201402L
+#define CANN_ASC_STL_DETAIL_STD_VER 2014
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201703L
+#define CANN_ASC_STL_DETAIL_STD_VER 2017
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202002L
+#define CANN_ASC_STL_DETAIL_STD_VER 2020
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202302L
+#define CANN_ASC_STL_DETAIL_STD_VER 2023
+#else
+#define CANN_ASC_STL_DETAIL_STD_VER 2024
+#endif
+#endif  // CANN_ASC_STL_DETAIL_STD_VER
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// Minimal local equivalent of the traversal probe used by the migrated
+// implementation: the shared probe of the dev tree lives in its iterator
+// traits header, which the base keeps protected, so keep a file-local copy
+// (same pattern as other base headers). Both sub-probes are SFINAE-friendly
+// in C++17 mode.
+namespace __wrap_iter_detail {
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_category_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool
+    __has_iterator_category_convertible_to<Iter, Tag, void_t<typename iterator_traits<Iter>::iterator_category>> =
+        is_convertible_v<typename iterator_traits<Iter>::iterator_category, Tag>;
+
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_concept_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool __has_iterator_concept_convertible_to<Iter, Tag, void_t<typename Iter::iterator_concept>> =
+    is_convertible_v<typename Iter::iterator_concept, Tag>;
+
+// __has_contiguous_traversal determines if an iterator is known to be
+// contiguous, either because it advertises itself as such via its
+// iterator_concept or because its iterator_category says so. Wrappers around
+// (possibly fancy) pointer types opt in via explicit specializations below.
 template <class Iter>
+inline constexpr bool __has_contiguous_traversal =
+    __has_iterator_category_convertible_to<Iter, contiguous_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, contiguous_iterator_tag>;
+}  // namespace __wrap_iter_detail
+
+template <class _Iter>
 class __wrap_iter {
 public:
-    using iterator_type = Iter;
-    using value_type = typename iterator_traits<Iter>::value_type;
-    using difference_type = typename iterator_traits<Iter>::difference_type;
-    using pointer = typename iterator_traits<Iter>::pointer;
-    using reference = typename iterator_traits<Iter>::reference;
-    using iterator_category = typename iterator_traits<Iter>::iterator_category;
+    using iterator_type = _Iter;
+    using value_type = typename iterator_traits<iterator_type>::value_type;
+    using difference_type = typename iterator_traits<iterator_type>::difference_type;
+    using pointer = typename iterator_traits<iterator_type>::pointer;
+    using reference = typename iterator_traits<iterator_type>::reference;
+    using iterator_category = typename iterator_traits<iterator_type>::iterator_category;
+
     using iterator_concept = contiguous_iterator_tag;
 
-    CANN_ASC_STL_API constexpr __wrap_iter() noexcept : iter_()
+private:
+    iterator_type __i_;
+
+public:
+    CANN_ASC_STL_API constexpr __wrap_iter() noexcept : __i_()
     {}
-    template <class Other, enable_if_t<is_convertible_v<Other, Iter>, int> = 0>
-    CANN_ASC_STL_API constexpr __wrap_iter(const __wrap_iter<Other>& other) noexcept : iter_(other.base())
+    template <class _Up>
+    CANN_ASC_STL_API constexpr __wrap_iter(
+        const __wrap_iter<_Up>& __u, typename enable_if<is_convertible_v<_Up, iterator_type>>::type* = nullptr) noexcept
+        : __i_(__u.base())
     {}
     CANN_ASC_STL_API constexpr reference operator*() const noexcept
     {
-        return *iter_;
+        return *__i_;
     }
     CANN_ASC_STL_API constexpr pointer operator->() const noexcept
     {
-        return ::asc::std::to_address(iter_);
-    }
-    CANN_ASC_STL_API constexpr reference operator[](difference_type n) const noexcept
-    {
-        return iter_[n];
+        return ::asc::std::to_address(__i_);
     }
     CANN_ASC_STL_API constexpr __wrap_iter& operator++() noexcept
     {
-        ++iter_;
+        ++__i_;
         return *this;
     }
     CANN_ASC_STL_API constexpr __wrap_iter operator++(int) noexcept
     {
-        auto result = *this;
-        ++*this;
-        return result;
+        __wrap_iter __tmp(*this);
+        ++(*this);
+        return __tmp;
     }
+
     CANN_ASC_STL_API constexpr __wrap_iter& operator--() noexcept
     {
-        --iter_;
+        --__i_;
         return *this;
     }
     CANN_ASC_STL_API constexpr __wrap_iter operator--(int) noexcept
     {
-        auto result = *this;
-        --*this;
-        return result;
+        __wrap_iter __tmp(*this);
+        --(*this);
+        return __tmp;
     }
-    CANN_ASC_STL_API constexpr __wrap_iter& operator+=(difference_type n) noexcept
+    CANN_ASC_STL_API constexpr __wrap_iter operator+(difference_type __n) const noexcept
     {
-        iter_ += n;
+        __wrap_iter __w(*this);
+        __w += __n;
+        return __w;
+    }
+    CANN_ASC_STL_API constexpr __wrap_iter& operator+=(difference_type __n) noexcept
+    {
+        __i_ += __n;
         return *this;
     }
-    CANN_ASC_STL_API constexpr __wrap_iter& operator-=(difference_type n) noexcept
+    CANN_ASC_STL_API constexpr __wrap_iter operator-(difference_type __n) const noexcept
     {
-        iter_ -= n;
+        return *this + (-__n);
+    }
+    CANN_ASC_STL_API constexpr __wrap_iter& operator-=(difference_type __n) noexcept
+    {
+        *this += -__n;
         return *this;
     }
-    CANN_ASC_STL_API constexpr __wrap_iter operator+(difference_type n) const noexcept
+    CANN_ASC_STL_API constexpr reference operator[](difference_type __n) const noexcept
     {
-        auto result = *this;
-        return result += n;
+        return __i_[__n];
     }
-    CANN_ASC_STL_API constexpr __wrap_iter operator-(difference_type n) const noexcept
-    {
-        auto result = *this;
-        return result -= n;
-    }
+
     CANN_ASC_STL_API constexpr iterator_type base() const noexcept
     {
-        return iter_;
+        return __i_;
     }
 
 private:
-    CANN_ASC_STL_API constexpr explicit __wrap_iter(Iter value) noexcept : iter_(value)
+    CANN_ASC_STL_API constexpr __wrap_iter(iterator_type __x) noexcept : __i_(__x)
     {}
 
-    template <class, class>
-    friend class __bounded_iter;
-    template <class, class>
-    friend struct pointer_traits;
-    Iter iter_;
+    template <class _Up>
+    friend class __wrap_iter;
+    template <class _CharT, class _Traits, class _Alloc>
+    friend class basic_string;
+    template <class _Tp, class _Alloc>
+    friend class vector;
+    template <class _Tp, size_t>
+    friend class span;
 };
 
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr bool operator==(const __wrap_iter<I1>& x, const __wrap_iter<I2>& y) noexcept
+template <class _Iter1>
+CANN_ASC_STL_API constexpr bool operator==(const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter1>& __y) noexcept
 {
-    return x.base() == y.base();
-}
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr bool operator!=(const __wrap_iter<I1>& x, const __wrap_iter<I2>& y) noexcept
-{
-    return !(x == y);
-}
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr bool operator<(const __wrap_iter<I1>& x, const __wrap_iter<I2>& y) noexcept
-{
-    return x.base() < y.base();
-}
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr bool operator>(const __wrap_iter<I1>& x, const __wrap_iter<I2>& y) noexcept
-{
-    return y < x;
-}
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr bool operator<=(const __wrap_iter<I1>& x, const __wrap_iter<I2>& y) noexcept
-{
-    return !(y < x);
-}
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr bool operator>=(const __wrap_iter<I1>& x, const __wrap_iter<I2>& y) noexcept
-{
-    return !(x < y);
-}
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr auto operator-(
-    const __wrap_iter<I1>& x, const __wrap_iter<I2>& y) noexcept -> decltype(x.base() - y.base())
-{
-    return x.base() - y.base();
-}
-template <class Iter>
-CANN_ASC_STL_API constexpr __wrap_iter<Iter> operator+(
-    typename __wrap_iter<Iter>::difference_type n, __wrap_iter<Iter> value) noexcept
-{
-    return value + n;
+    return __x.base() == __y.base();
 }
 
-template <class Iter>
-struct pointer_traits<__wrap_iter<Iter>> {
-    using pointer = __wrap_iter<Iter>;
-    using element_type = typename pointer_traits<Iter>::element_type;
-    using difference_type = typename pointer_traits<Iter>::difference_type;
-    CANN_ASC_STL_API static constexpr element_type* to_address(pointer value) noexcept
+template <class _Iter1, class _Iter2>
+CANN_ASC_STL_API constexpr bool operator==(const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter2>& __y) noexcept
+{
+    return __x.base() == __y.base();
+}
+
+template <class _Iter1>
+CANN_ASC_STL_API constexpr bool operator<(const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter1>& __y) noexcept
+{
+    return __x.base() < __y.base();
+}
+
+template <class _Iter1, class _Iter2>
+CANN_ASC_STL_API constexpr bool operator<(const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter2>& __y) noexcept
+{
+    return __x.base() < __y.base();
+}
+
+template <class _Iter1>
+CANN_ASC_STL_API constexpr bool operator!=(const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter1>& __y) noexcept
+{
+    return !(__x == __y);
+}
+
+template <class _Iter1, class _Iter2>
+CANN_ASC_STL_API constexpr bool operator!=(const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter2>& __y) noexcept
+{
+    return !(__x == __y);
+}
+
+template <class _Iter1>
+CANN_ASC_STL_API constexpr bool operator>(const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter1>& __y) noexcept
+{
+    return __y < __x;
+}
+
+template <class _Iter1, class _Iter2>
+CANN_ASC_STL_API constexpr bool operator>(const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter2>& __y) noexcept
+{
+    return __y < __x;
+}
+
+template <class _Iter1>
+CANN_ASC_STL_API constexpr bool operator>=(const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter1>& __y) noexcept
+{
+    return !(__x < __y);
+}
+
+template <class _Iter1, class _Iter2>
+CANN_ASC_STL_API constexpr bool operator>=(const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter2>& __y) noexcept
+{
+    return !(__x < __y);
+}
+
+template <class _Iter1>
+CANN_ASC_STL_API constexpr bool operator<=(const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter1>& __y) noexcept
+{
+    return !(__y < __x);
+}
+
+template <class _Iter1, class _Iter2>
+CANN_ASC_STL_API constexpr bool operator<=(const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter2>& __y) noexcept
+{
+    return !(__y < __x);
+}
+
+template <class _Iter1, class _Iter2>
+CANN_ASC_STL_API constexpr auto operator-(
+    const __wrap_iter<_Iter1>& __x, const __wrap_iter<_Iter2>& __y) noexcept -> decltype(__x.base() - __y.base())
+{
+    return __x.base() - __y.base();
+}
+
+template <class _Iter1>
+CANN_ASC_STL_API constexpr __wrap_iter<_Iter1> operator+(
+    typename __wrap_iter<_Iter1>::difference_type __n, __wrap_iter<_Iter1> __x) noexcept
+{
+    __x += __n;
+    return __x;
+}
+
+#if CANN_ASC_STL_DETAIL_STD_VER <= 2017
+namespace __wrap_iter_detail {
+template <class _It>
+inline constexpr bool __has_contiguous_traversal<__wrap_iter<_It>> = true;
+}  // namespace __wrap_iter_detail
+#endif  // CANN_ASC_STL_DETAIL_STD_VER <= 2017
+
+template <class _It>
+struct pointer_traits<__wrap_iter<_It>> {
+    using pointer = __wrap_iter<_It>;
+    using element_type = typename pointer_traits<_It>::element_type;
+    using difference_type = typename pointer_traits<_It>::difference_type;
+
+    CANN_ASC_STL_API constexpr static element_type* to_address(pointer __w) noexcept
     {
-        return ::asc::std::to_address(value.base());
+        return ::asc::std::to_address(__w.base());
     }
 };
 

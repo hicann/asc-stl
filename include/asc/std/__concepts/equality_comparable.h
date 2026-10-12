@@ -34,12 +34,14 @@
 #include <asc/std/__type_traits/common_reference.h>
 #include <asc/std/__type_traits/is_comparable.h>
 #include <asc/std/__type_traits/make_const_lvalue_ref.h>
+#include <asc/std/__type_traits/void_t.h>
+#include <asc/std/__utility/declval.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class T, class U>
-concept __weakly_equality_comparable_with = requires(const remove_reference_t<T>& t, const remove_reference_t<U>& u) {
+concept __weakly_equality_comparable_with = requires(__make_const_lvalue_ref<T> t, __make_const_lvalue_ref<U> u) {
     { t == u } -> __boolean_testable;
     { t != u } -> __boolean_testable;
     { u == t } -> __boolean_testable;
@@ -54,6 +56,45 @@ concept equality_comparable_with = equality_comparable<T> && equality_comparable
     common_reference_with<__make_const_lvalue_ref<T>, __make_const_lvalue_ref<U>> &&
     equality_comparable<common_reference_t<__make_const_lvalue_ref<T>, __make_const_lvalue_ref<U>>> &&
     __weakly_equality_comparable_with<T, U>;
+#else
+template <class T, class U, class = void>
+inline constexpr bool __weakly_equality_comparable_with_impl = false;
+
+template <class T, class U>
+inline constexpr bool __weakly_equality_comparable_with_impl<T, U,
+    void_t<__make_const_lvalue_ref<T>, __make_const_lvalue_ref<U>,
+        decltype(::asc::std::declval<__make_const_lvalue_ref<T>>() ==
+            ::asc::std::declval<__make_const_lvalue_ref<U>>()),
+        decltype(::asc::std::declval<__make_const_lvalue_ref<T>>() !=
+            ::asc::std::declval<__make_const_lvalue_ref<U>>()),
+        decltype(::asc::std::declval<__make_const_lvalue_ref<U>>() ==
+            ::asc::std::declval<__make_const_lvalue_ref<T>>()),
+        decltype(::asc::std::declval<__make_const_lvalue_ref<U>>() !=
+            ::asc::std::declval<__make_const_lvalue_ref<T>>())>> =
+    __boolean_testable<decltype(::asc::std::declval<__make_const_lvalue_ref<T>>() ==
+        ::asc::std::declval<__make_const_lvalue_ref<U>>())> &&
+    __boolean_testable<decltype(::asc::std::declval<__make_const_lvalue_ref<T>>() !=
+        ::asc::std::declval<__make_const_lvalue_ref<U>>())> &&
+    __boolean_testable<decltype(::asc::std::declval<__make_const_lvalue_ref<U>>() ==
+        ::asc::std::declval<__make_const_lvalue_ref<T>>())> &&
+    __boolean_testable<decltype(::asc::std::declval<__make_const_lvalue_ref<U>>() !=
+        ::asc::std::declval<__make_const_lvalue_ref<T>>())>;
+
+template <class T, class U>
+inline constexpr bool __weakly_equality_comparable_with = __weakly_equality_comparable_with_impl<T, U>;
+
+template <class T, class U, class = void>
+inline constexpr bool __equality_comparable_with_impl = false;
+
+template <class T, class U>
+inline constexpr bool __equality_comparable_with_impl<T, U,
+    void_t<common_reference_t<__make_const_lvalue_ref<T>, __make_const_lvalue_ref<U>>>> =
+    __weakly_equality_comparable_with<T, T> && __weakly_equality_comparable_with<U, U> &&
+    __common_reference_with_impl<__make_const_lvalue_ref<T>, __make_const_lvalue_ref<U>> &&
+    __weakly_equality_comparable_with<common_reference_t<__make_const_lvalue_ref<T>, __make_const_lvalue_ref<U>>,
+        common_reference_t<__make_const_lvalue_ref<T>, __make_const_lvalue_ref<U>>> &&
+    __weakly_equality_comparable_with<T, U>;
+
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

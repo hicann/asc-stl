@@ -31,7 +31,7 @@ int asc_stl_b025_consumer_b()
     const asc::std::monostate empty_state{};
     return leading(2) == 42 && asc::std::accumulate(data, data + 5, 0) == 15 &&
             asc::std::inner_product(data, data + 3, data, 0) == 14 && asc::std::has_single_bit(4u) &&
-            asc::std::compare_weak_order_fallback(1, 2) == asc::std::weak_ordering::less &&
+            asc::std::compare_weak_order_fallback{}(1, 2) == asc::std::weak_ordering::less &&
             empty_state == asc::std::monostate{} ?
         0 :
         1;

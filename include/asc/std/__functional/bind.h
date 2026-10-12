@@ -44,6 +44,7 @@
 #include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/is_void.h>
+#include <asc/std/__type_traits/nat.h>
 #include <asc/std/__type_traits/remove_cv.h>
 #include <asc/std/__type_traits/remove_cvref.h>
 #include <asc/std/__type_traits/remove_reference.h>
@@ -58,7 +59,7 @@ struct is_bind_expression
     : conditional_t<is_same<T, remove_cvref_t<T>>::value, false_type, is_bind_expression<remove_cvref_t<T>>> {};
 
 template <class T>
-inline constexpr int is_bind_expression_v = is_bind_expression<T>::value;
+inline constexpr bool is_bind_expression_v = is_bind_expression<T>::value;
 
 template <class T>
 struct is_placeholder : conditional_t<is_same<T, remove_cvref_t<T>>::value, integral_constant<int, 0>,
@@ -145,10 +146,20 @@ __mu(Ti& ti, Uj&)
 template <class Ti, bool IsReferenceWrapper, bool IsBindEx, bool IsPh, class TupleUj>
 struct __mu_return_impl;
 
+// 当嵌套 bind 表达式对实参不可调用时回退为 __nat，避免 __mu_return 求值硬错误（SFINAE 友好）。
+template <bool Invocable, class Ti, class... Uj>
+struct __mu_return_invocable {
+    using type = __nat;
+};
+
 template <class Ti, class... Uj>
-struct __mu_return_impl<Ti, false, true, false, tuple<Uj...>> {
+struct __mu_return_invocable<true, Ti, Uj...> {
     using type = invoke_result_t<Ti&, Uj...>;
 };
+
+template <class Ti, class... Uj>
+struct __mu_return_impl<Ti, false, true, false, tuple<Uj...>>
+    : public __mu_return_invocable<is_invocable_v<Ti&, Uj...>, Ti, Uj...> {};
 
 template <class Ti, class TupleUj>
 struct __mu_return_impl<Ti, false, false, true, TupleUj> {

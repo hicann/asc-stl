@@ -59,38 +59,29 @@ struct __is_convertible_test<From, To,
     decltype(asc::std::__is_convertible_imp::__test_convert<To>(asc::std::declval<From>()))> : public true_type {};
 
 template <class Tp, bool IsArray = is_array_v<Tp>, bool IsFunction = is_function_v<Tp>, bool IsVoid = is_void_v<Tp> >
-struct __is_array_function_or_void {
-    enum { value = 0 };
-};
+struct __is_array_function_or_void : integral_constant<unsigned, 0> {};
 template <class Tp>
-struct __is_array_function_or_void<Tp, true, false, false> {
-    enum { value = 1 };
-};
+struct __is_array_function_or_void<Tp, true, false, false> : integral_constant<unsigned, 1> {};
 template <class Tp>
-struct __is_array_function_or_void<Tp, false, true, false> {
-    enum { value = 2 };
-};
+struct __is_array_function_or_void<Tp, false, true, false> : integral_constant<unsigned, 2> {};
 template <class Tp>
-struct __is_array_function_or_void<Tp, false, false, true> {
-    enum { value = 3 };
-};
+struct __is_array_function_or_void<Tp, false, false, true> : integral_constant<unsigned, 3> {};
 }  // namespace __is_convertible_imp
 
 template <class Tp, unsigned = __is_convertible_imp::__is_array_function_or_void<remove_reference_t<Tp> >::value>
 struct __is_convertible_check {
-    static const size_t __v = 0;
+    static constexpr size_t __v = 0;
 };
 
 template <class Tp>
 struct __is_convertible_check<Tp, 0> {
-    static const size_t __v = sizeof(Tp);
+    static constexpr size_t __v = sizeof(Tp);
 };
 
 template <class T1, class T2,
     unsigned T1IsArrayFunctionOrVoid = __is_convertible_imp::__is_array_function_or_void<T1>::value,
     unsigned T2IsArrayFunctionOrVoid = __is_convertible_imp::__is_array_function_or_void<T2>::value>
-struct __is_convertible_fallback
-    : public integral_constant<bool, __is_convertible_imp::__is_convertible_test<T1, T2>::value> {};
+struct __is_convertible_fallback : public __is_convertible_imp::__is_convertible_test<T1, T2> {};
 
 template <class T1, class T2>
 struct __is_convertible_fallback<T1, T2, 0, 1> : public false_type {};
@@ -121,8 +112,8 @@ struct __is_convertible_fallback<T1, T2, 3, 3> : public true_type {};
 
 template <class T1, class T2>
 struct is_convertible : public __is_convertible_fallback<T1, T2> {
-    static const size_t __complete_check1 = __is_convertible_check<T1>::__v;
-    static const size_t __complete_check2 = __is_convertible_check<T2>::__v;
+    static constexpr size_t __complete_check1 = __is_convertible_check<T1>::__v;
+    static constexpr size_t __complete_check2 = __is_convertible_check<T2>::__v;
 };
 
 template <class From, class To>

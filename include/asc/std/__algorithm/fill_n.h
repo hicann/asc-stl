@@ -33,14 +33,19 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class OutputIterator, class Size, class T>
-CANN_ASC_STL_API constexpr OutputIterator fill_n(OutputIterator first, Size count, const T& value)
+template <class _OutputIterator, class _Size, class _Tp>
+CANN_ASC_STL_API constexpr _OutputIterator __fill_n(_OutputIterator __first, _Size __n, const _Tp& __value_)
 {
-    const auto integral_count = ::asc::std::__convert_to_integral(count);
-    for (auto index = 0; index < integral_count; ++index, (void)++first) {
-        *first = value;
+    for (; __n > 0; ++__first, (void)--__n) {
+        *__first = __value_;
     }
-    return first;
+    return __first;
+}
+
+template <class _OutputIterator, class _Size, class _Tp>
+CANN_ASC_STL_API constexpr _OutputIterator fill_n(_OutputIterator __first, _Size __n, const _Tp& __value_)
+{
+    return ::asc::std::__fill_n(__first, __convert_to_integral(__n), __value_);
 }
 
 CANN_ASC_STL_END_NAMESPACE

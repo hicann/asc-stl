@@ -34,109 +34,152 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace chrono {
 struct __month_constant_factory;
-
 class month {
+private:
+    friend struct __month_constant_factory;
+
+    constexpr month(unsigned __value, int) noexcept : __month_(__value)
+    {}
+    // record 裁定局部采纳队友版零初始化：默认构造后确定 ok() == false，消除读取未初始化无符号值的 UB 风险
+    unsigned char __month_{};
+
+    CANN_ASC_STL_API constexpr void __add_clamped(long long __add) noexcept
+    {
+        const auto __mu = static_cast<long long>(static_cast<unsigned>(__month_)) + (__add - 1);
+        const auto __yr = (__mu >= 0 ? __mu : __mu - 11) / 12;
+        __month_ = static_cast<unsigned char>(__mu - __yr * 12 + 1);
+    }
+
 public:
     CANN_ASC_STL_API constexpr month() = default;
-    CANN_ASC_STL_API explicit constexpr month(unsigned value) noexcept : value_(value)
+    CANN_ASC_STL_API explicit constexpr month(unsigned __month) noexcept : __month_(static_cast<unsigned char>(__month))
     {}
-    CANN_ASC_STL_API constexpr explicit operator unsigned() const noexcept
-    {
-        return value_;
-    }
-    CANN_ASC_STL_API constexpr bool ok() const noexcept
-    {
-        return value_ >= 1 && value_ <= 12;
-    }
     CANN_ASC_STL_API constexpr month& operator++() noexcept
     {
-        value_ = static_cast<unsigned char>(value_ == 12 ? 1 : value_ + 1);
+        __add_clamped(1);
         return *this;
     }
     CANN_ASC_STL_API constexpr month operator++(int) noexcept
     {
-        month previous(*this);
-        ++*this;
-        return previous;
+        month __tmp = *this;
+        __add_clamped(1);
+        return __tmp;
     }
     CANN_ASC_STL_API constexpr month& operator--() noexcept
     {
-        value_ = static_cast<unsigned char>(value_ == 1 ? 12 : value_ - 1);
+        __add_clamped(-1);
         return *this;
     }
     CANN_ASC_STL_API constexpr month operator--(int) noexcept
     {
-        month previous(*this);
-        --*this;
-        return previous;
-    }
-    CANN_ASC_STL_API constexpr month& operator+=(const months& value) noexcept
-    {
-        const long long zero_based = static_cast<long long>(value_) - 1 + value.count();
-        const long long reduced = zero_based >= 0 ? zero_based % 12 : 11 + (zero_based + 1) % 12;
-        value_ = static_cast<unsigned char>(reduced + 1);
-        return *this;
-    }
-    CANN_ASC_STL_API constexpr month& operator-=(const months& value) noexcept
-    {
-        return *this += months(-value.count());
+        month __tmp = *this;
+        __add_clamped(-1);
+        return __tmp;
     }
 
-private:
-    friend struct __month_constant_factory;
-    constexpr month(unsigned value, int) noexcept : value_(value)
-    {}
-    unsigned char value_{};
+    CANN_ASC_STL_API constexpr month& operator+=(const months& __dm) noexcept
+    {
+        __add_clamped(__dm.count());
+        return *this;
+    }
+
+    CANN_ASC_STL_API constexpr month& operator-=(const months& __dm) noexcept
+    {
+        __add_clamped(-__dm.count());
+        return *this;
+    }
+
+    CANN_ASC_STL_API explicit constexpr operator unsigned() const noexcept
+    {
+        return __month_;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool ok() const noexcept
+    {
+        return __month_ >= 1 && __month_ <= 12;
+    }
+
+    // Arithmetics
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr month operator+(
+        const month& __lhs, const months& __rhs) noexcept
+    {
+        month __ret{__lhs};
+        __ret.__add_clamped(__rhs.count());
+        return __ret;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr month operator+(
+        const months& __lhs, const month& __rhs) noexcept
+    {
+        month __ret{__rhs};
+        __ret.__add_clamped(__lhs.count());
+        return __ret;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr month operator-(
+        const month& __lhs, const months& __rhs) noexcept
+    {
+        month __ret{__lhs};
+        __ret.__add_clamped(-__rhs.count());
+        return __ret;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr months operator-(
+        const month& __lhs, const month& __rhs) noexcept
+    {
+        auto const __dm = static_cast<unsigned>(__lhs) - static_cast<unsigned>(__rhs);
+        return months(__dm <= 11 ? __dm : __dm + 12);
+    }
+
+    // Comparisons
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator==(
+        const month& __lhs, const month& __rhs) noexcept
+    {
+        return static_cast<unsigned>(__lhs) == static_cast<unsigned>(__rhs);
+    }
+
+#if !CANN_ASC_STL_DETAIL_HAS_CXX20()
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator!=(
+        const month& __lhs, const month& __rhs) noexcept
+    {
+        return static_cast<unsigned>(__lhs) != static_cast<unsigned>(__rhs);
+    }
+#endif  // !CANN_ASC_STL_DETAIL_HAS_CXX20()
+
+    // Traditional relational operators (spaceship not supported)
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator<(
+        const month& __lhs, const month& __rhs) noexcept
+    {
+        return static_cast<unsigned>(__lhs) < static_cast<unsigned>(__rhs);
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator>(
+        const month& __lhs, const month& __rhs) noexcept
+    {
+        return static_cast<unsigned>(__lhs) > static_cast<unsigned>(__rhs);
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator<=(
+        const month& __lhs, const month& __rhs) noexcept
+    {
+        return static_cast<unsigned>(__lhs) <= static_cast<unsigned>(__rhs);
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator>=(
+        const month& __lhs, const month& __rhs) noexcept
+    {
+        return static_cast<unsigned>(__lhs) >= static_cast<unsigned>(__rhs);
+    }
 };
 
 struct __month_constant_factory {
-    static constexpr month make(unsigned value) noexcept
+    static constexpr month make(unsigned __value) noexcept
     {
-        return month(value, 0);
+        return month(__value, 0);
     }
 };
-CANN_ASC_STL_API constexpr bool operator==(month left, month right) noexcept
-{
-    return static_cast<unsigned>(left) == static_cast<unsigned>(right);
-}
-CANN_ASC_STL_API constexpr bool operator!=(month left, month right) noexcept
-{
-    return !(left == right);
-}
-CANN_ASC_STL_API constexpr bool operator<(month left, month right) noexcept
-{
-    return static_cast<unsigned>(left) < static_cast<unsigned>(right);
-}
-CANN_ASC_STL_API constexpr bool operator>(month left, month right) noexcept
-{
-    return right < left;
-}
-CANN_ASC_STL_API constexpr bool operator<=(month left, month right) noexcept
-{
-    return !(right < left);
-}
-CANN_ASC_STL_API constexpr bool operator>=(month left, month right) noexcept
-{
-    return !(left < right);
-}
-CANN_ASC_STL_API constexpr month operator+(month value, const months& offset) noexcept
-{
-    return value += offset;
-}
-CANN_ASC_STL_API constexpr month operator+(const months& offset, month value) noexcept
-{
-    return value += offset;
-}
-CANN_ASC_STL_API constexpr month operator-(month value, const months& offset) noexcept
-{
-    return value -= offset;
-}
-CANN_ASC_STL_API constexpr months operator-(month left, month right) noexcept
-{
-    const int left_value = static_cast<int>(static_cast<unsigned>(left));
-    const int right_value = static_cast<int>(static_cast<unsigned>(right));
-    return months((left_value - right_value + 12) % 12);
-}
 
 inline constexpr month January = __month_constant_factory::make(1);
 inline constexpr month February = __month_constant_factory::make(2);

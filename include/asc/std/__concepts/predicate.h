@@ -31,12 +31,22 @@
 #include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__concepts/invocable.h>
 #include <asc/std/__functional/invoke.h>
+#include <asc/std/__type_traits/is_callable.h>
+#include <asc/std/__type_traits/void_t.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class Fn, class... Args>
 concept predicate = regular_invocable<Fn, Args...> && __boolean_testable<invoke_result_t<Fn, Args...>>;
+#else
+template <class Fn, class Void, class... Args>
+inline constexpr bool __predicate_impl = false;
+
+template <class Fn, class... Args>
+inline constexpr bool __predicate_impl<Fn, void_t<invoke_result_t<Fn, Args...>>, Args...> =
+    __is_callable_v<Fn, Args...> && __boolean_testable<invoke_result_t<Fn, Args...>>;
+
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

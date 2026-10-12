@@ -31,6 +31,12 @@
 #include <asc/std/__chrono/duration.h>
 #include <asc/std/__chrono/time_point.h>
 
+// Migrated from dev __asc/visibility.h: ASC-STL keeps only the inline
+// semantics for ABI hidden; base asc/__detail/visibility.h has no such macro.
+#ifndef CANN_ASC_STL_DETAIL_HIDE_FROM_ABI
+#define CANN_ASC_STL_DETAIL_HIDE_FROM_ABI inline
+#endif
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace chrono {
@@ -42,27 +48,11 @@ using local_time = time_point<local_t, Duration>;
 using local_seconds = local_time<seconds>;
 using local_days = local_time<days>;
 
-struct __last_spec_constant_factory;
-
 struct last_spec {
-    CANN_ASC_STL_API explicit constexpr last_spec() noexcept = default;
-
-private:
-    friend struct __last_spec_constant_factory;
-    constexpr explicit last_spec(int value) noexcept
-    {
-        static_cast<void>(value);
-    }
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI explicit last_spec() = default;
 };
 
-struct __last_spec_constant_factory {
-    static constexpr last_spec make() noexcept
-    {
-        return last_spec(0);
-    }
-};
-
-inline constexpr last_spec last = __last_spec_constant_factory::make();
+inline constexpr last_spec last{};
 
 }  // namespace chrono
 

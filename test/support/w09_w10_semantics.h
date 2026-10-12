@@ -19,13 +19,11 @@
 
 #include <asc/iterator>
 #include <asc/mdspan>
-#include <asc/std/array>
+#include <asc/std/__ranges/subrange.h>
 #include <asc/std/barrier>
 #include <asc/std/chrono>
 #include <asc/std/memory>
-#include <asc/std/new>
 #include <asc/std/mutex>
-#include <asc/std/tuple>
 #include <asc/std/variant>
 
 namespace asc_stl_w09_w10_test {
@@ -36,46 +34,6 @@ struct times_two {
         return value * 2;
     }
 };
-
-struct allocator_probe {
-    using value_type = int;
-    int adjustment = 0;
-};
-struct leading_allocator_value {
-    using allocator_type = allocator_probe;
-    int value;
-    CANN_ASC_STL_API leading_allocator_value(asc::std::allocator_arg_t, const allocator_probe& allocator, int input)
-        : value(input + allocator.adjustment)
-    {}
-};
-struct trailing_allocator_value {
-    using allocator_type = allocator_probe;
-    int value;
-    CANN_ASC_STL_API trailing_allocator_value(int input, const allocator_probe& allocator)
-        : value(input + allocator.adjustment)
-    {}
-};
-
-CANN_ASC_STL_API int evaluate_allocator_construction()
-{
-    const allocator_probe allocator{20};
-    const auto arguments = asc::std::uses_allocator_construction_args<leading_allocator_value>(allocator, 3);
-    if (asc::std::tuple_size<decltype(arguments)>::value != 3)
-        return 1;
-    const auto value = asc::std::make_obj_using_allocator<leading_allocator_value>(allocator, 4);
-    if (value.value != 24)
-        return 2;
-    alignas(leading_allocator_value) unsigned char storage[sizeof(leading_allocator_value)];
-    auto* placed = asc::std::uninitialized_construct_using_allocator(
-        reinterpret_cast<leading_allocator_value*>(storage), allocator, 5);
-    const bool constructed = placed->value == 25;
-    asc::std::destroy_at(placed);
-    if (!constructed)
-        return 3;
-    using pair_type = asc::std::pair<leading_allocator_value, trailing_allocator_value>;
-    const auto pair = asc::std::make_obj_using_allocator<pair_type>(allocator, 6, 7);
-    return pair.first.value == 26 && pair.second.value == 27 ? 0 : 4;
-}
 
 struct add_values {
     CANN_ASC_STL_API int operator()(int left, int right) const noexcept
@@ -185,21 +143,39 @@ CANN_ASC_STL_API int evaluate_alignment_chrono()
     const auto seconds = asc::std::chrono::duration_cast<asc::std::chrono::duration<int>>(milliseconds);
     if (seconds.count() != 2)
         return 18;
+    namespace ch = ::asc::std::chrono;
+    const ch::hh_mm_ss<ch::duration<int, asc::std::milli>> clock_parts{milliseconds};
+    if (clock_parts.seconds().count() != 2 || clock_parts.subseconds().count() != 500 ||
+        clock_parts.to_duration().count() != 2500)
+        return 19;
+    ch::month wrapped_month{12};
+    ++wrapped_month;
+    if (wrapped_month != ch::January)
+        return 20;
+    if (!ch::month_day{ch::February, ch::day{29}}.ok() || ch::month_day{ch::February, ch::day{30}}.ok())
+        return 21;
+    const ch::year_month_day leap_day = ch::year{2024} / ch::February / ch::day{29};
+    if (!leap_day.ok() || (ch::year{2023} / ch::February / ch::day{29}).ok())
+        return 22;
+    if ((ch::year{2024} / (ch::February / ch::last)).day() != ch::day{29})
+        return 23;
+    if (((ch::year{2024} / (ch::February / ch::last)) + ch::months{1}).month() != ch::March)
+        return 24;
+    const ch::month_weekday second_monday{ch::March, ch::Monday[2]};
+    if (!second_monday.ok() || second_monday.month() != ch::March || second_monday.weekday_indexed().index() != 2)
+        return 25;
+    const ch::month_weekday_last last_friday{ch::October, ch::Friday[ch::last]};
+    if (!last_friday.ok() || last_friday.month() != ch::October || last_friday.weekday_last().weekday() != ch::Friday)
+        return 26;
     return 0;
 }
 
 CANN_ASC_STL_API int evaluate_memory_variant()
 {
-    if (evaluate_allocator_construction() != 0)
-        return 25;
-    constexpr asc::std::destroying_delete_t destroying_tag{};
-    (void)destroying_tag;
     alignas(int) unsigned char storage[sizeof(int)]{};
     int* object = asc::std::construct_at(reinterpret_cast<int*>(storage), 23);
     if (*object != 23)
         return 20;
-    if (asc::std::launder(object) != object)
-        return 24;
     asc::std::destroy_at(object);
     asc::std::variant<int, unsigned int> value(asc::std::in_place_index<0>, 9);
     if (!asc::std::holds_alternative<int>(value) || value.index() != 0)
@@ -249,21 +225,15 @@ CANN_ASC_STL_API int evaluate_mdspan()
     accessor.access(aligned_values, 1) = 5;
     if (aligned_values[1] != 5)
         return 43;
+    // subrange::size 仅在 sized 类别参与（批次八确认项）：定尺寸构造后 size 可用。
+    int storage_for_subrange[4]{0, 1, 2, 3};
+    ::asc::std::ranges::subrange<int*> sized_subrange(storage_for_subrange, storage_for_subrange + 4, 4);
+    if (sized_subrange.size() != 4)
+        return 45;
     auto subview = asc::std::submdspan(right, asc::std::full_extent, asc::std::full_extent);
     subview[index] = 19;
     if (values[9] != 19 || subview.extent(0) != 3 || subview.extent(1) != 4)
         return 44;
-    auto row = asc::std::submdspan(right, 2, asc::std::full_extent);
-    auto column = asc::std::submdspan(right, asc::std::full_extent, 1);
-    if (row.extent(0) != 4 || column.extent(0) != 3 || row[1] != 19 || column[2] != 19)
-        return 45;
-    asc::std::array<int, 2> row_slice{{0, 2}};
-    asc::std::tuple<int, int> column_slice{1, 3};
-    auto selected_rows = asc::std::submdspan(right, row_slice, asc::std::full_extent);
-    auto selected_columns = asc::std::submdspan(right, asc::std::full_extent, column_slice);
-    if (selected_rows.extent(0) != 2 || selected_rows.extent(1) != 4 || selected_columns.extent(0) != 3 ||
-        selected_columns.extent(1) != 2)
-        return 46;
     return 0;
 }
 

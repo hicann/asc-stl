@@ -44,157 +44,377 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace chrono {
 
-class year_month_weekday_last;
-
+//! @brief A calendar date expressed as year, month, and the n-th
+//! occurrence of a weekday (the second Tuesday of March 2024, say).
+//! Converts to and from day counts by anchoring on the first of the
+//! month and shifting by whole weeks.
 class year_month_weekday {
-public:
-    CANN_ASC_STL_API constexpr year_month_weekday() = default;
-    CANN_ASC_STL_API constexpr year_month_weekday(const year_month_weekday&) = default;
-    CANN_ASC_STL_API constexpr year_month_weekday(year_month_weekday&&) noexcept = default;
-    CANN_ASC_STL_API constexpr year_month_weekday& operator=(const year_month_weekday&) = default;
-    CANN_ASC_STL_API constexpr year_month_weekday& operator=(year_month_weekday&&) noexcept = default;
-    CANN_ASC_STL_API constexpr year_month_weekday(const chrono::year& year_value, const chrono::month& month_value,
-        const chrono::weekday_indexed& weekday_indexed_value) noexcept
-        : year_(year_value), month_(month_value), weekday_indexed_(weekday_indexed_value)
-    {}
-    CANN_ASC_STL_API constexpr year_month_weekday(const sys_days& value) noexcept
-        : year_month_weekday(__from_days(value.time_since_epoch()))
-    {}
-    CANN_ASC_STL_API explicit constexpr year_month_weekday(const local_days& value) noexcept
-        : year_month_weekday(__from_days(value.time_since_epoch()))
-    {}
-    CANN_ASC_STL_API ~year_month_weekday() noexcept = default;
+    chrono::year __year_;
+    chrono::month __month_;
+    chrono::weekday_indexed __weekday_indexed_;
 
-    CANN_ASC_STL_API constexpr chrono::year year() const noexcept
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API static constexpr year_month_weekday __from_days(days __days) noexcept
     {
-        return year_;
+        const sys_days __sysd{__days};
+        const chrono::weekday __wd = chrono::weekday{__sysd};
+        const year_month_day __ymd = year_month_day{__sysd};
+        return year_month_weekday{__ymd.year(), __ymd.month(), __wd[(static_cast<unsigned>(__ymd.day()) - 1) / 7 + 1]};
     }
-    CANN_ASC_STL_API constexpr chrono::month month() const noexcept
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr days __to_days() const noexcept
     {
-        return month_;
+        const sys_days __sysd{__year_ / __month_ / 1};
+        return (__sysd +
+            (__weekday_indexed_.weekday() - chrono::weekday(__sysd) + days{(__weekday_indexed_.index() - 1) * 7}))
+            .time_since_epoch();
     }
-    CANN_ASC_STL_API constexpr chrono::weekday weekday() const noexcept
+
+public:
+    CANN_ASC_STL_API year_month_weekday() = default;
+
+    CANN_ASC_STL_API constexpr year_month_weekday(const chrono::year& __year, const chrono::month& __month,
+        const chrono::weekday_indexed& __weekday_indexed) noexcept
+        : __year_{__year}, __month_{__month}, __weekday_indexed_{__weekday_indexed}
+    {}
+
+    CANN_ASC_STL_API constexpr year_month_weekday(const sys_days& __sysd) noexcept
+        : year_month_weekday(__from_days(__sysd.time_since_epoch()))
+    {}
+
+    CANN_ASC_STL_API explicit constexpr year_month_weekday(const local_days& __locd) noexcept
+        : year_month_weekday(__from_days(__locd.time_since_epoch()))
+    {}
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::year year() const noexcept
     {
-        return weekday_indexed_.weekday();
+        return __year_;
     }
-    CANN_ASC_STL_API constexpr unsigned index() const noexcept
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::month month() const noexcept
     {
-        return weekday_indexed_.index();
+        return __month_;
     }
-    CANN_ASC_STL_API constexpr chrono::weekday_indexed weekday_indexed() const noexcept
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::weekday weekday() const noexcept
     {
-        return weekday_indexed_;
+        return __weekday_indexed_.weekday();
     }
-    CANN_ASC_STL_API constexpr bool ok() const noexcept
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned index() const noexcept
     {
-        if (!year_.ok() || !month_.ok() || !weekday_indexed_.ok()) {
+        return __weekday_indexed_.index();
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::weekday_indexed weekday_indexed() const noexcept
+    {
+        return __weekday_indexed_;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr operator sys_days() const noexcept
+    {
+        return sys_days{__to_days()};
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API explicit constexpr operator local_days() const noexcept
+    {
+        return local_days{__to_days()};
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool ok() const noexcept
+    {
+        if (!__year_.ok() || !__month_.ok() || !__weekday_indexed_.ok()) {
             return false;
         }
-        if (weekday_indexed_.index() <= 4) {
+        if (__weekday_indexed_.index() <= 4) {
             return true;
         }
-        const sys_days first_of_month(year_ / month_ / chrono::day(1u));
-        const days nth_weekday_offset =
-            weekday_indexed_.weekday() - chrono::weekday(first_of_month) + days((weekday_indexed_.index() - 1) * 7);
-        const year_month_day_last last_day(year_, month_ / chrono::last);
-        return static_cast<unsigned>(nth_weekday_offset.count() + 1) <= static_cast<unsigned>(last_day.day());
+        const auto __nth_weekday_day = __weekday_indexed_.weekday() -
+            chrono::weekday{static_cast<sys_days>(__year_ / __month_ / 1)} +
+            days{(__weekday_indexed_.index() - 1) * 7} + days{1};
+        return static_cast<unsigned>(__nth_weekday_day.count()) <=
+            static_cast<unsigned>((__year_ / __month_ / last).day());
     }
 
-    CANN_ASC_STL_API constexpr year_month_weekday& operator+=(const months& offset) noexcept
+    CANN_ASC_STL_API constexpr year_month_weekday& operator+=(const months& __dm) noexcept;
+    CANN_ASC_STL_API constexpr year_month_weekday& operator-=(const months& __dm) noexcept;
+    CANN_ASC_STL_API constexpr year_month_weekday& operator+=(const years& __dy) noexcept;
+    CANN_ASC_STL_API constexpr year_month_weekday& operator-=(const years& __dy) noexcept;
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator==(
+        const year_month_weekday& __lhs, const year_month_weekday& __rhs) noexcept
     {
-        const year_month shifted = year_month(year_, month_) + offset;
-        year_ = shifted.year();
-        month_ = shifted.month();
-        return *this;
-    }
-    CANN_ASC_STL_API constexpr year_month_weekday& operator-=(const months& offset) noexcept
-    {
-        return *this += -offset;
-    }
-    CANN_ASC_STL_API constexpr year_month_weekday& operator+=(const years& offset) noexcept
-    {
-        year_ += offset;
-        return *this;
-    }
-    CANN_ASC_STL_API constexpr year_month_weekday& operator-=(const years& offset) noexcept
-    {
-        return *this += -offset;
+        return __lhs.year() == __rhs.year() && __lhs.month() == __rhs.month() &&
+            __lhs.weekday_indexed() == __rhs.weekday_indexed();
     }
 
-private:
-    CANN_ASC_STL_API static constexpr year_month_weekday __from_days(days value) noexcept
+#if !CANN_ASC_STL_DETAIL_HAS_CXX20()
+    CANN_ASC_STL_NODISCARD
+    CANN_ASC_STL_API friend constexpr bool operator!=(
+        const year_month_weekday& __lhs, const year_month_weekday& __rhs) noexcept
     {
-        const sys_days sysd(value);
-        const chrono::weekday weekday_value(sysd);
-        const year_month_day ymd(sysd);
-        return year_month_weekday(
-            ymd.year(), ymd.month(), weekday_value[(static_cast<unsigned>(ymd.day()) - 1u) / 7u + 1u]);
+        return __lhs.year() != __rhs.year() || __lhs.month() != __rhs.month() ||
+            __lhs.weekday_indexed() != __rhs.weekday_indexed();
     }
-
-    chrono::year year_;
-    chrono::month month_;
-    chrono::weekday_indexed weekday_indexed_;
+#endif  // !CANN_ASC_STL_DETAIL_HAS_CXX20()
 };
 
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday operator/(
+    const year_month& __lhs, const weekday_indexed& __rhs) noexcept
+{
+    return year_month_weekday{__lhs.year(), __lhs.month(), __rhs};
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday operator/(
+    const year& __lhs, const month_weekday& __rhs) noexcept
+{
+    return year_month_weekday{__lhs, __rhs.month(), __rhs.weekday_indexed()};
+}
+
+CANN_ASC_STL_API constexpr year_month_weekday operator/(int __lhs, const month_weekday& __rhs) noexcept
+{
+    return ::asc::std::chrono::operator/(year(__lhs), __rhs);
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday operator/(
+    const month_weekday& __lhs, const year& __rhs) noexcept
+{
+    return ::asc::std::chrono::operator/(__rhs, __lhs);
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday operator/(
+    const month_weekday& __lhs, int __rhs) noexcept
+{
+    return ::asc::std::chrono::operator/(year(__rhs), __lhs);
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday operator+(
+    const year_month_weekday& __lhs, const months& __rhs) noexcept
+{
+    return (__lhs.year() / __lhs.month() + __rhs) / __lhs.weekday_indexed();
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday operator+(
+    const months& __lhs, const year_month_weekday& __rhs) noexcept
+{
+    return __rhs + __lhs;
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday operator-(
+    const year_month_weekday& __lhs, const months& __rhs) noexcept
+{
+    return __lhs + (-__rhs);
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday operator+(
+    const year_month_weekday& __lhs, const years& __rhs) noexcept
+{
+    return year_month_weekday{__lhs.year() + __rhs, __lhs.month(), __lhs.weekday_indexed()};
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday operator+(
+    const years& __lhs, const year_month_weekday& __rhs) noexcept
+{
+    return __rhs + __lhs;
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday operator-(
+    const year_month_weekday& __lhs, const years& __rhs) noexcept
+{
+    return __lhs + (-__rhs);
+}
+
+CANN_ASC_STL_API constexpr year_month_weekday& year_month_weekday::operator+=(const months& __dm) noexcept
+{
+    *this = *this + __dm;
+    return *this;
+}
+
+CANN_ASC_STL_API constexpr year_month_weekday& year_month_weekday::operator-=(const months& __dm) noexcept
+{
+    *this = *this - __dm;
+    return *this;
+}
+
+CANN_ASC_STL_API constexpr year_month_weekday& year_month_weekday::operator+=(const years& __dy) noexcept
+{
+    *this = *this + __dy;
+    return *this;
+}
+
+CANN_ASC_STL_API constexpr year_month_weekday& year_month_weekday::operator-=(const years& __dy) noexcept
+{
+    *this = *this - __dy;
+    return *this;
+}
+
+//! @brief A calendar date expressed as year, month, and the last
+//! occurrence of a weekday (the last Friday of October, say). Converts
+//! to a day count by starting at the month's last day and stepping back
+//! the weekday distance.
 class year_month_weekday_last {
+    chrono::year __year_;
+    chrono::month __month_;
+    chrono::weekday_last __weekday_last_;
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr days __to_days() const noexcept
+    {
+        const sys_days __last{__year_ / __month_ / chrono::last};
+        return (__last - (chrono::weekday{__last} - __weekday_last_.weekday())).time_since_epoch();
+    }
+
 public:
-    CANN_ASC_STL_API constexpr year_month_weekday_last(const chrono::year& year_value, const chrono::month& month_value,
-        const chrono::weekday_last& weekday_last_value) noexcept
-        : year_(year_value), month_(month_value), weekday_last_(weekday_last_value)
+    CANN_ASC_STL_API constexpr year_month_weekday_last(
+        const chrono::year& __year, const chrono::month& __month, const chrono::weekday_last& __weekday_last) noexcept
+        : __year_{__year}, __month_{__month}, __weekday_last_{__weekday_last}
     {}
-    CANN_ASC_STL_API constexpr year_month_weekday_last(const year_month_weekday_last&) = default;
-    CANN_ASC_STL_API constexpr year_month_weekday_last(year_month_weekday_last&&) noexcept = default;
-    CANN_ASC_STL_API constexpr year_month_weekday_last& operator=(const year_month_weekday_last&) = default;
-    CANN_ASC_STL_API constexpr year_month_weekday_last& operator=(year_month_weekday_last&&) noexcept = default;
-    CANN_ASC_STL_API ~year_month_weekday_last() noexcept = default;
 
-    CANN_ASC_STL_API constexpr chrono::year year() const noexcept
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::year year() const noexcept
     {
-        return year_;
-    }
-    CANN_ASC_STL_API constexpr chrono::month month() const noexcept
-    {
-        return month_;
-    }
-    CANN_ASC_STL_API constexpr chrono::weekday weekday() const noexcept
-    {
-        return weekday_last_.weekday();
-    }
-    CANN_ASC_STL_API constexpr chrono::weekday_last weekday_last() const noexcept
-    {
-        return weekday_last_;
-    }
-    CANN_ASC_STL_API constexpr bool ok() const noexcept
-    {
-        return year_.ok() && month_.ok() && weekday_last_.ok();
+        return __year_;
     }
 
-    CANN_ASC_STL_API constexpr year_month_weekday_last& operator+=(const months& offset) noexcept
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::month month() const noexcept
     {
-        const year_month shifted = year_month(year_, month_) + offset;
-        year_ = shifted.year();
-        month_ = shifted.month();
-        return *this;
-    }
-    CANN_ASC_STL_API constexpr year_month_weekday_last& operator-=(const months& offset) noexcept
-    {
-        return *this += -offset;
-    }
-    CANN_ASC_STL_API constexpr year_month_weekday_last& operator+=(const years& offset) noexcept
-    {
-        year_ += offset;
-        return *this;
-    }
-    CANN_ASC_STL_API constexpr year_month_weekday_last& operator-=(const years& offset) noexcept
-    {
-        return *this += -offset;
+        return __month_;
     }
 
-private:
-    chrono::year year_;
-    chrono::month month_;
-    chrono::weekday_last weekday_last_;
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::weekday weekday() const noexcept
+    {
+        return __weekday_last_.weekday();
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::weekday_last weekday_last() const noexcept
+    {
+        return __weekday_last_;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr operator sys_days() const noexcept
+    {
+        return sys_days{__to_days()};
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API explicit constexpr operator local_days() const noexcept
+    {
+        return local_days{__to_days()};
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool ok() const noexcept
+    {
+        return __year_.ok() && __month_.ok() && __weekday_last_.ok();
+    }
+
+    CANN_ASC_STL_API constexpr year_month_weekday_last& operator+=(const months& __dm) noexcept;
+    CANN_ASC_STL_API constexpr year_month_weekday_last& operator-=(const months& __dm) noexcept;
+    CANN_ASC_STL_API constexpr year_month_weekday_last& operator+=(const years& __dy) noexcept;
+    CANN_ASC_STL_API constexpr year_month_weekday_last& operator-=(const years& __dy) noexcept;
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator==(
+        const year_month_weekday_last& __lhs, const year_month_weekday_last& __rhs) noexcept
+    {
+        return __lhs.year() == __rhs.year() && __lhs.month() == __rhs.month() &&
+            __lhs.weekday_last() == __rhs.weekday_last();
+    }
+
+#if !CANN_ASC_STL_DETAIL_HAS_CXX20()
+    CANN_ASC_STL_NODISCARD
+    CANN_ASC_STL_API friend constexpr bool operator!=(
+        const year_month_weekday_last& __lhs, const year_month_weekday_last& __rhs) noexcept
+    {
+        return __lhs.year() != __rhs.year() || __lhs.month() != __rhs.month() ||
+            __lhs.weekday_last() != __rhs.weekday_last();
+    }
+#endif  // !CANN_ASC_STL_DETAIL_HAS_CXX20()
 };
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday_last operator/(
+    const year_month& __lhs, const weekday_last& __rhs) noexcept
+{
+    return year_month_weekday_last{__lhs.year(), __lhs.month(), __rhs};
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday_last operator/(
+    const year& __lhs, const month_weekday_last& __rhs) noexcept
+{
+    return year_month_weekday_last{__lhs, __rhs.month(), __rhs.weekday_last()};
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday_last operator/(
+    int __lhs, const month_weekday_last& __rhs) noexcept
+{
+    return ::asc::std::chrono::operator/(year(__lhs), __rhs);
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday_last operator/(
+    const month_weekday_last& __lhs, const year& __rhs) noexcept
+{
+    return ::asc::std::chrono::operator/(__rhs, __lhs);
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday_last operator/(
+    const month_weekday_last& __lhs, int __rhs) noexcept
+{
+    return ::asc::std::chrono::operator/(year(__rhs), __lhs);
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday_last operator+(
+    const year_month_weekday_last& __lhs, const months& __rhs) noexcept
+{
+    return (__lhs.year() / __lhs.month() + __rhs) / __lhs.weekday_last();
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday_last operator+(
+    const months& __lhs, const year_month_weekday_last& __rhs) noexcept
+{
+    return __rhs + __lhs;
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday_last operator-(
+    const year_month_weekday_last& __lhs, const months& __rhs) noexcept
+{
+    return __lhs + (-__rhs);
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday_last operator+(
+    const year_month_weekday_last& __lhs, const years& __rhs) noexcept
+{
+    return year_month_weekday_last{__lhs.year() + __rhs, __lhs.month(), __lhs.weekday_last()};
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday_last operator+(
+    const years& __lhs, const year_month_weekday_last& __rhs) noexcept
+{
+    return __rhs + __lhs;
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month_weekday_last operator-(
+    const year_month_weekday_last& __lhs, const years& __rhs) noexcept
+{
+    return __lhs + (-__rhs);
+}
+
+CANN_ASC_STL_API constexpr year_month_weekday_last& year_month_weekday_last::operator+=(const months& __dm) noexcept
+{
+    *this = *this + __dm;
+    return *this;
+}
+
+CANN_ASC_STL_API constexpr year_month_weekday_last& year_month_weekday_last::operator-=(const months& __dm) noexcept
+{
+    *this = *this - __dm;
+    return *this;
+}
+
+CANN_ASC_STL_API constexpr year_month_weekday_last& year_month_weekday_last::operator+=(const years& __dy) noexcept
+{
+    *this = *this + __dy;
+    return *this;
+}
+
+CANN_ASC_STL_API constexpr year_month_weekday_last& year_month_weekday_last::operator-=(const years& __dy) noexcept
+{
+    *this = *this - __dy;
+    return *this;
+}
 
 }  // namespace chrono
 

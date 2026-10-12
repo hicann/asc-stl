@@ -27,14 +27,6 @@
 #pragma system_header
 #endif
 
-// Keep dynamic Device descriptor validation away from a BiSheng optimization
-// that lowers its runtime arithmetic to an unavailable __multi3 helper.
-#if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
-#define CANN_ASC_STL_DETAIL_TENSOR_VALIDATE_OPTNONE __attribute__((optnone))
-#else
-#define CANN_ASC_STL_DETAIL_TENSOR_VALIDATE_OPTNONE
-#endif
-
 // Tensor-transfer descriptor value vocabulary for the later public
 // <asc/tensor_copy>.  A descriptor records, per dimension, the extent, the GM
 // source element stride, the UB destination element stride and the left/right
@@ -98,7 +90,7 @@ public:
         return Rank;
     }
 
-    CANN_ASC_STL_API CANN_ASC_STL_DETAIL_TENSOR_VALIDATE_OPTNONE constexpr tensor_copy_status validate() const noexcept
+    CANN_ASC_STL_API constexpr tensor_copy_status validate() const noexcept
     {
         unsigned long long elements = 1;
         for (unsigned dimension = 0; dimension < Rank; ++dimension) {
@@ -188,7 +180,5 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned int tensor_copy_requi
 }
 
 }  // namespace asc
-
-#undef CANN_ASC_STL_DETAIL_TENSOR_VALIDATE_OPTNONE
 
 #endif  // CANN_ASC_STL_ASC___TENSOR_COPY_DESCRIPTOR_H

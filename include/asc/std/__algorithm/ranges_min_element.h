@@ -43,6 +43,33 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 struct __min_element_fn {
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    template <class Iterator, class Sentinel, class Compare = ranges::less, class Projection = identity>
+        requires forward_iterator<Iterator> && sentinel_for<Sentinel, Iterator> &&
+        indirect_strict_weak_order<Compare, projected<Iterator, Projection>>
+    CANN_ASC_STL_API constexpr Iterator operator()(
+        Iterator first, Sentinel last, Compare compare = {}, Projection projection = {}) const
+    {
+        if (first == last) {
+            return first;
+        }
+        Iterator result = first;
+        while (++first != last) {
+            if (::asc::std::invoke(
+                    compare, ::asc::std::invoke(projection, *first), ::asc::std::invoke(projection, *result))) {
+                result = first;
+            }
+        }
+        return result;
+    }
+    template <class Range, class Compare = ranges::less, class Projection = identity>
+        requires forward_range<Range> && indirect_strict_weak_order<Compare, projected<iterator_t<Range>, Projection>>
+    CANN_ASC_STL_API constexpr borrowed_iterator_t<Range> operator()(
+        Range&& range, Compare compare = {}, Projection projection = {}) const
+    {
+        return (*this)(ranges::begin(range), ranges::end(range), compare, projection);
+    }
+#else
     template <class Iterator, class Sentinel, class Compare = ranges::less, class Projection = identity,
         class = decltype(::asc::std::declval<Iterator&>() != ::asc::std::declval<Sentinel&>())>
     CANN_ASC_STL_API constexpr Iterator operator()(
@@ -68,6 +95,7 @@ struct __min_element_fn {
     {
         return (*this)(ranges::begin(range), ranges::end(range), compare, projection);
     }
+#endif
 };
 inline constexpr __min_element_fn min_element{};
 }  // namespace ranges

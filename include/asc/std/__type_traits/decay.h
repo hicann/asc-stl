@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_DECAY_H
 #define CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_DECAY_H
 
@@ -27,6 +28,7 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+
 #include <asc/std/__type_traits/add_pointer.h>
 #include <asc/std/__type_traits/conditional.h>
 #include <asc/std/__type_traits/is_array.h>
@@ -38,47 +40,28 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__decay)
-
-template <class Tp>
-struct decay {
-    using type = __decay(Tp);
-};
-
-template <class Tp>
-using decay_t = __decay(Tp);
-
-#else
-
-// The frozen decay::type contract spells the referenceable dispatch
-// __asc_is_referenceable; it routes to the shared is_referenceable trait.
-template <class Tp>
-using __asc_is_referenceable = __is_referenceable<Tp>;
-
-template <class Up, bool>
+template <class _Up, bool>
 struct __decay_impl {
-    using type = remove_cv_t<Up>;
+    using type = remove_cv_t<_Up>;
 };
 
-template <class Up>
-struct __decay_impl<Up, true> {
-    using type = conditional_t<is_array_v<Up>, remove_extent_t<Up>*,
-        conditional_t<is_function_v<Up>, add_pointer_t<Up>, remove_cv_t<Up> > >;
+template <class _Up>
+struct __decay_impl<_Up, true> {
+    using type = conditional_t<is_array_v<_Up>, remove_extent_t<_Up>*,
+        conditional_t<is_function_v<_Up>, add_pointer_t<_Up>, remove_cv_t<_Up>>>;
 };
 
-template <class Tp>
+template <class _Tp>
 struct decay {
 private:
-    using Up = remove_reference_t<Tp>;
+    using _Up = remove_reference_t<_Tp>;
 
 public:
-    using type = typename __decay_impl<Up, __asc_is_referenceable<Up>::value>::type;
+    using type = typename __decay_impl<_Up, __asc_is_referenceable<_Up>::value>::type;
 };
 
-template <class Tp>
-using decay_t = typename decay<Tp>::type;
-
-#endif
+template <class _Tp>
+using decay_t = typename decay<_Tp>::type;
 
 CANN_ASC_STL_END_NAMESPACE
 

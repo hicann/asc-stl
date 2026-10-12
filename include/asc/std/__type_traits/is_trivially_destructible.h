@@ -37,11 +37,13 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 template <class T>
 inline constexpr bool is_trivially_destructible_v = __is_trivially_destructible(T);
 
-#else
+#elif CANN_ASC_STL_DETAIL_HAS_BUILTIN(__has_trivial_destructor)
 
 template <class T>
 inline constexpr bool is_trivially_destructible_v = is_destructible_v<T> && __has_trivial_destructor(T);
 
+#else
+#error "ASC-STL requires a compiler builtin for is_trivially_destructible"
 #endif
 
 template <class T>

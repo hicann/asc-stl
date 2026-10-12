@@ -22,13 +22,12 @@ __global__ __launch_bounds__(64) void asc_stl_b018_cannsim_kernel(unsigned int* 
     const unsigned int thread = static_cast<unsigned int>(threadIdx.x);
     const unsigned int value = thread + 1;
     unsigned int* row = output + thread * 6;
-    auto workspace = asc::make_block_collective_workspace(shared, 32u);
-    row[0] = asc::block_reduce_add(workspace, value);
-    row[1] = asc::block_reduce_min(workspace, value);
-    row[2] = asc::block_reduce_max(workspace, value);
-    row[3] = asc::block_broadcast(workspace, value, 17u);
-    row[4] = asc::block_inclusive_scan(workspace, value);
-    row[5] = asc::block_exclusive_scan(workspace, value);
+    row[0] = asc::detail::block_reduce_add_impl(shared, value);
+    row[1] = asc::detail::block_reduce_min_impl(shared, value);
+    row[2] = asc::detail::block_reduce_max_impl(shared, value);
+    row[3] = asc::detail::block_broadcast_impl(shared, value, 17);
+    row[4] = asc::detail::block_inclusive_scan_add_impl(shared, value);
+    row[5] = asc::detail::block_exclusive_scan_add_impl(shared, value);
 }
 void launch_asc_stl_b018_cannsim(unsigned int* output, aclrtStream stream)
 {

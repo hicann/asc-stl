@@ -34,10 +34,77 @@
 #include <asc/std/__iterator/iterator_traits.h>
 #include <asc/std/__random/uniform_int_distribution.h>
 #include <asc/std/__type_traits/common_type.h>
+#include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/is_signed.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/move.h>
 
+// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查
+#ifndef CANN_ASC_STL_DETAIL_ASSERT
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
+#else
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) \
+    ((expression) ? static_cast<void>(0) : (__builtin_trap(), static_cast<void>(0)))
+#endif
+#endif  // CANN_ASC_STL_DETAIL_ASSERT
+
 CANN_ASC_STL_BEGIN_NAMESPACE
+
+namespace __sample_detail {
+
+// 遍历类别探测的最小本地等价（与 __algorithm/partition.h 同款）：对 iterator_traits 的
+// category 探测与对成员 iterator_concept 的探测，二者 C++17 下均 SFINAE 友好。
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_category_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool
+    __has_iterator_category_convertible_to<Iter, Tag, void_t<typename iterator_traits<Iter>::iterator_category>> =
+        is_convertible_v<typename iterator_traits<Iter>::iterator_category, Tag>;
+
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_concept_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool __has_iterator_concept_convertible_to<Iter, Tag, void_t<typename Iter::iterator_concept>> =
+    is_convertible_v<typename Iter::iterator_concept, Tag>;
+
+template <class Iter>
+inline constexpr bool __has_forward_traversal = __has_iterator_category_convertible_to<Iter, forward_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, forward_iterator_tag>;
+
+template <class Iter>
+inline constexpr bool __has_random_access_traversal =
+    __has_iterator_category_convertible_to<Iter, random_access_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, random_access_iterator_tag>;
+
+template <class Iter, class = void>
+inline constexpr bool __has_member_iterator_concept = false;
+
+template <class Iter>
+inline constexpr bool __has_member_iterator_concept<Iter, void_t<typename Iter::iterator_concept>> = true;
+
+// C++20 迭代器常以 iterator_concept 声明强于 iterator_category 的遍历类别；
+// 按 iterator_concept 与 iterator_category 的较大者推导实际分派标签。
+template <class Iter>
+CANN_ASC_STL_API constexpr auto __iterator_traits_category_or_concept() noexcept
+{
+    if constexpr (!__has_member_iterator_concept<Iter>) {
+        return typename iterator_traits<Iter>::iterator_category{};
+    } else if constexpr (__has_random_access_traversal<Iter>) {
+        return random_access_iterator_tag{};
+    } else if constexpr (__has_forward_traversal<Iter>) {
+        return forward_iterator_tag{};
+    } else {
+        return typename Iter::iterator_category{};
+    }
+}
+
+template <class Iter>
+using __iterator_traits_category_or_concept_t = decltype(__iterator_traits_category_or_concept<Iter>());
+
+}  // namespace __sample_detail
 
 template <class _PopulationIterator, class _SampleIterator, class _Distance, class _UniformRandomNumberGenerator>
 CANN_ASC_STL_API _SampleIterator __sample(_PopulationIterator __first, _PopulationIterator __last,
@@ -77,9 +144,13 @@ template <class _PopulationIterator, class _SampleIterator, class _Distance, cla
 CANN_ASC_STL_API _SampleIterator __sample(_PopulationIterator __first, _PopulationIterator __last,
     _SampleIterator __output_iter, _Distance __n, _UniformRandomNumberGenerator& __g)
 {
-    using _PopCategory = typename iterator_traits<_PopulationIterator>::iterator_category;
+    using _PopCategory = __sample_detail::__iterator_traits_category_or_concept_t<_PopulationIterator>;
     using _Difference = typename iterator_traits<_PopulationIterator>::difference_type;
+    static_assert(__sample_detail::__has_forward_traversal<_PopulationIterator> ||
+            __sample_detail::__has_random_access_traversal<_SampleIterator>,
+        "SampleIterator must meet the requirements of RandomAccessIterator");
     using _CommonType = typename common_type<_Distance, _Difference>::type;
+    CANN_ASC_STL_DETAIL_ASSERT(!is_signed_v<_Distance> || __n >= 0, "N must be a positive number.");
     return ::asc::std::__sample(__first, __last, __output_iter, _CommonType(__n), __g, _PopCategory());
 }
 

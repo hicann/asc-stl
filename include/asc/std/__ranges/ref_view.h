@@ -28,11 +28,7 @@
 #endif
 
 #include <asc/__detail/attributes.h>
-#include <asc/std/__concepts/convertible_to.h>
-#include <asc/std/__concepts/different_from.h>
 #include <asc/std/__iterator/concepts.h>
-#include <asc/std/__iterator/incrementable_traits.h>
-#include <asc/std/__iterator/iterator_traits.h>
 #include <asc/std/__memory/addressof.h>
 #include <asc/std/__ranges/access.h>
 #include <asc/std/__ranges/concepts.h>
@@ -42,47 +38,114 @@
 #include <asc/std/__ranges/size.h>
 #include <asc/std/__ranges/view_interface.h>
 #include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/integral_constant.h>
+#include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/is_object.h>
+#include <asc/std/__type_traits/is_same.h>
+#include <asc/std/__type_traits/remove_cvref.h>
+#include <asc/std/__type_traits/void_t.h>
+#include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/forward.h>
-namespace asc::std::ranges {
-template <class Range>
-class ref_view : public view_interface<ref_view<Range>> {
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+namespace ranges {
+
+// 判定 _Tp 能否转换为 _Range 的左值（排除把右值绑定到左值引用的路径）。
+template <class _Range>
+struct __conversion_tester {
+    CANN_ASC_STL_API static void __fun(_Range&);
+    static void __fun(_Range&&) = delete;
+};
+
+template <class _Tp, class _Range, class = void>
+struct __convertible_to_lvalue : false_type {};
+template <class _Tp, class _Range>
+struct __convertible_to_lvalue<_Tp, _Range,
+    void_t<decltype(__conversion_tester<_Range>::__fun(::asc::std::declval<_Tp>()))>> : true_type {};
+
+// 成员门控：empty()/size()/data() 仅在对应 CPO 可调用时提供，
+// 以基座惯用的 void_t 探测结构 + enable_if_t 展开，C++17 与设备路径同样可用。
+template <class T, class = void>
+struct __ref_view_has_empty : false_type {};
+template <class T>
+struct __ref_view_has_empty<T, void_t<decltype((void)::asc::std::ranges::__empty_cpo{}(::asc::std::declval<T>()))>>
+    : true_type {};
+
+template <class T, class = void>
+struct __ref_view_has_size : false_type {};
+template <class T>
+struct __ref_view_has_size<T, void_t<decltype((void)::asc::std::ranges::__size_cpo{}(::asc::std::declval<T&>()))>>
+    : true_type {};
+
+template <class T, class = void>
+struct __ref_view_has_data : false_type {};
+template <class T>
+struct __ref_view_has_data<T, void_t<decltype((void)::asc::std::ranges::__data_cpo{}(::asc::std::declval<T&>()))>>
+    : true_type {};
+
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+template <range _Range>
+    requires is_object_v<_Range>
+#else
+template <class _Range>
+#endif
+class ref_view : public view_interface<ref_view<_Range>> {
+    _Range* __range_;
+
 public:
-    CANN_ASC_STL_API constexpr explicit ref_view(Range& range) noexcept : range_(::asc::std::addressof(range))
+    template <class _Tp,
+        enable_if_t<!is_same_v<remove_cvref_t<_Tp>, ref_view> && is_convertible_v<_Tp, _Range&> &&
+                __convertible_to_lvalue<_Tp, _Range>::value,
+            int> = 0>
+    CANN_ASC_STL_API constexpr ref_view(_Tp&& __t)
+        : view_interface<ref_view<_Range>>(),
+          __range_(::asc::std::addressof(
+              static_cast<_Range&>(::asc::std::forward<_Tp>(__t))))  // NOLINT(build/include_what_you_use)
     {}
-    CANN_ASC_STL_API constexpr auto begin() const
+
+    CANN_ASC_STL_API constexpr _Range& base() const
     {
-        return ranges::begin(*range_);
-    }
-    CANN_ASC_STL_API constexpr auto end() const
-    {
-        return ranges::end(*range_);
-    }
-    template <class Range2 = Range>
-    CANN_ASC_STL_API constexpr auto empty() const
-    {
-        return ranges::empty(*range_);
-    }
-    template <class Range2 = Range>
-    CANN_ASC_STL_API constexpr auto size() const
-    {
-        return ranges::size(*range_);
-    }
-    template <class Range2 = Range>
-    CANN_ASC_STL_API constexpr auto data() const
-    {
-        return ranges::data(*range_);
-    }
-    CANN_ASC_STL_API constexpr Range& base() const noexcept
-    {
-        return *range_;
+        return *__range_;
     }
 
-private:
-    Range* range_;
+    CANN_ASC_STL_API constexpr iterator_t<_Range> begin() const
+    {
+        return ::asc::std::ranges::__begin_cpo{}(*__range_);
+    }
+
+    CANN_ASC_STL_API constexpr sentinel_t<_Range> end() const
+    {
+        return ::asc::std::ranges::__end_cpo{}(*__range_);
+    }
+
+    template <class _Range2 = _Range, enable_if_t<__ref_view_has_empty<const _Range2&>::value, int> = 0>
+    CANN_ASC_STL_API constexpr bool empty() const
+    {
+        return ::asc::std::ranges::__empty_cpo{}(*__range_);
+    }
+
+    template <class _Range2 = _Range, enable_if_t<__ref_view_has_size<_Range2>::value, int> = 0>
+    CANN_ASC_STL_API constexpr auto size() const
+    {
+        return ::asc::std::ranges::__size_cpo{}(*__range_);
+    }
+
+    template <class _Range2 = _Range, enable_if_t<__ref_view_has_data<_Range2>::value, int> = 0>
+    CANN_ASC_STL_API constexpr auto data() const
+    {
+        return ::asc::std::ranges::__data_cpo{}(*__range_);
+    }
 };
-template <class R>
-inline constexpr bool enable_borrowed_range<ref_view<R>> = true;
-}  // namespace asc::std::ranges
+
+template <class _Range>
+ref_view(_Range&) -> ref_view<_Range>;
+
+template <class _Tp>
+inline constexpr bool enable_borrowed_range<ref_view<_Tp>> = true;
+
+}  // namespace ranges
+
+CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STD___RANGES_REF_VIEW_H

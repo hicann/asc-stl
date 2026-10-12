@@ -49,34 +49,52 @@
 #include <asc/std/__type_traits/remove_reference.h>
 #include <asc/std/__utility/declval.h>
 
+// 设备编译不引入宿主 initializer_list（保持负向合同的诊断面）：宿主侧内联
+// 最小等价探测，设备侧恒 false（viewable_range 不做花括号列表排除）。
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#include <initializer_list>
+#endif
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
-template <class R>
-using sentinel_t = decltype(ranges::end(::asc::std::declval<R&>()));
-template <class R>
-using range_difference_t = iter_difference_t<iterator_t<R>>;
-template <class R>
-using range_value_t = iter_value_t<iterator_t<R>>;
-template <class R>
-using range_reference_t = iter_reference_t<iterator_t<R>>;
-template <class R>
-using range_rvalue_reference_t = iter_rvalue_reference_t<iterator_t<R>>;
-template <class R>
-using range_size_t = decltype(ranges::size(::asc::std::declval<R&>()));
-template <class R>
-using range_common_reference_t = iter_common_reference_t<iterator_t<R>>;
+
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+template <class T>
+inline constexpr bool __is_asc_std_initializer_list = false;
+
+template <class E>
+inline constexpr bool __is_asc_std_initializer_list<::std::initializer_list<E>> = true;
+#else
+template <class T>
+inline constexpr bool __is_asc_std_initializer_list = false;
+#endif
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
+
 template <class T>
 concept range = requires(T& value) {
-    ranges::begin(value);
-    ranges::end(value);
+    __begin_cpo{}(value);  // 有时保持相等性
+    __end_cpo{}(value);
 };
+template <range R>
+using sentinel_t = decltype(__end_cpo{}(::asc::std::declval<R&>()));
+template <range R>
+using range_difference_t = iter_difference_t<iterator_t<R>>;
+template <range R>
+using range_value_t = iter_value_t<iterator_t<R>>;
+template <range R>
+using range_reference_t = iter_reference_t<iterator_t<R>>;
+template <range R>
+using range_rvalue_reference_t = iter_rvalue_reference_t<iterator_t<R>>;
+template <range R>
+using range_common_reference_t = iter_common_reference_t<iterator_t<R>>;
 template <class T>
 concept borrowed_range = range<T> && (is_lvalue_reference_v<T> || enable_borrowed_range<remove_cvref_t<T>>);
 template <class T>
-concept sized_range = range<T> && requires(T& value) { ranges::size(value); };
+concept sized_range = range<T> && requires(T& value) { __size_cpo{}(value); };
+template <sized_range R>
+using range_size_t = decltype(__size_cpo{}(::asc::std::declval<R&>()));
 template <class T>
 concept input_range = range<T> && input_iterator<iterator_t<T>>;
 template <class T, class U>
@@ -88,14 +106,44 @@ concept bidirectional_range = forward_range<T> && bidirectional_iterator<iterato
 template <class T>
 concept random_access_range = bidirectional_range<T> && random_access_iterator<iterator_t<T>>;
 template <class T>
-concept contiguous_range =
-    random_access_range<T> && contiguous_iterator<iterator_t<T>> && requires(T& value) { ranges::data(value); };
+concept contiguous_range = random_access_range<T> && contiguous_iterator<iterator_t<T>> && requires(T& value) {
+    { __data_cpo{}(value) } -> same_as<add_pointer_t<range_reference_t<T>>>;
+};
 template <class T>
 concept common_range = range<T> && same_as<iterator_t<T>, sentinel_t<T>>;
 template <class T>
 concept view = range<T> && movable<T> && enable_view<T>;
 template <class T>
-concept viewable_range = range<T> && (borrowed_range<T> || view<remove_cvref_t<T>>);
+concept __simple_view = view<T> && range<const T> && same_as<iterator_t<T>, iterator_t<const T>> &&
+    same_as<sentinel_t<T>, sentinel_t<const T>>;
+template <class T>
+concept viewable_range = range<T> &&
+    ((view<remove_cvref_t<T>> && constructible_from<remove_cvref_t<T>, T>) ||
+        (!view<remove_cvref_t<T>> &&
+            (is_lvalue_reference_v<T> ||
+                (movable<remove_reference_t<T>> && !__is_asc_std_initializer_list<remove_cvref_t<T>>))));
+
+// [container.intro.reqmts]
+template <class R, class T>
+concept __container_compatible_range = input_range<R> && convertible_to<range_reference_t<R>, T>;
+
+#else
+
+template <class R>
+using sentinel_t = decltype(__end_cpo{}(::asc::std::declval<R&>()));
+template <class R>
+using range_difference_t = iter_difference_t<iterator_t<R>>;
+template <class R>
+using range_value_t = iter_value_t<iterator_t<R>>;
+template <class R>
+using range_reference_t = iter_reference_t<iterator_t<R>>;
+template <class R>
+using range_rvalue_reference_t = iter_rvalue_reference_t<iterator_t<R>>;
+template <class R>
+using range_common_reference_t = iter_common_reference_t<iterator_t<R>>;
+template <class R>
+using range_size_t = decltype(__size_cpo{}(::asc::std::declval<R&>()));
+
 #endif
 }  // namespace ranges
 

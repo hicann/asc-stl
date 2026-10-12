@@ -29,17 +29,23 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__concepts/constructible.h>
-#include <asc/std/__concepts/derived_from.h>
 #include <asc/std/__concepts/invocable.h>
-#include <asc/std/__concepts/same_as.h>
 #include <asc/std/__functional/compose.h>
 #include <asc/std/__functional/invoke.h>
+#include <asc/std/__ranges/access.h>
 #include <asc/std/__ranges/concepts.h>
 #include <asc/std/__type_traits/decay.h>
 #include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/integral_constant.h>
+#include <asc/std/__type_traits/is_class.h>
+#include <asc/std/__type_traits/is_constructible.h>
 #include <asc/std/__type_traits/is_nothrow_constructible.h>
+#include <asc/std/__type_traits/is_same.h>
+#include <asc/std/__type_traits/remove_cv.h>
 #include <asc/std/__type_traits/remove_cvref.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/ctad_support.h>
+#include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/forward.h>
 #include <asc/std/__utility/move.h>
 
@@ -47,16 +53,128 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 
-template <class Derived>
-class range_adaptor_closure {
-public:
-    template <class Range>
-    friend CANN_ASC_STL_API constexpr auto operator|(Range&& range, const Derived& closure) noexcept(
-        noexcept(closure(::asc::std::forward<Range>(range)))) -> decltype(closure(::asc::std::forward<Range>(range)))
-    {
-        return closure(::asc::std::forward<Range>(range));  // NOLINT(build/include_what_you_use)
-    }
+//! @brief CRTP 基类：继承它的类型即被库识别为 range adaptor closure，
+//! 并获得管道运算符，使 `x | f` 等价于 `f(x)`，`f1 | f2` 组合为等价于
+//! `f2(f1(x))` 的新 closure。
+template <class _Tp, enable_if_t<is_class_v<_Tp>, int> = 0, enable_if_t<is_same_v<_Tp, remove_cv_t<_Tp>>, int> = 0>
+struct __range_adaptor_closure {};
+
+//! @brief 把任意函数对象包装成可用 `x | f` 调用的 adaptor closure。
+template <class _Fn>
+struct __pipeable : _Fn, __range_adaptor_closure<__pipeable<_Fn>> {
+    CANN_ASC_STL_API constexpr explicit __pipeable(_Fn&& __f) : _Fn(::asc::std::move(__f))
+    {}
 };
+CANN_ASC_STL_DETAIL_CTAD_SUPPORTED_FOR_TYPE(__pipeable);
+
+template <class _Tp>
+CANN_ASC_STL_API _Tp __derived_from_range_adaptor_closure(__range_adaptor_closure<_Tp>*);
+
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+
+template <class _Tp>
+concept __is_range_adaptor_closure = requires {
+    requires(!::asc::std::ranges::range<remove_cvref_t<_Tp>>);
+    {
+        ::asc::std::ranges::__derived_from_range_adaptor_closure(static_cast<remove_cvref_t<_Tp>*>(nullptr))
+    } -> ::asc::std::same_as<remove_cvref_t<_Tp>>;
+};
+
+template <class _Range, class _Closure>
+concept __range_adaptor_can_pipe_invoke = requires {
+    requires(range<_Range>);
+    requires(__is_range_adaptor_closure<_Closure>);
+    requires(invocable<_Closure, _Range>);
+};
+
+template <class _Closure, class _OtherClosure>
+concept __range_adaptor_can_pipe_compose = requires {
+    requires(__is_range_adaptor_closure<_Closure>);
+    requires(__is_range_adaptor_closure<_OtherClosure>);
+    requires(constructible_from<decay_t<_Closure>, _Closure>);
+    requires(constructible_from<decay_t<_OtherClosure>, _OtherClosure>);
+};
+
+template <class _Range, class _Closure>
+    requires __range_adaptor_can_pipe_invoke<_Range, _Closure>
+CANN_ASC_STL_API constexpr decltype(auto) operator|(_Range&& __range, _Closure&& __closure) noexcept(
+    noexcept(::asc::std::invoke(::asc::std::declval<_Closure>(), ::asc::std::declval<_Range>())))
+{
+    return ::asc::std::invoke(::asc::std::forward<_Closure>(__closure), ::asc::std::forward<_Range>(__range));
+}
+
+template <class _Closure, class _OtherClosure>
+    requires __range_adaptor_can_pipe_compose<_Closure, _OtherClosure>
+CANN_ASC_STL_API constexpr auto operator|(_Closure&& __closure, _OtherClosure&& __other_closure) noexcept(
+    is_nothrow_constructible_v<decay_t<_Closure>, _Closure> &&
+    is_nothrow_constructible_v<decay_t<_OtherClosure>, _OtherClosure>)
+{
+    return __pipeable(::asc::std::__compose(
+        ::asc::std::forward<_OtherClosure>(__other_closure), ::asc::std::forward<_Closure>(__closure)));
+}
+
+#else  // ^^^ concept 约束版（设备编译禁用） ^^^ / vvv SFINAE 回退版 vvv
+
+// 概念约束在此以基座惯用的 void_t 探测结构 + enable_if_t 展开，语义与概念版一致。
+template <class _Tp, class = void>
+struct __is_range_like : false_type {};
+template <class _Tp>
+struct __is_range_like<_Tp,
+    void_t<decltype(::asc::std::ranges::__begin_cpo{}(::asc::std::declval<_Tp&>())),
+        decltype(::asc::std::ranges::__end_cpo{}(::asc::std::declval<_Tp&>()))>> : true_type {};
+
+template <class _Tp, class = void>
+struct __derives_from_range_adaptor_closure : false_type {};
+template <class _Tp>
+struct __derives_from_range_adaptor_closure<_Tp,
+    void_t<decltype(::asc::std::ranges::__derived_from_range_adaptor_closure(
+        static_cast<remove_cvref_t<_Tp>*>(nullptr)))>>
+    : bool_constant<is_same_v<decltype(::asc::std::ranges::__derived_from_range_adaptor_closure(
+                                  static_cast<remove_cvref_t<_Tp>*>(nullptr))),
+          remove_cvref_t<_Tp>>> {};
+
+template <class _Tp>
+struct __is_range_adaptor_closure : bool_constant<!__is_range_like<remove_cvref_t<_Tp>>::value &&
+                                        __derives_from_range_adaptor_closure<remove_cvref_t<_Tp>>::value> {};
+
+template <class _Range, class _Closure, class = void>
+struct __can_pipe_invoke_impl : false_type {};
+template <class _Range, class _Closure>
+struct __can_pipe_invoke_impl<_Range, _Closure,
+    void_t<decltype(::asc::std::invoke(::asc::std::declval<_Closure>(), ::asc::std::declval<_Range>()))>>
+    : bool_constant<__is_range_like<_Range>::value && __is_range_adaptor_closure<_Closure>::value> {};
+
+template <class _Range, class _Closure>
+struct __range_adaptor_can_pipe_invoke : __can_pipe_invoke_impl<_Range, _Closure> {};
+
+template <class _Closure, class _OtherClosure>
+struct __range_adaptor_can_pipe_compose
+    : bool_constant<__is_range_adaptor_closure<_Closure>::value && __is_range_adaptor_closure<_OtherClosure>::value &&
+          is_constructible_v<decay_t<_Closure>, _Closure> &&
+          is_constructible_v<decay_t<_OtherClosure>, _OtherClosure>> {};
+
+template <class _Range, class _Closure, enable_if_t<__range_adaptor_can_pipe_invoke<_Range, _Closure>::value, int> = 0>
+CANN_ASC_STL_API constexpr decltype(auto) operator|(_Range&& __range, _Closure&& __closure) noexcept(
+    noexcept(::asc::std::invoke(::asc::std::declval<_Closure>(), ::asc::std::declval<_Range>())))
+{
+    return ::asc::std::invoke(::asc::std::forward<_Closure>(__closure), ::asc::std::forward<_Range>(__range));
+}
+
+template <class _Closure, class _OtherClosure,
+    enable_if_t<__range_adaptor_can_pipe_compose<_Closure, _OtherClosure>::value, int> = 0>
+CANN_ASC_STL_API constexpr auto operator|(_Closure&& __closure, _OtherClosure&& __other_closure) noexcept(
+    is_nothrow_constructible_v<decay_t<_Closure>, _Closure> &&
+    is_nothrow_constructible_v<decay_t<_OtherClosure>, _OtherClosure>)
+{
+    return __pipeable(::asc::std::__compose(::asc::std::forward<_OtherClosure>(__other_closure),
+        ::asc::std::forward<_Closure>(__closure)));  // NOLINT(build/include_what_you_use)
+}
+
+#endif  // 概念约束版 / SFINAE 回退版
+
+//! @brief 公开基类：用户继承它来声明自定义 range adaptor closure。
+template <class Derived>
+class range_adaptor_closure : public __range_adaptor_closure<Derived> {};
 
 }  // namespace ranges
 

@@ -125,6 +125,38 @@ inline constexpr double inv_sqrt3 = 0x1.279a74590331c4d218f81e4afb25p-1;
 inline constexpr double egamma = 0x1.2788cfc6fb618f49a37c7f0202a6p-1;
 inline constexpr double phi = 0x1.9e3779b97f4a7c15f39cc0605ceep+0;
 
+// The variable-template family is additionally reachable under the standard
+// [math.constants] spelling asc::std::numbers::e_v and so on; both spellings
+// route through the same float-only __numbers specializations, so the frozen
+// exclusion of the double and long double instantiations applies to either
+// qualified name.
+template <class Tp>
+inline constexpr Tp e_v = __numbers<Tp>::__e();
+template <class Tp>
+inline constexpr Tp log2e_v = __numbers<Tp>::__log2e();
+template <class Tp>
+inline constexpr Tp log10e_v = __numbers<Tp>::__log10e();
+template <class Tp>
+inline constexpr Tp pi_v = __numbers<Tp>::__pi();
+template <class Tp>
+inline constexpr Tp inv_pi_v = __numbers<Tp>::__inv_pi();
+template <class Tp>
+inline constexpr Tp inv_sqrtpi_v = __numbers<Tp>::__inv_sqrtpi();
+template <class Tp>
+inline constexpr Tp ln2_v = __numbers<Tp>::__ln2();
+template <class Tp>
+inline constexpr Tp ln10_v = __numbers<Tp>::__ln10();
+template <class Tp>
+inline constexpr Tp sqrt2_v = __numbers<Tp>::__sqrt2();
+template <class Tp>
+inline constexpr Tp sqrt3_v = __numbers<Tp>::__sqrt3();
+template <class Tp>
+inline constexpr Tp inv_sqrt3_v = __numbers<Tp>::__inv_sqrt3();
+template <class Tp>
+inline constexpr Tp egamma_v = __numbers<Tp>::__egamma();
+template <class Tp>
+inline constexpr Tp phi_v = __numbers<Tp>::__phi();
+
 }  // namespace numbers
 
 // The delivered *_v contract is the float specialization spelled at the

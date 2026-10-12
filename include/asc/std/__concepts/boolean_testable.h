@@ -29,6 +29,8 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__concepts/convertible_to.h>
+#include <asc/std/__type_traits/void_t.h>
+#include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/forward.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
@@ -47,6 +49,19 @@ template <class T>
 concept __boolean_testable = __boolean_testable_impl<T> && requires(T&& value) {
     { !::asc::std::forward<T>(value) } -> __boolean_testable_impl;  // NOLINT(build/include_what_you_use)
 };
+#else
+template <class T>
+inline constexpr bool __boolean_testable_impl = is_convertible_v<T, bool>;
+
+template <class T, class = void>
+inline constexpr bool __boolean_testable_impl_2 = false;
+
+template <class T>
+inline constexpr bool __boolean_testable_impl_2<T, void_t<decltype(!::asc::std::declval<T>())> > =
+    __boolean_testable_impl<T> && __boolean_testable_impl<decltype(!::asc::std::declval<T>())>;
+
+template <class T>
+inline constexpr bool __boolean_testable = __boolean_testable_impl_2<T>;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

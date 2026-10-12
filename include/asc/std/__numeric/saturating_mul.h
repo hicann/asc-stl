@@ -28,29 +28,22 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/__numeric/checked.h>
 #include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__type_traits/is_integer.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// Delegates to the shared checked/saturating backend: its unsigned
+// decomposition keeps every step well-defined on all supported compilers
+// (no builtin dependency, so the non-GNU/Clang toolchains saturate as well
+// instead of wrapping), and it reports the overflow flag the backend already
+// computes. Valid in Host, ordinary AICore and pure SIMT.
 template <class T>
 CANN_ASC_STL_API constexpr T saturating_mul(T left, T right) noexcept
 {
     static_assert(__is_integer_v<T>, "saturating_mul requires an integer type");
-    T result{};
-#if defined(__clang__) || defined(__GNUC__)
-    if (__builtin_mul_overflow(left, right, &result)) {
-        if (!(T(-1) < T(0)))
-            return T(~T(0));
-        const bool negative = (left < T(0)) != (right < T(0));
-        if (negative)
-            return T(-((T(1) << (sizeof(T) * 8 - 2)) - 1 + (T(1) << (sizeof(T) * 8 - 2))) - 1);
-        return T((T(1) << (sizeof(T) * 8 - 2)) - 1 + (T(1) << (sizeof(T) * 8 - 2)));
-    }
-    return result;
-#else
-    return left * right;
-#endif
+    return ::asc::detail::saturating_mul_impl(left, right).value;
 }
 
 CANN_ASC_STL_END_NAMESPACE

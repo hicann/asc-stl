@@ -14,7 +14,4 @@
  * limitations under the License.
  */
 
-const char* asc_stl_b028_cannsim_launcher_identity() noexcept
-{
-    return "asc/std/list";
-}
+// The cannsim launch is emitted from kernel.cpp.

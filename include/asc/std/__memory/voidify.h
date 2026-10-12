@@ -30,11 +30,23 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__memory/addressof.h>
 
+// 基座 __config 未提供 dev 的 CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20（dev 定义于
+// asc/std/__asc/dialect.h）：__voidify 含 cv 限定指针转换，pre-C++20 无条件标
+// constexpr 属 ill-formed NDR 风险，按 dev 门控；#ifndef 守卫防与未来基座定义冲突。
+#ifndef CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
+#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+#define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 constexpr
+#else
+#define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
+#endif
+#endif  // CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class T>
-CANN_ASC_STL_API constexpr void* __voidify(T& value) noexcept
+CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 void* __voidify(T& value) noexcept
 {
+    // Cast away cv-qualifiers to allow modifying elements of a range through const iterators.
     return const_cast<void*>(static_cast<const volatile void*>(asc::std::addressof(value)));
 }
 

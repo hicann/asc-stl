@@ -42,5 +42,6 @@
 #include <asc/std/__utility/integer_sequence.h>
 #include <asc/std/__utility/pair.h>
 #include <asc/std/__variant/get.h>
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_TUPLE

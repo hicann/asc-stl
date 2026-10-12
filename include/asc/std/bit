@@ -36,5 +36,6 @@
 #include <asc/std/__bit/integral.h>
 #include <asc/std/__bit/popcount.h>
 #include <asc/std/__bit/rotate.h>
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_BIT

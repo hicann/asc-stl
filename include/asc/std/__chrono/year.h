@@ -35,114 +35,150 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace chrono {
 class year {
+private:
+    short __year_;
+
 public:
-    CANN_ASC_STL_API constexpr year() = default;
-    CANN_ASC_STL_API explicit constexpr year(int value) noexcept : value_(static_cast<short>(value))
+    CANN_ASC_STL_API year() = default;
+    CANN_ASC_STL_API explicit constexpr year(int __year) noexcept : __year_(static_cast<short>(__year))
     {}
-    CANN_ASC_STL_API constexpr explicit operator int() const noexcept
-    {
-        return value_;
-    }
-    CANN_ASC_STL_API constexpr bool ok() const noexcept
-    {
-        return value_ >= -32767;
-    }
-    CANN_ASC_STL_API constexpr bool is_leap() const noexcept
-    {
-        const int value = static_cast<int>(*this);
-        return value % 4 == 0 && (value % 100 != 0 || value % 400 == 0);
-    }
-    CANN_ASC_STL_API constexpr year operator+() const noexcept
-    {
-        return *this;
-    }
-    CANN_ASC_STL_API constexpr year operator-() const noexcept
-    {
-        return year(-static_cast<int>(*this));
-    }
+
     CANN_ASC_STL_API constexpr year& operator++() noexcept
     {
-        ++value_;
+        ++__year_;
         return *this;
     }
     CANN_ASC_STL_API constexpr year operator++(int) noexcept
     {
-        year previous(*this);
-        ++*this;
-        return previous;
+        year __tmp = *this;
+        ++__year_;
+        return __tmp;
     }
     CANN_ASC_STL_API constexpr year& operator--() noexcept
     {
-        --value_;
+        --__year_;
         return *this;
     }
     CANN_ASC_STL_API constexpr year operator--(int) noexcept
     {
-        year previous(*this);
-        --*this;
-        return previous;
-    }
-    CANN_ASC_STL_API constexpr year& operator+=(const years& value) noexcept
-    {
-        value_ = static_cast<short>(static_cast<int>(value_) + value.count());
-        return *this;
-    }
-    CANN_ASC_STL_API constexpr year& operator-=(const years& value) noexcept
-    {
-        return *this += years(-value.count());
-    }
-    CANN_ASC_STL_API static constexpr year min() noexcept
-    {
-        return year(-32767);
-    }
-    CANN_ASC_STL_API static constexpr year max() noexcept
-    {
-        return year(32767);
+        year __tmp = *this;
+        --__year_;
+        return __tmp;
     }
 
-private:
-    short value_{};
+    CANN_ASC_STL_API constexpr year& operator+=(const years& __dy) noexcept
+    {
+        __year_ = static_cast<short>(static_cast<long long>(__year_) + __dy.count());
+        return *this;
+    }
+
+    CANN_ASC_STL_API constexpr year& operator-=(const years& __dy) noexcept
+    {
+        __year_ = static_cast<short>(static_cast<long long>(__year_) - __dy.count());
+        return *this;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year operator+() const noexcept
+    {
+        return *this;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year operator-() const noexcept
+    {
+        return year{-__year_};
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool is_leap() const noexcept
+    {
+        return __year_ % 4 == 0 && (__year_ % 100 != 0 || __year_ % 400 == 0);
+    }
+
+    CANN_ASC_STL_API constexpr explicit operator int() const noexcept
+    {
+        return __year_;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool ok() const noexcept
+    {
+        return static_cast<int>(min()) <= __year_ && __year_ <= static_cast<int>(max());
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API static constexpr year min() noexcept
+    {
+        return year{-32767};
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API static constexpr year max() noexcept
+    {
+        return year{32767};
+    }
+
+    // arithmetics
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr year operator+(
+        const year& __lhs, const years& __rhs) noexcept
+    {
+        return year{static_cast<int>(__lhs) + __rhs.count()};
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr year operator+(
+        const years& __lhs, const year& __rhs) noexcept
+    {
+        return year{static_cast<int>(__rhs) + __lhs.count()};
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr year operator-(
+        const year& __lhs, const years& __rhs) noexcept
+    {
+        return year{static_cast<int>(__lhs) - __rhs.count()};
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr years operator-(
+        const year& __lhs, const year& __rhs) noexcept
+    {
+        return years{static_cast<int>(__lhs) - static_cast<int>(__rhs)};
+    }
+
+    // comparisons
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator==(
+        const year& __lhs, const year& __rhs) noexcept
+    {
+        return static_cast<int>(__lhs) == static_cast<int>(__rhs);
+    }
+
+#if !CANN_ASC_STL_DETAIL_HAS_CXX20()
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator!=(
+        const year& __lhs, const year& __rhs) noexcept
+    {
+        return static_cast<int>(__lhs) != static_cast<int>(__rhs);
+    }
+#endif  // !CANN_ASC_STL_DETAIL_HAS_CXX20()
+
+    // Traditional relational operators (spaceship not supported)
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator<(
+        const year& __lhs, const year& __rhs) noexcept
+    {
+        return static_cast<int>(__lhs) < static_cast<int>(__rhs);
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator>(
+        const year& __lhs, const year& __rhs) noexcept
+    {
+        return static_cast<int>(__lhs) > static_cast<int>(__rhs);
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator<=(
+        const year& __lhs, const year& __rhs) noexcept
+    {
+        return static_cast<int>(__lhs) <= static_cast<int>(__rhs);
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator>=(
+        const year& __lhs, const year& __rhs) noexcept
+    {
+        return static_cast<int>(__lhs) >= static_cast<int>(__rhs);
+    }
 };
-CANN_ASC_STL_API constexpr bool operator==(year left, year right) noexcept
-{
-    return static_cast<int>(left) == static_cast<int>(right);
-}
-CANN_ASC_STL_API constexpr bool operator!=(year left, year right) noexcept
-{
-    return !(left == right);
-}
-CANN_ASC_STL_API constexpr bool operator<(year left, year right) noexcept
-{
-    return static_cast<int>(left) < static_cast<int>(right);
-}
-CANN_ASC_STL_API constexpr bool operator>(year left, year right) noexcept
-{
-    return right < left;
-}
-CANN_ASC_STL_API constexpr bool operator<=(year left, year right) noexcept
-{
-    return !(right < left);
-}
-CANN_ASC_STL_API constexpr bool operator>=(year left, year right) noexcept
-{
-    return !(left < right);
-}
-CANN_ASC_STL_API constexpr year operator+(year value, const years& offset) noexcept
-{
-    return value += offset;
-}
-CANN_ASC_STL_API constexpr year operator+(const years& offset, year value) noexcept
-{
-    return value += offset;
-}
-CANN_ASC_STL_API constexpr year operator-(year value, const years& offset) noexcept
-{
-    return value -= offset;
-}
-CANN_ASC_STL_API constexpr years operator-(year left, year right) noexcept
-{
-    return years(static_cast<int>(left) - static_cast<int>(right));
-}
 }  // namespace chrono
 
 CANN_ASC_STL_END_NAMESPACE

@@ -28,6 +28,7 @@
 
 #include <asc/std/__limits/numeric_limits.h>
 #include <asc/std/__limits/numeric_limits_ext.h>
+#include <asc/std/version>
 
 // Public aggregation Header.
 

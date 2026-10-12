@@ -29,18 +29,37 @@
 
 #include <asc/__detail/attributes.h>
 
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__remove_const)
+#define CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_CONST(...) __remove_const(__VA_ARGS__)
+#endif  // CANN_ASC_STL_DETAIL_HAS_BUILTIN(__remove_const)
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class T>
+#if defined(CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_CONST) && !defined(CANN_ASC_STL_DETAIL_USE_REMOVE_CONST_FALLBACK)
+template <class _Tp>
 struct remove_const {
-    using type = T;
+    using type = CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_CONST(_Tp);
 };
-template <class T>
-struct remove_const<const T> {
-    using type = T;
+
+template <class _Tp>
+using remove_const_t = CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_CONST(_Tp);
+
+#else
+
+template <class _Tp>
+struct remove_const {
+    using type = _Tp;
 };
-template <class T>
-using remove_const_t = typename remove_const<T>::type;
+template <class _Tp>
+struct remove_const<const _Tp> {
+    using type = _Tp;
+};
+
+template <class _Tp>
+using remove_const_t = typename remove_const<_Tp>::type;
+
+#endif  // defined(CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_CONST) &&
+        // !defined(CANN_ASC_STL_DETAIL_USE_REMOVE_CONST_FALLBACK)
 
 CANN_ASC_STL_END_NAMESPACE
 

@@ -48,8 +48,31 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 // common_reference
 
 // Let COND_RES(X, Y) be:
+#if CANN_ASC_STL_DETAIL_COMPILER_MSVC
+template <class _Tp>
+_Tp __returns_exactly() noexcept;
+
+template <class _Xp, class _Yp>
+using __cond_res_if_right = decltype(false ? __returns_exactly<_Xp>() : __returns_exactly<_Yp>());
+
+template <class _Tp, class _Up, class = void>
+struct __cond_res_workaround {};
+
+template <class _Tp, class _Up>
+struct __cond_res_workaround<_Tp, _Up, void_t<__cond_res_if_right<_Tp, _Up>>> {
+    using _RTp = remove_cvref_t<_Tp>;
+    using type = conditional_t<is_same_v<_RTp, remove_cvref_t<_Up>> && (is_scalar_v<_RTp> || is_array_v<_RTp>) &&
+            ((is_lvalue_reference_v<_Tp> && is_rvalue_reference_v<_Up>) ||
+                (is_rvalue_reference_v<_Tp> && is_lvalue_reference_v<_Up>)),
+        decay_t<__copy_cv_t<remove_reference_t<_Tp>, remove_reference_t<_Up>>>, __cond_res_if_right<_Tp, _Up>>;
+};
+
+template <class _Xp, class _Yp>
+using __cond_res = typename __cond_res_workaround<_Xp, _Yp>::type;
+#else
 template <class _Xp, class _Yp>
 using __cond_res = decltype(false ? ::asc::std::declval<_Xp (&)()>()() : ::asc::std::declval<_Yp (&)()>()());
+#endif
 
 // Let `XREF(A)` denote a unary alias template `T` such that `T<U>` denotes the same type as `U`
 // with the addition of `A`'s cv and reference qualifiers, for a non-reference cv-unqualified type
@@ -123,8 +146,9 @@ struct __common_ref {};
 
 // Note C: For the common_reference trait applied to a parameter pack [...]
 
+// bullet 5 - Otherwise, there shall be no member `type`.
 template <class...>
-struct common_reference;
+struct common_reference {};
 
 template <class... _Types>
 using common_reference_t = typename common_reference<_Types...>::type;
@@ -193,17 +217,15 @@ struct __common_reference_sub_bullet3 : common_type<_Tp, _Up> {};
 
 // bullet 4 - If there is such a type `C`, the member typedef type shall denote the same type, if
 //            any, as `common_reference_t<C, Rest...>`.
-template <class, class...>
+template <class _Tp, class _Up, class _Vp, class _Enable, class... _Rest>
 struct __common_reference_multi {};
-template <class _Tp, class _Up, class _Vp, class... _Rest>
-struct __common_reference_multi<void_t<common_reference_t<_Tp, _Up>>, _Tp, _Up, _Vp, _Rest...>
-    : common_reference<common_reference_t<_Tp, _Up>, _Vp, _Rest...> {};
-template <class _Tp, class _Up, class _Vp, class... _Rest>
-struct common_reference<_Tp, _Up, _Vp, _Rest...> : __common_reference_multi<void, _Tp, _Up, _Vp, _Rest...> {};
 
-// bullet 5 - Otherwise, there shall be no member `type`.
-template <class...>
-struct common_reference {};
+template <class _Tp, class _Up, class _Vp, class... _Rest>
+struct __common_reference_multi<_Tp, _Up, _Vp, void_t<common_reference_t<_Tp, _Up>>, _Rest...>
+    : common_reference<common_reference_t<_Tp, _Up>, _Vp, _Rest...> {};
+
+template <class _Tp, class _Up, class _Vp, class... _Rest>
+struct common_reference<_Tp, _Up, _Vp, _Rest...> : __common_reference_multi<_Tp, _Up, _Vp, void, _Rest...> {};
 
 CANN_ASC_STL_END_NAMESPACE
 

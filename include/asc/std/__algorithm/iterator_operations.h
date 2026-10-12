@@ -49,20 +49,113 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// 经典迭代器操作集（算法族策略层）：算法模板以本结构为 _AlgPolicy 形参，
+// 经 _AlgPolicy:: 静态成员分派迭代器操作而非硬编码 asc::std:: 前置算法，
+// 便于后续按策略扩展。合入 dev 版经典策略的完整操作集：
+// 值类型/差值类型别名、advance/distance/next/prev/__advance_to、
+// iter_move 的引用/值双分派（含 reference 一致性诊断）与 iter_swap 的宿主/设备双路径。
 struct __classic_algorithm_iterator_operations {
-    template <class Iterator>
-    CANN_ASC_STL_API static constexpr decltype(auto) iter_move(Iterator&& iterator) noexcept(
+    template <class _Iter>
+    using __value_type = typename iterator_traits<_Iter>::value_type;
+
+    template <class _Iter>
+    using __difference_type = typename iterator_traits<_Iter>::difference_type;
+
+    // advance
+    template <class _Iter, class _Distance>
+    CANN_ASC_STL_API static constexpr void advance(_Iter& __iter, _Distance __count)
+    {
+        ::asc::std::advance(__iter, __count);
+    }
+
+    // distance
+    template <class _Iter>
+    CANN_ASC_STL_API static constexpr typename iterator_traits<_Iter>::difference_type distance(
+        _Iter __first, _Iter __last)
+    {
+        return ::asc::std::distance(__first, __last);  // NOLINT(build/include_what_you_use)
+    }
+
+    template <class _Iter>
+    using __deref_t = decltype(*::asc::std::declval<_Iter&>());
+
+    template <class _Iter>
+    using __move_t = decltype(::asc::std::move(*::asc::std::declval<_Iter&>()));  // NOLINT(build/include_what_you_use)
+
+    template <class _Iter>
+    CANN_ASC_STL_API static constexpr void __validate_iter_reference()
+    {
+        static_assert(is_same_v<__deref_t<_Iter>, typename iterator_traits<remove_cvref_t<_Iter>>::reference>,
+            "It looks like your iterator's `iterator_traits<It>::reference` does not match the return type of "
+            "dereferencing the iterator, i.e., calling `*it`. This is undefined behavior according to "
+            "[input.iterators] and can lead to dangling reference issues at runtime, so we are flagging this.");
+    }
+
+    // iter_move：解引用结果为引用时按 move 语义返回；为值（代理迭代器）时按值返回，
+    // 避免返回悬挂引用；两分支均校验 iterator_traits::reference 与 *it 的一致性。
+    template <class Iterator, enable_if_t<is_reference_v<__deref_t<Iterator>>, int> = 0>
+    CANN_ASC_STL_API static constexpr __move_t<Iterator> iter_move(Iterator&& iterator) noexcept(
         noexcept(::asc::std::move(*::asc::std::forward<Iterator>(iterator))))
     {
+        __validate_iter_reference<Iterator>();
         return ::asc::std::move(                        // NOLINT(build/include_what_you_use)
             *::asc::std::forward<Iterator>(iterator));  // NOLINT(build/include_what_you_use)
     }
 
+    template <class Iterator, enable_if_t<!is_reference_v<__deref_t<Iterator>>, int> = 0>
+    CANN_ASC_STL_API static constexpr __deref_t<Iterator> iter_move(Iterator&& iterator) noexcept(
+        noexcept(*::asc::std::forward<Iterator>(iterator)))
+    {
+        __validate_iter_reference<Iterator>();
+        return *::asc::std::forward<Iterator>(iterator);
+    }
+
+    // iter_swap：宿主走 ranges 定制点（优先 ADL iter_swap，回退 swap(*a, *b)）；
+    // CCE 设备编译下 ranges CPO 的 ADL 分支无法实例化（实测报 no matching function for call to object），
+    // 回退经典 iter_swap（即 swap(*a, *b)，设备路径已验证）。
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     template <class Iterator1, class Iterator2>
     CANN_ASC_STL_API static constexpr void iter_swap(Iterator1 left, Iterator2 right) noexcept(
         noexcept(::asc::std::iter_swap(left, right)))
     {
         ::asc::std::iter_swap(left, right);
+    }
+#else
+    template <class Iterator1, class Iterator2>
+    CANN_ASC_STL_API static constexpr void iter_swap(Iterator1 left, Iterator2 right) noexcept(
+        noexcept(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left, right)))
+    {
+        ::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left, right);
+    }
+#endif
+
+    // next：已知边界直取尾迭代器；否则经 asc::std::next 前进 n 步
+    template <class _Iterator>
+    CANN_ASC_STL_API static constexpr _Iterator next(_Iterator, _Iterator __last)
+    {
+        return __last;
+    }
+
+    template <class _Iter>
+    CANN_ASC_STL_API static constexpr remove_cvref_t<_Iter> next(
+        _Iter&& __iter, __difference_type<remove_cvref_t<_Iter>> __count = 1)
+    {
+        return ::asc::std::next(::asc::std::forward<_Iter>(__iter), __count);  // NOLINT(build/include_what_you_use)
+    }
+
+    // prev
+    template <class _Iter>
+    CANN_ASC_STL_API static constexpr remove_cvref_t<_Iter> prev(
+        _Iter&& __iter, __difference_type<remove_cvref_t<_Iter>> __count = 1)
+    {
+        return ::asc::std::prev(::asc::std::forward<_Iter>(__iter), __count);  // NOLINT(build/include_what_you_use)
+    }
+
+    // __advance_to：直进到已知终点
+    template <class _Iter>
+    CANN_ASC_STL_API static constexpr void __advance_to(_Iter& __first, _Iter __last)
+    {
+        __first = __last;
     }
 };
 

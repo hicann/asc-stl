@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_IS_REFERENCEABLE_H
 #define CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_IS_REFERENCEABLE_H
 
@@ -27,30 +28,38 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+
 #include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/is_same.h>
 
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_referenceable)
+#define CANN_ASC_STL_DETAIL_BUILTIN_IS_REFERENCEABLE(...) __is_referenceable(__VA_ARGS__)
+#endif  // CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_referenceable)
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_referenceable)
+#if defined(CANN_ASC_STL_DETAIL_BUILTIN_IS_REFERENCEABLE) && !defined(CANN_ASC_STL_DETAIL_USE_IS_REFERENCEABLE_FALLBACK)
 
-template <class T>
-struct __is_referenceable : integral_constant<bool, __is_referenceable(T)>{};
+template <class _Tp>
+struct __asc_is_referenceable : public integral_constant<bool, CANN_ASC_STL_DETAIL_BUILTIN_IS_REFERENCEABLE(_Tp)> {};
 
 #else
-
-struct __is_referenceable_impl {
-    template <class T>
-    CANN_ASC_STL_API static T& __test(int);
-    template <class T>
-    CANN_ASC_STL_API static false_type __test(long);
+struct __asc_is_referenceable_impl {
+    template <class _Tp>
+    CANN_ASC_STL_HOST_DEVICE static _Tp& __test(int);
+    template <class _Tp>
+    static false_type __test(long);
 };
 
-template <class T>
-struct __is_referenceable
-    : integral_constant<bool, _IsNotSame<decltype(__is_referenceable_impl::__test<T>(0)), false_type>::value>{};
+template <class _Tp>
+struct __asc_is_referenceable
+    : integral_constant<bool, _IsNotSame<decltype(__asc_is_referenceable_impl::__test<_Tp>(0)), false_type>::value> {};
+#endif  // defined(CANN_ASC_STL_DETAIL_BUILTIN_IS_REFERENCEABLE) &&
+        // !defined(CANN_ASC_STL_DETAIL_USE_IS_REFERENCEABLE_FALLBACK)
 
-#endif
+// 兼容 master 侧既有消费方的旧名
+template <class _Tp>
+using __is_referenceable = __asc_is_referenceable<_Tp>;
 
 CANN_ASC_STL_END_NAMESPACE
 

@@ -29,41 +29,61 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__algorithm/comp.h>
+#include <asc/std/__algorithm/comp_ref_type.h>
 #include <asc/std/__algorithm/iterator_operations.h>
 #include <asc/std/__algorithm/push_heap.h>
 #include <asc/std/__algorithm/sift_down.h>
 #include <asc/std/__iterator/iterator_traits.h>
+#include <asc/std/__type_traits/is_copy_assignable.h>
+#include <asc/std/__type_traits/is_copy_constructible.h>
 #include <asc/std/__utility/move.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class RandomAccessIterator, class Compare>
-CANN_ASC_STL_API constexpr void pop_heap(RandomAccessIterator first, RandomAccessIterator last, Compare compare)
+// 策略化内部入口：供 sort_heap / ranges 等策略迁移头复用。
+// _AlgPolicy 需提供静态 iter_move/iter_swap（如 __classic_algorithm_iterator_operations）。
+template <class _AlgPolicy, class _Compare, class _RandomAccessIterator>
+CANN_ASC_STL_API constexpr void __pop_heap(_RandomAccessIterator __first, _RandomAccessIterator __last,
+    _Compare& __comp, typename iterator_traits<_RandomAccessIterator>::difference_type __len)
 {
-    using operations = __classic_algorithm_iterator_operations;
-    using difference_type = typename iterator_traits<RandomAccessIterator>::difference_type;
-    using value_type = typename iterator_traits<RandomAccessIterator>::value_type;
-    const difference_type length = last - first;
-    if (length <= 1) {
-        return;
-    }
-    value_type top(operations::iter_move(first));
-    RandomAccessIterator hole = ::asc::std::__floyd_sift_down<operations>(first, compare, length);
-    --last;
-    if (hole == last) {
-        *hole = ::asc::std::move(top);  // NOLINT(build/include_what_you_use)
-    } else {
-        *hole = operations::iter_move(last);
-        ++hole;
-        *last = ::asc::std::move(top);  // NOLINT(build/include_what_you_use)
-        ::asc::std::__sift_up<operations>(first, hole, compare, hole - first);
+    // Calling `pop_heap` on an empty range is undefined behavior, but in practice it will be a no-op.
+    CANN_ASC_STL_DETAIL_ASSERT(__len > 0, "The heap given to pop_heap must be non-empty");
+
+    __comp_ref_type<_Compare> __comp_ref = __comp;
+
+    using value_type = typename iterator_traits<_RandomAccessIterator>::value_type;
+    if (__len > 1) {
+        value_type __top = _AlgPolicy::iter_move(__first);  // create a hole at __first
+        _RandomAccessIterator __hole = ::asc::std::__floyd_sift_down<_AlgPolicy>(__first, __comp_ref, __len);
+        --__last;
+
+        if (__hole == __last) {
+            *__hole = ::asc::std::move(__top);  // NOLINT(build/include_what_you_use)
+        } else {
+            *__hole = _AlgPolicy::iter_move(__last);
+            ++__hole;
+            *__last = ::asc::std::move(__top);  // NOLINT(build/include_what_you_use)
+            ::asc::std::__sift_up<_AlgPolicy>(__first, __hole, __comp_ref, __hole - __first);
+        }
     }
 }
 
-template <class RandomAccessIterator>
-CANN_ASC_STL_API constexpr void pop_heap(RandomAccessIterator first, RandomAccessIterator last)
+template <class _RandomAccessIterator, class _Compare>
+CANN_ASC_STL_API constexpr void pop_heap(_RandomAccessIterator __first, _RandomAccessIterator __last, _Compare __comp)
 {
-    ::asc::std::pop_heap(first, last, __less{});
+    static_assert(::asc::std::is_copy_constructible_v<_RandomAccessIterator>, "Iterators must be copy constructible.");
+    static_assert(::asc::std::is_copy_assignable_v<_RandomAccessIterator>, "Iterators must be copy assignable.");
+
+    typename iterator_traits<_RandomAccessIterator>::difference_type __len = __last - __first;
+    ::asc::std::__pop_heap<__classic_algorithm_iterator_operations>(
+        ::asc::std::move(__first), ::asc::std::move(__last), __comp, __len);
+}
+
+template <class _RandomAccessIterator>
+CANN_ASC_STL_API constexpr void pop_heap(_RandomAccessIterator __first, _RandomAccessIterator __last)
+{
+    ::asc::std::pop_heap(                                                // NOLINT(build/include_what_you_use)
+        ::asc::std::move(__first), ::asc::std::move(__last), __less{});  // NOLINT(build/include_what_you_use)
 }
 
 CANN_ASC_STL_END_NAMESPACE

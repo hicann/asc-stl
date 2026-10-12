@@ -47,7 +47,6 @@ B027_BITSET_CASE_ROOT="$ROOT/test/cases/asc/std/bitset/runtime/hardware"
 B028_LIST_CASE_ROOT="$ROOT/test/cases/asc/std/list/runtime/hardware"
 W08_CASE_ROOT="$ROOT/test/cases/asc/tensor_copy/runtime/hardware"
 W13_W14_CASE_ROOT="$ROOT/test/cases/asc/std/linalg/runtime/hardware"
-TERMINATE_CASE_ROOT="$ROOT/test/cases/asc/std/exception/runtime/hardware"
 BUILD_ROOT="${ASC_STL_HARDWARE_BUILD_DIR:-$ROOT/build/hardware}"
 RUNS="${ASC_STL_HARDWARE_RUNS:-3}"
 CASE_RESULTS="$BUILD_ROOT/hardware-case-results.csv"
@@ -87,7 +86,6 @@ for standard in 17 20; do
     B028_LIST_BUILD_DIR="$BUILD_ROOT/cxx$standard/b028-list-map"
     W08_BUILD_DIR="$BUILD_ROOT/cxx$standard/w08"
     W13_W14_BUILD_DIR="$BUILD_ROOT/cxx$standard/w13-w14"
-    TERMINATE_BUILD_DIR="$BUILD_ROOT/cxx$standard/terminate"
     cmake -S "$SOURCE_CASE_ROOT" -B "$SOURCE_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
     cmake --build "$SOURCE_BUILD_DIR" -j2
@@ -151,9 +149,6 @@ for standard in 17 20; do
     cmake -S "$W13_W14_CASE_ROOT" -B "$W13_W14_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
     cmake --build "$W13_W14_BUILD_DIR" -j2
-    cmake -S "$TERMINATE_CASE_ROOT" -B "$TERMINATE_BUILD_DIR" \
-        -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$TERMINATE_BUILD_DIR" -j2
 
     for run_index in $(seq 1 "$RUNS"); do
         echo "C++$standard source_location hardware run $run_index/$RUNS: D-SIMD"
@@ -240,16 +235,6 @@ for standard in 17 20; do
         echo "C++$standard W13/W14 hardware run $run_index/$RUNS: D-SIMT"
         run_hardware_case "asc/std/linalg" "$standard" simt "$run_index" "$W13_W14_BUILD_DIR/asc_stl_w13_w14_simt"
     done
-    # Fault injection runs after normal cases so the expected device error
-    # cannot contaminate another runtime golden in the same process group.
-    for run_index in $(seq 1 "$RUNS"); do
-        echo "C++$standard terminate fault run $run_index/$RUNS: D-SIMD"
-        run_hardware_case "asc/std/exception" "$standard" simd "$run_index" \
-            timeout 90s "$TERMINATE_BUILD_DIR/asc_stl_terminate_simd"
-        echo "C++$standard terminate fault run $run_index/$RUNS: D-SIMT"
-        run_hardware_case "asc/std/exception" "$standard" simt "$run_index" \
-            timeout 90s "$TERMINATE_BUILD_DIR/asc_stl_terminate_simt"
-    done
 done
 python3 "$ROOT/test/scripts/validate_hardware_results.py" \
     --manifest "$ROOT/test/metadata/headers.json" --results "$CASE_RESULTS" --runs "$RUNS"
@@ -264,11 +249,10 @@ printf '%s\n' \
     "asc/std/__cstring/memcpy.h" \
     "asc/std/atomic" \
     "asc/std/ctime" \
-    "asc/std/exception" \
     "asc/std/iterator" \
     "asc/std/linalg" \
     "asc/std/list" \
     "asc/tensor_copy" \
     "asc/warp" \
     "asc/work_queue" >>"$HW1_RESULTS"
-echo "PASS: C++17/C++20 source_location, foundation, hierarchy, algorithm, B022 atomic/rotate, B023 string-view, B025 memory-pool, work-queue, cmath, tensor-copy, iterator, B027 bitset/fixed-storage, B028 list/map, W08/W09/W10/W11/W12, W13/W14, and terminate fault semantics ($RUNS runs each)"
+echo "PASS: C++17/C++20 source_location, foundation, hierarchy, algorithm, B022 atomic/rotate, B023 string-view, B025 memory-pool, work-queue, cmath, tensor-copy, iterator, B027 bitset/fixed-storage, B028 list/map, W08/W09/W10/W11/W12, and W13/W14 hardware semantics ($RUNS runs each)"

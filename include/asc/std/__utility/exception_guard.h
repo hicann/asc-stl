@@ -33,26 +33,60 @@
 #include <asc/std/__utility/exchange.h>
 #include <asc/std/__utility/move.h>
 
+// 基座 __config 未提供下列宏（合入源树定义于 dialect/exceptions/assert 支撑头）：
+// 内联其语义的最小等价，#ifndef 守卫以免与未来基座定义冲突。
+#ifndef CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
+#if __cplusplus >= 202002L
+#define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 constexpr
+#else
+#define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
+#endif
+#endif  // CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
+
+#ifndef CANN_ASC_STL_DETAIL_HAS_EXCEPTIONS
+#if defined(ASC_DISABLE_EXCEPTIONS)
+#define CANN_ASC_STL_DETAIL_HAS_EXCEPTIONS() 0
+#elif CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()  // device compilation has no exceptions
+#define CANN_ASC_STL_DETAIL_HAS_EXCEPTIONS() 0
+#elif defined(__EXCEPTIONS)  // disabled with -fno-exceptions
+#define CANN_ASC_STL_DETAIL_HAS_EXCEPTIONS() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_EXCEPTIONS() 0
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HAS_EXCEPTIONS
+
+#ifndef CANN_ASC_STL_DETAIL_ASSERT
+// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查。
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
+#else
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) \
+    ((expression) ? static_cast<void>(0) : (__builtin_trap(), static_cast<void>(0)))
+#endif
+#endif  // CANN_ASC_STL_DETAIL_ASSERT
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class Rollback>
-class __exception_guard {
-public:
-    __exception_guard() = delete;
-    CANN_ASC_STL_API explicit constexpr __exception_guard(Rollback rollback) : rollback_(::asc::std::move(rollback))
+struct __exception_guard_exceptions {
+    __exception_guard_exceptions() = delete;
+    CANN_ASC_STL_API explicit constexpr __exception_guard_exceptions(Rollback rollback)
+        : rollback_(::asc::std::move(rollback)), completed_(false)
     {}
-    CANN_ASC_STL_API constexpr __exception_guard(__exception_guard&& other) noexcept(
+    CANN_ASC_STL_API constexpr __exception_guard_exceptions(__exception_guard_exceptions&& other) noexcept(
         is_nothrow_move_constructible_v<Rollback>)
-        : rollback_(::asc::std::move(other.rollback_)), completed_(::asc::std::exchange(other.completed_, true))
-    {}
-    __exception_guard(const __exception_guard&) = delete;
-    __exception_guard& operator=(const __exception_guard&) = delete;
-    __exception_guard& operator=(__exception_guard&&) = delete;
+        : rollback_(::asc::std::move(other.rollback_)), completed_(other.completed_)
+    {
+        other.completed_ = true;
+    }
+    __exception_guard_exceptions(const __exception_guard_exceptions&) = delete;
+    __exception_guard_exceptions& operator=(const __exception_guard_exceptions&) = delete;
+    __exception_guard_exceptions& operator=(__exception_guard_exceptions&&) = delete;
     CANN_ASC_STL_API constexpr void __complete() noexcept
     {
         completed_ = true;
     }
-    CANN_ASC_STL_API ~__exception_guard()
+    CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 ~__exception_guard_exceptions()
     {
         if (!completed_) {
             rollback_();
@@ -61,8 +95,50 @@ public:
 
 private:
     Rollback rollback_;
-    bool completed_{false};
+    bool completed_;
 };
+
+template <class Rollback>
+__exception_guard_exceptions(Rollback) -> __exception_guard_exceptions<Rollback>;
+
+template <class Rollback>
+struct __exception_guard_noexceptions {
+    __exception_guard_noexceptions() = delete;
+    CANN_ASC_STL_API explicit constexpr __exception_guard_noexceptions(Rollback)
+    {}
+    CANN_ASC_STL_API constexpr __exception_guard_noexceptions(__exception_guard_noexceptions&& other) noexcept(
+        is_nothrow_move_constructible_v<Rollback>)
+        : completed_(other.completed_)
+    {
+        other.completed_ = true;
+    }
+    __exception_guard_noexceptions(const __exception_guard_noexceptions&) = delete;
+    __exception_guard_noexceptions& operator=(const __exception_guard_noexceptions&) = delete;
+    __exception_guard_noexceptions& operator=(__exception_guard_noexceptions&&) = delete;
+    CANN_ASC_STL_API constexpr void __complete() noexcept
+    {
+        completed_ = true;
+    }
+    CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 ~__exception_guard_noexceptions()
+    {
+        CANN_ASC_STL_DETAIL_ASSERT(completed_, "__exception_guard not completed with exceptions disabled");
+    }
+
+private:
+    bool completed_ = false;
+};
+
+template <class Rollback>
+__exception_guard_noexceptions(Rollback) -> __exception_guard_noexceptions<Rollback>;
+
+#if !CANN_ASC_STL_DETAIL_HAS_EXCEPTIONS()
+template <class Rollback>
+using __exception_guard = __exception_guard_noexceptions<Rollback>;
+#else
+template <class Rollback>
+using __exception_guard = __exception_guard_exceptions<Rollback>;
+#endif
+
 template <class Rollback>
 CANN_ASC_STL_API constexpr __exception_guard<Rollback> __make_exception_guard(Rollback rollback)
 {

@@ -37,9 +37,19 @@
 #include <asc/std/__string/char_traits.h>
 #include <asc/std/__string/helper_functions.h>
 #include <asc/std/__tuple/ignore.h>
+#include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/integral_constant_like.h>
+#include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/exception_guard.h>
 namespace asc_stl_b015_test {
+template <class T, class = void>
+struct accepts_popcount : asc::std::false_type {};
+
+template <class T>
+struct accepts_popcount<T, decltype(void(asc::std::popcount(asc::std::declval<T>())))> : asc::std::true_type {};
+
+static_assert(accepts_popcount<unsigned>::value && !accepts_popcount<int>::value);
+
 CANN_ASC_STL_API int evaluate_common() noexcept
 {
     int failures = 0;
@@ -48,6 +58,9 @@ CANN_ASC_STL_API int evaluate_common() noexcept
     failures += asc::std::countl_zero(1U) != 31;
     failures += asc::std::countr_zero(8U) != 3;
     failures += asc::std::popcount(15U) != 4;
+    failures += asc::std::countl_zero(0U) != 32;
+    failures += asc::std::countr_zero(0U) != 32;
+    failures += asc::std::popcount(0xffffffffU) != 32;
     failures += asc::std::bit_width(8U) != 4;
     failures += asc::std::bit_floor(11U) != 8U;
     failures += asc::std::bit_ceil(11U) != 16U;
@@ -55,6 +68,10 @@ CANN_ASC_STL_API int evaluate_common() noexcept
     failures += !asc::std::ranges::less{}(2, 3);
     const char text[] = {'a', 's', 'c', '\0'};
     failures += asc::std::char_traits<char>::length(text) != 3;
+#if CANN_ASC_STL_DETAIL_HOSTED() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    // char_traits<wchar_t>::int_type 与标准一致取 wint_t（WEOF 值域）。
+    failures += !::asc::std::is_same_v<::asc::std::char_traits<wchar_t>::int_type, ::std::wint_t>;
+#endif
     int ignored = 0;
     asc::std::ignore = ignored;
     failures += asc::detail::hierarchy_zero() != 0;

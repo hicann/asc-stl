@@ -58,6 +58,12 @@ template <class _UIntType, _UIntType __A, _UIntType __C, _UIntType __M>
 class linear_congruential_engine {
     static_assert(
         __asc_random_is_valid_uinttype<_UIntType>, "linear_congruential_engine requires an unsigned integer type");
+    // [rand.eng.lcong] 前置条件：a == 0 || m == 0 || a < m，且 c == 0 || c < m。
+    static_assert(__M == 0 || __A < __M, "linear_congruential_engine invalid parameters");
+    static_assert(__M == 0 || __C < __M, "linear_congruential_engine invalid parameters");
+    static_assert((__C == 0u ? _UIntType(1u) : _UIntType(0u)) <
+            (__M == 0u ? static_cast<_UIntType>(~static_cast<_UIntType>(0u)) : static_cast<_UIntType>(__M - 1u)),
+        "linear_congruential_engine invalid parameters");
 
 public:
     using result_type = _UIntType;
@@ -82,10 +88,14 @@ public:
 
     CANN_ASC_STL_API constexpr void seed(result_type seed_value) noexcept
     {
-        if (__M != 0 && __C % __M == 0 && seed_value % __M == 0) {
-            value_ = 1u;
-        } else {
+        // [rand.eng.lcong]: x = s mod m; if c mod m == 0 and x == 0, x = 1.
+        if (__M == 0) {
             value_ = seed_value;
+            return;
+        }
+        value_ = static_cast<result_type>(seed_value % __M);
+        if (__C % __M == 0 && value_ == 0) {
+            value_ = 1u;
         }
     }
     template <class _Sseq, enable_if_t<detail::__is_seed_sequence<_Sseq, linear_congruential_engine>::value, int> = 0>

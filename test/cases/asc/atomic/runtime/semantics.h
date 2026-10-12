@@ -62,8 +62,8 @@ CANN_ASC_STL_SIMT_API void evaluate_visibility(__INT32_TYPE__* output) noexcept
             output[16] = static_cast<int>(round ^ 0x13579BDFU);
             published.store(static_cast<int>(round), asc::std::memory_order_release);
             unsigned int spins = 0;
-            while (acknowledged.load(asc::std::memory_order_acquire) < static_cast<int>(round) && spins < spin_limit) {
-                ++spins;
+            while (
+                acknowledged.load(asc::std::memory_order_acquire) < static_cast<int>(round) && ++spins < spin_limit) {
             }
             if (spins == spin_limit) {
                 (void)timeouts.fetch_add(1, asc::std::memory_order_relaxed);
@@ -73,8 +73,7 @@ CANN_ASC_STL_SIMT_API void evaluate_visibility(__INT32_TYPE__* output) noexcept
     } else if (blockIdx.x == 1U) {
         for (unsigned int round = 1; round <= rounds; ++round) {
             unsigned int spins = 0;
-            while (published.load(asc::std::memory_order_acquire) < static_cast<int>(round) && spins < spin_limit) {
-                ++spins;
+            while (published.load(asc::std::memory_order_acquire) < static_cast<int>(round) && ++spins < spin_limit) {
             }
             if (spins == spin_limit) {
                 (void)timeouts.fetch_add(1, asc::std::memory_order_relaxed);

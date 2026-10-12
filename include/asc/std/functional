@@ -28,7 +28,9 @@
 #endif
 
 #include <asc/std/__functional/bind.h>
+#include <asc/std/__functional/bind_back.h>
 #include <asc/std/__functional/bind_front.h>
+#include <asc/std/__functional/compose.h>
 #include <asc/std/__functional/default_searcher.h>
 #include <asc/std/__functional/hash.h>
 #include <asc/std/__functional/identity.h>
@@ -36,11 +38,14 @@
 #include <asc/std/__functional/mem_fn.h>
 #include <asc/std/__functional/not_fn.h>
 #include <asc/std/__functional/operations.h>
+#include <asc/std/__functional/perfect_forward.h>
 #include <asc/std/__functional/ranges_operations.h>
 #include <asc/std/__functional/reference_wrapper.h>
 #include <asc/std/__functional/unwrap_ref.h>
+#include <asc/std/__functional/weak_result_type.h>
 #include <asc/std/__fwd/hash.h>
 #include <asc/std/__fwd/reference_wrapper.h>
 #include <asc/std/__variant/hash.h>
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_FUNCTIONAL

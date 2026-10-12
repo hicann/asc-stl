@@ -34,17 +34,31 @@
 #include <asc/std/cstdint>
 #include <asc/std/limits>
 
+// 基座 __config 未提供 dev 的 CANN_ASC_STL_DETAIL_ASSUME（dev 定义于
+// asc/std/__asc/attributes.h）：内联其语义的最小等价，#ifndef 守卫以免
+// 与未来基座定义冲突。
+#ifndef CANN_ASC_STL_DETAIL_ASSUME
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_assume)
+#define CANN_ASC_STL_DETAIL_ASSUME(...) __builtin_assume(__VA_ARGS__)
+#else
+#define CANN_ASC_STL_DETAIL_ASSUME(...) ((void)sizeof(!(__VA_ARGS__)))
+#endif
+#endif  // CANN_ASC_STL_DETAIL_ASSUME
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+//! @brief 计算 @p value 的置位个数（Kernighan 位清除法：每次消去最低置位）。
 template <class T>
-CANN_ASC_STL_API constexpr int popcount(T value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr __unsigned_integer_result_t<T, int> popcount(T value) noexcept
 {
-    int result = 0;
+    int __count = 0;
     while (value != 0) {
-        result += static_cast<int>(value & T{1});
-        value = static_cast<T>(value >> 1);
+        value &= static_cast<T>(value - 1);
+        ++__count;
     }
-    return result;
+    CANN_ASC_STL_DETAIL_ASSUME(
+        __count >= 0 && __count <= numeric_limits<T>::digits);  // NOLINT(build/include_what_you_use)
+    return __count;
 }
 
 CANN_ASC_STL_END_NAMESPACE

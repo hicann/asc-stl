@@ -24,9 +24,8 @@ int main()
 {
     // Successful parses consume the longest digit pattern of the base.
     std::int32_t value = 0;
-    const char digits42[] = "42";
-    auto result = asc::std::from_chars(digits42, digits42 + 2, value);
-    assert(result.ec == asc::std::errc{} && result.ptr == digits42 + 2 && value == 42);
+    auto result = asc::std::from_chars("42", "42" + 2, value);
+    assert(result.ec == asc::std::errc{} && result.ptr == "42" + 2 && value == 42);
 
     const char leading_space[] = " 42";
     result = asc::std::from_chars(leading_space, leading_space + 3, value);
@@ -54,38 +53,29 @@ int main()
 
     // Bases 2..36 round-trip; other bases are rejected.
     std::int64_t parsed = 0;
-    const char hex_digits[] = "ff";
-    result = asc::std::from_chars(hex_digits, hex_digits + 2, parsed, 16);
+    result = asc::std::from_chars("ff", "ff" + 2, parsed, 16);
     assert(result.ec == asc::std::errc{} && parsed == 255);
-    const char octal_digits[] = "777";
-    result = asc::std::from_chars(octal_digits, octal_digits + 3, parsed, 8);
+    result = asc::std::from_chars("777", "777" + 3, parsed, 8);
     assert(result.ec == asc::std::errc{} && parsed == 511);
-    const char base36_digits[] = "z";
-    result = asc::std::from_chars(base36_digits, base36_digits + 1, parsed, 36);
+    result = asc::std::from_chars("z", "z" + 1, parsed, 36);
     assert(result.ec == asc::std::errc{} && parsed == 35);
-    const char invalid_binary[] = "2";
-    result = asc::std::from_chars(invalid_binary, invalid_binary + 1, parsed, 2);
+    result = asc::std::from_chars("2", "2" + 1, parsed, 2);
     assert(result.ec == asc::std::errc::invalid_argument);
-    const char single_digit[] = "1";
-    result = asc::std::from_chars(single_digit, single_digit + 1, parsed, 1);
+    result = asc::std::from_chars("1", "1" + 1, parsed, 1);
     assert(result.ec == asc::std::errc::invalid_argument);
-    result = asc::std::from_chars(single_digit, single_digit + 1, parsed, 37);
+    result = asc::std::from_chars("1", "1" + 1, parsed, 37);
     assert(result.ec == asc::std::errc::invalid_argument);
 
     // Overflow leaves the value untouched and reports result_out_of_range.
     std::int8_t small = 0;
-    const char too_large[] = "200";
-    result = asc::std::from_chars(too_large, too_large + 3, small);
-    assert(result.ec == asc::std::errc::result_out_of_range && small == 0 && result.ptr == too_large + 3);
+    result = asc::std::from_chars("200", "200" + 3, small);
+    assert(result.ec == asc::std::errc::result_out_of_range && small == 0 && result.ptr == "200" + 3);
     small = 7;
-    const char upper_overflow[] = "128";
-    result = asc::std::from_chars(upper_overflow, upper_overflow + 3, small);
+    result = asc::std::from_chars("128", "128" + 3, small);
     assert(result.ec == asc::std::errc::result_out_of_range && small == 7);
-    const char lower_overflow[] = "-129";
-    result = asc::std::from_chars(lower_overflow, lower_overflow + 4, small);
+    result = asc::std::from_chars("-129", "-129" + 4, small);
     assert(result.ec == asc::std::errc::result_out_of_range && small == 7);
-    const char lower_bound[] = "-128";
-    result = asc::std::from_chars(lower_bound, lower_bound + 4, small);
+    result = asc::std::from_chars("-128", "-128" + 4, small);
     assert(result.ec == asc::std::errc{} && small == -128);
 
     std::uint64_t wide = 0;
@@ -98,14 +88,13 @@ int main()
 
     // The three character types parse through their dedicated overloads.
     char character = 0;
-    const char digit9[] = "9";
-    result = asc::std::from_chars(digit9, digit9 + 1, character);
+    result = asc::std::from_chars("9", "9" + 1, character);
     assert(result.ec == asc::std::errc{} && character == 9);
     signed char signed_character = 0;
-    result = asc::std::from_chars(digit9, digit9 + 1, signed_character);
+    result = asc::std::from_chars("9", "9" + 1, signed_character);
     assert(result.ec == asc::std::errc{} && signed_character == 9);
     unsigned char unsigned_character = 0;
-    result = asc::std::from_chars(digit9, digit9 + 1, unsigned_character);
+    result = asc::std::from_chars("9", "9" + 1, unsigned_character);
     assert(result.ec == asc::std::errc{} && unsigned_character == 9);
     return 0;
 }

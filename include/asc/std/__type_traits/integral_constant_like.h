@@ -32,21 +32,61 @@
 #include <asc/std/__concepts/convertible_to.h>
 #include <asc/std/__concepts/equality_comparable.h>
 #include <asc/std/__type_traits/integral_constant.h>
+#include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/is_integral.h>
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/remove_cvref.h>
+#include <asc/std/__type_traits/remove_reference.h>
+#include <asc/std/__type_traits/void_t.h>
+#include <asc/std/__utility/declval.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// Dual-mode predicates backing __integral_constant_like: the concept forms are
+// used when concepts are available, SFINAE-equivalent forms otherwise.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
-template <class T>
-concept __integral_constant_like = requires {
-    T::value;
-    requires is_integral_v<remove_cvref_t<decltype(T::value)>>;
-    requires(!is_same_v<bool, remove_cvref_t<decltype(T::value)>>);
-    requires convertible_to<T, decltype(T::value)>;
-    requires equality_comparable_with<T, decltype(T::value)>;
-};
+template <class _Tp, class _Up>
+inline constexpr bool __integral_constant_like_convertible = convertible_to<_Tp, _Up>;
+
+template <class _Tp, class _Up>
+inline constexpr bool __integral_constant_like_eq_comparable = equality_comparable_with<_Tp, _Up>;
+#else
+template <class _Tp, class _Up>
+inline constexpr bool __integral_constant_like_convertible = is_convertible_v<_Tp, _Up>;
+
+template <class _Tp, class _Up, class = void>
+inline constexpr bool __integral_constant_weakly_eq_with = false;
+
+template <class _Tp, class _Up>
+inline constexpr bool __integral_constant_weakly_eq_with<_Tp, _Up,
+    void_t<decltype(::asc::std::declval<const remove_reference_t<_Tp>&>() ==
+               ::asc::std::declval<const remove_reference_t<_Up>&>()),
+        decltype(::asc::std::declval<const remove_reference_t<_Up>&>() ==
+            ::asc::std::declval<const remove_reference_t<_Tp>&>()),
+        decltype(::asc::std::declval<const remove_reference_t<_Tp>&>() !=
+            ::asc::std::declval<const remove_reference_t<_Up>&>()),
+        decltype(::asc::std::declval<const remove_reference_t<_Up>&>() !=
+            ::asc::std::declval<const remove_reference_t<_Tp>&>())>> = true;
+
+template <class _Tp, class _Up>
+inline constexpr bool __integral_constant_like_eq_comparable = __integral_constant_weakly_eq_with<_Tp, _Up> &&
+    __integral_constant_weakly_eq_with<_Tp, _Tp> && __integral_constant_weakly_eq_with<_Up, _Up>;
+#endif
+
+template <class _Tp, class = void>
+inline constexpr bool __integral_constant_like_impl = false;
+
+template <class _Tp>
+inline constexpr bool __integral_constant_like_impl<_Tp,
+    void_t<decltype(_Tp::value), typename bool_constant<(_Tp() == _Tp::value)>::type,
+        typename bool_constant<(static_cast<decltype(_Tp::value)>(_Tp()) == _Tp::value)>::type>> =
+    is_integral_v<remove_cvref_t<decltype(_Tp::value)>> && !is_same_v<bool, remove_cvref_t<decltype(_Tp::value)>> &&
+    __integral_constant_like_convertible<_Tp, decltype(_Tp::value)> &&
+    __integral_constant_like_eq_comparable<_Tp, decltype(_Tp::value)>;
+
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
+template <class _Tp>
+concept __integral_constant_like = __integral_constant_like_impl<_Tp>;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

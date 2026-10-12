@@ -48,19 +48,24 @@ template <class InputIterator, class RandomAccessIterator, class Compare>
 CANN_ASC_STL_API constexpr RandomAccessIterator partial_sort_copy(InputIterator first, InputIterator last,
     RandomAccessIterator result_first, RandomAccessIterator result_last, Compare compare)
 {
+    static_assert(
+        __is_callable<Compare, decltype(*first), decltype(*result_first)>::value, "Comparator has to be callable");
+
     RandomAccessIterator result = result_first;
-    for (; first != last && result != result_last; ++first, ++result) {
-        *result = *first;
-    }
-    ::asc::std::make_heap(result_first, result, compare);
-    for (; first != last; ++first) {
-        if (result_first != result && compare(*first, *result_first)) {
-            *result_first = *first;
-            ::asc::std::__sift_down<__classic_algorithm_iterator_operations>(
-                result_first, compare, result - result_first, result_first);
+    if (result_first != result_last) {
+        for (; first != last && result != result_last; ++first, ++result) {
+            *result = *first;
         }
+        ::asc::std::make_heap(result_first, result, compare);
+        for (; first != last; ++first) {
+            if (compare(*first, *result_first)) {
+                *result_first = *first;
+                ::asc::std::__sift_down<__classic_algorithm_iterator_operations>(
+                    result_first, compare, result - result_first, result_first);
+            }
+        }
+        ::asc::std::sort_heap(result_first, result, compare);
     }
-    ::asc::std::sort_heap(result_first, result, compare);
     return result;
 }
 

@@ -57,57 +57,6 @@ public:
     {
         heapify();
     }
-    CANN_ASC_STL_API constexpr priority_queue(const Compare& compare, Container&& container)
-        : c(static_cast<Container&&>(container)), comp(compare)
-    {
-        heapify();
-    }
-    template <class Alloc>
-    CANN_ASC_STL_API constexpr explicit priority_queue(const Alloc& allocator) : c(allocator)
-    {}
-    template <class Alloc>
-    CANN_ASC_STL_API constexpr priority_queue(const Compare& compare, const Alloc& allocator)
-        : c(allocator), comp(compare)
-    {}
-    template <class Alloc>
-    CANN_ASC_STL_API constexpr priority_queue(
-        const Compare& compare, const Container& container, const Alloc& allocator)
-        : c(container, allocator), comp(compare)
-    {
-        heapify();
-    }
-    template <class Alloc>
-    CANN_ASC_STL_API constexpr priority_queue(const Compare& compare, Container&& container, const Alloc& allocator)
-        : c(static_cast<Container&&>(container), allocator), comp(compare)
-    {
-        heapify();
-    }
-    template <class Alloc>
-    CANN_ASC_STL_API constexpr priority_queue(const priority_queue& other, const Alloc& allocator)
-        : c(other.c, allocator), comp(other.comp)
-    {}
-    template <class Alloc>
-    CANN_ASC_STL_API constexpr priority_queue(priority_queue&& other, const Alloc& allocator)
-        : c(static_cast<Container&&>(other.c), allocator), comp(static_cast<Compare&&>(other.comp))
-    {}
-    template <class InputIterator>
-    CANN_ASC_STL_API constexpr priority_queue(
-        InputIterator first, InputIterator last, const Compare& compare, const Container& container)
-        : c(container), comp(compare)
-    {
-        for (; first != last; ++first)
-            c.push_back(*first);
-        heapify();
-    }
-    template <class InputIterator>
-    CANN_ASC_STL_API constexpr priority_queue(
-        InputIterator first, InputIterator last, const Compare& compare, Container&& container)
-        : c(static_cast<Container&&>(container)), comp(compare)
-    {
-        for (; first != last; ++first)
-            c.push_back(*first);
-        heapify();
-    }
     CANN_ASC_STL_API constexpr bool empty() const
     {
         return c.empty();
@@ -195,16 +144,6 @@ private:
         }
     }
 };
-
-template <class Compare, class Container>
-CANN_ASC_STL_HOST_DEVICE priority_queue(
-    Compare, Container) -> priority_queue<typename Container::value_type, Container, Compare>;
-template <class Compare, class Container, class Alloc>
-CANN_ASC_STL_HOST_DEVICE priority_queue(
-    Compare, Container, Alloc) -> priority_queue<typename Container::value_type, Container, Compare>;
-template <class InputIterator, class Compare, class Container>
-CANN_ASC_STL_HOST_DEVICE priority_queue(InputIterator, InputIterator, Compare,
-    Container) -> priority_queue<typename Container::value_type, Container, Compare>;
 
 template <class T, class Container, class Compare>
 CANN_ASC_STL_API constexpr void swap(  // NOLINT(build/include_what_you_use)

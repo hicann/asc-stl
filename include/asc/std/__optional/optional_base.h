@@ -29,6 +29,7 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__functional/invoke.h>
+#include <asc/std/__memory/addressof.h>
 #include <asc/std/__memory/construct_at.h>
 #include <asc/std/__tuple/sfinae_helpers.h>
 #include <asc/std/__type_traits/is_copy_assignable.h>
@@ -54,54 +55,367 @@
 #include <asc/std/__utility/in_place.h>
 #include <asc/std/__utility/move.h>
 
+// Migrated from dev __asc/visibility.h: ASC-STL keeps only the inline
+// semantics for ABI hidden; base asc/__detail/visibility.h has no such macro.
+#ifndef CANN_ASC_STL_DETAIL_HIDE_FROM_ABI
+#define CANN_ASC_STL_DETAIL_HIDE_FROM_ABI inline
+#endif
+
+// Migrated from dev __asc/dialect.h: base asc/__config has no standard-version
+// level macro; key it on the base feature detection helper instead.
+#ifndef CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
+#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+#define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 constexpr
+#else
+#define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
+#endif
+#endif  // CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+struct __optional_construct_from_invoke_tag {};
+
+template <class T, bool = is_trivially_destructible_v<T>>
+struct __optional_destruct_base;
+
 template <class T>
-union __optional_union {
-    unsigned char empty_;
-    T value_;
-    CANN_ASC_STL_API constexpr __optional_union() noexcept : empty_{}
+struct __optional_destruct_base<T, false> {
+    using value_type = T;
+    using __stored_type = remove_cv_t<value_type>;
+    static_assert(is_object_v<value_type>, "instantiation of optional with a non-object type is undefined behavior");
+    union __storage {
+        unsigned char empty_;
+        __stored_type value_;
+
+        CANN_ASC_STL_API constexpr __storage() noexcept : empty_()
+        {}
+        template <class... Args>
+        CANN_ASC_STL_API constexpr __storage(in_place_t, Args&&... args) noexcept(
+            is_nothrow_constructible_v<value_type, Args...>)
+            : value_(::asc::std::forward<Args>(args)...)
+        {}
+        template <class Fun, class... Args>
+        CANN_ASC_STL_API constexpr __storage(__optional_construct_from_invoke_tag, Fun&& fun, Args&&... args)
+            : value_(::asc::std::invoke(::asc::std::forward<Fun>(fun), ::asc::std::forward<Args>(args)...))
+        {}
+        CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 ~__storage() noexcept
+        {}
+    };
+    __storage storage_;
+    bool engaged_;
+
+    CANN_ASC_STL_API constexpr __optional_destruct_base() noexcept : storage_(), engaged_(false)
     {}
+
     template <class... Args>
-    CANN_ASC_STL_API constexpr explicit __optional_union(in_place_t, Args&&... args)
-        : value_(::asc::std::forward<Args>(args)...)
+    CANN_ASC_STL_API constexpr explicit __optional_destruct_base(in_place_t, Args&&... args) noexcept(
+        is_nothrow_constructible_v<value_type, Args...>)
+        : storage_(in_place_t{}, ::asc::std::forward<Args>(args)...), engaged_(true)
     {}
-    CANN_ASC_STL_API ~__optional_union()
+
+    template <class Fun, class... Args>
+    CANN_ASC_STL_API constexpr __optional_destruct_base(__optional_construct_from_invoke_tag, Fun&& fun, Args&&... args)
+        : storage_(__optional_construct_from_invoke_tag{}, ::asc::std::forward<Fun>(fun),
+              ::asc::std::forward<Args>(args)...),
+          engaged_(true)
     {}
+    CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 ~__optional_destruct_base()
+    {
+        if (engaged_) {
+            storage_.value_.~__stored_type();
+        }
+    }
+
+    CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 void reset() noexcept
+    {
+        if (engaged_) {
+            storage_.value_.~__stored_type();
+            engaged_ = false;
+        }
+    }
 };
 
 template <class T>
-class __optional_base {
-protected:
-    CANN_ASC_STL_API constexpr __optional_base() noexcept = default;
-    template <class... Args>
-    CANN_ASC_STL_API constexpr explicit __optional_base(in_place_t, Args&&... args)
-        : storage_(in_place, ::asc::std::forward<Args>(args)...), engaged_(true)
+struct __optional_destruct_base<T, true> {
+    using value_type = T;
+    using __stored_type = remove_cv_t<value_type>;
+    static_assert(is_object_v<value_type>, "instantiation of optional with a non-object type is undefined behavior");
+    union __storage {
+        unsigned char empty_;
+        __stored_type value_;
+
+        CANN_ASC_STL_API constexpr __storage() noexcept : empty_()
+        {}
+        template <class... Args>
+        CANN_ASC_STL_API constexpr __storage(in_place_t, Args&&... args) noexcept(
+            is_nothrow_constructible_v<value_type, Args...>)
+            : value_(::asc::std::forward<Args>(args)...)
+        {}
+        template <class Fun, class... Args>
+        CANN_ASC_STL_API constexpr __storage(__optional_construct_from_invoke_tag, Fun&& fun, Args&&... args)
+            : value_(::asc::std::invoke(::asc::std::forward<Fun>(fun), ::asc::std::forward<Args>(args)...))
+        {}
+    };
+    __storage storage_;
+    bool engaged_;
+
+    CANN_ASC_STL_API constexpr __optional_destruct_base() noexcept : storage_(), engaged_(false)
     {}
-    CANN_ASC_STL_API ~__optional_base()
+
+    template <class... Args>
+    CANN_ASC_STL_API constexpr explicit __optional_destruct_base(in_place_t, Args&&... args) noexcept(
+        is_nothrow_constructible_v<value_type, Args...>)
+        : storage_(in_place_t{}, ::asc::std::forward<Args>(args)...), engaged_(true)
+    {}
+
+    template <class Fun, class... Args>
+    CANN_ASC_STL_API constexpr __optional_destruct_base(__optional_construct_from_invoke_tag, Fun&& fun, Args&&... args)
+        : storage_(__optional_construct_from_invoke_tag{}, ::asc::std::forward<Fun>(fun),
+              ::asc::std::forward<Args>(args)...),
+          engaged_(true)
+    {}
+
+    CANN_ASC_STL_API constexpr void reset() noexcept
     {
-        reset();
+        if (engaged_) {
+            engaged_ = false;
+        }
     }
+};
+
+template <class T>
+struct __optional_storage_base : __optional_destruct_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_storage_base, __optional_destruct_base, T);
+
+    using value_type = T;
+
+    CANN_ASC_STL_API constexpr bool has_value() const noexcept
+    {
+        return this->engaged_;
+    }
+
+    CANN_ASC_STL_API constexpr value_type& __get() & noexcept
+    {
+        return this->storage_.value_;
+    }
+    CANN_ASC_STL_API constexpr const value_type& __get() const& noexcept
+    {
+        return this->storage_.value_;
+    }
+    CANN_ASC_STL_API constexpr value_type&& __get() && noexcept
+    {
+        return ::asc::std::move(this->storage_.value_);
+    }
+    CANN_ASC_STL_API constexpr const value_type&& __get() const&& noexcept
+    {
+        return ::asc::std::move(this->storage_.value_);
+    }
+
+    CANN_ASC_STL_API constexpr void __set_engaged(bool engaged) noexcept
+    {
+        this->engaged_ = engaged;
+    }
+    template <class... Args>
+    CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 void __construct(Args&&... args)
+    {
+        ::asc::std::__construct_at(::asc::std::addressof(this->storage_.value_), ::asc::std::forward<Args>(args)...);
+        this->engaged_ = true;
+    }
+
+    template <class That>
+    CANN_ASC_STL_API constexpr void __construct_from(That&& opt)
+    {
+        if (opt.has_value()) {
+            __construct(::asc::std::forward<That>(opt).__get());
+        }
+    }
+    template <class That>
+    CANN_ASC_STL_API constexpr void __assign_from(That&& opt)
+    {
+        if (this->engaged_ == opt.has_value()) {
+            if (this->engaged_) {
+                this->storage_.value_ = ::asc::std::forward<That>(opt).__get();
+            }
+        } else {
+            if (this->engaged_) {
+                this->reset();
+            } else {
+                __construct(::asc::std::forward<That>(opt).__get());
+            }
+        }
+    }
+};
+
+template <class T>
+inline constexpr __smf_availability __optional_can_copy_construct =
+    is_trivially_copy_constructible_v<T> ? __smf_availability::__trivial :
+    is_copy_constructible_v<T>           ? __smf_availability::__available :
+                                           __smf_availability::__deleted;
+
+template <class T, __smf_availability = __optional_can_copy_construct<T>>
+struct __optional_copy_base : __optional_storage_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_copy_base, __optional_storage_base, T);
+};
+
+template <class T>
+struct __optional_copy_base<T, __smf_availability::__available> : __optional_storage_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_copy_base, __optional_storage_base, T);
+
+    // This ctor shouldn't need to initialize the base explicitly, but g++ 9 considers it to be uninitialized
+    // during constexpr evaluation if it isn't initialized explicitly. This can be replaced with the pattern
+    // below, in __optional_move_base, once g++ 9 falls off our support matrix.
+    CANN_ASC_STL_API constexpr __optional_copy_base(const __optional_copy_base& opt) noexcept(
+        is_nothrow_copy_constructible_v<T>)
+        : __base()
+    {
+        this->__construct_from(opt);
+    }
+
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_base(__optional_copy_base&&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_base& operator=(const __optional_copy_base&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_base& operator=(__optional_copy_base&&) = default;
+};
+
+template <class T>
+struct __optional_copy_base<T, __smf_availability::__deleted> : __optional_storage_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_copy_base, __optional_storage_base, T);
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_base(const __optional_copy_base&) = delete;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_base(__optional_copy_base&&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_base& operator=(const __optional_copy_base&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_base& operator=(__optional_copy_base&&) = default;
+};
+
+template <class T>
+inline constexpr __smf_availability __optional_can_move_construct =
+    is_trivially_move_constructible_v<T> ? __smf_availability::__trivial :
+    is_move_constructible_v<T>           ? __smf_availability::__available :
+                                           __smf_availability::__deleted;
+
+template <class T, __smf_availability = __optional_can_move_construct<T>>
+struct __optional_move_base : __optional_copy_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_move_base, __optional_copy_base, T);
+};
+
+template <class T>
+struct __optional_move_base<T, __smf_availability::__available> : __optional_copy_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_move_base, __optional_copy_base, T);
+
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_move_base(const __optional_move_base&) = default;
+
+    CANN_ASC_STL_API constexpr __optional_move_base(__optional_move_base&& opt) noexcept(
+        is_nothrow_move_constructible_v<T>)
+    {
+        this->__construct_from(::asc::std::move(opt));
+    }
+
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_move_base& operator=(const __optional_move_base&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_move_base& operator=(__optional_move_base&&) = default;
+};
+
+template <class T>
+struct __optional_move_base<T, __smf_availability::__deleted> : __optional_copy_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_move_base, __optional_copy_base, T);
+
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_move_base(const __optional_move_base&) = default;
+    __optional_move_base(__optional_move_base&&) = delete;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_move_base& operator=(const __optional_move_base&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_move_base& operator=(__optional_move_base&&) = default;
+};
+
+template <class T>
+inline constexpr __smf_availability __optional_can_copy_assign =
+    is_trivially_destructible_v<T> && is_trivially_copy_constructible_v<T> && is_trivially_copy_assignable_v<T> ?
+    __smf_availability::__trivial :
+    is_destructible_v<T> && is_copy_constructible_v<T> && is_copy_assignable_v<T> ? __smf_availability::__available :
+                                                                                    __smf_availability::__deleted;
+
+template <class T, __smf_availability = __optional_can_copy_assign<T>>
+struct __optional_copy_assign_base : __optional_move_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_copy_assign_base, __optional_move_base, T);
+};
+
+template <class T>
+struct __optional_copy_assign_base<T, __smf_availability::__available> : __optional_move_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_copy_assign_base, __optional_move_base, T);
+
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_assign_base(const __optional_copy_assign_base&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_assign_base(__optional_copy_assign_base&&) = default;
+
+    CANN_ASC_STL_API constexpr __optional_copy_assign_base& operator=(const __optional_copy_assign_base& opt)
+    {
+        this->__assign_from(opt);
+        return *this;
+    }
+
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_assign_base& operator=(__optional_copy_assign_base&&) = default;
+};
+
+template <class T>
+struct __optional_copy_assign_base<T, __smf_availability::__deleted> : __optional_move_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_copy_assign_base, __optional_move_base, T);
+
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_assign_base(const __optional_copy_assign_base&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_assign_base(__optional_copy_assign_base&&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_assign_base& operator=(
+        const __optional_copy_assign_base&) = delete;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_copy_assign_base& operator=(__optional_copy_assign_base&&) = default;
+};
+
+template <class T>
+inline constexpr __smf_availability __optional_can_move_assign =
+    is_trivially_destructible_v<T> && is_trivially_move_constructible_v<T> && is_trivially_move_assignable_v<T> ?
+    __smf_availability::__trivial :
+    is_destructible_v<T> && is_move_constructible_v<T> && is_move_assignable_v<T> ? __smf_availability::__available :
+                                                                                    __smf_availability::__deleted;
+
+template <class T, __smf_availability = __optional_can_move_assign<T>>
+struct __optional_move_assign_base : __optional_copy_assign_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_move_assign_base, __optional_copy_assign_base, T);
+};
+
+template <class T>
+struct __optional_move_assign_base<T, __smf_availability::__available> : __optional_copy_assign_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_move_assign_base, __optional_copy_assign_base, T);
+
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_move_assign_base(const __optional_move_assign_base&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_move_assign_base(__optional_move_assign_base&&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_move_assign_base& operator=(
+        const __optional_move_assign_base&) = default;
+
+    CANN_ASC_STL_API constexpr __optional_move_assign_base& operator=(__optional_move_assign_base&& opt) noexcept(
+        is_nothrow_move_assignable_v<T> && is_nothrow_move_constructible_v<T>)
+    {
+        this->__assign_from(::asc::std::move(opt));  // NOLINT(build/include_what_you_use)
+        return *this;
+    }
+};
+
+template <class T>
+struct __optional_move_assign_base<T, __smf_availability::__deleted> : __optional_copy_assign_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_move_assign_base, __optional_copy_assign_base, T);
+
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_move_assign_base(const __optional_move_assign_base&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_move_assign_base(__optional_move_assign_base&&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_move_assign_base& operator=(
+        const __optional_move_assign_base&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __optional_move_assign_base& operator=(__optional_move_assign_base&&) = delete;
+};
+
+// Storage layer that keeps the historical member names (storage_ / engaged_ /
+// construct / reset) consumed by optional<T> and its cross-type access paths.
+template <class T>
+struct __optional_base : __optional_move_assign_base<T> {
+    CANN_ASC_STL_DETAIL_DELEGATE_CONSTRUCTORS(__optional_base, __optional_move_assign_base, T);
 
     template <class... Args>
     CANN_ASC_STL_API constexpr T& construct(Args&&... args)
     {
-        ::asc::std::construct_at(  // NOLINT(build/include_what_you_use)
-            &storage_.value_,
+        ::asc::std::__construct_at(  // NOLINT(build/include_what_you_use)
+            &this->storage_.value_,
             ::asc::std::forward<Args>(args)...);  // NOLINT(build/include_what_you_use)
-        engaged_ = true;
-        return storage_.value_;
+        this->engaged_ = true;
+        return this->storage_.value_;
     }
-    CANN_ASC_STL_API constexpr void reset() noexcept
-    {
-        if (engaged_) {
-            ::asc::std::destroy_at(&storage_.value_);
-            engaged_ = false;
-        }
-    }
-
-    __optional_union<T> storage_{};
-    bool engaged_{};
 };
 
 CANN_ASC_STL_END_NAMESPACE

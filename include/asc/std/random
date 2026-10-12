@@ -32,5 +32,6 @@
 #include <asc/std/__random/philox_engine.h>
 #include <asc/std/__random/uniform_int_distribution.h>
 #include <asc/std/__random/uniform_real_distribution.h>
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_RANDOM

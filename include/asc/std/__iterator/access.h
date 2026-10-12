@@ -32,47 +32,101 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class C>
-CANN_ASC_STL_API constexpr auto begin(C& c) -> decltype(c.begin())
-{
-    return c.begin();
-}
-template <class C>
-CANN_ASC_STL_API constexpr auto begin(const C& c) -> decltype(c.begin())
-{
-    return c.begin();
-}
-template <class T, size_t N>
-CANN_ASC_STL_API constexpr T* begin(T (&array)[N]) noexcept
-{
-    return array;
-}
-template <class C>
-CANN_ASC_STL_API constexpr auto end(C& c) -> decltype(c.end())
-{
-    return c.end();
-}
-template <class C>
-CANN_ASC_STL_API constexpr auto end(const C& c) -> decltype(c.end())
-{
-    return c.end();
-}
-template <class T, size_t N>
-CANN_ASC_STL_API constexpr T* end(T (&array)[N]) noexcept
-{
-    return array + N;
-}
-template <class C>
-CANN_ASC_STL_API constexpr auto cbegin(const C& c) noexcept(
-    noexcept(::asc::std::begin(c))) -> decltype(::asc::std::begin(c))
-{
-    return ::asc::std::begin(c);
-}
-template <class C>
-CANN_ASC_STL_API constexpr auto cend(const C& c) noexcept(noexcept(::asc::std::end(c))) -> decltype(::asc::std::end(c))
-{
-    return ::asc::std::end(c);
-}
+namespace __begin {
+struct __fn {
+    template <class _Tp, size_t _Np>
+    CANN_ASC_STL_API constexpr _Tp* operator()(_Tp (&__array)[_Np]) const noexcept
+    {
+        return __array;
+    }
+
+    template <class _Cp>
+    CANN_ASC_STL_API constexpr auto operator()(_Cp& __c) const noexcept(noexcept(__c.begin())) -> decltype(__c.begin())
+    {
+        return __c.begin();
+    }
+
+    template <class _Cp>
+    CANN_ASC_STL_API constexpr auto operator()(const _Cp& __c) const
+        noexcept(noexcept(__c.begin())) -> decltype(__c.begin())
+    {
+        return __c.begin();
+    }
+};
+}  // namespace __begin
+
+inline namespace __cpo {
+inline constexpr auto begin = __begin::__fn{};
+
+// Use the function-object type directly for internal dispatch.
+using __begin_cpo = __begin::__fn;
+}  // namespace __cpo
+
+namespace __end {
+struct __fn {
+    template <class _Tp, size_t _Np>
+    CANN_ASC_STL_API constexpr _Tp* operator()(_Tp (&__array)[_Np]) const noexcept
+    {
+        return __array + _Np;
+    }
+
+    template <class _Cp>
+    CANN_ASC_STL_API constexpr auto operator()(_Cp& __c) const noexcept(noexcept(__c.end())) -> decltype(__c.end())
+    {
+        return __c.end();
+    }
+
+    template <class _Cp>
+    CANN_ASC_STL_API constexpr auto operator()(const _Cp& __c) const
+        noexcept(noexcept(__c.end())) -> decltype(__c.end())
+    {
+        return __c.end();
+    }
+};
+}  // namespace __end
+
+inline namespace __cpo {
+inline constexpr auto end = __end::__fn{};
+
+// Use the function-object type directly for internal dispatch.
+using __end_cpo = __end::__fn;
+}  // namespace __cpo
+
+namespace __cbegin {
+struct __fn {
+    template <class _Cp>
+    CANN_ASC_STL_API constexpr auto operator()(const _Cp& __c) const
+        noexcept(noexcept(::asc::std::__begin_cpo{}(__c))) -> decltype(::asc::std::__begin_cpo{}(__c))
+    {
+        return ::asc::std::__begin_cpo{}(__c);
+    }
+};
+}  // namespace __cbegin
+
+inline namespace __cpo {
+inline constexpr auto cbegin = __cbegin::__fn{};
+
+// Use the function-object type directly for internal dispatch.
+using __cbegin_cpo = __cbegin::__fn;
+}  // namespace __cpo
+
+namespace __cend {
+struct __fn {
+    template <class _Cp>
+    CANN_ASC_STL_API constexpr auto operator()(const _Cp& __c) const
+        noexcept(noexcept(::asc::std::__end_cpo{}(__c))) -> decltype(::asc::std::__end_cpo{}(__c))
+    {
+        return ::asc::std::__end_cpo{}(__c);
+    }
+};
+}  // namespace __cend
+
+inline namespace __cpo {
+inline constexpr auto cend = __cend::__fn{};
+
+// Use the function-object type directly for internal dispatch.
+using __cend_cpo = __cend::__fn;
+}  // namespace __cpo
 
 CANN_ASC_STL_END_NAMESPACE
 

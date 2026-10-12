@@ -58,8 +58,9 @@ struct buffer_state {
 CANN_ASC_STL_API constexpr __SIZE_TYPE__ buffer_element_bytes(
     __SIZE_TYPE__ element_size, __SIZE_TYPE__ element_count) noexcept
 {
-    if (element_size == 0 || element_count == 0)
+    if (element_size == 0 || element_count == 0) {
         return 0;
+    }
     const __SIZE_TYPE__ total = element_size * element_count;
     return total / element_count == element_size && total % element_size == 0 ? total : 0;
 }

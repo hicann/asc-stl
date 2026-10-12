@@ -30,6 +30,7 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__fwd/unexpected.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/is_array.h>
 #include <asc/std/__type_traits/is_const.h>
@@ -43,22 +44,63 @@
 #include <asc/std/__utility/forward.h>
 #include <asc/std/__utility/in_place.h>
 #include <asc/std/__utility/move.h>
+#include <asc/std/__utility/swap.h>
+
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#include <initializer_list>
+#endif
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+template <class T>
+inline constexpr bool __valid_unexpected =
+    is_object_v<T> && !is_array_v<T> && !__is_asc_std_unexpected<T> && !is_const_v<T> && !is_volatile_v<T>;
+
 template <class Error>
 class unexpected {
+    static_assert(__valid_unexpected<Error>,
+        "[expected.un.general] states a program that instantiates unexpected for a non-object type, an "
+        "array type, a specialization of unexpected, or a cv-qualified type is ill-formed.");
+
+    template <class, class>
+    friend class expected;
+
 public:
     using error_type = Error;
+
+    unexpected(const unexpected&) = default;
+    unexpected(unexpected&&) = default;
+
     CANN_ASC_STL_API constexpr explicit unexpected(const Error& error) : error_(error)
     {}
     CANN_ASC_STL_API constexpr explicit unexpected(Error&& error) noexcept(is_nothrow_move_constructible_v<Error>)
         : error_(::asc::std::move(error))
     {}
+    template <class Error2 = Error,
+        enable_if_t<!is_same_v<remove_cvref_t<Error2>, unexpected> && !is_same_v<remove_cvref_t<Error2>, in_place_t> &&
+                is_constructible_v<Error, Error2>,
+            int> = 0>
+    CANN_ASC_STL_API constexpr explicit unexpected(Error2&& error) noexcept(is_nothrow_constructible_v<Error, Error2>)
+        : error_(::asc::std::forward<Error2>(error))
+    {}
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     template <class... Args>
     CANN_ASC_STL_API constexpr explicit unexpected(in_place_t, Args&&... args)
         : error_(::asc::std::forward<Args>(args)...)
     {}
+#endif
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    template <class U, class... Args,
+        enable_if_t<is_constructible_v<Error, ::std::initializer_list<U>&, Args...>, int> = 0>
+    CANN_ASC_STL_API constexpr explicit unexpected(in_place_t, ::std::initializer_list<U> il, Args&&... args) noexcept(
+        is_nothrow_constructible_v<Error, ::std::initializer_list<U>&, Args...>)
+        : error_(il, ::asc::std::forward<Args>(args)...)
+    {}
+#endif
+
+    CANN_ASC_STL_API constexpr unexpected& operator=(const unexpected&) = default;
+    CANN_ASC_STL_API constexpr unexpected& operator=(unexpected&&) = default;
+
     CANN_ASC_STL_API constexpr const Error& error() const& noexcept
     {
         return error_;
@@ -76,9 +118,39 @@ public:
         return ::asc::std::move(error_);  // NOLINT(build/include_what_you_use)
     }
 
+    CANN_ASC_STL_API constexpr void swap(unexpected& other) noexcept(is_nothrow_swappable_v<Error>)
+    {
+        static_assert(is_swappable_v<Error>, "Error must be swappable");
+        ::asc::std::swap(error_, other.error_);  // NOLINT(build/include_what_you_use)
+    }
+    template <class Error2 = Error, enable_if_t<is_swappable_v<Error2>, int> = 0>
+    CANN_ASC_STL_API friend constexpr void swap(unexpected& lhs,  // NOLINT(build/include_what_you_use)
+        unexpected& rhs) noexcept(is_nothrow_swappable_v<Error2>)
+    {
+        lhs.swap(rhs);
+    }
+
+    template <class UError>
+    CANN_ASC_STL_API friend constexpr bool operator==(const unexpected& lhs, const unexpected<UError>& rhs) noexcept(
+        noexcept(static_cast<bool>(lhs.error() == rhs.error())))
+    {
+        return lhs.error() == rhs.error();
+    }
+#if !CANN_ASC_STL_DETAIL_HAS_CXX20()
+    template <class UError>
+    CANN_ASC_STL_API friend constexpr bool operator!=(const unexpected& lhs, const unexpected<UError>& rhs) noexcept(
+        noexcept(static_cast<bool>(lhs.error() != rhs.error())))
+    {
+        return lhs.error() != rhs.error();
+    }
+#endif  // !CANN_ASC_STL_DETAIL_HAS_CXX20()
+
 private:
     Error error_;
 };
+
+template <class Error>
+unexpected(Error) -> unexpected<Error>;
 
 CANN_ASC_STL_END_NAMESPACE
 

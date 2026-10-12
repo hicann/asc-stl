@@ -55,6 +55,15 @@ struct greater_than {
     }
 };
 
+struct counting_false_predicate {
+    int* calls;
+    CANN_ASC_STL_API constexpr bool operator()(int) const
+    {
+        ++*calls;
+        return false;
+    }
+};
+
 struct counting_functor {
     int calls;
     CANN_ASC_STL_API constexpr counting_functor() : calls(0)
@@ -98,6 +107,10 @@ CANN_ASC_STL_API constexpr int evaluate_predicate_algorithms()
     failures += !asc::std::is_partitioned(partitioned, partitioned + 4, greater_than{4});
     failures += asc::std::is_partitioned(mixed, mixed + 4, greater_than{4});
     failures += !asc::std::is_partitioned(partitioned, partitioned, greater_than{4});
+    int partition_calls = 0;
+    const int one_false = 0;
+    failures += !asc::std::is_partitioned(&one_false, &one_false + 1, counting_false_predicate{&partition_calls});
+    failures += partition_calls != 1;
 
     int copied[4] = {};
     failures += asc::std::copy_if(data, data + 4, copied, greater_than{2}) != copied + 2;

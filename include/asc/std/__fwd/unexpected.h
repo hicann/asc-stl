@@ -34,6 +34,12 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 template <class Error>
 class unexpected;
 
+template <class T>
+inline constexpr bool __is_asc_std_unexpected = false;
+
+template <class Error>
+inline constexpr bool __is_asc_std_unexpected<unexpected<Error>> = true;
+
 CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STD___FWD_UNEXPECTED_H

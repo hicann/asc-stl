@@ -28,6 +28,7 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__chrono/duration.h>
 #include <asc/std/__chrono/month.h>
 #include <asc/std/__chrono/year.h>
 
@@ -36,112 +37,157 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 namespace chrono {
 
 class year_month {
+    chrono::year __year_;
+    chrono::month __month_;
+
 public:
-    CANN_ASC_STL_API constexpr year_month() = default;
-    CANN_ASC_STL_API constexpr year_month(const chrono::year& year_value, const chrono::month& month_value) noexcept
-        : year_(year_value), month_(month_value)
+    CANN_ASC_STL_API year_month() = default;
+    CANN_ASC_STL_API constexpr year_month(const chrono::year& __year, const chrono::month& __month) noexcept
+        : __year_{__year}, __month_{__month}
     {}
-    CANN_ASC_STL_API constexpr chrono::year year() const noexcept
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::year year() const noexcept
     {
-        return year_;
-    }
-    CANN_ASC_STL_API constexpr chrono::month month() const noexcept
-    {
-        return month_;
-    }
-    CANN_ASC_STL_API constexpr bool ok() const noexcept
-    {
-        return year_.ok() && month_.ok();
-    }
-    CANN_ASC_STL_API constexpr year_month& operator+=(const months& offset) noexcept
-    {
-        const long long total = static_cast<long long>(static_cast<int>(year_)) * 12 +
-            static_cast<int>(static_cast<unsigned>(month_)) - 1 + offset.count();
-        const long long quotient = total >= 0 ? total / 12 : (total - 11) / 12;
-        year_ = chrono::year(static_cast<int>(quotient));
-        month_ = chrono::month(static_cast<unsigned>(total - quotient * 12 + 1));
-        return *this;
-    }
-    CANN_ASC_STL_API constexpr year_month& operator-=(const months& offset) noexcept
-    {
-        return *this += months(-offset.count());
-    }
-    CANN_ASC_STL_API constexpr year_month& operator+=(const years& offset) noexcept
-    {
-        year_ += offset;
-        return *this;
-    }
-    CANN_ASC_STL_API constexpr year_month& operator-=(const years& offset) noexcept
-    {
-        return *this += years(-offset.count());
+        return __year_;
     }
 
-private:
-    chrono::year year_{};
-    chrono::month month_{};
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::month month() const noexcept
+    {
+        return __month_;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool ok() const noexcept
+    {
+        return __year_.ok() && __month_.ok();
+    }
+
+    // arithmetics
+    CANN_ASC_STL_API constexpr year_month& operator+=(const months& __months) noexcept
+    {
+        int __dmi = static_cast<int>(static_cast<unsigned>(__month_)) - 1 + __months.count();
+        const int __years = (__dmi >= 0 ? __dmi : __dmi - 11) / 12;
+        __dmi = __dmi - __years * 12 + 1;
+        __year_ += years(__years);
+        __month_ = chrono::month(static_cast<unsigned>(__dmi));
+        return *this;
+    }
+
+    CANN_ASC_STL_API constexpr year_month& operator-=(const months& __months) noexcept
+    {
+        *this += -__months;
+        return *this;
+    }
+
+    CANN_ASC_STL_API constexpr year_month& operator+=(const years& __years) noexcept
+    {
+        __year_ += __years;
+        return *this;
+    }
+
+    CANN_ASC_STL_API constexpr year_month& operator-=(const years& __years) noexcept
+    {
+        __year_ -= __years;
+        return *this;
+    }
+
+    // comparisons
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator==(
+        const year_month& __lhs, const year_month& __rhs) noexcept
+    {
+        return __lhs.year() == __rhs.year() && __lhs.month() == __rhs.month();
+    }
+
+#if !CANN_ASC_STL_DETAIL_HAS_CXX20()
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator!=(
+        const year_month& __lhs, const year_month& __rhs) noexcept
+    {
+        return __lhs.year() != __rhs.year() || __lhs.month() != __rhs.month();
+    }
+#endif  // !CANN_ASC_STL_DETAIL_HAS_CXX20()
+
+    // Traditional relational operators (spaceship not supported)
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator<(
+        const year_month& __lhs, const year_month& __rhs) noexcept
+    {
+        return __lhs.year() != __rhs.year() ? __lhs.year() < __rhs.year() : __lhs.month() < __rhs.month();
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator>(
+        const year_month& __lhs, const year_month& __rhs) noexcept
+    {
+        return __rhs < __lhs;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator<=(
+        const year_month& __lhs, const year_month& __rhs) noexcept
+    {
+        return !(__rhs < __lhs);
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator>=(
+        const year_month& __lhs, const year_month& __rhs) noexcept
+    {
+        return !(__lhs < __rhs);
+    }
 };
 
-CANN_ASC_STL_API constexpr bool operator==(year_month left, year_month right) noexcept
+// Cannot be hidden friends, the compiler fails to find the right operator/
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month operator/(
+    const chrono::year& __year, const chrono::month& __month) noexcept
 {
-    return left.year() == right.year() && left.month() == right.month();
+    return year_month{__year, __month};
 }
-CANN_ASC_STL_API constexpr bool operator!=(year_month left, year_month right) noexcept
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month operator/(const chrono::year& __year, int __month) noexcept
 {
-    return !(left == right);
+    return year_month{__year, chrono::month(__month)};
 }
-CANN_ASC_STL_API constexpr bool operator<(year_month left, year_month right) noexcept
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month operator+(
+    const year_month& __lhs, const months& __rhs) noexcept
 {
-    return left.year() < right.year() || (!(right.year() < left.year()) && left.month() < right.month());
+    int __dmi = static_cast<int>(static_cast<unsigned>(__lhs.month())) - 1 + __rhs.count();
+    const int __years = (__dmi >= 0 ? __dmi : __dmi - 11) / 12;
+    __dmi = __dmi - __years * 12 + 1;
+    return (__lhs.year() + years(__years)) / chrono::month(static_cast<unsigned>(__dmi));
 }
-CANN_ASC_STL_API constexpr bool operator>(year_month left, year_month right) noexcept
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month operator+(
+    const months& __lhs, const year_month& __rhs) noexcept
 {
-    return right < left;
+    return __rhs + __lhs;
 }
-CANN_ASC_STL_API constexpr bool operator<=(year_month left, year_month right) noexcept
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month operator+(
+    const year_month& __lhs, const years& __rhs) noexcept
 {
-    return !(right < left);
+    return (__lhs.year() + __rhs) / __lhs.month();
 }
-CANN_ASC_STL_API constexpr bool operator>=(year_month left, year_month right) noexcept
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month operator+(
+    const years& __lhs, const year_month& __rhs) noexcept
 {
-    return !(left < right);
+    return __rhs + __lhs;
 }
-CANN_ASC_STL_API constexpr year_month operator+(year_month value, const months& offset) noexcept
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr months operator-(
+    const year_month& __lhs, const year_month& __rhs) noexcept
 {
-    return value += offset;
+    return (__lhs.year() - __rhs.year()) +
+        chrono::months(static_cast<unsigned>(__lhs.month()) - static_cast<unsigned>(__rhs.month()));
 }
-CANN_ASC_STL_API constexpr year_month operator+(const months& offset, year_month value) noexcept
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month operator-(
+    const year_month& __lhs, const months& __rhs) noexcept
 {
-    return value += offset;
+    return __lhs + -__rhs;
 }
-CANN_ASC_STL_API constexpr year_month operator-(year_month value, const months& offset) noexcept
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr year_month operator-(
+    const year_month& __lhs, const years& __rhs) noexcept
 {
-    return value -= offset;
-}
-CANN_ASC_STL_API constexpr months operator-(year_month left, year_month right) noexcept
-{
-    return months((static_cast<int>(left.year()) - static_cast<int>(right.year())) * 12 +
-        static_cast<int>(static_cast<unsigned>(left.month())) - static_cast<int>(static_cast<unsigned>(right.month())));
-}
-CANN_ASC_STL_API constexpr year_month operator+(year_month value, const years& offset) noexcept
-{
-    return value += offset;
-}
-CANN_ASC_STL_API constexpr year_month operator+(const years& offset, year_month value) noexcept
-{
-    return value += offset;
-}
-CANN_ASC_STL_API constexpr year_month operator-(year_month value, const years& offset) noexcept
-{
-    return value -= offset;
-}
-CANN_ASC_STL_API constexpr year_month operator/(
-    const chrono::year& year_value, const chrono::month& month_value) noexcept
-{
-    return year_month(year_value, month_value);
-}
-CANN_ASC_STL_API constexpr year_month operator/(const chrono::year& year_value, unsigned month_value) noexcept
-{
-    return year_value / chrono::month(month_value);
+    return __lhs + -__rhs;
 }
 
 }  // namespace chrono

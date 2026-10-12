@@ -47,8 +47,9 @@ CANN_ASC_STL_API constexpr __swap_result_t<T> swap(T& left, type_identity_t<T>& 
     right = ::asc::std::move(temporary);
 }
 template <class T, size_t N>
-CANN_ASC_STL_API constexpr enable_if_t<__is_swappable<T>::value> swap(T (&left)[N], T (&right)[N]) noexcept(
-    __is_nothrow_swappable<T>::value)
+CANN_ASC_STL_API constexpr enable_if_t<__detect_adl_swap::__has_no_adl_swap_array<T, N>::value &&
+    __is_swappable<T>::value>
+swap(T (&left)[N], T (&right)[N]) noexcept(__is_nothrow_swappable<T>::value)
 {
     for (size_t index = 0; index != N; ++index) {
         swap(left[index], right[index]);  // NOLINT(build/include_what_you_use)

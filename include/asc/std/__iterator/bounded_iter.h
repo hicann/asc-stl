@@ -32,147 +32,326 @@
 #include <asc/std/__memory/pointer_traits.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_convertible.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/move.h>
+
+// Migrated from dev __asc/dialect.h and __asc/visibility.h: base asc/__config
+// has no standard-version number macro and no ABI-hiding macro of its own.
+#ifndef CANN_ASC_STL_DETAIL_STD_VER
+#if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
+#define CANN_ASC_STL_DETAIL_STD_VER 2003
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201103L
+#define CANN_ASC_STL_DETAIL_STD_VER 2011
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201402L
+#define CANN_ASC_STL_DETAIL_STD_VER 2014
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201703L
+#define CANN_ASC_STL_DETAIL_STD_VER 2017
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202002L
+#define CANN_ASC_STL_DETAIL_STD_VER 2020
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202302L
+#define CANN_ASC_STL_DETAIL_STD_VER 2023
+#else
+#define CANN_ASC_STL_DETAIL_STD_VER 2024
+#endif
+#endif  // CANN_ASC_STL_DETAIL_STD_VER
+
+#ifndef CANN_ASC_STL_DETAIL_HIDE_FROM_ABI
+#define CANN_ASC_STL_DETAIL_HIDE_FROM_ABI inline
+#endif
+
+// Minimal equivalent inlining of the dev assertion chain (#ifndef guarded
+// against other headers): debug builds (_DEBUG/DEBUG) enable assertions;
+// the device side has no assertion mechanism and stays a no-op.
+#ifndef CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
+#if defined(_DEBUG) || defined(DEBUG)
+#define CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
+#endif  // defined(_DEBUG) || defined(DEBUG)
+#endif  // !CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
+
+#ifndef ASC_ENABLE_ASSERTIONS
+#ifdef CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
+#define ASC_ENABLE_ASSERTIONS
+#endif  // CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
+#endif  // !ASC_ENABLE_ASSERTIONS
+
+#ifndef ASC_ENABLE_HOST_ASSERTIONS
+#ifdef ASC_ENABLE_ASSERTIONS
+#define ASC_ENABLE_HOST_ASSERTIONS
+#endif  // ASC_ENABLE_ASSERTIONS
+#endif  // !ASC_ENABLE_HOST_ASSERTIONS
+
+#ifndef CANN_ASC_STL_DETAIL_ASSERT
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// ASC 设备侧无断言机制
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
+#elif defined(ASC_ENABLE_HOST_ASSERTIONS)
+#ifdef NDEBUG
+// NDEBUG 下 <assert.h> 未必已包含，手工补声明
+extern "C" {
+void __assert_fail(const char* __assertion, const char* __file, unsigned int __line, const char* __function) noexcept
+    __attribute__((__noreturn__));
+}  // extern "C"
+#else
+#include <assert.h>
+#endif  // NDEBUG
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) \
+    __builtin_expect(static_cast<bool>(expression), 1) ? (void)0 : __assert_fail(message, __FILE__, __LINE__, __func__)
+#else
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
+#endif  // ASC_ENABLE_HOST_ASSERTIONS
+#endif  // !CANN_ASC_STL_DETAIL_ASSERT
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class Iter, class = void>
-class __bounded_iter {
-public:
-    using value_type = typename iterator_traits<Iter>::value_type;
-    using difference_type = typename iterator_traits<Iter>::difference_type;
-    using pointer = typename iterator_traits<Iter>::pointer;
-    using reference = typename iterator_traits<Iter>::reference;
-    using iterator_category = typename iterator_traits<Iter>::iterator_category;
+// Minimal local equivalent of the traversal probe gating this wrapper: the
+// shared probe of the dev tree lives in its iterator traits header, which the
+// base keeps protected, so keep a file-local copy (same pattern as other base
+// headers). Both sub-probes are SFINAE-friendly in C++17 mode.
+namespace __bounded_iter_detail {
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_category_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool
+    __has_iterator_category_convertible_to<Iter, Tag, void_t<typename iterator_traits<Iter>::iterator_category>> =
+        is_convertible_v<typename iterator_traits<Iter>::iterator_category, Tag>;
+
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_concept_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool __has_iterator_concept_convertible_to<Iter, Tag, void_t<typename Iter::iterator_concept>> =
+    is_convertible_v<typename Iter::iterator_concept, Tag>;
+
+// __has_contiguous_traversal determines if an iterator is known to be
+// contiguous, either because it advertises itself as such via its
+// iterator_concept or because its iterator_category says so.
+template <class Iter>
+inline constexpr bool __has_contiguous_traversal =
+    __has_iterator_category_convertible_to<Iter, contiguous_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, contiguous_iterator_tag>;
+
+// Any native pointer which is an iterator is also a contiguous iterator.
+template <class T>
+inline constexpr bool __has_contiguous_traversal<T*> = true;
+}  // namespace __bounded_iter_detail
+
+// Iterator wrapper that carries the valid range it is allowed to access.
+//
+// This is a simple iterator wrapper for contiguous iterators that points
+// within a [begin, end) range and carries these bounds with it. The iterator
+// ensures that it is pointing within that [begin, end) range when it is
+// dereferenced.
+//
+// Arithmetic operations are allowed and the bounds of the resulting iterator
+// are not checked. Hence, it is possible to create an iterator pointing outside
+// its range, but it is not possible to dereference it.
+template <class _Iterator, class = enable_if_t<__bounded_iter_detail::__has_contiguous_traversal<_Iterator>>>
+struct __bounded_iter {
+    using value_type = typename iterator_traits<_Iterator>::value_type;
+    using difference_type = typename iterator_traits<_Iterator>::difference_type;
+    using pointer = typename iterator_traits<_Iterator>::pointer;
+    using reference = typename iterator_traits<_Iterator>::reference;
+    using iterator_category = typename iterator_traits<_Iterator>::iterator_category;
     using iterator_concept = contiguous_iterator_tag;
 
-    CANN_ASC_STL_API constexpr __bounded_iter() : current_(), begin_(), end_()
+    // Create a singular iterator.
+    //
+    // Such an iterator does not point to any object and is conceptually out of bounds, so it is
+    // not dereferenceable. Observing operations like comparison and assignment are valid.
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __bounded_iter() = default;
+
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __bounded_iter(__bounded_iter const&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __bounded_iter(__bounded_iter&&) = default;
+
+    template <class _OtherIterator, class = enable_if_t<is_convertible_v<_OtherIterator, _Iterator>>>
+    CANN_ASC_STL_API constexpr __bounded_iter(__bounded_iter<_OtherIterator> const& __other) noexcept
+        : __current_(__other.__current_), __begin_(__other.__begin_), __end_(__other.__end_)
     {}
 
-    template <class Other, class OtherEnable, enable_if_t<is_convertible_v<Other, Iter>, int> = 0>
-    CANN_ASC_STL_API constexpr __bounded_iter(const __bounded_iter<Other, OtherEnable>& other) noexcept
-        : current_(other.current_), begin_(other.begin_), end_(other.end_)
-    {}
+    // Assign a bounded iterator to another one, rebinding the bounds of the iterator as well.
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __bounded_iter& operator=(__bounded_iter const&) = default;
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __bounded_iter& operator=(__bounded_iter&&) = default;
 
+private:
+    // Create an iterator wrapping the given iterator, and whose bounds are described
+    // by the provided [begin, end) range.
+    //
+    // This constructor does not check whether the resulting iterator is within its bounds.
+    // However, it does check that the provided [begin, end) range is a valid range (that
+    // is, begin <= end).
+    //
+    // Since it is non-standard for iterators to have this constructor, __bounded_iter must
+    // be created via `::asc::std::__make_bounded_iter`.
+    CANN_ASC_STL_API constexpr explicit __bounded_iter(_Iterator __current, _Iterator __begin, _Iterator __end)
+        : __current_(__current), __begin_(__begin), __end_(__end)
+    {
+        CANN_ASC_STL_DETAIL_ASSERT(
+            __begin <= __end, "__bounded_iter(current, begin, end): [begin, end) is not a valid range");
+    }
+
+    template <class _It>
+    CANN_ASC_STL_API friend constexpr __bounded_iter<_It> __make_bounded_iter(_It, _It, _It);
+
+public:
+    // Dereference and indexing operations.
+    //
+    // These operations check that the iterator is dereferenceable, that is within [begin, end).
     CANN_ASC_STL_API constexpr reference operator*() const noexcept
     {
-        return *current_;
+        CANN_ASC_STL_DETAIL_ASSERT(
+            __in_bounds(__current_), "__bounded_iter::operator*: Attempt to dereference an out-of-range iterator");
+        return *__current_;
     }
+
     CANN_ASC_STL_API constexpr pointer operator->() const noexcept
     {
-        return ::asc::std::to_address(current_);
+        CANN_ASC_STL_DETAIL_ASSERT(
+            __in_bounds(__current_), "__bounded_iter::operator->: Attempt to dereference an out-of-range iterator");
+        return ::asc::std::to_address(__current_);
     }
-    CANN_ASC_STL_API constexpr reference operator[](difference_type n) const noexcept
+
+    CANN_ASC_STL_API constexpr reference operator[](difference_type __n) const noexcept
     {
-        return current_[n];
+        CANN_ASC_STL_DETAIL_ASSERT(
+            __in_bounds(__current_ + __n), "__bounded_iter::operator[]: Attempt to index an iterator out-of-range");
+        return __current_[__n];
     }
+
+    // Arithmetic operations.
+    //
+    // These operations do not check that the resulting iterator is within the bounds, since that
+    // would make it impossible to create a past-the-end iterator.
     CANN_ASC_STL_API constexpr __bounded_iter& operator++() noexcept
     {
-        ++current_;
+        ++__current_;
         return *this;
     }
     CANN_ASC_STL_API constexpr __bounded_iter operator++(int) noexcept
     {
-        auto result = *this;
+        __bounded_iter __tmp(*this);
         ++*this;
-        return result;
+        return __tmp;
     }
+
     CANN_ASC_STL_API constexpr __bounded_iter& operator--() noexcept
     {
-        --current_;
+        --__current_;
         return *this;
     }
     CANN_ASC_STL_API constexpr __bounded_iter operator--(int) noexcept
     {
-        auto result = *this;
+        __bounded_iter __tmp(*this);
         --*this;
-        return result;
+        return __tmp;
     }
-    CANN_ASC_STL_API constexpr __bounded_iter& operator+=(difference_type n) noexcept
+    CANN_ASC_STL_API constexpr __bounded_iter& operator+=(difference_type __n) noexcept
     {
-        current_ += n;
+        __current_ += __n;
         return *this;
     }
-    CANN_ASC_STL_API constexpr __bounded_iter& operator-=(difference_type n) noexcept
+    CANN_ASC_STL_API constexpr friend __bounded_iter operator+(
+        __bounded_iter const& __self, difference_type __n) noexcept
     {
-        current_ -= n;
-        return *this;
+        __bounded_iter __tmp(__self);
+        __tmp += __n;
+        return __tmp;
+    }
+    CANN_ASC_STL_API constexpr friend __bounded_iter operator+(
+        difference_type __n, __bounded_iter const& __self) noexcept
+    {
+        __bounded_iter __tmp(__self);
+        __tmp += __n;
+        return __tmp;
     }
 
-    friend CANN_ASC_STL_API constexpr __bounded_iter operator+(__bounded_iter value, difference_type n) noexcept
+    CANN_ASC_STL_API constexpr __bounded_iter& operator-=(difference_type __n) noexcept
     {
-        return value += n;
+        __current_ -= __n;
+        return *this;
     }
-    friend CANN_ASC_STL_API constexpr __bounded_iter operator+(difference_type n, __bounded_iter value) noexcept
+    CANN_ASC_STL_API constexpr friend __bounded_iter operator-(
+        __bounded_iter const& __self, difference_type __n) noexcept
     {
-        return value += n;
+        __bounded_iter __tmp(__self);
+        __tmp -= __n;
+        return __tmp;
     }
-    friend CANN_ASC_STL_API constexpr __bounded_iter operator-(__bounded_iter value, difference_type n) noexcept
+    CANN_ASC_STL_API constexpr friend difference_type operator-(
+        __bounded_iter const& __x, __bounded_iter const& __y) noexcept
     {
-        return value -= n;
+        return __x.__current_ - __y.__current_;
     }
-    friend CANN_ASC_STL_API constexpr difference_type operator-(
-        const __bounded_iter& left, const __bounded_iter& right) noexcept
+
+    // Comparison operations.
+    //
+    // These operations do not check whether the iterators are within their bounds.
+    // The valid range for each iterator is also not considered as part of the comparison,
+    // i.e. two iterators pointing to the same location will be considered equal even
+    // if they have different validity ranges.
+    CANN_ASC_STL_API constexpr friend bool operator==(__bounded_iter const& __x, __bounded_iter const& __y) noexcept
     {
-        return left.current_ - right.current_;
+        return __x.__current_ == __y.__current_;
     }
-    friend CANN_ASC_STL_API constexpr bool operator==(const __bounded_iter& left, const __bounded_iter& right) noexcept
+    CANN_ASC_STL_API constexpr friend bool operator!=(__bounded_iter const& __x, __bounded_iter const& __y) noexcept
     {
-        return left.current_ == right.current_;
+        return __x.__current_ != __y.__current_;
     }
-    friend CANN_ASC_STL_API constexpr bool operator!=(const __bounded_iter& left, const __bounded_iter& right) noexcept
+    CANN_ASC_STL_API constexpr friend bool operator<(__bounded_iter const& __x, __bounded_iter const& __y) noexcept
     {
-        return !(left == right);
+        return __x.__current_ < __y.__current_;
     }
-    friend CANN_ASC_STL_API constexpr bool operator<(const __bounded_iter& left, const __bounded_iter& right) noexcept
+    CANN_ASC_STL_API constexpr friend bool operator>(__bounded_iter const& __x, __bounded_iter const& __y) noexcept
     {
-        return left.current_ < right.current_;
+        return __x.__current_ > __y.__current_;
     }
-    friend CANN_ASC_STL_API constexpr bool operator>(const __bounded_iter& left, const __bounded_iter& right) noexcept
+    CANN_ASC_STL_API constexpr friend bool operator<=(__bounded_iter const& __x, __bounded_iter const& __y) noexcept
     {
-        return right < left;
+        return __x.__current_ <= __y.__current_;
     }
-    friend CANN_ASC_STL_API constexpr bool operator<=(const __bounded_iter& left, const __bounded_iter& right) noexcept
+    CANN_ASC_STL_API constexpr friend bool operator>=(__bounded_iter const& __x, __bounded_iter const& __y) noexcept
     {
-        return !(right < left);
-    }
-    friend CANN_ASC_STL_API constexpr bool operator>=(const __bounded_iter& left, const __bounded_iter& right) noexcept
-    {
-        return !(left < right);
+        return __x.__current_ >= __y.__current_;
     }
 
 private:
-    CANN_ASC_STL_API constexpr __bounded_iter(Iter current, Iter begin, Iter end)
-        : current_(::asc::std::move(current)), begin_(::asc::std::move(begin)), end_(::asc::std::move(end))
-    {}
+    // Return whether the given iterator is in the bounds of this __bounded_iter.
+    CANN_ASC_STL_API constexpr bool __in_bounds(_Iterator const& __iter) const
+    {
+        return __iter >= __begin_ && __iter < __end_;
+    }
 
     template <class, class>
     friend class __bounded_iter;
-    template <class I>
-    friend CANN_ASC_STL_API constexpr __bounded_iter<I> __make_bounded_iter(I, I, I);
     template <class, class>
     friend struct pointer_traits;
-    Iter current_;
-    Iter begin_;
-    Iter end_;
+    _Iterator __current_;        // current iterator
+    _Iterator __begin_, __end_;  // valid range represented as [begin, end)
 };
 
-template <class Iter>
-CANN_ASC_STL_API constexpr __bounded_iter<Iter> __make_bounded_iter(Iter current, Iter begin, Iter end)
+template <class _It>
+CANN_ASC_STL_API constexpr __bounded_iter<_It> __make_bounded_iter(_It __it, _It __begin, _It __end)
 {
-    return __bounded_iter<Iter>(::asc::std::move(current),
-        ::asc::std::move(begin),  // NOLINT(build/include_what_you_use)
-        ::asc::std::move(end));   // NOLINT(build/include_what_you_use)
+    return __bounded_iter<_It>(::asc::std::move(__it), ::asc::std::move(__begin),
+        ::asc::std::move(__end));  // NOLINT(build/include_what_you_use)
 }
 
-template <class Iter, class Enable>
-struct pointer_traits<__bounded_iter<Iter, Enable>> {
-    using pointer = __bounded_iter<Iter, Enable>;
-    using element_type = typename pointer_traits<Iter>::element_type;
-    using difference_type = typename pointer_traits<Iter>::difference_type;
-    CANN_ASC_STL_API static constexpr element_type* to_address(pointer value) noexcept
+#if CANN_ASC_STL_DETAIL_STD_VER <= 2017
+namespace __bounded_iter_detail {
+template <class _Iterator>
+inline constexpr bool __has_contiguous_traversal<__bounded_iter<_Iterator>> = true;
+}  // namespace __bounded_iter_detail
+#endif  // CANN_ASC_STL_DETAIL_STD_VER <= 2017
+
+template <class _Iterator>
+struct pointer_traits<__bounded_iter<_Iterator>> {
+    using pointer = __bounded_iter<_Iterator>;
+    using element_type = typename pointer_traits<_Iterator>::element_type;
+    using difference_type = typename pointer_traits<_Iterator>::difference_type;
+
+    CANN_ASC_STL_API constexpr static element_type* to_address(pointer __it) noexcept
     {
-        return ::asc::std::to_address(value.current_);
+        return ::asc::std::to_address(__it.__current_);
     }
 };
 

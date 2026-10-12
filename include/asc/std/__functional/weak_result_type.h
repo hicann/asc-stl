@@ -32,17 +32,36 @@
 #include <asc/std/__functional/invoke.h>
 #include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/is_same.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/declval.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// 仿函数类型适配：T 自带 result_type 成员时向宿主类透出该类型。
+template <class T, class = void>
+inline constexpr bool __has_member_result_type = false;
+
 template <class T>
-struct __weak_result_type {};
+inline constexpr bool __has_member_result_type<T, void_t<typename T::result_type>> = true;
+
+template <class T, bool = __has_member_result_type<T>>
+struct __weak_result_type_imp {};
+
+template <class T>
+struct __weak_result_type_imp<T, true> {
+    using result_type = typename T::result_type;
+};
+
+template <class T>
+struct __weak_result_type : __weak_result_type_imp<T> {};
 
 template <class R, class... Args>
 struct __weak_result_type<R(Args...)> {
     using result_type = R;
 };
+
+template <class R, class... Args>
+struct __weak_result_type<R (&)(Args...)> : __weak_result_type<R(Args...)> {};
 
 template <class R, class... Args>
 struct __weak_result_type<R (*)(Args...)> : __weak_result_type<R(Args...)> {};
@@ -52,6 +71,12 @@ struct __weak_result_type<R (C::*)(Args...)> : __weak_result_type<R(Args...)> {}
 
 template <class R, class C, class... Args>
 struct __weak_result_type<R (C::*)(Args...) const> : __weak_result_type<R(Args...)> {};
+
+template <class R, class C, class... Args>
+struct __weak_result_type<R (C::*)(Args...) volatile> : __weak_result_type<R(Args...)> {};
+
+template <class R, class C, class... Args>
+struct __weak_result_type<R (C::*)(Args...) const volatile> : __weak_result_type<R(Args...)> {};
 
 CANN_ASC_STL_END_NAMESPACE
 

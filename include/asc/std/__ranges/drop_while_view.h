@@ -28,12 +28,12 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/__detail/execution_space.h>
 #include <asc/std/__algorithm/ranges_find_if_not.h>
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__functional/bind_back.h>
 #include <asc/std/__functional/reference_wrapper.h>
 #include <asc/std/__iterator/concepts.h>
-#include <asc/std/__ranges/access.h>
 #include <asc/std/__ranges/all.h>
 #include <asc/std/__ranges/concepts.h>
 #include <asc/std/__ranges/enable_borrowed_range.h>
@@ -43,80 +43,195 @@
 #include <asc/std/__ranges/view_interface.h>
 #include <asc/std/__type_traits/conditional.h>
 #include <asc/std/__type_traits/decay.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_nothrow_constructible.h>
 #include <asc/std/__type_traits/is_object.h>
 #include <asc/std/__utility/forward.h>
 #include <asc/std/__utility/in_place.h>
 #include <asc/std/__utility/move.h>
-namespace asc::std::ranges {
-template <class View, class Predicate>
-class drop_while_view : public view_interface<drop_while_view<View, Predicate>> {
+
+#ifndef CANN_ASC_STL_DETAIL_ASSERT
+#ifndef ASC_ENABLE_ASSERTIONS
+#ifdef CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
+#define ASC_ENABLE_ASSERTIONS
+#endif  // CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
+#endif  // !ASC_ENABLE_ASSERTIONS
+
+#ifndef ASC_ENABLE_HOST_ASSERTIONS
+#ifdef ASC_ENABLE_ASSERTIONS
+#define ASC_ENABLE_HOST_ASSERTIONS
+#endif  // ASC_ENABLE_ASSERTIONS
+#endif  // !ASC_ENABLE_HOST_ASSERTIONS
+
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// ASC 设备侧无断言机制
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
+#elif defined(ASC_ENABLE_HOST_ASSERTIONS)
+#ifdef NDEBUG
+// NDEBUG 下 <assert.h> 未必已包含，手工补声明
+extern "C" {
+void __assert_fail(const char* __assertion, const char* __file, unsigned int __line, const char* __function) noexcept
+    __attribute__((__noreturn__));
+}  // extern "C"
+#else
+#include <assert.h>
+#endif  // NDEBUG
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) \
+    __builtin_expect(static_cast<bool>(expression), 1) ? (void)0 : __assert_fail(message, __FILE__, __LINE__, __func__)
+#else
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
+#endif  // CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#endif  // !CANN_ASC_STL_DETAIL_ASSERT
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+namespace ranges {
+
+// 设备编译与 C++17 下 concept 约束不可求值，回退到无约束版本，两分支公开接口一致。
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+template <view _View, class _Pred>
+    requires input_range<_View> && ::asc::std::is_object_v<_Pred> &&
+    ::asc::std::indirect_unary_predicate<const _Pred, iterator_t<_View>>
+#else
+template <class _View, class _Pred>
+#endif
+class drop_while_view : public view_interface<drop_while_view<_View, _Pred>> {
+private:
+    CANN_ASC_STL_NO_UNIQUE_ADDRESS _View __base_ = _View();
+
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    CANN_ASC_STL_NO_UNIQUE_ADDRESS __movable_box<_Pred> __pred_{};
+
+    // forward_range 下缓存首个不满足谓词的迭代器，提供摊还 O(1) 的 begin()；
+    // input_range 下 begin() 非相等保持，不可缓存（单遍也只会调用一次 begin()）。
+    static constexpr bool _use_cache = forward_range<_View>;
+    using _cache_type =
+        ::asc::std::conditional_t<_use_cache, __non_propagating_cache<iterator_t<_View>>, __empty_cache>;
+    CANN_ASC_STL_NO_UNIQUE_ADDRESS _cache_type __cached_begin_{};
+#else
+    // C++17 与设备侧形态：__movable_box 仅在 C++20 分支有定义，此处按基座现状直接存值。
+    CANN_ASC_STL_NO_UNIQUE_ADDRESS _Pred __pred_ = _Pred();
+#endif
+
 public:
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    CANN_ASC_STL_API constexpr drop_while_view()
+        requires ::asc::std::default_initializable<_View> && ::asc::std::default_initializable<_Pred>
+    = default;
+#else
     CANN_ASC_STL_API constexpr drop_while_view() = default;
-    CANN_ASC_STL_API constexpr drop_while_view(View view, Predicate predicate)
-        : view_(::asc::std::move(view)), predicate_(::asc::std::move(predicate))
+#endif
+
+    CANN_ASC_STL_API constexpr drop_while_view(_View __base, _Pred __pred)
+        : view_interface<drop_while_view<_View, _Pred>>()
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+          ,
+          __base_(::asc::std::move(__base)),
+          __pred_(in_place_t{}, ::asc::std::move(__pred))
+#else
+          ,
+          __base_(::asc::std::move(__base)),
+          __pred_(::asc::std::move(__pred))
+#endif
     {}
+
+    template <class _View2 = _View>
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        requires ::asc::std::copy_constructible<_View2>
+#endif
+    CANN_ASC_STL_API constexpr _View base() const& noexcept(::asc::std::is_nothrow_copy_constructible_v<_View2>)
+    {
+        return __base_;
+    }
+
+    CANN_ASC_STL_API constexpr _View base() && noexcept(::asc::std::is_nothrow_move_constructible_v<_View>)
+    {
+        return ::asc::std::move(__base_);
+    }
+
+    CANN_ASC_STL_API constexpr const _Pred& pred() const
+    {
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        return *__pred_;
+#else
+        return __pred_;
+#endif
+    }
+
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     CANN_ASC_STL_API constexpr auto begin()
     {
-        auto value = ranges::begin(view_);
-        const auto last = ranges::end(view_);
-        while (value != last && predicate_(*value))
-            ++value;
-        return value;
+        CANN_ASC_STL_DETAIL_ASSERT(
+            __pred_.__has_value(), "drop_while_view needs to have a valid predicate before calling begin()");
+
+        if constexpr (_use_cache) {
+            if (!__cached_begin_.__has_value()) {
+                __cached_begin_.__emplace(::asc::std::ranges::find_if_not(__base_, ::asc::std::cref(*__pred_)));
+            }
+            return *__cached_begin_;
+        } else {
+            return ::asc::std::ranges::find_if_not(__base_, ::asc::std::cref(*__pred_));
+        }
     }
+#else
+    CANN_ASC_STL_API constexpr auto begin()
+    {
+        return ::asc::std::ranges::find_if_not(__base_, ::asc::std::cref(__pred_));
+    }
+#endif
+
     CANN_ASC_STL_API constexpr auto end()
     {
-        return ranges::end(view_);
+        return ::asc::std::ranges::__end_cpo{}(__base_);
     }
-    template <class View2 = View>
-    CANN_ASC_STL_API constexpr View base() const& noexcept(is_nothrow_copy_constructible_v<View2>)
+};
+
+template <class _Range, class _Pred>
+drop_while_view(_Range&&, _Pred) -> drop_while_view<::asc::std::ranges::views::all_t<_Range>, _Pred>;
+
+template <class _Tp, class _Pred>
+inline constexpr bool enable_borrowed_range<drop_while_view<_Tp, _Pred>> = enable_borrowed_range<_Tp>;
+
+}  // namespace ranges
+
+namespace ranges::views {
+
+namespace __drop_while {
+
+struct __fn {
+    template <class _Range, class _Pred>
+    CANN_ASC_STL_API constexpr auto operator()(_Range&& __range, _Pred&& __pred) const
+        noexcept(noexcept(drop_while_view{::asc::std::forward<_Range>(__range), ::asc::std::forward<_Pred>(__pred)}))
+            -> decltype(drop_while_view{::asc::std::forward<_Range>(__range), ::asc::std::forward<_Pred>(__pred)})
     {
-        return view_;
-    }
-    CANN_ASC_STL_API constexpr View base() && noexcept(is_nothrow_move_constructible_v<View>)
-    {
-        return ::asc::std::move(view_);
-    }
-    CANN_ASC_STL_API constexpr const Predicate& pred() const
-    {
-        return predicate_;
+        return drop_while_view{::asc::std::forward<_Range>(__range), ::asc::std::forward<_Pred>(__pred)};
     }
 
-private:
-    View view_{};
-    Predicate predicate_{};
-};
-namespace views {
-template <class Predicate>
-class __drop_while_closure : public range_adaptor_closure<__drop_while_closure<Predicate>> {
-public:
-    CANN_ASC_STL_API constexpr explicit __drop_while_closure(Predicate value) : predicate_(::asc::std::move(value))
-    {}
-    template <class Range>
-    CANN_ASC_STL_API constexpr auto operator()(Range&& range) const
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    template <class _Pred>
+        requires ::asc::std::constructible_from<::asc::std::decay_t<_Pred>, _Pred>
+    CANN_ASC_STL_API constexpr auto operator()(_Pred&& __pred) const
+        noexcept(::asc::std::is_nothrow_constructible_v<::asc::std::decay_t<_Pred>, _Pred>)
     {
-        auto view = views::all(::asc::std::forward<Range>(range));
-        return drop_while_view<decltype(view), Predicate>(::asc::std::move(view), predicate_);
+        return ::asc::std::ranges::__pipeable(::asc::std::__bind_back(*this, ::asc::std::forward<_Pred>(__pred)));
     }
+#else
+    template <class _Pred, enable_if_t<::asc::std::is_constructible_v<::asc::std::decay_t<_Pred>, _Pred>, int> = 0>
+    CANN_ASC_STL_API constexpr auto operator()(_Pred&& __pred) const
+        noexcept(::asc::std::is_nothrow_constructible_v<::asc::std::decay_t<_Pred>, _Pred>)
+    {
+        return ::asc::std::ranges::__pipeable(
+            ::asc::std::__bind_back(*this, ::asc::std::forward<_Pred>(__pred)));  // NOLINT(build/include_what_you_use)
+    }
+#endif
+};
 
-private:
-    Predicate predicate_;
-};
-struct __drop_while_fn {
-    template <class Range, class Predicate>
-    CANN_ASC_STL_API constexpr auto operator()(Range&& range, Predicate predicate) const
-    {
-        auto view = views::all(::asc::std::forward<Range>(range));
-        return drop_while_view<decltype(view), Predicate>(::asc::std::move(view), ::asc::std::move(predicate));
-    }
-    template <class Predicate>
-    CANN_ASC_STL_API constexpr auto operator()(Predicate predicate) const
-    {
-        return __drop_while_closure<Predicate>(::asc::std::move(predicate));  // NOLINT(build/include_what_you_use)
-    }
-};
-inline constexpr __drop_while_fn drop_while{};
-}  // namespace views
-}  // namespace asc::std::ranges
+}  // namespace __drop_while
+
+inline constexpr __drop_while::__fn drop_while{};
+
+}  // namespace ranges::views
+
+CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STD___RANGES_DROP_WHILE_VIEW_H

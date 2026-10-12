@@ -33,6 +33,7 @@
 #include <asc/std/__iterator/wrap_iter.h>
 #include <asc/std/__memory/construct_at.h>
 #include <asc/std/__ranges/access.h>
+#include <asc/std/__ranges/all.h>
 #include <asc/std/__ranges/enable_borrowed_range.h>
 #include <asc/std/__ranges/size.h>
 #include <asc/std/__tuple/tuple_constraints.h>
@@ -41,7 +42,6 @@
 #include <asc/std/__utility/auto_cast.h>
 #include <asc/std/__utility/pair.h>
 #include <asc/std/__type_traits/is_same.h>
-#include <asc/std/functional>
 
 namespace asc_stl_b010_test {
 
@@ -94,6 +94,80 @@ CANN_ASC_STL_API constexpr unsigned size(range&) noexcept
 }
 }  // namespace adl_range
 
+struct reference_result_range {
+    int* first;
+    int* last;
+    CANN_ASC_STL_API constexpr int*& begin() noexcept
+    {
+        return first;
+    }
+    CANN_ASC_STL_API constexpr int*& end() noexcept
+    {
+        return last;
+    }
+};
+
+struct borrowed_lvalue_only {
+    int* first;
+    int* last;
+    CANN_ASC_STL_API constexpr int* begin() & noexcept
+    {
+        return first;
+    }
+    CANN_ASC_STL_API constexpr int* end() & noexcept
+    {
+        return last;
+    }
+    int* begin() && = delete;
+    int* end() && = delete;
+};
+
+struct small_size_range {
+    CANN_ASC_STL_API constexpr unsigned char size() const noexcept
+    {
+        return 2;
+    }
+};
+
+struct plain_view : asc::std::ranges::view_base {
+    int* first;
+    int* last;
+    CANN_ASC_STL_API constexpr plain_view(int* begin, int* end) noexcept : first(begin), last(end)
+    {}
+    CANN_ASC_STL_API constexpr int* begin() const noexcept
+    {
+        return first;
+    }
+    CANN_ASC_STL_API constexpr int* end() const noexcept
+    {
+        return last;
+    }
+};
+
+struct owned_nonview_range {
+    int* first;
+    int* last;
+    CANN_ASC_STL_API constexpr owned_nonview_range(int* begin, int* end) noexcept : first(begin), last(end)
+    {}
+    CANN_ASC_STL_API constexpr int* begin() const noexcept
+    {
+        return first;
+    }
+    CANN_ASC_STL_API constexpr int* end() const noexcept
+    {
+        return last;
+    }
+};
+
+}  // namespace asc_stl_b010_test
+
+namespace asc::std::ranges {
+template <>
+inline constexpr bool enable_borrowed_range<asc_stl_b010_test::borrowed_lvalue_only> = true;
+}  // namespace asc::std::ranges
+
+namespace asc_stl_b010_test {
+
 struct lifetime_probe {
     int value;
     CANN_ASC_STL_API explicit constexpr lifetime_probe(int input) noexcept : value(input)
@@ -111,16 +185,18 @@ static_assert(asc::std::__uabs(static_cast<unsigned short>(9)) == 9U);
 static_assert(asc::std::is_same_v<decltype(asc::std::__uabs(-1LL)), unsigned long long>);
 static_assert(asc::std::tuple_size<asc::std::pair<int, long>>::value == 2);
 static_assert(asc::std::is_same_v<asc::std::tuple_element_t<1, asc::std::pair<int, long>>, long>);
-static_assert(asc::std::is_same_v<asc::std::unwrap_reference_t<asc::std::reference_wrapper<int>>, int&>);
-static_assert(asc::std::is_same_v<asc::std::unwrap_ref_decay_t<asc::std::reference_wrapper<int>>, int&>);
-static_assert(asc::std::is_same_v<asc::std::unwrap_ref_decay_t<const int&>, int>);
-static_assert(asc::std::pair<int, int>{1, 2} != asc::std::pair<int, int>{1, 3});
-static_assert(asc::std::pair<int, int>{1, 2} < asc::std::pair<int, int>{1, 3});
-static_assert(asc::std::pair<int, int>{1, 3} > asc::std::pair<int, int>{1, 2});
-static_assert(asc::std::pair<int, int>{1, 2} <= asc::std::pair<int, int>{1, 3});
-static_assert(asc::std::pair<int, int>{1, 3} >= asc::std::pair<int, int>{1, 2});
 static_assert(asc::std::is_same_v<typename asc::std::projected<int*, identity>::value_type, int>);
 static_assert(asc::std::is_same_v<asc::std::ranges::iterator_t<member_range>, int*>);
+static_assert(
+    asc::std::is_same_v<decltype(asc::std::ranges::begin(asc::std::declval<reference_result_range&>())), int*>);
+static_assert(asc::std::is_same_v<decltype(asc::std::ranges::end(asc::std::declval<reference_result_range&>())), int*>);
+static_assert(asc::std::is_same_v<decltype(asc::std::ranges::begin(asc::std::declval<borrowed_lvalue_only>())), int*>);
+static_assert(asc::std::is_same_v<decltype(asc::std::ranges::ssize(asc::std::declval<small_size_range&>())),
+    asc::std::ptrdiff_t>);
+static_assert(asc::std::is_same_v<asc::std::ranges::views::all_t<plain_view&>, plain_view>);
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
+static_assert(asc::std::ranges::viewable_range<owned_nonview_range>);
+#endif
 static_assert(CANN_ASC_STL_DETAIL_AUTO_CAST(7) == 7);
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 static_assert(asc::std::input_or_output_iterator<int*>);
@@ -139,16 +215,37 @@ CANN_ASC_STL_API constexpr int evaluate_constexpr() noexcept
     asc::std::pair<int, long> pair(values[0], values[2]);
     member_range member{};
     adl_range::range adl{};
+    reference_result_range reference_result{values, values + 4};
+    borrowed_lvalue_only borrowed{values, values + 4};
+    small_size_range small{};
+    plain_view view(values, values + 4);
+    auto copied_view = asc::std::ranges::views::all(view);
+    auto owned_nonview = asc::std::ranges::views::all(owned_nonview_range(values, values + 4));
     return *bounded == 1 && *wrapped == 5 && asc::std::iter_move(values + 1) == 3 && asc::std::get<0>(pair) == 1 &&
             asc::std::get<int>(pair) == 1 && asc::std::ranges::end(member) - asc::std::ranges::begin(member) == 4 &&
             asc::std::ranges::size(member) == 4 && asc::std::ranges::ssize(member) == 4 &&
             asc::std::ranges::end(adl) - asc::std::ranges::begin(adl) == 3 && asc::std::ranges::size(adl) == 3 &&
+            asc::std::ranges::begin(reference_result) == values &&
+            asc::std::ranges::end(reference_result) == values + 4 &&
+            asc::std::ranges::begin(static_cast<borrowed_lvalue_only&&>(borrowed)) == values &&
+            asc::std::ranges::ssize(small) == 2 && copied_view.begin() == values && owned_nonview.begin() == values &&
             values != asc::std::unreachable_sentinel ?
         0 :
         1;
 }
 
 static_assert(evaluate_constexpr() == 0);
+
+CANN_ASC_STL_API bool evaluate_runtime_ranges() noexcept
+{
+    volatile int runtime_input = 19;
+    int values[2] = {runtime_input, 23};
+    plain_view view(values, values + 2);
+    small_size_range small{};
+    auto copied_view = asc::std::ranges::views::all(view);
+    auto owned_nonview = asc::std::ranges::views::all(owned_nonview_range(values, values + 2));
+    return *copied_view.begin() == 19 && *owned_nonview.begin() == 19 && asc::std::ranges::ssize(small) == 2;
+}
 
 CANN_ASC_STL_API int evaluate_runtime() noexcept
 {
@@ -162,7 +259,7 @@ CANN_ASC_STL_API int evaluate_runtime() noexcept
 #else
     const bool trigonometry = true;
 #endif
-    return constructed && trigonometry && evaluate_constexpr() == 0 ? 0 : 1;
+    return constructed && trigonometry && evaluate_constexpr() == 0 && evaluate_runtime_ranges() ? 0 : 1;
 }
 
 }  // namespace asc_stl_b010_test

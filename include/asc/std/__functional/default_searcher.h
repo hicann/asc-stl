@@ -68,6 +68,8 @@ private:
     BinaryPredicate predicate_;
 };
 
+CANN_ASC_STL_DETAIL_CTAD_SUPPORTED_FOR_TYPE(default_searcher);
+
 CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STD___FUNCTIONAL_DEFAULT_SEARCHER_H

@@ -158,4 +158,8 @@ private:
 
 }  // namespace asc
 
+// Standard engine and distribution family promoted through the top-level
+// umbrella.
+#include <asc/std/random>
+
 #endif  // CANN_ASC_STL_ASC_RANDOM

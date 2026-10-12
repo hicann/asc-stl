@@ -29,6 +29,18 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__type_traits/remove_cv.h>
 
+// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_INT128() gate (dev
+// __asc/extended_data_types.h; the base __config does not provide it): the
+// compiler-provided 128-bit integer types are available on LP64 Linux targets
+// unless explicitly disabled. Same inline copy as is_signed_integer.h.
+#if !defined(CANN_ASC_STL_DETAIL_HAS_INT128)
+#if !defined(ASC_DISABLE_INT128_SUPPORT) && (defined(__linux__) || defined(__LP64__)) && defined(__SIZEOF_INT128__)
+#define CANN_ASC_STL_DETAIL_HAS_INT128() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_INT128() 0
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HAS_INT128
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class T>
@@ -49,8 +61,24 @@ inline constexpr bool __is_unsigned_integer_v<unsigned long> = true;
 template <>
 inline constexpr bool __is_unsigned_integer_v<unsigned long long> = true;
 
+#if CANN_ASC_STL_DETAIL_HAS_INT128()
+template <>
+inline constexpr bool __is_unsigned_integer_v<__uint128_t> = true;
+#endif  // CANN_ASC_STL_DETAIL_HAS_INT128()
+
 template <class T>
 inline constexpr bool __is_cv_unsigned_integer_v = __is_unsigned_integer_v<asc::std::remove_cv_t<T>>;
+
+template <bool, class Result>
+struct __unsigned_integer_result {};
+
+template <class Result>
+struct __unsigned_integer_result<true, Result> {
+    using type = Result;
+};
+
+template <class T, class Result>
+using __unsigned_integer_result_t = typename __unsigned_integer_result<__is_cv_unsigned_integer_v<T>, Result>::type;
 
 CANN_ASC_STL_END_NAMESPACE
 

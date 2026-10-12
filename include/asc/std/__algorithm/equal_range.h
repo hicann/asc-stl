@@ -29,26 +29,64 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__algorithm/comp.h>
+#include <asc/std/__algorithm/comp_ref_type.h>
+#include <asc/std/__algorithm/half_positive.h>
+#include <asc/std/__algorithm/iterator_operations.h>
 #include <asc/std/__algorithm/lower_bound.h>
 #include <asc/std/__algorithm/upper_bound.h>
+#include <asc/std/__functional/identity.h>
+#include <asc/std/__functional/invoke.h>
+#include <asc/std/__iterator/advance.h>
+#include <asc/std/__iterator/distance.h>
+#include <asc/std/__iterator/iterator_traits.h>
+#include <asc/std/__iterator/next.h>
+#include <asc/std/__type_traits/is_callable.h>
+#include <asc/std/__type_traits/is_copy_constructible.h>
+#include <asc/std/__utility/move.h>
 #include <asc/std/__utility/pair.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class ForwardIterator, class T, class Compare>
-CANN_ASC_STL_API constexpr pair<ForwardIterator, ForwardIterator> equal_range(  // NOLINT(build/include_what_you_use)
-    ForwardIterator first, ForwardIterator last, const T& value, Compare compare)
+template <class _AlgPolicy, class _Compare, class _Iter, class _Sent, class _Tp, class _Proj>
+CANN_ASC_STL_API constexpr pair<_Iter, _Iter> __equal_range(
+    _Iter __first, _Sent __last, const _Tp& __value, _Compare&& __comp, _Proj&& __proj)
 {
-    const ForwardIterator lower = ::asc::std::lower_bound(first, last, value, compare);
-    return pair<ForwardIterator, ForwardIterator>(  // NOLINT(build/include_what_you_use)
-        lower, ::asc::std::upper_bound(lower, last, value, compare));
+    auto __len = ::asc::std::distance(__first, __last);
+    _Iter __end = ::asc::std::next(__first, __len);
+    while (__len != 0) {
+        auto __half_len = ::asc::std::__half_positive(__len);
+        _Iter __mid = ::asc::std::next(__first, __half_len);
+        if (::asc::std::invoke(__comp, ::asc::std::invoke(__proj, *__mid), __value)) {
+            __first = ++__mid;
+            __len -= __half_len + 1;
+        } else if (::asc::std::invoke(__comp, __value, ::asc::std::invoke(__proj, *__mid))) {
+            __end = __mid;
+            __len = __half_len;
+        } else {
+            _Iter __mp1 = __mid;
+            return pair<_Iter, _Iter>(::asc::std::__lower_bound<_AlgPolicy>(__first, __mid, __value, __comp, __proj),
+                ::asc::std::__upper_bound<_AlgPolicy>(++__mp1, __end, __value, __comp, __proj));
+        }
+    }
+    return pair<_Iter, _Iter>(__first, __first);
 }
 
-template <class ForwardIterator, class T>
-CANN_ASC_STL_API constexpr pair<ForwardIterator, ForwardIterator> equal_range(  // NOLINT(build/include_what_you_use)
-    ForwardIterator first, ForwardIterator last, const T& value)
+template <class _ForwardIterator, class _Tp, class _Compare>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr pair<_ForwardIterator, _ForwardIterator> equal_range(
+    _ForwardIterator __first, _ForwardIterator __last, const _Tp& __value, _Compare __comp)
 {
-    return ::asc::std::equal_range(first, last, value, __less{});
+    static_assert(__is_callable<_Compare, decltype(*__first), const _Tp&>::value, "The comparator has to be callable");
+    static_assert(is_copy_constructible_v<_ForwardIterator>, "Iterator has to be copy constructible");
+    return ::asc::std::__equal_range<__classic_algorithm_iterator_operations>(::asc::std::move(__first),
+        ::asc::std::move(__last), __value, static_cast<__comp_ref_type<_Compare>>(__comp), ::asc::std::identity());
+}
+
+template <class _ForwardIterator, class _Tp>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr pair<_ForwardIterator, _ForwardIterator> equal_range(
+    _ForwardIterator __first, _ForwardIterator __last, const _Tp& __value)
+{
+    return ::asc::std::equal_range(
+        ::asc::std::move(__first), ::asc::std::move(__last), __value, __less{});  // NOLINT(build/include_what_you_use)
 }
 
 CANN_ASC_STL_END_NAMESPACE

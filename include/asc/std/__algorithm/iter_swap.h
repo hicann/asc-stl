@@ -29,6 +29,9 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__iterator/iter_move.h>
+#include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/forward.h>
 #include <asc/std/__utility/swap.h>
@@ -45,6 +48,78 @@ CANN_ASC_STL_API constexpr void iter_swap(ForwardIterator1 left, ForwardIterator
     swap(*left, *right);  // NOLINT(build/include_what_you_use)
 }
 #endif
+
+// 定制点形态（ranges CPO）：优先 ADL iter_swap(a, b)，否则回退 swap(*a, *b)。
+// 命名空间屏蔽使 CPO 本体与 asc::std::iter_swap 经典函数互不干扰
+// （经典函数保留，__iterator/iter_swap.h 的同守卫定义继续共存）。
+namespace ranges {
+namespace __iter_swap {
+
+template <class _ForwardIterator1, class _ForwardIterator2, class = void>
+inline constexpr bool __unqualified_iter_swap = false;
+
+template <class _ForwardIterator1, class _ForwardIterator2>
+inline constexpr bool __unqualified_iter_swap<_ForwardIterator1, _ForwardIterator2,
+    void_t<decltype(iter_swap(::asc::std::declval<_ForwardIterator1>(), ::asc::std::declval<_ForwardIterator2>()))>> =
+    true;
+
+template <class _ForwardIterator1, class _ForwardIterator2, class = void>
+inline constexpr bool __readable_swappable = false;
+
+template <class _ForwardIterator1, class _ForwardIterator2>
+inline constexpr bool __readable_swappable<_ForwardIterator1, _ForwardIterator2,
+    void_t<decltype(swap(*::asc::std::declval<_ForwardIterator1>(), *::asc::std::declval<_ForwardIterator2>()))>> =
+    !__unqualified_iter_swap<_ForwardIterator1, _ForwardIterator2>;
+
+template <class _ForwardIterator1, class _ForwardIterator2, class = void>
+inline constexpr bool __movable_exchangeable = false;
+
+template <class _ForwardIterator1, class _ForwardIterator2>
+inline constexpr bool __movable_exchangeable<_ForwardIterator1, _ForwardIterator2,
+    void_t<decltype(::asc::std::iter_move(::asc::std::declval<_ForwardIterator1>())),
+        decltype(*::asc::std::declval<_ForwardIterator2>() =
+                     ::asc::std::iter_move(::asc::std::declval<_ForwardIterator1>())),
+        decltype(*::asc::std::declval<_ForwardIterator1>() =
+                     ::asc::std::iter_move(::asc::std::declval<_ForwardIterator2>()))>> =
+    !__unqualified_iter_swap<_ForwardIterator1, _ForwardIterator2> &&
+    !__readable_swappable<_ForwardIterator1, _ForwardIterator2>;
+
+struct __iter_swap_fn {
+    template <class _ForwardIterator1, class _ForwardIterator2,
+        enable_if_t<__unqualified_iter_swap<_ForwardIterator1, _ForwardIterator2>, int> = 0>
+    CANN_ASC_STL_API constexpr void operator()(_ForwardIterator1&& __a, _ForwardIterator2&& __b) const noexcept(
+        noexcept(iter_swap(::asc::std::declval<_ForwardIterator1>(), ::asc::std::declval<_ForwardIterator2>())))
+    {
+        (void)iter_swap(::asc::std::forward<_ForwardIterator1>(__a), ::asc::std::forward<_ForwardIterator2>(__b));
+    }
+
+    template <class _ForwardIterator1, class _ForwardIterator2,
+        enable_if_t<__readable_swappable<_ForwardIterator1, _ForwardIterator2>, int> = 0>
+    CANN_ASC_STL_API constexpr void operator()(_ForwardIterator1&& __a, _ForwardIterator2&& __b) const
+        noexcept(noexcept(swap(*::asc::std::declval<_ForwardIterator1>(), *::asc::std::declval<_ForwardIterator2>())))
+    {
+        swap(*__a, *__b);  // NOLINT(build/include_what_you_use)
+    }
+
+    template <class _ForwardIterator1, class _ForwardIterator2,
+        enable_if_t<__movable_exchangeable<_ForwardIterator1, _ForwardIterator2>, int> = 0>
+    CANN_ASC_STL_API constexpr void operator()(_ForwardIterator1&& __a, _ForwardIterator2&& __b) const
+        noexcept(noexcept(*::asc::std::declval<_ForwardIterator1>() = ::asc::std::iter_move(
+                              ::asc::std::declval<_ForwardIterator2>())) &&
+            noexcept(*::asc::std::declval<_ForwardIterator2>() = ::asc::std::iter_move(
+                         ::asc::std::declval<_ForwardIterator1>())))
+    {
+        auto __tmp = ::asc::std::iter_move(__a);
+        *__a = ::asc::std::iter_move(__b);
+        *__b = ::asc::std::move(__tmp);  // NOLINT(build/include_what_you_use)
+    }
+};
+
+}  // namespace __iter_swap
+
+inline constexpr __iter_swap::__iter_swap_fn iter_swap{};
+
+}  // namespace ranges
 
 CANN_ASC_STL_END_NAMESPACE
 

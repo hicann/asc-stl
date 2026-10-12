@@ -23,15 +23,6 @@ LOGGER = logging.getLogger(__name__)
 SIMT_ONLY_TARGETS = {"asc/atomic", "asc/std/atomic", "asc/std/iterator", "asc/std/list", "asc/warp"}
 
 
-def expected_result_combinations(modes: set[str], runs: int) -> set[tuple[str, str, str]]:
-    combinations = set()
-    for standard in ("17", "20"):
-        for mode in modes:
-            for run_index in range(1, runs + 1):
-                combinations.add((standard, mode, str(run_index)))
-    return combinations
-
-
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--manifest", type=Path, required=True)
@@ -52,7 +43,12 @@ def main() -> int:
     bad_counts = {}
     for target in sorted(expected_targets):
         expected_modes = {"simt"} if target in SIMT_ONLY_TARGETS else {"simd", "simt"}
-        expected_combinations = expected_result_combinations(expected_modes, args.runs)
+        expected_combinations = {
+            (standard, mode, str(run_index))
+            for standard in ("17", "20")
+            for mode in expected_modes
+            for run_index in range(1, args.runs + 1)
+        }
         observed_combinations = [
             (row[1], row[2], row[3]) for row in results if row[0] == target and row[4] == "PASS"
         ]

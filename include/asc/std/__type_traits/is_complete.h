@@ -30,12 +30,32 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__type_traits/void_t.h>
 
+#ifndef CANN_ASC_STL_DETAIL_BUILTIN_IS_COMPLETE_TYPE
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_complete_type)
+#define CANN_ASC_STL_DETAIL_BUILTIN_IS_COMPLETE_TYPE(...) __is_complete_type(__VA_ARGS__)
+#endif
+#endif
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+#ifdef CANN_ASC_STL_DETAIL_BUILTIN_IS_COMPLETE_TYPE
+
+template <class T>
+inline constexpr bool __is_complete_v = CANN_ASC_STL_DETAIL_BUILTIN_IS_COMPLETE_TYPE(T);
+
+#else   // ^^^ builtin __is_complete_type ^^^ / vvv SFINAE fallback vvv
+// Must be a SFINAE trait instead of
+//
+// template <class T>
+// inline constexpr bool __is_complete_v = sizeof(T) > 0;
+//
+// Because some compilers don't even allow you to utter the phrase sizeof(T) if T is incomplete
 template <class T, class = void>
 inline constexpr bool __is_complete_v = false;
+
 template <class T>
-inline constexpr bool __is_complete_v<T, void_t<decltype(sizeof(T))>> = sizeof(T) > 0;
+inline constexpr bool __is_complete_v<T, void_t<decltype(sizeof(T))> > = sizeof(T) > 0;
+#endif  // ^^^ SFINAE fallback ^^^
 
 CANN_ASC_STL_END_NAMESPACE
 

@@ -34,6 +34,16 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/cstdint>
 
+// Feature macro inlined from the dev dialect layer (not present in the base
+// config), same inline copy as __type_traits/make_signed.h.
+#ifndef CANN_ASC_STL_DETAIL_HAS_INT128
+#if !defined(ASC_DISABLE_INT128_SUPPORT) && defined(__linux__) && defined(__SIZEOF_INT128__)
+#define CANN_ASC_STL_DETAIL_HAS_INT128() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_INT128() 0
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HAS_INT128
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <bool, class T = void>
@@ -44,19 +54,28 @@ struct __fp_storage_enable_if<true, T> {
     using type = T;
 };
 
-// The ASC __fp_format vocabulary has no 8/6/4-bit vendor formats, and
-// __int128 is not a delivered contract, so the wider-than-binary64 formats
-// fall into the unsupported static_assert branch.
+// The 8/6/4-bit vendor formats pack into a single storage byte; the
+// wider-than-binary64 formats need __int128 storage and stay in the
+// unsupported static_assert branch when it is unavailable.
 template <__fp_format Fmt>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto __fp_storage_type_impl() noexcept
 {
-    if constexpr (Fmt == __fp_format::__binary16 || Fmt == __fp_format::__bfloat16) {
+    if constexpr (Fmt == __fp_format::__fp8_e4m3 || Fmt == __fp_format::__fp8_e5m2 || Fmt == __fp_format::__fp8_e8m0 ||
+        Fmt == __fp_format::__fp6_e2m3 || Fmt == __fp_format::__fp6_e3m2 || Fmt == __fp_format::__fp4_e2m1) {
+        return uint8_t{};
+    } else if constexpr (Fmt == __fp_format::__binary16 || Fmt == __fp_format::__bfloat16) {
         return uint16_t{};
     } else if constexpr (Fmt == __fp_format::__binary32) {
         return uint32_t{};
     } else if constexpr (Fmt == __fp_format::__binary64) {
         return uint64_t{};
-    } else {
+    }
+#if CANN_ASC_STL_DETAIL_HAS_INT128()
+    else if constexpr (Fmt == __fp_format::__fp80_x86 || Fmt == __fp_format::__binary128) {
+        return __uint128_t{};
+    }
+#endif      // CANN_ASC_STL_DETAIL_HAS_INT128()
+    else {  // NOLINT(readability/braces)
         static_assert(__always_false_v<decltype(Fmt)>, "Unsupported floating point format");
     }
 }
@@ -70,12 +89,25 @@ using __fp_storage_of_t = __fp_storage_t<__fp_format_of_v<Tp>>;
 template <class Tp>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr Tp __fp_from_storage(__fp_storage_of_t<Tp> v) noexcept
 {
-    if constexpr (__is_std_fp_v<Tp>) {
+    if constexpr (__is_std_fp_v<Tp> || __fp_is_compiler_fp_v<Tp>) {
         return asc::std::bit_cast<Tp>(v);
-    } else if constexpr (__is_ext_asc_fp_v<Tp>) {
+    } else if constexpr (__is_ext_accl_fp_v<Tp>) {
         Tp ret{};
         ret.__storage_ = v;
         return ret;
+    } else if constexpr (__is_ext_asc_fp_v<Tp>) {
+        union __storage_access {
+            __storage_access() noexcept
+            {}
+            __fp_storage_of_t<Tp> __storage;
+            Tp __value;
+        } access;
+        // Bisheng C310 cannot lower an immediate bit-cast to the FP8 scalar
+        // builtins. Materialize the bit pattern before accessing the union, as
+        // done by the CANN scalar bit-code helpers.
+        volatile __fp_storage_of_t<Tp> materialized = v;
+        access.__storage = materialized;
+        return access.__value;
     } else {
         static_assert(__always_false_v<Tp>, "Unsupported floating point format");
     }
@@ -88,10 +120,19 @@ CANN_ASC_STL_API constexpr auto __fp_from_storage(const Up&) noexcept ->
 template <class Tp>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr __fp_storage_of_t<Tp> __fp_get_storage(Tp v) noexcept
 {
-    if constexpr (__is_std_fp_v<Tp>) {
+    if constexpr (__is_std_fp_v<Tp> || __fp_is_compiler_fp_v<Tp>) {
         return asc::std::bit_cast<__fp_storage_of_t<Tp>>(v);
-    } else if constexpr (__is_ext_asc_fp_v<Tp>) {
+    } else if constexpr (__is_ext_accl_fp_v<Tp>) {
         return v.__storage_;
+    } else if constexpr (__is_ext_asc_fp_v<Tp>) {
+        union __storage_access {
+            __storage_access() noexcept
+            {}
+            Tp __value;
+            __fp_storage_of_t<Tp> __storage;
+        } access;
+        access.__value = v;
+        return access.__storage;
     } else {
         static_assert(__always_false_v<Tp>, "Unsupported floating point format");
     }

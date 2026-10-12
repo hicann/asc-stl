@@ -81,6 +81,9 @@ template <size_t Index, class TupleLike>
 CANN_ASC_STL_API constexpr decltype(auto) __adl_get(TupleLike&& value) noexcept(
     noexcept(get<Index>(::asc::std::forward<TupleLike>(value))))
 {
+    // 与源实现一致：函数体内引入 using 声明使 asc::std::get 常规可见，
+    // 同时保留对宿主 STL 类型（无法在类外展开 using）的 ADL 查找路径。
+    using ::asc::std::get;
     return get<Index>(::asc::std::forward<TupleLike>(value));  // NOLINT(build/include_what_you_use)
 }
 

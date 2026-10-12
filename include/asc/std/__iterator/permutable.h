@@ -35,9 +35,9 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class Iterator>
-concept permutable = forward_iterator<Iterator> && indirectly_movable_storable<Iterator, Iterator> &&
-    indirectly_swappable<Iterator, Iterator>;
+template <class _Iterator>
+concept permutable = forward_iterator<_Iterator> && indirectly_movable_storable<_Iterator, _Iterator> &&
+    indirectly_swappable<_Iterator, _Iterator>;
 
 CANN_ASC_STL_END_NAMESPACE
 

@@ -34,7 +34,8 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 struct __equal_to {
     template <class T, class U>
-    CANN_ASC_STL_API constexpr bool operator()(const T& left, const U& right) const noexcept(noexcept(left == right))
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool operator()(const T& left, const U& right) const
+        noexcept(noexcept(left == right))
     {
         return left == right;
     }
@@ -42,7 +43,8 @@ struct __equal_to {
 
 struct __less {
     template <class T, class U>
-    CANN_ASC_STL_API constexpr bool operator()(const T& left, const U& right) const noexcept(noexcept(left < right))
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool operator()(const T& left, const U& right) const
+        noexcept(noexcept(left < right))
     {
         return left < right;
     }

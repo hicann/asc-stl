@@ -29,43 +29,67 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__algorithm/comp.h>
-#include <asc/std/__algorithm/iter_swap.h>
+#include <asc/std/__algorithm/comp_ref_type.h>
+#include <asc/std/__algorithm/iterator_operations.h>
 #include <asc/std/__algorithm/reverse.h>
+#include <asc/std/__utility/move.h>
+#include <asc/std/__utility/pair.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class BidirectionalIterator, class Compare>
-CANN_ASC_STL_API constexpr bool next_permutation(
-    BidirectionalIterator first, BidirectionalIterator last, Compare compare)
+// Policy-based core returning the last iterator plus whether a next permutation existed, kept as
+// the extension point for the ranges flavour. The sentinel is converted to an iterator up front;
+// the classic policy's `next(__first, __last)` degenerates to the sentinel itself for iterator
+// sentinels.
+template <class _AlgPolicy, class _Compare, class _BidirectionalIterator, class _Sentinel>
+CANN_ASC_STL_API constexpr pair<_BidirectionalIterator, bool> __next_permutation(
+    _BidirectionalIterator __first, _Sentinel __last, _Compare&& __comp)
 {
-    if (first == last) {
-        return false;
+    using _Result = pair<_BidirectionalIterator, bool>;
+
+    _BidirectionalIterator __last_iter = ::asc::std::move(__last);  // NOLINT(build/include_what_you_use)
+    _BidirectionalIterator __i = __last_iter;
+    if (__first == __last || __first == --__i) {
+        return _Result(::asc::std::move(__last_iter), false);
     }
-    BidirectionalIterator current = last;
-    if (first == --current) {
-        return false;
-    }
-    for (;;) {
-        BidirectionalIterator previous = current;
-        if (compare(*--current, *previous)) {
-            BidirectionalIterator selected = last;
-            while (!compare(*current, *--selected)) {
+
+    bool __result = true;
+    while (true) {
+        _BidirectionalIterator __ip1 = __i;
+        if (__comp(*--__i, *__ip1)) {
+            _BidirectionalIterator __j = __last_iter;
+            while (!__comp(*__i, *--__j)) {
             }
-            ::asc::std::iter_swap(current, selected);
-            ::asc::std::reverse(previous, last);
-            return true;
+            _AlgPolicy::iter_swap(__i, __j);
+            ::asc::std::__reverse<_AlgPolicy>(__ip1, __last_iter);
+            __result = true;
+            break;
         }
-        if (current == first) {
-            ::asc::std::reverse(first, last);
-            return false;
+        if (__i == __first) {
+            ::asc::std::__reverse<_AlgPolicy>(__first, __last_iter);
+            __result = false;
+            break;
         }
     }
+    return _Result(::asc::std::move(__last_iter), __result);
 }
 
-template <class BidirectionalIterator>
-CANN_ASC_STL_API constexpr bool next_permutation(BidirectionalIterator first, BidirectionalIterator last)
+template <class _BidirectionalIterator, class _Compare>
+CANN_ASC_STL_API constexpr bool next_permutation(
+    _BidirectionalIterator __first, _BidirectionalIterator __last, _Compare __comp)
 {
-    return ::asc::std::next_permutation(first, last, __less{});
+    return ::asc::std::__next_permutation<
+        __classic_algorithm_iterator_operations>(  // NOLINT(build/include_what_you_use)
+        ::asc::std::move(__first),
+        ::asc::std::move(__last),                        // NOLINT(build/include_what_you_use)
+        static_cast<__comp_ref_type<_Compare>>(__comp))  // NOLINT(build/include_what_you_use)
+        .second;
+}
+
+template <class _BidirectionalIterator>
+CANN_ASC_STL_API constexpr bool next_permutation(_BidirectionalIterator __first, _BidirectionalIterator __last)
+{
+    return ::asc::std::next_permutation(__first, __last, __less{});
 }
 
 CANN_ASC_STL_END_NAMESPACE

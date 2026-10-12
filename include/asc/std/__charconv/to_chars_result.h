@@ -35,6 +35,22 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 struct to_chars_result {
     char* ptr;
     errc ec;
+
+    CANN_ASC_STL_API constexpr explicit operator bool() const noexcept
+    {
+        return ec == errc{};
+    }
+
+    friend CANN_ASC_STL_API constexpr bool operator==(
+        const to_chars_result& left, const to_chars_result& right) noexcept
+    {
+        return left.ptr == right.ptr && left.ec == right.ec;
+    }
+    friend CANN_ASC_STL_API constexpr bool operator!=(
+        const to_chars_result& left, const to_chars_result& right) noexcept
+    {
+        return !(left == right);
+    }
 };
 
 CANN_ASC_STL_END_NAMESPACE

@@ -88,6 +88,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool cmp_greater_equal(T left,
 template <class T, class U>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool in_range(U value) noexcept
 {
+    static_assert(__is_integer_v<T> && __is_integer_v<U>, "in_range requires integer types");
     return ::asc::std::cmp_greater_equal(  // NOLINT(build/include_what_you_use)
                value, numeric_limits<T>::min()) &&
         ::asc::std::cmp_less_equal(            // NOLINT(build/include_what_you_use)

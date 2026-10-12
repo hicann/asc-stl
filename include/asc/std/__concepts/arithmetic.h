@@ -34,6 +34,7 @@
 #include <asc/std/__type_traits/is_signed.h>
 #include <asc/std/__type_traits/is_signed_integer.h>
 #include <asc/std/__type_traits/is_unsigned_integer.h>
+#include <asc/std/__type_traits/remove_cv.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -47,7 +48,10 @@ concept unsigned_integral = integral<T> && !signed_integral<T>;
 template <class T>
 concept floating_point = is_floating_point_v<T>;
 template <class T>
-concept __asc_signed_integer = __is_signed_integer_v<T>;
+concept __asc_signed_integer = __is_signed_integer_v<remove_cv_t<T>>;
+#else
+template <class T>
+inline constexpr bool __asc_signed_integer = __is_signed_integer_v<remove_cv_t<T>>;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

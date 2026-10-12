@@ -30,48 +30,48 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__type_traits/is_arithmetic.h>
+#include <asc/std/__type_traits/void_t.h>
+#include <asc/std/__utility/declval.h>
 #include <asc/std/complex>
 
 namespace asc::std::linalg {
-namespace __conj_detail {
+namespace __conj_if_needed {
 
+// 是否存在可用的限定 ::asc::std::conj（上游迁移形态：不搜 ADL conj）。
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <class T>
-T&& declval() noexcept;
-
-template <class...>
-using void_t = void;
-
-template <class T>
-CANN_ASC_STL_API constexpr auto adl_conj(const T& value) noexcept(noexcept(conj(value))) -> decltype(conj(value))
-{
-    return conj(value);
-}
-
+inline constexpr bool _HasConj = requires(const T& value) { static_cast<void>(::asc::std::conj(value)); };
+#else
 template <class T, class = void>
-struct has_conj {
-    static constexpr bool value = false;
-};
+inline constexpr bool __has_conj_impl = false;
 
 template <class T>
-struct has_conj<T, void_t<decltype(adl_conj(declval<const T&>()))>> {
-    static constexpr bool value = true;
-};
+inline constexpr bool
+    __has_conj_impl<T, void_t<decltype(static_cast<void>(::asc::std::conj(::asc::std::declval<const T&>())))> > = true;
 
-struct conj_if_needed_fn {
+template <class T>
+inline constexpr bool _HasConj = __has_conj_impl<T>;
+#endif
+
+struct __conj_if_needed {
     template <class T>
     CANN_ASC_STL_API constexpr auto operator()(const T& value) const
     {
-        if constexpr (is_arithmetic_v<T> || !has_conj<T>::value) {
+        // 算术类型先短路，避免对算术 T 求 _HasConj 时实例化本库 float-only 的
+        // complex<T>（::asc::std::conj 的标量重载返回 complex<T>）导致硬错误。
+        if constexpr (is_arithmetic_v<T>) {
+            return value;
+        } else if constexpr (!_HasConj<T>) {
             return value;
         } else {
-            return adl_conj(value);
+            return ::asc::std::conj(value);
         }
     }
 };
 
-}  // namespace __conj_detail
+}  // namespace __conj_if_needed
 
-inline constexpr __conj_detail::conj_if_needed_fn conj_if_needed{};
+inline constexpr __conj_if_needed::__conj_if_needed conj_if_needed{};
 
 }  // namespace asc::std::linalg
 

@@ -91,18 +91,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API bool isunordered(float x, floa
 
 CANN_ASC_STL_END_NAMESPACE
 
-#ifndef FP_ILOGB0
-#define FP_ILOGB0 (-2147483647 - 1)
-#endif
-#ifndef FP_ILOGBNAN
-#define FP_ILOGBNAN 2147483647
-#endif
-#ifndef FP_LLOGB0
-#define FP_LLOGB0 (-9223372036854775807LL - 1)
-#endif
-#ifndef FP_LLOGBNAN
-#define FP_LLOGBNAN 9223372036854775807LL
-#endif
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// 设备侧无宿主 math.h，提供 FP_*/INFINITY/NAN 回退；宿主侧由 <math.h>
+// 提供（glibc 枚举技法要求宿主定义先行，宏回退会破坏其后置枚举）。
 #ifndef FP_INFINITE
 #define FP_INFINITE 1
 #define FP_NAN 0
@@ -115,6 +106,9 @@ CANN_ASC_STL_END_NAMESPACE
 #endif
 #ifndef NAN
 #define NAN (__builtin_nanf(""))
+#endif
+#else
+#include <math.h>
 #endif
 
 #endif  // CANN_ASC_STL_ASC_STD_CMATH

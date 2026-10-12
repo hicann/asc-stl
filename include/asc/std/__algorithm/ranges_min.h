@@ -40,8 +40,50 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// 断言宏：基座无集中定义（方言层持有），按 __mdspan/empty_base.h 的同形内联，
+// #ifndef 守卫以免与未来集中定义冲突。
+#ifndef CANN_ASC_STL_DETAIL_ASSERT
+// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查。
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
+#else
+#define CANN_ASC_STL_DETAIL_ASSERT(expression, message) \
+    ((expression) ? static_cast<void>(0) : (__builtin_trap(), static_cast<void>(0)))
+#endif
+#endif  // CANN_ASC_STL_DETAIL_ASSERT
+
 namespace ranges {
 struct __min_fn {
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    template <class T, class Projection = identity, class Compare = ranges::less>
+        requires indirect_strict_weak_order<Compare, projected<const T*, Projection>>
+    CANN_ASC_STL_API constexpr const T& operator()(
+        const T& left, const T& right, Compare compare = {}, Projection projection = {}) const
+    {
+        return ::asc::std::invoke(
+                   compare, ::asc::std::invoke(projection, right), ::asc::std::invoke(projection, left)) ?
+            right :
+            left;
+    }
+    template <class Range, class Compare = ranges::less, class Projection = identity>
+        requires input_range<Range> && indirect_strict_weak_order<Compare, projected<iterator_t<Range>, Projection>> &&
+        indirectly_copyable_storable<iterator_t<Range>, range_value_t<Range>*>
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr range_value_t<Range> operator()(
+        Range&& range, Compare compare = {}, Projection projection = {}) const
+    {
+        auto first = ranges::begin(range);
+        const auto last = ranges::end(range);
+        CANN_ASC_STL_DETAIL_ASSERT(first != last, "range passed to ranges::min must be non-empty");
+        range_value_t<Range> result = *first;
+        while (++first != last) {
+            if (::asc::std::invoke(
+                    compare, ::asc::std::invoke(projection, *first), ::asc::std::invoke(projection, result))) {
+                result = *first;
+            }
+        }
+        return result;
+    }
+#else
     template <class T, class Projection = identity, class Compare = ranges::less>
     CANN_ASC_STL_API constexpr const T& operator()(
         const T& left, const T& right, Compare compare = {}, Projection projection = {}) const
@@ -59,6 +101,7 @@ struct __min_fn {
     {
         auto first = ranges::begin(range);
         const auto last = ranges::end(range);
+        CANN_ASC_STL_DETAIL_ASSERT(first != last, "range passed to ranges::min must be non-empty");
         range_value_t<Range> result = *first;
         while (++first != last) {
             if (::asc::std::invoke(
@@ -68,6 +111,7 @@ struct __min_fn {
         }
         return result;
     }
+#endif
 };
 inline constexpr __min_fn min{};
 }  // namespace ranges

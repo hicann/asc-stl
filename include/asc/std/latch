@@ -28,5 +28,6 @@
 #endif
 
 #include <asc/std/__latch/latch.h>
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_LATCH

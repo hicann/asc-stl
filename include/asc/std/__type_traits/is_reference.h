@@ -29,24 +29,71 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__type_traits/integral_constant.h>
 
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_lvalue_reference)
+#define CANN_ASC_STL_DETAIL_BUILTIN_IS_LVALUE_REFERENCE(...) __is_lvalue_reference(__VA_ARGS__)
+#endif  // CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_lvalue_reference)
+
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_rvalue_reference)
+#define CANN_ASC_STL_DETAIL_BUILTIN_IS_RVALUE_REFERENCE(...) __is_rvalue_reference(__VA_ARGS__)
+#endif  // CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_rvalue_reference)
+
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_reference)
+#define CANN_ASC_STL_DETAIL_BUILTIN_IS_REFERENCE(...) __is_reference(__VA_ARGS__)
+#endif  // CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_reference)
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class>
+#if defined(CANN_ASC_STL_DETAIL_BUILTIN_IS_LVALUE_REFERENCE) &&       \
+    !defined(CANN_ASC_STL_DETAIL_USE_IS_LVALUE_REFERENCE_FALLBACK) && \
+    defined(CANN_ASC_STL_DETAIL_BUILTIN_IS_RVALUE_REFERENCE) &&       \
+    !defined(CANN_ASC_STL_DETAIL_USE_IS_RVALUE_REFERENCE_FALLBACK) && \
+    defined(CANN_ASC_STL_DETAIL_BUILTIN_IS_REFERENCE) && !defined(CANN_ASC_STL_DETAIL_USE_IS_REFERENCE_FALLBACK)
+
+template <class _Tp>
+struct is_lvalue_reference : bool_constant<CANN_ASC_STL_DETAIL_BUILTIN_IS_LVALUE_REFERENCE(_Tp)> {};
+
+template <class _Tp>
+struct is_rvalue_reference : bool_constant<CANN_ASC_STL_DETAIL_BUILTIN_IS_RVALUE_REFERENCE(_Tp)> {};
+
+template <class _Tp>
+struct is_reference : bool_constant<CANN_ASC_STL_DETAIL_BUILTIN_IS_REFERENCE(_Tp)> {};
+
+template <class _Tp>
+inline constexpr bool is_lvalue_reference_v = CANN_ASC_STL_DETAIL_BUILTIN_IS_LVALUE_REFERENCE(_Tp);
+template <class _Tp>
+inline constexpr bool is_rvalue_reference_v = CANN_ASC_STL_DETAIL_BUILTIN_IS_RVALUE_REFERENCE(_Tp);
+template <class _Tp>
+inline constexpr bool is_reference_v = CANN_ASC_STL_DETAIL_BUILTIN_IS_REFERENCE(_Tp);
+
+#else
+
+template <class _Tp>
 inline constexpr bool is_lvalue_reference_v = false;
-template <class T>
-inline constexpr bool is_lvalue_reference_v<T&> = true;
-template <class T>
-struct is_lvalue_reference : bool_constant<is_lvalue_reference_v<T>> {};
-template <class>
+template <class _Tp>
+inline constexpr bool is_lvalue_reference_v<_Tp&> = true;
+
+template <class _Tp>
+struct is_lvalue_reference : bool_constant<is_lvalue_reference_v<_Tp> > {};
+
+template <class _Tp>
 inline constexpr bool is_rvalue_reference_v = false;
-template <class T>
-inline constexpr bool is_rvalue_reference_v<T&&> = true;
-template <class T>
-struct is_rvalue_reference : bool_constant<is_rvalue_reference_v<T>> {};
-template <class T>
-inline constexpr bool is_reference_v = is_lvalue_reference_v<T> || is_rvalue_reference_v<T>;
-template <class T>
-struct is_reference : bool_constant<is_reference_v<T>> {};
+template <class _Tp>
+inline constexpr bool is_rvalue_reference_v<_Tp&&> = true;
+
+template <class _Tp>
+struct is_rvalue_reference : bool_constant<is_rvalue_reference_v<_Tp> > {};
+
+template <class _Tp>
+inline constexpr bool is_reference_v = false;
+template <class _Tp>
+inline constexpr bool is_reference_v<_Tp&> = true;
+template <class _Tp>
+inline constexpr bool is_reference_v<_Tp&&> = true;
+
+template <class _Tp>
+struct is_reference : bool_constant<is_reference_v<_Tp> > {};
+
+#endif  // !CANN_ASC_STL_DETAIL_BUILTIN_IS_LVALUE_REFERENCE
 
 CANN_ASC_STL_END_NAMESPACE
 

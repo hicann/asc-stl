@@ -31,6 +31,23 @@
 #include <asc/std/__type_traits/always_false.h>
 #include <asc/std/cstdint>
 
+// Feature macros inlined from the dev dialect layer (not present in the base config).
+#ifndef CANN_ASC_STL_DETAIL_HAS_INT128
+#if !defined(ASC_DISABLE_INT128_SUPPORT) && defined(__linux__) && defined(__SIZEOF_INT128__)
+#define CANN_ASC_STL_DETAIL_HAS_INT128() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_INT128() 0
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HAS_INT128
+
+#ifndef CANN_ASC_STL_DETAIL_UNREACHABLE
+#if defined(_MSC_VER)
+#define CANN_ASC_STL_DETAIL_UNREACHABLE() __assume(0)
+#else
+#define CANN_ASC_STL_DETAIL_UNREACHABLE() __builtin_unreachable()
+#endif
+#endif  // CANN_ASC_STL_DETAIL_UNREACHABLE
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <size_t NBits, bool IsSigned>
@@ -45,8 +62,13 @@ CANN_ASC_STL_API constexpr auto __make_nbit_int_impl() noexcept
             return int32_t{};
         } else if constexpr (NBits == 64) {
             return int64_t{};
+#if CANN_ASC_STL_DETAIL_HAS_INT128()
+        } else if constexpr (NBits == 128) {
+            return __int128_t{};
+#endif  // CANN_ASC_STL_DETAIL_HAS_INT128()
         } else {
             static_assert(__always_false_v<decltype(NBits)>, "Unsupported signed integer size");
+            CANN_ASC_STL_DETAIL_UNREACHABLE();
         }
     } else {
         if constexpr (NBits == 8) {
@@ -57,8 +79,13 @@ CANN_ASC_STL_API constexpr auto __make_nbit_int_impl() noexcept
             return uint32_t{};
         } else if constexpr (NBits == 64) {
             return uint64_t{};
+#if CANN_ASC_STL_DETAIL_HAS_INT128()
+        } else if constexpr (NBits == 128) {
+            return __uint128_t{};
+#endif  // CANN_ASC_STL_DETAIL_HAS_INT128()
         } else {
             static_assert(__always_false_v<decltype(NBits)>, "Unsupported unsigned integer size");
+            CANN_ASC_STL_DETAIL_UNREACHABLE();
         }
     }
 }

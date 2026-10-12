@@ -27,16 +27,25 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__floating_point/conversion_rank_order.h>
+#include <asc/std/__type_traits/always_false.h>
 #include <asc/std/__type_traits/conditional.h>
-#include <asc/std/__type_traits/is_same.h>
+#include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/is_integral.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class T, class U>
-using __fp_common_type_t = conditional_t<is_same_v<T, long double> || is_same_v<U, long double>, long double,
-    conditional_t<is_same_v<T, double> || is_same_v<U, double>, double, float>>;
-template <class T, class U>
-using __fp_int_ext_common_type_t = __fp_common_type_t<T, U>;
+//! @brief 两个浮点类型的公共类型：取转换秩较高者（__greater 一侧）。
+//! 无序或含未知类型时该别名替换失败（SFINAE 友好）。
+template <class Lhs, class Rhs>
+using __fp_common_type_t = enable_if_t<__fp_conv_rank_order_v<Lhs, Rhs> != __fp_conv_rank_order::__unordered &&
+        __fp_conv_rank_order_v<Lhs, Rhs> != __fp_conv_rank_order::__invalid,
+    conditional_t<__fp_conv_rank_order_v<Lhs, Rhs> == __fp_conv_rank_order::__greater, Lhs, Rhs>>;
+
+//! @brief 同 __fp_common_type_t，积分类型按 double 处理。
+template <class Lhs, class Rhs>
+using __fp_int_ext_common_type_t =
+    __fp_common_type_t<conditional_t<is_integral_v<Lhs>, double, Lhs>, conditional_t<is_integral_v<Rhs>, double, Rhs>>;
 
 CANN_ASC_STL_END_NAMESPACE
 

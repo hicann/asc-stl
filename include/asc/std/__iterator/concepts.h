@@ -76,8 +76,9 @@ using __with_reference = T&;
 template <class T>
 concept __can_reference = requires { typename __with_reference<T>; };
 
+// [iterator.concept.readable]
 template <class In>
-concept indirectly_readable =
+concept __indirectly_readable_impl =
     requires(const In input) {
         typename iter_value_t<In>;
         typename iter_reference_t<In>;
@@ -88,6 +89,9 @@ concept indirectly_readable =
     common_reference_with<iter_reference_t<In>&&, iter_rvalue_reference_t<In>&&> &&
     common_reference_with<iter_rvalue_reference_t<In>&&, const iter_value_t<In>&>;
 
+template <class In>
+concept indirectly_readable = __indirectly_readable_impl<remove_cvref_t<In>>;
+
 template <class Out, class T>
 concept indirectly_writable = requires(Out&& output, T&& value) {
     *output = ::asc::std::forward<T>(value);
@@ -96,13 +100,15 @@ concept indirectly_writable = requires(Out&& output, T&& value) {
     const_cast<const iter_reference_t<Out>&&>(*::asc::std::forward<Out>(output)) = ::asc::std::forward<T>(value);
 };
 
+// [iterator.concept.winc]
 template <class It>
-concept weakly_incrementable = movable<It> && requires(It value) {
-    typename iter_difference_t<It>;
-    requires signed_integral<iter_difference_t<It>>;
-    { ++value } -> same_as<It&>;
-    value++;
-};
+concept weakly_incrementable = !same_as<It, bool> &&  // 部分编译器对 bool 的自增处理有缺陷，显式排除
+    movable<It> && requires(It value) {
+        typename iter_difference_t<It>;
+        requires signed_integral<iter_difference_t<It>>;
+        { ++value } -> same_as<It&>;
+        value++;
+    };
 
 template <class It>
 concept incrementable = regular<It> && weakly_incrementable<It> && requires(It value) {
@@ -124,41 +130,70 @@ concept sized_sentinel_for = sentinel_for<Sent, It> &&
         { iter - sent } -> same_as<iter_difference_t<It>>;
     };
 
+// [iterator.concept.input]
 template <class It>
 concept input_iterator = input_or_output_iterator<It> && indirectly_readable<It> &&
-    requires { typename iterator_traits<It>::iterator_category; };
+    requires { typename _ITER_CONCEPT<It>; } && derived_from<_ITER_CONCEPT<It>, input_iterator_tag>;
 
 template <class It, class T>
 concept output_iterator = input_or_output_iterator<It> && indirectly_writable<It, T> &&
     requires(It iter, T&& value) { *iter++ = ::asc::std::forward<T>(value); };  // NOLINT(build/include_what_you_use)
 
+// [iterator.concept.forward]
 template <class It>
-concept forward_iterator =
-    input_iterator<It> && derived_from<typename iterator_traits<It>::iterator_category, forward_iterator_tag> &&
+concept forward_iterator = input_iterator<It> && derived_from<_ITER_CONCEPT<It>, forward_iterator_tag> &&
     incrementable<It> && sentinel_for<It, It>;
 
+// [iterator.concept.bidir]
 template <class It>
-concept bidirectional_iterator = forward_iterator<It> &&
-    derived_from<typename iterator_traits<It>::iterator_category, bidirectional_iterator_tag> && requires(It value) {
-        { --value } -> same_as<It&>;
-        { value-- } -> same_as<It>;
-    };
+concept __iter_can_decrement = requires(It value) {
+    { --value } -> same_as<It&>;
+    { value-- } -> same_as<It>;
+};
 
 template <class It>
-concept random_access_iterator = bidirectional_iterator<It> &&
-    derived_from<typename iterator_traits<It>::iterator_category, random_access_iterator_tag> && totally_ordered<It> &&
-    sized_sentinel_for<It, It> && requires(It value, const It other, iter_difference_t<It> count) {
-        { value += count } -> same_as<It&>;
-        { other + count } -> same_as<It>;
-        { count + other } -> same_as<It>;
-        { value -= count } -> same_as<It&>;
-        { other - count } -> same_as<It>;
-        { other[count] } -> same_as<iter_reference_t<It>>;
-    };
+concept bidirectional_iterator =
+    forward_iterator<It> && derived_from<_ITER_CONCEPT<It>, bidirectional_iterator_tag> && __iter_can_decrement<It>;
 
 template <class It>
-concept contiguous_iterator = random_access_iterator<It> &&
-    derived_from<typename iterator_traits<It>::iterator_concept, contiguous_iterator_tag> &&
+concept __iter_can_plus_equal = requires(It value, const iter_difference_t<It> count) {
+    { value += count } -> same_as<It&>;
+};
+
+template <class It>
+concept __iter_can_plus = requires(const It value, const iter_difference_t<It> count) {
+    { value + count } -> same_as<It>;
+    { count + value } -> same_as<It>;
+};
+
+template <class It>
+concept __iter_can_minus_equal = requires(It value, const iter_difference_t<It> count) {
+    { value -= count } -> same_as<It&>;
+};
+
+template <class It>
+concept __iter_can_minus = requires(const It value, const iter_difference_t<It> count) {
+    { value - count } -> same_as<It>;
+};
+
+template <class It>
+concept __iter_can_subscript = requires(const It value, const iter_difference_t<It> count) {
+    { value[count] } -> same_as<iter_reference_t<It>>;
+};
+
+template <class It>
+concept __random_access_operations = __iter_can_plus_equal<It> && __iter_can_plus<It> && __iter_can_minus_equal<It> &&
+    __iter_can_minus<It> && __iter_can_subscript<It>;
+
+// [iterator.concept.random.access]
+template <class It>
+concept random_access_iterator =
+    bidirectional_iterator<It> && derived_from<_ITER_CONCEPT<It>, random_access_iterator_tag> && totally_ordered<It> &&
+    sized_sentinel_for<It, It> && __random_access_operations<It>;
+
+// [iterator.concept.contiguous]
+template <class It>
+concept contiguous_iterator = random_access_iterator<It> && derived_from<_ITER_CONCEPT<It>, contiguous_iterator_tag> &&
     is_lvalue_reference_v<iter_reference_t<It>> && same_as<iter_value_t<It>, remove_cvref_t<iter_reference_t<It>>> &&
     requires(const It& value) {
         { ::asc::std::to_address(value) } -> same_as<add_pointer_t<iter_reference_t<It>>>;
@@ -189,10 +224,20 @@ concept indirect_binary_predicate = indirectly_readable<It1> && indirectly_reada
     predicate<F&, iter_common_reference_t<It1>, iter_common_reference_t<It2>>;
 
 template <class F, class It1, class It2 = It1>
-concept indirect_equivalence_relation = indirect_binary_predicate<F, It1, It2>;
+concept indirect_equivalence_relation = indirectly_readable<It1> && indirectly_readable<It2> && copy_constructible<F> &&
+    equivalence_relation<F&, iter_value_t<It1>&, iter_value_t<It2>&> &&
+    equivalence_relation<F&, iter_value_t<It1>&, iter_reference_t<It2>> &&
+    equivalence_relation<F&, iter_reference_t<It1>, iter_value_t<It2>&> &&
+    equivalence_relation<F&, iter_reference_t<It1>, iter_reference_t<It2>> &&
+    equivalence_relation<F&, iter_common_reference_t<It1>, iter_common_reference_t<It2>>;
 
 template <class F, class It1, class It2 = It1>
-concept indirect_strict_weak_order = indirect_binary_predicate<F, It1, It2>;
+concept indirect_strict_weak_order = indirectly_readable<It1> && indirectly_readable<It2> && copy_constructible<F> &&
+    strict_weak_order<F&, iter_value_t<It1>&, iter_value_t<It2>&> &&
+    strict_weak_order<F&, iter_value_t<It1>&, iter_reference_t<It2>> &&
+    strict_weak_order<F&, iter_reference_t<It1>, iter_value_t<It2>&> &&
+    strict_weak_order<F&, iter_reference_t<It1>, iter_reference_t<It2>> &&
+    strict_weak_order<F&, iter_common_reference_t<It1>, iter_common_reference_t<It2>>;
 
 template <class In, class Out>
 concept indirectly_movable = indirectly_readable<In> && indirectly_writable<Out, iter_rvalue_reference_t<In>>;

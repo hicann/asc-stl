@@ -28,6 +28,7 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__algorithm/copy.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -35,13 +36,8 @@ template <class ForwardIterator, class OutputIterator>
 CANN_ASC_STL_API constexpr OutputIterator rotate_copy(
     ForwardIterator first, ForwardIterator middle, ForwardIterator last, OutputIterator result)
 {
-    for (ForwardIterator iterator = middle; iterator != last; ++iterator) {
-        *result++ = *iterator;
-    }
-    for (ForwardIterator iterator = first; iterator != middle; ++iterator) {
-        *result++ = *iterator;
-    }
-    return result;
+    return ::asc::std::copy(                                     // NOLINT(build/include_what_you_use)
+        first, middle, ::asc::std::copy(middle, last, result));  // NOLINT(build/include_what_you_use)
 }
 
 CANN_ASC_STL_END_NAMESPACE

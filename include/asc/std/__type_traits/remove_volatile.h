@@ -29,18 +29,37 @@
 
 #include <asc/__detail/attributes.h>
 
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__remove_volatile)
+#define CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_VOLATILE(...) __remove_volatile(__VA_ARGS__)
+#endif  // CANN_ASC_STL_DETAIL_HAS_BUILTIN(__remove_volatile)
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class T>
+#if defined(CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_VOLATILE) && !defined(CANN_ASC_STL_DETAIL_USE_REMOVE_VOLATILE_FALLBACK)
+template <class _Tp>
 struct remove_volatile {
-    using type = T;
+    using type = CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_VOLATILE(_Tp);
 };
-template <class T>
-struct remove_volatile<volatile T> {
-    using type = T;
+
+template <class _Tp>
+using remove_volatile_t = CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_VOLATILE(_Tp);
+
+#else
+
+template <class _Tp>
+struct remove_volatile {
+    using type = _Tp;
 };
-template <class T>
-using remove_volatile_t = typename remove_volatile<T>::type;
+template <class _Tp>
+struct remove_volatile<volatile _Tp> {
+    using type = _Tp;
+};
+
+template <class _Tp>
+using remove_volatile_t = typename remove_volatile<_Tp>::type;
+
+#endif  // defined(CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_VOLATILE) &&
+        // !defined(CANN_ASC_STL_DETAIL_USE_REMOVE_VOLATILE_FALLBACK)
 
 CANN_ASC_STL_END_NAMESPACE
 

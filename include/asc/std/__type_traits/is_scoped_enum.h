@@ -35,24 +35,36 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_scoped_enum)
+
+template <class _Tp>
+struct is_scoped_enum : bool_constant<__is_scoped_enum(_Tp)> {};
+
+template <class _Tp>
+inline constexpr bool is_scoped_enum_v = __is_scoped_enum(_Tp);
+
+#else
+
 // An enumeration is scoped exactly when its values do not implicitly convert
 // to the enumeration's underlying type.  The underlying type is only named
 // for actual enumerations so non-enum arguments never instantiate it.
-template <class _Tp, bool = is_enum_v<_Tp>>
+template <class _Tp, bool = is_enum_v<_Tp> >
 struct __scoped_enum_impl {
     static constexpr bool value = false;
 };
 
 template <class _Tp>
 struct __scoped_enum_impl<_Tp, true> {
-    static constexpr bool value = !is_convertible_v<_Tp, underlying_type_t<_Tp>>;
+    static constexpr bool value = !is_convertible_v<_Tp, underlying_type_t<_Tp> >;
 };
 
 template <class _Tp>
 inline constexpr bool is_scoped_enum_v = __scoped_enum_impl<_Tp>::value;
 
 template <class _Tp>
-struct is_scoped_enum : bool_constant<is_scoped_enum_v<_Tp>> {};
+struct is_scoped_enum : bool_constant<is_scoped_enum_v<_Tp> > {};
+
+#endif  // CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_scoped_enum)
 
 CANN_ASC_STL_END_NAMESPACE
 

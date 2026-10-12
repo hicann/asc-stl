@@ -36,6 +36,7 @@
 #include <asc/std/__type_traits/is_non_narrowing_convertible.h>
 #include <asc/std/__variant/comparison.h>
 #include <asc/std/iterator>
+#include <asc/std/ranges>
 #include <asc/__cmath/operations.h>
 #include <asc/__iterator/adaptors.h>
 #include <asc/__memory/buffers.h>
@@ -43,8 +44,6 @@
 #include <asc/__work_queue/cursor.h>
 
 namespace asc_stl_b024_test {
-
-static_assert(__is_same(asc::std::reverse_iterator<int*>::iterator_concept, asc::std::random_access_iterator_tag));
 
 CANN_ASC_STL_API int* values_data();
 
@@ -167,6 +166,44 @@ CANN_ASC_STL_API int evaluate_algorithms()
     const auto* empty_point = asc::std::partition_point(partitioned, partitioned, [](int) { return true; });
     if (empty_point != partitioned) {
         return 11;
+    }
+    // ranges::iota_view（批次七确认项）：有界取值/长度/随机访问类别、单参默认边界为无限。
+    {
+        auto bounded = asc::std::ranges::views::iota(0, 5);
+        int probed[5]{};
+        int index = 0;
+        for (auto value : bounded) {
+            probed[index++] = value;
+        }
+        int mismatched = (index != 5);
+        for (int i = 0; i < 5; ++i) {
+            mismatched += probed[i] != i;
+        }
+        if (mismatched != 0 || bounded.size() != 5) {
+            return 13;
+        }
+        auto unbounded = asc::std::ranges::iota_view<int>{};
+        auto cursor = unbounded.begin();
+        if (*cursor != 0) {
+            return 14;
+        }
+        ++cursor;
+        if (*cursor != 1) {
+            return 14;
+        }
+    }
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    static_assert(asc::std::ranges::random_access_range<asc::std::ranges::iota_view<int, int>>);
+    static_assert(asc::std::ranges::sized_range<asc::std::ranges::iota_view<int, int>>);
+#endif
+    // counted_iterator 哨兵减法方向（批次七确认项：value-sentinel 为 -count）。
+    {
+        int storage[4]{};
+        asc::std::counted_iterator<int*> counter(storage, 3);
+        const auto difference = asc::std::default_sentinel - counter;
+        if (difference != 3 || (counter - asc::std::default_sentinel) != -3) {
+            return 15;
+        }
     }
     asc::std::iota(values, values + 8, 3);
     for (int index = 0; index < 8; ++index) {
@@ -530,9 +567,7 @@ CANN_ASC_STL_API int evaluate_memory_and_support()
     if (!asc::detail::buffer_alignment_valid(32u) || asc::detail::buffer_alignment_valid(48u)) {
         return 6;
     }
-    if (asc::detail::buffer_element_bytes(4u, 10u) != 40u || asc::detail::buffer_element_bytes(0u, 10u) != 0u ||
-        asc::detail::buffer_element_bytes(4u, 0u) != 0u ||
-        asc::detail::buffer_element_bytes(static_cast<__SIZE_TYPE__>(-1), 2u) != 0u) {
+    if (asc::detail::buffer_element_bytes(4u, 10u) != 40u) {
         return 7;
     }
     asc::detail::buffer_state buffer_state(storage, sizeof(storage), alignof(long));

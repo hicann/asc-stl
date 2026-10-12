@@ -27,7 +27,6 @@
 #pragma system_header
 #endif
 
-#include <asc/std/__exception/terminate.h>
 #include <asc/std/__numeric/accumulate.h>
 #include <asc/std/__numeric/adjacent_difference.h>
 #include <asc/std/__numeric/device_policy.h>
@@ -47,91 +46,6 @@
 #include <asc/std/__numeric/transform_exclusive_scan.h>
 #include <asc/std/__numeric/transform_inclusive_scan.h>
 #include <asc/std/__numeric/transform_reduce.h>
-
-CANN_ASC_STL_BEGIN_NAMESPACE
-
-#if defined(__clang__) && defined(CANN_ASC_STL_USE_SIMT_LAUNCH)
-
-template <class Input, class Output, class BinaryOperation>
-CANN_ASC_STL_HOST_API Output adjacent_difference(
-    asc::device_policy policy, Input first, Input last, Output result, BinaryOperation operation)
-{
-    auto status = ::asc::parallel::adjacent_difference(policy, first, last, result, operation);
-    if (!::asc::detail::finish_synchronous(policy, status).success())
-        ::asc::std::terminate();
-    return result + (last - first);
-}
-
-template <class Input, class Output, class T, class BinaryOperation>
-CANN_ASC_STL_HOST_API Output exclusive_scan(
-    asc::device_policy policy, Input first, Input last, Output result, T init, BinaryOperation operation)
-{
-    auto status = ::asc::parallel::exclusive_scan(policy, first, last, result, init, operation);
-    if (!::asc::detail::finish_synchronous(policy, status).success())
-        ::asc::std::terminate();
-    return result + (last - first);
-}
-
-template <class Input, class Output, class T, class BinaryOperation>
-CANN_ASC_STL_HOST_API Output inclusive_scan(
-    asc::device_policy policy, Input first, Input last, Output result, T init, BinaryOperation operation)
-{
-    auto status = ::asc::parallel::inclusive_scan(policy, first, last, result, init, operation);
-    if (!::asc::detail::finish_synchronous(policy, status).success())
-        ::asc::std::terminate();
-    return result + (last - first);
-}
-
-template <class Input, class T, class BinaryOperation>
-CANN_ASC_STL_HOST_API T reduce(asc::device_policy policy, Input first, Input last, T init, BinaryOperation operation)
-{
-    auto slot = ::asc::detail::make_synchronous_slot<T>(policy);
-    if (!slot.status.success())
-        ::asc::std::terminate();
-    auto status = ::asc::parallel::reduce(slot.backend_policy, first, last, init, slot.device_value, operation);
-    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
-        ::asc::std::terminate();
-    return slot.host_value;
-}
-
-template <class Input, class Output, class T, class BinaryOperation, class UnaryOperation>
-CANN_ASC_STL_HOST_API Output transform_exclusive_scan(asc::device_policy policy, Input first, Input last, Output result,
-    T init, BinaryOperation binary_operation, UnaryOperation unary_operation)
-{
-    auto status =
-        ::asc::parallel::transform_exclusive_scan(policy, first, last, result, init, binary_operation, unary_operation);
-    if (!::asc::detail::finish_synchronous(policy, status).success())
-        ::asc::std::terminate();
-    return result + (last - first);
-}
-
-template <class Input, class Output, class T, class BinaryOperation, class UnaryOperation>
-CANN_ASC_STL_HOST_API Output transform_inclusive_scan(asc::device_policy policy, Input first, Input last, Output result,
-    BinaryOperation binary_operation, UnaryOperation unary_operation, T init)
-{
-    auto status =
-        ::asc::parallel::transform_inclusive_scan(policy, first, last, result, binary_operation, unary_operation, init);
-    if (!::asc::detail::finish_synchronous(policy, status).success())
-        ::asc::std::terminate();
-    return result + (last - first);
-}
-
-template <class Input, class T, class BinaryOperation, class UnaryOperation>
-CANN_ASC_STL_HOST_API T transform_reduce(asc::device_policy policy, Input first, Input last, T init,
-    BinaryOperation binary_operation, UnaryOperation unary_operation)
-{
-    auto slot = ::asc::detail::make_synchronous_slot<T>(policy);
-    if (!slot.status.success())
-        ::asc::std::terminate();
-    auto status = ::asc::parallel::transform_reduce(
-        slot.backend_policy, first, last, init, slot.device_value, binary_operation, unary_operation);
-    if (!::asc::detail::finish_synchronous(policy, status, slot).success())
-        ::asc::std::terminate();
-    return slot.host_value;
-}
-
-#endif  // defined(__clang__) && defined(CANN_ASC_STL_USE_SIMT_LAUNCH)
-
-CANN_ASC_STL_END_NAMESPACE
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_NUMERIC

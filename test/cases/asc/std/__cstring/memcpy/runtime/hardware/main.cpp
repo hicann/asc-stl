@@ -18,8 +18,6 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
-
-#include "launch.h"
 namespace {
 constexpr int kDeviceId = 0;
 constexpr std::array<std::uint32_t, 44> kExpected = {0x13579BDFU, 0x1001U, 0U, 0x1002U, 17U, 0x1003U, 365U, 0x1004U,
@@ -39,6 +37,11 @@ bool check(aclError result, const char* operation)
     return false;
 }
 }  // namespace
+#if defined(ASC_STL_FOUNDATION_SIMD)
+void launch_asc_stl_foundation_simd(std::uint32_t*, aclrtStream);
+#else
+void launch_asc_stl_foundation_simt(std::uint32_t*, aclrtStream);
+#endif
 int main()
 {
     std::array<std::uint32_t, kExpected.size()> actual{};

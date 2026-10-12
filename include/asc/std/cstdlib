@@ -27,7 +27,36 @@
 #pragma system_header
 #endif
 
+#include <asc/__detail/attributes.h>
+#include <asc/__detail/execution_space.h>
+#include <asc/std/__cmath/abs.h>
 #include <asc/std/__cstdlib/abs.h>
 #include <asc/std/__cstdlib/div.h>
+#include <asc/std/cstddef>
+#include <asc/std/version>
+
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#include <cstdlib>
+#endif
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+// General-utilities umbrella: the floating-point abs/fabs family joins via
+// __cmath/abs.h, the integral abs/div family via __cstdlib. The aligned heap
+// entry below is Host-only: AI Core has no native aligned allocation ABI, and
+// device allocation is exposed separately where the runtime supports it.
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// Preserve the bytes-first argument order of the source contract. A null
+// result reports unsatisfied alignment preconditions without throwing.
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API void* aligned_alloc(size_t nbytes, size_t alignment) noexcept
+{
+    if (alignment == 0 || (alignment & (alignment - 1)) != 0 || nbytes % alignment != 0) {
+        return nullptr;
+    }
+    return ::aligned_alloc(alignment, nbytes);
+}
+#endif  // !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+
+CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STD_CSTDLIB

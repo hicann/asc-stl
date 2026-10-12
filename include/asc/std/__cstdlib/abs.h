@@ -33,23 +33,27 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 CANN_ASC_STL_API constexpr int abs(int value) noexcept
 {
-    return value < 0 ? -value : value;
+    return (value < 0) ? -value : value;
 }
-CANN_ASC_STL_API constexpr long abs(long value) noexcept
-{
-    return value < 0 ? -value : value;
-}
-CANN_ASC_STL_API constexpr long long abs(long long value) noexcept
-{
-    return value < 0 ? -value : value;
-}
+
 CANN_ASC_STL_API constexpr long labs(long value) noexcept
 {
-    return ::asc::std::abs(value);
+    return (value < 0l) ? -value : value;
 }
+
+CANN_ASC_STL_API constexpr long abs(long value) noexcept
+{
+    return ::asc::std::labs(value);
+}
+
 CANN_ASC_STL_API constexpr long long llabs(long long value) noexcept
 {
-    return ::asc::std::abs(value);
+    return (value < 0ll) ? -value : value;
+}
+
+CANN_ASC_STL_API constexpr long long abs(long long value) noexcept
+{
+    return ::asc::std::llabs(value);
 }
 
 CANN_ASC_STL_END_NAMESPACE

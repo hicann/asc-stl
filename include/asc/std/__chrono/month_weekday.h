@@ -36,109 +36,138 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 namespace chrono {
 
 class month_weekday {
+private:
+    chrono::month __month_;
+    chrono::weekday_indexed __weekday_indexed_;
+
 public:
-    CANN_ASC_STL_API constexpr month_weekday() = default;
+    CANN_ASC_STL_API month_weekday() = default;
     CANN_ASC_STL_API constexpr month_weekday(
-        const chrono::month& month_value, const chrono::weekday_indexed& weekday_value) noexcept
-        : month_(month_value), weekday_(weekday_value)
+        const chrono::month& __month, const chrono::weekday_indexed& __weekday_indexed) noexcept
+        : __month_{__month}, __weekday_indexed_{__weekday_indexed}
     {}
-    CANN_ASC_STL_API constexpr chrono::month month() const noexcept
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::month month() const noexcept
     {
-        return month_;
-    }
-    CANN_ASC_STL_API constexpr chrono::weekday_indexed weekday_indexed() const noexcept
-    {
-        return weekday_;
-    }
-    CANN_ASC_STL_API constexpr bool ok() const noexcept
-    {
-        return month_.ok() && weekday_.ok();
+        return __month_;
     }
 
-private:
-    chrono::month month_{};
-    chrono::weekday_indexed weekday_{};
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::weekday_indexed weekday_indexed() const noexcept
+    {
+        return __weekday_indexed_;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool ok() const noexcept
+    {
+        return __month_.ok() && __weekday_indexed_.ok();
+    }
+
+    // comparisons
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator==(
+        const month_weekday& __lhs, const month_weekday& __rhs) noexcept
+    {
+        return __lhs.month() == __rhs.month() && __lhs.weekday_indexed() == __rhs.weekday_indexed();
+    }
+
+#if !CANN_ASC_STL_DETAIL_HAS_CXX20()
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator!=(
+        const month_weekday& __lhs, const month_weekday& __rhs) noexcept
+    {
+        return __lhs.month() != __rhs.month() || __lhs.weekday_indexed() != __rhs.weekday_indexed();
+    }
+#endif  // !CANN_ASC_STL_DETAIL_HAS_CXX20()
 };
+
+// arithmetics
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr month_weekday operator/(
+    const chrono::month& __lhs, const chrono::weekday_indexed& __rhs) noexcept
+{
+    return month_weekday{__lhs, __rhs};
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr month_weekday operator/(
+    int __lhs, const chrono::weekday_indexed& __rhs) noexcept
+{
+    return month_weekday{chrono::month(__lhs), __rhs};
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr month_weekday operator/(
+    const chrono::weekday_indexed& __lhs, const chrono::month& __rhs) noexcept
+{
+    return month_weekday{__rhs, __lhs};
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr month_weekday operator/(
+    const chrono::weekday_indexed& __lhs, int __rhs) noexcept
+{
+    return month_weekday{chrono::month(__rhs), __lhs};
+}
 
 class month_weekday_last {
+private:
+    chrono::month __month_;
+    chrono::weekday_last __weekday_last_;
+
 public:
     CANN_ASC_STL_API constexpr month_weekday_last(
-        const chrono::month& month_value, const chrono::weekday_last& weekday_value) noexcept
-        : month_(month_value), weekday_(weekday_value)
+        const chrono::month& __month, const chrono::weekday_last& __weekday_last) noexcept
+        : __month_{__month}, __weekday_last_{__weekday_last}
     {}
-    CANN_ASC_STL_API constexpr chrono::month month() const noexcept
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::month month() const noexcept
     {
-        return month_;
-    }
-    CANN_ASC_STL_API constexpr chrono::weekday_last weekday_last() const noexcept
-    {
-        return weekday_;
-    }
-    CANN_ASC_STL_API constexpr bool ok() const noexcept
-    {
-        return month_.ok() && weekday_.ok();
+        return __month_;
     }
 
-private:
-    chrono::month month_;
-    chrono::weekday_last weekday_;
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr chrono::weekday_last weekday_last() const noexcept
+    {
+        return __weekday_last_;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool ok() const noexcept
+    {
+        return __month_.ok() && __weekday_last_.ok();
+    }
+
+    // comparisons
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator==(
+        const month_weekday_last& __lhs, const month_weekday_last& __rhs) noexcept
+    {
+        return __lhs.month() == __rhs.month() && __lhs.weekday_last() == __rhs.weekday_last();
+    }
+
+#if !CANN_ASC_STL_DETAIL_HAS_CXX20()
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator!=(
+        const month_weekday_last& __lhs, const month_weekday_last& __rhs) noexcept
+    {
+        return __lhs.month() != __rhs.month() || __lhs.weekday_last() != __rhs.weekday_last();
+    }
+#endif  // !CANN_ASC_STL_DETAIL_HAS_CXX20()
 };
 
-CANN_ASC_STL_API constexpr bool operator==(month_weekday left, month_weekday right) noexcept
+// arithmetics
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr month_weekday_last operator/(
+    const chrono::month& __lhs, const chrono::weekday_last& __rhs) noexcept
 {
-    return left.month() == right.month() && left.weekday_indexed() == right.weekday_indexed();
+    return month_weekday_last{__lhs, __rhs};
 }
-CANN_ASC_STL_API constexpr bool operator!=(month_weekday left, month_weekday right) noexcept
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr month_weekday_last operator/(
+    int __lhs, const chrono::weekday_last& __rhs) noexcept
 {
-    return !(left == right);
+    return month_weekday_last{chrono::month(__lhs), __rhs};
 }
-CANN_ASC_STL_API constexpr bool operator==(month_weekday_last left, month_weekday_last right) noexcept
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr month_weekday_last operator/(
+    const chrono::weekday_last& __lhs, const chrono::month& __rhs) noexcept
 {
-    return left.month() == right.month() && left.weekday_last() == right.weekday_last();
+    return month_weekday_last{__rhs, __lhs};
 }
-CANN_ASC_STL_API constexpr bool operator!=(month_weekday_last left, month_weekday_last right) noexcept
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr month_weekday_last operator/(
+    const chrono::weekday_last& __lhs, int __rhs) noexcept
 {
-    return !(left == right);
-}
-CANN_ASC_STL_API constexpr month_weekday operator/(
-    const chrono::month& month_value, const chrono::weekday_indexed& weekday_value) noexcept
-{
-    return month_weekday(month_value, weekday_value);
-}
-CANN_ASC_STL_API constexpr month_weekday operator/(
-    const chrono::weekday_indexed& weekday_value, const chrono::month& month_value) noexcept
-{
-    return month_value / weekday_value;
-}
-CANN_ASC_STL_API constexpr month_weekday operator/(
-    int month_value, const chrono::weekday_indexed& weekday_value) noexcept
-{
-    return chrono::month(static_cast<unsigned>(month_value)) / weekday_value;
-}
-CANN_ASC_STL_API constexpr month_weekday operator/(
-    const chrono::weekday_indexed& weekday_value, int month_value) noexcept
-{
-    return chrono::month(static_cast<unsigned>(month_value)) / weekday_value;
-}
-CANN_ASC_STL_API constexpr month_weekday_last operator/(
-    const chrono::month& month_value, const chrono::weekday_last& weekday_value) noexcept
-{
-    return month_weekday_last(month_value, weekday_value);
-}
-CANN_ASC_STL_API constexpr month_weekday_last operator/(
-    const chrono::weekday_last& weekday_value, const chrono::month& month_value) noexcept
-{
-    return month_value / weekday_value;
-}
-CANN_ASC_STL_API constexpr month_weekday_last operator/(
-    int month_value, const chrono::weekday_last& weekday_value) noexcept
-{
-    return chrono::month(static_cast<unsigned>(month_value)) / weekday_value;
-}
-CANN_ASC_STL_API constexpr month_weekday_last operator/(
-    const chrono::weekday_last& weekday_value, int month_value) noexcept
-{
-    return chrono::month(static_cast<unsigned>(month_value)) / weekday_value;
+    return month_weekday_last{chrono::month(__rhs), __lhs};
 }
 
 }  // namespace chrono

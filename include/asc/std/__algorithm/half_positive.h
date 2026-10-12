@@ -34,10 +34,18 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// Perform division by two quickly for positive integers (llvm.org/PR39129).
 template <class T, enable_if_t<is_integral_v<T>, int> = 0>
 CANN_ASC_STL_API constexpr T __half_positive(T value) noexcept
 {
     return static_cast<T>(static_cast<make_unsigned_t<T>>(value) / 2);
+}
+
+// 非整型回退：直接折半（上游同款），否则非整型差类型经 SFINAE 剔除后无可用重载。
+template <class T, enable_if_t<!is_integral_v<T>, int> = 0>
+CANN_ASC_STL_API constexpr T __half_positive(T value) noexcept(noexcept(value / 2))
+{
+    return value / 2;
 }
 
 CANN_ASC_STL_END_NAMESPACE

@@ -32,26 +32,28 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class ForwardIterator, class BinaryPredicate>
-CANN_ASC_STL_API constexpr ForwardIterator adjacent_find(
-    ForwardIterator first, ForwardIterator last, BinaryPredicate predicate)
+template <class _ForwardIterator, class _BinaryPredicate>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _ForwardIterator adjacent_find(
+    _ForwardIterator __first, _ForwardIterator __last, _BinaryPredicate __pred)
 {
-    if (first == last) {
-        return last;
-    }
-    ForwardIterator next = first;
-    while (++next != last) {
-        if (predicate(*first, *next)) {
-            return first;
+    if (__first != __last) {
+        _ForwardIterator __i = __first;
+        while (++__i != __last) {
+            if (__pred(*__first, *__i)) {
+                __last = __first;
+                break;
+            }
+            __first = __i;
         }
-        first = next;
     }
-    return last;
+    return __last;
 }
-template <class ForwardIterator>
-CANN_ASC_STL_API constexpr ForwardIterator adjacent_find(ForwardIterator first, ForwardIterator last)
+
+template <class _ForwardIterator>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _ForwardIterator adjacent_find(
+    _ForwardIterator __first, _ForwardIterator __last)
 {
-    return ::asc::std::adjacent_find(first, last, __equal_to{});
+    return ::asc::std::adjacent_find(__first, __last, __equal_to{});
 }
 
 CANN_ASC_STL_END_NAMESPACE

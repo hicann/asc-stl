@@ -29,6 +29,26 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/cstddef>
 
+// Hosted ::std interoperation gate: a host standard library has been pulled in.
+#ifndef CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB
+#if defined(__GLIBCXX__) || defined(_LIBCPP_VERSION) || defined(_MSVC_STL_VERSION)
+#define CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB() 0
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB
+
+// std:: forward declarations
+
+#if CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB()
+namespace std {
+template <class, ::size_t>
+struct array;
+}  // namespace std
+#endif  // CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB()
+
+// asc::std:: forward declarations
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class T, size_t Size>
@@ -39,6 +59,14 @@ inline constexpr bool __is_asc_std_array_v = false;
 
 template <class T, size_t Size>
 inline constexpr bool __is_asc_std_array_v<array<T, Size>> = true;
+
+#if CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB()
+template <class T>
+inline constexpr bool __is_std_array_v = false;
+
+template <class T, ::size_t Size>
+inline constexpr bool __is_std_array_v<::std::array<T, Size>> = true;
+#endif  // CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB()
 
 CANN_ASC_STL_END_NAMESPACE
 

@@ -20,8 +20,6 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
-
-#include "launch.h"
 #if defined(ASC_STL_ATOMIC_SIMD)
 int main()
 {
@@ -29,6 +27,7 @@ int main()
     return 0;
 }
 #else
+void launch_asc_stl_atomic_simt(std::int32_t*, aclrtStream);
 int main()
 {
     constexpr std::array<std::int32_t, 16> expected = {11, 10, 15, 12, 1, 12, 8, 13, 14, 4, 9, 9, 11, 10, 1, 11};

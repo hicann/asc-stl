@@ -41,6 +41,17 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// True when INVOKE(op, args...) is well-formed; inlined is_invocable_v equivalent.
+template <class Op, class Void, class... Args>
+inline constexpr bool __perfect_forward_invocable_impl = false;
+
+template <class Op, class... Args>
+inline constexpr bool __perfect_forward_invocable_impl<Op,
+    void_t<decltype(::asc::std::invoke(::asc::std::declval<Op>(), ::asc::std::declval<Args>()...))>, Args...> = true;
+
+template <class Op, class... Args>
+inline constexpr bool __perfect_forward_invocable = __perfect_forward_invocable_impl<Op, void, Args...>;
+
 template <class Op, class Indices, class... BoundArgs>
 class __perfect_forward_impl;
 template <class Op, size_t... Indices, class... BoundArgs>
@@ -58,21 +69,25 @@ public:
     __perfect_forward_impl& operator=(const __perfect_forward_impl&) = default;
     __perfect_forward_impl& operator=(__perfect_forward_impl&&) = default;
 
-    template <class... Args>
+    template <class... Args, enable_if_t<__perfect_forward_invocable<Op, BoundArgs&..., Args...>, int> = 0>
     CANN_ASC_STL_API constexpr auto operator()(Args&&... args) & noexcept(
         noexcept(Op{}(::asc::std::get<Indices>(bound_)..., ::asc::std::forward<Args>(args)...)))
         -> decltype(Op{}(::asc::std::get<Indices>(bound_)..., ::asc::std::forward<Args>(args)...))
     {
         return Op{}(::asc::std::get<Indices>(bound_)..., ::asc::std::forward<Args>(args)...);
     }
-    template <class... Args>
+    template <class... Args, enable_if_t<!__perfect_forward_invocable<Op, BoundArgs&..., Args...>, int> = 0>
+    void operator()(Args&&...) & = delete;
+    template <class... Args, enable_if_t<__perfect_forward_invocable<Op, const BoundArgs&..., Args...>, int> = 0>
     CANN_ASC_STL_API constexpr auto operator()(Args&&... args) const& noexcept(
         noexcept(Op{}(::asc::std::get<Indices>(bound_)..., ::asc::std::forward<Args>(args)...)))
         -> decltype(Op{}(::asc::std::get<Indices>(bound_)..., ::asc::std::forward<Args>(args)...))
     {
         return Op{}(::asc::std::get<Indices>(bound_)..., ::asc::std::forward<Args>(args)...);
     }
-    template <class... Args>
+    template <class... Args, enable_if_t<!__perfect_forward_invocable<Op, const BoundArgs&..., Args...>, int> = 0>
+    void operator()(Args&&...) const& = delete;
+    template <class... Args, enable_if_t<__perfect_forward_invocable<Op, BoundArgs..., Args...>, int> = 0>
     CANN_ASC_STL_API constexpr auto operator()(Args&&... args) && noexcept(
         noexcept(Op{}(::asc::std::get<Indices>(::asc::std::move(bound_))..., ::asc::std::forward<Args>(args)...)))
         -> decltype(Op{}(::asc::std::get<Indices>(::asc::std::move(bound_))..., ::asc::std::forward<Args>(args)...))
@@ -80,6 +95,18 @@ public:
         return Op{}(::asc::std::get<Indices>(::asc::std::move(bound_))...,
             ::asc::std::forward<Args>(args)...);  // NOLINT(build/include_what_you_use)
     }
+    template <class... Args, enable_if_t<!__perfect_forward_invocable<Op, BoundArgs..., Args...>, int> = 0>
+    void operator()(Args&&...) && = delete;
+    template <class... Args, enable_if_t<__perfect_forward_invocable<Op, const BoundArgs..., Args...>, int> = 0>
+    CANN_ASC_STL_API constexpr auto operator()(Args&&... args) const&& noexcept(
+        noexcept(Op{}(::asc::std::get<Indices>(::asc::std::move(bound_))..., ::asc::std::forward<Args>(args)...)))
+        -> decltype(Op{}(::asc::std::get<Indices>(::asc::std::move(bound_))..., ::asc::std::forward<Args>(args)...))
+    {
+        return Op{}(::asc::std::get<Indices>(::asc::std::move(bound_))...,
+            ::asc::std::forward<Args>(args)...);  // NOLINT(build/include_what_you_use)
+    }
+    template <class... Args, enable_if_t<!__perfect_forward_invocable<Op, const BoundArgs..., Args...>, int> = 0>
+    void operator()(Args&&...) const&& = delete;
 };
 template <class Op, class... Args>
 using __perfect_forward = __perfect_forward_impl<Op, index_sequence_for<Args...>, Args...>;

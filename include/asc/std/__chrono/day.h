@@ -30,97 +30,151 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__chrono/duration.h>
 
+// Migrated from dev __asc/visibility.h: ASC-STL keeps only the inline
+// semantics for ABI hidden; base asc/__detail/visibility.h has no such macro.
+#ifndef CANN_ASC_STL_DETAIL_HIDE_FROM_ABI
+#define CANN_ASC_STL_DETAIL_HIDE_FROM_ABI inline
+#endif
+
+// Migrated from dev __asc/dialect.h: base asc/__config has no standard-version
+// number macro, so key it on CANN_ASC_STL_DETAIL_CPLUSPLUS instead.
+#ifndef CANN_ASC_STL_DETAIL_STD_VER
+#if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
+#define CANN_ASC_STL_DETAIL_STD_VER 2003
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201103L
+#define CANN_ASC_STL_DETAIL_STD_VER 2011
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201402L
+#define CANN_ASC_STL_DETAIL_STD_VER 2014
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201703L
+#define CANN_ASC_STL_DETAIL_STD_VER 2017
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202002L
+#define CANN_ASC_STL_DETAIL_STD_VER 2020
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202302L
+#define CANN_ASC_STL_DETAIL_STD_VER 2023
+#else
+#define CANN_ASC_STL_DETAIL_STD_VER 2024
+#endif
+#endif  // CANN_ASC_STL_DETAIL_STD_VER
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace chrono {
 class day {
+private:
+    unsigned char __day_;
+
 public:
-    CANN_ASC_STL_API constexpr day() = default;
-    CANN_ASC_STL_API explicit constexpr day(unsigned value) noexcept : value_(value)
+    CANN_ASC_STL_DETAIL_HIDE_FROM_ABI day() = default;
+    CANN_ASC_STL_API explicit constexpr day(unsigned __day) noexcept : __day_(static_cast<unsigned char>(__day))
     {}
-    CANN_ASC_STL_API constexpr explicit operator unsigned() const noexcept
-    {
-        return value_;
-    }
-    CANN_ASC_STL_API constexpr bool ok() const noexcept
-    {
-        return value_ >= 1 && value_ <= 31;
-    }
+
     CANN_ASC_STL_API constexpr day& operator++() noexcept
     {
-        ++value_;
+        ++__day_;
         return *this;
     }
     CANN_ASC_STL_API constexpr day operator++(int) noexcept
     {
-        day previous(*this);
-        ++*this;
-        return previous;
+        day __tmp = *this;
+        ++__day_;
+        return __tmp;
     }
     CANN_ASC_STL_API constexpr day& operator--() noexcept
     {
-        --value_;
+        --__day_;
         return *this;
     }
     CANN_ASC_STL_API constexpr day operator--(int) noexcept
     {
-        day previous(*this);
-        --*this;
-        return previous;
-    }
-    CANN_ASC_STL_API constexpr day& operator+=(const days& value) noexcept
-    {
-        value_ = static_cast<unsigned char>(static_cast<int>(value_) + value.count());
-        return *this;
-    }
-    CANN_ASC_STL_API constexpr day& operator-=(const days& value) noexcept
-    {
-        return *this += days(-value.count());
+        day __tmp = *this;
+        --__day_;
+        return __tmp;
     }
 
-private:
-    unsigned char value_{};
+    CANN_ASC_STL_API constexpr day& operator+=(const days& __dd) noexcept
+    {
+        __day_ += static_cast<unsigned char>(__dd.count());
+        return *this;
+    }
+
+    CANN_ASC_STL_API constexpr day& operator-=(const days& __dd) noexcept
+    {
+        __day_ -= static_cast<unsigned char>(__dd.count());
+        return *this;
+    }
+
+    CANN_ASC_STL_API explicit constexpr operator unsigned() const noexcept
+    {
+        return __day_;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool ok() const noexcept
+    {
+        return __day_ >= 1 && __day_ <= 31;
+    }
+
+    // Arithmetics
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr day operator+(const day& __lhs, const days& __rhs) noexcept
+    {
+        return day{static_cast<unsigned>(__lhs) + static_cast<unsigned>(__rhs.count())};
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr day operator+(const days& __lhs, const day& __rhs) noexcept
+    {
+        return day{static_cast<unsigned>(__lhs.count()) + static_cast<unsigned>(__rhs)};
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr day operator-(const day& __lhs, const days& __rhs) noexcept
+    {
+        return day{static_cast<unsigned>(__lhs) - static_cast<unsigned>(__rhs.count())};
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr days operator-(const day& __lhs, const day& __rhs) noexcept
+    {
+        return days{static_cast<int>(static_cast<unsigned>(__lhs)) - static_cast<int>(static_cast<unsigned>(__rhs))};
+    }
+
+    // Comparisons
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator==(
+        const day& __lhs, const day& __rhs) noexcept
+    {
+        return static_cast<unsigned>(__lhs) == static_cast<unsigned>(__rhs);
+    }
+
+#if CANN_ASC_STL_DETAIL_STD_VER <= 2017
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator!=(
+        const day& __lhs, const day& __rhs) noexcept
+    {
+        return static_cast<unsigned>(__lhs) != static_cast<unsigned>(__rhs);
+    }
+#endif  // CANN_ASC_STL_DETAIL_STD_VER <= 2017
+
+    // Traditional relational operators (spaceship not supported)
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator<(const day& __lhs, const day& __rhs) noexcept
+    {
+        return static_cast<unsigned>(__lhs) < static_cast<unsigned>(__rhs);
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator>(const day& __lhs, const day& __rhs) noexcept
+    {
+        return static_cast<unsigned>(__lhs) > static_cast<unsigned>(__rhs);
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator<=(
+        const day& __lhs, const day& __rhs) noexcept
+    {
+        return static_cast<unsigned>(__lhs) <= static_cast<unsigned>(__rhs);
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API friend constexpr bool operator>=(
+        const day& __lhs, const day& __rhs) noexcept
+    {
+        return static_cast<unsigned>(__lhs) >= static_cast<unsigned>(__rhs);
+    }
 };
-CANN_ASC_STL_API constexpr bool operator==(day left, day right) noexcept
-{
-    return static_cast<unsigned>(left) == static_cast<unsigned>(right);
-}
-CANN_ASC_STL_API constexpr bool operator!=(day left, day right) noexcept
-{
-    return !(left == right);
-}
-CANN_ASC_STL_API constexpr bool operator<(day left, day right) noexcept
-{
-    return static_cast<unsigned>(left) < static_cast<unsigned>(right);
-}
-CANN_ASC_STL_API constexpr bool operator>(day left, day right) noexcept
-{
-    return right < left;
-}
-CANN_ASC_STL_API constexpr bool operator<=(day left, day right) noexcept
-{
-    return !(right < left);
-}
-CANN_ASC_STL_API constexpr bool operator>=(day left, day right) noexcept
-{
-    return !(left < right);
-}
-CANN_ASC_STL_API constexpr day operator+(day value, const days& offset) noexcept
-{
-    return value += offset;
-}
-CANN_ASC_STL_API constexpr day operator+(const days& offset, day value) noexcept
-{
-    return value += offset;
-}
-CANN_ASC_STL_API constexpr day operator-(day value, const days& offset) noexcept
-{
-    return value -= offset;
-}
-CANN_ASC_STL_API constexpr days operator-(day left, day right) noexcept
-{
-    return days(static_cast<int>(static_cast<unsigned>(left)) - static_cast<int>(static_cast<unsigned>(right)));
-}
 }  // namespace chrono
 
 CANN_ASC_STL_END_NAMESPACE

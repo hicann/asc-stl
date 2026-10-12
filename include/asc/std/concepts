@@ -29,13 +29,17 @@
 
 #include <asc/std/__concepts/arithmetic.h>
 #include <asc/std/__concepts/assignable.h>
+#include <asc/std/__concepts/boolean_testable.h>
+#include <asc/std/__concepts/class_or_enum.h>
 #include <asc/std/__concepts/common_reference_with.h>
 #include <asc/std/__concepts/common_with.h>
+#include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__concepts/convertible_to.h>
 #include <asc/std/__concepts/copyable.h>
 #include <asc/std/__concepts/derived_from.h>
 #include <asc/std/__concepts/destructible.h>
+#include <asc/std/__concepts/different_from.h>
 #include <asc/std/__concepts/equality_comparable.h>
 #include <asc/std/__concepts/invocable.h>
 #include <asc/std/__concepts/movable.h>
@@ -46,6 +50,7 @@
 #include <asc/std/__concepts/semiregular.h>
 #include <asc/std/__concepts/swappable.h>
 #include <asc/std/__concepts/totally_ordered.h>
+#include <asc/std/version>
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 #include <asc/std/__concepts/arithmetic.h>

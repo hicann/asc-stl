@@ -32,7 +32,14 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_pointer)
+// CCE 下禁用 __is_pointer 特性关键字快路径：libstdc++ bits/cpp_type_traits.h
+// 声明了同名模板，ASC 工具链的辅助编译遍（dav-c310-vec）里该声明会遮蔽特性
+// 关键字，使 __is_pointer(_Tp) 被解析为对模板的调用（950 真机 2026-09 复现，
+// 仅当宿主 <vector> 等先行包含时触发）。回退分支语义完备（_Tp* 特化 +
+// remove_cv），CCE 一律走回退；真 clang 的关键字优先级不受声明影响，保留快路径。
+// 需要手工切换时可定义 CANN_ASC_STL_DETAIL_USE_IS_POINTER_FALLBACK 强制回退。
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_pointer) && !defined(CANN_ASC_STL_DETAIL_USE_IS_POINTER_FALLBACK) && \
+    !CANN_ASC_STL_DETAIL_COMPILER_CCE
 
 template <class T>
 struct is_pointer : bool_constant<__is_pointer(T)> {};

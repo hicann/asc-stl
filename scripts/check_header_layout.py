@@ -22,10 +22,20 @@ import argparse
 import logging
 from pathlib import Path
 
-from header_layout_contract import SHARED_ROOTS
-
 
 LOGGER = logging.getLogger(__name__)
+
+
+SHARED_ROOTS = {
+    "asc/__detail/attributes.h",
+    "asc/__detail/builtin.h",
+    "asc/__detail/compiler.h",
+    "asc/__detail/diagnostics.h",
+    "asc/__detail/execution_space.h",
+    "asc/__detail/feature_detection.h",
+    "asc/__detail/preprocessor.h",
+    "asc/__detail/visibility.h",
+}
 
 SYSTEM_HEADER_BLOCK = [
     "#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)",

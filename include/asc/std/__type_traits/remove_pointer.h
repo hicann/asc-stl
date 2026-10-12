@@ -29,7 +29,27 @@
 
 #include <asc/__detail/attributes.h>
 
+// Inline equivalent of the dev builtin hook (dev __asc/builtin.h): use the
+// compiler's __remove_pointer type transform when available.
+#if !defined(CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_POINTER)
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__remove_pointer)
+#define CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_POINTER(...) __remove_pointer(__VA_ARGS__)
+#endif
+#endif  // CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_POINTER
+
 CANN_ASC_STL_BEGIN_NAMESPACE
+
+#if defined(CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_POINTER) && !defined(CANN_ASC_STL_DETAIL_USE_REMOVE_POINTER_FALLBACK)
+
+template <class T>
+struct remove_pointer {
+    using type = CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_POINTER(T);
+};
+
+template <class T>
+using remove_pointer_t = CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_POINTER(T);
+
+#else
 
 template <class T>
 struct remove_pointer {
@@ -51,8 +71,12 @@ template <class T>
 struct remove_pointer<T* const volatile> {
     using type = T;
 };
+
 template <class T>
 using remove_pointer_t = typename remove_pointer<T>::type;
+
+#endif  // defined(CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_POINTER) &&
+        // !defined(CANN_ASC_STL_DETAIL_USE_REMOVE_POINTER_FALLBACK)
 
 CANN_ASC_STL_END_NAMESPACE
 

@@ -36,50 +36,145 @@
 #include <asc/std/__utility/move.h>
 #include <asc/std/cstddef>
 
+// Migrated from dev __asc/dialect.h: base asc/__config has no standard-version
+// number macro, so key it on CANN_ASC_STL_DETAIL_CPLUSPLUS instead.
+#ifndef CANN_ASC_STL_DETAIL_STD_VER
+#if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
+#define CANN_ASC_STL_DETAIL_STD_VER 2003
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201103L
+#define CANN_ASC_STL_DETAIL_STD_VER 2011
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201402L
+#define CANN_ASC_STL_DETAIL_STD_VER 2014
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201703L
+#define CANN_ASC_STL_DETAIL_STD_VER 2017
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202002L
+#define CANN_ASC_STL_DETAIL_STD_VER 2020
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202302L
+#define CANN_ASC_STL_DETAIL_STD_VER 2023
+#else
+#define CANN_ASC_STL_DETAIL_STD_VER 2024
+#endif
+#endif  // CANN_ASC_STL_DETAIL_STD_VER
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class Container>
-class back_insert_iterator {
+template <class _Container>
+class __back_insert_iterator {
+protected:
+    _Container* container;
+
 public:
     using iterator_category = output_iterator_tag;
     using value_type = void;
     using difference_type = ptrdiff_t;
     using pointer = void;
     using reference = void;
-    using container_type = Container;
-    CANN_ASC_STL_API explicit constexpr back_insert_iterator(Container& container)
-        : container_(::asc::std::addressof(container))
+    using container_type = _Container;
+
+    CANN_ASC_STL_API constexpr explicit __back_insert_iterator(_Container& __x) : container(::asc::std::addressof(__x))
     {}
-    CANN_ASC_STL_API constexpr back_insert_iterator& operator=(const typename Container::value_type& value)
+
+    CANN_ASC_STL_API constexpr __back_insert_iterator& operator=(const typename _Container::value_type& __value)
     {
-        container_->push_back(value);
+        container->push_back(__value);
         return *this;
     }
-    CANN_ASC_STL_API constexpr back_insert_iterator& operator=(typename Container::value_type&& value)
+
+    CANN_ASC_STL_API constexpr __back_insert_iterator& operator=(typename _Container::value_type&& __value)
     {
-        container_->push_back(::asc::std::move(value));  // NOLINT(build/include_what_you_use)
+        container->push_back(::asc::std::move(__value));
         return *this;
     }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr __back_insert_iterator& operator*() noexcept
+    {
+        return *this;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr const __back_insert_iterator& operator*() const noexcept
+    {
+        return *this;
+    }
+
+    CANN_ASC_STL_API constexpr __back_insert_iterator& operator++() noexcept
+    {
+        return *this;
+    }
+
+    CANN_ASC_STL_API constexpr __back_insert_iterator operator++(int) noexcept
+    {
+        return *this;
+    }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _Container* __get_container() const noexcept
+    {
+        return container;
+    }
+};
+
+template <class _Container>
+class back_insert_iterator {
+protected:
+    _Container* container;
+
+public:
+    using iterator_category = output_iterator_tag;
+    using value_type = void;
+#if CANN_ASC_STL_DETAIL_STD_VER > 2017
+    using difference_type = ptrdiff_t;
+#else
+    using difference_type = void;
+#endif
+    using pointer = void;
+    using reference = void;
+    using container_type = _Container;
+
+    CANN_ASC_STL_API constexpr explicit back_insert_iterator(_Container& __x) : container(::asc::std::addressof(__x))
+    {}
+
+    CANN_ASC_STL_API constexpr back_insert_iterator& operator=(const typename _Container::value_type& __value)
+    {
+        container->push_back(__value);
+        return *this;
+    }
+
+    CANN_ASC_STL_API constexpr back_insert_iterator& operator=(typename _Container::value_type&& __value)
+    {
+        container->push_back(::asc::std::move(__value));  // NOLINT(build/include_what_you_use)
+        return *this;
+    }
+
     CANN_ASC_STL_API constexpr back_insert_iterator& operator*() noexcept
     {
         return *this;
     }
+
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr const back_insert_iterator& operator*() const noexcept
+    {
+        return *this;
+    }
+
     CANN_ASC_STL_API constexpr back_insert_iterator& operator++() noexcept
     {
         return *this;
     }
+
     CANN_ASC_STL_API constexpr back_insert_iterator operator++(int) noexcept
     {
         return *this;
     }
 
-protected:
-    Container* container_;
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _Container* __get_container() const noexcept
+    {
+        return container;
+    }
 };
-template <class Container>
-CANN_ASC_STL_API constexpr back_insert_iterator<Container> back_inserter(Container& container) noexcept
+CANN_ASC_STL_DETAIL_CTAD_SUPPORTED_FOR_TYPE(back_insert_iterator);
+
+template <class _Container>
+CANN_ASC_STL_API constexpr back_insert_iterator<_Container> back_inserter(_Container& __x) noexcept
 {
-    return back_insert_iterator<Container>(container);
+    return back_insert_iterator<_Container>(__x);
 }
 
 CANN_ASC_STL_END_NAMESPACE

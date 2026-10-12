@@ -31,59 +31,93 @@
 #include <asc/std/__iterator/iterator.h>
 #include <asc/std/__iterator/iterator_traits.h>
 #include <asc/std/__memory/addressof.h>
+#include <asc/std/__utility/ctad_support.h>
 #include <asc/std/__utility/move.h>
 #include <asc/std/cstddef>
 
+// Migrated from dev __asc/dialect.h: base asc/__config has no standard-version
+// number macro, so key it on CANN_ASC_STL_DETAIL_CPLUSPLUS instead.
+#ifndef CANN_ASC_STL_DETAIL_STD_VER
+#if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
+#define CANN_ASC_STL_DETAIL_STD_VER 2003
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201103L
+#define CANN_ASC_STL_DETAIL_STD_VER 2011
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201402L
+#define CANN_ASC_STL_DETAIL_STD_VER 2014
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201703L
+#define CANN_ASC_STL_DETAIL_STD_VER 2017
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202002L
+#define CANN_ASC_STL_DETAIL_STD_VER 2020
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202302L
+#define CANN_ASC_STL_DETAIL_STD_VER 2023
+#else
+#define CANN_ASC_STL_DETAIL_STD_VER 2024
+#endif
+#endif  // CANN_ASC_STL_DETAIL_STD_VER
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class Container>
-using __insert_iterator_iter_t = typename Container::iterator;
-template <class Container>
+template <class _Container>
+using __insert_iterator_iter_t = typename _Container::iterator;
+
+template <class _Container>
 class insert_iterator {
+protected:
+    _Container* container;
+    __insert_iterator_iter_t<_Container> iter;
+
 public:
     using iterator_category = output_iterator_tag;
     using value_type = void;
+#if CANN_ASC_STL_DETAIL_STD_VER > 2017
     using difference_type = ptrdiff_t;
+#else
+    using difference_type = void;
+#endif
     using pointer = void;
     using reference = void;
-    using container_type = Container;
-    CANN_ASC_STL_API constexpr insert_iterator(Container& container, __insert_iterator_iter_t<Container> iterator)
-        : container_(::asc::std::addressof(container)), iterator_(iterator)
+    using container_type = _Container;
+
+    CANN_ASC_STL_API constexpr insert_iterator(_Container& __x, __insert_iterator_iter_t<_Container> __i)
+        : container(::asc::std::addressof(__x)), iter(__i)
     {}
-    CANN_ASC_STL_API constexpr insert_iterator& operator=(const typename Container::value_type& value)
+
+    CANN_ASC_STL_API constexpr insert_iterator& operator=(const typename _Container::value_type& __value)
     {
-        iterator_ = container_->insert(iterator_, value);
-        ++iterator_;
+        iter = container->insert(iter, __value);
+        ++iter;
         return *this;
     }
-    CANN_ASC_STL_API constexpr insert_iterator& operator=(typename Container::value_type&& value)
+
+    CANN_ASC_STL_API constexpr insert_iterator& operator=(typename _Container::value_type&& __value)
     {
-        iterator_ = container_->insert(iterator_, ::asc::std::move(value));  // NOLINT(build/include_what_you_use)
-        ++iterator_;
+        iter = container->insert(iter, ::asc::std::move(__value));  // NOLINT(build/include_what_you_use)
+        ++iter;
         return *this;
     }
+
     CANN_ASC_STL_API constexpr insert_iterator& operator*() noexcept
     {
         return *this;
     }
+
     CANN_ASC_STL_API constexpr insert_iterator& operator++() noexcept
     {
         return *this;
     }
-    CANN_ASC_STL_API constexpr insert_iterator& operator++(int) noexcept
+
+    CANN_ASC_STL_API constexpr insert_iterator operator++(int) noexcept
     {
         return *this;
     }
-
-protected:
-    Container* container_;
-    __insert_iterator_iter_t<Container> iterator_;
 };
-template <class Container>
-CANN_ASC_STL_API constexpr insert_iterator<Container> inserter(
-    Container& container, __insert_iterator_iter_t<Container> iterator)
+CANN_ASC_STL_DETAIL_CTAD_SUPPORTED_FOR_TYPE(insert_iterator);
+
+template <class _Container>
+CANN_ASC_STL_API constexpr insert_iterator<_Container> inserter(
+    _Container& __x, __insert_iterator_iter_t<_Container> __i)
 {
-    return insert_iterator<Container>(container, iterator);
+    return insert_iterator<_Container>(__x, __i);
 }
 
 CANN_ASC_STL_END_NAMESPACE

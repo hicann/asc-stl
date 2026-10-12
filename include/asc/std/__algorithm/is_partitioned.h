@@ -40,12 +40,18 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool is_partitioned(
             break;
         }
     }
+    if (__first == __last) {
+        return true;
+    }
+    ++__first;
+    bool __result = true;
     for (; __first != __last; ++__first) {
         if (__pred(*__first)) {
-            return false;
+            __result = false;
+            break;
         }
     }
-    return true;
+    return __result;
 }
 
 CANN_ASC_STL_END_NAMESPACE

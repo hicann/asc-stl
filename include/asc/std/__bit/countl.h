@@ -39,7 +39,7 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class T>
-CANN_ASC_STL_API constexpr int countl_zero(T value) noexcept
+CANN_ASC_STL_API constexpr __unsigned_integer_result_t<T, int> countl_zero(T value) noexcept
 {
     int result = 0;
     T mask = static_cast<T>(T{1} << (numeric_limits<T>::digits - 1));  // NOLINT(build/include_what_you_use)
@@ -50,7 +50,7 @@ CANN_ASC_STL_API constexpr int countl_zero(T value) noexcept
     return result;
 }
 template <class T>
-CANN_ASC_STL_API constexpr int countl_one(T value) noexcept
+CANN_ASC_STL_API constexpr __unsigned_integer_result_t<T, int> countl_one(T value) noexcept
 {
     return countl_zero(static_cast<T>(~value));
 }

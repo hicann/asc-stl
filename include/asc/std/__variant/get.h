@@ -38,9 +38,90 @@
 #include <asc/std/__utility/move.h>
 #include <asc/std/__variant/variant.h>
 #include <asc/std/__variant/variant_access.h>
+#include <asc/std/__variant/variant_constraints.h>
 #include <asc/std/__variant/variant_match.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
+
+template <size_t Index, class... Types>
+CANN_ASC_STL_API constexpr decltype(auto) get(variant<Types...>& value)
+{
+    static_assert(Index < sizeof...(Types), "variant index out of range");
+    static_assert(!is_void_v<variant_alternative_t<Index, variant<Types...>>>, "variant alternative must not be void");
+    if (value.index() != Index) {
+        __builtin_trap();
+    }
+    return value.template __get<Index>();
+}
+
+template <size_t Index, class... Types>
+CANN_ASC_STL_API constexpr decltype(auto) get(const variant<Types...>& value)
+{
+    static_assert(Index < sizeof...(Types), "variant index out of range");
+    static_assert(!is_void_v<variant_alternative_t<Index, variant<Types...>>>, "variant alternative must not be void");
+    if (value.index() != Index) {
+        __builtin_trap();
+    }
+    return value.template __get<Index>();
+}
+
+template <size_t Index, class... Types>
+CANN_ASC_STL_API constexpr decltype(auto) get(variant<Types...>&& value)
+{
+    static_assert(Index < sizeof...(Types), "variant index out of range");
+    static_assert(!is_void_v<variant_alternative_t<Index, variant<Types...>>>, "variant alternative must not be void");
+    if (value.index() != Index) {
+        __builtin_trap();
+    }
+    return ::asc::std::move(value).template __get<Index>();
+}
+
+template <size_t Index, class... Types>
+CANN_ASC_STL_API constexpr decltype(auto) get(const variant<Types...>&& value)
+{
+    static_assert(Index < sizeof...(Types), "variant index out of range");
+    static_assert(!is_void_v<variant_alternative_t<Index, variant<Types...>>>, "variant alternative must not be void");
+    if (value.index() != Index) {
+        __builtin_trap();
+    }
+    return ::asc::std::move(value).template __get<Index>();
+}
+
+template <class T, class... Types>
+CANN_ASC_STL_API constexpr decltype(auto) get(variant<Types...>& value)
+{
+    constexpr size_t index = __variant_find_exact<T, Types...>::value;
+    static_assert(index != variant_npos, "type is not a unique variant alternative");
+    static_assert(__variant_type_count_v<T, Types...> == 1, "type must occur exactly once in the variant");
+    return ::asc::std::get<index>(value);
+}
+
+template <class T, class... Types>
+CANN_ASC_STL_API constexpr decltype(auto) get(const variant<Types...>& value)
+{
+    constexpr size_t index = __variant_find_exact<T, Types...>::value;
+    static_assert(index != variant_npos, "type is not a unique variant alternative");
+    static_assert(__variant_type_count_v<T, Types...> == 1, "type must occur exactly once in the variant");
+    return ::asc::std::get<index>(value);
+}
+
+template <class T, class... Types>
+CANN_ASC_STL_API constexpr decltype(auto) get(variant<Types...>&& value)
+{
+    constexpr size_t index = __variant_find_exact<T, Types...>::value;
+    static_assert(index != variant_npos, "type is not a unique variant alternative");
+    static_assert(__variant_type_count_v<T, Types...> == 1, "type must occur exactly once in the variant");
+    return ::asc::std::get<index>(::asc::std::move(value));  // NOLINT(build/include_what_you_use)
+}
+
+template <class T, class... Types>
+CANN_ASC_STL_API constexpr decltype(auto) get(const variant<Types...>&& value)
+{
+    constexpr size_t index = __variant_find_exact<T, Types...>::value;
+    static_assert(index != variant_npos, "type is not a unique variant alternative");
+    static_assert(__variant_type_count_v<T, Types...> == 1, "type must occur exactly once in the variant");
+    return ::asc::std::get<index>(::asc::std::move(value));  // NOLINT(build/include_what_you_use)
+}
 
 template <size_t Index, class... Types>
 CANN_ASC_STL_API constexpr add_pointer_t<variant_alternative_t<Index, variant<Types...>>> get_if(
@@ -63,6 +144,7 @@ CANN_ASC_STL_API constexpr add_pointer_t<T> get_if(variant<Types...>* value) noe
 {
     constexpr size_t index = __variant_find_exact<T, Types...>::value;
     static_assert(index != variant_npos, "type is not a unique variant alternative");
+    static_assert(__variant_type_count_v<T, Types...> == 1, "type must occur exactly once in the variant");
     return ::asc::std::get_if<index>(value);
 }
 
@@ -71,6 +153,7 @@ CANN_ASC_STL_API constexpr add_pointer_t<const T> get_if(const variant<Types...>
 {
     constexpr size_t index = __variant_find_exact<T, Types...>::value;
     static_assert(index != variant_npos, "type is not a unique variant alternative");
+    static_assert(__variant_type_count_v<T, Types...> == 1, "type must occur exactly once in the variant");
     return ::asc::std::get_if<index>(value);
 }
 
@@ -79,6 +162,7 @@ CANN_ASC_STL_API constexpr bool holds_alternative(const variant<Types...>& value
 {
     constexpr size_t index = __variant_find_exact<T, Types...>::value;
     static_assert(index != variant_npos, "type is not a unique variant alternative");
+    static_assert(__variant_type_count_v<T, Types...> == 1, "type must occur exactly once in the variant");
     return value.index() == index;
 }
 

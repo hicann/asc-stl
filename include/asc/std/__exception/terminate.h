@@ -30,41 +30,47 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/cassert>
 
+// 序言内联等价语义：基座 __config 未提供 hosted 门（参见
+// __string/constexpr_c_functions.h 的同形内联定义，#ifndef 守卫以便未来集中定义胜出）。
+#ifndef CANN_ASC_STL_DETAIL_HOSTED
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#define CANN_ASC_STL_DETAIL_HOSTED() 0
+#else
+#define CANN_ASC_STL_DETAIL_HOSTED() 1
+#endif
+#endif  // CANN_ASC_STL_DETAIL_HOSTED
+
+#if CANN_ASC_STL_DETAIL_HOSTED() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #include <exception>
+#endif
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// Host submission invokes the installed terminate handler. Device execution
-// uses the target's fail-fast instruction path without a debug-header dependency.
+// The Device branches follow the delivered fail-fast trap mechanism
+// (`asc/std/__atomic/backend.h` and `asc/std/__variant/get.h`): the compiler
+// builtin lowers to the same trap entrypoint that the CANN wrappers
+// `__asc_simt_vf::__trap` and `AscendC::Trap` reach on this toolchain, keeps
+// the debug-assertion adapter out of release semantics, and never returns.
+// The Host branch delegates to the currently installed terminate handler.
+// The freestanding Host compiler path (no C runtime, no terminate handler)
+// falls back to the same fail-fast trap.
 #if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-noreturn"
 #endif
 
-#if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
-CANN_ASC_STL_NORETURN __host__ CANN_ASC_STL_DETAIL_VISIBILITY_HIDDEN inline void terminate() noexcept
-{
-    ::std::terminate();
-}
-
-CANN_ASC_STL_NORETURN __aicore__ CANN_ASC_STL_DETAIL_VISIBILITY_HIDDEN inline void terminate() noexcept
-{
-#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
-    // The supported pure-SIMT backend lowers builtin traps to an uncallable
-    // abort symbol. A volatile invalid-address write emits the device fault.
-    *reinterpret_cast<volatile unsigned char*>(-1) = 0;
-#else
-    trap();
-#endif
-    for (;;) {
-    }
-}
-#else
 CANN_ASC_STL_NORETURN CANN_ASC_STL_API void terminate() noexcept
 {
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    __builtin_trap();
+    for (;;) {
+    }
+#elif CANN_ASC_STL_DETAIL_HOSTED() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     ::std::terminate();
-}
+#else  // 独立环境的宿主编译器路径：无 C 运行时，直接 fail-fast
+    __builtin_trap();
 #endif
+}
 
 #if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
 #pragma clang diagnostic pop

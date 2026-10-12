@@ -28,8 +28,9 @@
 #endif
 
 #include <asc/__detail/attributes.h>
-#include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__type_traits/add_const.h>
+#include <asc/std/__type_traits/is_constructible.h>
+#include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/remove_const.h>
 #include <asc/std/__utility/declval.h>
 #include <asc/std/mdspan>
@@ -39,55 +40,80 @@ namespace asc::std::linalg {
 template <class ScalingFactor, class NestedAccessor>
 class scaled_accessor {
 public:
-    using element_type = const decltype(::asc::std::declval<ScalingFactor>() *
-        ::asc::std::declval<typename NestedAccessor::element_type>());
+    using element_type = add_const_t<decltype(::asc::std::declval<ScalingFactor>() *
+        ::asc::std::declval<typename NestedAccessor::element_type>())>;
     using reference = remove_const_t<element_type>;
     using data_handle_type = typename NestedAccessor::data_handle_type;
     using offset_policy = scaled_accessor<ScalingFactor, typename NestedAccessor::offset_policy>;
 
     CANN_ASC_STL_API constexpr scaled_accessor() = default;
 
-    template <class OtherScalingFactor, class OtherNestedAccessor>
-    CANN_ASC_STL_API constexpr explicit scaled_accessor(
+    // 嵌套访问器不可隐式转换：显式转换构造（标准要求按可转换性分档）。
+    template <class OtherScalingFactor, class OtherNestedAccessor,
+        enable_if_t<is_constructible_v<NestedAccessor, const OtherNestedAccessor&> &&
+                is_constructible_v<ScalingFactor, OtherScalingFactor> &&
+                !is_convertible_v<OtherNestedAccessor, NestedAccessor>,
+            int> = 0>
+    CANN_ASC_STL_API explicit constexpr scaled_accessor(
         const scaled_accessor<OtherScalingFactor, OtherNestedAccessor>& other)
-        : factor_(other.scaling_factor()), accessor_(other.nested_accessor())
+        : scaling_factor_(other.scaling_factor()), nested_accessor_(other.nested_accessor())
+    {}
+
+    // 嵌套访问器可隐式转换：非显式转换构造。
+    template <class OtherScalingFactor, class OtherNestedAccessor,
+        enable_if_t<is_constructible_v<NestedAccessor, const OtherNestedAccessor&> &&
+                is_constructible_v<ScalingFactor, OtherScalingFactor> &&
+                is_convertible_v<OtherNestedAccessor, NestedAccessor>,
+            int> = 0>
+    CANN_ASC_STL_API constexpr scaled_accessor(const scaled_accessor<OtherScalingFactor, OtherNestedAccessor>& other)
+        : scaling_factor_(other.scaling_factor()), nested_accessor_(other.nested_accessor())
     {}
 
     CANN_ASC_STL_API constexpr scaled_accessor(const ScalingFactor& factor, const NestedAccessor& accessor)
-        : factor_(factor), accessor_(accessor)
+        : scaling_factor_(factor), nested_accessor_(accessor)
     {}
 
     CANN_ASC_STL_API constexpr reference access(data_handle_type pointer, size_t index) const
     {
-        return factor_ * typename NestedAccessor::element_type(accessor_.access(pointer, index));
+        return scaling_factor_ * typename NestedAccessor::element_type(nested_accessor_.access(pointer, index));
     }
 
-    CANN_ASC_STL_API constexpr typename offset_policy::data_handle_type offset(
-        data_handle_type pointer, size_t index) const
+    CANN_ASC_STL_API
+    typename offset_policy::data_handle_type constexpr offset(data_handle_type pointer, size_t index) const
     {
-        return accessor_.offset(pointer, index);
+        return nested_accessor_.offset(pointer, index);
     }
 
     CANN_ASC_STL_API constexpr NestedAccessor nested_accessor() const noexcept
     {
-        return accessor_;
+        return nested_accessor_;
     }
+
     CANN_ASC_STL_API constexpr ScalingFactor scaling_factor() const noexcept
     {
-        return factor_;
+        return scaling_factor_;
     }
 
 private:
-    ScalingFactor factor_{};
-    NestedAccessor accessor_{};
+    // 无默认初始化器（与上游一致）：默认构造后的成员值不确定，标准未规定该值。
+    ScalingFactor scaling_factor_;
+    NestedAccessor nested_accessor_;
 };
 
+namespace __detail {
+
+template <class ScalingFactor, class NestedAccessor>
+using __scaled_element_type = add_const_t<typename scaled_accessor<ScalingFactor, NestedAccessor>::element_type>;
+
+}  // namespace __detail
+
 template <class ScalingFactor, class Element, class Extents, class Layout, class Accessor>
-CANN_ASC_STL_API constexpr auto scaled(ScalingFactor factor, mdspan<Element, Extents, Layout, Accessor> input)
+CANN_ASC_STL_API constexpr mdspan<__detail::__scaled_element_type<ScalingFactor, Accessor>, Extents, Layout,
+    scaled_accessor<ScalingFactor, Accessor>>
+scaled(ScalingFactor scaling_factor, mdspan<Element, Extents, Layout, Accessor> input)
 {
-    using result_accessor = scaled_accessor<ScalingFactor, Accessor>;
-    return mdspan<typename result_accessor::element_type, Extents, Layout, result_accessor>(
-        input.data_handle(), input.mapping(), result_accessor(factor, input.accessor()));
+    using accessor_type = scaled_accessor<ScalingFactor, Accessor>;
+    return {input.data_handle(), input.mapping(), accessor_type{scaling_factor, input.accessor()}};
 }
 
 }  // namespace asc::std::linalg

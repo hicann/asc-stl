@@ -51,21 +51,130 @@
 #include <asc/std/__type_traits/is_nothrow_convertible.h>
 #include <asc/std/__type_traits/is_nothrow_copy_constructible.h>
 #include <asc/std/__type_traits/is_nothrow_default_constructible.h>
+#include <asc/std/__type_traits/is_pointer.h>
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/declval.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+namespace __reverse_iterator_detail {
+
+// Minimal local equivalents of the traversal probes used by the migrated
+// implementation: a category probe against iterator_traits and a concept probe
+// against a member iterator_concept, both SFINAE-friendly in C++17 mode.
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_category_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool
+    __has_iterator_category_convertible_to<Iter, Tag, void_t<typename iterator_traits<Iter>::iterator_category>> =
+        is_convertible_v<typename iterator_traits<Iter>::iterator_category, Tag>;
+
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_concept_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool __has_iterator_concept_convertible_to<Iter, Tag, void_t<typename Iter::iterator_concept>> =
+    is_convertible_v<typename Iter::iterator_concept, Tag>;
+
+template <class Iter>
+inline constexpr bool __has_input_traversal = __has_iterator_category_convertible_to<Iter, input_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, input_iterator_tag>;
+
+template <class Iter>
+inline constexpr bool __has_forward_traversal = __has_iterator_category_convertible_to<Iter, forward_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, forward_iterator_tag>;
+
+template <class Iter>
+inline constexpr bool __has_bidirectional_traversal =
+    __has_iterator_category_convertible_to<Iter, bidirectional_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, bidirectional_iterator_tag>;
+
+template <class Iter>
+inline constexpr bool __has_random_access_traversal =
+    __has_iterator_category_convertible_to<Iter, random_access_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, random_access_iterator_tag>;
+
+template <class Iter>
+inline constexpr bool __has_contiguous_traversal =
+    __has_iterator_category_convertible_to<Iter, contiguous_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, contiguous_iterator_tag>;
+
+template <class Iter, class = void>
+inline constexpr bool __has_member_iterator_concept = false;
+
+template <class Iter>
+inline constexpr bool __has_member_iterator_concept<Iter, void_t<typename Iter::iterator_concept>> = true;
+
+// C++20 iterators do not always carry a C++17-compatible iterator_category;
+// deduce the effective category from the maximum of iterator_concept and
+// iterator_category, mirroring __iterator_traits_category_or_concept.
+template <class Iter>
+CANN_ASC_STL_API constexpr auto __iterator_traits_category_or_concept() noexcept
+{
+    if constexpr (!__has_member_iterator_concept<Iter>) {
+        return typename iterator_traits<Iter>::iterator_category{};
+    } else if constexpr (__has_contiguous_traversal<Iter>) {
+        return contiguous_iterator_tag{};
+    } else if constexpr (__has_random_access_traversal<Iter>) {
+        return random_access_iterator_tag{};
+    } else if constexpr (__has_bidirectional_traversal<Iter>) {
+        return bidirectional_iterator_tag{};
+    } else if constexpr (__has_forward_traversal<Iter>) {
+        return forward_iterator_tag{};
+    } else if constexpr (__has_input_traversal<Iter>) {
+        return input_iterator_tag{};
+    } else {
+        return typename Iter::iterator_category{};
+    }
+}
+
+template <class Iter>
+using __iterator_traits_category_or_concept_t = decltype(__iterator_traits_category_or_concept<Iter>());
+
+// Local equivalent of __has_const_arrow: satisfied by pointers and by types
+// exposing a const operator->.
+template <class Iter, class = void>
+inline constexpr bool __has_const_arrow_operator = false;
+
+template <class Iter>
+inline constexpr bool
+    __has_const_arrow_operator<Iter, void_t<decltype(::asc::std::declval<const Iter&>().operator->())>> = true;
+
+template <class Iter>
+inline constexpr bool __has_const_arrow = is_pointer_v<Iter> || __has_const_arrow_operator<Iter>;
+
+}  // namespace __reverse_iterator_detail
+
+// Note: the upstream hidden friends iter_move/iter_swap cannot be declared
+// here: asc::std::iter_move and asc::std::iter_swap are customization-point
+// objects (namespace-scope variables), and a same-named friend function in an
+// asc::std class is ill-formed ("redeclared as a different kind of entity").
+// The equivalent behavior is provided by the customization points themselves:
+// iter_move(ri) dispatches to move(*ri) (the element at base-1) and
+// iter_swap(ri, rj) swaps the base-1 elements through the global iter_swap.
+
+// MSVC historically has issues with is_nothrow_convertible_v here, so use the noexcept expression instead.
+template <class Iter, class Iter2, class = void>
+inline constexpr bool __noexcept_rev_iter_convertible = false;
+
+template <class Iter, class Iter2>
+inline constexpr bool __noexcept_rev_iter_convertible<Iter, Iter2, enable_if_t<is_convertible_v<const Iter&, Iter2>>> =
+    noexcept(Iter2(::asc::std::declval<const Iter&>()));
+
 template <class Iter>
 class reverse_iterator {
 public:
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
+    static_assert(__reverse_iterator_detail::__has_bidirectional_traversal<Iter> || bidirectional_iterator<Iter>,
+        "reverse_iterator<It> requires It to be a bidirectional iterator.");
+#endif
+
     using iterator_type = Iter;
-    using difference_type = iter_difference_t<Iter>;
-    using value_type = iter_value_t<Iter>;
+    using iterator_category = conditional_t<__reverse_iterator_detail::__has_random_access_traversal<Iter>,
+        random_access_iterator_tag, __reverse_iterator_detail::__iterator_traits_category_or_concept_t<Iter>>;
     using pointer = typename iterator_traits<Iter>::pointer;
-    using reference = iter_reference_t<Iter>;
-    using iterator_category = typename iterator_traits<Iter>::iterator_category;
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
     using iterator_concept =
         conditional_t<random_access_iterator<Iter>, random_access_iterator_tag, bidirectional_iterator_tag>;
@@ -74,19 +183,28 @@ public:
         conditional_t<is_convertible_v<typename iterator_traits<Iter>::iterator_category, random_access_iterator_tag>,
             random_access_iterator_tag, bidirectional_iterator_tag>;
 #endif
+    using value_type = iter_value_t<Iter>;
+    using difference_type = iter_difference_t<Iter>;
+    using reference = iter_reference_t<Iter>;
 
-    CANN_ASC_STL_API constexpr reverse_iterator() noexcept(is_nothrow_default_constructible_v<Iter>) = default;
-    CANN_ASC_STL_API explicit constexpr reverse_iterator(Iter value) noexcept(is_nothrow_copy_constructible_v<Iter>)
+    template <class It = Iter, enable_if_t<is_default_constructible_v<It>, int> = 0>
+    CANN_ASC_STL_API constexpr reverse_iterator() noexcept(is_nothrow_default_constructible_v<It>) : current()
+    {}
+
+    CANN_ASC_STL_API constexpr explicit reverse_iterator(Iter value) noexcept(is_nothrow_copy_constructible_v<Iter>)
         : current(value)
     {}
-    template <class U, enable_if_t<is_convertible_v<const U&, Iter>, int> = 0>
-    CANN_ASC_STL_API constexpr reverse_iterator(const reverse_iterator<U>& other) noexcept(
-        is_nothrow_convertible_v<const U&, Iter>)
+    template <class Other, enable_if_t<!is_same_v<Other, Iter> && is_convertible_v<const Other&, Iter>, int> = 0>
+    CANN_ASC_STL_API constexpr reverse_iterator(const reverse_iterator<Other>& other) noexcept(
+        __noexcept_rev_iter_convertible<Other, Iter>)
         : current(other.base())
     {}
-    template <class U, enable_if_t<is_assignable_v<Iter&, const U&>, int> = 0>
-    CANN_ASC_STL_API constexpr reverse_iterator& operator=(const reverse_iterator<U>& other) noexcept(
-        is_nothrow_assignable_v<Iter&, const U&>)
+    template <class Other,
+        enable_if_t<!is_same_v<Other, Iter> && is_convertible_v<const Other&, Iter> &&
+                is_assignable_v<Iter&, const Other&>,
+            int> = 0>
+    CANN_ASC_STL_API constexpr reverse_iterator& operator=(const reverse_iterator<Other>& other) noexcept(
+        is_nothrow_assignable_v<Iter&, const Other&>)
     {
         current = other.base();
         return *this;
@@ -97,16 +215,16 @@ public:
     }
     CANN_ASC_STL_API constexpr reference operator*() const
     {
-        Iter value = current;
-        return *--value;
+        return *::asc::std::prev(current);
     }
+    template <class It = Iter, enable_if_t<__reverse_iterator_detail::__has_const_arrow<It>, int> = 0>
     CANN_ASC_STL_API constexpr pointer operator->() const
     {
-        return ::asc::std::addressof(operator*());
-    }
-    CANN_ASC_STL_API constexpr reference operator[](difference_type count) const
-    {
-        return current[-count - 1];
+        if constexpr (is_pointer_v<It>) {
+            return ::asc::std::prev(current);
+        } else {
+            return ::asc::std::prev(current).operator->();
+        }
     }
     CANN_ASC_STL_API constexpr reverse_iterator& operator++()
     {
@@ -134,67 +252,90 @@ public:
     {
         return reverse_iterator(current - count);
     }
-    CANN_ASC_STL_API constexpr reverse_iterator operator-(difference_type count) const
+    CANN_ASC_STL_API friend constexpr reverse_iterator operator+(difference_type count, const reverse_iterator& value)
     {
-        return reverse_iterator(current + count);
+        return reverse_iterator(value.base() - count);
     }
     CANN_ASC_STL_API constexpr reverse_iterator& operator+=(difference_type count)
     {
         current -= count;
         return *this;
     }
+    CANN_ASC_STL_API constexpr reverse_iterator operator-(difference_type count) const
+    {
+        return reverse_iterator(current + count);
+    }
+    template <class Iter2>
+    CANN_ASC_STL_API friend constexpr auto operator-(const reverse_iterator& left,
+        const reverse_iterator<Iter2>& right) -> decltype(::asc::std::declval<const Iter2&>() -
+                                                  ::asc::std::declval<const Iter&>())
+    {
+        return right.base() - left.base();
+    }
     CANN_ASC_STL_API constexpr reverse_iterator& operator-=(difference_type count)
     {
         current += count;
         return *this;
+    }
+    CANN_ASC_STL_API constexpr reference operator[](difference_type count) const
+    {
+        return *(*this + count);
+    }
+    template <class Iter2>
+    CANN_ASC_STL_API friend constexpr auto operator==(const reverse_iterator& left,
+        const reverse_iterator<Iter2>& right) noexcept(noexcept(static_cast<bool>(::asc::std::declval<const Iter&>() ==
+        ::asc::std::declval<const Iter2&>()))) -> decltype(static_cast<bool>(::asc::std::declval<const Iter&>() ==
+                                                   ::asc::std::declval<const Iter2&>()))
+    {
+        return left.base() == right.base();
+    }
+    template <class Iter2>
+    CANN_ASC_STL_API friend constexpr auto operator!=(const reverse_iterator& left,
+        const reverse_iterator<Iter2>& right) noexcept(noexcept(static_cast<bool>(::asc::std::declval<const Iter&>() !=
+        ::asc::std::declval<const Iter2&>()))) -> decltype(static_cast<bool>(::asc::std::declval<const Iter&>() !=
+                                                   ::asc::std::declval<const Iter2&>()))
+    {
+        return left.base() != right.base();
+    }
+    // Relational comparisons expose the reversed ordering: the exposed < compares
+    // the underlying iterators via >.
+    template <class Iter2>
+    CANN_ASC_STL_API friend constexpr auto operator<(const reverse_iterator& left, const reverse_iterator<Iter2>& right)
+        -> decltype(static_cast<bool>(::asc::std::declval<const Iter&>() > ::asc::std::declval<const Iter2&>()))
+    {
+        return left.base() > right.base();
+    }
+    template <class Iter2>
+    CANN_ASC_STL_API friend constexpr auto operator>(const reverse_iterator& left, const reverse_iterator<Iter2>& right)
+        -> decltype(static_cast<bool>(::asc::std::declval<const Iter&>() < ::asc::std::declval<const Iter2&>()))
+    {
+        return left.base() < right.base();
+    }
+    template <class Iter2>
+    CANN_ASC_STL_API friend constexpr auto operator>=(const reverse_iterator& left,
+        const reverse_iterator<Iter2>& right) -> decltype(static_cast<bool>(::asc::std::declval<const Iter&>() <=
+                                                  ::asc::std::declval<const Iter2&>()))
+    {
+        return left.base() <= right.base();
+    }
+    template <class Iter2>
+    CANN_ASC_STL_API friend constexpr auto operator<=(const reverse_iterator& left,
+        const reverse_iterator<Iter2>& right) -> decltype(static_cast<bool>(::asc::std::declval<const Iter&>() >=
+                                                  ::asc::std::declval<const Iter2&>()))
+    {
+        return left.base() >= right.base();
     }
 
 private:
     Iter current{};
 };
 
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr bool operator==(const reverse_iterator<I1>& left, const reverse_iterator<I2>& right)
-{
-    return left.base() == right.base();
-}
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr bool operator!=(const reverse_iterator<I1>& left, const reverse_iterator<I2>& right)
-{
-    return !(left == right);
-}
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr bool operator<(const reverse_iterator<I1>& left, const reverse_iterator<I2>& right)
-{
-    return right.base() < left.base();
-}
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr bool operator>(const reverse_iterator<I1>& left, const reverse_iterator<I2>& right)
-{
-    return right < left;
-}
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr bool operator<=(const reverse_iterator<I1>& left, const reverse_iterator<I2>& right)
-{
-    return !(right < left);
-}
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr bool operator>=(const reverse_iterator<I1>& left, const reverse_iterator<I2>& right)
-{
-    return !(left < right);
-}
-template <class Iter>
-CANN_ASC_STL_API constexpr reverse_iterator<Iter> operator+(
-    typename reverse_iterator<Iter>::difference_type count, const reverse_iterator<Iter>& value)
-{
-    return value + count;
-}
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr auto operator-(
-    const reverse_iterator<I1>& left, const reverse_iterator<I2>& right) -> decltype(right.base() - left.base())
-{
-    return right.base() - left.base();
-}
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
+template <class Iter1, class Iter2>
+inline constexpr bool disable_sized_sentinel_for<reverse_iterator<Iter1>, reverse_iterator<Iter2>> =
+    !sized_sentinel_for<Iter1, Iter2>;
+#endif
+
 template <class Iter>
 CANN_ASC_STL_API constexpr reverse_iterator<Iter> make_reverse_iterator(Iter value) noexcept(
     is_nothrow_copy_constructible_v<Iter>)

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_COPY_CVREF_H
 #define CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_COPY_CVREF_H
 
@@ -27,90 +28,129 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+
 #include <asc/std/__type_traits/add_lvalue_reference.h>
 #include <asc/std/__type_traits/add_rvalue_reference.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 struct __apply_cvref_ {
-    template <class T>
-    using __call = T;
+    template <class _Tp>
+    using __call = _Tp;
 };
+
 struct __apply_cvref_c {
-    template <class T>
-    using __call = const T;
+    template <class _Tp>
+    using __call = const _Tp;
 };
+
 struct __apply_cvref_v {
-    template <class T>
-    using __call = volatile T;
+    template <class _Tp>
+    using __call = volatile _Tp;
 };
+
 struct __apply_cvref_cv {
-    template <class T>
-    using __call = const volatile T;
+    template <class _Tp>
+    using __call = const volatile _Tp;
 };
+
 struct __apply_cvref_lr {
-    template <class T>
-    using __call = T&;
+    template <class _Tp>
+    using __call = _Tp&;
 };
+
 struct __apply_cvref_clr {
-    template <class T>
-    using __call = const T&;
+    template <class _Tp>
+    using __call = const _Tp&;
 };
+
 struct __apply_cvref_vlr {
-    template <class T>
-    using __call = volatile T&;
+    template <class _Tp>
+    using __call = volatile _Tp&;
 };
+
 struct __apply_cvref_cvlr {
-    template <class T>
-    using __call = const volatile T&;
+    template <class _Tp>
+    using __call = const volatile _Tp&;
 };
+
 struct __apply_cvref_rr {
-    template <class T>
-    using __call = T&&;
+    template <class _Tp>
+    using __call = _Tp&&;
 };
+
 struct __apply_cvref_crr {
-    template <class T>
-    using __call = const T&&;
+    template <class _Tp>
+    using __call = const _Tp&&;
 };
+
 struct __apply_cvref_vrr {
-    template <class T>
-    using __call = volatile T&&;
+    template <class _Tp>
+    using __call = volatile _Tp&&;
 };
+
 struct __apply_cvref_cvrr {
-    template <class T>
-    using __call = const volatile T&&;
+    template <class _Tp>
+    using __call = const volatile _Tp&&;
 };
 
+// BiSheng rejects references to variable templates while instantiating an
+// aicore function signature.  Keep the same dispatch contract, but express the
+// mapping entirely through types so __copy_cvref_t is valid in device code.
 template <class>
-extern __apply_cvref_ __apply_cvref;
-template <class T>
-extern __apply_cvref_c __apply_cvref<const T>;
-template <class T>
-extern __apply_cvref_v __apply_cvref<volatile T>;
-template <class T>
-extern __apply_cvref_cv __apply_cvref<const volatile T>;
-template <class T>
-extern __apply_cvref_lr __apply_cvref<T&>;
-template <class T>
-extern __apply_cvref_clr __apply_cvref<const T&>;
-template <class T>
-extern __apply_cvref_vlr __apply_cvref<volatile T&>;
-template <class T>
-extern __apply_cvref_cvlr __apply_cvref<const volatile T&>;
-template <class T>
-extern __apply_cvref_rr __apply_cvref<T&&>;
-template <class T>
-extern __apply_cvref_crr __apply_cvref<const T&&>;
-template <class T>
-extern __apply_cvref_vrr __apply_cvref<volatile T&&>;
-template <class T>
-extern __apply_cvref_cvrr __apply_cvref<const volatile T&&>;
+struct __apply_cvref_impl {
+    using type = __apply_cvref_;
+};
+template <class _Tp>
+struct __apply_cvref_impl<const _Tp> {
+    using type = __apply_cvref_c;
+};
+template <class _Tp>
+struct __apply_cvref_impl<volatile _Tp> {
+    using type = __apply_cvref_v;
+};
+template <class _Tp>
+struct __apply_cvref_impl<const volatile _Tp> {
+    using type = __apply_cvref_cv;
+};
+template <class _Tp>
+struct __apply_cvref_impl<_Tp&> {
+    using type = __apply_cvref_lr;
+};
+template <class _Tp>
+struct __apply_cvref_impl<const _Tp&> {
+    using type = __apply_cvref_clr;
+};
+template <class _Tp>
+struct __apply_cvref_impl<volatile _Tp&> {
+    using type = __apply_cvref_vlr;
+};
+template <class _Tp>
+struct __apply_cvref_impl<const volatile _Tp&> {
+    using type = __apply_cvref_cvlr;
+};
+template <class _Tp>
+struct __apply_cvref_impl<_Tp&&> {
+    using type = __apply_cvref_rr;
+};
+template <class _Tp>
+struct __apply_cvref_impl<const _Tp&&> {
+    using type = __apply_cvref_crr;
+};
+template <class _Tp>
+struct __apply_cvref_impl<volatile _Tp&&> {
+    using type = __apply_cvref_vrr;
+};
+template <class _Tp>
+struct __apply_cvref_impl<const volatile _Tp&&> {
+    using type = __apply_cvref_cvrr;
+};
 
-template <class T>
-using __apply_cvref_fn = decltype(__apply_cvref<T>);
+template <class _Tp>
+using __apply_cvref_fn = typename __apply_cvref_impl<_Tp>::type;
 
-template <class From, class To>
-using __copy_cvref_t = typename __apply_cvref_fn<From>::template __call<To>;
+template <class _From, class _To>
+using __copy_cvref_t = typename __apply_cvref_fn<_From>::template __call<_To>;
 
 CANN_ASC_STL_END_NAMESPACE
 

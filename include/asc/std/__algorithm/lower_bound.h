@@ -45,12 +45,12 @@ template <class _AlgPolicy, class _Iter, class _Sent, class _Type, class _Proj, 
 CANN_ASC_STL_API constexpr _Iter __lower_bound(
     _Iter __first, _Sent __last, const _Type& __value, _Comp& __comp, _Proj& __proj)
 {
-    auto __len = ::asc::std::distance(__first, __last);
+    auto __len = _AlgPolicy::distance(__first, __last);
 
     while (__len != 0) {
         auto __l2 = ::asc::std::__half_positive(__len);
         _Iter __m = __first;
-        ::asc::std::advance(__m, __l2);
+        _AlgPolicy::advance(__m, __l2);
         if (::asc::std::invoke(__comp, ::asc::std::invoke(__proj, *__m), __value)) {
             __first = ++__m;
             __len -= __l2 + 1;

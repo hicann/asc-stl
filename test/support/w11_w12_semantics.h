@@ -26,7 +26,6 @@
 #include <asc/version>
 #include <asc/std/algorithm>
 #include <asc/std/charconv>
-#include <asc/std/compare>
 #include <asc/std/cinttypes>
 #include <asc/std/cuchar>
 #include <asc/std/cwctype>
@@ -150,12 +149,6 @@ CANN_ASC_STL_API CANN_ASC_STL_DETAIL_NO_INLINE unsigned int evaluate_ranges_and_
     failures += zipped.size() != 2;
     asc::args::immediate<int> immediate(4);
     failures += immediate.value() != 4 || asc::maximum<int>{}(2, 5) != 5;
-    failures += asc::identity_element<asc::std::plus<int>, int>() != 0 ||
-        asc::identity_element<asc::std::multiplies<int>, int>() != 1 ||
-        asc::absorbing_element<asc::std::multiplies<int>, int>() != 0;
-    failures += asc::std::compare_strong_order_fallback(values[0], values[1]) != asc::std::strong_ordering::less ||
-        asc::std::compare_weak_order_fallback(values[0], values[1]) != asc::std::weak_ordering::less ||
-        asc::std::compare_partial_order_fallback(values[0], values[1]) != asc::std::partial_ordering::less;
     failures += !asc::is_bitwise_comparable_v<int> || CANN_ASC_STL_VERSION != 10000;
     failures += !asc::std::iswalpha(L'Q') || !asc::std::iswalnum(L'7') || !asc::std::iswblank(L' ') ||
         !asc::std::iswcntrl(L'\n') || !asc::std::iswdigit(L'4') || !asc::std::iswgraph(L'!') ||

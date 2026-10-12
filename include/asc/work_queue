@@ -49,10 +49,24 @@ namespace detail {
 
 template <class T>
 struct work_index_supported {
-    // uint64_t may itself be unsigned long long; a predicate avoids duplicate
-    // explicit specializations while retaining both accepted 64-bit spellings.
-    static constexpr bool value = __is_same(T, __UINT32_TYPE__) || __is_same(T, __UINT64_TYPE__) ||
-        (sizeof(unsigned long long) == 8 && __is_same(T, unsigned long long));
+    static constexpr bool value = false;
+};
+
+template <>
+struct work_index_supported<__UINT32_TYPE__> {
+    static constexpr bool value = true;
+};
+
+template <>
+struct work_index_supported<__UINT64_TYPE__> {
+    static constexpr bool value = true;
+};
+
+// The 64-bit unsigned contract is width-based: unsigned long long is a
+// distinct spelling of the same width on the LP64 targets and stays usable.
+template <>
+struct work_index_supported<unsigned long long> {
+    static constexpr bool value = true;
 };
 
 }  // namespace detail

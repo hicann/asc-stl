@@ -42,12 +42,13 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 template <__fp_format Fmt>
 CANN_ASC_STL_API constexpr __fp_storage_t<Fmt> __fp_inf() noexcept
 {
-    static_assert(__fp_has_inf_v<Fmt>);
+    static_assert(__fp_has_inf_v<Fmt>, "The format does not support infinity");
     return static_cast<__fp_storage_t<Fmt>>(__fp_exp_mask_v<Fmt> | __fp_explicit_bit_mask_v<Fmt>);
 }
 template <class T>
 CANN_ASC_STL_API constexpr T __fp_inf() noexcept
 {
+    static_assert(__fp_has_inf_v<__fp_format_of_v<T>>, "The format does not support infinity");
     if constexpr (__fp_is_native_type_v<T>) {
         return static_cast<T>(__builtin_huge_val());
     } else {
@@ -57,13 +58,20 @@ CANN_ASC_STL_API constexpr T __fp_inf() noexcept
 template <__fp_format Fmt>
 CANN_ASC_STL_API constexpr __fp_storage_t<Fmt> __fp_nan() noexcept
 {
+    static_assert(__fp_has_nan_v<Fmt>, "The format does not support nan");
     using Storage = __fp_storage_t<Fmt>;
-    return static_cast<Storage>(__fp_exp_mask_v<Fmt> | __fp_explicit_bit_mask_v<Fmt> |
-        (Storage(1) << (__fp_mant_nbits_v<Fmt> - 1 - !__fp_has_implicit_bit_v<Fmt>)));
+    if constexpr (Fmt == __fp_format::__fp8_e8m0) {
+        // E8M0 has no mantissa field; the all-ones exponent is the NaN encoding.
+        return Storage(0xffu);
+    } else {
+        return static_cast<Storage>(__fp_exp_mask_v<Fmt> | __fp_explicit_bit_mask_v<Fmt> |
+            (Storage(1) << (__fp_mant_nbits_v<Fmt> - 1 - !__fp_has_implicit_bit_v<Fmt>)));
+    }
 }
 template <class T>
 CANN_ASC_STL_API constexpr T __fp_nan() noexcept
 {
+    static_assert(__fp_has_nan_v<__fp_format_of_v<T>>, "The format does not support nan");
     if constexpr (__fp_is_native_type_v<T>) {
         return static_cast<T>(__builtin_nan(""));
     } else {
@@ -73,6 +81,7 @@ CANN_ASC_STL_API constexpr T __fp_nan() noexcept
 template <__fp_format Fmt>
 CANN_ASC_STL_API constexpr __fp_storage_t<Fmt> __fp_nans() noexcept
 {
+    static_assert(__fp_has_nans_v<Fmt>, "The format does not support nans");
     using Storage = __fp_storage_t<Fmt>;
     return static_cast<Storage>(__fp_exp_mask_v<Fmt> | __fp_explicit_bit_mask_v<Fmt> |
         (Storage(1) << (__fp_mant_nbits_v<Fmt> - 2 - !__fp_has_implicit_bit_v<Fmt>)));
@@ -80,7 +89,9 @@ CANN_ASC_STL_API constexpr __fp_storage_t<Fmt> __fp_nans() noexcept
 template <class T>
 CANN_ASC_STL_API constexpr T __fp_nans() noexcept
 {
-    return __fp_from_storage<T>(__fp_nans<__fp_format_of_v<T>>());
+    constexpr auto Fmt = __fp_format_of_v<T>;
+    static_assert(__fp_has_nans_v<Fmt>, "The format does not support nans");
+    return __fp_from_storage<T>(__fp_nans<Fmt>());
 }
 template <__fp_format Fmt>
 CANN_ASC_STL_API constexpr __fp_storage_t<Fmt> __fp_max() noexcept
@@ -113,12 +124,15 @@ CANN_ASC_STL_API constexpr T __fp_min() noexcept
 template <__fp_format Fmt>
 CANN_ASC_STL_API constexpr __fp_storage_t<Fmt> __fp_denorm_min() noexcept
 {
+    static_assert(__fp_has_denorm_v<Fmt>, "The format does not support denormals");
     return __fp_storage_t<Fmt>{1};
 }
 template <class T>
 CANN_ASC_STL_API constexpr T __fp_denorm_min() noexcept
 {
-    return __fp_from_storage<T>(__fp_denorm_min<__fp_format_of_v<T>>());
+    constexpr auto Fmt = __fp_format_of_v<T>;
+    static_assert(__fp_has_denorm_v<Fmt>, "The format does not support denormals");
+    return __fp_from_storage<T>(__fp_denorm_min<Fmt>());
 }
 template <__fp_format Fmt>
 CANN_ASC_STL_API constexpr __fp_storage_t<Fmt> __fp_lowest() noexcept

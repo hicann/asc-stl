@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_REMOVE_CVREF_H
 #define CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_REMOVE_CVREF_H
 
@@ -27,39 +28,23 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/remove_cv.h>
 #include <asc/std/__type_traits/remove_reference.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// GCC rejects a builtin-trait alias such as __remove_cvref(T) once it expands
-// inside a function signature, so the alias routes through the trait struct's
-// nested type on the builtin branch as well.
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__remove_cvref)
+template <class _Tp>
+using remove_cvref_t = remove_cv_t<remove_reference_t<_Tp>>;
 
-template <class T>
+template <class _Tp, class _Up>
+struct __is_same_uncvref : _IsSame<remove_cvref_t<_Tp>, remove_cvref_t<_Up>> {};
+
+template <class _Tp>
 struct remove_cvref {
-    using type = __remove_cvref(T);
+    using type = remove_cvref_t<_Tp>;
 };
-
-template <class T>
-using remove_cvref_t = typename remove_cvref<T>::type;
-
-#else
-
-template <class T>
-struct remove_cvref {
-    using type = remove_cv_t<remove_reference_t<T>>;
-};
-
-template <class T>
-using remove_cvref_t = typename remove_cvref<T>::type;
-
-#endif
-
-template <class T, class U>
-struct __is_same_uncvref : is_same<remove_cvref_t<T>, remove_cvref_t<U>> {};
 
 CANN_ASC_STL_END_NAMESPACE
 

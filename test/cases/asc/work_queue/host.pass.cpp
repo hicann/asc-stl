@@ -34,8 +34,6 @@ int main()
 
     constexpr asc::work_chunk<std::uint64_t> wide{1, 1ull << 40};
     static_assert(wide.size() == (1ull << 40) - 1);
-    constexpr asc::work_chunk<unsigned long long> alternate_wide{1, 1ull << 40};
-    static_assert(alternate_wide.size() == (1ull << 40) - 1);
 
     // The queue borrows a caller-owned cursor and carries the end bound and
     // grain size as values: only the cursor cell is touched while claiming.

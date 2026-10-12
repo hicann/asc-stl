@@ -18,16 +18,24 @@ import argparse
 import json
 import logging
 import subprocess
-import sys
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
-from header_layout_contract import SHARED_ROOTS  # noqa: E402
-
 
 LOGGER = logging.getLogger(__name__)
+
+
+SHARED_ROOTS = {
+    "asc/__detail/attributes.h",
+    "asc/__detail/builtin.h",
+    "asc/__detail/compiler.h",
+    "asc/__detail/diagnostics.h",
+    "asc/__detail/execution_space.h",
+    "asc/__detail/feature_detection.h",
+    "asc/__detail/preprocessor.h",
+    "asc/__detail/visibility.h",
+}
 
 SYSTEM_HEADER_START = "#if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)"
 

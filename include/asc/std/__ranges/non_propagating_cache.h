@@ -28,103 +28,201 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__functional/invoke.h>
 #include <asc/std/__iterator/concepts.h>
 #include <asc/std/__iterator/iterator_traits.h>
 #include <asc/std/__memory/addressof.h>
 #include <asc/std/__memory/construct_at.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_nothrow_constructible.h>
+#include <asc/std/__type_traits/is_nothrow_default_constructible.h>
 #include <asc/std/__type_traits/is_object.h>
 #include <asc/std/__type_traits/is_trivially_destructible.h>
 #include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/delegate_constructors.h>
 #include <asc/std/__utility/forward.h>
 
+// dev 方言宏的等价内联：C++20 起析构函数方可 constexpr。
+// 依赖 __config 提供的 CANN_ASC_STL_DETAIL_CPLUSPLUS（MSVC 下取 _MSVC_LANG，其余取 __cplusplus）。
+#ifndef CANN_ASC_STL_DETAIL_STD_VER
+#if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
+#define CANN_ASC_STL_DETAIL_STD_VER 2003
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201103L
+#define CANN_ASC_STL_DETAIL_STD_VER 2011
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201402L
+#define CANN_ASC_STL_DETAIL_STD_VER 2014
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201703L
+#define CANN_ASC_STL_DETAIL_STD_VER 2017
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202002L
+#define CANN_ASC_STL_DETAIL_STD_VER 2020
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202302L
+#define CANN_ASC_STL_DETAIL_STD_VER 2023
+#else
+#define CANN_ASC_STL_DETAIL_STD_VER 2024
+#endif
+#endif  // CANN_ASC_STL_DETAIL_STD_VER
+
+#ifndef CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
+#if CANN_ASC_STL_DETAIL_STD_VER >= 2020
+#define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 constexpr
+#else
+#define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
+#endif
+#endif  // CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 
-struct __empty_cache {};
+struct __forward_tag {};
+struct __from_tag {};
+// This helper class is needed to perform copy and move elision when constructing the contained type from an iterator.
+template <class T>
+struct __npc_wrapper {
+    template <class... Args>
+    CANN_ASC_STL_API constexpr explicit __npc_wrapper(__forward_tag, Args&&... args)
+        : __t_(::asc::std::forward<Args>(args)...)
+    {}
 
+    template <class Fn>
+    CANN_ASC_STL_API constexpr explicit __npc_wrapper(__from_tag, const Fn& fun) : __t_(fun())
+    {}
+
+    T __t_;
+};
+
+template <class T, class = void>
+struct __npc_destruct_base {
+    union {
+        CANN_ASC_STL_NO_UNIQUE_ADDRESS __npc_wrapper<T> __val_;
+    };
+    bool __engaged_ = false;
+
+    // 联合体成员默认不初始化（与源形态一致）。历史上（9.2.0 谱系）曾以
+    // 「初始化联合体成员/哑 char/普通成员存储」等中间形态绕 bisheng 设备
+    // 端误编译；2026-09-19 CANN 9.3.0 复验误编译不复现，且 filter 全链路
+    // 真机 16384/0——__emplace_from 的 constexpr CXX20 降级已按裁决撤销。
+    CANN_ASC_STL_API constexpr __npc_destruct_base() noexcept
+    {}
+
+    template <class... Args>
+    CANN_ASC_STL_API constexpr __npc_destruct_base(__forward_tag, Args&&... args) noexcept(
+        is_nothrow_constructible_v<T, Args...>)
+        : __val_(__forward_tag{}, ::asc::std::forward<Args>(args)...), __engaged_(true)
+    {}
+
+    CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 ~__npc_destruct_base() noexcept
+    {
+        if (__engaged_) {
+            __val_.~__npc_wrapper<T>();
+        }
+    }
+
+    CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 void __reset() noexcept
+    {
+        if (__engaged_) {
+            __val_.~__npc_wrapper<T>();
+            __engaged_ = false;
+        }
+    }
+};
+
+template <class T>
+struct __npc_destruct_base<T, enable_if_t<is_trivially_destructible_v<T>>> {
+    union {
+        CANN_ASC_STL_NO_UNIQUE_ADDRESS __npc_wrapper<T> __val_;
+    };
+    bool __engaged_ = false;
+
+    CANN_ASC_STL_API constexpr __npc_destruct_base() noexcept
+    {}
+
+    template <class... Args>
+    CANN_ASC_STL_API constexpr __npc_destruct_base(__forward_tag, Args&&... args) noexcept(
+        is_nothrow_constructible_v<T, Args...>)
+        : __val_(__forward_tag{}, ::asc::std::forward<Args>(args)...), __engaged_(true)
+    {}
+
+    CANN_ASC_STL_API constexpr void __reset() noexcept
+    {
+        if (__engaged_) {
+            __engaged_ = false;
+        }
+    }
+};
+
+// __non_propagating_cache is a helper type that allows storing an optional value in it,
+// but which does not copy the source's value when it is copy constructed/assigned to,
+// and which resets the source's value when it is moved-from.
+//
+// This type is used as an implementation detail of some views that need to cache the
+// result of `begin()` in order to provide an amortized O(1) begin() method. Typically,
+// we don't want to propagate the value of the cache upon copy because the cached iterator
+// may refer to internal details of the source view.
 template <class T, enable_if_t<is_object_v<T>, int> = 0>
-class __non_propagating_cache {
+class __non_propagating_cache : public __npc_destruct_base<T> {
 public:
-    CANN_ASC_STL_API constexpr __non_propagating_cache() noexcept : storage_{}, engaged_(false)
+    using __base = __npc_destruct_base<T>;
+    using __base::__base;
+    CANN_ASC_STL_API constexpr __non_propagating_cache() noexcept(is_nothrow_default_constructible_v<__base>) = default;
+
+    CANN_ASC_STL_API constexpr __non_propagating_cache(const __non_propagating_cache&) noexcept : __base()
     {}
-    CANN_ASC_STL_API constexpr __non_propagating_cache(const __non_propagating_cache&) noexcept
-        : storage_{}, engaged_(false)
-    {}
-    CANN_ASC_STL_API constexpr __non_propagating_cache(__non_propagating_cache&& other) noexcept
-        : storage_{}, engaged_(false)
+
+    CANN_ASC_STL_API constexpr __non_propagating_cache(__non_propagating_cache&& other) noexcept : __base()
     {
         other.__reset();
     }
-    CANN_ASC_STL_API ~__non_propagating_cache()
-    {
-        __reset();
-    }
+
     CANN_ASC_STL_API constexpr __non_propagating_cache& operator=(const __non_propagating_cache& other) noexcept
     {
-        if (this != ::asc::std::addressof(other))
-            __reset();
-        return *this;
-    }
-    CANN_ASC_STL_API constexpr __non_propagating_cache& operator=(__non_propagating_cache&& other) noexcept
-    {
         if (this != ::asc::std::addressof(other)) {
-            __reset();
-            other.__reset();
+            this->__reset();
         }
         return *this;
     }
-    CANN_ASC_STL_API constexpr bool __has_value() const noexcept
+
+    CANN_ASC_STL_API constexpr __non_propagating_cache& operator=(__non_propagating_cache&& other) noexcept
     {
-        return engaged_;
+        this->__reset();
+        other.__reset();
+        return *this;
     }
+
     CANN_ASC_STL_API constexpr T& operator*() noexcept
     {
-        return storage_.value;
+        return this->__val_.__t_;
     }
     CANN_ASC_STL_API constexpr const T& operator*() const noexcept
     {
-        return storage_.value;
+        return this->__val_.__t_;
     }
+
+    CANN_ASC_STL_API constexpr bool __has_value() const noexcept
+    {
+        return this->__engaged_;
+    }
+
     template <class... Args>
     CANN_ASC_STL_API constexpr T& __emplace(Args&&... args) noexcept(is_nothrow_constructible_v<T, Args...>)
     {
-        __reset();
-        // NOLINTNEXTLINE(build/include_what_you_use)
-        ::asc::std::__construct_at(::asc::std::addressof(storage_.value), ::asc::std::forward<Args>(args)...);
-        engaged_ = true;
-        return storage_.value;
-    }
-    template <class Function>
-    CANN_ASC_STL_API constexpr T& __emplace_from(const Function& function)
-    {
-        __reset();
-        ::asc::std::__construct_at(::asc::std::addressof(storage_.value), function());
-        engaged_ = true;
-        return storage_.value;
-    }
-    CANN_ASC_STL_API constexpr void __reset() noexcept
-    {
-        if (engaged_) {
-            ::asc::std::__destroy_at(::asc::std::addressof(storage_.value));
-            engaged_ = false;
-        }
+        ::asc::std::__construct_at(::asc::std::addressof(this->__val_), __forward_tag{},
+            ::asc::std::forward<Args>(args)...);  // NOLINT(build/include_what_you_use)
+        this->__engaged_ = true;
+        return this->__val_.__t_;
     }
 
-private:
-    union storage_type {
-        char empty;
-        T value;
-        CANN_ASC_STL_API constexpr storage_type() : empty()
-        {}
-        CANN_ASC_STL_API ~storage_type()
-        {}
-    } storage_;
-    bool engaged_;
+    template <class Fn>
+    CANN_ASC_STL_API constexpr T& __emplace_from(const Fn& fun) noexcept(
+        is_nothrow_constructible_v<T, invoke_result_t<Fn>>)
+    {
+        ::asc::std::__construct_at(::asc::std::addressof(this->__val_), __from_tag{}, fun);
+        this->__engaged_ = true;
+        return this->__val_.__t_;
+    }
 };
+
+struct __empty_cache {};
 
 }  // namespace ranges
 

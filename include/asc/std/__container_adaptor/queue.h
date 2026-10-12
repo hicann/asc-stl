@@ -43,23 +43,6 @@ public:
     {}
     CANN_ASC_STL_API constexpr explicit queue(Container&& container) : c(static_cast<Container&&>(container))
     {}
-    template <class Alloc>
-    CANN_ASC_STL_API constexpr explicit queue(const Alloc& allocator) : c(allocator)
-    {}
-    template <class Alloc>
-    CANN_ASC_STL_API constexpr queue(const Container& container, const Alloc& allocator) : c(container, allocator)
-    {}
-    template <class Alloc>
-    CANN_ASC_STL_API constexpr queue(Container&& container, const Alloc& allocator)
-        : c(static_cast<Container&&>(container), allocator)
-    {}
-    template <class Alloc>
-    CANN_ASC_STL_API constexpr queue(const queue& other, const Alloc& allocator) : c(other.c, allocator)
-    {}
-    template <class Alloc>
-    CANN_ASC_STL_API constexpr queue(queue&& other, const Alloc& allocator)
-        : c(static_cast<Container&&>(other.c), allocator)
-    {}
     CANN_ASC_STL_API constexpr bool empty() const
     {
         return c.empty();
@@ -110,11 +93,6 @@ public:
 protected:
     Container c{};
 };
-
-template <class Container>
-CANN_ASC_STL_HOST_DEVICE queue(Container) -> queue<typename Container::value_type, Container>;
-template <class Container, class Alloc>
-CANN_ASC_STL_HOST_DEVICE queue(Container, Alloc) -> queue<typename Container::value_type, Container>;
 
 template <class T, class Container>
 CANN_ASC_STL_API constexpr void swap(  // NOLINT(build/include_what_you_use)

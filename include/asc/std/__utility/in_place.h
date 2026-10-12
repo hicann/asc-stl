@@ -48,6 +48,33 @@ struct in_place_index_t {
 template <size_t I>
 inline constexpr in_place_index_t<I> in_place_index{};
 
+template <class T>
+inline constexpr bool __is_asc_std_inplace_type_v = false;
+template <class T>
+inline constexpr bool __is_asc_std_inplace_type_v<in_place_type_t<T>> = true;
+
+template <class T>
+inline constexpr bool __is_asc_std_inplace_index_v = false;
+template <size_t I>
+inline constexpr bool __is_asc_std_inplace_index_v<in_place_index_t<I>> = true;
+
 CANN_ASC_STL_END_NAMESPACE
+
+// ASC-STL extension: construct an object from a callable/factory result.
+namespace asc {
+
+struct in_place_from_t {
+    explicit in_place_from_t() = default;
+};
+inline constexpr in_place_from_t in_place_from{};
+
+template <class T>
+struct in_place_from_type_t {
+    explicit in_place_from_type_t() = default;
+};
+template <class T>
+inline constexpr in_place_from_type_t<T> in_place_from_type{};
+
+}  // namespace asc
 
 #endif  // CANN_ASC_STL_ASC_STD___UTILITY_IN_PLACE_H

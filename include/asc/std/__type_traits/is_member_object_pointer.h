@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_IS_MEMBER_OBJECT_POINTER_H
 #define CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_IS_MEMBER_OBJECT_POINTER_H
 
@@ -27,29 +28,18 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+
 #include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/is_member_function_pointer.h>
 #include <asc/std/__type_traits/remove_cv.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_member_object_pointer)
+template <class _Tp>
+struct is_member_object_pointer : bool_constant<__asc_is_member_pointer<remove_cv_t<_Tp>>::__is_obj> {};
 
-template <class T>
-struct is_member_object_pointer : integral_constant<bool, __is_member_object_pointer(T)> {};
-
-template <class T>
-inline constexpr bool is_member_object_pointer_v = __is_member_object_pointer(T);
-
-#else
-
-template <class T>
-struct is_member_object_pointer : integral_constant<bool, __asc_is_member_pointer<remove_cv_t<T> >::__is_obj> {};
-
-template <class T>
-inline constexpr bool is_member_object_pointer_v = is_member_object_pointer<T>::value;
-
-#endif
+template <class _Tp>
+inline constexpr bool is_member_object_pointer_v = is_member_object_pointer<_Tp>::value;
 
 CANN_ASC_STL_END_NAMESPACE
 

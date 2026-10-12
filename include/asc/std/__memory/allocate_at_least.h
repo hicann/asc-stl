@@ -32,34 +32,56 @@
 #include <asc/std/__utility/ctad_support.h>
 #include <asc/std/cstddef>
 
+// 基座 __config 未提供 dev 的标准版本号宏（dev 定义于 asc/std/__asc/dialect.h），
+// 按 __bit/reference.h 的既有内联模式补最小等价，#ifndef 守卫防重。
+#ifndef CANN_ASC_STL_DETAIL_STD_VER
+#if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
+#define CANN_ASC_STL_DETAIL_STD_VER 2003
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201103L
+#define CANN_ASC_STL_DETAIL_STD_VER 2011
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201402L
+#define CANN_ASC_STL_DETAIL_STD_VER 2014
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201703L
+#define CANN_ASC_STL_DETAIL_STD_VER 2017
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202002L
+#define CANN_ASC_STL_DETAIL_STD_VER 2020
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202302L
+#define CANN_ASC_STL_DETAIL_STD_VER 2023
+#else
+#define CANN_ASC_STL_DETAIL_STD_VER 2024
+#endif
+#endif  // CANN_ASC_STL_DETAIL_STD_VER
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// C++23 allocation vocabulary delivered at the C++17 baseline: the caller
-// provides an allocator that is valid in the calling execution space and
-// reads the returned pointer/count pair without any owning promise.
-template <class Pointer, class SizeType = asc::std::size_t>
+// [allocator.globals]：count 采用第二模板参数（默认 size_t），
+// 与标准 allocation_result 及既有单参用法（经默认实参）兼容。
+template <class Pointer, class SizeType = ::asc::std::size_t>
 struct allocation_result {
     Pointer ptr;
     SizeType count;
 };
+CANN_ASC_STL_DETAIL_CTAD_SUPPORTED_FOR_TYPE(allocation_result);
 
-template <class Allocator, class SizeType, class = void>
-struct __allocator_has_allocate_at_least : false_type {};
-template <class Allocator, class SizeType>
-struct __allocator_has_allocate_at_least<Allocator, SizeType,
-    void_t<decltype(declval<Allocator&>().allocate_at_least(declval<SizeType>()))>> : true_type {};
-
-template <class Allocator>
-CANN_ASC_STL_API constexpr allocation_result<typename allocator_traits<Allocator>::pointer,
-    typename allocator_traits<Allocator>::size_type>
-allocator_traits<Allocator>::allocate_at_least(Allocator& allocator, size_type count)
+template <class Alloc>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr allocation_result<typename allocator_traits<Alloc>::pointer>
+allocate_at_least(Alloc& __alloc, ::asc::std::size_t __n)
 {
-    if constexpr (__allocator_has_allocate_at_least<Allocator, size_type>::value) {
-        auto result = allocator.allocate_at_least(count);
-        return {result.ptr, result.count};
+#if CANN_ASC_STL_DETAIL_STD_VER >= 2020
+    if constexpr (requires { __alloc.allocate_at_least(__n); }) {
+        return __alloc.allocate_at_least(__n);
     } else {
-        return {allocator_traits::allocate(allocator, count), count};
+        return {__alloc.allocate(__n), __n};
     }
+#else
+    return {__alloc.allocate(__n), __n};
+#endif
+}
+
+template <class Alloc>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto __allocate_at_least(Alloc& __alloc, ::asc::std::size_t __n)
+{
+    return ::asc::std::allocate_at_least(__alloc, __n);
 }
 
 CANN_ASC_STL_END_NAMESPACE

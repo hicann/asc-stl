@@ -20,6 +20,7 @@
 #include <asc/std/__algorithm/search.h>
 #include <asc/std/__charconv/to_chars.h>
 #include <asc/std/__chrono/duration.h>
+#include <asc/std/__chrono/year.h>
 #include <asc/std/__functional/perfect_forward.h>
 #include <asc/std/__fwd/mdspan.h>
 #include <asc/std/__iterator/common_iterator.h>
@@ -29,6 +30,7 @@
 #include <asc/std/__optional/nullopt.h>
 #include <asc/std/__random/uniform_int_distribution.h>
 #include <asc/std/__ranges/dangling.h>
+#include <asc/std/limits>
 #include <asc/std/tuple>
 namespace asc_stl_b016_test {
 struct sentinel {
@@ -84,6 +86,31 @@ struct add {
         return left + right;
     }
 };
+struct wrapped_iterator {
+    int* current;
+    CANN_ASC_STL_API constexpr int* operator->() const noexcept
+    {
+        return current;
+    }
+};
+struct wrapped_range {
+    int* values;
+    CANN_ASC_STL_API constexpr wrapped_iterator begin() const noexcept
+    {
+        return {values};
+    }
+};
+struct nonpointer_data_range {
+    int* values;
+    CANN_ASC_STL_API constexpr int data() const noexcept
+    {
+        return 0;
+    }
+    CANN_ASC_STL_API constexpr int* begin() const noexcept
+    {
+        return values;
+    }
+};
 CANN_ASC_STL_API constexpr int evaluate_hierarchy() noexcept
 {
     constexpr auto hierarchy = asc::make_hierarchy(asc::grid_dims<3, 2>(), asc::block_dims<32, 2>());
@@ -128,13 +155,26 @@ CANN_ASC_STL_API constexpr int evaluate_chrono() noexcept
         "duration ceil");
     static_assert(asc::std::chrono::round<asc::std::chrono::seconds>(asc::std::chrono::milliseconds(2500)).count() == 2,
         "duration ties to even");
-    return 0;
+    constexpr auto extreme_offset = [] {
+        asc::std::chrono::year value(0);
+        value -= asc::std::chrono::years(asc::std::numeric_limits<int>::min());
+        return value;
+    }();
+    constexpr auto extreme_sum = [] {
+        asc::std::chrono::year value(32767);
+        value += asc::std::chrono::years(asc::std::numeric_limits<int>::max());
+        return value;
+    }();
+    (void)extreme_offset;
+    (void)extreme_sum;
+    asc::std::chrono::year value(2024);
+    value -= asc::std::chrono::years(1);
+    return value != asc::std::chrono::year(2023);
 }
 
 CANN_ASC_STL_API int evaluate_random_and_tuple() noexcept
 {
     int failures = 0;
-    int values[] = {1, 2, 3, 4};
     generator random{};
     const int sampled = asc::std::uniform_int_distribution<int>(1, 6)(random);
     failures += sampled < 1 || sampled > 6;
@@ -145,8 +185,17 @@ CANN_ASC_STL_API int evaluate_random_and_tuple() noexcept
     failures += bound_add(3) != 5;
     const auto tuple = asc::std::make_tuple(4, 5);
     failures += asc::std::get<0>(tuple) != 4 || asc::std::get<1>(tuple) != 5;
-    failures += asc::std::ranges::data(values) != values;
     return failures;
+}
+
+CANN_ASC_STL_API int evaluate_range_data() noexcept
+{
+    int values[] = {1, 2, 3, 4};
+    wrapped_range range{values};
+    int* range_data = asc::std::ranges::data(range);
+    nonpointer_data_range fallback{values};
+    int* fallback_data = asc::std::ranges::data(fallback);
+    return (range_data != values) + (fallback_data != values) + (asc::std::ranges::data(values) != values);
 }
 
 CANN_ASC_STL_API int evaluate_device_hierarchy() noexcept
@@ -170,7 +219,7 @@ CANN_ASC_STL_API int evaluate_device_hierarchy() noexcept
 CANN_ASC_STL_API int evaluate_common() noexcept
 {
     return evaluate_hierarchy() + evaluate_iterators_and_charconv() + evaluate_chrono() + evaluate_random_and_tuple() +
-        evaluate_device_hierarchy();
+        evaluate_range_data() + evaluate_device_hierarchy();
 }
 }  // namespace asc_stl_b016_test
 #endif  // ASC_STL_TEST_B016_SEMANTICS_H

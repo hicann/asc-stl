@@ -29,13 +29,78 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__algorithm/comp.h>
+#include <asc/std/__algorithm/comp_ref_type.h>
+#include <asc/std/__algorithm/iterator_operations.h>
+#include <asc/std/__utility/move.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
+
+// 内部返回结构（dev 语义）：三终点迭代器打包，供后续 ranges 入口复用
+template <class _InIter1, class _InIter2, class _OutIter>
+struct __set_symmetric_difference_result {
+    _InIter1 __in1_;
+    _InIter2 __in2_;
+    _OutIter __out_;
+
+    CANN_ASC_STL_API constexpr __set_symmetric_difference_result(
+        _InIter1&& __in_iter1, _InIter2&& __in_iter2, _OutIter&& __out_iter)
+        : __in1_(::asc::std::move(__in_iter1)),
+          __in2_(::asc::std::move(__in_iter2)),
+          __out_(::asc::std::move(__out_iter))
+    {}
+};
+
+// 通用内部实现（dev 语义）：哨兵形参 + 主循环单点写出 + 尾段整段搬移。
+// 基座 copy.h 无带策略的 __copy 变体，尾段改写等价内联循环（语义等价，见 notes）。
+template <class _AlgPolicy, class _Compare, class _InIter1, class _Sent1, class _InIter2, class _Sent2, class _OutIter>
+CANN_ASC_STL_API constexpr __set_symmetric_difference_result<_InIter1, _InIter2, _OutIter> __set_symmetric_difference(
+    _InIter1 __first1, _Sent1 __last1, _InIter2 __first2, _Sent2 __last2, _OutIter __result, _Compare&& __comp)
+{
+    bool __first_end_reached = true;
+    while (__first1 != __last1) {
+        if (__first2 == __last2) {
+            __first_end_reached = false;
+            break;
+        }
+        if (__comp(*__first1, *__first2)) {
+            *__result = *__first1;
+            ++__result;
+            ++__first1;
+        } else {
+            if (__comp(*__first2, *__first1)) {
+                *__result = *__first2;
+                ++__result;
+            } else {
+                ++__first1;
+            }
+            ++__first2;
+        }
+    }
+
+    if (__first_end_reached) {
+        while (__first2 != __last2) {
+            *__result = *__first2;
+            ++__first2;
+            ++__result;
+        }
+    } else {
+        while (__first1 != __last1) {
+            *__result = *__first1;
+            ++__first1;
+            ++__result;
+        }
+    }
+    return __set_symmetric_difference_result<_InIter1, _InIter2, _OutIter>(
+        ::asc::std::move(__first1), ::asc::std::move(__first2), ::asc::std::move(__result));
+}
 
 template <class InputIterator1, class InputIterator2, class OutputIterator, class Compare>
 CANN_ASC_STL_API constexpr OutputIterator set_symmetric_difference(InputIterator1 first1, InputIterator1 last1,
     InputIterator2 first2, InputIterator2 last2, OutputIterator result, Compare compare)
 {
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    // CCE 设备侧：经返回结构搬运输出迭代器会附加段偏移，走手写循环直接返回
+    // （与 set_difference 的设备分支同策略）。
     while (first1 != last1 && first2 != last2) {
         if (compare(*first1, *first2)) {
             *result++ = *first1++;
@@ -53,6 +118,12 @@ CANN_ASC_STL_API constexpr OutputIterator set_symmetric_difference(InputIterator
         *result++ = *first2++;
     }
     return result;
+#else
+    return ::asc::std::__set_symmetric_difference<__classic_algorithm_iterator_operations, __comp_ref_type<Compare> >(
+        ::asc::std::move(first1), ::asc::std::move(last1), ::asc::std::move(first2), ::asc::std::move(last2),
+        ::asc::std::move(result), compare)  // NOLINT(build/include_what_you_use)
+        .__out_;
+#endif
 }
 
 template <class InputIterator1, class InputIterator2, class OutputIterator>

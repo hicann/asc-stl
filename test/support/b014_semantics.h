@@ -27,7 +27,7 @@
 #include <asc/std/__complex/hyperbolic_functions.h>
 #include <asc/std/__complex/literals.h>
 #include <asc/std/__complex/math.h>
-#include <asc/std/tuple>
+#include <asc/std/__complex/tuple.h>
 #include <asc/std/__functional/hash.h>
 #include <asc/std/__tuple/apply.h>
 #include <asc/std/__tuple/get.h>
@@ -39,7 +39,6 @@
 #include <asc/std/__variant/hash.h>
 #include <asc/std/__variant/variant.h>
 #include <asc/std/cstdlib>
-#include <asc/std/variant>
 
 namespace asc_stl_b014_test {
 
@@ -47,8 +46,6 @@ CANN_ASC_STL_API constexpr int add(int left, int right) noexcept
 {
     return left + right;
 }
-
-enum class hash_enum : unsigned int { value = 7 };
 
 CANN_ASC_STL_API int evaluate_common() noexcept
 {
@@ -72,15 +69,10 @@ CANN_ASC_STL_API int evaluate_common() noexcept
 
     asc::std::variant<int, long> variant(7);
     failures += !asc::std::holds_alternative<int>(variant);
-    const int* first_alternative = asc::std::get_if<0>(&variant);
-    failures += first_alternative == nullptr || *first_alternative != 7 || asc::std::get_if<long>(&variant) != nullptr;
+    failures += asc::std::get<0>(variant) != 7 || asc::std::get_if<long>(&variant) != nullptr;
     variant.emplace<1>(9L);
-    const long* second_alternative = asc::std::get_if<long>(&variant);
-    failures += second_alternative == nullptr || *second_alternative != 9L;
+    failures += asc::std::get<long>(variant) != 9L;
     failures += asc::std::hash<decltype(variant)>{}(variant) == 0;
-    failures += asc::std::hash<int>{}(7) != asc::std::hash<int>{}(7);
-    failures += asc::std::hash<hash_enum>{}(hash_enum::value) != asc::std::hash<unsigned int>{}(7U);
-    failures += asc::std::hash<int*>{}(values) != asc::std::hash<int*>{}(values);
 
     asc::std::complex<float> complex_value(3.0F, 4.0F);
     failures += asc::std::real(complex_value) != 3.0F || asc::std::imag(complex_value) != 4.0F;

@@ -43,4 +43,7 @@
 #include <asc/std/__chrono/year_month_day.h>
 #include <asc/std/__chrono/year_month_weekday.h>
 
+// Standard-mandated feature-test macro surface for the chrono family.
+#include <asc/std/version>
+
 #endif  // CANN_ASC_STL_ASC_STD_CHRONO

@@ -36,20 +36,25 @@
 #include <asc/std/__tuple/vector_types.h>
 #include <asc/std/__type_traits/is_swappable.h>
 #include <asc/std/__utility/as_const.h>
+#include <asc/std/__utility/auto_cast.h>
 #include <asc/std/__utility/cmp.h>
+#include <asc/std/__utility/convert_to_integral.h>
 #include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/exchange.h>
 #include <asc/std/__utility/forward.h>
 #include <asc/std/__utility/forward_like.h>
 #include <asc/std/__utility/in_place.h>
 #include <asc/std/__utility/integer_sequence.h>
+#include <asc/std/__utility/monostate.h>
 #include <asc/std/__utility/move.h>
 #include <asc/std/__utility/pair.h>
 #include <asc/std/__utility/piecewise_construct.h>
+#include <asc/std/__utility/priority_tag.h>
 #include <asc/std/__utility/rel_ops.h>
 #include <asc/std/__utility/swap.h>
 #include <asc/std/__utility/to_underlying.h>
 #include <asc/std/__utility/unreachable.h>
 #include <asc/std/__variant/get.h>
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_UTILITY

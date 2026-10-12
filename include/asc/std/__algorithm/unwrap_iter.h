@@ -31,28 +31,87 @@
 #include <asc/std/__iterator/iterator_traits.h>
 #include <asc/std/__memory/pointer_traits.h>
 #include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/is_copy_constructible.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/move.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+namespace __unwrap_iter_detail {
+
+// 连续遍历探测的最小本地等价（与 __algorithm/partition.h 同款）：category/concept
+// 双探测在 C++17 下 SFINAE 友好，指针特化恒为连续。
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_category_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool
+    __has_iterator_category_convertible_to<Iter, Tag, void_t<typename iterator_traits<Iter>::iterator_category>> =
+        is_convertible_v<typename iterator_traits<Iter>::iterator_category, Tag>;
+
+template <class Iter, class Tag, class = void>
+inline constexpr bool __has_iterator_concept_convertible_to = false;
+
+template <class Iter, class Tag>
+inline constexpr bool __has_iterator_concept_convertible_to<Iter, Tag, void_t<typename Iter::iterator_concept>> =
+    is_convertible_v<typename Iter::iterator_concept, Tag>;
+
+template <class Iter>
+inline constexpr bool __has_contiguous_traversal =
+    __has_iterator_category_convertible_to<Iter, contiguous_iterator_tag> ||
+    __has_iterator_concept_convertible_to<Iter, contiguous_iterator_tag>;
+
+template <class Tp>
+inline constexpr bool __has_contiguous_traversal<Tp*> = true;
+
+}  // namespace __unwrap_iter_detail
+
+// __unwrap_iter 负责剥掉迭代器包装（reverse_iterator/__wrap_iter 等），减少模板实例化
+// 数量并为 copy/sort 等启用指针化快径；__rewrap_iter 负责把解包结果还原为原迭代器类型。
+template <class Iterator, bool = __unwrap_iter_detail::__has_contiguous_traversal<Iterator>>
+struct __unwrap_iter_impl {
+    // 非连续迭代器：原样返回
+    static CANN_ASC_STL_API constexpr Iterator __rewrap(Iterator, Iterator __iter)
+    {
+        return __iter;
+    }
+    static CANN_ASC_STL_API constexpr Iterator __unwrap(Iterator __i) noexcept
+    {
+        return __i;
+    }
+};
+
+// 连续迭代器：解包为裸指针
 template <class Iterator>
-CANN_ASC_STL_API constexpr Iterator __unwrap_iter(Iterator iterator) noexcept
+struct __unwrap_iter_impl<Iterator, true> {
+    using __to_address_t = decltype(::asc::std::__to_address(::asc::std::declval<Iterator>()));
+
+    static CANN_ASC_STL_API constexpr Iterator __rewrap(Iterator __orig_iter, __to_address_t __unwrapped_iter)
+    {
+        return __orig_iter + (__unwrapped_iter - ::asc::std::__to_address(__orig_iter));
+    }
+
+    static CANN_ASC_STL_API constexpr __to_address_t __unwrap(Iterator __i) noexcept
+    {
+        return ::asc::std::__to_address(__i);
+    }
+};
+
+template <class Iterator, class Impl = __unwrap_iter_impl<Iterator>,
+    enable_if_t<is_copy_constructible_v<Iterator>, int> = 0>
+CANN_ASC_STL_API constexpr decltype(Impl::__unwrap(::asc::std::declval<Iterator>())) __unwrap_iter(
+    Iterator __i) noexcept
 {
-    return iterator;
+    return Impl::__unwrap(__i);
 }
 
-template <class Iterator, class Unwrapped>
-CANN_ASC_STL_API constexpr Iterator __rewrap_iter(Iterator, Unwrapped iterator)
+template <class OrigIterator, class Iterator, class Impl = __unwrap_iter_impl<OrigIterator>>
+CANN_ASC_STL_API constexpr OrigIterator __rewrap_iter(OrigIterator __orig_iter, Iterator __iter) noexcept
 {
-    return Iterator(iterator);
-}
-
-template <class Iterator>
-CANN_ASC_STL_API constexpr Iterator __rewrap_iter(Iterator, Iterator iterator)
-{
-    return iterator;
+    return Impl::__rewrap(
+        ::asc::std::move(__orig_iter), ::asc::std::move(__iter));  // NOLINT(build/include_what_you_use)
 }
 
 CANN_ASC_STL_END_NAMESPACE

@@ -29,6 +29,8 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__atomic/atomic_ref.h>
+#include <asc/std/climits>
+#include <asc/std/cstddef>
 #include <asc/std/cstdint>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
@@ -37,7 +39,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 // Device waiters must belong to a participant set whose execution model
 // guarantees forward progress; oversubscribed ordinary grids and timed waits
 // are outside this contract.
-template <long long least_max_value>
+template <ptrdiff_t least_max_value = INT_MAX>
 class counting_semaphore {
     static_assert(least_max_value >= 0, "asc::std::counting_semaphore requires a nonnegative least maximum");
 
@@ -119,6 +121,9 @@ public:
 private:
     __INT64_TYPE__ count_;
 };
+
+// [thread.semaphore.binary]：计数值至多为 1 的计数信号量别名。
+using binary_semaphore = counting_semaphore<1>;
 
 CANN_ASC_STL_END_NAMESPACE
 

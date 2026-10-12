@@ -213,31 +213,6 @@ CANN_ASC_STL_API constexpr bool operator>=(void*, partial_ordering value) noexce
     return value.value() == -1 || value.value() == 0;
 }
 
-CANN_ASC_STL_API constexpr bool is_eq(partial_ordering value) noexcept
-{
-    return value.value() == 0;
-}
-CANN_ASC_STL_API constexpr bool is_neq(partial_ordering value) noexcept
-{
-    return value.value() != 0;
-}
-CANN_ASC_STL_API constexpr bool is_lt(partial_ordering value) noexcept
-{
-    return value.value() == -1;
-}
-CANN_ASC_STL_API constexpr bool is_lteq(partial_ordering value) noexcept
-{
-    return value.value() == -1 || value.value() == 0;
-}
-CANN_ASC_STL_API constexpr bool is_gt(partial_ordering value) noexcept
-{
-    return value.value() == 1;
-}
-CANN_ASC_STL_API constexpr bool is_gteq(partial_ordering value) noexcept
-{
-    return value.value() == 1 || value.value() == 0;
-}
-
 CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STD___COMPARE_ORDERING_H

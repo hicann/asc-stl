@@ -71,25 +71,25 @@ int main()
     // Synthesized fallback over operator== and operator< in every language mode.
     const Plain low{1};
     const Plain high{2};
-    assert(asc::std::compare_strong_order_fallback(low, high) == asc::std::strong_ordering::less);
-    assert(asc::std::compare_strong_order_fallback(high, low) == asc::std::strong_ordering::greater);
-    assert(asc::std::compare_strong_order_fallback(low, low) == asc::std::strong_ordering::equal);
-    assert(asc::std::compare_weak_order_fallback(low, high) == asc::std::weak_ordering::less);
-    assert(asc::std::compare_weak_order_fallback(low, low) == asc::std::weak_ordering::equivalent);
-    assert(asc::std::compare_partial_order_fallback(low, high) == asc::std::partial_ordering::less);
-    assert(asc::std::compare_partial_order_fallback(low, low) == asc::std::partial_ordering::equivalent);
+    assert(asc::std::compare_strong_order_fallback{}(low, high) == asc::std::strong_ordering::less);
+    assert(asc::std::compare_strong_order_fallback{}(high, low) == asc::std::strong_ordering::greater);
+    assert(asc::std::compare_strong_order_fallback{}(low, low) == asc::std::strong_ordering::equal);
+    assert(asc::std::compare_weak_order_fallback{}(low, high) == asc::std::weak_ordering::less);
+    assert(asc::std::compare_weak_order_fallback{}(low, low) == asc::std::weak_ordering::equivalent);
+    assert(asc::std::compare_partial_order_fallback{}(low, high) == asc::std::partial_ordering::less);
+    assert(asc::std::compare_partial_order_fallback{}(low, low) == asc::std::partial_ordering::equivalent);
 
     // The unordered partial state is reachable through the fallback synthesis.
     const Unorderable first{1};
     const Unorderable second{2};
-    assert(asc::std::compare_partial_order_fallback(first, second) == asc::std::partial_ordering::unordered);
+    assert(asc::std::compare_partial_order_fallback{}(first, second) == asc::std::partial_ordering::unordered);
 
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
     // In C++20 the fallback prefers a real three-way comparison.
     const ThreeWayCapable capable_low{1};
     const ThreeWayCapable capable_high{2};
-    assert(asc::std::compare_strong_order_fallback(capable_low, capable_high) == asc::std::strong_ordering::less);
-    assert(asc::std::compare_strong_order_fallback(capable_low, capable_low) == asc::std::strong_ordering::equal);
+    assert(asc::std::compare_strong_order_fallback{}(capable_low, capable_high) == asc::std::strong_ordering::less);
+    assert(asc::std::compare_strong_order_fallback{}(capable_low, capable_low) == asc::std::strong_ordering::equal);
 
     // The language-level three-way callable exists only in C++20. Built-in
     // operands produce the compiler's own category type, compared with the
@@ -103,7 +103,7 @@ int main()
     assert(asc::std::compare_three_way{}(capable_low, capable_low) == asc::std::strong_ordering::equal);
 #endif
 
-    constexpr auto constant_evaluated = asc::std::compare_strong_order_fallback(1, 2);
+    constexpr auto constant_evaluated = asc::std::compare_strong_order_fallback{}(1, 2);
     static_assert(constant_evaluated == asc::std::strong_ordering::less);
     return 0;
 }

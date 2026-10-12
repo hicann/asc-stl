@@ -33,26 +33,17 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class T>
-struct unwrap_reference {
+struct __unwrap_reference {
     using type = T;
 };
 template <class T>
-struct unwrap_reference<reference_wrapper<T>> {
+struct __unwrap_reference<reference_wrapper<T>> {
     using type = T&;
 };
 template <class T>
-using unwrap_reference_t = typename unwrap_reference<T>::type;
+using __unwrap_reference_t = typename __unwrap_reference<T>::type;
 template <class T>
-struct unwrap_ref_decay : unwrap_reference<decay_t<T>> {};
-template <class T>
-using unwrap_ref_decay_t = typename unwrap_ref_decay<T>::type;
-
-template <class T>
-struct __unwrap_reference : unwrap_reference<T> {};
-template <class T>
-using __unwrap_reference_t = unwrap_reference_t<T>;
-template <class T>
-using __unwrap_ref_decay_t = unwrap_ref_decay_t<T>;
+using __unwrap_ref_decay_t = __unwrap_reference_t<decay_t<T>>;
 
 CANN_ASC_STL_END_NAMESPACE
 

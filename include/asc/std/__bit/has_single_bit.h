@@ -29,15 +29,17 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__bit/popcount.h>
-#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_unsigned_integer.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class T>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool has_single_bit(T value) noexcept
+// Mandated to participate only for unsigned integer types (the dev `requires
+// __asc_is_unsigned_integer_v<_Tp>` expressed with the baseline enable_if_t idiom).
+template <class _Tp, enable_if_t<__is_unsigned_integer_v<_Tp>, int> = 0>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool has_single_bit(_Tp __t) noexcept
 {
-    return ::asc::std::popcount(value) == 1;
+    return ::asc::std::popcount(__t) == 1;
 }
 
 CANN_ASC_STL_END_NAMESPACE

@@ -34,6 +34,18 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 template <class Value, class Error>
 class expected;
 
+template <class T>
+inline constexpr bool __is_asc_std_expected_v = false;
+
+template <class Value, class Error>
+inline constexpr bool __is_asc_std_expected_v<expected<Value, Error>> = true;
+
+template <class T>
+inline constexpr bool __is_asc_std_expected_nonvoid_v = __is_asc_std_expected_v<T>;
+
+template <class Error>
+inline constexpr bool __is_asc_std_expected_nonvoid_v<expected<void, Error>> = false;
+
 CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STD___FWD_EXPECTED_H

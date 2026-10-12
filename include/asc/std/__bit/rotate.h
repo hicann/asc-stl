@@ -36,9 +36,9 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class _Tp>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _Tp rotl(const _Tp value, const int count) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr __unsigned_integer_result_t<_Tp, _Tp> rotl(
+    const _Tp value, const int count) noexcept
 {
-    static_assert(__is_unsigned_integer_v<_Tp>, "rotl requires an unsigned integer type");
     // NOLINTNEXTLINE(build/include_what_you_use)
     const int digits = numeric_limits<_Tp>::digits;
     int effective = count % digits;
@@ -52,9 +52,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _Tp rotl(const _Tp value, cons
 }
 
 template <class _Tp>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _Tp rotr(const _Tp value, const int count) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr __unsigned_integer_result_t<_Tp, _Tp> rotr(
+    const _Tp value, const int count) noexcept
 {
-    static_assert(__is_unsigned_integer_v<_Tp>, "rotr requires an unsigned integer type");
     // NOLINTNEXTLINE(build/include_what_you_use)
     const int digits = numeric_limits<_Tp>::digits;
     int effective = count % digits;

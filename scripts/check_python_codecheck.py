@@ -146,9 +146,7 @@ def slice_spacing_violations(text: str) -> list[Violation]:
             square_depth += 1
         elif token.type == tokenize.OP and token.string == "]":
             square_depth = max(0, square_depth - 1)
-        elif token.type == tokenize.OP and token.string == ":" and square_depth:
-            if previous is None:
-                continue
+        elif token.type == tokenize.OP and token.string == ":" and square_depth and previous is not None:
             if previous.end[0] == token.start[0] and previous.end[1] < token.start[1]:
                 violations.append(Violation(token.start[0], "G.FMT.04", "remove whitespace before slice colon"))
         if token.type not in ignored:
@@ -175,11 +173,13 @@ def inspect_file(path: Path) -> list[Violation]:
 
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(message)s")
-    findings = []
-    for value in sys.argv[1:]:
-        path = Path(value)
-        if path.is_file():
-            findings.extend((path, violation) for violation in inspect_file(path))
+    findings = [
+        (path, violation)
+        for value in sys.argv[1:]
+        for path in (Path(value),)
+        if path.is_file()
+        for violation in inspect_file(path)
+    ]
     for path, violation in findings:
         LOGGER.error("%s:%d: %s: %s", path, violation.line, violation.rule, violation.message)
     if findings:

@@ -30,6 +30,7 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__fwd/mdspan.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_abstract.h>
 #include <asc/std/__type_traits/is_array.h>
 #include <asc/std/__type_traits/is_convertible.h>
@@ -39,14 +40,21 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class Element>
 struct default_accessor {
+    static_assert(!is_array_v<Element>, "default_accessor: template argument may not be an array type");
+    static_assert(!is_abstract_v<Element>, "default_accessor: template argument may not be an abstract class");
+
     using element_type = Element;
     using reference = Element&;
     using data_handle_type = Element*;
     using offset_policy = default_accessor;
+
     CANN_ASC_STL_API constexpr default_accessor() noexcept = default;
-    template <class OtherElement>
+
+    template <class OtherElement,
+        enable_if_t<is_convertible_v<OtherElement (*)[], element_type (*)[]>, int> = 0>  // NOLINT
     CANN_ASC_STL_API constexpr default_accessor(default_accessor<OtherElement>) noexcept
     {}
+
     CANN_ASC_STL_API constexpr reference access(data_handle_type pointer, size_t index) const noexcept
     {
         return pointer[index];

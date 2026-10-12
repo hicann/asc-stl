@@ -29,7 +29,9 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__functional/invoke.h>
+#include <asc/std/__type_traits/is_valid_expansion.h>
 #include <asc/std/__type_traits/remove_cvref.h>
+#include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/forward.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
@@ -47,6 +49,16 @@ concept __invoke_constructible = requires(Fn&& function, Args&&... arguments) {
         ::asc::std::invoke(::asc::std::forward<Fn>(function),  // NOLINT(build/include_what_you_use)
             ::asc::std::forward<Args>(arguments)...));         // NOLINT(build/include_what_you_use)
 };
+#else
+template <class Fn, class... Args>
+using __invocable_result_t = invoke_result_t<Fn, Args...>;
+
+template <class Fun, class... Args>
+using __invoke_constructible_result_t = decltype(static_cast<remove_cvref_t<invoke_result_t<Fun, Args...>>>(
+    ::asc::std::invoke(::asc::std::declval<Fun>(), ::asc::std::declval<Args>()...)));
+
+template <class Fun, class... Args>
+inline constexpr bool __invoke_constructible = _IsValidExpansion<__invoke_constructible_result_t, Fun, Args...>::value;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

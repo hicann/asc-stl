@@ -29,6 +29,7 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__concepts/constructible.h>
+#include <asc/std/__concepts/invocable.h>
 #include <asc/std/__concepts/movable.h>
 #include <asc/std/__ranges/access.h>
 #include <asc/std/__ranges/concepts.h>
@@ -39,64 +40,169 @@
 #include <asc/std/__ranges/view_interface.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_nothrow_default_constructible.h>
+#include <asc/std/__type_traits/is_nothrow_move_constructible.h>
 #include <asc/std/__type_traits/remove_cvref.h>
 #include <asc/std/__utility/ctad_support.h>
 #include <asc/std/__utility/move.h>
 namespace asc::std::ranges {
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+
+// 类级合同（C++20 [range.owning.view]）：可移动的区间；初始化器列表底层数组生存期不随视图，
+// 任何标准路径下都禁止持有（约束保持 SFINAE 友好，供 views::all 的 CTAD 探测优雅失败）。
 template <class Range>
+    requires range<Range> && movable<Range> && (!__is_asc_std_initializer_list<remove_cvref_t<Range>>)
 class owning_view : public view_interface<owning_view<Range>> {
 public:
-    CANN_ASC_STL_API constexpr owning_view() = default;
-    CANN_ASC_STL_API constexpr explicit owning_view(Range&& range) noexcept(is_nothrow_move_constructible_v<Range>)
+    CANN_ASC_STL_API constexpr owning_view()
+        requires default_initializable<Range>
+    = default;
+    CANN_ASC_STL_API constexpr owning_view(Range&& range) noexcept(is_nothrow_move_constructible_v<Range>)
         : range_(::asc::std::move(range))
     {}
     CANN_ASC_STL_API constexpr auto begin()
     {
-        return ranges::begin(range_);
+        return __begin_cpo{}(range_);
+    }
+    template <class Range2 = Range>
+        requires range<const Range2>
+    CANN_ASC_STL_API constexpr auto begin() const
+    {
+        return __begin_cpo{}(range_);
+    }
+    CANN_ASC_STL_API constexpr auto end()
+    {
+        return __end_cpo{}(range_);
+    }
+    template <class Range2 = Range>
+        requires range<const Range2>
+    CANN_ASC_STL_API constexpr auto end() const
+    {
+        return __end_cpo{}(range_);
+    }
+    template <class Range2 = Range>
+        requires sized_range<Range2>
+    CANN_ASC_STL_API constexpr auto size()
+    {
+        return __size_cpo{}(range_);
+    }
+
+    template <class Range2 = Range>
+        requires sized_range<const Range2>
+    CANN_ASC_STL_API constexpr auto size() const
+    {
+        return __size_cpo{}(range_);
+    }
+
+    template <class Range2 = Range>
+        requires invocable<__empty_cpo, Range2&>
+    CANN_ASC_STL_API constexpr bool empty()
+    {
+        return __empty_cpo{}(range_);
+    }
+
+    template <class Range2 = Range>
+        requires invocable<__empty_cpo, const Range2&>
+    CANN_ASC_STL_API constexpr bool empty() const
+    {
+        return __empty_cpo{}(range_);
+    }
+
+    template <class Range2 = Range>
+        requires contiguous_range<Range2>
+    CANN_ASC_STL_API constexpr auto data()
+    {
+        return __data_cpo{}(range_);
+    }
+
+    template <class Range2 = Range>
+        requires contiguous_range<const Range2>
+    CANN_ASC_STL_API constexpr auto data() const
+    {
+        return __data_cpo{}(range_);
+    }
+
+    CANN_ASC_STL_API constexpr Range& base() & noexcept
+    {
+        return range_;
+    }
+    CANN_ASC_STL_API constexpr const Range& base() const& noexcept
+    {
+        return range_;
+    }
+    CANN_ASC_STL_API constexpr Range&& base() && noexcept
+    {
+        return ::asc::std::move(range_);  // NOLINT(build/include_what_you_use)
+    }
+    CANN_ASC_STL_API constexpr const Range&& base() const&& noexcept
+    {
+        return ::asc::std::move(range_);  // NOLINT(build/include_what_you_use)
+    }
+
+private:
+    Range range_{};
+};
+
+#else
+
+// 非 concepts 路径（C++17 与设备编译）：保持基座惯用的惰性模板成员形状。
+template <class Range>
+class owning_view : public view_interface<owning_view<Range>> {
+    // 初始化器列表元素悬垂风险极高，此路径下同样禁止持有。
+    static_assert(!__is_asc_std_initializer_list<remove_cvref_t<Range>>,
+        "owning_view must not own an initializer_list; wrap it in another view first");
+
+public:
+    CANN_ASC_STL_API constexpr owning_view() = default;
+    CANN_ASC_STL_API constexpr owning_view(Range&& range) noexcept(is_nothrow_move_constructible_v<Range>)
+        : range_(::asc::std::move(range))
+    {}
+    CANN_ASC_STL_API constexpr auto begin()
+    {
+        return __begin_cpo{}(range_);
     }
     template <class Range2 = Range>
     CANN_ASC_STL_API constexpr auto begin() const
     {
-        return ranges::begin(range_);
+        return __begin_cpo{}(range_);
     }
     CANN_ASC_STL_API constexpr auto end()
     {
-        return ranges::end(range_);
+        return __end_cpo{}(range_);
     }
     template <class Range2 = Range>
     CANN_ASC_STL_API constexpr auto end() const
     {
-        return ranges::end(range_);
+        return __end_cpo{}(range_);
     }
     template <class Range2 = Range>
     CANN_ASC_STL_API constexpr auto size()
     {
-        return ranges::size(range_);
+        return __size_cpo{}(range_);
     }
     template <class Range2 = Range>
     CANN_ASC_STL_API constexpr auto size() const
     {
-        return ranges::size(range_);
+        return __size_cpo{}(range_);
     }
     template <class Range2 = Range>
     CANN_ASC_STL_API constexpr bool empty()
     {
-        return ranges::empty(range_);
+        return __empty_cpo{}(range_);
     }
     template <class Range2 = Range>
     CANN_ASC_STL_API constexpr bool empty() const
     {
-        return ranges::empty(range_);
+        return __empty_cpo{}(range_);
     }
     template <class Range2 = Range>
     CANN_ASC_STL_API constexpr auto data()
     {
-        return ranges::data(range_);
+        return __data_cpo{}(range_);
     }
     template <class Range2 = Range>
     CANN_ASC_STL_API constexpr auto data() const
     {
-        return ranges::data(range_);
+        return __data_cpo{}(range_);
     }
     CANN_ASC_STL_API constexpr Range& base() & noexcept
     {
@@ -118,6 +224,10 @@ public:
 private:
     Range range_{};
 };
+
+#endif
+
+CANN_ASC_STL_DETAIL_CTAD_SUPPORTED_FOR_TYPE(owning_view);
 template <class R>
 inline constexpr bool enable_borrowed_range<owning_view<R>> = enable_borrowed_range<R>;
 }  // namespace asc::std::ranges

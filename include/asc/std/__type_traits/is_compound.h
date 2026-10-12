@@ -33,11 +33,23 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_compound)
+
+template <class _Tp>
+struct is_compound : bool_constant<__is_compound(_Tp)> {};
+
+template <class _Tp>
+inline constexpr bool is_compound_v = __is_compound(_Tp);
+
+#else
+
 template <class _Tp>
 inline constexpr bool is_compound_v = !is_fundamental_v<_Tp>;
 
 template <class _Tp>
-struct is_compound : bool_constant<is_compound_v<_Tp>> {};
+struct is_compound : bool_constant<is_compound_v<_Tp> > {};
+
+#endif  // CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_compound)
 
 CANN_ASC_STL_END_NAMESPACE
 

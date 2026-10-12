@@ -33,6 +33,9 @@
 #include <asc/std/__type_traits/common_reference.h>
 #include <asc/std/__type_traits/copy_cv.h>
 #include <asc/std/__type_traits/copy_cvref.h>
+#include <asc/std/__type_traits/is_convertible.h>
+#include <asc/std/__type_traits/is_same.h>
+#include <asc/std/__type_traits/void_t.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -40,6 +43,16 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 template <class T, class U>
 concept common_reference_with = same_as<common_reference_t<T, U>, common_reference_t<U, T>> &&
     convertible_to<T, common_reference_t<T, U>> && convertible_to<U, common_reference_t<T, U>>;
+#else
+template <class T, class U, class = void>
+inline constexpr bool __common_reference_with_impl = false;
+
+template <class T, class U>
+inline constexpr bool __common_reference_with_impl<T, U, void_t<common_reference_t<T, U>, common_reference_t<U, T>>> =
+    is_same_v<common_reference_t<T, U>, common_reference_t<U, T>> &&
+    is_same_v<common_reference_t<U, T>, common_reference_t<T, U>> && is_convertible_v<T, common_reference_t<T, U>> &&
+    is_convertible_v<U, common_reference_t<T, U>>;
+
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

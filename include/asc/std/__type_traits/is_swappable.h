@@ -47,77 +47,107 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class T>
+namespace __detect_hidden_friend_swap {
+template <class _Tp>
+CANN_ASC_STL_HOST_DEVICE void swap(_Tp&, _Tp&);
+struct __hidden_friend_swap_found {};
+template <class _Tp>
+auto __swap(_Tp& __lhs, _Tp& __rhs) -> decltype(swap(__lhs, __rhs));
+auto __swap(...) -> __hidden_friend_swap_found;
+template <class _Tp>
+struct __has_hidden_friend_swap
+    : is_same<decltype(__detect_hidden_friend_swap::__swap(::asc::std::declval<_Tp&>(), ::asc::std::declval<_Tp&>())),
+          void> {};
+}  // namespace __detect_hidden_friend_swap
+namespace __detect_adl_swap {
+template <class _Tp>
+void swap(_Tp&, _Tp&) = delete;
+struct __no_adl_swap_found {};
+template <class _Tp>
+auto __swap(_Tp& __lhs, _Tp& __rhs) -> decltype(swap(__lhs, __rhs));
+auto __swap(...) -> __no_adl_swap_found;
+template <class _Tp>
+struct __has_no_adl_swap
+    : is_same<decltype(__detect_adl_swap::__swap(::asc::std::declval<_Tp&>(), ::asc::std::declval<_Tp&>())),
+          __no_adl_swap_found> {};
+template <class _Tp, size_t _Np>
+struct __has_no_adl_swap_array : is_same<decltype(__detect_adl_swap::__swap(
+                                             ::asc::std::declval<_Tp (&)[_Np]>(), ::asc::std::declval<_Tp (&)[_Np]>())),
+                                     __no_adl_swap_found> {};
+template <class _Tp>
+struct __can_define_swap : _Or<__has_no_adl_swap<_Tp>, __detect_hidden_friend_swap::__has_hidden_friend_swap<_Tp>> {};
+}  // namespace __detect_adl_swap
+template <class _Tp>
 struct __is_swappable;
-template <class T>
+template <class _Tp>
 struct __is_nothrow_swappable;
-template <class T>
-using __swap_result_t = enable_if_t<is_move_constructible_v<T> && is_move_assignable_v<T>>;
-template <class T>
-CANN_ASC_STL_API constexpr __swap_result_t<T> swap(T& left, type_identity_t<T>& right) noexcept(
-    is_nothrow_move_constructible_v<T> && is_nothrow_move_assignable_v<T>);
-template <class T, size_t N>
-CANN_ASC_STL_API constexpr enable_if_t<__is_swappable<T>::value> swap(T (&left)[N], T (&right)[N]) noexcept(
-    __is_nothrow_swappable<T>::value);
+template <class _Tp>
+using __swap_result_t = enable_if_t<__detect_adl_swap::__can_define_swap<_Tp>::value && is_move_constructible_v<_Tp> &&
+    is_move_assignable_v<_Tp>>;
+template <class _Tp>
+CANN_ASC_STL_API constexpr __swap_result_t<_Tp> swap(_Tp& __x, type_identity_t<_Tp>& __y) noexcept(
+    is_nothrow_move_constructible_v<_Tp> && is_nothrow_move_assignable_v<_Tp>);
+template <class _Tp, size_t _Np>
+CANN_ASC_STL_API constexpr enable_if_t<__detect_adl_swap::__has_no_adl_swap_array<_Tp, _Np>::value &&
+    __is_swappable<_Tp>::value>
+    swap(_Tp (&__a)[_Np], _Tp (&__b)[_Np]) noexcept(__is_nothrow_swappable<_Tp>::value);
 namespace __detail {
-template <class T, class U, bool = !is_void_v<T> && !is_void_v<U>>
+template <class _Tp, class _Up = _Tp, bool _NotVoid = !is_void_v<_Tp> && !is_void_v<_Up>>
 struct __swappable_with {
-    template <class Left, class Right>
-    CANN_ASC_STL_API static auto __test_swap(
-        int) -> decltype(swap(::asc::std::declval<Left>(), ::asc::std::declval<Right>()));
+    template <class _LHS, class _RHS>
+    CANN_ASC_STL_API static decltype(swap(::asc::std::declval<_LHS>(), ::asc::std::declval<_RHS>())) __test_swap(int);
     template <class, class>
     CANN_ASC_STL_API static __nat __test_swap(long);
-
-    using __swap1 = decltype(__test_swap<T, U>(0));
-    using __swap2 = decltype(__test_swap<U, T>(0));
-    static constexpr bool value = !is_same_v<__swap1, __nat> && !is_same_v<__swap2, __nat>;
+    using __swap1 = decltype((__test_swap<_Tp, _Up>(0)));
+    using __swap2 = decltype((__test_swap<_Up, _Tp>(0)));
+    static const bool value = _IsNotSame<__swap1, __nat>::value && _IsNotSame<__swap2, __nat>::value;
 };
-template <class T, class U>
-struct __swappable_with<T, U, false> : false_type {};
-template <class T, class U, bool = __swappable_with<T, U>::value>
-struct __nothrow_swappable_with : false_type {};
-template <class T, class U>
-struct __nothrow_swappable_with<T, U, true>
-    : bool_constant<noexcept(swap(::asc::std::declval<T>(), ::asc::std::declval<U>())) &&
-          noexcept(swap(::asc::std::declval<U>(), ::asc::std::declval<T>()))> {  // NOLINT(build/include_what_you_use)
+template <class _Tp, class _Up>
+struct __swappable_with<_Tp, _Up, false> : false_type {};
+template <class _Tp, class _Up = _Tp, bool _Swappable = __swappable_with<_Tp, _Up>::value>
+struct __nothrow_swappable_with {
+    static const bool value = noexcept(swap(::asc::std::declval<_Tp>(), ::asc::std::declval<_Up>())) &&
+        noexcept(swap(::asc::std::declval<_Up>(), ::asc::std::declval<_Tp>()));  // NOLINT(build/include_what_you_use)
 };
+template <class _Tp, class _Up>
+struct __nothrow_swappable_with<_Tp, _Up, false> : false_type {};
 }  // namespace __detail
-template <class T>
-struct __is_swappable : bool_constant<__detail::__swappable_with<T&, T&>::value> {};
-template <class T>
-struct __is_nothrow_swappable : __detail::__nothrow_swappable_with<T&, T&> {};
+template <class _Tp>
+struct __is_swappable : public integral_constant<bool, __detail::__swappable_with<_Tp&>::value> {};
+template <class _Tp>
+struct __is_nothrow_swappable : public integral_constant<bool, __detail::__nothrow_swappable_with<_Tp&>::value> {};
+template <class _Tp, class _Up>
+inline constexpr bool is_swappable_with_v = __detail::__swappable_with<_Tp, _Up>::value;
+template <class _Tp, class _Up>
+inline constexpr bool is_nothrow_swappable_with_v = __detail::__nothrow_swappable_with<_Tp, _Up>::value;
 namespace __detail {
-template <class T, bool = __is_referenceable<T>::value>
-struct __is_swappable_value : false_type {};
-template <class T>
-struct __is_swappable_value<T, true>
-    : bool_constant<__swappable_with<add_lvalue_reference_t<T>, add_lvalue_reference_t<T>>::value> {};
-template <class T, bool = __is_referenceable<T>::value>
-struct __is_nothrow_swappable_value : false_type {};
-template <class T>
-struct __is_nothrow_swappable_value<T, true>
-    : bool_constant<__nothrow_swappable_with<add_lvalue_reference_t<T>, add_lvalue_reference_t<T>>::value> {};
+template <class _Tp, bool = __is_referenceable<_Tp>::value>
+inline constexpr bool __is_swappable_value_v = false;
+template <class _Tp>
+inline constexpr bool __is_swappable_value_v<_Tp, true> =
+    is_swappable_with_v<add_lvalue_reference_t<_Tp>, add_lvalue_reference_t<_Tp>>;
+template <class _Tp, bool = __is_referenceable<_Tp>::value>
+inline constexpr bool __is_nothrow_swappable_value_v = false;
+template <class _Tp>
+inline constexpr bool __is_nothrow_swappable_value_v<_Tp, true> =
+    is_nothrow_swappable_with_v<add_lvalue_reference_t<_Tp>, add_lvalue_reference_t<_Tp>>;
 }  // namespace __detail
-template <class T, class U>
-inline constexpr bool is_swappable_with_v = __detail::__swappable_with<T, U>::value;
-template <class T>
-inline constexpr bool is_swappable_v = __detail::__is_swappable_value<T>::value;
-template <class T, class U>
-inline constexpr bool is_nothrow_swappable_with_v = __detail::__nothrow_swappable_with<T, U>::value;
-template <class T>
-inline constexpr bool is_nothrow_swappable_v = __detail::__is_nothrow_swappable_value<T>::value;
-template <class T, class U>
-struct is_swappable_with : bool_constant<is_swappable_with_v<T, U>> {};
-template <class T>
-struct is_swappable : bool_constant<is_swappable_v<T>> {};
-template <class T, class U>
-struct is_nothrow_swappable_with : bool_constant<is_nothrow_swappable_with_v<T, U>> {};
-template <class T>
-struct is_nothrow_swappable : bool_constant<is_nothrow_swappable_v<T>> {};
-template <class T, bool = __is_complete_v<T>>
+template <class _Tp>
+inline constexpr bool is_swappable_v = __detail::__is_swappable_value_v<_Tp>;
+template <class _Tp>
+inline constexpr bool is_nothrow_swappable_v = __detail::__is_nothrow_swappable_value_v<_Tp>;
+template <class _Tp, class _Up>
+struct is_swappable_with : public bool_constant<is_swappable_with_v<_Tp, _Up>> {};
+template <class _Tp>
+struct is_swappable : public bool_constant<is_swappable_v<_Tp>> {};
+template <class _Tp, class _Up>
+struct is_nothrow_swappable_with : public bool_constant<is_nothrow_swappable_with_v<_Tp, _Up>> {};
+template <class _Tp>
+struct is_nothrow_swappable : public bool_constant<is_nothrow_swappable_v<_Tp>> {};
+template <class _Tp, bool = __is_complete_v<_Tp>>
 inline constexpr bool __is_complete_and_nothrow_swappable_v = false;
-template <class T>
-inline constexpr bool __is_complete_and_nothrow_swappable_v<T, true> = is_nothrow_swappable_v<T>;
+template <class _Tp>
+inline constexpr bool __is_complete_and_nothrow_swappable_v<_Tp, true> = is_nothrow_swappable_v<_Tp>;
 
 CANN_ASC_STL_END_NAMESPACE
 

@@ -37,13 +37,63 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class InputIterator>
-CANN_ASC_STL_API InputIterator prev(
+CANN_ASC_STL_API constexpr InputIterator prev(
     InputIterator value, typename iterator_traits<InputIterator>::difference_type count = 1)
 {
+    CANN_ASC_STL_DETAIL_ASSERT(count <= 0 || __advance_detail::__has_bidirectional_traversal<InputIterator>,
+        "Attempt to prev(it, +n) on a non-bidirectional iterator");
+
     ::asc::std::advance(value, -count);
     return value;
 }
 
 CANN_ASC_STL_END_NAMESPACE
+
+// [range.iter.op.prev]
+
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+namespace ranges {
+
+namespace __prev {
+struct __fn {
+    template <class _Ip, enable_if_t<bidirectional_iterator<_Ip>, int> = 0>
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _Ip operator()(_Ip __x) const
+    {
+        --__x;
+        return __x;
+    }
+
+    template <class _Ip, enable_if_t<bidirectional_iterator<_Ip>, int> = 0>
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _Ip operator()(_Ip __x, iter_difference_t<_Ip> __n) const
+    {
+        ::asc::std::ranges::__advance_cpo{}(__x, -__n);
+        return __x;
+    }
+
+    template <class _Ip, enable_if_t<bidirectional_iterator<_Ip>, int> = 0>
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _Ip operator()(
+        _Ip __x, iter_difference_t<_Ip> __n, _Ip __bound_iter) const
+    {
+        ::asc::std::ranges::__advance_cpo{}(__x, -__n, __bound_iter);
+        return __x;
+    }
+};
+}  // namespace __prev
+
+inline namespace __cpo {
+inline constexpr auto prev = __prev::__fn{};
+
+// Avoid using the public CPO internally so lookup stays constrained to this implementation.
+using __prev_cpo = __prev::__fn;
+}  // namespace __cpo
+
+}  // namespace ranges
+
+CANN_ASC_STL_END_NAMESPACE
+
+#endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 #endif  // CANN_ASC_STL_ASC_STD___ITERATOR_PREV_H

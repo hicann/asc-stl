@@ -17,6 +17,31 @@
 #include <asc/std/ranges>
 #include <asc/std/array>
 #include <asc/std/tuple>
+#include <asc/std/__type_traits/is_same.h>
+
+struct movable_range {
+    int* first;
+    int* last;
+    movable_range(int* begin, int* end) : first(begin), last(end)
+    {}
+    movable_range(const movable_range&) = delete;
+    movable_range& operator=(const movable_range&) = delete;
+    movable_range(movable_range&&) = default;
+    movable_range& operator=(movable_range&&) = default;
+    int* begin() const
+    {
+        return first;
+    }
+    int* end() const
+    {
+        return last;
+    }
+};
+
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
+static_assert(asc::std::ranges::viewable_range<movable_range>);
+static_assert(asc::std::ranges::viewable_range<movable_range&>);
+#endif
 
 struct less_than_four {
     constexpr bool operator()(int value) const
@@ -156,6 +181,19 @@ int main()
     if (owned.empty() || owned.size() != 3 || owned.data() != owned.begin() || owned.begin()[0] != 7 ||
         owned.begin()[2] != 9)
         return 15;
+    auto source_view = asc::std::ranges::views::single(42);
+    auto copied_view = asc::std::ranges::views::all(source_view);
+    static_assert(asc::std::is_same_v<decltype(copied_view), decltype(source_view)>);
+    if (*copied_view.begin() != 42)
+        return 31;
+    auto moved_view = asc::std::ranges::views::all(asc::std::ranges::views::single(73));
+    static_assert(asc::std::is_same_v<decltype(moved_view), decltype(source_view)>);
+    if (*moved_view.begin() != 73)
+        return 32;
+    movable_range movable{values, values + 2};
+    auto owned_movable = asc::std::ranges::views::all(static_cast<movable_range&&>(movable));
+    if (*owned_movable.begin() != 9)
+        return 33;
     const int constant_values[] = {4, 5};
     const auto constant_reference = asc::std::ranges::views::all(constant_values);
     if (constant_reference.data() != constant_values || *constant_reference.begin() != 4)

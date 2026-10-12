@@ -29,6 +29,7 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__type_traits/is_convertible.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/declval.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
@@ -36,6 +37,14 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class From, class To>
 concept convertible_to = is_convertible_v<From, To> && requires { static_cast<To>(::asc::std::declval<From>()); };
+#else
+template <class From, class To, class = void>
+inline constexpr bool __convertible_to_impl = false;
+
+template <class From, class To>
+inline constexpr bool __convertible_to_impl<From, To, void_t<decltype(static_cast<To>(::asc::std::declval<From>()))> > =
+    is_convertible_v<From, To>;
+
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

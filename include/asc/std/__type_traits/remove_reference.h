@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_REMOVE_REFERENCE_H
 #define CANN_ASC_STL_STD_DETAIL_TYPE_TRAITS_REMOVE_REFERENCE_H
 
@@ -31,37 +32,21 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__remove_reference)
-
-template <class T>
+template <class _Tp>
 struct remove_reference {
-    using type = __remove_reference(T);
+    using type = _Tp;
+};
+template <class _Tp>
+struct remove_reference<_Tp&> {
+    using type = _Tp;
+};
+template <class _Tp>
+struct remove_reference<_Tp&&> {
+    using type = _Tp;
 };
 
-// GCC rejects the builtin trait spelling inside function signatures, so the
-// _t helper goes through the trait struct.
-template <class T>
-using remove_reference_t = typename remove_reference<T>::type;
-
-#else
-
-template <class T>
-struct remove_reference {
-    using type = T;
-};
-template <class T>
-struct remove_reference<T&> {
-    using type = T;
-};
-template <class T>
-struct remove_reference<T&&> {
-    using type = T;
-};
-
-template <class T>
-using remove_reference_t = typename remove_reference<T>::type;
-
-#endif
+template <class _Tp>
+using remove_reference_t = typename remove_reference<_Tp>::type;
 
 CANN_ASC_STL_END_NAMESPACE
 

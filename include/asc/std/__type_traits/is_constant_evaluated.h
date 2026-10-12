@@ -29,14 +29,33 @@
 
 #include <asc/__detail/attributes.h>
 
+#ifndef CANN_ASC_STL_DETAIL_BUILTIN_IS_CONSTANT_EVALUATED
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_is_constant_evaluated) || \
+    (defined(__GNUC__) && !defined(__clang__) && __GNUC__ >= 9)
+#define CANN_ASC_STL_DETAIL_BUILTIN_IS_CONSTANT_EVALUATED(...) __builtin_is_constant_evaluated(__VA_ARGS__)
+#endif
+#endif
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool is_constant_evaluated() noexcept
 {
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_is_constant_evaluated) || defined(__GNUC__)
-    return __builtin_is_constant_evaluated();
+#if defined(CANN_ASC_STL_DETAIL_BUILTIN_IS_CONSTANT_EVALUATED)
+    return CANN_ASC_STL_DETAIL_BUILTIN_IS_CONSTANT_EVALUATED();
 #else
     return false;
+#endif
+}
+
+// Conservative variant for call sites where assuming constant evaluation is the
+// safe default: when the compiler has no way to tell, assume we are in a
+// constant-evaluated context.
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool __default_is_constant_evaluated() noexcept
+{
+#if defined(CANN_ASC_STL_DETAIL_BUILTIN_IS_CONSTANT_EVALUATED)
+    return CANN_ASC_STL_DETAIL_BUILTIN_IS_CONSTANT_EVALUATED();
+#else
+    return true;
 #endif
 }
 

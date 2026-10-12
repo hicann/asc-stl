@@ -27,35 +27,32 @@ from pathlib import Path
 LOGGER = logging.getLogger(__name__)
 
 
-def is_direct_print_call(node: ast.AST) -> bool:
-    if not isinstance(node, ast.Call):
-        return False
-    if isinstance(node.func, ast.Name):
-        return node.func.id == "print"
-    return (
-        isinstance(node.func, ast.Attribute)
-        and isinstance(node.func.value, ast.Name)
-        and node.func.value.id == "builtins"
-        and node.func.attr == "print"
-    )
-
-
 def direct_print_calls(path: Path) -> list[int]:
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-    calls = []
-    for node in ast.walk(tree):
-        if is_direct_print_call(node):
-            calls.append(node.lineno)
-    return sorted(calls)
+    return sorted(
+        node.lineno
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and (
+            isinstance(node.func, ast.Name)
+            and node.func.id == "print"
+            or isinstance(node.func, ast.Attribute)
+            and isinstance(node.func.value, ast.Name)
+            and node.func.value.id == "builtins"
+            and node.func.attr == "print"
+        )
+    )
 
 
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(message)s")
-    violations = []
-    for value in sys.argv[1:]:
-        path = Path(value)
-        if path.is_file():
-            violations.extend((path, line) for line in direct_print_calls(path))
+    violations = [
+        (path, line)
+        for value in sys.argv[1:]
+        for path in (Path(value),)
+        if path.is_file()
+        for line in direct_print_calls(path)
+    ]
     for path, line in violations:
         LOGGER.error("%s:%d: direct print() call; use the logging module", path, line)
     if violations:

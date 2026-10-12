@@ -71,22 +71,6 @@ public:
     }
 
 private:
-    CANN_ASC_STL_API static constexpr bool escaped_field(char current, char next, bool has_following) noexcept
-    {
-        return (current == '{' || current == '}') && has_following && next == current;
-    }
-    CANN_ASC_STL_API static constexpr bool empty_field(char current, char next) noexcept
-    {
-        return current == '{' && next == '}';
-    }
-    CANN_ASC_STL_API static constexpr bool typed_field(char current, char next, char closing, bool complete) noexcept
-    {
-        return current == '{' && complete && next == ':' && closing == '}';
-    }
-    CANN_ASC_STL_API static constexpr bool numeric_presentation(char value) noexcept
-    {
-        return value == 'd' || value == 'x' || value == 'X' || value == 'o' || value == 'b';
-    }
     template <__SIZE_TYPE__ Size>
 #if defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
     CANN_ASC_STL_API static constexpr void validate(const __gm__ CharT (&text)[Size]) noexcept
@@ -102,22 +86,22 @@ private:
         __SIZE_TYPE__ field = 0;
         for (__SIZE_TYPE__ position = 0; position + 1 < Size;) {
             const char current = text[position++];
-            if (escaped_field(current, text[position], position + 1 < Size)) {
+            if ((current == '{' || current == '}') && position + 1 < Size && text[position] == current) {
                 ++position;
                 continue;
             }
-            if (empty_field(current, text[position])) {
+            if (current == '{' && position < Size && text[position] == '}') {
                 if (field >= sizeof...(Args))
                     __builtin_trap();
                 ++field;
                 ++position;
                 continue;
             }
-            const bool complete = position + 2 < Size;
-            const char closing = complete ? text[position + 2] : '\0';
-            if (typed_field(current, text[position], closing, complete)) {
+            if (current == '{' && position + 2 < Size && text[position] == ':' && text[position + 2] == '}') {
                 const char presentation = text[position + 1];
-                if (field >= sizeof...(Args) || !numeric[field] || !numeric_presentation(presentation)) {
+                if (field >= sizeof...(Args) || !numeric[field] ||
+                    !(presentation == 'd' || presentation == 'x' || presentation == 'X' || presentation == 'o' ||
+                        presentation == 'b')) {
                     __builtin_trap();
                 }
                 ++field;

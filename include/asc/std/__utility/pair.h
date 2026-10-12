@@ -68,12 +68,6 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
-#define CANN_ASC_STL_PAIR_VALUE_API __host__ __aicore__ CANN_ASC_STL_DETAIL_VISIBILITY_HIDDEN inline
-#else
-#define CANN_ASC_STL_PAIR_VALUE_API CANN_ASC_STL_API
-#endif
-
 template <class T>
 struct __is_pair : false_type {};
 template <class T1, class T2>
@@ -114,18 +108,18 @@ struct pair {
         enable_if_t<is_constructible_v<T1, U1&&> && is_constructible_v<T2, U2&&> && is_convertible_v<U1&&, T1> &&
                 is_convertible_v<U2&&, T2>,
             int> = 0>
-    CANN_ASC_STL_PAIR_VALUE_API constexpr pair(U1&& left, U2&& right) noexcept(
+    CANN_ASC_STL_API constexpr pair(U1&& left, U2&& right) noexcept(
         is_nothrow_constructible_v<T1, U1&&> && is_nothrow_constructible_v<T2, U2&&>)
-        : first(static_cast<U1&&>(left)), second(static_cast<U2&&>(right))
+        : first(::asc::std::forward<U1>(left)), second(::asc::std::forward<U2>(right))
     {}
 
     template <class U1, class U2,
         enable_if_t<is_constructible_v<T1, U1&&> && is_constructible_v<T2, U2&&> &&
                 !(is_convertible_v<U1&&, T1> && is_convertible_v<U2&&, T2>),
             long> = 0>
-    CANN_ASC_STL_PAIR_VALUE_API explicit constexpr pair(U1&& left, U2&& right) noexcept(
+    CANN_ASC_STL_API explicit constexpr pair(U1&& left, U2&& right) noexcept(
         is_nothrow_constructible_v<T1, U1&&> && is_nothrow_constructible_v<T2, U2&&>)
-        : first(static_cast<U1&&>(left)), second(static_cast<U2&&>(right))
+        : first(::asc::std::forward<U1>(left)), second(::asc::std::forward<U2>(right))
     {}
 
     template <class U1, class U2, enable_if_t<is_constructible_v<T1, U1&> && is_constructible_v<T2, U2&>, int> = 0>
@@ -234,9 +228,9 @@ struct pair {
 private:
     template <class... Args1, class... Args2, size_t... I1, size_t... I2>
     CANN_ASC_STL_API constexpr pair(piecewise_construct_t,
-        tuple<Args1...>&& left,                           // NOLINT(build/include_what_you_use)
-        tuple<Args2...>&& right, __tuple_indices<I1...>,  // NOLINT(build/include_what_you_use)
-        __tuple_indices<I2...>)
+        tuple<Args1...>&& left,                          // NOLINT(build/include_what_you_use)
+        tuple<Args2...>&& right, index_sequence<I1...>,  // NOLINT(build/include_what_you_use)
+        index_sequence<I2...>)
         : first(::asc::std::get<I1>(::asc::std::move(left))...), second(::asc::std::get<I2>(::asc::std::move(right))...)
     {}
 };
@@ -262,30 +256,6 @@ CANN_ASC_STL_API constexpr bool operator<(const pair<T1, T2>& left, const pair<T
     noexcept(left.first < right.first && left.second < right.second))
 {
     return left.first < right.first || (!(right.first < left.first) && left.second < right.second);
-}
-template <class T1, class T2>
-CANN_ASC_STL_API constexpr bool operator!=(const pair<T1, T2>& left, const pair<T1, T2>& right) noexcept(
-    noexcept(left == right))
-{
-    return !(left == right);
-}
-template <class T1, class T2>
-CANN_ASC_STL_API constexpr bool operator>(const pair<T1, T2>& left, const pair<T1, T2>& right) noexcept(
-    noexcept(right < left))
-{
-    return right < left;
-}
-template <class T1, class T2>
-CANN_ASC_STL_API constexpr bool operator<=(const pair<T1, T2>& left, const pair<T1, T2>& right) noexcept(
-    noexcept(right < left))
-{
-    return !(right < left);
-}
-template <class T1, class T2>
-CANN_ASC_STL_API constexpr bool operator>=(const pair<T1, T2>& left, const pair<T1, T2>& right) noexcept(
-    noexcept(left < right))
-{
-    return !(left < right);
 }
 
 template <class T1, class T2>
@@ -370,8 +340,6 @@ CANN_ASC_STL_API constexpr const T&& get(const pair<U, T>&& value) noexcept
 {
     return ::asc::std::move(value.second);  // NOLINT(build/include_what_you_use)
 }
-
-#undef CANN_ASC_STL_PAIR_VALUE_API
 
 CANN_ASC_STL_END_NAMESPACE
 

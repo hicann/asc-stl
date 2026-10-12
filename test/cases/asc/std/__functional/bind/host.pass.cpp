@@ -28,6 +28,7 @@ int main()
     static_assert(asc::std::is_placeholder_v<decltype(_10)> == 10);
     static_assert(asc::std::is_placeholder_v<int> == 0);
     static_assert(!asc::std::is_bind_expression_v<int>);
+    static_assert(asc::std::is_same_v<decltype(asc::std::is_bind_expression_v<int>), const bool>);
     static_assert(!asc::std::is_bind_expression<int>::value);
 
     struct Summer {

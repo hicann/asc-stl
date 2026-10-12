@@ -30,36 +30,28 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__type_traits/is_integer.h>
+#include <asc/std/__utility/cmp.h>
+#include <asc/std/limits>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-namespace __saturating_detail {
-template <class T>
-CANN_ASC_STL_API constexpr bool __is_signed_type() noexcept
-{
-    return T(-1) < T(0);
-}
-template <class T>
-CANN_ASC_STL_API constexpr T __max() noexcept
-{
-    return __is_signed_type<T>() ? T((T(1) << (sizeof(T) * 8 - 2)) - 1 + (T(1) << (sizeof(T) * 8 - 2))) : T(~T(0));
-}
-template <class T>
-CANN_ASC_STL_API constexpr T __min() noexcept
-{
-    return __is_signed_type<T>() ? T(-__max<T>() - 1) : T(0);
-}
-}  // namespace __saturating_detail
-
+// Saturation compares the exact integer domains through the cmp helpers and
+// numeric_limits instead of a floating-point intermediate: every compared
+// value stays precise for each supported width (a long double mantissa cannot
+// be assumed to carry a full 64-bit integer), and mixed sign comparisons stay
+// well-defined. All paths are plain constexpr arithmetic, valid in Host,
+// ordinary AICore and pure SIMT alike.
 template <class To, class From>
 CANN_ASC_STL_API constexpr To saturating_cast(From value) noexcept
 {
     static_assert(__is_integer_v<To> && __is_integer_v<From>, "saturating_cast requires integer types");
-    const long double wide = static_cast<long double>(value);
-    return wide < static_cast<long double>(__saturating_detail::__min<To>()) ?
-        __saturating_detail::__min<To>() :
-        (wide > static_cast<long double>(__saturating_detail::__max<To>()) ? __saturating_detail::__max<To>() :
-                                                                             static_cast<To>(value));
+    if (::asc::std::cmp_less(value, numeric_limits<To>::min())) {  // NOLINT(build/include_what_you_use)
+        return numeric_limits<To>::min();                          // NOLINT(build/include_what_you_use)
+    }
+    if (::asc::std::cmp_greater(value, numeric_limits<To>::max())) {  // NOLINT(build/include_what_you_use)
+        return numeric_limits<To>::max();                             // NOLINT(build/include_what_you_use)
+    }
+    return static_cast<To>(value);
 }
 
 CANN_ASC_STL_END_NAMESPACE

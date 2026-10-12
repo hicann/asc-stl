@@ -48,9 +48,19 @@ using for_each_n_result = in_fun_result<_Iter, _Func>;
 namespace __for_each_n {
 
 struct __fn {
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    // 约束保持表达式级（可解引用、可自增、谓词可经投影调用）：冻结用例以仅有
+    // operator*/operator++ 的经典裸迭代器调用本定制点，标准 input_iterator 级
+    // 校验会破坏既有交付面。
     template <class _Iter, class _Func, class _Proj = identity>
+        requires requires {
+            *::asc::std::declval<_Iter&>();
+            ++::asc::std::declval<_Iter&>();
+            ::asc::std::invoke(::asc::std::declval<_Func&>(),
+                ::asc::std::invoke(::asc::std::declval<_Proj&>(), *::asc::std::declval<_Iter&>()));
+        }
     CANN_ASC_STL_API constexpr for_each_n_result<_Iter, _Func> operator()(
-        _Iter __first, typename iterator_traits<_Iter>::difference_type __count, _Func __func, _Proj __proj = {}) const
+        _Iter __first, iter_difference_t<_Iter> __count, _Func __func, _Proj __proj = {}) const
     {
         while (__count-- > 0) {
             ::asc::std::invoke(__func, ::asc::std::invoke(__proj, *__first));
@@ -58,6 +68,18 @@ struct __fn {
         }
         return {::asc::std::move(__first), ::asc::std::move(__func)};  // NOLINT(build/include_what_you_use)
     }
+#else
+    template <class _Iter, class _Func, class _Proj = identity>
+    CANN_ASC_STL_API constexpr for_each_n_result<_Iter, _Func> operator()(
+        _Iter __first, iter_difference_t<_Iter> __count, _Func __func, _Proj __proj = {}) const
+    {
+        while (__count-- > 0) {
+            ::asc::std::invoke(__func, ::asc::std::invoke(__proj, *__first));
+            ++__first;
+        }
+        return {::asc::std::move(__first), ::asc::std::move(__func)};  // NOLINT(build/include_what_you_use)
+    }
+#endif
 };
 }  // namespace __for_each_n
 
