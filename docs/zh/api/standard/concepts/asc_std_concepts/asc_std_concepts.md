@@ -31,6 +31,7 @@
 | [asc::std::movable](movable.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::move_constructible](move_constructible.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::predicate](predicate.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::ranges::swap](ranges_swap.md) | 变量 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::regular](regular.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::regular_invocable](regular_invocable.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::relation](relation.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
