@@ -64,6 +64,7 @@
 | [asc::std::chrono::hh_mm_ss::hours](chrono_hh_mm_ss_hours.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::hh_mm_ss::is_negative](chrono_hh_mm_ss_is_negative.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::hh_mm_ss::minutes](chrono_hh_mm_ss_minutes.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::hh_mm_ss::operator precision](chrono_hh_mm_ss_operator_precision.md) | 转换函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::hh_mm_ss::precision](chrono_hh_mm_ss_precision.md) | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::hh_mm_ss::seconds](chrono_hh_mm_ss_seconds.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::hh_mm_ss::subseconds](chrono_hh_mm_ss_subseconds.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
@@ -115,6 +116,17 @@
 | [asc::std::chrono::month_weekday_last::~month_weekday_last](chrono_month_weekday_last_destructor_month_weekday_last.md) | 析构函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::months](chrono_months.md) | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::nanoseconds](chrono_nanoseconds.md) | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::operator!=](chrono_operator_not_equal.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::operator%](chrono_operator_modulo.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::operator*](chrono_operator_multiply.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::operator+](chrono_operator_plus.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::operator-](chrono_operator_minus.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::operator/](chrono_operator_divide.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::operator<](chrono_operator_less.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::operator<=](chrono_operator_less_equal.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::operator==](chrono_operator_equal.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::operator>](chrono_operator_greater.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::operator>=](chrono_operator_greater_equal.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::round](chrono_round.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::seconds](chrono_seconds.md) | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::sys_days](chrono_sys_days.md) | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
@@ -191,6 +203,8 @@
 | [asc::std::chrono::year_month_day::day](chrono_year_month_day_day.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_day::month](chrono_year_month_day_month.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_day::ok](chrono_year_month_day_ok.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::year_month_day::operator local_days](chrono_year_month_day_operator_local_days.md) | 转换函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::year_month_day::operator sys_days](chrono_year_month_day_operator_sys_days.md) | 转换函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_day::operator+=](chrono_year_month_day_operator_plus_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_day::operator-=](chrono_year_month_day_operator_minus_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_day::operator=](chrono_year_month_day_operator_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
@@ -202,6 +216,8 @@
 | [asc::std::chrono::year_month_day_last::month](chrono_year_month_day_last_month.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_day_last::month_day_last](chrono_year_month_day_last_month_day_last.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_day_last::ok](chrono_year_month_day_last_ok.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::year_month_day_last::operator local_days](chrono_year_month_day_last_operator_local_days.md) | 转换函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::year_month_day_last::operator sys_days](chrono_year_month_day_last_operator_sys_days.md) | 转换函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_day_last::operator+=](chrono_year_month_day_last_operator_plus_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_day_last::operator-=](chrono_year_month_day_last_operator_minus_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_day_last::operator=](chrono_year_month_day_last_operator_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
@@ -212,6 +228,8 @@
 | [asc::std::chrono::year_month_weekday::index](chrono_year_month_weekday_index.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_weekday::month](chrono_year_month_weekday_month.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_weekday::ok](chrono_year_month_weekday_ok.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::year_month_weekday::operator local_days](chrono_year_month_weekday_operator_local_days.md) | 转换函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::year_month_weekday::operator sys_days](chrono_year_month_weekday_operator_sys_days.md) | 转换函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_weekday::operator+=](chrono_year_month_weekday_operator_plus_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_weekday::operator-=](chrono_year_month_weekday_operator_minus_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_weekday::operator=](chrono_year_month_weekday_operator_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
@@ -223,6 +241,8 @@
 | [asc::std::chrono::year_month_weekday_last](chrono_year_month_weekday_last.md) | 类 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_weekday_last::month](chrono_year_month_weekday_last_month.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_weekday_last::ok](chrono_year_month_weekday_last_ok.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::year_month_weekday_last::operator local_days](chrono_year_month_weekday_last_operator_local_days.md) | 转换函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::chrono::year_month_weekday_last::operator sys_days](chrono_year_month_weekday_last_operator_sys_days.md) | 转换函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_weekday_last::operator+=](chrono_year_month_weekday_last_operator_plus_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_weekday_last::operator-=](chrono_year_month_weekday_last_operator_minus_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::year_month_weekday_last::operator=](chrono_year_month_weekday_last_operator_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
@@ -233,4 +253,10 @@
 | [asc::std::chrono::year_month_weekday_last::~year_month_weekday_last](chrono_year_month_weekday_last_destructor_year_month_weekday_last.md) | 析构函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::chrono::years](chrono_years.md) | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::literals::chrono_literals::operator""d](literals_chrono_literals_operator_literal_d.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::literals::chrono_literals::operator""h](literals_chrono_literals_operator__h.md) | 函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::literals::chrono_literals::operator""min](literals_chrono_literals_operator__min.md) | 函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::literals::chrono_literals::operator""ms](literals_chrono_literals_operator__ms.md) | 函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::literals::chrono_literals::operator""ns](literals_chrono_literals_operator__ns.md) | 函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::literals::chrono_literals::operator""s](literals_chrono_literals_operator__s.md) | 函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::literals::chrono_literals::operator""us](literals_chrono_literals_operator__us.md) | 函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::literals::chrono_literals::operator""y](literals_chrono_literals_operator_literal_y.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
