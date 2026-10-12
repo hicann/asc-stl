@@ -2,7 +2,7 @@
 
 #### 面向昇腾设备编程的 C++ 标准库 —— 纯头文件实现，为 Host 与 Device 提供统一的公共 Header 组织
 
-[📖 api文档](#)（待定） | [📚 产品路线图](docs/roadmap/ROADMAP.md) | [📄 LICENSE](LICENSE) | [🤝 贡献指南](CONTRIBUTING.md)
+[📖 api文档](docs/zh/api/README.md) | [📚 路线图](docs/roadmap/ROADMAP.md) | [📄 LICENSE](LICENSE) | [🤝 贡献指南](CONTRIBUTING.md)
 
 ## 🔥 最新动态
 
@@ -21,6 +21,7 @@
 ### 📖 文档
 
 - 产品路线图：[ASC-STL 总路线图](docs/roadmap/ROADMAP.md) · [v1.0.0 细分路线图](docs/roadmap/ROADMAP-v1.0.0.md)。
+- API 参考文档：[ASC-STL API 参考](docs/zh/api/README.md)（标准库、昇腾扩展与 Runtime 接口）。
 
 ## 🚀 概述
 
@@ -177,7 +178,7 @@ ln -sf build/compile_commands.json .
 | [产品路线图](docs/roadmap/ROADMAP.md) | 版本发布计划与各版本能力范围 |
 | [v1.0.0 细分路线图](docs/roadmap/ROADMAP-v1.0.0.md) | 完整版本的条目级说明：C++ 标准库、昇腾扩展与 Runtime 能力 |
 | [贡献指南](CONTRIBUTING.md) | 贡献流程、贡献场景与代码/测试要求 |
-| api参考文档 | 待定 |
+| [API 参考文档](docs/zh/api/README.md) | ASC-STL 公开接口的参考文档入口：标准库、昇腾扩展与 Runtime |
 
 ## 📌 相关规划
 
