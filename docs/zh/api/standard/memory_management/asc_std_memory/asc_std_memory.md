@@ -14,6 +14,7 @@
 | --- | --- | --- | --- | --- |
 | [asc::std::addressof](addressof.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::align](align.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::allocate_at_least](allocate_at_least.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::allocation_result](allocation_result.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::allocation_result::count](allocation_result_count.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::allocation_result::ptr](allocation_result_ptr.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
