@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cstddef>`。
 
-`asc::std::operator<<` 对 std::byte 值执行对应的按位或移位操作。
+`asc::std::operator<<` 将 `lhs` 所含 std::byte 的整数值向左移动 `shift` 位，移位结果以 `byte` 返回。`shift` 须为非负整数，有效移位范围为 0 <= s < 8（以实现为准）。
 
 标准语义参考：[cppreference `cstddef`](https://en.cppreference.com/w/cpp/header/cstddef)。
 
@@ -57,7 +57,7 @@ template<class Integer> constexpr byte asc::std::operator<<(byte lhs, Integer sh
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `byte` | 返回对 `byte` 操作数执行对应按位或移位运算后的值。 |
+| `byte` | 返回 `lhs` 的整数值左移 `shift` 位后得到的 `byte` 值。 |
 
 ## 约束说明
 

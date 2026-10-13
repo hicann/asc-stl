@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/stack>`。
 
-`asc::std::stack::top` 返回队列或栈当前首元素的引用。
+`asc::std::stack::top` 返回栈顶元素的引用，即最近一次压入且尚未弹出的元素；调用前须保证栈非空。
 
 标准语义参考：[cppreference `stack`](https://en.cppreference.com/w/cpp/header/stack)。
 
@@ -60,8 +60,8 @@ constexpr reference asc::std::stack::top();
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `const_reference` | 返回队列或栈当前首元素的引用。 |
-| 原型 2 | `reference` | 返回队列或栈当前首元素的引用。 |
+| 原型 1 | `const_reference` | 返回栈顶元素的 const 引用；栈须非空。 |
+| 原型 2 | `reference` | 返回栈顶元素的引用；栈须非空。 |
 
 ## 约束说明
 

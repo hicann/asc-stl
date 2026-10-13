@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::weekday::operator[]` 在调用方保证索引有效时访问指定元素。
+`asc::std::chrono::weekday::operator[]` 借助下标语法构造日历辅助类型：带索引形式由本星期几与索引构造 `weekday_indexed`（表示本月第几个此星期几），`last_spec` 形式构造 `weekday_last`（表示本月最后一个此星期几）。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -68,8 +68,8 @@
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `weekday_indexed` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
-| 原型 2 | `weekday_last` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型 1 | `weekday_indexed` | 返回由本星期几与给定索引构造的 `weekday_indexed`，表示本月第几个此星期几。 |
+| 原型 2 | `weekday_last` | 返回由本星期几构造的 `weekday_last`，表示本月最后一个此星期几。 |
 
 ## 约束说明
 

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::month::operator--` 把当前迭代器或计数值后退一步。
+`asc::std::chrono::month::operator--` 对月份执行递减：月份值在 1 月至 12 月之间循环后退，1 月递减后得到 12 月；前置版本将月份减一并返回自身的引用，后置版本同样将月份减一，但返回修改前的月份值副本。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -64,8 +64,8 @@ constexpr month asc::std::chrono::month::operator--(int unused) noexcept;
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `month &` | 返回更新后的当前对象引用。 |
-| 原型 2 | `month` | 返回更新后的迭代器或计数值。 |
+| 原型 1 | `month &` | 返回自减后月份对象的引用。 |
+| 原型 2 | `month` | 返回修改前的月份值副本。 |
 
 ## 约束说明
 

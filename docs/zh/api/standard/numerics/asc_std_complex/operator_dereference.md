@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::operator*` 解引用当前迭代器或有值对象。
+`asc::std::operator*` 执行复数乘法：原型 1 将两个 `complex<float>` 按复数乘法规则相乘；原型 2 将 `complex<float>` 的实部与虚部同乘 `float` 标量；原型 3 为 `float` 标量乘以 `complex<float>`，与原型 2 的标量乘法结果相同。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 

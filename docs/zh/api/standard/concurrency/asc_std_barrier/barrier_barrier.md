@@ -30,6 +30,8 @@
 
 `asc::std::barrier::barrier` 按本页所列构造形态初始化 `barrier` 对象。
 
+`completion` 为阶段完成函数对象：每轮（phase）所有参与线程到达屏障且到达计数计满时，由其中一个线程以无参形式调用；若该调用抛出异常，则调用 `std::terminate`。未显式提供时使用不做任何操作的默认完成函数。
+
 该接口的可用位置为 Host、AI Core SIMT 编程。
 
 标准语义参考：[cppreference `barrier`](https://en.cppreference.com/w/cpp/header/barrier)。
@@ -47,7 +49,7 @@ barrier(long long expected, CompletionFunction completion) noexcept;
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `expected` | 输入 | 指定“按本页所列构造形态初始化 `barrier` 对象”使用的标量值；取值须满足声明和约束。 |
-| `completion` | 输入 | 用于确定元素顺序的比较对象。 |
+| `completion` | 输入 | 阶段完成函数对象：每轮（phase）所有参与线程到达屏障且计满时由其中一个线程无参调用；若其抛出异常则调用 `std::terminate`。 |
 
 ## 约束说明
 

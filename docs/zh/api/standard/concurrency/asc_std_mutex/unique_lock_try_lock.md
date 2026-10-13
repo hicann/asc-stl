@@ -28,7 +28,9 @@
 
 头文件路径为：`<asc/std/mutex>`。
 
-`asc::std::unique_lock::try_lock` 依次尝试获取多把调用方提供的锁，并返回失败位置。
+`asc::std::unique_lock::try_lock` 尝试锁定其关联的单个 mutex 并取得所有权，返回是否取得成功。
+
+前置条件：已关联 mutex，且调用前不持有该 mutex 的所有权。
 
 标准语义参考：[cppreference `mutex`](https://en.cppreference.com/w/cpp/header/mutex)。
 
@@ -46,7 +48,7 @@ bool asc::std::unique_lock::try_lock();
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 成功锁定关联 mutex 并取得所有权时返回 `true`，否则返回 `false`。 |
 
 ## 约束说明
 

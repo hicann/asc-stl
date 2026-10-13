@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::allocator_traits::destroy` 逐个结束给定范围内对象的生命周期。
+`asc::std::allocator_traits::destroy` 结束指定地址处单个对象的生命周期：优先调用分配器的 `destroy` 成员，分配器未提供该成员时回退为调用指针所指对象的析构函数（等价于 `pointer->~T()`）。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
@@ -51,7 +51,7 @@ template<class T> constexpr void asc::std::allocator_traits::destroy(allocator_t
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `allocator` | 输入/输出 | 负责对象存储分配与释放的分配器。 |
-| `pointer` | 输入 | 提供“逐个结束给定范围内对象的生命周期”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `pointer` | 输入 | 提供“结束指定地址处单个对象的生命周期”所需的数据地址；可访问范围和生命周期须满足约束。 |
 
 ## 返回值说明
 

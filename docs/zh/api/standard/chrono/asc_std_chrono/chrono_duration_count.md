@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::duration::count` 返回与键或目标值匹配的元素数量。
+`asc::std::chrono::duration::count` 返回存储的计时计数（tick 数）；计数的单位由 period 决定。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -46,7 +46,7 @@
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `rep` | 返回与键或目标值匹配的元素数量。 |
+| `rep` | 返回存储的计时计数（tick 数）；计数单位由 period 决定。 |
 
 ## 约束说明
 
