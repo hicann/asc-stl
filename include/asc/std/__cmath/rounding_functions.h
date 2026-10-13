@@ -278,7 +278,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 // 宿主全类型面：double/long double 主名、后缀 l 别名与整型提升。整型提升
-// 沿基座可观察契约走 float 精度（与仅 float 时代的隐式转换逐位一致）。
+// 整型提升对齐 <cmath> 标准：整型实参提升为 double 计算并返回 double。
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double ceil(double value) noexcept
 {
@@ -298,9 +298,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double ceill(long do
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float ceil(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double ceil(Tp value) noexcept
 {
-    return ::asc::std::ceil(static_cast<float>(value));
+    return ::asc::std::ceil(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double floor(double value) noexcept
@@ -321,9 +321,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double floorl(long d
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float floor(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double floor(Tp value) noexcept
 {
-    return ::asc::std::floor(static_cast<float>(value));
+    return ::asc::std::floor(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double trunc(double value) noexcept
@@ -344,9 +344,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double truncl(long d
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float trunc(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double trunc(Tp value) noexcept
 {
-    return ::asc::std::trunc(static_cast<float>(value));
+    return ::asc::std::trunc(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double round(double value) noexcept
@@ -367,9 +367,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double roundl(long d
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float round(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double round(Tp value) noexcept
 {
-    return ::asc::std::round(static_cast<float>(value));
+    return ::asc::std::round(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double rint(double value) noexcept
@@ -390,9 +390,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double rintl(long do
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float rint(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double rint(Tp value) noexcept
 {
-    return ::asc::std::rint(static_cast<float>(value));
+    return ::asc::std::rint(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double nearbyint(double value) noexcept
@@ -413,9 +413,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double nearbyintl(lo
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float nearbyint(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double nearbyint(Tp value) noexcept
 {
-    return ::asc::std::nearbyint(static_cast<float>(value));
+    return ::asc::std::nearbyint(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long lrint(double value) noexcept

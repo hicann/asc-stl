@@ -237,7 +237,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 // 宿主全类型面：double/long double 主名、后缀 l 别名与整型提升。整型提升
-// 沿基座可观察契约走 float 精度（与仅 float 时代的隐式转换逐位一致）。
+// 整型提升对齐 <cmath> 标准：整型实参提升为 double 计算并返回 double。
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double log(double value) noexcept
 {
@@ -257,9 +257,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double logl(long dou
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float log(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double log(Tp value) noexcept
 {
-    return ::asc::std::log(static_cast<float>(value));
+    return ::asc::std::log(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double log10(double value) noexcept
@@ -280,9 +280,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double log10l(long d
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float log10(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double log10(Tp value) noexcept
 {
-    return ::asc::std::log10(static_cast<float>(value));
+    return ::asc::std::log10(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double log1p(double value) noexcept
@@ -303,9 +303,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double log1pl(long d
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float log1p(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double log1p(Tp value) noexcept
 {
-    return ::asc::std::log1p(static_cast<float>(value));
+    return ::asc::std::log1p(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double log2(double value) noexcept
@@ -326,9 +326,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double log2l(long do
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float log2(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double log2(Tp value) noexcept
 {
-    return ::asc::std::log2(static_cast<float>(value));
+    return ::asc::std::log2(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr int ilogb(double value) noexcept

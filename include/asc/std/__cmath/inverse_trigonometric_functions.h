@@ -137,7 +137,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 // 宿主全类型面：double/long double 主名、后缀 l 别名与整型提升。整型提升
-// 沿基座可观察契约走 float 精度（与仅 float 时代的隐式转换逐位一致）。
+// 整型提升对齐 <cmath> 标准：整型实参提升为 double 计算并返回 double。
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double acos(double value) noexcept
 {
@@ -157,9 +157,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double acosl(long do
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float acos(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double acos(Tp value) noexcept
 {
-    return ::asc::std::acos(static_cast<float>(value));
+    return ::asc::std::acos(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double asin(double value) noexcept
@@ -180,9 +180,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double asinl(long do
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float asin(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double asin(Tp value) noexcept
 {
-    return ::asc::std::asin(static_cast<float>(value));
+    return ::asc::std::asin(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double atan(double value) noexcept
@@ -203,9 +203,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double atanl(long do
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float atan(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double atan(Tp value) noexcept
 {
-    return ::asc::std::atan(static_cast<float>(value));
+    return ::asc::std::atan(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double atan2(double y, double x) noexcept

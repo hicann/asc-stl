@@ -25,7 +25,7 @@
 
 namespace asc_stl_b012_test {
 
-static_assert(asc::std::is_same_v<decltype(asc::std::sin(1)), float>);
+static_assert(asc::std::is_same_v<decltype(asc::std::sin(1)), double>);
 static_assert(asc::std::is_same_v<decltype(asc::std::sqrt(4.0F)), float>);
 static_assert(asc::std::is_same_v<decltype(asc::std::hypot(3.0F, 4.0F)), float>);
 static_assert(asc::device_ref(2).ordinal() == 2);

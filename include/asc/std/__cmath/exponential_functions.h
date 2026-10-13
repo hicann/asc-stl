@@ -245,7 +245,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 // 宿主全类型面：double/long double 主名、后缀 l 别名与整型提升。整型提升
-// 沿基座可观察契约走 float 精度（与仅 float 时代的隐式转换逐位一致）。
+// 整型提升对齐 <cmath> 标准：整型实参提升为 double 计算并返回 double。
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double exp(double value) noexcept
 {
@@ -265,9 +265,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double expl(long dou
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float exp(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double exp(Tp value) noexcept
 {
-    return ::asc::std::exp(static_cast<float>(value));
+    return ::asc::std::exp(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double exp2(double value) noexcept
@@ -288,9 +288,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double exp2l(long do
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float exp2(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double exp2(Tp value) noexcept
 {
-    return ::asc::std::exp2(static_cast<float>(value));
+    return ::asc::std::exp2(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double expm1(double value) noexcept
@@ -311,9 +311,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double expm1l(long d
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float expm1(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double expm1(Tp value) noexcept
 {
-    return ::asc::std::expm1(static_cast<float>(value));
+    return ::asc::std::expm1(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double frexp(double value, int* exponent) noexcept

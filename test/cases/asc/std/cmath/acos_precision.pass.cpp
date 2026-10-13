@@ -26,9 +26,9 @@ static_assert(std::is_same_v<decltype(asc::std::acos(0.5F)), float>);
 static_assert(std::is_same_v<decltype(asc::std::acos(0.5)), double>);
 static_assert(std::is_same_v<decltype(asc::std::acos(0.5L)), long double>);
 static_assert(std::is_same_v<decltype(asc::std::acosl(0.5L)), long double>);
-static_assert(std::is_same_v<decltype(asc::std::acos(1)), float>);
-static_assert(std::is_same_v<decltype(asc::std::acos(1ULL)), float>);
-static_assert(std::is_same_v<decltype(asc::std::acos(true)), float>);
+static_assert(std::is_same_v<decltype(asc::std::acos(1)), double>);
+static_assert(std::is_same_v<decltype(asc::std::acos(1ULL)), double>);
+static_assert(std::is_same_v<decltype(asc::std::acos(true)), double>);
 static_assert(noexcept(asc::std::acos(0.5)) && noexcept(asc::std::acosl(0.5L)));
 
 template <class T>
@@ -55,7 +55,7 @@ int main()
     volatile long double input = 1.0L - 8 * std::numeric_limits<long double>::epsilon();
     if (asc::std::acosl(input) != asc::std::acos(input) || asc::std::acosl(input) <= 0)
         return 11;
-    if (asc::std::acos(0) != asc::std::acos(0.0F) || asc::std::acos(1ULL) != 0.0F)
+    if (asc::std::acos(0) != asc::std::acos(0.0) || asc::std::acos(1ULL) != 0.0)
         return 12;
     return 0;
 }

@@ -113,7 +113,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 // 宿主全类型面：double/long double 主名、后缀 l 别名与整型提升。整型提升
-// 沿基座可观察契约走 float 精度（与仅 float 时代的隐式转换逐位一致）。
+// 整型提升对齐 <cmath> 标准：整型实参提升为 double 计算并返回 double。
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double sinh(double value) noexcept
 {
@@ -133,9 +133,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double sinhl(long do
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float sinh(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double sinh(Tp value) noexcept
 {
-    return ::asc::std::sinh(static_cast<float>(value));
+    return ::asc::std::sinh(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double cosh(double value) noexcept
@@ -156,9 +156,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double coshl(long do
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float cosh(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double cosh(Tp value) noexcept
 {
-    return ::asc::std::cosh(static_cast<float>(value));
+    return ::asc::std::cosh(static_cast<double>(value));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double tanh(double value) noexcept
@@ -179,9 +179,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double tanhl(long do
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float tanh(Tp value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double tanh(Tp value) noexcept
 {
-    return ::asc::std::tanh(static_cast<float>(value));
+    return ::asc::std::tanh(static_cast<double>(value));
 }
 
 #endif  // !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()

@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::acos` 的 Host 整型兼容重载将整数转换为 float 后计算反余弦，并返回 float。这一行为保留此前整型调用的精度和返回类型，与标准库整型调用通常返回 double 的行为不同。
+`asc::std::acos` 的 Host 整型兼容重载将整数提升为 double 后计算反余弦，并返回 double，与标准 `<cmath>` 整型调用的行为一致。设备侧整型实参仍经 float 重载计算并返回 float。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-template<class Integer, enable_if_t<is_integral<Integer>::value, int> = 0> float asc::std::acos(Integer value) noexcept;
+template<class Integer, enable_if_t<is_integral<Integer>::value, int> = 0> double asc::std::acos(Integer value) noexcept;
 ```
 
 ## 参数说明
@@ -50,20 +50,20 @@ template<class Integer, enable_if_t<is_integral<Integer>::value, int> = 0> float
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
+| --- | --- |
 | `value` | 输入 | 整型输入；有效实数定义域内的整数为 -1、0 和 1。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `float` | 返回转换为 float 后计算的反余弦弧度值。 |
+| `double` | 返回整型实参提升为 double 后计算的反余弦弧度值，结果区间为 [0, π]。 |
 
 ## 约束说明
 
 - 仅可在 Host 调用
 - Integer 必须是整数类型（含 bool）
-- 转换为 float 后计算并返回 float，保持既有整型调用行为
+- 整型实参提升为 double 后计算并返回 double，对齐标准 `<cmath>` 行为
 
 ## 调用示例
 
@@ -72,8 +72,8 @@ template<class Integer, enable_if_t<is_integral<Integer>::value, int> = 0> float
 ```cpp
 #include <asc/std/cmath>
 
-float example()
+double example()
 {
-    return asc::std::acos(0);
+    return asc::std::acos(0);  // 整型实参提升为 double，返回 [0, π] 内的弧度值
 }
 ```

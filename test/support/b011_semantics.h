@@ -87,7 +87,11 @@ static_assert(asc::std::__fp_has_native_type_v<asc::std::__fp_format::__binary32
 static_assert(asc::std::__fp_conv_rank_order_v<float, double> == asc::std::__fp_conv_rank_order::__less);
 static_assert(asc::std::__fp_is_implicit_conversion_v<float, double>);
 static_assert(asc::std::__fp_is_explicit_conversion_v<double, float>);
-static_assert(asc::std::is_same_v<decltype(asc::std::sin(1)), float>);
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+static_assert(asc::std::is_same_v<decltype(asc::std::sin(1)), float>);  // 设备：整型经 float 重载
+#else
+static_assert(asc::std::is_same_v<decltype(asc::std::sin(1)), double>);  // 宿主：整型提升对齐标准
+#endif
 static_assert(asc::std::is_same_v<decltype(asc::std::fma(1, 2.0F, 3.0F)), float>);
 static_assert(asc::std::is_same_v<decltype(asc::std::atan2(1.0F, 2.0F)), float>);
 static_assert(asc::std::is_same_v<decltype(asc::std::remquo(1.0L, 2.0L, static_cast<int*>(nullptr))), float>);
