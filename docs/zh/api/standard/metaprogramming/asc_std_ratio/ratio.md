@@ -35,7 +35,7 @@
 ## 声明
 
 ```cpp
-template<intmax_t Num, intmax_t Den> class asc::std::ratio
+template<intmax_t Numerator, intmax_t Denominator = 1> class asc::std::ratio
 ```
 
 ## 约束说明

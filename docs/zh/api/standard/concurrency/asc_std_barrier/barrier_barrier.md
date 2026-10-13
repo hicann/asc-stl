@@ -39,7 +39,7 @@
 ## 函数原型
 
 ```cpp
-barrier(long long expected, CompletionFunction completion) noexcept;
+barrier(long long expected, CompletionFunction completion);
 ```
 
 ## 参数说明

@@ -37,7 +37,7 @@
 ## 函数原型
 
 ```cpp
-arrival_token asc::std::barrier::arrive(long long update) noexcept;
+arrival_token asc::std::barrier::arrive(long long update);
 ```
 
 ## 参数说明

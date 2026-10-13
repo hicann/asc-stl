@@ -43,7 +43,7 @@ template<class T> [[nodiscard]] constexpr T asc::std::imag(const complex<T>& val
 ### 原型 2
 
 ```cpp
-template<class T> [[nodiscard]] constexpr Asccomplexvaluetype<T> asc::std::imag(T value);
+template<class T> [[nodiscard]] constexpr T asc::std::imag(T value);
 ```
 
 ## 参数说明
@@ -81,7 +81,7 @@ template<class T> [[nodiscard]] constexpr Asccomplexvaluetype<T> asc::std::imag(
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
 | 原型 1 | `T` | 返回复数虚部。 |
-| 原型 2 | `Asccomplexvaluetype<T>` | 返回复数虚部。 |
+| 原型 2 | `T` | 返回复数虚部。 |
 
 ## 约束说明
 

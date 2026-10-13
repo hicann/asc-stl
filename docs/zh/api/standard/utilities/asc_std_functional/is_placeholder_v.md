@@ -35,7 +35,7 @@
 ## 声明
 
 ```cpp
-template<class T> inline constexpr const size_t asc::std::is_placeholder_v
+template<class T> inline constexpr int asc::std::is_placeholder_v
 ```
 
 ## 约束说明

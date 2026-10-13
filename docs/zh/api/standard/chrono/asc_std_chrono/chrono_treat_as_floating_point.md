@@ -35,7 +35,7 @@
 ## 声明
 
 ```cpp
-template<class Re> struct asc::std::chrono::treat_as_floating_point
+template<class Rep> struct asc::std::chrono::treat_as_floating_point
 ```
 
 ## 约束说明

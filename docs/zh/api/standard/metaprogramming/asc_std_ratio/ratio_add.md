@@ -35,7 +35,7 @@
 ## 声明
 
 ```cpp
-template<class R1, class R2> using asc::std::ratio_add = typename Ratioadd<R1, R2>::type
+template<class R1, class R2> using asc::std::ratio_add = typename __ratio_add<R1, R2>::type
 ```
 
 ## 约束说明

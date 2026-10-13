@@ -74,38 +74,6 @@ template<class InputIterator1, class InputIterator2> [[nodiscard]] constexpr boo
 
 该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
 
-### 原型 6
-
-```cpp
-template<typename II1, typename II2> constexpr bool asc::std::equal(II1 first1, II1 last1, II2 first2);
-```
-
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
-
-### 原型 7
-
-```cpp
-template<typename II1, typename II2> constexpr bool asc::std::equal(II1 first1, II1 last1, II2 first2, II2 last2);
-```
-
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
-
-### 原型 8
-
-```cpp
-template<typename IIter1, typename IIter2, typename BinaryPredicate> constexpr bool asc::std::equal(IIter1 first1, IIter1 last1, IIter2 first2, BinaryPredicate predicate);
-```
-
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
-
-### 原型 9
-
-```cpp
-template<typename IIter1, typename IIter2, typename BinaryPredicate> constexpr bool asc::std::equal(IIter1 first1, IIter1 last1, IIter2 first2, IIter2 last2, BinaryPredicate predicate);
-```
-
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
-
 ## 参数说明
 
 ### 原型 1 的参数
@@ -203,80 +171,6 @@ template<typename IIter1, typename IIter2, typename BinaryPredicate> constexpr b
 | `first2` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last2` | 输入 | 输入范围的结束位置，不包含该位置。 |
 
-### 原型 6 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `II1` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `II2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `first1` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last1` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `first2` | 输入 | 输入范围的起始迭代器或指针。 |
-
-### 原型 7 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `II1` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `II2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `first1` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last1` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `first2` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last2` | 输入 | 输入范围的结束位置，不包含该位置。 |
-
-### 原型 8 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `IIter1` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `IIter2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `BinaryPredicate` | 判断元素是否满足条件的可调用对象类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `first1` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last1` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `first2` | 输入 | 输入范围的起始迭代器或指针。 |
-| `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
-
-### 原型 9 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `IIter1` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `IIter2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `BinaryPredicate` | 判断元素是否满足条件的可调用对象类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `first1` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last1` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `first2` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last2` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
-
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
@@ -286,10 +180,6 @@ template<typename IIter1, typename IIter2, typename BinaryPredicate> constexpr b
 | 原型 3 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
 | 原型 4 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
 | 原型 5 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 6 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 7 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 8 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 9 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
 
 ## 约束说明
 

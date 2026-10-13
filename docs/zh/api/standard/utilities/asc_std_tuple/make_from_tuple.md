@@ -35,7 +35,7 @@
 ## 函数原型
 
 ```cpp
-template<class T, class Tuple> constexpr T asc::std::make_from_tuple(Tuple&& value) noexcept(noexcept(::asc::std::Makefromtupleimpl<T>(::asc::std::forward<Tuple>(T4), Maketupleindicest<tuple_size_v<remove_reference_t<Tuple>>>{})));
+template<class T, class Tuple> constexpr T asc::std::make_from_tuple(Tuple&& value);
 ```
 
 ## 参数说明

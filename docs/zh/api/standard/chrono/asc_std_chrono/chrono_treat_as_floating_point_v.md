@@ -35,7 +35,7 @@
 ## 声明
 
 ```cpp
-template<class Re> inline constexpr const bool asc::std::chrono::treat_as_floating_point_v
+template<class Rep> inline constexpr const bool asc::std::chrono::treat_as_floating_point_v
 ```
 
 ## 约束说明

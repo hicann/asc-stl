@@ -37,7 +37,7 @@
 ### 原型 1
 
 ```cpp
-[[nodiscard]] constexpr bool asc::std::operator==(basic_string_view<CharT, Traits> left, basic_string_view<CharT, Traits> right) noexcept;
+constexpr bool asc::std::operator==(basic_string_view<CharT, Traits> left, basic_string_view<CharT, Traits> right) noexcept;
 ```
 
 此原型对应头文件：`<asc/std/string_view>`。
@@ -45,7 +45,7 @@
 ### 原型 2
 
 ```cpp
-[[nodiscard]] constexpr bool asc::std::operator==(const tuple<>& left, const tuple<>& right) noexcept;
+template<class... Left, class... Right> constexpr bool asc::std::operator==(const tuple<Left...>& left, const tuple<Right...>& right);
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
@@ -69,7 +69,7 @@ constexpr bool asc::std::operator==(const uniform_real_distribution<float>::para
 ### 原型 5
 
 ```cpp
-template<class T1, class T2> constexpr bool asc::std::operator==(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) noexcept(noexcept(lhs.first == rhs.first&& lhs.second == rhs.second));
+template<class T1, class T2> constexpr bool asc::std::operator==(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) noexcept(noexcept(lhs.first == rhs.first && lhs.second == rhs.second));
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
@@ -77,7 +77,7 @@ template<class T1, class T2> constexpr bool asc::std::operator==(const pair<T1, 
 ### 原型 6
 
 ```cpp
-template<class T> constexpr bool asc::std::operator==(complex<T> lhs, complex<T> rhs) noexcept;
+template<class T> constexpr bool asc::std::operator==(const complex<T>& lhs, const complex<T>& rhs) noexcept;
 ```
 
 此原型对应头文件：`<asc/std/complex>`。

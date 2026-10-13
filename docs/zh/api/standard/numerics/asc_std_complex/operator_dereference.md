@@ -37,19 +37,19 @@
 ### 原型 1
 
 ```cpp
-constexpr asc::std::complex<float> asc::std::operator*(const asc::std::complex<float>& lhs, const asc::std::complex<float>& rhs);
+constexpr asc::std::complex<float> asc::std::operator*(const asc::std::complex<float>& lhs, const asc::std::complex<float>& rhs) noexcept;
 ```
 
 ### 原型 2
 
 ```cpp
-constexpr asc::std::complex<float> asc::std::operator*(const asc::std::complex<float>& lhs, float rhs);
+constexpr asc::std::complex<float> asc::std::operator*(const asc::std::complex<float>& lhs, float rhs) noexcept;
 ```
 
 ### 原型 3
 
 ```cpp
-constexpr asc::std::complex<float> asc::std::operator*(float lhs, const asc::std::complex<float>& rhs);
+constexpr asc::std::complex<float> asc::std::operator*(float lhs, const asc::std::complex<float>& rhs) noexcept;
 ```
 
 ## 参数说明

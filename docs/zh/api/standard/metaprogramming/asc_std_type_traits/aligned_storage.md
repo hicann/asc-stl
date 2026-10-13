@@ -34,16 +34,8 @@
 
 ## 声明
 
-### 原型 1
-
 ```cpp
-template<size_t Len, size_t Align> struct asc::std::aligned_storage
-```
-
-### 原型 2
-
-```cpp
-template<size_t Len> struct asc::std::aligned_storage
+template<size_t Len, size_t Align = /* 不超过 Len 的最大基础类型对齐值 */> struct asc::std::aligned_storage
 ```
 
 ## 约束说明

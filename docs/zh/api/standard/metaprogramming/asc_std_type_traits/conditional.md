@@ -37,13 +37,13 @@
 ### 原型 1
 
 ```cpp
-template<bool Value, class If, class Then> struct asc::std::conditional
+template<bool B, class If, class Then> struct asc::std::conditional
 ```
 
 ### 原型 2
 
 ```cpp
-template<class If, class Then> struct asc::std::conditional
+template<class If, class Then> struct asc::std::conditional<false, If, Then>
 ```
 
 ## 约束说明

@@ -35,7 +35,7 @@
 ## 声明
 
 ```cpp
-#define PTRDIFF_MIN (-PTRDIFFMAX - 1)
+#define PTRDIFF_MIN (-__PTRDIFF_MAX__ - 1)
 ```
 
 ## 约束说明

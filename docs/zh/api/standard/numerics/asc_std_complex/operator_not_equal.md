@@ -37,7 +37,7 @@
 ### 原型 1
 
 ```cpp
-[[nodiscard]] constexpr bool asc::std::operator!=(basic_string_view<CharT, Traits> left, basic_string_view<CharT, Traits> right) noexcept;
+constexpr bool asc::std::operator!=(basic_string_view<CharT, Traits> left, basic_string_view<CharT, Traits> right) noexcept;
 ```
 
 此原型对应头文件：`<asc/std/string_view>`。
@@ -45,7 +45,7 @@
 ### 原型 2
 
 ```cpp
-[[nodiscard]] constexpr bool asc::std::operator!=(const tuple<>& left, const tuple<>& right) noexcept;
+template<class... Left, class... Right> constexpr bool asc::std::operator!=(const tuple<Left...>& left, const tuple<Right...>& right);
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
@@ -69,15 +69,7 @@ constexpr bool asc::std::operator!=(const uniform_real_distribution<float>::para
 ### 原型 5
 
 ```cpp
-template<class T1, class T2> constexpr bool asc::std::operator!=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) noexcept(noexcept(lhs == rhs));
-```
-
-此原型对应头文件：`<asc/std/utility>`。
-
-### 原型 6
-
-```cpp
-template<class T> constexpr bool asc::std::operator!=(complex<T> lhs, complex<T> rhs) noexcept;
+template<class T> constexpr bool asc::std::operator!=(const complex<T>& lhs, const complex<T>& rhs) noexcept;
 ```
 
 此原型对应头文件：`<asc/std/complex>`。
@@ -126,22 +118,6 @@ template<class T> constexpr bool asc::std::operator!=(complex<T> lhs, complex<T>
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `T2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `lhs` | 输入 | 提供按位置访问或组合的元素集合。 |
-| `rhs` | 输入 | 提供按位置访问或组合的元素集合。 |
-
-### 原型 6 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
 | `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
 
 **函数参数**
@@ -160,7 +136,6 @@ template<class T> constexpr bool asc::std::operator!=(complex<T> lhs, complex<T>
 | 原型 3 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
 | 原型 4 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
 | 原型 5 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 6 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
 
 ## 约束说明
 

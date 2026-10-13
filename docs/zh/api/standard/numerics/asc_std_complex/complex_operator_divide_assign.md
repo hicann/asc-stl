@@ -35,7 +35,7 @@
 ## 函数原型
 
 ```cpp
-constexpr complex<T>& asc::std::complex::operator/=(const value_type& rhs);
+constexpr complex<T>& asc::std::complex::operator/=(const T& rhs) noexcept;
 ```
 
 ## 参数说明

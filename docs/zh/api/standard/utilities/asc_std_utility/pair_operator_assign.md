@@ -73,13 +73,7 @@ template<class U1, class U2, enable_if_t<is_assignable_v<const T1&, const U1&>, 
 ### 原型 7
 
 ```cpp
-template<class UPair, Selectassignment Trait, enable_if_t<Canassign<Trait>, int>> constexpr const pair<T1, T2>& asc::std::pair::operator=(UPair&& other) const noexcept(Cannothrowassign<Trait>);
-```
-
-### 原型 8
-
-```cpp
-template<class UPair, Selectassignment Trait, enable_if_t<Canassign<Trait>, int>> constexpr pair<T1, T2>& asc::std::pair::operator=(UPair&& other) noexcept(Cannothrowassign<Trait>);
+template<class PairLike, enable_if_t<__tuple_like_ext<remove_cvref_t<PairLike>> && !__is_pair<remove_cvref_t<PairLike>>::value && is_assignable_v<T1&, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))> && is_assignable_v<T2&, decltype(::asc::std::__adl_get<1>(::asc::std::declval<PairLike>()))>, int>> constexpr pair<T1, T2>& asc::std::pair::operator=(PairLike&& other);
 ```
 
 ## 参数说明
@@ -174,25 +168,8 @@ template<class UPair, Selectassignment Trait, enable_if_t<Canassign<Trait>, int>
 
 | 参数名 | 描述 |
 | --- | --- |
-| `UPair` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 8 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `UPair` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
+| `PairLike` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
 
 **函数参数**
 
@@ -210,8 +187,7 @@ template<class UPair, Selectassignment Trait, enable_if_t<Canassign<Trait>, int>
 | 原型 4 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 | 原型 5 | `const pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 | 原型 6 | `const pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 7 | `const pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 8 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型 7 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 
 ## 约束说明
 

@@ -37,7 +37,7 @@
 ### 原型 1
 
 ```cpp
-template<class ...Types> [[nodiscard]] constexpr bool asc::std::operator>(const variant<Types...>& left, const variant<Types...>& right);
+template<class ...Types> constexpr bool asc::std::operator>(const variant<Types...>& left, const variant<Types...>& right);
 ```
 
 此原型对应头文件：`<asc/std/variant>`。
@@ -85,7 +85,7 @@ template<class T> constexpr bool asc::std::operator>(const asc::std::optional<T>
 ### 原型 7
 
 ```cpp
-template<int T> [[nodiscard]] constexpr bool asc::std::operator>(basic_string_view<CharT, Traits> left, type_identity_t<basic_string_view<CharT, Traits>> right) noexcept;
+template<class C, class T, int = 1> constexpr bool asc::std::operator>(basic_string_view<C, T> left, type_identity_t<basic_string_view<C, T>> right) noexcept;
 ```
 
 此原型对应头文件：`<asc/std/string_view>`。
@@ -93,7 +93,7 @@ template<int T> [[nodiscard]] constexpr bool asc::std::operator>(basic_string_vi
 ### 原型 8
 
 ```cpp
-template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator>(type_identity_t<basic_string_view<CharT, Traits>> left, basic_string_view<CharT, Traits> right) noexcept;
+template<class C, class T, unsigned int = 2> constexpr bool asc::std::operator>(type_identity_t<basic_string_view<C, T>> left, basic_string_view<C, T> right) noexcept;
 ```
 
 此原型对应头文件：`<asc/std/string_view>`。
@@ -175,7 +175,6 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator>(type_ide
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 提供“判断左操作数是否大于右操作数”所需的输入对象；类型须满足所选原型约束。 |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
 
 ### 原型 6 的参数
@@ -191,7 +190,6 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator>(type_ide
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `asc` | 输入 | 提供“判断左操作数是否大于右操作数”所需的输入对象；类型须满足所选原型约束。 |
 
 ### 原型 7 的参数
 
@@ -199,7 +197,9 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator>(type_ide
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `C` | basic_string_view 的字符类型；须满足原型中的类型约束。 |
+| `T` | basic_string_view 的字符特性类型；须满足原型中的类型约束。 |
+| `未命名参数3` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
 
 **函数参数**
 
@@ -214,7 +214,9 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator>(type_ide
 
 | 参数名 | 描述 |
 | --- | --- |
-| `未命名参数1` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
+| `C` | basic_string_view 的字符类型；须满足原型中的类型约束。 |
+| `T` | basic_string_view 的字符特性类型；须满足原型中的类型约束。 |
+| `未命名参数3` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
 
 **函数参数**
 

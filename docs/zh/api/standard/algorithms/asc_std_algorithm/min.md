@@ -46,30 +46,6 @@ template<class T, class Compare> [[nodiscard]] constexpr const T& asc::std::min(
 template<class T> [[nodiscard]] constexpr const T& asc::std::min(const T& left, const T& right);
 ```
 
-### 原型 3
-
-```cpp
-template<typename T, typename Compare> constexpr const T& asc::std::min(const T& left, const T& right, Compare compare);
-```
-
-### 原型 4
-
-```cpp
-template<typename T> constexpr const T& asc::std::min(const T& left, const T& right);
-```
-
-### 原型 5
-
-```cpp
-template<typename T> constexpr const long& asc::std::min(const long& left, const long& right);
-```
-
-### 原型 6
-
-```cpp
-template<typename T> constexpr const unsigned long& asc::std::min(const unsigned long& left, const unsigned long& right);
-```
-
 ## 参数说明
 
 ### 原型 1 的参数
@@ -100,69 +76,7 @@ template<typename T> constexpr const unsigned long& asc::std::min(const unsigned
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
-
-### 原型 3 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
 | --- | --- |
-| `T` | 输入范围元素或参与运算的值类型。 |
-| `Compare` | 定义元素先后顺序的比较对象类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
-| `compare` | 输入 | 用于确定元素顺序的比较对象。 |
-
-### 原型 4 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 输入范围元素或参与运算的值类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
-
-### 原型 5 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 输入范围元素或参与运算的值类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
-
-### 原型 6 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 输入范围元素或参与运算的值类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
 | `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
 | `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
 
@@ -172,10 +86,6 @@ template<typename T> constexpr const unsigned long& asc::std::min(const unsigned
 | --- | --- | --- |
 | 原型 1 | `const T &` | 返回较小值的引用或范围中的最小值。 |
 | 原型 2 | `const T &` | 返回较小值的引用或范围中的最小值。 |
-| 原型 3 | `const T &` | 返回较小值的引用或范围中的最小值。 |
-| 原型 4 | `const T &` | 返回较小值的引用或范围中的最小值。 |
-| 原型 5 | `const long &` | 返回较小值的引用或范围中的最小值。 |
-| 原型 6 | `const unsigned long &` | 返回较小值的引用或范围中的最小值。 |
 
 ## 约束说明
 

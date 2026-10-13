@@ -37,13 +37,13 @@
 ### 原型 1
 
 ```cpp
-template<class Pointer> constexpr auto asc::std::to_address(const Pointer& pointer) noexcept -> decltype(::asc::std::Toaddress(P));
+template<class Pointer> constexpr auto asc::std::to_address(const Pointer& pointer) noexcept -> decltype(::asc::std::__to_address(pointer));
 ```
 
 ### 原型 2
 
 ```cpp
-template<class T> constexpr auto asc::std::to_address(T* pointer) noexcept;
+template<class T> constexpr T* asc::std::to_address(T* pointer) noexcept;
 ```
 
 ## 参数说明
@@ -81,7 +81,7 @@ template<class T> constexpr auto asc::std::to_address(T* pointer) noexcept;
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
 | 原型 1 | `auto` | 返回与输入指针或指针类对象对应的原始地址。 |
-| 原型 2 | `auto` | 返回与输入指针或指针类对象对应的原始地址。 |
+| 原型 2 | `T*` | 返回与输入指针或指针类对象对应的原始地址。 |
 
 ## 约束说明
 

@@ -37,7 +37,7 @@
 ### 原型 1
 
 ```cpp
-template<class Cont> [[nodiscard]] constexpr auto asc::std::empty(const Cont& c) noexcept(noexcept(C.empty())) -> decltype(C.empty());
+template<class Cont> [[nodiscard]] constexpr auto asc::std::empty(const Cont& c) noexcept(noexcept(c.empty())) -> decltype(c.empty());
 ```
 
 ### 原型 2
@@ -81,7 +81,7 @@ template<class T, size_t Sz> [[nodiscard]] constexpr bool asc::std::empty(const 
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `decltype(C.empty())` | 输入范围不含元素时返回 `true`，否则返回 `false`。 |
+| 原型 1 | `decltype(c.empty())` | 输入范围不含元素时返回 `true`，否则返回 `false`。 |
 | 原型 2 | `bool` | 对象不含元素时返回 `true`，否则返回 `false`。 |
 
 ## 约束说明

@@ -37,13 +37,19 @@
 ### 原型 1
 
 ```cpp
-template<class Rp, class Visitor, class ...Vs, typename> constexpr Rp asc::std::visit(Visitor&& visitor, Vs&&... values);
+template<class Visitor, class Variant> constexpr decltype(auto) asc::std::visit(Visitor&& visitor, Variant&& value);
 ```
 
 ### 原型 2
 
 ```cpp
-template<class Visitor, class ...Vs, typename> constexpr decltype(auto) asc::std::visit(Visitor&& visitor, Vs&&... values);
+template<class Visitor, class Left, class Right> constexpr decltype(auto) asc::std::visit(Visitor&& visitor, Left&& left, Right&& right);
+```
+
+### 原型 3
+
+```cpp
+template<class Visitor, class First, class Second, class... Rest, enable_if_t<sizeof...(Rest) >= 1, int> = 0> constexpr auto asc::std::visit(Visitor&& visitor, First&& first, Second&& second, Rest&&... rest) -> decltype(asc::std::__visit_common_step<remove_cvref_t<Visitor>, remove_cvref_t<First>&, remove_cvref_t<Second>&, remove_cvref_t<Rest>&...>(asc::std::__make_indices_imp<variant_size_v<remove_cvref_t<First>>, 0>{}));
 ```
 
 ## 参数说明
@@ -54,17 +60,15 @@ template<class Visitor, class ...Vs, typename> constexpr decltype(auto) asc::std
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rp` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Visitor` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Vs` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `未命名参数4` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
+| `Visitor` | 访问器可调用体类型。 |
+| `Variant` | 被访问的 variant 类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `visitor` | 输入/输出 | 提供“以活动备选项调用访问器并返回结果”使用的对象引用；被引用对象须在调用期间有效。 |
-| `values` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `visitor` | 输入 | 以当前活动备选项调用的访问器。 |
+| `value` | 输入 | 被访问的 variant。 |
 
 ### 原型 2 的参数
 
@@ -72,23 +76,39 @@ template<class Visitor, class ...Vs, typename> constexpr decltype(auto) asc::std
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Visitor` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Vs` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `未命名参数3` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
+| `Visitor` | 访问器可调用体类型。 |
+| `Left`、`Right` | 两个被访问的 variant 类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `visitor` | 输入/输出 | 提供“以活动备选项调用访问器并返回结果”使用的对象引用；被引用对象须在调用期间有效。 |
-| `values` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `visitor` | 输入 | 以两个 variant 的活动备选项组合调用的访问器。 |
+| `left`、`right` | 输入 | 被访问的两个 variant。 |
+
+### 原型 3 的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Visitor` | 访问器可调用体类型。 |
+| `First`、`Second`、`Rest...` | 三个及以上被访问的 variant 类型。 |
+| `未命名约束参数6` | 编译期约束参数（`sizeof...(Rest) >= 1`），调用方无需显式指定。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `visitor` | 输入 | 以各 variant 活动备选项组合调用的访问器。 |
+| `first`、`second`、`rest...` | 输入 | 被访问的三个及以上 variant。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `Rp` | 返回结果。 |
-| 原型 2 | `decltype(auto)` | 返回结果。 |
+| 原型 1、2 | `decltype(auto)` | 访问器以活动备选项（组合）调用的结果，保持其值类别与类型。 |
+| 原型 3 | 尾置推导类型 | 各备选类型组合调用结果的公共类型。 |
 
 ## 约束说明
 

@@ -35,7 +35,7 @@
 ## 函数原型
 
 ```cpp
-template<class Fn, class Tuple> constexpr decltype(auto) asc::std::apply(Fn&& function, Tuple&& value) noexcept(noexcept(::asc::std::Applytupleimpl(::asc::std::forward<Fn>(F), ::asc::std::forward<Tuple>(T), Maketupleindicest<tuple_size_v<remove_reference_t<Tuple>>>{})));
+template<class Function, class Tuple> constexpr decltype(auto) asc::std::apply(Function&& function, Tuple&& value);
 ```
 
 ## 参数说明
@@ -44,7 +44,7 @@ template<class Fn, class Tuple> constexpr decltype(auto) asc::std::apply(Fn&& fu
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Fn` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Function` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
 | `Tuple` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
 
 **函数参数**

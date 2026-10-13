@@ -35,7 +35,7 @@
 ## 函数原型
 
 ```cpp
-template<class InputIter> [[nodiscard]] constexpr InputIter asc::std::prev(InputIter value, typename iterator_traits<InputIter>::difference_type count);
+template<class InputIter> constexpr InputIter asc::std::prev(InputIter value, typename iterator_traits<InputIter>::difference_type count = 1);
 ```
 
 ## 参数说明

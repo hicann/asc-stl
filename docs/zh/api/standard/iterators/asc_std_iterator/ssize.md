@@ -37,7 +37,7 @@
 ### 原型 1
 
 ```cpp
-template<class Cont> constexpr auto asc::std::ssize(const Cont& value) noexcept(noexcept(static_cast<common_type_t<ptrdiff_t, make_signed_t<decltype(C.size())>>>(C.size()))) -> common_type_t<ptrdiff_t, make_signed_t<decltype(C.size())>>;
+template<class Cont> constexpr auto asc::std::ssize(const Cont& value) noexcept(noexcept(static_cast<common_type_t<ptrdiff_t, make_signed_t<decltype(value.size())>>>(value.size()))) -> common_type_t<ptrdiff_t, make_signed_t<decltype(value.size())>>;
 ```
 
 ### 原型 2
@@ -81,7 +81,7 @@ template<class T, ptrdiff_t Sz> constexpr ptrdiff_t asc::std::ssize(const T (&va
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `common_type_t<ptrdiff_t, make_signed_t<decltype(C.size())>>` | 返回范围的元素数量。 |
+| 原型 1 | `common_type_t<ptrdiff_t, make_signed_t<decltype(value.size())>>` | 返回范围的元素数量。 |
 | 原型 2 | `ptrdiff_t` | 返回范围的元素数量。 |
 
 ## 约束说明

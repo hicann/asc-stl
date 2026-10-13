@@ -37,7 +37,7 @@
 ## 函数原型
 
 ```cpp
-void asc::std::barrier::arrive_and_drop() noexcept;
+void asc::std::barrier::arrive_and_drop();
 ```
 
 ## 参数说明

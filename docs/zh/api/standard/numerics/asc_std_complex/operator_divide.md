@@ -37,19 +37,19 @@
 ### 原型 1
 
 ```cpp
-template<class T> [[nodiscard]] constexpr complex<T> asc::std::operator/(const T& lhs, const complex<T>& rhs);
+template<class T> constexpr complex<T> asc::std::operator/(const T& lhs, const complex<T>& rhs) noexcept;
 ```
 
 ### 原型 2
 
 ```cpp
-template<class T> [[nodiscard]] constexpr complex<T> asc::std::operator/(const complex<T>& lhs, const T& rhs);
+template<class T> constexpr complex<T> asc::std::operator/(const complex<T>& lhs, const T& rhs) noexcept;
 ```
 
 ### 原型 3
 
 ```cpp
-template<class T> [[nodiscard]] constexpr complex<T> asc::std::operator/(const complex<T>& lhs, const complex<T>& rhs);
+template<class T> constexpr complex<T> asc::std::operator/(const complex<T>& lhs, const complex<T>& rhs) noexcept;
 ```
 
 ## 参数说明

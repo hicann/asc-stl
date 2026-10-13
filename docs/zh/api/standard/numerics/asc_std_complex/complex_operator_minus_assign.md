@@ -37,13 +37,13 @@
 ### 原型 1
 
 ```cpp
-constexpr complex<T>& asc::std::complex::operator-=(const value_type& rhs);
+constexpr complex<T>& asc::std::complex::operator-=(const T& rhs) noexcept;
 ```
 
 ### 原型 2
 
 ```cpp
-template<class U> constexpr complex<T>& asc::std::complex::operator-=(const complex<U>& rhs);
+template<class U> constexpr complex<T>& asc::std::complex::operator-=(const complex<U>& rhs) noexcept;
 ```
 
 ## 参数说明

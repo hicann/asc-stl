@@ -35,7 +35,11 @@
 ## 声明
 
 ```cpp
-inline constexpr const intmax_t asc::std::ratio::den
+template<intmax_t Numerator, intmax_t Denominator = 1>
+class asc::std::ratio {
+public:
+    static constexpr intmax_t den = /* 约分后的分母，恒为正 */;
+};
 ```
 
 ## 约束说明

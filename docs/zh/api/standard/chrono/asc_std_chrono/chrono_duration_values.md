@@ -35,7 +35,7 @@
 ## 声明
 
 ```cpp
-template<class Re> struct asc::std::chrono::duration_values
+template<class Rep> struct asc::std::chrono::duration_values
 ```
 
 ## 约束说明

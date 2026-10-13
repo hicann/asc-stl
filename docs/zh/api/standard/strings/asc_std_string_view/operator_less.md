@@ -37,7 +37,7 @@
 ### 原型 1
 
 ```cpp
-[[nodiscard]] constexpr bool asc::std::operator<(basic_string_view<CharT, Traits> left, basic_string_view<CharT, Traits> right) noexcept;
+template<class CharT, class Traits> constexpr bool asc::std::operator<(basic_string_view<CharT, Traits> left, basic_string_view<CharT, Traits> right) noexcept;
 ```
 
 此原型对应头文件：`<asc/std/string_view>`。
@@ -45,7 +45,7 @@
 ### 原型 2
 
 ```cpp
-[[nodiscard]] constexpr bool asc::std::operator<(const tuple<>& left, const tuple<>& right) noexcept;
+template<class... Left, class... Right> constexpr bool asc::std::operator<(const tuple<Left...>& left, const tuple<Right...>& right);
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
@@ -53,7 +53,7 @@
 ### 原型 3
 
 ```cpp
-template<class T1, class T2> constexpr bool asc::std::operator<(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) noexcept(noexcept(lhs.first < rhs.first&& lhs.second < rhs.second));
+template<class T1, class T2> constexpr bool asc::std::operator<(const pair<T1, T2>& left, const pair<T1, T2>& right) noexcept(noexcept(left.first < right.first && left.second < right.second));
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
@@ -61,6 +61,13 @@ template<class T1, class T2> constexpr bool asc::std::operator<(const pair<T1, T
 ## 参数说明
 
 ### 原型 1 的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `CharT` | basic_string_view 的字符类型；须满足原型中的类型约束。 |
+| `Traits` | basic_string_view 的字符特性类型；须满足原型中的类型约束。 |
 
 **函数参数**
 
@@ -70,6 +77,13 @@ template<class T1, class T2> constexpr bool asc::std::operator<(const pair<T1, T
 | `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
 
 ### 原型 2 的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Left` | 左侧操作数 tuple 的元素类型列表。 |
+| `Right` | 右侧操作数 tuple 的元素类型列表。 |
 
 **函数参数**
 
@@ -91,8 +105,8 @@ template<class T1, class T2> constexpr bool asc::std::operator<(const pair<T1, T
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 提供按位置访问或组合的元素集合。 |
-| `rhs` | 输入 | 提供按位置访问或组合的元素集合。 |
+| `left` | 输入 | 提供按位置访问或组合的元素集合。 |
+| `right` | 输入 | 提供按位置访问或组合的元素集合。 |
 
 ## 返回值说明
 

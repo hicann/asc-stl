@@ -35,7 +35,7 @@
 ## 函数原型
 
 ```cpp
-template<class InputIter> [[nodiscard]] constexpr typename iterator_traits<InputIter>::difference_type asc::std::distance(InputIter first, InputIter last);
+template<class InputIter> constexpr typename iterator_traits<InputIter>::difference_type asc::std::distance(InputIter first, InputIter last);
 ```
 
 ## 参数说明

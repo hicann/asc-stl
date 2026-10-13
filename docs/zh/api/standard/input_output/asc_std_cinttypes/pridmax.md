@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/cinttypes>`。
 
-`PRIdMAX` 提供最大宽度整数对应的格式化转换说明符。
+`PRIdMAX` 提供最大宽度有符号整数（intmax_t）的 printf 格式转换说明符；本产品采用 LP64 数据模型，intmax_t 为 long。
 
 标准语义参考：[cppreference `cinttypes`](https://en.cppreference.com/w/cpp/header/cinttypes)。
 
 ## 声明
 
 ```cpp
-#define PRIdMAX "lld"
+#define PRIdMAX "ld"
 ```
 
 ## 约束说明

@@ -37,13 +37,13 @@
 ### 原型 1
 
 ```cpp
-template<bool, class T> struct asc::std::enable_if
+template<bool B, class T = void> struct asc::std::enable_if
 ```
 
 ### 原型 2
 
 ```cpp
-template<class T> struct asc::std::enable_if
+template<class T> struct asc::std::enable_if<true, T>
 ```
 
 ## 约束说明

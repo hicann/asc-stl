@@ -35,7 +35,7 @@
 ## 声明
 
 ```cpp
-template<class Re, class Period> class asc::std::chrono::duration
+template<class Rep, class Period> class asc::std::chrono::duration
 ```
 
 ## 约束说明

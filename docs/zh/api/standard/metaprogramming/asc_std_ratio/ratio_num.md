@@ -35,7 +35,11 @@
 ## 声明
 
 ```cpp
-inline constexpr const intmax_t asc::std::ratio::num
+template<intmax_t Numerator, intmax_t Denominator = 1>
+class asc::std::ratio {
+public:
+    static constexpr intmax_t num = /* 约分并规范化符号后的分子 */;
+};
 ```
 
 ## 约束说明

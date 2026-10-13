@@ -37,7 +37,7 @@
 ## 函数原型
 
 ```cpp
-void asc::std::barrier::wait(arrival_token&& token) const noexcept;
+void asc::std::barrier::wait(arrival_token&& token) const;
 ```
 
 ## 参数说明

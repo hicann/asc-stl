@@ -35,7 +35,7 @@
 ## 声明
 
 ```cpp
-#define offsetof(type, member) Builtinoffsetof(type, member)
+#define offsetof(type, member) __builtin_offsetof(type, member)
 ```
 
 ## 约束说明

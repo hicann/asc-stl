@@ -32,8 +32,14 @@
 
 ## 声明
 
+`size_type` 为类模板 `asc::tensor_copy_descriptor<Rank>` 的成员类型别名，在类模板上下文中声明如下：
+
 ```cpp
-using asc::tensor_copy_descriptor<Rank>::size_type = unsigned int
+template<unsigned Rank>
+class asc::tensor_copy_descriptor {
+public:
+    using size_type = unsigned int;
+};
 ```
 
 ## 约束说明

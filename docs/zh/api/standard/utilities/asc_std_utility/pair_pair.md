@@ -37,120 +37,98 @@
 ### 原型 1
 
 ```cpp
-pair(const pair<T1, T2>& other);
+template<class U1 = T1, class U2 = T2, enable_if_t<is_default_constructible_v<U1> && is_default_constructible_v<U2> && __is_implicitly_default_constructible<U1>::value && __is_implicitly_default_constructible<U2>::value, int>> constexpr pair() noexcept(is_nothrow_default_constructible_v<T1>&& is_nothrow_default_constructible_v<T2>);
 ```
 
 ### 原型 2
 
 ```cpp
-pair(pair<T1, T2>&& other);
+template<class U1 = T1, class U2 = T2, enable_if_t<is_default_constructible_v<U1> && is_default_constructible_v<U2> && !(__is_implicitly_default_constructible<U1>::value && __is_implicitly_default_constructible<U2>::value), long>> explicit constexpr pair() noexcept(is_nothrow_default_constructible_v<T1>&& is_nothrow_default_constructible_v<T2>);
 ```
 
 ### 原型 3
 
 ```cpp
-template<Selectconstructor Trait, enable_if_t<Canconstructexplicitly<Trait>, int>> constexpr pair() noexcept(is_nothrow_default_constructible_v<T1>&& is_nothrow_default_constructible_v<T2>);
+pair(const pair<T1, T2>& other);
 ```
 
 ### 原型 4
 
 ```cpp
-template<Selectconstructor Trait, enable_if_t<Canconstructexplicitly<Trait>, int>> constexpr pair(const T1& first, const T2& second) noexcept(is_nothrow_copy_constructible_v<T1>&& is_nothrow_copy_constructible_v<T2>);
+pair(pair<T1, T2>&& other);
 ```
 
 ### 原型 5
 
 ```cpp
-template<Selectconstructor Trait, enable_if_t<Canconstructimplicitly<Trait>, int>> constexpr pair() noexcept(is_nothrow_default_constructible_v<T1>&& is_nothrow_default_constructible_v<T2>);
+template<class U1 = T1, class U2 = T2, enable_if_t<is_constructible_v<T1, U1&&> && is_constructible_v<T2, U2&&> && is_convertible_v<U1&&, T1> && is_convertible_v<U2&&, T2>, int>> constexpr pair(U1&& left, U2&& right) noexcept(is_nothrow_constructible_v<T1, U1&&>&& is_nothrow_constructible_v<T2, U2&&>);
 ```
 
 ### 原型 6
 
 ```cpp
-template<Selectconstructor Trait, enable_if_t<Canconstructimplicitly<Trait>, int>> constexpr pair(const T1& first, const T2& second) noexcept(is_nothrow_copy_constructible_v<T1>&& is_nothrow_copy_constructible_v<T2>);
+template<class U1, class U2, enable_if_t<is_constructible_v<T1, U1&&> && is_constructible_v<T2, U2&&> && !(is_convertible_v<U1&&, T1> && is_convertible_v<U2&&, T2>), long>> explicit constexpr pair(U1&& left, U2&& right) noexcept(is_nothrow_constructible_v<T1, U1&&>&& is_nothrow_constructible_v<T2, U2&&>);
 ```
 
 ### 原型 7
 
 ```cpp
-template<class ...Args1, class ...Args2> constexpr pair(piecewise_construct_t tag, tuple<Args1...> first_args, tuple<Args2...> second_args) noexcept((is_nothrow_constructible_v<T1, Args1...>&& is_nothrow_constructible_v<T2, Args2...>));
+template<class U1, class U2, enable_if_t<is_constructible_v<T1, U1&> && is_constructible_v<T2, U2&>, int>> constexpr pair(pair<U1, U2>& other) noexcept(is_nothrow_constructible_v<T1, U1&>&& is_nothrow_constructible_v<T2, U2&>);
 ```
 
 ### 原型 8
 
 ```cpp
-template<class U1, class U2, Selectconstructor Trait, enable_if_t<Canconstructexplicitly<Trait>, int>> constexpr pair(U1&& first, U2&& second) noexcept(is_nothrow_constructible_v<T1, U1>&& is_nothrow_constructible_v<T2, U2>);
+template<class U1, class U2, enable_if_t<is_constructible_v<T1, const U1&&> && is_constructible_v<T2, const U2&&>, int>> constexpr pair(const pair<U1, U2>&& other) noexcept(is_nothrow_constructible_v<T1, const U1&&>&& is_nothrow_constructible_v<T2, const U2&&>);
 ```
 
 ### 原型 9
 
 ```cpp
-template<class U1, class U2, Selectconstructor Trait, enable_if_t<Canconstructexplicitly<Trait>, int>> constexpr pair(const pair<U1, U2>&& other) noexcept(is_nothrow_constructible_v<T1, const U1>&& is_nothrow_constructible_v<T2, const U2>);
+template<class PairLike, enable_if_t<__tuple_like_ext<remove_cvref_t<PairLike>> && !__is_pair<remove_cvref_t<PairLike>>::value && is_constructible_v<T1, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))> && is_constructible_v<T2, decltype(::asc::std::__adl_get<1>(::asc::std::declval<PairLike>()))>, int>> constexpr pair(PairLike&& other) noexcept(is_nothrow_constructible_v<T1, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))>&& is_nothrow_constructible_v<T2, decltype(::asc::std::__adl_get<1>(::asc::std::declval<PairLike>()))>);
 ```
 
 ### 原型 10
 
 ```cpp
-template<class U1, class U2, Selectconstructor Trait, enable_if_t<Canconstructexplicitly<Trait>, int>> constexpr pair(const pair<U1, U2>& other) noexcept(is_nothrow_constructible_v<T1, const U1&>&& is_nothrow_constructible_v<T2, const U2&>);
+template<class U1, class U2, enable_if_t<is_constructible_v<T1, const U1&> && is_constructible_v<T2, const U2&>, int>> constexpr pair(const pair<U1, U2>& other) noexcept(is_nothrow_constructible_v<T1, const U1&>&& is_nothrow_constructible_v<T2, const U2&>);
 ```
 
 ### 原型 11
 
 ```cpp
-template<class U1, class U2, Selectconstructor Trait, enable_if_t<Canconstructexplicitly<Trait>, int>> constexpr pair(pair<U1, U2>&& other) noexcept(is_nothrow_constructible_v<T1, U1>&& is_nothrow_constructible_v<T2, U2>);
+template<class U1, class U2, enable_if_t<is_constructible_v<T1, U1&&> && is_constructible_v<T2, U2&&>, int>> constexpr pair(pair<U1, U2>&& other) noexcept(is_nothrow_constructible_v<T1, U1&&>&& is_nothrow_constructible_v<T2, U2&&>);
 ```
 
 ### 原型 12
 
 ```cpp
-template<class U1, class U2, Selectconstructor Trait, enable_if_t<Canconstructexplicitly<Trait>, int>> constexpr pair(pair<U1, U2>& other) noexcept(is_nothrow_constructible_v<T1, U1&>&& is_nothrow_constructible_v<T2, U2&>);
-```
-
-### 原型 13
-
-```cpp
-template<class U1, class U2, Selectconstructor Trait, enable_if_t<Canconstructimplicitly<Trait>, int>> constexpr pair(U1&& first, U2&& second) noexcept(is_nothrow_constructible_v<T1, U1>&& is_nothrow_constructible_v<T2, U2>);
-```
-
-### 原型 14
-
-```cpp
-template<class U1, class U2, Selectconstructor Trait, enable_if_t<Canconstructimplicitly<Trait>, int>> constexpr pair(const pair<U1, U2>&& other) noexcept(is_nothrow_constructible_v<T1, const U1>&& is_nothrow_constructible_v<T2, const U2>);
-```
-
-### 原型 15
-
-```cpp
-template<class U1, class U2, Selectconstructor Trait, enable_if_t<Canconstructimplicitly<Trait>, int>> constexpr pair(const pair<U1, U2>& other) noexcept(is_nothrow_constructible_v<T1, const U1&>&& is_nothrow_constructible_v<T2, const U2&>);
-```
-
-### 原型 16
-
-```cpp
-template<class U1, class U2, Selectconstructor Trait, enable_if_t<Canconstructimplicitly<Trait>, int>> constexpr pair(pair<U1, U2>&& other) noexcept(is_nothrow_constructible_v<T1, U1>&& is_nothrow_constructible_v<T2, U2>);
-```
-
-### 原型 17
-
-```cpp
-template<class U1, class U2, Selectconstructor Trait, enable_if_t<Canconstructimplicitly<Trait>, int>> constexpr pair(pair<U1, U2>& other) noexcept(is_nothrow_constructible_v<T1, U1&>&& is_nothrow_constructible_v<T2, U2&>);
-```
-
-### 原型 18
-
-```cpp
-template<class UPair, enable_if_t<!is_same_v<remove_cvref_t<UPair>, pair<T1, T2>>, int>, Selectconstructor Trait, enable_if_t<Canconstructexplicitly<Trait>, int>> constexpr pair(UPair&& other) noexcept(is_nothrow_constructible_v<T1, decltype(::asc::std::Adlget<0>(::asc::std::forward<UPair>(P)))>&& is_nothrow_constructible_v<T2, decltype(::asc::std::Adlget<1>(::asc::std::forward<UPair>(P)))>);
-```
-
-### 原型 19
-
-```cpp
-template<class UPair, enable_if_t<!is_same_v<remove_cvref_t<UPair>, pair<T1, T2>>, int>, Selectconstructor Trait, enable_if_t<Canconstructimplicitly<Trait>, int>> constexpr pair(UPair&& other) noexcept(is_nothrow_constructible_v<T1, decltype(::asc::std::Adlget<0>(::asc::std::forward<UPair>(P)))>&& is_nothrow_constructible_v<T2, decltype(::asc::std::Adlget<1>(::asc::std::forward<UPair>(P)))>);
+template<class... Args1, class... Args2> constexpr pair(piecewise_construct_t, tuple<Args1...> left, tuple<Args2...> right) noexcept(is_nothrow_constructible_v<T1, Args1...>&& is_nothrow_constructible_v<T2, Args2...>);
 ```
 
 ## 参数说明
 
 ### 原型 1 的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `U1` | 本接口处理或保存的值类型；默认为第一个元素的类型 `T1`。 |
+| `U2` | 本接口处理或保存的值类型；默认为第二个元素的类型 `T2`。 |
+| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
+
+### 原型 2 的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `U1` | 本接口处理或保存的值类型；默认为第一个元素的类型 `T1`。 |
+| `U2` | 本接口处理或保存的值类型；默认为第二个元素的类型 `T2`。 |
+| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
+
+### 原型 3 的参数
 
 **函数参数**
 
@@ -158,7 +136,7 @@ template<class UPair, enable_if_t<!is_same_v<remove_cvref_t<UPair>, pair<T1, T2>
 | --- | --- | --- |
 | `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
 
-### 原型 2 的参数
+### 原型 4 的参数
 
 **函数参数**
 
@@ -166,39 +144,22 @@ template<class UPair, enable_if_t<!is_same_v<remove_cvref_t<UPair>, pair<T1, T2>
 | --- | --- | --- |
 | `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
 
-### 原型 3 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-### 原型 4 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second` | 输入 | 提供“按本页所列构造形态初始化 `pair` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
-
 ### 原型 5 的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
+| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入/输出 | 用于初始化第一个元素的值；被引用对象须在调用期间有效。 |
+| `right` | 输入/输出 | 用于初始化第二个元素的值；被引用对象须在调用期间有效。 |
 
 ### 原型 6 的参数
 
@@ -206,15 +167,16 @@ template<class UPair, enable_if_t<!is_same_v<remove_cvref_t<UPair>, pair<T1, T2>
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
+| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second` | 输入 | 提供“按本页所列构造形态初始化 `pair` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `left` | 输入/输出 | 用于初始化第一个元素的值；被引用对象须在调用期间有效。 |
+| `right` | 输入/输出 | 用于初始化第二个元素的值；被引用对象须在调用期间有效。 |
 
 ### 原型 7 的参数
 
@@ -222,16 +184,15 @@ template<class UPair, enable_if_t<!is_same_v<remove_cvref_t<UPair>, pair<T1, T2>
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Args1` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Args2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `tag` | 输入 | 提供“按本页所列构造形态初始化 `pair` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `first_args` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_args` | 输入 | 转发给对象构造或函数调用的实参列表。 |
+| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
 
 ### 原型 8 的参数
 
@@ -241,15 +202,13 @@ template<class UPair, enable_if_t<!is_same_v<remove_cvref_t<UPair>, pair<T1, T2>
 | --- | --- |
 | `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
 | `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
+| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `first` | 输入/输出 | 输入范围的起始迭代器或指针。 |
-| `second` | 输入/输出 | 提供“按本页所列构造形态初始化 `pair` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
 
 ### 原型 9 的参数
 
@@ -257,16 +216,14 @@ template<class UPair, enable_if_t<!is_same_v<remove_cvref_t<UPair>, pair<T1, T2>
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
+| `PairLike` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
 
 ### 原型 10 的参数
 
@@ -276,8 +233,7 @@ template<class UPair, enable_if_t<!is_same_v<remove_cvref_t<UPair>, pair<T1, T2>
 | --- | --- |
 | `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
 | `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
+| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
 
 **函数参数**
 
@@ -293,8 +249,7 @@ template<class UPair, enable_if_t<!is_same_v<remove_cvref_t<UPair>, pair<T1, T2>
 | --- | --- |
 | `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
 | `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
+| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
 
 **函数参数**
 
@@ -308,136 +263,15 @@ template<class UPair, enable_if_t<!is_same_v<remove_cvref_t<UPair>, pair<T1, T2>
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
+| `Args1` | 转发给第一个元素构造的实参类型列表。 |
+| `Args2` | 转发给第二个元素构造的实参类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 13 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `first` | 输入/输出 | 输入范围的起始迭代器或指针。 |
-| `second` | 输入/输出 | 提供“按本页所列构造形态初始化 `pair` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
-
-### 原型 14 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 15 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 16 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 17 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 18 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `UPair` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 19 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `UPair` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `left` | 输入 | 转发给第一个元素构造的实参元组。 |
+| `right` | 输入 | 转发给第二个元素构造的实参元组。 |
 
 ## 约束说明
 

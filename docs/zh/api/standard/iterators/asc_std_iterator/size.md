@@ -37,7 +37,7 @@
 ### 原型 1
 
 ```cpp
-template<class Cont> constexpr auto asc::std::size(const Cont& value) noexcept(noexcept(C.size())) -> decltype(C.size());
+template<class Cont> constexpr auto asc::std::size(const Cont& value) noexcept(noexcept(value.size())) -> decltype(value.size());
 ```
 
 ### 原型 2
@@ -81,7 +81,7 @@ template<class T, size_t Sz> constexpr size_t asc::std::size(const T (&value)[Sz
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `decltype(C.size())` | 返回范围的元素数量。 |
+| 原型 1 | `decltype(value.size())` | 返回范围的元素数量。 |
 | 原型 2 | `size_t` | 返回范围的元素数量。 |
 
 ## 约束说明

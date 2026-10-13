@@ -37,7 +37,7 @@
 ### 原型 1
 
 ```cpp
-asc::std::complex<float> asc::std::literals::complex_literals::operator""if(long double arg)
+[[nodiscard]] constexpr asc::std::complex<float> asc::std::literals::complex_literals::operator""if(long double arg) noexcept;
 ```
 
 该原型适用于 `C++17+`，可用位置为 Host。
@@ -45,7 +45,7 @@ asc::std::complex<float> asc::std::literals::complex_literals::operator""if(long
 ### 原型 2
 
 ```cpp
-asc::std::complex<float> asc::std::literals::complex_literals::operator""if(unsigned long long arg)
+[[nodiscard]] constexpr asc::std::complex<float> asc::std::literals::complex_literals::operator""if(unsigned long long arg) noexcept;
 ```
 
 该原型适用于 `C++17+`，可用位置为 Host。

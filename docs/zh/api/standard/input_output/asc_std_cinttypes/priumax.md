@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/cinttypes>`。
 
-`PRIuMAX` 提供最大宽度整数对应的格式化转换说明符。
+`PRIuMAX` 提供最大宽度无符号整数（uintmax_t）的 printf 格式转换说明符；本产品采用 LP64 数据模型，uintmax_t 为 unsigned long。
 
 标准语义参考：[cppreference `cinttypes`](https://en.cppreference.com/w/cpp/header/cinttypes)。
 
 ## 声明
 
 ```cpp
-#define PRIuMAX "llu"
+#define PRIuMAX "lu"
 ```
 
 ## 约束说明

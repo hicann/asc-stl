@@ -37,31 +37,25 @@
 ### 原型 1
 
 ```cpp
-constexpr complex<T>& asc::std::complex::operator=(complex<T>&& other) noexcept(is_nothrow_move_assignable_v<T>);
+constexpr complex<T>& asc::std::complex::operator=(complex<T>&& other) noexcept;
 ```
 
 ### 原型 2
 
 ```cpp
-constexpr complex<T>& asc::std::complex::operator=(const complex<T>& other) noexcept(is_nothrow_copy_assignable_v<T>);
+constexpr complex<T>& asc::std::complex::operator=(const complex<T>& other) noexcept;
 ```
 
 ### 原型 3
 
 ```cpp
-constexpr complex<T>& asc::std::complex::operator=(const value_type& other);
+constexpr complex<T>& asc::std::complex::operator=(const T& other) noexcept;
 ```
 
 ### 原型 4
 
 ```cpp
-template<class U> complex<T>& asc::std::complex::operator=(const ::std::complex<U>& other);
-```
-
-### 原型 5
-
-```cpp
-template<class U> constexpr complex<T>& asc::std::complex::operator=(const complex<U>& other);
+template<class U> complex<T>& asc::std::complex::operator=(const ::std::complex<U>& other) noexcept;
 ```
 
 ## 参数说明
@@ -104,20 +98,6 @@ template<class U> constexpr complex<T>& asc::std::complex::operator=(const compl
 | --- | --- | --- |
 | `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
 
-### 原型 5 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
@@ -126,7 +106,6 @@ template<class U> constexpr complex<T>& asc::std::complex::operator=(const compl
 | 原型 2 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 | 原型 3 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 | 原型 4 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 5 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 
 ## 约束说明
 

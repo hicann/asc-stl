@@ -49,257 +49,34 @@ tuple<Types...>& asc::std::tuple::operator=(tuple<Types...>&& other);
 ### 原型 3
 
 ```cpp
-template<Selectassignment Trait, enable_if_t<Canassign<Trait>, int>> constexpr const tuple<Types...>& asc::std::tuple::operator=(const tuple<Types...>& other) const noexcept(Cannothrowassign<Trait>);
+template<class... Other, enable_if_t<sizeof...(Other) == sizeof...(Types), int> = 0> tuple<Types...>& asc::std::tuple::operator=(const tuple<Other...>& other);
 ```
 
 ### 原型 4
 
 ```cpp
-template<Selectassignment Trait, enable_if_t<Canassign<Trait>, int>> constexpr const tuple<Types...>& asc::std::tuple::operator=(tuple<Types...>&& other) const noexcept(Cannothrowassign<Trait>);
-```
-
-### 原型 5
-
-```cpp
-template<class ...UTypes, Selectassignment Trait, enable_if_t<Canassign<Trait>, int>> constexpr const tuple<Types...>& asc::std::tuple::operator=(const tuple<UTypes...>& other) const noexcept(Cannothrowassign<Trait>);
-```
-
-### 原型 6
-
-```cpp
-template<class ...UTypes, Selectassignment Trait, enable_if_t<Canassign<Trait>, int>> constexpr const tuple<Types...>& asc::std::tuple::operator=(tuple<UTypes...>&& other) const noexcept(Cannothrowassign<Trait>);
-```
-
-### 原型 7
-
-```cpp
-template<class ...UTypes, Selectassignment Trait, enable_if_t<Canassign<Trait>, int>> constexpr tuple<Types...>& asc::std::tuple::operator=(const tuple<UTypes...>& other) noexcept(Cannothrowassign<Trait>);
-```
-
-### 原型 8
-
-```cpp
-template<class ...UTypes, Selectassignment Trait, enable_if_t<Canassign<Trait>, int>> constexpr tuple<Types...>& asc::std::tuple::operator=(tuple<UTypes...>&& other) noexcept(Cannothrowassign<Trait>);
-```
-
-### 原型 9
-
-```cpp
-template<class UTuple, enable_if_t<!Isascstdtuple<remove_cvref_t<UTuple>>, int>, Selectassignment Trait, enable_if_t<Canassign<Trait>, int>> constexpr const tuple<Types...>& asc::std::tuple::operator=(UTuple&& other) const noexcept(Cannothrowassign<Trait>);
-```
-
-### 原型 10
-
-```cpp
-template<class UTuple, enable_if_t<!Isascstdtuple<remove_cvref_t<UTuple>>, int>, Selectassignment Trait, enable_if_t<Canassign<Trait>, int>> constexpr tuple<Types...>& asc::std::tuple::operator=(UTuple&& other) noexcept(Cannothrowassign<Trait>);
-```
-
-### 原型 11
-
-```cpp
-template<class UTuple, enable_if_t<!Isascstdtuple<remove_cvref_t<UTuple>>, int>, enable_if_t<Tuplelikewithsize<UTuple, 0>, int>> constexpr const tuple<>& asc::std::tuple::operator=(UTuple&& other) const noexcept;
-```
-
-### 原型 12
-
-```cpp
-template<class UTuple, enable_if_t<!Isascstdtuple<remove_cvref_t<UTuple>>, int>, enable_if_t<Tuplelikewithsize<UTuple, 0>, int>> constexpr tuple<>& asc::std::tuple::operator=(UTuple&& other) noexcept;
+template<class... Other, enable_if_t<sizeof...(Other) == sizeof...(Types), int> = 0> tuple<Types...>& asc::std::tuple::operator=(tuple<Other...>&& other);
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 2 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 3 的参数
-
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
+| `Other` | 原型 3、4 的逐元素赋值来源 tuple 的元素类型包，元素数须与 `Types...` 相同。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 4 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 5 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `UTypes` | 传递给构造函数或可调用对象的实参类型列表。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 6 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `UTypes` | 传递给构造函数或可调用对象的实参类型列表。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 7 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `UTypes` | 传递给构造函数或可调用对象的实参类型列表。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 8 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `UTypes` | 传递给构造函数或可调用对象的实参类型列表。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 9 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `UTuple` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 10 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `UTuple` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-| `Trait` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 11 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `UTuple` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 12 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `UTuple` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-| `匿名约束参数3` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 赋值来源 tuple：原型 1、3 为左值引用逐元素拷贝赋值，原型 2、4 为右值引用逐元素移动赋值。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `tuple<Types...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 2 | `tuple<Types...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 3 | `const tuple<Types...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 4 | `const tuple<Types...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 5 | `const tuple<Types...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 6 | `const tuple<Types...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 7 | `tuple<Types...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 8 | `tuple<Types...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 9 | `const tuple<Types...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 10 | `tuple<Types...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 11 | `const tuple<> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 12 | `tuple<> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型 1-4 | `tuple<Types...>&` | 返回赋值后的自身引用。 |
 
 ## 约束说明
 

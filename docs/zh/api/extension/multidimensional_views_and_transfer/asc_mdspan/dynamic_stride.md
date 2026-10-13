@@ -33,7 +33,7 @@
 ## 声明
 
 ```cpp
-inline constexpr asc::std::ptrdiff_t asc::dynamic_stride = (-PTRDIFFMAX - 1)
+inline constexpr asc::std::ptrdiff_t asc::dynamic_stride = (-__PTRDIFF_MAX__ - 1)
 ```
 
 ## 约束说明

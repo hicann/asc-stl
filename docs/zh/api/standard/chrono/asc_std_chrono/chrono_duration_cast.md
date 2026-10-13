@@ -35,7 +35,7 @@
 ## 函数原型
 
 ```cpp
-template<class ToDuration, class Re, class Period> [[nodiscard]] constexpr ToDuration asc::std::chrono::duration_cast(const duration<Re, Period>& value);
+template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDuration asc::std::chrono::duration_cast(const duration<Rep, Period>& value);
 ```
 
 ## 参数说明
@@ -45,7 +45,7 @@ template<class ToDuration, class Re, class Period> [[nodiscard]] constexpr ToDur
 | 参数名 | 描述 |
 | --- | --- |
 | `ToDuration` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Re` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Rep` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
 | `Period` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
 
 **函数参数**

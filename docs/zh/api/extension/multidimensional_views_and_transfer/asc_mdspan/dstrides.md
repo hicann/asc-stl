@@ -33,8 +33,11 @@
 ## 声明
 
 ```cpp
-template<class OffsetType, asc::std::size_t Rank> using asc::dstrides = typename asc::detail::make_dstrides<OffsetType, Rank>::type
+template<class OffsetType, asc::std::size_t Rank>
+using asc::dstrides = asc::strides<OffsetType, asc::dynamic_stride, ..., asc::dynamic_stride>;
 ```
+
+模板实参列表中共有 `Rank` 个 `asc::dynamic_stride`，即全部维度步长均为动态。
 
 ## 约束说明
 

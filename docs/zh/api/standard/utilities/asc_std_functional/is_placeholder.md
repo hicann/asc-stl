@@ -34,17 +34,11 @@
 
 ## 声明
 
-### 原型 1
-
 ```cpp
 template<class T> struct asc::std::is_placeholder
 ```
 
-### 原型 2
-
-```cpp
-template<int N> struct asc::std::is_placeholder
-```
+结果语义：主模板对非占位符类型继承 `asc::std::integral_constant<int, 0>`；对占位符类型（`asc::std::placeholders::_1` 至 `_10`），经特化继承 `asc::std::integral_constant<int, N>`，其中 `N` 为对应占位符的调用实参位置（`N >= 1`）。占位符实现模板参数（`int N`）不属于公共主模板参数。
 
 ## 约束说明
 

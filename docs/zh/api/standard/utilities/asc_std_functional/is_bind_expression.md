@@ -34,20 +34,6 @@
 
 ## 声明
 
-### 原型 1
-
-```cpp
-template<class Fp, class ...BoundArgs> struct asc::std::is_bind_expression
-```
-
-### 原型 2
-
-```cpp
-template<class Rp, class Fp, class ...BoundArgs> struct asc::std::is_bind_expression
-```
-
-### 原型 3
-
 ```cpp
 template<class T> struct asc::std::is_bind_expression
 ```

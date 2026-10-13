@@ -35,7 +35,7 @@
 ## 函数原型
 
 ```cpp
-template<class Re, class Period> [[nodiscard]] constexpr duration<Re, Period> asc::std::chrono::abs(duration<Re, Period> value);
+template<class Rep, class Period> [[nodiscard]] constexpr duration<Rep, Period> asc::std::chrono::abs(duration<Rep, Period> value);
 ```
 
 ## 参数说明
@@ -44,7 +44,7 @@ template<class Re, class Period> [[nodiscard]] constexpr duration<Re, Period> as
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Re` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Rep` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
 | `Period` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
 
 **函数参数**
@@ -57,7 +57,7 @@ template<class Re, class Period> [[nodiscard]] constexpr duration<Re, Period> as
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `duration<Re, Period>` | 返回时长的非负值。 |
+| `duration<Rep, Period>` | 返回时长的非负值。 |
 
 ## 约束说明
 

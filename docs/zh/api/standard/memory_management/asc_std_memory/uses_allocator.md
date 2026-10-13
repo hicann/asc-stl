@@ -37,7 +37,7 @@
 ### 原型 1
 
 ```cpp
-template<class ...T, class Allocator> struct asc::std::uses_allocator
+template<class T, class Allocator> struct asc::std::uses_allocator
 ```
 
 此原型对应头文件：`<asc/std/memory>`、`<asc/std/tuple>`。
@@ -45,7 +45,7 @@ template<class ...T, class Allocator> struct asc::std::uses_allocator
 ### 原型 2
 
 ```cpp
-template<class T, class Allocator> struct asc::std::uses_allocator
+template<class... T, class Allocator> struct asc::std::uses_allocator<asc::std::tuple<T...>, Allocator>
 ```
 
 此原型对应头文件：`<asc/std/memory>`、`<asc/std/tuple>`。
