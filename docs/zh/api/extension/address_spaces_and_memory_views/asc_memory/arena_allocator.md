@@ -30,6 +30,8 @@
 
 `asc::arena_allocator<T>` 把 `monotonic_arena` 适配为元素分配器；分配按 `alignof(T)` 对齐，单次 `deallocate` 不回收空间。
 
+`monotonic_arena` 在集中管理的存储上按到达顺序单向分配；空间在 `reset()` 或 arena 生命周期结束后整体回收，单次 `deallocate` 不回收空间。详见 [asc::monotonic_arena](monotonic_arena.md)。
+
 ## 声明
 
 ```cpp

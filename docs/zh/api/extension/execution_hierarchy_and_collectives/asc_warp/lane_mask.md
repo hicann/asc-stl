@@ -30,6 +30,8 @@
 
 `asc::lane_mask` 以 32 位位图表示一个 Warp 中参与操作的 Lane 集合。
 
+Lane 是线程束（Warp）内线程的通道编号，取值范围为 0 到 31；掩码第 i 位对应编号为 i 的 Lane，该位为 1 表示此 Lane 在集合中。当前线程自身的 Lane 编号可由 [`asc::lane_id`](../asc_hierarchy/lane_id.md) 获取，只包含当前 Lane 的掩码可由 [`asc::lane_mask::this_lane`](lane_mask_this_lane.md) 获取。
+
 ## 声明
 
 ```cpp

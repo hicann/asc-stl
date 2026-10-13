@@ -30,6 +30,8 @@
 
 `asc::parallel::for_each` 异步对输入范围内的每个元素调用给定函数对象。
 
+接口通过 [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md) 指定 Stream、临时存储和执行要求，并异步提交 Device 任务；返回的 [`asc::execution_status`](../../../runtime/execution_policies_and_status/asc_execution/execution_status.md) 表示参数校验与任务提交状态，提交成功不等于异步执行已完成。
+
 ## 函数原型
 
 ```cpp

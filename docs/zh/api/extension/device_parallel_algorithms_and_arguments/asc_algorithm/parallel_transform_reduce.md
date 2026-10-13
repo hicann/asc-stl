@@ -30,6 +30,8 @@
 
 `asc::parallel::transform_reduce` 异步变换输入元素并归约变换结果，最终把单个结果写入 GM 输出参数。
 
+接口通过 [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md) 指定 Stream、临时存储和执行要求，并异步提交 Device 任务；返回的 [`asc::execution_status`](../../../runtime/execution_policies_and_status/asc_execution/execution_status.md) 表示参数校验与任务提交状态，提交成功不等于异步执行已完成。
+
 ## 函数原型
 
 ```cpp

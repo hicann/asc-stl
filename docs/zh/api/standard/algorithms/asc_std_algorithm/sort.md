@@ -30,6 +30,8 @@
 
 `asc::std::sort` 按比较关系排序随机访问范围；无策略形式在调用者所在执行主体内顺序执行。
 
+适用重载的同步/并行关系：带策略原型由 Host 调用对应的 [asc::parallel::sort](../../../extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_sort.md) 前端并行执行，并同步等待该 Stream 完成；无策略原型为顺序执行，不涉及 Device 提交。带策略原型的执行策略参数 [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md) 须绑定有效 Stream 和足够的调用方临时存储。由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用 [`asc::std::terminate`](../../language_support/asc_std_exception/terminate.md)。
+
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
