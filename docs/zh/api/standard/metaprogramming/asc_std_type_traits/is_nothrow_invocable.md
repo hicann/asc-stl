@@ -44,14 +44,25 @@ template<class Fn, class ...Args> struct asc::std::is_nothrow_invocable
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::is_nothrow_invocable<int(*)(int), int>;
-    (void)sizeof(selected);
+    using fn = int (*)(int);
+    struct nothrow {
+        int operator()(int) const noexcept { return 0; }
+    };
+    struct throws {
+        int operator()(int) { throw 0; }
+    };
+    // 正例：operator() 声明为 noexcept，调用不会抛出异常
+    static_assert(asc::std::is_nothrow_invocable<nothrow, int>::value);
+    static_assert(asc::std::is_nothrow_invocable_v<nothrow, int>);
+    // 反例：函数指针指向的函数无法静态保证不抛出，operator() 可能抛出异常
+    static_assert(!asc::std::is_nothrow_invocable_v<fn, int>);
+    static_assert(!asc::std::is_nothrow_invocable_v<throws, int>);
 }
 ```

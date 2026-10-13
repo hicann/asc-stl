@@ -44,14 +44,20 @@ template<class T> struct asc::std::is_class
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_class<int>;
-    (void)sizeof(trait);
+    struct sample_class {};
+    enum sample_enum {};
+    // 正例：struct 定义的 sample_class 是类类型
+    static_assert(asc::std::is_class<sample_class>::value);
+    static_assert(asc::std::is_class_v<sample_class>);
+    // 反例：int 与枚举都不是类类型
+    static_assert(!asc::std::is_class_v<int>);
+    static_assert(!asc::std::is_class_v<sample_enum>);
 }
 ```

@@ -44,14 +44,21 @@ template<class T> struct asc::std::is_scalar
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_scalar<int>;
-    (void)sizeof(trait);
+    enum color { red };
+    struct sample {};
+    // 正例：算术类型、指针与枚举都是标量类型
+    static_assert(asc::std::is_scalar<int>::value);
+    static_assert(asc::std::is_scalar_v<void*>);
+    static_assert(asc::std::is_scalar_v<color>);
+    // 反例：类类型与引用不是标量类型
+    static_assert(!asc::std::is_scalar_v<sample>);
+    static_assert(!asc::std::is_scalar_v<int&>);
 }
 ```

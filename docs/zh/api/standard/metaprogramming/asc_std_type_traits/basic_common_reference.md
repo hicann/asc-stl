@@ -44,15 +44,29 @@ template<class, class, template<...> class, template<...> class, class> struct a
 
 ## 调用示例
 
-以下 Host 片段实例化自定义点的主模板；需要指定公共引用类型时，由用户针对自有类型提供特化。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+struct Width {};
+struct Height {};
+
+// 针对自有类型偏特化自定义点，指定公共引用类型
+namespace asc::std {
+template <template <class> class TQual, template <class> class UQual>
+struct basic_common_reference<Width, Height, TQual, UQual> {
+    using type = Width;
+};
+}  // namespace asc::std
+
+void use_trait()
 {
-    using customization = asc::std::basic_common_reference<int, long,
-        asc::std::type_identity_t, asc::std::type_identity_t>;
-    (void)sizeof(customization);
+    // 特化生效：common_reference 命中自定义的公共引用类型
+    static_assert(asc::std::is_same_v<asc::std::common_reference_t<Width, Height>, Width>);
+    // 带左值引用限定的组合同样路由到该特化
+    static_assert(asc::std::is_same_v<asc::std::common_reference_t<Width&, Height&>, Width>);
+    // 内建类型不受该特化影响，仍按常规规则求公共引用类型
+    static_assert(asc::std::is_same_v<asc::std::common_reference_t<int, long>, long>);
 }
 ```

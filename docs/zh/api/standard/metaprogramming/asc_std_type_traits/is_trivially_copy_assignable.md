@@ -44,14 +44,20 @@ template<class T> struct asc::std::is_trivially_copy_assignable
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_trivially_copy_assignable<int>;
-    (void)sizeof(trait);
+    struct custom_assign {
+        custom_assign& operator=(const custom_assign&) { return *this; }
+    };
+    // 正例：int 的拷贝赋值是平凡的
+    static_assert(asc::std::is_trivially_copy_assignable<int>::value);
+    static_assert(asc::std::is_trivially_copy_assignable_v<int>);
+    // 反例：用户提供拷贝赋值运算符的类拷贝赋值不是平凡的
+    static_assert(!asc::std::is_trivially_copy_assignable_v<custom_assign>);
 }
 ```

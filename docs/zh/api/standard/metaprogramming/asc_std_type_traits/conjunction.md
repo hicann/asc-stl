@@ -58,14 +58,17 @@ template<class Arg> struct asc::std::conjunction
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::conjunction<asc::std::true_type, asc::std::false_type>;
-    (void)sizeof(selected);
+    // 全部谓词为真时整体为真
+    static_assert(asc::std::conjunction<asc::std::true_type, asc::std::is_integral<int>>::value);
+    static_assert(asc::std::conjunction_v<asc::std::is_integral<int>, asc::std::true_type>);
+    // 反例：任一谓词为假则整体为假
+    static_assert(!asc::std::conjunction_v<asc::std::true_type, asc::std::is_integral<double>>);
 }
 ```

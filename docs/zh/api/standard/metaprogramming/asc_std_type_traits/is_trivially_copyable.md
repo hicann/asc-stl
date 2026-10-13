@@ -44,14 +44,23 @@ template<class T> struct asc::std::is_trivially_copyable
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_trivially_copyable<int>;
-    (void)sizeof(trait);
+    struct custom_copy {
+        custom_copy(const custom_copy&) {}
+    };
+    struct plain {
+        int value;
+    };
+    // 正例：int 与仅含 int 成员的类是平凡可复制的
+    static_assert(asc::std::is_trivially_copyable<int>::value);
+    static_assert(asc::std::is_trivially_copyable_v<plain>);
+    // 反例：用户提供拷贝构造函数的类不是平凡可复制的
+    static_assert(!asc::std::is_trivially_copyable_v<custom_copy>);
 }
 ```

@@ -44,14 +44,21 @@ template<class T> struct asc::std::is_trivial
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_trivial<int>;
-    (void)sizeof(trait);
+    struct plain {};
+    struct custom {
+        custom() {}
+    };
+    // 正例：标量类型与特殊成员全为默认的类是平凡类型
+    static_assert(asc::std::is_trivial<int>::value);
+    static_assert(asc::std::is_trivial_v<plain>);
+    // 反例：用户提供默认构造函数的类不是平凡类型
+    static_assert(!asc::std::is_trivial_v<custom>);
 }
 ```

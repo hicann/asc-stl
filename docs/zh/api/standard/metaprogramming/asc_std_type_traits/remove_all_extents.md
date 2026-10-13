@@ -44,14 +44,17 @@ template<class T> struct asc::std::remove_all_extents
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::remove_all_extents<int>;
-    (void)sizeof(trait);
+    // 正例：remove_all_extents 移除全部数组维度
+    static_assert(asc::std::is_same_v<asc::std::remove_all_extents_t<int[2][3]>, int>);
+    static_assert(asc::std::is_same_v<typename asc::std::remove_all_extents<const char[2][3]>::type, const char>);
+    // 反例：remove_all_extents_t<int[2][3]> 不是 int[3]
+    static_assert(!asc::std::is_same_v<asc::std::remove_all_extents_t<int[2][3]>, int[3]>);
 }
 ```

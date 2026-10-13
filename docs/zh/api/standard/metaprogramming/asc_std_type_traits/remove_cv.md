@@ -44,14 +44,17 @@ template<class T> struct asc::std::remove_cv
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::remove_cv<int>;
-    (void)sizeof(trait);
+    // 正例：remove_cv 移除顶层 const 与 volatile
+    static_assert(asc::std::is_same_v<asc::std::remove_cv_t<const volatile int>, int>);
+    static_assert(asc::std::is_same_v<typename asc::std::remove_cv<const double>::type, double>);
+    // 反例：remove_cv_t<const int> 不是 const int
+    static_assert(!asc::std::is_same_v<asc::std::remove_cv_t<const int>, const int>);
 }
 ```

@@ -52,14 +52,18 @@ template<class T> struct asc::std::enable_if
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::enable_if<true, int>;
-    (void)sizeof(selected);
+    // 条件为真时 ::type 为指定类型
+    static_assert(asc::std::is_same_v<asc::std::enable_if<true, int>::type, int>);
+    // 默认类型实参为 void
+    static_assert(asc::std::is_same_v<asc::std::enable_if_t<true>, void>);
+    // 反例：命中的类型不是任意其它类型
+    static_assert(!asc::std::is_same_v<asc::std::enable_if_t<true, int>, long>);
 }
 ```

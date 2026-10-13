@@ -52,14 +52,17 @@ template<class T> struct asc::std::remove_extent
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::remove_extent<int[4]>;
-    (void)sizeof(selected);
+    // 正例：remove_extent 只移除最外层数组维度
+    static_assert(asc::std::is_same_v<asc::std::remove_extent_t<int[2][3]>, int[3]>);
+    static_assert(asc::std::is_same_v<typename asc::std::remove_extent<const char[4]>::type, const char>);
+    // 反例：remove_extent_t<int[2][3]> 不是 int
+    static_assert(!asc::std::is_same_v<asc::std::remove_extent_t<int[2][3]>, int>);
 }
 ```

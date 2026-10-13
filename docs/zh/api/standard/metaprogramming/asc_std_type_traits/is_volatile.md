@@ -44,14 +44,18 @@ template<class T> struct asc::std::is_volatile
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_volatile<int>;
-    (void)sizeof(trait);
+    // 正例：volatile int 是 volatile 限定类型
+    static_assert(asc::std::is_volatile<volatile int>::value);
+    static_assert(asc::std::is_volatile_v<volatile int>);
+    // 反例：int 与 const int 都不是 volatile 限定类型
+    static_assert(!asc::std::is_volatile_v<int>);
+    static_assert(!asc::std::is_volatile_v<const int>);
 }
 ```

@@ -44,14 +44,21 @@ template<typename Fm, typename To> struct asc::std::is_nothrow_convertible
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::is_nothrow_convertible<int, long>;
-    (void)sizeof(selected);
+    struct target {};
+    struct source {
+        operator target() { throw 0; }
+    };
+    // 正例：int 到 long 的内置转换不会抛出异常
+    static_assert(asc::std::is_nothrow_convertible<int, long>::value);
+    static_assert(asc::std::is_nothrow_convertible_v<int, long>);
+    // 反例：转换运算符可能抛出异常
+    static_assert(!asc::std::is_nothrow_convertible_v<source, target>);
 }
 ```

@@ -44,14 +44,18 @@ template<class T> struct asc::std::alignment_of
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::alignment_of<int>;
-    (void)sizeof(trait);
+    // ::value 与 _v 均返回 alignof 结果
+    static_assert(asc::std::alignment_of<int>::value == alignof(int));
+    static_assert(asc::std::alignment_of_v<double> == alignof(double));
+    static_assert(asc::std::alignment_of<char>::value == 1); // char 对齐恒为 1
+    // 反例：char 与 int 的对齐值不同
+    static_assert(asc::std::alignment_of_v<char> != asc::std::alignment_of_v<int>);
 }
 ```

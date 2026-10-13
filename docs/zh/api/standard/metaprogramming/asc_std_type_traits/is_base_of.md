@@ -44,16 +44,20 @@ template<class Value, class Dp> struct asc::std::is_base_of
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
     struct sample_base {};
     struct sample_derived : sample_base {};
-    using selected = asc::std::is_base_of<sample_base, sample_derived>;
-    (void)sizeof(selected);
+    struct unrelated {};
+    // 正例：sample_derived 继承自 sample_base
+    static_assert(asc::std::is_base_of<sample_base, sample_derived>::value);
+    static_assert(asc::std::is_base_of_v<sample_base, sample_derived>);
+    // 反例：unrelated 与 sample_base 没有继承关系
+    static_assert(!asc::std::is_base_of_v<sample_base, unrelated>);
 }
 ```

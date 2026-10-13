@@ -44,14 +44,17 @@ template<class T1, class T2> struct asc::std::is_assignable
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::is_assignable<int&, int>;
-    (void)sizeof(selected);
+    // 正例：int 左值可以接受 int 赋值
+    static_assert(asc::std::is_assignable<int&, int>::value);
+    static_assert(asc::std::is_assignable_v<int&, double>);
+    // 反例：int 右值不能被赋值
+    static_assert(!asc::std::is_assignable_v<int, int>);
 }
 ```

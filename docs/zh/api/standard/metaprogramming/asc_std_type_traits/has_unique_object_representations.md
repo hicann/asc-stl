@@ -44,14 +44,18 @@ template<class T> struct asc::std::has_unique_object_representations
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::has_unique_object_representations<int>;
-    (void)sizeof(trait);
+    struct Padded { char c; int i; }; // 含填充字节的局部类型
+    // 无填充的类型对象表示唯一
+    static_assert(asc::std::has_unique_object_representations<int>::value);
+    static_assert(asc::std::has_unique_object_representations_v<unsigned char>);
+    // 反例：填充字节使对象表示不唯一
+    static_assert(!asc::std::has_unique_object_representations_v<Padded>);
 }
 ```

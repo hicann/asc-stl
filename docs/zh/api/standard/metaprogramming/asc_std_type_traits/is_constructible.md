@@ -44,14 +44,17 @@ template<class T, class ...Args> struct asc::std::is_constructible
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::is_constructible<int, int>;
-    (void)sizeof(selected);
+    // 正例：int 可以由 double 直接初始化
+    static_assert(asc::std::is_constructible<int, double>::value);
+    static_assert(asc::std::is_constructible_v<int, long>);
+    // 反例：int* 不能由 const char* 构造
+    static_assert(!asc::std::is_constructible_v<int*, const char*>);
 }
 ```

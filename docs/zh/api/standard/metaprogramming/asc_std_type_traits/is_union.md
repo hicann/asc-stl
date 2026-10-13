@@ -44,14 +44,22 @@ template<class T> struct asc::std::is_union
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_union<int>;
-    (void)sizeof(trait);
+    union sample_union {
+        int value;
+    };
+    struct sample_struct {};
+    // 正例：union 定义的 sample_union 是联合体类型
+    static_assert(asc::std::is_union<sample_union>::value);
+    static_assert(asc::std::is_union_v<sample_union>);
+    // 反例：struct 与 int 都不是联合体类型
+    static_assert(!asc::std::is_union_v<sample_struct>);
+    static_assert(!asc::std::is_union_v<int>);
 }
 ```

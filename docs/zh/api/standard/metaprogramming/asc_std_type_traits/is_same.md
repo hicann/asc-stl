@@ -44,14 +44,18 @@ template<class T, class U> struct asc::std::is_same
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::is_same<int, long>;
-    (void)sizeof(selected);
+    // 正例：类型完全一致时判定为同一类型
+    static_assert(asc::std::is_same<int, int>::value);
+    static_assert(asc::std::is_same_v<unsigned, unsigned>);
+    // 反例：int 与 const int、int 与 long 不是同一类型
+    static_assert(!asc::std::is_same_v<int, const int>);
+    static_assert(!asc::std::is_same_v<int, long>);
 }
 ```

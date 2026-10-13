@@ -44,14 +44,18 @@ template<class R1, class R2> struct asc::std::ratio_less
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/ratio>
 
-void use_type()
+void use_trait()
 {
-    using selected = asc::std::ratio_less<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>;
-    (void)sizeof(selected);
+    // 1/3 小于 1/2
+    static_assert(asc::std::ratio_less<asc::std::ratio<1, 3>, asc::std::ratio<1, 2>>::value);
+    // 负数比较：-1/2 小于 -1/3
+    static_assert(asc::std::ratio_less_v<asc::std::ratio<-1, 2>, asc::std::ratio<-1, 3>>);
+    // 反例：1/2 不小于 1/3
+    static_assert(!asc::std::ratio_less_v<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>);
 }
 ```

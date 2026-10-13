@@ -44,14 +44,18 @@ template<class Ret, class Fn, class ...Args> struct asc::std::is_invocable_r
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::is_invocable_r<int, int(*)(int), int>;
-    (void)sizeof(selected);
+    using fn = int (*)(int);
+    // 正例：返回的 int 可转换为 long；R 为 void 时仅要求可调用
+    static_assert(asc::std::is_invocable_r<long, fn, int>::value);
+    static_assert(asc::std::is_invocable_r_v<void, fn, int>);
+    // 反例：返回的 int 不能转换为 void*
+    static_assert(!asc::std::is_invocable_r_v<void*, fn, int>);
 }
 ```

@@ -44,14 +44,20 @@ template<class T, class ...Args> struct asc::std::is_trivially_constructible
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::is_trivially_constructible<int, int>;
-    (void)sizeof(selected);
+    struct custom_ctor {
+        custom_ctor(int) {}
+    };
+    // 正例：int 从 int 构造是平凡构造
+    static_assert(asc::std::is_trivially_constructible<int, int>::value);
+    static_assert(asc::std::is_trivially_constructible_v<int, int>);
+    // 反例：用户提供构造函数的类构造不是平凡的
+    static_assert(!asc::std::is_trivially_constructible_v<custom_ctor, int>);
 }
 ```

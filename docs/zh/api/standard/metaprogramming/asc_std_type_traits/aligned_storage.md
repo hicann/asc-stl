@@ -52,14 +52,16 @@ template<size_t Len> struct asc::std::aligned_storage
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::aligned_storage<16, alignof(int)>;
-    (void)sizeof(selected);
+    // _t 与 ::type 一致，存储大小按对齐值取整
+    static_assert(asc::std::is_same_v<asc::std::aligned_storage_t<16, 4>, asc::std::aligned_storage<16, 4>::type>);
+    static_assert(sizeof(asc::std::aligned_storage_t<16, 4>) == 16);
+    static_assert(alignof(asc::std::aligned_storage_t<16, 4>) == 4);
 }
 ```

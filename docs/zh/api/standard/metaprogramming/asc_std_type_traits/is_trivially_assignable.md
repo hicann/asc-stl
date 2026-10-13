@@ -44,14 +44,20 @@ template<class T, class Arg> struct asc::std::is_trivially_assignable
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::is_trivially_assignable<int&, int>;
-    (void)sizeof(selected);
+    struct custom_assign {
+        custom_assign& operator=(const custom_assign&) { return *this; }
+    };
+    // 正例：int 左值接受 int 赋值是平凡赋值
+    static_assert(asc::std::is_trivially_assignable<int&, int>::value);
+    static_assert(asc::std::is_trivially_assignable_v<int&, int>);
+    // 反例：用户提供拷贝赋值运算符的类赋值不是平凡的
+    static_assert(!asc::std::is_trivially_assignable_v<custom_assign&, const custom_assign&>);
 }
 ```

@@ -44,14 +44,19 @@ template<class T> struct asc::std::is_copy_constructible
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_copy_constructible<int>;
-    (void)sizeof(trait);
+    struct sample_copy {};
+    struct no_copy { no_copy(const no_copy&) = delete; };
+    // 正例：int 与 sample_copy 都可拷贝构造
+    static_assert(asc::std::is_copy_constructible<int>::value);
+    static_assert(asc::std::is_copy_constructible_v<sample_copy>);
+    // 反例：删除了拷贝构造函数的 no_copy 不可拷贝构造
+    static_assert(!asc::std::is_copy_constructible_v<no_copy>);
 }
 ```

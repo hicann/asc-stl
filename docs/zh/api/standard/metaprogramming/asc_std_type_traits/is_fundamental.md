@@ -44,14 +44,18 @@ template<class T> struct asc::std::is_fundamental
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_fundamental<int>;
-    (void)sizeof(trait);
+    // 正例：算术类型与 void 都是基础类型
+    static_assert(asc::std::is_fundamental<int>::value);
+    static_assert(asc::std::is_fundamental_v<void>);
+    static_assert(asc::std::is_fundamental_v<decltype(nullptr)>);
+    // 反例：指针不是基础类型
+    static_assert(!asc::std::is_fundamental_v<int*>);
 }
 ```

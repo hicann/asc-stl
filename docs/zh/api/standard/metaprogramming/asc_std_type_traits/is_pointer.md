@@ -44,14 +44,19 @@ template<class T> struct asc::std::is_pointer
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_pointer<int>;
-    (void)sizeof(trait);
+    struct sample {};
+    // 正例：对象指针是指针类型
+    static_assert(asc::std::is_pointer<int*>::value);
+    static_assert(asc::std::is_pointer_v<double*>);
+    // 反例：引用和成员指针不是 is_pointer 意义上的指针
+    static_assert(!asc::std::is_pointer_v<int&>);
+    static_assert(!asc::std::is_pointer_v<int sample::*>);
 }
 ```

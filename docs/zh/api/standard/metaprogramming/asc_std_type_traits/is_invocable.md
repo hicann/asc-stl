@@ -44,14 +44,18 @@ template<class Fn, class ...Args> struct asc::std::is_invocable
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::is_invocable<int(*)(int), int>;
-    (void)sizeof(selected);
+    using fn = int (*)(int);
+    // 正例：可以用 int（或可转换为 int 的 short）实参调用 int(*)(int)
+    static_assert(asc::std::is_invocable<fn, int>::value);
+    static_assert(asc::std::is_invocable_v<fn, short>);
+    // 反例：const char* 实参不能转换为 int 形参
+    static_assert(!asc::std::is_invocable_v<fn, const char*>);
 }
 ```

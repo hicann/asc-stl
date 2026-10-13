@@ -44,14 +44,20 @@ template<class T> struct asc::std::is_nothrow_destructible
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_nothrow_destructible<int>;
-    (void)sizeof(trait);
+    struct throws {
+        ~throws() noexcept(false) {}
+    };
+    // 正例：int 的析构不会抛出异常
+    static_assert(asc::std::is_nothrow_destructible<int>::value);
+    static_assert(asc::std::is_nothrow_destructible_v<int>);
+    // 反例：析构函数声明为 noexcept(false)
+    static_assert(!asc::std::is_nothrow_destructible_v<throws>);
 }
 ```

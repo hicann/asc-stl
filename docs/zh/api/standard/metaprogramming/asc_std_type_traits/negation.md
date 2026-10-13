@@ -44,14 +44,17 @@ template<class T> struct asc::std::negation
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::negation<asc::std::true_type>;
-    (void)sizeof(trait);
+    // 正例：int 不是 const 类型，谓词取反结果为 true
+    static_assert(asc::std::negation<asc::std::is_const<int>>::value);
+    static_assert(asc::std::negation_v<asc::std::is_const<int>>);
+    // 反例：int 是整数类型，取反结果为 false
+    static_assert(!asc::std::negation_v<asc::std::is_integral<int>>);
 }
 ```

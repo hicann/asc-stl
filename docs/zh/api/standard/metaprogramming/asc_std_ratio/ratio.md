@@ -44,14 +44,21 @@ template<intmax_t Num, intmax_t Den> class asc::std::ratio
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/ratio>
 
-void use_type()
+void use_trait()
 {
-    using selected = asc::std::ratio<1, 2>;
-    (void)sizeof(selected);
+    // 4/2 约分为 2/1，分母总为正
+    static_assert(asc::std::ratio<4, 2>::num == 2);
+    static_assert(asc::std::ratio<4, 2>::den == 1);
+    // 负号归一到分子，den 保持为正
+    static_assert(asc::std::ratio<-4, 2>::num == -2);
+    static_assert(asc::std::ratio<-4, 2>::den == 1);
+    // type 成员即约分后的等价 ratio 类型
+    static_assert(asc::std::ratio<4, 2>::type::num == 2);
+    static_assert(asc::std::ratio<4, 2>::type::den == 1);
 }
 ```

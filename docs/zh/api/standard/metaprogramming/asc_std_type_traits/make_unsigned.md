@@ -44,14 +44,17 @@ template<class T> struct asc::std::make_unsigned
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::make_unsigned<int>;
-    (void)sizeof(trait);
+    // 正例：int 的对应无符号类型是 unsigned int，顶层 const 保持不变
+    static_assert(asc::std::is_same_v<asc::std::make_unsigned_t<int>, unsigned int>);
+    static_assert(asc::std::is_same_v<typename asc::std::make_unsigned<const short>::type, const unsigned short>);
+    // 反例：make_unsigned_t<int> 不是 int 自身
+    static_assert(!asc::std::is_same_v<asc::std::make_unsigned_t<int>, int>);
 }
 ```

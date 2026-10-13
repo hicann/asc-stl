@@ -44,14 +44,20 @@ template<class T, class ...Args> struct asc::std::is_nothrow_default_constructib
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::is_nothrow_default_constructible<int>;
-    (void)sizeof(selected);
+    struct throws {
+        throws() { throw 0; }
+    };
+    // 正例：int 默认构造不会抛出异常
+    static_assert(asc::std::is_nothrow_default_constructible<int>::value);
+    static_assert(asc::std::is_nothrow_default_constructible_v<int>);
+    // 反例：默认构造函数可能抛出异常
+    static_assert(!asc::std::is_nothrow_default_constructible_v<throws>);
 }
 ```

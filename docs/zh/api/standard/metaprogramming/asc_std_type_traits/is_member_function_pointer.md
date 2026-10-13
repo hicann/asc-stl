@@ -44,14 +44,20 @@ template<class T> struct asc::std::is_member_function_pointer
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_member_function_pointer<int>;
-    (void)sizeof(trait);
+    struct sample {};
+    using mem_fn = int (sample::*)(double);
+    // 正例：成员函数指针
+    static_assert(asc::std::is_member_function_pointer<mem_fn>::value);
+    static_assert(asc::std::is_member_function_pointer_v<void (sample::*)()>);
+    // 反例：成员对象指针与普通指针都不是成员函数指针
+    static_assert(!asc::std::is_member_function_pointer_v<int sample::*>);
+    static_assert(!asc::std::is_member_function_pointer_v<int*>);
 }
 ```

@@ -44,14 +44,19 @@ template<class T, size_t Index> struct asc::std::extent
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::extent<int[4], 0>;
-    (void)sizeof(selected);
+    // 第 0 维长度
+    static_assert(asc::std::extent<int[4]>::value == 4);
+    // 第 1 维长度
+    static_assert(asc::std::extent_v<int[2][3], 1> == 3);
+    // 无界数组与非数组的维度为 0
+    static_assert(asc::std::extent_v<int[]> == 0);
+    static_assert(asc::std::extent_v<double> == 0);
 }
 ```

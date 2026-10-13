@@ -44,14 +44,17 @@ template<class R1, class R2> struct asc::std::ratio_not_equal
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/ratio>
 
-void use_type()
+void use_trait()
 {
-    using selected = asc::std::ratio_not_equal<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>;
-    (void)sizeof(selected);
+    // 1/2 与 1/3 数值不同
+    static_assert(asc::std::ratio_not_equal<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>::value);
+    static_assert(asc::std::ratio_not_equal_v<asc::std::ratio<-1, 2>, asc::std::ratio<1, 2>>);
+    // 反例：2/4 约分后等于 1/2，不满足不等
+    static_assert(!asc::std::ratio_not_equal_v<asc::std::ratio<1, 2>, asc::std::ratio<2, 4>>);
 }
 ```

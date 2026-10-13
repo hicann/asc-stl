@@ -44,14 +44,22 @@ template<class T> struct asc::std::is_swappable
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_swappable<int>;
-    (void)sizeof(trait);
+    struct point {};
+    struct locked {
+        locked(const locked&) = delete;
+        locked& operator=(const locked&) = delete;
+    };
+    // 正例：int 与可移动交换的类类型都可用通用 swap 交换
+    static_assert(asc::std::is_swappable<int>::value);
+    static_assert(asc::std::is_swappable_v<point>);
+    // 反例：删除拷贝且无移动操作的类型无法交换
+    static_assert(!asc::std::is_swappable_v<locked>);
 }
 ```

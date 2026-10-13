@@ -44,14 +44,20 @@ template<class T, class U> struct asc::std::is_nothrow_swappable_with
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::is_nothrow_swappable_with<int&, int&>;
-    (void)sizeof(selected);
+    struct throws {
+        throws(throws&&) { throw 0; }
+    };
+    // 正例：两个 int 左值之间可 noexcept 交换
+    static_assert(asc::std::is_nothrow_swappable_with<int&, int&>::value);
+    static_assert(asc::std::is_nothrow_swappable_with_v<int&, int&>);
+    // 反例：移动构造可能抛出异常，交换不是 noexcept
+    static_assert(!asc::std::is_nothrow_swappable_with_v<throws&, throws&>);
 }
 ```

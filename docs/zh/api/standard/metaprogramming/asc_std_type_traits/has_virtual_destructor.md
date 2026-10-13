@@ -44,14 +44,17 @@ template<class T> struct asc::std::has_virtual_destructor
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::has_virtual_destructor<int>;
-    (void)sizeof(trait);
+    struct Base { virtual ~Base() = default; }; // 带虚析构的局部类型
+    static_assert(asc::std::has_virtual_destructor<Base>::value);
+    static_assert(asc::std::has_virtual_destructor_v<Base>);
+    // 反例：int 没有虚析构函数
+    static_assert(!asc::std::has_virtual_destructor_v<int>);
 }
 ```

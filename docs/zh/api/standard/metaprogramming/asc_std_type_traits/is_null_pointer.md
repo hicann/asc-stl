@@ -44,14 +44,17 @@ template<class T> struct asc::std::is_null_pointer
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_null_pointer<int>;
-    (void)sizeof(trait);
+    // 正例：nullptr_t 及其 cv 限定形式是空指针类型
+    static_assert(asc::std::is_null_pointer<asc::std::nullptr_t>::value);
+    static_assert(asc::std::is_null_pointer_v<const asc::std::nullptr_t>);
+    // 反例：void* 是普通指针，不是空指针类型
+    static_assert(!asc::std::is_null_pointer_v<void*>);
 }
 ```

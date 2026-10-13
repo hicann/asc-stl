@@ -45,14 +45,20 @@ template<class T> struct asc::std::is_scoped_enum
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_scoped_enum<int>;
-    (void)sizeof(trait);
+    enum class scoped { yes };
+    enum unscoped { no };
+    // 正例：enum class 定义的是限定作用域枚举
+    static_assert(asc::std::is_scoped_enum<scoped>::value);
+    static_assert(asc::std::is_scoped_enum_v<scoped>);
+    // 反例：非限定作用域枚举与 int 不是限定作用域枚举
+    static_assert(!asc::std::is_scoped_enum_v<unscoped>);
+    static_assert(!asc::std::is_scoped_enum_v<int>);
 }
 ```

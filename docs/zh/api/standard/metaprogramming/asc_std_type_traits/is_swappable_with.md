@@ -44,14 +44,18 @@ template<class T, class U> struct asc::std::is_swappable_with
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::is_swappable_with<int&, int&>;
-    (void)sizeof(selected);
+    struct point {};
+    // 正例：同类型左值之间可用通用 swap 交换
+    static_assert(asc::std::is_swappable_with<int&, int&>::value);
+    static_assert(asc::std::is_swappable_with_v<point&, point&>);
+    // 反例：int 左值与 long 左值互相无法交换
+    static_assert(!asc::std::is_swappable_with_v<int&, long&>);
 }
 ```

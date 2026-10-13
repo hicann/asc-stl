@@ -44,14 +44,20 @@ template<class T> struct asc::std::is_empty
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_empty<int>;
-    (void)sizeof(trait);
+    struct sample_empty {};
+    struct not_empty { int member; };
+    // 正例：无任何非静态数据成员的 sample_empty 是空类
+    static_assert(asc::std::is_empty<sample_empty>::value);
+    static_assert(asc::std::is_empty_v<sample_empty>);
+    // 反例：含数据成员的 not_empty 与 int 都不是空类
+    static_assert(!asc::std::is_empty_v<not_empty>);
+    static_assert(!asc::std::is_empty_v<int>);
 }
 ```

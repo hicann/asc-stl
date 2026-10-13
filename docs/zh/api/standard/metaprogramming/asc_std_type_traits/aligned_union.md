@@ -44,14 +44,19 @@ template<size_t Len, class Type0, class ...Types> struct asc::std::aligned_union
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::aligned_union<16, int, float>;
-    (void)sizeof(selected);
+    using union_type = asc::std::aligned_union<8, char, int>;
+    // alignment_value 为各成员对齐的最大值
+    static_assert(union_type::alignment_value == alignof(int));
+    // _t 与 ::type 一致，存储至少容纳请求长度与各成员大小
+    static_assert(asc::std::is_same_v<asc::std::aligned_union_t<8, char, int>, union_type::type>);
+    static_assert(sizeof(asc::std::aligned_union_t<8, char, int>) == 8);
+    static_assert(alignof(asc::std::aligned_union_t<8, char, int>) == alignof(int));
 }
 ```

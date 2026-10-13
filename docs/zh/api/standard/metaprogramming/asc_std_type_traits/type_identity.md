@@ -44,14 +44,17 @@ template<class T> struct asc::std::type_identity
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::type_identity<int>;
-    (void)sizeof(trait);
+    // 正例：type_identity 原样返回传入的类型
+    static_assert(asc::std::is_same_v<asc::std::type_identity_t<int>, int>);
+    static_assert(asc::std::is_same_v<typename asc::std::type_identity<const float>::type, const float>);
+    // 反例：type_identity_t<int> 不是 long
+    static_assert(!asc::std::is_same_v<asc::std::type_identity_t<int>, long>);
 }
 ```

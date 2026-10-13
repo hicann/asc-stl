@@ -44,14 +44,23 @@ template<class T> struct asc::std::is_trivially_destructible
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_trivially_destructible<int>;
-    (void)sizeof(trait);
+    struct custom_dtor {
+        ~custom_dtor() {}
+    };
+    struct plain {
+        int value;
+    };
+    // 正例：int 与仅含 int 成员的类析构是平凡的
+    static_assert(asc::std::is_trivially_destructible<int>::value);
+    static_assert(asc::std::is_trivially_destructible_v<plain>);
+    // 反例：用户提供析构函数的类析构不是平凡的
+    static_assert(!asc::std::is_trivially_destructible_v<custom_dtor>);
 }
 ```

@@ -44,14 +44,19 @@ template<class T1, class T2> struct asc::std::is_convertible
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::is_convertible<int, long>;
-    (void)sizeof(selected);
+    struct sample_src {};
+    struct sample_dst { sample_dst(sample_src) {} };
+    // 正例：int 可隐式转换为 long，sample_src 可隐式转换为 sample_dst
+    static_assert(asc::std::is_convertible<int, long>::value);
+    static_assert(asc::std::is_convertible_v<sample_src, sample_dst>);
+    // 反例：不相关指针类型之间不能隐式转换
+    static_assert(!asc::std::is_convertible_v<long*, int*>);
 }
 ```

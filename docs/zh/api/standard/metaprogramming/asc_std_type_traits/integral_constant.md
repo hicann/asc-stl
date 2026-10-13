@@ -44,14 +44,21 @@ template<class T, T V> struct asc::std::integral_constant
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::integral_constant<int, 3>;
-    (void)sizeof(selected);
+    using two = asc::std::integral_constant<int, 2>;
+    // ::value 携带编译期常量
+    static_assert(two::value == 2);
+    static_assert(asc::std::is_same_v<two::value_type, int>);
+    static_assert(asc::std::is_same_v<two::type, two>); // type 即自身
+    // bool_constant 即 integral_constant<bool, B>
+    static_assert(asc::std::bool_constant<true>::value);
+    // 反例：false_type 取值为假
+    static_assert(!asc::std::false_type::value);
 }
 ```

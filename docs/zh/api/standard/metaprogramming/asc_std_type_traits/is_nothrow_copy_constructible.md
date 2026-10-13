@@ -44,14 +44,20 @@ template<class T> struct asc::std::is_nothrow_copy_constructible
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_nothrow_copy_constructible<int>;
-    (void)sizeof(trait);
+    struct throws {
+        throws(const throws&) { throw 0; }
+    };
+    // 正例：int 的拷贝构造不会抛出异常
+    static_assert(asc::std::is_nothrow_copy_constructible<int>::value);
+    static_assert(asc::std::is_nothrow_copy_constructible_v<int>);
+    // 反例：拷贝构造函数可能抛出异常
+    static_assert(!asc::std::is_nothrow_copy_constructible_v<throws>);
 }
 ```

@@ -52,14 +52,17 @@ template<class If, class Then> struct asc::std::conditional
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::conditional<true, int, long>;
-    (void)sizeof(selected);
+    // 条件为真选第一实参，为假选第二实参
+    static_assert(asc::std::is_same_v<asc::std::conditional<true, int, long>::type, int>);
+    static_assert(asc::std::is_same_v<asc::std::conditional_t<false, int, long>, long>);
+    // 反例：真条件不会选择第二实参
+    static_assert(!asc::std::is_same_v<asc::std::conditional_t<true, int, long>, long>);
 }
 ```

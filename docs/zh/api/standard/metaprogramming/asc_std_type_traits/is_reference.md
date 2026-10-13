@@ -44,14 +44,17 @@ template<class T> struct asc::std::is_reference
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_reference<int>;
-    (void)sizeof(trait);
+    // 正例：左值引用与右值引用都是引用类型
+    static_assert(asc::std::is_reference<int&>::value);
+    static_assert(asc::std::is_reference_v<int&&>);
+    // 反例：int 不是引用类型
+    static_assert(!asc::std::is_reference_v<int>);
 }
 ```

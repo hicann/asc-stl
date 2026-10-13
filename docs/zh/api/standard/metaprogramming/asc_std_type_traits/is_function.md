@@ -44,14 +44,18 @@ template<class T> struct asc::std::is_function
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_function<int>;
-    (void)sizeof(trait);
+    // 正例：函数类型
+    static_assert(asc::std::is_function<void(int)>::value);
+    static_assert(asc::std::is_function_v<int(double)>);
+    // 反例：函数指针与 int 都不是函数类型
+    static_assert(!asc::std::is_function_v<void(*)(int)>);
+    static_assert(!asc::std::is_function_v<int>);
 }
 ```

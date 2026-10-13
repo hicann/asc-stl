@@ -44,14 +44,18 @@ template<class T> struct asc::std::is_integral
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_integral<int>;
-    (void)sizeof(trait);
+    // 正例：int、unsigned long 与 const char 都是整数类型
+    static_assert(asc::std::is_integral<int>::value);
+    static_assert(asc::std::is_integral_v<unsigned long>);
+    static_assert(asc::std::is_integral_v<const char>);
+    // 反例：float 不是整数类型
+    static_assert(!asc::std::is_integral_v<float>);
 }
 ```

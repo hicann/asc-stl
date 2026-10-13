@@ -44,14 +44,19 @@ template<class T> struct asc::std::is_default_constructible
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_default_constructible<int>;
-    (void)sizeof(trait);
+    struct sample_default {};
+    struct no_default { no_default(int) {} };
+    // 正例：int 与 sample_default 都可默认构造
+    static_assert(asc::std::is_default_constructible<int>::value);
+    static_assert(asc::std::is_default_constructible_v<sample_default>);
+    // 反例：仅有 int 形参构造函数的 no_default 不可默认构造
+    static_assert(!asc::std::is_default_constructible_v<no_default>);
 }
 ```

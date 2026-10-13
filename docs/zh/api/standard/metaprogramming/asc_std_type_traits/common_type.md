@@ -64,14 +64,17 @@ template<class T> struct asc::std::common_type
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::common_type<int, long>;
-    (void)sizeof(selected);
+    // ::type 与 _t 都得到条件表达式的公共类型
+    static_assert(asc::std::is_same_v<asc::std::common_type<int, long>::type, long>);
+    static_assert(asc::std::is_same_v<asc::std::common_type_t<int, double>, double>);
+    // 反例：公共类型不取第一个实参
+    static_assert(!asc::std::is_same_v<asc::std::common_type_t<int, long>, int>);
 }
 ```

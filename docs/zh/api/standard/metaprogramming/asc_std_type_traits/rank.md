@@ -44,14 +44,17 @@ template<class T> struct asc::std::rank
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::rank<int>;
-    (void)sizeof(trait);
+    // 正例：数组的秩是数组维数，二维数组 int[2][3] 的秩为 2
+    static_assert(asc::std::rank<int[2][3]>::value == 2);
+    static_assert(asc::std::rank_v<int[4]> == 1);
+    // 反例：非数组类型 int 的秩为 0
+    static_assert(asc::std::rank_v<int> == 0);
 }
 ```

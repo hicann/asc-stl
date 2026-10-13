@@ -44,14 +44,18 @@ template<class T> struct asc::std::is_aggregate
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_aggregate<int>;
-    (void)sizeof(trait);
+    struct Point { int x; int y; }; // 无用户提供构造与私有成员，是聚合类
+    static_assert(asc::std::is_aggregate<Point>::value);
+    // 数组也是聚合
+    static_assert(asc::std::is_aggregate_v<Point[2]>);
+    // 反例：标量类型不是聚合
+    static_assert(!asc::std::is_aggregate_v<int>);
 }
 ```

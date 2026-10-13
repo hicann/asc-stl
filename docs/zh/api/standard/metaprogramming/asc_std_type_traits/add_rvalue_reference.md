@@ -44,14 +44,20 @@ template<class T> struct asc::std::add_rvalue_reference
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::add_rvalue_reference<int>;
-    (void)sizeof(trait);
+    // 可引用类型加上右值引用
+    static_assert(asc::std::is_same_v<asc::std::add_rvalue_reference<int>::type, int&&>);
+    // 引用折叠：左值引用上加右值引用仍是左值引用
+    static_assert(asc::std::is_same_v<asc::std::add_rvalue_reference_t<int&>, int&>);
+    // void 不可加引用，保持原样
+    static_assert(asc::std::is_same_v<asc::std::add_rvalue_reference_t<void>, void>);
+    // 反例：int 加右值引用后不是左值引用
+    static_assert(!asc::std::is_same_v<asc::std::add_rvalue_reference_t<int>, int&>);
 }
 ```

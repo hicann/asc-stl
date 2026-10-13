@@ -44,14 +44,18 @@ template<class T> struct asc::std::is_move_constructible
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using trait = asc::std::is_move_constructible<int>;
-    (void)sizeof(trait);
+    struct no_move { no_move(no_move&&) = delete; };
+    // 正例：int 可移动构造
+    static_assert(asc::std::is_move_constructible<int>::value);
+    static_assert(asc::std::is_move_constructible_v<int>);
+    // 反例：删除了移动构造函数的 no_move 不可移动构造
+    static_assert(!asc::std::is_move_constructible_v<no_move>);
 }
 ```

@@ -44,14 +44,18 @@ template<class Fp, class ...Args> struct asc::std::invoke_result
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::invoke_result<int(*)(int), int>;
-    (void)sizeof(selected);
+    struct Functor { double operator()(int) const { return 0.5; } }; // 局部仿函数
+    // 函数指针以 int 调用的结果类型
+    static_assert(asc::std::is_same_v<asc::std::invoke_result<int (*)(int), int>::type, int>);
+    static_assert(asc::std::is_same_v<asc::std::invoke_result_t<Functor, int>, double>);
+    // 反例：Functor 以 int 调用不返回 int
+    static_assert(!asc::std::is_same_v<asc::std::invoke_result_t<Functor, int>, int>);
 }
 ```

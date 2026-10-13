@@ -70,14 +70,17 @@ template<class T> struct asc::std::common_reference
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+void use_trait()
 {
-    using selected = asc::std::common_reference<int&, const int&>;
-    (void)sizeof(selected);
+    // 左值引用组合的公共引用类型
+    static_assert(asc::std::is_same_v<asc::std::common_reference_t<int&, const int&>, const int&>);
+    // 非引用类型按条件表达式的结果取公共类型
+    static_assert(asc::std::is_same_v<asc::std::common_reference<short, int>::type, int>);
+    static_assert(asc::std::is_same_v<asc::std::common_reference_t<int, double>, double>);
 }
 ```
