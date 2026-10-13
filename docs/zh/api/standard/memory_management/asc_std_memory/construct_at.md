@@ -58,7 +58,7 @@ template<class T, class ...Args> constexpr T* asc::std::construct_at(T* location
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `T *` | 返回指向新构造对象的指针，其地址与 `arg1` 相同。 |
+| `T *` | 返回指向新构造对象的指针，其地址与 `location` 相同。 |
 
 ## 约束说明
 

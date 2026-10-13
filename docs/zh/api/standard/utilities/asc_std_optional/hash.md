@@ -60,7 +60,9 @@ template <class T> struct hash<optional<T>> { size_t operator()(const optional<T
 
 ## 约束说明
 
-- optional 的哈希特化：空值哈希 0，有值时 hash<remove_const_t<T>>{}(*value)；使 unordered 容器可直接容纳 optional。CSV hash 行 target_headers 不含 optional，故记新增。
+- T 须使 hash<remove_const_t<T>> 可调用，即 remove_const_t<T> 为可哈希类型
+- 空 optional 的哈希值为 0；含值时返回 hash<remove_const_t<T>>{}(*value)
+- operator() 接受 const optional<T>& 并返回 size_t，使 unordered 容器可直接容纳 optional<T>
 
 ## 调用示例
 

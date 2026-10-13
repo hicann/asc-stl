@@ -44,7 +44,7 @@ void* ::operator new[](asc::std::size_t, void* ptr) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 指定“全局数组 placement `operator new[]` 使用调用方提供的存储地址，接口不分配内存”使用的标量值；取值须满足声明和约束。 |
+| `asc::std::size_t`（未命名） | 输入 | placement 形式的第一个参数，为未命名的 std::size_t 大小参数，表示请求构造数组所占用的总字节数；本接口不分配内存，不使用该值。 |
 | `ptr` | 输入 | 提供“全局数组 placement `operator new[]` 使用调用方提供的存储地址，接口不分配内存”所需的数据地址；可访问范围和生命周期须满足约束。 |
 
 ## 返回值说明

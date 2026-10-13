@@ -65,8 +65,8 @@ template<class T> void asc::sincos(T value, double* sin_out, double* cos_out) no
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `sin_out` | 输入 | 参与本页所述数学运算的输入值。 |
-| `cos_out` | 输入 | 参与本页所述数学运算的输入值。 |
+| `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写 `float`）。 |
+| `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写 `float`）。 |
 
 ### 原型 2 的参数
 
@@ -75,8 +75,8 @@ template<class T> void asc::sincos(T value, double* sin_out, double* cos_out) no
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `sin_out` | 输入 | 参与本页所述数学运算的输入值。 |
-| `cos_out` | 输入 | 参与本页所述数学运算的输入值。 |
+| `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写 `double`）。 |
+| `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写 `double`）。 |
 
 ### 原型 3 的参数
 
@@ -85,8 +85,8 @@ template<class T> void asc::sincos(T value, double* sin_out, double* cos_out) no
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `sin_out` | 输入 | 参与本页所述数学运算的输入值。 |
-| `cos_out` | 输入 | 参与本页所述数学运算的输入值。 |
+| `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写 `long double`）。 |
+| `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写 `long double`）。 |
 
 ### 原型 4 的参数
 
@@ -101,8 +101,8 @@ template<class T> void asc::sincos(T value, double* sin_out, double* cos_out) no
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `sin_out` | 输入 | 参与本页所述数学运算的输入值。 |
-| `cos_out` | 输入 | 参与本页所述数学运算的输入值。 |
+| `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写 `double`）。 |
+| `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写 `double`）。 |
 
 ## 返回值说明
 

@@ -60,13 +60,10 @@ template<size_t Size> struct asc::std::hash<asc::std::bitset<Size>>
 
 ## 约束说明
 
-- 提供标准算术类型、枚举和指针类型的 hash 特化
-- default_searcher 使用调用方管理的对象和存储
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
-- 支持默认构造和 unsigned long long 构造
-- operator[] 不进行边界检查
-- 提供整组 set、reset、flip，位运算、移位、状态检查、计数和容量查询
+- 主模板对枚举类型按底层整型取哈希，其余类型按对象字节序列取哈希；对所选 `T` 是否存在可用特化以实际声明为准
+- 提供算术类型、枚举类型、指针类型和 nullptr_t 的 hash 特化，各 operator() 均为非抛出并返回 size_t
+- variant<Types...> 特化要求各备选类型可哈希，将活跃备选值的哈希与其索引的哈希合成，valueless_by_exception 时取固定哨兵值
+- bitset<Size> 特化按位序列取哈希，operator() 为 constexpr、非抛出并返回 size_t
 
 ## 调用示例
 
