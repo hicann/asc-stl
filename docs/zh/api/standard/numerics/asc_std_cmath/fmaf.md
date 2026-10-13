@@ -58,7 +58,7 @@ float asc::std::fmaf(float x, float y, float z) noexcept;
 
 ## 约束说明
 
-- 提供 float 重载、标准 *f 别名以及已确认的 float lerp 回移接口
+- 提供 float 重载、标准 *f 别名以及 float lerp 回移接口
 
 ## 调用示例
 

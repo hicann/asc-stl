@@ -45,7 +45,6 @@ template<class Integer, enable_if_t<is_integral<Integer>::value, int> = 0> doubl
 | 参数名 | 描述 |
 | --- | --- |
 | `Integer` | 整型参数类型，包含 bool；不接受浮点类型。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
 
 **函数参数**
 

@@ -87,7 +87,6 @@ template<class... Values, enable_if_t<sizeof...(Values) == sizeof...(Types), int
 | 参数名 | 描述 |
 | --- | --- |
 | `Values` | 传递给构造函数或可调用对象的实参类型列表。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
 
 **函数参数**
 

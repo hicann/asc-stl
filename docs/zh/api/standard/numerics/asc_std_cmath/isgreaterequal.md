@@ -57,7 +57,7 @@ bool asc::std::isgreaterequal(float x, float y) noexcept;
 
 ## 约束说明
 
-- 提供 float 函数重载、已确认的求值类型别名、比较函数、nanf 和分类宏
+- 提供 float 函数重载、求值类型别名、比较函数、nanf 和分类宏
 
 ## 调用示例
 

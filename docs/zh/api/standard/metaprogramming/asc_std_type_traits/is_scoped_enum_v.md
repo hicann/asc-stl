@@ -41,7 +41,7 @@ template<class T> inline constexpr const bool asc::std::is_scoped_enum_v
 ## 约束说明
 
 - 提供特征类和 _v 辅助形式
-- is_scoped_enum 是经确认提供的回移接口
+- is_scoped_enum 为回移提供的接口
 
 ## 调用示例
 

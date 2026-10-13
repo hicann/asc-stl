@@ -85,7 +85,7 @@ template<class T> complex<T> asc::std::log10(const complex<T>& value) noexcept;
 
 ## 约束说明
 
-- 提供 float 重载、标准 *f 别名以及已确认的 float lerp 回移接口
+- 提供 float 重载、标准 *f 别名以及 float lerp 回移接口
 - 仅提供页面声明的 float 或 complex<float> 运算
 - 接口可用性取决于相应的 float 数学能力
 

@@ -88,8 +88,6 @@ template<class InputIterator, class Size, class OutputIterator, enable_if_t<Hasr
 | `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
 | `Size` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
 | `OutputIterator` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
-| `匿名约束参数5` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
 
 **函数参数**
 
@@ -108,7 +106,6 @@ template<class InputIterator, class Size, class OutputIterator, enable_if_t<Hasr
 | `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
 | `Size` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
 | `OutputIterator` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
 
 **函数参数**
 

@@ -73,7 +73,6 @@ template<class Sseq, enable_if_t<Isseedsequence<Sseq, linear_congruential_engine
 | 参数名 | 描述 |
 | --- | --- |
 | `Sseq` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `匿名约束参数2` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
 
 **函数参数**
 

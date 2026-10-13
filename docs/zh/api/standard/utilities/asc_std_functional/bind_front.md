@@ -63,7 +63,7 @@ template<class Fn, class ...Args> constexpr auto asc::std::bind_front(Fn&& funct
 ## 约束说明
 
 - 支持标准可调用对象和成员指针形式
-- invoke_r 是经确认提供的 C++23 回移接口
+- invoke_r 为 C++23 回移提供的接口
 
 ## 调用示例
 

@@ -40,7 +40,7 @@ enum class asc::output_ordering
 
 ## 约束说明
 
-- 仅提供三个已确认的取值
+- 仅提供三个取值
 
 ## 调用示例
 

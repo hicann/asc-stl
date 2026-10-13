@@ -57,7 +57,6 @@ template<size_t Index, class ...Args, class Constraints, class> typename Constra
 | `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
 | `Args` | 传递给构造函数或可调用对象的实参类型列表。 |
 | `Index` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
-| `匿名约束参数4` | 用于在编译期筛选可参与重载的类型或表达式，调用方无需显式指定。 |
 
 **函数参数**
 
