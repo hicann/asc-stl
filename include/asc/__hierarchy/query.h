@@ -30,7 +30,13 @@
 #if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
 #include <simt_api/device_functions.h>
 #elif CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+#if __has_include(<c_api/utils/sys_var.h>)
 #include <c_api/utils/sys_var.h>
+#elif __has_include(<c_api/sys_var/sys_var.h>)
+#include <c_api/sys_var/sys_var.h>
+#else
+#error "ASC-STL requires a CANN SDK providing the SIMD system-variable query interfaces"
+#endif
 #endif
 
 namespace asc {

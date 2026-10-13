@@ -17,8 +17,17 @@
 #include <asc/std/execution>
 #include <asc/tensor_copy>
 
+#include "../../../support/tensor_descriptor_boundaries.h"
+
 int main()
 {
+    constexpr auto maximum_descriptor = asc_stl_tensor_descriptor_test::make_pair_descriptor(~0u, 2, ~0u, 0);
+    static_assert(maximum_descriptor.validate() == asc::tensor_copy_status::success);
+    static_assert(maximum_descriptor.required_elements() == ~0ULL);
+    volatile unsigned int maximum = ~0u;
+    if (asc_stl_tensor_descriptor_test::evaluate(maximum) != 0) {
+        return 2;
+    }
     const unsigned int extents[2] = {3, 5};
     const unsigned int source_strides[2] = {8, 1};
     const unsigned int destination_strides[2] = {8, 1};

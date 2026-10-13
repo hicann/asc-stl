@@ -95,9 +95,21 @@ asc-stl/
 | --- | --- |
 | CANN | 9.2.0 |
 | 毕昇 CCE / clang | 15.0.5 |
-| g++ | 支持 C++17 的版本 |
+| g++ | 产品最低使用 C++17；完整 Host 测试同时需要 C++20 支持 |
 | CMake | ≥ 3.20 |
 | 处理器 | 昇腾 950 处理器 |
+
+CANN 同一版本的不同构建可能采用不同 SDK 目录布局。设备层查询会优先包含
+`c_api/utils/sys_var.h`，缺少时使用 `c_api/sys_var/sys_var.h`；两者均缺少时会给出
+编译错误。Tensor 描述符的 64 位乘法溢出检查采用 32 位分段运算，避免旧版 BiSheng
+在动态描述符路径生成设备侧不可用的 `__multi3` 链接符号；公共接口和状态码保持不变。
+
+Host 标准库接口还依赖配套的 C 库和 C++ 标准库。C++20 `<asc/std/cuchar>` 的
+`c8rtomb`、`mbrtoc8` 需要系统 `<cuchar>` 实际导出这两个接口；GNU/Linux 通常需要
+glibc 2.36 或更新版本，以及构建时启用了相应能力的 libstdc++。只升级编译器不足以
+满足要求，应在同一环境中检查编译、链接和运行。Ubuntu 24.04 的 GCC 13/glibc 2.39
+可提供这组接口；不要把新版 glibc 全局注入旧 CANN 环境。完整 Host 门禁会检查
+C++17/C++20 两种模式，不应因系统库缺失而跳过测试。
 
 ### 直接包含（Host 示例）
 
@@ -131,7 +143,7 @@ target_link_libraries(your_target PRIVATE asc-stl)   # INTERFACE 目标，只传
 # 方式一：构建入口脚本（默认安装头文件与 CMake 配置到 build/install）
 bash build.sh
 
-# 方式二：Host 门禁（风格检查、对外头文件自包含、Host 语义 UT；仅需 C++17 编译器与 Python 3）
+# 方式二：Host 门禁（风格检查、头文件自包含、C++17/C++20 Host 语义 UT；需要 Python 3）
 bash scripts/ci-quick-check.sh
 
 # 方式三：CMake + CTest（显式开启测试目标；设备编译与仿真门禁需 CANN 环境并通过 build.sh --device-compile / --cannsim 开启）

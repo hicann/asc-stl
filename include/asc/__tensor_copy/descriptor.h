@@ -27,6 +27,14 @@
 #pragma system_header
 #endif
 
+// Keep dynamic Device descriptor validation away from a BiSheng optimization
+// that lowers its runtime arithmetic to an unavailable __multi3 helper.
+#if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+#define CANN_ASC_STL_DETAIL_TENSOR_VALIDATE_OPTNONE __attribute__((optnone))
+#else
+#define CANN_ASC_STL_DETAIL_TENSOR_VALIDATE_OPTNONE
+#endif
+
 // Tensor-transfer descriptor value vocabulary for the later public
 // <asc/tensor_copy>.  A descriptor records, per dimension, the extent, the GM
 // source element stride, the UB destination element stride and the left/right
@@ -36,6 +44,37 @@
 // kernel.  Every range and stride must pass construction validation.
 
 namespace asc {
+
+namespace detail {
+
+// Avoid division-based overflow tests that some BiSheng versions lower to
+// an unavailable __multi3 helper. Each product below has two 32-bit factors.
+// The result is written only when the full unsigned 64-bit product fits.
+CANN_ASC_STL_API constexpr bool tensor_copy_checked_multiply(
+    unsigned long long left, unsigned long long right, unsigned long long& result) noexcept
+{
+    const unsigned long long left_low = static_cast<__UINT32_TYPE__>(left);
+    const unsigned long long left_high = left >> 32;
+    const unsigned long long right_low = static_cast<__UINT32_TYPE__>(right);
+    const unsigned long long right_high = right >> 32;
+    if (left_high != 0 && right_high != 0) {
+        return false;
+    }
+    const unsigned long long low = left_low * right_low;
+    // At most one cross product is nonzero after the high/high check.
+    const unsigned long long middle = left_high * right_low + left_low * right_high;
+    if ((middle >> 32) != 0) {
+        return false;
+    }
+    const unsigned long long high = (low >> 32) + middle;
+    if ((high >> 32) != 0) {
+        return false;
+    }
+    result = (high << 32) | static_cast<__UINT32_TYPE__>(low);
+    return true;
+}
+
+}  // namespace detail
 
 enum class tensor_copy_status : int {
     success = 0,
@@ -90,7 +129,7 @@ public:
         return Rank;
     }
 
-    CANN_ASC_STL_API constexpr tensor_copy_status validate() const noexcept
+    CANN_ASC_STL_API CANN_ASC_STL_DETAIL_TENSOR_VALIDATE_OPTNONE constexpr tensor_copy_status validate() const noexcept
     {
         unsigned long long elements = 1;
         for (unsigned dimension = 0; dimension < Rank; ++dimension) {
@@ -102,10 +141,9 @@ public:
             }
             const unsigned long long padded = static_cast<unsigned long long>(extents_[dimension]) +
                 left_padding_[dimension] + right_padding_[dimension];
-            if (padded == 0 || elements > ~0ULL / padded) {
+            if (padded == 0 || !detail::tensor_copy_checked_multiply(elements, padded, elements)) {
                 return tensor_copy_status::size_overflow;
             }
-            elements *= padded;
         }
         return tensor_copy_status::success;
     }
@@ -116,10 +154,9 @@ public:
         for (unsigned dimension = 0; dimension < Rank; ++dimension) {
             const unsigned long long padded = static_cast<unsigned long long>(extents_[dimension]) +
                 left_padding_[dimension] + right_padding_[dimension];
-            if (padded == 0 || elements > ~0ULL / padded) {
+            if (padded == 0 || !detail::tensor_copy_checked_multiply(elements, padded, elements)) {
                 return 0;
             }
-            elements *= padded;
         }
         return elements;
     }
@@ -180,5 +217,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned int tensor_copy_requi
 }
 
 }  // namespace asc
+
+#undef CANN_ASC_STL_DETAIL_TENSOR_VALIDATE_OPTNONE
 
 #endif  // CANN_ASC_STL_ASC___TENSOR_COPY_DESCRIPTOR_H

@@ -44,6 +44,7 @@
 #include <asc/tensor_copy>
 
 #include "../../../../support/b028_allocator.h"
+#include "../../../../support/tensor_descriptor_boundaries.h"
 #include "../../../../support/w09_w10_semantics.h"
 #include "../../../../support/w11_w12_semantics.h"
 #include "../../../../support/v1_algorithm_semantics.h"
@@ -306,6 +307,8 @@ CANN_ASC_STL_API unsigned int evaluate_single_thread(asc::monotonic_arena& arena
     failures += asc::std::align(8, 8, aligned_pointer, aligned_space) == nullptr;
     failures += asc_stl_w09_w10_test::evaluate_iterator() != 0;
     failures += asc_stl_v1_algorithm_test::evaluate() != 0;
+    volatile unsigned int descriptor_maximum = ~0u;
+    failures += asc_stl_tensor_descriptor_test::evaluate(descriptor_maximum);
     failures += asc_stl_w09_w10_test::evaluate_alignment_chrono() != 0;
     failures += asc_stl_w09_w10_test::evaluate_memory_variant() != 0;
     failures += asc_stl_w09_w10_test::evaluate_mutex() != 0;

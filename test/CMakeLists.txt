@@ -58,6 +58,16 @@ set_tests_properties(gate.dependencies PROPERTIES LABELS "metadata;static-rules;
 
 if(ASC_STL_ENABLE_HOST_TESTS)
     add_test(
+        NAME compatibility.cann-sdk-layout
+        COMMAND
+            ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/check_cann_sdk_paths.py
+            --include-root ${ASC_STL_INCLUDE_ROOT}
+            --compiler ${CMAKE_CXX_COMPILER})
+    set_tests_properties(
+        compatibility.cann-sdk-layout
+        PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 120)
+
+    add_test(
         NAME header.host.all
         COMMAND
             ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/run_header_self_contained.py
