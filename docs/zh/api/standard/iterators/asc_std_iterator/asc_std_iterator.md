@@ -159,9 +159,9 @@
 | [asc::std::move_sentinel::move_sentinel](move_sentinel_move_sentinel.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::move_sentinel::operator=](move_sentinel_operator_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::next](next.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator!=](operator_not_equal.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator-](operator_minus.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator==](operator_equal.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator!=（move_iterator 重载）（函数模板）](operator_not_equal.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator-（move_iterator/common_iterator/counted_iterator 重载）（函数模板）](operator_minus.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator==（move_iterator 重载）（函数模板）](operator_equal.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::output_iterator](output_iterator.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::output_iterator_tag](output_iterator_tag.md) | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::permutable](permutable.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |

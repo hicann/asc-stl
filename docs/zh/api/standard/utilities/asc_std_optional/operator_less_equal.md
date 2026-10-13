@@ -1,4 +1,4 @@
-# asc::std::operator<=（函数模板）
+# asc::std::operator<=（optional 重载）（函数模板）
 
 ## 产品支持情况
 
@@ -37,20 +37,12 @@
 ### 原型 1
 
 ```cpp
-template<class ...Types> constexpr bool asc::std::operator<=(const variant<Types...>& left, const variant<Types...>& right);
-```
-
-此原型对应头文件：`<asc/std/variant>`。
-
-### 原型 2
-
-```cpp
 template<class T, class U> constexpr bool asc::std::operator<=(const T& value, const asc::std::optional<U>& optional_value);
 ```
 
 此原型对应头文件：`<asc/std/optional>`。
 
-### 原型 3
+### 原型 2
 
 ```cpp
 template<class T, class U> constexpr bool asc::std::operator<=(const asc::std::optional<T>& left, const asc::std::optional<U>& right);
@@ -58,7 +50,7 @@ template<class T, class U> constexpr bool asc::std::operator<=(const asc::std::o
 
 此原型对应头文件：`<asc/std/optional>`。
 
-### 原型 4
+### 原型 3
 
 ```cpp
 template<class T, class U> constexpr bool asc::std::operator<=(const asc::std::optional<T>& optional_value, const U& value);
@@ -66,7 +58,7 @@ template<class T, class U> constexpr bool asc::std::operator<=(const asc::std::o
 
 此原型对应头文件：`<asc/std/optional>`。
 
-### 原型 5
+### 原型 4
 
 ```cpp
 template<class T> constexpr bool asc::std::operator<=(asc::std::nullopt_t, const asc::std::optional<T>& value) noexcept;
@@ -74,7 +66,7 @@ template<class T> constexpr bool asc::std::operator<=(asc::std::nullopt_t, const
 
 此原型对应头文件：`<asc/std/optional>`。
 
-### 原型 6
+### 原型 5
 
 ```cpp
 template<class T> constexpr bool asc::std::operator<=(const asc::std::optional<T>& value, asc::std::nullopt_t) noexcept;
@@ -82,40 +74,9 @@ template<class T> constexpr bool asc::std::operator<=(const asc::std::optional<T
 
 此原型对应头文件：`<asc/std/optional>`。
 
-### 原型 7
-
-```cpp
-template<class C, class T, int = 1> constexpr bool asc::std::operator<=(basic_string_view<C, T> left, type_identity_t<basic_string_view<C, T>> right) noexcept;
-```
-
-此原型对应头文件：`<asc/std/string_view>`。
-
-### 原型 8
-
-```cpp
-template<class C, class T, unsigned int = 2> constexpr bool asc::std::operator<=(type_identity_t<basic_string_view<C, T>> left, basic_string_view<C, T> right) noexcept;
-```
-
-此原型对应头文件：`<asc/std/string_view>`。
-
 ## 参数说明
 
 ### 原型 1 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Types` | 传递给构造函数或可调用对象的实参类型列表。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
-
-### 原型 2 的参数
 
 **模板参数**
 
@@ -131,7 +92,7 @@ template<class C, class T, unsigned int = 2> constexpr bool asc::std::operator<=
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
 | `optional_value` | 输入 | 参与操作或用于初始化、比较的值。 |
 
-### 原型 3 的参数
+### 原型 2 的参数
 
 **模板参数**
 
@@ -147,7 +108,7 @@ template<class C, class T, unsigned int = 2> constexpr bool asc::std::operator<=
 | `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
 | `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
 
-### 原型 4 的参数
+### 原型 3 的参数
 
 **模板参数**
 
@@ -161,6 +122,20 @@ template<class C, class T, unsigned int = 2> constexpr bool asc::std::operator<=
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `optional_value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+
+### 原型 4 的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
 
 ### 原型 5 的参数
@@ -177,75 +152,21 @@ template<class C, class T, unsigned int = 2> constexpr bool asc::std::operator<=
 | --- | --- | --- |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
 
-### 原型 6 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-
-### 原型 7 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `C` | basic_string_view 的字符类型；须满足原型中的类型约束。 |
-| `T` | basic_string_view 的字符特性类型；须满足原型中的类型约束。 |
-| `未命名参数3` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
-
-### 原型 8 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `C` | basic_string_view 的字符类型；须满足原型中的类型约束。 |
-| `T` | basic_string_view 的字符特性类型；须满足原型中的类型约束。 |
-| `未命名参数3` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
-
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 2 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 3 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 4 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 5 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 6 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 7 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 8 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| 原型 1-5 | `bool` | 比较成立时为 `true`，否则为 `false`。 |
 
 ## 约束说明
 
-- 本页约束说明仅针对 `<asc/std/optional>` 提供的 `operator<=` 重载（原型 2 至原型 6）；原型 1、7、8 为 `<asc/std/variant>`、`<asc/std/string_view>` 的同名运算符，不属于本页约束范围
-- 参与比较的重载集合：`optional<T>` 与 `optional<U>`、`optional<T>` 与 `U` 类型的值、`T` 类型的值与 `optional<U>`，以及 `optional<T>` 与 `nullopt_t` 的两种操作数顺序
-- `optional` 的模板实参须为非引用对象类型；与裸值（`T`/`U` 类型操作数）比较时，裸值始终按含值状态处理
-- 无值状态参与比较的规则：左侧无值时结果恒为 `true`；左侧含值且右侧无值时结果为 `false`；两侧均含值时结果为 `*left <= *right`
-- 两侧均含值（或与裸值比较的 `optional` 一侧含值）时才计算所含值的比较表达式，`T` 与 `U` 须支持 `const` 操作数上 `operator<=` 的有效比较，异常语义跟随该比较表达式
-- 与 `nullopt_t` 的比较只判断是否含值，不访问所含值，对 `T` 无可比较要求，相应重载标记为 `noexcept`
+- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
+- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
+- T 必须是普通的非引用对象类型
+- Host 遵循有效的 C++17 操作
+- Device 侧构造、赋值、调用和交换所依赖的操作必须不抛出异常
+- 提供构造、迭代和除 at 外的访问接口，以及 remove_prefix、remove_suffix、swap、data、size、starts_with、ends_with 和非抛出的比较/查找接口
+- AI Core SIMD 编程 仅支持 local 或 generic 地址空间的普通字符指针
 
 ## 调用示例
 
@@ -260,3 +181,5 @@ decltype(auto) example(const T& value, const asc::std::optional<U>& optional_val
     return asc::std::operator<=(value, optional_value);
 }
 ```
+
+变体比较运算符由 `<asc/std/variant>` 提供；string_view 比较运算符见 [string_view 重载页](../../strings/asc_std_string_view/operator_operator_less_equal.md)。

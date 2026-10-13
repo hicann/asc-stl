@@ -35,7 +35,7 @@
 ## 函数原型
 
 ```cpp
-template<class ...UTypes, class Constraints> [[nodiscard]] constexpr bool asc::std::tuple::operator<(const tuple<UTypes...>& other) const noexcept(Constraints::Nothrowlessthancomparable);
+template<class... Left, class... Right> constexpr bool asc::std::operator<(const tuple<Left...>& left, const tuple<Right...>& right);
 ```
 
 ## 参数说明
@@ -44,20 +44,19 @@ template<class ...UTypes, class Constraints> [[nodiscard]] constexpr bool asc::s
 
 | 参数名 | 描述 |
 | --- | --- |
-| `UTypes` | 传递给构造函数或可调用对象的实参类型列表。 |
-| `Constraints` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Left`、`Right` | 两个 tuple 的元素类型包，元素个数须相同。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `left`、`right` | 输入 | 参与比较的两个 tuple。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 两 tuple 按字典序小于比较时为 `true`，否则为 `false`。 |
 
 ## 约束说明
 

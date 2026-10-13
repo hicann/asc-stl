@@ -126,8 +126,8 @@
 | [asc::std::upper_bound](algorithms/asc_std_algorithm/upper_bound.md) | asc/std/algorithm | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::array](containers/asc_std_array/array.md) | asc/std/array | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::get](containers/asc_std_array/get.md) | asc/std/array | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator!=（函数模板）](containers/asc_std_array/operator_not_equal.md) | asc/std/array | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator==（函数模板）](containers/asc_std_array/operator_equal.md) | asc/std/array | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator!=（array 重载）（函数模板）](containers/asc_std_array/operator_not_equal.md) | asc/std/array | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator==（array 重载）（函数模板）](containers/asc_std_array/operator_equal.md) | asc/std/array | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::to_array](containers/asc_std_array/to_array.md) | asc/std/array | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::tuple_element](containers/asc_std_array/tuple_element.md) | asc/std/array | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::tuple_size](containers/asc_std_array/tuple_size.md) | asc/std/array | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
@@ -300,9 +300,9 @@
 | [asc::std::bitset::to_ullong](utilities/asc_std_bitset/bitset_to_ullong.md) | asc/std/bitset | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::bitset::to_ulong](utilities/asc_std_bitset/bitset_to_ulong.md) | asc/std/bitset | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::hash](utilities/asc_std_bitset/hash.md) | asc/std/bitset | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator&（函数模板）](utilities/asc_std_bitset/operator_bit_and.md) | asc/std/bitset | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator^（函数模板）](utilities/asc_std_bitset/operator_bit_xor.md) | asc/std/bitset | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator\|（函数模板）](utilities/asc_std_bitset/operator_bit_or.md) | asc/std/bitset | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator&（bitset 重载）（函数模板）](utilities/asc_std_bitset/operator_bit_and.md) | asc/std/bitset | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator^（bitset 重载）（函数模板）](utilities/asc_std_bitset/operator_bit_xor.md) | asc/std/bitset | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator\|（bitset 重载）（函数模板）](utilities/asc_std_bitset/operator_bit_or.md) | asc/std/bitset | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [assert](diagnostics/asc_std_cassert/assert.md) | asc/std/cassert | 宏 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::isalnum](text_processing/asc_std_cctype/isalnum.md) | asc/std/cctype | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::isalpha](text_processing/asc_std_cctype/isalpha.md) | asc/std/cctype | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
@@ -733,12 +733,12 @@
 | [asc::std::conj](numerics/asc_std_complex/conj.md) | asc/std/complex | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::imag](numerics/asc_std_complex/imag.md) | asc/std/complex | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::norm](numerics/asc_std_complex/norm.md) | asc/std/complex | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator!=（函数）](numerics/asc_std_complex/operator_not_equal.md) | asc/std/complex | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator!=（complex 重载）（函数模板）](numerics/asc_std_complex/operator_not_equal.md) | asc/std/complex | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::operator*](numerics/asc_std_complex/operator_dereference.md) | asc/std/complex | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::operator+](numerics/asc_std_complex/operator_plus.md) | asc/std/complex | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator-](numerics/asc_std_complex/operator_minus.md) | asc/std/complex | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator-（complex 重载）（函数模板）](numerics/asc_std_complex/operator_minus.md) | asc/std/complex | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::operator/](numerics/asc_std_complex/operator_divide.md) | asc/std/complex | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator==（函数）](numerics/asc_std_complex/operator_equal.md) | asc/std/complex | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator==（complex 重载）（函数模板）](numerics/asc_std_complex/operator_equal.md) | asc/std/complex | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::polar](numerics/asc_std_complex/polar.md) | asc/std/complex | 函数 | C++17+ | Host、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::proj](numerics/asc_std_complex/proj.md) | asc/std/complex | 函数 | C++17+ | Host、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::real](numerics/asc_std_complex/real.md) | asc/std/complex | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
@@ -776,15 +776,15 @@
 | [asc::std::byte](language_support/asc_std_cstddef/byte.md) | asc/std/cstddef | 枚举 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::max_align_t](language_support/asc_std_cstddef/max_align_t.md) | asc/std/cstddef | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::nullptr_t](language_support/asc_std_cstddef/nullptr_t.md) | asc/std/cstddef | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator&（函数）](language_support/asc_std_cstddef/operator_bit_and.md) | asc/std/cstddef | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator&（byte 重载）（函数）](language_support/asc_std_cstddef/operator_bit_and.md) | asc/std/cstddef | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::operator&=](language_support/asc_std_cstddef/operator_bit_and_assign.md) | asc/std/cstddef | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::operator<<](language_support/asc_std_cstddef/operator_shift_left.md) | asc/std/cstddef | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::operator<<=](language_support/asc_std_cstddef/operator_shift_left_assign.md) | asc/std/cstddef | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::operator>>](language_support/asc_std_cstddef/operator_shift_right.md) | asc/std/cstddef | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::operator>>=](language_support/asc_std_cstddef/operator_shift_right_assign.md) | asc/std/cstddef | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator^（函数）](language_support/asc_std_cstddef/operator_bit_xor.md) | asc/std/cstddef | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator^（byte 重载）（函数）](language_support/asc_std_cstddef/operator_bit_xor.md) | asc/std/cstddef | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::operator^=](language_support/asc_std_cstddef/operator_bit_xor_assign.md) | asc/std/cstddef | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator\|（函数）](language_support/asc_std_cstddef/operator_bit_or.md) | asc/std/cstddef | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator\|（byte 重载）（函数）](language_support/asc_std_cstddef/operator_bit_or.md) | asc/std/cstddef | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::operator\|=](language_support/asc_std_cstddef/operator_bit_or_assign.md) | asc/std/cstddef | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::operator~](language_support/asc_std_cstddef/operator_bit_not.md) | asc/std/cstddef | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::ptrdiff_t](language_support/asc_std_cstddef/ptrdiff_t.md) | asc/std/cstddef | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
@@ -1600,10 +1600,10 @@
 | [asc::std::make_optional](utilities/asc_std_optional/make_optional.md) | asc/std/optional | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::nullopt](utilities/asc_std_optional/nullopt.md) | asc/std/optional | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::nullopt_t](utilities/asc_std_optional/nullopt_t.md) | asc/std/optional | 类 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator<（函数模板）](utilities/asc_std_optional/operator_less.md) | asc/std/optional | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator<=（函数模板）](utilities/asc_std_optional/operator_less_equal.md) | asc/std/optional | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator>（函数模板）](utilities/asc_std_optional/operator_greater.md) | asc/std/optional | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator>=（函数模板）](utilities/asc_std_optional/operator_greater_equal.md) | asc/std/optional | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator<（optional 重载）（函数模板）](utilities/asc_std_optional/operator_less.md) | asc/std/optional | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator<=（optional 重载）（函数模板）](utilities/asc_std_optional/operator_less_equal.md) | asc/std/optional | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator>（optional 重载）（函数模板）](utilities/asc_std_optional/operator_greater.md) | asc/std/optional | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator>=（optional 重载）（函数模板）](utilities/asc_std_optional/operator_greater_equal.md) | asc/std/optional | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::optional](utilities/asc_std_optional/optional.md) | asc/std/optional | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::optional::emplace](utilities/asc_std_optional/optional_emplace.md) | asc/std/optional | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::optional::has_value](utilities/asc_std_optional/optional_has_value.md) | asc/std/optional | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
@@ -2029,10 +2029,10 @@
 | [asc::std::basic_string_view](strings/asc_std_string_view/basic_string_view.md) | asc/std/string_view | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::char_traits](strings/asc_std_string_view/char_traits.md) | asc/std/string_view | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::literals::string_view_literals](strings/asc_std_string_view/literals_string_view_literals.md) | asc/std/string_view | 命名空间 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator<（函数）](strings/asc_std_string_view/operator_less.md) | asc/std/string_view | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator<=（函数）](strings/asc_std_string_view/operator_less_equal.md) | asc/std/string_view | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator>（函数）](strings/asc_std_string_view/operator_greater.md) | asc/std/string_view | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator>=（函数）](strings/asc_std_string_view/operator_greater_equal.md) | asc/std/string_view | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator<（string_view 重载）（函数模板）](strings/asc_std_string_view/operator_less.md) | asc/std/string_view | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator<=（string_view 重载）（函数模板）](strings/asc_std_string_view/operator_less_equal.md) | asc/std/string_view | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator>（string_view 重载）（函数模板）](strings/asc_std_string_view/operator_greater.md) | asc/std/string_view | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator>=（string_view 重载）（函数模板）](strings/asc_std_string_view/operator_greater_equal.md) | asc/std/string_view | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::string_view](strings/asc_std_string_view/string_view.md) | asc/std/string_view | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::u16string_view](strings/asc_std_string_view/u16string_view.md) | asc/std/string_view | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::u32string_view](strings/asc_std_string_view/u32string_view.md) | asc/std/string_view | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |

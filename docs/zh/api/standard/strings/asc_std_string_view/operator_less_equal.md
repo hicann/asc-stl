@@ -1,4 +1,4 @@
-# asc::std::operator<=（函数）
+# asc::std::operator<=（string_view 重载）（函数模板）
 
 ## 产品支持情况
 
@@ -26,7 +26,7 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/std/string_view>`、`<asc/std/tuple>`、`<asc/std/utility>`。
+头文件路径为：`<asc/std/string_view>`。
 
 按字符序列字典序判断左侧 string_view 是否不大于右侧。
 
@@ -45,10 +45,18 @@ template<class CharT, class Traits> constexpr bool asc::std::operator<=(basic_st
 ### 原型 2
 
 ```cpp
-template<class... Left, class... Right> constexpr bool asc::std::operator<=(const tuple<Left...>& left, const tuple<Right...>& right);
+template<class C, class T, int = 1> constexpr bool asc::std::operator<=(basic_string_view<C, T> left, type_identity_t<basic_string_view<C, T>> right) noexcept;
 ```
 
-此原型对应头文件：`<asc/std/tuple>`。
+此原型对应头文件：`<asc/std/string_view>`。异构形式：右操作数可由可转换为 `basic_string_view<C, T>` 的类型（如字符串字面量）隐式构造。
+
+### 原型 3
+
+```cpp
+template<class C, class T, unsigned int = 2> constexpr bool asc::std::operator<=(type_identity_t<basic_string_view<C, T>> left, basic_string_view<C, T> right) noexcept;
+```
+
+此原型对应头文件：`<asc/std/string_view>`。异构形式：左操作数可由可隐式转换的源类型构造。
 
 ## 参数说明
 
@@ -65,31 +73,29 @@ template<class... Left, class... Right> constexpr bool asc::std::operator<=(cons
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 参与比较的左侧 string_view。 |
+| `right` | 输入 | 参与比较的右侧 string_view。 |
 
-### 原型 2 的参数
+### 原型 2、3 的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Left` | 左侧操作数 tuple 的元素类型列表。 |
-| `Right` | 右侧操作数 tuple 的元素类型列表。 |
+| `C`、`T` | 字符类型与字符特性类型。 |
+| `未命名约束参数3` | 编译期消歧参数（区分两个异构方向的宏生成重载），调用方无需显式指定。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left`、`right` | 输入 | 参与比较的两个 string_view（其中一侧可为可隐式转换的源类型，如字符串字面量）。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 2 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| 原型 1-3 | `bool` | 按字典序比较成立时为 `true`，否则为 `false`。 |
 
 ## 约束说明
 
@@ -111,3 +117,5 @@ decltype(auto) example(asc::std::string_view left, asc::std::string_view right)
     return (left <= right);
 }
 ```
+
+tuple 比较运算符见 [tuple 重载页](../../utilities/asc_std_tuple/tuple_operator_less_equal.md)。

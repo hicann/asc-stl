@@ -13,15 +13,15 @@
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |
 | [asc::std::hash](hash.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator!=（函数模板）](../../containers/asc_std_array/operator_not_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator==（函数模板）](../../containers/asc_std_array/operator_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator!=（array 重载）（函数模板）](../../containers/asc_std_array/operator_not_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator==（array 重载）（函数模板）](../../containers/asc_std_array/operator_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::make_optional](make_optional.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::nullopt](nullopt.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::nullopt_t](nullopt_t.md) | 类 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator<（函数模板）](operator_less.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator<=（函数模板）](operator_less_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator>（函数模板）](operator_greater.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator>=（函数模板）](operator_greater_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator<（optional 重载）（函数模板）](operator_less.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator<=（optional 重载）（函数模板）](operator_less_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator>（optional 重载）（函数模板）](operator_greater.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator>=（optional 重载）（函数模板）](operator_greater_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::optional](optional.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::optional::emplace](optional_emplace.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::optional::has_value](optional_has_value.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |

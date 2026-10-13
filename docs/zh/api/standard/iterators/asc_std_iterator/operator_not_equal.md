@@ -1,4 +1,4 @@
-# asc::std::operator!=
+# asc::std::operator!=（move_iterator 重载）（函数模板）
 
 ## 产品支持情况
 

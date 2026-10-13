@@ -15,13 +15,13 @@
 | [asc::std::get](../../containers/asc_std_array/get.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::tuple_element](../../containers/asc_std_array/tuple_element.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::tuple_size](../../containers/asc_std_array/tuple_size.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator!=（函数）](../../numerics/asc_std_complex/operator_not_equal.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator==（函数）](../../numerics/asc_std_complex/operator_equal.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator!=（complex 重载）（函数模板）](../../numerics/asc_std_complex/operator_not_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator==（complex 重载）（函数模板）](../../numerics/asc_std_complex/operator_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::uses_allocator](../../memory_management/asc_std_memory/uses_allocator.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator<（函数）](../../strings/asc_std_string_view/operator_less.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator<=（函数）](../../strings/asc_std_string_view/operator_less_equal.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator>（函数）](../../strings/asc_std_string_view/operator_greater.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator>=（函数）](../../strings/asc_std_string_view/operator_greater_equal.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| asc::std::operator<（tuple 重载）（由 `<asc/std/tuple>` 提供） | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| asc::std::operator<=（tuple 重载）（由 `<asc/std/tuple>` 提供） | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| asc::std::operator>（tuple 重载）（由 `<asc/std/tuple>` 提供） | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| asc::std::operator>=（tuple 重载）（由 `<asc/std/tuple>` 提供） | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::apply](apply.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::forward_as_tuple](forward_as_tuple.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::ignore](ignore.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |

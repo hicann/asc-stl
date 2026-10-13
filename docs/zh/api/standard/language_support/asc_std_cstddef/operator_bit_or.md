@@ -1,4 +1,4 @@
-# asc::std::operator|（函数）
+# asc::std::operator|（byte 重载）（函数）
 
 ## 产品支持情况
 

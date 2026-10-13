@@ -16,13 +16,13 @@
 | [asc::std::get](../../containers/asc_std_array/get.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::tuple_element](../../containers/asc_std_array/tuple_element.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::tuple_size](../../containers/asc_std_array/tuple_size.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator!=（函数）](../../numerics/asc_std_complex/operator_not_equal.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator==（函数）](../../numerics/asc_std_complex/operator_equal.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator!=（complex 重载）（函数模板）](../../numerics/asc_std_complex/operator_not_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator==（complex 重载）（函数模板）](../../numerics/asc_std_complex/operator_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::swap](../../concurrency/asc_std_mutex/swap.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator<（函数）](../../strings/asc_std_string_view/operator_less.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator<=（函数）](../../strings/asc_std_string_view/operator_less_equal.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator>（函数）](../../strings/asc_std_string_view/operator_greater.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator>=（函数）](../../strings/asc_std_string_view/operator_greater_equal.md) | 函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator<（string_view 重载）（函数模板）](../../strings/asc_std_string_view/operator_less.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator<=（string_view 重载）（函数模板）](../../strings/asc_std_string_view/operator_less_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator>（string_view 重载）（函数模板）](../../strings/asc_std_string_view/operator_greater.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator>=（string_view 重载）（函数模板）](../../strings/asc_std_string_view/operator_greater_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::tuple_element::type](../asc_std_tuple/tuple_element_type.md) | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::as_const](as_const.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::cmp_equal](cmp_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |

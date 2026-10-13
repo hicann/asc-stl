@@ -12,7 +12,7 @@
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |
-| [asc::std::operator==（函数模板）](../../containers/asc_std_array/operator_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator==（array 重载）（函数模板）](../../containers/asc_std_array/operator_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::scoped_allocator_adaptor](scoped_allocator_adaptor.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::scoped_allocator_adaptor::allocate](scoped_allocator_adaptor_allocate.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::scoped_allocator_adaptor::const_pointer](scoped_allocator_adaptor_const_pointer.md) | 类型别名 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |

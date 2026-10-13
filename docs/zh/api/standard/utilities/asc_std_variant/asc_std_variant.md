@@ -12,13 +12,13 @@
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |
-| [asc::std::operator!=（函数模板）](../../containers/asc_std_array/operator_not_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator==（函数模板）](../../containers/asc_std_array/operator_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator!=（array 重载）（函数模板）](../../containers/asc_std_array/operator_not_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::operator==（array 重载）（函数模板）](../../containers/asc_std_array/operator_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::hash](../asc_std_bitset/hash.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator<（函数模板）](../asc_std_optional/operator_less.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator<=（函数模板）](../asc_std_optional/operator_less_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator>（函数模板）](../asc_std_optional/operator_greater.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::operator>=（函数模板）](../asc_std_optional/operator_greater_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| asc::std::operator<（variant 重载）（由 `<asc/std/variant>` 提供） | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| asc::std::operator<=（variant 重载）（由 `<asc/std/variant>` 提供） | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| asc::std::operator>（variant 重载）（由 `<asc/std/variant>` 提供） | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| asc::std::operator>=（variant 重载）（由 `<asc/std/variant>` 提供） | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::get_if](get_if.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::holds_alternative](holds_alternative.md) | 函数模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
 | [asc::std::monostate](monostate.md) | 类 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |

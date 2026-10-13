@@ -98,7 +98,7 @@ template<class T> [[nodiscard]] constexpr T* asc::std::launder(T* pointer) noexc
 以下 Host 片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
 
 ```cpp
-#include <asc/std/memory>
+#include <asc/std/new>
 
 decltype(auto) example()
 {

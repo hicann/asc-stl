@@ -60,7 +60,7 @@ float asc::block_broadcast(asc::block_collective_workspace<float> workspace, flo
 | --- | --- | --- |
 | `workspace` | 输入 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `source_thread` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source_thread` | 输入 | 广播源线程在当前线程块内的线程索引；该参数为标量索引，不涉及存储生命周期。 |
 
 ### 原型 2 的参数
 
@@ -70,7 +70,7 @@ float asc::block_broadcast(asc::block_collective_workspace<float> workspace, flo
 | --- | --- | --- |
 | `workspace` | 输入 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `source_thread` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source_thread` | 输入 | 广播源线程在当前线程块内的线程索引；该参数为标量索引，不涉及存储生命周期。 |
 
 ### 原型 3 的参数
 
@@ -80,7 +80,7 @@ float asc::block_broadcast(asc::block_collective_workspace<float> workspace, flo
 | --- | --- | --- |
 | `workspace` | 输入 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `source_thread` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source_thread` | 输入 | 广播源线程在当前线程块内的线程索引；该参数为标量索引，不涉及存储生命周期。 |
 
 ## 返回值说明
 

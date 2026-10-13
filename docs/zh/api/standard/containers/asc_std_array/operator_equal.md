@@ -1,4 +1,4 @@
-# asc::std::operator==（函数模板）
+# asc::std::operator==（array 重载）（函数模板）
 
 ## 产品支持情况
 

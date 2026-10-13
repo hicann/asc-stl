@@ -77,7 +77,7 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `source_lane` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source_lane` | 输入 | 读取值的来源 Lane 在当前宽度分组内的索引；该参数为标量索引，不涉及存储生命周期。 |
 | `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
 
 ### 原型 2 的参数
@@ -93,7 +93,7 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `source_lane` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source_lane` | 输入 | 读取值的来源 Lane 在当前宽度分组内的索引；该参数为标量索引，不涉及存储生命周期。 |
 | `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
 
 ### 原型 3 的参数
@@ -109,7 +109,7 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `source_lane` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source_lane` | 输入 | 读取值的来源 Lane 在当前宽度分组内的索引；该参数为标量索引，不涉及存储生命周期。 |
 | `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
 
 ### 原型 4 的参数
@@ -125,7 +125,7 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `source_lane` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source_lane` | 输入 | 读取值的来源 Lane 在当前宽度分组内的索引；该参数为标量索引，不涉及存储生命周期。 |
 | `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
 
 ### 原型 5 的参数
@@ -141,7 +141,7 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `source_lane` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source_lane` | 输入 | 读取值的来源 Lane 在当前宽度分组内的索引；该参数为标量索引，不涉及存储生命周期。 |
 | `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
 
 ## 返回值说明

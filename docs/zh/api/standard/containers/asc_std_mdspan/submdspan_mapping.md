@@ -104,7 +104,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
 | `second_index` | 输入 | 提供“计算混合切片的映射与起始偏移，不拥有底层存储”所需的输入对象；类型须满足所选原型约束。 |
 
@@ -121,7 +121,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
 | `second_index` | 输入 | 提供“计算混合切片的映射与起始偏移，不拥有底层存储”所需的输入对象；类型须满足所选原型约束。 |
 
@@ -138,7 +138,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
 | `second_index` | 输入 | 提供“计算混合切片的映射与起始偏移，不拥有底层存储”所需的输入对象；类型须满足所选原型约束。 |
 
@@ -157,7 +157,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
 | `second_index` | 输入 | 提供“计算混合切片的映射与起始偏移，不拥有底层存储”所需的输入对象；类型须满足所选原型约束。 |
 
@@ -176,7 +176,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
 | `second_index` | 输入 | 提供“计算混合切片的映射与起始偏移，不拥有底层存储”使用的对象引用；被引用对象须在调用期间有效。 |
 
@@ -193,7 +193,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
 | `second_index` | 输入 | 提供“计算混合切片的映射与起始偏移，不拥有底层存储”所需的输入对象；类型须满足所选原型约束。 |
 
@@ -210,7 +210,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
 | `second_index` | 输入 | 提供按位置访问或组合的元素集合。 |
 
@@ -226,7 +226,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 
 ### 原型 9 的参数
 
@@ -240,7 +240,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
 | `second_index` | 输入 | 提供“计算混合切片的映射与起始偏移，不拥有底层存储”所需的输入对象；类型须满足所选原型约束。 |
 
