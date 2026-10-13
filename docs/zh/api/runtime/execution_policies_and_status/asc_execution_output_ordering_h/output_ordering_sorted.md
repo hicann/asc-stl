@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/execution.output_ordering.h>`。
 
-`asc::output_ordering::sorted` 要求输出按算法定义的排序关系有序，不额外要求等价元素保持原有相对顺序。
+`asc::output_ordering::sorted`要求输出按算法定义的排序关系有序，不额外要求等价元素保持原有相对顺序。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 声明
 
+所属类型：[`asc::output_ordering`](output_ordering.md)。
+
 ```cpp
-asc::output_ordering::sorted
+// asc::output_ordering 类内的声明节选；模板形参和其他成员由所属类提供。
+sorted;
 ```
 
 ## 约束说明
 
-- 仅提供三个取值
+- 仅提供三个取值。
 
 ## 调用示例
 
@@ -51,3 +54,8 @@ asc::output_ordering::sorted
 
 auto value = asc::output_ordering::sorted;
 ```
+
+## 关联API
+
+- [`asc::output_ordering`](output_ordering.md)
+- [本头文件的接口列表](asc_execution_output_ordering_h.md)

@@ -28,66 +28,60 @@
 
 头文件路径为：`<asc/std/memory>`、`<asc/std/tuple>`。
 
-`asc::std::uses_allocator` 在编译期判断类型是否接受指定分配器构造。
+`asc::std::uses_allocator`在编译期判断类型是否接受指定分配器构造。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T, class Allocator> struct asc::std::uses_allocator
+namespace asc::std {
+template<class T, class Allocator> struct uses_allocator;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/memory>`、`<asc/std/tuple>`。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class... T, class Allocator> struct asc::std::uses_allocator<asc::std::tuple<T...>, Allocator>
+namespace asc::std {
+template<class... T, class Allocator> struct uses_allocator<asc::std::tuple<T...>, Allocator>;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/memory>`、`<asc/std/tuple>`。
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
-- allocator_arg_t/allocator_arg
-- uses_allocator/uses_allocator_v
-- allocator_traits 的 C++20 成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator 含 pair 递归构造
-- C++23 allocation_result 与标准 allocator_traits::allocate_at_least
-- 均限用户显式提供且在调用执行空间有效的 allocator
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
+- allocator_arg_t/allocator_arg。
+- uses_allocator/uses_allocator_v。
+- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
+- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
+- C++23 allocation_result与标准allocator_traits::allocate_at_least。
+- 均限用户显式提供且在调用执行空间有效的allocator。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
-#include <asc/std/memory>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
-#include <deque>
-#include <functional>
-#include <vector>
+#include <asc/std/memory>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
+struct Consumer { using allocator_type = ::std::allocator<int>; };
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::uses_allocator<::std::vector<int, example_allocator<int>>, example_allocator<int>>;
-    (void)sizeof(selected);
+    static_assert(asc::std::uses_allocator<Consumer, ::std::allocator<int>>::value);
+    static_assert(!asc::std::uses_allocator<int, ::std::allocator<int>>::value);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

@@ -1,6 +1,6 @@
 # 设备、Stream与Event管理
 
-设备查询、Stream 和 Event 生命周期管理。
+设备查询、Stream和Event生命周期管理。
 
 | 头文件 | 功能 |
 | --- | --- |

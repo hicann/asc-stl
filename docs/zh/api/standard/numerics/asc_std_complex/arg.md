@@ -28,37 +28,41 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::arg` 返回复数的幅角。
+`asc::std::arg`返回复数的幅角。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-float asc::std::arg(float value) noexcept;
+namespace asc::std {
+float arg(float value) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> T asc::std::arg(const complex<T>& value) noexcept;
+namespace asc::std {
+template<class T> T arg(const complex<T>& value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待求幅角的实数输入（按虚部为 0 的复数处理，返回值为 0 或 π 弧度）。 |
+| `value` | 输入 | 待求幅角的实数输入（按虚部为0的复数处理，返回值为0或 π 弧度）。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -70,19 +74,19 @@ template<class T> T asc::std::arg(const complex<T>& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待求幅角的复数操作数（幅角为 atan2(虚部, 实部)，单位为弧度）。 |
+| `value` | 输入 | 待求幅角的复数操作数（幅角为atan2(虚部, 实部)，单位为弧度）。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `float` | 返回复数的幅角。 |
-| 原型 2 | `T` | 返回复数的幅角。 |
+| 原型1 | `float` | 返回复数的幅角。 |
+| 原型2 | `T` | 返回复数的幅角。 |
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
@@ -96,3 +100,7 @@ decltype(auto) example(float value)
     return asc::std::arg(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_complex.md)

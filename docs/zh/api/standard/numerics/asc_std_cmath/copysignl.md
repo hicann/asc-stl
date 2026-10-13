@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::copysignl` 由 `<asc/std/cmath>` 提供，组合幅值与符号位生成带符号的长双精度浮点值。接口遵循对应 C++ 标准设施的语义；ASC-STL 的语言模式和调用位置以本页声明为准。
+`asc::std::copysignl`由`<asc/std/cmath>`提供，组合幅值与符号位生成带符号的长双精度浮点值。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-constexpr long double asc::std::copysignl(long double x, long double y) noexcept
+namespace asc::std {
+constexpr long double copysignl(long double x, long double y) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -51,11 +53,11 @@ constexpr long double asc::std::copysignl(long double x, long double y) noexcept
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `long double` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `long double` | 大小取自第一个实参、符号取自第二个实参的值。 |
 
 ## 约束说明
 
-- 把第二个参数的符号位复制到第一个参数的幅值上，返回long double结果
+- 把第二个参数的符号位复制到第一个参数的幅值上，返回long double结果。
 
 ## 调用示例
 
@@ -69,3 +71,7 @@ decltype(auto) example(long double x, long double y)
     return asc::std::copysignl(x, y);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

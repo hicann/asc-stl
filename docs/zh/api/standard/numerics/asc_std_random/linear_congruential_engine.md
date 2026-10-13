@@ -28,30 +28,36 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::linear_congruential_engine` 保存线性同余随机引擎的状态并生成数值。
+`asc::std::linear_congruential_engine`保存线性同余随机引擎的状态并生成数值。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 声明
 
 ```cpp
-template<class UIntType, UIntType A, UIntType C, UIntType M> class asc::std::linear_congruential_engine
+namespace asc::std {
+template<class UIntType, UIntType A, UIntType C, UIntType M> class linear_congruential_engine;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供不接收 seed_seq 的标准 seed、discard、生成和相等比较成员
+- 提供不接收seed_seq的标准seed、discard、生成和相等比较成员。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/random>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::minstd_rand;
-    (void)sizeof(selected);
+    asc::std::minstd_rand engine(1);
+    return engine() == 48271U;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/scoped_allocator>`。
 
-`asc::std::scoped_allocator_adaptor::max_size` 返回该容器或分配器允许的理论最大元素数量。
+`asc::std::scoped_allocator_adaptor::max_size`返回该容器或分配器允许的理论最大元素数量。
 
 标准语义参考：[cppreference `scoped_allocator`](https://en.cppreference.com/w/cpp/header/scoped_allocator)。
 
 ## 函数原型
 
+所属类型：[`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。
+
 ```cpp
-constexpr size_type asc::std::scoped_allocator_adaptor::max_size() const;
+// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr size_type max_size() const;
 ```
 
 ## 参数说明
@@ -50,12 +53,12 @@ constexpr size_type asc::std::scoped_allocator_adaptor::max_size() const;
 
 ## 约束说明
 
-- 遵循 scoped_allocator_adaptor 的标准分配器传播、构造、销毁、比较和交换约束
-- 参与操作的分配器必须在当前可用位置有效，Device 侧操作不得抛出异常
+- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
+- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器并完整释放存储；设备端须改用目标位置可调用的分配器。
+以下Host片段使用显式提供的分配器并完整释放存储；设备端须改用目标位置可调用的分配器。
 
 ```cpp
 #include <asc/std/scoped_allocator>
@@ -80,3 +83,8 @@ decltype(auto) example(const asc::std::scoped_allocator_adaptor<example_allocato
     return allocator.max_size();
 }
 ```
+
+## 关联API
+
+- [`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)
+- [本头文件的接口列表](asc_std_scoped_allocator.md)

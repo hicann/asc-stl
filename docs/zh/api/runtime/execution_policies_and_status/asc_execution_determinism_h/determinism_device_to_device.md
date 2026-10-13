@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/execution.determinism.h>`。
 
-`asc::determinism::device_to_device` 要求相同输入在不同 Device 上执行时产生可重复结果。
+`asc::determinism::device_to_device`要求相同输入在不同Device上执行时产生可重复结果。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 声明
 
+所属类型：[`asc::determinism`](determinism.md)。
+
 ```cpp
-asc::determinism::device_to_device
+// asc::determinism 类内的声明节选；模板形参和其他成员由所属类提供。
+device_to_device;
 ```
 
 ## 约束说明
 
-- 仅提供三个取值
+- 仅提供三个取值。
 
 ## 调用示例
 
@@ -51,3 +54,8 @@ asc::determinism::device_to_device
 
 auto value = asc::determinism::device_to_device;
 ```
+
+## 关联API
+
+- [`asc::determinism`](determinism.md)
+- [本头文件的接口列表](asc_execution_determinism_h.md)

@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/semaphore>`。
 
-`asc::counting_semaphore::release` 按指定数量原子增加信号量许可并唤醒等待者。
+`asc::counting_semaphore::release`按指定数量原子增加信号量许可并唤醒等待者。
 
 ## 函数原型
 
+所属类型：[`asc::counting_semaphore`](counting_semaphore.md)。
+
 ```cpp
-void asc::counting_semaphore::release(asc::std::ptrdiff_t update = 1) noexcept;
+// asc::counting_semaphore 类内的声明节选；模板形参和其他成员由所属类提供。
+void release(asc::std::ptrdiff_t update = 1) noexcept;
 ```
 
 ## 参数说明
@@ -42,7 +45,7 @@ void asc::counting_semaphore::release(asc::std::ptrdiff_t update = 1) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `update` | 输入 | 许可增加量，默认 1：按该值原子增加内部计数并唤醒等待者。 |
+| `update` | 输入 | 许可增加量，默认1：按该值原子增加内部计数并唤醒等待者。 |
 
 ## 返回值说明
 
@@ -50,15 +53,15 @@ void asc::counting_semaphore::release(asc::std::ptrdiff_t update = 1) noexcept;
 
 ## 约束说明
 
-- 使用 C++17
-- 在 AI Core SIMT 编程 中操作调用方管理的 GM 状态
-- Scope 必须为 asc::memory_scope::block 或 asc::memory_scope::device
-- 所有阻塞参与者必须能够并发推进
-- 复制构造和复制赋值已删除
+- 使用C++17。
+- 在AI Core SIMT编程 中操作调用方管理的GM状态。
+- Scope必须为asc::memory_scope::block或asc::memory_scope::device。
+- 所有阻塞参与者必须能够并发推进。
+- 复制构造和复制赋值已删除。
 
 ## 调用示例
 
-以下 AI Core SIMT 片段使用调用方管理的 GM 同步对象；参与者数量和前进条件须满足本页约束。
+以下AI Core SIMT片段使用调用方管理的GM同步对象；参与者数量和前进条件须满足本页约束。
 
 ```cpp
 #include <asc/semaphore>
@@ -69,3 +72,8 @@ __aicore__ void example(asc::counting_semaphore<asc::memory_scope::block, 4>* gm
     gm_counting_semaphore->release();
 }
 ```
+
+## 关联API
+
+- [`asc::counting_semaphore`](counting_semaphore.md)
+- [本头文件的接口列表](asc_semaphore.md)

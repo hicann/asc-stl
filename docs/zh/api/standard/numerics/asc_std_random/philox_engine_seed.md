@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::philox_engine::seed` 使用指定种子重置随机数引擎状态。
+`asc::std::philox_engine::seed`使用指定种子重置随机数引擎状态。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 函数原型
 
+所属类型：[`asc::std::philox_engine`](philox_engine.md)。
+
 ```cpp
-constexpr void asc::std::philox_engine::seed(UIntType value = default_seed) noexcept;
+// asc::std::philox_engine 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr void seed(UIntType value = default_seed) noexcept;
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ constexpr void asc::std::philox_engine::seed(UIntType value = default_seed) noex
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 用于初始化引擎状态的种子值，将引擎重置为该种子对应的状态；省略时取 default_seed。 |
+| `value` | 输入 | 用于初始化引擎状态的种子值，将引擎重置为该种子对应的状态；省略时取default_seed。 |
 
 ## 返回值说明
 
@@ -52,12 +55,12 @@ constexpr void asc::std::philox_engine::seed(UIntType value = default_seed) noex
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下 Host 片段使用具体数值类型演示调用；状态与参数须满足本页约束。
+以下Host片段使用具体数值类型演示调用；状态与参数须满足本页约束。
 
 ```cpp
 #include <asc/std/random>
@@ -68,3 +71,8 @@ void example()
     generator.seed(9);
 }
 ```
+
+## 关联API
+
+- [`asc::std::philox_engine`](philox_engine.md)
+- [本头文件的接口列表](asc_std_random.md)

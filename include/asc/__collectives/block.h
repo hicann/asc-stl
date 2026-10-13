@@ -81,7 +81,9 @@ CANN_ASC_STL_SIMT_API T block_reduce_impl(T* workspace, T value, Operation opera
         workspace[0] = result;
     }
     asc_syncthreads();
-    return workspace[0];
+    const T result = workspace[0];
+    asc_syncthreads();
+    return result;
 }
 
 template <class T>

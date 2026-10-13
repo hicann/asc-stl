@@ -28,20 +28,21 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::placeholders::_6` 表示绑定表达式调用时的第 6 个实参占位符。
+`asc::std::placeholders::_6`表示绑定表达式调用时的第6个实参占位符。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 声明
 
 ```cpp
-inline constexpr const Ph<6> asc::std::placeholders::_6
+namespace asc::std::placeholders {
+inline constexpr const Ph<6> _6;
+} // namespace asc::std::placeholders
 ```
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
@@ -52,3 +53,7 @@ inline constexpr const Ph<6> asc::std::placeholders::_6
 
 auto value = asc::std::placeholders::_6;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

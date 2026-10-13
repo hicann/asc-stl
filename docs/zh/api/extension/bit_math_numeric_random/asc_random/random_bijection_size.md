@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::random_bijection::size` 返回一一映射覆盖的有限索引域大小。
+`asc::random_bijection::size`返回一一映射覆盖的有限索引域大小。
 
 ## 函数原型
 
+所属类型：[`asc::random_bijection`](random_bijection.md)。
+
 ```cpp
-constexpr Index asc::random_bijection::size() const noexcept;
+// asc::random_bijection 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr Index size() const noexcept;
 ```
 
 ## 参数说明
@@ -48,18 +51,25 @@ constexpr Index asc::random_bijection::size() const noexcept;
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/random>
 
-void example(asc::random_bijection<unsigned long long>& object)
+bool example()
 {
-    (void)object.size();
+    asc::pcg64 engine(7);
+    asc::random_bijection<unsigned long long> permutation(8, engine);
+    return permutation.size() == 8 && permutation(0) < 8;
 }
 ```
+
+## 关联API
+
+- [`asc::random_bijection`](random_bijection.md)
+- [本头文件的接口列表](asc_random.md)

@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::in_range` 判断整数值能否由指定目标整数类型表示。
+`asc::std::in_range`判断整数值能否由指定目标整数类型表示。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 函数原型
 
 ```cpp
-template<class T, class U> constexpr bool asc::std::in_range(U value) noexcept;
+namespace asc::std {
+template<class T, class U> constexpr bool in_range(U value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,8 +46,8 @@ template<class T, class U> constexpr bool asc::std::in_range(U value) noexcept;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 目标整数类型；判断 value 的值能否由该类型表示。 |
-| `U` | 待判断值的整数类型，须为标准整数类型或 bool。 |
+| `T` | 目标整数类型；判断value的值能否由该类型表示。 |
+| `U` | 待判断值的整数类型，须为标准整数类型或bool。 |
 
 **函数参数**
 
@@ -57,11 +59,11 @@ template<class T, class U> constexpr bool asc::std::in_range(U value) noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 遵循标准整数约束
+- 遵循标准整数约束。
 
 ## 调用示例
 
@@ -75,3 +77,7 @@ decltype(auto) example()
     return asc::std::in_range<unsigned int>(3);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

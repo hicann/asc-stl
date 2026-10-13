@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/numbers>`。
 
-`asc::std::ln2_v` 提供2 的自然对数的编译期值。
+`asc::std::ln2_v`提供2的自然对数的编译期值。
 
 标准语义参考：[cppreference `numbers`](https://en.cppreference.com/w/cpp/header/numbers)。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr const T asc::std::ln2_v
+namespace asc::std {
+template<class T> inline constexpr const T ln2_v;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 float 变量模板
+- 提供float变量模板。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class T> inline constexpr const T asc::std::ln2_v
 
 inline constexpr auto example = asc::std::ln2_v<float>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_numbers.md)

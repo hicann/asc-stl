@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/source_location>`。
 
-`asc::std::source_location::current` 捕获调用位置的文件、函数、行和列信息。
+`asc::std::source_location::current`捕获调用位置的文件、函数、行和列信息。
 
 标准语义参考：[cppreference `source_location`](https://en.cppreference.com/w/cpp/header/source_location)。
 
 ## 函数原型
 
+所属类型：[`asc::std::source_location`](source_location.md)。
+
 ```cpp
-[[nodiscard]] constexpr source_location asc::std::source_location::current(const char* file_name, const char* function_name, uint_least32_t line, uint_least32_t column) noexcept;
+// asc::std::source_location 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr source_location current(const char* file_name, const char* function_name, uint_least32_t line, uint_least32_t column) noexcept;
 ```
 
 ## 参数说明
@@ -46,8 +49,8 @@
 | --- | --- | --- |
 | `file_name` | 输入 | 源文件名，以空字符结尾的字符串首地址；缺省实参由编译器内建信息填充。 |
 | `function_name` | 输入 | 函数名，以空字符结尾的字符串首地址；缺省实参由编译器内建信息填充。 |
-| `line` | 输入 | 行号（uint_least32_t，从 1 起）；缺省实参由编译器内建信息填充。 |
-| `column` | 输入 | 列号（uint_least32_t，从 1 起）；缺省实参由编译器内建信息填充。 |
+| `line` | 输入 | 行号（uint_least32_t，从1起）；缺省实参由编译器内建信息填充。 |
+| `column` | 输入 | 列号（uint_least32_t，从1起）；缺省实参由编译器内建信息填充。 |
 
 ## 返回值说明
 
@@ -57,12 +60,12 @@
 
 ## 约束说明
 
-- 提供标准 source_location 接口
-- 当编译器不能直接提供列号时，column() 使用标准允许的回退值
+- 提供标准source_location接口。
+- 当编译器不能直接提供列号时，column()使用标准允许的回退值。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
+以下Host片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
 
 ```cpp
 #include <asc/std/source_location>
@@ -73,3 +76,8 @@ decltype(auto) example()
     return source.line();
 }
 ```
+
+## 关联API
+
+- [`asc::std::source_location`](source_location.md)
+- [本头文件的接口列表](asc_std_source_location.md)

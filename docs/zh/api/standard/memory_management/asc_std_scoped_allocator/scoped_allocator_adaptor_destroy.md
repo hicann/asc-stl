@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/scoped_allocator>`。
 
-`asc::std::scoped_allocator_adaptor::destroy` 结束已构造对象的生命周期。
+`asc::std::scoped_allocator_adaptor::destroy`结束已构造对象的生命周期。
 
 标准语义参考：[cppreference `scoped_allocator`](https://en.cppreference.com/w/cpp/header/scoped_allocator)。
 
 ## 函数原型
 
+所属类型：[`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。
+
 ```cpp
-template<class Type> void asc::std::scoped_allocator_adaptor::destroy(Type* pointer);
+// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Type> void destroy(Type* pointer);
 ```
 
 ## 参数说明
@@ -44,13 +47,13 @@ template<class Type> void asc::std::scoped_allocator_adaptor::destroy(Type* poin
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Type` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Type` | 由分配器构造或销毁的对象类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 提供“结束已构造对象的生命周期”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `pointer` | 输入/输出 | 指向生命周期尚未结束的对象；调用结束其生命周期，不释放底层存储。 |
 
 ## 返回值说明
 
@@ -58,12 +61,12 @@ template<class Type> void asc::std::scoped_allocator_adaptor::destroy(Type* poin
 
 ## 约束说明
 
-- 遵循 scoped_allocator_adaptor 的标准分配器传播、构造、销毁、比较和交换约束
-- 参与操作的分配器必须在当前可用位置有效，Device 侧操作不得抛出异常
+- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
+- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器并完整释放存储；设备端须改用目标位置可调用的分配器。
+以下Host片段使用显式提供的分配器并完整释放存储；设备端须改用目标位置可调用的分配器。
 
 ```cpp
 #include <asc/std/scoped_allocator>
@@ -91,3 +94,8 @@ void example(asc::std::scoped_allocator_adaptor<example_allocator<int>>& allocat
     allocator.deallocate(pointer, 1);
 }
 ```
+
+## 关联API
+
+- [`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)
+- [本头文件的接口列表](asc_std_scoped_allocator.md)

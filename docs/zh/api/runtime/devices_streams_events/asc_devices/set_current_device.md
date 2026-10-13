@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/devices>`。
 
-`asc::set_current_device` 请求 Runtime 将指定 `device_ref` 设置为当前线程使用的 Device，并用布尔值报告是否成功。
+`asc::set_current_device`请求Runtime将指定`device_ref`设置为当前线程使用的Device，并用布尔值报告是否成功。
 
 ## 函数原型
 
 ```cpp
-bool asc::set_current_device(asc::device_ref device) noexcept;
+namespace asc {
+bool set_current_device(asc::device_ref device) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,19 +44,19 @@ bool asc::set_current_device(asc::device_ref device) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `device` | 输入 | 目标 device_ref：请求 Runtime 将其序号设为当前线程的 Device，成功返回 true。 |
+| `device` | 输入 | 目标device_ref：请求Runtime将其序号设为当前线程的Device，成功返回true。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 仅可在 Host 查询或选择 Device
-- 引用只保存设备序号且不拥有 Runtime 状态
-- 查询失败时输出参数保持原值，属性仅限当前接口列出的 AI Core、Vector Core、Warp、UB、GM、L2 与架构字段
+- 仅可在Host查询或选择Device。
+- 引用只保存设备序号且不拥有Runtime状态。
+- 查询失败时输出参数保持原值，属性仅限当前接口列出的AI Core、Vector Core、Warp、UB、GM、L2与架构字段。
 
 ## 调用示例
 
@@ -68,3 +70,7 @@ decltype(auto) example(asc::device_ref device)
     return asc::set_current_device(device);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_devices.md)

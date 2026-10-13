@@ -28,33 +28,37 @@
 
 头文件路径为：`<asc/std/linalg>`。
 
-`asc::std::linalg::conjugated` 创建按复共轭观察元素的非拥有多维视图。
+`asc::std::linalg::conjugated`创建按复共轭观察元素的非拥有多维视图。
 
 标准语义参考：[cppreference `linalg`](https://en.cppreference.com/w/cpp/header/linalg)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class ElementType, class Extents, class Layout, class Accessor> [[nodiscard]] constexpr auto asc::std::linalg::conjugated(mdspan<ElementType, Extents, Layout, Accessor> input);
+namespace asc::std::linalg {
+template<class ElementType, class Extents, class Layout, class Accessor> [[nodiscard]] constexpr auto conjugated(mdspan<ElementType, Extents, Layout, Accessor> input);
+} // namespace asc::std::linalg
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class ElementType, class Extents, class Layout, class NestedAccessor> [[nodiscard]] constexpr auto asc::std::linalg::conjugated(mdspan<ElementType, Extents, Layout, conjugated_accessor<NestedAccessor>> input);
+namespace asc::std::linalg {
+template<class ElementType, class Extents, class Layout, class NestedAccessor> [[nodiscard]] constexpr auto conjugated(mdspan<ElementType, Extents, Layout, conjugated_accessor<NestedAccessor>> input);
+} // namespace asc::std::linalg
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `ElementType` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `ElementType` | 视图访问的元素类型，决定读取、变换和返回值的类型。 |
 | `Extents` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
 | `Layout` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
 | `Accessor` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
@@ -65,16 +69,16 @@ template<class ElementType, class Extents, class Layout, class NestedAccessor> [
 | --- | --- | --- |
 | `input` | 输入 | 提供非拥有多维数据视图；底层存储须在视图使用期间有效。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `ElementType` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `ElementType` | 视图访问的元素类型，决定读取、变换和返回值的类型。 |
 | `Extents` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
 | `Layout` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `NestedAccessor` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `NestedAccessor` | 底层访问器类型；提供数据句柄、元素访问及偏移操作。 |
 
 **函数参数**
 
@@ -86,18 +90,16 @@ template<class ElementType, class Extents, class Layout, class NestedAccessor> [
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `auto` | 返回按复共轭观察元素的非拥有多维视图。 |
-| 原型 2 | `auto` | 返回按复共轭观察元素的非拥有多维视图。 |
+| 原型1 | `auto` | 返回按复共轭观察元素的非拥有多维视图。 |
+| 原型2 | `auto` | 返回按复共轭观察元素的非拥有多维视图。 |
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库公共入口的完整7实体合同：scaled/scaled_accessor、conjugated/conjugated_accessor、transposed/layout_transpose、conjugate_transposed
-- 包括access/offset/nested accessor/factor、转换构造、算术类型共轭不变、ADL可共轭类型、双重共轭/转置消去、rank-2静态/动态extents交换、layout_left/right/stride与通用layout_transpose mapping全部观察/比较
-- 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段展示固定缓冲或多维视图的具体调用；底层存储须保持有效。
+以下Host片段展示固定缓冲或多维视图的具体调用；底层存储须保持有效。
 
 ```cpp
 #include <asc/std/linalg>
@@ -111,3 +113,7 @@ decltype(auto) example()
     return asc::std::linalg::conjugated(view);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_linalg.md)

@@ -28,16 +28,19 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic::load` 按指定或默认内存序读取当前原子值。
+`asc::std::atomic::load`按指定或默认内存序读取当前原子值。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 函数原型
 
+所属类型：[`asc::std::atomic`](atomic.md)。
+
 ```cpp
-T asc::std::atomic::load(memory_order order) const noexcept;
+// asc::std::atomic 类内的声明节选；模板形参和其他成员由所属类提供。
+T load(memory_order order) const noexcept;
 ```
 
 ## 参数说明
@@ -56,14 +59,14 @@ T asc::std::atomic::load(memory_order order) const noexcept;
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数
-- bool/8/16位用32位内部存储
-- 32/64位按有符号位模式分派
-- Host 和 AI Core SIMT 编程 GM
+- 标准整数/字符owning atomic别名及列出自由函数。
+- bool/8/16位用32位内部存储。
+- 32/64位按有符号位模式分派。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
-以下 Host 片段演示原子操作；设备端对象须放在本页规定的有效内存空间。
+以下Host片段演示原子操作；设备端对象须放在本页规定的有效内存空间。
 
 ```cpp
 #include <asc/std/atomic>
@@ -73,3 +76,8 @@ decltype(auto) example(const asc::std::atomic<int>& value)
     return value.load(asc::std::memory_order_relaxed);
 }
 ```
+
+## 关联API
+
+- [`asc::std::atomic`](atomic.md)
+- [本头文件的接口列表](asc_std_atomic.md)

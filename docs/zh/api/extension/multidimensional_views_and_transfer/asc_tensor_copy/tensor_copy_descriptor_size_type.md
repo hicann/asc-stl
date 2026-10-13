@@ -28,11 +28,11 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::tensor_copy_descriptor::size_type` 表示 Tensor Copy Descriptor 的维度和步长数值类型。
+`asc::tensor_copy_descriptor::size_type`表示Tensor Copy Descriptor的维度和步长数值类型。
 
 ## 声明
 
-`size_type` 为类模板 `asc::tensor_copy_descriptor<Rank>` 的成员类型别名，在类模板上下文中声明如下：
+`size_type`为类模板`asc::tensor_copy_descriptor<Rank>`的成员类型别名，在类模板上下文中声明如下：
 
 ```cpp
 template<unsigned Rank>
@@ -44,20 +44,26 @@ public:
 
 ## 约束说明
 
-- 描述符及状态类型可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Rank 为 1 至 5
-- 维度和步长采用 uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运
+- 此别名表示所属类型用于元素数量或大小的无符号整数类型；读取类型本身不分配内存，也不访问元素。
+- 构造、分配和访问的运行条件见所属类型[asc::tensor_copy_descriptor](tensor_copy_descriptor.md)。
 
 ## 调用示例
 
-以下片段选用具体模板实参读取嵌套类型。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/tensor_copy>
+#include <asc/std/type_traits>
 
-void use_type()
+bool example()
 {
-    using selected = typename asc::tensor_copy_descriptor<2>::size_type;
-    (void)sizeof(selected);
+    using Descriptor = asc::tensor_copy_descriptor<2>;
+    static_assert(asc::std::is_same_v<Descriptor::size_type, unsigned int>);
+    Descriptor descriptor;
+    return descriptor.rank() == 2 && descriptor.validate() == asc::tensor_copy_status::zero_extent;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_tensor_copy.md)

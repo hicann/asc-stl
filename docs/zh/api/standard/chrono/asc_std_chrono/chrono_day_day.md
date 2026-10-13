@@ -28,31 +28,31 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::day::day` 按本页所列构造形态初始化 `day` 对象。
+`asc::std::chrono::day::day`按本页所列构造形态初始化`day`对象。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr day();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr day(const day& value) noexcept;
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 constexpr day(day&& value) noexcept;
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
 constexpr day(unsigned int value) noexcept;
@@ -60,49 +60,57 @@ constexpr day(unsigned int value) noexcept;
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 用于复制构造的 day 对象。 |
+| `value` | 输入 | 用于复制构造的day对象。 |
 
-### 原型 3 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入/输出 | 用于移动构造的 day 对象；移动后源对象处于有效但未指定状态。 |
-
-### 原型 4 的参数
+### 原型3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 日值，1 到 31 表示有效日；0 与 32 到 255 亦可保存，但 ok() 判为 false。 |
+| `value` | 输入/输出 | 用于移动构造的day对象；移动后源对象处于有效但未指定状态。 |
+
+### 原型4的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 日值，1到31表示有效日；0与32到255亦可保存，但ok()判为false。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
-以下 Host 片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    asc::std::chrono::day value{};
-    (void)value;
+    asc::std::chrono::day value{29};
+    return static_cast<unsigned int>(value) == 29;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

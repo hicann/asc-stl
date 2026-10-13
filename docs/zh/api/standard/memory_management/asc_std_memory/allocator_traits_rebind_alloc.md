@@ -28,28 +28,32 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::allocator_traits::rebind_alloc` 按给定元素类型重新绑定分配器或指针特征。
+`asc::std::allocator_traits::rebind_alloc`按给定元素类型重新绑定分配器或指针特征。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 声明
 
+在`asc::std::allocator_traits<Allocator>`中，`rebind_alloc<T>`将分配器重绑定到元素类型`T`：优先使用分配器的`rebind<T>::other`，否则按分配器模板的首个类型参数重绑定。以下是使用形式：
+
 ```cpp
-template<class T> using asc::std::allocator_traits::rebind_alloc = Allocatortraitsrebindt<allocator_type, T>
+template<class Allocator, class T>
+using rebound_allocator =
+    typename asc::std::allocator_traits<Allocator>::template rebind_alloc<T>;
 ```
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg
-- uses_allocator/uses_allocator_v
-- allocator_traits 的 C++20 成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator 含 pair 递归构造
-- C++23 allocation_result 与标准 allocator_traits::allocate_at_least
-- 均限用户显式提供且在调用执行空间有效的 allocator
+- allocator_arg_t/allocator_arg。
+- uses_allocator/uses_allocator_v。
+- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
+- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
+- C++23 allocation_result与标准allocator_traits::allocate_at_least。
+- 均限用户显式提供且在调用执行空间有效的allocator。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/memory>
@@ -74,3 +78,7 @@ void use_type()
     using alias_type = typename asc::std::allocator_traits<example_allocator<int>>::rebind_alloc<long>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

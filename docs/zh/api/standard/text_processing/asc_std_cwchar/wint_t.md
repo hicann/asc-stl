@@ -28,37 +28,41 @@
 
 头文件路径为：`<asc/std/cwchar>`、`<asc/std/cwctype>`。
 
-`asc::std::wint_t` 标识当前 ABI 对应的时间、字符转换或宽字符类型。
+`asc::std::wint_t`标识当前ABI对应的时间、字符转换或宽字符类型。
 
-该接口的可用位置为 Host（完整接口）、Device（C locale 相关接口）。
+该接口的可用位置为Host（完整接口）、Device（C locale相关接口）。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 
 ## 声明
 
 ```cpp
-using asc::std::wint_t = ::std::wint_t
+namespace asc::std {
+using wint_t = ::std::wint_t;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/cwchar>`、`<asc/std/cwctype>`。
 
 ## 约束说明
 
-- Host对本家族委托系统<cwchar>完整合同
-- Device交付size_t/mbstate_t/wint_t/NULL/WCHAR_MIN/WCHAR_MAX/WEOF、wcscoll/wcsxfrm/wcstok与btowc/wctob/mbrlen/mbrtowc/mbsinit/mbsrtowcs/wcrtomb/wcsrtombs，语义固定为无状态单字节C locale
-- Host 提供完整接口，设备端仅提供 C 语言区域设置相关接口
-- Host对22个词元委托系统<cwctype>完整合同
-- Device交付wint_t/wctype_t/wctrans_t/WEOF、14个直接分类/转换函数与wctype/iswctype/wctrans/towctrans完整描述符家族，语义固定为C locale
+- Host行为遵循系统`<cwchar>`提供的同名接口；字符转换和排序受当前C语言区域设置影响。
+- 类型宽度、取值范围和哨兵值由编译目标决定，不应假设与另一平台相同。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/cwchar>
 
-void use_type(const asc::std::wint_t& value)
+bool example()
 {
-    (void)value;
+    asc::std::wint_t value = asc::std::btowc('A');
+    return value == static_cast<asc::std::wint_t>(L'A') && asc::std::wctob(value) == 'A';
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cwchar.md)

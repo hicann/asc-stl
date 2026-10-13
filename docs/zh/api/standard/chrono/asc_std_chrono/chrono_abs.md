@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::abs` 返回时长的非负值。
+`asc::std::chrono::abs`返回时长的非负值。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
 ```cpp
-template<class Rep, class Period> [[nodiscard]] constexpr duration<Rep, Period> asc::std::chrono::abs(duration<Rep, Period> value);
+namespace asc::std::chrono {
+template<class Rep, class Period> [[nodiscard]] constexpr duration<Rep, Period> abs(duration<Rep, Period> value);
+} // namespace asc::std::chrono
 ```
 
 ## 参数说明
@@ -44,14 +46,14 @@ template<class Rep, class Period> [[nodiscard]] constexpr duration<Rep, Period> 
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rep` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Period` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Rep` | 输入时长的计数表示类型。 |
+| `Period` | 输入时长一个计数单位对应的秒数，以ratio表示。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待取绝对值的时长；返回 |value|，计时单位由 period 决定。 |
+| `value` | 输入 | 待取绝对值的时长；返回同一计时单位下的非负时长，计时单位由period决定。 |
 
 ## 返回值说明
 
@@ -61,7 +63,7 @@ template<class Rep, class Period> [[nodiscard]] constexpr duration<Rep, Period> 
 
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符
+- 提供值运算以及六个显式关系运算符。
 
 ## 调用示例
 
@@ -76,3 +78,7 @@ decltype(auto) example()
     return asc::std::chrono::abs(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

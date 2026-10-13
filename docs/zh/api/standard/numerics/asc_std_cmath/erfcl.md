@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::erfcl` 由 `<asc/std/cmath>` 提供，宿主 long double 互补误差函数，后缀 l 别名
+`asc::std::erfcl`由`<asc/std/cmath>`提供，宿主long double互补误差函数，后缀l别名
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-constexpr long double asc::std::erfcl(long double value) noexcept
+namespace asc::std {
+constexpr long double erfcl(long double value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,17 +46,17 @@ constexpr long double asc::std::erfcl(long double value) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 互补误差函数 erfc(x) = 1 - erf(x) 的输入值（无量纲）；大参数下比用 1 - erf(x) 计算更精确。 |
+| `value` | 输入 | 互补误差函数erfc(x) = 1 - erf(x)的输入值（无量纲）；大参数下比用1 - erf(x)计算更精确。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `long double` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `long double` | 互补误差函数值，即1减去erf的数学结果。 |
 
 ## 约束说明
 
-- 宿主 long double 互补误差函数，后缀 l 别名
+- 宿主long double互补误差函数，后缀l别名。
 
 ## 调用示例
 
@@ -68,3 +70,7 @@ decltype(auto) example(long double value)
     return asc::std::erfcl(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

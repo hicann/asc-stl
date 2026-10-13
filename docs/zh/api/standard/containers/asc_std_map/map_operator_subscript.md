@@ -1,4 +1,4 @@
-# asc::std::map::operator[]
+# asc::std::map::`operator[]`
 
 ## 产品支持情况
 
@@ -28,18 +28,21 @@
 
 头文件路径为：`<asc/std/map>`。
 
-`asc::std::map::operator[]` 按键查找映射值：键已存在时返回对应映射值的引用；键不存在时向容器插入由该键和默认构造的映射值组成的元素，并返回新插入元素映射值的引用。
+`asc::std::map::operator[]`按键查找映射值：键已存在时返回对应映射值的引用；键不存在时向容器插入由该键和默认构造的映射值组成的元素，并返回新插入元素映射值的引用。
 
 执行插入要求映射值类型可默认构造；节点分配或元素构造失败、抛出异常时容器内容保持不变。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `map`](https://en.cppreference.com/w/cpp/header/map)。
 
 ## 函数原型
 
+所属类型：[`asc::std::map`](map.md)。
+
 ```cpp
-T& asc::std::map::operator[](const Key& key);
+// asc::std::map 类内的声明节选；模板形参和其他成员由所属类提供。
+T& operator[](const Key& key);
 ```
 
 ## 参数说明
@@ -58,17 +61,17 @@ T& asc::std::map::operator[](const Key& key);
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下map<Key,T,Compare,A>显式GM arena
-- allocator以及Compare+allocator构造
-- empty/size/begin/end/insert/find/count/operator[]/clear
-- AVL平衡与对数级插入/查找核心
-- 重复键拒绝、有序迭代、移动和析构
-- 仅容量充足和不抛出异常键值/比较/allocator域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下map<Key,T,Compare,A>显式GM arena。
+- allocator以及Compare+allocator构造。
+- empty/size/begin/end/insert/find/count/`operator[]`/clear。
+- AVL平衡与对数级插入/查找核心。
+- 重复键拒绝、有序迭代、移动和析构。
+- 仅容量充足和不抛出异常键值/比较/allocator域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/map>
@@ -93,3 +96,8 @@ decltype(auto) example(asc::std::map<int, int, ::std::less<int>, example_allocat
     return values[7];
 }
 ```
+
+## 关联API
+
+- [`asc::std::map`](map.md)
+- [本头文件的接口列表](asc_std_map.md)

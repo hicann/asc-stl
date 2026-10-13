@@ -28,30 +28,47 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::view_base` 标记临时范围的不可借用结果或提供视图适配辅助能力。
+`asc::std::ranges::view_base`标记临时范围的不可借用结果或提供视图适配辅助能力。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
 ```cpp
-struct asc::std::ranges::view_base
+namespace asc::std::ranges {
+struct view_base;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
 
-void use_type(const asc::std::ranges::view_base& value)
+struct View : asc::std::ranges::view_base {
+    int* first = nullptr;
+    int* last = nullptr;
+    int* begin() const { return first; }
+    int* end() const { return last; }
+};
+
+bool example()
 {
-    (void)value;
+    static_assert(asc::std::ranges::enable_view<View>);
+    int values[] = {2, 4};
+    View view;
+    view.first = values;
+    view.last = values + 2;
+    return *view.begin() == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

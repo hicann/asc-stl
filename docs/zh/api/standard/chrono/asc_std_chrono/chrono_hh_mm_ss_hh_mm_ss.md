@@ -28,19 +28,19 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::hh_mm_ss::hh_mm_ss` 按本页所列构造形态初始化 `hh_mm_ss` 对象。
+`asc::std::chrono::hh_mm_ss::hh_mm_ss`按本页所列构造形态初始化`hh_mm_ss`对象。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr hh_mm_ss() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr hh_mm_ss(Duration duration) noexcept;
@@ -48,33 +48,41 @@ constexpr hh_mm_ss(Duration duration) noexcept;
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `duration` | 输入 | 待拆分为时、分、秒的时长；计时单位由其 period 决定，负时长记录符号并按绝对值拆分。 |
+| `duration` | 输入 | 待拆分为时、分、秒的时长；计时单位由其period决定，负时长记录符号并按绝对值拆分。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
-以下 Host 片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    asc::std::chrono::hh_mm_ss<asc::std::chrono::seconds> value{};
-    (void)value;
+    asc::std::chrono::hh_mm_ss<asc::std::chrono::seconds> value{asc::std::chrono::seconds{3661}};
+    return value.to_duration().count() == 3661;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

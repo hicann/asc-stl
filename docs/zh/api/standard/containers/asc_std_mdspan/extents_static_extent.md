@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::extents::static_extent` 返回指定维度的编译期静态长度。
+`asc::std::extents::static_extent`返回指定维度的编译期静态长度。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
+所属类型：[`asc::std::extents`](extents.md)。
+
 ```cpp
-constexpr size_t asc::std::extents::static_extent(rank_type index) noexcept;
+// asc::std::extents 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr size_t static_extent(rank_type index) noexcept;
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ constexpr size_t asc::std::extents::static_extent(rank_type index) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 待查询静态长度的维度编号，从 0 起；须小于维度总数（rank()），该维为动态维时返回 dynamic_extent。 |
+| `index` | 输入 | 待查询静态长度的维度编号，从0起；须小于维度总数（rank()），该维为动态维时返回dynamic_extent。 |
 
 ## 返回值说明
 
@@ -54,12 +57,11 @@ constexpr size_t asc::std::extents::static_extent(rank_type index) noexcept;
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整dynamic_extent/extents/dextents/dims家族：零rank与正rank、默认/按rank或rank_dynamic传值/array/span/跨extents构造、标准显式性与约束、deduction guide、相等比较及rank/rank_dynamic/static_extent/extent观察
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
+以下Host片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
 
 ```cpp
 #include <asc/std/mdspan>
@@ -69,3 +71,8 @@ decltype(auto) example()
     return asc::std::extents<int, 2, 3>::static_extent(0);
 }
 ```
+
+## 关联API
+
+- [`asc::std::extents`](extents.md)
+- [本头文件的接口列表](asc_std_mdspan.md)

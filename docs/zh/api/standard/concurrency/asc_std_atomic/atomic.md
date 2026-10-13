@@ -28,35 +28,42 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic` 按规定内存序读取和更新保存的原子值。
+`asc::std::atomic`按规定内存序读取和更新保存的原子值。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 声明
 
 ```cpp
-template<class T> class asc::std::atomic
+namespace asc::std {
+template<class T> class atomic;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数
-- bool/8/16位用32位内部存储
-- 32/64位按有符号位模式分派
-- Host 和 AI Core SIMT 编程 GM
+- 标准整数/字符owning atomic别名及列出自由函数。
+- bool/8/16位用32位内部存储。
+- 32/64位按有符号位模式分派。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/atomic>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::atomic<int>;
-    (void)sizeof(selected);
+    asc::std::atomic<int> counter(1);
+    const int previous = counter.fetch_add(2);
+    return previous == 1 && counter.load() == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

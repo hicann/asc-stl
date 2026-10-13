@@ -1,4 +1,4 @@
-# 头文件 asc/devices
+# 头文件asc/devices
 
 用于枚举可用设备、查询和选择当前设备，以及查询设备属性
 
@@ -8,7 +8,7 @@
 #include <asc/devices>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |
@@ -33,6 +33,6 @@
 | [asc::npu_arch::ascend_3101](npu_arch_ascend_3101.md) | 枚举值 | C++17+ | Host | Ascend 950 |
 | [asc::npu_arch::ascend_3510](npu_arch_ascend_3510.md) | 枚举值 | C++17+ | Host | Ascend 950 |
 | [asc::npu_arch::unknown](npu_arch_unknown.md) | 枚举值 | C++17+ | Host | Ascend 950 |
-| [asc::operator!=（函数）](operator_not_equal.md) | 函数 | C++17+ | Host | Ascend 950 |
-| [asc::operator==（函数）](operator_equal.md) | 函数 | C++17+ | Host | Ascend 950 |
+| [`asc::operator!=`（函数）](operator_not_equal.md) | 函数 | C++17+ | Host | Ascend 950 |
+| [`asc::operator==`（函数）](operator_equal.md) | 函数 | C++17+ | Host | Ascend 950 |
 | [asc::set_current_device](set_current_device.md) | 函数 | C++17+ | Host | Ascend 950 |

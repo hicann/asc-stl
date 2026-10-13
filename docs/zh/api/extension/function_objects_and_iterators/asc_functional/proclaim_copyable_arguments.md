@@ -28,12 +28,16 @@
 
 头文件路径为：`<asc/functional>`。
 
-`asc::proclaim_copyable_arguments` 包装函数对象并显式声明其参数可安全按值复制。
+`asc::proclaim_copyable_arguments`包装函数对象并显式声明其参数可安全按值复制。
 
 ## 函数原型
 
+以下为声明摘要，具体返回类型由实现定义，是可保存并调用的包装对象。
+
 ```cpp
-template<class Function> constexpr asc::detail::copyable_arguments_wrapper<asc::std::decay_t<Function>> asc::proclaim_copyable_arguments(Function&& function) noexcept;
+namespace asc {
+template<class Function> constexpr auto proclaim_copyable_arguments(Function&& function) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -58,8 +62,8 @@ template<class Function> constexpr asc::detail::copyable_arguments_wrapper<asc::
 
 ## 约束说明
 
-- 整数或逻辑运算仅在数学性质成立时报告对应特性
-- 浮点加法不满足结合律
+- 整数或逻辑运算仅在数学性质成立时报告对应特性。
+- 浮点加法不满足结合律。
 
 ## 调用示例
 
@@ -73,3 +77,7 @@ decltype(auto) example()
     return asc::proclaim_copyable_arguments([](int value) { return value + 1; });
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_functional.md)

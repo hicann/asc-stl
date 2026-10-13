@@ -28,35 +28,49 @@
 
 头文件路径为：`<asc/execution.require.h>`。
 
-`asc::execution_requirements` 默认构造函数创建不保证确定性、不要求输出有序且不指定相同键值处理规则的要求组合。
+`asc::execution_requirements`默认构造函数创建不保证确定性、不要求输出有序且不指定相同键值处理规则的要求组合。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 函数原型
 
+所属类型：[`asc::execution_requirements`](execution_requirements.md)。
+
 ```cpp
-constexpr asc::execution_requirements::execution_requirements() noexcept;
+// asc::execution_requirements 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr execution_requirements() noexcept;
 ```
 
 ## 参数说明
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 对象为不可变值
-- 默认采用 determinism::not_guaranteed、output_ordering::unsorted 和 tie_break::unspecified
+- 对象为不可变值。
+- 默认采用determinism::not_guaranteed、output_ordering::unsorted和tie_break::unspecified。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/execution.require.h>
 
-void example()
+bool example()
 {
-    asc::execution_requirements requirements{};
-    (void)requirements.determinism_value();
+    asc::execution_requirements requirements;
+    return requirements.determinism_value() == asc::determinism::not_guaranteed
+        && requirements.output_ordering_value() == asc::output_ordering::unsorted
+        && requirements.tie_break_value() == asc::tie_break::unspecified;
 }
 ```
+
+## 关联API
+
+- [`asc::execution_requirements`](execution_requirements.md)
+- [本头文件的接口列表](asc_execution_require_h.md)

@@ -28,31 +28,38 @@
 
 头文件路径为：`<asc/std/array>`。
 
-`asc::std::array` 连续保存编译期固定数量的元素。
+`asc::std::array`连续保存编译期固定数量的元素。
 
 标准语义参考：[cppreference `array`](https://en.cppreference.com/w/cpp/header/array)。
 
 ## 声明
 
 ```cpp
-template<class T, size_t Size> class asc::std::array
+namespace asc::std {
+template<class T, size_t Size> class array;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 支持包括零在内的所有 N
-- 成员函数和自由函数均不抛出异常
+- 支持包括零在内的所有N。
+- 成员函数和自由函数均不抛出异常。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/array>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::array<int, 4>;
-    (void)sizeof(selected);
+    asc::std::array<int, 3> values{{1, 2, 3}};
+    values[1] = 7;
+    return values.size() == 3 && values.front() == 1 && values[1] == 7 && values.back() == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_array.md)

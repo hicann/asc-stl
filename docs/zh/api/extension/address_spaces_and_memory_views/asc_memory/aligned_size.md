@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/memory>`。
 
-`asc::aligned_size` 将 `size` 向上舍入到 `alignment` 的整数倍；当 alignment 为零时返回原始 size。
+`asc::aligned_size`将`size`向上舍入到`alignment`的整数倍；`alignment == 0`时保持`size`不变。
 
 ## 函数原型
 
 ```cpp
-template<class Integer> constexpr Integer asc::aligned_size(Integer size, Integer alignment) noexcept;
+namespace asc {
+template<class Integer> constexpr Integer aligned_size(Integer size, Integer alignment) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,35 +44,39 @@ template<class Integer> constexpr Integer asc::aligned_size(Integer size, Intege
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Integer` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Integer` | 大小和对齐倍数共用的整数类型；加法、除法及乘法的中间结果须可表示。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `size` | 输入 | 对象或范围的大小。 |
-| `alignment` | 输入 | 要求的对齐值，单位为字节。 |
+| `size` | 输入 | 待向上取整的非负整数大小，与alignment使用相同单位。 |
+| `alignment` | 输入 | 取整的非负整数倍数；0表示保持原始大小，正值不要求是2的幂。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `Integer` | 返回原始 size。 |
+| `Integer` | `alignment == 0`时返回`size`；否则返回不小于`size`的最小alignment整数倍。 |
 
 ## 约束说明
 
-- Integer 必须支持整数除法、加法和乘法
-- 计算结果必须能由 Integer 表示
+- `size >= 0`、`alignment >= 0`；正alignment可以是7等非2的幂。
+- `size + alignment - 1`及最终结果须可由`Integer`表示；接口不检测算术溢出。
 
 ## 调用示例
 
-以下片段选用具体整数实参展示接口调用。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/memory>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::aligned_size(17u, 8u);
+    return asc::aligned_size(10, 7) == 14 && asc::aligned_size(10, 0) == 10;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_memory.md)

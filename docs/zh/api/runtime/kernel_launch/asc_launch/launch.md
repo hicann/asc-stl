@@ -28,25 +28,29 @@
 
 头文件路径为：`<asc/launch>`。
 
-`asc::launch` 在指定 Stream 上异步启动编译期确定的 SIMT 或 AICore Kernel。成功状态表示启动已提交；所有按值传递的 Kernel 参数必须可平凡复制。
+`asc::launch`在指定Stream上异步启动编译期确定的SIMT或AICore Kernel。成功状态表示启动已提交；所有按值传递的Kernel参数必须可平凡复制。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<auto Kernel, class... Args> asc::execution_status asc::launch(asc::stream_ref stream, asc::aicore_launch_config config, Args... args) noexcept;
+namespace asc {
+template<auto Kernel, class... Args> asc::execution_status launch(asc::stream_ref stream, asc::aicore_launch_config config, Args... args) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<auto Kernel, class... Args> asc::execution_status asc::launch(asc::stream_ref stream, asc::simt_launch_config config, Args... args) noexcept;
+namespace asc {
+template<auto Kernel, class... Args> asc::execution_status launch(asc::stream_ref stream, asc::simt_launch_config config, Args... args) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -59,11 +63,11 @@ template<auto Kernel, class... Args> asc::execution_status asc::launch(asc::stre
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `stream` | 输入 | 接收本次启动任务的 Stream；提交后任务按该 Stream 的顺序执行，完成前 Stream 必须有效。 |
-| `config` | 输入 | AI Core SIMD 编程核函数的启动配置，指定所需的执行块。 |
+| `stream` | 输入 | 接收本次启动任务的Stream；提交后任务按该Stream的顺序执行，完成前Stream必须有效。 |
+| `config` | 输入 | AI Core SIMD编程核函数的启动配置，指定所需的执行块。 |
 | `args` | 输入 | 传递给核函数的按值实参；提交后执行期间不得引用已失效的外部资源。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -76,30 +80,30 @@ template<auto Kernel, class... Args> asc::execution_status asc::launch(asc::stre
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `stream` | 输入 | 接收本次启动任务的 Stream；提交后任务按该 Stream 的顺序执行，完成前 Stream 必须有效。 |
-| `config` | 输入 | AI Core SIMT 编程核函数的启动配置，指定网格、线程块和动态共享内存。 |
+| `stream` | 输入 | 接收本次启动任务的Stream；提交后任务按该Stream的顺序执行，完成前Stream必须有效。 |
+| `config` | 输入 | AI Core SIMT编程核函数的启动配置，指定网格、线程块和动态共享内存。 |
 | `args` | 输入 | 传递给核函数的按值实参；提交后执行期间不得引用已失效的外部资源。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
-| 原型 2 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
+| 原型1 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
+| 原型2 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
 
 ## 约束说明
 
-- 仅可在毕昇 ASC 翻译单元的 Host 提交阶段调用
-- 调用时必须显式指定编译期 Kernel 模板实参，Stream 和启动维度必须有效，按值传递的参数必须可平凡复制
+- 仅可在毕昇ASC翻译单元的Host提交阶段调用。
+- 调用时必须显式指定编译期Kernel模板实参，Stream和启动维度必须有效，按值传递的参数必须可平凡复制。
 - 成功仅表示任务已经提交。
-- 仅可在 Host 调用
-- Kernel 必须是编译期确定的目标，参数按值传递且可平凡复制
-- Stream、启动维度及参数生命周期必须有效
-- 成功仅表示任务已按 Stream 顺序提交
+- 仅可在Host调用。
+- Kernel必须是编译期确定的目标，参数按值传递且可平凡复制。
+- Stream、启动维度及参数生命周期必须有效。
+- 成功仅表示任务已按Stream顺序提交。
 
 ## 调用示例
 
-以下片段用于毕昇 ASC 翻译单元：Host 使用有效 Stream 提交普通 AI Core Kernel，output 指向有效全局内存。
+以下片段用于毕昇ASC翻译单元：Host使用有效Stream提交普通AI Core Kernel，output指向有效全局内存。
 
 ```cpp
 #include <asc/launch>
@@ -114,7 +118,7 @@ decltype(auto) example(asc::stream_ref stream, int* output)
 }
 ```
 
-## 关联 API
+## 关联API
 
 - [asc::stream_ref](../../devices_streams_events/asc_stream/stream_ref.md)
 - [asc::aicore_launch_config](aicore_launch_config.md)

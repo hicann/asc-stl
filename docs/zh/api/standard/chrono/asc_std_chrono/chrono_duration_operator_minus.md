@@ -1,4 +1,4 @@
-# asc::std::chrono::duration::operator-
+# asc::std::chrono::duration::`operator-`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::duration::operator-` 按该类型定义的减法或位移规则产生新值。
+`asc::std::chrono::duration::operator-`按该类型定义的减法或位移规则产生新值。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
+所属类型：[`asc::std::chrono::duration`](chrono_duration.md)。
+
 ```cpp
-constexpr common_type_t<duration<Re, Period>> asc::std::chrono::duration::operator-() const;
+// asc::std::chrono::duration 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr common_type_t<duration<Re, Period>> operator-() const;
 ```
 
 ## 参数说明
@@ -50,11 +53,11 @@ constexpr common_type_t<duration<Re, Period>> asc::std::chrono::duration::operat
 
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符
+- 提供值运算以及六个显式关系运算符。
 
 ## 调用示例
 
-以下 Host 片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host片段以具体日期或时间类型演示调用；数值须满足本页约束。
 
 ```cpp
 #include <asc/std/chrono>
@@ -64,3 +67,8 @@ decltype(auto) example(const asc::std::chrono::duration<int>& value)
     return (-value);
 }
 ```
+
+## 关联API
+
+- [`asc::std::chrono::duration`](chrono_duration.md)
+- [本头文件的接口列表](asc_std_chrono.md)

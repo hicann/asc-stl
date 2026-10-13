@@ -28,58 +28,71 @@
 
 头文件路径为：`<asc/argument>`。
 
-`asc::args::deferred::deferred` 使用调用方提供的参数初始化 `asc::args::deferred` 对象。
+`asc::args::deferred::deferred`使用调用方提供的参数初始化`asc::args::deferred`对象。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::args::deferred`](args_deferred.md)。
+
+### 原型1
 
 ```cpp
-constexpr asc::args::deferred::deferred(const T* data, Bounds bounds) noexcept;
+// asc::args::deferred 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr deferred(const T* data, Bounds bounds) noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr explicit asc::args::deferred::deferred(const T* data) noexcept;
+// asc::args::deferred 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr explicit deferred(const T* data) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `data` | 输入 | 指向 Device 侧延迟数据的指针：值仅在流序到达后才可读；包装对象不复制数据，使用期间不得为空且所指存储须覆盖整个使用周期。 |
-| `bounds` | 输入 | 该延迟参数取值的边界对象（no_bounds/static_bounds/runtime_bounds）：供后端无需同步读取 Device 数据即可做安全选择。 |
+| `data` | 输入 | 指向Device侧延迟数据的指针：值仅在流序到达后才可读；包装对象不复制数据，使用期间不得为空且所指存储须覆盖整个使用周期。 |
+| `bounds` | 输入 | 该延迟参数取值的边界对象（no_bounds/static_bounds/runtime_bounds）：供后端无需同步读取Device数据即可做安全选择。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `data` | 输入 | 指向 Device 侧延迟数据的指针：值仅在流序到达后才可读；包装对象不复制数据，使用期间不得为空且所指存储须覆盖整个使用周期。 |
+| `data` | 输入 | 指向Device侧延迟数据的指针：值仅在流序到达后才可读；包装对象不复制数据，使用期间不得为空且所指存储须覆盖整个使用周期。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 使用 C++17，可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Bounds 必须为 asc::args::no_bounds 或 asc::args::static_bounds
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期
+- 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
+- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示本页接口；对象和指针的有效期须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/argument>
 
-void example(const int* values)
+bool example()
 {
-    // values 在使用 deferred 的整个期间保持有效。
-    asc::args::deferred<int> argument(values, asc::args::no_bounds{});
-    (void)argument.data();
+    int value = 7;
+    asc::args::deferred<int> argument(&value, asc::args::no_bounds{});
+    return argument.data() == &value && *argument.data() == 7;
 }
 ```
+
+## 关联API
+
+- [`asc::args::deferred`](args_deferred.md)
+- [本头文件的接口列表](asc_argument.md)

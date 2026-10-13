@@ -28,29 +28,37 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::identity` 原样返回调用实参的函数对象。
+`asc::std::identity`原样返回调用实参的函数对象。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 声明
 
 ```cpp
-struct asc::std::identity
+namespace asc::std {
+struct identity;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 同时提供指定类型形式和透明调用形式
+- 同时提供指定类型形式和透明调用形式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/functional>
 
-void use_type(const asc::std::identity& value)
+bool example()
 {
-    (void)value;
+    int value = 7;
+    auto&& result = asc::std::identity{}(value);
+    return &result == &value && result == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

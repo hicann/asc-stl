@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/numeric>`。
 
-`asc::std::gcd` 计算两个整数的最大公约数。
+`asc::std::gcd`计算两个整数的最大公约数。
 
 标准语义参考：[cppreference `numeric`](https://en.cppreference.com/w/cpp/header/numeric)。
 
 ## 函数原型
 
 ```cpp
-template<class T, class U> [[nodiscard]] constexpr common_type_t<T, U> asc::std::gcd(T left, U right);
+namespace asc::std {
+template<class T, class U> [[nodiscard]] constexpr common_type_t<T, U> gcd(T left, U right);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,8 +46,8 @@ template<class T, class U> [[nodiscard]] constexpr common_type_t<T, U> asc::std:
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 左操作数的整数类型；不含 bool。 |
-| `U` | 右操作数的整数类型；不含 bool。 |
+| `T` | 左操作数的整数类型；不含bool。 |
+| `U` | 右操作数的整数类型；不含bool。 |
 
 **函数参数**
 
@@ -62,8 +64,9 @@ template<class T, class U> [[nodiscard]] constexpr common_type_t<T, U> asc::std:
 
 ## 约束说明
 
-- 模板参数 `T`、`U` 须为整型且非 `bool`，否则触发编译期断言
-- 两参数的绝对值均须能由公共结果类型 `common_type_t<T, U>` 表示，否则结果无定义
+- 模板参数`T`、`U`须为整型且非`bool`，否则触发编译期断言。
+- 两参数的绝对值均须能由公共结果类型`common_type_t<T, U>`表示，否则结果无定义。
+
 ## 调用示例
 
 以下片段用具体整数范围展示数值调用；输出数组具有足够容量。
@@ -76,3 +79,7 @@ decltype(auto) example()
     return asc::std::gcd(12, 18);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_numeric.md)

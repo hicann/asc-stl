@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::wcscat` 把宽字符串追加到目标字符串末尾。
+`asc::std::wcscat`把宽字符串追加到目标字符串末尾。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 
 ## 函数原型
 
 ```cpp
-wchar_t* asc::std::wcscat(wchar_t* destination, const wchar_t* source) noexcept;
+namespace asc::std {
+wchar_t* wcscat(wchar_t* destination, const wchar_t* source) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -55,10 +57,10 @@ wchar_t* asc::std::wcscat(wchar_t* destination, const wchar_t* source) noexcept;
 
 ## 约束说明
 
-- 18个标准函数名及23个可调用签名：wmemcpy/wmemmove/wmemchr/wmemcmp/wmemset、wcscpy/wcsncpy/wcscat/wcsncat、wcschr/wcsrchr、wcscmp/wcsncmp、wcsspn/wcscspn/wcspbrk/wcsstr/wcslen
-- 5个查找函数包含const与可变指针重载
-- Host委托系统，Device纯计算实现
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain-pointer域
+- 18个标准函数名及23个可调用签名：wmemcpy/wmemmove/wmemchr/wmemcmp/wmemset、wcscpy/wcsncpy/wcscat/wcsncat、wcschr/wcsrchr、wcscmp/wcsncmp、wcsspn/wcscspn/wcspbrk/wcsstr/wcslen。
+- 5个查找函数包含const与可变指针重载。
+- Host委托系统，Device纯计算实现。
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain-pointer域。
 
 ## 调用示例
 
@@ -72,3 +74,7 @@ decltype(auto) example(wchar_t * destination, const wchar_t * source)
     return asc::std::wcscat(destination, source);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cwchar.md)

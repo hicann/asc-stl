@@ -28,32 +28,40 @@
 
 头文件路径为：`<asc/semaphore>`。
 
-`asc::counting_semaphore` 维护可并发获取和释放的计数信号量。
+`asc::counting_semaphore`维护可并发获取和释放的计数信号量。
 
 ## 声明
 
 ```cpp
-template<asc::memory_scope Scope, asc::std::ptrdiff_t LeastMaxValue = 2147483647> class asc::counting_semaphore
+namespace asc {
+template<asc::memory_scope Scope, asc::std::ptrdiff_t LeastMaxValue = 2147483647> class counting_semaphore;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 使用 C++17
-- 在 AI Core SIMT 编程 中操作调用方管理的 GM 状态
-- Scope 必须为 asc::memory_scope::block 或 asc::memory_scope::device
-- 所有阻塞参与者必须能够并发推进
-- 复制构造和复制赋值已删除
+- 使用C++17。
+- 在AI Core SIMT编程 中操作调用方管理的GM状态。
+- Scope必须为asc::memory_scope::block或asc::memory_scope::device。
+- 所有阻塞参与者必须能够并发推进。
+- 复制构造和复制赋值已删除。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下片段用于D-SIMT编译。permits是GM中已构造的信号量，初始许可数在[0, 2] 内；示例在成功取得许可后归还。
 
 ```cpp
 #include <asc/semaphore>
 
-__aicore__ void use_type()
+__aicore__ bool example(asc::counting_semaphore<asc::memory_scope::device, 2>& permits)
 {
-    using selected = asc::counting_semaphore<asc::memory_scope::device, 4>;
-    (void)sizeof(selected);
+    if (!permits.try_acquire()) return false;
+    // 在此访问受许可保护的资源。
+    permits.release();
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_semaphore.md)

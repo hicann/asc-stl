@@ -28,16 +28,19 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::weekday::ok` 判断当前日历字段组合是否表示有效日期。
+`asc::std::chrono::weekday::ok`判断当前日历字段组合是否表示有效日期。
 
-`weekday` 仅含星期字段：存储值在 0 到 6 之间（值域 `[0, 6]`，0 表示星期日、6 表示星期六）时返回 `true`，否则返回 `false`。
+`weekday`仅含星期字段：存储值在0到6之间（值域`[0, 6]`，0表示星期日、6表示星期六）时返回`true`，否则返回`false`。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
+所属类型：[`asc::std::chrono::weekday`](chrono_weekday.md)。
+
 ```cpp
-[[nodiscard]] constexpr bool asc::std::chrono::weekday::ok() const noexcept;
+// asc::std::chrono::weekday 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr bool ok() const noexcept;
 ```
 
 ## 参数说明
@@ -48,22 +51,28 @@
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void example(asc::std::chrono::weekday& object)
+bool example()
 {
-    (void)object.ok();
+    asc::std::chrono::weekday value{4};
+    return value.ok();
 }
 ```
+
+## 关联API
+
+- [`asc::std::chrono::weekday`](chrono_weekday.md)
+- [本头文件的接口列表](asc_std_chrono.md)

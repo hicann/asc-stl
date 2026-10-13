@@ -28,32 +28,34 @@
 
 头文件路径为：`<asc/std/numbers>`。
 
-`asc::std::numbers::e_v` 由 `<asc/std/numbers>` 提供，提供 `e_v` 常量或变量。接口遵循对应 C++ 标准设施的语义；ASC-STL 的语言模式和调用位置以本页声明为准。
+`asc::std::numbers::e_v`由`<asc/std/numbers>`提供，提供`e_v`常量或变量。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
 
 标准语义参考：[cppreference `numbers`](https://en.cppreference.com/w/cpp/header/numbers)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-asc::std::numbers::e_v :
+namespace asc::std::numbers {
+e_v :;
+} // namespace asc::std::numbers
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 2
+### 原型2
 
 ```cpp
 template <class Tp> constexpr Tp e_v = __numbers<Tp>::__e();
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 约束说明
 
-- 提供 float 变量模板
-- 数学常量 e 的变量模板（标准 [math.constants] 位形），float 实例可用，double/long double 实例仍按冻结核对静态断言拒绝
+- 提供float变量模板。
+- 数学常量e的变量模板（标准[math.constants] 位形），float实例可用，double/long double实例仍按冻结核对静态断言拒绝。
 
 ## 调用示例
 
@@ -65,3 +67,7 @@ template <class Tp> constexpr Tp e_v = __numbers<Tp>::__e();
 constexpr float value = asc::std::numbers::e_v<float>;
 static_assert(value > 2.7f && value < 2.8f);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_numbers.md)

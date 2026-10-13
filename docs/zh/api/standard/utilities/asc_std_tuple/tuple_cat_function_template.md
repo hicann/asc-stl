@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/tuple>`。
 
-`asc::std::tuple_cat` 按顺序拼接多个 tuple 的元素。
+`asc::std::tuple_cat`按顺序拼接多个tuple的元素。
 
 标准语义参考：[cppreference `tuple`](https://en.cppreference.com/w/cpp/header/tuple)。
 
 ## 函数原型
 
 ```cpp
-template<class Tuple0, class ...Tuples> constexpr typename Tuplecatreturn<Tuple0, Tuples...>::type asc::std::tuple_cat(Tuple0&& first, Tuples&&... right);
+namespace asc::std {
+template<class Tuple0, class ...Tuples> constexpr typename Tuplecatreturn<Tuple0, Tuples...>::type tuple_cat(Tuple0&& first, Tuples&&... right);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,25 +46,25 @@ template<class Tuple0, class ...Tuples> constexpr typename Tuplecatreturn<Tuple0
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Tuple0` | 第一个待拼接的 tuple 类型；须为 tuple 类模板实例。 |
-| `Tuples` | 其余各待拼接 tuple 的类型；结果按实参顺序拼接全部元素。 |
+| `Tuple0` | 第一个待拼接的tuple类型；须为tuple类模板实例。 |
+| `Tuples` | 其余各待拼接tuple的类型；结果按实参顺序拼接全部元素。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `first` | 输入/输出 | 第一个待拼接的 tuple；其元素置于结果开头，右值时元素被移动，移动后处于有效但未指定状态 |
-| `right` | 输入/输出 | 其余待拼接的各 tuple；元素依次接在 first 的元素之后，右值时元素被移动，移动后处于有效但未指定状态 |
+| `first` | 输入/输出 | 第一个待拼接的tuple；其元素置于结果开头，右值时元素被移动，移动后处于有效但未指定状态 |
+| `right` | 输入/输出 | 其余待拼接的各tuple；元素依次接在first的元素之后，右值时元素被移动，移动后处于有效但未指定状态 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `typename Tuplecatreturn<Tuple0, Tuples...>::type` | 返回按给定元素或 tuple 组合得到的新 tuple。 |
+| `typename Tuplecatreturn<Tuple0, Tuples...>::type` | 返回按给定元素或tuple组合得到的新tuple。 |
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
 
 ## 调用示例
 
@@ -77,3 +79,7 @@ decltype(auto) example(Tuple0 && first, Tuples &&... right)
     return asc::std::tuple_cat(first, right...);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_tuple.md)

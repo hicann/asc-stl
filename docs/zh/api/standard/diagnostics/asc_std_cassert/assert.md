@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cassert>`。
 
-`assert` 在调试构建中检查条件，条件为假时触发断言失败。
+`assert`在调试构建中检查条件，条件为假时触发断言失败。
 
 标准语义参考：[cppreference `cassert`](https://en.cppreference.com/w/cpp/header/cassert)。
 
@@ -40,8 +40,8 @@
 
 ## 约束说明
 
-- 宏值取决于 NDEBUG
-- 展开结果为可用于条件判断的 true 或 false 表达式
+- 宏值取决于NDEBUG。
+- 展开结果为可用于条件判断的true或false表达式。
 
 ## 调用示例
 
@@ -54,3 +54,7 @@
 #error "assert is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cassert.md)

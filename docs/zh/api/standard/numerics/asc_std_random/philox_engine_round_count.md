@@ -28,30 +28,45 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::philox_engine::round_count` 给出当前随机引擎的默认种子、递推参数或轮次数值。
+`asc::std::philox_engine::round_count`给出当前随机引擎的默认种子、递推参数或轮次数值。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 声明
 
+所属类型：[`asc::std::philox_engine`](philox_engine.md)。
+
 ```cpp
-static constexpr size_t asc::std::philox_engine::round_count = NumRounds
+// asc::std::philox_engine 类内的声明节选；模板形参和其他成员由所属类提供。
+static constexpr size_t round_count = NumRounds;
 ```
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/random>
+#include <asc/std/limits>
 
-void example(const asc::std::philox4x32& object)
+bool example()
 {
-    (void)object.round_count;
+    using Engine = asc::std::philox4x32;
+    static_assert(Engine::round_count == 10);
+    Engine engine(7);
+    const auto first = engine();
+    engine.seed(7);
+    // 重设相同种子应重现序列的第一个值。
+    return engine() == first;
 }
 ```
+
+## 关联API
+
+- [`asc::std::philox_engine`](philox_engine.md)
+- [本头文件的接口列表](asc_std_random.md)

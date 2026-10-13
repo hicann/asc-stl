@@ -28,19 +28,19 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::zip_view::zip_view` 按本页所列构造形态初始化 `zip_view` 对象。
+`asc::std::ranges::zip_view::zip_view`按本页所列构造形态初始化`zip_view`对象。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 zip_view();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr zip_view(Views... base);
@@ -48,11 +48,11 @@ constexpr zip_view(Views... base);
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -60,22 +60,36 @@ constexpr zip_view(Views... base);
 | --- | --- | --- |
 | `base` | 输入 | 参与打包的底层视图包，每个实参为一个视图；视图按位置将各视图元素组合为元组。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 七个列出名称
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 七个列出名称。
+- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example()
+bool example()
 {
-    asc::std::ranges::zip_view<asc::std::ranges::single_view<int>, asc::std::ranges::single_view<int>> value{};
-    (void)value;
+    int values[] = {1, 2, 3, 4};
+    using Base = asc::std::ranges::subrange<int*>;
+    Base base(values, values + 4);
+    asc::std::ranges::zip_view<Base, Base> view(base, base);
+    return asc::std::get<0>(*view.begin()) == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

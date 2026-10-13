@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/numeric>`。
 
-`asc::std::iota` 从给定起始值开始连续填充范围。
+`asc::std::iota`从给定起始值开始连续填充范围。
 
 标准语义参考：[cppreference `numeric`](https://en.cppreference.com/w/cpp/header/numeric)。
 
 ## 函数原型
 
 ```cpp
-template<class ForwardIterator, class T> constexpr void asc::std::iota(ForwardIterator first, ForwardIterator last, T value_);
+namespace asc::std {
+template<class ForwardIterator, class T> constexpr void iota(ForwardIterator first, ForwardIterator last, T value_);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -61,8 +63,8 @@ template<class ForwardIterator, class T> constexpr void asc::std::iota(ForwardIt
 
 ## 约束说明
 
-- 提供顺序迭代器/值重载
-- 本族中标准定义的执行策略重载采用顺序执行语义
+- 提供顺序迭代器/值重载。
+- 本族中标准定义的执行策略重载采用顺序执行语义。
 
 ## 调用示例
 
@@ -77,3 +79,7 @@ void example()
     asc::std::iota(output, output + 4, 1);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_numeric.md)

@@ -1,4 +1,4 @@
-# asc::std::complex::operator+=
+# asc::std::complex::`operator+=`
 
 ## 产品支持情况
 
@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::complex::operator+=` 按给定距离或操作数更新当前值。
+`asc::std::complex::operator+=`按给定距离或操作数更新当前值。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::complex`](complex.md)。
+
+### 原型1
 
 ```cpp
-constexpr complex<T>& asc::std::complex::operator+=(const T& rhs) noexcept;
+// asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr complex<T>& operator+=(const T& rhs) noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class U> constexpr complex<T>& asc::std::complex::operator+=(const complex<U>& rhs) noexcept;
+// asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class U> constexpr complex<T>& operator+=(const complex<U>& rhs) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -56,7 +60,7 @@ template<class U> constexpr complex<T>& asc::std::complex::operator+=(const comp
 | --- | --- | --- |
 | `rhs` | 输入 | 加法赋值的右操作数（实数标量，加到当前对象的实部）。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -74,17 +78,17 @@ template<class U> constexpr complex<T>& asc::std::complex::operator+=(const comp
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 2 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型1 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型2 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下 Host 片段使用具体数值类型演示调用；状态与参数须满足本页约束。
+以下Host片段使用具体数值类型演示调用；状态与参数须满足本页约束。
 
 ```cpp
 #include <asc/std/complex>
@@ -94,3 +98,8 @@ void example(asc::std::complex<float>& value)
     value += 2.0f;
 }
 ```
+
+## 关联API
+
+- [`asc::std::complex`](complex.md)
+- [本头文件的接口列表](asc_std_complex.md)

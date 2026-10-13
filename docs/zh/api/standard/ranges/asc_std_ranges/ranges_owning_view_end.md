@@ -28,31 +28,35 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::owning_view::end` 返回指向尾后位置的迭代器。
+`asc::std::ranges::owning_view::end`返回指向尾后位置的迭代器。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::ranges::owning_view`](ranges_owning_view.md)。
+
+### 原型1
 
 ```cpp
-[[nodiscard]] constexpr sentinel_t<Rp> asc::std::ranges::owning_view::end();
+// asc::std::ranges::owning_view 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr sentinel_t<Rp> end();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class Range> [[nodiscard]] constexpr auto asc::std::ranges::owning_view::end() const;
+// asc::std::ranges::owning_view 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Range> [[nodiscard]] constexpr auto end() const;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -64,23 +68,38 @@ template<class Range> [[nodiscard]] constexpr auto asc::std::ranges::owning_view
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `sentinel_t<Rp>` | 返回指向尾后位置的迭代器。 |
-| 原型 2 | `auto` | 返回指向尾后位置的迭代器。 |
+| 原型1 | `sentinel_t<Rp>` | 返回指向尾后位置的迭代器。 |
+| 原型2 | `auto` | 返回指向尾后位置的迭代器。 |
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- owning_view仅拥有调用方传入的范围对象，不产生额外分配。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example(asc::std::ranges::owning_view<asc::std::ranges::single_view<int>>& object)
+bool example()
 {
-    (void)object.end();
+    int values[] = {1, 2, 3, 4};
+    using Base = asc::std::ranges::subrange<int*>;
+    Base base(values, values + 4);
+    asc::std::ranges::owning_view<asc::std::array<int, 4>> view(asc::std::array<int, 4>{1, 2, 3, 4});
+    auto last = view.end();
+    unsigned int count = 0;
+    for (auto it = view.begin(); it != last; ++it) ++count;
+    return count == 4;
 }
 ```
+
+## 关联API
+
+- [`asc::std::ranges::owning_view`](ranges_owning_view.md)
+- [本头文件的接口列表](asc_std_ranges.md)

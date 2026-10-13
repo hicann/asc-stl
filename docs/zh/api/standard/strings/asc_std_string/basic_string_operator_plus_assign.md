@@ -1,4 +1,4 @@
-# asc::std::basic_string::operator+=
+# asc::std::basic_string::`operator+=`
 
 ## 产品支持情况
 
@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/string>`。
 
-`asc::std::basic_string::operator+=` 在当前字符串末尾追加操作数，并返回当前字符串的引用：原型 1 追加单个字符 `value`；原型 2 追加以空字符结尾的字符串 `text`。
+`asc::std::basic_string::operator+=`在当前字符串末尾追加操作数，并返回当前字符串的引用：原型1追加单个字符`value`；原型2追加以空字符结尾的字符串`text`。
 
 标准语义参考：[cppreference `string`](https://en.cppreference.com/w/cpp/header/string)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::basic_string`](basic_string.md)。
+
+### 原型1
 
 ```cpp
-basic_string<CharT, Traits, Allocator>& asc::std::basic_string::operator+=(CharT value);
+// asc::std::basic_string 类内的声明节选；模板形参和其他成员由所属类提供。
+basic_string<CharT, Traits, Allocator>& operator+=(CharT value);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-basic_string<CharT, Traits, Allocator>& asc::std::basic_string::operator+=(const CharT* text);
+// asc::std::basic_string 类内的声明节选；模板形参和其他成员由所属类提供。
+basic_string<CharT, Traits, Allocator>& operator+=(const CharT* text);
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -56,7 +60,7 @@ basic_string<CharT, Traits, Allocator>& asc::std::basic_string::operator+=(const
 | --- | --- | --- |
 | `value` | 输入 | 追加到当前字符串末尾的单个字符。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -68,19 +72,19 @@ basic_string<CharT, Traits, Allocator>& asc::std::basic_string::operator+=(const
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `basic_string<CharT, Traits, Allocator> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 2 | `basic_string<CharT, Traits, Allocator> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型1 | `basic_string<CharT, Traits, Allocator> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型2 | `basic_string<CharT, Traits, Allocator> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 
 ## 约束说明
 
-- basic_string<char,Traits,A>显式allocator构造
-- plain/local字符来源的append/push_back/clear
-- size/capacity/data/c_str/迭代/索引与析构
-- 仅容量充足和不抛出异常域
+- basic_string<char,Traits,A>显式allocator构造。
+- plain/local字符来源的append/push_back/clear。
+- size/capacity/data/c_str/迭代/索引与析构。
+- 仅容量充足和不抛出异常域。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/string>
@@ -105,3 +109,8 @@ decltype(auto) example(asc::std::basic_string<char, ::std::char_traits<char>, ex
     return (value += 'a');
 }
 ```
+
+## 关联API
+
+- [`asc::std::basic_string`](basic_string.md)
+- [本头文件的接口列表](asc_std_string.md)

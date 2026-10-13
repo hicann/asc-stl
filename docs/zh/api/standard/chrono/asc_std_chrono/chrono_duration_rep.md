@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::duration::rep` 表示日期、时间点或时长计算中的 `rep` 值类型。
+`asc::std::chrono::duration::rep`表示日期、时间点或时长计算中的`rep`值类型。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 声明
 
+所属类型：[`asc::std::chrono::duration`](chrono_duration.md)。
+
 ```cpp
-using asc::std::chrono::duration::rep = Re
+// asc::std::chrono::duration 类内的声明节选；模板形参和其他成员由所属类提供。
+using rep = Re;
 ```
 
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符
+- 提供值运算以及六个显式关系运算符。
 
 ## 调用示例
 
@@ -54,3 +57,8 @@ void use_type()
     using alias_type = typename asc::std::chrono::duration<int>::rep;
 }
 ```
+
+## 关联API
+
+- [`asc::std::chrono::duration`](chrono_duration.md)
+- [本头文件的接口列表](asc_std_chrono.md)

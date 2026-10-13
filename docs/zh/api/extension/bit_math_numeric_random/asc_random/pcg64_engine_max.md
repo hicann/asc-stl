@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::pcg64_engine::max` 返回 PCG64 引擎可生成的最大结果值。
+`asc::pcg64_engine::max`返回PCG64引擎可生成的最大结果值。
 
 ## 函数原型
 
+所属类型：[`asc::pcg64_engine`](pcg64_engine.md)。
+
 ```cpp
-static constexpr result_type asc::pcg64_engine::max() noexcept;
+// asc::pcg64_engine 类内的声明节选；模板形参和其他成员由所属类提供。
+static constexpr result_type max() noexcept;
 ```
 
 ## 参数说明
@@ -44,22 +47,28 @@ static constexpr result_type asc::pcg64_engine::max() noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `result_type` | 返回PCG64 引擎可生成的最大结果值。 |
+| `result_type` | 返回PCG64引擎可生成的最大结果值。 |
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/random>
+#include <asc/std/limits>
 
-void example(asc::pcg64& object)
+bool example()
 {
-    (void)object.max();
+    return asc::pcg64::max() == asc::std::numeric_limits<asc::pcg64::result_type>::max();
 }
 ```
+
+## 关联API
+
+- [`asc::pcg64_engine`](pcg64_engine.md)
+- [本头文件的接口列表](asc_random.md)

@@ -28,39 +28,48 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::pair` 按位置保存两个不同类型的元素。
+`asc::std::pair`按位置保存两个不同类型的元素。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T1, class T2> struct asc::std::pair
+namespace asc::std {
+template<class T1, class T2> struct pair;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class, class> class asc::std::pair
+namespace asc::std {
+template<class, class> class pair;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- pair 操作不抛出异常
-- 关系运算符均为显式提供
+- 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/utility>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::pair<int, int>;
-    (void)sizeof(selected);
+    asc::std::pair<int, float> values(7, 2.0F);
+    values.first = 9;
+    return values.first == 9 && values.second == 2.0F;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

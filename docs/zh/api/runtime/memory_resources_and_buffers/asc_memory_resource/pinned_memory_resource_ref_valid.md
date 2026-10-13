@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/memory_resource>`。
 
-`asc::pinned_memory_resource_ref::valid` 判断该引用是否关联了 `pinned_memory_resource` 对象。
+`asc::pinned_memory_resource_ref::valid`判断该引用是否关联了`pinned_memory_resource`对象。
 
 ## 函数原型
 
+所属类型：[`asc::pinned_memory_resource_ref`](pinned_memory_resource_ref.md)。
+
 ```cpp
-constexpr bool asc::pinned_memory_resource_ref::valid() const noexcept;
+// asc::pinned_memory_resource_ref 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr bool valid() const noexcept;
 ```
 
 ## 参数说明
@@ -44,24 +47,33 @@ constexpr bool asc::pinned_memory_resource_ref::valid() const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 仅可在 Host 调用
-- 内存资源不抛出异常
-- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐
-- 资源及其引用的生命周期由调用方管理
+- 仅可在Host调用。
+- 内存资源不抛出异常。
+- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐。
+- 资源及其引用的生命周期由调用方管理。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/memory_resource>
 
-void example(asc::pinned_memory_resource_ref& object)
+bool example()
 {
-    (void)object.valid();
+    asc::pinned_memory_resource resource;
+    asc::pinned_memory_resource_ref reference(resource);
+    if (!reference.valid()) return false;
+    auto properties = reference.properties();
+    return properties.host_accessible() && !properties.device_accessible() && properties.maximum_alignment() == alignof(asc::std::max_align_t);
 }
 ```
+
+## 关联API
+
+- [`asc::pinned_memory_resource_ref`](pinned_memory_resource_ref.md)
+- [本头文件的接口列表](asc_memory_resource.md)

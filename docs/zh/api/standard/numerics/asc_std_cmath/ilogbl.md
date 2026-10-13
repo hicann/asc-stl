@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::ilogbl` 由 `<asc/std/cmath>` 提供，宿主 long double 规范化指数（整型返回），后缀 l 别名
+`asc::std::ilogbl`由`<asc/std/cmath>`提供，宿主long double规范化指数（整型返回），后缀l别名
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-constexpr int asc::std::ilogbl(long double value) noexcept
+namespace asc::std {
+constexpr int ilogbl(long double value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,17 +46,17 @@ constexpr int asc::std::ilogbl(long double value) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待提取以 2 为底的规范化指数的输入值（无量纲）；±0、±inf、NaN 等特殊值返回约定常量（如 FP_ILOGB0、FP_ILOGBNAN）。 |
+| `value` | 输入 | 待提取以2为底的规范化指数的输入值（无量纲）；±0、±inf、NaN等特殊值返回约定常量（如FP_ILOGB0、FP_ILOGBNAN）。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `int` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `int` | 输入绝对值的浮点指数，以int返回；零和NaN使用相应FP_ILOGB宏规定的结果。 |
 
 ## 约束说明
 
-- 宿主 long double 规范化指数（整型返回），后缀 l 别名
+- 宿主long double规范化指数（整型返回），后缀l别名。
 
 ## 调用示例
 
@@ -68,3 +70,7 @@ decltype(auto) example(long double value)
     return asc::std::ilogbl(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

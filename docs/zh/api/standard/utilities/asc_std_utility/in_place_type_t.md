@@ -28,30 +28,37 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::in_place_type_t` 标记按备选项类型原位构造对象。
+`asc::std::in_place_type_t`标记按备选项类型原位构造对象。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 声明
 
 ```cpp
-template<class T> struct asc::std::in_place_type_t
+namespace asc::std {
+template<class T> struct in_place_type_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供完整的标准形式
+- 提供完整的标准形式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/utility>
+#include <asc/std/variant>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::in_place_type_t<int>;
-    (void)sizeof(selected);
+    asc::std::variant<int, float> value(asc::std::in_place_type_t<int>{}, 7);
+    return value.index() == 0 && *asc::std::get_if<int>(&value) == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

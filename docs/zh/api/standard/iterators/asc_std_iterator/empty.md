@@ -28,33 +28,37 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::empty` 判断范围是否不含元素。
+`asc::std::empty`判断范围是否不含元素。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class Cont> [[nodiscard]] constexpr auto asc::std::empty(const Cont& c) noexcept(noexcept(c.empty())) -> decltype(c.empty());
+namespace asc::std {
+template<class Cont> [[nodiscard]] constexpr auto empty(const Cont& c) noexcept(noexcept(c.empty())) -> decltype(c.empty());
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T, size_t Sz> [[nodiscard]] constexpr bool asc::std::empty(const T (&c)[Sz]) noexcept;
+namespace asc::std {
+template<class T, size_t Sz> [[nodiscard]] constexpr bool empty(const T (&c)[Sz]) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Cont` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Cont` | 被查询容器的类型；须提供本重载调用的size、empty或data成员。 |
 
 **函数参数**
 
@@ -62,14 +66,14 @@ template<class T, size_t Sz> [[nodiscard]] constexpr bool asc::std::empty(const 
 | --- | --- | --- |
 | `c` | 输入 | 提供“判断范围是否不含元素”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Sz` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
+| `T` | 内建数组的元素类型。 |
+| `Sz` | 内建数组在该维度的元素数量，由数组实参推导。 |
 
 **函数参数**
 
@@ -81,16 +85,16 @@ template<class T, size_t Sz> [[nodiscard]] constexpr bool asc::std::empty(const 
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `decltype(c.empty())` | 输入范围不含元素时返回 `true`，否则返回 `false`。 |
-| 原型 2 | `bool` | 对象不含元素时返回 `true`，否则返回 `false`。 |
+| 原型1 | `decltype(c.empty())` | 输入范围不含元素时返回`true`，否则返回`false`。 |
+| 原型2 | `bool` | 对象不含元素时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 支持非 I/O 范围、数组和用户容器
+- 支持非I/O范围、数组和用户容器。
 
 ## 调用示例
 
-以下 Host 片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
 
 ```cpp
 #include <asc/std/iterator>
@@ -101,3 +105,7 @@ decltype(auto) example()
     return asc::std::empty(values);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

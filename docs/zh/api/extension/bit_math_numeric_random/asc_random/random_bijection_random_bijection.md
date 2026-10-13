@@ -28,35 +28,39 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::random_bijection::random_bijection` 使用调用方提供的参数初始化 `asc::random_bijection` 对象。
+`asc::random_bijection::random_bijection`使用调用方提供的参数初始化`asc::random_bijection`对象。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::random_bijection`](random_bijection.md)。
+
+### 原型1
 
 ```cpp
-constexpr asc::random_bijection::random_bijection() noexcept;
+// asc::random_bijection 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr random_bijection() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class RNG> constexpr asc::random_bijection::random_bijection(Index size, RNG&& generator) noexcept;
+// asc::random_bijection 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class RNG> constexpr random_bijection(Index size, RNG&& generator) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `RNG` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `RNG` | 用于生成双射参数的随机数引擎类型；须能提供所需的无符号随机值。 |
 
 **函数参数**
 
@@ -65,21 +69,31 @@ template<class RNG> constexpr asc::random_bijection::random_bijection(Index size
 | `size` | 输入 | 对象或范围的大小。 |
 | `generator` | 输入/输出 | 提供随机数的生成器；调用时其状态可能推进。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示本页接口；对象和指针的有效期须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/random>
 
-void example()
+bool example()
 {
-    asc::random_bijection<unsigned long long> mapping{};
-    (void)mapping.size();
+    asc::pcg64 engine(7);
+    asc::random_bijection<unsigned long long> permutation(8, engine);
+    return permutation.size() == 8 && permutation(0) < 8;
 }
 ```
+
+## 关联API
+
+- [`asc::random_bijection`](random_bijection.md)
+- [本头文件的接口列表](asc_random.md)

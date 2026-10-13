@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::wcsrchr` 查找宽字符串中目标字符的最后出现位置。
+`asc::std::wcsrchr`查找宽字符串中目标字符的最后出现位置。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-const wchar_t* asc::std::wcsrchr(const wchar_t* input, wchar_t value) noexcept;
+namespace asc::std {
+const wchar_t* wcsrchr(const wchar_t* input, wchar_t value) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-wchar_t* asc::std::wcsrchr(wchar_t* input, wchar_t value) noexcept;
+namespace asc::std {
+wchar_t* wcsrchr(wchar_t* input, wchar_t value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -57,7 +61,7 @@ wchar_t* asc::std::wcsrchr(wchar_t* input, wchar_t value) noexcept;
 | `input` | 输入 | 被查找的宽字符串首地址，以空字符结尾；终止空字符也参与匹配。 |
 | `value` | 输入 | 待查找最后一次出现位置的宽字符。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -70,15 +74,15 @@ wchar_t* asc::std::wcsrchr(wchar_t* input, wchar_t value) noexcept;
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `const wchar_t *` | 返回匹配位置的指针；没有匹配项时返回空指针。 |
-| 原型 2 | `wchar_t *` | 返回匹配位置的指针；没有匹配项时返回空指针。 |
+| 原型1 | `const wchar_t *` | 返回匹配位置的指针；没有匹配项时返回空指针。 |
+| 原型2 | `wchar_t *` | 返回匹配位置的指针；没有匹配项时返回空指针。 |
 
 ## 约束说明
 
-- 18个标准函数名及23个可调用签名：wmemcpy/wmemmove/wmemchr/wmemcmp/wmemset、wcscpy/wcsncpy/wcscat/wcsncat、wcschr/wcsrchr、wcscmp/wcsncmp、wcsspn/wcscspn/wcspbrk/wcsstr/wcslen
-- 5个查找函数包含const与可变指针重载
-- Host委托系统，Device纯计算实现
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain-pointer域
+- 18个标准函数名及23个可调用签名：wmemcpy/wmemmove/wmemchr/wmemcmp/wmemset、wcscpy/wcsncpy/wcscat/wcsncat、wcschr/wcsrchr、wcscmp/wcsncmp、wcsspn/wcscspn/wcspbrk/wcsstr/wcslen。
+- 5个查找函数包含const与可变指针重载。
+- Host委托系统，Device纯计算实现。
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain-pointer域。
 
 ## 调用示例
 
@@ -92,3 +96,7 @@ decltype(auto) example(const wchar_t * input, wchar_t value)
     return asc::std::wcsrchr(input, value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cwchar.md)

@@ -28,39 +28,49 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::ranges::in_fun_result<Iter, Func>` 从 C++17 起保存算法结束迭代器 `in` 和执行后的函数对象 `fun`。
+`asc::std::ranges::in_fun_result<Iter, Func>`从C++17起保存算法结束迭代器`in`和执行后的函数对象`fun`。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class Iter, class Func> struct asc::std::ranges::in_fun_result
+namespace asc::std::ranges {
+template<class Iter, class Func> struct in_fun_result;
+} // namespace asc::std::ranges
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class InIter1, class Func1> struct asc::std::ranges::in_fun_result
+namespace asc::std::ranges {
+template<class InIter1, class Func1> struct in_fun_result;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 遵循该接口声明对应的类型和前置条件
-- 调用方必须保证实参取值、对象生命周期、地址空间及可用位置有效
+- 遵循该接口声明对应的类型和前置条件。
+- 调用方必须保证实参取值、对象生命周期、地址空间及可用位置有效。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/algorithm>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::ranges::in_fun_result<int*, int (*)(int)>;
-    (void)sizeof(selected);
+    int values[] = {2, 4};
+    auto twice = [](int value) { return 2 * value; };
+    asc::std::ranges::in_fun_result<int*, decltype(twice)> result{values + 1, twice};
+    return *result.in == 4 && result.fun(3) == 6;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

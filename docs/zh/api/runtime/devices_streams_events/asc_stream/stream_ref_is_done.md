@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/stream>`。
 
-`asc::stream_ref::is_done` 非阻塞查询该 Stream 是否已完成此前提交的任务；查询成功时更新输出布尔值。
+`asc::stream_ref::is_done`非阻塞查询该Stream是否已完成此前提交的任务；查询成功时更新输出布尔值。
 
 ## 函数原型
 
+所属类型：[`asc::stream_ref`](stream_ref.md)。
+
 ```cpp
-bool asc::stream_ref::is_done(bool& output) const noexcept;
+// asc::stream_ref 类内的声明节选；模板形参和其他成员由所属类提供。
+bool is_done(bool& output) const noexcept;
 ```
 
 ## 参数说明
@@ -42,19 +45,19 @@ bool asc::stream_ref::is_done(bool& output) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 提供“非阻塞查询该 Stream 是否已完成此前提交的任务”使用的对象引用；被引用对象须在调用期间有效。 |
+| `output` | 输出 | 提供“非阻塞查询该Stream是否已完成此前提交的任务”使用的对象引用；被引用对象须在调用期间有效。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 提供可为空的非拥有 Host 引用
-- 原生句柄为不透明 void 指针
-- 仅当 CANN Runtime 调用成功时才更新查询结果和输出参数
+- 提供可为空的非拥有Host引用。
+- 原生句柄为不透明void指针。
+- 仅当CANN Runtime调用成功时才更新查询结果和输出参数。
 
 ## 调用示例
 
@@ -70,6 +73,11 @@ decltype(auto) example(Object& object, Args&&... args)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
+
+## 关联API
+
+- [`asc::stream_ref`](stream_ref.md)
+- [本头文件的接口列表](asc_stream.md)

@@ -1,4 +1,4 @@
-# asc::maximum::operator()
+# asc::maximum::`operator()`
 
 ## 产品支持情况
 
@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/functional>`。
 
-`asc::maximum::operator()` 比较两个输入并返回较大值。
+`asc::maximum::operator()`比较两个输入并返回较大值。
 
 ## 函数原型
 
+所属类型：[`asc::maximum`](maximum.md)。
+
 ```cpp
-template<class Left, class Right> constexpr auto asc::maximum::operator()(Left&& left, Right&& right) const noexcept(noexcept(left < right)) -> decltype(left < right ? right : left);
+// asc::maximum 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Left, class Right> constexpr auto operator()(Left&& left, Right&& right) const noexcept(noexcept(left < right)) -> decltype(left < right ? right : left);
 ```
 
 ## 参数说明
@@ -42,8 +45,8 @@ template<class Left, class Right> constexpr auto asc::maximum::operator()(Left&&
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Left` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Right` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Left` | 左侧比较操作数的类型。 |
+| `Right` | 右侧比较操作数的类型。 |
 
 ## 返回值说明
 
@@ -53,12 +56,12 @@ template<class Left, class Right> constexpr auto asc::maximum::operator()(Left&&
 
 ## 约束说明
 
-- 整数或逻辑运算仅在数学性质成立时报告对应特性
-- 浮点加法不满足结合律
+- 整数或逻辑运算仅在数学性质成立时报告对应特性。
+- 浮点加法不满足结合律。
 
 ## 调用示例
 
-以下 Host 片段以具体值演示调用；输入须满足本页约束。
+以下Host片段以具体值演示调用；输入须满足本页约束。
 
 ```cpp
 #include <asc/functional>
@@ -68,3 +71,8 @@ decltype(auto) example()
     return asc::maximum<>{}(1, 2);
 }
 ```
+
+## 关联API
+
+- [`asc::maximum`](maximum.md)
+- [本头文件的接口列表](asc_functional.md)

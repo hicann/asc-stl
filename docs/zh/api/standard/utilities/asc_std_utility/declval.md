@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::declval` 仅在未求值语境中形成指定类型的引用表达式。
+`asc::std::declval`仅在未求值语境中形成指定类型的引用表达式。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 函数原型
 
 ```cpp
-template<class T> asc::std::add_rvalue_reference_t<T> asc::std::declval() noexcept;
+namespace asc::std {
+template<class T> asc::std::add_rvalue_reference_t<T> declval() noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,7 +46,7 @@ template<class T> asc::std::add_rvalue_reference_t<T> asc::std::declval() noexce
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 在未求值上下文中取得假想引用表达式的类型；不要求可构造。 |
 
 ## 返回值说明
 
@@ -54,12 +56,12 @@ template<class T> asc::std::add_rvalue_reference_t<T> asc::std::declval() noexce
 
 ## 约束说明
 
-- 遵循标准约束
-- forward_like 保留 const/volatile 限定和值类别
+- 遵循标准约束。
+- forward_like保留const/volatile限定和值类别。
 
 ## 调用示例
 
-以下片段用具体类型展示调用；declval 仅用于不求值的类型表达式。
+以下片段用具体类型展示调用；declval仅用于不求值的类型表达式。
 
 ```cpp
 #include <asc/std/utility>
@@ -70,3 +72,7 @@ decltype(auto) example()
     return sizeof(result);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

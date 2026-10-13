@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cstring>`。
 
-`asc::std::strncmp` 最多比较指定数量的窄字符；AI Core SIMD 编程 仅接受兼容的普通指针地址空间。
+`asc::std::strncmp`最多比较指定数量的窄字符；AI Core SIMD编程 仅接受兼容的普通指针地址空间。
 
 标准语义参考：[cppreference `cstring`](https://en.cppreference.com/w/cpp/header/cstring)。
 
 ## 函数原型
 
 ```cpp
-[[nodiscard]] constexpr int asc::std::strncmp(const char* left, const char* right, size_t count);
+namespace asc::std {
+[[nodiscard]] constexpr int strncmp(const char* left, const char* right, size_t count);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,8 +46,8 @@
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与比较的左侧窄字符串首地址，以空字符结尾；最多比较前 count 个字符。 |
-| `right` | 输入 | 参与比较的右侧窄字符串首地址，以空字符结尾；最多比较前 count 个字符。 |
+| `left` | 输入 | 参与比较的左侧窄字符串首地址，以空字符结尾；最多比较前count个字符。 |
+| `right` | 输入 | 参与比较的右侧窄字符串首地址，以空字符结尾；最多比较前count个字符。 |
 | `count` | 输入 | 参与比较的最大字符数。 |
 
 ## 返回值说明
@@ -56,9 +58,9 @@
 
 ## 约束说明
 
-- 在 Host 侧和 AI Core SIMT 编程中使用普通指针
-- AI Core SIMD 编程中使用 local 或 generic 地址空间的普通指针
-- 仅 memmove 允许源和目标重叠
+- 在Host侧和AI Core SIMT编程中使用普通指针。
+- AI Core SIMD编程中使用local或generic地址空间的普通指针。
+- 仅memmove允许源和目标重叠。
 
 ## 调用示例
 
@@ -73,3 +75,7 @@ decltype(auto) example(const char * left, const char * right, asc::std::size_t c
     return asc::std::strncmp(left, right, count);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstring.md)

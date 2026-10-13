@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cfloat>`。
 
-`DECIMAL_DIG` 给出浮点值往返转换所需的十进制有效位数。
+`DECIMAL_DIG`给出浮点值往返转换所需的十进制有效位数。
 
 标准语义参考：[cppreference `cfloat`](https://en.cppreference.com/w/cpp/header/cfloat)。
 
@@ -40,7 +40,7 @@
 
 ## 约束说明
 
-- 仅提供编译器 ABI 实际支持的宏
+- 仅提供编译器ABI实际支持的宏。
 
 ## 调用示例
 
@@ -53,3 +53,7 @@
 #error "DECIMAL_DIG is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cfloat.md)

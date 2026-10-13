@@ -28,65 +28,75 @@
 
 头文件路径为：`<asc/std/cmath>`、`<asc/std/complex>`、`<asc/std/cstdlib>`。
 
-`asc::std::abs` 返回参数的绝对值；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::abs`返回参数的绝对值；Device侧适用范围以本页float与执行位置约束为准。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-[[nodiscard]] constexpr int asc::std::abs(int x) noexcept;
+namespace asc::std {
+[[nodiscard]] constexpr int abs(int x) noexcept;
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 此原型对应头文件：`<asc/std/cstdlib>`。
 
-### 原型 2
+### 原型2
 
 ```cpp
-[[nodiscard]] constexpr long asc::std::abs(long x) noexcept;
+namespace asc::std {
+[[nodiscard]] constexpr long abs(long x) noexcept;
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 此原型对应头文件：`<asc/std/cstdlib>`。
 
-### 原型 3
+### 原型3
 
 ```cpp
-[[nodiscard]] constexpr long long asc::std::abs(long long x) noexcept;
+namespace asc::std {
+[[nodiscard]] constexpr long long abs(long long x) noexcept;
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 此原型对应头文件：`<asc/std/cstdlib>`。
 
-### 原型 4
+### 原型4
 
 ```cpp
-float asc::std::abs(float x) noexcept;
+namespace asc::std {
+float abs(float x) noexcept;
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMT编程。
 
 此原型对应头文件：`<asc/std/cmath>`。
 
-### 原型 5
+### 原型5
 
 ```cpp
-template<class T> T asc::std::abs(const complex<T>& value) noexcept;
+namespace asc::std {
+template<class T> T abs(const complex<T>& value) noexcept;
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMT编程。
 
 此原型对应头文件：`<asc/std/complex>`。
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -94,7 +104,7 @@ template<class T> T asc::std::abs(const complex<T>& value) noexcept;
 | --- | --- | --- |
 | `x` | 输入 | 待求绝对值的整数输入（int）。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -102,7 +112,7 @@ template<class T> T asc::std::abs(const complex<T>& value) noexcept;
 | --- | --- | --- |
 | `x` | 输入 | 待求绝对值的整数输入（long）。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
@@ -110,7 +120,7 @@ template<class T> T asc::std::abs(const complex<T>& value) noexcept;
 | --- | --- | --- |
 | `x` | 输入 | 待求绝对值的整数输入（long long）。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **函数参数**
 
@@ -118,7 +128,7 @@ template<class T> T asc::std::abs(const complex<T>& value) noexcept;
 | --- | --- | --- |
 | `x` | 输入 | 待求浮点绝对值的输入值（无量纲）。 |
 
-### 原型 5 的参数
+### 原型5的参数
 
 **模板参数**
 
@@ -136,19 +146,19 @@ template<class T> T asc::std::abs(const complex<T>& value) noexcept;
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `int` | 返回参数的绝对值。 |
-| 原型 2 | `long` | 返回参数的绝对值。 |
-| 原型 3 | `long long` | 返回参数的绝对值。 |
-| 原型 4 | `float` | 返回参数的绝对值。 |
-| 原型 5 | `T` | 返回参数的绝对值。 |
+| 原型1 | `int` | 返回参数的绝对值。 |
+| 原型2 | `long` | 返回参数的绝对值。 |
+| 原型3 | `long long` | 返回参数的绝对值。 |
+| 原型4 | `float` | 返回参数的绝对值。 |
+| 原型5 | `T` | 返回参数的绝对值。 |
 
 ## 约束说明
 
-- 提供整数重载及相应结果类型
-- 整数重载（原型 1、原型 2、原型 3）要求参数的绝对值可由返回类型表示，例如 `abs(INT_MIN)` 不满足该要求，行为无定义
-- 提供 float 重载、标准 *f 别名以及 float lerp 回移接口
-- 仅提供页面声明的 float 或 complex<float> 运算
-- 接口可用性取决于相应的 float 数学能力
+- 提供整数重载及相应结果类型。
+- 整数重载（原型1、原型2、原型3）要求参数的绝对值可由返回类型表示，例如`abs(INT_MIN)`不满足该要求，行为无定义。
+- 提供float重载、标准 *f别名以及float lerp回移接口。
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
@@ -162,3 +172,7 @@ decltype(auto) example(float x)
     return asc::std::abs(x);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

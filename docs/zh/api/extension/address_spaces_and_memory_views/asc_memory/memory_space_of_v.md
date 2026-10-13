@@ -28,17 +28,19 @@
 
 头文件路径为：`<asc/memory>`。
 
-`asc::memory_space_of_v<T>` 是 `memory_space_of<T>::value` 的变量模板简写。
+`asc::memory_space_of_v<T>`是`memory_space_of<T>::value`的变量模板简写。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr asc::memory_space asc::memory_space_of_v = asc::memory_space_of<T>::value
+namespace asc {
+template<class T> inline constexpr asc::memory_space memory_space_of_v = asc::memory_space_of<T>::value;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供非拥有的地址空间视图、显式 arena 和临时存储
+- 提供非拥有的地址空间视图、显式arena和临时存储。
 
 ## 调用示例
 
@@ -49,3 +51,7 @@ template<class T> inline constexpr asc::memory_space asc::memory_space_of_v = as
 
 inline constexpr auto example = asc::memory_space_of_v<asc::gm_span<int>>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_memory.md)

@@ -28,45 +28,55 @@
 
 头文件路径为：`<asc/std/variant>`。
 
-`asc::std::variant_size` 取得 variant 的备选项数量。
+`asc::std::variant_size`取得variant的备选项数量。
 
 标准语义参考：[cppreference `variant`](https://en.cppreference.com/w/cpp/header/variant)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class ...Types> struct asc::std::variant_size
+namespace asc::std {
+template<class ...Types> struct variant_size;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> class asc::std::variant_size
+namespace asc::std {
+template<class T> class variant_size;
+} // namespace asc::std
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class T> struct asc::std::variant_size
+namespace asc::std {
+template<class T> struct variant_size;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
+- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
+- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/variant>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::variant_size<asc::std::variant<int, float>>;
-    (void)sizeof(selected);
+    static_assert(asc::std::variant_size<asc::std::variant<int, float>>::value == 2);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_variant.md)

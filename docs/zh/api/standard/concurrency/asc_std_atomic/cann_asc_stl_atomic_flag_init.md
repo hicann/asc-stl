@@ -28,9 +28,9 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`CANN_ASC_STL_ATOMIC_FLAG_INIT` 提供 `atomic_flag` 的静态初始化形式。
+`CANN_ASC_STL_ATOMIC_FLAG_INIT`提供`atomic_flag`的静态初始化形式。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
@@ -42,8 +42,8 @@
 
 ## 约束说明
 
-- C++20兼容附录语义的CANN_ASC_STL_ATOMIC_VAR_INIT与CANN_ASC_STL_ATOMIC_FLAG_INIT
-- Host 和 AI Core SIMT 编程
+- C++20兼容附录语义的CANN_ASC_STL_ATOMIC_VAR_INIT与CANN_ASC_STL_ATOMIC_FLAG_INIT。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
@@ -56,3 +56,7 @@
 #error "CANN_ASC_STL_ATOMIC_FLAG_INIT is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

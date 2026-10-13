@@ -1,4 +1,4 @@
-# asc::std::operator<（string_view 重载）（函数模板）
+# `asc::std::operator<`（string_view）
 
 ## 产品支持情况
 
@@ -26,118 +26,58 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/std/string_view>`、`<asc/std/utility>`。
+头文件路径为：`<asc/std/string_view>`。
 
-按字符序列字典序判断左侧 string_view 是否小于右侧。
-
-标准语义参考：[cppreference `string_view`](https://en.cppreference.com/w/cpp/header/string_view)。
+按照字符特性`T`比较字符序列内容和长度。顺序比较使用字典序。三个形式分别接受两个视图，以及单侧可隐式转换为视图的值；不比较指针地址。
 
 ## 函数原型
 
-### 原型 1
+以下为`asc::std`命名空间中的函数模板声明；执行空间宏已省略。
 
 ```cpp
-template<class CharT, class Traits> constexpr bool asc::std::operator<(basic_string_view<CharT, Traits> left, basic_string_view<CharT, Traits> right) noexcept;
+template<class C, class T>
+constexpr bool operator<(basic_string_view<C, T> left, basic_string_view<C, T> right) noexcept;
+
+template<class C, class T, int = 1>
+constexpr bool operator<(basic_string_view<C, T> left, type_identity_t<basic_string_view<C, T>> right) noexcept;
+
+template<class C, class T, unsigned int = 2>
+constexpr bool operator<(type_identity_t<basic_string_view<C, T>> left, basic_string_view<C, T> right) noexcept;
 ```
-
-此原型对应头文件：`<asc/std/string_view>`。
-
-### 原型 2
-
-```cpp
-template<class C, class T, int = 1> constexpr bool asc::std::operator<(basic_string_view<C, T> left, type_identity_t<basic_string_view<C, T>> right) noexcept;
-```
-
-此原型对应头文件：`<asc/std/string_view>`。异构形式：右操作数可由可转换为 `basic_string_view<C, T>` 的类型（如字符串字面量）隐式构造。
-
-### 原型 3
-
-```cpp
-template<class C, class T, unsigned int = 2> constexpr bool asc::std::operator<(type_identity_t<basic_string_view<C, T>> left, basic_string_view<C, T> right) noexcept;
-```
-
-此原型对应头文件：`<asc/std/string_view>`。异构形式：左操作数可由可隐式转换的源类型构造。
-
-### 原型 4
-
-```cpp
-template<class T1, class T2> constexpr bool asc::std::operator<(const pair<T1, T2>& left, const pair<T1, T2>& right) noexcept(noexcept(left.first < right.first && left.second < right.second));
-```
-
-此原型对应头文件：`<asc/std/utility>`。
 
 ## 参数说明
 
-### 原型 1 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `CharT` | basic_string_view 的字符类型；须满足原型中的类型约束。 |
-| `Traits` | basic_string_view 的字符特性类型；须满足原型中的类型约束。 |
-
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与比较的左侧 string_view。 |
-| `right` | 输入 | 参与比较的右侧 string_view。 |
+| `left` | 输入 | 比较的左操作数，比较不修改它。 |
+| `right` | 输入 | 比较的右操作数，比较不修改它。 |
 
-### 原型 2、3 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `C`、`T` | 字符类型与字符特性类型。 |
-| `未命名约束参数3` | 编译期消歧参数（区分两个异构方向的宏生成重载），调用方无需显式指定。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left`、`right` | 输入 | 参与比较的两个 string_view（其中一侧可为可隐式转换的源类型，如字符串字面量）。 |
-
-### 原型 4 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T1`、`T2` | pair 的两个元素类型；须满足原型中的比较约束。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left`、`right` | 输入 | 参与比较的两个 pair。 |
+`C`是字符类型，`T`是字符特性类型。未命名整数模板参数仅用于区分重载，无需显式传入。
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型 1-4 | `bool` | 按字典序比较成立时为 `true`，否则为 `false`。 |
+返回`bool`，比较关系成立时为`true`，否则为`false`。
 
 ## 约束说明
 
-- 提供构造、迭代和除 at 外的访问接口，以及 remove_prefix、remove_suffix、swap、data、size、starts_with、ends_with 和非抛出的比较/查找接口
-- AI Core SIMD 编程 仅支持 local 或 generic 地址空间的普通字符指针
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
-- pair 操作不抛出异常
-- 关系运算符均为显式提供
+- 视图引用的字符区间在调用期间必须可读且存活；字符串字面量转换按其终止符确定长度。
+- D-SIMD的普通字符指针适用于local或generic地址空间。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/string_view>
 
-decltype(auto) example(asc::std::string_view left, asc::std::string_view right)
+bool example()
 {
-    return (left < right);
+    asc::std::string_view left("2");
+    asc::std::string_view right("3");
+    return (left < right) && (left < "3") && ("2" < right);
 }
 ```
 
-tuple 比较运算符见 [tuple 重载页](../../utilities/asc_std_tuple/tuple_operator_less.md)。
+## 相关比较接口
+
+原混合页面中的其他类型重载现分别收录于：[variant](../../utilities/asc_std_variant/operator_less.md)、[array](../../containers/asc_std_array/operator_less.md)、[optional](../../utilities/asc_std_optional/operator_less.md)、[pair](../../utilities/asc_std_utility/pair_operator_less.md)。

@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::predicate` 在 C++20 及以上模式约束可作谓词使用的可调用体：`Fn` 须可以 `Args...` 正则调用（`regular_invocable`，不修改操作数），且调用结果满足 boolean-testable（可显式转换为 `bool` 并用于条件判断）。
+`asc::std::predicate`在C++20及以上模式约束可作谓词使用的可调用体：`Fn`须可以`Args...`正则调用（`regular_invocable`，不修改操作数），且调用结果满足boolean-testable（结果及其逻辑非结果均可隐式转换为`bool`；仅提供显式`operator bool`的结果类型不满足此要求）。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 
 ## 声明
 
 ```cpp
-template<class Fn, class ...Args> concept asc::std::predicate
+namespace asc::std {
+template<class Fn, class ...Args> concept predicate;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供完整的公开 C++20 concepts 集合
+- 提供完整的公开C++20 concepts集合。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class Fn, class ...Args> concept asc::std::predicate
 
 static_assert(asc::std::predicate<bool (*)(int), int>);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_concepts.md)

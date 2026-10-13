@@ -1,4 +1,4 @@
-# asc::std::layout_stride::mapping::operator==
+# asc::std::layout_stride::mapping::`operator==`
 
 ## 产品支持情况
 
@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::layout_stride::mapping::operator==` 判断两个步长映射是否等价：维数、逐维 extent 与步长均相等。
+`asc::std::layout_stride::mapping::operator==`判断两个步长映射是否等价：维数、逐维extent与步长均相等。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
 ```cpp
-template<class OtherMapping> friend bool asc::std::layout_stride::mapping<Extents>::operator==(const OtherMapping&, const mapping<Extents>&) noexcept
+template<class OtherMapping> friend bool asc::std::layout_stride::mapping<Extents>::operator==(const OtherMapping&, const mapping<Extents>&) noexcept;
 ```
 
 ## 参数说明
@@ -44,7 +44,7 @@ template<class OtherMapping> friend bool asc::std::layout_stride::mapping<Extent
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherMapping` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
+| `OtherMapping` | 用于比较的另一布局映射类型；须提供兼容extents、stride及映射属性查询。 |
 
 **函数参数**
 
@@ -57,11 +57,11 @@ template<class OtherMapping> friend bool asc::std::layout_stride::mapping<Extent
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `按声明确定` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `按声明确定` | 对应的相等／顺序比较表达式成立时为true，否则为false。 |
 
 ## 约束说明
 
-- 两侧须为布局映射；逐维 extent 与步长均相等时为 true
+- 两侧须为布局映射；逐维extent与步长均相等时为true。
 
 ## 调用示例
 
@@ -76,3 +76,7 @@ decltype(auto) example(Object& object, Args&&... args)
     return object.operator==(static_cast<Args&&>(args)...);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mdspan.md)

@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::borrowed_iterator_t` 按名称所指的范围或迭代器属性计算结果类型。
+`asc::std::ranges::borrowed_iterator_t`按名称所指的范围或迭代器属性计算结果类型。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
 ```cpp
-template<class Rp> using asc::std::ranges::borrowed_iterator_t = If<borrowed_range<Rp>, iterator_t<Rp>, dangling>
+namespace asc::std::ranges {
+template<class Rp> using borrowed_iterator_t = If<borrowed_range<Rp>, iterator_t<Rp>, dangling>;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 支持数组和用户范围，不支持仅由花括号构成的 initializer_list 表达式
+- 支持数组和用户范围，不支持仅由花括号构成的initializer_list表达式。
 
 ## 调用示例
 
@@ -54,3 +56,7 @@ void use_type()
     using selected = asc::std::ranges::borrowed_iterator_t<int (&)[4]>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

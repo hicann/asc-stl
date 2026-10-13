@@ -28,18 +28,21 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::pcg64_engine::result_type` 表示 PCG64 引擎生成的 64 位无符号结果类型。
+`asc::pcg64_engine::result_type`表示PCG64引擎生成的64位无符号结果类型。
 
 ## 声明
 
+所属类型：[`asc::pcg64_engine`](pcg64_engine.md)。
+
 ```cpp
-using asc::pcg64_engine::result_type = asc::std::uint64_t
+// asc::pcg64_engine 类内的声明节选；模板形参和其他成员由所属类提供。
+using result_type = asc::std::uint64_t;
 ```
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
@@ -53,3 +56,8 @@ void use_type()
     using alias_type = typename asc::pcg64::result_type;
 }
 ```
+
+## 关联API
+
+- [`asc::pcg64_engine`](pcg64_engine.md)
+- [本头文件的接口列表](asc_random.md)

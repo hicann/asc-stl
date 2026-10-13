@@ -28,46 +28,52 @@
 
 头文件路径为：`<asc/std/expected>`。
 
-`asc::std::expected::or_else` 在保存错误时调用恢复函数，并保留成功值。
+`asc::std::expected::or_else`在保存错误时调用恢复函数，并保留成功值。
 
 标准语义参考：[cppreference `expected`](https://en.cppreference.com/w/cpp/header/expected)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::expected`](expected.md)。
+
+### 原型1
 
 ```cpp
-template<class Fun, class Tp2> constexpr auto asc::std::expected::or_else(Fun&& function)&;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Fun, class Tp2> constexpr auto or_else(Fun&& function)&;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class Fun, class Tp2> constexpr auto asc::std::expected::or_else(Fun&& function)&&;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Fun, class Tp2> constexpr auto or_else(Fun&& function)&&;
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class Fun, class Tp2> constexpr auto asc::std::expected::or_else(Fun&& function) const&;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Fun, class Tp2> constexpr auto or_else(Fun&& function) const&;
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class Fun, class Tp2> constexpr auto asc::std::expected::or_else(Fun&& function) const&&;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Fun, class Tp2> constexpr auto or_else(Fun&& function) const&&;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `Fun` | 对输入值执行本页操作的可调用对象类型。 |
-| `Tp2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `Tp2` | 来源expected的成功值类型；该重载要求相应的成功值构造或传播可行。 |
 
 **函数参数**
 
@@ -75,14 +81,14 @@ template<class Fun, class Tp2> constexpr auto asc::std::expected::or_else(Fun&& 
 | --- | --- | --- |
 | `function` | 输入/输出 | 提供“在保存错误时调用恢复函数，并保留成功值”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `Fun` | 对输入值执行本页操作的可调用对象类型。 |
-| `Tp2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `Tp2` | 来源expected的成功值类型；该重载要求相应的成功值构造或传播可行。 |
 
 **函数参数**
 
@@ -90,14 +96,14 @@ template<class Fun, class Tp2> constexpr auto asc::std::expected::or_else(Fun&& 
 | --- | --- | --- |
 | `function` | 输入/输出 | 提供“在保存错误时调用恢复函数，并保留成功值”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `Fun` | 对输入值执行本页操作的可调用对象类型。 |
-| `Tp2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `Tp2` | 来源expected的成功值类型；该重载要求相应的成功值构造或传播可行。 |
 
 **函数参数**
 
@@ -105,14 +111,14 @@ template<class Fun, class Tp2> constexpr auto asc::std::expected::or_else(Fun&& 
 | --- | --- | --- |
 | `function` | 输入/输出 | 提供“在保存错误时调用恢复函数，并保留成功值”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `Fun` | 对输入值执行本页操作的可调用对象类型。 |
-| `Tp2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `Tp2` | 来源expected的成功值类型；该重载要求相应的成功值构造或传播可行。 |
 
 **函数参数**
 
@@ -124,19 +130,19 @@ template<class Fun, class Tp2> constexpr auto asc::std::expected::or_else(Fun&& 
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `auto` | 返回按当前值或错误状态变换后形成的新状态对象。 |
-| 原型 2 | `auto` | 返回按当前值或错误状态变换后形成的新状态对象。 |
-| 原型 3 | `auto` | 返回按当前值或错误状态变换后形成的新状态对象。 |
-| 原型 4 | `auto` | 返回按当前值或错误状态变换后形成的新状态对象。 |
+| 原型1 | `auto` | 返回按当前值或错误状态变换后形成的新状态对象。 |
+| 原型2 | `auto` | 返回按当前值或错误状态变换后形成的新状态对象。 |
+| 原型3 | `auto` | 返回按当前值或错误状态变换后形成的新状态对象。 |
+| 原型4 | `auto` | 返回按当前值或错误状态变换后形成的新状态对象。 |
 
 ## 约束说明
 
-- 支持所有 cv/ref 限定形式
-- Device 侧可调用对象及结果构造必须不抛出异常
+- 支持所有cv/ref限定形式。
+- Device侧可调用对象及结果构造必须不抛出异常。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
+以下Host片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
 
 ```cpp
 #include <asc/std/expected>
@@ -148,3 +154,8 @@ decltype(auto) example()
     return next;
 }
 ```
+
+## 关联API
+
+- [`asc::std::expected`](expected.md)
+- [本头文件的接口列表](asc_std_expected.md)

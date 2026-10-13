@@ -1,4 +1,4 @@
-# asc::std::move_sentinel::operator=
+# asc::std::move_sentinel::`operator=`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::move_sentinel::operator=` 按所选赋值重载更新对象，并返回规定的结果。
+`asc::std::move_sentinel::operator=`按所选赋值重载更新对象，并返回规定的结果。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
+所属类型：[`asc::std::move_sentinel`](move_sentinel.md)。
+
 ```cpp
-template<class S2> constexpr move_sentinel<Sent>& asc::std::move_sentinel::operator=(const move_sentinel<S2>& other);
+// asc::std::move_sentinel 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class S2> constexpr move_sentinel<Sent>& operator=(const move_sentinel<S2>& other);
 ```
 
 ## 参数说明
@@ -44,13 +47,13 @@ template<class S2> constexpr move_sentinel<Sent>& asc::std::move_sentinel::opera
 
 | 参数名 | 描述 |
 | --- | --- |
-| `S2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `S2` | 来源哨兵的类型；须满足到当前哨兵类型的转换条件。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
 ## 返回值说明
 
@@ -60,12 +63,12 @@ template<class S2> constexpr move_sentinel<Sent>& asc::std::move_sentinel::opera
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
 
 ```cpp
 #include <asc/std/iterator>
@@ -75,3 +78,8 @@ void example(asc::std::move_sentinel<const int*>& destination, const asc::std::m
     destination = source;
 }
 ```
+
+## 关联API
+
+- [`asc::std::move_sentinel`](move_sentinel.md)
+- [本头文件的接口列表](asc_std_iterator.md)

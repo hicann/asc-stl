@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/numeric>`。
 
-`asc::narrow_cast` 显式执行不附加运行期检查的窄化类型转换。
+`asc::narrow_cast`显式执行不附加运行期检查的窄化类型转换。
 
 ## 函数原型
 
 ```cpp
-template<class To, class From> constexpr To asc::narrow_cast(From value);
+namespace asc {
+template<class To, class From> constexpr To narrow_cast(From value);
+} // namespace asc
 ```
 
 ## 参数说明
@@ -59,8 +61,8 @@ template<class To, class From> constexpr To asc::narrow_cast(From value);
 
 ## 约束说明
 
-- T、From 和 To 必须是不超过 64 位的标准非 bool 整数类型
-- 所有溢出检查均不得触发有符号整数溢出的未定义行为
+- T、From和To必须是不超过64位的标准非bool整数类型。
+- 所有溢出检查均不得触发有符号整数溢出的未定义行为。
 
 ## 调用示例
 
@@ -74,3 +76,7 @@ decltype(auto) example()
     return asc::narrow_cast<unsigned char>(3);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_numeric.md)

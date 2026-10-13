@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/atomic>`。
 
-`asc::atomic::compare_exchange_strong` 比较当前值与 expected，相等时写入 desired，否则回写实际值。
+`asc::atomic::compare_exchange_strong`比较当前值与expected，相等时写入desired，否则回写实际值。
 
-该接口的可用位置为 AI Core SIMT 编程。
+该接口的可用位置为AI Core SIMT编程。
 
 ## 函数原型
 
+所属类型：[`asc::atomic`](atomic.md)。
+
 ```cpp
-bool asc::atomic::compare_exchange_strong(T& expected, T desired, asc::std::memory_order success, asc::std::memory_order failure) noexcept;
+// asc::atomic 类内的声明节选；模板形参和其他成员由所属类提供。
+bool compare_exchange_strong(T& expected, T desired, asc::std::memory_order success, asc::std::memory_order failure) noexcept;
 ```
 
 ## 参数说明
@@ -44,39 +47,45 @@ bool asc::atomic::compare_exchange_strong(T& expected, T desired, asc::std::memo
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `expected` | 输入/输出 | 提供预期值或目标值；比较失败时函数把观察到的当前原子值写入 `expected`；strong 形式不允许伪失败，仅在实际比较失败时返回 `false`。 |
+| `expected` | 输入/输出 | 提供预期值或目标值；比较失败时函数把观察到的当前原子值写入`expected`；strong形式不允许伪失败，仅在实际比较失败时返回`false`。 |
 | `desired` | 输入 | 比较相等时写入原子对象的目标值。 |
-| `success` | 输入 | 比较交换成功分支使用的内存序，约束交换写入的可见性顺序。 |
-| `failure` | 输入 | 比较交换失败分支（仅读取）使用的内存序；不得为 release 或 acq_rel。 |
+| `success` | 输入 | 比较成功后采用的读改写内存序。UB对象仅使用`memory_order_relaxed`。 |
+| `failure` | 输入 | 比较失败后采用的读取内存序；不得使用`memory_order_release`或`memory_order_acq_rel`，且不应强于success。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 原子对象的类型、地址空间、作用域和内存序必须匹配
-- Device 作用域的 64 位对象位于 GM，UB 原子操作仅使用 memory_order_relaxed
+- 原子对象的类型、地址空间、作用域和内存序必须匹配。
+- Device作用域的64位对象位于GM，UB原子操作仅使用memory_order_relaxed。
 
 ## 调用示例
 
-以下 AI Core SIMT 片段使用调用方管理的 GM 原子单元；初始化与并发访问须满足本页约束。
+以下SIMT核函数由单个线程初始化并访问一个GM原子单元；无其他并发访问，预期output[0]为1。Host须在核函数完成后读取结果。
 
 ```cpp
 #include <asc/atomic>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
+#include <asc/std/new>
 
-__aicore__ decltype(auto) example(asc::atomic<int>* cell)
+__global__ void example(int* storage, unsigned int* output)
 {
-    // cell 指向调用方已构造的 GM 原子对象。
-    int expected = 1;
-    return cell->compare_exchange_strong(expected, 2, asc::std::memory_order_relaxed, asc::std::memory_order_relaxed);
+    // 仅启动1个block、1个线程；storage和output均为Host分配的GM。
+    auto* object = new (storage) asc::atomic<int>(7);
+    auto& cell = *object;
+    cell.store(7, asc::std::memory_order_relaxed);
+    int expected = 7;
+    const bool exchanged = cell.compare_exchange_strong(expected, 11, asc::std::memory_order_relaxed, asc::std::memory_order_relaxed);
+    output[0] = (exchanged && expected == 7 && cell.load(asc::std::memory_order_relaxed) == 11) ? 1U : 0U;
 }
 ```
+
+完整工程及运行步骤见[《atomic_operations示例》](../../../../examples/atomic_operations/README.md)。
+
+## 关联API
+
+- [`asc::atomic`](atomic.md)
+- [本头文件的接口列表](asc_atomic.md)

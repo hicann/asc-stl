@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`CANN_ASC_STL_ATOMIC_LLONG_LOCK_FREE` 报告对应原子类型是否始终使用无锁实现的能力等级。
+`CANN_ASC_STL_ATOMIC_LLONG_LOCK_FREE`报告对应原子类型是否始终使用无锁实现的能力等级。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
@@ -40,9 +40,9 @@
 
 ## 约束说明
 
-- 11个CANN_ASC_STL_ATOMIC_*_LOCK_FREE产品宏
-- 已交付整数/字符为2，未交付pointer为0
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 11个CANN_ASC_STL_ATOMIC_*_LOCK_FREE产品宏。
+- 已交付整数/字符为2，未交付pointer为0。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
@@ -55,3 +55,7 @@
 #error "CANN_ASC_STL_ATOMIC_LLONG_LOCK_FREE is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

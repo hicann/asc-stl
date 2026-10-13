@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::destroy_at` 调用指定对象的析构函数，结束其生命周期，但不释放调用方提供的存储。
+`asc::std::destroy_at`调用指定对象的析构函数，结束其生命周期，但不释放调用方提供的存储。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
 ```cpp
-template<class T> constexpr void asc::std::destroy_at(T* location);
+namespace asc::std {
+template<class T> constexpr void destroy_at(T* location);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -50,7 +52,7 @@ template<class T> constexpr void asc::std::destroy_at(T* location);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `location` | 输入 | 提供“调用指定对象的析构函数，结束其生命周期，但不释放调用方提供的存储”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `location` | 输入/输出 | 指向生命周期尚未结束的对象；调用结束其生命周期，不释放底层存储。 |
 
 ## 返回值说明
 
@@ -58,8 +60,8 @@ template<class T> constexpr void asc::std::destroy_at(T* location);
 
 ## 约束说明
 
-- 存储由调用方提供并满足对齐要求
-- 当回滚会引发异常时，Device 侧相关操作必须不抛出异常
+- 存储由调用方提供并满足对齐要求。
+- 当回滚会引发异常时，Device侧相关操作必须不抛出异常。
 
 ## 调用示例
 
@@ -76,6 +78,6 @@ void example()
 }
 ```
 
-## 关联 API
+## 关联API
 
 - [asc::std::construct_at](construct_at.md)

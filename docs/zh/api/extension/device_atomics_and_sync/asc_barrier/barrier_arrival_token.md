@@ -28,31 +28,45 @@
 
 头文件路径为：`<asc/barrier>`。
 
-`asc::barrier_arrival_token` 表示一次 barrier 到达操作所属的阶段，供后续 wait 使用。
+`asc::barrier_arrival_token`表示一次barrier到达操作所属的阶段，供后续wait使用。
 
 ## 声明
 
 ```cpp
-class asc::barrier_arrival_token
+namespace asc {
+class barrier_arrival_token;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 使用 C++17
-- 在 AI Core SIMT 编程 中操作调用方管理的 GM 状态
-- Scope 必须为 asc::memory_scope::block 或 asc::memory_scope::device
-- 所有阻塞参与者必须能够并发推进
-- 复制构造和复制赋值已删除
+- 使用C++17。
+- 在AI Core SIMT编程 中操作调用方管理的GM状态。
+- Scope必须为asc::memory_scope::block或asc::memory_scope::device。
+- 所有阻塞参与者必须能够并发推进。
+- 复制构造和复制赋值已删除。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+本片段展示到达令牌只用于其对应屏障阶段。单个参与线程完成该阶段后，Host同步读取output[0]应为1；多个参与者必须共同遵守屏障计数。
 
 ```cpp
 #include <asc/barrier>
+#include <asc/std/new>
 
-__aicore__ void use_type(const asc::barrier_arrival_token& value)
+__global__ void example(void* storage, unsigned int* output)
 {
-    (void)value;
+    // 以单线程启动；Host为barrier提供对齐的GM存储。
+    using Barrier = asc::barrier<asc::memory_scope::device>;
+    auto* barrier = new (storage) Barrier(1);
+    asc::barrier_arrival_token token = barrier->arrive();
+    barrier->wait(static_cast<asc::barrier_arrival_token&&>(token));
+    output[0] = 1;
 }
 ```
+
+完整工程及运行步骤见[《atomic_operations示例》](../../../../examples/atomic_operations/README.md)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_barrier.md)

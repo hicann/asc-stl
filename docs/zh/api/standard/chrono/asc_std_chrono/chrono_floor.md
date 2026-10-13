@@ -28,34 +28,38 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::floor` 把时长或时间点向负无穷方向转换为指定精度。
+`asc::std::chrono::floor`把时长或时间点向负无穷方向转换为指定精度。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class ToDuration, class Clock, class Duration> [[nodiscard]] constexpr time_point<Clock, ToDuration> asc::std::chrono::floor(const time_point<Clock, Duration>& value);
+namespace asc::std::chrono {
+template<class ToDuration, class Clock, class Duration> [[nodiscard]] constexpr time_point<Clock, ToDuration> floor(const time_point<Clock, Duration>& value);
+} // namespace asc::std::chrono
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDuration asc::std::chrono::floor(const duration<Rep, Period>& value);
+namespace asc::std::chrono {
+template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDuration floor(const duration<Rep, Period>& value);
+} // namespace asc::std::chrono
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `ToDuration` | 转换到的目标时长类型。 |
-| `Clock` | 时间点所属的时钟类型，如 system_clock。 |
+| `Clock` | 时间点所属的时钟类型，如system_clock。 |
 | `Duration` | 源时间点的时长类型。 |
 
 **函数参数**
@@ -64,15 +68,15 @@ template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDu
 | --- | --- | --- |
 | `value` | 输入 | 待向下取整转换的时间点。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `ToDuration` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Rep` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Period` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `ToDuration` | 转换结果的duration类型，决定结果计数表示和计时单位。 |
+| `Rep` | 输入时长的计数表示类型。 |
+| `Period` | 输入时长一个计数单位对应的秒数，以ratio表示。 |
 
 **函数参数**
 
@@ -84,13 +88,13 @@ template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDu
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `time_point<Clock, ToDuration>` | 返回按所选精度和舍入规则转换后的时长或时间点。 |
-| 原型 2 | `ToDuration` | 返回按所选精度和舍入规则转换后的时长或时间点。 |
+| 原型1 | `time_point<Clock, ToDuration>` | 返回按所选精度和舍入规则转换后的时长或时间点。 |
+| 原型2 | `ToDuration` | 返回按所选精度和舍入规则转换后的时长或时间点。 |
 
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符
-- 支持用户定义时钟、值运算以及六个显式关系运算符
+- 提供值运算以及六个显式关系运算符。
+- 支持用户定义时钟、值运算以及六个显式关系运算符。
 
 ## 调用示例
 
@@ -105,3 +109,7 @@ decltype(auto) example()
     return asc::std::chrono::floor<asc::std::chrono::seconds>(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

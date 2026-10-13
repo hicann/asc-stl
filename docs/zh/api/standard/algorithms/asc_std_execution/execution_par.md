@@ -28,20 +28,21 @@
 
 头文件路径为：`<asc/std/execution>`。
 
-`asc::std::execution::par` 表示并行策略形式；当前版本对应重载使用顺序执行路径。
+`asc::std::execution::par`表示并行策略形式；当前版本对应重载使用顺序执行路径。
 
 标准语义参考：[cppreference `execution`](https://en.cppreference.com/w/cpp/header/execution)。
 
 ## 声明
 
 ```cpp
-inline constexpr const parallel_policy asc::std::execution::par
+// asc::std::execution 类内的声明节选；模板形参和其他成员由所属类提供。
+inline constexpr const parallel_policy par;
 ```
 
 ## 约束说明
 
-- 提供四种执行策略类型、对象和特征
-- 已提供的算法重载采用符合标准的顺序执行语义
+- 提供四种执行策略类型、对象和特征。
+- 已提供的算法重载采用符合标准的顺序执行语义。
 
 ## 调用示例
 
@@ -52,3 +53,7 @@ inline constexpr const parallel_policy asc::std::execution::par
 
 auto value = asc::std::execution::par;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_execution.md)

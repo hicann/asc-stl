@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/latch>`。
 
-`asc::latch::try_wait` 非阻塞判断 latch 计数是否已经归零。
+`asc::latch::try_wait`非阻塞判断latch计数是否已经归零。
 
 ## 函数原型
 
+所属类型：[`asc::latch`](latch.md)。
+
 ```cpp
-bool asc::latch::try_wait() const noexcept;
+// asc::latch 类内的声明节选；模板形参和其他成员由所属类提供。
+bool try_wait() const noexcept;
 ```
 
 ## 参数说明
@@ -44,19 +47,19 @@ bool asc::latch::try_wait() const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 使用 C++17
-- 在 AI Core SIMT 编程 中操作调用方管理的 GM 状态
-- Scope 必须为 asc::memory_scope::block 或 asc::memory_scope::device
-- 所有阻塞参与者必须能够并发推进
-- 复制构造和复制赋值已删除
+- 使用C++17。
+- 在AI Core SIMT编程 中操作调用方管理的GM状态。
+- Scope必须为asc::memory_scope::block或asc::memory_scope::device。
+- 所有阻塞参与者必须能够并发推进。
+- 复制构造和复制赋值已删除。
 
 ## 调用示例
 
-以下 AI Core SIMT 片段使用调用方管理的 GM 同步对象；参与者数量和前进条件须满足本页约束。
+以下AI Core SIMT片段使用调用方管理的GM同步对象；参与者数量和前进条件须满足本页约束。
 
 ```cpp
 #include <asc/latch>
@@ -67,3 +70,8 @@ __aicore__ decltype(auto) example(asc::latch<asc::memory_scope::block>* gm_latch
     return gm_latch->try_wait();
 }
 ```
+
+## 关联API
+
+- [`asc::latch`](latch.md)
+- [本头文件的接口列表](asc_latch.md)

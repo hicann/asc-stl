@@ -28,9 +28,9 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`FP_ILOGB0` 是 `asc::std::ilogb(0)` 返回的标准失败值。
+`FP_ILOGB0`是`asc::std::ilogb(0)`返回的标准失败值。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
@@ -42,8 +42,8 @@
 
 ## 约束说明
 
-- 包含 `<asc/std/cmath>` 后始终定义
-- 宏值等于 `(-2147483647 - 1)`
+- 包含`<asc/std/cmath>`后始终定义。
+- 宏值等于`(-2147483647 - 1)`。
 
 ## 调用示例
 
@@ -57,3 +57,7 @@
 #endif
 static_assert(FP_ILOGB0 == (-2147483647 - 1));
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cstring>`。
 
-`asc::std::strlen` 计算窄字符串终止零字符之前的长度；AI Core SIMD 编程 仅接受兼容的普通指针地址空间。
+`asc::std::strlen`计算窄字符串终止零字符之前的长度；AI Core SIMD编程 仅接受兼容的普通指针地址空间。
 
 标准语义参考：[cppreference `cstring`](https://en.cppreference.com/w/cpp/header/cstring)。
 
 ## 函数原型
 
 ```cpp
-[[nodiscard]] constexpr size_t asc::std::strlen(const char* value);
+namespace asc::std {
+[[nodiscard]] constexpr size_t strlen(const char* value);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -54,9 +56,9 @@
 
 ## 约束说明
 
-- 在 Host 侧和 AI Core SIMT 编程中使用普通指针
-- AI Core SIMD 编程中使用 local 或 generic 地址空间的普通指针
-- 仅 memmove 允许源和目标重叠
+- 在Host侧和AI Core SIMT编程中使用普通指针。
+- AI Core SIMD编程中使用local或generic地址空间的普通指针。
+- 仅memmove允许源和目标重叠。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example(const char * value)
     return asc::std::strlen(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstring.md)

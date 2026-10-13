@@ -28,20 +28,20 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::views::all_t` 按名称所指的范围或迭代器属性计算结果类型。
+`asc::std::ranges::views::all_t`按名称所指的范围或迭代器属性计算结果类型。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
 ```cpp
-template<class Range> using asc::std::ranges::views::all_t = decltype(::asc::std::ranges::views::all(declval<Range>()))
+// asc::std::ranges::views 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Range> using all_t = decltype(::asc::std::ranges::views::all(declval<Range>()));
 ```
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
@@ -55,3 +55,7 @@ void use_type()
     using selected = asc::std::ranges::views::all_t<int (&)[4]>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

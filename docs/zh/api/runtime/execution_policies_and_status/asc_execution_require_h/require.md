@@ -28,51 +28,63 @@
 
 头文件路径为：`<asc/execution.require.h>`。
 
-`asc::require` 创建执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。
+`asc::require`创建执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-constexpr asc::execution_requirements asc::require(asc::determinism value) noexcept;
+namespace asc {
+constexpr asc::execution_requirements require(asc::determinism value) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr asc::execution_requirements asc::require(asc::execution_requirements base, asc::determinism value) noexcept;
+namespace asc {
+constexpr asc::execution_requirements require(asc::execution_requirements base, asc::determinism value) noexcept;
+} // namespace asc
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-constexpr asc::execution_requirements asc::require(asc::execution_requirements base, asc::output_ordering value) noexcept;
+namespace asc {
+constexpr asc::execution_requirements require(asc::execution_requirements base, asc::output_ordering value) noexcept;
+} // namespace asc
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-constexpr asc::execution_requirements asc::require(asc::execution_requirements base, asc::tie_break value) noexcept;
+namespace asc {
+constexpr asc::execution_requirements require(asc::execution_requirements base, asc::tie_break value) noexcept;
+} // namespace asc
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
-constexpr asc::execution_requirements asc::require(asc::output_ordering value) noexcept;
+namespace asc {
+constexpr asc::execution_requirements require(asc::output_ordering value) noexcept;
+} // namespace asc
 ```
 
-### 原型 6
+### 原型6
 
 ```cpp
-constexpr asc::execution_requirements asc::require(asc::tie_break value) noexcept;
+namespace asc {
+constexpr asc::execution_requirements require(asc::tie_break value) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -80,34 +92,34 @@ constexpr asc::execution_requirements asc::require(asc::tie_break value) noexcep
 | --- | --- | --- |
 | `value` | 输入 | 确定性要求枚举值（asc::determinism：device_to_device、run_to_run、not_guaranteed）：在默认组合基础上设置该维度。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `base` | 输入 | 现有执行要求组合：返回的组合仅替换其中的确定性维度，其余维度保留原值。 |
-| `value` | 输入 | 确定性要求枚举值（asc::determinism）：替换 base 组合中的确定性维度。 |
+| `value` | 输入 | 确定性要求枚举值（asc::determinism）：替换base组合中的确定性维度。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `base` | 输入 | 现有执行要求组合：返回的组合仅替换其中的输出顺序维度，其余维度保留原值。 |
-| `value` | 输入 | 输出顺序要求枚举值（asc::output_ordering）：替换 base 组合中的输出顺序维度。 |
+| `value` | 输入 | 输出顺序要求枚举值（asc::output_ordering）：替换base组合中的输出顺序维度。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `base` | 输入 | 现有执行要求组合：返回的组合仅替换其中的相同键值处理维度，其余维度保留原值。 |
-| `value` | 输入 | 相同键值处理规则枚举值（asc::tie_break）：替换 base 组合中的该维度。 |
+| `value` | 输入 | 相同键值处理规则枚举值（asc::tie_break）：替换base组合中的该维度。 |
 
-### 原型 5 的参数
+### 原型5的参数
 
 **函数参数**
 
@@ -115,7 +127,7 @@ constexpr asc::execution_requirements asc::require(asc::tie_break value) noexcep
 | --- | --- | --- |
 | `value` | 输入 | 输出顺序要求枚举值（asc::output_ordering：sorted、stable_sorted、unsorted）：在默认组合基础上设置该维度。 |
 
-### 原型 6 的参数
+### 原型6的参数
 
 **函数参数**
 
@@ -127,19 +139,19 @@ constexpr asc::execution_requirements asc::require(asc::tie_break value) noexcep
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::execution_requirements` | 返回执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。 |
-| 原型 2 | `asc::execution_requirements` | 返回执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。 |
-| 原型 3 | `asc::execution_requirements` | 返回执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。 |
-| 原型 4 | `asc::execution_requirements` | 返回执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。 |
-| 原型 5 | `asc::execution_requirements` | 返回执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。 |
-| 原型 6 | `asc::execution_requirements` | 返回执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。 |
+| 原型1 | `asc::execution_requirements` | 返回执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。 |
+| 原型2 | `asc::execution_requirements` | 返回执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。 |
+| 原型3 | `asc::execution_requirements` | 返回执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。 |
+| 原型4 | `asc::execution_requirements` | 返回执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。 |
+| 原型5 | `asc::execution_requirements` | 返回执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。 |
+| 原型6 | `asc::execution_requirements` | 返回执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度。 |
 
 ## 约束说明
 
-- sets determinism on default 要求ments
-- 仅替换函数名称所指明的执行要求、Stream 或临时存储绑定，其余策略属性保持不变
-- sets output ordering on default 要求ments
-- sets tie break on default 要求ments
+- sets determinism on default要求ments。
+- 仅替换函数名称所指明的执行要求、Stream或临时存储绑定，其余策略属性保持不变。
+- sets output ordering on default要求ments。
+- sets tie break on default要求ments。
 
 ## 调用示例
 
@@ -153,3 +165,7 @@ decltype(auto) example(asc::determinism value)
     return asc::require(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_execution_require_h.md)

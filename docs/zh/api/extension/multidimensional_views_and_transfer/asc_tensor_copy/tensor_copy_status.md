@@ -28,29 +28,36 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::tensor_copy_status` 定义 Tensor Copy 校验和执行状态。
+`asc::tensor_copy_status`定义Tensor Copy校验和执行状态。
 
 ## 声明
 
 ```cpp
-enum class asc::tensor_copy_status : int
+namespace asc {
+enum class tensor_copy_status : int;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 描述符及状态类型可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Rank 为 1 至 5
-- 维度和步长采用 uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运
+- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Rank为1至5。
+- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/tensor_copy>
 
-void use_type(asc::tensor_copy_status value)
+bool example()
 {
-    (void)value;
+    const asc::tensor_copy_status status = asc::tensor_copy_status::insufficient_destination;
+    return status != asc::tensor_copy_status::success;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_tensor_copy.md)

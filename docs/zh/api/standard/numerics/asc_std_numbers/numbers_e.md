@@ -28,23 +28,25 @@
 
 头文件路径为：`<asc/std/numbers>`。
 
-`asc::std::numbers::e` 提供自然对数的底的编译期值。
+`asc::std::numbers::e`提供自然对数的底的编译期值。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `numbers`](https://en.cppreference.com/w/cpp/header/numbers)。
 
 ## 声明
 
 ```cpp
-inline constexpr const double asc::std::numbers::e
+namespace asc::std::numbers {
+inline constexpr const double e;
+} // namespace asc::std::numbers
 ```
 
 ## 约束说明
 
-- 13个标准double命名常量
-- Host 和 AI Core SIMT 编程完整值
-- 普通AICore仅constant-fold后无runtime double的用法
+- 13个标准double命名常量。
+- 可用于Host与D-SIMT；参与操作的对象及其存储须在对应执行位置有效。
+- 普通AICore仅constant-fold后无runtime double的用法。
 
 ## 调用示例
 
@@ -55,3 +57,7 @@ inline constexpr const double asc::std::numbers::e
 
 auto value = asc::std::numbers::e;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_numbers.md)

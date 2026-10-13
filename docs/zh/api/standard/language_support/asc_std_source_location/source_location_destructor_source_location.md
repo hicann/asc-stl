@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/source_location>`。
 
-`asc::std::source_location::~source_location` 销毁 `source_location` 对象并结束其生命周期。
+`asc::std::source_location::~source_location`销毁`source_location`对象并结束其生命周期。
 
 标准语义参考：[cppreference `source_location`](https://en.cppreference.com/w/cpp/header/source_location)。
 
@@ -42,14 +42,18 @@ constexpr ~source_location() noexcept;
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 提供标准 source_location 接口
-- 当编译器不能直接提供列号时，column() 使用标准允许的回退值
+- 提供标准source_location接口。
+- 当编译器不能直接提供列号时，column()使用标准允许的回退值。
 
 ## 调用示例
 
-以下片段假定 object 指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
+以下片段假定object指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
 
 ```cpp
 #include <asc/std/source_location>
@@ -61,3 +65,7 @@ void example(example_object* object)
     object->~example_object();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_source_location.md)

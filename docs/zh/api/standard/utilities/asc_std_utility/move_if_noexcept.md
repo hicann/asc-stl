@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::move_if_noexcept` 在移动构造不抛异常或复制不可用时返回右值引用，否则返回常量左值引用，让调用方按异常保证选择移动或复制路径。返回引用只在原对象存活期间有效。
+`asc::std::move_if_noexcept`在移动构造不抛异常或复制不可用时返回右值引用，否则返回常量左值引用，让调用方按异常保证选择移动或复制路径。返回引用只在原对象存活期间有效。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 函数原型
 
 ```cpp
-template<class T> constexpr asc::std::conditional_t<asc::std::is_nothrow_move_constructible_v<T> || !asc::std::is_copy_constructible_v<T>, T&&, const T&> asc::std::move_if_noexcept(T& value) noexcept;
+namespace asc::std {
+template<class T> constexpr asc::std::conditional_t<asc::std::is_nothrow_move_constructible_v<T> || !asc::std::is_copy_constructible_v<T>, T&&, const T&> move_if_noexcept(T& value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,35 +46,43 @@ template<class T> constexpr asc::std::conditional_t<asc::std::is_nothrow_move_co
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 对象类型；须可复制构造或可按 noexcept 移动构造。 |
+| `T` | 对象类型；须可复制构造或可按noexcept移动构造。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待按条件移动的对象；当 T 可 noexcept 移动或不可复制时返回其右值引用（随之移动则移动后处于有效但未指定状态），否则返回 const 左值引用以走复制路径。 |
+| `value` | 输入/输出 | 待按条件移动的对象；当T可noexcept移动或不可复制时返回其右值引用（随之移动则移动后处于有效但未指定状态），否则返回const左值引用以走复制路径。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::std::conditional_t<asc::std::is_nothrow_move_constructible_v<T> || !asc::std::is_copy_constructible_v<T>, T&&, const T&>` | 返回右值引用，否则返回常量左值引用，让调用方按异常保证选择移动或复制路径。 |
+| `asc::std::conditional_t<asc::std::is_nothrow_move_constructible_v<T> \|\| !asc::std::is_copy_constructible_v<T>, T&&, const T&>` | 返回右值引用，否则返回常量左值引用，让调用方按异常保证选择移动或复制路径。 |
 
 ## 约束说明
 
-- T 必须满足所选移动或复制构造路径的要求
-- 返回引用不延长原对象生命周期
+- T必须满足所选移动或复制构造路径的要求。
+- 返回引用不延长原对象生命周期。
 
 ## 调用示例
 
-以下片段用具体数值展示本页调用。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/utility>
+#include <asc/std/type_traits>
 
-decltype(auto) example()
+bool example()
 {
     int value = 3;
-    return asc::std::move_if_noexcept(value);
+    auto&& reference = asc::std::move_if_noexcept(value);
+    static_assert(asc::std::is_same_v<decltype(reference), int&&>);
+    // 在value仍存活时检查引用；函数只返回布尔值。
+    return &reference == &value && reference == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

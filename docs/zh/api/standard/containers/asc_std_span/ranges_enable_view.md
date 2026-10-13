@@ -28,34 +28,24 @@
 
 头文件路径为：`<asc/std/span>`。
 
-`asc::std::ranges::enable_view<span<T,Extent>>` 由 `<asc/std/span>` 提供，标准 C++20：span 为视图
+`asc::std::ranges::enable_view<span<T,Extent>>`由`<asc/std/span>`提供，标准C++20：span为视图
 
 标准语义参考：[cppreference `span`](https://en.cppreference.com/w/cpp/header/span)。
 
-## 函数原型
+## 声明
 
 ```cpp
-template<class T, size_t Extent> constexpr bool enable_view<span<T,Extent>> = true;
+namespace asc::std::ranges {
+template<class T, size_t Extent>
+inline constexpr bool enable_view<asc::std::span<T, Extent>> = true;
+} // namespace asc::std::ranges
 ```
 
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
-| `Extent` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `按声明确定` | 返回该操作产生的值，具体含义由所选原型确定。 |
+这是变量模板特化，值为`true`，表示该类型满足相应视图／借用区间登记。
 
 ## 约束说明
 
-- 标准 C++20：span 为视图
+- 标准C++20：span为视图。
 
 ## 调用示例
 
@@ -66,3 +56,7 @@ template<class T, size_t Extent> constexpr bool enable_view<span<T,Extent>> = tr
 
 static_assert(asc::std::ranges::enable_view<asc::std::span<int>>);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_span.md)

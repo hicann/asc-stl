@@ -28,40 +28,42 @@
 
 头文件路径为：`<asc/work_queue>`。
 
-`asc::work_queue_ref<Index>` 非拥有地引用调用方管理的 GM 原子游标，并按值保存任务结束位置和每次领取的粒度。
+`asc::work_queue_ref<Index>`非拥有地引用调用方管理的GM原子游标，并按值保存任务结束位置和每次领取的粒度。
 
-该接口的可用位置为 AI Core SIMD 编程、AI Core SIMT 编程。
+该接口的可用位置为AI Core SIMD编程、AI Core SIMT编程。
 
 ## 声明
 
 ```cpp
-template<class Index> class asc::work_queue_ref
+namespace asc {
+template<class Index> class work_queue_ref;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- Index 必须为受支持的 32 位或 64 位无符号整数
-- 游标须位于可用的 GM 并在所有并发领取完成前保持有效
-- 非正粒度会按 1 保存
-- 接口不保证领取顺序或公平性
+- Index必须为受支持的32位或64位无符号整数。
+- 游标须位于可用的GM并在所有并发领取完成前保持有效。
+- 非正粒度会按1保存。
+- 接口不保证领取顺序或公平性。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+默认构造得到空队列引用；从空引用领取返回false并清空输出区间。实际并发领取须先绑定有效的GM游标。
 
 ```cpp
 #include <asc/work_queue>
-#include <asc/std/array>
-#include <asc/std/cstddef>
 #include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
 
-__aicore__ void example()
+bool example()
 {
-    // 默认构造只建立空的引用值，实际领取前须绑定有效的 GM 游标。
-    asc::work_queue_ref<asc::std::uint32_t> queue{};
-    (void)queue.grain_size();
+    asc::work_queue_ref<asc::std::uint32_t> queue;
+    asc::work_chunk<asc::std::uint32_t> chunk(2U, 5U);
+    const bool acquired = asc::acquire_work(queue, chunk);
+    return queue.cursor() == nullptr && queue.grain_size() == 1 && !acquired && chunk.empty();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_work_queue.md)

@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/bit>`。
 
-`asc::bitfield_extract` 从无符号整数的 `start` 位开始提取连续 `width` 位，并将结果右对齐返回。
+`asc::bitfield_extract`从无符号整数的`start`位开始提取连续`width`位，并将结果右对齐返回。
 
 ## 函数原型
 
 ```cpp
-template<class T> constexpr T asc::bitfield_extract(T value, int start, int width) noexcept;
+namespace asc {
+template<class T> constexpr T bitfield_extract(T value, int start, int width) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,14 +44,14 @@ template<class T> constexpr T asc::bitfield_extract(T value, int start, int widt
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 无符号整数类型；须为 uint32_t 或 uint64_t。 |
+| `T` | 无符号整数类型；须为uint32_t或uint64_t。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 待提取位域的无符号整数值。 |
-| `start` | 输入 | 位域在 `value` 中的起始位编号（最低位为第 0 位）；不得为负。 |
+| `start` | 输入 | 位域在`value`中的起始位编号（最低位为第0位）；不得为负。 |
 | `width` | 输入 | 待提取的连续位数；不得为负。 |
 
 ## 返回值说明
@@ -60,8 +62,8 @@ template<class T> constexpr T asc::bitfield_extract(T value, int start, int widt
 
 ## 约束说明
 
-- T 必须为 uint32_t 或 uint64_t
-- start 和 width 不得为负且不得超出类型位宽，零位宽和全位宽操作不得产生未定义移位
+- T必须为uint32_t或uint64_t。
+- start和width不得为负且不得超出类型位宽，零位宽和全位宽操作不得产生未定义移位。
 
 ## 调用示例
 
@@ -75,3 +77,7 @@ decltype(auto) example()
     return asc::bitfield_extract(0x3fu, 1, 3);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_bit.md)

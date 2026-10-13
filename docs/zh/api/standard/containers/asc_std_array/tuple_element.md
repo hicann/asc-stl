@@ -28,86 +28,106 @@
 
 头文件路径为：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
 
-`asc::std::tuple_element<Index, T>` 取得受支持类 tuple 对象中指定索引处的元素类型；索引必须小于元素数量。
+`asc::std::tuple_element<Index, T>`取得受支持类tuple对象中指定索引处的元素类型；索引必须小于元素数量。
 
 标准语义参考：[cppreference `array`](https://en.cppreference.com/w/cpp/header/array)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T, class U> struct asc::std::tuple_element
+namespace asc::std {
+template<class T, class U> struct tuple_element;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<size_t Index, class ...Types> struct asc::std::tuple_element
+namespace asc::std {
+template<size_t Index, class ...Types> struct tuple_element;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`。
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<size_t Index, class T, T ...Indices> struct asc::std::tuple_element
+namespace asc::std {
+template<size_t Index, class T, T ...Indices> struct tuple_element;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<size_t Index, class T, class U> struct asc::std::tuple_element
+namespace asc::std {
+template<size_t Index, class T, class U> struct tuple_element;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`。
 
-### 原型 5
+### 原型5
 
 ```cpp
-template<size_t Index, class T, size_t N> struct asc::std::tuple_element
+namespace asc::std {
+template<size_t Index, class T, size_t N> struct tuple_element;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`。
 
-### 原型 6
+### 原型6
 
 ```cpp
-template<size_t Index, class T> class asc::std::tuple_element
+namespace asc::std {
+template<size_t Index, class T> class tuple_element;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
 
-### 原型 7
+### 原型7
 
 ```cpp
-template<size_t Index, class T> struct asc::std::tuple_element
+namespace asc::std {
+template<size_t Index, class T> struct tuple_element;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
 
 ## 约束说明
 
-- 支持包括零在内的所有 N
-- 成员函数和自由函数均不抛出异常
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
-- pair 操作不抛出异常
-- 关系运算符均为显式提供
+- 支持包括零在内的所有N。
+- 成员函数和自由函数均不抛出异常。
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
+- 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/array>
+#include <asc/std/type_traits>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::tuple_element<0, asc::std::array<int, 2>>;
-    (void)sizeof(selected);
+    using Array = asc::std::array<int, 3>;
+    static_assert(asc::std::is_same_v<asc::std::tuple_element<1, Array>::type, int>);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_array.md)

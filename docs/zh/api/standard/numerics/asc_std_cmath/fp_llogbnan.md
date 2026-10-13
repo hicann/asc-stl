@@ -28,22 +28,26 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`FP_LLOGBNAN` 是 `asc::std::llogb` 接收 NaN 时返回的标准失败值。
+`FP_LLOGBNAN`是`asc::std::llogb`接收NaN时返回的标准失败值。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 声明
 
+宏的具体整数值由数学实现定义。使用宏名判断对应的NaN指数结果，不依赖固定数值。
+
 ```cpp
-#define FP_LLOGBNAN 9223372036854775807LL
+#include <asc/std/cmath>
+
+constexpr auto nan_exponent = FP_LLOGBNAN;
 ```
 
 ## 约束说明
 
-- 包含 `<asc/std/cmath>` 后始终定义
-- 宏值等于 `9223372036854775807LL`
+- 包含`<asc/std/cmath>`后始终定义。
+- 宏值为LONG_MIN或LONG_MAX，由当前数学实现决定。
 
 ## 调用示例
 
@@ -51,9 +55,14 @@
 
 ```cpp
 #include <asc/std/cmath>
+#include <asc/std/climits>
 
 #ifndef FP_LLOGBNAN
 #error "FP_LLOGBNAN is required by this public Header"
 #endif
-static_assert(FP_LLOGBNAN == 9223372036854775807LL);
+static_assert(FP_LLOGBNAN == LONG_MIN || FP_LLOGBNAN == LONG_MAX);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

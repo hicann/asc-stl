@@ -1,4 +1,4 @@
-# asc::std::inplace_vector::operator=
+# asc::std::inplace_vector::`operator=`
 
 ## 产品支持情况
 
@@ -28,60 +28,64 @@
 
 头文件路径为：`<asc/std/inplace_vector>`。
 
-`asc::std::inplace_vector::operator=` 按所选赋值重载更新对象，并返回规定的结果。
+`asc::std::inplace_vector::operator=`按所选赋值重载更新对象，并返回规定的结果。
 
-该接口的可用位置为 Host（完整接口）、Device（非抛出子集）。
+该接口的可用位置为Host（完整接口）、Device（非抛出子集）。
 
 标准语义参考：[cppreference `inplace_vector`](https://en.cppreference.com/w/cpp/header/inplace_vector)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::inplace_vector`](inplace_vector.md)。
+
+### 原型1
 
 ```cpp
-inplace_vector<T, Capacity>& asc::std::inplace_vector::operator=(const inplace_vector<T, Capacity>& other);
+// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
+inplace_vector<T, Capacity>& operator=(const inplace_vector<T, Capacity>& other);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-inplace_vector<T, Capacity>& asc::std::inplace_vector::operator=(inplace_vector<T, Capacity>&& other);
+// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
+inplace_vector<T, Capacity>& operator=(inplace_vector<T, Capacity>&& other);
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `inplace_vector<T, Capacity> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 2 | `inplace_vector<T, Capacity> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型1 | `inplace_vector<T, Capacity> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型2 | `inplace_vector<T, Capacity> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 
 ## 约束说明
 
-- 最终C++26标准inplace_vector/erase/erase_if合同：Host交付除P4022R0已删除try_append_range外的完整构造、赋值、迭代、访问、修改、try/unchecked、比较、swap、容量、零容量empty/trivial与constexpr/约束合同
-- Device交付固定容量内联存储的非抛子合同，包括观察/迭代/operator[]/front/back、不抛出异常拷移赋值析构、try/unchecked后插、pop_back/clear、不抛出异常 erase/erase_if/swap、相等与不抛出异常三路比较、完整零容量核心
-- Host 提供完整接口，设备端仅提供不抛出异常的接口
+- 元素保存在固定容量的对象内存中，不进行动态分配。
+- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
+- Host提供完整接口，设备端仅提供不抛出异常的接口。
 
 ## 调用示例
 
-以下 Host 片段以具体容量或维度演示调用；对象和索引须满足本页约束。
+以下Host片段以具体容量或维度演示调用；对象和索引须满足本页约束。
 
 ```cpp
 #include <asc/std/inplace_vector>
@@ -91,3 +95,8 @@ void example(asc::std::inplace_vector<int, 8>& target, const asc::std::inplace_v
     target = source;
 }
 ```
+
+## 关联API
+
+- [`asc::std::inplace_vector`](inplace_vector.md)
+- [本头文件的接口列表](asc_std_inplace_vector.md)

@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_flag_test_and_set_explicit` 按指定内存序置位原子标志并返回原有状态。
+`asc::std::atomic_flag_test_and_set_explicit`按指定内存序置位原子标志并返回原有状态。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 函数原型
 
 ```cpp
-bool asc::std::atomic_flag_test_and_set_explicit(atomic_flag* object, memory_order order) noexcept;
+namespace asc::std {
+bool atomic_flag_test_and_set_explicit(atomic_flag* object, memory_order order) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -47,18 +49,18 @@ bool asc::std::atomic_flag_test_and_set_explicit(atomic_flag* object, memory_ord
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `object` | 输入 | 指向被置位或清除的原子标志对象的指针。 |
-| `order` | 输入 | 置位并读取原值所用内存序，决定本次操作的可见性顺序；可取 memory_order 各枚举值。 |
+| `order` | 输入 | 置位并读取原值所用内存序，决定本次操作的可见性顺序；可取memory_order各枚举值。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- atomic_flag的test/test_and_set/clear成员与非volatile自由函数
-- Host 和 AI Core SIMT 编程 GM
+- atomic_flag的test/test_and_set/clear成员与非volatile自由函数。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
@@ -72,3 +74,7 @@ decltype(auto) example(asc::std::atomic_flag * object, asc::std::memory_order or
     return asc::std::atomic_flag_test_and_set_explicit(object, order);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

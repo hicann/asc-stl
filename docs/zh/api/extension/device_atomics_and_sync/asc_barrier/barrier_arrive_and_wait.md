@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/barrier>`。
 
-`asc::barrier::arrive_and_wait` 到达当前阶段并等待该阶段完成。
+`asc::barrier::arrive_and_wait`到达当前阶段并等待该阶段完成。
 
 ## 函数原型
 
+所属类型：[`asc::barrier`](barrier.md)。
+
 ```cpp
-void asc::barrier::arrive_and_wait() noexcept;
+// asc::barrier 类内的声明节选；模板形参和其他成员由所属类提供。
+void arrive_and_wait() noexcept;
 ```
 
 ## 参数说明
@@ -46,15 +49,15 @@ void asc::barrier::arrive_and_wait() noexcept;
 
 ## 约束说明
 
-- 使用 C++17
-- 在 AI Core SIMT 编程 中操作调用方管理的 GM 状态
-- Scope 必须为 asc::memory_scope::block 或 asc::memory_scope::device
-- 所有阻塞参与者必须能够并发推进
-- 复制构造和复制赋值已删除
+- 使用C++17。
+- 在AI Core SIMT编程 中操作调用方管理的GM状态。
+- Scope必须为asc::memory_scope::block或asc::memory_scope::device。
+- 所有阻塞参与者必须能够并发推进。
+- 复制构造和复制赋值已删除。
 
 ## 调用示例
 
-以下 AI Core SIMT 片段使用调用方管理的 GM 同步对象；参与者数量和前进条件须满足本页约束。
+以下AI Core SIMT片段使用调用方管理的GM同步对象；参与者数量和前进条件须满足本页约束。
 
 ```cpp
 #include <asc/barrier>
@@ -65,3 +68,8 @@ __aicore__ void example(asc::barrier<asc::memory_scope::block>* gm_barrier)
     gm_barrier->arrive_and_wait();
 }
 ```
+
+## 关联API
+
+- [`asc::barrier`](barrier.md)
+- [本头文件的接口列表](asc_barrier.md)

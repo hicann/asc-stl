@@ -28,30 +28,38 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::uniform_int_distribution::param_type` 保存随机数分布的配置参数。
+`asc::std::uniform_int_distribution::param_type`保存随机数分布的配置参数。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 声明
 
+所属类型：[`asc::std::uniform_int_distribution`](uniform_int_distribution.md)。
+
 ```cpp
-class asc::std::uniform_int_distribution::param_type
+// asc::std::uniform_int_distribution 类内的声明节选；模板形参和其他成员由所属类提供。
+class param_type;
 ```
 
 ## 约束说明
 
-- 支持全部标准整数结果类型
+- 支持全部标准整数结果类型。
 
 ## 调用示例
 
-以下片段通过具体容器或分布类型实例化嵌套类。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/random>
 
-void use_type()
+bool example()
 {
-    using selected = typename asc::std::uniform_int_distribution<int>::param_type;
-    (void)sizeof(selected);
+    asc::std::uniform_int_distribution<int>::param_type parameters(2, 4);
+    return parameters.a() == 2 && parameters.b() == 4;
 }
 ```
+
+## 关联API
+
+- [`asc::std::uniform_int_distribution`](uniform_int_distribution.md)
+- [本头文件的接口列表](asc_std_random.md)

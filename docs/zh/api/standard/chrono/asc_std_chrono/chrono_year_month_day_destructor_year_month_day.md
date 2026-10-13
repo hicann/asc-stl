@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::year_month_day::~year_month_day` 销毁 `year_month_day` 对象并结束其生命周期。
+`asc::std::chrono::year_month_day::~year_month_day`销毁`year_month_day`对象并结束其生命周期。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -42,14 +42,17 @@ constexpr ~year_month_day() noexcept;
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
-以下片段假定 object 指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
+以下片段假定object指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
 
 ```cpp
 #include <asc/std/chrono>
@@ -61,3 +64,7 @@ void example(example_object* object)
     object->~example_object();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

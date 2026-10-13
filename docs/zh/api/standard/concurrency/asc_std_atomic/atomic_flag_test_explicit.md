@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_flag_test_explicit` 按指定内存序读取原子标志。
+`asc::std::atomic_flag_test_explicit`按指定内存序读取原子标志。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 函数原型
 
 ```cpp
-bool asc::std::atomic_flag_test_explicit(const atomic_flag* object, memory_order order) noexcept;
+namespace asc::std {
+bool atomic_flag_test_explicit(const atomic_flag* object, memory_order order) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -47,18 +49,18 @@ bool asc::std::atomic_flag_test_explicit(const atomic_flag* object, memory_order
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `object` | 输入 | 指向被读取的原子标志对象的指针。 |
-| `order` | 输入 | 读取标志所用内存序，决定本次读取的可见性顺序；仅可取 relaxed、consume、acquire 或 seq_cst。 |
+| `order` | 输入 | 读取标志所用内存序，决定本次读取的可见性顺序；仅可取relaxed、consume、acquire或seq_cst。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- atomic_flag的test/test_and_set/clear成员与非volatile自由函数
-- Host 和 AI Core SIMT 编程 GM
+- atomic_flag的test/test_and_set/clear成员与非volatile自由函数。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
@@ -72,3 +74,7 @@ decltype(auto) example(const asc::std::atomic_flag * object, asc::std::memory_or
     return asc::std::atomic_flag_test_explicit(object, order);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

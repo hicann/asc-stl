@@ -28,32 +28,42 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::range_adaptor_closure` 标记临时范围的不可借用结果或提供视图适配辅助能力。
+`asc::std::ranges::range_adaptor_closure`标记临时范围的不可借用结果或提供视图适配辅助能力。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
 ```cpp
-template<class T, enable_if_t<is_class_v<T>, int>, enable_if_t<same_as<T, remove_cv_t<T>>, int>> class asc::std::ranges::range_adaptor_closure
+namespace asc::std::ranges {
+template<class T, enable_if_t<is_class_v<T>, int>, enable_if_t<same_as<T, remove_cv_t<T>>, int>> class range_adaptor_closure;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 七个列出名称
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 七个列出名称。
+- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::ranges::range_adaptor_closure<asc::std::ranges::single_view<int>>;
-    (void)sizeof(selected);
+    int values[] = {1, 2, 3, 4};
+    auto view = values | asc::std::ranges::views::drop(1) | asc::std::ranges::views::take(2);
+    return *view.begin() == 2 && view.size() == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

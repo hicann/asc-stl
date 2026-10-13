@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/bitset>`。
 
-`asc::std::bitset::to_ulong` 把位集合转换为 unsigned long，超出可表示范围时失败。
+`asc::std::bitset::to_ulong`把位集合转换为unsigned long，超出可表示范围时失败。
 
 标准语义参考：[cppreference `bitset`](https://en.cppreference.com/w/cpp/header/bitset)。
 
 ## 函数原型
 
+所属类型：[`asc::std::bitset`](bitset.md)。
+
 ```cpp
-unsigned long asc::std::bitset::to_ulong() const requires (Size <= numeric_limits<unsigned long>::digits);
+// asc::std::bitset 类内的声明节选；模板形参和其他成员由所属类提供。
+unsigned long to_ulong() const requires (Size <= numeric_limits<unsigned long>::digits);
 ```
 
 ## 参数说明
@@ -50,17 +53,23 @@ unsigned long asc::std::bitset::to_ulong() const requires (Size <= numeric_limit
 
 ## 约束说明
 
-- _Size 的值必须能由声明中的无符号整数类型表示
+- _Size的值必须能由声明中的无符号整数类型表示。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/bitset>
 
-void example(asc::std::bitset<8>& object)
+bool example()
 {
-    (void)object.to_ulong();
+    asc::std::bitset<8> bits(5);
+    return bits.to_ulong() == 5;
 }
 ```
+
+## 关联API
+
+- [`asc::std::bitset`](bitset.md)
+- [本头文件的接口列表](asc_std_bitset.md)

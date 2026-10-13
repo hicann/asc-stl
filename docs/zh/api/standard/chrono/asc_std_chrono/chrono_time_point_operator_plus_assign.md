@@ -1,4 +1,4 @@
-# asc::std::chrono::time_point::operator+=
+# asc::std::chrono::time_point::`operator+=`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::time_point::operator+=` 按给定距离或操作数更新当前值。
+`asc::std::chrono::time_point::operator+=`按给定距离或操作数更新当前值。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
+所属类型：[`asc::std::chrono::time_point`](chrono_time_point.md)。
+
 ```cpp
-constexpr time_point<Clock, Duration>& asc::std::chrono::time_point::operator+=(const duration& value);
+// asc::std::chrono::time_point 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr time_point<Clock, Duration>& operator+=(const duration& value);
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ constexpr time_point<Clock, Duration>& asc::std::chrono::time_point::operator+=(
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 累加到当前时间点的时长；计时单位由其 period 决定，结果仍以同一 Clock 为基准。 |
+| `value` | 输入 | 累加到当前时间点的时长；计时单位由其period决定，结果仍以同一Clock为基准。 |
 
 ## 返回值说明
 
@@ -54,11 +57,11 @@ constexpr time_point<Clock, Duration>& asc::std::chrono::time_point::operator+=(
 
 ## 约束说明
 
-- 支持用户定义时钟、值运算以及六个显式关系运算符
+- 支持用户定义时钟、值运算以及六个显式关系运算符。
 
 ## 调用示例
 
-以下 Host 片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host片段以具体日期或时间类型演示调用；数值须满足本页约束。
 
 ```cpp
 #include <asc/std/chrono>
@@ -68,3 +71,8 @@ void example(asc::std::chrono::time_point<asc::std::chrono::system_clock>& value
     value += asc::std::chrono::system_clock::duration{1};
 }
 ```
+
+## 关联API
+
+- [`asc::std::chrono::time_point`](chrono_time_point.md)
+- [本头文件的接口列表](asc_std_chrono.md)

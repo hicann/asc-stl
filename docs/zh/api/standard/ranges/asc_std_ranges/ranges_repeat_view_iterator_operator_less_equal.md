@@ -1,4 +1,4 @@
-# asc::std::ranges::repeat_view::iterator::operator<=
+# asc::std::ranges::repeat_view::iterator::`operator<=`
 
 ## 产品支持情况
 
@@ -35,7 +35,8 @@
 ## 函数原型
 
 ```cpp
-constexpr auto asc::std::ranges::repeat_view::iterator::operator<=
+// asc::std::ranges::repeat_view::iterator 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr auto operator<=;
 ```
 
 ## 参数说明
@@ -46,11 +47,11 @@ constexpr auto asc::std::ranges::repeat_view::iterator::operator<=
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `auto` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `bool` | 对应的相等／顺序比较表达式成立时为true，否则为false。 |
 
 ## 约束说明
 
-- 迭代器处于有效区间；双向与比较运算要求底层值支持相应运算
+- 迭代器处于有效区间；双向与比较运算要求底层值支持相应运算。
 
 ## 调用示例
 
@@ -65,3 +66,7 @@ decltype(auto) example(Object& object, Args&&... args)
     return object.operator<=(static_cast<Args&&>(args)...);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

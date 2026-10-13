@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/numbers>`。
 
-`asc::std::sqrt3_v` 提供3 的平方根的编译期值。
+`asc::std::sqrt3_v`提供3的平方根的编译期值。
 
 标准语义参考：[cppreference `numbers`](https://en.cppreference.com/w/cpp/header/numbers)。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr const T asc::std::sqrt3_v
+namespace asc::std {
+template<class T> inline constexpr const T sqrt3_v;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 float 变量模板
+- 提供float变量模板。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class T> inline constexpr const T asc::std::sqrt3_v
 
 inline constexpr auto example = asc::std::sqrt3_v<float>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_numbers.md)

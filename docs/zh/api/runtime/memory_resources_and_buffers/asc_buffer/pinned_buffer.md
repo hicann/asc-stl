@@ -28,30 +28,36 @@
 
 头文件路径为：`<asc/buffer>`。
 
-`asc::pinned_buffer<T>` 是 Host 侧使用的页锁定内存拥有者，用于管理一段连续的、元素类型为 `T` 的 Host 可访问存储。类型只支持可平凡复制的元素，不可复制但可以移动。
+`asc::pinned_buffer<T>`是Host侧使用的页锁定内存拥有者，用于管理一段连续的、元素类型为`T`的Host可访问存储。类型只支持可平凡复制的元素，不可复制但可以移动。
 
 ## 声明
 
 ```cpp
-template<class T> class asc::pinned_buffer
+namespace asc {
+template<class T> class pinned_buffer;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- T 必须为可平凡复制类型
-- 对象不可复制但可移动
-- 创建时使用的 Stream 和内存资源必须在对象关闭前保持有效
+- T必须为可平凡复制类型。
+- 对象不可复制但可移动。
+- 创建时使用的Stream和内存资源必须在对象关闭前保持有效。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/buffer>
 
-void use_type()
+bool example()
 {
-    using selected = asc::pinned_buffer<int>;
-    (void)sizeof(selected);
+    asc::pinned_buffer<int> buffer;
+    return buffer.empty() && buffer.size() == 0 && buffer.data() == nullptr;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_buffer.md)

@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/warp>`。
 
-`asc::lane_mask::lane_mask` 使用调用方提供的参数初始化 `asc::lane_mask` 对象。
+`asc::lane_mask::lane_mask`使用调用方提供的参数初始化`asc::lane_mask`对象。
 
 ## 函数原型
 
+所属类型：[`asc::lane_mask`](lane_mask.md)。
+
 ```cpp
-constexpr explicit asc::lane_mask::lane_mask(unsigned int value = 0) noexcept;
+// asc::lane_mask 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr explicit lane_mask(unsigned int value = 0) noexcept;
 ```
 
 ## 参数说明
@@ -42,12 +45,17 @@ constexpr explicit asc::lane_mask::lane_mask(unsigned int value = 0) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 32 位 Lane 掩码原始值（unsigned int，默认 0 即空掩码）：bit i（0 起）置 1 表示 Lane i 属于该集合。 |
+| `value` | 输入 | 32位Lane掩码原始值（unsigned int，默认0即空掩码）：bit i（0起）置1表示Lane i属于该集合。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 参数类型、取值范围、会合要求和对象生命周期必须满足页面声明
+- 掩码值的构造、观察和位运算可用于Host、D-SIMD与D-SIMT。
+- 每一位对应Warp中编号0—31的一个Lane；1表示该Lane被选择。
+- 掩码值本身不执行同步；把它用于Warp操作时还须满足该操作的参与者会合要求。
 
 ## 调用示例
 
@@ -63,7 +71,7 @@ __aicore__ asc::lane_mask make_object(Args&&... args)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：
 
@@ -71,3 +79,7 @@ __aicore__ asc::lane_mask make_object(Args&&... args)
 - [warp_example.h](../../../../examples/warp_collectives/warp_example.h)
 - [kernel.asc](../../../../examples/warp_collectives/kernel.asc)
 - [main.cpp](../../../../examples/warp_collectives/main.cpp)
+
+## 关联API
+
+- [`asc::lane_mask`](lane_mask.md)：Warp内Lane的位集合；第i位对应编号为i的Lane。

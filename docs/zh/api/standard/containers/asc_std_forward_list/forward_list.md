@@ -28,52 +28,59 @@
 
 头文件路径为：`<asc/std/forward_list>`。
 
-`asc::std::forward_list` 以单向链表顺序保存元素。
+`asc::std::forward_list`以单向链表顺序保存元素。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `forward_list`](https://en.cppreference.com/w/cpp/header/forward_list)。
 
 ## 声明
 
 ```cpp
-template<class T, class Allocator> class asc::std::forward_list
+namespace asc::std {
+template<class T, class Allocator> class forward_list;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下forward_list<T,A>显式GM arena allocator构造
-- empty/front/begin/end
-- push_front/emplace_front/pop_front/clear
-- 移动构造/赋值、移动前迭代器继续遍历目标节点及析构
-- 仅容量充足和不抛出异常值/allocator域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下forward_list<T,A>显式GM arena allocator构造。
+- empty/front/begin/end。
+- push_front/emplace_front/pop_front/clear。
+- 移动构造/赋值、移动前迭代器继续遍历目标节点及析构。
+- 仅容量充足和不抛出异常值/allocator域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
-#include <asc/std/forward_list>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/forward_list>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
+template<class T>
+struct ExampleAllocator : ::std::allocator<T> {
     using pointer = T*;
+    using const_pointer = const T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    template<class U> struct rebind { using other = ExampleAllocator<U>; };
+    ExampleAllocator() = default;
+    template<class U> ExampleAllocator(const ExampleAllocator<U>&) noexcept {}
 };
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::forward_list<int, example_allocator<int>>;
-    (void)sizeof(selected);
+    asc::std::forward_list<int, ExampleAllocator<int>> values(ExampleAllocator<int>{});
+    values.push_front(2);
+    values.push_front(1);
+    auto second = values.begin();
+    ++second;
+    return values.front() == 1 && *second == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_forward_list.md)

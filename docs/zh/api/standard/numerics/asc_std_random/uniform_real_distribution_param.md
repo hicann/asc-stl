@@ -28,19 +28,19 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::uniform_real_distribution::param` 返回当前分布或随机引擎的参数对象。
+`asc::std::uniform_real_distribution::param`返回当前分布或随机引擎的参数对象。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr param_type asc::std::uniform_real_distribution<float>::param() const noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr void asc::std::uniform_real_distribution<float>::param(const param_type& parameters) noexcept;
@@ -48,11 +48,11 @@ constexpr void asc::std::uniform_real_distribution<float>::param(const param_typ
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -64,23 +64,29 @@ constexpr void asc::std::uniform_real_distribution<float>::param(const param_typ
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `param_type` | 返回当前分布或随机引擎的参数对象。 |
-| 原型 2 | `void` | 无返回值。 |
+| 原型1 | `param_type` | 返回当前分布或随机引擎的参数对象。 |
+| 原型2 | `void` | 无返回值。 |
 
 ## 约束说明
 
-- 仅提供 uniform_real_distribution<float>
-- 结果位于指定的半开区间内，不提供 double、long double 及其他统计分布
+- 仅提供uniform_real_distribution<float>。
+- 结果位于指定的半开区间内，不提供double、long double及其他统计分布。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/random>
+#include <asc/std/limits>
 
-void example(asc::std::uniform_real_distribution<float>& object)
+bool example()
 {
-    (void)object.param();
+    asc::std::uniform_real_distribution<float> distribution(2.0f, 5.0f);
+    return distribution.param().a() == 2.0f && distribution.param().b() == 5.0f;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

@@ -1,4 +1,4 @@
-# asc::std::pair::operator=
+# asc::std::pair::`operator=`
 
 ## 产品支持情况
 
@@ -28,166 +28,175 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::pair::operator=` 按所选赋值重载更新对象，并返回规定的结果。
+`asc::std::pair::operator=`按所选赋值重载更新对象，并返回规定的结果。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::pair`](pair.md)。
+
+### 原型1
 
 ```cpp
-pair<T1, T2>& asc::std::pair::operator=(const pair<T1, T2>& other);
+// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
+pair<T1, T2>& operator=(const pair<T1, T2>& other);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-pair<T1, T2>& asc::std::pair::operator=(pair<T1, T2>&& other);
+// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
+pair<T1, T2>& operator=(pair<T1, T2>&& other);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class U1, class U2, enable_if_t<is_assignable_v<T1&, U1>, int>, enable_if_t<is_assignable_v<T2&, U2>, int>> constexpr pair<T1, T2>& asc::std::pair::operator=(pair<U1, U2>&& other) noexcept(is_nothrow_assignable_v<T1&, U1>&& is_nothrow_assignable_v<T2&, U2>);
+// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class U1, class U2, enable_if_t<is_assignable_v<T1&, U1>, int>, enable_if_t<is_assignable_v<T2&, U2>, int>> constexpr pair<T1, T2>& operator=(pair<U1, U2>&& other) noexcept(is_nothrow_assignable_v<T1&, U1>&& is_nothrow_assignable_v<T2&, U2>);
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class U1, class U2, enable_if_t<is_assignable_v<T1&, const U1&>, int>, enable_if_t<is_assignable_v<T2&, const U2&>, int>> constexpr pair<T1, T2>& asc::std::pair::operator=(const pair<U1, U2>& other) noexcept(is_nothrow_assignable_v<T1&, const U1&>&& is_nothrow_assignable_v<T2&, const U2&>);
+// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class U1, class U2, enable_if_t<is_assignable_v<T1&, const U1&>, int>, enable_if_t<is_assignable_v<T2&, const U2&>, int>> constexpr pair<T1, T2>& operator=(const pair<U1, U2>& other) noexcept(is_nothrow_assignable_v<T1&, const U1&>&& is_nothrow_assignable_v<T2&, const U2&>);
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
-template<class U1, class U2, enable_if_t<is_assignable_v<const T1&, U1>, int>, enable_if_t<is_assignable_v<const T2&, U2>, int>> constexpr const pair<T1, T2>& asc::std::pair::operator=(pair<U1, U2>&& other) const noexcept(is_nothrow_assignable_v<const T1&, U1>&& is_nothrow_assignable_v<const T2&, U2>);
+// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class U1, class U2, enable_if_t<is_assignable_v<const T1&, U1>, int>, enable_if_t<is_assignable_v<const T2&, U2>, int>> constexpr const pair<T1, T2>& operator=(pair<U1, U2>&& other) const noexcept(is_nothrow_assignable_v<const T1&, U1>&& is_nothrow_assignable_v<const T2&, U2>);
 ```
 
-### 原型 6
+### 原型6
 
 ```cpp
-template<class U1, class U2, enable_if_t<is_assignable_v<const T1&, const U1&>, int>, enable_if_t<is_assignable_v<const T2&, const U2&>, int>> constexpr const pair<T1, T2>& asc::std::pair::operator=(const pair<U1, U2>& other) const noexcept(is_nothrow_assignable_v<const T1&, const U1&>&& is_nothrow_assignable_v<const T2&, const U2&>);
+// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class U1, class U2, enable_if_t<is_assignable_v<const T1&, const U1&>, int>, enable_if_t<is_assignable_v<const T2&, const U2&>, int>> constexpr const pair<T1, T2>& operator=(const pair<U1, U2>& other) const noexcept(is_nothrow_assignable_v<const T1&, const U1&>&& is_nothrow_assignable_v<const T2&, const U2&>);
 ```
 
-### 原型 7
+### 原型7
 
 ```cpp
-template<class PairLike, enable_if_t<__tuple_like_ext<remove_cvref_t<PairLike>> && !__is_pair<remove_cvref_t<PairLike>>::value && is_assignable_v<T1&, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))> && is_assignable_v<T2&, decltype(::asc::std::__adl_get<1>(::asc::std::declval<PairLike>()))>, int>> constexpr pair<T1, T2>& asc::std::pair::operator=(PairLike&& other);
+// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class PairLike, enable_if_t<__tuple_like_ext<remove_cvref_t<PairLike>> && !__is_pair<remove_cvref_t<PairLike>>::value && is_assignable_v<T1&, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))> && is_assignable_v<T2&, decltype(::asc::std::__adl_get<1>(::asc::std::declval<PairLike>()))>, int>> constexpr pair<T1, T2>& operator=(PairLike&& other);
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U1` | 来源pair的first元素或首个构造实参的类型。 |
+| `U2` | 来源pair的second元素或第二个构造实参的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U1` | 来源pair的first元素或首个构造实参的类型。 |
+| `U2` | 来源pair的second元素或第二个构造实参的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
-### 原型 5 的参数
+### 原型5的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U1` | 来源pair的first元素或首个构造实参的类型。 |
+| `U2` | 来源pair的second元素或第二个构造实参的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
-### 原型 6 的参数
+### 原型6的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U1` | 来源pair的first元素或首个构造实参的类型。 |
+| `U2` | 来源pair的second元素或第二个构造实参的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
-### 原型 7 的参数
+### 原型7的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `PairLike` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `PairLike` | 提供两个元素及相应get访问的pair-like类型，两个元素须可用于对应构造或赋值。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 2 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 3 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 4 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 5 | `const pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 6 | `const pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 7 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型1 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型2 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型3 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型4 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型5 | `const pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型6 | `const pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型7 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 
 ## 约束说明
 
-- pair 操作不抛出异常
-- 关系运算符均为显式提供
+- 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
+以下Host片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
 
 ```cpp
 #include <asc/std/utility>
@@ -198,3 +207,8 @@ void example()
     left = right;
 }
 ```
+
+## 关联API
+
+- [`asc::std::pair`](pair.md)
+- [本头文件的接口列表](asc_std_utility.md)

@@ -28,23 +28,27 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`repeat_view::iterator` 的默认构造，产生与默认值关联的迭代器。
+`repeat_view::iterator`的默认构造，产生与默认值关联的迭代器。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
 ```cpp
-asc::std::ranges::repeat_view<T, Bound>::iterator()
+asc::std::ranges::repeat_view<T, Bound>::iterator();
 ```
 
 ## 参数说明
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 默认构造后可被赋值为有效迭代器
+- 默认构造后可被赋值为有效迭代器。
 
 ## 调用示例
 
@@ -59,3 +63,7 @@ decltype(auto) example(Object& object, Args&&... args)
     return object.iterator(static_cast<Args&&>(args)...);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::lerp` 计算两个值之间的线性插值；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::lerp`计算两个值之间的线性插值；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-float asc::std::lerp(float a, float b, float t) noexcept;
+namespace asc::std {
+float lerp(float a, float b, float t) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -48,17 +50,17 @@ float asc::std::lerp(float a, float b, float t) noexcept;
 | --- | --- | --- |
 | `a` | 输入 | 线性插值的起点值（无量纲）。 |
 | `b` | 输入 | 线性插值的终点值（无量纲）。 |
-| `t` | 输入 | 插值权重（无量纲）；按 a + t * (b - a) 计算，t = 1 时直接返回 b，允许取 [0, 1] 之外的值做外推。 |
+| `t` | 输入 | 插值权重（无量纲）；按a + t * (b - a)计算，t = 1时直接返回b，允许取[0, 1] 之外的值做外推。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `float` | 返回两个值之间的线性插值；Device 侧适用范围以本页 float 与执行位置约束为准的计算结果。 |
+| `float` | 返回两个值之间的线性插值；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
 
 ## 约束说明
 
-- 提供 float 重载、标准 *f 别名以及 float lerp 回移接口
+- 提供float重载、标准 *f别名以及float lerp回移接口。
 
 ## 调用示例
 
@@ -72,3 +74,7 @@ decltype(auto) example(float a, float b, float t)
     return asc::std::lerp(a, b, t);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

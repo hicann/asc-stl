@@ -28,30 +28,40 @@
 
 头文件路径为：`<asc/memory_resource>`。
 
-`asc::device_memory_resource_ref` 是 `device_memory_resource` 的非拥有引用，转发 Device 序号查询、属性查询及分配和释放操作。
+`asc::device_memory_resource_ref`是`device_memory_resource`的非拥有引用，转发Device序号查询、属性查询及分配和释放操作。
 
 ## 声明
 
 ```cpp
-class asc::device_memory_resource_ref
+namespace asc {
+class device_memory_resource_ref;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 仅可在 Host 调用
-- 内存资源不抛出异常
-- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐
-- 资源及其引用的生命周期由调用方管理
+- 仅可在Host调用。
+- 内存资源不抛出异常。
+- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐。
+- 资源及其引用的生命周期由调用方管理。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/memory_resource>
 
-void use_type(const asc::device_memory_resource_ref& value)
+bool example()
 {
-    (void)value;
+    asc::device_memory_resource resource(0);
+    asc::device_memory_resource_ref reference(resource);
+    if (!reference.valid()) return false;
+    auto properties = reference.properties();
+    return reference.device_ordinal() == 0 && !properties.host_accessible() && properties.device_accessible() && properties.maximum_alignment() == 32;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_memory_resource.md)

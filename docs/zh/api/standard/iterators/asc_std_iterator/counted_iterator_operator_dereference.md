@@ -1,4 +1,4 @@
-# asc::std::counted_iterator::operator*
+# asc::std::counted_iterator::`operator*`
 
 ## 产品支持情况
 
@@ -28,31 +28,35 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::counted_iterator::operator*` 解引用当前迭代器或有值对象。
+`asc::std::counted_iterator::operator*`解引用当前迭代器或有值对象。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::counted_iterator`](counted_iterator.md)。
+
+### 原型1
 
 ```cpp
-[[nodiscard]] constexpr decltype(auto) asc::std::counted_iterator::operator*();
+// asc::std::counted_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr decltype(auto) operator*();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class I2> [[nodiscard]] constexpr decltype(auto) asc::std::counted_iterator::operator*() const;
+// asc::std::counted_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class I2> [[nodiscard]] constexpr decltype(auto) operator*() const;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -64,17 +68,17 @@ template<class I2> [[nodiscard]] constexpr decltype(auto) asc::std::counted_iter
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `decltype(auto)` | 返回当前迭代器、范围或字符串所指位置的元素引用或代理值。 |
-| 原型 2 | `decltype(auto)` | 返回当前迭代器、范围或字符串所指位置的元素引用或代理值。 |
+| 原型1 | `decltype(auto)` | 返回当前迭代器、范围或字符串所指位置的元素引用或代理值。 |
+| 原型2 | `decltype(auto)` | 返回当前迭代器、范围或字符串所指位置的元素引用或代理值。 |
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
 
 ```cpp
 #include <asc/std/iterator>
@@ -84,3 +88,8 @@ decltype(auto) example(const asc::std::counted_iterator<int*>& iterator)
     return (*iterator);
 }
 ```
+
+## 关联API
+
+- [`asc::std::counted_iterator`](counted_iterator.md)
+- [本头文件的接口列表](asc_std_iterator.md)

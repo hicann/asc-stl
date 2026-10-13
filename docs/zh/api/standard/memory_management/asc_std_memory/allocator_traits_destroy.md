@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::allocator_traits::destroy` 结束指定地址处单个对象的生命周期：优先调用分配器的 `destroy` 成员，分配器未提供该成员时回退为调用指针所指对象的析构函数（等价于 `pointer->~T()`）。
+`asc::std::allocator_traits::destroy`结束指定地址处单个对象的生命周期：优先调用分配器的`destroy`成员，分配器未提供该成员时回退为调用指针所指对象的析构函数（等价于`pointer->~T()`）。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
+所属类型：[`asc::std::allocator_traits`](allocator_traits.md)。
+
 ```cpp
-template<class T> constexpr void asc::std::allocator_traits::destroy(allocator_type& allocator, T* pointer) noexcept;
+// asc::std::allocator_traits 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class T> constexpr void destroy(allocator_type& allocator, T* pointer) noexcept;
 ```
 
 ## 参数说明
@@ -51,7 +54,7 @@ template<class T> constexpr void asc::std::allocator_traits::destroy(allocator_t
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `allocator` | 输入/输出 | 负责对象存储分配与释放的分配器。 |
-| `pointer` | 输入 | 提供“结束指定地址处单个对象的生命周期”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `pointer` | 输入/输出 | 指向生命周期尚未结束的对象；调用结束其生命周期，不释放底层存储。 |
 
 ## 返回值说明
 
@@ -59,16 +62,16 @@ template<class T> constexpr void asc::std::allocator_traits::destroy(allocator_t
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg
-- uses_allocator/uses_allocator_v
-- allocator_traits 的 C++20 成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator 含 pair 递归构造
-- C++23 allocation_result 与标准 allocator_traits::allocate_at_least
-- 均限用户显式提供且在调用执行空间有效的 allocator
+- allocator_arg_t/allocator_arg。
+- uses_allocator/uses_allocator_v。
+- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
+- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
+- C++23 allocation_result与标准allocator_traits::allocate_at_least。
+- 均限用户显式提供且在调用执行空间有效的allocator。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器并完整释放存储；设备端须改用目标位置可调用的分配器。
+以下Host片段使用显式提供的分配器并完整释放存储；设备端须改用目标位置可调用的分配器。
 
 ```cpp
 #include <asc/std/memory>
@@ -96,3 +99,8 @@ void example(example_allocator<int>& allocator)
     asc::std::allocator_traits<example_allocator<int>>::deallocate(allocator, pointer, 1);
 }
 ```
+
+## 关联API
+
+- [`asc::std::allocator_traits`](allocator_traits.md)
+- [本头文件的接口列表](asc_std_memory.md)

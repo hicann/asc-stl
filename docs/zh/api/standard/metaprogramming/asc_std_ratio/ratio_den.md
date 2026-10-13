@@ -28,33 +28,40 @@
 
 头文件路径为：`<asc/std/ratio>`。
 
-`asc::std::ratio::den` 保存编译期有理数的分母。
+`asc::std::ratio::den`保存编译期有理数的分母。
 
 标准语义参考：[cppreference `ratio`](https://en.cppreference.com/w/cpp/header/ratio)。
 
 ## 声明
 
+`asc::std::ratio<Numerator, Denominator>::den`是类型为`const intmax_t`的静态`constexpr`成员。其值为分母绝对值除以最大公约数，结果为正。
+
 ```cpp
-template<intmax_t Numerator, intmax_t Denominator = 1>
-class asc::std::ratio {
-public:
-    static constexpr intmax_t den = /* 约分后的分母，恒为正 */;
-};
+using R = asc::std::ratio<6, -8>;
+static_assert(R::num == -3);
+static_assert(R::den == 4);
 ```
 
 ## 约束说明
 
-- 提供完整的 C++20 ratio 接口
+- 分母不得为零；规范化后的分子和分母必须可由`intmax_t`表示。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/ratio>
 
-void example(const asc::std::ratio<1, 2>& object)
+bool example()
 {
-    (void)object.den;
+    using Ratio = asc::std::ratio<-6, -8>;
+    static_assert(Ratio::num == 3);
+    static_assert(Ratio::den == 4);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ratio.md)

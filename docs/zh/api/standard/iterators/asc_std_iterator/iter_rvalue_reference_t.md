@@ -28,23 +28,26 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::iter_rvalue_reference_t` 按名称所指的范围或迭代器属性计算结果类型。
+`asc::std::iter_rvalue_reference_t`按名称所指的范围或迭代器属性计算结果类型。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-template<class T> using asc::std::iter_rvalue_reference_t = decltype(::asc::std::ranges::Itermovecpo{}(::asc::std::declval<T&>()))
+namespace asc::std {
+template<class T>
+using iter_rvalue_reference_t = decltype(iter_move(declval<T&>()));
+}
 ```
 
 ## 约束说明
 
-- 提供 C++20 公开迭代器概念和特征接口
+- 提供C++20公开迭代器概念和特征接口。
 
 ## 调用示例
 
-以下 Host 片段用具体迭代器或容器类型实例化本页接口。
+以下Host片段用具体迭代器或容器类型实例化本页接口。
 
 ```cpp
 #include <asc/std/iterator>
@@ -54,6 +57,10 @@ template<class T> using asc::std::iter_rvalue_reference_t = decltype(::asc::std:
 void example()
 {
     using selected = asc::std::iter_rvalue_reference_t<int*>;
-    static_assert(asc::std::is_same_v<selected, selected>);
+    static_assert(asc::std::is_same_v<selected, int&&>);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

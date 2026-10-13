@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::default_searcher::default_searcher` 按本页所列构造形态初始化 `default_searcher` 对象。
+`asc::std::default_searcher::default_searcher`按本页所列构造形态初始化`default_searcher`对象。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 函数原型
 
+所属类型：[`asc::std::default_searcher`](default_searcher.md)。
+
 ```cpp
-asc::std::default_searcher::default_searcher(ForwardIterator first, ForwardIterator last, BinaryPredicate pred = BinaryPredicate());
+// asc::std::default_searcher 类内的声明节选；模板形参和其他成员由所属类提供。
+default_searcher(ForwardIterator first, ForwardIterator last, BinaryPredicate pred = BinaryPredicate());
 ```
 
 ## 参数说明
@@ -48,21 +51,33 @@ asc::std::default_searcher::default_searcher(ForwardIterator first, ForwardItera
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `pred` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 提供标准算术类型、枚举和指针类型的 hash 特化
-- default_searcher 使用调用方管理的对象和存储
+- 提供标准算术类型、枚举和指针类型的hash特化。
+- default_searcher使用调用方管理的对象和存储。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/functional>
 
-void example(int* pattern)
+bool example()
 {
+    int values[] = {1, 2, 3, 4};
+    int pattern[] = {2, 3};
     asc::std::default_searcher<int*> searcher(pattern, pattern + 2);
-    (void)searcher;
+    auto result = searcher(values, values + 4);
+    return result.first == values + 1 && result.second == values + 3;
 }
 ```
+
+## 关联API
+
+- [`asc::std::default_searcher`](default_searcher.md)
+- [本头文件的接口列表](asc_std_functional.md)

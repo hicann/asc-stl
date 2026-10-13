@@ -28,29 +28,33 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::stable_sort` 排序范围并保持等价元素的原有相对顺序；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::stable_sort`排序范围并保持等价元素的原有相对顺序；无策略形式在调用者所在执行主体内顺序执行。
 
-该接口的可用位置为 Host、AI Core SIMD 编程。
+该接口的可用位置为Host、AI Core SIMD编程。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class RandomAccessIterator, class Compare> void asc::std::stable_sort(RandomAccessIterator first, RandomAccessIterator last, Compare compare);
+namespace asc::std {
+template<class RandomAccessIterator, class Compare> void stable_sort(RandomAccessIterator first, RandomAccessIterator last, Compare compare);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class RandomAccessIterator> void asc::std::stable_sort(RandomAccessIterator first, RandomAccessIterator last);
+namespace asc::std {
+template<class RandomAccessIterator> void stable_sort(RandomAccessIterator first, RandomAccessIterator last);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -67,7 +71,7 @@ template<class RandomAccessIterator> void asc::std::stable_sort(RandomAccessIter
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `compare` | 输入 | 用于确定元素顺序的比较对象。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -88,12 +92,12 @@ template<class RandomAccessIterator> void asc::std::stable_sort(RandomAccessIter
 
 ## 约束说明
 
-- stable_sort/stable_partition/inplace_merge的非分配、非递归random-access pointer核心
-- Host+普通AICore
+- stable_sort/stable_partition/inplace_merge的非分配、非递归random-access pointer核心。
+- Host+普通AICore。
 
 ## 调用示例
 
-以下 Host 片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
 
 ```cpp
 #include <asc/std/algorithm>
@@ -104,3 +108,7 @@ void example()
     asc::std::stable_sort(values, values + 8);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::addressof` 取得对象实际地址而不调用重载的取地址运算符。
+`asc::std::addressof`取得对象实际地址而不调用重载的取地址运算符。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
 ```cpp
-template<typename T> [[nodiscard]] constexpr T* asc::std::addressof(T& value) noexcept;
+namespace asc::std {
+template<typename T> [[nodiscard]] constexpr T* addressof(T& value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -50,7 +52,7 @@ template<typename T> [[nodiscard]] constexpr T* asc::std::addressof(T& value) no
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待取实际地址的对象（左值）；即使其类型重载了 operator& 也不调用该重载。 |
+| `value` | 输入 | 待取实际地址的对象（左值）；即使其类型重载了operator& 也不调用该重载。 |
 
 ## 返回值说明
 
@@ -60,7 +62,7 @@ template<typename T> [[nodiscard]] constexpr T* asc::std::addressof(T& value) no
 
 ## 约束说明
 
-- 支持原始指针和用户自定义 fancy pointer，接口自身不分配内存
+- 支持原始指针和用户自定义fancy pointer，接口自身不分配内存。
 
 ## 调用示例
 
@@ -76,6 +78,10 @@ decltype(auto) example(T & value)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
 完整示例源码：[pointer_alignment.cpp](../../../../examples/pointer_alignment.cpp)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

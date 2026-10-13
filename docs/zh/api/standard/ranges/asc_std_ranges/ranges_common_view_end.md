@@ -28,31 +28,35 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::common_view::end` 返回指向尾后位置的迭代器。
+`asc::std::ranges::common_view::end`返回指向尾后位置的迭代器。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::ranges::common_view`](ranges_common_view.md)。
+
+### 原型1
 
 ```cpp
-[[nodiscard]] constexpr auto asc::std::ranges::common_view::end();
+// asc::std::ranges::common_view 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr auto end();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class View2> [[nodiscard]] constexpr auto asc::std::ranges::common_view::end() const;
+// asc::std::ranges::common_view 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class View2> [[nodiscard]] constexpr auto end() const;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -64,23 +68,35 @@ template<class View2> [[nodiscard]] constexpr auto asc::std::ranges::common_view
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `auto` | 返回指向尾后位置的迭代器。 |
-| 原型 2 | `auto` | 返回指向尾后位置的迭代器。 |
+| 原型1 | `auto` | 返回指向尾后位置的迭代器。 |
+| 原型2 | `auto` | 返回指向尾后位置的迭代器。 |
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+本例使用不同类型的迭代器与哨兵；common_view将它们转换为可用同一种类型表示的起止位置。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/iterator>
 
-void example(asc::std::ranges::common_view<asc::std::ranges::ref_view<int[4]>>& object)
+bool example()
 {
-    (void)object.end();
+    int values[] = {2, 4, 6};
+    using Iterator = asc::std::counted_iterator<int*>;
+    using Base = asc::std::ranges::subrange<Iterator, asc::std::default_sentinel_t>;
+    Base base(Iterator(values, 3), asc::std::default_sentinel);
+    asc::std::ranges::common_view<Base> view(base);
+    unsigned int count = 0;
+    for (auto it = view.begin(); it != view.end(); ++it) ++count;
+    return count == 3;
 }
 ```
+
+## 关联API
+
+- [`asc::std::ranges::common_view`](ranges_common_view.md)
+- [本头文件的接口列表](asc_std_ranges.md)

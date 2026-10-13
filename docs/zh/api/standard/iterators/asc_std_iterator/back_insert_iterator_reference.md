@@ -28,24 +28,27 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::back_insert_iterator::reference` 标识可写元素引用类型。
+`asc::std::back_insert_iterator::reference`标识可写元素引用类型。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
+所属类型：[`asc::std::back_insert_iterator`](back_insert_iterator.md)。
+
 ```cpp
-using asc::std::back_insert_iterator::reference = void
+// asc::std::back_insert_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
+using reference = void;
 ```
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段用具体迭代器或容器类型实例化本页接口。
+以下Host片段用具体迭代器或容器类型实例化本页接口。
 
 ```cpp
 #include <asc/std/iterator>
@@ -54,11 +57,15 @@ using asc::std::back_insert_iterator::reference = void
 #include <vector>
 
 #include <asc/std/type_traits>
-#include <vector>
 
 void example()
 {
     using selected = typename asc::std::back_insert_iterator<::std::vector<int>>::reference;
-    static_assert(asc::std::is_same_v<selected, selected>);
+    static_assert(asc::std::is_same_v<selected, void>);
 }
 ```
+
+## 关联API
+
+- [`asc::std::back_insert_iterator`](back_insert_iterator.md)
+- [本头文件的接口列表](asc_std_iterator.md)

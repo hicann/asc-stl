@@ -28,29 +28,38 @@
 
 头文件路径为：`<asc/std/cstdlib>`。
 
-`asc::std::ldiv_t::rem` 保存整数除法结果的余数。
+`asc::std::ldiv_t::rem`保存整数除法结果的余数。
 
 标准语义参考：[cppreference `cstdlib`](https://en.cppreference.com/w/cpp/header/cstdlib)。
 
 ## 声明
 
+所属类型：[`asc::std::ldiv_t`](ldiv_t.md)。
+
 ```cpp
-long asc::std::ldiv_t::rem
+// asc::std::ldiv_t 类内的声明节选；模板形参和其他成员由所属类提供。
+long rem;
 ```
 
 ## 约束说明
 
-- 提供整数重载及相应结果类型
+- 提供整数重载及相应结果类型。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/cstdlib>
 
-void example(const asc::std::ldiv_t& object)
+bool example()
 {
-    (void)object.rem;
+    asc::std::ldiv_t result = asc::std::ldiv(17, 5);
+    return result.quot == 3 && result.rem == 2;
 }
 ```
+
+## 关联API
+
+- [`asc::std::ldiv_t`](ldiv_t.md)
+- [本头文件的接口列表](asc_std_cstdlib.md)

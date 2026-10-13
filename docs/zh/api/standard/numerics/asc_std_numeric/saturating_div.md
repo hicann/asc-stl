@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/numeric>`。
 
-`asc::std::saturating_div` 按名称指定的算术或转换规则执行整数饱和运算。
+`asc::std::saturating_div`按名称指定的算术或转换规则执行整数饱和运算。
 
 标准语义参考：[cppreference `numeric`](https://en.cppreference.com/w/cpp/header/numeric)。
 
 ## 函数原型
 
 ```cpp
-template<class T> [[nodiscard]] constexpr T asc::std::saturating_div(T left, T right) noexcept;
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr T saturating_div(T left, T right) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -61,10 +63,10 @@ template<class T> [[nodiscard]] constexpr T asc::std::saturating_div(T left, T r
 
 ## 约束说明
 
-- 五个列出函数
-- 十种标准signed/unsigned整数类型
-- constexpr/noexcept
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 五个列出函数。
+- 十种标准signed/unsigned整数类型。
+- constexpr/noexcept。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
@@ -78,3 +80,7 @@ decltype(auto) example()
     return asc::std::saturating_div(8, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_numeric.md)

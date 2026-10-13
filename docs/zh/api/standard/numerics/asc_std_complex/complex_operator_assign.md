@@ -1,4 +1,4 @@
-# asc::std::complex::operator=
+# asc::std::complex::`operator=`
 
 ## 产品支持情况
 
@@ -28,93 +28,99 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::complex::operator=` 按所选赋值重载更新对象，并返回规定的结果。
+`asc::std::complex::operator=`按所选赋值重载更新对象，并返回规定的结果。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::complex`](complex.md)。
+
+### 原型1
 
 ```cpp
-constexpr complex<T>& asc::std::complex::operator=(complex<T>&& other) noexcept;
+// asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr complex<T>& operator=(complex<T>&& other) noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr complex<T>& asc::std::complex::operator=(const complex<T>& other) noexcept;
+// asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr complex<T>& operator=(const complex<T>& other) noexcept;
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-constexpr complex<T>& asc::std::complex::operator=(const T& other) noexcept;
+// asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr complex<T>& operator=(const T& other) noexcept;
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class U> complex<T>& asc::std::complex::operator=(const ::std::complex<U>& other) noexcept;
+// asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class U> complex<T>& operator=(const ::std::complex<U>& other) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
-### 原型 2 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 3 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
-### 原型 4 的参数
+### 原型3的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
+
+### 原型4的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U` | 复数实部和虚部的浮点表示类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 2 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 3 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 4 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型1 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型2 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型3 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型4 | `complex<T> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下 Host 片段使用具体数值类型演示调用；状态与参数须满足本页约束。
+以下Host片段使用具体数值类型演示调用；状态与参数须满足本页约束。
 
 ```cpp
 #include <asc/std/complex>
@@ -124,3 +130,8 @@ void example(asc::std::complex<float>& target, asc::std::complex<float>& source)
     target = static_cast<asc::std::complex<float>&&>(source);
 }
 ```
+
+## 关联API
+
+- [`asc::std::complex`](complex.md)
+- [本头文件的接口列表](asc_std_complex.md)

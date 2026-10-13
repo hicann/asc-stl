@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::sqrtf` 计算平方根；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::sqrtf`计算平方根；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-float asc::std::sqrtf(float value) noexcept;
+namespace asc::std {
+float sqrtf(float value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,17 +48,17 @@ float asc::std::sqrtf(float value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待求平方根的输入值（无量纲）；定义域为 [0, +∞)，负数返回 NaN，±0 原样返回。 |
+| `value` | 输入 | 待求平方根的输入值（无量纲）；定义域为[0, +∞)，负数返回NaN，±0原样返回。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `float` | 返回平方根；Device 侧适用范围以本页 float 与执行位置约束为准的计算结果。 |
+| `float` | 返回平方根；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
 
 ## 约束说明
 
-- 提供 float 重载、标准 *f 别名以及 float lerp 回移接口
+- 提供float重载、标准 *f别名以及float lerp回移接口。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example(float value)
     return asc::std::sqrtf(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

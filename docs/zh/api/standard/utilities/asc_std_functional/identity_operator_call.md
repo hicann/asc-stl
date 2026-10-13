@@ -1,4 +1,4 @@
-# asc::std::identity::operator()
+# asc::std::identity::`operator()`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::identity::operator()` 按 `identity` 的可用运算符规则处理当前对象及操作数。
+`asc::std::identity::operator()`按`identity`的可用运算符规则处理当前对象及操作数。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 函数原型
 
+所属类型：[`asc::std::identity`](identity.md)。
+
 ```cpp
-template<class T> [[nodiscard]] constexpr T&& asc::std::identity::operator()(T&& value) const noexcept;
+// asc::std::identity 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class T> [[nodiscard]] constexpr T&& operator()(T&& value) const noexcept;
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ template<class T> [[nodiscard]] constexpr T&& asc::std::identity::operator()(T&&
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 被原样转发的实参类型；返回值保留cv限定和引用类别。 |
 
 ## 返回值说明
 
@@ -54,11 +57,11 @@ template<class T> [[nodiscard]] constexpr T&& asc::std::identity::operator()(T&&
 
 ## 约束说明
 
-- 同时提供指定类型形式和透明调用形式
+- 同时提供指定类型形式和透明调用形式。
 
 ## 调用示例
 
-以下 Host 片段以具体整数实参演示函数对象调用。
+以下Host片段以具体整数实参演示函数对象调用。
 
 ```cpp
 #include <asc/std/functional>
@@ -68,3 +71,8 @@ decltype(auto) example()
     return asc::std::identity{}(7);
 }
 ```
+
+## 关联API
+
+- [`asc::std::identity`](identity.md)
+- [本头文件的接口列表](asc_std_functional.md)

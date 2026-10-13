@@ -1,4 +1,4 @@
-# 头文件 asc/launch
+# 头文件asc/launch
 
 提供在指定Stream上异步调用核函数，以及按Stream顺序提交Host回调函数（Host Callback）的功能
 
@@ -8,7 +8,7 @@
 #include <asc/launch>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |

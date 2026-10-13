@@ -28,29 +28,33 @@
 
 头文件路径为：`<asc/execution>`。
 
-默认构造函数创建成功状态；带参构造函数创建指定状态，并且只在状态类别为 `backend_error` 时保留传入的原生状态码。
+默认构造函数创建成功状态；带参构造函数创建指定状态，并且只在状态类别为`backend_error`时保留传入的原生状态码。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::execution_status`](execution_status.md)。
+
+### 原型1
 
 ```cpp
-constexpr asc::execution_status::execution_status() noexcept;
+// asc::execution_status 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr execution_status() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr explicit asc::execution_status::execution_status(asc::execution_errc code, int native_code = 0) noexcept;
+// asc::execution_status 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr explicit execution_status(asc::execution_errc code, int native_code = 0) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -59,22 +63,32 @@ constexpr explicit asc::execution_status::execution_status(asc::execution_errc c
 | `code` | 输入 | 要保存或查询的错误、执行状态类别。 |
 | `native_code` | 输入 | 底层运行时返回的原生状态码；仅在对应错误类别下有意义。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 仅可在 Host 使用
-- 状态值可平凡复制
-- 成功状态的 code() 为 execution_errc::success，native_code() 为 0，失败状态保留可用于诊断的状态码
+- 仅可在Host使用。
+- 状态值可平凡复制。
+- 成功状态的code()为execution_errc::success，native_code()为0，失败状态保留可用于诊断的状态码。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/execution>
 
-void example()
+bool example()
 {
-    asc::execution_status status{};
-    (void)status.success();
+    asc::execution_status success;
+    asc::execution_status failure(asc::execution_errc::backend_error, 17);
+    return success.success() && success.code() == asc::execution_errc::success && success.native_code() == 0
+        && !failure.success() && failure.code() == asc::execution_errc::backend_error && failure.native_code() == 17;
 }
 ```
+
+## 关联API
+
+- [`asc::execution_status`](execution_status.md)：参数校验和任务提交状态；提交成功不表示异步工作已经完成。

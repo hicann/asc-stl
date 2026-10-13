@@ -98,15 +98,14 @@ struct __layout_mapping_alike_impl : false_type {};
 template <class Mapping>
 struct __layout_mapping_alike_impl<Mapping,
     void_t<typename Mapping::layout_type, typename Mapping::extents_type, decltype(Mapping::is_always_unique()),
-        decltype(Mapping::is_always_exhaustive()), decltype(Mapping::is_always_strided())>>
+        decltype(Mapping::is_always_exhaustive()), decltype(Mapping::is_always_strided()),
+        integral_constant<bool, Mapping::is_always_unique()>, integral_constant<bool, Mapping::is_always_exhaustive()>,
+        integral_constant<bool, Mapping::is_always_strided()>>>
     : bool_constant<__mdspan_detail::__is_mapping_of<typename Mapping::layout_type, Mapping> &&
           __mdspan_detail::__is_asc_std_extents_v<typename Mapping::extents_type> &&
           is_same_v<bool, decltype(Mapping::is_always_strided())> &&
           is_same_v<bool, decltype(Mapping::is_always_exhaustive())> &&
-          is_same_v<bool, decltype(Mapping::is_always_unique())> &&
-          integral_constant<bool, Mapping::is_always_strided()>::value &&
-          integral_constant<bool, Mapping::is_always_exhaustive()>::value &&
-          integral_constant<bool, Mapping::is_always_unique()>::value> {};
+          is_same_v<bool, decltype(Mapping::is_always_unique())>> {};
 
 template <class Mapping>
 inline constexpr bool __layout_mapping_alike = __layout_mapping_alike_impl<Mapping>::value;

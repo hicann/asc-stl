@@ -28,43 +28,43 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::common_iterator::common_iterator` 按本页所列构造形态初始化 `common_iterator` 对象。
+`asc::std::common_iterator::common_iterator`按本页所列构造形态初始化`common_iterator`对象。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr common_iterator() noexcept(is_nothrow_default_constructible_v<Iter>);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr common_iterator(Iter first) noexcept(is_nothrow_move_constructible_v<Iter>);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 constexpr common_iterator(Sent sentinel) noexcept(is_nothrow_move_constructible_v<Sent>);
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
 constexpr common_iterator(common_iterator<Iter, Sent>&& other);
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
 constexpr common_iterator(const common_iterator<Iter, Sent>& other);
 ```
 
-### 原型 6
+### 原型6
 
 ```cpp
 template<class I2, class S2> constexpr common_iterator(const common_iterator<I2, S2>& other) noexcept(is_nothrow_constructible_v<Iter, const I2&>&& is_nothrow_constructible_v<Sent, const S2&>);
@@ -72,11 +72,11 @@ template<class I2, class S2> constexpr common_iterator(const common_iterator<I2,
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -84,7 +84,7 @@ template<class I2, class S2> constexpr common_iterator(const common_iterator<I2,
 | --- | --- | --- |
 | `first` | 输入 | 被包装的迭代器；适配器保存其副本，作为当前遍历位置。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
@@ -92,52 +92,66 @@ template<class I2, class S2> constexpr common_iterator(const common_iterator<I2,
 | --- | --- | --- |
 | `sentinel` | 输入 | 被包装的哨兵；适配器保存其副本，作为范围结束标记。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 移动来源 common_iterator；其迭代器与哨兵被移动到新对象，移动后处于有效但未指定状态。 |
+| `other` | 输入/输出 | 移动来源common_iterator；其迭代器与哨兵被移动到新对象，移动后处于有效但未指定状态。 |
 
-### 原型 5 的参数
+### 原型5的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 复制来源 common_iterator；其迭代器与哨兵被复制到新对象。 |
+| `other` | 输入 | 复制来源common_iterator；其迭代器与哨兵被复制到新对象。 |
 
-### 原型 6 的参数
+### 原型6的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `I2` | 来源 common_iterator 的迭代器类型；须能转换构造为 Iter。 |
-| `S2` | 来源 common_iterator 的哨兵类型；须能转换构造为 Sent。 |
+| `I2` | 来源common_iterator的迭代器类型；须能转换构造为Iter。 |
+| `S2` | 来源common_iterator的哨兵类型；须能转换构造为Sent。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 复制来源 common_iterator（迭代器/哨兵类型可不同）；二者经转换复制到新对象。 |
+| `other` | 输入 | 复制来源common_iterator（迭代器/哨兵类型可不同）；二者经转换复制到新对象。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段使用具体指针与哨兵演示调用；解引用前须保证指针有效。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void example()
+bool example()
 {
-    asc::std::common_iterator<int*, asc::std::unreachable_sentinel_t> iterator{};
-    (void)iterator;
+    int values[] = {2, 4};
+    using It = asc::std::counted_iterator<int*>;
+    using Common = asc::std::common_iterator<It, asc::std::default_sentinel_t>;
+    Common first(It(values, 2));
+    Common last(asc::std::default_sentinel);
+    int sum = 0;
+    for (; first != last; ++first) sum += *first;
+    return sum == 6;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

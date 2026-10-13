@@ -28,29 +28,41 @@
 
 头文件路径为：`<asc/std/cstddef>`。
 
-`asc::std::ptrdiff_t` 标识当前 C++ ABI 对应的大小、指针差值、空指针或最大对齐类型。
+`asc::std::ptrdiff_t`标识当前C++ ABI对应的大小、指针差值、空指针或最大对齐类型。
 
 标准语义参考：[cppreference `cstddef`](https://en.cppreference.com/w/cpp/header/cstddef)。
 
 ## 声明
 
 ```cpp
-using asc::std::ptrdiff_t = long
+namespace asc::std {
+using ptrdiff_t = long;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供标准声明
+- 提供标准声明。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/cstddef>
+#include <asc/std/type_traits>
 
-void use_type(const asc::std::ptrdiff_t& value)
+bool example()
 {
-    (void)value;
+    using Integer = asc::std::ptrdiff_t;
+    static_assert(asc::std::is_integral_v<Integer>);
+    static_assert(asc::std::is_signed_v<Integer> == true);
+    Integer left = 2;
+    Integer right = 3;
+    return left + right == 5;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstddef.md)

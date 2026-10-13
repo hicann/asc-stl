@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/algorithm>`。
 
-`asc::fill_bytes` 使用给定的单字节值填充一段 Device 可访问内存。
+`asc::fill_bytes`使用给定的单字节值填充一段Device可访问内存。
 
 ## 函数原型
 
 ```cpp
-asc::execution_status asc::fill_bytes(asc::stream_ref stream, void* destination, unsigned char value, asc::std::size_t bytes) noexcept;
+namespace asc {
+asc::execution_status fill_bytes(asc::stream_ref stream, void* destination, unsigned char value, asc::std::size_t bytes) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,10 +44,10 @@ asc::execution_status asc::fill_bytes(asc::stream_ref stream, void* destination,
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `stream` | 输入 | 用于按序提交异步工作的 Stream。相关资源须保持有效，直至工作完成。 |
-| `destination` | 输出 | 待填充的目标内存起始地址：须可写且覆盖 bytes 字节，异步完成前保持有效。 |
+| `stream` | 输入 | 用于按序提交异步工作的Stream。相关资源须保持有效，直至工作完成。 |
+| `destination` | 输出 | 待填充的目标内存起始地址：须可写且覆盖bytes字节，异步完成前保持有效。 |
 | `value` | 输入 | 填充值（unsigned char，0~255）：以该字节逐字节重复写入目标区域。 |
-| `bytes` | 输入 | 填充的字节数，单位为字节；为 0 时不提交任务并直接返回成功。 |
+| `bytes` | 输入 | 填充的字节数，单位为字节；为0时不提交任务并直接返回成功。 |
 
 ## 返回值说明
 
@@ -55,9 +57,9 @@ asc::execution_status asc::fill_bytes(asc::stream_ref stream, void* destination,
 
 ## 约束说明
 
-- 仅可在 Host 调用
-- Stream 必须有效
-- 目标地址须可由 Device 访问，并在异步填充完成前保持有效
+- 仅可在Host调用。
+- Stream必须有效。
+- 目标地址须可由Device访问，并在异步填充完成前保持有效。
 
 ## 调用示例
 
@@ -78,3 +80,7 @@ decltype(auto) example(asc::stream_ref stream, void* destination, unsigned char 
     return asc::fill_bytes(stream, destination, value, bytes);
 }
 ```
+
+## 关联API
+
+- [`asc::execution_status`](../../../runtime/execution_policies_and_status/asc_execution/execution_status.md)：参数校验和任务提交状态；提交成功不表示异步工作已经完成。

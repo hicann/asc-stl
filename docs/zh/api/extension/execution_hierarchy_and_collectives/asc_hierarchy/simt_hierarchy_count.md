@@ -28,56 +28,60 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::simt_hierarchy::count` 返回指定 SIMT 层级包含的线性元素数量。
+`asc::simt_hierarchy::count`返回指定SIMT层级包含的线性元素数量。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::simt_hierarchy`](simt_hierarchy.md)。
+
+### 原型1
 
 ```cpp
-constexpr unsigned long long asc::simt_hierarchy::count(asc::block_level) const noexcept;
+// asc::simt_hierarchy 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr unsigned long long count(asc::block_level) const noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr unsigned long long asc::simt_hierarchy::count(asc::grid_level) const noexcept;
+// asc::simt_hierarchy 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr unsigned long long count(asc::grid_level) const noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 级别标签：传入 asc::block（block_level 值）选择 Block 级，返回该级三维尺寸的元素总数 x*y*z。 |
+| `asc` | 输入 | 级别标签：传入asc::block（block_level值）选择Block级，返回该级三维尺寸的元素总数x*y*z。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 级别标签：传入 asc::grid（grid_level 值）选择 Grid 级，返回该级三维尺寸的元素总数 x*y*z。 |
+| `asc` | 输入 | 级别标签：传入asc::grid（grid_level值）选择Grid级，返回该级三维尺寸的元素总数x*y*z。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `unsigned long long` | 返回由当前网格和线程块尺寸构成的执行层次或启动尺寸。 |
-| 原型 2 | `unsigned long long` | 返回由当前网格和线程块尺寸构成的执行层次或启动尺寸。 |
+| 原型1 | `unsigned long long` | 返回由当前网格和线程块尺寸构成的执行层次或启动尺寸。 |
+| 原型2 | `unsigned long long` | 返回由当前网格和线程块尺寸构成的执行层次或启动尺寸。 |
 
 ## 约束说明
 
-- 提供 C++17 constexpr Host/Device 层次结构接口
-- 带 extent 的值要求每一维均非零
-- extent 总数按无符号 64 位的 x*y*z 计算
+- 提供C++17 constexpr Host/Device层次结构接口。
+- 带extent的值要求每一维均非零。
+- extent总数按无符号64位的x*y*z计算。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示本页接口；对象和指针的有效期须满足本页约束。
+以下Host片段使用具体类型演示本页接口；对象和指针的有效期须满足本页约束。
 
 ```cpp
 #include <asc/hierarchy>
@@ -88,3 +92,8 @@ decltype(auto) example(const asc::simt_hierarchy& hierarchy)
     return blocks;
 }
 ```
+
+## 关联API
+
+- [`asc::simt_hierarchy`](simt_hierarchy.md)
+- [本头文件的接口列表](asc_hierarchy.md)

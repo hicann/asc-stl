@@ -28,32 +28,42 @@
 
 头文件路径为：`<asc/std/linalg>`。
 
-`asc::std::linalg::scaled_accessor::offset_policy` 标识组合访问器或布局内部使用的偏移与嵌套布局策略。
+`asc::std::linalg::scaled_accessor::offset_policy`标识组合访问器或布局内部使用的偏移与嵌套布局策略。
 
 标准语义参考：[cppreference `linalg`](https://en.cppreference.com/w/cpp/header/linalg)。
 
 ## 声明
 
+所属类型：[`asc::std::linalg::scaled_accessor`](linalg_scaled_accessor.md)。
+
 ```cpp
-using asc::std::linalg::scaled_accessor::offset_policy = scaled_accessor<ScalingFactor, typename NestedAccessor::offset_policy>
+// asc::std::linalg::scaled_accessor 类内的声明节选；模板形参和其他成员由所属类提供。
+using offset_policy = scaled_accessor<ScalingFactor, typename NestedAccessor::offset_policy>;
 ```
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库公共入口的完整7实体合同：scaled/scaled_accessor、conjugated/conjugated_accessor、transposed/layout_transpose、conjugate_transposed
-- 包括access/offset/nested accessor/factor、转换构造、算术类型共轭不变、ADL可共轭类型、双重共轭/转置消去、rank-2静态/动态extents交换、layout_left/right/stride与通用layout_transpose mapping全部观察/比较
-- 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段选用具体模板实参读取嵌套类型。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/linalg>
+#include <asc/std/complex>
+#include <asc/std/type_traits>
 
-void use_type()
+using Accessor = asc::std::linalg::scaled_accessor<float, asc::std::default_accessor<float>>;
+
+bool example()
 {
-    using selected = typename asc::std::linalg::scaled_accessor<int, asc::std::default_accessor<int>>::offset_policy;
-    (void)sizeof(selected);
+    static_assert(asc::std::is_same_v<Accessor::offset_policy, Accessor>);
+    return true;
 }
 ```
+
+## 关联API
+
+- [`asc::std::linalg::scaled_accessor`](linalg_scaled_accessor.md)
+- [本头文件的接口列表](asc_std_linalg.md)

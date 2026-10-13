@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/bit>`。
 
-`asc::std::bit_cast` 在满足大小和可平凡复制约束时复制对象表示并得到目标类型值。
+`asc::std::bit_cast`在满足大小和可平凡复制约束时复制对象表示并得到目标类型值。
 
 标准语义参考：[cppreference `bit`](https://en.cppreference.com/w/cpp/header/bit)。
 
 ## 函数原型
 
 ```cpp
-template<class To, class From> [[nodiscard]] constexpr To asc::std::bit_cast(const From& fx) noexcept;
+namespace asc::std {
+template<class To, class From> [[nodiscard]] constexpr To bit_cast(const From& fx) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,8 +46,8 @@ template<class To, class From> [[nodiscard]] constexpr To asc::std::bit_cast(con
 
 | 参数名 | 描述 |
 | --- | --- |
-| `To` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `From` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `To` | 位转换的目标类型；须可平凡复制且与来源类型大小相同。 |
+| `From` | 位转换的来源类型；须可平凡复制且与目标类型大小相同。 |
 
 **函数参数**
 
@@ -61,8 +63,8 @@ template<class To, class From> [[nodiscard]] constexpr To asc::std::bit_cast(con
 
 ## 约束说明
 
-- `To` 与 `From` 须满足 `sizeof(To) == sizeof(From)` 且均为可平凡复制类型
-- 编译器提供 `__builtin_bit_cast` 时调用可用于常量表达式；否则经 `memcpy` 回退实现，此时 `To` 须可默认构造
+- `To`与`From`须满足`sizeof(To) == sizeof(From)`且均为可平凡复制类型。
+- 编译器提供`__builtin_bit_cast`时调用可用于常量表达式；否则经`memcpy`回退实现，此时`To`须可默认构造。
 
 ## 调用示例
 
@@ -76,3 +78,7 @@ decltype(auto) example()
     return asc::std::bit_cast<unsigned int>(1.0f);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_bit.md)

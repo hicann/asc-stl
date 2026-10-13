@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/optional>`。
 
-`asc::std::optional::reset` 清除当前保存的值或状态。
+`asc::std::optional::reset`清除当前保存的值或状态。
 
 标准语义参考：[cppreference `optional`](https://en.cppreference.com/w/cpp/header/optional)。
 
 ## 函数原型
 
+所属类型：[`asc::std::optional`](optional.md)。
+
 ```cpp
-constexpr void asc::std::optional::reset() noexcept;
+// asc::std::optional 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr void reset() noexcept;
 ```
 
 ## 参数说明
@@ -48,19 +51,26 @@ constexpr void asc::std::optional::reset() noexcept;
 
 ## 约束说明
 
-- T 必须是普通的非引用对象类型
-- Host 遵循有效的 C++17 操作
-- Device 侧构造、赋值、调用和交换所依赖的操作必须不抛出异常
+- T必须是普通的非引用对象类型。
+- Host遵循有效的C++17操作。
+- Device侧构造、赋值、调用和交换所依赖的操作必须不抛出异常。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/optional>
 
-void example(asc::std::optional<int>& object)
+bool example()
 {
-    (void)object.reset();
+    asc::std::optional<int> value(7);
+    value.reset();
+    return !value.has_value();
 }
 ```
+
+## 关联API
+
+- [`asc::std::optional`](optional.md)
+- [本头文件的接口列表](asc_std_optional.md)

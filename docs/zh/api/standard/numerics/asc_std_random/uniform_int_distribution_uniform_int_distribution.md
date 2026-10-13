@@ -28,25 +28,25 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::uniform_int_distribution::uniform_int_distribution` 按本页所列构造形态初始化 `uniform_int_distribution` 对象。
+`asc::std::uniform_int_distribution::uniform_int_distribution`按本页所列构造形态初始化`uniform_int_distribution`对象。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr uniform_int_distribution() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr uniform_int_distribution(const param_type& parameters) noexcept;
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 constexpr uniform_int_distribution(result_type minimum, result_type maximum) noexcept;
@@ -54,11 +54,11 @@ constexpr uniform_int_distribution(result_type minimum, result_type maximum) noe
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -66,7 +66,7 @@ constexpr uniform_int_distribution(result_type minimum, result_type maximum) noe
 | --- | --- | --- |
 | `parameters` | 输入 | 分布参数对象引用；以其保存的闭区间参数初始化本分布。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
@@ -75,20 +75,31 @@ constexpr uniform_int_distribution(result_type minimum, result_type maximum) noe
 | `minimum` | 输入 | 闭采样区间的下界；生成值不小于该值。 |
 | `maximum` | 输入 | 闭采样区间的上界；生成值不大于该值。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 支持全部标准整数结果类型
+- 支持全部标准整数结果类型。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/random>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    asc::std::uniform_int_distribution<int> distribution{};
-    (void)distribution.min();
+    asc::std::uniform_int_distribution<int> distribution(2, 5);
+    asc::std::minstd_rand engine(7);
+    const auto value = distribution(engine);
+    return value >= 2 && value <= 5;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

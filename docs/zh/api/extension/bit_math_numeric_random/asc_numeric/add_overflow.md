@@ -28,31 +28,35 @@
 
 头文件路径为：`<asc/numeric>`。
 
-`asc::add_overflow` 计算整数加法并报告结果是否超出目标类型范围。
+`asc::add_overflow`计算整数加法并报告结果是否超出目标类型范围。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> constexpr asc::overflow_result<T> asc::add_overflow(T left, T right) noexcept;
+namespace asc {
+template<class T> constexpr asc::overflow_result<T> add_overflow(T left, T right) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> constexpr bool asc::add_overflow(T left, T right, T& result) noexcept;
+namespace asc {
+template<class T> constexpr bool add_overflow(T left, T right, T& result) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 参与检查式加法的标准整数类型（非 bool，不超过 64 位）。 |
+| `T` | 参与检查式加法的标准整数类型（非bool，不超过64位）。 |
 
 **函数参数**
 
@@ -61,13 +65,13 @@ template<class T> constexpr bool asc::add_overflow(T left, T right, T& result) n
 | `left` | 输入 | 检查溢出的整数加法左操作数。
 | `right` | 输入 | 检查溢出的整数加法右操作数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 参与检查式加法的标准整数类型（非 bool，不超过 64 位）。 |
+| `T` | 参与检查式加法的标准整数类型（非bool，不超过64位）。 |
 
 **函数参数**
 
@@ -75,19 +79,19 @@ template<class T> constexpr bool asc::add_overflow(T left, T right, T& result) n
 | --- | --- | --- |
 | `left` | 输入 | 检查溢出的整数加法左操作数。
 | `right` | 输入 | 检查溢出的整数加法右操作数。
-| `result` | 输出 | 写出运算结果的引用；返回 true 表示发生溢出。 |
+| `result` | 输出 | 写出运算结果的引用；返回true表示发生溢出。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::overflow_result<T>` | 返回整数加法并报告结果是否超出目标类型范围的计算结果。 |
-| 原型 2 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| 原型1 | `asc::overflow_result<T>` | 返回整数加法并报告结果是否超出目标类型范围的计算结果。 |
+| 原型2 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- T、From 和 To 必须是不超过 64 位的标准非 bool 整数类型
-- 所有溢出检查均不得触发有符号整数溢出的未定义行为
+- T、From和To必须是不超过64位的标准非bool整数类型。
+- 所有溢出检查均不得触发有符号整数溢出的未定义行为。
 
 ## 调用示例
 
@@ -101,3 +105,7 @@ decltype(auto) example()
     return asc::add_overflow(7, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_numeric.md)

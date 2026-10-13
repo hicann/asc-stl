@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/variant>`。
 
-`asc::std::holds_alternative` 判断当前活动备选项是否为指定唯一类型。
+`asc::std::holds_alternative`判断当前活动备选项是否为指定唯一类型。
 
 标准语义参考：[cppreference `variant`](https://en.cppreference.com/w/cpp/header/variant)。
 
 ## 函数原型
 
 ```cpp
-template<class T, class ...Types> [[nodiscard]] constexpr bool asc::std::holds_alternative(const variant<Types...>& value) noexcept;
+namespace asc::std {
+template<class T, class ...Types> [[nodiscard]] constexpr bool holds_alternative(const variant<Types...>& value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,29 +46,29 @@ template<class T, class ...Types> [[nodiscard]] constexpr bool asc::std::holds_a
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 待检测的备选项类型；须在 Types... 中恰好出现一次。 |
-| `Types` | variant 的备选项类型列表。 |
+| `T` | 待检测的备选项类型；须在Types... 中恰好出现一次。 |
+| `Types` | variant的备选项类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 被检测的 variant 对象；判断其当前活动备选项是否为 T。 |
+| `value` | 输入 | 被检测的variant对象；判断其当前活动备选项是否为T。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
+- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
+- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/variant>
@@ -77,3 +79,7 @@ decltype(auto) example()
     return asc::std::holds_alternative<int>(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_variant.md)

@@ -28,39 +28,41 @@
 
 头文件路径为：`<asc/warp>`。
 
-`asc::lane_mask` 以 32 位位图表示一个 Warp 中参与操作的 Lane 集合。
+`asc::lane_mask`以32位位图表示一个Warp中参与操作的Lane集合。
 
-Lane 是线程束（Warp）内线程的通道编号，取值范围为 0 到 31；掩码第 i 位对应编号为 i 的 Lane，该位为 1 表示此 Lane 在集合中。当前线程自身的 Lane 编号可由 [`asc::lane_id`](../asc_hierarchy/lane_id.md) 获取，只包含当前 Lane 的掩码可由 [`asc::lane_mask::this_lane`](lane_mask_this_lane.md) 获取。
+Lane是线程束（Warp）内线程的通道编号，取值范围为0到31；掩码第i位对应编号为i的Lane，该位为1表示此Lane在集合中。当前线程自身的Lane编号可由[`asc::lane_id`](../asc_hierarchy/lane_id.md)获取，只包含当前Lane的掩码可由[`asc::lane_mask::this_lane`](lane_mask_this_lane.md)获取。
 
 ## 声明
 
 ```cpp
-class asc::lane_mask
+namespace asc {
+class lane_mask;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 参数类型、取值范围、会合要求和对象生命周期必须满足页面声明
+- 掩码值的构造、观察和位运算可用于Host、D-SIMD与D-SIMT。
+- 每一位对应Warp中编号0—31的一个Lane；1表示该Lane被选择。
+- 掩码值本身不执行同步；把它用于Warp操作时还须满足该操作的参与者会合要求。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以1个block、32个线程启动，所有lane收敛执行本片段。output指向32个GM元素；同步完成后每项应为1。
 
 ```cpp
 #include <asc/warp>
 
-__aicore__ void use_type(const asc::lane_mask& value)
+__global__ void example(unsigned int* output)
 {
-    (void)value;
+    const unsigned int lane = asc::lane_id();
+    const asc::lane_mask mask = asc::lane_mask::this_lane();
+    output[lane] = mask.value() == (1U << lane);
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+完整工程及运行步骤见[《warp_collectives示例》](../../../../examples/warp_collectives/README.md)。
 
-完整示例源码：
+## 关联API
 
-- [CMakeLists.txt](../../../../examples/warp_collectives/CMakeLists.txt)
-- [warp_example.h](../../../../examples/warp_collectives/warp_example.h)
-- [kernel.asc](../../../../examples/warp_collectives/kernel.asc)
-- [main.cpp](../../../../examples/warp_collectives/main.cpp)
+- [本头文件的接口列表](asc_warp.md)

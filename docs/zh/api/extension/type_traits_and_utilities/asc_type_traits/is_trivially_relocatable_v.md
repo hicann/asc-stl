@@ -28,17 +28,19 @@
 
 头文件路径为：`<asc/type_traits>`。
 
-`asc::is_trivially_relocatable_v<T>` 是 `is_trivially_relocatable<T>::value` 的 bool 变量模板简写。
+`asc::is_trivially_relocatable_v<T>`是`is_trivially_relocatable<T>::value`的bool变量模板简写。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr bool asc::is_trivially_relocatable_v = asc::is_trivially_relocatable<T>::value
+namespace asc {
+template<class T> inline constexpr bool is_trivially_relocatable_v = asc::is_trivially_relocatable<T>::value;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 结果是对应定制点返回值的精确 bool 投影
+- 结果是对应定制点返回值的精确bool投影。
 
 ## 调用示例
 
@@ -49,3 +51,7 @@ template<class T> inline constexpr bool asc::is_trivially_relocatable_v = asc::i
 
 inline constexpr auto example = asc::is_trivially_relocatable_v<int>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_type_traits.md)

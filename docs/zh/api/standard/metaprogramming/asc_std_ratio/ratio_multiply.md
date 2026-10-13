@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/ratio>`。
 
-`asc::std::ratio_multiply` 按名称所指的算术或比较关系组合两个编译期有理数。
+`asc::std::ratio_multiply`按名称所指的算术或比较关系组合两个编译期有理数。
 
 标准语义参考：[cppreference `ratio`](https://en.cppreference.com/w/cpp/header/ratio)。
 
 ## 声明
 
+`asc::std::ratio_multiply<R1, R2>`是对两个编译期有理数进行`*`运算后得到的规范化ratio类型。公开用法不依赖内部运算辅助模板。
+
 ```cpp
-template<class R1, class R2> using asc::std::ratio_multiply = typename __ratio_multiply<R1, R2>::type
+using Result = asc::std::ratio_multiply<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>;
 ```
 
 ## 约束说明
 
-- 提供完整的 C++20 ratio 接口
+- 分母不得为零；规范化后的分子和分母必须可由`intmax_t`表示。
 
 ## 调用示例
 
@@ -54,3 +56,7 @@ void use_type()
     using selected = asc::std::ratio_multiply<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ratio.md)

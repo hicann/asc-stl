@@ -28,29 +28,37 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::counting_iterator` 生成按步进规则递增的随机访问迭代器。
+`asc::counting_iterator`生成按步进规则递增的随机访问迭代器。
 
 ## 声明
 
 ```cpp
-template<class Start, class Difference = asc::std::ptrdiff_t> class asc::counting_iterator
+namespace asc {
+template<class Start, class Difference = asc::std::ptrdiff_t> class counting_iterator;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
-void use_type()
+bool example()
 {
-    using selected = asc::counting_iterator<int>;
-    (void)sizeof(selected);
+    asc::counting_iterator<int> iterator(3);
+    const bool first = *iterator == 3;
+    ++iterator;
+    return first && *iterator == 4;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

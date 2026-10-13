@@ -28,137 +28,147 @@
 
 头文件路径为：`<asc/warp>`。
 
-`asc::warp_shuffle_up` 读取同一分组中 Lane 编号减少 delta 后的值。
+`asc::warp_shuffle_up`读取同一分组中Lane编号减少delta后的值。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<int Width = 32> asc::warp_shuffle_result<float> asc::warp_shuffle_up(float value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+template<int Width = 32> asc::warp_shuffle_result<float> warp_shuffle_up(float value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<int Width = 32> asc::warp_shuffle_result<int> asc::warp_shuffle_up(int value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+template<int Width = 32> asc::warp_shuffle_result<int> warp_shuffle_up(int value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<int Width = 32> asc::warp_shuffle_result<long long> asc::warp_shuffle_up(long long value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+template<int Width = 32> asc::warp_shuffle_result<long long> warp_shuffle_up(long long value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<int Width = 32> asc::warp_shuffle_result<unsigned int> asc::warp_shuffle_up(unsigned int value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+template<int Width = 32> asc::warp_shuffle_result<unsigned int> warp_shuffle_up(unsigned int value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
-template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_shuffle_up(unsigned long long value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+template<int Width = 32> asc::warp_shuffle_result<unsigned long long> warp_shuffle_up(unsigned long long value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
+| `Width` | 洗牌分组宽度（编译期整数，取1/2/4/8/16/32，默认32）：Lane按Width分组，目标Lane须与调用Lane同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自同一分组内编号为 本 Lane 编号 - delta 的 Lane。 |
-| `delta` | 输入 | 目标 Lane 相对本 Lane 编号的负向偏移量。 |
-| `participants` | 输入 | 参与本操作的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：自身或目标不在集合内时结果无效。 |
+| `value` | 输入 | 本Lane提供参与洗牌的值：返回值来自同一分组内编号为 本Lane编号 - delta的Lane。 |
+| `delta` | 输入 | 目标Lane相对本Lane编号的负向偏移量。 |
+| `participants` | 输入 | 参与本操作的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：自身或目标不在集合内时结果无效。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
+| `Width` | 洗牌分组宽度（编译期整数，取1/2/4/8/16/32，默认32）：Lane按Width分组，目标Lane须与调用Lane同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自同一分组内编号为 本 Lane 编号 - delta 的 Lane。 |
-| `delta` | 输入 | 目标 Lane 相对本 Lane 编号的负向偏移量。 |
-| `participants` | 输入 | 参与本操作的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：自身或目标不在集合内时结果无效。 |
+| `value` | 输入 | 本Lane提供参与洗牌的值：返回值来自同一分组内编号为 本Lane编号 - delta的Lane。 |
+| `delta` | 输入 | 目标Lane相对本Lane编号的负向偏移量。 |
+| `participants` | 输入 | 参与本操作的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：自身或目标不在集合内时结果无效。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
+| `Width` | 洗牌分组宽度（编译期整数，取1/2/4/8/16/32，默认32）：Lane按Width分组，目标Lane须与调用Lane同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自同一分组内编号为 本 Lane 编号 - delta 的 Lane。 |
-| `delta` | 输入 | 目标 Lane 相对本 Lane 编号的负向偏移量。 |
-| `participants` | 输入 | 参与本操作的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：自身或目标不在集合内时结果无效。 |
+| `value` | 输入 | 本Lane提供参与洗牌的值：返回值来自同一分组内编号为 本Lane编号 - delta的Lane。 |
+| `delta` | 输入 | 目标Lane相对本Lane编号的负向偏移量。 |
+| `participants` | 输入 | 参与本操作的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：自身或目标不在集合内时结果无效。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
+| `Width` | 洗牌分组宽度（编译期整数，取1/2/4/8/16/32，默认32）：Lane按Width分组，目标Lane须与调用Lane同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自同一分组内编号为 本 Lane 编号 - delta 的 Lane。 |
-| `delta` | 输入 | 目标 Lane 相对本 Lane 编号的负向偏移量。 |
-| `participants` | 输入 | 参与本操作的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：自身或目标不在集合内时结果无效。 |
+| `value` | 输入 | 本Lane提供参与洗牌的值：返回值来自同一分组内编号为 本Lane编号 - delta的Lane。 |
+| `delta` | 输入 | 目标Lane相对本Lane编号的负向偏移量。 |
+| `participants` | 输入 | 参与本操作的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：自身或目标不在集合内时结果无效。 |
 
-### 原型 5 的参数
+### 原型5的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
+| `Width` | 洗牌分组宽度（编译期整数，取1/2/4/8/16/32，默认32）：Lane按Width分组，目标Lane须与调用Lane同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自同一分组内编号为 本 Lane 编号 - delta 的 Lane。 |
-| `delta` | 输入 | 目标 Lane 相对本 Lane 编号的负向偏移量。 |
-| `participants` | 输入 | 参与本操作的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：自身或目标不在集合内时结果无效。 |
+| `value` | 输入 | 本Lane提供参与洗牌的值：返回值来自同一分组内编号为 本Lane编号 - delta的Lane。 |
+| `delta` | 输入 | 目标Lane相对本Lane编号的负向偏移量。 |
+| `participants` | 输入 | 参与本操作的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：自身或目标不在集合内时结果无效。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::warp_shuffle_result<float>` | 返回按指定线程束来源位置取得的值。 |
-| 原型 2 | `asc::warp_shuffle_result<int>` | 返回按指定线程束来源位置取得的值。 |
-| 原型 3 | `asc::warp_shuffle_result<long long>` | 返回按指定线程束来源位置取得的值。 |
-| 原型 4 | `asc::warp_shuffle_result<unsigned int>` | 返回按指定线程束来源位置取得的值。 |
-| 原型 5 | `asc::warp_shuffle_result<unsigned long long>` | 返回按指定线程束来源位置取得的值。 |
+| 原型1 | `asc::warp_shuffle_result<float>` | 返回按指定线程束来源位置取得的值。 |
+| 原型2 | `asc::warp_shuffle_result<int>` | 返回按指定线程束来源位置取得的值。 |
+| 原型3 | `asc::warp_shuffle_result<long long>` | 返回按指定线程束来源位置取得的值。 |
+| 原型4 | `asc::warp_shuffle_result<unsigned int>` | 返回按指定线程束来源位置取得的值。 |
+| 原型5 | `asc::warp_shuffle_result<unsigned long long>` | 返回按指定线程束来源位置取得的值。 |
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 所有参与的活动线程必须以收敛控制流调用
-- Width 只能取 1、2、4、8、16 或 32
+- 仅可在AI Core SIMT编程中调用。
+- 所有参与的活动线程必须以收敛控制流调用。
+- Width只能取1、2、4、8、16或32。
 
 ## 调用示例
 
@@ -174,7 +184,7 @@ __aicore__ decltype(auto) example(float value, int delta, asc::lane_mask partici
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：
 
@@ -182,3 +192,7 @@ __aicore__ decltype(auto) example(float value, int delta, asc::lane_mask partici
 - [warp_example.h](../../../../examples/warp_collectives/warp_example.h)
 - [kernel.asc](../../../../examples/warp_collectives/kernel.asc)
 - [main.cpp](../../../../examples/warp_collectives/main.cpp)
+
+## 关联API
+
+- [`asc::lane_mask`](lane_mask.md)：Warp内Lane的位集合；第i位对应编号为i的Lane。

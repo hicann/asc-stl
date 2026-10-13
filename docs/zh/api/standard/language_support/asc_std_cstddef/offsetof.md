@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cstddef>`。
 
-`offsetof` 计算给定成员相对于标准布局类型对象起始地址的字节偏移。
+`offsetof`计算给定成员相对于标准布局类型对象起始地址的字节偏移。
 
 标准语义参考：[cppreference `cstddef`](https://en.cppreference.com/w/cpp/header/cstddef)。
 
@@ -40,7 +40,7 @@
 
 ## 约束说明
 
-- 提供标准声明
+- 提供标准声明。
 
 ## 调用示例
 
@@ -53,3 +53,7 @@
 #error "offsetof is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstddef.md)

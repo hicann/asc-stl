@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::tensor_copy_descriptor::set_dimension` 设置指定维度的范围、源/目标步长及两侧填充。
+`asc::tensor_copy_descriptor::set_dimension`设置指定维度的范围、源/目标步长及两侧填充。
 
 ## 函数原型
 
@@ -42,18 +42,18 @@ constexpr void asc::tensor_copy_descriptor<Rank>::set_dimension(unsigned int dim
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rank` | 描述符的张量秩（维度数量），为 1 至 5 的编译期无符号整数。 |
+| `Rank` | 描述符的张量秩（维度数量），为1至5的编译期无符号整数。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `dimension` | 输入 | 待设置的维度索引，从 0 起计（最内维为 Rank-1）；不小于 Rank 时本次调用不改动描述符的任何字段。 |
+| `dimension` | 输入 | 待设置的维度索引，从0起计（最内维为Rank-1）；不小于Rank时本次调用不改动描述符的任何字段。 |
 | `extent` | 输入 | 该维度参与搬运的有效元素个数，以元素计（uint32_t）；描述符校验通过须其为非零值。 |
 | `source_stride` | 输入 | 该维度源端（GM）相邻元素跨距，以元素计（uint32_t）；描述符校验通过须其为非零值。 |
 | `destination_stride` | 输入 | 该维度目标端（UB）相邻元素跨距，以元素计（uint32_t）；描述符校验通过须其为非零值。 |
-| `left_padding` | 输入 | 该维度目标端左侧填充的元素个数（uint32_t），搬运时以 fill_value 写入。 |
-| `right_padding` | 输入 | 该维度目标端右侧填充的元素个数（uint32_t），搬运时以 fill_value 写入。 |
+| `left_padding` | 输入 | 该维度目标端左侧填充的元素个数（uint32_t），搬运时以fill_value写入。 |
+| `right_padding` | 输入 | 该维度目标端右侧填充的元素个数（uint32_t），搬运时以fill_value写入。 |
 
 ## 返回值说明
 
@@ -61,13 +61,13 @@ constexpr void asc::tensor_copy_descriptor<Rank>::set_dimension(unsigned int dim
 
 ## 约束说明
 
-- 描述符及状态类型可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Rank 为 1 至 5
-- 维度和步长采用 uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运
+- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Rank为1至5。
+- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
 
 ## 调用示例
 
-以下 Host 片段以二维描述符演示设置一个有效维度。
+以下Host片段以二维描述符演示设置一个有效维度。
 
 ```cpp
 #include <asc/tensor_copy>
@@ -78,3 +78,7 @@ void example()
     descriptor.set_dimension(0, 4, 4, 4, 0, 0);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_tensor_copy.md)

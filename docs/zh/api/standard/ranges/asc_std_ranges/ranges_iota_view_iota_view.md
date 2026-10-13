@@ -28,43 +28,43 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::iota_view::iota_view` 按本页所列构造形态初始化 `iota_view` 对象。
+`asc::std::ranges::iota_view::iota_view`按本页所列构造形态初始化`iota_view`对象。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 iota_view();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr iota_view(Start start) noexcept(is_nothrow_move_constructible_v<Start>);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 constexpr iota_view(type_identity_t<Start> start, type_identity_t<BoundSentinel> bound) noexcept(is_nothrow_move_constructible_v<Start>&& is_nothrow_move_constructible_v<BoundSentinel>);
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
 template<class BoundSentinel2> constexpr iota_view(Iterator start, BoundSentinel bound);
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
 template<class BoundSentinel2> constexpr iota_view(Iterator start, Iterator bound);
 ```
 
-### 原型 6
+### 原型6
 
 ```cpp
 template<class BoundSentinel2> constexpr iota_view(Iterator start, Sentinel bound);
@@ -72,11 +72,11 @@ template<class BoundSentinel2> constexpr iota_view(Iterator start, Sentinel boun
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -84,22 +84,22 @@ template<class BoundSentinel2> constexpr iota_view(Iterator start, Sentinel boun
 | --- | --- | --- |
 | `start` | 输入 | 序列起始值；视图从该值起按递增生成元素。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `start` | 输入 | 序列起始值；视图从该值起按递增生成元素。 |
-| `bound` | 输入 | 序列上界哨兵值；元素生成到等于 bound 之前结束。 |
+| `bound` | 输入 | 序列上界哨兵值；元素生成到等于bound之前结束。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `BoundSentinel2` | bound 的实际类型；须可与视图迭代器比较相等或为兼容的哨兵类型。 |
+| `BoundSentinel2` | bound的实际类型；须可与视图迭代器比较相等或为兼容的哨兵类型。 |
 
 **函数参数**
 
@@ -108,13 +108,13 @@ template<class BoundSentinel2> constexpr iota_view(Iterator start, Sentinel boun
 | `start` | 输入 | 起始迭代器，包装序列起始值。 |
 | `bound` | 输入 | 结束哨兵，界定序列上界。 |
 
-### 原型 5 的参数
+### 原型5的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `BoundSentinel2` | bound 的实际类型；须可与视图迭代器比较相等或为兼容的哨兵类型。 |
+| `BoundSentinel2` | bound的实际类型；须可与视图迭代器比较相等或为兼容的哨兵类型。 |
 
 **函数参数**
 
@@ -123,13 +123,13 @@ template<class BoundSentinel2> constexpr iota_view(Iterator start, Sentinel boun
 | `start` | 输入 | 起始迭代器，包装序列起始值。 |
 | `bound` | 输入 | 结束迭代器，包装序列上界值。 |
 
-### 原型 6 的参数
+### 原型6的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `BoundSentinel2` | bound 的实际类型；须可与视图迭代器比较相等或为兼容的哨兵类型。 |
+| `BoundSentinel2` | bound的实际类型；须可与视图迭代器比较相等或为兼容的哨兵类型。 |
 
 **函数参数**
 
@@ -138,21 +138,34 @@ template<class BoundSentinel2> constexpr iota_view(Iterator start, Sentinel boun
 | `start` | 输入 | 起始迭代器，包装序列起始值。 |
 | `bound` | 输入 | 结束哨兵，界定序列上界。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example()
+bool example()
 {
-    asc::std::ranges::iota_view<int, int> value{};
-    (void)value;
+    int values[] = {1, 2, 3, 4};
+    using Base = asc::std::ranges::subrange<int*>;
+    Base base(values, values + 4);
+    asc::std::ranges::iota_view<int, int> view(3, 6);
+    return *view.begin() == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

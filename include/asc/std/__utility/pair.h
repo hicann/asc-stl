@@ -164,7 +164,7 @@ struct pair {
     CANN_ASC_STL_API constexpr pair(piecewise_construct_t, tuple<Args1...> left, tuple<Args2...> right) noexcept(
         is_nothrow_constructible_v<T1, Args1...> && is_nothrow_constructible_v<T2, Args2...>)
         : pair(piecewise_construct, ::asc::std::move(left), ::asc::std::move(right),
-              __make_tuple_indices_t<sizeof...(Args1)>{}, __make_tuple_indices_t<sizeof...(Args2)>{})
+              make_index_sequence<sizeof...(Args1)>{}, make_index_sequence<sizeof...(Args2)>{})
     {}
 
     template <class U1, class U2,

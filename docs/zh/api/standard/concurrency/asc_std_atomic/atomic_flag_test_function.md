@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_flag_test` 读取原子标志是否置位。
+`asc::std::atomic_flag_test`读取原子标志是否置位。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 函数原型
 
 ```cpp
-bool asc::std::atomic_flag_test(const atomic_flag* object) noexcept;
+namespace asc::std {
+bool atomic_flag_test(const atomic_flag* object) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,18 +48,18 @@ bool asc::std::atomic_flag_test(const atomic_flag* object) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `object` | 输入 | 提供“读取原子标志是否置位”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `object` | 输入 | 指向存活且满足类型对齐的原子对象；读取其原子状态或实现属性，不取得对象所有权。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- atomic_flag的test/test_and_set/clear成员与非volatile自由函数
-- Host 和 AI Core SIMT 编程 GM
+- atomic_flag的test/test_and_set/clear成员与非volatile自由函数。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
@@ -71,3 +73,7 @@ decltype(auto) example(const asc::std::atomic_flag * object)
     return asc::std::atomic_flag_test(object);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

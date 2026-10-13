@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::construct_at` 在调用方提供且满足 `T` 对齐要求的存储中，以转发的实参构造 `T` 对象。构造成功后可通过返回指针访问该对象；对象生命周期结束时可调用 `destroy_at`。
+`asc::std::construct_at`在调用方提供且满足`T`对齐要求的存储中，以转发的实参构造`T`对象。构造成功后可通过返回指针访问该对象；对象生命周期结束时可调用`destroy_at`。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
 ```cpp
-template<class T, class ...Args> constexpr T* asc::std::construct_at(T* location, Args&&... args);
+namespace asc::std {
+template<class T, class ...Args> constexpr T* construct_at(T* location, Args&&... args);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -45,25 +47,25 @@ template<class T, class ...Args> constexpr T* asc::std::construct_at(T* location
 | 参数名 | 描述 |
 | --- | --- |
 | `T` | 要在目标存储中构造的对象类型。 |
-| `Args` | 传给 `T` 构造函数的实参类型列表。 |
+| `Args` | 传给`T`构造函数的实参类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `location` | 输入 | 提供“在调用方提供且满足 `T` 对齐要求的存储中，以转发的实参构造 `T` 对象”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `location` | 输出 | 满足目标对象大小与对齐的未初始化存储地址；调用在该处开始对象生命周期，构造实参决定其初值。 |
 | `args` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `T *` | 返回指向新构造对象的指针，其地址与 `location` 相同。 |
+| `T *` | 返回指向新构造对象的指针，其地址与`location`相同。 |
 
 ## 约束说明
 
-- 存储由调用方提供并满足对齐要求
-- 当回滚会引发异常时，Device 侧相关操作必须不抛出异常
+- 存储由调用方提供并满足对齐要求。
+- 当回滚会引发异常时，Device侧相关操作必须不抛出异常。
 
 ## 调用示例
 
@@ -80,6 +82,6 @@ void example()
 }
 ```
 
-## 关联 API
+## 关联API
 
 - [asc::std::destroy_at](destroy_at.md)

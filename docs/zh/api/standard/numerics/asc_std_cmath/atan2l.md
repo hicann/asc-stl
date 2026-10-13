@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::atan2l` 由 `<asc/std/cmath>` 提供，宿主 long double 两参反正切，后缀 l 别名
+`asc::std::atan2l`由`<asc/std/cmath>`提供，宿主long double两参反正切，后缀l别名
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-constexpr long double asc::std::atan2l(long double y, long double x) noexcept
+namespace asc::std {
+constexpr long double atan2l(long double y, long double x) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -51,11 +53,11 @@ constexpr long double asc::std::atan2l(long double y, long double x) noexcept
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `long double` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `long double` | 由y、x确定象限的反正切角度（弧度）。 |
 
 ## 约束说明
 
-- 宿主 long double 两参反正切，后缀 l 别名
+- 宿主long double两参反正切，后缀l别名。
 
 ## 调用示例
 
@@ -69,3 +71,7 @@ decltype(auto) example(long double y, long double x)
     return asc::std::atan2l(y, x);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

@@ -28,31 +28,40 @@
 
 头文件路径为：`<asc/std/optional>`。
 
-`asc::std::nullopt_t` 标记 optional 不保存有效值的状态。
+`asc::std::nullopt_t`标记optional不保存有效值的状态。
 
 标准语义参考：[cppreference `optional`](https://en.cppreference.com/w/cpp/header/optional)。
 
 ## 声明
 
 ```cpp
-struct asc::std::nullopt_t
+namespace asc::std {
+struct nullopt_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- T 必须是普通的非引用对象类型
-- Host 遵循有效的 C++17 操作
-- Device 侧构造、赋值、调用和交换所依赖的操作必须不抛出异常
+- T必须是普通的非引用对象类型。
+- Host遵循有效的C++17操作。
+- Device侧构造、赋值、调用和交换所依赖的操作必须不抛出异常。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/optional>
 
-void use_type(const asc::std::nullopt_t& value)
+bool example()
 {
-    (void)value;
+    asc::std::optional<int> value(7);
+    asc::std::nullopt_t empty = asc::std::nullopt;
+    value = empty;
+    return !value.has_value();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_optional.md)

@@ -28,32 +28,42 @@
 
 头文件路径为：`<asc/std/semaphore>`。
 
-`asc::std::binary_semaphore` 提供最大许可数为一的计数信号量别名。
+`asc::std::binary_semaphore`提供最大许可数为一的计数信号量别名。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `semaphore`](https://en.cppreference.com/w/cpp/header/semaphore)。
 
 ## 声明
 
 ```cpp
-using asc::std::binary_semaphore = counting_semaphore<1>
+namespace asc::std {
+using binary_semaphore = counting_semaphore<1>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- Host 侧对象管理 Ascend 950 的 GM 状态
-- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足
+- Host侧对象管理Ascend 950的GM状态。
+- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/semaphore>
 
-void use_type(const asc::std::binary_semaphore& value)
+bool example()
 {
-    (void)value;
+    asc::std::binary_semaphore slots(1);
+    slots.acquire();
+    const bool empty = !slots.try_acquire();
+    slots.release();
+    return empty && slots.try_acquire() && slots.max() >= 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_semaphore.md)

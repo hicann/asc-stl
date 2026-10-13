@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::duration_values::min` 返回该类型允许的最小值。
+`asc::std::chrono::duration_values::min`返回该类型允许的最小值。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
+所属类型：[`asc::std::chrono::duration_values`](chrono_duration_values.md)。
+
 ```cpp
-[[nodiscard]] constexpr Re asc::std::chrono::duration_values::min() noexcept;
+// asc::std::chrono::duration_values 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr Re min() noexcept;
 ```
 
 ## 参数说明
@@ -50,17 +53,24 @@
 
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符
+- 提供值运算以及六个显式关系运算符。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void example(asc::std::chrono::duration_values<int>& object)
+bool example()
 {
-    (void)object.min();
+    asc::std::chrono::duration_values<int> value{};
+    return value.min() == asc::std::numeric_limits<int>::lowest();
 }
 ```
+
+## 关联API
+
+- [`asc::std::chrono::duration_values`](chrono_duration_values.md)
+- [本头文件的接口列表](asc_std_chrono.md)

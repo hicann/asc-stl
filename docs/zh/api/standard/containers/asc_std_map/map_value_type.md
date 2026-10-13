@@ -28,31 +28,34 @@
 
 头文件路径为：`<asc/std/map>`。
 
-`asc::std::map::value_type` 标识元素或结果的值类型。
+`asc::std::map::value_type`标识元素或结果的值类型。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `map`](https://en.cppreference.com/w/cpp/header/map)。
 
 ## 声明
 
+所属类型：[`asc::std::map`](map.md)。
+
 ```cpp
-using asc::std::map::value_type = pair<const Key, T>
+// asc::std::map 类内的声明节选；模板形参和其他成员由所属类提供。
+using value_type = pair<const Key, T>;
 ```
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下map<Key,T,Compare,A>显式GM arena
-- allocator以及Compare+allocator构造
-- empty/size/begin/end/insert/find/count/operator[]/clear
-- AVL平衡与对数级插入/查找核心
-- 重复键拒绝、有序迭代、移动和析构
-- 仅容量充足和不抛出异常键值/比较/allocator域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下map<Key,T,Compare,A>显式GM arena。
+- allocator以及Compare+allocator构造。
+- empty/size/begin/end/insert/find/count/`operator[]`/clear。
+- AVL平衡与对数级插入/查找核心。
+- 重复键拒绝、有序迭代、移动和析构。
+- 仅容量充足和不抛出异常键值/比较/allocator域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/map>
@@ -77,3 +80,8 @@ void use_type()
     using alias_type = typename asc::std::map<int, int, ::std::less<int>, example_allocator<::std::pair<const int, int>>>::value_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::map`](map.md)
+- [本头文件的接口列表](asc_std_map.md)

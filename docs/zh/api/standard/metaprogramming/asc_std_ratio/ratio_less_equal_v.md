@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/ratio>`。
 
-`asc::std::ratio_less_equal_v` 在编译期判断两个有理数是否满足名称所指的大小关系。
+`asc::std::ratio_less_equal_v`在编译期判断两个有理数是否满足名称所指的大小关系。
 
 标准语义参考：[cppreference `ratio`](https://en.cppreference.com/w/cpp/header/ratio)。
 
 ## 声明
 
 ```cpp
-template<class R1, class R2> inline constexpr bool asc::std::ratio_less_equal_v = ratio_less_equal<R1, R2>::value
+namespace asc::std {
+template<class R1, class R2> inline constexpr bool ratio_less_equal_v = ratio_less_equal<R1, R2>::value;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供完整的 C++20 ratio 接口
+- 分母不得为零；规范化后的分子和分母必须可由`intmax_t`表示。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class R1, class R2> inline constexpr bool asc::std::ratio_less_equal_v 
 
 inline constexpr auto example = asc::std::ratio_less_equal_v<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ratio.md)

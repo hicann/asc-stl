@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/devices>`。
 
-`asc::device_ref::properties` 从 Runtime 查询该 Device 的属性；仅在全部属性读取成功且值有效时更新输出对象并返回 true。
+`asc::device_ref::properties`从Runtime查询该Device的属性；仅在全部属性读取成功且值有效时更新输出对象并返回true。
 
 ## 函数原型
 
+所属类型：[`asc::device_ref`](device_ref.md)。
+
 ```cpp
-bool asc::device_ref::properties(asc::device_properties& output) const noexcept;
+// asc::device_ref 类内的声明节选；模板形参和其他成员由所属类提供。
+bool properties(asc::device_properties& output) const noexcept;
 ```
 
 ## 参数说明
@@ -42,23 +45,23 @@ bool asc::device_ref::properties(asc::device_properties& output) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 提供“从 Runtime 查询该 Device 的属性”使用的对象引用；被引用对象须在调用期间有效。 |
+| `output` | 输出 | 提供“从Runtime查询该Device的属性”使用的对象引用；被引用对象须在调用期间有效。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 仅可在 Host 查询或选择 Device
-- 引用只保存设备序号且不拥有 Runtime 状态
-- 查询失败时输出参数保持原值，属性仅限当前接口列出的 AI Core、Vector Core、Warp、UB、GM、L2 与架构字段
+- 仅可在Host查询或选择Device。
+- 引用只保存设备序号且不拥有Runtime状态。
+- 查询失败时输出参数保持原值，属性仅限当前接口列出的AI Core、Vector Core、Warp、UB、GM、L2与架构字段。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
 
 ```cpp
 #include <asc/devices>
@@ -69,3 +72,8 @@ decltype(auto) example(asc::device_ref device)
     return device.properties(properties);
 }
 ```
+
+## 关联API
+
+- [`asc::device_ref`](device_ref.md)
+- [本头文件的接口列表](asc_devices.md)

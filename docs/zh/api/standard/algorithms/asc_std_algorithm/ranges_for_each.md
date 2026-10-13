@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::ranges::for_each` 是 C++17 起可调用的算法对象，接受迭代器与哨兵或输入范围，对每个投影后的元素调用函数。返回 `for_each_result`，包含结束位置与调用后的函数对象；非借用临时范围的结束位置为 `dangling`。
+`asc::std::ranges::for_each`是C++17起可调用的算法对象，接受迭代器与哨兵或输入范围，对每个投影后的元素调用函数。返回`for_each_result`，包含结束位置与调用后的函数对象；非借用临时范围的结束位置为`dangling`。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -37,16 +37,20 @@
 该名称是公开的常量函数对象；对象的实现类型不构成接口承诺。以下为调用形式，省略的可选参数以各原型约束为准。
 
 ```cpp
-asc::std::ranges::for_each(first, last, function, projection)
+namespace asc::std::ranges {
+for_each(first, last, function, projection);
+} // namespace asc::std::ranges
 ```
 
 ```cpp
-asc::std::ranges::for_each(range, function, projection)
+namespace asc::std::ranges {
+for_each(range, function, projection);
+} // namespace asc::std::ranges
 ```
 
 ## 参数说明
 
-### 调用形式 1 的参数
+### 调用形式1的参数
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -55,7 +59,7 @@ asc::std::ranges::for_each(range, function, projection)
 | `function` | 输入 | 对输入元素执行操作的可调用对象。 |
 | `projection` | 输入 | 在比较或判断前作用于元素的投影函数。 |
 
-### 调用形式 2 的参数
+### 调用形式2的参数
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -65,7 +69,7 @@ asc::std::ranges::for_each(range, function, projection)
 
 ## 返回值说明
 
-返回结束位置与调用后的函数对象；范围重载遵循借用与 `dangling` 规则。
+返回结束位置与调用后的函数对象；范围重载遵循借用与`dangling`规则。
 
 | 调用形式 | 返回类型 |
 | --- | --- |
@@ -74,24 +78,26 @@ asc::std::ranges::for_each(range, function, projection)
 
 ## 约束说明
 
-- 函数对象须能接收投影后的元素
-- 输入范围在调用期间须保持有效
+- 函数对象须能接收投影后的元素。
+- 输入范围在调用期间须保持有效。
 
 ## 调用示例
 
-以下 Host 片段以具体数组或数值演示本页调用形式。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    // 用具体类型和实参演示已交付的调用形式。
-    int values[4] = {1, 2, 3, 4};
+    int values[] = {1, 2, 3, 4};
     auto action = [](int& value) { ++value; };
-    auto result_1 = asc::std::ranges::for_each(values, values + 4, action);
-    (void)result_1;
-    auto result_2 = asc::std::ranges::for_each(values, action);
-    (void)result_2;
+    auto first = asc::std::ranges::for_each(values, values + 4, action);
+    auto second = asc::std::ranges::for_each(values, action);
+    return first.in == values + 4 && second.in == values + 4 && values[0] == 3 && values[3] == 6;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

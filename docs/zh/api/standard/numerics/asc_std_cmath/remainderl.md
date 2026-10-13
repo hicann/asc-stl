@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::remainderl` 由 `<asc/std/cmath>` 提供，宿主 long double IEEE 余数，后缀 l 别名（清单外新增）
+`asc::std::remainderl`由`<asc/std/cmath>`提供，宿主long double IEEE余数，后缀l别名（清单外新增）
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-constexpr long double asc::std::remainderl(long double x, long double y) noexcept
+namespace asc::std {
+constexpr long double remainderl(long double x, long double y) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -51,11 +53,11 @@ constexpr long double asc::std::remainderl(long double x, long double y) noexcep
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `long double` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `long double` | x-n*y的余数，其中n是最接近x/y的整数，中点取偶数。 |
 
 ## 约束说明
 
-- 宿主 long double IEEE 余数，后缀 l 别名（清单外新增）
+- 宿主long double IEEE余数，后缀l别名（清单外新增）。
 
 ## 调用示例
 
@@ -69,3 +71,7 @@ decltype(auto) example(long double x, long double y)
     return asc::std::remainderl(x, y);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

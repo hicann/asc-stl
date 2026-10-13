@@ -28,52 +28,50 @@
 
 头文件路径为：`<asc/std/unordered_map>`。
 
-`asc::std::unordered_map` 按哈希桶组织键值对。
+`asc::std::unordered_map`按哈希桶组织键值对。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `unordered_map`](https://en.cppreference.com/w/cpp/header/unordered_map)。
 
 ## 声明
 
 ```cpp
-template<class Key, class T, class Hash, class Equal, class Allocator> class asc::std::unordered_map
+namespace asc::std {
+template<class Key, class T, class Hash, class Equal, class Allocator> class unordered_map;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下unordered_map<Key,T,Hash,Equal,A>显式GM arena
-- empty/size/bucket_count/begin/end/insert/find/count/operator[]/clear
-- allocator回绑桶数组并在默认负载阈值上自动rehash
-- 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构
-- 仅容量充足和不抛出异常域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下unordered_map<Key,T,Hash,Equal,A>显式GM arena。
+- empty/size/bucket_count/begin/end/insert/find/count/`operator[]`/clear。
+- allocator回绑桶数组并在默认负载阈值上自动rehash。
+- 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构。
+- 仅容量充足和不抛出异常域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
-#include <asc/std/unordered_map>
+#include <asc/memory>
 #include <functional>
-#include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/unordered_map>
+#include <asc/std/utility>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void use_type()
+bool example()
 {
-    using selected = asc::std::unordered_map<int, int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<::std::pair<const int, int>>>;
-    (void)sizeof(selected);
+    alignas(64) unsigned char storage[16384] = {};
+    asc::monotonic_arena arena(storage, sizeof(storage));
+    using allocator = asc::arena_allocator<asc::std::pair<const int, int>>;
+    asc::std::unordered_map<int, int, ::std::hash<int>, ::std::equal_to<int>, allocator> values(allocator{arena});
+    values[2] = 7;
+    return values.size() == 1 && values[2] == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_unordered_map.md)

@@ -28,24 +28,27 @@
 
 头文件路径为：`<asc/std/scoped_allocator>`。
 
-`asc::std::scoped_allocator_adaptor::size_type` 标识容器大小的无符号类型。
+`asc::std::scoped_allocator_adaptor::size_type`标识容器大小的无符号类型。
 
 标准语义参考：[cppreference `scoped_allocator`](https://en.cppreference.com/w/cpp/header/scoped_allocator)。
 
 ## 声明
 
+所属类型：[`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。
+
 ```cpp
-using asc::std::scoped_allocator_adaptor::size_type = typename outer_traits::size_type
+// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
+using size_type = typename outer_traits::size_type;
 ```
 
 ## 约束说明
 
-- 遵循 scoped_allocator_adaptor 的标准分配器传播、构造、销毁、比较和交换约束
-- 参与操作的分配器必须在当前可用位置有效，Device 侧操作不得抛出异常
+- 此别名表示所属类型用于元素数量或大小的无符号整数类型；读取类型本身不分配内存，也不访问元素。
+- 构造、分配和访问的运行条件见所属类型[asc::std::scoped_allocator_adaptor](scoped_allocator_adaptor.md)。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/scoped_allocator>
@@ -70,3 +73,8 @@ void use_type()
     using alias_type = typename asc::std::scoped_allocator_adaptor<example_allocator<int>>::size_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)
+- [本头文件的接口列表](asc_std_scoped_allocator.md)

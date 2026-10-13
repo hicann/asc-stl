@@ -28,30 +28,35 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::multiplies` 把名称所指的算术运算包装为可调用对象。
+`asc::std::multiplies`把名称所指的算术运算包装为可调用对象。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 声明
 
 ```cpp
-template<class T> struct asc::std::multiplies
+namespace asc::std {
+template<class T> struct multiplies;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 同时提供指定类型形式和透明调用形式
+- 同时提供指定类型形式和透明调用形式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/functional>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::multiplies<void>;
-    (void)sizeof(selected);
+    return asc::std::multiplies<int>{}(3, 4) == 12;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

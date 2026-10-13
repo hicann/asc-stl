@@ -28,31 +28,44 @@
 
 头文件路径为：`<asc/atomic>`。
 
-`asc::atomic` 拥有一个可按指定内存作用域原子访问的值。
+`asc::atomic`拥有一个可按指定内存作用域原子访问的值。
 
-该接口的可用位置为 AI Core SIMT 编程。
+该接口的可用位置为AI Core SIMT编程。
 
 ## 声明
 
 ```cpp
-template<class T, asc::memory_scope Scope = asc::memory_scope::device> class asc::atomic
+namespace asc {
+template<class T, asc::memory_scope Scope = asc::memory_scope::device> class atomic;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 原子对象的类型、地址空间、作用域和内存序必须匹配
-- Device 作用域的 64 位对象位于 GM，UB 原子操作仅使用 memory_order_relaxed
+- 原子对象的类型、地址空间、作用域和内存序必须匹配。
+- Device作用域的64位对象位于GM，UB原子操作仅使用memory_order_relaxed。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下SIMT核函数由单个线程初始化并访问一个GM原子单元；无其他并发访问，预期output[0]为1。Host须在核函数完成后读取结果。
 
 ```cpp
 #include <asc/atomic>
+#include <asc/std/new>
 
-__aicore__ void use_type()
+__global__ void example(int* storage, unsigned int* output)
 {
-    using selected = asc::atomic<int>;
-    (void)sizeof(selected);
+    // 仅启动1个block、1个线程；storage和output均为Host分配的GM。
+    auto* object = new (storage) asc::atomic<int>(7);
+    auto& cell = *object;
+    cell.store(7, asc::std::memory_order_relaxed);
+
+    output[0] = (cell.load(asc::std::memory_order_relaxed) == 7) ? 1U : 0U;
 }
 ```
+
+完整工程及运行步骤见[《atomic_operations示例》](../../../../examples/atomic_operations/README.md)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_atomic.md)

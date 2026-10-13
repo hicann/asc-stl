@@ -1,6 +1,6 @@
-# 头文件 asc/cmath
+# 头文件asc/cmath
 
-提供整数除法取整、对数、平方根、乘积高位和整数幂，以及 Host 和 AI Core SIMT 编程可用的 `sincos` 函数
+提供整数除法取整、对数、平方根、乘积高位和整数幂，以及Host和AI Core SIMT编程可用的`sincos`函数
 
 ## 使用方式
 
@@ -8,7 +8,7 @@
 #include <asc/cmath>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |

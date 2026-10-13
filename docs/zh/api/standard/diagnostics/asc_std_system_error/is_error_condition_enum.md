@@ -28,30 +28,37 @@
 
 头文件路径为：`<asc/std/system_error>`。
 
-`asc::std::is_error_condition_enum` 标记枚举类型可用于构造错误条件。
+`asc::std::is_error_condition_enum`标记枚举类型可用于构造错误条件。
 
 标准语义参考：[cppreference `system_error`](https://en.cppreference.com/w/cpp/header/system_error)。
 
 ## 声明
 
 ```cpp
-template<class T> struct asc::std::is_error_condition_enum
+namespace asc::std {
+template<class T> struct is_error_condition_enum;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 invalid_argument、result_out_of_range 和 value_too_large 错误值、对应特征及枚举比较操作
+- 提供invalid_argument、result_out_of_range和value_too_large错误值、对应特征及枚举比较操作。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/system_error>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::is_error_condition_enum<asc::std::errc>;
-    (void)sizeof(selected);
+    static_assert(asc::std::is_error_condition_enum<asc::std::errc>::value);
+    static_assert(!asc::std::is_error_condition_enum<int>::value);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_system_error.md)

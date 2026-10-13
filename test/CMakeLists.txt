@@ -42,6 +42,13 @@ add_test(
         --test-root ${ASC_STL_TEST_ROOT})
 set_tests_properties(gate.metadata PROPERTIES LABELS "metadata;static-rules;affected-regression;nightly")
 
+add_test(NAME gate.api-docs
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/check_api_docs.py)
+add_test(NAME gate.api-docs-regressions
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/test_api_docs.py)
+set_tests_properties(gate.api-docs gate.api-docs-regressions
+    PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 120)
+
 add_test(
     NAME gate.product-contract
     COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/validate_product_contract.py
@@ -504,6 +511,7 @@ if(ASC_STL_ENABLE_HOST_TESTS)
     asc_stl_add_host_case("asc.std.format-numeric.w11" "asc/std/format/host.pass.cpp")
     asc_stl_add_host_case("asc.std.ranges.w12" "asc/std/ranges/host.pass.cpp")
     asc_stl_add_host_case("asc.argument-functional.w12" "asc/argument/host.pass.cpp")
+    asc_stl_add_host_case("asc.functional.properties" "asc/functional/host.pass.cpp")
     asc_stl_add_host_case("asc.std.array.shared" "asc/std/array/host.pass.cpp")
     asc_stl_add_host_case("asc.collectives.shared" "asc/__collectives/block/host.pass.cpp")
     asc_stl_add_host_case("asc.algorithm.frontend.shared" "asc/__algorithm/frontend/host.pass.cpp")

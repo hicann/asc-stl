@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/random>`。
 
-构造 float 均匀实数分布的半开区间参数对象。
+构造float均匀实数分布的半开区间参数对象。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
@@ -44,24 +44,33 @@ constexpr explicit asc::std::uniform_real_distribution<float>::param_type::param
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `a` | 输入 | 均匀实数分布半开区间的下界；生成值满足 a <= x < b，省略时为 0.0F。 |
-| `b` | 输入 | 均匀实数分布半开区间的上界；省略时为 1.0F。 |
+| `a` | 输入 | 均匀实数分布半开区间的下界；生成值满足a <= x < b，省略时为0.0F。 |
+| `b` | 输入 | 均匀实数分布半开区间的上界；省略时为1.0F。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 仅提供 uniform_real_distribution<float>
-- 结果位于指定的半开区间内，不提供 double、long double 及其他统计分布
+- 仅提供uniform_real_distribution<float>。
+- 结果位于指定的半开区间内，不提供double、long double及其他统计分布。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/random>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    asc::std::uniform_real_distribution<float>::param_type parameters(0.0f, 1.0f);
-    (void)parameters;
+    asc::std::uniform_real_distribution<float>::param_type parameters(2.0f, 5.0f);
+    return parameters.a() == 2.0f && parameters.b() == 5.0f;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

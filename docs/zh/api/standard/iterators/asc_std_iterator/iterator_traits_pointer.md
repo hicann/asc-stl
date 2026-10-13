@@ -28,23 +28,26 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::iterator_traits::pointer` 标识元素指针类型。
+`asc::std::iterator_traits::pointer`标识元素指针类型。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
+所属类型：[`asc::std::iterator_traits`](iterator_traits.md)。
+
 ```cpp
-using asc::std::iterator_traits::pointer = T*
+// asc::std::iterator_traits 类内的声明节选；模板形参和其他成员由所属类提供。
+using pointer = T*;
 ```
 
 ## 约束说明
 
-- 提供 C++20 公开迭代器概念和特征接口
+- 提供C++20公开迭代器概念和特征接口。
 
 ## 调用示例
 
-以下 Host 片段用具体迭代器或容器类型实例化本页接口。
+以下Host片段用具体迭代器或容器类型实例化本页接口。
 
 ```cpp
 #include <asc/std/iterator>
@@ -54,6 +57,11 @@ using asc::std::iterator_traits::pointer = T*
 void example()
 {
     using selected = typename asc::std::iterator_traits<int*>::pointer;
-    static_assert(asc::std::is_same_v<selected, selected>);
+    static_assert(asc::std::is_same_v<selected, int*>);
 }
 ```
+
+## 关联API
+
+- [`asc::std::iterator_traits`](iterator_traits.md)
+- [本头文件的接口列表](asc_std_iterator.md)

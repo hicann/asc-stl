@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/bitset>`。
 
-`asc::std::bitset::operator&=` 按 `bitset` 的可用运算符规则处理当前对象及操作数。
+`asc::std::bitset::operator&=`按`bitset`的可用运算符规则处理当前对象及操作数。
 
 标准语义参考：[cppreference `bitset`](https://en.cppreference.com/w/cpp/header/bitset)。
 
 ## 函数原型
 
+所属类型：[`asc::std::bitset`](bitset.md)。
+
 ```cpp
-bitset<Size>& asc::std::bitset::operator&=(const bitset<Size>& other) noexcept;
+// asc::std::bitset 类内的声明节选；模板形参和其他成员由所属类提供。
+bitset<Size>& operator&=(const bitset<Size>& other) noexcept;
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ bitset<Size>& asc::std::bitset::operator&=(const bitset<Size>& other) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
 
 ## 返回值说明
 
@@ -54,13 +57,13 @@ bitset<Size>& asc::std::bitset::operator&=(const bitset<Size>& other) noexcept;
 
 ## 约束说明
 
-- 支持默认构造和 unsigned long long 构造
-- operator[] 不进行边界检查
-- 提供整组 set、reset、flip，位运算、移位、状态检查、计数和容量查询
+- 支持默认构造和unsigned long long构造。
+- `operator[]`不进行边界检查。
+- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
 
 ## 调用示例
 
-以下 Host 片段以 8 位 bitset 演示具体调用；索引须在有效范围内。
+以下Host片段以8位bitset演示具体调用；索引须在有效范围内。
 
 ```cpp
 #include <asc/std/bitset>
@@ -70,3 +73,8 @@ decltype(auto) example(asc::std::bitset<8>& left, const asc::std::bitset<8>& rig
     return (left &= right);
 }
 ```
+
+## 关联API
+
+- [`asc::std::bitset`](bitset.md)
+- [本头文件的接口列表](asc_std_bitset.md)

@@ -1,6 +1,6 @@
-# 头文件 asc/mdspan
+# 头文件asc/mdspan
 
-提供非拥有多维数据视图，覆盖 Host、GM 以及 AI Core SIMD 编程中的 UB；DLPack 可用时支持 Host 侧数据结构转换
+提供非拥有多维数据视图，覆盖Host、GM以及AI Core SIMD编程中的UB；DLPack可用时支持Host侧数据结构转换
 
 ## 使用方式
 
@@ -8,7 +8,7 @@
 #include <asc/mdspan>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |

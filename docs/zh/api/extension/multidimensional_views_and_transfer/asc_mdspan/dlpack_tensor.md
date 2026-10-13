@@ -28,32 +28,42 @@
 
 头文件路径为：`<asc/mdspan>`。
 
-`asc::dlpack_tensor` 保存 DLPack 张量元数据及其关联的数据指针。
+`asc::dlpack_tensor`保存DLPack张量元数据及其关联的数据指针。
 
 ## 声明
 
 ```cpp
-template<asc::std::size_t Rank> class asc::dlpack_tensor
+namespace asc {
+template<asc::std::size_t Rank> class dlpack_tensor;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供 Host 和 GM 视图以及 AI Core SIMD 编程 UB 视图
-- 允许有符号步长
-- 可选的 Host DLPack 桥接不抛出异常
+- 提供Host和GM视图以及AI Core SIMD编程UB视图。
+- 允许有符号步长。
+- 可选的Host DLPack桥接不抛出异常。
 
 ## 调用示例
 
-此接口仅在提供 DLPack 头文件时可用；以下片段按头文件是否存在选择编译。
+以下Host示例需要真实DLPack开发头文件。`holder`持有形状／步长元数据，但不拥有`values`；二者都须比导出的`DLTensor`使用期更长。
 
 ```cpp
+#include <dlpack/dlpack.h>
 #include <asc/mdspan>
 
-#if __has_include(<dlpack/dlpack.h>)
-void use_type()
+bool example()
 {
-    using selected = asc::dlpack_tensor<2>;
-    (void)sizeof(selected);
+    int values[] = {2, 4, 6};
+    using Extents = asc::std::extents<int, 3>;
+    asc::std::mdspan<int, Extents> view(values);
+    asc::dlpack_tensor<1> holder;
+    if (!asc::to_dlpack_tensor(view, kDLCPU, 0, holder)) return false;
+    const DLTensor tensor = holder.get();
+    return tensor.data == values && tensor.ndim == 1 && tensor.shape[0] == 3;
 }
-#endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_mdspan.md)

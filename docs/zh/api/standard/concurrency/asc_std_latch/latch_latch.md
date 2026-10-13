@@ -28,9 +28,9 @@
 
 头文件路径为：`<asc/std/latch>`。
 
-`asc::std::latch::latch` 按本页所列构造形态初始化 `latch` 对象。
+`asc::std::latch::latch`按本页所列构造形态初始化`latch`对象。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `latch`](https://en.cppreference.com/w/cpp/header/latch)。
 
@@ -48,14 +48,18 @@ latch(long long expected) noexcept;
 | --- | --- | --- |
 | `expected` | 输入 | 初始计数值，须非负；到达总数达到该值后所有等待者被放行。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- Host 侧对象管理 Ascend 950 的 GM 状态
-- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足
+- Host侧对象管理Ascend 950的GM状态。
+- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下 Host 片段使用一个可独立完成的参与者演示调用；多参与者场景须保证并发推进。
+以下Host片段使用一个可独立完成的参与者演示调用；多参与者场景须保证并发推进。
 
 ```cpp
 #include <asc/std/latch>
@@ -66,3 +70,7 @@ void example()
     latch.arrive_and_wait(1);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_latch.md)

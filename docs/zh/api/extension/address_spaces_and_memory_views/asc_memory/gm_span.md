@@ -28,21 +28,24 @@
 
 头文件路径为：`<asc/memory>`。
 
-`asc::gm_span<T>` 是不拥有存储的 GM 连续内存视图，保存首元素指针和元素数量，可用于访问、切片和查询字节数。
+`asc::gm_span<T>`是不拥有存储的GM连续内存视图，保存首元素指针和元素数量，可用于访问、切片和查询字节数。
 
-GM 指 Global Memory（全局存储），是设备侧可访问的数据空间；视图要求底层存储位于 GM，并在视图使用期间保持可访问。`<asc/memory>` 提供的内存视图与内存空间接口总述见 [asc/memory 头文件说明](asc_memory.md)。
+GM指Global Memory（全局存储），是设备侧可访问的数据空间；视图要求底层存储位于GM，并在视图使用期间保持可访问。`<asc/memory>`提供的内存视图与内存空间接口总述见[asc/memory头文件说明](asc_memory.md)。
 
 ## 声明
 
 ```cpp
-template<class T> class asc::gm_span
+namespace asc {
+template<class T> class gm_span;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 视图不管理存储生命周期
-- 底层 GM 区域必须在视图使用期间保持有效
-- 索引和切片范围由调用方保证有效
+- D-SIMD下，元素下标访问返回保留GM（__gm__） 地址空间及元素const限定的引用；Host下为普通引用。
+- 视图不管理存储生命周期。
+- 底层GM区域必须在视图使用期间保持有效。
+- 索引和切片范围由调用方保证有效。
 
 ## 调用示例
 
@@ -67,3 +70,7 @@ bool use_gm_span()
     return ok;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_memory.md)

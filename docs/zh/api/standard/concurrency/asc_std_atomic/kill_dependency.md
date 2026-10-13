@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::kill_dependency` 在不改变值的前提下去除其依赖链标记。
+`asc::std::kill_dependency`在不改变值的前提下去除其依赖链标记。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 函数原型
 
 ```cpp
-template<class T> constexpr T asc::std::kill_dependency(T value) noexcept;
+namespace asc::std {
+template<class T> constexpr T kill_dependency(T value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -60,13 +62,12 @@ template<class T> constexpr T asc::std::kill_dependency(T value) noexcept;
 
 ## 约束说明
 
-- kill_dependency(T)的值保持与依赖切断词汇
-- constexpr/noexcept
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- constexpr/noexcept。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用具体整数原子对象；设备端对象须位于可访问的全局内存。
+以下Host片段使用具体整数原子对象；设备端对象须位于可访问的全局内存。
 
 ```cpp
 #include <asc/std/atomic>
@@ -76,3 +77,7 @@ decltype(auto) example()
     return asc::std::kill_dependency(1);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

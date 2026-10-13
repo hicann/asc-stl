@@ -28,48 +28,43 @@
 
 头文件路径为：`<asc/std/string>`。
 
-`asc::std::basic_string` 拥有并管理连续字符序列。
+`asc::std::basic_string`拥有并管理连续字符序列。
 
 标准语义参考：[cppreference `string`](https://en.cppreference.com/w/cpp/header/string)。
 
 ## 声明
 
 ```cpp
-template<class CharT, class Traits, class Allocator> class asc::std::basic_string
+namespace asc::std {
+template<class CharT, class Traits, class Allocator> class basic_string;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- basic_string<char,Traits,A>显式allocator构造
-- plain/local字符来源的append/push_back/clear
-- size/capacity/data/c_str/迭代/索引与析构
-- 仅容量充足和不抛出异常域
+- basic_string<char,Traits,A>显式allocator构造。
+- plain/local字符来源的append/push_back/clear。
+- size/capacity/data/c_str/迭代/索引与析构。
+- 仅容量充足和不抛出异常域。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
-#include <asc/std/string>
-#include <functional>
 #include <memory>
 #include <string>
-#include <utility>
+#include <asc/std/string>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void use_type()
+bool example()
 {
-    using selected = asc::std::basic_string<char, ::std::char_traits<char>, example_allocator<char>>;
-    (void)sizeof(selected);
+    using string_type = asc::std::basic_string<char, ::std::char_traits<char>, ::std::allocator<char>>;
+    string_type text(::std::allocator<char>{});
+    text += "hi";
+    return text.size() == 2 && text[0] == 'h' && text[1] == 'i';
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_string.md)

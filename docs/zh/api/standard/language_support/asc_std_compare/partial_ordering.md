@@ -28,29 +28,36 @@
 
 头文件路径为：`<asc/std/compare>`。
 
-`asc::std::partial_ordering` 表示可包含无序状态的部分排序结果。
+`asc::std::partial_ordering`表示可包含无序状态的部分排序结果。
 
 标准语义参考：[cppreference `compare`](https://en.cppreference.com/w/cpp/header/compare)。
 
 ## 声明
 
 ```cpp
-class asc::std::partial_ordering
+namespace asc::std {
+class partial_ordering;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 支持 ASC 比较类别常量、与零比较以及标准类别转换
+- 支持ASC比较类别常量、与零比较以及标准类别转换。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/compare>
 
-void use_type(const asc::std::partial_ordering& value)
+bool example()
 {
-    (void)value;
+    auto result = asc::std::partial_ordering::unordered;
+    return !(result < 0) && !(result == 0) && !(result > 0);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_compare.md)

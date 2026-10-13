@@ -28,19 +28,19 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::filter_view::filter_view` 按本页所列构造形态初始化 `filter_view` 对象。
+`asc::std::ranges::filter_view::filter_view`按本页所列构造形态初始化`filter_view`对象。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr filter_view(View base, Pred predicate) noexcept(is_nothrow_move_constructible_v<View>&& is_nothrow_constructible_v<Movablebox<Pred>, in_place_t, add_rvalue_reference_t<Pred>>);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 template<class View2, class Pred2> constexpr filter_view() noexcept(is_nothrow_default_constructible_v<View2>&& is_nothrow_default_constructible_v<Pred2>);
@@ -48,41 +48,53 @@ template<class View2, class Pred2> constexpr filter_view() noexcept(is_nothrow_d
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `base` | 输入 | 被过滤的底层视图；视图遍历时跳过不满足谓词的元素。 |
-| `predicate` | 输入 | 一元谓词，按调用形式 predicate(elem) 返回 bool；仅保留返回 true 的元素。 |
+| `predicate` | 输入 | 一元谓词，按调用形式predicate(elem)返回bool；仅保留返回true的元素。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `View2` | 输入范围或视图的类型；须满足所选原型的遍历要求。 |
-| `Pred2` | 谓词类型；调用形式为 pred(elem)，返回 bool。 |
+| `Pred2` | 谓词类型；调用形式为pred(elem)，返回bool。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example()
+bool example()
 {
-    asc::std::ranges::single_view<int> source(7);
-    asc::std::ranges::filter_view<asc::std::ranges::single_view<int>, asc::std::identity> view(
-        source, asc::std::identity{});
-    (void)view;
+    int values[] = {1, 2, 3, 4};
+    using Base = asc::std::ranges::subrange<int*>;
+    Base base(values, values + 4);
+    auto predicate = [](int value) { return value % 2 == 0; };
+    asc::std::ranges::filter_view<Base, decltype(predicate)> view(base, predicate);
+    return *view.begin() == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

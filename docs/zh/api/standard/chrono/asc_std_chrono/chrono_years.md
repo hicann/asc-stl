@@ -28,29 +28,37 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::years` 表示日期、时间点或时长计算中的 `years` 值类型。
+`asc::std::chrono::years`表示日期、时间点或时长计算中的`years`值类型。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 声明
 
 ```cpp
-using asc::std::chrono::years = duration<int, ratio_multiply<ratio<146097, 400>, days::period>>
+namespace asc::std::chrono {
+using years = duration<int, ratio_multiply<ratio<146097, 400>, days::period>>;
+} // namespace asc::std::chrono
 ```
 
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符
+- 提供值运算以及六个显式关系运算符。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void use_type(const asc::std::chrono::years& value)
+bool example()
 {
-    (void)value;
+    asc::std::chrono::years first{2}, second{3};
+    return (first + second).count() == 5;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

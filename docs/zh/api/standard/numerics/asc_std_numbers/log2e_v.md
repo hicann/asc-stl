@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/numbers>`。
 
-`asc::std::log2e_v` 提供e 的以 2 为底的对数的编译期值。
+`asc::std::log2e_v`提供e的以2为底的对数的编译期值。
 
 标准语义参考：[cppreference `numbers`](https://en.cppreference.com/w/cpp/header/numbers)。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr const T asc::std::log2e_v
+namespace asc::std {
+template<class T> inline constexpr const T log2e_v;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 float 变量模板
+- 提供float变量模板。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class T> inline constexpr const T asc::std::log2e_v
 
 inline constexpr auto example = asc::std::log2e_v<float>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_numbers.md)

@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::generate_canonical` 使用调用方随机引擎生成指定精度的浮点随机值。
+`asc::std::generate_canonical`使用调用方随机引擎生成指定精度的浮点随机值。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 函数原型
 
 ```cpp
-template<class RealType, size_t Bits, class URng> [[nodiscard]] constexpr RealType asc::std::generate_canonical(URng& generator) noexcept;
+namespace asc::std {
+template<class RealType, size_t Bits, class URng> [[nodiscard]] constexpr RealType generate_canonical(URng& generator) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,9 +46,9 @@ template<class RealType, size_t Bits, class URng> [[nodiscard]] constexpr RealTy
 
 | 参数名 | 描述 |
 | --- | --- |
-| `RealType` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `RealType` | 随机引擎或分布产生的数值类型；须符合当前引擎或分布的整数／浮点要求。 |
 | `Bits` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `URng` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `URng` | 均匀随机位生成器类型，提供无参调用、min和max。 |
 
 **函数参数**
 
@@ -62,12 +64,12 @@ template<class RealType, size_t Bits, class URng> [[nodiscard]] constexpr RealTy
 
 ## 约束说明
 
-- 随机数引擎由调用方提供，并且必须满足 URBG 要求
-- 结果类型为 float
+- 随机数引擎由调用方提供，并且必须满足URBG要求。
+- 结果类型为float。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/random>
@@ -78,3 +80,7 @@ decltype(auto) example()
     return asc::std::generate_canonical<float, 10>(engine);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

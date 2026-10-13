@@ -28,35 +28,48 @@
 
 头文件路径为：`<asc/memory_resource>`。
 
-`asc::pinned_memory_resource` 默认构造函数创建无状态的页锁定 Host 内存资源对象。
+`asc::pinned_memory_resource`默认构造函数创建无状态的页锁定Host内存资源对象。
 
 ## 函数原型
 
+所属类型：[`asc::pinned_memory_resource`](pinned_memory_resource.md)。
+
 ```cpp
-constexpr asc::pinned_memory_resource::pinned_memory_resource() noexcept;
+// asc::pinned_memory_resource 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr pinned_memory_resource() noexcept;
 ```
 
 ## 参数说明
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 仅可在 Host 调用
-- 内存资源不抛出异常
-- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐
-- 资源及其引用的生命周期由调用方管理
+- 仅可在Host调用。
+- 内存资源不抛出异常。
+- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐。
+- 资源及其引用的生命周期由调用方管理。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/memory_resource>
 
-void example()
+bool example()
 {
-    asc::pinned_memory_resource resource{};
-    (void)resource.properties();
+    asc::pinned_memory_resource resource;
+    auto properties = resource.properties();
+    return properties.host_accessible() && !properties.device_accessible() && properties.maximum_alignment() == alignof(asc::std::max_align_t);
 }
 ```
+
+## 关联API
+
+- [`asc::pinned_memory_resource`](pinned_memory_resource.md)
+- [本头文件的接口列表](asc_memory_resource.md)

@@ -28,29 +28,38 @@
 
 头文件路径为：`<asc/execution>`。
 
-`asc::execution_errc` 定义 ASC-STL Host 执行接口的通用状态类别，用于区分成功、参数无效、临时存储不足和后端 Runtime 错误。
+`asc::execution_errc`定义ASC-STL Host执行接口的通用状态类别，用于区分成功、参数无效、临时存储不足和后端Runtime错误。
 
 ## 声明
 
 ```cpp
-enum class asc::execution_errc : int
+namespace asc {
+enum class execution_errc : int;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 仅可在 Host 使用
-- 状态值可平凡复制
-- 成功状态的 code() 为 execution_errc::success，native_code() 为 0，失败状态保留可用于诊断的状态码
+- 仅可在Host使用。
+- 状态值可平凡复制。
+- 成功状态的code()为execution_errc::success，native_code()为0，失败状态保留可用于诊断的状态码。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/execution>
 
-void use_type(asc::execution_errc value)
+bool example()
 {
-    (void)value;
+    asc::execution_status success;
+    asc::execution_status failure(asc::execution_errc::backend_error, 17);
+    return success.success() && success.code() == asc::execution_errc::success && success.native_code() == 0
+        && !failure.success() && failure.code() == asc::execution_errc::backend_error && failure.native_code() == 17;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_execution.md)

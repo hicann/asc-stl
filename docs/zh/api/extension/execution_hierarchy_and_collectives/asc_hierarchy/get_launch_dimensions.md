@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::get_launch_dimensions` 从 simt_hierarchy 提取 Grid 和 Block 启动尺寸。
+`asc::get_launch_dimensions`从simt_hierarchy提取Grid和Block启动尺寸。
 
 ## 函数原型
 
 ```cpp
-constexpr asc::launch_dimensions asc::get_launch_dimensions(asc::simt_hierarchy hierarchy) noexcept;
+namespace asc {
+constexpr asc::launch_dimensions get_launch_dimensions(asc::simt_hierarchy hierarchy) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,7 +44,7 @@ constexpr asc::launch_dimensions asc::get_launch_dimensions(asc::simt_hierarchy 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `hierarchy` | 输入 | 待提取启动尺寸的 simt_hierarchy 对象：其 Grid 与 Block 三维尺寸被复制进返回的 launch_dimensions。 |
+| `hierarchy` | 输入 | 待提取启动尺寸的simt_hierarchy对象：其Grid与Block三维尺寸被复制进返回的launch_dimensions。 |
 
 ## 返回值说明
 
@@ -52,9 +54,9 @@ constexpr asc::launch_dimensions asc::get_launch_dimensions(asc::simt_hierarchy 
 
 ## 约束说明
 
-- 提供 C++17 constexpr Host/Device 层次结构接口
-- 带 extent 的值要求每一维均非零
-- extent 总数按无符号 64 位的 x*y*z 计算
+- 提供C++17 constexpr Host/Device层次结构接口。
+- 带extent的值要求每一维均非零。
+- extent总数按无符号64位的x*y*z计算。
 
 ## 调用示例
 
@@ -68,3 +70,7 @@ decltype(auto) example(asc::simt_hierarchy hierarchy)
     return asc::get_launch_dimensions(hierarchy);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_hierarchy.md)

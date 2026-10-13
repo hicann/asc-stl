@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/tuple>`。
 
-`asc::std::tuple_size_v` 在编译期给出 tuple 元素数量。
+`asc::std::tuple_size_v`在编译期给出tuple元素数量。
 
 标准语义参考：[cppreference `tuple`](https://en.cppreference.com/w/cpp/header/tuple)。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr const size_t asc::std::tuple_size_v
+namespace asc::std {
+template<class T> inline constexpr const size_t tuple_size_v;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class T> inline constexpr const size_t asc::std::tuple_size_v
 
 inline constexpr auto example = asc::std::tuple_size_v<asc::std::tuple<int, float>>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_tuple.md)

@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::wcstok` 按调用方提供的分隔集合切分宽字符串。
+`asc::std::wcstok`按调用方提供的分隔集合切分宽字符串。
 
-该接口的可用位置为 Host（完整接口）、Device（C locale 相关接口）。
+该接口的可用位置为Host（完整接口）、Device（C locale相关接口）。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 
 ## 函数原型
 
 ```cpp
-wchar_t* asc::std::wcstok(wchar_t* input, const wchar_t* delimiters, wchar_t** state) noexcept;
+namespace asc::std {
+wchar_t* wcstok(wchar_t* input, const wchar_t* delimiters, wchar_t** state) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,9 +48,9 @@ wchar_t* asc::std::wcstok(wchar_t* input, const wchar_t* delimiters, wchar_t** s
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `input` | 输入 | 提供“按调用方提供的分隔集合切分宽字符串”所需的数据地址；可访问范围和生命周期须满足约束。 |
-| `delimiters` | 输入 | 提供“按调用方提供的分隔集合切分宽字符串”所需的数据地址；可访问范围和生命周期须满足约束。 |
-| `state` | 输入 | 提供“按调用方提供的分隔集合切分宽字符串”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `input` | 输入/输出 | 首轮为可写、以零宽字符终止的字符串，分隔位置会写入零字符；后续传nullptr继续分词。 |
+| `delimiters` | 输入 | 以零宽字符终止的分隔字符集合，可在连续调用之间更换。 |
+| `state` | 输入/输出 | 指向保存下次扫描位置的指针槽；连续调用使用同一个非空槽。 |
 
 ## 返回值说明
 
@@ -58,9 +60,8 @@ wchar_t* asc::std::wcstok(wchar_t* input, const wchar_t* delimiters, wchar_t** s
 
 ## 约束说明
 
-- Host对本家族委托系统<cwchar>完整合同
-- Device交付size_t/mbstate_t/wint_t/NULL/WCHAR_MIN/WCHAR_MAX/WEOF、wcscoll/wcsxfrm/wcstok与btowc/wctob/mbrlen/mbrtowc/mbsinit/mbsrtowcs/wcrtomb/wcsrtombs，语义固定为无状态单字节C locale
-- Host 提供完整接口，设备端仅提供 C 语言区域设置相关接口
+- Host行为遵循系统`<cwchar>`提供的同名接口；字符转换和排序受当前C语言区域设置影响。
+- 输入宽字符串须可写且以空字符结尾。该操作会写入分隔符终止位置；保存后续扫描位置的状态指针须有效。
 
 ## 调用示例
 
@@ -74,3 +75,7 @@ decltype(auto) example(wchar_t * input, const wchar_t * delimiters, wchar_t ** s
     return asc::std::wcstok(input, delimiters, state);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cwchar.md)

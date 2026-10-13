@@ -28,35 +28,43 @@
 
 头文件路径为：`<asc/std/queue>`。
 
-`asc::std::priority_queue` 按比较优先级访问底层容器。
+`asc::std::priority_queue`按比较优先级访问底层容器。
 
 标准语义参考：[cppreference `queue`](https://en.cppreference.com/w/cpp/header/queue)。
 
 ## 声明
 
 ```cpp
-template<class T, class Container, class Compare> class asc::std::priority_queue
+namespace asc::std {
+template<class T, class Container, class Compare> class priority_queue;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- priority_queue<T,Container,Compare=less<typename Container::value_type>>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/front/operator[]/push_back/emplace_back/pop_back/size/empty/swap及allocator操作必须在当前执行空间有效，Compare必须定义Device可调的strict-weak-order且可在已验证移动交换域使用
-- 交付container_type/value_compare/value_type/size_type/reference/const_reference及protected c/comp，default/Compare/Container/copy/move/allocator构造及赋值，N4861两类InputIterator构造，empty/size/top、lvalue/rvalue push、void emplace、pop，member/non-member swap、uses_allocator特化，以及Compare+Container、InputIterator+Compare+Container、Compare+Container+Alloc三类显式Container CTAD
-- 堆序语义为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- priority_queue<T,Container,Compare=less<typename Container::value_type>>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/front/`operator[]`/push_back/emplace_back/pop_back/size/empty/swap及allocator操作必须在当前执行空间有效，Compare必须定义Device可调的strict-weak-order且可在已验证移动交换域使用。
+- 交付container_type/value_compare/value_type/size_type/reference/const_reference及protected c/comp，default/Compare/Container/copy/move/allocator构造及赋值，N4861两类InputIterator构造，empty/size/top、lvalue/rvalue push、void emplace、pop，member/non-member swap、uses_allocator特化，以及Compare+Container、InputIterator+Compare+Container、Compare+Container+Alloc三类显式Container CTAD。
+- 堆序语义为Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段显式提供标准容器作为底层存储；设备端须提供可在目标位置调用的容器。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
-#include <asc/std/queue>
-#include <deque>
-#include <functional>
 #include <vector>
+#include <functional>
+#include <asc/std/queue>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>;
-    (void)sizeof(selected);
+    asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>> values;
+    values.push(1);
+    values.push(3);
+    values.push(2);
+    return values.size() == 3 && values.top() == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_queue.md)

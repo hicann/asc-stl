@@ -28,31 +28,42 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::full_extent_t` 表示多维切片、维度范围或布局适配方式。
+`asc::std::full_extent_t`表示多维切片、维度范围或布局适配方式。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 声明
 
 ```cpp
-struct asc::std::full_extent_t
+namespace asc::std {
+struct full_extent_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整submdspan家族：full_extent_t/full_extent、strided_slice及deduction guide、submdspan_mapping_result、submdspan_extents/submdspan_mapping/submdspan
-- 全部有效整数降rank/full/pair-like/strided slice组合，零与任意rank、静态/动态/混合/空extent、layout_left/layout_right/layout_stride源及标准布局保持或layout_stride回退
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain pointer域
+- 全部有效整数降rank/full/pair-like/strided slice组合，零与任意rank、静态/动态/混合/空extent、layout_left/layout_right/layout_stride源及标准布局保持或layout_stride回退。
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
+#include <asc/mdspan>
 #include <asc/std/mdspan>
 
-void use_type(const asc::std::full_extent_t& value)
+bool example()
 {
-    (void)value;
+    int values[] = {1, 2, 3, 4, 5, 6};
+    using Extents = asc::std::extents<int, 2, 3>;
+    asc::std::mdspan<int, Extents> view(values);
+    asc::std::full_extent_t all{};
+    auto row = asc::std::submdspan(view, 1, all);
+    return row.extent(0) == 3 && row(2) == 6;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mdspan.md)

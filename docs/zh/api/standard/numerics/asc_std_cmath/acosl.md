@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::acosl` 在 Host 上以 long double 精度计算反余弦，结果以弧度表示，取值范围为 [0, π]。long double 的实际精度由 Host 平台和工具链决定，不保证高于 double。
+`asc::std::acosl`在Host上以long double精度计算反余弦，结果以弧度表示，取值范围为[0, π]。long double的实际精度由Host平台和工具链决定，不保证高于double。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-long double asc::std::acosl(long double value) noexcept;
+namespace asc::std {
+long double acosl(long double value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,19 +46,19 @@ long double asc::std::acosl(long double value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待计算的 long double 值，有效定义域为 [-1, 1]。 |
+| `value` | 输入 | 待计算的long double值，有效定义域为[-1, 1]。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `long double` | 返回 long double 反余弦弧度值；定义域外输入按 Host 数学实现处理。 |
+| `long double` | 返回long double反余弦弧度值；定义域外输入按Host数学实现处理。 |
 
 ## 约束说明
 
-- 仅可在 Host 调用
-- 使用参数对应的浮点精度
-- 有效实数输入范围为 [-1, 1]
+- 仅可在Host调用。
+- 使用参数对应的浮点精度。
+- 有效实数输入范围为[-1, 1]。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ long double example()
     return asc::std::acosl(0.5L);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

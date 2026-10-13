@@ -28,31 +28,38 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::extents` 保存多维索引空间的静态与动态维度长度。
+`asc::std::extents`保存多维索引空间的静态与动态维度长度。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 声明
 
 ```cpp
-template<class IndexType, size_t ...StaticExtents> class asc::std::extents
+namespace asc::std {
+template<class IndexType, size_t ...StaticExtents> class extents;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整dynamic_extent/extents/dextents/dims家族：零rank与正rank、默认/按rank或rank_dynamic传值/array/span/跨extents构造、标准显式性与约束、deduction guide、相等比较及rank/rank_dynamic/static_extent/extent观察
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/mdspan>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::extents<int, 2, 3>;
-    (void)sizeof(selected);
+    using shape = asc::std::extents<int, 2, asc::std::dynamic_extent>;
+    shape sizes(3);
+    static_assert(shape::rank() == 2 && shape::rank_dynamic() == 1);
+    return sizes.extent(0) == 2 && sizes.extent(1) == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mdspan.md)

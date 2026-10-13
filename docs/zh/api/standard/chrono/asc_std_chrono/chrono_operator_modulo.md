@@ -1,4 +1,4 @@
-# asc::std::chrono::operator%
+# asc::std::chrono::`operator%`
 
 ## 产品支持情况
 
@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::operator%` 由 `<asc/std/chrono>` 提供，执行时长维度的时长对标量取模运算。接口遵循对应 C++ 标准设施的语义；ASC-STL 的语言模式和调用位置以本页声明为准。
+`asc::std::chrono::operator%`由`<asc/std/chrono>`提供，执行时长维度的时长对标量取模运算。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template <class Rep2, enable_if_t<!__is_asc_std_duration_v<Rep2> && is_convertible_v<const Rep2&, common_type_t<Rep, Rep2>>, int> = 0> constexpr duration<common_type_t<Rep, Rep2>, Period> asc::std::chrono::operator%(const duration& lhs, const Rep2& rhs)
+namespace asc::std::chrono {
+template <class Rep2, enable_if_t<!__is_asc_std_duration_v<Rep2> && is_convertible_v<const Rep2&, common_type_t<Rep, Rep2>>, int> = 0> constexpr duration<common_type_t<Rep, Rep2>, Period> operator%(const duration& lhs, const Rep2& rhs);
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template <class Rep2, class Period2> constexpr common_type_t<duration, duration<Rep2, Period2>> asc::std::chrono::operator%(const duration& lhs, const duration<Rep2, Period2>& rhs)
+namespace asc::std::chrono {
+template <class Rep2, class Period2> constexpr common_type_t<duration, duration<Rep2, Period2>> operator%(const duration& lhs, const duration<Rep2, Period2>& rhs);
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 参数说明
 
@@ -56,8 +60,8 @@ template <class Rep2, class Period2> constexpr common_type_t<duration, duration<
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rep2` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
-| `Period2` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
+| `Rep2` | 另一时长或标量的计数类型；运算时与Rep形成公共类型。 |
+| `Period2` | 另一时长的计时周期，是表示秒比例的ratio类型。 |
 
 **函数参数**
 
@@ -70,23 +74,29 @@ template <class Rep2, class Period2> constexpr common_type_t<duration, duration<
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `&& is_convertible_v<const Rep2&, common_type_t<Rep, Rep2>>, int> = 0> constexpr duration<common_type_t<Rep, Rep2>, Period>` | 返回该操作产生的值，具体含义由所选原型确定。 |
-| `common_type_t<duration, duration<Rep2, Period2>>` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `duration<common_type_t<Rep, Rep2>, Period>` | 计数除标量的余数duration，或两duration转成公共duration后取余的结果。 |
+| `common_type_t<duration, duration<Rep2, Period2>>` | 计数除标量的余数duration，或两duration转成公共duration后取余的结果。 |
 
 ## 约束说明
 
-- 右操作数须为可转换到公共计数类型的标量且不得为时长类型
-- 两个时长先转换为公共时长类型后取模
+- 右操作数须为可转换到公共计数类型的标量且不得为时长类型。
+- 两个时长先转换为公共时长类型后取模。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    (void)(asc::std::chrono::seconds{90} % 30);
+    asc::std::chrono::seconds left{2}, right{3};
+    return (right % left).count() == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

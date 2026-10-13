@@ -28,21 +28,23 @@
 
 头文件路径为：`<asc/std/mutex>`。
 
-`asc::std::try_to_lock` 标记构造时尝试获取锁但不阻塞的形式。
+`asc::std::try_to_lock`标记构造时尝试获取锁但不阻塞的形式。
 
 标准语义参考：[cppreference `mutex`](https://en.cppreference.com/w/cpp/header/mutex)。
 
 ## 声明
 
 ```cpp
-inline constexpr const try_to_lock_t asc::std::try_to_lock
+namespace asc::std {
+inline constexpr const try_to_lock_t try_to_lock;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- defer_lock_t、try_to_lock_t、adopt_lock_t及对应defer_lock、try_to_lock、adopt_lock三个inline constexpr对象
-- 纯类型与对象，不拥有或操作锁
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- defer_lock_t、try_to_lock_t、adopt_lock_t及对应defer_lock、try_to_lock、adopt_lock三个inline constexpr对象。
+- 纯类型与对象，不拥有或操作锁。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
@@ -53,3 +55,7 @@ inline constexpr const try_to_lock_t asc::std::try_to_lock
 
 auto value = asc::std::try_to_lock;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mutex.md)

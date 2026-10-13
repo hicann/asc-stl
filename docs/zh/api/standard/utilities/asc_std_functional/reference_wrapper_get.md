@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::reference_wrapper::get` 返回引用包装器保存的对象引用。
+`asc::std::reference_wrapper::get`返回引用包装器保存的对象引用。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 函数原型
 
+所属类型：[`asc::std::reference_wrapper`](reference_wrapper.md)。
+
 ```cpp
-[[nodiscard]] constexpr type& asc::std::reference_wrapper::get() const noexcept;
+// asc::std::reference_wrapper 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr type& get() const noexcept;
 ```
 
 ## 参数说明
@@ -50,18 +53,25 @@
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/functional>
 
-void example(asc::std::reference_wrapper<int>& object)
+bool example()
 {
-    (void)object.get();
+    int value = 7;
+    asc::std::reference_wrapper<int> reference(value);
+    reference.get() = 9;
+    return value == 9 && &reference.get() == &value;
 }
 ```
+
+## 关联API
+
+- [`asc::std::reference_wrapper`](reference_wrapper.md)
+- [本头文件的接口列表](asc_std_functional.md)

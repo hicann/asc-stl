@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::uninitialized_copy` 在未构造的目标存储中复制构造输入范围。
+`asc::std::uninitialized_copy`在未构造的目标存储中复制构造输入范围。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
 ```cpp
-template<class InputIterator, class ForwardIterator> ForwardIterator asc::std::uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator result);
+namespace asc::std {
+template<class InputIterator, class ForwardIterator> ForwardIterator uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator result);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -63,12 +65,12 @@ template<class InputIterator, class ForwardIterator> ForwardIterator asc::std::u
 
 ## 约束说明
 
-- 存储由调用方提供并满足对齐要求
-- 当回滚会引发异常时，Device 侧相关操作必须不抛出异常
+- 存储由调用方提供并满足对齐要求。
+- 当回滚会引发异常时，Device侧相关操作必须不抛出异常。
 
 ## 调用示例
 
-以下 Host 片段在函数内完成构造、结果校验与销毁，不把指向局部存储的指针传出函数。
+以下Host片段在函数内完成构造、结果校验与销毁，不把指向局部存储的指针传出函数。
 
 ```cpp
 #include <asc/std/memory>
@@ -89,3 +91,7 @@ bool copy_elements()
     return ok;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

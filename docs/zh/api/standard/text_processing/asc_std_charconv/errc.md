@@ -28,33 +28,42 @@
 
 头文件路径为：`<asc/std/charconv>`、`<asc/std/system_error>`。
 
-`asc::std::errc` 列出本期整数转换及轻量错误接口支持的错误值。
+`asc::std::errc`列出本期整数转换及轻量错误接口支持的错误值。
 
 标准语义参考：[cppreference `charconv`](https://en.cppreference.com/w/cpp/header/charconv)。
 
 ## 声明
 
 ```cpp
-enum asc::std::errc
+namespace asc::std {
+enum errc;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/charconv>`、`<asc/std/system_error>`。
 
 ## 约束说明
 
-- 支持所有标准有符号/无符号整数类型以及 2 至 36 进制
-- AI Core SIMD 编程 缓冲区必须是 local 或 generic 地址空间的普通 char 指针
-- 提供 invalid_argument、result_out_of_range 和 value_too_large 错误值、对应特征及枚举比较操作
+- 支持所有标准有符号/无符号整数类型以及2至36进制。
+- AI Core SIMD编程 缓冲区必须是local或generic地址空间的普通char指针。
+- 提供invalid_argument、result_out_of_range和value_too_large错误值、对应特征及枚举比较操作。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/charconv>
 
-void use_type(asc::std::errc value)
+bool example()
 {
-    (void)value;
+    const char text[] = "x";
+    int value = 7;
+    auto result = asc::std::from_chars(text, text + 1, value);
+    return result.ec == asc::std::errc::invalid_argument && value == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_charconv.md)

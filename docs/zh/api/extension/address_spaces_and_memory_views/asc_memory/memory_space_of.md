@@ -28,28 +28,34 @@
 
 头文件路径为：`<asc/memory>`。
 
-`asc::memory_space_of<T>` 是可定制类型特征，用于取得受支持内存视图类型对应的 `memory_space`；`gm_span` 和 `ub_span` 分别映射到 GM 与 UB。
+`asc::memory_space_of<T>`是可定制类型特征，用于取得受支持内存视图类型对应的`memory_space`；`gm_span`和`ub_span`分别映射到GM与UB。
 
 ## 声明
 
 ```cpp
-template<class T> struct asc::memory_space_of
+namespace asc {
+template<class T> struct memory_space_of;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供非拥有的地址空间视图、显式 arena 和临时存储
+- 提供非拥有的地址空间视图、显式arena和临时存储。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/memory>
 
-void use_type()
+bool example()
 {
-    using selected = asc::memory_space_of<asc::gm_span<int>>;
-    (void)sizeof(selected);
+    static_assert(asc::memory_space_of<asc::gm_span<int>>::value == asc::memory_space::global);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_memory.md)

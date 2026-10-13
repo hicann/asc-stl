@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/charconv>`。
 
-`asc::std::to_chars_result::operator bool` 返回转换是否无错误发生：`ec == errc{}` 时为 true，支持条件判断惯用法。
+`asc::std::to_chars_result::operator bool`返回转换是否无错误发生：`ec == errc{}`时为true，支持条件判断惯用法。
 
 标准语义参考：[cppreference `charconv`](https://en.cppreference.com/w/cpp/header/charconv)。
 
 ## 函数原型
 
 ```cpp
-explicit asc::std::to_chars_result::operator bool() const noexcept
+explicit asc::std::to_chars_result::operator bool() const noexcept;
 ```
 
 ## 参数说明
@@ -46,11 +46,11 @@ explicit asc::std::to_chars_result::operator bool() const noexcept
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `explicit` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `bool` | ec等于errc{}（没有转换错误）时为true。 |
 
 ## 约束说明
 
-- 结果为 true 当且仅当错误码等于默认构造的 errc
+- 结果为true当且仅当错误码等于默认构造的errc。
 
 ## 调用示例
 
@@ -65,3 +65,7 @@ decltype(auto) example(Object& object, Args&&... args)
     return object.operator bool(static_cast<Args&&>(args)...);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_charconv.md)

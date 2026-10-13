@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/algorithm>`。
 
-`asc::copy_bytes` 按字节把一段 Device 可访问内存复制到目标地址，适合元素类型未知或需要显式控制字节数的场景。
+`asc::copy_bytes`按字节把一段Device可访问内存复制到目标地址，适合元素类型未知或需要显式控制字节数的场景。
 
 ## 函数原型
 
 ```cpp
-asc::execution_status asc::copy_bytes(asc::stream_ref stream, void* destination, const void* source, asc::std::size_t bytes) noexcept;
+namespace asc {
+asc::execution_status copy_bytes(asc::stream_ref stream, void* destination, const void* source, asc::std::size_t bytes) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,7 +44,7 @@ asc::execution_status asc::copy_bytes(asc::stream_ref stream, void* destination,
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `stream` | 输入 | 用于按序提交异步工作的 Stream。相关资源须保持有效，直至工作完成。 |
+| `stream` | 输入 | 用于按序提交异步工作的Stream。相关资源须保持有效，直至工作完成。 |
 | `destination` | 输出 | 用于接收结果的目标存储。异步操作完成前，其存储须保持有效。 |
 | `source` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
 | `bytes` | 输入 | 处理的数据量，单位为字节。 |
@@ -55,9 +57,9 @@ asc::execution_status asc::copy_bytes(asc::stream_ref stream, void* destination,
 
 ## 约束说明
 
-- 仅可在 Host 调用
-- Stream 必须有效
-- 源和目标须可由 Device 按指定方向访问、地址不得重叠，并在异步复制完成前保持有效
+- 仅可在Host调用。
+- Stream必须有效。
+- 源和目标须可由Device按指定方向访问、地址不得重叠，并在异步复制完成前保持有效。
 
 ## 调用示例
 
@@ -78,3 +80,7 @@ decltype(auto) example(asc::stream_ref stream, void* destination, const void* so
     return asc::copy_bytes(stream, destination, source, bytes);
 }
 ```
+
+## 关联API
+
+- [`asc::execution_status`](../../../runtime/execution_policies_and_status/asc_execution/execution_status.md)：参数校验和任务提交状态；提交成功不表示异步工作已经完成。

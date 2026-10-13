@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::year_month_weekday_last::operator sys_days` 由 `<asc/std/chrono>` 提供，把年月末星期换算为系统纪元天数精度的时间点。接口遵循对应 C++ 标准设施的语义；ASC-STL 的语言模式和调用位置以本页声明为准。
+`asc::std::chrono::year_month_weekday_last::operator sys_days`由`<asc/std/chrono>`提供，把年月末星期换算为系统纪元天数精度的时间点。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
 ```cpp
-constexpr asc::std::chrono::year_month_weekday_last::operator sys_days() const noexcept
+constexpr asc::std::chrono::year_month_weekday_last::operator sys_days() const noexcept;
 ```
 
 ## 参数说明
@@ -46,22 +46,27 @@ constexpr asc::std::chrono::year_month_weekday_last::operator sys_days() const n
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `constexpr` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `asc::std::chrono::sys_days` | 该日期在系统时间线上的日精度时间点。 |
 
 ## 约束说明
 
-- 换算定位到该月最后一个同星期日期，结果面向系统纪元
+- 换算定位到该月最后一个同星期日期，结果面向系统纪元。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    asc::std::chrono::year_month_weekday_last object{asc::std::chrono::year{2026}, asc::std::chrono::month{3}, asc::std::chrono::weekday_last{asc::std::chrono::weekday{1}}};
-    (void)object.operator asc::std::chrono::sys_days();
+    asc::std::chrono::year_month_weekday_last value{asc::std::chrono::year{2024}, asc::std::chrono::month{2}, asc::std::chrono::weekday_last{asc::std::chrono::weekday{4}}};
+    return static_cast<asc::std::chrono::sys_days>(value).time_since_epoch().count() == 19782;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

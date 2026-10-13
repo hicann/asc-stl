@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::views::zip` 将恰好两个可确定大小的随机访问范围按位置配对，所得视图在较短的输入范围结束时结束。
+`asc::std::ranges::views::zip`将恰好两个可确定大小的随机访问范围按位置配对，所得视图在较短的输入范围结束时结束。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
@@ -37,7 +37,8 @@
 该名称是公开的常量函数对象；对象的实现类型不构成接口承诺。以下为调用形式，省略的可选参数以各原型约束为准。
 
 ```cpp
-asc::std::ranges::views::zip(first_range, second_range)
+// asc::std::ranges::views 类内的声明节选；模板形参和其他成员由所属类提供。
+zip(first_range, second_range);
 ```
 
 ## 参数说明
@@ -57,25 +58,30 @@ asc::std::ranges::views::zip(first_range, second_range)
 
 ## 约束说明
 
-- 七个列出名称
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- 本期只支持两个具备随机访问能力且可确定大小的范围
+- 七个列出名称。
+- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 本期只支持两个具备随机访问能力且可确定大小的范围。
 - 所得视图的引用不得超过任一输入范围的有效期。
 
 ## 调用示例
 
-以下 Host 片段以具体数组或数值演示本页调用形式。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example()
+bool example()
 {
-    // 用具体类型和实参演示已交付的调用形式。
-    int values[4] = {1, 2, 3, 4};
-    int other[4] = {5, 6, 7, 8};
-    auto result_1 = asc::std::ranges::views::zip(values, other);
-    (void)result_1;
+    int values[] = {1, 2, 3, 4};
+    auto view = asc::std::ranges::views::zip(values, values);
+    return asc::std::get<0>(*view.begin()) == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

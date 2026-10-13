@@ -1,4 +1,4 @@
-# 头文件 asc/std/ccomplex
+# 头文件asc/std/ccomplex
 
 提供C兼容复数类型和复数运算函数
 
@@ -8,7 +8,7 @@
 #include <asc/std/ccomplex>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |

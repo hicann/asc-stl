@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/devices>`。
 
-`asc::npu_arch::ascend_3101` 表示架构编号为 3101 的 NPU。
+`asc::npu_arch::ascend_3101`表示架构编号为3101的NPU。
 
 ## 声明
 
+所属类型：[`asc::npu_arch`](npu_arch.md)。
+
 ```cpp
-asc::npu_arch::ascend_3101 = 3101
+// asc::npu_arch 类内的声明节选；模板形参和其他成员由所属类提供。
+ascend_3101 = 3101;
 ```
 
 ## 约束说明
 
-- 仅可在 Host 查询或选择 Device
-- 引用只保存设备序号且不拥有 Runtime 状态
-- 查询失败时输出参数保持原值，属性仅限当前接口列出的 AI Core、Vector Core、Warp、UB、GM、L2 与架构字段
+- 仅可在Host查询或选择Device。
+- 引用只保存设备序号且不拥有Runtime状态。
+- 查询失败时输出参数保持原值，属性仅限当前接口列出的AI Core、Vector Core、Warp、UB、GM、L2与架构字段。
 
 ## 调用示例
 
@@ -51,3 +54,8 @@ asc::npu_arch::ascend_3101 = 3101
 
 auto value = asc::npu_arch::ascend_3101;
 ```
+
+## 关联API
+
+- [`asc::npu_arch`](npu_arch.md)
+- [本头文件的接口列表](asc_devices.md)

@@ -25,6 +25,7 @@
 #include <asc/std/memory>
 #include <asc/std/mutex>
 #include <asc/std/variant>
+#include "mdspan_slice_regression.h"
 
 namespace asc_stl_w09_w10_test {
 
@@ -205,6 +206,8 @@ CANN_ASC_STL_API int evaluate_mutex()
 
 CANN_ASC_STL_API int evaluate_mdspan()
 {
+    if (!asc_stl_mdspan_slice_test::evaluate())
+        return 46;
     int values[12]{};
     using extents_type = asc::std::extents<asc::std::size_t, 3, asc::std::dynamic_extent>;
     extents_type extents(4);

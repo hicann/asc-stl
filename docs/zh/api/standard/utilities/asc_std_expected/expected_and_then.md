@@ -28,139 +28,146 @@
 
 头文件路径为：`<asc/std/expected>`。
 
-`asc::std::expected::and_then` 在保存有效值时调用函数，并传播其返回的状态对象。
+`asc::std::expected::and_then`在保存有效值时调用函数，并传播其返回的状态对象。
 
 标准语义参考：[cppreference `expected`](https://en.cppreference.com/w/cpp/header/expected)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::expected`](expected.md)。
+
+### 原型1
 
 ```cpp
-template<class Function> constexpr auto asc::std::expected::and_then(Function function) const;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Function> constexpr auto and_then(Function function) const;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class Fun, class Err2> constexpr auto asc::std::expected::and_then(Fun&& function)&;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Fun, class Err2> constexpr auto and_then(Fun&& function)&;
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class Fun, class Err2> constexpr auto asc::std::expected::and_then(Fun&& function)&&;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Fun, class Err2> constexpr auto and_then(Fun&& function)&&;
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class Fun, class Err2> constexpr auto asc::std::expected::and_then(Fun&& function) const&;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Fun, class Err2> constexpr auto and_then(Fun&& function) const&;
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
-template<class Fun, class Err2> constexpr auto asc::std::expected::and_then(Fun&& function) const&&;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Fun, class Err2> constexpr auto and_then(Fun&& function) const&&;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Function` | 以保存的期望值为实参调用的可调用对象类型；调用结果须为 expected 类对象。 |
+| `Function` | 以保存的期望值为实参调用的可调用对象类型；调用结果须为expected类对象。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入 | 以保存的期望值为实参调用的可调用对象，调用形式 function(期望值)；仅含期望值时调用，其返回的 expected 作为结果传播。 |
+| `function` | 输入 | 以保存的期望值为实参调用的可调用对象，调用形式function(期望值)；仅含期望值时调用，其返回的expected作为结果传播。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Fun` | 以保存的期望值为实参调用的可调用对象类型；调用结果须为 expected 类对象。 |
-| `Err2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Fun` | 以保存的期望值为实参调用的可调用对象类型；调用结果须为expected类对象。 |
+| `Err2` | 来源expected的错误类型；该重载要求相应的错误值构造或传播可行。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入/输出 | 以保存的期望值为实参调用的可调用对象，调用形式 function(期望值)；仅含期望值时调用，其返回的 expected 作为结果传播。 |
+| `function` | 输入/输出 | 以保存的期望值为实参调用的可调用对象，调用形式function(期望值)；仅含期望值时调用，其返回的expected作为结果传播。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Fun` | 以保存的期望值为实参调用的可调用对象类型；调用结果须为 expected 类对象。 |
-| `Err2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Fun` | 以保存的期望值为实参调用的可调用对象类型；调用结果须为expected类对象。 |
+| `Err2` | 来源expected的错误类型；该重载要求相应的错误值构造或传播可行。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入/输出 | 以保存的期望值为实参调用的可调用对象，调用形式 function(期望值)；仅含期望值时调用，其返回的 expected 作为结果传播。 |
+| `function` | 输入/输出 | 以保存的期望值为实参调用的可调用对象，调用形式function(期望值)；仅含期望值时调用，其返回的expected作为结果传播。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Fun` | 以保存的期望值为实参调用的可调用对象类型；调用结果须为 expected 类对象。 |
-| `Err2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Fun` | 以保存的期望值为实参调用的可调用对象类型；调用结果须为expected类对象。 |
+| `Err2` | 来源expected的错误类型；该重载要求相应的错误值构造或传播可行。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入/输出 | 以保存的期望值为实参调用的可调用对象，调用形式 function(期望值)；仅含期望值时调用，其返回的 expected 作为结果传播。 |
+| `function` | 输入/输出 | 以保存的期望值为实参调用的可调用对象，调用形式function(期望值)；仅含期望值时调用，其返回的expected作为结果传播。 |
 
-### 原型 5 的参数
+### 原型5的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Fun` | 以保存的期望值为实参调用的可调用对象类型；调用结果须为 expected 类对象。 |
-| `Err2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Fun` | 以保存的期望值为实参调用的可调用对象类型；调用结果须为expected类对象。 |
+| `Err2` | 来源expected的错误类型；该重载要求相应的错误值构造或传播可行。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入/输出 | 以保存的期望值为实参调用的可调用对象，调用形式 function(期望值)；仅含期望值时调用，其返回的 expected 作为结果传播。 |
+| `function` | 输入/输出 | 以保存的期望值为实参调用的可调用对象，调用形式function(期望值)；仅含期望值时调用，其返回的expected作为结果传播。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `auto` | 返回的状态对象。 |
-| 原型 2 | `auto` | 返回的状态对象。 |
-| 原型 3 | `auto` | 返回的状态对象。 |
-| 原型 4 | `auto` | 返回的状态对象。 |
-| 原型 5 | `auto` | 返回的状态对象。 |
+| 原型1 | `auto` | 返回的状态对象。 |
+| 原型2 | `auto` | 返回的状态对象。 |
+| 原型3 | `auto` | 返回的状态对象。 |
+| 原型4 | `auto` | 返回的状态对象。 |
+| 原型5 | `auto` | 返回的状态对象。 |
 
 ## 约束说明
 
-- T 必须为非 void 类型，E 必须为对象类型
-- 适用操作必须不抛出异常
-- 提供构造、赋值、emplace 和 swap
-- 支持所有 cv/ref 限定形式
-- Device 侧可调用对象及结果构造必须不抛出异常
+- T必须为非void类型，E必须为对象类型。
+- 适用操作必须不抛出异常。
+- 提供构造、赋值、emplace和swap。
+- 支持所有cv/ref限定形式。
+- Device侧可调用对象及结果构造必须不抛出异常。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
+以下Host片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
 
 ```cpp
 #include <asc/std/expected>
@@ -172,3 +179,8 @@ decltype(auto) example()
     return next;
 }
 ```
+
+## 关联API
+
+- [`asc::std::expected`](expected.md)
+- [本头文件的接口列表](asc_std_expected.md)

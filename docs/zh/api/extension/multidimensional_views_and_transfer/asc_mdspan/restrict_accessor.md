@@ -28,36 +28,38 @@
 
 头文件路径为：`<asc/mdspan>`。
 
-`asc::restrict_accessor` 为满足不别名约束的数据句柄提供 mdspan 访问器。
+`asc::restrict_accessor`为满足不别名约束的数据句柄提供mdspan访问器。
 
 ## 声明
 
 ```cpp
-template<class Accessor> class asc::restrict_accessor
+namespace asc {
+template<class Accessor> class restrict_accessor;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供 Host 和 GM 视图以及 AI Core SIMD 编程 UB 视图
-- 允许有符号步长
-- 可选的 Host DLPack 桥接不抛出异常
+- 提供Host和GM视图以及AI Core SIMD编程UB视图。
+- 允许有符号步长。
+- 可选的Host DLPack桥接不抛出异常。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/mdspan>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
 
-void use_type()
+bool example()
 {
-    using selected = asc::restrict_accessor<asc::std::default_accessor<int>>;
-    (void)sizeof(selected);
+    int values[] = {2, 4};
+    asc::restrict_accessor<asc::std::default_accessor<int>> accessor;
+    accessor.access(values, 1) = 7;
+    return values[1] == 7 && accessor.offset(values, 1) == values + 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_mdspan.md)

@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::view_interface::operator bool` 由 `<asc/std/ranges>` 提供，视图接口的显式布尔转换，经判空定制点对象判断区间是否为空。接口遵循对应 C++ 标准设施的语义；ASC-STL 的语言模式和调用位置以本页声明为准。
+`asc::std::ranges::view_interface::operator bool`由`<asc/std/ranges>`提供，视图接口的显式布尔转换，经判空定制点对象判断区间是否为空。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
 ```cpp
-template<class D2 = _Derived> constexpr explicit asc::std::ranges::view_interface::operator bool()（含常量限定版本）
+template<class D2 = _Derived> constexpr explicit asc::std::ranges::view_interface::operator bool()（含常量限定版本）;
 ```
 
 ## 参数说明
@@ -44,17 +44,17 @@ template<class D2 = _Derived> constexpr explicit asc::std::ranges::view_interfac
 
 | 参数名 | 描述 |
 | --- | --- |
-| `_Derived` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
+| `_Derived` | 采用CRTP继承view_interface的派生视图类型。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `explicit` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `bool` | 当前范围非空时为true。 |
 
 ## 约束说明
 
-- 派生视图可判空时提供：取值为判空结果的反值；转换为显式形式，须经条件语境使用
+- 派生视图可判空时提供：取值为判空结果的反值；转换为显式形式，须经条件语境使用。
 
 ## 调用示例
 
@@ -69,3 +69,7 @@ decltype(auto) example(Object& object, Args&&... args)
     return object.operator bool(static_cast<Args&&>(args)...);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

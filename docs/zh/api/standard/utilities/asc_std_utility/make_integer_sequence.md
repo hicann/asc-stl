@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::make_integer_sequence` 在编译期生成或保存整数索引序列类型。
+`asc::std::make_integer_sequence`在编译期生成或保存整数索引序列类型。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 声明
 
+`asc::std::make_integer_sequence<T, N>`等价于从0到N-1的`integer_sequence<T, ...>`；N为0时参数包为空。T必须为整数类型且N非负。
+
 ```cpp
-template<class T, T N> using asc::std::make_integer_sequence = Makeintegersequence<T, N>
+using Sequence = asc::std::make_integer_sequence<int, 3>;
+using Equivalent = asc::std::integer_sequence<int, 0, 1, 2>;
 ```
 
 ## 约束说明
 
-- 提供完整的标准形式
+- 提供完整的标准形式。
 
 ## 调用示例
 
@@ -54,3 +57,7 @@ void use_type()
     using selected = asc::std::make_integer_sequence<int, 3>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

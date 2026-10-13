@@ -28,56 +28,60 @@
 
 头文件路径为：`<asc/std/cstring>`。
 
-`asc::std::strstr` 查找子字符串首次出现的位置；AI Core SIMD 编程 仅接受兼容的普通指针地址空间。
+`asc::std::strstr`查找子字符串首次出现的位置；AI Core SIMD编程 仅接受兼容的普通指针地址空间。
 
 标准语义参考：[cppreference `cstring`](https://en.cppreference.com/w/cpp/header/cstring)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-char* asc::std::strstr(char* value, const char* needle) noexcept(true);
+namespace asc::std {
+char* strstr(char* value, const char* needle) noexcept(true);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-const char* asc::std::strstr(const char* value, const char* needle) noexcept(true);
+namespace asc::std {
+const char* strstr(const char* value, const char* needle) noexcept(true);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 被查找的窄字符串首地址，以空字符结尾。 |
-| `needle` | 输入 | 待查找的子串，以空字符结尾的窄字符串；为空串时直接返回 value。 |
+| `needle` | 输入 | 待查找的子串，以空字符结尾的窄字符串；为空串时直接返回value。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 被查找的窄字符串首地址，以空字符结尾。 |
-| `needle` | 输入 | 待查找的子串，以空字符结尾的窄字符串；为空串时直接返回 value。 |
+| `needle` | 输入 | 待查找的子串，以空字符结尾的窄字符串；为空串时直接返回value。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `char *` | 返回匹配位置的指针；没有匹配项时返回空指针。 |
-| 原型 2 | `const char *` | 返回匹配位置的指针；没有匹配项时返回空指针。 |
+| 原型1 | `char *` | 返回匹配位置的指针；没有匹配项时返回空指针。 |
+| 原型2 | `const char *` | 返回匹配位置的指针；没有匹配项时返回空指针。 |
 
 ## 约束说明
 
-- 在 Host 侧和 AI Core SIMT 编程中使用普通指针
-- AI Core SIMD 编程中使用 local 或 generic 地址空间的普通指针
-- 仅 memmove 允许源和目标重叠
+- 在Host侧和AI Core SIMT编程中使用普通指针。
+- AI Core SIMD编程中使用local或generic地址空间的普通指针。
+- 仅memmove允许源和目标重叠。
 
 ## 调用示例
 
@@ -91,3 +95,7 @@ decltype(auto) example(char * value, const char * needle)
     return asc::std::strstr(value, needle);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstring.md)

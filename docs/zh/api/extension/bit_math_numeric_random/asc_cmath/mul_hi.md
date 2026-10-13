@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/cmath>`。
 
-`asc::mul_hi` 返回两个同类型无符号整数乘积的高半部分。
+`asc::mul_hi`返回两个同类型无符号整数乘积的高半部分。
 
 ## 函数原型
 
 ```cpp
-template<class T> constexpr T asc::mul_hi(T left, T right) noexcept;
+namespace asc {
+template<class T> constexpr T mul_hi(T left, T right) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -59,7 +61,7 @@ template<class T> constexpr T asc::mul_hi(T left, T right) noexcept;
 
 ## 约束说明
 
-- T 必须为非 bool 的无符号整数类型，两个操作数类型必须相同
+- T必须为非bool的无符号整数类型，两个操作数类型必须相同。
 
 ## 调用示例
 
@@ -73,3 +75,7 @@ decltype(auto) example()
     return asc::mul_hi(0x10000u, 0x10000u);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_cmath.md)

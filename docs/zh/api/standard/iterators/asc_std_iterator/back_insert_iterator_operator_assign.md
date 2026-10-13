@@ -1,4 +1,4 @@
-# asc::std::back_insert_iterator::operator=
+# asc::std::back_insert_iterator::`operator=`
 
 ## 产品支持情况
 
@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::back_insert_iterator::operator=` 按所选赋值重载更新对象，并返回规定的结果。
+`asc::std::back_insert_iterator::operator=`按所选赋值重载更新对象，并返回规定的结果。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::back_insert_iterator`](back_insert_iterator.md)。
+
+### 原型1
 
 ```cpp
-constexpr back_insert_iterator<Container>& asc::std::back_insert_iterator::operator=(const typename Container::value_type& value);
+// asc::std::back_insert_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr back_insert_iterator<Container>& operator=(const typename Container::value_type& value);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr back_insert_iterator<Container>& asc::std::back_insert_iterator::operator=(typename Container::value_type&& value);
+// asc::std::back_insert_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr back_insert_iterator<Container>& operator=(typename Container::value_type&& value);
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -56,7 +60,7 @@ constexpr back_insert_iterator<Container>& asc::std::back_insert_iterator::opera
 | --- | --- | --- |
 | `value` | 输入 | 待插入到容器尾部的元素值；以复制方式插入（push_back(value)）。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -68,17 +72,17 @@ constexpr back_insert_iterator<Container>& asc::std::back_insert_iterator::opera
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `back_insert_iterator<Container> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 2 | `back_insert_iterator<Container> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型1 | `back_insert_iterator<Container> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型2 | `back_insert_iterator<Container> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段使用调用方提供的标准容器演示迭代器操作；目标容器须保持有效。
+以下Host片段使用调用方提供的标准容器演示迭代器操作；目标容器须保持有效。
 
 ```cpp
 #include <asc/std/iterator>
@@ -95,3 +99,8 @@ void example()
     output = 7;
 }
 ```
+
+## 关联API
+
+- [`asc::std::back_insert_iterator`](back_insert_iterator.md)
+- [本头文件的接口列表](asc_std_iterator.md)

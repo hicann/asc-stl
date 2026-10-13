@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::not_fn` 创建对函数对象结果取逻辑非的包装器。
+`asc::std::not_fn`创建对函数对象结果取逻辑非的包装器。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 函数原型
 
 ```cpp
-template<class Fn> [[nodiscard]] constexpr auto asc::std::not_fn(Fn&& function);
+namespace asc::std {
+template<class Fn> [[nodiscard]] constexpr auto not_fn(Fn&& function);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,7 +46,7 @@ template<class Fn> [[nodiscard]] constexpr auto asc::std::not_fn(Fn&& function);
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Fn` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Fn` | 被调用的函数、函数指针、成员指针或函数对象类型。 |
 
 **函数参数**
 
@@ -60,12 +62,11 @@ template<class Fn> [[nodiscard]] constexpr auto asc::std::not_fn(Fn&& function);
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/functional>
@@ -76,3 +77,7 @@ decltype(auto) example()
     return call(-1);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

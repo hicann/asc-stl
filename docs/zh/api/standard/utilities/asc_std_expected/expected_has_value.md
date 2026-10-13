@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/expected>`。
 
-`asc::std::expected::has_value` 判断对象当前是否保存有效值。
+`asc::std::expected::has_value`判断对象当前是否保存有效值。
 
 标准语义参考：[cppreference `expected`](https://en.cppreference.com/w/cpp/header/expected)。
 
 ## 函数原型
 
+所属类型：[`asc::std::expected`](expected.md)。
+
 ```cpp
-constexpr bool asc::std::expected::has_value() const noexcept;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr bool has_value() const noexcept;
 ```
 
 ## 参数说明
@@ -46,25 +49,31 @@ constexpr bool asc::std::expected::has_value() const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 对象保存有效值时返回 `true`，否则返回 `false`。 |
+| `bool` | 对象保存有效值时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- T 必须为非 void 类型，E 必须为对象类型
-- 适用操作必须不抛出异常
-- 提供构造、赋值、emplace 和 swap
-- 支持所有 cv/ref 限定形式
-- Device 侧可调用对象及结果构造必须不抛出异常
+- T必须为非void类型，E必须为对象类型。
+- 适用操作必须不抛出异常。
+- 提供构造、赋值、emplace和swap。
+- 支持所有cv/ref限定形式。
+- Device侧可调用对象及结果构造必须不抛出异常。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/expected>
 
-void example(asc::std::expected<int, int>& object)
+bool example()
 {
-    (void)object.has_value();
+    asc::std::expected<int, int> value(7);
+    return value.has_value() && *value == 7;
 }
 ```
+
+## 关联API
+
+- [`asc::std::expected`](expected.md)
+- [本头文件的接口列表](asc_std_expected.md)

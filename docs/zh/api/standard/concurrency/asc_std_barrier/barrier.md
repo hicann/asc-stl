@@ -28,33 +28,43 @@
 
 头文件路径为：`<asc/std/barrier>`。
 
-`asc::std::barrier` 协调参与线程按阶段会合。
+`asc::std::barrier`协调参与线程按阶段会合。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `barrier`](https://en.cppreference.com/w/cpp/header/barrier)。
 
 ## 声明
 
 ```cpp
-template<class CompletionFunction> class asc::std::barrier
+namespace asc::std {
+template<class CompletionFunction> class barrier;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- Host 侧对象管理 Ascend 950 的 GM 状态
-- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足
+- Host侧对象管理Ascend 950的GM状态。
+- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/barrier>
+#include <asc/std/utility>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::barrier<>;
-    (void)sizeof(selected);
+    asc::std::barrier<> barrier(1);
+    auto token = barrier.arrive();
+    barrier.wait(asc::std::move(token));
+    barrier.arrive_and_wait();
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_barrier.md)

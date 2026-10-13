@@ -28,23 +28,25 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`disable_sized_sentinel_for<Sentinel, Iter>` 标记哨兵与迭代器的减法不应被当作有效的常量时间距离计算。
+`disable_sized_sentinel_for<Sentinel, Iter>`标记哨兵与迭代器的减法不应被当作有效的常量时间距离计算。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-template<class, class> inline constexpr const bool asc::std::disable_sized_sentinel_for
+namespace asc::std {
+template<class, class> inline constexpr const bool disable_sized_sentinel_for;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 C++20 公开迭代器概念和特征接口
+- 提供C++20公开迭代器概念和特征接口。
 
 ## 调用示例
 
-以下 Host 片段用具体迭代器或容器类型实例化本页接口。
+以下Host片段用具体迭代器或容器类型实例化本页接口。
 
 ```cpp
 #include <asc/std/iterator>
@@ -53,3 +55,7 @@ template<class, class> inline constexpr const bool asc::std::disable_sized_senti
 
 inline constexpr auto example = asc::std::disable_sized_sentinel_for<int*, int*>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

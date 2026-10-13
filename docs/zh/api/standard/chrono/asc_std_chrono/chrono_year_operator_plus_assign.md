@@ -1,4 +1,4 @@
-# asc::std::chrono::year::operator+=
+# asc::std::chrono::year::`operator+=`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::year::operator+=` 按给定距离或操作数更新当前值。
+`asc::std::chrono::year::operator+=`按给定距离或操作数更新当前值。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
+所属类型：[`asc::std::chrono::year`](chrono_year.md)。
+
 ```cpp
-constexpr year& asc::std::chrono::year::operator+=(const years& value) noexcept;
+// asc::std::chrono::year 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr year& operator+=(const years& value) noexcept;
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ constexpr year& asc::std::chrono::year::operator+=(const years& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 加到当前年份的年数（years 时长，计数单位为年）；结果超出 -32767 到 32767 时存储值未指定。 |
+| `value` | 输入 | 加到当前年份的年数（years时长，计数单位为年）；结果超出 -32767到32767时存储值未指定。 |
 
 ## 返回值说明
 
@@ -54,12 +57,11 @@ constexpr year& asc::std::chrono::year::operator+=(const years& value) noexcept;
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
-以下 Host 片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host片段以具体日期或时间类型演示调用；数值须满足本页约束。
 
 ```cpp
 #include <asc/std/chrono>
@@ -69,3 +71,8 @@ void example(asc::std::chrono::year& value)
     value += asc::std::chrono::years{1};
 }
 ```
+
+## 关联API
+
+- [`asc::std::chrono::year`](chrono_year.md)
+- [本头文件的接口列表](asc_std_chrono.md)

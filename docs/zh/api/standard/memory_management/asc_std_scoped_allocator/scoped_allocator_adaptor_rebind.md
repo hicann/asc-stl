@@ -28,46 +28,54 @@
 
 头文件路径为：`<asc/std/scoped_allocator>`。
 
-`asc::std::scoped_allocator_adaptor::rebind` 在容器与嵌套元素构造间传递分配器，或把分配器重绑定到新元素类型。
+`asc::std::scoped_allocator_adaptor::rebind`在容器与嵌套元素构造间传递分配器，或把分配器重绑定到新元素类型。
 
 标准语义参考：[cppreference `scoped_allocator`](https://en.cppreference.com/w/cpp/header/scoped_allocator)。
 
 ## 声明
 
+所属类型：[`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。
+
 ```cpp
-template<class Type> struct asc::std::scoped_allocator_adaptor::rebind
+// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Type> struct rebind;
 ```
 
 ## 约束说明
 
-- 遵循 scoped_allocator_adaptor 的标准分配器传播、构造、销毁、比较和交换约束
-- 参与操作的分配器必须在当前可用位置有效，Device 侧操作不得抛出异常
+- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
+- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
-#include <asc/std/scoped_allocator>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/scoped_allocator>
+#include <asc/std/type_traits>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
+template<class T>
+struct ExampleAllocator : ::std::allocator<T> {
     using pointer = T*;
+    using const_pointer = const T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    template<class U> struct rebind { using other = ExampleAllocator<U>; };
+    ExampleAllocator() = default;
+    template<class U> ExampleAllocator(const ExampleAllocator<U>&) noexcept {}
 };
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::scoped_allocator_adaptor<example_allocator<int>>::rebind<long>;
-    (void)sizeof(selected);
+    using Original = asc::std::scoped_allocator_adaptor<ExampleAllocator<int>>;
+    using Rebound = Original::rebind<float>::other;
+    static_assert(asc::std::is_same_v<Rebound::value_type, float>);
+    return true;
 }
 ```
+
+## 关联API
+
+- [`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)
+- [本头文件的接口列表](asc_std_scoped_allocator.md)

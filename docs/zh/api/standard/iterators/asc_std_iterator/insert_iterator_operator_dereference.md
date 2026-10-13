@@ -1,4 +1,4 @@
-# asc::std::insert_iterator::operator*
+# asc::std::insert_iterator::`operator*`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::insert_iterator::operator*` 解引用当前迭代器或有值对象。
+`asc::std::insert_iterator::operator*`解引用当前迭代器或有值对象。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
+所属类型：[`asc::std::insert_iterator`](insert_iterator.md)。
+
 ```cpp
-[[nodiscard]] constexpr insert_iterator<Container>& asc::std::insert_iterator::operator*() noexcept;
+// asc::std::insert_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr insert_iterator<Container>& operator*() noexcept;
 ```
 
 ## 参数说明
@@ -50,12 +53,12 @@
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段使用调用方提供的标准容器演示迭代器操作；目标容器须保持有效。
+以下Host片段使用调用方提供的标准容器演示迭代器操作；目标容器须保持有效。
 
 ```cpp
 #include <asc/std/iterator>
@@ -72,3 +75,8 @@ decltype(auto) example()
     return *output;
 }
 ```
+
+## 关联API
+
+- [`asc::std::insert_iterator`](insert_iterator.md)
+- [本头文件的接口列表](asc_std_iterator.md)

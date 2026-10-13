@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/new>`。
 
-全局数组 placement `operator new[]` 使用调用方提供的存储地址，接口不分配内存。
+全局数组placement `operator new[]`使用调用方提供的存储地址，接口不分配内存。
 
 标准语义参考：[cppreference `new`](https://en.cppreference.com/w/cpp/header/new)。
 
@@ -44,8 +44,8 @@ void* ::operator new[](asc::std::size_t, void* ptr) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc::std::size_t`（未命名） | 输入 | placement 形式的第一个参数，为未命名的 std::size_t 大小参数，表示请求构造数组所占用的总字节数；本接口不分配内存，不使用该值。 |
-| `ptr` | 输入 | 提供“全局数组 placement `operator new[]` 使用调用方提供的存储地址，接口不分配内存”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `asc::std::size_t`（未命名） | 输入 | placement形式的第一个参数，为未命名的std::size_t大小参数，表示请求构造数组所占用的总字节数；本接口不分配内存，不使用该值。 |
+| `ptr` | 输入 | 调用方提供的原始存储地址，须满足待构造对象的大小及对齐要求；该placement函数直接返回此地址，不分配存储。 |
 
 ## 返回值说明
 
@@ -55,7 +55,7 @@ void* ::operator new[](asc::std::size_t, void* ptr) noexcept;
 
 ## 约束说明
 
-- 提供 placement 对象生命周期和无动态分配的接口
+- 提供placement对象生命周期和无动态分配的接口。
 
 ## 调用示例
 
@@ -70,3 +70,7 @@ decltype(auto) example(void* storage)
     return address;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_new.md)

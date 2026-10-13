@@ -28,29 +28,36 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::true_type` 表示编译期真值类型。
+`asc::std::true_type`表示编译期真值类型。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
 ```cpp
-using asc::std::true_type = integral_constant<bool, true>
+namespace asc::std {
+using true_type = integral_constant<bool, true>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类及其对应的 _v 辅助形式
+- 提供特征类及其对应的 _v辅助形式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void use_type(const asc::std::true_type& value)
+bool example()
 {
-    (void)value;
+    static_assert(asc::std::true_type::value);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_type_traits.md)

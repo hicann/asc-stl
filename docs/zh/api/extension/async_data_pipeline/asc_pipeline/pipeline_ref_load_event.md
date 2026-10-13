@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/pipeline>`。
 
-`asc::pipeline_ref::load_event` 返回指定流水级使用的 Load Event 编号。
+`asc::pipeline_ref::load_event`返回指定流水级使用的Load Event编号。
 
 ## 函数原型
 
+所属类型：[`asc::pipeline_ref`](pipeline_ref.md)。
+
 ```cpp
-asc::pipeline_event_id asc::pipeline_ref::load_event(unsigned int stage) const noexcept;
+// asc::pipeline_ref 类内的声明节选；模板形参和其他成员由所属类提供。
+asc::pipeline_event_id load_event(unsigned int stage) const noexcept;
 ```
 
 ## 参数说明
@@ -42,22 +45,22 @@ asc::pipeline_event_id asc::pipeline_ref::load_event(unsigned int stage) const n
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `stage` | 输入 | 流水级编号，从 0 起且须小于构造时确定的流水级数（1 或 2）；返回该级 Load 事件 ID。 |
+| `stage` | 输入 | 流水级编号，从0起且须小于构造时确定的流水级数（1或2）；返回该级Load事件ID。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::pipeline_event_id` | 返回指定流水级使用的 Load Event 编号。 |
+| `asc::pipeline_event_id` | 返回指定流水级使用的Load Event编号。 |
 
 ## 约束说明
 
-- 仅可在 AI Core SIMD 编程中调用
-- 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明
+- 仅可在AI Core SIMD编程中调用。
+- 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明。
 
 ## 调用示例
 
-以下 AI Core SIMD 片段演示阶段操作；事件 ID 和调用顺序须满足本页约束。
+以下AI Core SIMD片段演示阶段操作；事件ID和调用顺序须满足本页约束。
 
 ```cpp
 #include <asc/pipeline>
@@ -68,3 +71,8 @@ __aicore__ decltype(auto) example(const asc::pipeline_ref& pipeline, unsigned in
     return pipeline.load_event(stage);
 }
 ```
+
+## 关联API
+
+- [`asc::pipeline_ref`](pipeline_ref.md)
+- [本头文件的接口列表](asc_pipeline.md)

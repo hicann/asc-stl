@@ -28,20 +28,23 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::pair::second_type` 标识 pair 的对应元素类型。
+`asc::std::pair::second_type`标识pair的对应元素类型。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 声明
 
+所属类型：[`asc::std::pair`](pair.md)。
+
 ```cpp
-using asc::std::pair::second_type = T2
+// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
+using second_type = T2;
 ```
 
 ## 约束说明
 
-- pair 操作不抛出异常
-- 关系运算符均为显式提供
+- 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
@@ -55,3 +58,8 @@ void use_type()
     using alias_type = typename asc::std::pair<int, int>::second_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::pair`](pair.md)
+- [本头文件的接口列表](asc_std_utility.md)

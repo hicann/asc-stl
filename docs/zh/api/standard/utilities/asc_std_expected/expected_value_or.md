@@ -28,33 +28,38 @@
 
 头文件路径为：`<asc/std/expected>`。
 
-`asc::std::expected::value_or` 在对象有值时返回该值，否则返回调用方提供的替代值。
+`asc::std::expected::value_or`在对象有值时返回该值，否则返回调用方提供的替代值。
 
 标准语义参考：[cppreference `expected`](https://en.cppreference.com/w/cpp/header/expected)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::expected`](expected.md)。
+
+### 原型1
 
 ```cpp
-constexpr Value asc::std::expected::value_or(const Value& fallback) const;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr Value value_or(const Value& fallback) const;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class U> constexpr T asc::std::expected::value_or(U&& fallback)&&;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class U> constexpr T value_or(U&& fallback)&&;
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class U> constexpr T asc::std::expected::value_or(U&& fallback) const&;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class U> constexpr T value_or(U&& fallback) const&;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -62,13 +67,13 @@ template<class U> constexpr T asc::std::expected::value_or(U&& fallback) const&;
 | --- | --- | --- |
 | `fallback` | 输入 | 提供“在对象有值时返回该值，否则返回调用方提供的替代值”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U` | 来源成功值的类型；须能构造或赋值给当前成功值类型。 |
 
 **函数参数**
 
@@ -76,13 +81,13 @@ template<class U> constexpr T asc::std::expected::value_or(U&& fallback) const&;
 | --- | --- | --- |
 | `fallback` | 输入/输出 | 提供“在对象有值时返回该值，否则返回调用方提供的替代值”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U` | 来源成功值的类型；须能构造或赋值给当前成功值类型。 |
 
 **函数参数**
 
@@ -94,21 +99,21 @@ template<class U> constexpr T asc::std::expected::value_or(U&& fallback) const&;
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `Value` | 返回该值，否则返回调用方提供的替代值。 |
-| 原型 2 | `T` | 返回该值，否则返回调用方提供的替代值。 |
-| 原型 3 | `T` | 返回该值，否则返回调用方提供的替代值。 |
+| 原型1 | `Value` | 返回该值，否则返回调用方提供的替代值。 |
+| 原型2 | `T` | 返回该值，否则返回调用方提供的替代值。 |
+| 原型3 | `T` | 返回该值，否则返回调用方提供的替代值。 |
 
 ## 约束说明
 
-- T 必须为非 void 类型，E 必须为对象类型
-- 适用操作必须不抛出异常
-- 提供构造、赋值、emplace 和 swap
-- 支持所有 cv/ref 限定形式
-- Device 侧可调用对象及结果构造必须不抛出异常
+- T必须为非void类型，E必须为对象类型。
+- 适用操作必须不抛出异常。
+- 提供构造、赋值、emplace和swap。
+- 支持所有cv/ref限定形式。
+- Device侧可调用对象及结果构造必须不抛出异常。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
+以下Host片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
 
 ```cpp
 #include <asc/std/expected>
@@ -119,3 +124,8 @@ decltype(auto) example()
     return value.value_or(0);
 }
 ```
+
+## 关联API
+
+- [`asc::std::expected`](expected.md)
+- [本头文件的接口列表](asc_std_expected.md)

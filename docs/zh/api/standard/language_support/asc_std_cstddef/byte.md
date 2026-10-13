@@ -28,29 +28,36 @@
 
 头文件路径为：`<asc/std/cstddef>`。
 
-`asc::std::byte` 定义不带算术含义的单字节值类型。
+`asc::std::byte`定义不带算术含义的单字节值类型。
 
 标准语义参考：[cppreference `cstddef`](https://en.cppreference.com/w/cpp/header/cstddef)。
 
 ## 声明
 
 ```cpp
-enum asc::std::byte
+namespace asc::std {
+enum byte;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供标准声明
+- 提供标准声明。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/cstddef>
 
-void use_type(asc::std::byte value)
+bool example()
 {
-    (void)value;
+    const asc::std::byte value{0x0f};
+    return asc::std::to_integer<unsigned int>(value) == 15;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstddef.md)

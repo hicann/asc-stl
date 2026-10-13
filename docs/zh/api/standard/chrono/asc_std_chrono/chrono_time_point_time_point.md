@@ -28,25 +28,25 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::time_point::time_point` 按本页所列构造形态初始化 `time_point` 对象。
+`asc::std::chrono::time_point::time_point`按本页所列构造形态初始化`time_point`对象。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr time_point();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr time_point(const duration& duration);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 template<class Duration2> constexpr time_point(const time_point<clock, Duration2>& duration);
@@ -54,46 +54,55 @@ template<class Duration2> constexpr time_point(const time_point<clock, Duration2
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `duration` | 输入 | 提供“按本页所列构造形态初始化 `time_point` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `duration` | 输入 | 提供“按本页所列构造形态初始化`time_point`对象”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Duration2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Duration2` | 来源time_point的duration类型；须能转换为目标时长类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `duration` | 输入 | 提供“按本页所列构造形态初始化 `time_point` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `duration` | 输入 | 提供“按本页所列构造形态初始化`time_point`对象”使用的对象引用；被引用对象须在调用期间有效。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 支持用户定义时钟、值运算以及六个显式关系运算符
+- 支持用户定义时钟、值运算以及六个显式关系运算符。
 
 ## 调用示例
 
-以下 Host 片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    asc::std::chrono::time_point<asc::std::chrono::system_clock> value{};
-    (void)value;
+    asc::std::chrono::time_point<asc::std::chrono::system_clock, asc::std::chrono::seconds> value{asc::std::chrono::seconds{7}};
+    return value.time_since_epoch().count() == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

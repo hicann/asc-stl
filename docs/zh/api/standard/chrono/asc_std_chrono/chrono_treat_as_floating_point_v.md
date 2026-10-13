@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::treat_as_floating_point_v` 表示给定时长表示类型是否按浮点数处理。
+`asc::std::chrono::treat_as_floating_point_v`表示给定时长表示类型是否按浮点数处理。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 声明
 
 ```cpp
-template<class Rep> inline constexpr const bool asc::std::chrono::treat_as_floating_point_v
+namespace asc::std::chrono {
+template<class Rep> inline constexpr const bool treat_as_floating_point_v;
+} // namespace asc::std::chrono
 ```
 
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符
+- 提供值运算以及六个显式关系运算符。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class Rep> inline constexpr const bool asc::std::chrono::treat_as_float
 
 inline constexpr auto example = asc::std::chrono::treat_as_floating_point_v<float>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

@@ -28,34 +28,36 @@
 
 头文件路径为：`<asc/argument>`。
 
-`asc::args::bounds` 创建编译期或运行期参数边界对象。
+`asc::args::bounds`创建编译期或运行期参数边界对象。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<auto Lower, auto Upper> constexpr asc::args::static_bounds<Lower, Upper> asc::args::bounds() noexcept;
+// asc::args 类内的声明节选；模板形参和其他成员由所属类提供。
+template<auto Lower, auto Upper> constexpr asc::args::static_bounds<Lower, Upper> bounds() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> constexpr asc::args::runtime_bounds<T> asc::args::bounds(T lower, T upper) noexcept;
+// asc::args 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class T> constexpr asc::args::runtime_bounds<T> bounds(T lower, T upper) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Lower` | 编译期边界下限：作为 static_bounds<Lower, Upper> 的 lower()，要求 Lower ≤ Upper。 |
-| `Upper` | 编译期边界上限：作为 static_bounds<Lower, Upper> 的 upper()。 |
+| `Lower` | 编译期边界下限：作为static_bounds<Lower, Upper> 的lower()，要求Lower ≤ Upper。 |
+| `Upper` | 编译期边界上限：作为static_bounds<Lower, Upper> 的upper()。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -67,21 +69,21 @@ template<class T> constexpr asc::args::runtime_bounds<T> asc::args::bounds(T low
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lower` | 输入 | 运行期边界下限：存入返回的 runtime_bounds<T> 并经 lower() 查询。 |
-| `upper` | 输入 | 运行期边界上限：存入返回的 runtime_bounds<T> 并经 upper() 查询。 |
+| `lower` | 输入 | 运行期边界下限：存入返回的runtime_bounds<T> 并经lower()查询。 |
+| `upper` | 输入 | 运行期边界上限：存入返回的runtime_bounds<T> 并经upper()查询。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::args::static_bounds<Lower, Upper>` | 返回编译期或运行期参数边界对象。 |
-| 原型 2 | `asc::args::runtime_bounds<T>` | 返回编译期或运行期参数边界对象。 |
+| 原型1 | `asc::args::static_bounds<Lower, Upper>` | 返回编译期或运行期参数边界对象。 |
+| 原型2 | `asc::args::runtime_bounds<T>` | 返回编译期或运行期参数边界对象。 |
 
 ## 约束说明
 
-- 使用 C++17，可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Bounds 必须为 asc::args::no_bounds 或 asc::args::static_bounds
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期
+- 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
+- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 
@@ -95,3 +97,7 @@ decltype(auto) example()
     return asc::args::bounds<0, 10>();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_argument.md)

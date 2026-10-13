@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`disable_sized_range<T>` 允许对不满足稳定大小语义的范围禁用 sized_range 识别。
+`disable_sized_range<T>`允许对不满足稳定大小语义的范围禁用sized_range识别。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr const bool asc::std::ranges::disable_sized_range
+namespace asc::std::ranges {
+template<class T> inline constexpr const bool disable_sized_range;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 支持数组和用户范围，不支持仅由花括号构成的 initializer_list 表达式
+- 支持数组和用户范围，不支持仅由花括号构成的initializer_list表达式。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class T> inline constexpr const bool asc::std::ranges::disable_sized_ra
 
 inline constexpr auto example = asc::std::ranges::disable_sized_range<int[4]>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

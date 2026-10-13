@@ -28,31 +28,39 @@
 
 头文件路径为：`<asc/std/variant>`。
 
-`asc::std::variant` 从多个备选类型中保存一个活动值。
+`asc::std::variant`从多个备选类型中保存一个活动值。
 
 标准语义参考：[cppreference `variant`](https://en.cppreference.com/w/cpp/header/variant)。
 
 ## 声明
 
 ```cpp
-template<class ...Types> class asc::std::variant
+namespace asc::std {
+template<class ...Types> class variant;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
+- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
+- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/variant>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::variant<int, float>;
-    (void)sizeof(selected);
+    asc::std::variant<int, float> value(7);
+    const bool integer = value.index() == 0 && *asc::std::get_if<0>(&value) == 7;
+    value.emplace<1>(2.0F);
+    return integer && value.index() == 1 && *asc::std::get_if<1>(&value) == 2.0F;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_variant.md)

@@ -28,30 +28,35 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::decay::type` 提供该类型特征、映射或适配器计算出的成员类型。
+`asc::std::decay::type`提供该类型特征、映射或适配器计算出的成员类型。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
+`asc::std::decay<T>::type`先移去T的引用：数组转成指向元素的指针，函数转成函数指针，其余类型移去顶层cv限定。
+
 ```cpp
-using asc::std::decay::type = typename Decayimpl<U, Ascisreferenceable<U>::value>::type
+using ArrayResult = asc::std::decay<int[3]>::type;  // int*
+using ValueResult = asc::std::decay<const int&>::type; // int
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v 辅助形式
+- 提供特征类以及标准的 _t、_v辅助形式。
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下Host示例使用独立的预期类型或值检查接口结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
-{
-    using selected = typename asc::std::decay<int>::type;
-    static_assert(asc::std::is_same_v<selected, selected>);
-}
+using result_type = typename asc::std::decay<const int&>::type;
+static_assert(asc::std::is_same_v<result_type, int>);
+static_assert(asc::std::is_same_v<asc::std::decay_t<int[3]>, int*>);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_type_traits.md)

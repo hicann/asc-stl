@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::make_constant_iterator` 创建始终产生指定值的 constant_iterator。
+`asc::make_constant_iterator`创建始终产生指定值的constant_iterator。
 
 ## 函数原型
 
 ```cpp
-template<class T, class Index = asc::std::ptrdiff_t> constexpr asc::constant_iterator<T, Index> asc::make_constant_iterator(T value, Index index = 0);
+namespace asc {
+template<class T, class Index = asc::std::ptrdiff_t> constexpr asc::constant_iterator<T, Index> make_constant_iterator(T value, Index index = 0);
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,15 +44,15 @@ template<class T, class Index = asc::std::ptrdiff_t> constexpr asc::constant_ite
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Index` | 迭代器内部索引类型，默认 ptrdiff_t：仅用于位置计数与迭代器差值。 |
+| `T` | 常量迭代器保存并在每次解引用时提供的值类型。 |
+| `Index` | 迭代器内部索引类型，默认ptrdiff_t：仅用于位置计数与迭代器差值。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 解引用恒返回的常量值：迭代器任意位置的读取结果均为该值。 |
-| `index` | 输入 | 初始索引，默认 0：仅影响迭代器位置与差值，不影响解引用结果。 |
+| `index` | 输入 | 初始索引，默认0：仅影响迭代器位置与差值，不影响解引用结果。 |
 
 ## 返回值说明
 
@@ -60,8 +62,8 @@ template<class T, class Index = asc::std::ptrdiff_t> constexpr asc::constant_ite
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
@@ -77,3 +79,7 @@ decltype(auto) example()
     return asc::make_constant_iterator(7);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

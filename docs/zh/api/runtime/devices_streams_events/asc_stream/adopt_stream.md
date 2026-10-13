@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/stream>`。
 
-`asc::adopt_stream` 把非空的 Runtime Stream 原生句柄所有权交给空的 `stream` 对象，不创建新的 Runtime 资源。
+`asc::adopt_stream`把非空的Runtime Stream原生句柄所有权交给空的`stream`对象，不创建新的Runtime资源。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 函数原型
 
 ```cpp
-bool asc::adopt_stream(asc::stream_ref::native_handle_type handle, asc::stream& output) noexcept;
+namespace asc {
+bool adopt_stream(asc::stream_ref::native_handle_type handle, asc::stream& output) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -44,19 +46,19 @@ bool asc::adopt_stream(asc::stream_ref::native_handle_type handle, asc::stream& 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `handle` | 输入 | 提交或等待异步任务的 Stream 引用；任务完成前须保持有效。 |
-| `output` | 输出 | 提供“把非空的 Runtime Stream 原生句柄所有权交给空的 `stream` 对象，不创建新的 Runtime 资源”使用的对象引用；被引用对象须在调用期间有效。 |
+| `handle` | 输入 | 提交或等待异步任务的Stream引用；任务完成前须保持有效。 |
+| `output` | 输出 | 提供“把非空的Runtime Stream原生句柄所有权交给空的`stream`对象，不创建新的Runtime资源”使用的对象引用；被引用对象须在调用期间有效。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 句柄不得为空，输出对象在调用前必须为空
-- 失败时输出保持不变，成功时转移资源所有权
+- 句柄不得为空，输出对象在调用前必须为空。
+- 失败时输出保持不变，成功时转移资源所有权。
 
 ## 调用示例
 
@@ -71,6 +73,10 @@ decltype(auto) example(asc::stream_ref::native_handle_type handle, asc::stream& 
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_stream.md)

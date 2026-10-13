@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/collectives>`。
 
-`asc::block_collective_workspace` 包装 AI Core SIMT 编程 Block 集体操作所需的动态共享 UB 工作区。
+`asc::block_collective_workspace`包装AI Core SIMT编程Block集体操作所需的动态共享UB工作区。
 
 ## 声明
 
 ```cpp
-template<class T> class asc::block_collective_workspace
+namespace asc {
+template<class T> class block_collective_workspace;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 同一 Block 的线程必须会合调用
-- 线程数、动态共享 UB 工作区及同步次序必须满足声明要求，工作区在调用期间不得被并发复用
+- 仅可在AI Core SIMT编程中调用。
+- 同一Block的线程必须会合调用。
+- 线程数、动态共享UB工作区及同步次序必须满足声明要求，工作区在调用期间不得被并发复用。
 
 ## 调用示例
 
@@ -55,3 +57,7 @@ __aicore__ asc::block_collective_workspace<unsigned int> example(unsigned int* d
     return asc::make_block_collective_workspace(dynamic_shared_pointer, 2u);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_collectives.md)

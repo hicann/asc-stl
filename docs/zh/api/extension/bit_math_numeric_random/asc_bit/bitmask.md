@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/bit>`。
 
-`asc::bitmask` 生成 32 位或 64 位无符号整数掩码，从 `start` 位开始将连续 `width` 位设置为 1，其余位为 0。
+`asc::bitmask`生成32位或64位无符号整数掩码，从`start`位开始将连续`width`位设置为1，其余位为0。
 
 ## 函数原型
 
 ```cpp
-template<class T = asc::std::uint32_t> constexpr T asc::bitmask(int start, int width) noexcept;
+namespace asc {
+template<class T = asc::std::uint32_t> constexpr T bitmask(int start, int width) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,25 +44,25 @@ template<class T = asc::std::uint32_t> constexpr T asc::bitmask(int start, int w
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 掩码的无符号整数类型；须为 uint32_t 或 uint64_t，省略时为 uint32_t。 |
+| `T` | 掩码的无符号整数类型；须为uint32_t或uint64_t，省略时为uint32_t。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `start` | 输入 | 掩码的起始位编号（最低位为第 0 位）；不得为负。 |
-| `width` | 输入 | 掩码中连续置 1 的位数，从 `start` 位向高位延伸；不得为负。 |
+| `start` | 输入 | 掩码的起始位编号（最低位为第0位）；不得为负。 |
+| `width` | 输入 | 掩码中连续置1的位数，从`start`位向高位延伸；不得为负。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `T` | 返回 32 位或 64 位无符号整数掩码，从 `start` 位开始将连续 `width` 位设置为 1，其余位为 0。 |
+| `T` | 返回32位或64位无符号整数掩码，从`start`位开始将连续`width`位设置为1，其余位为0。 |
 
 ## 约束说明
 
-- T 必须为 uint32_t 或 uint64_t
-- start 和 width 不得为负且不得超出类型位宽，零位宽和全位宽操作不得产生未定义移位
+- T必须为uint32_t或uint64_t。
+- start和width不得为负且不得超出类型位宽，零位宽和全位宽操作不得产生未定义移位。
 
 ## 调用示例
 
@@ -74,3 +76,7 @@ decltype(auto) example()
     return asc::bitmask<unsigned int>(2, 3);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_bit.md)

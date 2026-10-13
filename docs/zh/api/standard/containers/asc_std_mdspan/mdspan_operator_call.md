@@ -1,4 +1,4 @@
-# asc::std::mdspan::operator()
+# asc::std::mdspan::`operator()`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::mdspan::operator()` 按多维下标访问元素，下标个数须等于维数且均可转换为索引类型。
+`asc::std::mdspan::operator()`按多维下标访问元素，下标个数须等于维数且均可转换为索引类型。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
 ```cpp
-template<class... IndexTypes> typename asc::std::mdspan<T, Extents, Layout, Accessor>::reference asc::std::mdspan<T, Extents, Layout, Accessor>::operator()(IndexTypes... indices)
+// asc::std::mdspan<Element, Extents, Layout, Accessor> 类内声明摘要。
+// 省略内部 SFINAE：Indices... 均须可转换为 index_type。
+template<class... Indices>
+[[nodiscard]] constexpr reference operator()(Indices... indices) const;
 ```
 
 ## 参数说明
@@ -44,35 +47,40 @@ template<class... IndexTypes> typename asc::std::mdspan<T, Extents, Layout, Acce
 
 | 参数名 | 描述 |
 | --- | --- |
-| `IndexTypes` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
+| `Indices` | 每一维下标的实参类型，须能转换为index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `indices` | 输入 | 参与本次操作的输入对象；其类型须满足函数原型中的要求。 |
+| `indices` | 输入 | 逐维下标，个数必须为rank()，第r维满足0 <= index < extent(r)。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `按声明确定` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `reference` | 通过mapping计算偏移并交由accessor访问所得的结果；具体引用或代理值类型由Accessor::reference决定。 |
 
 ## 约束说明
 
-- 下标个数等于维数且每个下标可显式转换为索引类型
+- 下标个数等于维数且每个下标可显式转换为索引类型。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/mdspan>
 
-void example()
+bool example()
 {
-    int data[4] = {1, 2, 3, 4};
-    asc::std::mdspan<int, asc::std::extents<unsigned long, 4>> view{data};
-    (void)view(2);
+    int values[4] = {1, 2, 3, 4};
+    asc::std::mdspan<int, asc::std::extents<int, 2, 2>> view(values);
+    view(1, 0) = 7;
+    return values[2] == 7 && view(0, 1) == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mdspan.md)

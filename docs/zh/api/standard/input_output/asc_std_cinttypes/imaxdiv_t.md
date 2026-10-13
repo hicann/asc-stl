@@ -28,29 +28,36 @@
 
 头文件路径为：`<asc/std/cinttypes>`。
 
-`asc::std::imaxdiv_t` 保存最大宽度整数除法的商与余数。
+`asc::std::imaxdiv_t`保存最大宽度整数除法的商与余数。
 
 标准语义参考：[cppreference `cinttypes`](https://en.cppreference.com/w/cpp/header/cinttypes)。
 
 ## 声明
 
 ```cpp
-struct asc::std::imaxdiv_t
+namespace asc::std {
+struct imaxdiv_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供纯整数类型运算和格式宏
+- 提供纯整数类型运算和格式宏。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/cinttypes>
 
-void use_type(const asc::std::imaxdiv_t& value)
+bool example()
 {
-    (void)value;
+    asc::std::imaxdiv_t result = asc::std::imaxdiv(17, 5);
+    return result.quot == 3 && result.rem == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cinttypes.md)

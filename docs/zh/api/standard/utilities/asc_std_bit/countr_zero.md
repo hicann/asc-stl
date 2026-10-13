@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/bit>`。
 
-`asc::std::countr_zero` 统计从最低位起连续的零位数。
+`asc::std::countr_zero`统计从最低位起连续的零位数。
 
 标准语义参考：[cppreference `bit`](https://en.cppreference.com/w/cpp/header/bit)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> [[nodiscard]] constexpr int asc::std::countr_zero(T value) noexcept;
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr int countr_zero(T value) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> [[nodiscard]] constexpr int asc::std::countr_zero(unsigned long value) noexcept;
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr int countr_zero(unsigned long value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -60,9 +64,9 @@ template<class T> [[nodiscard]] constexpr int asc::std::countr_zero(unsigned lon
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待统计的无符号整数值；统计从最低位起连续为 0 的位数，值为 0 时返回 T 的位宽。 |
+| `value` | 输入 | 待统计的无符号整数值；统计从最低位起连续为0的位数，值为0时返回T的位宽。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -74,18 +78,18 @@ template<class T> [[nodiscard]] constexpr int asc::std::countr_zero(unsigned lon
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待统计的无符号整数值；统计从最低位起连续为 0 的位数，值为 0 时返回 T 的位宽。 |
+| `value` | 输入 | 待统计的无符号整数值；统计从最低位起连续为0的位数，值为0时返回T的位宽。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `int` | 返回对应前导位、尾随位或全部置位位的数量。 |
-| 原型 2 | `int` | 返回对应前导位、尾随位或全部置位位的数量。 |
+| 原型1 | `int` | 返回对应前导位、尾随位或全部置位位的数量。 |
+| 原型2 | `int` | 返回对应前导位、尾随位或全部置位位的数量。 |
 
 ## 约束说明
 
-- 遵循标准无符号整数类型约束
+- 遵循标准无符号整数类型约束。
 
 ## 调用示例
 
@@ -99,3 +103,7 @@ decltype(auto) example()
     return asc::std::countr_zero(3u);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_bit.md)

@@ -28,29 +28,36 @@
 
 头文件路径为：`<asc/type_traits>`。
 
-`asc::is_bitwise_comparable<T>` 判断按字节比较 `T` 的对象表示是否与 `operator==` 的值比较等价；标准整数类型默认为 true，浮点类型默认为 false。
+`asc::is_bitwise_comparable<T>`判断按字节比较`T`的对象表示是否与`operator==`的值比较等价；标准整数类型默认为true，浮点类型默认为false。
 
 ## 声明
 
 ```cpp
-template<class T> struct asc::is_bitwise_comparable
+namespace asc {
+template<class T> struct is_bitwise_comparable;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 该接口是单类型定制点
-- 用户特化必须满足页面声明的语义前置条件
+- 该接口是单类型定制点。
+- 用户特化必须满足页面声明的语义前置条件。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/type_traits>
 
-void use_type()
+bool example()
 {
-    using selected = asc::is_bitwise_comparable<int>;
-    (void)sizeof(selected);
+    static_assert(asc::is_bitwise_comparable<int>::value);
+    static_assert(!asc::is_bitwise_comparable<float>::value);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_type_traits.md)

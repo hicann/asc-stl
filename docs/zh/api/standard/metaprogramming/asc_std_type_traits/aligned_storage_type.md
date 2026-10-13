@@ -28,38 +28,45 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::aligned_storage::type` 保存满足指定大小和对齐的原始存储类型。
+`asc::std::aligned_storage::type`保存满足指定大小和对齐的原始存储类型。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
-### 原型 1
+所属类型：[`asc::std::aligned_storage`](aligned_storage.md)。
+
+### 原型1
 
 ```cpp
-struct asc::std::aligned_storage::type
+// asc::std::aligned_storage 类内的声明节选；模板形参和其他成员由所属类提供。
+struct type;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-union asc::std::aligned_storage::type
+// asc::std::aligned_storage 类内的声明节选；模板形参和其他成员由所属类提供。
+union type;
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v 辅助形式
+- 提供特征类以及标准的 _t、_v辅助形式。
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下Host示例使用独立的预期类型或值检查接口结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
-{
-    using selected = typename asc::std::aligned_storage<16, alignof(int)>::type;
-    static_assert(asc::std::is_same_v<selected, selected>);
-}
+using storage_type = typename asc::std::aligned_storage<sizeof(double), alignof(double)>::type;
+static_assert(sizeof(storage_type) >= sizeof(double));
+static_assert(alignof(storage_type) >= alignof(double));
 ```
+
+## 关联API
+
+- [`asc::std::aligned_storage`](aligned_storage.md)
+- [本头文件的接口列表](asc_std_type_traits.md)

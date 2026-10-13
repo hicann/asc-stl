@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/bit>`。
 
-`asc::bit_reverse` 反转 32 位或 64 位无符号整数的全部二进制位，使最低位与最高位、次低位与次高位依次交换。
+`asc::bit_reverse`反转32位或64位无符号整数的全部二进制位，使最低位与最高位、次低位与次高位依次交换。
 
 ## 函数原型
 
 ```cpp
-template<class T> constexpr T asc::bit_reverse(T value) noexcept;
+namespace asc {
+template<class T> constexpr T bit_reverse(T value) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,7 +44,7 @@ template<class T> constexpr T asc::bit_reverse(T value) noexcept;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 无符号整数类型；须为 uint32_t 或 uint64_t。 |
+| `T` | 无符号整数类型；须为uint32_t或uint64_t。 |
 
 **函数参数**
 
@@ -58,8 +60,8 @@ template<class T> constexpr T asc::bit_reverse(T value) noexcept;
 
 ## 约束说明
 
-- T 必须为 uint32_t 或 uint64_t
-- start 和 width 不得为负且不得超出类型位宽，零位宽和全位宽操作不得产生未定义移位
+- T必须为uint32_t或uint64_t。
+- start和width不得为负且不得超出类型位宽，零位宽和全位宽操作不得产生未定义移位。
 
 ## 调用示例
 
@@ -73,3 +75,7 @@ decltype(auto) example()
     return asc::bit_reverse(0x12u);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_bit.md)

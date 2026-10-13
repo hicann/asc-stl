@@ -1,4 +1,4 @@
-# 头文件 asc/std/ranges
+# 头文件asc/std/ranges
 
 提供基于范围（range）的遍历、过滤、变换和视图组合功能
 
@@ -8,188 +8,188 @@
 #include <asc/std/ranges>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |
-| [asc::std::from_range](from_range.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::from_range_t](from_range_t.md) | 类 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::begin](ranges_begin.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::bidirectional_range](ranges_bidirectional_range.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::borrowed_iterator_t](ranges_borrowed_iterator_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::borrowed_range](ranges_borrowed_range.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::borrowed_subrange_t](ranges_borrowed_subrange_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::cbegin](ranges_cbegin.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::cdata](ranges_cdata.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::cend](ranges_cend.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::common_range](ranges_common_range.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::common_view](ranges_common_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::common_view::base](ranges_common_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::common_view::begin](ranges_common_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::common_view::common_view](ranges_common_view_common_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::common_view::end](ranges_common_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::common_view::size](ranges_common_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::contiguous_range](ranges_contiguous_range.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::crbegin](ranges_crbegin.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::crend](ranges_crend.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::dangling](ranges_dangling.md) | 类 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::dangling::dangling](ranges_dangling_dangling.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::data](ranges_data.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::disable_sized_range](ranges_disable_sized_range.md) | 变量模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::drop_view](ranges_drop_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::drop_view::base](ranges_drop_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::drop_view::begin](ranges_drop_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::drop_view::drop_view](ranges_drop_view_drop_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::drop_view::end](ranges_drop_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::drop_view::size](ranges_drop_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::drop_while_view](ranges_drop_while_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::drop_while_view::base](ranges_drop_while_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::drop_while_view::begin](ranges_drop_while_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::drop_while_view::drop_while_view](ranges_drop_while_view_drop_while_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::drop_while_view::end](ranges_drop_while_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::drop_while_view::pred](ranges_drop_while_view_pred.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::empty](ranges_empty.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::empty_view](ranges_empty_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::empty_view::begin](ranges_empty_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::empty_view::data](ranges_empty_view_data.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::empty_view::empty](ranges_empty_view_empty.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::empty_view::end](ranges_empty_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::empty_view::size](ranges_empty_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::enable_borrowed_range](ranges_enable_borrowed_range.md) | 变量模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::enable_view](ranges_enable_view.md) | 变量模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::end](ranges_end.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::filter_view](ranges_filter_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::filter_view::base](ranges_filter_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::filter_view::begin](ranges_filter_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::filter_view::end](ranges_filter_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::filter_view::filter_view](ranges_filter_view_filter_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::filter_view::pred](ranges_filter_view_pred.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::forward_range](ranges_forward_range.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::input_range](ranges_input_range.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::iota_view](ranges_iota_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::iota_view::begin](ranges_iota_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::iota_view::end](ranges_iota_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::iota_view::iota_view](ranges_iota_view_iota_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::iota_view::size](ranges_iota_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::iterator_t](ranges_iterator_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::operator|](ranges_operator_bit_or.md) | 函数模板 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::output_range](ranges_output_range.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::owning_view](ranges_owning_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::owning_view::base](ranges_owning_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::owning_view::begin](ranges_owning_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::owning_view::data](ranges_owning_view_data.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::owning_view::empty](ranges_owning_view_empty.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::owning_view::end](ranges_owning_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::owning_view::operator=](ranges_owning_view_operator_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::owning_view::owning_view](ranges_owning_view_owning_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::owning_view::size](ranges_owning_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::random_access_range](ranges_random_access_range.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::range](ranges_range.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::range_adaptor_closure](ranges_range_adaptor_closure.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::range_common_reference_t](ranges_range_common_reference_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::range_difference_t](ranges_range_difference_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::range_reference_t](ranges_range_reference_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::range_rvalue_reference_t](ranges_range_rvalue_reference_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::range_size_t](ranges_range_size_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::range_value_t](ranges_range_value_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::rbegin](ranges_rbegin.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::ref_view](ranges_ref_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::ref_view::base](ranges_ref_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::ref_view::begin](ranges_ref_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::ref_view::data](ranges_ref_view_data.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::ref_view::empty](ranges_ref_view_empty.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::ref_view::end](ranges_ref_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::ref_view::ref_view](ranges_ref_view_ref_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::ref_view::size](ranges_ref_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::rend](ranges_rend.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view](ranges_repeat_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::begin](ranges_repeat_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::end](ranges_repeat_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::iterator::iterator](ranges_repeat_view_iterator_iterator.md) | 构造函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::iterator::operator+](ranges_repeat_view_iterator_operator_plus.md) | 成员函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::iterator::operator++](ranges_repeat_view_iterator_operator_increment.md) | 成员函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::iterator::operator-](ranges_repeat_view_iterator_operator_minus.md) | 成员函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::iterator::operator--](ranges_repeat_view_iterator_operator_decrement.md) | 成员函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::iterator::operator-=](ranges_repeat_view_iterator_operator_minus_assign.md) | 成员函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::iterator::operator<](ranges_repeat_view_iterator_operator_less.md) | 成员函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::iterator::operator<=](ranges_repeat_view_iterator_operator_less_equal.md) | 成员函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::iterator::operator>](ranges_repeat_view_iterator_operator_greater.md) | 成员函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::iterator::operator>=](ranges_repeat_view_iterator_operator_greater_equal.md) | 成员函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::repeat_view](ranges_repeat_view_repeat_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::repeat_view::size](ranges_repeat_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::reverse_view](ranges_reverse_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::reverse_view::base](ranges_reverse_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::reverse_view::begin](ranges_reverse_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::reverse_view::end](ranges_reverse_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::reverse_view::reverse_view](ranges_reverse_view_reverse_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::reverse_view::size](ranges_reverse_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::sentinel_t](ranges_sentinel_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::single_view](ranges_single_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::single_view::begin](ranges_single_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::single_view::data](ranges_single_view_data.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::single_view::end](ranges_single_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::single_view::single_view](ranges_single_view_single_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::single_view::size](ranges_single_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::size](ranges_size.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::sized_range](ranges_sized_range.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::ssize](ranges_ssize.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::subrange](ranges_subrange.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::subrange::advance](ranges_subrange_advance.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::subrange::begin](ranges_subrange_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::subrange::empty](ranges_subrange_empty.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::subrange::end](ranges_subrange_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::subrange::next](ranges_subrange_next.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::subrange::prev](ranges_subrange_prev.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::subrange::size](ranges_subrange_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::subrange::subrange](ranges_subrange_subrange.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::subrange_kind](ranges_subrange_kind.md) | 枚举 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::take_view](ranges_take_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::take_view::base](ranges_take_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::take_view::begin](ranges_take_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::take_view::end](ranges_take_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::take_view::size](ranges_take_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::take_view::take_view](ranges_take_view_take_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::take_while_view](ranges_take_while_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::take_while_view::base](ranges_take_while_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::take_while_view::begin](ranges_take_while_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::take_while_view::end](ranges_take_while_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::take_while_view::pred](ranges_take_while_view_pred.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::take_while_view::take_while_view](ranges_take_while_view_take_while_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::transform_view](ranges_transform_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::transform_view::base](ranges_transform_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::transform_view::begin](ranges_transform_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::transform_view::end](ranges_transform_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::transform_view::size](ranges_transform_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::transform_view::transform_view](ranges_transform_view_transform_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::view](ranges_view.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::view_base](ranges_view_base.md) | 类 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::view_interface](ranges_view_interface.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::view_interface::back](ranges_view_interface_back.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::view_interface::data](ranges_view_interface_data.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::view_interface::empty](ranges_view_interface_empty.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::view_interface::front](ranges_view_interface_front.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::view_interface::operator bool](ranges_view_interface_operator_bool.md) | 成员函数 | `C++17+` | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::view_interface::operator\[\]](ranges_view_interface_operator_subscript.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::view_interface::size](ranges_view_interface_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::viewable_range](ranges_viewable_range.md) | 概念 | C++20+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::all](ranges_views_all.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::all_t](ranges_views_all_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::common](ranges_views_common.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::counted](ranges_views_counted.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::drop](ranges_views_drop.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::drop_while](ranges_views_drop_while.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::empty](ranges_views_empty.md) | 变量模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::filter](ranges_views_filter.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::iota](ranges_views_iota.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::repeat](ranges_views_repeat.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::reverse](ranges_views_reverse.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::single](ranges_views_single.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::take](ranges_views_take.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::take_while](ranges_views_take_while.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::transform](ranges_views_transform.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::views::zip](ranges_views_zip.md) | 变量 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::zip_view](ranges_zip_view.md) | 类模板 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::zip_view::begin](ranges_zip_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::zip_view::end](ranges_zip_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::zip_view::size](ranges_zip_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
-| [asc::std::ranges::zip_view::zip_view](ranges_zip_view_zip_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD 编程、AI Core SIMT 编程 | Ascend 950 |
+| [asc::std::from_range](from_range.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::from_range_t](from_range_t.md) | 类 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::begin](ranges_begin.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::bidirectional_range](ranges_bidirectional_range.md) | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::borrowed_iterator_t](ranges_borrowed_iterator_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::borrowed_range](ranges_borrowed_range.md) | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::borrowed_subrange_t](ranges_borrowed_subrange_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::cbegin](ranges_cbegin.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::cdata](ranges_cdata.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::cend](ranges_cend.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::common_range](ranges_common_range.md) | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::common_view](ranges_common_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::common_view::base](ranges_common_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::common_view::begin](ranges_common_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::common_view::common_view](ranges_common_view_common_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::common_view::end](ranges_common_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::common_view::size](ranges_common_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::contiguous_range](ranges_contiguous_range.md) | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::crbegin](ranges_crbegin.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::crend](ranges_crend.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::dangling](ranges_dangling.md) | 类 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::dangling::dangling](ranges_dangling_dangling.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::data](ranges_data.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::disable_sized_range](ranges_disable_sized_range.md) | 变量模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::drop_view](ranges_drop_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::drop_view::base](ranges_drop_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::drop_view::begin](ranges_drop_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::drop_view::drop_view](ranges_drop_view_drop_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::drop_view::end](ranges_drop_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::drop_view::size](ranges_drop_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::drop_while_view](ranges_drop_while_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::drop_while_view::base](ranges_drop_while_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::drop_while_view::begin](ranges_drop_while_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::drop_while_view::drop_while_view](ranges_drop_while_view_drop_while_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::drop_while_view::end](ranges_drop_while_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::drop_while_view::pred](ranges_drop_while_view_pred.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::empty](ranges_empty.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::empty_view](ranges_empty_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::empty_view::begin](ranges_empty_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::empty_view::data](ranges_empty_view_data.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::empty_view::empty](ranges_empty_view_empty.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::empty_view::end](ranges_empty_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::empty_view::size](ranges_empty_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::enable_borrowed_range](ranges_enable_borrowed_range.md) | 变量模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::enable_view](ranges_enable_view.md) | 变量模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::end](ranges_end.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::filter_view](ranges_filter_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::filter_view::base](ranges_filter_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::filter_view::begin](ranges_filter_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::filter_view::end](ranges_filter_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::filter_view::filter_view](ranges_filter_view_filter_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::filter_view::pred](ranges_filter_view_pred.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::forward_range](ranges_forward_range.md) | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::input_range](ranges_input_range.md) | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::iota_view](ranges_iota_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::iota_view::begin](ranges_iota_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::iota_view::end](ranges_iota_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::iota_view::iota_view](ranges_iota_view_iota_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::iota_view::size](ranges_iota_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::iterator_t](ranges_iterator_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::operator\|](ranges_operator_bit_or.md) | 函数模板 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::output_range](ranges_output_range.md) | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::owning_view](ranges_owning_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::owning_view::base](ranges_owning_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::owning_view::begin](ranges_owning_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::owning_view::data](ranges_owning_view_data.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::owning_view::empty](ranges_owning_view_empty.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::owning_view::end](ranges_owning_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::owning_view::`operator=`](ranges_owning_view_operator_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::owning_view::owning_view](ranges_owning_view_owning_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::owning_view::size](ranges_owning_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::random_access_range](ranges_random_access_range.md) | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::range](ranges_range.md) | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::range_adaptor_closure](ranges_range_adaptor_closure.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::range_common_reference_t](ranges_range_common_reference_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::range_difference_t](ranges_range_difference_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::range_reference_t](ranges_range_reference_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::range_rvalue_reference_t](ranges_range_rvalue_reference_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::range_size_t](ranges_range_size_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::range_value_t](ranges_range_value_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::rbegin](ranges_rbegin.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::ref_view](ranges_ref_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::ref_view::base](ranges_ref_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::ref_view::begin](ranges_ref_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::ref_view::data](ranges_ref_view_data.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::ref_view::empty](ranges_ref_view_empty.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::ref_view::end](ranges_ref_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::ref_view::ref_view](ranges_ref_view_ref_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::ref_view::size](ranges_ref_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::rend](ranges_rend.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view](ranges_repeat_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::begin](ranges_repeat_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::end](ranges_repeat_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::iterator::iterator](ranges_repeat_view_iterator_iterator.md) | 构造函数 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::iterator::`operator+`](ranges_repeat_view_iterator_operator_plus.md) | 成员函数 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::iterator::`operator++`](ranges_repeat_view_iterator_operator_increment.md) | 成员函数 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::iterator::`operator-`](ranges_repeat_view_iterator_operator_minus.md) | 成员函数 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::iterator::`operator--`](ranges_repeat_view_iterator_operator_decrement.md) | 成员函数 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::iterator::`operator-=`](ranges_repeat_view_iterator_operator_minus_assign.md) | 成员函数 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::iterator::`operator<`](ranges_repeat_view_iterator_operator_less.md) | 成员函数 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::iterator::`operator<=`](ranges_repeat_view_iterator_operator_less_equal.md) | 成员函数 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::iterator::`operator>`](ranges_repeat_view_iterator_operator_greater.md) | 成员函数 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::iterator::`operator>=`](ranges_repeat_view_iterator_operator_greater_equal.md) | 成员函数 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::repeat_view](ranges_repeat_view_repeat_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::repeat_view::size](ranges_repeat_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::reverse_view](ranges_reverse_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::reverse_view::base](ranges_reverse_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::reverse_view::begin](ranges_reverse_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::reverse_view::end](ranges_reverse_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::reverse_view::reverse_view](ranges_reverse_view_reverse_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::reverse_view::size](ranges_reverse_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::sentinel_t](ranges_sentinel_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::single_view](ranges_single_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::single_view::begin](ranges_single_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::single_view::data](ranges_single_view_data.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::single_view::end](ranges_single_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::single_view::single_view](ranges_single_view_single_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::single_view::size](ranges_single_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::size](ranges_size.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::sized_range](ranges_sized_range.md) | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::ssize](ranges_ssize.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::subrange](ranges_subrange.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::subrange::advance](ranges_subrange_advance.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::subrange::begin](ranges_subrange_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::subrange::empty](ranges_subrange_empty.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::subrange::end](ranges_subrange_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::subrange::next](ranges_subrange_next.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::subrange::prev](ranges_subrange_prev.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::subrange::size](ranges_subrange_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::subrange::subrange](ranges_subrange_subrange.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::subrange_kind](ranges_subrange_kind.md) | 枚举 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::take_view](ranges_take_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::take_view::base](ranges_take_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::take_view::begin](ranges_take_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::take_view::end](ranges_take_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::take_view::size](ranges_take_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::take_view::take_view](ranges_take_view_take_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::take_while_view](ranges_take_while_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::take_while_view::base](ranges_take_while_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::take_while_view::begin](ranges_take_while_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::take_while_view::end](ranges_take_while_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::take_while_view::pred](ranges_take_while_view_pred.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::take_while_view::take_while_view](ranges_take_while_view_take_while_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::transform_view](ranges_transform_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::transform_view::base](ranges_transform_view_base.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::transform_view::begin](ranges_transform_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::transform_view::end](ranges_transform_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::transform_view::size](ranges_transform_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::transform_view::transform_view](ranges_transform_view_transform_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::view](ranges_view.md) | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::view_base](ranges_view_base.md) | 类 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::view_interface](ranges_view_interface.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::view_interface::back](ranges_view_interface_back.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::view_interface::data](ranges_view_interface_data.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::view_interface::empty](ranges_view_interface_empty.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::view_interface::front](ranges_view_interface_front.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::view_interface::operator bool](ranges_view_interface_operator_bool.md) | 成员函数 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::view_interface::operator\[\]](ranges_view_interface_operator_subscript.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::view_interface::size](ranges_view_interface_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::viewable_range](ranges_viewable_range.md) | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::all](ranges_views_all.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::all_t](ranges_views_all_t.md) | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::common](ranges_views_common.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::counted](ranges_views_counted.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::drop](ranges_views_drop.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::drop_while](ranges_views_drop_while.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::empty](ranges_views_empty.md) | 变量模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::filter](ranges_views_filter.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::iota](ranges_views_iota.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::repeat](ranges_views_repeat.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::reverse](ranges_views_reverse.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::single](ranges_views_single.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::take](ranges_views_take.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::take_while](ranges_views_take_while.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::transform](ranges_views_transform.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::views::zip](ranges_views_zip.md) | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::zip_view](ranges_zip_view.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::zip_view::begin](ranges_zip_view_begin.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::zip_view::end](ranges_zip_view_end.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::zip_view::size](ranges_zip_view_size.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::zip_view::zip_view](ranges_zip_view_zip_view.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |

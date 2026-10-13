@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::reverse_iterator::base` 返回适配器保存的底层迭代器或对象。
+`asc::std::reverse_iterator::base`返回适配器保存的底层迭代器或对象。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
+所属类型：[`asc::std::reverse_iterator`](reverse_iterator.md)。
+
 ```cpp
-[[nodiscard]] constexpr Iter asc::std::reverse_iterator::base() const noexcept(is_nothrow_copy_constructible_v<Iter>);
+// asc::std::reverse_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr Iter base() const noexcept(is_nothrow_copy_constructible_v<Iter>);
 ```
 
 ## 参数说明
@@ -50,18 +53,25 @@
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void example(asc::std::reverse_iterator<int*>& object)
+bool example()
 {
-    (void)object.base();
+    int values[] = {2, 4};
+    asc::std::reverse_iterator<int*> iterator(values + 2);
+    return iterator.base() == values + 2;
 }
 ```
+
+## 关联API
+
+- [`asc::std::reverse_iterator`](reverse_iterator.md)
+- [本头文件的接口列表](asc_std_iterator.md)

@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/bit>`。
 
-`asc::std::bit_floor` 返回不大于输入的最大 2 的幂。
+`asc::std::bit_floor`返回不大于输入的最大2的幂。
 
 标准语义参考：[cppreference `bit`](https://en.cppreference.com/w/cpp/header/bit)。
 
 ## 函数原型
 
 ```cpp
-template<class T> [[nodiscard]] constexpr T asc::std::bit_floor(T value) noexcept;
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr T bit_floor(T value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -50,17 +52,17 @@ template<class T> [[nodiscard]] constexpr T asc::std::bit_floor(T value) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待求上限二次幂的无符号整数值；返回不大于它的最大 2 的幂（值为 0 时返回 0）。 |
+| `value` | 输入 | 待求上限二次幂的无符号整数值；返回不大于它的最大2的幂（值为0时返回0）。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `T` | 返回不大于输入的最大 2 的幂。 |
+| `T` | 返回不大于输入的最大2的幂。 |
 
 ## 约束说明
 
-- 遵循标准无符号整数类型约束
+- 遵循标准无符号整数类型约束。
 
 ## 调用示例
 
@@ -74,3 +76,7 @@ decltype(auto) example()
     return asc::std::bit_floor(5u);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_bit.md)

@@ -28,29 +28,19 @@
 
 头文件路径为：`<asc/std/charconv>`。
 
-`asc::std::chars_format` 由 `<asc/std/charconv>` 提供，[charconv.syn] 格式词表位掩码枚举，枚举值独立于宿主标准库，hosted 与设备编译共享同一表示
+`asc::std::chars_format`由`<asc/std/charconv>`提供，[charconv.syn] 格式词表位掩码枚举，枚举值独立于宿主标准库，hosted与设备编译共享同一表示
 
 标准语义参考：[cppreference `charconv`](https://en.cppreference.com/w/cpp/header/charconv)。
 
-## 函数原型
+## 声明
 
 ```cpp
-enum class chars_format { scientific = 0x1, fixed = 0x2, hex = 0x4, general = fixed | scientific }
+enum class chars_format { scientific = 0x1, fixed = 0x2, hex = 0x4, general = fixed | scientific };
 ```
-
-## 参数说明
-
-无参数。
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `按声明确定` | 返回该操作产生的值，具体含义由所选原型确定。 |
 
 ## 约束说明
 
-- [charconv.syn] 格式词表位掩码枚举，枚举值独立于宿主标准库，hosted 与设备编译共享同一表示
+- [charconv.syn] 格式词表位掩码枚举，枚举值独立于宿主标准库，hosted与设备编译共享同一表示。
 
 ## 调用示例
 
@@ -64,3 +54,7 @@ decltype(auto) example()
     return asc::std::chars_format();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_charconv.md)

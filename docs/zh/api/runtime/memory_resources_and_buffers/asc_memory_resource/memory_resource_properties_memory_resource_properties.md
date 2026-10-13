@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/memory_resource>`。
 
-`asc::memory_resource_properties` 构造函数保存 Host 可访问性、Device 可访问性和最大字节对齐三个资源属性。
+`asc::memory_resource_properties`构造函数保存Host可访问性、Device可访问性和最大字节对齐三个资源属性。
 
 ## 函数原型
 
+所属类型：[`asc::memory_resource_properties`](memory_resource_properties.md)。
+
 ```cpp
-constexpr asc::memory_resource_properties::memory_resource_properties(bool host_accessible, bool device_accessible, asc::std::size_t maximum_alignment) noexcept;
+// asc::memory_resource_properties 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr memory_resource_properties(bool host_accessible, bool device_accessible, asc::std::size_t maximum_alignment) noexcept;
 ```
 
 ## 参数说明
@@ -42,27 +45,36 @@ constexpr asc::memory_resource_properties::memory_resource_properties(bool host_
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `host_accessible` | 输入 | 资源是否 Host 可访问：该资源分配的内存能否由 Host 直接读写。 |
-| `device_accessible` | 输入 | 资源是否 Device 可访问：该资源分配的内存能否由 Device（AI Core）直接读写。 |
-| `maximum_alignment` | 输入 | 资源支持的最大字节对齐（如 64）：allocate 请求的对齐不得超过该值。 |
+| `host_accessible` | 输入 | 资源是否Host可访问：该资源分配的内存能否由Host直接读写。 |
+| `device_accessible` | 输入 | 资源是否Device可访问：该资源分配的内存能否由Device（AI Core）直接读写。 |
+| `maximum_alignment` | 输入 | 资源支持的最大字节对齐（如64）：allocate请求的对齐不得超过该值。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 仅可在 Host 调用
-- 内存资源不抛出异常
-- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐
-- 资源及其引用的生命周期由调用方管理
+- 仅可在Host调用。
+- 内存资源不抛出异常。
+- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐。
+- 资源及其引用的生命周期由调用方管理。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/memory_resource>
 
-void example()
+bool example()
 {
-    asc::memory_resource_properties properties(true, true, 64);
-    (void)properties.maximum_alignment();
+    asc::memory_resource_properties properties(true, false, 64);
+    return properties.host_accessible() && !properties.device_accessible() && properties.maximum_alignment() == 64;
 }
 ```
+
+## 关联API
+
+- [`asc::memory_resource_properties`](memory_resource_properties.md)
+- [本头文件的接口列表](asc_memory_resource.md)

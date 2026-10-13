@@ -28,30 +28,38 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::uniform_int_distribution` 把随机引擎结果映射为给定整数区间内的值。
+`asc::std::uniform_int_distribution`把随机引擎结果映射为给定整数区间内的值。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 声明
 
 ```cpp
-template<class IntType> class asc::std::uniform_int_distribution
+namespace asc::std {
+template<class IntType> class uniform_int_distribution;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 支持全部标准整数结果类型
+- 支持全部标准整数结果类型。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/random>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::uniform_int_distribution<int>;
-    (void)sizeof(selected);
+    asc::std::minstd_rand engine(1);
+    asc::std::uniform_int_distribution<int> distribution(2, 4);
+    const int value = distribution(engine);
+    return distribution.a() == 2 && distribution.b() == 4 && value >= 2 && value <= 4;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

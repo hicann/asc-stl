@@ -28,24 +28,26 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::uses_allocator_v` 在编译期判断类型是否使用给定分配器。
+`asc::std::uses_allocator_v`在编译期判断类型是否使用给定分配器。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 声明
 
 ```cpp
-template<class T, class Allocator> inline constexpr const bool asc::std::uses_allocator_v
+namespace asc::std {
+template<class T, class Allocator> inline constexpr const bool uses_allocator_v;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg
-- uses_allocator/uses_allocator_v
-- allocator_traits 的 C++20 成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator 含 pair 递归构造
-- C++23 allocation_result 与标准 allocator_traits::allocate_at_least
-- 均限用户显式提供且在调用执行空间有效的 allocator
+- allocator_arg_t/allocator_arg。
+- uses_allocator/uses_allocator_v。
+- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
+- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
+- C++23 allocation_result与标准allocator_traits::allocate_at_least。
+- 均限用户显式提供且在调用执行空间有效的allocator。
 
 ## 调用示例
 
@@ -74,3 +76,7 @@ struct example_allocator : ::std::allocator<T> {
 
 inline constexpr auto example = asc::std::uses_allocator_v<::std::vector<int, example_allocator<int>>, example_allocator<int>>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

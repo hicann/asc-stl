@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::ranges::for_each_n` 从 C++17 起对指定数量的元素逐个调用函数，支持投影，返回结束迭代器和调用后的函数对象。
+`asc::std::ranges::for_each_n`从C++17起对指定数量的元素逐个调用函数，支持投影，返回结束迭代器和调用后的函数对象。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -37,7 +37,9 @@
 该名称是公开的常量函数对象；对象的实现类型不构成接口承诺。以下为调用形式，省略的可选参数以各原型约束为准。
 
 ```cpp
-asc::std::ranges::for_each_n(first, count, function, projection)
+namespace asc::std::ranges {
+for_each_n(first, count, function, projection);
+} // namespace asc::std::ranges
 ```
 
 ## 参数说明
@@ -59,22 +61,25 @@ asc::std::ranges::for_each_n(first, count, function, projection)
 
 ## 约束说明
 
-- 起始位置之后必须至少有指定数量的有效元素
-- 函数对象须能接收投影后的元素
+- 起始位置之后必须至少有指定数量的有效元素。
+- 函数对象须能接收投影后的元素。
 
 ## 调用示例
 
-以下 Host 片段以具体数组或数值演示本页调用形式。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    // 用具体类型和实参演示已交付的调用形式。
-    int values[4] = {1, 2, 3, 4};
+    int values[] = {1, 2, 3, 4};
     auto action = [](int& value) { ++value; };
-    auto result_1 = asc::std::ranges::for_each_n(values, 4, action);
-    (void)result_1;
+    auto result = asc::std::ranges::for_each_n(values, 4, action);
+    return result.in == values + 4 && values[0] == 2 && values[3] == 5;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::random_access_iterator` 在 C++20 及以上模式约束满足 `random_access_iterator` 语义的类型或表达式。
+`asc::std::random_access_iterator`在C++20及以上模式约束满足`random_access_iterator`语义的类型或表达式。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-template<class Iter> concept asc::std::random_access_iterator
+namespace asc::std {
+template<class Iter> concept random_access_iterator;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 C++20 公开迭代器概念和特征接口
+- 提供C++20公开迭代器概念和特征接口。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class Iter> concept asc::std::random_access_iterator
 
 static_assert(asc::std::random_access_iterator<int*>);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

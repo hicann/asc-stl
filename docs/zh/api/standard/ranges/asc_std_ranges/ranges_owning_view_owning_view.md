@@ -28,25 +28,25 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::owning_view::owning_view` 按本页所列构造形态初始化 `owning_view` 对象。
+`asc::std::ranges::owning_view::owning_view`按本页所列构造形态初始化`owning_view`对象。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 owning_view();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 owning_view(owning_view<Rp>&& other);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 constexpr owning_view(Rp&& base) noexcept(is_nothrow_move_constructible_v<Rp>);
@@ -54,41 +54,55 @@ constexpr owning_view(Rp&& base) noexcept(is_nothrow_move_constructible_v<Rp>);
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `base` | 输入/输出 | 提供“按本页所列构造形态初始化 `owning_view` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `base` | 输入/输出 | 提供“按本页所列构造形态初始化`owning_view`对象”使用的对象引用；被引用对象须在调用期间有效。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- owning_view仅拥有调用方传入的范围对象，不产生额外分配。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example()
+bool example()
 {
-    asc::std::ranges::owning_view<asc::std::ranges::single_view<int>> value{};
-    (void)value;
+    int values[] = {1, 2, 3, 4};
+    using Base = asc::std::ranges::subrange<int*>;
+    Base base(values, values + 4);
+    asc::std::ranges::owning_view<asc::std::array<int, 4>> view(asc::std::array<int, 4>{1, 2, 3, 4});
+    return *view.begin() == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

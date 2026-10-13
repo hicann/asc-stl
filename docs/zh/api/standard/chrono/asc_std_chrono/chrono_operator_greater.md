@@ -1,4 +1,4 @@
-# asc::std::chrono::operator>
+# asc::std::chrono::`operator>`
 
 ## 产品支持情况
 
@@ -28,75 +28,91 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::operator>` 由 `<asc/std/chrono>` 提供，比较两个时长的大于关系。接口遵循对应 C++ 标准设施的语义；ASC-STL 的语言模式和调用位置以本页声明为准。
+`asc::std::chrono::operator>`由`<asc/std/chrono>`提供，比较两个时长的大于关系。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template <class Rep2, class Period2> constexpr bool asc::std::chrono::operator>(const duration<Rep, Period>& lhs, const duration<Rep2, Period2>& rhs)
+namespace asc::std::chrono {
+template <class Rep2, class Period2> constexpr bool operator>(const duration<Rep, Period>& lhs, const duration<Rep2, Period2>& rhs);
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr bool asc::std::chrono::operator>(const month& lhs, const month& rhs) noexcept
+namespace asc::std::chrono {
+constexpr bool operator>(const month& lhs, const month& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 3
+### 原型3
 
 ```cpp
-constexpr bool asc::std::chrono::operator>(const month_day_last& lhs, const month_day_last& rhs) noexcept
+namespace asc::std::chrono {
+constexpr bool operator>(const month_day_last& lhs, const month_day_last& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 4
+### 原型4
 
 ```cpp
-template <class Duration2> constexpr bool asc::std::chrono::operator>(const time_point& lhs, const time_point<Clock, Duration2>& rhs)
+namespace asc::std::chrono {
+template <class Duration2> constexpr bool operator>(const time_point& lhs, const time_point<Clock, Duration2>& rhs);
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 5
+### 原型5
 
 ```cpp
-constexpr bool asc::std::chrono::operator>(const weekday& lhs, const weekday& rhs) noexcept
+namespace asc::std::chrono {
+constexpr bool operator>(const weekday& lhs, const weekday& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 6
+### 原型6
 
 ```cpp
-constexpr bool asc::std::chrono::operator>(const year_month& lhs, const year_month& rhs) noexcept
+namespace asc::std::chrono {
+constexpr bool operator>(const year_month& lhs, const year_month& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 7
+### 原型7
 
 ```cpp
-constexpr bool asc::std::chrono::operator>(const year_month_day& lhs, const year_month_day& rhs) noexcept
+namespace asc::std::chrono {
+constexpr bool operator>(const year_month_day& lhs, const year_month_day& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 8
+### 原型8
 
 ```cpp
-constexpr bool asc::std::chrono::operator>(const year_month_day_last& lhs, const year_month_day_last& rhs) noexcept
+namespace asc::std::chrono {
+constexpr bool operator>(const year_month_day_last& lhs, const year_month_day_last& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 参数说明
 
@@ -104,9 +120,9 @@ constexpr bool asc::std::chrono::operator>(const year_month_day_last& lhs, const
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rep2` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
-| `Period2` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
-| `Duration2` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
+| `Rep2` | 另一时长或标量的计数类型；运算时与Rep形成公共类型。 |
+| `Period2` | 另一时长的计时周期，是表示秒比例的ratio类型。 |
+| `Duration2` | 另一时间点保存的duration类型。 |
 
 **函数参数**
 
@@ -119,30 +135,34 @@ constexpr bool asc::std::chrono::operator>(const year_month_day_last& lhs, const
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `bool` | 对应的相等／顺序比较表达式成立时为true，否则为false。 |
 
 ## 约束说明
 
-- 两个时长先转换为公共时长类型再比较计数值
-- 按内部存储的无符号月份值逐位比较
-- 按month()的取值比较大小先后
-- 按time_since_epoch()返回的纪元时长比较大小
-- 按c_encoding()返回的星期编码值比较大小
-- 按year()优先、month()其次的字典序比较
-- 按year()、month()、day()的字典序比较
-- 按year()、month()的字典序比较
+- 两个时长先转换为公共时长类型再比较计数值。
+- 按内部存储的无符号月份值逐位比较。
+- 按month()的取值比较大小先后。
+- 按time_since_epoch()返回的纪元时长比较大小。
+- 按c_encoding()返回的星期编码值比较大小。
+- 按year()优先、month()其次的字典序比较。
+- 按year()、month()、day()的字典序比较。
+- 按year()、month()的字典序比较。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    const asc::std::chrono::month& lhs{};
-    const asc::std::chrono::month& rhs{};
-    (void)(lhs > rhs);
+    asc::std::chrono::seconds left{2}, right{3};
+    return (left > right) == false;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

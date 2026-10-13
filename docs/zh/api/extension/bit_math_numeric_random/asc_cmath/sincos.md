@@ -28,64 +28,75 @@
 
 头文件路径为：`<asc/cmath>`。
 
-`asc::sincos` 在一次调用中计算输入值的正弦和余弦，并分别写入两个输出指针。
+`asc::sincos`在一次调用中计算输入值的正弦和余弦，并分别写入两个输出指针。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-void asc::sincos(float value, float* sin_out, float* cos_out) noexcept;
+namespace asc {
+void sincos(float value, float* sin_out, float* cos_out) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-void asc::sincos(double value, double* sin_out, double* cos_out) noexcept;
+namespace asc {
+void sincos(double value, double* sin_out, double* cos_out) noexcept;
+} // namespace asc
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-void asc::sincos(long double value, long double* sin_out, long double* cos_out) noexcept;
+namespace asc {
+void sincos(long double value, long double* sin_out, long double* cos_out) noexcept;
+} // namespace asc
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class T> void asc::sincos(T value, double* sin_out, double* cos_out) noexcept;
+namespace asc {
+template<class T> void sincos(T value, double* sin_out, double* cos_out) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待计算正弦和余弦的整数值；内部转换为 double 后计算。 || `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写 `float`）。 |
-| `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写 `float`）。 |
+| `value` | 输入 | 待计算正弦和余弦的整数值；内部转换为double后计算。 |
+| `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写`float`）。 |
+| `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写`float`）。 |
 
-### 原型 2 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 待计算正弦和余弦的整数值；内部转换为 double 后计算。 || `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写 `double`）。 |
-| `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写 `double`）。 |
-
-### 原型 3 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待计算正弦和余弦的整数值；内部转换为 double 后计算。 || `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写 `long double`）。 |
-| `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写 `long double`）。 |
+| `value` | 输入 | 待计算正弦和余弦的整数值；内部转换为double后计算。 |
+| `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写`double`）。 |
+| `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写`double`）。 |
 
-### 原型 4 的参数
+### 原型3的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 待计算正弦和余弦的整数值；内部转换为double后计算。 |
+| `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写`long double`）。 |
+| `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写`long double`）。 |
+
+### 原型4的参数
 
 **模板参数**
 
@@ -97,8 +108,9 @@ template<class T> void asc::sincos(T value, double* sin_out, double* cos_out) no
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待计算正弦和余弦的整数值；内部转换为 double 后计算。 || `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写 `double`）。 |
-| `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写 `double`）。 |
+| `value` | 输入 | 待计算正弦和余弦的整数值；内部转换为double后计算。 |
+| `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写`double`）。 |
+| `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写`double`）。 |
 
 ## 返回值说明
 
@@ -106,9 +118,9 @@ template<class T> void asc::sincos(T value, double* sin_out, double* cos_out) no
 
 ## 约束说明
 
-- sin_out 和 cos_out 不得为空
-- float 重载可在 Host 和 AI Core SIMT 编程中调用，其余重载仅可在 Host 调用
-- 模板重载要求 T 为整数或枚举类型
+- sin_out和cos_out不得为空。
+- float重载可在Host和AI Core SIMT编程中调用，其余重载仅可在Host调用。
+- 模板重载要求T为整数或枚举类型。
 
 ## 调用示例
 
@@ -122,3 +134,7 @@ void example(float value, float* sin_out, float* cos_out)
     asc::sincos(value, sin_out, cos_out);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_cmath.md)

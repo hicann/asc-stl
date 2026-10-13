@@ -28,29 +28,37 @@
 
 头文件路径为：`<asc/devices>`。
 
-`asc::device_properties` 保存一个 Device 的 AICore、Vector Core、Warp、线程上限、UB、全局内存、L2 Cache 和 NPU 架构信息。
+`asc::device_properties`保存一个Device的AICore、Vector Core、Warp、线程上限、UB、全局内存、L2 Cache和NPU架构信息。
 
 ## 声明
 
 ```cpp
-struct asc::device_properties
+namespace asc {
+struct device_properties;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 仅可在 Host 查询或选择 Device
-- 引用只保存设备序号且不拥有 Runtime 状态
-- 查询失败时输出参数保持原值，属性仅限当前接口列出的 AI Core、Vector Core、Warp、UB、GM、L2 与架构字段
+- 仅可在Host查询或选择Device。
+- 引用只保存设备序号且不拥有Runtime状态。
+- 查询失败时输出参数保持原值，属性仅限当前接口列出的AI Core、Vector Core、Warp、UB、GM、L2与架构字段。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/devices>
 
-void use_type(const asc::device_properties& value)
+bool example()
 {
-    (void)value;
+    // 默认属性是查询前的空值，不代表任何真实设备的规格。
+    asc::device_properties properties{};
+    return properties.architecture == asc::npu_arch::unknown;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_devices.md)

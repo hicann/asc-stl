@@ -28,14 +28,15 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::literals::chrono_literals::operator""y` 从整数字面量构造日历年值。
+`asc::std::literals::chrono_literals::operator""y`从整数字面量构造日历年值。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
 ```cpp
-constexpr chrono::year asc::std::literals::chrono_literals::operator""y(unsigned long long value) noexcept;
+// asc::std::literals::chrono_literals 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr chrono::year operator""y(unsigned long long value) noexcept;
 ```
 
 ## 参数说明
@@ -44,7 +45,7 @@ constexpr chrono::year asc::std::literals::chrono_literals::operator""y(unsigned
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 字面量整数值（无符号）；转换为表示年份的 year 对象，如 2026y 表示 2026 年。 |
+| `value` | 输入 | 字面量整数值（无符号）；转换为表示年份的year对象，如2026y表示2026年。 |
 
 ## 返回值说明
 
@@ -54,8 +55,7 @@ constexpr chrono::year asc::std::literals::chrono_literals::operator""y(unsigned
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
@@ -69,3 +69,7 @@ decltype(auto) example(unsigned long long value)
     return asc::std::literals::chrono_literals::operator ""y(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

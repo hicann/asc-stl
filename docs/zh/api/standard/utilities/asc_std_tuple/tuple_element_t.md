@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/tuple>`。
 
-`asc::std::tuple_element_t` 取得给定索引处元素或备选项的类型。
+`asc::std::tuple_element_t`取得给定索引处元素或备选项的类型。
 
 标准语义参考：[cppreference `tuple`](https://en.cppreference.com/w/cpp/header/tuple)。
 
 ## 声明
 
 ```cpp
-template<size_t Index, class T> using asc::std::tuple_element_t = typename tuple_element<Index, T>::type
+namespace asc::std {
+template<size_t Index, class T> using tuple_element_t = typename tuple_element<Index, T>::type;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
 
 ## 调用示例
 
@@ -54,3 +56,7 @@ void use_type()
     using selected = asc::std::tuple_element_t<0, asc::std::tuple<int, float>>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_tuple.md)

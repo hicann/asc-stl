@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::aligned_accessor::access` 通过访问器取得指定索引处的元素引用。
+`asc::std::aligned_accessor::access`通过访问器取得指定索引处的元素引用。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
+所属类型：[`asc::std::aligned_accessor`](aligned_accessor.md)。
+
 ```cpp
-constexpr reference asc::std::aligned_accessor::access(data_handle_type pointer, size_t index) const noexcept;
+// asc::std::aligned_accessor 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr reference access(data_handle_type pointer, size_t index) const noexcept;
 ```
 
 ## 参数说明
@@ -44,8 +47,8 @@ constexpr reference asc::std::aligned_accessor::access(data_handle_type pointer,
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 指向被访问元素存储的数据句柄；须满足访问器的对齐要求（按 byte_alignment 对齐）。 |
-| `index` | 输入 | 相对 pointer 的元素下标，从 0 起；返回 *(pointer + index) 处的元素引用。 |
+| `pointer` | 输入 | 指向被访问元素存储的数据句柄；须满足访问器的对齐要求（按byte_alignment对齐）。 |
+| `index` | 输入 | 相对pointer的元素下标，从0起；返回 *(pointer + index)处的元素引用。 |
 
 ## 返回值说明
 
@@ -55,12 +58,11 @@ constexpr reference asc::std::aligned_accessor::access(data_handle_type pointer,
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整layout_left/layout_right/layout_stride mapping及default_accessor/aligned_accessor家族：零rank与正rank、默认/extents/array/span/跨mapping或accessor构造、标准显式性与约束、索引映射、要求d_span_size/stride/extents、唯一/穷尽/步长观察、mapping比较、access/offset及byte_alignment
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain pointer域
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
 
-以下 Host 片段在底层存储存活期内完成访问，返回元素值的副本，不把局部数组元素引用传出函数。
+以下Host片段在底层存储存活期内完成访问，返回元素值的副本，不把局部数组元素引用传出函数。
 
 ```cpp
 #include <asc/std/mdspan>
@@ -74,3 +76,8 @@ int read_first_element()
     return accessor.access(values, 0);
 }
 ```
+
+## 关联API
+
+- [`asc::std::aligned_accessor`](aligned_accessor.md)
+- [本头文件的接口列表](asc_std_mdspan.md)

@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::frexpl` 由 `<asc/std/cmath>` 提供，宿主 long double 尾数/指数分解，后缀 l 别名
+`asc::std::frexpl`由`<asc/std/cmath>`提供，宿主long double尾数/指数分解，后缀l别名
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-constexpr long double asc::std::frexpl(long double value, int* exponent) noexcept
+namespace asc::std {
+constexpr long double frexpl(long double value, int* exponent) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,17 +46,18 @@ constexpr long double asc::std::frexpl(long double value, int* exponent) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待分解为规范化尾数与指数的输入值（无量纲）。 || `exponent` | 输出 | 输出参数，函数将二进制指数写入该指针所指对象；指针须有效（指向可写 `int`）。 |
+| `value` | 输入 | 待分解为规范化尾数与指数的输入值（无量纲）。 |
+| `exponent` | 输出 | 输出参数，函数将二进制指数写入该指针所指对象；指针须有效（指向可写`int`）。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `long double` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `long double` | 有效数部分；同时通过指数指针写出二进制指数，满足输入等于返回值乘2的指数次幂。 |
 
 ## 约束说明
 
-- 宿主 long double 尾数/指数分解，后缀 l 别名
+- 宿主long double尾数/指数分解，后缀l别名。
 
 ## 调用示例
 
@@ -68,3 +71,7 @@ decltype(auto) example(long double value, int* exponent)
     return asc::std::frexpl(value, exponent);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

@@ -28,29 +28,36 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::pcg64_engine` 实现可设种子、可跳过输出的确定性 64 位 PCG 伪随机数引擎。
+`asc::pcg64_engine`实现可设种子、可跳过输出的确定性64位PCG伪随机数引擎。
 
 ## 声明
 
 ```cpp
-template<asc::std::uint64_t AHigh, asc::std::uint64_t ALow, asc::std::uint64_t CHigh, asc::std::uint64_t CLow> class asc::pcg64_engine
+namespace asc {
+template<asc::std::uint64_t AHigh, asc::std::uint64_t ALow, asc::std::uint64_t CHigh, asc::std::uint64_t CLow> class pcg64_engine;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/random>
 
-void use_type()
+bool example()
 {
-    using selected = asc::pcg64;
-    (void)sizeof(selected);
+    asc::pcg64 first(7);
+    asc::pcg64 second(7);
+    return first() == second() && first() == second();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_random.md)

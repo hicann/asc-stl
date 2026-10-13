@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/ctime>`。
 
-`asc::std::time` 由 `<asc/std/ctime>` 提供，返回纪元以来的日历时间数值，宿主侧可用。
+`asc::std::time`由`<asc/std/ctime>`提供，返回纪元以来的日历时间数值，宿主侧可用。
 
 标准语义参考：[cppreference `ctime`](https://en.cppreference.com/w/cpp/header/ctime)。
 
 ## 函数原型
 
 ```cpp
-time_t time(time_t* timer) noexcept
+time_t time(time_t* timer) noexcept;
 ```
 
 ## 参数说明
@@ -50,11 +50,11 @@ time_t time(time_t* timer) noexcept
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `按声明确定` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `time_t` | 当前日历时间；无法取得时返回time_t(-1)。timer非空时同时把结果写入 *timer。 |
 
 ## 约束说明
 
-- 返回纪元以来的日历时间数值，宿主侧可用
+- 返回纪元以来的日历时间数值，宿主侧可用。
 
 ## 调用示例
 
@@ -68,3 +68,7 @@ decltype(auto) example(time_t* timer)
     return asc::std::time(timer);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ctime.md)

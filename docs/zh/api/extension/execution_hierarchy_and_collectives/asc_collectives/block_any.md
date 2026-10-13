@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/collectives>`。
 
-`asc::block_any` 判断同一 Block 是否至少有一个线程谓词为 true。
+`asc::block_any`判断同一Block是否至少有一个线程谓词为true。
 
 ## 函数原型
 
 ```cpp
-bool asc::block_any(asc::block_collective_workspace<asc::std::uint32_t> workspace, bool predicate) noexcept;
+namespace asc {
+bool block_any(asc::block_collective_workspace<asc::std::uint32_t> workspace, bool predicate) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -49,12 +51,13 @@ bool asc::block_any(asc::block_collective_workspace<asc::std::uint32_t> workspac
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 参数类型、取值范围、会合要求和对象生命周期必须满足页面声明
+- 仅可在AI Core SIMT编程中调用。
+- 同一block的所有线程以相同顺序会合调用；总线程数必须为32的正整数倍。
+- 工作区来自该block的动态共享UB，至少包含thread_count()/32个T，且调用期间不得被其他并发操作复用。
 
 ## 调用示例
 
@@ -70,3 +73,7 @@ __aicore__ bool example(unsigned int* dynamic_shared_pointer, bool predicate)
     return asc::block_any(workspace, predicate);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_collectives.md)

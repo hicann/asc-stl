@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/algorithm>`、`<asc/std/iterator>`。
 
-`asc::std::iter_swap` 交换两个迭代器所指向的元素；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::iter_swap`交换两个迭代器所指向的元素；无策略形式在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
 
 ```cpp
-template<class ForwardIterator1, class ForwardIterator2> constexpr void asc::std::iter_swap(ForwardIterator1 a, ForwardIterator2 b);
+namespace asc::std {
+template<class ForwardIterator1, class ForwardIterator2> constexpr void iter_swap(ForwardIterator1 a, ForwardIterator2 b);
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/algorithm>`、`<asc/std/iterator>`。
@@ -62,13 +64,13 @@ template<class ForwardIterator1, class ForwardIterator2> constexpr void asc::std
 
 ## 约束说明
 
-- 提供顺序执行且不进行动态内存分配的重载
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序
-- 支持非 I/O 范围、数组和用户容器
+- 提供顺序执行且不进行动态内存分配的重载。
+- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
+- 支持非I/O范围、数组和用户容器。
 
 ## 调用示例
 
-以下 Host 片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
 
 ```cpp
 #include <asc/std/algorithm>
@@ -79,3 +81,7 @@ void example()
     asc::std::iter_swap(values, values + 1);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

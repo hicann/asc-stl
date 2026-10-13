@@ -1,4 +1,4 @@
-# asc::std::to_chars_result::operator!=
+# asc::std::to_chars_result::`operator!=`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/charconv>`。
 
-`asc::std::to_chars_result::operator!=` 为相等比较的逻辑否定。
+`asc::std::to_chars_result::operator!=`为相等比较的逻辑否定。
 
 标准语义参考：[cppreference `charconv`](https://en.cppreference.com/w/cpp/header/charconv)。
 
 ## 函数原型
 
+所属类型：[`asc::std::to_chars_result`](to_chars_result.md)。
+
 ```cpp
-friend bool asc::std::to_chars_result::operator!=(const to_chars_result&, const to_chars_result&) noexcept
+// asc::std::to_chars_result 类内的声明节选；模板形参和其他成员由所属类提供。
+friend bool operator!=(const to_chars_result&, const to_chars_result&) noexcept;
 ```
 
 ## 参数说明
@@ -50,11 +53,11 @@ friend bool asc::std::to_chars_result::operator!=(const to_chars_result&, const 
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `bool` | 对应的相等／顺序比较表达式成立时为true，否则为false。 |
 
 ## 约束说明
 
-- 结果为相等比较的取反，恒不抛出
+- 结果为相等比较的取反，恒不抛出。
 
 ## 调用示例
 
@@ -69,3 +72,8 @@ decltype(auto) example(Object& object, Args&&... args)
     return object.operator!=(static_cast<Args&&>(args)...);
 }
 ```
+
+## 关联API
+
+- [`asc::std::to_chars_result`](to_chars_result.md)
+- [本头文件的接口列表](asc_std_charconv.md)

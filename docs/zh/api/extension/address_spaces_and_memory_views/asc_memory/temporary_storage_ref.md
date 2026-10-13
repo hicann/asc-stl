@@ -28,28 +28,36 @@
 
 头文件路径为：`<asc/memory>`。
 
-`asc::temporary_storage_ref` 是不拥有存储的字节区间引用，同时记录地址、字节数和所属 `memory_space`，用于向执行策略提供临时工作空间。
+`asc::temporary_storage_ref`是不拥有存储的字节区间引用，同时记录地址、字节数和所属`memory_space`，用于向执行策略提供临时工作空间。
 
 ## 声明
 
 ```cpp
-class asc::temporary_storage_ref
+namespace asc {
+class temporary_storage_ref;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 引用不管理底层存储生命周期
-- 底层区域必须在使用该临时存储的操作完成前保持有效，且地址空间标记必须与实际存储一致
+- 引用不管理底层存储生命周期。
+- 底层区域必须在使用该临时存储的操作完成前保持有效，且地址空间标记必须与实际存储一致。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/memory>
 
-void use_type(const asc::temporary_storage_ref& value)
+bool example()
 {
-    (void)value;
+    unsigned char storage[64]{};
+    asc::temporary_storage_ref temporary(storage, sizeof(storage), asc::memory_space::host);
+    return temporary.data() == storage && temporary.size_bytes() == 64 && temporary.space() == asc::memory_space::host;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_memory.md)

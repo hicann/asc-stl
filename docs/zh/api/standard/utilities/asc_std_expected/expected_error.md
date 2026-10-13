@@ -28,71 +28,79 @@
 
 头文件路径为：`<asc/std/expected>`。
 
-`asc::std::expected::error` 返回错误状态中保存的错误对象引用。
+`asc::std::expected::error`返回错误状态中保存的错误对象引用。
 
 标准语义参考：[cppreference `expected`](https://en.cppreference.com/w/cpp/header/expected)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::expected`](expected.md)。
+
+### 原型1
 
 ```cpp
-constexpr Error& asc::std::expected::error()& noexcept;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr Error& error()& noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr Err&& asc::std::expected::error()&& noexcept;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr Err&& error()&& noexcept;
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-constexpr Err& asc::std::expected::error()& noexcept;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr Err& error()& noexcept;
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-constexpr const Error& asc::std::expected::error() const& noexcept;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr const Error& error() const& noexcept;
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
-constexpr const Err&& asc::std::expected::error() const&& noexcept;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr const Err&& error() const&& noexcept;
 ```
 
-### 原型 6
+### 原型6
 
 ```cpp
-constexpr const Err& asc::std::expected::error() const& noexcept;
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr const Err& error() const& noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 无参数。
 
-### 原型 3 的参数
+### 原型3的参数
 
 无参数。
 
-### 原型 4 的参数
+### 原型4的参数
 
 无参数。
 
-### 原型 5 的参数
+### 原型5的参数
 
 无参数。
 
-### 原型 6 的参数
+### 原型6的参数
 
 无参数。
 
@@ -100,30 +108,36 @@ constexpr const Err& asc::std::expected::error() const& noexcept;
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `Error &` | 返回错误状态中保存的错误对象引用。 |
-| 原型 2 | `Err &&` | 返回错误状态中保存的错误对象引用。 |
-| 原型 3 | `Err &` | 返回错误状态中保存的错误对象引用。 |
-| 原型 4 | `const Error &` | 返回错误状态中保存的错误对象引用。 |
-| 原型 5 | `const Err &&` | 返回错误状态中保存的错误对象引用。 |
-| 原型 6 | `const Err &` | 返回错误状态中保存的错误对象引用。 |
+| 原型1 | `Error &` | 返回错误状态中保存的错误对象引用。 |
+| 原型2 | `Err &&` | 返回错误状态中保存的错误对象引用。 |
+| 原型3 | `Err &` | 返回错误状态中保存的错误对象引用。 |
+| 原型4 | `const Error &` | 返回错误状态中保存的错误对象引用。 |
+| 原型5 | `const Err &&` | 返回错误状态中保存的错误对象引用。 |
+| 原型6 | `const Err &` | 返回错误状态中保存的错误对象引用。 |
 
 ## 约束说明
 
-- T 必须为非 void 类型，E 必须为对象类型
-- 适用操作必须不抛出异常
-- 提供构造、赋值、emplace 和 swap
-- 支持所有 cv/ref 限定形式
-- Device 侧可调用对象及结果构造必须不抛出异常
+- T必须为非void类型，E必须为对象类型。
+- 适用操作必须不抛出异常。
+- 提供构造、赋值、emplace和swap。
+- 支持所有cv/ref限定形式。
+- Device侧可调用对象及结果构造必须不抛出异常。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/expected>
 
-void example(asc::std::expected<int, int>& object)
+bool example()
 {
-    (void)object.error();
+    asc::std::expected<int, int> result(asc::std::unexpect, 7);
+    return !result.has_value() && result.error() == 7;
 }
 ```
+
+## 关联API
+
+- [`asc::std::expected`](expected.md)
+- [本头文件的接口列表](asc_std_expected.md)

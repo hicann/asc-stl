@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::make_shuffle_iterator` 创建按确定性映射重排访问顺序的 shuffle_iterator。
+`asc::make_shuffle_iterator`创建按确定性映射重排访问顺序的shuffle_iterator。
 
 ## 函数原型
 
 ```cpp
-template<class Bijection, class Index = asc::std::size_t> constexpr asc::shuffle_iterator<Index, Bijection> asc::make_shuffle_iterator(Bijection bijection, Index start = 0);
+namespace asc {
+template<class Bijection, class Index = asc::std::size_t> constexpr asc::shuffle_iterator<Index, Bijection> make_shuffle_iterator(Bijection bijection, Index start = 0);
+} // namespace asc
 ```
 
 ## 参数说明
@@ -43,14 +45,14 @@ template<class Bijection, class Index = asc::std::size_t> constexpr asc::shuffle
 | 参数名 | 描述 |
 | --- | --- |
 | `Bijection` | 确定性映射对象类型：以当前索引为输入计算重排后的访问结果。 |
-| `Index` | 迭代器内部游标的索引类型，默认 size_t。 |
+| `Index` | 迭代器内部游标的索引类型，默认size_t。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `bijection` | 输入 | 确定性映射对象：解引用与下标结果为 bijection(当前索引)。 |
-| `start` | 输入 | 游标起始索引，默认 0：随迭代递增并作为 bijection 的输入。 |
+| `bijection` | 输入 | 确定性映射对象：解引用与下标结果为bijection(当前索引)。 |
+| `start` | 输入 | 游标起始索引，默认0：随迭代递增并作为bijection的输入。 |
 
 ## 返回值说明
 
@@ -60,8 +62,8 @@ template<class Bijection, class Index = asc::std::size_t> constexpr asc::shuffle
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
@@ -84,3 +86,7 @@ decltype(auto) example()
     return asc::make_shuffle_iterator([](asc::std::size_t index) { return index; }, asc::std::size_t{0});
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

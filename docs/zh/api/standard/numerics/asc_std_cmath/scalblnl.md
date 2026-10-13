@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::scalblnl` 由 `<asc/std/cmath>` 提供，宿主 long double 同 scalbn 而 long 指数，后缀 l 别名
+`asc::std::scalblnl`由`<asc/std/cmath>`提供，宿主long double同scalbn而long指数，后缀l别名
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-constexpr long double asc::std::scalblnl(long double value, long exponent) noexcept
+namespace asc::std {
+constexpr long double scalblnl(long double value, long exponent) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,18 +46,18 @@ constexpr long double asc::std::scalblnl(long double value, long exponent) noexc
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待按 FLT_RADIX（为 2）的整数次幂缩放的浮点值（无量纲）。 |
-| `exponent` | 输入 | 以 2（FLT_RADIX）为底的整数指数（long，无量纲），结果为 value * 2^exponent。 |
+| `value` | 输入 | 待按FLT_RADIX（为2）的整数次幂缩放的浮点值（无量纲）。 |
+| `exponent` | 输入 | 以2（FLT_RADIX）为底的整数指数（long，无量纲），结果为value * 2^exponent。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `long double` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `long double` | 输入值乘浮点基数的指定long指数次幂。 |
 
 ## 约束说明
 
-- 宿主 long double 同 scalbn 而 long 指数，后缀 l 别名
+- 宿主long double同scalbn而long指数，后缀l别名。
 
 ## 调用示例
 
@@ -69,3 +71,7 @@ decltype(auto) example(long double value, long exponent)
     return asc::std::scalblnl(value, exponent);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

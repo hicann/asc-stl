@@ -28,32 +28,41 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::iterator` 提供传统迭代器类型定义所需的类别与值类型。
+`asc::std::iterator`提供传统迭代器类型定义所需的类别与值类型。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-template<class Category, class T, class Distance, class Pointer, class Reference> struct asc::std::iterator
+namespace asc::std {
+template<class Category, class T, class Distance, class Pointer, class Reference> struct iterator;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 C++20 公开迭代器概念和特征接口
+- 提供C++20公开迭代器概念和特征接口。
 
 ## 调用示例
 
-以下 Host 片段用具体迭代器或容器类型实例化本页接口。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/iterator>
-
 #include <asc/std/type_traits>
+#include <asc/std/vector>
+#include <asc/std/forward_list>
 
-void example()
+bool example()
 {
-    using selected = asc::std::iterator<asc::std::random_access_iterator_tag, int>;
-    (void)sizeof(selected);
+    using Base = asc::std::iterator<asc::std::input_iterator_tag, int>;
+    static_assert(asc::std::is_same_v<Base::value_type, int>);
+    static_assert(asc::std::is_same_v<Base::reference, int&>);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

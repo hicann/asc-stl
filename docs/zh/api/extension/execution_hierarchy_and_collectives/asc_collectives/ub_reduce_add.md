@@ -28,31 +28,37 @@
 
 头文件路径为：`<asc/collectives>`。
 
-`asc::ub_reduce_add` 对 UB 连续范围中的元素求和。
+`asc::ub_reduce_add`对UB连续范围中的元素求和。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-asc::std::int32_t asc::ub_reduce_add(asc::ub_span<const asc::std::int32_t> input) noexcept;
+namespace asc {
+asc::std::int32_t ub_reduce_add(asc::ub_span<const asc::std::int32_t> input) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-asc::std::uint32_t asc::ub_reduce_add(asc::ub_span<const asc::std::uint32_t> input) noexcept;
+namespace asc {
+asc::std::uint32_t ub_reduce_add(asc::ub_span<const asc::std::uint32_t> input) noexcept;
+} // namespace asc
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-float asc::ub_reduce_add(asc::ub_span<const float> input) noexcept;
+namespace asc {
+float ub_reduce_add(asc::ub_span<const float> input) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -60,7 +66,7 @@ float asc::ub_reduce_add(asc::ub_span<const float> input) noexcept;
 | --- | --- | --- |
 | `input` | 输入 | 观察片上缓冲区连续区域的非拥有视图；底层存储须在操作期间有效。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -68,7 +74,7 @@ float asc::ub_reduce_add(asc::ub_span<const float> input) noexcept;
 | --- | --- | --- |
 | `input` | 输入 | 观察片上缓冲区连续区域的非拥有视图；底层存储须在操作期间有效。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
@@ -80,14 +86,14 @@ float asc::ub_reduce_add(asc::ub_span<const float> input) noexcept;
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::std::int32_t` | 返回参与线程或连续范围按接口名称归约后的结果。 |
-| 原型 2 | `asc::std::uint32_t` | 返回参与线程或连续范围按接口名称归约后的结果。 |
-| 原型 3 | `float` | 返回参与线程或连续范围按接口名称归约后的结果。 |
+| 原型1 | `asc::std::int32_t` | 返回参与线程或连续范围按接口名称归约后的结果。 |
+| 原型2 | `asc::std::uint32_t` | 返回参与线程或连续范围按接口名称归约后的结果。 |
+| 原型3 | `float` | 返回参与线程或连续范围按接口名称归约后的结果。 |
 
 ## 约束说明
 
-- 仅可在 AI Core SIMD 编程中调用
-- 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明
+- 仅可在AI Core SIMD编程中调用。
+- 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明。
 
 ## 调用示例
 
@@ -102,3 +108,7 @@ __aicore__ unsigned int example(__ubuf__ const unsigned int* input)
     return asc::ub_reduce_add(asc::ub_span<const unsigned int>(input, 4u));
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_collectives.md)

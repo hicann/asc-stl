@@ -28,41 +28,45 @@
 
 头文件路径为：`<asc/std/cmath>`、`<asc/std/complex>`。
 
-`asc::std::log` 计算自然对数；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::log`计算自然对数；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-float asc::std::log(float x) noexcept;
+namespace asc::std {
+float log(float x) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/cmath>`。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> complex<T> asc::std::log(const complex<T>& value) noexcept;
+namespace asc::std {
+template<class T> complex<T> log(const complex<T>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/complex>`。
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 待求自然对数的输入值（无量纲）；定义域为 (0, +∞)，±0 返回 -inf，负数返回 NaN。 |
+| `x` | 输入 | 待求自然对数的输入值（无量纲）；定义域为 (0, +∞)，±0返回 -inf，负数返回NaN。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -80,14 +84,14 @@ template<class T> complex<T> asc::std::log(const complex<T>& value) noexcept;
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `float` | 返回自然对数；Device 侧适用范围以本页 float 与执行位置约束为准的计算结果。 |
-| 原型 2 | `complex<T>` | 返回自然对数；Device 侧适用范围以本页 float 与执行位置约束为准的计算结果。 |
+| 原型1 | `float` | 返回自然对数；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+| 原型2 | `complex<T>` | 返回自然对数；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
 
 ## 约束说明
 
-- 提供 float 重载、标准 *f 别名以及 float lerp 回移接口
-- 仅提供页面声明的 float 或 complex<float> 运算
-- 接口可用性取决于相应的 float 数学能力
+- 提供float重载、标准 *f别名以及float lerp回移接口。
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
@@ -101,3 +105,7 @@ decltype(auto) example(float x)
     return asc::std::log(x);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

@@ -28,53 +28,50 @@
 
 头文件路径为：`<asc/std/set>`。
 
-`asc::std::set` 按比较顺序保存唯一键。
+`asc::std::set`按比较顺序保存唯一键。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `set`](https://en.cppreference.com/w/cpp/header/set)。
 
 ## 声明
 
 ```cpp
-template<class Key, class Compare, class Allocator> class asc::std::set
+namespace asc::std {
+template<class Key, class Compare, class Allocator> class set;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下set<Key,Compare,A>显式GM arena
-- allocator以及Compare+allocator构造
-- empty/size/begin/end/insert/find/count/clear
-- AVL平衡与对数级插入/查找核心
-- 重复键拒绝、有序迭代、移动和析构
-- 仅容量充足和不抛出异常键/比较/allocator域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下set<Key,Compare,A>显式GM arena。
+- allocator以及Compare+allocator构造。
+- empty/size/begin/end/insert/find/count/clear。
+- AVL平衡与对数级插入/查找核心。
+- 重复键拒绝、有序迭代、移动和析构。
+- 仅容量充足和不抛出异常键/比较/allocator域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
-#include <asc/std/set>
+#include <asc/memory>
 #include <functional>
-#include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/set>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void use_type()
+bool example()
 {
-    using selected = asc::std::set<int, ::std::less<int>, example_allocator<int>>;
-    (void)sizeof(selected);
+    alignas(64) unsigned char storage[16384] = {};
+    asc::monotonic_arena arena(storage, sizeof(storage));
+    asc::std::set<int, ::std::less<int>, asc::arena_allocator<int>> values(asc::arena_allocator<int>{arena});
+    values.insert(7);
+    values.insert(3);
+    return values.size() == 2 && *values.begin() == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_set.md)

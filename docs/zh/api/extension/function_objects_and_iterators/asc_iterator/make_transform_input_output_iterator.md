@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::make_transform_input_output_iterator` 创建同时具有输入和输出变换的迭代器。
+`asc::make_transform_input_output_iterator`创建同时具有输入和输出变换的迭代器。
 
 ## 函数原型
 
 ```cpp
-template<class Iterator, class InputFunction, class OutputFunction> constexpr asc::transform_input_output_iterator<InputFunction, OutputFunction, Iterator> asc::make_transform_input_output_iterator(Iterator iterator, InputFunction input_function, OutputFunction output_function);
+namespace asc {
+template<class Iterator, class InputFunction, class OutputFunction> constexpr asc::transform_input_output_iterator<InputFunction, OutputFunction, Iterator> make_transform_input_output_iterator(Iterator iterator, InputFunction input_function, OutputFunction output_function);
+} // namespace asc
 ```
 
 ## 参数说明
@@ -43,16 +45,16 @@ template<class Iterator, class InputFunction, class OutputFunction> constexpr as
 | 参数名 | 描述 |
 | --- | --- |
 | `Iterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `InputFunction` | 读取变换的可调用对象类型：读取时按 input_function(*底层迭代器) 变换。 |
-| `OutputFunction` | 写入变换的可调用对象类型：写入时先经 output_function 变换再存入底层迭代器。 |
+| `InputFunction` | 读取变换的可调用对象类型：读取时按input_function(*底层迭代器)变换。 |
+| `OutputFunction` | 写入变换的可调用对象类型：写入时先经output_function变换再存入底层迭代器。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `iterator` | 输入 | 被包装的底层迭代器：读写实际作用于该迭代器所指位置。 |
-| `input_function` | 输入 | 读取变换对象：解引用读取结果为 input_function(*底层迭代器)。 |
-| `output_function` | 输入 | 写入变换对象：赋给本迭代器的值先经 output_function 变换再写入底层位置。 |
+| `input_function` | 输入 | 读取变换对象：解引用读取结果为input_function(*底层迭代器)。 |
+| `output_function` | 输入 | 写入变换对象：赋给本迭代器的值先经output_function变换再写入底层位置。 |
 
 ## 返回值说明
 
@@ -62,8 +64,8 @@ template<class Iterator, class InputFunction, class OutputFunction> constexpr as
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
@@ -79,3 +81,7 @@ decltype(auto) example()
     return asc::make_transform_input_output_iterator(values, [](int value) { return value; }, [](int value) { return value; });
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

@@ -28,70 +28,74 @@
 
 头文件路径为：`<asc/std/optional>`。
 
-`asc::std::optional::value_or` 在对象有值时返回该值，否则返回调用方提供的替代值。
+`asc::std::optional::value_or`在对象有值时返回该值，否则返回调用方提供的替代值。
 
 标准语义参考：[cppreference `optional`](https://en.cppreference.com/w/cpp/header/optional)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::optional`](optional.md)。
+
+### 原型1
 
 ```cpp
-template<class U> constexpr T asc::std::optional::value_or(U&& default_value)&&;
+// asc::std::optional 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class U> constexpr T value_or(U&& default_value)&&;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class U> constexpr T asc::std::optional::value_or(U&& default_value) const&;
+// asc::std::optional 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class U> constexpr T value_or(U&& default_value) const&;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U` | 替代值的类型；须能转换为 T。 |
+| `U` | 替代值的类型；须能转换为T。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `default_value` | 输入/输出 | 替代值；本对象不含值时返回由它转换得到的 T，含值时返回所含值（右值重载按移动返回）。 |
+| `default_value` | 输入/输出 | 替代值；本对象不含值时返回由它转换得到的T，含值时返回所含值（右值重载按移动返回）。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U` | 替代值的类型；须能转换为 T。 |
+| `U` | 替代值的类型；须能转换为T。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `default_value` | 输入/输出 | 替代值；本对象不含值时返回由它转换得到的 T，含值时返回所含值。 |
+| `default_value` | 输入/输出 | 替代值；本对象不含值时返回由它转换得到的T，含值时返回所含值。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `T` | 返回该值，否则返回调用方提供的替代值。 |
-| 原型 2 | `T` | 返回该值，否则返回调用方提供的替代值。 |
+| 原型1 | `T` | 返回该值，否则返回调用方提供的替代值。 |
+| 原型2 | `T` | 返回该值，否则返回调用方提供的替代值。 |
 
 ## 约束说明
 
-- T 必须是普通的非引用对象类型
-- Host 遵循有效的 C++17 操作
-- Device 侧构造、赋值、调用和交换所依赖的操作必须不抛出异常
+- T必须是普通的非引用对象类型。
+- Host遵循有效的C++17操作。
+- Device侧构造、赋值、调用和交换所依赖的操作必须不抛出异常。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
+以下Host片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
 
 ```cpp
 #include <asc/std/optional>
@@ -102,3 +106,8 @@ decltype(auto) example()
     return static_cast<asc::std::optional<int>&&>(value).value_or(0);
 }
 ```
+
+## 关联API
+
+- [`asc::std::optional`](optional.md)
+- [本头文件的接口列表](asc_std_optional.md)

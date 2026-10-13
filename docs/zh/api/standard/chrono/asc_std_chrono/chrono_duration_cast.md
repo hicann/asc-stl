@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::duration_cast` 在指定时长类型之间转换计数与周期。
+`asc::std::chrono::duration_cast`在指定时长类型之间转换计数与周期。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
 ```cpp
-template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDuration asc::std::chrono::duration_cast(const duration<Rep, Period>& value);
+namespace asc::std::chrono {
+template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDuration duration_cast(const duration<Rep, Period>& value);
+} // namespace asc::std::chrono
 ```
 
 ## 参数说明
@@ -44,9 +46,9 @@ template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDu
 
 | 参数名 | 描述 |
 | --- | --- |
-| `ToDuration` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Rep` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Period` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `ToDuration` | 转换结果的duration类型，决定结果计数表示和计时单位。 |
+| `Rep` | 输入时长的计数表示类型。 |
+| `Period` | 输入时长一个计数单位对应的秒数，以ratio表示。 |
 
 **函数参数**
 
@@ -62,7 +64,7 @@ template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDu
 
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符
+- 提供值运算以及六个显式关系运算符。
 
 ## 调用示例
 
@@ -77,3 +79,7 @@ decltype(auto) example()
     return asc::std::chrono::duration_cast<asc::std::chrono::seconds>(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

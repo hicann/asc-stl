@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/functional>`。
 
-`asc::identity_element` 返回已登记运算及值类型的单位元；未登记组合不能调用。
+`asc::identity_element`返回已登记运算及值类型的单位元；未登记组合不能调用。
 
 ## 函数原型
 
 ```cpp
-template<class Operator, class T> constexpr T asc::identity_element() noexcept;
+namespace asc {
+template<class Operator, class T> constexpr T identity_element() noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,7 +44,7 @@ template<class Operator, class T> constexpr T asc::identity_element() noexcept;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Operator` | 已登记的 `asc::std` 标准函数对象类型。 |
+| `Operator` | 已登记的`asc::std`标准函数对象类型。 |
 | `T` | 与该运算匹配的值类型。 |
 
 ## 返回值说明
@@ -53,7 +55,7 @@ template<class Operator, class T> constexpr T asc::identity_element() noexcept;
 
 ## 约束说明
 
-- 仅接受已登记的整数算术、布尔逻辑或无符号整数位运算组合
+- 仅接受已登记的整数算术、布尔逻辑或无符号整数位运算组合。
 - 浮点加法未登记。
 
 ## 调用示例
@@ -75,6 +77,6 @@ void example()
 }
 ```
 
-## 关联 API
+## 关联API
 
 - [asc::has_identity_element_v](has_identity_element_v.md)

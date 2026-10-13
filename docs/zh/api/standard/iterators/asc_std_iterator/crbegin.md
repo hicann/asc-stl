@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::crbegin` 取得逆序范围起始常量迭代器。
+`asc::std::crbegin`取得逆序范围起始常量迭代器。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
 ```cpp
-template<class C> constexpr auto asc::std::crbegin(const C& c) -> decltype(asc::std::rbegin(c));
+namespace asc::std {
+template<class C> constexpr auto crbegin(const C& c) -> decltype(asc::std::rbegin(c));
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,7 +46,7 @@ template<class C> constexpr auto asc::std::crbegin(const C& c) -> decltype(asc::
 
 | 参数名 | 描述 |
 | --- | --- |
-| `C` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `C` | 被查询数组或容器的类型，须提供对应的范围访问操作。 |
 
 **函数参数**
 
@@ -60,11 +62,11 @@ template<class C> constexpr auto asc::std::crbegin(const C& c) -> decltype(asc::
 
 ## 约束说明
 
-- 支持非 I/O 范围、数组和用户容器
+- 支持非I/O范围、数组和用户容器。
 
 ## 调用示例
 
-以下 Host 片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
 
 ```cpp
 #include <asc/std/iterator>
@@ -75,3 +77,7 @@ decltype(auto) example()
     return asc::std::crbegin(values);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

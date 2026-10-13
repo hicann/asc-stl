@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::ranges::iter_swap` 是交换两个迭代器所指元素的定制点对象：优先调用可发现的 `iter_swap`，其次交换可解引用结果，再次逐元素 `swap`。
+`asc::std::ranges::iter_swap`是交换两个迭代器所指元素的定制点对象：优先调用可发现的`iter_swap`，其次交换可解引用结果，再次逐元素`swap`。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-constexpr asc::std::ranges::iter_swap_fn asc::std::ranges::iter_swap
+namespace asc::std::ranges {
+constexpr iter_swap_fn iter_swap;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 两迭代器均可解引用且指向可交换元素
+- 两迭代器均可解引用且指向可交换元素。
 
 ## 调用示例
 
@@ -57,3 +59,7 @@ void example()
     asc::std::ranges::iter_swap(&lhs, &rhs);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

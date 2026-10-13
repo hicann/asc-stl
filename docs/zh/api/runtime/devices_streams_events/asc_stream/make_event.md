@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/stream>`。
 
-`asc::make_event` 创建 Runtime Event，并把所有权写入空的 `event` 对象；输出对象已持有句柄或创建失败时返回 false。
+`asc::make_event`创建Runtime Event，并把所有权写入空的`event`对象；输出对象已持有句柄或创建失败时返回false。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 函数原型
 
 ```cpp
-bool asc::make_event(asc::event& output) noexcept;
+namespace asc {
+bool make_event(asc::event& output) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -44,18 +46,18 @@ bool asc::make_event(asc::event& output) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 提供“创建 Runtime Event，并把所有权写入空的 `event` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `output` | 输出 | 提供“创建Runtime Event，并把所有权写入空的`event`对象”使用的对象引用；被引用对象须在调用期间有效。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- `output` 非空（已持有句柄）时本接口拒绝执行，直接返回 `false`，不创建新的 Runtime Event，也不修改 `output`
-- output 失败时保持不变
+- `output`非空（已持有句柄）时本接口拒绝执行，直接返回`false`，不创建新的Runtime Event，也不修改`output`。
+- output失败时保持不变。
 
 ## 调用示例
 
@@ -70,6 +72,10 @@ decltype(auto) example(asc::event& output)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_stream.md)

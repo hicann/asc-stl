@@ -28,6 +28,7 @@
 #endif
 
 #include <asc/__functional/metadata.h>
+#include <asc/std/functional>
 
 namespace asc {
 
@@ -95,6 +96,129 @@ struct maximum<void> {
 };
 
 namespace detail {
+template <class T>
+struct metadata_integral {
+    static constexpr bool value = false;
+};
+#define CANN_ASC_STL_METADATA_INTEGRAL(Type) \
+    template <>                              \
+    struct metadata_integral<Type> {         \
+        static constexpr bool value = true;  \
+    }
+CANN_ASC_STL_METADATA_INTEGRAL(bool);
+CANN_ASC_STL_METADATA_INTEGRAL(char);
+CANN_ASC_STL_METADATA_INTEGRAL(signed char);
+CANN_ASC_STL_METADATA_INTEGRAL(unsigned char);
+CANN_ASC_STL_METADATA_INTEGRAL(short);
+CANN_ASC_STL_METADATA_INTEGRAL(unsigned short);
+CANN_ASC_STL_METADATA_INTEGRAL(int);
+CANN_ASC_STL_METADATA_INTEGRAL(unsigned int);
+CANN_ASC_STL_METADATA_INTEGRAL(long);
+CANN_ASC_STL_METADATA_INTEGRAL(unsigned long);
+CANN_ASC_STL_METADATA_INTEGRAL(long long);
+CANN_ASC_STL_METADATA_INTEGRAL(unsigned long long);
+CANN_ASC_STL_METADATA_INTEGRAL(wchar_t);
+CANN_ASC_STL_METADATA_INTEGRAL(char16_t);
+CANN_ASC_STL_METADATA_INTEGRAL(char32_t);
+#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+CANN_ASC_STL_METADATA_INTEGRAL(char8_t);
+#endif
+#undef CANN_ASC_STL_METADATA_INTEGRAL
+
+template <class T>
+struct metadata_unsigned {
+    static constexpr bool value = false;
+};
+#define CANN_ASC_STL_METADATA_UNSIGNED(Type) \
+    template <>                              \
+    struct metadata_unsigned<Type> {         \
+        static constexpr bool value = true;  \
+    }
+CANN_ASC_STL_METADATA_UNSIGNED(unsigned char);
+CANN_ASC_STL_METADATA_UNSIGNED(unsigned short);
+CANN_ASC_STL_METADATA_UNSIGNED(unsigned int);
+CANN_ASC_STL_METADATA_UNSIGNED(unsigned long);
+CANN_ASC_STL_METADATA_UNSIGNED(unsigned long long);
+#undef CANN_ASC_STL_METADATA_UNSIGNED
+
+template <class Operator>
+struct operation_tag {
+    using type = void;
+    using value_type = void;
+};
+template <class A, class B>
+struct metadata_same {
+    static constexpr bool value = false;
+};
+template <class A>
+struct metadata_same<A, A> {
+    static constexpr bool value = true;
+};
+template <class T>
+struct operation_tag<::asc::std::plus<T>> {
+    using type = add_op;
+    using value_type = T;
+};
+template <class T>
+struct operation_tag<::asc::std::multiplies<T>> {
+    using type = multiply_op;
+    using value_type = T;
+};
+template <class T>
+struct operation_tag<::asc::std::logical_and<T>> {
+    using type = logical_and_op;
+    using value_type = T;
+};
+template <class T>
+struct operation_tag<::asc::std::logical_or<T>> {
+    using type = logical_or_op;
+    using value_type = T;
+};
+template <class T>
+struct operation_tag<::asc::std::bit_and<T>> {
+    using type = bitwise_and_op;
+    using value_type = T;
+};
+template <class T>
+struct operation_tag<::asc::std::bit_or<T>> {
+    using type = bitwise_or_op;
+    using value_type = T;
+};
+template <class T>
+struct operation_tag<::asc::std::bit_xor<T>> {
+    using type = bitwise_xor_op;
+    using value_type = T;
+};
+
+template <class Operator, class T>
+struct metadata_domain {
+    using tag = typename operation_tag<Operator>::type;
+    static constexpr bool arithmetic = metadata_integral<T>::value && !metadata_same<T, bool>::value &&
+        (metadata_same<tag, add_op>::value || metadata_same<tag, multiply_op>::value);
+    static constexpr bool logical = metadata_same<T, bool>::value &&
+        (metadata_same<tag, logical_and_op>::value || metadata_same<tag, logical_or_op>::value);
+    static constexpr bool bitwise = metadata_unsigned<T>::value &&
+        (metadata_same<tag, bitwise_and_op>::value || metadata_same<tag, bitwise_or_op>::value ||
+            metadata_same<tag, bitwise_xor_op>::value);
+    using operator_value_type = typename operation_tag<Operator>::value_type;
+    static constexpr bool matching =
+        metadata_same<operator_value_type, void>::value || metadata_same<operator_value_type, T>::value;
+    static constexpr bool valid = matching && (arithmetic || logical || bitwise);
+};
+
+template <class Operator, class T, bool = metadata_domain<Operator, T>::valid>
+struct metadata_elements {
+    static constexpr bool has_identity = false;
+    static constexpr bool has_absorbing = false;
+};
+
+template <class Operator, class T>
+struct metadata_elements<Operator, T, true> {
+    using tag = typename metadata_domain<Operator, T>::tag;
+    static constexpr bool has_identity = identity_element_op<tag, T>::has_value;
+    static constexpr bool has_absorbing = absorbing_element_op<tag, T>::has_value;
+};
+
 template <class T>
 struct remove_reference {
     using type = T;
@@ -172,34 +296,42 @@ CANN_ASC_STL_API constexpr detail::copyable_arguments_wrapper<detail::decay_t<Fu
 }
 
 template <class Operator, class T>
-inline constexpr bool is_associative_v = false;
+inline constexpr bool is_associative_v =
+    detail::metadata_domain<Operator, T>::valid && detail::metadata_unsigned<T>::value &&
+    detail::is_associative_op<typename detail::metadata_domain<Operator, T>::tag>::value &&
+    // Narrow unsigned multiplication can promote to signed int and overflow.
+    (!detail::metadata_same<typename detail::metadata_domain<Operator, T>::tag, detail::multiply_op>::value ||
+        detail::metadata_same<T, unsigned int>::value || detail::metadata_same<T, unsigned long>::value ||
+        detail::metadata_same<T, unsigned long long>::value);
+template <class Operator>
+inline constexpr bool is_associative_v<Operator, bool> = detail::metadata_domain<Operator, bool>::valid;
 template <class T>
 inline constexpr bool is_associative_v<minimum<T>, T> = true;
 template <class T>
 inline constexpr bool is_associative_v<maximum<T>, T> = true;
 
 template <class Operator, class T>
-inline constexpr bool is_commutative_v = false;
+inline constexpr bool is_commutative_v = is_associative_v<Operator, T>;
 template <class T>
 inline constexpr bool is_commutative_v<minimum<T>, T> = true;
 template <class T>
 inline constexpr bool is_commutative_v<maximum<T>, T> = true;
 
 template <class Operator, class T>
-inline constexpr bool has_identity_element_v = false;
+inline constexpr bool has_identity_element_v = detail::metadata_elements<Operator, T>::has_identity;
 template <class Operator, class T>
 CANN_ASC_STL_API constexpr T identity_element() noexcept
 {
     static_assert(has_identity_element_v<Operator, T>, "operator has no registered identity element");
-    return T{};
+    return detail::identity_element_op<typename detail::metadata_domain<Operator, T>::tag, T>::value;
 }
 template <class Operator, class T>
-inline constexpr bool has_absorbing_element_v = false;
+inline constexpr bool has_absorbing_element_v = detail::metadata_elements<Operator, T>::has_absorbing;
 template <class Operator, class T>
 CANN_ASC_STL_API constexpr T absorbing_element() noexcept
 {
     static_assert(has_absorbing_element_v<Operator, T>, "operator has no registered absorbing element");
-    return T{};
+    return detail::absorbing_element_op<typename detail::metadata_domain<Operator, T>::tag, T>::value;
 }
 
 }  // namespace asc

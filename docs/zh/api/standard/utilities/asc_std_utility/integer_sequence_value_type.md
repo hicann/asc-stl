@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::integer_sequence::value_type` 标识元素或结果的值类型。
+`asc::std::integer_sequence::value_type`标识元素或结果的值类型。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 声明
 
+所属类型：[`asc::std::integer_sequence`](integer_sequence.md)。
+
 ```cpp
-using asc::std::integer_sequence::value_type = T
+// asc::std::integer_sequence 类内的声明节选；模板形参和其他成员由所属类提供。
+using value_type = T;
 ```
 
 ## 约束说明
 
-- 提供完整的标准形式
+- 提供完整的标准形式。
 
 ## 调用示例
 
@@ -54,3 +57,8 @@ void use_type()
     using alias_type = typename asc::std::integer_sequence<int, 1, 2, 3>::value_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::integer_sequence`](integer_sequence.md)
+- [本头文件的接口列表](asc_std_utility.md)

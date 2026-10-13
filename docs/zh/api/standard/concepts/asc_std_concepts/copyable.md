@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::copyable` 在 C++20 及以上模式约束满足 `copyable` 语义的类型或表达式。
+`asc::std::copyable`在C++20及以上模式约束满足`copyable`语义的类型或表达式。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 
 ## 声明
 
 ```cpp
-template<class T> concept asc::std::copyable
+namespace asc::std {
+template<class T> concept copyable;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供完整的公开 C++20 concepts 集合
+- 提供完整的公开C++20 concepts集合。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class T> concept asc::std::copyable
 
 static_assert(asc::std::copyable<int>);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_concepts.md)

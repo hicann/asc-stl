@@ -28,33 +28,41 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::move_sentinel` 把底层哨兵适配为移动迭代器的结束位置。
+`asc::std::move_sentinel`把底层哨兵适配为移动迭代器的结束位置。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-template<class Sent> class asc::std::move_sentinel
+namespace asc::std {
+template<class Sent> class move_sentinel;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段用具体迭代器或容器类型实例化本页接口。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/iterator>
-
 #include <asc/std/type_traits>
+#include <asc/std/vector>
+#include <asc/std/forward_list>
 
-void example()
+bool example()
 {
-    using selected = asc::std::move_sentinel<int*>;
-    (void)sizeof(selected);
+    int values[2] = {};
+    asc::std::move_sentinel<int*> sentinel(values + 2);
+    return sentinel.base() == values + 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

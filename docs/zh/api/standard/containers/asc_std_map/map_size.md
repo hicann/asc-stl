@@ -28,16 +28,19 @@
 
 头文件路径为：`<asc/std/map>`。
 
-`asc::std::map::size` 返回当前对象包含的元素数量。
+`asc::std::map::size`返回当前对象包含的元素数量。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `map`](https://en.cppreference.com/w/cpp/header/map)。
 
 ## 函数原型
 
+所属类型：[`asc::std::map`](map.md)。
+
 ```cpp
-size_type asc::std::map::size() const noexcept;
+// asc::std::map 类内的声明节选；模板形参和其他成员由所属类提供。
+size_type size() const noexcept;
 ```
 
 ## 参数说明
@@ -52,38 +55,37 @@ size_type asc::std::map::size() const noexcept;
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下map<Key,T,Compare,A>显式GM arena
-- allocator以及Compare+allocator构造
-- empty/size/begin/end/insert/find/count/operator[]/clear
-- AVL平衡与对数级插入/查找核心
-- 重复键拒绝、有序迭代、移动和析构
-- 仅容量充足和不抛出异常键值/比较/allocator域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下map<Key,T,Compare,A>显式GM arena。
+- allocator以及Compare+allocator构造。
+- empty/size/begin/end/insert/find/count/`operator[]`/clear。
+- AVL平衡与对数级插入/查找核心。
+- 重复键拒绝、有序迭代、移动和析构。
+- 仅容量充足和不抛出异常键值/比较/allocator域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
-#include <asc/std/map>
+#include <asc/memory>
 #include <functional>
-#include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/map>
+#include <asc/std/utility>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void example(asc::std::map<int, int, ::std::less<int>, example_allocator<::std::pair<const int, int>>>& object)
+bool example()
 {
-    (void)object.size();
+    alignas(64) unsigned char storage[16384] = {};
+    asc::monotonic_arena arena(storage, sizeof(storage));
+    using allocator = asc::arena_allocator<asc::std::pair<const int, int>>;
+    asc::std::map<int, int, ::std::less<int>, allocator> values(allocator{arena});
+    values[1] = 7;
+    values[3] = 9;
+    return values.size() == 2;
 }
 ```
+
+## 关联API
+
+- [`asc::std::map`](map.md)
+- [本头文件的接口列表](asc_std_map.md)

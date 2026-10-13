@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::mdspan::stride` 返回指定维度相邻元素之间的步长。
+`asc::std::mdspan::stride`返回指定维度相邻元素之间的步长。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
+所属类型：[`asc::std::mdspan`](mdspan.md)。
+
 ```cpp
-constexpr index_type asc::std::mdspan::stride(rank_type rank_index) const noexcept;
+// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr index_type stride(rank_type rank_index) const noexcept;
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ constexpr index_type asc::std::mdspan::stride(rank_type rank_index) const noexce
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `rank_index` | 输入 | 待查询步长的维度编号，从 0 起；须满足 rank_index < rank()，返回该维相邻元素相隔的元素个数。 |
+| `rank_index` | 输入 | 待查询步长的维度编号，从0起；须满足rank_index < rank()，返回该维相邻元素相隔的元素个数。 |
 
 ## 返回值说明
 
@@ -54,13 +57,12 @@ constexpr index_type asc::std::mdspan::stride(rank_type rank_index) const noexce
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整标准mdspan view家族：全部成员类型与rank/static_extent观察，默认/拷贝/移动、data_handle+维度包/array/span/extents/mapping/mapping+accessor及跨mdspan构造，赋值与deduction guides，array/span下标、size/empty/swap、data_handle/mapping/accessor/extents/extent及映射属性观察
-- C++20开放rank-one operator[]，C++2b条件开放标准多索引operator[]
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain pointer域
+- C++20开放rank-one `operator[]`，C++2b条件开放标准多索引operator[]。
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
 
-以下 Host 片段以具体容量或维度演示调用；对象和索引须满足本页约束。
+以下Host片段以具体容量或维度演示调用；对象和索引须满足本页约束。
 
 ```cpp
 #include <asc/std/mdspan>
@@ -71,3 +73,8 @@ decltype(auto) example(const asc::std::mdspan<int, asc::std::extents<asc::std::s
     return view.stride(0);
 }
 ```
+
+## 关联API
+
+- [`asc::std::mdspan`](mdspan.md)
+- [本头文件的接口列表](asc_std_mdspan.md)

@@ -28,31 +28,42 @@
 
 头文件路径为：`<asc/std/mutex>`。
 
-`asc::std::try_to_lock_t` 标记锁包装器构造时采用的获取方式。
+`asc::std::try_to_lock_t`标记锁包装器构造时采用的获取方式。
 
 标准语义参考：[cppreference `mutex`](https://en.cppreference.com/w/cpp/header/mutex)。
 
 ## 声明
 
 ```cpp
-struct asc::std::try_to_lock_t
+namespace asc::std {
+struct try_to_lock_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- defer_lock_t、try_to_lock_t、adopt_lock_t及对应defer_lock、try_to_lock、adopt_lock三个inline constexpr对象
-- 纯类型与对象，不拥有或操作锁
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- defer_lock_t、try_to_lock_t、adopt_lock_t及对应defer_lock、try_to_lock、adopt_lock三个inline constexpr对象。
+- 纯类型与对象，不拥有或操作锁。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/mutex>
+#include <mutex>
 
-void use_type(const asc::std::try_to_lock_t& value)
+bool example()
 {
-    (void)value;
+    ::std::mutex mutex;
+    asc::std::unique_lock<::std::mutex> guard(mutex, asc::std::try_to_lock);
+    const bool owned = guard.owns_lock();
+    guard.unlock();
+    return owned && !guard.owns_lock();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mutex.md)

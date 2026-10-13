@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::tensor_copy_descriptor::tensor_copy_descriptor` 使用调用方提供的参数初始化 `asc::tensor_copy_descriptor` 对象。
+`asc::tensor_copy_descriptor::tensor_copy_descriptor`使用调用方提供的参数初始化`asc::tensor_copy_descriptor`对象。
 
 ## 函数原型
 
@@ -44,22 +44,30 @@ constexpr asc::tensor_copy_descriptor<Rank>::tensor_copy_descriptor() noexcept;
 | --- | --- |
 | `Rank` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 描述符及状态类型可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Rank 为 1 至 5
-- 维度和步长采用 uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运
+- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Rank为1至5。
+- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
 
 ## 调用示例
 
-以下 Host 片段演示构造二维描述符。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/tensor_copy>
 
-void example()
+bool example()
 {
-    asc::tensor_copy_descriptor<2> descriptor{};
-    (void)descriptor.rank();
+    asc::tensor_copy_descriptor<2> descriptor;
+    return descriptor.rank() == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_tensor_copy.md)

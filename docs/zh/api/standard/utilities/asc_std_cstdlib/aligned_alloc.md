@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cstdlib>`。
 
-`asc::std::aligned_alloc` 由 `<asc/std/cstdlib>` 提供，按字节数与对齐值分配内存，对齐不合法时返回空指针。
+`asc::std::aligned_alloc`由`<asc/std/cstdlib>`提供，按字节数与对齐值分配内存，对齐不合法时返回空指针。
 
 标准语义参考：[cppreference `cstdlib`](https://en.cppreference.com/w/cpp/header/cstdlib)。
 
 ## 函数原型
 
 ```cpp
-void* aligned_alloc(size_t nbytes, size_t alignment) noexcept
+namespace asc::std {
+[[nodiscard]] void* aligned_alloc(size_t nbytes, size_t alignment) noexcept;
+}
 ```
 
 ## 参数说明
@@ -51,21 +53,33 @@ void* aligned_alloc(size_t nbytes, size_t alignment) noexcept
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `按声明确定` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `void*` | 成功返回满足对齐要求的分配地址，失败返回nullptr；须通过 ::std::free释放。 |
 
 ## 约束说明
 
-- 按字节数与对齐值分配内存；对齐值非法时返回空指针，宿主侧可用
+- 仅用于Host，参数顺序是字节数在前、对齐在后。
+- alignment须为非零的2的幂，nbytes须为alignment的整数倍；不满足时返回nullptr。
+- 还须满足宿主C库支持的对齐要求；成功的分配需调用 ::std::free释放。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/cstdlib>
+#include <asc/std/cstdint>
+#include <cstdlib>
 
-decltype(auto) example(size_t nbytes, size_t alignment)
+bool example()
 {
-    return asc::std::aligned_alloc(nbytes, alignment);
+    void* pointer = asc::std::aligned_alloc(64, 32);
+    if (pointer == nullptr) return false;
+    const bool aligned = reinterpret_cast<asc::std::uintptr_t>(pointer) % 32 == 0;
+    ::std::free(pointer);
+    return aligned;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstdlib.md)

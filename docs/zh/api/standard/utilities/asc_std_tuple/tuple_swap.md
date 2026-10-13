@@ -28,41 +28,45 @@
 
 头文件路径为：`<asc/std/tuple>`。
 
-`asc::std::tuple::swap` 交换两个对象保存的状态或元素。
+`asc::std::tuple::swap`交换两个对象保存的状态或元素。
 
 标准语义参考：[cppreference `tuple`](https://en.cppreference.com/w/cpp/header/tuple)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::tuple`](tuple.md)。
+
+### 原型1
 
 ```cpp
-void asc::std::tuple::swap(tuple<Types...>& other) noexcept(noexcept(this->Base.swap(T.Base)));
+// asc::std::tuple 类内的声明节选；模板形参和其他成员由所属类提供。
+void swap(tuple<Types...>& other) noexcept(noexcept(this->Base.swap(T.Base)));
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr void asc::std::tuple::swap(tuple<>& other) noexcept;
+// asc::std::tuple 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr void swap(tuple<>& other) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 与当前对象交换状态的另一对象；交换后双方保存对方原有状态。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 与当前对象交换状态的另一对象；交换后双方保存对方原有状态。 |
 
 ## 返回值说明
 
@@ -70,11 +74,11 @@ constexpr void asc::std::tuple::swap(tuple<>& other) noexcept;
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
 
 ## 调用示例
 
-以下 Host 片段使用具体数值类型演示调用；状态与参数须满足本页约束。
+以下Host片段使用具体数值类型演示调用；状态与参数须满足本页约束。
 
 ```cpp
 #include <asc/std/tuple>
@@ -85,3 +89,8 @@ void example()
     left.swap(right);
 }
 ```
+
+## 关联API
+
+- [`asc::std::tuple`](tuple.md)
+- [本头文件的接口列表](asc_std_tuple.md)

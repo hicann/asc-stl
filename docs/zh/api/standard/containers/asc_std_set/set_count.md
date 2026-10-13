@@ -28,16 +28,19 @@
 
 头文件路径为：`<asc/std/set>`。
 
-`asc::std::set::count` 返回与键或目标值匹配的元素数量。
+`asc::std::set::count`返回与键或目标值匹配的元素数量。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `set`](https://en.cppreference.com/w/cpp/header/set)。
 
 ## 函数原型
 
+所属类型：[`asc::std::set`](set.md)。
+
 ```cpp
-size_type asc::std::set::count(const Key& key) noexcept;
+// asc::std::set 类内的声明节选；模板形参和其他成员由所属类提供。
+size_type count(const Key& key) noexcept;
 ```
 
 ## 参数说明
@@ -56,17 +59,17 @@ size_type asc::std::set::count(const Key& key) noexcept;
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下set<Key,Compare,A>显式GM arena
-- allocator以及Compare+allocator构造
-- empty/size/begin/end/insert/find/count/clear
-- AVL平衡与对数级插入/查找核心
-- 重复键拒绝、有序迭代、移动和析构
-- 仅容量充足和不抛出异常键/比较/allocator域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下set<Key,Compare,A>显式GM arena。
+- allocator以及Compare+allocator构造。
+- empty/size/begin/end/insert/find/count/clear。
+- AVL平衡与对数级插入/查找核心。
+- 重复键拒绝、有序迭代、移动和析构。
+- 仅容量充足和不抛出异常键/比较/allocator域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/set>
@@ -91,3 +94,8 @@ decltype(auto) example(asc::std::set<int, ::std::less<int>, example_allocator<in
     return values.count(7);
 }
 ```
+
+## 关联API
+
+- [`asc::std::set`](set.md)
+- [本头文件的接口列表](asc_std_set.md)

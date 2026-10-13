@@ -28,66 +28,70 @@
 
 头文件路径为：`<asc/numeric>`。
 
-`asc::div_overflow` 计算整数除法并报告除零或结果越界。
+`asc::div_overflow`计算整数除法并报告除零或结果越界。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> constexpr asc::overflow_result<T> asc::div_overflow(T left, T right) noexcept;
+namespace asc {
+template<class T> constexpr asc::overflow_result<T> div_overflow(T left, T right) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> constexpr bool asc::div_overflow(T left, T right, T& result) noexcept;
+namespace asc {
+template<class T> constexpr bool div_overflow(T left, T right, T& result) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 参与检查式除法的标准整数类型（非 bool，不超过 64 位）。 |
+| `T` | 参与检查式除法的标准整数类型（非bool，不超过64位）。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `left` | 输入 | 检查除零或越界的整数除法左操作数。
-| `right` | 输入 | 检查除零或越界的整数除法右操作数；不得为 0。
+| `right` | 输入 | 检查除零或越界的整数除法右操作数；不得为0。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 参与检查式除法的标准整数类型（非 bool，不超过 64 位）。 |
+| `T` | 参与检查式除法的标准整数类型（非bool，不超过64位）。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `left` | 输入 | 检查除零或越界的整数除法左操作数。
-| `right` | 输入 | 检查除零或越界的整数除法右操作数；不得为 0。
-| `result` | 输出 | 写出除法结果的引用；返回 true 表示除零或结果越界。 |
+| `right` | 输入 | 检查除零或越界的整数除法右操作数；不得为0。
+| `result` | 输出 | 写出除法结果的引用；返回true表示除零或结果越界。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::overflow_result<T>` | 返回整数除法并报告除零或结果越界的计算结果。 |
-| 原型 2 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| 原型1 | `asc::overflow_result<T>` | 返回整数除法并报告除零或结果越界的计算结果。 |
+| 原型2 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- T、From 和 To 必须是不超过 64 位的标准非 bool 整数类型
-- 所有溢出检查均不得触发有符号整数溢出的未定义行为
+- T、From和To必须是不超过64位的标准非bool整数类型。
+- 所有溢出检查均不得触发有符号整数溢出的未定义行为。
 
 ## 调用示例
 
@@ -101,3 +105,7 @@ decltype(auto) example()
     return asc::div_overflow(8, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_numeric.md)

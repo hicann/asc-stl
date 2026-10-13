@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::negation_v` 对一个布尔特征执行逻辑非，以 bool 变量模板形式提供结果。
+`asc::std::negation_v`对一个布尔特征执行逻辑非，以bool变量模板形式提供结果。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr const bool asc::std::negation_v
+namespace asc::std {
+template<class T> inline constexpr const bool negation_v;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v 辅助形式
+- 提供特征类以及标准的 _t、_v辅助形式。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class T> inline constexpr const bool asc::std::negation_v
 
 inline constexpr auto example = asc::std::negation_v<asc::std::true_type>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_type_traits.md)

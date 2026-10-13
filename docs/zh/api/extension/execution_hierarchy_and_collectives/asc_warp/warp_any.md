@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/warp>`。
 
-`asc::warp_any` 判断当前 Warp 是否至少有一个活动 Lane 谓词为 true。
+`asc::warp_any`判断当前Warp是否至少有一个活动Lane谓词为true。
 
 ## 函数原型
 
 ```cpp
-bool asc::warp_any(bool predicate) noexcept;
+namespace asc {
+bool warp_any(bool predicate) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -48,12 +50,12 @@ bool asc::warp_any(bool predicate) noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 所有参与的活动线程必须以收敛控制流调用
+- 仅可在AI Core SIMT编程中调用。
+- 所有参与的活动线程必须以收敛控制流调用。
 
 ## 调用示例
 
@@ -68,7 +70,7 @@ __aicore__ decltype(auto) example(bool predicate)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：
 
@@ -76,3 +78,7 @@ __aicore__ decltype(auto) example(bool predicate)
 - [warp_example.h](../../../../examples/warp_collectives/warp_example.h)
 - [kernel.asc](../../../../examples/warp_collectives/kernel.asc)
 - [main.cpp](../../../../examples/warp_collectives/main.cpp)
+
+## 关联API
+
+- [本头文件的接口列表](asc_warp.md)

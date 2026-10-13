@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::in_place` 标记对应类型或索引的原位构造方式。
+`asc::std::in_place`标记对应类型或索引的原位构造方式。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 声明
 
 ```cpp
-inline constexpr const in_place_t asc::std::in_place
+namespace asc::std {
+inline constexpr const in_place_t in_place;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供完整的标准形式
+- 提供完整的标准形式。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ inline constexpr const in_place_t asc::std::in_place
 
 auto value = asc::std::in_place;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::views::take` 仅呈现输入范围前指定数量的元素。
+`asc::std::ranges::views::take`仅呈现输入范围前指定数量的元素。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
@@ -37,23 +37,25 @@
 该名称是公开的常量函数对象；对象的实现类型不构成接口承诺。以下为调用形式，省略的可选参数以各原型约束为准。
 
 ```cpp
-asc::std::ranges::views::take(range, count)
+// asc::std::ranges::views 类内的声明节选；模板形参和其他成员由所属类提供。
+take(range, count);
 ```
 
 ```cpp
-asc::std::ranges::views::take(count)
+// asc::std::ranges::views 类内的声明节选；模板形参和其他成员由所属类提供。
+take(count);
 ```
 
 ## 参数说明
 
-### 调用形式 1 的参数
+### 调用形式1的参数
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `range` | 输入 | 待访问或变换的输入范围；借用结果受其生命周期约束。 |
 | `count` | 输入 | 要处理、保留或跳过的元素数量。 |
 
-### 调用形式 2 的参数
+### 调用形式2的参数
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -70,23 +72,26 @@ asc::std::ranges::views::take(count)
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下 Host 片段以具体数组或数值演示本页调用形式。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example()
+bool example()
 {
-    // 用具体类型和实参演示已交付的调用形式。
-    int values[4] = {1, 2, 3, 4};
-    auto result_1 = asc::std::ranges::views::take(values, 2);
-    (void)result_1;
-    auto result_2 = asc::std::ranges::views::take(2)(values);
-    (void)result_2;
+    int values[] = {1, 2, 3, 4};
+    auto view = asc::std::ranges::views::take(values, 2);
+    return view.size() == 2 && *view.begin() == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::subrange::prev` 返回起点向后移动后的新子范围。
+`asc::std::ranges::subrange::prev`返回起点向后移动后的新子范围。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
+所属类型：[`asc::std::ranges::subrange`](ranges_subrange.md)。
+
 ```cpp
-template<class It> [[nodiscard]] constexpr subrange<Iter, Sent, Kind> asc::std::ranges::subrange::prev(iter_difference_t<Iter> amount) const;
+// asc::std::ranges::subrange 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class It> [[nodiscard]] constexpr subrange<Iter, Sent, Kind> prev(iter_difference_t<Iter> amount) const;
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ template<class It> [[nodiscard]] constexpr subrange<Iter, Sent, Kind> asc::std::
 
 | 参数名 | 描述 |
 | --- | --- |
-| `It` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `It` | 范围起点及当前位置使用的迭代器类型。 |
 
 **函数参数**
 
@@ -60,12 +63,11 @@ template<class It> [[nodiscard]] constexpr subrange<Iter, Sent, Kind> asc::std::
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
+以下Host片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
 
 ```cpp
 #include <asc/std/ranges>
@@ -76,3 +78,8 @@ decltype(auto) example(asc::std::ranges::subrange<int*>& range)
     return range.prev(1);
 }
 ```
+
+## 关联API
+
+- [`asc::std::ranges::subrange`](ranges_subrange.md)
+- [本头文件的接口列表](asc_std_ranges.md)

@@ -1,4 +1,4 @@
-# asc::random_bijection::operator()
+# asc::random_bijection::`operator()`
 
 ## 产品支持情况
 
@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::random_bijection::operator()` 把输入索引映射为有限域内唯一的置换索引。
+`asc::random_bijection::operator()`把输入索引映射为有限域内唯一的置换索引。
 
 ## 函数原型
 
+所属类型：[`asc::random_bijection`](random_bijection.md)。
+
 ```cpp
-constexpr Index asc::random_bijection::operator()(Index index) const noexcept;
+// asc::random_bijection 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr Index operator()(Index index) const noexcept;
 ```
 
 ## 参数说明
@@ -48,12 +51,12 @@ constexpr Index asc::random_bijection::operator()(Index index) const noexcept;
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下 Host 片段以具体值演示调用；输入须满足本页约束。
+以下Host片段以具体值演示调用；输入须满足本页约束。
 
 ```cpp
 #include <asc/random>
@@ -65,3 +68,8 @@ decltype(auto) example()
     return mapping(3);
 }
 ```
+
+## 关联API
+
+- [`asc::random_bijection`](random_bijection.md)
+- [本头文件的接口列表](asc_random.md)

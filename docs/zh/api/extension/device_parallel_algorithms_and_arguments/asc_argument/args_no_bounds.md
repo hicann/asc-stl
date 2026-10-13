@@ -28,29 +28,35 @@
 
 头文件路径为：`<asc/argument>`。
 
-`asc::args::no_bounds` 表示参数没有附加取值边界。
+`asc::args::no_bounds`表示参数没有附加取值边界。
 
 ## 声明
 
 ```cpp
-struct asc::args::no_bounds
+// asc::args 类内的声明节选；模板形参和其他成员由所属类提供。
+struct no_bounds;
 ```
 
 ## 约束说明
 
-- 使用 C++17，可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Bounds 必须为 asc::args::no_bounds 或 asc::args::static_bounds
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期
+- 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
+- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/argument>
 
-void use_type(const asc::args::no_bounds& value)
+bool example()
 {
-    (void)value;
+    asc::args::immediate<int> argument(7, asc::args::no_bounds{});
+    return argument.value() == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_argument.md)

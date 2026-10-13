@@ -28,20 +28,22 @@
 
 头文件路径为：`<asc/std/variant>`。
 
-`asc::std::variant_size_v` 在编译期给出备选项数量。
+`asc::std::variant_size_v`在编译期给出备选项数量。
 
 标准语义参考：[cppreference `variant`](https://en.cppreference.com/w/cpp/header/variant)。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr const ::std::size_t asc::std::variant_size_v
+namespace asc::std {
+template<class T> inline constexpr const ::std::size_t variant_size_v;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
+- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
+- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
@@ -52,3 +54,7 @@ template<class T> inline constexpr const ::std::size_t asc::std::variant_size_v
 
 inline constexpr auto example = asc::std::variant_size_v<asc::std::variant<int, float>>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_variant.md)

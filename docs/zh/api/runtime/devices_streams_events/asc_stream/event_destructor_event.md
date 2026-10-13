@@ -28,24 +28,31 @@
 
 头文件路径为：`<asc/stream>`。
 
-`asc::event` 析构函数同步并销毁仍由对象持有的 Runtime Event 句柄；已释放或为空时不执行 Runtime 操作。
+`asc::event`析构函数同步并销毁仍由对象持有的Runtime Event句柄；已释放或为空时不执行Runtime操作。
 
 ## 函数原型
 
+所属类型：[`asc::event`](event.md)。
+
 ```cpp
-asc::event::~event();
+// asc::event 类内的声明节选；模板形参和其他成员由所属类提供。
+~event();
 ```
 
 ## 参数说明
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 仅可在 Host 使用且对象不可复制
-- 移动操作转移资源所有权
-- close() 负责同步并销毁自身资源，失败时保留所有权
-- 析构函数会尝试完成本地清理
+- 仅可在Host使用且对象不可复制。
+- 移动操作转移资源所有权。
+- close()负责同步并销毁自身资源，失败时保留所有权。
+- 析构函数会尝试完成本地清理。
 
 ## 调用示例
 
@@ -62,6 +69,11 @@ void example(example_object* object)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
+
+## 关联API
+
+- [`asc::event`](event.md)
+- [本头文件的接口列表](asc_stream.md)

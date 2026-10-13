@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::invoke_r` 按标准 INVOKE 规则调用并转换为指定结果类型。
+`asc::std::invoke_r`按标准INVOKE规则调用并转换为指定结果类型。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 函数原型
 
 ```cpp
-template<class Ret, class Fn, class ...Args> constexpr Ret asc::std::invoke_r(Fn&& function, Args&&... arguments) noexcept(is_nothrow_invocable_r_v<Ret, Fn, Args...>);
+namespace asc::std {
+template<class Ret, class Fn, class ...Args> constexpr Ret invoke_r(Fn&& function, Args&&... arguments) noexcept(is_nothrow_invocable_r_v<Ret, Fn, Args...>);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,15 +46,15 @@ template<class Ret, class Fn, class ...Args> constexpr Ret asc::std::invoke_r(Fn
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Ret` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Fn` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Ret` | 要求转换到的调用结果类型；为void时只执行调用并丢弃其返回值。 |
+| `Fn` | 被调用的函数、函数指针、成员指针或函数对象类型。 |
 | `Args` | 传递给构造函数或可调用对象的实参类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入/输出 | 提供“按标准 INVOKE 规则调用并转换为指定结果类型”使用的对象引用；被引用对象须在调用期间有效。 |
+| `function` | 输入/输出 | 提供“按标准INVOKE规则调用并转换为指定结果类型”使用的对象引用；被引用对象须在调用期间有效。 |
 | `arguments` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
 
 ## 返回值说明
@@ -63,12 +65,12 @@ template<class Ret, class Fn, class ...Args> constexpr Ret asc::std::invoke_r(Fn
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
+- invoke_r为C++23回移提供的接口。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/functional>
@@ -78,3 +80,7 @@ decltype(auto) example()
     return asc::std::invoke_r<int>([](int value) { return value + 1; }, 3);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

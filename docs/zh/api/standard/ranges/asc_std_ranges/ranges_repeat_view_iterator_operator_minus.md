@@ -1,4 +1,4 @@
-# asc::std::ranges::repeat_view::iterator::operator-
+# asc::std::ranges::repeat_view::iterator::`operator-`
 
 ## 产品支持情况
 
@@ -35,7 +35,8 @@
 ## 函数原型
 
 ```cpp
-constexpr auto asc::std::ranges::repeat_view::iterator::operator-(iterator, difference_type)
+// asc::std::ranges::repeat_view::iterator 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr auto operator-(iterator, difference_type);
 ```
 
 ## 参数说明
@@ -44,18 +45,18 @@ constexpr auto asc::std::ranges::repeat_view::iterator::operator-(iterator, diff
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `iterator` | 输入 | 参与本次操作的输入对象；其类型须满足函数原型中的要求。 |
-| `difference_type` | 输入 | 参与本次操作的输入对象；其类型须满足函数原型中的要求。 |
+| 未命名的迭代器实参 | 输入 | 参与距离计算或偏移操作的另一迭代器。 |
+| 未命名的距离实参 | 输入 | 要前进或后退的位置数，使用该迭代器的difference_type。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `auto` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `auto` | 减去距离后的新迭代器；两迭代器相减时返回其位置之差。 |
 
 ## 约束说明
 
-- 迭代器处于有效区间；双向与比较运算要求底层值支持相应运算
+- 迭代器处于有效区间；双向与比较运算要求底层值支持相应运算。
 
 ## 调用示例
 
@@ -70,3 +71,7 @@ decltype(auto) example(Object& object, Args&&... args)
     return object.operator-(static_cast<Args&&>(args)...);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

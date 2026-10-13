@@ -1,4 +1,4 @@
-# asc::std::chrono::year::operator--
+# asc::std::chrono::year::`operator--`
 
 ## 产品支持情况
 
@@ -28,53 +28,56 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::year::operator--` 把当前迭代器或计数值后退一步。
+`asc::std::chrono::year::operator--`把当前迭代器或计数值后退一步。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::chrono::year`](chrono_year.md)。
+
+### 原型1
 
 ```cpp
-constexpr year& asc::std::chrono::year::operator--() noexcept;
+// asc::std::chrono::year 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr year& operator--() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr year asc::std::chrono::year::operator--(int unused) noexcept;
+// asc::std::chrono::year 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr year operator--(int unused) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `unused` | 输入 | 用于区分后置自增或后置自减形式的占位参数；调用时写作整数 0。 |
+| `unused` | 输入 | 用于区分后置自增或后置自减形式的占位参数；调用时写作整数0。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `year &` | 返回更新后的当前对象引用。 |
-| 原型 2 | `year` | 返回更新后的迭代器或计数值。 |
+| 原型1 | `year &` | 返回更新后的当前对象引用。 |
+| 原型2 | `year` | 返回更新后的迭代器或计数值。 |
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
-以下 Host 片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host片段以具体日期或时间类型演示调用；数值须满足本页约束。
 
 ```cpp
 #include <asc/std/chrono>
@@ -84,3 +87,8 @@ void example(asc::std::chrono::year& value)
     --value;
 }
 ```
+
+## 关联API
+
+- [`asc::std::chrono::year`](chrono_year.md)
+- [本头文件的接口列表](asc_std_chrono.md)

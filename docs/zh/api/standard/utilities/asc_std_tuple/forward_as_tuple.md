@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/tuple>`。
 
-`asc::std::forward_as_tuple` 把实参的引用和值类别组合为不拥有对象的 tuple。
+`asc::std::forward_as_tuple`把实参的引用和值类别组合为不拥有对象的tuple。
 
 标准语义参考：[cppreference `tuple`](https://en.cppreference.com/w/cpp/header/tuple)。
 
 ## 函数原型
 
 ```cpp
-template<class ...T> [[nodiscard]] constexpr tuple<T&&...> asc::std::forward_as_tuple(T&&... values) noexcept;
+namespace asc::std {
+template<class ...T> [[nodiscard]] constexpr tuple<T&&...> forward_as_tuple(T&&... values) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,13 +46,13 @@ template<class ...T> [[nodiscard]] constexpr tuple<T&&...> asc::std::forward_as_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 待转发实参的类型；结果 tuple 以 T&& 保存其引用并保持原值类别。 |
+| `T` | 待转发实参的类型；结果tuple以T&& 保存其引用并保持原值类别。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `values` | 输入/输出 | 待转发的各实参；返回的 tuple 保存各实参的引用（保持原值类别），实参生命周期须覆盖 tuple 的使用期。 |
+| `values` | 输入/输出 | 待转发的各实参；返回的tuple保存各实参的引用（保持原值类别），实参生命周期须覆盖tuple的使用期。 |
 
 ## 返回值说明
 
@@ -60,7 +62,7 @@ template<class ...T> [[nodiscard]] constexpr tuple<T&&...> asc::std::forward_as_
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
 
 ## 调用示例
 
@@ -75,3 +77,7 @@ decltype(auto) example()
     return asc::std::forward_as_tuple(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_tuple.md)

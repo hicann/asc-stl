@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/variant>`。
 
-`asc::std::variant::index` 返回当前字段的索引值。
+`asc::std::variant::index`返回当前字段的索引值。
 
 标准语义参考：[cppreference `variant`](https://en.cppreference.com/w/cpp/header/variant)。
 
 ## 函数原型
 
+所属类型：[`asc::std::variant`](variant.md)。
+
 ```cpp
-[[nodiscard]] constexpr size_t asc::std::variant::index() const noexcept;
+// asc::std::variant 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr size_t index() const noexcept;
 ```
 
 ## 参数说明
@@ -50,18 +53,24 @@
 
 ## 约束说明
 
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
+- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
+- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/variant>
 
-void example(asc::std::variant<int, float>& object)
+bool example()
 {
-    (void)object.index();
+    asc::std::variant<int, float> value(7);
+    return value.index() == 0 && !value.valueless_by_exception() && asc::std::get<0>(value) == 7;
 }
 ```
+
+## 关联API
+
+- [`asc::std::variant`](variant.md)
+- [本头文件的接口列表](asc_std_variant.md)

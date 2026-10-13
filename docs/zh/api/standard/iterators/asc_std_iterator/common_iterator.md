@@ -28,33 +28,46 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::common_iterator` 适配底层迭代器的遍历、计数、逆序、移动或插入方式。
+`asc::std::common_iterator`适配底层迭代器的遍历、计数、逆序、移动或插入方式。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-template<class Iter, class Sent> class asc::std::common_iterator
+namespace asc::std {
+template<class Iter, class Sent> class common_iterator;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段用具体迭代器或容器类型实例化本页接口。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/iterator>
-
 #include <asc/std/type_traits>
+#include <asc/std/vector>
+#include <asc/std/forward_list>
 
-void example()
+bool example()
 {
-    using selected = asc::std::common_iterator<int*, asc::std::unreachable_sentinel_t>;
-    (void)sizeof(selected);
+    int values[] = {2, 4};
+    using It = asc::std::counted_iterator<int*>;
+    using Common = asc::std::common_iterator<It, asc::std::default_sentinel_t>;
+    Common it(It(values, 2));
+    Common end(asc::std::default_sentinel);
+    int sum = 0;
+    for (; it != end; ++it) sum += *it;
+    return sum == 6;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

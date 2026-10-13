@@ -28,27 +28,35 @@
 
 头文件路径为：`<asc/memory>`。
 
-`asc::memory_space` 标识内存所在的地址空间，包括 Host、GM、UB 和线程局部存储。
+`asc::memory_space`标识内存所在的地址空间，包括Host、GM、UB和线程局部存储。
 
 ## 声明
 
 ```cpp
-enum class asc::memory_space { host, global, unified_buffer, local }
+namespace asc {
+enum class memory_space { host, global, unified_buffer, local }
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供非拥有的地址空间视图、显式 arena 和临时存储
+- 提供非拥有的地址空间视图、显式arena和临时存储。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/memory>
 
-void use_type(asc::memory_space value)
+bool example()
 {
-    (void)value;
+    unsigned char storage[64]{};
+    asc::temporary_storage_ref temporary(storage, sizeof(storage), asc::memory_space::host);
+    return temporary.data() == storage && temporary.size_bytes() == 64 && temporary.space() == asc::memory_space::host;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_memory.md)

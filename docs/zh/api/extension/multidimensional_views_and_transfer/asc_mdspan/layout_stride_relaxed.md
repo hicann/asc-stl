@@ -28,29 +28,39 @@
 
 头文件路径为：`<asc/mdspan>`。
 
-`asc::layout_stride_relaxed` 提供允许宽松步长约束的 mdspan 布局映射策略。
+`asc::layout_stride_relaxed`提供允许宽松步长约束的mdspan布局映射策略。
 
 ## 声明
 
 ```cpp
-struct asc::layout_stride_relaxed
+namespace asc {
+struct layout_stride_relaxed;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供 Host 和 GM 视图以及 AI Core SIMD 编程 UB 视图
-- 允许有符号步长
-- 可选的 Host DLPack 桥接不抛出异常
+- 提供Host和GM视图以及AI Core SIMD编程UB视图。
+- 允许有符号步长。
+- 可选的Host DLPack桥接不抛出异常。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/mdspan>
+#include <asc/std/mdspan>
 
-void use_type(const asc::layout_stride_relaxed& value)
+bool example()
 {
-    (void)value;
+    using Extents = asc::std::extents<int, 2, 3>;
+    asc::dstrides<asc::std::ptrdiff_t, 2> strides(5, 1);
+    asc::layout_stride_relaxed::mapping<Extents> mapping(Extents{}, strides);
+    return mapping(1, 2) == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_mdspan.md)

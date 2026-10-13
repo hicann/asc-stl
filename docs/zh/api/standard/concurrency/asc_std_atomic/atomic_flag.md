@@ -28,32 +28,41 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_flag` 保存可原子置位和清除的标志。
+`asc::std::atomic_flag`保存可原子置位和清除的标志。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 声明
 
 ```cpp
-class asc::std::atomic_flag
+namespace asc::std {
+class atomic_flag;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- atomic_flag的test/test_and_set/clear成员与非volatile自由函数
-- Host 和 AI Core SIMT 编程 GM
+- atomic_flag的test/test_and_set/clear成员与非volatile自由函数。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/atomic>
 
-void use_type(const asc::std::atomic_flag& value)
+bool example()
 {
-    (void)value;
+    asc::std::atomic_flag flag{};
+    flag.clear();
+    const bool was_set = flag.test_and_set();
+    return !was_set && flag.test_and_set();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

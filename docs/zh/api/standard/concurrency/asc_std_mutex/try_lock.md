@@ -28,36 +28,40 @@
 
 头文件路径为：`<asc/std/mutex>`。
 
-`asc::std::try_lock` 依次尝试获取多把调用方提供的锁，并返回失败位置。
+`asc::std::try_lock`依次尝试获取多把调用方提供的锁，并返回失败位置。
 
 标准语义参考：[cppreference `mutex`](https://en.cppreference.com/w/cpp/header/mutex)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class FirstMutex, class SecondMutex, class ThirdMutex, class ...RestMutexes> int asc::std::try_lock(FirstMutex& mutexes, SecondMutex& mutex, ThirdMutex& mutex, RestMutexes&... mutex);
+namespace asc::std {
+template<class FirstMutex, class SecondMutex, class ThirdMutex, class ...RestMutexes> int try_lock(FirstMutex& mutexes, SecondMutex& mutex, ThirdMutex& mutex, RestMutexes&... mutex);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class FirstMutex, class SecondMutex> int asc::std::try_lock(FirstMutex& mutexes, SecondMutex& mutex);
+namespace asc::std {
+template<class FirstMutex, class SecondMutex> int try_lock(FirstMutex& mutexes, SecondMutex& mutex);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `FirstMutex` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `SecondMutex` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `ThirdMutex` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `RestMutexes` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `FirstMutex` | 第一把待尝试锁定的Lockable类型。 |
+| `SecondMutex` | 第二把待尝试锁定的Lockable类型。 |
+| `ThirdMutex` | 第三把待尝试锁定的Lockable类型。 |
+| `RestMutexes` | 其余待尝试锁定的Lockable类型列表。 |
 
 **函数参数**
 
@@ -68,14 +72,14 @@ template<class FirstMutex, class SecondMutex> int asc::std::try_lock(FirstMutex&
 | `mutex` | 输入/输出 | 提供“依次尝试获取多把调用方提供的锁，并返回失败位置”使用的对象引用；被引用对象须在调用期间有效。 |
 | `mutex` | 输入/输出 | 提供“依次尝试获取多把调用方提供的锁，并返回失败位置”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `FirstMutex` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `SecondMutex` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `FirstMutex` | 第一把待尝试锁定的Lockable类型。 |
+| `SecondMutex` | 第二把待尝试锁定的Lockable类型。 |
 
 **函数参数**
 
@@ -88,17 +92,17 @@ template<class FirstMutex, class SecondMutex> int asc::std::try_lock(FirstMutex&
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `int` | 返回失败位置。 |
-| 原型 2 | `int` | 返回失败位置。 |
+| 原型1 | `int` | 返回失败位置。 |
+| 原型2 | `int` | 返回失败位置。 |
 
 ## 约束说明
 
-- 两个及以上显式非抛Device Lockable的asc::std::try_lock：按参数顺序尝试，成功返回-1，失败返回零基索引并回滚此前已获得的全部锁
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 两个及以上显式非抛Device Lockable的asc::std::try_lock：按参数顺序尝试，成功返回-1，失败返回零基索引并回滚此前已获得的全部锁。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段用满足 Lockable 操作的示例对象展示调用。
+以下Host片段用满足Lockable操作的示例对象展示调用。
 
 ```cpp
 #include <asc/std/mutex>
@@ -114,3 +118,7 @@ void example()
     }
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mutex.md)

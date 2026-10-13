@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::make_tabulate_output_iterator` 创建把索引和值交给函数处理的输出迭代器。
+`asc::make_tabulate_output_iterator`创建把索引和值交给函数处理的输出迭代器。
 
 ## 函数原型
 
 ```cpp
-template<class Function, class Integer = asc::std::ptrdiff_t> constexpr asc::tabulate_output_iterator<Function, Integer> asc::make_tabulate_output_iterator(Function function, Integer index = 0);
+namespace asc {
+template<class Function, class Integer = asc::std::ptrdiff_t> constexpr asc::tabulate_output_iterator<Function, Integer> make_tabulate_output_iterator(Function function, Integer index = 0);
+} // namespace asc
 ```
 
 ## 参数说明
@@ -43,14 +45,14 @@ template<class Function, class Integer = asc::std::ptrdiff_t> constexpr asc::tab
 | 参数名 | 描述 |
 | --- | --- |
 | `Function` | 对输入值执行本页操作的可调用对象类型。 |
-| `Integer` | 索引类型，默认 ptrdiff_t：随迭代递增并传给 function。 |
+| `Integer` | 索引类型，默认ptrdiff_t：随迭代递增并传给function。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入 | 输出函数对象：对本迭代器赋值时按 function(当前索引, 写入值) 调用。 |
-| `index` | 输入 | 起始索引，默认 0：随迭代器递增并作为 function 的第一个参数。 |
+| `function` | 输入 | 输出函数对象：对本迭代器赋值时按function(当前索引, 写入值)调用。 |
+| `index` | 输入 | 起始索引，默认0：随迭代器递增并作为function的第一个参数。 |
 
 ## 返回值说明
 
@@ -60,8 +62,8 @@ template<class Function, class Integer = asc::std::ptrdiff_t> constexpr asc::tab
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
@@ -77,3 +79,7 @@ decltype(auto) example()
     return asc::make_tabulate_output_iterator([](int, int) {}, 0);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

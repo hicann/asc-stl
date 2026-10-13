@@ -28,14 +28,18 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::submdspan` 从二维视图选取一行或一列，返回借用原底层存储的子视图。
-
-标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
+`asc::std::submdspan`从多维视图按逐维切片规格创建子视图；返回视图独立保存映射和访问器，并借用原元素存储。
 
 ## 函数原型
 
+以下为省略内部SFINAE筛选参数的声明摘要；切片须能用于源布局的`submdspan_mapping`。
+
 ```cpp
-template<class Element, class Extents, class Layout, class Accessor, class ...Slices> constexpr auto asc::std::submdspan(const mdspan<Element, Extents, Layout, Accessor>& source, const Slices&... slices);
+namespace asc::std {
+template<class T, class Extents, class Layout, class Accessor, class... Slices>
+constexpr auto submdspan(
+    const mdspan<T, Extents, Layout, Accessor>& source, Slices... slices);
+}
 ```
 
 ## 参数说明
@@ -44,48 +48,48 @@ template<class Element, class Extents, class Layout, class Accessor, class ...Sl
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Element` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Extents` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Layout` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Accessor` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Slices` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `T` | 元素类型；子视图访问原存储中的相同对象。 |
+| `Extents` | 源视图的静态／动态维度信息及索引类型。 |
+| `Layout` | 源布局策略，决定其mapping类型。 |
+| `Accessor` | 源访问器类型；子视图采用其offset_policy。 |
+| `Slices` | 逐维切片类型列表，数量等于源视图rank。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入 | 源 mdspan 视图。本调用为同步执行，返回值为非拥有的子视图，借用源视图的数据指针与布局映射；子视图使用期间，源 mdspan 的数据指针与布局映射须保持有效。 |
-| `slices` | 输入 | 提供“从二维视图选取一行或一列，返回借用原底层存储的子视图”使用的对象引用；被引用对象须在调用期间有效。 |
+| `source` | 输入 | 被切片的视图；函数读取其句柄、映射和访问器，不拥有或复制元素。 |
+| `slices` | 输入 | 逐维指定整数索引、full_extent、半开区间或strided_slice；具体边界见submdspan_mapping。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `auto` | 返回按切片规格建立的非拥有多维子视图或映射。 |
+返回对应元素类型、结果维度、结果布局和`Accessor::offset_policy`的mdspan。原始视图对象可在子视图之前销毁，但底层元素存储及访问器依赖的资源须持续有效。
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整submdspan家族：full_extent_t/full_extent、strided_slice及deduction guide、submdspan_mapping_result、submdspan_extents/submdspan_mapping/submdspan
-- 全部有效整数降rank/full/pair-like/strided slice组合，零与任意rank、静态/动态/混合/空extent、layout_left/layout_right/layout_stride源及标准布局保持或layout_stride回退
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain pointer域
+- 切片数量和取值满足源映射的要求；所有计算出的访问位置均须在有效存储中。
+- 返回视图不拥有存储；对可写子视图的修改直接作用于原元素。
+- 保存原跨步的结果不一定连续，不得仅按结果维度乘积假设连续排列。
+- 相应布局映射与访问器在所选执行位置可用。
 
 ## 调用示例
 
-以下 Host C++ 片段展示整数索引与 full_extent 混合切片；设备侧须在 AI Core 函数内调用，索引须在各维度范围内。
-
 ```cpp
 #include <asc/std/mdspan>
-#include <asc/std/cstddef>
 
-void example()
+bool example()
 {
     int values[6] = {1, 2, 3, 4, 5, 6};
-    using extents_type = asc::std::extents<asc::std::size_t, 2, 3>;
-    extents_type extents{};
-    asc::std::mdspan<int, extents_type> view(values);
+    asc::std::mdspan<int, asc::std::extents<int, 2, 3>> view(values);
     auto row = asc::std::submdspan(view, 1, asc::std::full_extent);
     auto column = asc::std::submdspan(view, asc::std::full_extent, 1);
-    (void)row;
-    (void)column;
+    column(1) = 9;
+    return row.extent(0) == 3 && row(0) == 4 &&
+        column.extent(0) == 2 && column(0) == 2 && values[4] == 9;
 }
 ```
+
+## 关联API
+
+- [submdspan_mapping](submdspan_mapping.md)：各切片形式和布局计算规则。
+- [mdspan](mdspan.md)：借用式多维数据视图。

@@ -28,20 +28,22 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::memory_order_seq_cst` 表示名称所指的原子内存顺序。
+`asc::std::memory_order_seq_cst`表示名称所指的原子内存顺序。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 声明
 
 ```cpp
-asc::std::memory_order_seq_cst
+namespace asc::std {
+memory_order_seq_cst;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供全部标准枚举值
-- Device 侧 consume 内存序加强为 acquire
+- 提供全部标准枚举值。
+- Device侧consume内存序加强为acquire。
 
 ## 调用示例
 
@@ -52,3 +54,7 @@ asc::std::memory_order_seq_cst
 
 auto value = asc::std::memory_order_seq_cst;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

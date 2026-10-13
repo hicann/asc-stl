@@ -28,18 +28,22 @@
 
 头文件路径为：`<asc/functional>`。
 
-`asc::is_associative_v` 表示指定运算在该类型上是否满足结合律。
+`asc::is_associative_v`表示指定运算在该类型上是否满足结合律。
 
 ## 声明
 
 ```cpp
-template<class Operator, class T> inline constexpr bool asc::is_associative_v
+namespace asc {
+template<class Operator, class T> inline constexpr bool is_associative_v;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 整数或逻辑运算仅在数学性质成立时报告对应特性
-- 浮点加法不满足结合律
+- 标准运算仅登记匹配的`Operator<T>`／`T`组合或透明`Operator<void>`；不匹配的值类型返回false。
+- 整数加法单位元为0，乘法单位元为1、吸收元为0；逻辑运算只登记bool；位运算只登记无符号整数。
+- 算术结合律登记无符号类型；乘法进一步限unsigned int、unsigned long、unsigned long long，避免窄整数提升后发生有符号溢出。浮点加法／乘法不作此登记。
+- minimum／maximum的已有登记要求调用方使用满足全序的值域；NaN和非全序自定义比较不能据此认定重新分组安全。
 
 ## 调用示例
 
@@ -50,3 +54,7 @@ template<class Operator, class T> inline constexpr bool asc::is_associative_v
 
 inline constexpr auto example = asc::is_associative_v<asc::minimum<int>, int>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_functional.md)

@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::year_month_day_last::year` 返回当前日历组合中的年字段。
+`asc::std::chrono::year_month_day_last::year`返回当前日历组合中的年字段。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
+所属类型：[`asc::std::chrono::year_month_day_last`](chrono_year_month_day_last.md)。
+
 ```cpp
-[[nodiscard]] constexpr chrono::year asc::std::chrono::year_month_day_last::year() const noexcept;
+// asc::std::chrono::year_month_day_last 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr chrono::year year() const noexcept;
 ```
 
 ## 参数说明
@@ -50,18 +53,24 @@
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void example(asc::std::chrono::year_month_day_last& object)
+bool example()
 {
-    (void)object.year();
+    asc::std::chrono::year_month_day_last value{asc::std::chrono::year{2024}, asc::std::chrono::month_day_last{asc::std::chrono::month{2}}};
+    return static_cast<int>(value.year()) == 2024;
 }
 ```
+
+## 关联API
+
+- [`asc::std::chrono::year_month_day_last`](chrono_year_month_day_last.md)
+- [本头文件的接口列表](asc_std_chrono.md)

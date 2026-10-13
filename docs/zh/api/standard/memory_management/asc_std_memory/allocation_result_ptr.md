@@ -28,34 +28,44 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::allocation_result::ptr` 保存分配操作返回的存储指针。
+`asc::std::allocation_result::ptr`保存分配操作返回的存储指针。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 声明
 
+所属类型：[`asc::std::allocation_result`](allocation_result.md)。
+
 ```cpp
-Pointer asc::std::allocation_result::ptr
+// asc::std::allocation_result 类内的声明节选；模板形参和其他成员由所属类提供。
+Pointer ptr;
 ```
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg
-- uses_allocator/uses_allocator_v
-- allocator_traits 的 C++20 成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator 含 pair 递归构造
-- C++23 allocation_result 与标准 allocator_traits::allocate_at_least
-- 均限用户显式提供且在调用执行空间有效的 allocator
+- allocator_arg_t/allocator_arg。
+- uses_allocator/uses_allocator_v。
+- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
+- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
+- C++23 allocation_result与标准allocator_traits::allocate_at_least。
+- 均限用户显式提供且在调用执行空间有效的allocator。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/memory>
 
-void example(const asc::std::allocation_result<int*>& object)
+bool example()
 {
-    (void)object.ptr;
+    int storage[3] = {1, 2, 3};
+    asc::std::allocation_result<int*> result{storage, 3};
+    return result.ptr[2] == 3 && result.count == 3;
 }
 ```
+
+## 关联API
+
+- [`asc::std::allocation_result`](allocation_result.md)
+- [本头文件的接口列表](asc_std_memory.md)

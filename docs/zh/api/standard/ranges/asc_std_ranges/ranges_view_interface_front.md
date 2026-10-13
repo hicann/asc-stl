@@ -28,57 +28,60 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::view_interface::front` 返回首元素的引用；对象必须非空。
+`asc::std::ranges::view_interface::front`返回首元素的引用；对象必须非空。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::ranges::view_interface`](ranges_view_interface.md)。
+
+### 原型1
 
 ```cpp
-template<class D2> constexpr decltype(auto) asc::std::ranges::view_interface::front();
+// asc::std::ranges::view_interface 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class D2> constexpr decltype(auto) front();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class D2> constexpr decltype(auto) asc::std::ranges::view_interface::front() const;
+// asc::std::ranges::view_interface 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class D2> constexpr decltype(auto) front() const;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `D2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `D2` | view_interface的派生视图类型，用于检查该成员所需的范围能力。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `D2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `D2` | view_interface的派生视图类型，用于检查该成员所需的范围能力。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `decltype(auto)` | 返回首元素的引用。 |
-| 原型 2 | `decltype(auto)` | 返回首元素的引用。 |
+| 原型1 | `decltype(auto)` | 返回首元素的引用。 |
+| 原型2 | `decltype(auto)` | 返回首元素的引用。 |
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下 Host 片段在底层存储存活期内完成访问，返回元素值的副本，不把局部数组元素引用传出函数。
+以下Host片段在底层存储存活期内完成访问，返回元素值的副本，不把局部数组元素引用传出函数。
 
 ```cpp
 #include <asc/std/ranges>
@@ -91,3 +94,8 @@ int read_first_element()
     return view.front();
 }
 ```
+
+## 关联API
+
+- [`asc::std::ranges::view_interface`](ranges_view_interface.md)
+- [本头文件的接口列表](asc_std_ranges.md)

@@ -28,23 +28,25 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::is_base_of_v` 在编译期判断一个类型是另一个类型的基类，以 bool 变量模板形式提供结果。
+`asc::std::is_base_of_v`在编译期判断一个类型是另一个类型的基类，以bool变量模板形式提供结果。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
 ```cpp
-template<class Value, class Dp> inline constexpr const bool asc::std::is_base_of_v
+namespace asc::std {
+template<class Value, class Dp> inline constexpr const bool is_base_of_v;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类和 _v 辅助形式
+- 提供特征类和 _v辅助形式。
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下Host片段用具体类型实参实例化本页类型特征。
 
 ```cpp
 #include <asc/std/type_traits>
@@ -53,3 +55,7 @@ struct sample_base {};
 struct sample_derived : sample_base {};
 inline constexpr auto example = asc::std::is_base_of_v<sample_base, sample_derived>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_type_traits.md)

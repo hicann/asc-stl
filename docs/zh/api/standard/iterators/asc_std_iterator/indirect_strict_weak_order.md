@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::indirect_strict_weak_order` 在 C++20 及以上模式约束满足 `indirect_strict_weak_order` 语义的类型或表达式。
+`asc::std::indirect_strict_weak_order`在C++20及以上模式约束满足`indirect_strict_weak_order`语义的类型或表达式。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-template<class Fp, class It1, class It2> concept asc::std::indirect_strict_weak_order
+namespace asc::std {
+template<class Fp, class It1, class It2> concept indirect_strict_weak_order;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 C++20 公开迭代器概念和特征接口
+- 提供C++20公开迭代器概念和特征接口。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class Fp, class It1, class It2> concept asc::std::indirect_strict_weak_
 
 static_assert(asc::std::indirect_strict_weak_order<bool (*)(int, int), int*, int*>);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

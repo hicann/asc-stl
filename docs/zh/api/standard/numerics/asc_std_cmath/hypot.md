@@ -28,57 +28,61 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::hypot` 计算平方和的平方根；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::hypot`计算平方和的平方根；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-float asc::std::hypot(float x, float y) noexcept;
+namespace asc::std {
+float hypot(float x, float y) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-float asc::std::hypot(float x, float y, float z) noexcept;
+namespace asc::std {
+float hypot(float x, float y, float z) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 直角三角形斜边计算中 x 方向直角边的长度（无量纲）。 |
-| `y` | 输入 | 直角三角形斜边计算中 y 方向直角边的长度（无量纲）。 |
+| `x` | 输入 | 直角三角形斜边计算中x方向直角边的长度（无量纲）。 |
+| `y` | 输入 | 直角三角形斜边计算中y方向直角边的长度（无量纲）。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 三维斜边 sqrt(x^2 + y^2 + z^2) 计算中 x 方向的边长（无量纲）。 |
-| `y` | 输入 | 三维斜边 sqrt(x^2 + y^2 + z^2) 计算中 y 方向的边长（无量纲）。 |
-| `z` | 输入 | 三维斜边 sqrt(x^2 + y^2 + z^2) 计算中 z 方向的边长（无量纲）。 |
+| `x` | 输入 | 三维斜边sqrt(x^2 + y^2 + z^2)计算中x方向的边长（无量纲）。 |
+| `y` | 输入 | 三维斜边sqrt(x^2 + y^2 + z^2)计算中y方向的边长（无量纲）。 |
+| `z` | 输入 | 三维斜边sqrt(x^2 + y^2 + z^2)计算中z方向的边长（无量纲）。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `float` | 返回平方和的平方根；Device 侧适用范围以本页 float 与执行位置约束为准的计算结果。 |
-| 原型 2 | `float` | 返回平方和的平方根；Device 侧适用范围以本页 float 与执行位置约束为准的计算结果。 |
+| 原型1 | `float` | 返回平方和的平方根；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+| 原型2 | `float` | 返回平方和的平方根；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
 
 ## 约束说明
 
-- 提供 float 重载、标准 *f 别名以及 float lerp 回移接口
+- 提供float重载、标准 *f别名以及float lerp回移接口。
 
 ## 调用示例
 
@@ -92,3 +96,7 @@ decltype(auto) example(float x, float y)
     return asc::std::hypot(x, y);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

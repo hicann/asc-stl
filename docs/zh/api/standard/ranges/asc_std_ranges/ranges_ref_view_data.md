@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::ref_view::data` 返回所管理或所观察连续存储的首地址。
+`asc::std::ranges::ref_view::data`返回所管理或所观察连续存储的首地址。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
+所属类型：[`asc::std::ranges::ref_view`](ranges_ref_view.md)。
+
 ```cpp
-template<class Range2> constexpr auto asc::std::ranges::ref_view::data() const;
+// asc::std::ranges::ref_view 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Range2> constexpr auto data() const;
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ template<class Range2> constexpr auto asc::std::ranges::ref_view::data() const;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Range2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Range2` | ref_view所引用的底层范围类型；该成员仅在底层范围支持对应查询时可用。 |
 
 ## 返回值说明
 
@@ -54,18 +57,29 @@ template<class Range2> constexpr auto asc::std::ranges::ref_view::data() const;
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example(asc::std::ranges::ref_view<int[4]>& object)
+bool example()
 {
-    (void)object.data();
+    int values[] = {1, 2, 3, 4};
+    using Base = asc::std::ranges::subrange<int*>;
+    Base base(values, values + 4);
+    asc::std::ranges::ref_view<int[4]> view(values);
+    return view.data()[0] == 1;
 }
 ```
+
+## 关联API
+
+- [`asc::std::ranges::ref_view`](ranges_ref_view.md)
+- [本头文件的接口列表](asc_std_ranges.md)

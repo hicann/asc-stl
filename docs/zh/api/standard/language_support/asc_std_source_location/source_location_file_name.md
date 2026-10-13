@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/source_location>`。
 
-`asc::std::source_location::file_name` 返回源代码位置保存的文件名。
+`asc::std::source_location::file_name`返回源代码位置保存的文件名。
 
 标准语义参考：[cppreference `source_location`](https://en.cppreference.com/w/cpp/header/source_location)。
 
 ## 函数原型
 
+所属类型：[`asc::std::source_location`](source_location.md)。
+
 ```cpp
-[[nodiscard]] constexpr const char* asc::std::source_location::file_name() const noexcept;
+// asc::std::source_location 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr const char* file_name() const noexcept;
 ```
 
 ## 参数说明
@@ -50,18 +53,24 @@
 
 ## 约束说明
 
-- 提供标准 source_location 接口
-- 当编译器不能直接提供列号时，column() 使用标准允许的回退值
+- 提供标准source_location接口。
+- 当编译器不能直接提供列号时，column()使用标准允许的回退值。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/source_location>
 
-void example(asc::std::source_location& object)
+bool example()
 {
-    (void)object.file_name();
+    const auto location = asc::std::source_location::current();
+    return location.line() > 0 && location.file_name()[0] != '\0' && location.function_name()[0] != '\0';
 }
 ```
+
+## 关联API
+
+- [`asc::std::source_location`](source_location.md)
+- [本头文件的接口列表](asc_std_source_location.md)

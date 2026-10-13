@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::make_permutation_iterator` 创建按索引序列访问数据的 permutation_iterator。
+`asc::make_permutation_iterator`创建按索引序列访问数据的permutation_iterator。
 
 ## 函数原型
 
 ```cpp
-template<class Iterator, class IndexIterator> constexpr asc::permutation_iterator<Iterator, IndexIterator> asc::make_permutation_iterator(Iterator iterator, IndexIterator index);
+namespace asc {
+template<class Iterator, class IndexIterator> constexpr asc::permutation_iterator<Iterator, IndexIterator> make_permutation_iterator(Iterator iterator, IndexIterator index);
+} // namespace asc
 ```
 
 ## 参数说明
@@ -60,8 +62,8 @@ template<class Iterator, class IndexIterator> constexpr asc::permutation_iterato
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
@@ -77,3 +79,7 @@ decltype(auto) example()
     return asc::make_permutation_iterator(values, indices);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

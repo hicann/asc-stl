@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::advance` 按给定距离推进迭代器。
+`asc::std::advance`按给定距离推进迭代器。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
 ```cpp
-template<class InputIter, class Distance, class IntegralDistance, class> constexpr void asc::std::advance(InputIter& iter, Distance original);
+namespace asc::std {
+template<class InputIter, class Distance, class IntegralDistance, class> constexpr void advance(InputIter& iter, Distance original);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -45,7 +47,7 @@ template<class InputIter, class Distance, class IntegralDistance, class> constex
 | 参数名 | 描述 |
 | --- | --- |
 | `InputIter` | 被推进的迭代器类型；按其迭代器类别选择步进方式。 |
-| `Distance` | 推进距离的类型；可为整数或类整数类型，内部转换为迭代器的 difference_type。 |
+| `Distance` | 推进距离的类型；可为整数或类整数类型，内部转换为迭代器的difference_type。 |
 | `IntegralDistance` | 距离转换为整数后的内部类型，用于重载分派；调用方无需显式指定。 |
 | `未命名参数4` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
 
@@ -53,7 +55,7 @@ template<class InputIter, class Distance, class IntegralDistance, class> constex
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `iter` | 输入/输出 | 被原地推进的迭代器；向前移动 original 步（负值时向后移动，须双向迭代器）。 |
+| `iter` | 输入/输出 | 被原地推进的迭代器；向前移动original步（负值时向后移动，须双向迭代器）。 |
 | `original` | 输入 | 推进的步数（元素距离）；正值为前进、负值为后退。 |
 
 ## 返回值说明
@@ -62,11 +64,11 @@ template<class InputIter, class Distance, class IntegralDistance, class> constex
 
 ## 约束说明
 
-- 支持非 I/O 范围、数组和用户容器
+- 支持非I/O范围、数组和用户容器。
 
 ## 调用示例
 
-以下 Host 片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
 
 ```cpp
 #include <asc/std/iterator>
@@ -78,3 +80,7 @@ void example()
     asc::std::advance(iterator, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

@@ -1,4 +1,4 @@
-# asc::stream::operator=
+# asc::stream::`operator=`
 
 ## 产品支持情况
 
@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/stream>`。
 
-`asc::stream::operator=` 交换当前对象与源对象持有的 Runtime Stream 句柄，完成所有权移动。
+`asc::stream::operator=`交换当前对象与源对象持有的Runtime Stream句柄，完成所有权移动。
 
 ## 函数原型
 
+所属类型：[`asc::stream`](stream.md)。
+
 ```cpp
-asc::stream& asc::stream::operator=(asc::stream&& other) noexcept;
+// asc::stream 类内的声明节选；模板形参和其他成员由所属类提供。
+asc::stream& operator=(asc::stream&& other) noexcept;
 ```
 
 ## 参数说明
@@ -42,7 +45,7 @@ asc::stream& asc::stream::operator=(asc::stream&& other) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
 ## 返回值说明
 
@@ -52,10 +55,10 @@ asc::stream& asc::stream::operator=(asc::stream&& other) noexcept;
 
 ## 约束说明
 
-- 仅可在 Host 使用且对象不可复制
-- 移动操作转移资源所有权
-- close() 负责同步并销毁自身资源，失败时保留所有权
-- 析构函数会尝试完成本地清理
+- 仅可在Host使用且对象不可复制。
+- 移动操作转移资源所有权。
+- close()负责同步并销毁自身资源，失败时保留所有权。
+- 析构函数会尝试完成本地清理。
 
 ## 调用示例
 
@@ -71,6 +74,11 @@ decltype(auto) example(Object& object, Args&&... args)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
+
+## 关联API
+
+- [`asc::stream`](stream.md)
+- [本头文件的接口列表](asc_stream.md)

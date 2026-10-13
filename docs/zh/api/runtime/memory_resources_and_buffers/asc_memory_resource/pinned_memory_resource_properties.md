@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/memory_resource>`。
 
-`asc::pinned_memory_resource::properties` 返回页锁定内存资源属性：Host 可访问、Device 不可访问，最大对齐为 `alignof(max_align_t)`。
+`asc::pinned_memory_resource::properties`返回页锁定内存资源属性：Host可访问、Device不可访问，最大对齐为`alignof(max_align_t)`。
 
 ## 函数原型
 
+所属类型：[`asc::pinned_memory_resource`](pinned_memory_resource.md)。
+
 ```cpp
-static constexpr asc::memory_resource_properties asc::pinned_memory_resource::properties() noexcept;
+// asc::pinned_memory_resource 类内的声明节选；模板形参和其他成员由所属类提供。
+static constexpr asc::memory_resource_properties properties() noexcept;
 ```
 
 ## 参数说明
@@ -44,24 +47,31 @@ static constexpr asc::memory_resource_properties asc::pinned_memory_resource::pr
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::memory_resource_properties` | 返回页锁定内存资源属性：Host 可访问、Device 不可访问，最大对齐为 `alignof(max_align_t)`。 |
+| `asc::memory_resource_properties` | 返回页锁定内存资源属性：Host可访问、Device不可访问，最大对齐为`alignof(max_align_t)`。 |
 
 ## 约束说明
 
-- 仅可在 Host 调用
-- 内存资源不抛出异常
-- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐
-- 资源及其引用的生命周期由调用方管理
+- 仅可在Host调用。
+- 内存资源不抛出异常。
+- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐。
+- 资源及其引用的生命周期由调用方管理。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/memory_resource>
 
-void example(asc::pinned_memory_resource& object)
+bool example()
 {
-    (void)object.properties();
+    asc::pinned_memory_resource resource;
+    auto properties = resource.properties();
+    return properties.host_accessible() && !properties.device_accessible() && properties.maximum_alignment() == alignof(asc::std::max_align_t);
 }
 ```
+
+## 关联API
+
+- [`asc::pinned_memory_resource`](pinned_memory_resource.md)
+- [本头文件的接口列表](asc_memory_resource.md)

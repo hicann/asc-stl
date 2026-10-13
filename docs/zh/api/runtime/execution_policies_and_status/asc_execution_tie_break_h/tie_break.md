@@ -28,29 +28,36 @@
 
 头文件路径为：`<asc/execution.tie_break.h>`。
 
-`asc::tie_break` 指定多个位置同时满足选择条件时采用的索引取舍规则。
+`asc::tie_break`指定多个位置同时满足选择条件时采用的索引取舍规则。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 声明
 
 ```cpp
-enum class asc::tie_break
+namespace asc {
+enum class tie_break;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 仅提供三个取值
+- 仅提供三个取值。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
-#include <asc/execution.tie_break.h>
+#include <asc/execution.require.h>
 
-void use_type(asc::tie_break value)
+bool example()
 {
-    (void)value;
+    auto requirements = asc::require(asc::tie_break::unspecified);
+    return requirements.tie_break_value() == asc::tie_break::unspecified;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_execution_tie_break_h.md)

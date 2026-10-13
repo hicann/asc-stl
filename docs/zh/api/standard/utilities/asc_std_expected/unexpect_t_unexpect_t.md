@@ -28,25 +28,25 @@
 
 头文件路径为：`<asc/std/expected>`。
 
-`asc::std::unexpect_t::unexpect_t` 按本页所列构造形态初始化 `unexpect_t` 对象。
+`asc::std::unexpect_t::unexpect_t`按本页所列构造形态初始化`unexpect_t`对象。
 
 标准语义参考：[cppreference `expected`](https://en.cppreference.com/w/cpp/header/expected)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr unexpect_t() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr unexpect_t(const unexpect_t& other);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 constexpr unexpect_t(unexpect_t&& other);
@@ -54,42 +54,51 @@ constexpr unexpect_t(unexpect_t&& other);
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- T 必须为非 void 类型，E 必须为对象类型
-- 适用操作必须不抛出异常
-- 提供构造、赋值、emplace 和 swap
+- T必须为非void类型，E必须为对象类型。
+- 适用操作必须不抛出异常。
+- 提供构造、赋值、emplace和swap。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/expected>
 
-void example()
+bool example()
 {
     asc::std::unexpect_t tag{};
-    (void)tag;
+    asc::std::expected<int, int> result(tag, 7);
+    return !result.has_value() && result.error() == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_expected.md)

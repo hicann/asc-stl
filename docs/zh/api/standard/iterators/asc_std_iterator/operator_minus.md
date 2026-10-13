@@ -1,4 +1,4 @@
-# asc::std::operator-（move_iterator/common_iterator/counted_iterator 重载）（函数模板）
+# `asc::std::operator-`（move_iterator/common_iterator/counted_iterator重载）（函数模板）
 
 ## 产品支持情况
 
@@ -28,43 +28,51 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::operator-(const move_sentinel<Sentinel>&, const move_iterator<Iter>&)` 由 `<asc/std/iterator>` 提供，移动哨位减移动迭代器的差值运算。接口遵循对应 C++ 标准设施的语义；ASC-STL 的语言模式和调用位置以本页声明为准。
+`asc::std::operator-(const move_sentinel<Sentinel>&, const move_iterator<Iter>&)`由`<asc/std/iterator>`提供，移动哨位减移动迭代器的差值运算。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class Iter, class Sentinel> constexpr asc::std::iter_difference_t<Iter> asc::std::operator-(const move_sentinel<Sentinel>& sentinel, const move_iterator<Iter>& iterator)
+namespace asc::std {
+template<class Iter, class Sentinel> constexpr asc::std::iter_difference_t<Iter> operator-(const move_sentinel<Sentinel>& sentinel, const move_iterator<Iter>& iterator);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class Iter, class Sentinel> constexpr asc::std::iter_difference_t<Iter> asc::std::operator-(const move_iterator<Iter>& iterator, const move_sentinel<Sentinel>& sentinel)
+namespace asc::std {
+template<class Iter, class Sentinel> constexpr asc::std::iter_difference_t<Iter> operator-(const move_iterator<Iter>& iterator, const move_sentinel<Sentinel>& sentinel);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class I1, class S1, class I2, class S2> requires(sized_sentinel_for<I2, I1> && sized_sentinel_for<S2, I1> && sized_sentinel_for<S1, I2>) constexpr asc::std::iter_difference_t<I2> asc::std::operator-(const common_iterator<I1, S1>& left, const common_iterator<I2, S2>& right)
+namespace asc::std {
+template<class I1, class S1, class I2, class S2> requires(sized_sentinel_for<I2, I1> && sized_sentinel_for<S2, I1> && sized_sentinel_for<S1, I2>) constexpr asc::std::iter_difference_t<I2> operator-(const common_iterator<I1, S1>& left, const common_iterator<I2, S2>& right);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 4
+### 原型4
 
 ```cpp
-template <class I1, class I2> constexpr iter_difference_t<I2> asc::std::operator-(const counted_iterator<I1>&, const counted_iterator<I2>&)
+namespace asc::std {
+template <class I1, class I2> constexpr iter_difference_t<I2> operator-(const counted_iterator<I1>&, const counted_iterator<I2>&);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 参数说明
 
@@ -72,12 +80,12 @@ template <class I1, class I2> constexpr iter_difference_t<I2> asc::std::operator
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Iter` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
-| `Sentinel` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
-| `I1` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
-| `S1` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
-| `I2` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
-| `S2` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
+| `Iter` | 底层迭代器类型。 |
+| `Sentinel` | 与Iter配对的结束哨兵类型。 |
+| `I1` | 左侧common_iterator的迭代器类型。 |
+| `S1` | 左侧common_iterator的哨兵类型。 |
+| `I2` | 右侧common_iterator的迭代器类型。 |
+| `S2` | 右侧common_iterator的哨兵类型。 |
 
 **函数参数**
 
@@ -92,16 +100,16 @@ template <class I1, class I2> constexpr iter_difference_t<I2> asc::std::operator
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::std::iter_difference_t<Iter>` | 返回该操作产生的值，具体含义由所选原型确定。 |
-| `iter_difference_t<I2>` | 返回该操作产生的值，具体含义由所选原型确定。 |
-| `requires(sized_sentinel_for<I2, I1> && sized_sentinel_for<S2, I1> && sized_sentinel_for<S1, I2>) constexpr asc::std::iter_difference_t<I2>` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `asc::std::iter_difference_t<Iter>` | 左操作数的底层位置减去右操作数的底层位置所得有符号距离。 |
+| `iter_difference_t<I2>` | 左操作数的底层位置减去右操作数的底层位置所得有符号距离。 |
+| `asc::std::iter_difference_t<I2>` | 左操作数的底层位置减去右操作数的底层位置所得有符号距离。 |
 
 ## 约束说明
 
-- 要求哨位与迭代器满足差值哨位要求，结果为两侧底层位置之差
-- 要求迭代器与哨位满足差值哨位要求，结果为两侧底层位置之差
-- 要求各持有组合满足差值哨位要求；两侧同为哨位时差值为零，其余按底层位置求差
-- 两个 counted_iterator 相减，返回 right.count() - left.count()
+- 要求哨位与迭代器满足差值哨位要求，结果为两侧底层位置之差。
+- 要求迭代器与哨位满足差值哨位要求，结果为两侧底层位置之差。
+- 要求各持有组合满足差值哨位要求；两侧同为哨位时差值为零，其余按底层位置求差。
+- 两个counted_iterator相减，返回right.count() - left.count()。
 
 ## 调用示例
 
@@ -116,3 +124,7 @@ decltype(auto) example(const asc::std::move_sentinel<Sentinel>& sentinel, const 
     return asc::std::operator-(sentinel, iterator);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

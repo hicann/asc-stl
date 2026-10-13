@@ -28,20 +28,22 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::ranges::for_each_n_result<Iter, Func>` 从 C++17 起是 `in_fun_result<Iter, Func>` 的别名。
+`asc::std::ranges::for_each_n_result<Iter, Func>`从C++17起是`in_fun_result<Iter, Func>`的别名。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 声明
 
 ```cpp
-template<class Iter, class Func> using asc::std::ranges::for_each_n_result = in_fun_result<Iter, Func>
+namespace asc::std::ranges {
+template<class Iter, class Func> using for_each_n_result = in_fun_result<Iter, Func>;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 遵循该接口声明对应的类型和前置条件
-- 调用方必须保证实参取值、对象生命周期、地址空间及可用位置有效
+- 遵循该接口声明对应的类型和前置条件。
+- 调用方必须保证实参取值、对象生命周期、地址空间及可用位置有效。
 
 ## 调用示例
 
@@ -55,3 +57,7 @@ void use_type()
     using selected = asc::std::ranges::for_each_n_result<int*, void (*)(int)>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

@@ -28,37 +28,54 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::front_insert_iterator` 适配底层迭代器的遍历、计数、逆序、移动或插入方式。
+`asc::std::front_insert_iterator`适配底层迭代器的遍历、计数、逆序、移动或插入方式。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-template<class Container> class asc::std::front_insert_iterator
+namespace asc::std {
+template<class Container> class front_insert_iterator;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段用具体迭代器或容器类型实例化本页接口。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
+#include <memory>
+#include <asc/std/forward_list>
 #include <asc/std/iterator>
-#include <deque>
-#include <functional>
-#include <vector>
 
-#include <asc/std/type_traits>
-#include <deque>
+template<class T>
+struct ExampleAllocator : ::std::allocator<T> {
+    using pointer = T*;
+    using const_pointer = const T*;
+    using size_type = ::std::size_t;
+    using difference_type = ::std::ptrdiff_t;
+    template<class U> struct rebind { using other = ExampleAllocator<U>; };
+    ExampleAllocator() = default;
+    template<class U> ExampleAllocator(const ExampleAllocator<U>&) noexcept {}
+};
 
-void example()
+bool example()
 {
-    using selected = asc::std::front_insert_iterator<::std::deque<int>>;
-    (void)sizeof(selected);
+    using Container = asc::std::forward_list<int, ExampleAllocator<int>>;
+    Container values(ExampleAllocator<int>{});
+    asc::std::front_insert_iterator<Container> output(values);
+    *output = 7;
+    *output = 9;
+    return values.front() == 9;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

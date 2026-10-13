@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::align` 在调用方提供的存储区中寻找满足大小与对齐要求的位置。
+`asc::std::align`在调用方提供的存储区中寻找满足大小与对齐要求的位置。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
 ```cpp
-void* asc::std::align(size_t alignment, size_t size, void*& pointer, size_t& space);
+namespace asc::std {
+void* align(size_t alignment, size_t size, void*& pointer, size_t& space);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,7 +48,7 @@ void* asc::std::align(size_t alignment, size_t size, void*& pointer, size_t& spa
 | --- | --- | --- |
 | `alignment` | 输入 | 要求的对齐值，单位为字节。 |
 | `size` | 输入 | 对象或范围的大小。 |
-| `pointer` | 输入/输出 | 提供“在调用方提供的存储区中寻找满足大小与对齐要求的位置”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `pointer` | 输入/输出 | 输入为可用缓冲区的起点；成功时推进到满足alignment的地址，同时相应减少space，失败时保持两者不变。 |
 | `space` | 输入/输出 | 提供“在调用方提供的存储区中寻找满足大小与对齐要求的位置”使用的对象引用；被引用对象须在调用期间有效。 |
 
 ## 返回值说明
@@ -57,7 +59,7 @@ void* asc::std::align(size_t alignment, size_t size, void*& pointer, size_t& spa
 
 ## 约束说明
 
-- 支持原始指针和用户自定义 fancy pointer，接口自身不分配内存
+- 支持原始指针和用户自定义fancy pointer，接口自身不分配内存。
 
 ## 调用示例
 
@@ -73,6 +75,10 @@ decltype(auto) example(asc::std::size_t alignment, asc::std::size_t size, void *
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
 完整示例源码：[pointer_alignment.cpp](../../../../examples/pointer_alignment.cpp)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

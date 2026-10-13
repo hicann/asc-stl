@@ -1,4 +1,4 @@
-# asc::std::ranges::view_interface::operator[]
+# asc::std::ranges::view_interface::`operator[]`
 
 ## 产品支持情况
 
@@ -28,69 +28,72 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::view_interface::operator[]` 在调用方保证索引有效时访问指定元素。
+`asc::std::ranges::view_interface::operator[]`在调用方保证索引有效时访问指定元素。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::ranges::view_interface`](ranges_view_interface.md)。
+
+### 原型1
 
 ```cpp
-template<class RARange> constexpr decltype(auto) asc::std::ranges::view_interface::operator[](range_difference_t<RARange> index);
+// asc::std::ranges::view_interface 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class RARange> constexpr decltype(auto) operator[](range_difference_t<RARange> index);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class RARange> constexpr decltype(auto) asc::std::ranges::view_interface::operator[](range_difference_t<RARange> index) const;
+// asc::std::ranges::view_interface 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class RARange> constexpr decltype(auto) operator[](range_difference_t<RARange> index) const;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `RARange` | 派生自 view_interface 的随机访问范围/视图类型。 |
+| `RARange` | 派生自view_interface的随机访问范围/视图类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 元素下标，从 0 起；调用方须保证 0 <= index < 范围长度，接口不检查越界。 |
+| `index` | 输入 | 元素下标，从0起；调用方须保证0 <= index < 范围长度，接口不检查越界。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `RARange` | 派生自 view_interface 的随机访问范围/视图类型。 |
+| `RARange` | 派生自view_interface的随机访问范围/视图类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 元素下标，从 0 起；调用方须保证 0 <= index < 范围长度，接口不检查越界。 |
+| `index` | 输入 | 元素下标，从0起；调用方须保证0 <= index < 范围长度，接口不检查越界。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `decltype(auto)` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
-| 原型 2 | `decltype(auto)` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型1 | `decltype(auto)` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型2 | `decltype(auto)` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下 Host 片段在底层存储存活期内完成访问，返回元素值的副本，不把局部数组元素引用传出函数。
+以下Host片段在底层存储存活期内完成访问，返回元素值的副本，不把局部数组元素引用传出函数。
 
 ```cpp
 #include <asc/std/ranges>
@@ -103,3 +106,8 @@ int read_first_element()
     return view[0];
 }
 ```
+
+## 关联API
+
+- [`asc::std::ranges::view_interface`](ranges_view_interface.md)
+- [本头文件的接口列表](asc_std_ranges.md)

@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/mdspan>`。
 
-`asc::steps` 表示 mdspan 各维静态或动态步长参数的类型序列。
+`asc::steps`表示mdspan各维静态或动态步长参数的类型序列。
 
 ## 声明
 
 ```cpp
-template<asc::std::size_t Rank, class OffsetType = asc::std::ptrdiff_t> using asc::steps = asc::dstrides<OffsetType, Rank>
+namespace asc {
+template<asc::std::size_t Rank, class OffsetType = asc::std::ptrdiff_t> using steps = asc::dstrides<OffsetType, Rank>;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供 Host 和 GM 视图以及 AI Core SIMD 编程 UB 视图
-- 允许有符号步长
-- 可选的 Host DLPack 桥接不抛出异常
+- 提供Host和GM视图以及AI Core SIMD编程UB视图。
+- 允许有符号步长。
+- 可选的Host DLPack桥接不抛出异常。
 
 ## 调用示例
 
@@ -54,3 +56,7 @@ void use_type()
     using selected = asc::steps<2, int>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_mdspan.md)

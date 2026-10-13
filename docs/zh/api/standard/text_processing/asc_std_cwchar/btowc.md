@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::btowc` 在单字节字符与宽字符表示之间转换。
+`asc::std::btowc`在单字节字符与宽字符表示之间转换。
 
-该接口的可用位置为 Host（完整接口）、Device（C locale 相关接口）。
+该接口的可用位置为Host（完整接口）、Device（C locale相关接口）。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 
 ## 函数原型
 
 ```cpp
-wint_t asc::std::btowc(int value) noexcept;
+namespace asc::std {
+wint_t btowc(int value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,19 +48,19 @@ wint_t asc::std::btowc(int value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待转换为宽字符的单字节字符值；须可表示为 unsigned char 或等于 EOF，等于 EOF 时返回 WEOF。 |
+| `value` | 输入 | 待转换为宽字符的单字节字符值；须可表示为unsigned char或等于EOF，等于EOF时返回WEOF。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `wint_t` | 返回对应的宽字符；无法转换时返回 `WEOF`。 |
+| `wint_t` | 返回对应的宽字符；无法转换时返回`WEOF`。 |
 
 ## 约束说明
 
-- Host对本家族委托系统<cwchar>完整合同
-- Device交付size_t/mbstate_t/wint_t/NULL/WCHAR_MIN/WCHAR_MAX/WEOF、wcscoll/wcsxfrm/wcstok与btowc/wctob/mbrlen/mbrtowc/mbsinit/mbsrtowcs/wcrtomb/wcsrtombs，语义固定为无状态单字节C locale
-- Host 提供完整接口，设备端仅提供 C 语言区域设置相关接口
+- Host行为遵循系统`<cwchar>`提供的同名接口；字符转换和排序受当前C语言区域设置影响。
+- Device固定为无状态单字节转换，仅支持ASCII及空字符；超出范围时按本接口返回值说明报告失败。
+- 不同字符序列使用独立状态对象；字符串输出缓冲区须具有足够容量。
 
 ## 调用示例
 
@@ -72,3 +74,7 @@ decltype(auto) example(int value)
     return asc::std::btowc(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cwchar.md)

@@ -1,4 +1,4 @@
-# asc::std::deque::operator[]
+# asc::std::deque::`operator[]`
 
 ## 产品支持情况
 
@@ -28,62 +28,66 @@
 
 头文件路径为：`<asc/std/deque>`。
 
-`asc::std::deque::operator[]` 在调用方保证索引有效时访问指定元素。
+`asc::std::deque::operator[]`在调用方保证索引有效时访问指定元素。
 
 标准语义参考：[cppreference `deque`](https://en.cppreference.com/w/cpp/header/deque)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::deque`](deque.md)。
+
+### 原型1
 
 ```cpp
-const_reference asc::std::deque::operator[](size_type index) const noexcept;
+// asc::std::deque 类内的声明节选；模板形参和其他成员由所属类提供。
+const_reference operator[](size_type index) const noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-reference asc::std::deque::operator[](size_type index) noexcept;
+// asc::std::deque 类内的声明节选；模板形参和其他成员由所属类提供。
+reference operator[](size_type index) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 待访问元素的下标，从 0 起；本接口不检查越界，调用方须保证 index < size()。 |
+| `index` | 输入 | 待访问元素的下标，从0起；本接口不检查越界，调用方须保证index < size()。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 待访问元素的下标，从 0 起；本接口不检查越界，调用方须保证 index < size()。 |
+| `index` | 输入 | 待访问元素的下标，从0起；本接口不检查越界，调用方须保证index < size()。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `const_reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
-| 原型 2 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型1 | `const_reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型2 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
 
 ## 约束说明
 
-- 前置条件：`index < size()`；`operator[]` 不执行边界检查，越界访问后果未定义
-- deque<T,A>显式allocator构造
-- 有限块映射内的push/emplace/pop_front/back
-- empty/size/front/back/operator[]/随机访问迭代核心
-- 新端块分配时已有元素引用稳定
-- clear/析构
-- 仅容量充足和不抛出异常域
+- 前置条件：`index < size()`；`operator[]`不执行边界检查，越界访问后果未定义。
+- deque<T,A>显式allocator构造。
+- 有限块映射内的push/emplace/pop_front/back。
+- empty/size/front/back/`operator[]`/随机访问迭代核心。
+- 新端块分配时已有元素引用稳定。
+- clear/析构。
+- 仅容量充足和不抛出异常域。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/deque>
@@ -117,3 +121,8 @@ void write_first(asc::std::deque<int, example_allocator<int>>& values, int new_v
     }
 }
 ```
+
+## 关联API
+
+- [`asc::std::deque`](deque.md)
+- [本头文件的接口列表](asc_std_deque.md)

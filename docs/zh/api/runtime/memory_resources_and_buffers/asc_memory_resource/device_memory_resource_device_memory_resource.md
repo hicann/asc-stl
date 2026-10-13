@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/memory_resource>`。
 
-`asc::device_memory_resource` 构造函数保存后续分配和释放操作所针对的 Runtime Device 序号。
+`asc::device_memory_resource`构造函数保存后续分配和释放操作所针对的Runtime Device序号。
 
 ## 函数原型
 
+所属类型：[`asc::device_memory_resource`](device_memory_resource.md)。
+
 ```cpp
-constexpr explicit asc::device_memory_resource::device_memory_resource(int device_ordinal) noexcept;
+// asc::device_memory_resource 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr explicit device_memory_resource(int device_ordinal) noexcept;
 ```
 
 ## 参数说明
@@ -42,25 +45,35 @@ constexpr explicit asc::device_memory_resource::device_memory_resource(int devic
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `device_ordinal` | 输入 | 目标 Runtime Device 序号（int，0 起）：后续分配与释放前把该 Device 设为当前 Device。 |
+| `device_ordinal` | 输入 | 目标Runtime Device序号（int，0起）：后续分配与释放前把该Device设为当前Device。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 仅可在 Host 调用
-- 内存资源不抛出异常
-- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐
-- 资源及其引用的生命周期由调用方管理
+- 仅可在Host调用。
+- 内存资源不抛出异常。
+- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐。
+- 资源及其引用的生命周期由调用方管理。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/memory_resource>
 
-void example()
+bool example()
 {
     asc::device_memory_resource resource(0);
-    (void)resource.device_ordinal();
+    auto properties = resource.properties();
+    return resource.device_ordinal() == 0 && !properties.host_accessible() && properties.device_accessible() && properties.maximum_alignment() == 32;
 }
 ```
+
+## 关联API
+
+- [`asc::device_memory_resource`](device_memory_resource.md)
+- [本头文件的接口列表](asc_memory_resource.md)

@@ -28,20 +28,21 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::is_placeholder_v` 取得占位符对应的调用实参位置。
+`asc::std::is_placeholder_v`取得占位符对应的调用实参位置。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr int asc::std::is_placeholder_v
+namespace asc::std {
+template<class T> inline constexpr int is_placeholder_v;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
@@ -52,3 +53,7 @@ template<class T> inline constexpr int asc::std::is_placeholder_v
 
 inline constexpr auto example = asc::std::is_placeholder_v<int>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

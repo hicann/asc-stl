@@ -1,4 +1,4 @@
-# 头文件 asc/std/cerrno
+# 头文件asc/std/cerrno
 
 提供C兼容的errno错误码宏
 
@@ -8,7 +8,7 @@
 #include <asc/std/cerrno>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |

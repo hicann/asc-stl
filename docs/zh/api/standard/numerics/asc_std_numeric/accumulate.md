@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/numeric>`。
 
-`asc::std::accumulate` 从初值开始按顺序归约输入范围。
+`asc::std::accumulate`从初值开始按顺序归约输入范围。
 
 标准语义参考：[cppreference `numeric`](https://en.cppreference.com/w/cpp/header/numeric)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class InputIterator, class T, class BinaryOperation> [[nodiscard]] constexpr T asc::std::accumulate(InputIterator first, InputIterator last, T init, BinaryOperation binary_op);
+namespace asc::std {
+template<class InputIterator, class T, class BinaryOperation> [[nodiscard]] constexpr T accumulate(InputIterator first, InputIterator last, T init, BinaryOperation binary_op);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class InputIterator, class T> [[nodiscard]] constexpr T asc::std::accumulate(InputIterator first, InputIterator last, T init);
+namespace asc::std {
+template<class InputIterator, class T> [[nodiscard]] constexpr T accumulate(InputIterator first, InputIterator last, T init);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -56,7 +60,7 @@ template<class InputIterator, class T> [[nodiscard]] constexpr T asc::std::accum
 | --- | --- |
 | `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
 | `T` | 归约初值、中间累加值与返回结果的类型。 |
-| `BinaryOperation` | 逐步合并累加值的二元运算可调用对象类型：接受两个 T 值并返回可转换为 T 的结果。 |
+| `BinaryOperation` | 逐步合并累加值的二元运算可调用对象类型：接受两个T值并返回可转换为T的结果。 |
 
 **函数参数**
 
@@ -65,9 +69,9 @@ template<class InputIterator, class T> [[nodiscard]] constexpr T asc::std::accum
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `init` | 输入 | 归约初值，作为逐元素合并的起始累加值；范围为空时原样返回该值。 |
-| `binary_op` | 输入 | 二元归约运算对象，按 binary_op(当前累加值, 当前元素) 逐步合并初值与各元素；省略该参数的重载使用 operator+。 |
+| `binary_op` | 输入 | 二元归约运算对象，按binary_op(当前累加值, 当前元素)逐步合并初值与各元素；省略该参数的重载使用`operator+`。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -88,13 +92,13 @@ template<class InputIterator, class T> [[nodiscard]] constexpr T asc::std::accum
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `T` | 返回输入值按接口规定运算后的数值结果。 |
-| 原型 2 | `T` | 返回输入值按接口规定运算后的数值结果。 |
+| 原型1 | `T` | 返回输入值按接口规定运算后的数值结果。 |
+| 原型2 | `T` | 返回输入值按接口规定运算后的数值结果。 |
 
 ## 约束说明
 
-- 提供顺序迭代器/值重载
-- 本族中标准定义的执行策略重载采用顺序执行语义
+- 提供顺序迭代器/值重载。
+- 本族中标准定义的执行策略重载采用顺序执行语义。
 
 ## 调用示例
 
@@ -109,3 +113,7 @@ decltype(auto) example()
     return asc::std::accumulate(input, input + 4, 0);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_numeric.md)

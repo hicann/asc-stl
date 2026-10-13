@@ -28,30 +28,37 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::local_days` 表示日期、时间点或时长计算中的 `local_days` 值类型。
+`asc::std::chrono::local_days`表示日期、时间点或时长计算中的`local_days`值类型。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 声明
 
 ```cpp
-using asc::std::chrono::local_days = local_time<days>
+namespace asc::std::chrono {
+using local_days = local_time<days>;
+} // namespace asc::std::chrono
 ```
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void use_type(const asc::std::chrono::local_days& value)
+bool example()
 {
-    (void)value;
+    asc::std::chrono::local_days point{asc::std::chrono::days{7}};
+    return point.time_since_epoch().count() == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

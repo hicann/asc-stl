@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/inplace_vector>`。
 
-`asc::std::erase` 按目标值从固定容量容器中移除元素并返回删除数量。
+`asc::std::erase`按目标值从固定容量容器中移除元素并返回删除数量。
 
-该接口的可用位置为 Host（完整接口）、Device（非抛出子集）。
+该接口的可用位置为Host（完整接口）、Device（非抛出子集）。
 
 标准语义参考：[cppreference `inplace_vector`](https://en.cppreference.com/w/cpp/header/inplace_vector)。
 
 ## 函数原型
 
 ```cpp
-template<class T, asc::std::size_t N, class U = T> constexpr typename asc::std::inplace_vector<T, N>::size_type asc::std::erase(asc::std::inplace_vector<T, N>& c, const U& value);
+namespace asc::std {
+template<class T, asc::std::size_t N, class U = T> constexpr typename asc::std::inplace_vector<T, N>::size_type erase(asc::std::inplace_vector<T, N>& c, const U& value);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,16 +48,16 @@ template<class T, asc::std::size_t N, class U = T> constexpr typename asc::std::
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | inplace_vector 的元素类型。 |
-| `N` | inplace_vector 的固定容量，编译期常量。 |
-| `U` | 待移除目标的取值类型；须可用 operator== 与元素类型 T 比较。 |
+| `T` | inplace_vector的元素类型。 |
+| `N` | inplace_vector的固定容量，编译期常量。 |
+| `U` | 待移除目标的取值类型；须可用`operator==`与元素类型T比较。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `c` | 输入/输出 | 被清理的固定容量容器；其中与 value 相等的元素全部被移除，其余元素前移并保持相对次序。 |
-| `value` | 输入 | 待移除的目标值；容器内与它相等（operator== 为真）的元素均被删除。 |
+| `c` | 输入/输出 | 被清理的固定容量容器；其中与value相等的元素全部被移除，其余元素前移并保持相对次序。 |
+| `value` | 输入 | 待移除的目标值；容器内与它相等（`operator==`为真）的元素均被删除。 |
 
 ## 返回值说明
 
@@ -65,13 +67,13 @@ template<class T, asc::std::size_t N, class U = T> constexpr typename asc::std::
 
 ## 约束说明
 
-- 最终C++26标准inplace_vector/erase/erase_if合同：Host交付除P4022R0已删除try_append_range外的完整构造、赋值、迭代、访问、修改、try/unchecked、比较、swap、容量、零容量empty/trivial与constexpr/约束合同
-- Device交付固定容量内联存储的非抛子合同，包括观察/迭代/operator[]/front/back、不抛出异常拷移赋值析构、try/unchecked后插、pop_back/clear、不抛出异常 erase/erase_if/swap、相等与不抛出异常三路比较、完整零容量核心
-- Host 提供完整接口，设备端仅提供不抛出异常的接口
+- 元素保存在固定容量的对象内存中，不进行动态分配。
+- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
+- Host提供完整接口，设备端仅提供不抛出异常的接口。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/inplace_vector>
@@ -89,3 +91,7 @@ bool example()
     return erased == 1 && values.size() == 1 && values[0] == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_inplace_vector.md)

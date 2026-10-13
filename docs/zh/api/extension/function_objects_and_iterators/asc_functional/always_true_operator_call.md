@@ -1,4 +1,4 @@
-# asc::always_true::operator()
+# asc::always_true::`operator()`
 
 ## 产品支持情况
 
@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/functional>`。
 
-`asc::always_true::operator()` 忽略全部参数并返回 true。
+`asc::always_true::operator()`忽略全部参数并返回true。
 
 ## 函数原型
 
+所属类型：[`asc::always_true`](always_true.md)。
+
 ```cpp
-template<class... Args> constexpr bool asc::always_true::operator()(Args&&...) const noexcept;
+// asc::always_true 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class... Args> constexpr bool operator()(Args&&...) const noexcept;
 ```
 
 ## 参数说明
@@ -48,16 +51,16 @@ template<class... Args> constexpr bool asc::always_true::operator()(Args&&...) c
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 整数或逻辑运算仅在数学性质成立时报告对应特性
-- 浮点加法不满足结合律
+- 整数或逻辑运算仅在数学性质成立时报告对应特性。
+- 浮点加法不满足结合律。
 
 ## 调用示例
 
-以下 Host 片段以具体值演示调用；输入须满足本页约束。
+以下Host片段以具体值演示调用；输入须满足本页约束。
 
 ```cpp
 #include <asc/functional>
@@ -67,3 +70,8 @@ decltype(auto) example()
     return asc::always_true{}(7);
 }
 ```
+
+## 关联API
+
+- [`asc::always_true`](always_true.md)
+- [本头文件的接口列表](asc_functional.md)

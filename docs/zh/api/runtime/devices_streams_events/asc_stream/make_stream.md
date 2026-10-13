@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/stream>`。
 
-`asc::make_stream` 按指定优先级创建 Runtime Stream，并把所有权写入空的 `stream` 对象；输出对象已持有句柄或创建失败时返回 false。
+`asc::make_stream`按指定优先级创建Runtime Stream，并把所有权写入空的`stream`对象；输出对象已持有句柄或创建失败时返回false。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 函数原型
 
 ```cpp
-bool asc::make_stream(asc::stream& output, asc::std::uint32_t priority = 0) noexcept;
+namespace asc {
+bool make_stream(asc::stream& output, asc::std::uint32_t priority = 0) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -44,19 +46,19 @@ bool asc::make_stream(asc::stream& output, asc::std::uint32_t priority = 0) noex
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 待接收新建 Stream 的空 stream 对象引用：须尚未持有句柄，成功后获得新 Runtime Stream 的所有权；已持有句柄时直接返回失败。 |
-| `priority` | 输入 | 新建 Stream 的优先级（uint32_t，传给底层 Runtime；0 为常规优先级）。 |
+| `output` | 输出 | 待接收新建Stream的空stream对象引用：须尚未持有句柄，成功后获得新Runtime Stream的所有权；已持有句柄时直接返回失败。 |
+| `priority` | 输入 | 新建Stream的优先级（uint32_t，传给底层Runtime；0为常规优先级）。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- `output` 非空（已持有句柄）时本接口拒绝执行，直接返回 `false`，不创建新的 Runtime Stream，也不修改 `output`
-- output 失败时保持不变
+- `output`非空（已持有句柄）时本接口拒绝执行，直接返回`false`，不创建新的Runtime Stream，也不修改`output`。
+- output失败时保持不变。
 
 ## 调用示例
 
@@ -77,6 +79,10 @@ decltype(auto) example(asc::stream& output, asc::std::uint32_t priority = 0)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_stream.md)

@@ -1,4 +1,4 @@
-# asc::std::operator^（bitset 重载）（函数模板）
+# asc::std::operator^（bitset重载）（函数模板）
 
 ## 产品支持情况
 
@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/bitset>`。
 
-`asc::std::operator^` 返回两个等长位集合的按位异或结果。
+`asc::std::operator^`返回两个等长位集合的按位异或结果。
 
 标准语义参考：[cppreference `bitset`](https://en.cppreference.com/w/cpp/header/bitset)。
 
 ## 函数原型
 
 ```cpp
-template<size_t Size> bitset<Size> asc::std::operator^(const bitset<Size>& lhs, const bitset<Size>& rhs) noexcept;
+namespace asc::std {
+template<size_t Size> bitset<Size> operator^(const bitset<Size>& lhs, const bitset<Size>& rhs) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -61,13 +63,13 @@ template<size_t Size> bitset<Size> asc::std::operator^(const bitset<Size>& lhs, 
 
 ## 约束说明
 
-- 支持默认构造和 unsigned long long 构造
-- operator[] 不进行边界检查
-- 提供整组 set、reset、flip，位运算、移位、状态检查、计数和容量查询
+- 支持默认构造和unsigned long long构造。
+- `operator[]`不进行边界检查。
+- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
 
 ## 调用示例
 
-以下片段用具体类型展示调用；declval 仅用于不求值的类型表达式。
+以下片段用具体类型展示调用；declval仅用于不求值的类型表达式。
 
 ```cpp
 #include <asc/std/bitset>
@@ -79,3 +81,7 @@ decltype(auto) example()
     return asc::std::operator^(left, right);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_bitset.md)

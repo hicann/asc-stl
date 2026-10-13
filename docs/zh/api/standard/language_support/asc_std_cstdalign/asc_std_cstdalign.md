@@ -1,4 +1,4 @@
-# 头文件 asc/std/cstdalign
+# 头文件asc/std/cstdalign
 
 提供对齐关键字的C兼容定义
 
@@ -8,7 +8,7 @@
 #include <asc/std/cstdalign>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |

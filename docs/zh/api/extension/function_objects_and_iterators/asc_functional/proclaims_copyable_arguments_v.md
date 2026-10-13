@@ -28,18 +28,20 @@
 
 头文件路径为：`<asc/functional>`。
 
-`asc::proclaims_copyable_arguments_v` 表示函数对象是否声明给定参数可安全按值复制。
+`asc::proclaims_copyable_arguments_v`表示函数对象是否声明给定参数可安全按值复制。
 
 ## 声明
 
 ```cpp
-template<class Function, class... Args> inline constexpr bool asc::proclaims_copyable_arguments_v = asc::proclaims_copyable_arguments<Function, Args...>::value
+namespace asc {
+template<class Function, class... Args> inline constexpr bool proclaims_copyable_arguments_v = asc::proclaims_copyable_arguments<Function, Args...>::value;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 整数或逻辑运算仅在数学性质成立时报告对应特性
-- 浮点加法不满足结合律
+- 整数或逻辑运算仅在数学性质成立时报告对应特性。
+- 浮点加法不满足结合律。
 
 ## 调用示例
 
@@ -50,3 +52,7 @@ template<class Function, class... Args> inline constexpr bool asc::proclaims_cop
 
 inline constexpr auto example = asc::proclaims_copyable_arguments_v<asc::always_true, int>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_functional.md)

@@ -28,34 +28,54 @@
 
 头文件路径为：`<asc/stream>`。
 
-`asc::event` 是 Runtime Event 的可移动、不可复制拥有者；析构或显式关闭时会先同步，再销毁仍由对象持有的句柄。
+`asc::event`是Runtime Event的可移动、不可复制拥有者；析构或显式关闭时会先同步，再销毁仍由对象持有的句柄。
 
 ## 声明
 
 ```cpp
-class asc::event
+namespace asc {
+class event;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 仅可在 Host 使用且对象不可复制
-- 移动操作转移资源所有权
-- close() 负责同步并销毁自身资源，失败时保留所有权
-- 析构函数会尝试完成本地清理
+- 仅可在Host使用且对象不可复制。
+- 移动操作转移资源所有权。
+- close()负责同步并销毁自身资源，失败时保留所有权。
+- 析构函数会尝试完成本地清理。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例在设备0上初始化Runtime，检查资源状态，并在资源释放后关闭Runtime；运行需要已安装CANN且设备可用。
 
 ```cpp
+#include <acl/acl.h>
 #include <asc/stream>
 
-void use_type(const asc::event& value)
+bool resource_example()
 {
-    (void)value;
+    asc::event owner;
+    if (!asc::make_event(owner)) return false;
+    const bool observed = static_cast<bool>(owner) && owner.native_handle() == owner.native_handle();
+    const bool closed = owner.close();
+    return observed && closed;
+}
+
+bool example()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) return false;
+    if (aclrtSetDevice(0) != ACL_SUCCESS) {
+        const bool finalized = aclFinalize() == ACL_SUCCESS;
+        return finalized && false;
+    }
+    const bool passed = resource_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return passed && reset && finalized;
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+## 关联API
 
-完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
+- [本头文件的接口列表](asc_stream.md)

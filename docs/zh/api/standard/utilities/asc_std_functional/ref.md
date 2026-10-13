@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::ref` 创建不拥有对象的可复制引用包装器。
+`asc::std::ref`创建不拥有对象的可复制引用包装器。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> [[nodiscard]] constexpr reference_wrapper<T> asc::std::ref(T& value) noexcept;
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr reference_wrapper<T> ref(T& value) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> [[nodiscard]] constexpr reference_wrapper<T> asc::std::ref(reference_wrapper<T> value) noexcept;
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr reference_wrapper<T> ref(reference_wrapper<T> value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -60,9 +64,9 @@ template<class T> [[nodiscard]] constexpr reference_wrapper<T> asc::std::ref(ref
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 被包装的左值对象；返回的 reference_wrapper<T> 保存指向它的引用，对象生命周期须覆盖包装器使用期。 |
+| `value` | 输入/输出 | 被包装的左值对象；返回的reference_wrapper<T> 保存指向它的引用，对象生命周期须覆盖包装器使用期。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -74,23 +78,22 @@ template<class T> [[nodiscard]] constexpr reference_wrapper<T> asc::std::ref(ref
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 已有的 reference_wrapper 对象；返回指向同一目标的 reference_wrapper<T>。 |
+| `value` | 输入 | 已有的reference_wrapper对象；返回指向同一目标的reference_wrapper<T>。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `reference_wrapper<T>` | 返回保存调用目标及所选参数的可调用对象或引用包装器。 |
-| 原型 2 | `reference_wrapper<T>` | 返回保存调用目标及所选参数的可调用对象或引用包装器。 |
+| 原型1 | `reference_wrapper<T>` | 返回保存调用目标及所选参数的可调用对象或引用包装器。 |
+| 原型2 | `reference_wrapper<T>` | 返回保存调用目标及所选参数的可调用对象或引用包装器。 |
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/functional>
@@ -101,3 +104,7 @@ decltype(auto) example()
     return asc::std::ref(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

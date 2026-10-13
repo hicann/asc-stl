@@ -1,4 +1,4 @@
-# 头文件 asc/execution.determinism.h
+# 头文件asc/execution.determinism.h
 
 提供并行算法的结果确定性要求，用于指定相同输入是否需要产生可重复结果
 
@@ -8,7 +8,7 @@
 #include <asc/execution.determinism.h>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |

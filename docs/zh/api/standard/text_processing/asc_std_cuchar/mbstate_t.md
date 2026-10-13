@@ -28,38 +28,43 @@
 
 头文件路径为：`<asc/std/cuchar>`、`<asc/std/cwchar>`。
 
-`asc::std::mbstate_t` 标识当前 ABI 对应的时间、字符转换或宽字符类型。
+`asc::std::mbstate_t`标识当前ABI对应的时间、字符转换或宽字符类型。
 
-该接口的可用位置为 Host（完整接口）、Device（C locale 相关接口）。
+该接口的可用位置为Host（完整接口）、Device（C locale相关接口）。
 
 标准语义参考：[cppreference `cuchar`](https://en.cppreference.com/w/cpp/header/cuchar)。
 
 ## 声明
 
 ```cpp
-using asc::std::mbstate_t = ::std::mbstate_t
+namespace asc::std {
+using mbstate_t = ::std::mbstate_t;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/cuchar>`、`<asc/std/cwchar>`。
 
 ## 约束说明
 
-- Host委托系统<cuchar>完整合同
-- Device交付size_t/mbstate_t，C++11起的mbrtoc16/c16rtomb/mbrtoc32/c32rtomb和C++20起的mbrtoc8/c8rtomb
-- Device固定C locale的ASCII/NUL、count==0、空输入/输出、重置、显式或空state无状态路径与size_t(-1)/(-2)错误/未完成返回
-- Host 提供完整接口，设备端仅提供 C 语言区域设置相关接口
-- Host对本家族委托系统<cwchar>完整合同
-- Device交付size_t/mbstate_t/wint_t/NULL/WCHAR_MIN/WCHAR_MAX/WEOF、wcscoll/wcsxfrm/wcstok与btowc/wctob/mbrlen/mbrtowc/mbsinit/mbsrtowcs/wcrtomb/wcsrtombs，语义固定为无状态单字节C locale
+- Host使用系统多字节转换状态类型；首次转换前以`{}`初始化，并在同一字符序列的连续调用间保留对象。
+- Device使用无状态单字节转换；`mbstate_t`保留用于兼容接口，不表示支持任意区域设置或多字节续接。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/cuchar>
 
-void use_type(const asc::std::mbstate_t& value)
+bool example()
 {
-    (void)value;
+    asc::std::mbstate_t state{};
+    char16_t result{};
+    auto count = asc::std::mbrtoc16(&result, "A", 1, &state);
+    return count == 1 && result == u'A';
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cuchar.md)

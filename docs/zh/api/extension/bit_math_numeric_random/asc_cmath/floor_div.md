@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/cmath>`。
 
-`asc::floor_div` 计算向负无穷方向取整的整数商。
+`asc::floor_div`计算向负无穷方向取整的整数商。
 
 ## 函数原型
 
 ```cpp
-template<class T, class U> constexpr auto asc::floor_div(T a, U b) noexcept;
+namespace asc {
+template<class T, class U> constexpr auto floor_div(T a, U b) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -50,7 +52,7 @@ template<class T, class U> constexpr auto asc::floor_div(T a, U b) noexcept;
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `a` | 输入 | 整数商的被除数。 |
-| `b` | 输入 | 整数商的除数；不得为 0。 |
+| `b` | 输入 | 整数商的除数；不得为0。 |
 
 ## 返回值说明
 
@@ -60,9 +62,9 @@ template<class T, class U> constexpr auto asc::floor_div(T a, U b) noexcept;
 
 ## 约束说明
 
-- T 和 U 必须为非 bool 的整数或枚举类型
-- b 不得为零
-- 除法结果必须可表示
+- T和U必须为非bool的整数或枚举类型。
+- b不得为零。
+- 除法结果必须可表示。
 
 ## 调用示例
 
@@ -76,3 +78,7 @@ decltype(auto) example()
     return asc::floor_div(-5, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_cmath.md)

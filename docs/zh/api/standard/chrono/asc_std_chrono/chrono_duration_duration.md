@@ -28,25 +28,25 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::duration::duration` 按本页所列构造形态初始化 `duration` 对象。
+`asc::std::chrono::duration::duration`按本页所列构造形态初始化`duration`对象。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr duration();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 template<class Rep2, class Period2> constexpr duration(const duration<Rep2, Period2>& count);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 template<class Rep2> constexpr duration(const Rep2& count);
@@ -54,18 +54,18 @@ template<class Rep2> constexpr duration(const Rep2& count);
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rep2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Period2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Rep2` | 来源计数的表示类型，须满足目标duration的转换条件。 |
+| `Period2` | 来源duration的计时单位，以ratio表示。 |
 
 **函数参数**
 
@@ -73,34 +73,43 @@ template<class Rep2> constexpr duration(const Rep2& count);
 | --- | --- | --- |
 | `count` | 输入 | 参与操作的元素数量。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rep2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Rep2` | 来源计数的表示类型，须满足目标duration的转换条件。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `count` | 输入 | 参与操作的元素数量。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符
+- 提供值运算以及六个显式关系运算符。
 
 ## 调用示例
 
-以下 Host 片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    asc::std::chrono::duration<int> value{};
-    (void)value;
+    asc::std::chrono::duration<int> value{7};
+    return value.count() == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

@@ -1,4 +1,4 @@
-# 头文件 asc/execution
+# 头文件asc/execution
 
 统一导出设备端执行策略、执行要求和提交状态相关接口
 
@@ -8,7 +8,7 @@
 #include <asc/execution>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |

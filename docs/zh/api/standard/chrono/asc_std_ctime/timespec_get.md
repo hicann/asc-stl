@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/ctime>`。
 
-`asc::std::timespec_get` 由 `<asc/std/ctime>` 提供，host-only 基准时间获取，转发 ::timespec_get，base 为 TIME_UTC
+`asc::std::timespec_get`由`<asc/std/ctime>`提供，host-only基准时间获取，转发 ::timespec_get，base为TIME_UTC
 
 标准语义参考：[cppreference `ctime`](https://en.cppreference.com/w/cpp/header/ctime)。
 
 ## 函数原型
 
 ```cpp
-int timespec_get(timespec* ts, int base) noexcept
+int timespec_get(timespec* ts, int base) noexcept;
 ```
 
 ## 参数说明
@@ -51,11 +51,11 @@ int timespec_get(timespec* ts, int base) noexcept
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `按声明确定` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `int` | 成功时返回base并写入ts；失败时返回0。 |
 
 ## 约束说明
 
-- 返回纪元以来的日历时间数值，宿主侧可用
+- 返回纪元以来的日历时间数值，宿主侧可用。
 
 ## 调用示例
 
@@ -69,3 +69,7 @@ decltype(auto) example(timespec* ts, int base)
     return asc::std::timespec_get(ts, base);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ctime.md)

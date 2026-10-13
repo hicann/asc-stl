@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/tuple>`。
 
-`asc::std::tie` 创建保存调用方左值引用的 tuple。
+`asc::std::tie`创建保存调用方左值引用的tuple。
 
 标准语义参考：[cppreference `tuple`](https://en.cppreference.com/w/cpp/header/tuple)。
 
 ## 函数原型
 
 ```cpp
-template<class ...T> [[nodiscard]] constexpr tuple<T&...> asc::std::tie(T&... values) noexcept;
+namespace asc::std {
+template<class ...T> [[nodiscard]] constexpr tuple<T&...> tie(T&... values) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -50,17 +52,17 @@ template<class ...T> [[nodiscard]] constexpr tuple<T&...> asc::std::tie(T&... va
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `values` | 输入/输出 | 被绑定的各左值对象；返回的 tuple 保存指向它们的左值引用，对象生命周期须覆盖 tuple 的使用期。 |
+| `values` | 输入/输出 | 被绑定的各左值对象；返回的tuple保存指向它们的左值引用，对象生命周期须覆盖tuple的使用期。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `tuple<T &...>` | 返回保存调用方左值引用的 tuple。 |
+| `tuple<T &...>` | 返回保存调用方左值引用的tuple。 |
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
 
 ## 调用示例
 
@@ -76,3 +78,7 @@ decltype(auto) example()
     return asc::std::tie(left, right);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_tuple.md)

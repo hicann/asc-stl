@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::front_insert_iterator::front_insert_iterator` 按本页所列构造形态初始化 `front_insert_iterator` 对象。
+`asc::std::front_insert_iterator::front_insert_iterator`按本页所列构造形态初始化`front_insert_iterator`对象。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
@@ -44,29 +44,34 @@ constexpr front_insert_iterator(Container& container) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `container` | 输入/输出 | 提供“按本页所列构造形态初始化 `front_insert_iterator` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `container` | 输入/输出 | 提供“按本页所列构造形态初始化`front_insert_iterator`对象”使用的对象引用；被引用对象须在调用期间有效。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段使用调用方提供的标准容器演示迭代器操作；目标容器须保持有效。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 #include <deque>
-#include <functional>
-#include <vector>
 
-#include <deque>
-
-void example()
+bool example()
 {
-    ::std::deque<int> values{};
+    ::std::deque<int> values;
     asc::std::front_insert_iterator<::std::deque<int>> output(values);
-    (void)output;
+    *output = 7;
+    return values.size() == 1 && values.front() == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

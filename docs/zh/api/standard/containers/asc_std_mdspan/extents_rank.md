@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::extents::rank` 返回维度总数。
+`asc::std::extents::rank`返回维度总数。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
+所属类型：[`asc::std::extents`](extents.md)。
+
 ```cpp
-constexpr rank_type asc::std::extents::rank() noexcept;
+// asc::std::extents 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr rank_type rank() noexcept;
 ```
 
 ## 参数说明
@@ -50,18 +53,24 @@ constexpr rank_type asc::std::extents::rank() noexcept;
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整dynamic_extent/extents/dextents/dims家族：零rank与正rank、默认/按rank或rank_dynamic传值/array/span/跨extents构造、标准显式性与约束、deduction guide、相等比较及rank/rank_dynamic/static_extent/extent观察
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/mdspan>
+#include <asc/std/type_traits>
 
-void example(asc::std::extents<int, 2, 3>& object)
+bool example()
 {
-    (void)object.rank();
+    asc::std::extents<int, 2, 3> shape;
+    return shape.rank() == 2 && shape.rank_dynamic() == 0 && shape.extent(0) == 2 && shape.extent(1) == 3;
 }
 ```
+
+## 关联API
+
+- [`asc::std::extents`](extents.md)
+- [本头文件的接口列表](asc_std_mdspan.md)

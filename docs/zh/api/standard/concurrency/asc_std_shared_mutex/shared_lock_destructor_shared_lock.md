@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/shared_mutex>`。
 
-`asc::std::shared_lock::~shared_lock` 销毁 `shared_lock` 对象并结束其生命周期。
+`asc::std::shared_lock::~shared_lock`销毁`shared_lock`对象并结束其生命周期。
 
 标准语义参考：[cppreference `shared_mutex`](https://en.cppreference.com/w/cpp/header/shared_mutex)。
 
@@ -42,16 +42,20 @@
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- shared_lock<Mutex>的mutex_type，default/普通/defer/try/adopt构造、删除copy、move构造/赋值和析构
-- 有效状态上的lock/try_lock/unlock/swap/release/mutex/owns_lock/operator bool及非成员swap
-- 显式非抛Device SharedLockable域
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- shared_lock<Mutex>的mutex_type，default/普通/defer/try/adopt构造、删除copy、move构造/赋值和析构。
+- 有效状态上的lock/try_lock/unlock/swap/release/mutex/owns_lock/operator bool及非成员swap。
+- 显式非抛Device SharedLockable域。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段要求 object 指向已构造的锁包装器；析构会按持有状态释放锁，存储由调用方管理。
+以下片段要求object指向已构造的锁包装器；析构会按持有状态释放锁，存储由调用方管理。
 
 ```cpp
 #include <asc/std/shared_mutex>
@@ -71,3 +75,7 @@ void example(example_object* object)
     object->~example_object();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_shared_mutex.md)

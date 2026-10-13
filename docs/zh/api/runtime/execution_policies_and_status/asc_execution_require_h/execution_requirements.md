@@ -28,30 +28,39 @@
 
 头文件路径为：`<asc/execution.require.h>`。
 
-`asc::execution_requirements` 保存确定性、输出顺序和相同键值处理规则三个执行要求。默认值分别为 `not_guaranteed`、`unsorted` 和 `unspecified`。
+`asc::execution_requirements`保存确定性、输出顺序和相同键值处理规则三个执行要求。默认值分别为`not_guaranteed`、`unsorted`和`unspecified`。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 声明
 
 ```cpp
-class asc::execution_requirements
+namespace asc {
+class execution_requirements;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 对象为不可变值
-- 默认采用 determinism::not_guaranteed、output_ordering::unsorted 和 tie_break::unspecified
+- 对象为不可变值。
+- 默认采用determinism::not_guaranteed、output_ordering::unsorted和tie_break::unspecified。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/execution.require.h>
 
-void use_type(const asc::execution_requirements& value)
+bool example()
 {
-    (void)value;
+    asc::execution_requirements requirements;
+    return requirements.determinism_value() == asc::determinism::not_guaranteed
+        && requirements.output_ordering_value() == asc::output_ordering::unsorted
+        && requirements.tie_break_value() == asc::tie_break::unspecified;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_execution_require_h.md)

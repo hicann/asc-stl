@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::includes` 判断一个已排序范围是否包含另一个已排序范围的全部元素；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::includes`判断一个已排序范围是否包含另一个已排序范围的全部元素；无策略形式在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class InputIterator1, class InputIterator2, class Compare> [[nodiscard]] constexpr bool asc::std::includes(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, Compare comp);
+namespace asc::std {
+template<class InputIterator1, class InputIterator2, class Compare> [[nodiscard]] constexpr bool includes(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, Compare comp);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class InputIterator1, class InputIterator2> [[nodiscard]] constexpr bool asc::std::includes(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2);
+namespace asc::std {
+template<class InputIterator1, class InputIterator2> [[nodiscard]] constexpr bool includes(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -68,7 +72,7 @@ template<class InputIterator1, class InputIterator2> [[nodiscard]] constexpr boo
 | `last2` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `comp` | 输入 | 用于确定元素顺序的比较对象。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -90,17 +94,17 @@ template<class InputIterator1, class InputIterator2> [[nodiscard]] constexpr boo
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 2 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| 原型1 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
+| 原型2 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 提供顺序执行且不进行动态内存分配的重载
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序
+- 提供顺序执行且不进行动态内存分配的重载。
+- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下 Host 片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
 
 ```cpp
 #include <asc/std/algorithm>
@@ -112,3 +116,7 @@ decltype(auto) example()
     return asc::std::includes(values, values + 8, other, other + 8);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::rintf` 按当前舍入方式取整；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::rintf`按当前舍入方式取整；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-float asc::std::rintf(float value) noexcept;
+namespace asc::std {
+float rintf(float value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -56,7 +58,7 @@ float asc::std::rintf(float value) noexcept;
 
 ## 约束说明
 
-- 提供 float 重载和标准 *f 别名，底层能力由 Ascend C 开发套件提供
+- 提供float重载和标准 *f别名，底层能力由Ascend C开发套件提供。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example(float value)
     return asc::std::rintf(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

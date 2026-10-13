@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/work_queue>`。
 
-`asc::make_work_queue` 将调用方管理的工作游标、结束索引和粒度组合为非拥有的 `work_queue_ref<Index>`，供并发任务领取接口使用。
+`asc::make_work_queue`将调用方管理的工作游标、结束索引和粒度组合为非拥有的`work_queue_ref<Index>`，供并发任务领取接口使用。
 
-该接口的可用位置为 AI Core SIMD 编程、AI Core SIMT 编程。
+该接口的可用位置为AI Core SIMD编程、AI Core SIMT编程。
 
 ## 函数原型
 
 ```cpp
-template<class Index> constexpr asc::work_queue_ref<Index> asc::make_work_queue(asc::detail::work_cursor& cursor, Index end, Index grain_size) noexcept;
+namespace asc {
+template<class Index> constexpr asc::work_queue_ref<Index> make_work_queue(asc::detail::work_cursor& cursor, Index end, Index grain_size) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -44,13 +46,13 @@ template<class Index> constexpr asc::work_queue_ref<Index> asc::make_work_queue(
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 工作索引类型：仅支持 uint32_t 与 uint64_t。 |
+| `Index` | 工作索引类型：仅支持uint32_t与uint64_t。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `cursor` | 输入/输出 | 调用方管理的 GM 原子工作游标（work_cursor）引用：本调用仅借用不拥有，后续领取工作时以原子 fetch-add 前进其 next 值；须保持有效直至不再领取。 |
+| `cursor` | 输入/输出 | 调用方管理的GM原子工作游标（work_cursor）引用：本调用仅借用不拥有，后续领取工作时以原子fetch-add前进其next值；须保持有效直至不再领取。 |
 | `end` | 输入 | 工作索引上界（排他）：领取到的块被裁剪到该值以内。 |
 | `grain_size` | 输入 | 每次领取的粒度（单个块的索引个数）：须为正，且游标值加该值不得溢出。 |
 
@@ -62,9 +64,10 @@ template<class Index> constexpr asc::work_queue_ref<Index> asc::make_work_queue(
 
 ## 约束说明
 
-- Index 必须为受支持的 32 位或 64 位无符号整数
-- grain_size 必须大于零
-- cursor 在队列引用使用期间必须保持有效
+- 声明中的`asc::detail`类型是当前头文件实际使用的实现类型，未另行提供同名公共别名；请使用本页的公开构造入口，不把它改写成不存在的公共类型名。
+- Index必须为受支持的32位或64位无符号整数。
+- grain_size必须大于零。
+- cursor在队列引用使用期间必须保持有效。
 
 ## 调用示例
 
@@ -78,3 +81,7 @@ __aicore__ decltype(auto) example(asc::detail::work_cursor& cursor)
     return asc::make_work_queue(cursor, 100u, 4u);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_work_queue.md)

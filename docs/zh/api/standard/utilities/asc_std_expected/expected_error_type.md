@@ -28,21 +28,24 @@
 
 头文件路径为：`<asc/std/expected>`。
 
-`asc::std::expected::error_type` 标识错误状态保存的类型。
+`asc::std::expected::error_type`标识错误状态保存的类型。
 
 标准语义参考：[cppreference `expected`](https://en.cppreference.com/w/cpp/header/expected)。
 
 ## 声明
 
+所属类型：[`asc::std::expected`](expected.md)。
+
 ```cpp
-using asc::std::expected::error_type = Error
+// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
+using error_type = Error;
 ```
 
 ## 约束说明
 
-- T 必须为非 void 类型，E 必须为对象类型
-- 适用操作必须不抛出异常
-- 提供构造、赋值、emplace 和 swap
+- T必须为非void类型，E必须为对象类型。
+- 适用操作必须不抛出异常。
+- 提供构造、赋值、emplace和swap。
 
 ## 调用示例
 
@@ -56,3 +59,8 @@ void use_type()
     using alias_type = typename asc::std::expected<int, int>::error_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::expected`](expected.md)
+- [本头文件的接口列表](asc_std_expected.md)

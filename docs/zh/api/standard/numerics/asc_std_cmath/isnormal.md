@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::isnormal` 判断浮点值是否为正规数；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::isnormal`判断浮点值是否为正规数；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-bool asc::std::isnormal(float x) noexcept;
+namespace asc::std {
+bool isnormal(float x) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,17 +48,17 @@ bool asc::std::isnormal(float x) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 待判断是否为正规数（非零、非次正规、非无穷且非 NaN）的输入值（无量纲）。 |
+| `x` | 输入 | 待判断是否为正规数（非零、非次正规、非无穷且非NaN）的输入值（无量纲）。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 提供 float 函数重载、求值类型别名、比较函数、nanf 和分类宏
+- 提供float函数重载、求值类型别名、比较函数、nanf和分类宏。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example(float x)
     return asc::std::isnormal(x);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

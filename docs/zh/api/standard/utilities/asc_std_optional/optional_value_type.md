@@ -28,21 +28,24 @@
 
 头文件路径为：`<asc/std/optional>`。
 
-`asc::std::optional::value_type` 标识元素或结果的值类型。
+`asc::std::optional::value_type`标识元素或结果的值类型。
 
 标准语义参考：[cppreference `optional`](https://en.cppreference.com/w/cpp/header/optional)。
 
 ## 声明
 
+所属类型：[`asc::std::optional`](optional.md)。
+
 ```cpp
-using asc::std::optional::value_type = T
+// asc::std::optional 类内的声明节选；模板形参和其他成员由所属类提供。
+using value_type = T;
 ```
 
 ## 约束说明
 
-- T 必须是普通的非引用对象类型
-- Host 遵循有效的 C++17 操作
-- Device 侧构造、赋值、调用和交换所依赖的操作必须不抛出异常
+- T必须是普通的非引用对象类型。
+- Host遵循有效的C++17操作。
+- Device侧构造、赋值、调用和交换所依赖的操作必须不抛出异常。
 
 ## 调用示例
 
@@ -56,3 +59,8 @@ void use_type()
     using alias_type = typename asc::std::optional<int>::value_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::optional`](optional.md)
+- [本头文件的接口列表](asc_std_optional.md)

@@ -28,29 +28,33 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::pcg64_engine::pcg64_engine` 使用调用方提供的参数初始化 `asc::pcg64_engine` 对象。
+`asc::pcg64_engine::pcg64_engine`使用调用方提供的参数初始化`asc::pcg64_engine`对象。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::pcg64_engine`](pcg64_engine.md)。
+
+### 原型1
 
 ```cpp
-constexpr asc::pcg64_engine::pcg64_engine() noexcept;
+// asc::pcg64_engine 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr pcg64_engine() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr explicit asc::pcg64_engine::pcg64_engine(result_type seed) noexcept;
+// asc::pcg64_engine 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr explicit pcg64_engine(result_type seed) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -58,21 +62,33 @@ constexpr explicit asc::pcg64_engine::pcg64_engine(result_type seed) noexcept;
 | --- | --- | --- |
 | `seed` | 输入 | 用于初始化或重置伪随机数引擎状态的种子值。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示本页接口；对象和指针的有效期须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/random>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    asc::pcg64 generator{};
-    (void)generator();
+    asc::pcg64 engine(7);
+    const auto first = engine();
+    engine.seed(7);
+    return engine() == first;
 }
 ```
+
+## 关联API
+
+- [`asc::pcg64_engine`](pcg64_engine.md)
+- [本头文件的接口列表](asc_random.md)

@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::wmemset` 把指定数量的字节写成同一个字节值。
+`asc::std::wmemset`把指定数量的字节写成同一个字节值。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 
 ## 函数原型
 
 ```cpp
-wchar_t* asc::std::wmemset(wchar_t* destination, wchar_t value, size_t count) noexcept;
+namespace asc::std {
+wchar_t* wmemset(wchar_t* destination, wchar_t value, size_t count) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -45,7 +47,8 @@ wchar_t* asc::std::wmemset(wchar_t* destination, wchar_t value, size_t count) no
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `destination` | 输出 | 用于接收结果的目标存储。本调用为同步执行，返回时写入已完成；目标存储在调用期间保持有效即可，且须为待写入内容预留足够空间。 |
-| `value` | 输入 | 填充用的宽字符。 || `count` | 输入 | 参与操作的元素数量。 |
+| `value` | 输入 | 填充用的宽字符。 |
+| `count` | 输入 | 参与操作的元素数量。 |
 
 ## 返回值说明
 
@@ -55,10 +58,10 @@ wchar_t* asc::std::wmemset(wchar_t* destination, wchar_t value, size_t count) no
 
 ## 约束说明
 
-- 18个标准函数名及23个可调用签名：wmemcpy/wmemmove/wmemchr/wmemcmp/wmemset、wcscpy/wcsncpy/wcscat/wcsncat、wcschr/wcsrchr、wcscmp/wcsncmp、wcsspn/wcscspn/wcspbrk/wcsstr/wcslen
-- 5个查找函数包含const与可变指针重载
-- Host委托系统，Device纯计算实现
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain-pointer域
+- 18个标准函数名及23个可调用签名：wmemcpy/wmemmove/wmemchr/wmemcmp/wmemset、wcscpy/wcsncpy/wcscat/wcsncat、wcschr/wcsrchr、wcscmp/wcsncmp、wcsspn/wcscspn/wcspbrk/wcsstr/wcslen。
+- 5个查找函数包含const与可变指针重载。
+- Host委托系统，Device纯计算实现。
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain-pointer域。
 
 ## 调用示例
 
@@ -73,3 +76,7 @@ decltype(auto) example(wchar_t * destination, wchar_t value, asc::std::size_t co
     return asc::std::wmemset(destination, value, count);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cwchar.md)

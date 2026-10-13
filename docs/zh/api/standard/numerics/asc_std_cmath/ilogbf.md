@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::ilogbf` 返回浮点值二进制指数的整数表示；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::ilogbf`返回浮点值二进制指数的整数表示；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-int asc::std::ilogbf(float x) noexcept;
+namespace asc::std {
+int ilogbf(float x) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,7 +48,7 @@ int asc::std::ilogbf(float x) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 待提取以 2 为底的规范化指数的输入值（无量纲）；±0、±inf、NaN 等特殊值返回约定常量（如 FP_ILOGB0、FP_ILOGBNAN）。 |
+| `x` | 输入 | 待提取以2为底的规范化指数的输入值（无量纲）；±0、±inf、NaN等特殊值返回约定常量（如FP_ILOGB0、FP_ILOGBNAN）。 |
 
 ## 返回值说明
 
@@ -56,7 +58,7 @@ int asc::std::ilogbf(float x) noexcept;
 
 ## 约束说明
 
-- 提供 float 重载和标准 *f 别名，底层能力由 Ascend C 开发套件提供
+- 提供float重载和标准 *f别名，底层能力由Ascend C开发套件提供。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example(float x)
     return asc::std::ilogbf(x);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

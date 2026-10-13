@@ -28,29 +28,37 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::random_access_iterator_tag` 标识对应迭代器能力层级的标准标签类型。
+`asc::std::random_access_iterator_tag`标识对应迭代器能力层级的标准标签类型。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-using asc::std::random_access_iterator_tag = ::std::random_access_iterator_tag
+namespace asc::std {
+using random_access_iterator_tag = ::std::random_access_iterator_tag;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 C++20 公开迭代器概念和特征接口
+- 提供C++20公开迭代器概念和特征接口。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
+#include <asc/std/type_traits>
 
-void use_type(const asc::std::random_access_iterator_tag& value)
+bool example()
 {
-    (void)value;
+    static_assert(asc::std::is_base_of_v<asc::std::random_access_iterator_tag, asc::std::contiguous_iterator_tag>);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

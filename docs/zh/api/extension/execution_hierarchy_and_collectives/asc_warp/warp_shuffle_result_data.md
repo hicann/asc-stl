@@ -28,39 +28,37 @@
 
 头文件路径为：`<asc/warp>`。
 
-`asc::warp_shuffle_result::data` 保存 Warp Shuffle 读取到的数据。
+`asc::warp_shuffle_result::data`保存Warp Shuffle读取到的数据。
 
-该接口的可用位置为 AI Core SIMT 编程。
+该接口的可用位置为AI Core SIMT编程。
 
 ## 声明
 
 ```cpp
-T asc::warp_shuffle_result<T>::data
+T asc::warp_shuffle_result<T>::data;
 ```
 
 ## 约束说明
 
-- T 仅可为 int、unsigned int、float、long long 或 unsigned long long
+- T仅可为int、unsigned int、float、long long或unsigned long long。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以1个block、32个线程启动，所有lane收敛执行本片段。output指向32个GM元素；同步完成后每项应为1。
 
 ```cpp
 #include <asc/warp>
 
-template <class T>
-__aicore__ void example(const asc::warp_shuffle_result<T>& object)
+__global__ void example(unsigned int* output)
 {
-    (void)object.data;
+    const unsigned int lane = asc::lane_id();
+    const asc::warp_shuffle_result<unsigned int> result = asc::warp_shuffle_idx<32>(lane, 0, asc::lane_mask::all());
+    output[lane] = result.valid && result.data == 0;
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+完整工程及运行步骤见[《warp_collectives示例》](../../../../examples/warp_collectives/README.md)。
 
-完整示例源码：
+## 关联API
 
-- [CMakeLists.txt](../../../../examples/warp_collectives/CMakeLists.txt)
-- [warp_example.h](../../../../examples/warp_collectives/warp_example.h)
-- [kernel.asc](../../../../examples/warp_collectives/kernel.asc)
-- [main.cpp](../../../../examples/warp_collectives/main.cpp)
+- [本头文件的接口列表](asc_warp.md)

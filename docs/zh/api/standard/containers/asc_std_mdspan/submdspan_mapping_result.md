@@ -28,33 +28,39 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::submdspan_mapping_result` 按切片规格从现有多维视图生成非拥有子视图或对应映射。
+`asc::std::submdspan_mapping_result`按切片规格从现有多维视图生成非拥有子视图或对应映射。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 声明
 
 ```cpp
-template<class Mapping> struct asc::std::submdspan_mapping_result
+namespace asc::std {
+template<class Mapping> struct submdspan_mapping_result;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整submdspan家族：full_extent_t/full_extent、strided_slice及deduction guide、submdspan_mapping_result、submdspan_extents/submdspan_mapping/submdspan
-- 全部有效整数降rank/full/pair-like/strided slice组合，零与任意rank、静态/动态/混合/空extent、layout_left/layout_right/layout_stride源及标准布局保持或layout_stride回退
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain pointer域
+- 全部有效整数降rank/full/pair-like/strided slice组合，零与任意rank、静态/动态/混合/空extent、layout_left/layout_right/layout_stride源及标准布局保持或layout_stride回退。
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/mdspan>
-#include <asc/std/cstddef>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::submdspan_mapping_result<asc::std::layout_right::mapping<asc::std::extents<asc::std::size_t, 2, 3>>>;
-    (void)sizeof(selected);
+    using shape = asc::std::extents<int, 2, 3>;
+    asc::std::layout_right::mapping<shape> mapping(shape{});
+    const auto row = asc::std::submdspan_mapping(mapping, 1, asc::std::full_extent);
+    return row.offset == 3 && row.mapping.extents().extent(0) == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mdspan.md)

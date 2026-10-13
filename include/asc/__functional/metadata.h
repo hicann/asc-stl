@@ -158,6 +158,19 @@ struct absorbing_element_op<bitwise_and_op, T> {
     static constexpr T value = T{0};
 };
 
+template <class T>
+struct absorbing_element_op<logical_or_op, T> {
+    static constexpr bool has_value = true;
+    static constexpr bool value = true;
+};
+
+template <class T>
+struct absorbing_element_op<bitwise_or_op, T> {
+    static constexpr bool has_value = __is_same(T, unsigned char) || __is_same(T, unsigned short) ||
+        __is_same(T, unsigned int) || __is_same(T, unsigned long) || __is_same(T, unsigned long long);
+    static constexpr T value = static_cast<T>(~T{0});
+};
+
 // Always-predicates and value reducers used by the public facade; each is a
 // stateless callable valid in every execution space.
 struct always_true_op {

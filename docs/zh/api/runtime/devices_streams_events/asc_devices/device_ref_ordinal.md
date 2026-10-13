@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/devices>`。
 
-`asc::device_ref::ordinal` 返回该引用保存的 Runtime Device 序号。
+`asc::device_ref::ordinal`返回该引用保存的Runtime Device序号。
 
 ## 函数原型
 
+所属类型：[`asc::device_ref`](device_ref.md)。
+
 ```cpp
-constexpr asc::std::uint32_t asc::device_ref::ordinal() const noexcept;
+// asc::device_ref 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr asc::std::uint32_t ordinal() const noexcept;
 ```
 
 ## 参数说明
@@ -44,23 +47,29 @@ constexpr asc::std::uint32_t asc::device_ref::ordinal() const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::std::uint32_t` | 返回该引用保存的 Runtime Device 序号。 |
+| `asc::std::uint32_t` | 返回该引用保存的Runtime Device序号。 |
 
 ## 约束说明
 
-- 仅可在 Host 查询或选择 Device
-- 引用只保存设备序号且不拥有 Runtime 状态
-- 查询失败时输出参数保持原值，属性仅限当前接口列出的 AI Core、Vector Core、Warp、UB、GM、L2 与架构字段
+- 仅可在Host查询或选择Device。
+- 引用只保存设备序号且不拥有Runtime状态。
+- 查询失败时输出参数保持原值，属性仅限当前接口列出的AI Core、Vector Core、Warp、UB、GM、L2与架构字段。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/devices>
 
-void example(asc::device_ref& object)
+bool example()
 {
-    (void)object.ordinal();
+    asc::device_ref device(0);
+    return device.ordinal() == 0;
 }
 ```
+
+## 关联API
+
+- [`asc::device_ref`](device_ref.md)
+- [本头文件的接口列表](asc_devices.md)

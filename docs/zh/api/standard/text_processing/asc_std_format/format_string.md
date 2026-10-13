@@ -28,24 +28,26 @@
 
 头文件路径为：`<asc/std/format>`。
 
-`asc::std::format_string` 标识在编译期校验格式语法的 char 格式串类型。
+`asc::std::format_string`标识在编译期校验格式语法的char格式串类型。
 
-该接口自 C++20+ 模式起提供。
+该接口自C++20+ 模式起提供。
 
 标准语义参考：[cppreference `format`](https://en.cppreference.com/w/cpp/header/format)。
 
 ## 声明
 
 ```cpp
-template<class ...Args> using asc::std::format_string = basic_format_string<char, type_identity_t<Args>...>
+namespace asc::std {
+template<class ...Args> using format_string = basic_format_string<char, type_identity_t<Args>...>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- basic_format_string<char,Args...>的编译期char数组构造与format_string别名
-- format_to_n_result<char*>及其out/size成员
-- 格式串内部仅接受已验证的{}、转义花括号和非bool/char标准整数d/x/X/o/b语法
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- basic_format_string<char,Args...>的编译期char数组构造与format_string别名。
+- format_to_n_result<char*>及其out/size成员。
+- 格式串内部仅接受已验证的{}、转义花括号和非bool/char标准整数d/x/X/o/b语法。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
@@ -59,3 +61,7 @@ void use_type()
     using selected = asc::std::format_string<int>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_format.md)

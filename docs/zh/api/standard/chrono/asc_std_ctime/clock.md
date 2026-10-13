@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/ctime>`。
 
-`asc::std::clock` 返回当前执行环境的处理器时钟计数值。
+`asc::std::clock`返回当前执行环境的处理器时钟计数值。
 
 标准语义参考：[cppreference `ctime`](https://en.cppreference.com/w/cpp/header/ctime)。
 
 ## 函数原型
 
 ```cpp
-clock_t asc::std::clock() noexcept;
+namespace asc::std {
+clock_t clock() noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -50,9 +52,9 @@ clock_t asc::std::clock() noexcept;
 
 ## 约束说明
 
-- Host 使用标准时钟
-- AI Core SIMD 编程中使用 get_sys_cnt，AI Core SIMT 编程中使用 clock64
-- Device 计数器频率为页面声明的 1 GHz，difftime 仅进行值计算
+- Host使用标准时钟。
+- AI Core SIMD编程中使用get_sys_cnt，AI Core SIMT编程中使用clock64。
+- Device计数器频率为页面声明的1 GHz，difftime仅进行值计算。
 
 ## 调用示例
 
@@ -66,3 +68,7 @@ decltype(auto) example()
     return asc::std::clock();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ctime.md)

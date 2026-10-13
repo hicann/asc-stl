@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/version>`。
 
-`CANN_ASC_STL_HAS_COLLECTIVES` 定义为 1，表示当前版本提供 AI Core SIMT 编程中的线程块集体操作，以及 AI Core SIMD 编程中的 UB 范围集体操作。
+`CANN_ASC_STL_HAS_COLLECTIVES`定义为1，表示当前版本提供AI Core SIMT编程中的线程块集体操作，以及AI Core SIMD编程中的UB范围集体操作。
 
 ## 声明
 
@@ -38,7 +38,7 @@
 
 ## 约束说明
 
-- 提供产品版本和实际交付能力宏
+- 提供产品版本和实际交付能力宏。
 
 ## 调用示例
 
@@ -51,3 +51,7 @@
 #error "CANN_ASC_STL_HAS_COLLECTIVES is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_version.md)

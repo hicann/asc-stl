@@ -28,39 +28,45 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::rbegin` 取得逆序范围起始迭代器。
+`asc::std::rbegin`取得逆序范围起始迭代器。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class C> constexpr auto asc::std::rbegin(C& c) -> decltype(c.rbegin());
+namespace asc::std {
+template<class C> constexpr auto rbegin(C& c) -> decltype(c.rbegin());
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class C> constexpr auto asc::std::rbegin(const C& c) -> decltype(c.rbegin());
+namespace asc::std {
+template<class C> constexpr auto rbegin(const C& c) -> decltype(c.rbegin());
+} // namespace asc::std
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class T, asc::std::size_t N> constexpr asc::std::reverse_iterator<T*> asc::std::rbegin(T (&array)[N]);
+namespace asc::std {
+template<class T, asc::std::size_t N> constexpr asc::std::reverse_iterator<T*> rbegin(T (&array)[N]);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `C` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `C` | 被查询数组或容器的类型，须提供对应的范围访问操作。 |
 
 **函数参数**
 
@@ -68,13 +74,13 @@ template<class T, asc::std::size_t N> constexpr asc::std::reverse_iterator<T*> a
 | --- | --- | --- |
 | `c` | 输入/输出 | 提供“取得逆序范围起始迭代器”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `C` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `C` | 被查询数组或容器的类型，须提供对应的范围访问操作。 |
 
 **函数参数**
 
@@ -82,13 +88,13 @@ template<class T, asc::std::size_t N> constexpr asc::std::reverse_iterator<T*> a
 | --- | --- | --- |
 | `c` | 输入 | 提供“取得逆序范围起始迭代器”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 内建数组的元素类型。 |
 | `N` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
 
 **函数参数**
@@ -101,17 +107,17 @@ template<class T, asc::std::size_t N> constexpr asc::std::reverse_iterator<T*> a
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `decltype(c.rbegin())` | 返回逆序范围起始迭代器。 |
-| 原型 2 | `decltype(c.rbegin())` | 返回逆序范围起始迭代器。 |
-| 原型 3 | `asc::std::reverse_iterator<T*>` | 返回逆序范围起始迭代器。 |
+| 原型1 | `decltype(c.rbegin())` | 返回逆序范围起始迭代器。 |
+| 原型2 | `decltype(c.rbegin())` | 返回逆序范围起始迭代器。 |
+| 原型3 | `asc::std::reverse_iterator<T*>` | 返回逆序范围起始迭代器。 |
 
 ## 约束说明
 
-- 支持非 I/O 范围、数组和用户容器
+- 支持非I/O范围、数组和用户容器。
 
 ## 调用示例
 
-以下 Host 片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
 
 ```cpp
 #include <asc/std/iterator>
@@ -122,3 +128,7 @@ decltype(auto) example()
     return asc::std::rbegin(values);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

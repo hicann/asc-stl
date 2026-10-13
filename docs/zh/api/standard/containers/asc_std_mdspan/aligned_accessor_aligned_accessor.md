@@ -28,25 +28,25 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::aligned_accessor::aligned_accessor` 按本页所列构造形态初始化 `aligned_accessor` 对象。
+`asc::std::aligned_accessor::aligned_accessor`按本页所列构造形态初始化`aligned_accessor`对象。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr aligned_accessor() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 template<class OtherElement, size_t OtherByteAlignment> constexpr aligned_accessor(aligned_accessor<OtherElement, OtherByteAlignment> other) noexcept;
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 template<class OtherElement> constexpr aligned_accessor(default_accessor<OtherElement> accessor) noexcept;
@@ -54,54 +54,64 @@ template<class OtherElement> constexpr aligned_accessor(default_accessor<OtherEl
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `OtherElement` | 源对齐访问器的元素类型，须与本访问器的元素类型兼容。 |
-| `OtherByteAlignment` | 源对齐访问器的字节对齐值，编译期常量；须不小于本访问器的 ByteAlignment。 |
+| `OtherByteAlignment` | 源对齐访问器的字节对齐值，编译期常量；须不小于本访问器的ByteAlignment。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待转换的另一对齐访问器；其字节对齐不低于本访问器的 byte_alignment，本对象取得与其等价的访问策略。 |
+| `other` | 输入 | 待转换的另一对齐访问器；其字节对齐不低于本访问器的byte_alignment，本对象取得与其等价的访问策略。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherElement` | 源 default_accessor 的元素类型，须与本访问器的元素类型兼容。 |
+| `OtherElement` | 源default_accessor的元素类型，须与本访问器的元素类型兼容。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `accessor` | 输入 | 被转换的 default_accessor 对象；本对象改为按该元素类型的默认对齐执行访问。 |
+| `accessor` | 输入 | 被转换的default_accessor对象；本对象改为按该元素类型的默认对齐执行访问。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整layout_left/layout_right/layout_stride mapping及default_accessor/aligned_accessor家族：零rank与正rank、默认/extents/array/span/跨mapping或accessor构造、标准显式性与约束、索引映射、要求d_span_size/stride/extents、唯一/穷尽/步长观察、mapping比较、access/offset及byte_alignment
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain pointer域
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/mdspan>
+#include <asc/std/type_traits>
 
-void example()
+bool example()
 {
-    asc::std::aligned_accessor<int, 16> accessor{};
-    (void)accessor;
+    alignas(16) int values[4] = {1, 2, 3, 4};
+    asc::std::aligned_accessor<int, 16> accessor;
+    static_assert(decltype(accessor)::byte_alignment == 16);
+    return accessor.access(values, 1) == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mdspan.md)

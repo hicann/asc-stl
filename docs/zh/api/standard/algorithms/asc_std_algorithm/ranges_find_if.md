@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::ranges::find_if` 是 C++17 起可调用的算法对象，接受迭代器与哨兵或输入范围，并可指定投影；返回首个投影后满足谓词的位置。范围重载对非借用临时范围返回 `dangling`。
+`asc::std::ranges::find_if`是C++17起可调用的算法对象，接受迭代器与哨兵或输入范围，并可指定投影；返回首个投影后满足谓词的位置。范围重载对非借用临时范围返回`dangling`。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -37,16 +37,20 @@
 该名称是公开的常量函数对象；对象的实现类型不构成接口承诺。以下为调用形式，省略的可选参数以各原型约束为准。
 
 ```cpp
-asc::std::ranges::find_if(first, last, predicate, projection)
+namespace asc::std::ranges {
+find_if(first, last, predicate, projection);
+} // namespace asc::std::ranges
 ```
 
 ```cpp
-asc::std::ranges::find_if(range, predicate, projection)
+namespace asc::std::ranges {
+find_if(range, predicate, projection);
+} // namespace asc::std::ranges
 ```
 
 ## 参数说明
 
-### 调用形式 1 的参数
+### 调用形式1的参数
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -55,7 +59,7 @@ asc::std::ranges::find_if(range, predicate, projection)
 | `predicate` | 输入 | 对元素或投影结果执行判断的谓词。 |
 | `projection` | 输入 | 在比较或判断前作用于元素的投影函数。 |
 
-### 调用形式 2 的参数
+### 调用形式2的参数
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
@@ -65,7 +69,7 @@ asc::std::ranges::find_if(range, predicate, projection)
 
 ## 返回值说明
 
-返回首个满足谓词的元素位置；未找到时返回结束位置。非借用临时范围的范围重载返回 `dangling`。
+返回首个满足谓词的元素位置；未找到时返回结束位置。非借用临时范围的范围重载返回`dangling`。
 
 | 调用形式 | 返回类型 |
 | --- | --- |
@@ -74,24 +78,26 @@ asc::std::ranges::find_if(range, predicate, projection)
 
 ## 约束说明
 
-- 谓词须能接收投影后的元素
-- 迭代器与哨兵须形成有效范围
+- 谓词须能接收投影后的元素。
+- 迭代器与哨兵须形成有效范围。
 
 ## 调用示例
 
-以下 Host 片段以具体数组或数值演示本页调用形式。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    // 用具体类型和实参演示已交付的调用形式。
-    int values[4] = {1, 2, 3, 4};
+    int values[] = {1, 2, 3, 4};
     auto predicate = [](int value) { return value % 2 == 0; };
-    auto result_1 = asc::std::ranges::find_if(values, values + 4, predicate);
-    (void)result_1;
-    auto result_2 = asc::std::ranges::find_if(values, predicate);
-    (void)result_2;
+    auto first = asc::std::ranges::find_if(values, values + 4, predicate);
+    auto second = asc::std::ranges::find_if(values, predicate);
+    return first == values + 1 && second == first;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

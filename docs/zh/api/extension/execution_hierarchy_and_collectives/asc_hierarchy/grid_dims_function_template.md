@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::grid_dims` 创建 Grid 层级的三维尺寸描述。
+`asc::grid_dims`创建Grid层级的三维尺寸描述。
 
 ## 函数原型
 
 ```cpp
-template<unsigned int X, unsigned int Y = 1, unsigned int Z = 1> constexpr asc::level_dimensions<asc::grid_level> asc::grid_dims() noexcept;
+namespace asc {
+template<unsigned int X, unsigned int Y = 1, unsigned int Z = 1> constexpr asc::level_dimensions<asc::grid_level> grid_dims() noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -54,9 +56,9 @@ template<unsigned int X, unsigned int Y = 1, unsigned int Z = 1> constexpr asc::
 
 ## 约束说明
 
-- 提供 C++17 constexpr Host/Device 层次结构接口
-- 带 extent 的值要求每一维均非零
-- extent 总数按无符号 64 位的 x*y*z 计算
+- 提供C++17 constexpr Host/Device层次结构接口。
+- 带extent的值要求每一维均非零。
+- extent总数按无符号64位的x*y*z计算。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example()
     return asc::grid_dims<2, 1, 1>();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_hierarchy.md)

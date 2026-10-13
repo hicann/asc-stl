@@ -18,9 +18,7 @@
 #include "../semantics.h"
 int main()
 {
-    constexpr unsigned int threads = 64;
-    constexpr unsigned int columns = 6;
-    unsigned int host[threads * columns]{};
+    unsigned int host[asc_stl_collective_test::result_count]{};
     unsigned int* device = nullptr;
     aclrtStream stream = nullptr;
     bool passed = aclInit(nullptr) == ACL_SUCCESS && aclrtSetDevice(0) == ACL_SUCCESS &&
@@ -31,11 +29,7 @@ int main()
         passed = aclrtSynchronizeStream(stream) == ACL_SUCCESS &&
             aclrtMemcpy(host, sizeof(host), device, sizeof(host), ACL_MEMCPY_DEVICE_TO_HOST) == ACL_SUCCESS;
     }
-    for (unsigned int thread = 0; passed && thread < threads; ++thread) {
-        const unsigned int* row = host + thread * columns;
-        passed = row[0] == 2080 && row[1] == 1 && row[2] == 64 && row[3] == 18 &&
-            row[4] == (thread + 1) * (thread + 2) / 2 && row[5] == thread * (thread + 1) / 2;
-    }
+    passed = passed && asc_stl_collective_test::verify(host);
     if (device)
         passed = aclrtFree(device) == ACL_SUCCESS && passed;
     if (stream)

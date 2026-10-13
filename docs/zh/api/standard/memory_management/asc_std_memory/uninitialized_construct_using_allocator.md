@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::uninitialized_construct_using_allocator` 在给定存储中按 uses-allocator 规则构造对象。
+`asc::std::uninitialized_construct_using_allocator`在给定存储中按uses-allocator规则构造对象。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
 ```cpp
-template<class T, class Alloc, class... Args> constexpr T* asc::std::uninitialized_construct_using_allocator(T* ptr, const Alloc& alloc, Args&&... args);
+namespace asc::std {
+template<class T, class Alloc, class... Args> constexpr T* uninitialized_construct_using_allocator(T* ptr, const Alloc& alloc, Args&&... args);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -52,8 +54,8 @@ template<class T, class Alloc, class... Args> constexpr T* asc::std::uninitializ
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `ptr` | 输入 | 提供“在给定存储中按 uses-allocator 规则构造对象”所需的数据地址；可访问范围和生命周期须满足约束。 |
-| `alloc` | 输入 | 提供“在给定存储中按 uses-allocator 规则构造对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `ptr` | 输出 | 满足目标对象大小与对齐的未初始化存储地址；调用在该处开始对象生命周期，构造实参决定其初值。 |
+| `alloc` | 输入 | 提供“在给定存储中按uses-allocator规则构造对象”使用的对象引用；被引用对象须在调用期间有效。 |
 | `args` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
 
 ## 返回值说明
@@ -64,16 +66,16 @@ template<class T, class Alloc, class... Args> constexpr T* asc::std::uninitializ
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg
-- uses_allocator/uses_allocator_v
-- allocator_traits 的 C++20 成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator 含 pair 递归构造
-- C++23 allocation_result 与标准 allocator_traits::allocate_at_least
-- 均限用户显式提供且在调用执行空间有效的 allocator
+- allocator_arg_t/allocator_arg。
+- uses_allocator/uses_allocator_v。
+- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
+- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
+- C++23 allocation_result与标准allocator_traits::allocate_at_least。
+- 均限用户显式提供且在调用执行空间有效的allocator。
 
 ## 调用示例
 
-以下 Host 片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
+以下Host片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
 
 ```cpp
 #include <asc/std/memory>
@@ -102,3 +104,7 @@ decltype(auto) example()
     asc::std::destroy_n(output, 1);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

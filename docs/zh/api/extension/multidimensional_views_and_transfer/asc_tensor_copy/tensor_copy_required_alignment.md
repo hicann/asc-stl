@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::tensor_copy_required_alignment` 计算指定元素类型和 Descriptor 所需的地址对齐。
+`asc::tensor_copy_required_alignment`计算指定元素类型和Descriptor所需的地址对齐。
 
 ## 函数原型
 
 ```cpp
-template<class T, unsigned Rank> constexpr unsigned int asc::tensor_copy_required_alignment(const asc::tensor_copy_descriptor<Rank>& descriptor) noexcept;
+namespace asc {
+template<class T, unsigned Rank> constexpr unsigned int tensor_copy_required_alignment(const asc::tensor_copy_descriptor<Rank>& descriptor) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,7 +44,7 @@ template<class T, unsigned Rank> constexpr unsigned int asc::tensor_copy_require
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 参与张量搬运的元素类型，决定元素大小及搬运对齐要求。 |
 | `Rank` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
 
 **函数参数**
@@ -59,9 +61,9 @@ template<class T, unsigned Rank> constexpr unsigned int asc::tensor_copy_require
 
 ## 约束说明
 
-- 描述符及状态类型可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Rank 为 1 至 5
-- 维度和步长采用 uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运
+- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Rank为1至5。
+- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
 
 ## 调用示例
 
@@ -79,3 +81,7 @@ decltype(auto) example()
     return asc::tensor_copy_required_alignment<int>(descriptor);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_tensor_copy.md)

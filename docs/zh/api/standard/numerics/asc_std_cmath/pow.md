@@ -28,64 +28,72 @@
 
 头文件路径为：`<asc/std/cmath>`、`<asc/std/complex>`。
 
-`asc::std::pow` 计算幂；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::pow`计算幂；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-float asc::std::pow(float base, float exponent) noexcept;
+namespace asc::std {
+float pow(float base, float exponent) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/cmath>`。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T, class U> complex<common_type_t<T, U>> asc::std::pow(const T& base, const complex<U>& exponent) noexcept;
+namespace asc::std {
+template<class T, class U> complex<common_type_t<T, U>> pow(const T& base, const complex<U>& exponent) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/complex>`。
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class T, class U> complex<common_type_t<T, U>> asc::std::pow(const complex<T>& base, const U& exponent) noexcept;
+namespace asc::std {
+template<class T, class U> complex<common_type_t<T, U>> pow(const complex<T>& base, const U& exponent) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/complex>`。
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class T> complex<T> asc::std::pow(const complex<T>& base, const complex<T>& exponent) noexcept;
+namespace asc::std {
+template<class T> complex<T> pow(const complex<T>& base, const complex<T>& exponent) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/complex>`。
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `base` | 输入 | 待求幂的底数（无量纲）。 |
-| `exponent` | 输入 | 待求幂的指数（无量纲）；上溢返回 ±inf，下溢返回 ±0，负底数配非整数指数等无法定义的情形返回 NaN。 |
+| `exponent` | 输入 | 待求幂的指数（无量纲）；上溢返回 ±inf，下溢返回 ±0，负底数配非整数指数等无法定义的情形返回NaN。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 底数（实数标量）的值类型，与 U 的公共类型作为结果复数的成分类型。 |
+| `T` | 底数（实数标量）的值类型，与U的公共类型作为结果复数的成分类型。 |
 | `U` | 复数指数的成分（实部与虚部）值类型。 |
 
 **函数参数**
@@ -95,14 +103,14 @@ template<class T> complex<T> asc::std::pow(const complex<T>& base, const complex
 | `base` | 输入 | 待求幂的实数底数（标量，无量纲）。 |
 | `exponent` | 输入 | 待求幂的复数指数操作数。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `T` | 复数底数的成分（实部与虚部）值类型。 |
-| `U` | 指数（实数标量）的值类型，与 T 的公共类型作为结果复数的成分类型。 |
+| `U` | 指数（实数标量）的值类型，与T的公共类型作为结果复数的成分类型。 |
 
 **函数参数**
 
@@ -111,7 +119,7 @@ template<class T> complex<T> asc::std::pow(const complex<T>& base, const complex
 | `base` | 输入 | 待求幂的复数底数操作数。 |
 | `exponent` | 输入 | 待求幂的实数指数（标量，无量纲）。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
@@ -130,16 +138,16 @@ template<class T> complex<T> asc::std::pow(const complex<T>& base, const complex
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `float` | 返回幂；Device 侧适用范围以本页 float 与执行位置约束为准的计算结果。 |
-| 原型 2 | `complex<common_type_t<T, U>>` | 返回幂；Device 侧适用范围以本页 float 与执行位置约束为准的计算结果。 |
-| 原型 3 | `complex<common_type_t<T, U>>` | 返回幂；Device 侧适用范围以本页 float 与执行位置约束为准的计算结果。 |
-| 原型 4 | `complex<T>` | 返回幂；Device 侧适用范围以本页 float 与执行位置约束为准的计算结果。 |
+| 原型1 | `float` | 返回幂；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+| 原型2 | `complex<common_type_t<T, U>>` | 返回幂；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+| 原型3 | `complex<common_type_t<T, U>>` | 返回幂；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+| 原型4 | `complex<T>` | 返回幂；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
 
 ## 约束说明
 
-- 提供 float 重载、标准 *f 别名以及 float lerp 回移接口
-- 仅提供页面声明的 float 或 complex<float> 运算
-- 接口可用性取决于相应的 float 数学能力
+- 提供float重载、标准 *f别名以及float lerp回移接口。
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
@@ -153,3 +161,7 @@ decltype(auto) example(float base, float exponent)
     return asc::std::pow(base, exponent);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

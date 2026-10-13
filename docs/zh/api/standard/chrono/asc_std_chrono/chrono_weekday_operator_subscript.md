@@ -1,4 +1,4 @@
-# asc::std::chrono::weekday::operator[]
+# asc::std::chrono::weekday::`operator[]`
 
 ## 产品支持情况
 
@@ -28,57 +28,60 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::weekday::operator[]` 借助下标语法构造日历辅助类型：带索引形式由本星期几与索引构造 `weekday_indexed`（表示本月第几个此星期几），`last_spec` 形式构造 `weekday_last`（表示本月最后一个此星期几）。
+`asc::std::chrono::weekday::operator[]`借助下标语法构造日历辅助类型：带索引形式由本星期几与索引构造`weekday_indexed`（表示本月第几个此星期几），`last_spec`形式构造`weekday_last`（表示本月最后一个此星期几）。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::chrono::weekday`](chrono_weekday.md)。
+
+### 原型1
 
 ```cpp
-[[nodiscard]] constexpr weekday_indexed asc::std::chrono::weekday::operator[](unsigned int index) const noexcept;
+// asc::std::chrono::weekday 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr weekday_indexed operator[](unsigned int index) const noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-[[nodiscard]] constexpr weekday_last asc::std::chrono::weekday::operator[](last_spec index) const noexcept;
+// asc::std::chrono::weekday 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr weekday_last operator[](last_spec index) const noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 该月的第几个星期几，取值 1 到 5；与当前星期几组合成 weekday_indexed。 |
+| `index` | 输入 | 该月的第几个星期几，取值1到5；与当前星期几组合成weekday_indexed。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | last 标记（asc::std::chrono::last）；表示取该月的最后一个当前星期几。 |
+| `index` | 输入 | last标记（asc::std::chrono::last）；表示取该月的最后一个当前星期几。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `weekday_indexed` | 返回由本星期几与给定索引构造的 `weekday_indexed`，表示本月第几个此星期几。 |
-| 原型 2 | `weekday_last` | 返回由本星期几构造的 `weekday_last`，表示本月最后一个此星期几。 |
+| 原型1 | `weekday_indexed` | 返回由本星期几与给定索引构造的`weekday_indexed`，表示本月第几个此星期几。 |
+| 原型2 | `weekday_last` | 返回由本星期几构造的`weekday_last`，表示本月最后一个此星期几。 |
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
-以下 Host 片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host片段以具体日期或时间类型演示调用；数值须满足本页约束。
 
 ```cpp
 #include <asc/std/chrono>
@@ -88,3 +91,8 @@ decltype(auto) example(const asc::std::chrono::weekday& value)
     return value[1];
 }
 ```
+
+## 关联API
+
+- [`asc::std::chrono::weekday`](chrono_weekday.md)
+- [本头文件的接口列表](asc_std_chrono.md)

@@ -1,4 +1,4 @@
-# asc::std::chrono::operator-
+# asc::std::chrono::`operator-`
 
 ## 产品支持情况
 
@@ -28,131 +28,161 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::operator-` 由 `<asc/std/chrono>` 提供，执行时长维度的求差运算。接口遵循对应 C++ 标准设施的语义；ASC-STL 的语言模式和调用位置以本页声明为准。
+`asc::std::chrono::operator-`由`<asc/std/chrono>`提供，执行时长维度的求差运算。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template <class Rep2, class Period2> constexpr common_type_t<duration, duration<Rep2, Period2>> asc::std::chrono::operator-(const duration& lhs, const duration<Rep2, Period2>& rhs)
+namespace asc::std::chrono {
+template <class Rep2, class Period2> constexpr common_type_t<duration, duration<Rep2, Period2>> operator-(const duration& lhs, const duration<Rep2, Period2>& rhs);
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr month asc::std::chrono::operator-(const month& lhs, const months& rhs) noexcept
+namespace asc::std::chrono {
+constexpr month operator-(const month& lhs, const months& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 3
+### 原型3
 
 ```cpp
-constexpr months asc::std::chrono::operator-(const month& lhs, const month& rhs) noexcept
+namespace asc::std::chrono {
+constexpr months operator-(const month& lhs, const month& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 4
+### 原型4
 
 ```cpp
-template <class Rep2, class Period2> constexpr time_point<Clock, common_type_t<Duration, chrono::duration<Rep2, Period2>>> asc::std::chrono::operator-(const time_point& lhs, const chrono::duration<Rep2, Period2>& rhs)
+namespace asc::std::chrono {
+template <class Rep2, class Period2> constexpr time_point<Clock, common_type_t<Duration, chrono::duration<Rep2, Period2>>> operator-(const time_point& lhs, const chrono::duration<Rep2, Period2>& rhs);
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 5
+### 原型5
 
 ```cpp
-constexpr months asc::std::chrono::operator-(const year_month& lhs, const year_month& rhs) noexcept
+namespace asc::std::chrono {
+constexpr months operator-(const year_month& lhs, const year_month& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 6
+### 原型6
 
 ```cpp
-constexpr year_month asc::std::chrono::operator-(const year_month& lhs, const months& rhs) noexcept
+namespace asc::std::chrono {
+constexpr year_month operator-(const year_month& lhs, const months& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 7
+### 原型7
 
 ```cpp
-constexpr year_month asc::std::chrono::operator-(const year_month& lhs, const years& rhs) noexcept
+namespace asc::std::chrono {
+constexpr year_month operator-(const year_month& lhs, const years& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 8
+### 原型8
 
 ```cpp
-constexpr year_month_day asc::std::chrono::operator-(const year_month_day& lhs, const months& rhs) noexcept
+namespace asc::std::chrono {
+constexpr year_month_day operator-(const year_month_day& lhs, const months& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 9
+### 原型9
 
 ```cpp
-constexpr year_month_day asc::std::chrono::operator-(const year_month_day& lhs, const years& rhs) noexcept
+namespace asc::std::chrono {
+constexpr year_month_day operator-(const year_month_day& lhs, const years& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 10
+### 原型10
 
 ```cpp
-constexpr year_month_day_last asc::std::chrono::operator-(const year_month_day_last& lhs, const months& rhs) noexcept
+namespace asc::std::chrono {
+constexpr year_month_day_last operator-(const year_month_day_last& lhs, const months& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 11
+### 原型11
 
 ```cpp
-constexpr year_month_day_last asc::std::chrono::operator-(const year_month_day_last& lhs, const years& rhs) noexcept
+namespace asc::std::chrono {
+constexpr year_month_day_last operator-(const year_month_day_last& lhs, const years& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 12
+### 原型12
 
 ```cpp
-constexpr year_month_weekday asc::std::chrono::operator-(const year_month_weekday& lhs, const months& rhs) noexcept
+namespace asc::std::chrono {
+constexpr year_month_weekday operator-(const year_month_weekday& lhs, const months& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 13
+### 原型13
 
 ```cpp
-constexpr year_month_weekday asc::std::chrono::operator-(const year_month_weekday& lhs, const years& rhs) noexcept
+namespace asc::std::chrono {
+constexpr year_month_weekday operator-(const year_month_weekday& lhs, const years& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 14
+### 原型14
 
 ```cpp
-constexpr year_month_weekday_last asc::std::chrono::operator-(const year_month_weekday_last& lhs, const months& rhs) noexcept
+namespace asc::std::chrono {
+constexpr year_month_weekday_last operator-(const year_month_weekday_last& lhs, const months& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 15
+### 原型15
 
 ```cpp
-constexpr year_month_weekday_last asc::std::chrono::operator-(const year_month_weekday_last& lhs, const years& rhs) noexcept
+namespace asc::std::chrono {
+constexpr year_month_weekday_last operator-(const year_month_weekday_last& lhs, const years& rhs) noexcept;
+} // namespace asc::std::chrono
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 参数说明
 
@@ -160,8 +190,8 @@ constexpr year_month_weekday_last asc::std::chrono::operator-(const year_month_w
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rep2` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
-| `Period2` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
+| `Rep2` | 另一时长或标量的计数类型；运算时与Rep形成公共类型。 |
+| `Period2` | 另一时长的计时周期，是表示秒比例的ratio类型。 |
 
 **函数参数**
 
@@ -174,36 +204,40 @@ constexpr year_month_weekday_last asc::std::chrono::operator-(const year_month_w
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `common_type_t<duration, duration<Rep2, Period2>>` | 返回该操作产生的值，具体含义由所选原型确定。 |
-| `month` | 返回该操作产生的值，具体含义由所选原型确定。 |
-| `months` | 返回该操作产生的值，具体含义由所选原型确定。 |
-| `time_point<Clock, common_type_t<Duration, chrono::duration<Rep2, Period2>>>` | 返回该操作产生的值，具体含义由所选原型确定。 |
-| `year_month` | 返回该操作产生的值，具体含义由所选原型确定。 |
-| `year_month_day` | 返回该操作产生的值，具体含义由所选原型确定。 |
-| `year_month_day_last` | 返回该操作产生的值，具体含义由所选原型确定。 |
-| `year_month_weekday` | 返回该操作产生的值，具体含义由所选原型确定。 |
-| `year_month_weekday_last` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `common_type_t<duration, duration<Rep2, Period2>>` | 减法结果：时长／时间点差使用公共duration；日历形式产生相应的月份差或偏移后的日期组成。 |
+| `month` | 减法结果：时长／时间点差使用公共duration；日历形式产生相应的月份差或偏移后的日期组成。 |
+| `months` | 减法结果：时长／时间点差使用公共duration；日历形式产生相应的月份差或偏移后的日期组成。 |
+| `time_point<Clock, common_type_t<Duration, chrono::duration<Rep2, Period2>>>` | 减法结果：时长／时间点差使用公共duration；日历形式产生相应的月份差或偏移后的日期组成。 |
+| `year_month` | 减法结果：时长／时间点差使用公共duration；日历形式产生相应的月份差或偏移后的日期组成。 |
+| `year_month_day` | 减法结果：时长／时间点差使用公共duration；日历形式产生相应的月份差或偏移后的日期组成。 |
+| `year_month_day_last` | 减法结果：时长／时间点差使用公共duration；日历形式产生相应的月份差或偏移后的日期组成。 |
+| `year_month_weekday` | 减法结果：时长／时间点差使用公共duration；日历形式产生相应的月份差或偏移后的日期组成。 |
+| `year_month_weekday_last` | 减法结果：时长／时间点差使用公共duration；日历形式产生相应的月份差或偏移后的日期组成。 |
 
 ## 约束说明
 
-- 两个时长先转换为公共时长类型后相减
-- 月数按十二进制回绕，结果保持在标准月份取值范围内
-- 两个月份的差值结果保证落在一个年度范围之内
-- 时长与时间点的精度先取公共类型，结果为该精度下的时间点
-- 差值为年份差折算的月数与月份差之和
-- 等价于加上相反数
+- 两个时长先转换为公共时长类型后相减。
+- 月数按十二进制回绕，结果保持在标准月份取值范围内。
+- 两个月份的差值结果保证落在一个年度范围之内。
+- 时长与时间点的精度先取公共类型，结果为该精度下的时间点。
+- 差值为年份差折算的月数与月份差之和。
+- 等价于加上相反数。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    const asc::std::chrono::month& lhs{};
-    const asc::std::chrono::months& rhs{};
-    (void)(lhs - rhs);
+    asc::std::chrono::seconds left{2}, right{3};
+    return (right - left).count() == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

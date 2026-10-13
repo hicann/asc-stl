@@ -28,31 +28,40 @@
 
 头文件路径为：`<asc/std/variant>`。
 
-`asc::std::variant_alternative::type` 提供该类型特征、映射或适配器计算出的成员类型。
+`asc::std::variant_alternative::type`提供该类型特征、映射或适配器计算出的成员类型。
 
 标准语义参考：[cppreference `variant`](https://en.cppreference.com/w/cpp/header/variant)。
 
 ## 声明
 
+`asc::std::variant_alternative<Index, Variant>::type`是Variant的第Index个备选项类型；Variant的cv限定附加到结果类型。Index必须小于variant_size_v<Variant>。
+
 ```cpp
-using asc::std::variant_alternative::type = Typeindexc<Index, Types...>
+using Variant = const asc::std::variant<int, float>;
+using Alternative = asc::std::variant_alternative<1, Variant>::type; // const float
 ```
 
 ## 约束说明
 
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
+- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
+- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下片段选用具体模板实参读取嵌套类型。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/variant>
+#include <asc/std/type_traits>
 
-void use_type()
+bool example()
 {
-    using selected = typename asc::std::variant_alternative<0, asc::std::variant<int, float>>::type;
-    (void)sizeof(selected);
+    using Variant = const asc::std::variant<int, float>;
+    static_assert(asc::std::is_same_v<asc::std::variant_alternative<0, Variant>::type, const int>);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_variant.md)

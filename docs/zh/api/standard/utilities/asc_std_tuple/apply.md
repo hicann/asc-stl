@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/tuple>`。
 
-`asc::std::apply` 把 tuple 元素展开为函数对象的实参并调用。
+`asc::std::apply`把tuple元素展开为函数对象的实参并调用。
 
 标准语义参考：[cppreference `tuple`](https://en.cppreference.com/w/cpp/header/tuple)。
 
 ## 函数原型
 
 ```cpp
-template<class Function, class Tuple> constexpr decltype(auto) asc::std::apply(Function&& function, Tuple&& value);
+namespace asc::std {
+template<class Function, class Tuple> constexpr decltype(auto) apply(Function&& function, Tuple&& value);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,25 +46,25 @@ template<class Function, class Tuple> constexpr decltype(auto) asc::std::apply(F
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Function` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Tuple` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Function` | 接收展开后的tuple-like元素的可调用对象类型。 |
+| `Tuple` | 提供tuple_size及get的tuple-like实参类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入/输出 | 被调用的可调用对象；tuple 的各元素按序展开为其实参（按 invoke 语义调用），返回其调用结果。 |
-| `value` | 输入/输出 | 被展开调用的 tuple 对象；其各元素按序作为调用实参，右值元素被移动，移动后处于有效但未指定状态。 |
+| `function` | 输入/输出 | 被调用的可调用对象；tuple的各元素按序展开为其实参（按invoke语义调用），返回其调用结果。 |
+| `value` | 输入/输出 | 被展开调用的tuple对象；其各元素按序作为调用实参，右值元素被移动，移动后处于有效但未指定状态。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `decltype(auto)` | 返回将 tuple 元素展开后调用函数对象的结果。 |
+| `decltype(auto)` | 返回将tuple元素展开后调用函数对象的结果。 |
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
 
 ## 调用示例
 
@@ -77,3 +79,7 @@ decltype(auto) example()
     return asc::std::apply([](int left, int right) { return left + right; }, values);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_tuple.md)

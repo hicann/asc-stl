@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::move_backward` 从尾部向前移动范围中的元素；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::move_backward`从尾部向前移动范围中的元素；无策略形式在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
 
 ```cpp
-template<class BidirectionalIterator1, class BidirectionalIterator2> constexpr BidirectionalIterator2 asc::std::move_backward(BidirectionalIterator1 first, BidirectionalIterator1 last, BidirectionalIterator2 result);
+namespace asc::std {
+template<class BidirectionalIterator1, class BidirectionalIterator2> constexpr BidirectionalIterator2 move_backward(BidirectionalIterator1 first, BidirectionalIterator1 last, BidirectionalIterator2 result);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -63,12 +65,12 @@ template<class BidirectionalIterator1, class BidirectionalIterator2> constexpr B
 
 ## 约束说明
 
-- 提供顺序执行且不进行动态内存分配的重载
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序
+- 提供顺序执行且不进行动态内存分配的重载。
+- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下 Host 片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
 
 ```cpp
 #include <asc/std/algorithm>
@@ -80,3 +82,7 @@ decltype(auto) example()
     return asc::std::move_backward(values, values + 8, output + 8);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/execution.require.h>`。
 
-`asc::execution_requirements::output_ordering_value` 返回当前组合中的输出顺序要求。
+`asc::execution_requirements::output_ordering_value`返回当前组合中的输出顺序要求。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 函数原型
 
+所属类型：[`asc::execution_requirements`](execution_requirements.md)。
+
 ```cpp
-constexpr asc::output_ordering asc::execution_requirements::output_ordering_value() const noexcept;
+// asc::execution_requirements 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr asc::output_ordering output_ordering_value() const noexcept;
 ```
 
 ## 参数说明
@@ -50,18 +53,26 @@ constexpr asc::output_ordering asc::execution_requirements::output_ordering_valu
 
 ## 约束说明
 
-- 对象为不可变值
-- 默认采用 determinism::not_guaranteed、output_ordering::unsorted 和 tie_break::unspecified
+- 对象为不可变值。
+- 默认采用determinism::not_guaranteed、output_ordering::unsorted和tie_break::unspecified。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/execution.require.h>
 
-void example(asc::execution_requirements& object)
+bool example()
 {
-    (void)object.output_ordering_value();
+    asc::execution_requirements requirements;
+    return requirements.determinism_value() == asc::determinism::not_guaranteed
+        && requirements.output_ordering_value() == asc::output_ordering::unsorted
+        && requirements.tie_break_value() == asc::tie_break::unspecified;
 }
 ```
+
+## 关联API
+
+- [`asc::execution_requirements`](execution_requirements.md)
+- [本头文件的接口列表](asc_execution_require_h.md)

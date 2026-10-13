@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::views::all` 把输入范围转为适当的非拥有或拥有式视图。
+`asc::std::ranges::views::all`把输入范围转为适当的非拥有或拥有式视图。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
@@ -37,7 +37,8 @@
 该名称是公开的常量函数对象；对象的实现类型不构成接口承诺。以下为调用形式，省略的可选参数以各原型约束为准。
 
 ```cpp
-asc::std::ranges::views::all(range)
+// asc::std::ranges::views 类内的声明节选；模板形参和其他成员由所属类提供。
+all(range);
 ```
 
 ## 参数说明
@@ -57,25 +58,28 @@ asc::std::ranges::views::all(range)
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
-- 左值输入返回非拥有视图，右值输入返回拥有式视图
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- 左值输入返回非拥有视图，右值输入返回拥有式视图。
 - 非拥有视图不得超过原范围的生命周期。
 
 ## 调用示例
 
-以下 Host 片段以具体数组或数值演示本页调用形式。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example()
+bool example()
 {
-    // 用具体类型和实参演示已交付的调用形式。
-    int values[4] = {1, 2, 3, 4};
-    auto result_1 = asc::std::ranges::views::all(values);
-    (void)result_1;
-    auto result_2 = asc::std::ranges::views::all(asc::std::ranges::views::single(7));
-    (void)result_2;
+    int values[] = {1, 2, 3, 4};
+    auto view = asc::std::ranges::views::all(values);
+    return view.size() == 4 && *view.begin() == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

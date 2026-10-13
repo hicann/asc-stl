@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/execution>`。
 
-`asc::execution_errc::success` 表示接口调用成功，且对应的原生后端状态码为 0。
+`asc::execution_errc::success`表示接口调用成功，且对应的原生后端状态码为0。
 
 ## 声明
 
+所属类型：[`asc::execution_errc`](execution_errc.md)。
+
 ```cpp
-asc::execution_errc::success = 0
+// asc::execution_errc 类内的声明节选；模板形参和其他成员由所属类提供。
+success = 0;
 ```
 
 ## 约束说明
 
-- 仅可在 Host 使用
-- 状态值可平凡复制
-- 成功状态的 code() 为 execution_errc::success，native_code() 为 0，失败状态保留可用于诊断的状态码
+- 仅可在Host使用。
+- 状态值可平凡复制。
+- 成功状态的code()为execution_errc::success，native_code()为0，失败状态保留可用于诊断的状态码。
 
 ## 调用示例
 
@@ -51,3 +54,8 @@ asc::execution_errc::success = 0
 
 auto value = asc::execution_errc::success;
 ```
+
+## 关联API
+
+- [`asc::execution_errc`](execution_errc.md)
+- [本头文件的接口列表](asc_execution.md)

@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::ranges::swap` 是交换两个值的定制点对象：优先 ADL 发现的 `swap`，其次等长数组逐元素交换，再次用 `exchange` 做移动交换。
+`asc::std::ranges::swap`是交换两个值的定制点对象：优先ADL发现的`swap`，其次等长数组逐元素交换，再次用`exchange`做移动交换。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 
 ## 声明
 
 ```cpp
-constexpr asc::std::ranges::swap_fn asc::std::ranges::swap
+namespace asc::std::ranges {
+constexpr swap_fn swap;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 两实参为可交换的左值，或两个等长的元素可交换数组
+- 两实参为可交换的左值，或两个等长的元素可交换数组。
 
 ## 调用示例
 
@@ -57,3 +59,7 @@ void example()
     asc::std::ranges::swap(lhs, rhs);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_concepts.md)

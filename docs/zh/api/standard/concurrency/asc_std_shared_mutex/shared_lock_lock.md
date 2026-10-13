@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/shared_mutex>`。
 
-`asc::std::shared_lock::lock` 获取调用方提供的 Lockable 对象所有权。
+`asc::std::shared_lock::lock`获取调用方提供的Lockable对象所有权。
 
 标准语义参考：[cppreference `shared_mutex`](https://en.cppreference.com/w/cpp/header/shared_mutex)。
 
 ## 函数原型
 
+所属类型：[`asc::std::shared_lock`](shared_lock.md)。
+
 ```cpp
-void asc::std::shared_lock::lock();
+// asc::std::shared_lock 类内的声明节选；模板形参和其他成员由所属类提供。
+void lock();
 ```
 
 ## 参数说明
@@ -48,14 +51,14 @@ void asc::std::shared_lock::lock();
 
 ## 约束说明
 
-- shared_lock<Mutex>的mutex_type，default/普通/defer/try/adopt构造、删除copy、move构造/赋值和析构
-- 有效状态上的lock/try_lock/unlock/swap/release/mutex/owns_lock/operator bool及非成员swap
-- 显式非抛Device SharedLockable域
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- shared_lock<Mutex>的mutex_type，default/普通/defer/try/adopt构造、删除copy、move构造/赋值和析构。
+- 有效状态上的lock/try_lock/unlock/swap/release/mutex/owns_lock/operator bool及非成员swap。
+- 显式非抛Device SharedLockable域。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用标准锁对象演示调用；调用方须遵守锁的所有权和生命周期约束。
+以下Host片段使用标准锁对象演示调用；调用方须遵守锁的所有权和生命周期约束。
 
 ```cpp
 #include <asc/std/shared_mutex>
@@ -68,3 +71,8 @@ void example(::std::shared_mutex& mutex)
     guard.lock();
 }
 ```
+
+## 关联API
+
+- [`asc::std::shared_lock`](shared_lock.md)
+- [本头文件的接口列表](asc_std_shared_mutex.md)

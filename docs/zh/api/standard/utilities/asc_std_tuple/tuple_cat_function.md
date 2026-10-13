@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/tuple>`。
 
-`asc::std::tuple_cat` 按顺序拼接多个 tuple 的元素。
+`asc::std::tuple_cat`按顺序拼接多个tuple的元素。
 
 标准语义参考：[cppreference `tuple`](https://en.cppreference.com/w/cpp/header/tuple)。
 
 ## 函数原型
 
 ```cpp
-constexpr tuple<> asc::std::tuple_cat();
+namespace asc::std {
+constexpr tuple<> tuple_cat();
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,11 +48,11 @@ constexpr tuple<> asc::std::tuple_cat();
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `tuple<>` | 返回按给定元素或 tuple 组合得到的新 tuple。 |
+| `tuple<>` | 返回按给定元素或tuple组合得到的新tuple。 |
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
 
 ## 调用示例
 
@@ -64,3 +66,7 @@ decltype(auto) example()
     return asc::std::tuple_cat();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_tuple.md)

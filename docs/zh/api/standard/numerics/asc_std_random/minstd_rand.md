@@ -28,29 +28,38 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::minstd_rand` 提供对应随机数引擎或分布参数的类型别名。
+`asc::std::minstd_rand`提供对应随机数引擎或分布参数的类型别名。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 声明
 
 ```cpp
-using asc::std::minstd_rand = linear_congruential_engine<uint_fast32_t, 48271, 0, 2147483647>
+namespace asc::std {
+using minstd_rand = linear_congruential_engine<uint_fast32_t, 48271, 0, 2147483647>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供不接收 seed_seq 的标准 seed、discard、生成和相等比较成员
+- 提供不接收seed_seq的标准seed、discard、生成和相等比较成员。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/random>
+#include <asc/std/limits>
 
-void use_type(const asc::std::minstd_rand& value)
+bool example()
 {
-    (void)value;
+    using Engine = asc::std::minstd_rand;
+    Engine engine(1);
+    return engine() == 48271;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

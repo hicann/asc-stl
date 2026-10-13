@@ -28,35 +28,48 @@
 
 头文件路径为：`<asc/execution.policy.h>`。
 
-`asc::device_policy` 默认构造函数创建未绑定 Stream 和临时存储、并采用默认执行要求的策略。
+`asc::device_policy`默认构造函数创建未绑定Stream和临时存储、并采用默认执行要求的策略。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 函数原型
 
+所属类型：[`asc::device_policy`](device_policy.md)。
+
 ```cpp
-constexpr asc::device_policy::device_policy() noexcept;
+// asc::device_policy 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr device_policy() noexcept;
 ```
 
 ## 参数说明
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 绑定不可变且不拥有资源
-- 默认构造绑定空 Stream、空临时存储和默认执行要求
+- 绑定不可变且不拥有资源。
+- 默认构造绑定空Stream、空临时存储和默认执行要求。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/execution.policy.h>
 
-void example()
+bool example()
 {
-    asc::device_policy policy{};
-    (void)policy.requirements();
+    asc::device_policy policy;
+    return !policy.stream() && policy.temporary_storage().data() == nullptr
+        && policy.temporary_storage().size_bytes() == 0
+        && policy.requirements().determinism_value() == asc::determinism::not_guaranteed;
 }
 ```
+
+## 关联API
+
+- [`asc::device_policy`](device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。

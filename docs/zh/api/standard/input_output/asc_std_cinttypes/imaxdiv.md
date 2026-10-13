@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cinttypes>`。
 
-`asc::std::imaxdiv` 同时计算最大宽度整数的商和余数。
+`asc::std::imaxdiv`同时计算最大宽度整数的商和余数。
 
 标准语义参考：[cppreference `cinttypes`](https://en.cppreference.com/w/cpp/header/cinttypes)。
 
 ## 函数原型
 
 ```cpp
-constexpr imaxdiv_t asc::std::imaxdiv(intmax_t numerator, intmax_t denominator) noexcept;
+namespace asc::std {
+constexpr imaxdiv_t imaxdiv(intmax_t numerator, intmax_t denominator) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,8 +46,8 @@ constexpr imaxdiv_t asc::std::imaxdiv(intmax_t numerator, intmax_t denominator) 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `numerator` | 输入 | 被除数（intmax_t 有符号整数）；返回值的 quot、rem 分别为其除以 denominator 的商与余数。 |
-| `denominator` | 输入 | 除数（intmax_t 有符号整数）；为 0 时整数除法行为未定义。 |
+| `numerator` | 输入 | 被除数（intmax_t有符号整数）；返回值的quot、rem分别为其除以denominator的商与余数。 |
+| `denominator` | 输入 | 除数（intmax_t有符号整数）；为0时整数除法行为未定义。 |
 
 ## 返回值说明
 
@@ -55,7 +57,7 @@ constexpr imaxdiv_t asc::std::imaxdiv(intmax_t numerator, intmax_t denominator) 
 
 ## 约束说明
 
-- 提供纯整数类型运算和格式宏
+- 提供纯整数类型运算和格式宏。
 
 ## 调用示例
 
@@ -69,3 +71,7 @@ decltype(auto) example(asc::std::intmax_t numerator, asc::std::intmax_t denomina
     return asc::std::imaxdiv(numerator, denominator);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cinttypes.md)

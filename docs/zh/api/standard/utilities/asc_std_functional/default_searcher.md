@@ -28,31 +28,40 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::default_searcher` 保存搜索模式及比较条件以供子序列查找。
+`asc::std::default_searcher`保存搜索模式及比较条件以供子序列查找。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 声明
 
 ```cpp
-template<class ForwardIterator, class BinaryPredicate = asc::std::equal_to<>> class asc::std::default_searcher
+namespace asc::std {
+template<class ForwardIterator, class BinaryPredicate = asc::std::equal_to<>> class default_searcher;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供标准算术类型、枚举和指针类型的 hash 特化
-- default_searcher 使用调用方管理的对象和存储
+- 提供标准算术类型、枚举和指针类型的hash特化。
+- default_searcher使用调用方管理的对象和存储。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/functional>
 
-template <class ForwardIterator, class BinaryPredicate = asc::std::equal_to<>>
-void use_type(const asc::std::default_searcher<ForwardIterator, BinaryPredicate>& value)
+bool example()
 {
-    (void)value;
+    int values[] = {1, 2, 3, 4};
+    int pattern[] = {2, 3};
+    asc::std::default_searcher<int*> searcher(pattern, pattern + 2);
+    auto result = searcher(values, values + 4);
+    return result.first == values + 1 && result.second == values + 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

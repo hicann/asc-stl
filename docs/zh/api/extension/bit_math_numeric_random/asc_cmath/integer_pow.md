@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/cmath>`。
 
-`asc::integer_pow` 使用整数运算计算 `base` 的 `exponent` 次幂。
+`asc::integer_pow`使用整数运算计算`base`的`exponent`次幂。
 
 ## 函数原型
 
 ```cpp
-template<class T, class E> constexpr T asc::integer_pow(T base, E exponent) noexcept;
+namespace asc {
+template<class T, class E> constexpr T integer_pow(T base, E exponent) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -60,9 +62,9 @@ template<class T, class E> constexpr T asc::integer_pow(T base, E exponent) noex
 
 ## 约束说明
 
-- T 和 E 必须为非 bool 的整数或枚举类型
-- 有符号指数不得为负数
-- 结果必须可表示
+- T和E必须为非bool的整数或枚举类型。
+- 有符号指数不得为负数。
+- 结果必须可表示。
 
 ## 调用示例
 
@@ -76,3 +78,7 @@ decltype(auto) example()
     return asc::integer_pow(2, 3);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_cmath.md)

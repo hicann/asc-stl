@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::shuffle` 使用调用方提供的随机引擎重排范围；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::shuffle`使用调用方提供的随机引擎重排范围；无策略形式在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
 
 ```cpp
-template<class RandomAccessIterator, class UniformRandomNumberGenerator> void asc::std::shuffle(RandomAccessIterator first, RandomAccessIterator last, UniformRandomNumberGenerator&& g);
+namespace asc::std {
+template<class RandomAccessIterator, class UniformRandomNumberGenerator> void shuffle(RandomAccessIterator first, RandomAccessIterator last, UniformRandomNumberGenerator&& g);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -45,7 +47,7 @@ template<class RandomAccessIterator, class UniformRandomNumberGenerator> void as
 | 参数名 | 描述 |
 | --- | --- |
 | `RandomAccessIterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `UniformRandomNumberGenerator` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `UniformRandomNumberGenerator` | 提供随机无符号整数的均匀随机位生成器类型。 |
 
 **函数参数**
 
@@ -61,12 +63,12 @@ template<class RandomAccessIterator, class UniformRandomNumberGenerator> void as
 
 ## 约束说明
 
-- 随机数引擎由调用方提供，并且必须满足 URBG 要求
-- 结果类型为 float
+- 随机数引擎由调用方提供，并且必须满足URBG要求。
+- 结果类型为float。
 
 ## 调用示例
 
-以下 Host 片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
 
 ```cpp
 #include <asc/std/algorithm>
@@ -80,3 +82,7 @@ void example()
     asc::std::shuffle(values, values + 8, random_engine);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

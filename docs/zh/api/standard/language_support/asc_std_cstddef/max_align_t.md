@@ -28,29 +28,38 @@
 
 头文件路径为：`<asc/std/cstddef>`。
 
-`asc::std::max_align_t` 标识当前 C++ ABI 对应的大小、指针差值、空指针或最大对齐类型。
+`asc::std::max_align_t`标识当前C++ ABI对应的大小、指针差值、空指针或最大对齐类型。
 
 标准语义参考：[cppreference `cstddef`](https://en.cppreference.com/w/cpp/header/cstddef)。
 
 ## 声明
 
 ```cpp
-using asc::std::max_align_t = struct max_align_t
+namespace asc::std {
+using max_align_t = struct max_align_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供标准声明
+- 提供标准声明。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/cstddef>
 
-void use_type(const asc::std::max_align_t& value)
+bool example()
 {
-    (void)value;
+    alignas(asc::std::max_align_t) unsigned char storage[sizeof(asc::std::max_align_t)]{};
+    static_assert(alignof(asc::std::max_align_t) >= alignof(double));
+    // 对齐的字节存储可用于后续显式对象构造。
+    return storage[0] == 0;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstddef.md)

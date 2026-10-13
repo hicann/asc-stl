@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::subrange::advance` 把当前子范围的起始位置推进指定距离。
+`asc::std::ranges::subrange::advance`把当前子范围的起始位置推进指定距离。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
+所属类型：[`asc::std::ranges::subrange`](ranges_subrange.md)。
+
 ```cpp
-constexpr subrange<Iter, Sent, Kind>& asc::std::ranges::subrange::advance(iter_difference_t<Iter> amount);
+// asc::std::ranges::subrange 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr subrange<Iter, Sent, Kind>& advance(iter_difference_t<Iter> amount);
 ```
 
 ## 参数说明
@@ -54,12 +57,11 @@ constexpr subrange<Iter, Sent, Kind>& asc::std::ranges::subrange::advance(iter_d
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
+以下Host片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
 
 ```cpp
 #include <asc/std/ranges>
@@ -70,3 +72,8 @@ void example(asc::std::ranges::subrange<int*>& range)
     range.advance(1);
 }
 ```
+
+## 关联API
+
+- [`asc::std::ranges::subrange`](ranges_subrange.md)
+- [本头文件的接口列表](asc_std_ranges.md)

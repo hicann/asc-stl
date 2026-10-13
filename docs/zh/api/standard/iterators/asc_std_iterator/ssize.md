@@ -28,41 +28,45 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::ssize` 以有符号整数返回范围的元素数量。
+`asc::std::ssize`以有符号整数返回范围的元素数量。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class Cont> constexpr auto asc::std::ssize(const Cont& value) noexcept(noexcept(static_cast<common_type_t<ptrdiff_t, make_signed_t<decltype(value.size())>>>(value.size()))) -> common_type_t<ptrdiff_t, make_signed_t<decltype(value.size())>>;
+namespace asc::std {
+template<class Cont> constexpr auto ssize(const Cont& value) noexcept(noexcept(static_cast<common_type_t<ptrdiff_t, make_signed_t<decltype(value.size())>>>(value.size()))) -> common_type_t<ptrdiff_t, make_signed_t<decltype(value.size())>>;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T, ptrdiff_t Sz> constexpr ptrdiff_t asc::std::ssize(const T (&value)[Sz]) noexcept;
+namespace asc::std {
+template<class T, ptrdiff_t Sz> constexpr ptrdiff_t ssize(const T (&value)[Sz]) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Cont` | 容器类型；须提供 size() 成员。 |
+| `Cont` | 容器类型；须提供size()成员。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 被测量元素数量的容器；返回其 size() 的有符号形式。 |
+| `value` | 输入 | 被测量元素数量的容器；返回其size()的有符号形式。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -75,22 +79,22 @@ template<class T, ptrdiff_t Sz> constexpr ptrdiff_t asc::std::ssize(const T (&va
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 被测量元素数量的数组；返回其长度 Sz（以有符号整数返回）。 |
+| `value` | 输入 | 被测量元素数量的数组；返回其长度Sz（以有符号整数返回）。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `common_type_t<ptrdiff_t, make_signed_t<decltype(value.size())>>` | 返回范围的元素数量。 |
-| 原型 2 | `ptrdiff_t` | 返回范围的元素数量。 |
+| 原型1 | `common_type_t<ptrdiff_t, make_signed_t<decltype(value.size())>>` | 返回范围的元素数量。 |
+| 原型2 | `ptrdiff_t` | 返回范围的元素数量。 |
 
 ## 约束说明
 
-- 支持非 I/O 范围、数组和用户容器
+- 支持非I/O范围、数组和用户容器。
 
 ## 调用示例
 
-以下 Host 片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
 
 ```cpp
 #include <asc/std/iterator>
@@ -101,3 +105,7 @@ decltype(auto) example()
     return asc::std::ssize(values);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

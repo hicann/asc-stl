@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_thread_fence` 在指定作用域建立原子内存操作的线程间顺序约束。
+`asc::std::atomic_thread_fence`在指定作用域建立原子内存操作的线程间顺序约束。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 函数原型
 
 ```cpp
-void asc::std::atomic_thread_fence(memory_order order) noexcept;
+namespace asc::std {
+void atomic_thread_fence(memory_order order) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,7 +48,7 @@ void asc::std::atomic_thread_fence(memory_order order) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `order` | 输入 | 围栏的内存序；为当前线程建立原子访问间的顺序约束，如 acquire、release 或 seq_cst。 |
+| `order` | 输入 | 围栏的内存序；为当前线程建立原子访问间的顺序约束，如acquire、release或seq_cst。 |
 
 ## 返回值说明
 
@@ -54,8 +56,8 @@ void asc::std::atomic_thread_fence(memory_order order) noexcept;
 
 ## 约束说明
 
-- atomic_thread_fence：Host支持全部标准memory_order
-- Device纯SIMT支持relaxed/release，release为编译器屏障+asc_threadfence
+- atomic_thread_fence：Host支持全部标准memory_order。
+- Device纯SIMT支持relaxed/release，release为编译器屏障+asc_threadfence。
 
 ## 调用示例
 
@@ -69,3 +71,7 @@ void example(asc::std::memory_order order)
     asc::std::atomic_thread_fence(order);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

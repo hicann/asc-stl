@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::fabsl` 返回 long double 实参的绝对值，constexpr 且可作用于常量表达式。
+`asc::std::fabsl`返回long double实参的绝对值，constexpr且可作用于常量表达式。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-long double asc::std::fabsl(long double value) noexcept
+namespace asc::std {
+long double fabsl(long double value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -50,11 +52,11 @@ long double asc::std::fabsl(long double value) noexcept
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `long double` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `long double` | 输入的浮点绝对值。 |
 
 ## 约束说明
 
-- 参数为负时返回其相反数，恒不抛出
+- 参数为负时返回其相反数，恒不抛出。
 
 ## 调用示例
 
@@ -68,3 +70,7 @@ decltype(auto) example(long double value)
     return asc::std::fabsl(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

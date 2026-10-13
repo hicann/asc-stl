@@ -28,43 +28,43 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::weekday::weekday` 按本页所列构造形态初始化 `weekday` 对象。
+`asc::std::chrono::weekday::weekday`按本页所列构造形态初始化`weekday`对象。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr weekday();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr weekday(const local_days& value) noexcept;
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 constexpr weekday(const sys_days& value) noexcept;
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
 constexpr weekday(const unsigned int value) noexcept;
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
 constexpr weekday(const weekday& value) noexcept;
 ```
 
-### 原型 6
+### 原型6
 
 ```cpp
 constexpr weekday(weekday&& value) noexcept;
@@ -72,19 +72,19 @@ constexpr weekday(weekday&& value) noexcept;
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 以本地时区天数表示的时点天数，换算出对应星期几（0 到 6）构造对象。 |
+| `value` | 输入 | 以本地时区天数表示的时点天数，换算出对应星期几（0到6）构造对象。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
@@ -92,45 +92,53 @@ constexpr weekday(weekday&& value) noexcept;
 | --- | --- | --- |
 | `value` | 输入 | 以系统时点天数（sys_days）表示的日期，换算出对应星期几构造对象。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 星期几值，0 到 6 有效且 0 表示星期日；7 到 255 亦可保存，但 ok() 判为 false。 |
+| `value` | 输入 | 星期几值，0到6有效且0表示星期日；7到255亦可保存，但ok()判为false。 |
 
-### 原型 5 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 用于复制构造的 weekday 对象。 |
-
-### 原型 6 的参数
+### 原型5的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 用于移动构造的 weekday 对象；移动后源对象处于有效但未指定状态。 |
+| `value` | 输入 | 用于复制构造的weekday对象。 |
+
+### 原型6的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入/输出 | 用于移动构造的weekday对象；移动后源对象处于有效但未指定状态。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
-以下 Host 片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    asc::std::chrono::weekday value{};
-    (void)value;
+    asc::std::chrono::weekday value{4};
+    return value.c_encoding() == 4;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

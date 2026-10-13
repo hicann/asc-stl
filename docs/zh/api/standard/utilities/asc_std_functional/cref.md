@@ -28,69 +28,72 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::cref` 创建指向常量对象的引用包装器。
+`asc::std::cref`创建指向常量对象的引用包装器。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> [[nodiscard]] constexpr reference_wrapper<const T> asc::std::cref(const T& value) noexcept;
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr reference_wrapper<const T> cref(const T& value) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> [[nodiscard]] constexpr reference_wrapper<const T> asc::std::cref(reference_wrapper<T> value) noexcept;
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr reference_wrapper<const T> cref(reference_wrapper<T> value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 被包装对象的类型；包装后以 const T 形式访问。 |
+| `T` | 被包装对象的类型；包装后以const T形式访问。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 被包装的常量左值对象；返回指向 const T 的引用包装器，对象生命周期须覆盖包装器使用期。 |
+| `value` | 输入 | 被包装的常量左值对象；返回指向const T的引用包装器，对象生命周期须覆盖包装器使用期。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 被包装对象的类型；包装后以 const T 形式访问。 |
+| `T` | 被包装对象的类型；包装后以const T形式访问。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 已有的 reference_wrapper<T> 对象；返回指向同一目标的常量引用包装器。 |
+| `value` | 输入 | 已有的reference_wrapper<T> 对象；返回指向同一目标的常量引用包装器。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `reference_wrapper<const T>` | 返回保存调用目标及所选参数的可调用对象或引用包装器。 |
-| 原型 2 | `reference_wrapper<const T>` | 返回保存调用目标及所选参数的可调用对象或引用包装器。 |
+| 原型1 | `reference_wrapper<const T>` | 返回保存调用目标及所选参数的可调用对象或引用包装器。 |
+| 原型2 | `reference_wrapper<const T>` | 返回保存调用目标及所选参数的可调用对象或引用包装器。 |
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/functional>
@@ -101,3 +104,7 @@ decltype(auto) example()
     return asc::std::cref(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

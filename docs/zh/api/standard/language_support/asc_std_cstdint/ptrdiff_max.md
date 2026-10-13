@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cstdint>`。
 
-`PTRDIFF_MAX` 给出 `PTRDIFF` 对应整数类型或大小的界限值。
+`PTRDIFF_MAX`给出`PTRDIFF`对应整数类型或大小的界限值。
 
 标准语义参考：[cppreference `cstdint`](https://en.cppreference.com/w/cpp/header/cstdint)。
 
@@ -40,7 +40,7 @@
 
 ## 约束说明
 
-- 仅提供 Ascend 950 与 Host ABI 中实际存在的类型和宏
+- 仅提供Ascend 950与Host ABI中实际存在的类型和宏。
 
 ## 调用示例
 
@@ -53,3 +53,7 @@
 #error "PTRDIFF_MAX is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstdint.md)

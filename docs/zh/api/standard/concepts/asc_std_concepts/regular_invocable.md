@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::regular_invocable` 在 C++20 及以上模式约束满足 `regular_invocable` 语义的类型或表达式。
+`asc::std::regular_invocable`在C++20及以上模式约束满足`regular_invocable`语义的类型或表达式。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 
 ## 声明
 
 ```cpp
-template<class Fn, class ...Args> concept asc::std::regular_invocable
+namespace asc::std {
+template<class Fn, class ...Args> concept regular_invocable;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供完整的公开 C++20 concepts 集合
+- 提供完整的公开C++20 concepts集合。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class Fn, class ...Args> concept asc::std::regular_invocable
 
 static_assert(asc::std::regular_invocable<int (*)(int), int>);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_concepts.md)

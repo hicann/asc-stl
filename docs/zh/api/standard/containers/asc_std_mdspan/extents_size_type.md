@@ -28,20 +28,23 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::extents::size_type` 标识容器大小的无符号类型。
+`asc::std::extents::size_type`标识容器大小的无符号类型。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 声明
 
+所属类型：[`asc::std::extents`](extents.md)。
+
 ```cpp
-using asc::std::extents::size_type = size_t
+// asc::std::extents 类内的声明节选；模板形参和其他成员由所属类提供。
+using size_type = size_t;
 ```
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整dynamic_extent/extents/dextents/dims家族：零rank与正rank、默认/按rank或rank_dynamic传值/array/span/跨extents构造、标准显式性与约束、deduction guide、相等比较及rank/rank_dynamic/static_extent/extent观察
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 此别名表示所属类型用于元素数量或大小的无符号整数类型；读取类型本身不分配内存，也不访问元素。
+- 构造、分配和访问的运行条件见所属类型[asc::std::extents](extents.md)。
 
 ## 调用示例
 
@@ -55,3 +58,8 @@ void use_type()
     using alias_type = typename asc::std::extents<int, 2, 3>::size_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::extents`](extents.md)
+- [本头文件的接口列表](asc_std_mdspan.md)

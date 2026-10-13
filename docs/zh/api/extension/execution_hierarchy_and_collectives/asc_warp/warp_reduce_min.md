@@ -28,66 +28,72 @@
 
 头文件路径为：`<asc/warp>`。
 
-`asc::warp_reduce_min` 返回当前 Warp 各参与 Lane 值的最小值。
+`asc::warp_reduce_min`返回当前Warp各参与Lane值的最小值。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-float asc::warp_reduce_min(float value) noexcept;
+namespace asc {
+float warp_reduce_min(float value) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-int asc::warp_reduce_min(int value) noexcept;
+namespace asc {
+int warp_reduce_min(int value) noexcept;
+} // namespace asc
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-unsigned int asc::warp_reduce_min(unsigned int value) noexcept;
+namespace asc {
+unsigned int warp_reduce_min(unsigned int value) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与归约的输入值：返回整个 warp 各 Lane 该值中的最小值。 |
+| `value` | 输入 | 本Lane参与归约的输入值：返回整个warp各Lane该值中的最小值。 |
 
-### 原型 2 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与归约的输入值：返回整个 warp 各 Lane 该值中的最小值。 |
-
-### 原型 3 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与归约的输入值：返回整个 warp 各 Lane 该值中的最小值。 |
+| `value` | 输入 | 本Lane参与归约的输入值：返回整个warp各Lane该值中的最小值。 |
+
+### 原型3的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 本Lane参与归约的输入值：返回整个warp各Lane该值中的最小值。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `float` | 返回参与线程或连续范围按接口名称归约后的结果。 |
-| 原型 2 | `int` | 返回参与线程或连续范围按接口名称归约后的结果。 |
-| 原型 3 | `unsigned int` | 返回参与线程或连续范围按接口名称归约后的结果。 |
+| 原型1 | `float` | 返回参与线程或连续范围按接口名称归约后的结果。 |
+| 原型2 | `int` | 返回参与线程或连续范围按接口名称归约后的结果。 |
+| 原型3 | `unsigned int` | 返回参与线程或连续范围按接口名称归约后的结果。 |
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 所有参与的活动线程必须以收敛控制流调用
+- 仅可在AI Core SIMT编程中调用。
+- 所有参与的活动线程必须以收敛控制流调用。
 
 ## 调用示例
 
@@ -102,7 +108,7 @@ __aicore__ decltype(auto) example(float value)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：
 
@@ -110,3 +116,7 @@ __aicore__ decltype(auto) example(float value)
 - [warp_example.h](../../../../examples/warp_collectives/warp_example.h)
 - [kernel.asc](../../../../examples/warp_collectives/kernel.asc)
 - [main.cpp](../../../../examples/warp_collectives/main.cpp)
+
+## 关联API
+
+- [本头文件的接口列表](asc_warp.md)

@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/cmath>`。
 
-`asc::integer_sqrt` 返回满足 `r * r <= value` 的最大整数 `r`。
+`asc::integer_sqrt`返回满足`r * r <= value`的最大整数`r`。
 
 ## 函数原型
 
 ```cpp
-template<class T> constexpr auto asc::integer_sqrt(T value) noexcept;
+namespace asc {
+template<class T> constexpr auto integer_sqrt(T value) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,7 +44,7 @@ template<class T> constexpr auto asc::integer_sqrt(T value) noexcept;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 输入与结果的整数或枚举类型（不含 bool）。 |
+| `T` | 输入与结果的整数或枚举类型（不含bool）。 |
 
 **函数参数**
 
@@ -54,12 +56,12 @@ template<class T> constexpr auto asc::integer_sqrt(T value) noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `auto` | 返回满足 `r * r <= value` 的最大整数 `r`。 |
+| `auto` | 返回满足`r * r <= value`的最大整数`r`。 |
 
 ## 约束说明
 
-- T 必须为非 bool 的整数或枚举类型
-- 有符号类型的 value 不得为负数
+- T必须为非bool的整数或枚举类型。
+- 有符号类型的value不得为负数。
 
 ## 调用示例
 
@@ -73,3 +75,7 @@ decltype(auto) example()
     return asc::integer_sqrt(9u);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_cmath.md)

@@ -28,29 +28,33 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::proj` 把复数投影到黎曼球面。
+`asc::std::proj`把复数投影到黎曼球面。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> complex<T> asc::std::proj(T value) noexcept;
+namespace asc::std {
+template<class T> complex<T> proj(T value) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> complex<T> asc::std::proj(const complex<T>& value) noexcept;
+namespace asc::std {
+template<class T> complex<T> proj(const complex<T>& value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -62,9 +66,9 @@ template<class T> complex<T> asc::std::proj(const complex<T>& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待投影到黎曼球面的实数输入（按虚部为 0 的复数处理，无穷映射为 (+inf, 0)）。 |
+| `value` | 输入 | 待投影到黎曼球面的实数输入（按虚部为0的复数处理，无穷映射为 (+inf, 0)）。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -76,23 +80,23 @@ template<class T> complex<T> asc::std::proj(const complex<T>& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待投影到黎曼球面的复数操作数（实部或虚部为 inf 时映射为 +inf 实部与 0 虚部）。 |
+| `value` | 输入 | 待投影到黎曼球面的复数操作数（实部或虚部为inf时映射为 +inf实部与0虚部）。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `complex<T>` | 返回输入复数在黎曼球面上的投影值。 |
-| 原型 2 | `complex<T>` | 返回输入复数在黎曼球面上的投影值。 |
+| 原型1 | `complex<T>` | 返回输入复数在黎曼球面上的投影值。 |
+| 原型2 | `complex<T>` | 返回输入复数在黎曼球面上的投影值。 |
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/complex>
@@ -103,3 +107,7 @@ decltype(auto) example()
     return asc::std::proj(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_complex.md)

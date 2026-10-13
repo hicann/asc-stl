@@ -28,19 +28,19 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::take_while_view::take_while_view` 按本页所列构造形态初始化 `take_while_view` 对象。
+`asc::std::ranges::take_while_view::take_while_view`按本页所列构造形态初始化`take_while_view`对象。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 take_while_view();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr take_while_view(View base, Pred predicate);
@@ -48,34 +48,48 @@ constexpr take_while_view(View base, Pred predicate);
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `base` | 输入 | 被适配的底层视图；视图呈现从起点到谓词首次返回 false 之前的元素。 |
-| `predicate` | 输入 | 一元谓词，按调用形式 predicate(elem) 返回 bool；返回 false 时迭代终止。 |
+| `base` | 输入 | 被适配的底层视图；视图呈现从起点到谓词首次返回false之前的元素。 |
+| `predicate` | 输入 | 一元谓词，按调用形式predicate(elem)返回bool；返回false时迭代终止。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example()
+bool example()
 {
-    asc::std::ranges::take_while_view<asc::std::ranges::single_view<int>, asc::std::identity> value{};
-    (void)value;
+    int values[] = {1, 2, 3, 4};
+    using Base = asc::std::ranges::subrange<int*>;
+    Base base(values, values + 4);
+    auto predicate = [](int value) { return value < 3; };
+    asc::std::ranges::take_while_view<Base, decltype(predicate)> view(base, predicate);
+    return *view.begin() == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

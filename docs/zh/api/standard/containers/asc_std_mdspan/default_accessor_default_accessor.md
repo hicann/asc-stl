@@ -28,19 +28,19 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::default_accessor::default_accessor` 按本页所列构造形态初始化 `default_accessor` 对象。
+`asc::std::default_accessor::default_accessor`按本页所列构造形态初始化`default_accessor`对象。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr default_accessor() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 template<class OtherElement> constexpr default_accessor(default_accessor<OtherElement> other) noexcept;
@@ -48,39 +48,49 @@ template<class OtherElement> constexpr default_accessor(default_accessor<OtherEl
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherElement` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `OtherElement` | 来源访问器的元素类型；数组指针转换须满足当前访问器的元素兼容条件。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整layout_left/layout_right/layout_stride mapping及default_accessor/aligned_accessor家族：零rank与正rank、默认/extents/array/span/跨mapping或accessor构造、标准显式性与约束、索引映射、要求d_span_size/stride/extents、唯一/穷尽/步长观察、mapping比较、access/offset及byte_alignment
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain pointer域
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/mdspan>
+#include <asc/std/type_traits>
 
-void example()
+bool example()
 {
-    asc::std::default_accessor<int> accessor{};
-    (void)accessor;
+    int values[] = {2, 4};
+    asc::std::default_accessor<int> accessor;
+    accessor.access(values, 1) = 7;
+    return values[1] == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mdspan.md)

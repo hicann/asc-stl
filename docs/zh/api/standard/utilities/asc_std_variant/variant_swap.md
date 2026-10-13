@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/variant>`。
 
-`asc::std::variant::swap` 交换两个对象保存的状态或元素。
+`asc::std::variant::swap`交换两个对象保存的状态或元素。
 
 标准语义参考：[cppreference `variant`](https://en.cppreference.com/w/cpp/header/variant)。
 
 ## 函数原型
 
+所属类型：[`asc::std::variant`](variant.md)。
+
 ```cpp
-template<bool Dummy, class Constraint, class> void asc::std::variant::swap(variant<Types...>& other) noexcept(Constraint::Isnothrowswappablev);
+// asc::std::variant 类内的声明节选；模板形参和其他成员由所属类提供。
+template<bool Dummy, class Constraint, class> void swap(variant<Types...>& other) noexcept(Constraint::Isnothrowswappablev);
 ```
 
 ## 参数说明
@@ -45,14 +48,13 @@ template<bool Dummy, class Constraint, class> void asc::std::variant::swap(varia
 | 参数名 | 描述 |
 | --- | --- |
 | `Dummy` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `Constraint` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
 | `未命名参数3` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 与当前对象交换状态的另一对象；交换后双方保存对方原有状态。 |
 
 ## 返回值说明
 
@@ -60,12 +62,12 @@ template<bool Dummy, class Constraint, class> void asc::std::variant::swap(varia
 
 ## 约束说明
 
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
+- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
+- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
+以下Host片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
 
 ```cpp
 #include <asc/std/variant>
@@ -76,3 +78,8 @@ void example()
     left.swap(right);
 }
 ```
+
+## 关联API
+
+- [`asc::std::variant`](variant.md)
+- [本头文件的接口列表](asc_std_variant.md)

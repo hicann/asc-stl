@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/mdspan>`。
 
-`asc::dynamic_stride` 表示 mdspan 在运行期提供的动态步长标记值。
+`asc::dynamic_stride`表示mdspan在运行期提供的动态步长标记值。
 
 ## 声明
 
 ```cpp
-inline constexpr asc::std::ptrdiff_t asc::dynamic_stride = (-__PTRDIFF_MAX__ - 1)
+namespace asc {
+inline constexpr asc::std::ptrdiff_t dynamic_stride = (-__PTRDIFF_MAX__ - 1);
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供 Host 和 GM 视图以及 AI Core SIMD 编程 UB 视图
-- 允许有符号步长
-- 可选的 Host DLPack 桥接不抛出异常
+- 提供Host和GM视图以及AI Core SIMD编程UB视图。
+- 允许有符号步长。
+- 可选的Host DLPack桥接不抛出异常。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ inline constexpr asc::std::ptrdiff_t asc::dynamic_stride = (-__PTRDIFF_MAX__ - 1
 
 auto value = asc::dynamic_stride;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_mdspan.md)

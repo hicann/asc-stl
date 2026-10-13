@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_flag_clear` 原子地清除标志位。
+`asc::std::atomic_flag_clear`原子地清除标志位。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 函数原型
 
 ```cpp
-void asc::std::atomic_flag_clear(atomic_flag* object) noexcept;
+namespace asc::std {
+void atomic_flag_clear(atomic_flag* object) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,7 +48,7 @@ void asc::std::atomic_flag_clear(atomic_flag* object) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `object` | 输入 | 提供“原子地清除标志位”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `object` | 输入/输出 | 指向存活且满足类型对齐的原子对象；本操作按指定内存序修改其原子状态。 |
 
 ## 返回值说明
 
@@ -54,8 +56,8 @@ void asc::std::atomic_flag_clear(atomic_flag* object) noexcept;
 
 ## 约束说明
 
-- atomic_flag的test/test_and_set/clear成员与非volatile自由函数
-- Host 和 AI Core SIMT 编程 GM
+- atomic_flag的test/test_and_set/clear成员与非volatile自由函数。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
@@ -69,3 +71,7 @@ void example(asc::std::atomic_flag * object)
     asc::std::atomic_flag_clear(object);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

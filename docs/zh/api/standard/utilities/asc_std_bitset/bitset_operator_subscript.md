@@ -1,4 +1,4 @@
-# asc::std::bitset::operator[]
+# asc::std::bitset::`operator[]`
 
 ## 产品支持情况
 
@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/bitset>`。
 
-`asc::std::bitset::operator[]` 在调用方保证索引有效时访问指定元素。
+`asc::std::bitset::operator[]`在调用方保证索引有效时访问指定元素。
 
 标准语义参考：[cppreference `bitset`](https://en.cppreference.com/w/cpp/header/bitset)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::bitset`](bitset.md)。
+
+### 原型1
 
 ```cpp
-const_reference asc::std::bitset::operator[](size_t position) const;
+// asc::std::bitset 类内的声明节选；模板形参和其他成员由所属类提供。
+const_reference operator[](size_t position) const;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-reference asc::std::bitset::operator[](size_t position);
+// asc::std::bitset 类内的声明节选；模板形参和其他成员由所属类提供。
+reference operator[](size_t position);
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -56,7 +60,7 @@ reference asc::std::bitset::operator[](size_t position);
 | --- | --- | --- |
 | `position` | 输入 | 要访问的元素索引；调用方须保证索引在有效范围内。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -68,18 +72,18 @@ reference asc::std::bitset::operator[](size_t position);
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `const_reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
-| 原型 2 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型1 | `const_reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型2 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
 
 ## 约束说明
 
-- 支持默认构造和 unsigned long long 构造
-- operator[] 不进行边界检查
-- 提供整组 set、reset、flip，位运算、移位、状态检查、计数和容量查询
+- 支持默认构造和unsigned long long构造。
+- `operator[]`不进行边界检查。
+- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
 
 ## 调用示例
 
-以下 Host 片段以 8 位 bitset 演示具体调用；索引须在有效范围内。
+以下Host片段以8位bitset演示具体调用；索引须在有效范围内。
 
 ```cpp
 #include <asc/std/bitset>
@@ -89,3 +93,8 @@ decltype(auto) example(const asc::std::bitset<8>& bits)
     return bits[0];
 }
 ```
+
+## 关联API
+
+- [`asc::std::bitset`](bitset.md)
+- [本头文件的接口列表](asc_std_bitset.md)

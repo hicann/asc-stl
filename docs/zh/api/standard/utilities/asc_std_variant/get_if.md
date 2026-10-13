@@ -28,115 +28,123 @@
 
 头文件路径为：`<asc/std/variant>`。
 
-`asc::std::get_if` 活动备选项与目标匹配时返回其指针，否则返回空指针。
+`asc::std::get_if`活动备选项与目标匹配时返回其指针，否则返回空指针。
 
 标准语义参考：[cppreference `variant`](https://en.cppreference.com/w/cpp/header/variant)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T, class ...Types> [[nodiscard]] constexpr add_pointer_t<T> asc::std::get_if(variant<Types...>* value) noexcept;
+namespace asc::std {
+template<class T, class ...Types> [[nodiscard]] constexpr add_pointer_t<T> get_if(variant<Types...>* value) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T, class ...Types> [[nodiscard]] constexpr add_pointer_t<const T> asc::std::get_if(const variant<Types...>* value) noexcept;
+namespace asc::std {
+template<class T, class ...Types> [[nodiscard]] constexpr add_pointer_t<const T> get_if(const variant<Types...>* value) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<size_t Index, class ...Types> [[nodiscard]] constexpr add_pointer_t<const variant_alternative_t<Index, variant<Types...>>> asc::std::get_if(const variant<Types...>* value) noexcept;
+namespace asc::std {
+template<size_t Index, class ...Types> [[nodiscard]] constexpr add_pointer_t<const variant_alternative_t<Index, variant<Types...>>> get_if(const variant<Types...>* value) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<size_t Index, class ...Types> [[nodiscard]] constexpr add_pointer_t<variant_alternative_t<Index, variant<Types...>>> asc::std::get_if(variant<Types...>* value) noexcept;
+namespace asc::std {
+template<size_t Index, class ...Types> [[nodiscard]] constexpr add_pointer_t<variant_alternative_t<Index, variant<Types...>>> get_if(variant<Types...>* value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 目标备选项类型；须在 Types... 中恰好出现一次。 |
-| `Types` | variant 的备选项类型列表。 |
+| `T` | 目标备选项类型；须在Types... 中恰好出现一次。 |
+| `Types` | variant的备选项类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 被访问的 variant 对象指针；活动备选项与目标匹配时返回其备选项指针，否则返回空指针。 |
+| `value` | 输入 | 被访问的variant对象指针；活动备选项与目标匹配时返回其备选项指针，否则返回空指针。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 目标备选项类型；须在 Types... 中恰好出现一次。 |
-| `Types` | variant 的备选项类型列表。 |
+| `T` | 目标备选项类型；须在Types... 中恰好出现一次。 |
+| `Types` | variant的备选项类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 被访问的 variant 对象指针；活动备选项与目标匹配时返回其备选项指针，否则返回空指针。 |
+| `value` | 输入 | 被访问的variant对象指针；活动备选项与目标匹配时返回其备选项指针，否则返回空指针。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标备选项的下标（从 0 起）；须小于备选项数量。 |
-| `Types` | variant 的备选项类型列表。 |
+| `Index` | 目标备选项的下标（从0起）；须小于备选项数量。 |
+| `Types` | variant的备选项类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 被访问的 variant 对象指针；活动备选项与目标匹配时返回其备选项指针，否则返回空指针。 |
+| `value` | 输入 | 被访问的variant对象指针；活动备选项与目标匹配时返回其备选项指针，否则返回空指针。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标备选项的下标（从 0 起）；须小于备选项数量。 |
-| `Types` | variant 的备选项类型列表。 |
+| `Index` | 目标备选项的下标（从0起）；须小于备选项数量。 |
+| `Types` | variant的备选项类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 被访问的 variant 对象指针；活动备选项与目标匹配时返回其备选项指针，否则返回空指针。 |
+| `value` | 输入 | 被访问的variant对象指针；活动备选项与目标匹配时返回其备选项指针，否则返回空指针。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `add_pointer_t<T>` | 返回其指针，否则返回空指针。 |
-| 原型 2 | `add_pointer_t<const T>` | 返回其指针，否则返回空指针。 |
-| 原型 3 | `add_pointer_t<const variant_alternative_t<Index, variant<Types...>>>` | 返回其指针，否则返回空指针。 |
-| 原型 4 | `add_pointer_t<variant_alternative_t<Index, variant<Types...>>>` | 返回其指针，否则返回空指针。 |
+| 原型1 | `add_pointer_t<T>` | 返回其指针，否则返回空指针。 |
+| 原型2 | `add_pointer_t<const T>` | 返回其指针，否则返回空指针。 |
+| 原型3 | `add_pointer_t<const variant_alternative_t<Index, variant<Types...>>>` | 返回其指针，否则返回空指针。 |
+| 原型4 | `add_pointer_t<variant_alternative_t<Index, variant<Types...>>>` | 返回其指针，否则返回空指针。 |
 
 ## 约束说明
 
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
+- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
+- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/variant>
@@ -147,3 +155,7 @@ decltype(auto) example()
     return asc::std::get_if<0>(&value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_variant.md)

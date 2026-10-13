@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::cmp_not_equal` 在不同符号性的整数之间按名称指定关系安全比较。
+`asc::std::cmp_not_equal`在不同符号性的整数之间按名称指定关系安全比较。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 函数原型
 
 ```cpp
-template<class T, class U> constexpr bool asc::std::cmp_not_equal(T left, U right) noexcept;
+namespace asc::std {
+template<class T, class U> constexpr bool cmp_not_equal(T left, U right) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,8 +46,8 @@ template<class T, class U> constexpr bool asc::std::cmp_not_equal(T left, U righ
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 左侧操作数的整数类型；须为标准整数类型或 bool。 |
-| `U` | 右侧操作数的整数类型；须为标准整数类型或 bool。 |
+| `T` | 左侧操作数的整数类型；须为标准整数类型或bool。 |
+| `U` | 右侧操作数的整数类型；须为标准整数类型或bool。 |
 
 **函数参数**
 
@@ -58,11 +60,11 @@ template<class T, class U> constexpr bool asc::std::cmp_not_equal(T left, U righ
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 遵循标准整数约束
+- 遵循标准整数约束。
 
 ## 调用示例
 
@@ -76,3 +78,7 @@ decltype(auto) example()
     return asc::std::cmp_not_equal(1u, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

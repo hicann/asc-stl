@@ -1,4 +1,4 @@
-# 头文件 asc/std/ctgmath
+# 头文件asc/std/ctgmath
 
 根据参数类型选择对应的C数学或复数函数
 
@@ -8,7 +8,7 @@
 #include <asc/std/ctgmath>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |

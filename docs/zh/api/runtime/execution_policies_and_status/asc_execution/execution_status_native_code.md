@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/execution>`。
 
-`asc::execution_status::native_code` 返回后端 Runtime 的原生状态码；非 `backend_error` 状态返回 0。
+`asc::execution_status::native_code`返回后端Runtime的原生状态码；非`backend_error`状态返回0。
 
 ## 函数原型
 
+所属类型：[`asc::execution_status`](execution_status.md)。
+
 ```cpp
-constexpr int asc::execution_status::native_code() const noexcept;
+// asc::execution_status 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr int native_code() const noexcept;
 ```
 
 ## 参数说明
@@ -44,23 +47,30 @@ constexpr int asc::execution_status::native_code() const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `int` | 返回后端 Runtime 的原生状态码。 |
+| `int` | 返回后端Runtime的原生状态码。 |
 
 ## 约束说明
 
-- 仅可在 Host 使用
-- 状态值可平凡复制
-- 成功状态的 code() 为 execution_errc::success，native_code() 为 0，失败状态保留可用于诊断的状态码
+- 仅可在Host使用。
+- 状态值可平凡复制。
+- 成功状态的code()为execution_errc::success，native_code()为0，失败状态保留可用于诊断的状态码。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/execution>
 
-void example(asc::execution_status& object)
+bool example()
 {
-    (void)object.native_code();
+    asc::execution_status success;
+    asc::execution_status failure(asc::execution_errc::backend_error, 17);
+    return success.success() && success.code() == asc::execution_errc::success && success.native_code() == 0
+        && !failure.success() && failure.code() == asc::execution_errc::backend_error && failure.native_code() == 17;
 }
 ```
+
+## 关联API
+
+- [`asc::execution_status`](execution_status.md)：参数校验和任务提交状态；提交成功不表示异步工作已经完成。

@@ -28,32 +28,42 @@
 
 头文件路径为：`<asc/std/linalg>`。
 
-`asc::std::linalg::scaled_accessor` 定义多维视图读取或写入元素的访问策略。
+`asc::std::linalg::scaled_accessor`定义多维视图读取或写入元素的访问策略。
 
 标准语义参考：[cppreference `linalg`](https://en.cppreference.com/w/cpp/header/linalg)。
 
 ## 声明
 
 ```cpp
-template<class ScalingFactor, class NestedAccessor> class asc::std::linalg::scaled_accessor
+namespace asc::std::linalg {
+template<class ScalingFactor, class NestedAccessor> class scaled_accessor;
+} // namespace asc::std::linalg
 ```
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库公共入口的完整7实体合同：scaled/scaled_accessor、conjugated/conjugated_accessor、transposed/layout_transpose、conjugate_transposed
-- 包括access/offset/nested accessor/factor、转换构造、算术类型共轭不变、ADL可共轭类型、双重共轭/转置消去、rank-2静态/动态extents交换、layout_left/right/stride与通用layout_transpose mapping全部观察/比较
-- 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/linalg>
+#include <asc/std/complex>
+#include <asc/std/type_traits>
 
-void use_type()
+using Accessor = asc::std::linalg::scaled_accessor<float, asc::std::default_accessor<float>>;
+
+bool example()
 {
-    using selected = asc::std::linalg::scaled_accessor<int, asc::std::default_accessor<int>>;
-    (void)sizeof(selected);
+    float values[] = {3.0f};
+    Accessor accessor(2.0f, asc::std::default_accessor<float>{});
+    auto value = accessor.access(values, 0);
+    return value == 6.0f;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_linalg.md)

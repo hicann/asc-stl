@@ -16,19 +16,18 @@
 
 #include <asc/collectives>
 #include "../semantics.h"
+
 __global__ __launch_bounds__(64) void asc_stl_b018_cannsim_kernel(unsigned int* output)
 {
     extern __ubuf__ unsigned int shared[];
     const unsigned int thread = static_cast<unsigned int>(threadIdx.x);
-    const unsigned int value = thread + 1;
-    unsigned int* row = output + thread * 6;
-    row[0] = asc::detail::block_reduce_add_impl(shared, value);
-    row[1] = asc::detail::block_reduce_min_impl(shared, value);
-    row[2] = asc::detail::block_reduce_max_impl(shared, value);
-    row[3] = asc::detail::block_broadcast_impl(shared, value, 17);
-    row[4] = asc::detail::block_inclusive_scan_add_impl(shared, value);
-    row[5] = asc::detail::block_exclusive_scan_add_impl(shared, value);
+    asc_stl_collective_test::evaluate_group(shared, output, thread);
+    asc_stl_collective_test::evaluate_group(reinterpret_cast<int*>(shared),
+        output + asc_stl_collective_test::threads * asc_stl_collective_test::columns, thread);
+    asc_stl_collective_test::evaluate_group(reinterpret_cast<float*>(shared),
+        output + 2 * asc_stl_collective_test::threads * asc_stl_collective_test::columns, thread);
 }
+
 void launch_asc_stl_b018_cannsim(unsigned int* output, aclrtStream stream)
 {
     asc_stl_b018_cannsim_kernel<<<1, 64, 32 * sizeof(unsigned int), stream>>>(output);

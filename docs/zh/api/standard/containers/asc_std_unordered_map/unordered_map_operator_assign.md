@@ -1,4 +1,4 @@
-# asc::std::unordered_map::operator=
+# asc::std::unordered_map::`operator=`
 
 ## 产品支持情况
 
@@ -28,16 +28,19 @@
 
 头文件路径为：`<asc/std/unordered_map>`。
 
-`asc::std::unordered_map::operator=` 按所选赋值重载更新对象，并返回规定的结果。
+`asc::std::unordered_map::operator=`按所选赋值重载更新对象，并返回规定的结果。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `unordered_map`](https://en.cppreference.com/w/cpp/header/unordered_map)。
 
 ## 函数原型
 
+所属类型：[`asc::std::unordered_map`](unordered_map.md)。
+
 ```cpp
-unordered_map<Key, T, Hash, Equal, Allocator>& asc::std::unordered_map::operator=(unordered_map<Key, T, Hash, Equal, Allocator>&& other) noexcept;
+// asc::std::unordered_map 类内的声明节选；模板形参和其他成员由所属类提供。
+unordered_map<Key, T, Hash, Equal, Allocator>& operator=(unordered_map<Key, T, Hash, Equal, Allocator>&& other) noexcept;
 ```
 
 ## 参数说明
@@ -46,7 +49,7 @@ unordered_map<Key, T, Hash, Equal, Allocator>& asc::std::unordered_map::operator
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
 ## 返回值说明
 
@@ -56,16 +59,16 @@ unordered_map<Key, T, Hash, Equal, Allocator>& asc::std::unordered_map::operator
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下unordered_map<Key,T,Hash,Equal,A>显式GM arena
-- empty/size/bucket_count/begin/end/insert/find/count/operator[]/clear
-- allocator回绑桶数组并在默认负载阈值上自动rehash
-- 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构
-- 仅容量充足和不抛出异常域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下unordered_map<Key,T,Hash,Equal,A>显式GM arena。
+- empty/size/bucket_count/begin/end/insert/find/count/`operator[]`/clear。
+- allocator回绑桶数组并在默认负载阈值上自动rehash。
+- 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构。
+- 仅容量充足和不抛出异常域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/unordered_map>
@@ -90,3 +93,8 @@ void example(asc::std::unordered_map<int, int, ::std::hash<int>, ::std::equal_to
     target = static_cast<asc::std::unordered_map<int, int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<::std::pair<const int, int>>>&&>(source);
 }
 ```
+
+## 关联API
+
+- [`asc::std::unordered_map`](unordered_map.md)
+- [本头文件的接口列表](asc_std_unordered_map.md)

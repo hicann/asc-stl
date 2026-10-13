@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::allocator_arg_t::~allocator_arg_t` 销毁 `allocator_arg_t` 对象并结束其生命周期。
+`asc::std::allocator_arg_t::~allocator_arg_t`销毁`allocator_arg_t`对象并结束其生命周期。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
@@ -42,18 +42,22 @@ constexpr ~allocator_arg_t() noexcept;
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- allocator_arg_t/allocator_arg
-- uses_allocator/uses_allocator_v
-- allocator_traits 的 C++20 成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator 含 pair 递归构造
-- C++23 allocation_result 与标准 allocator_traits::allocate_at_least
-- 均限用户显式提供且在调用执行空间有效的 allocator
+- allocator_arg_t/allocator_arg。
+- uses_allocator/uses_allocator_v。
+- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
+- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
+- C++23 allocation_result与标准allocator_traits::allocate_at_least。
+- 均限用户显式提供且在调用执行空间有效的allocator。
 
 ## 调用示例
 
-以下片段假定 object 指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
+以下片段假定object指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
 
 ```cpp
 #include <asc/std/memory>
@@ -65,3 +69,7 @@ void example(example_object* object)
     object->~example_object();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

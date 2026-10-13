@@ -28,31 +28,50 @@
 
 头文件路径为：`<asc/std/ctime>`。
 
-`asc::std::clock_t` 标识当前 ABI 对应的时间、字符转换或宽字符类型。
+`asc::std::clock_t`标识当前ABI对应的时间、字符转换或宽字符类型。
 
 标准语义参考：[cppreference `ctime`](https://en.cppreference.com/w/cpp/header/ctime)。
 
 ## 声明
 
+Host使用系统`<time.h>`的同名类型；Device使用`long long`。
+
 ```cpp
-using asc::std::clock_t = Clockt
+namespace asc::std {
+// Host
+using ::clock_t;
+}
+```
+
+Device对应的类型声明为：
+
+```cpp
+namespace asc::std {
+using clock_t = long long;
+}
 ```
 
 ## 约束说明
 
-- Host 使用标准时钟
-- AI Core SIMD 编程中使用 get_sys_cnt，AI Core SIMT 编程中使用 clock64
-- Device 计数器频率为页面声明的 1 GHz，difftime 仅进行值计算
+- Host使用标准时钟。
+- AI Core SIMD编程中使用get_sys_cnt，AI Core SIMT编程中使用clock64。
+- Device计数器频率为页面声明的1 GHz，difftime仅进行值计算。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ctime>
 
-void use_type(const asc::std::clock_t& value)
+bool example()
 {
-    (void)value;
+    asc::std::clock_t begin = 2;
+    asc::std::clock_t end = 5;
+    return end - begin == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ctime.md)

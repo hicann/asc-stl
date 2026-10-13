@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cstddef>`。
 
-`asc::std::operator~` 对 std::byte 值执行对应的按位或移位操作。
+`asc::std::operator~`对std::byte值执行对应的按位或移位操作。
 
 标准语义参考：[cppreference `cstddef`](https://en.cppreference.com/w/cpp/header/cstddef)。
 
 ## 函数原型
 
 ```cpp
-constexpr byte asc::std::operator~(byte value) noexcept;
+namespace asc::std {
+constexpr byte operator~(byte value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,17 +46,17 @@ constexpr byte asc::std::operator~(byte value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 被按位取反的 byte 值；按其底层 unsigned char 逐位取反。 |
+| `value` | 输入 | 被按位取反的byte值；按其底层unsigned char逐位取反。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `byte` | 返回对 `byte` 操作数执行对应按位或移位运算后的值。 |
+| `byte` | 返回对`byte`操作数执行对应按位或移位运算后的值。 |
 
 ## 约束说明
 
-- 提供标准声明
+- 提供标准声明。
 
 ## 调用示例
 
@@ -68,3 +70,7 @@ decltype(auto) example(asc::std::byte value)
     return asc::std::operator~(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstddef.md)

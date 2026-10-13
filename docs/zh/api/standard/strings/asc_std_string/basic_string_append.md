@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/string>`。
 
-`asc::std::basic_string::append` 把字符或字符串内容追加到当前字符串末尾。
+`asc::std::basic_string::append`把字符或字符串内容追加到当前字符串末尾。
 
 标准语义参考：[cppreference `string`](https://en.cppreference.com/w/cpp/header/string)。
 
 ## 函数原型
 
+所属类型：[`asc::std::basic_string`](basic_string.md)。
+
 ```cpp
-basic_string<CharT, Traits, Allocator>& asc::std::basic_string::append(const CharT* text);
+// asc::std::basic_string 类内的声明节选；模板形参和其他成员由所属类提供。
+basic_string<CharT, Traits, Allocator>& append(const CharT* text);
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ basic_string<CharT, Traits, Allocator>& asc::std::basic_string::append(const Cha
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `text` | 输入 | 提供“把字符或字符串内容追加到当前字符串末尾”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `text` | 输入 | 待复制的源字符序列；无长度实参时须以零字符终止，有长度实参时至少包含指定数量的可读字符。调用复制字符，不取得源存储所有权。 |
 
 ## 返回值说明
 
@@ -54,14 +57,14 @@ basic_string<CharT, Traits, Allocator>& asc::std::basic_string::append(const Cha
 
 ## 约束说明
 
-- basic_string<char,Traits,A>显式allocator构造
-- plain/local字符来源的append/push_back/clear
-- size/capacity/data/c_str/迭代/索引与析构
-- 仅容量充足和不抛出异常域
+- basic_string<char,Traits,A>显式allocator构造。
+- plain/local字符来源的append/push_back/clear。
+- size/capacity/data/c_str/迭代/索引与析构。
+- 仅容量充足和不抛出异常域。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/string>
@@ -86,3 +89,8 @@ decltype(auto) example(asc::std::basic_string<char, ::std::char_traits<char>, ex
     return value.append("abc");
 }
 ```
+
+## 关联API
+
+- [`asc::std::basic_string`](basic_string.md)
+- [本头文件的接口列表](asc_std_string.md)

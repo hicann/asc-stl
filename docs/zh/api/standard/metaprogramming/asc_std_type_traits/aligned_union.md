@@ -28,23 +28,25 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::aligned_union` 计算可容纳所列类型且满足最大对齐的原始存储类型。
+`asc::std::aligned_union`计算可容纳所列类型且满足最大对齐的原始存储类型。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
 ```cpp
-template<size_t Len, class Type0, class ...Types> struct asc::std::aligned_union
+namespace asc::std {
+template<size_t Len, class Type0, class ...Types> struct aligned_union;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v 辅助形式
+- 提供特征类以及标准的 _t、_v辅助形式。
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
+以下Host片段用具体类型实参和`static_assert`验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
@@ -60,3 +62,7 @@ void use_trait()
     static_assert(alignof(asc::std::aligned_union_t<8, char, int>) == alignof(int));
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_type_traits.md)

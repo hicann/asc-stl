@@ -28,32 +28,37 @@
 
 头文件路径为：`<asc/barrier>`。
 
-`asc::barrier` 提供可重复使用的分阶段线程屏障，并在每一阶段完成时调用完成函数。
+`asc::barrier`提供可重复使用的分阶段线程屏障，并在每一阶段完成时调用完成函数。
 
 ## 声明
 
 ```cpp
-template<asc::memory_scope Scope, class CompletionFunction = asc::detail::barrier_empty_completion> class asc::barrier
+namespace asc {
+template<asc::memory_scope Scope, class CompletionFunction = asc::detail::barrier_empty_completion> class barrier;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 使用 C++17
-- 在 AI Core SIMT 编程 中操作调用方管理的 GM 状态
-- Scope 必须为 asc::memory_scope::block 或 asc::memory_scope::device
-- 所有阻塞参与者必须能够并发推进
-- 复制构造和复制赋值已删除
+- 使用C++17。
+- 在AI Core SIMT编程 中操作调用方管理的GM状态。
+- Scope必须为asc::memory_scope::block或asc::memory_scope::device。
+- 所有阻塞参与者必须能够并发推进。
+- 复制构造和复制赋值已删除。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下片段用于D-SIMT编译。barrier位于已初始化的共享GM存储；期望计数与本轮参与线程数一致，同一block的全部参与者必须到达。完成后才能进入下一阶段。
 
 ```cpp
 #include <asc/barrier>
 
-__aicore__ void use_type()
+__aicore__ void example(asc::barrier<asc::memory_scope::block>& barrier)
 {
-    using selected = asc::barrier<asc::memory_scope::block>;
-    (void)sizeof(selected);
+    barrier.arrive_and_wait();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_barrier.md)

@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/devices>`。
 
-`asc::device_ref` 构造函数使用给定的零基 Runtime Device 序号创建引用值。
+`asc::device_ref`构造函数使用给定的零基Runtime Device序号创建引用值。
 
 ## 函数原型
 
+所属类型：[`asc::device_ref`](device_ref.md)。
+
 ```cpp
-constexpr explicit asc::device_ref::device_ref(asc::std::uint32_t ordinal) noexcept;
+// asc::device_ref 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr explicit device_ref(asc::std::uint32_t ordinal) noexcept;
 ```
 
 ## 参数说明
@@ -42,24 +45,33 @@ constexpr explicit asc::device_ref::device_ref(asc::std::uint32_t ordinal) noexc
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `ordinal` | 输入 | Runtime Device 序号（uint32_t，0 起）：引用仅保存该序号，不拥有 Runtime 状态。 |
+| `ordinal` | 输入 | Runtime Device序号（uint32_t，0起）：引用仅保存该序号，不拥有Runtime状态。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 仅可在 Host 查询或选择 Device
-- 引用只保存设备序号且不拥有 Runtime 状态
-- 查询失败时输出参数保持原值，属性仅限当前接口列出的 AI Core、Vector Core、Warp、UB、GM、L2 与架构字段
+- 仅可在Host查询或选择Device。
+- 引用只保存设备序号且不拥有Runtime状态。
+- 查询失败时输出参数保持原值，属性仅限当前接口列出的AI Core、Vector Core、Warp、UB、GM、L2与架构字段。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/devices>
 
-void example()
+bool example()
 {
     asc::device_ref device(0);
-    (void)device.ordinal();
+    return device.ordinal() == 0;
 }
 ```
+
+## 关联API
+
+- [`asc::device_ref`](device_ref.md)
+- [本头文件的接口列表](asc_devices.md)

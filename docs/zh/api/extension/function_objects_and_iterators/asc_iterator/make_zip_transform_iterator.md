@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::make_zip_transform_iterator` 创建解引用时对多个输入执行函数的 zip_transform_iterator。
+`asc::make_zip_transform_iterator`创建解引用时对多个输入执行函数的zip_transform_iterator。
 
 ## 函数原型
 
 ```cpp
-template<class Function, class... Iterators> constexpr asc::zip_transform_iterator<Function, Iterators...> asc::make_zip_transform_iterator(Function function, Iterators... iterators);
+namespace asc {
+template<class Function, class... Iterators> constexpr asc::zip_transform_iterator<Function, Iterators...> make_zip_transform_iterator(Function function, Iterators... iterators);
+} // namespace asc
 ```
 
 ## 参数说明
@@ -49,8 +51,8 @@ template<class Function, class... Iterators> constexpr asc::zip_transform_iterat
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入 | 合并函数对象：解引用时把打包的多元组引用交给 function 求值得到结果。 |
-| `iterators` | 输入 | 被打包的各底层迭代器（零个或多个）：以 zip 迭代器方式同步前进。 |
+| `function` | 输入 | 合并函数对象：解引用时把打包的多元组引用交给function求值得到结果。 |
+| `iterators` | 输入 | 被打包的各底层迭代器（零个或多个）：以zip迭代器方式同步前进。 |
 
 ## 返回值说明
 
@@ -60,8 +62,8 @@ template<class Function, class... Iterators> constexpr asc::zip_transform_iterat
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
@@ -77,3 +79,7 @@ decltype(auto) example()
     return asc::make_zip_transform_iterator([](int left, int right) { return left + right; }, values, indices);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

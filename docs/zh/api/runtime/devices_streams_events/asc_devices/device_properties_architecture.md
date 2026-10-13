@@ -28,29 +28,39 @@
 
 头文件路径为：`<asc/devices>`。
 
-`asc::device_properties::architecture` 保存 Device 对应的 `npu_arch` 架构枚举值。
+`asc::device_properties::architecture`保存Device对应的`npu_arch`架构枚举值。
 
 ## 声明
 
+所属类型：[`asc::device_properties`](device_properties.md)。
+
 ```cpp
-asc::npu_arch asc::device_properties::architecture
+// asc::device_properties 类内的声明节选；模板形参和其他成员由所属类提供。
+asc::npu_arch architecture;
 ```
 
 ## 约束说明
 
-- 仅可在 Host 查询或选择 Device
-- 引用只保存设备序号且不拥有 Runtime 状态
-- 查询失败时输出参数保持原值，属性仅限当前接口列出的 AI Core、Vector Core、Warp、UB、GM、L2 与架构字段
+- 仅可在Host查询或选择Device。
+- 引用只保存设备序号且不拥有Runtime状态。
+- 查询失败时输出参数保持原值，属性仅限当前接口列出的AI Core、Vector Core、Warp、UB、GM、L2与架构字段。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/devices>
 
-void example(const asc::device_properties& object)
+bool example()
 {
-    (void)object.architecture;
+    // 默认属性是查询前的空值，不代表任何真实设备的规格。
+    asc::device_properties properties{};
+    return properties.architecture == asc::npu_arch::unknown;
 }
 ```
+
+## 关联API
+
+- [`asc::device_properties`](device_properties.md)
+- [本头文件的接口列表](asc_devices.md)

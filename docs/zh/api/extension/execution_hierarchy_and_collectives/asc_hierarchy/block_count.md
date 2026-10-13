@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::block_count` 返回当前 Kernel 启动的 Block 总数。
+`asc::block_count`返回当前Kernel启动的Block总数。
 
 ## 函数原型
 
 ```cpp
-unsigned long long asc::block_count() noexcept;
+namespace asc {
+unsigned long long block_count() noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -48,8 +50,8 @@ unsigned long long asc::block_count() noexcept;
 
 ## 约束说明
 
-- 可在 AI Core SIMD 编程、AI Core SIMT 编程中使用
-- 所选重载的类型、地址空间、取值范围和对象生命周期必须满足其公开声明
+- 可在AI Core SIMD编程、AI Core SIMT编程中使用。
+- 所选重载的类型、地址空间、取值范围和对象生命周期必须满足其公开声明。
 
 ## 调用示例
 
@@ -63,3 +65,7 @@ __aicore__ decltype(auto) example()
     return asc::block_count();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_hierarchy.md)

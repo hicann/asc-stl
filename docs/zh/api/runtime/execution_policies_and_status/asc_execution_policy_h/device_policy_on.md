@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/execution.policy.h>`。
 
-`asc::device_policy::on` 返回绑定指定 Stream 的新策略，并保留原策略的临时存储和执行要求。
+`asc::device_policy::on`返回绑定指定Stream的新策略，并保留原策略的临时存储和执行要求。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 函数原型
 
+所属类型：[`asc::device_policy`](device_policy.md)。
+
 ```cpp
-constexpr asc::device_policy asc::device_policy::on(asc::stream_ref stream) const noexcept;
+// asc::device_policy 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr asc::device_policy on(asc::stream_ref stream) const noexcept;
 ```
 
 ## 参数说明
@@ -44,21 +47,21 @@ constexpr asc::device_policy asc::device_policy::on(asc::stream_ref stream) cons
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `stream` | 输入 | 用于按序提交异步工作的 Stream。相关资源须保持有效，直至工作完成。 |
+| `stream` | 输入 | 用于按序提交异步工作的Stream。相关资源须保持有效，直至工作完成。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::device_policy` | 返回绑定指定 Stream 的新策略，并保留原策略的临时存储和执行要求。 |
+| `asc::device_policy` | 返回绑定指定Stream的新策略，并保留原策略的临时存储和执行要求。 |
 
 ## 约束说明
 
-- 仅替换函数名称所指明的执行要求、Stream 或临时存储绑定，其余策略属性保持不变
+- 仅替换函数名称所指明的执行要求、Stream或临时存储绑定，其余策略属性保持不变。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
 
 ```cpp
 #include <asc/execution.policy.h>
@@ -69,3 +72,7 @@ decltype(auto) example(asc::device_policy policy, asc::stream_ref stream)
     return configured;
 }
 ```
+
+## 关联API
+
+- [`asc::device_policy`](device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。

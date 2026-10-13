@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::unreachable` 声明控制流不可能到达当前位置；违背前置条件属于未定义行为。
+`asc::std::unreachable`声明控制流不可能到达当前位置；违背前置条件属于未定义行为。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 函数原型
 
 ```cpp
-void asc::std::unreachable();
+namespace asc::std {
+void unreachable();
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -48,8 +50,8 @@ void asc::std::unreachable();
 
 ## 约束说明
 
-- to_underlying 仅接受枚举类型
-- unreachable 保留标准语义前置条件，但不添加当前工具链不支持的 noreturn 属性
+- to_underlying仅接受枚举类型。
+- unreachable保留标准语义前置条件，但不添加当前工具链不支持的noreturn属性。
 
 ## 调用示例
 
@@ -63,3 +65,7 @@ void example()
     asc::std::unreachable();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

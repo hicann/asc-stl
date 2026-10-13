@@ -28,20 +28,21 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::sys_time` 表示日期、时间点或时长计算中的 `sys_time` 值类型。
+`asc::std::chrono::sys_time`表示日期、时间点或时长计算中的`sys_time`值类型。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 声明
 
 ```cpp
-template<class Duration> using asc::std::chrono::sys_time = time_point<system_clock, Duration>
+namespace asc::std::chrono {
+template<class Duration> using sys_time = time_point<system_clock, Duration>;
+} // namespace asc::std::chrono
 ```
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
@@ -55,3 +56,7 @@ void use_type()
     using selected = asc::std::chrono::sys_time<asc::std::chrono::seconds>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

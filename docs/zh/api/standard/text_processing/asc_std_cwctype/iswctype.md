@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cwctype>`。
 
-`asc::std::iswctype` 按当前支持的 C 区域设置规则分类输入字符。
+`asc::std::iswctype`按当前支持的C区域设置规则分类输入字符。
 
-该接口的可用位置为 Host（完整接口）、Device（C locale 相关接口）。
+该接口的可用位置为Host（完整接口）、Device（C locale相关接口）。
 
 标准语义参考：[cppreference `cwctype`](https://en.cppreference.com/w/cpp/header/cwctype)。
 
 ## 函数原型
 
 ```cpp
-int asc::std::iswctype(wint_t value, wctype_t descriptor) noexcept;
+namespace asc::std {
+int iswctype(wint_t value, wctype_t descriptor) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,8 +48,8 @@ int asc::std::iswctype(wint_t value, wctype_t descriptor) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待分类的宽字符（wint_t）；取值须可表示为宽字符或等于 WEOF，等于 WEOF 时结果为 0。 |
-| `descriptor` | 输入 | 字符分类描述符（wctype_t），由 wctype 取得；指定参与判断的分类类别（如字母、数字、空白）。 |
+| `value` | 输入 | 待分类的宽字符（wint_t）；取值须可表示为宽字符或等于WEOF，等于WEOF时结果为0。 |
+| `descriptor` | 输入 | 字符分类描述符（wctype_t），由wctype取得；指定参与判断的分类类别（如字母、数字、空白）。 |
 
 ## 返回值说明
 
@@ -57,9 +59,9 @@ int asc::std::iswctype(wint_t value, wctype_t descriptor) noexcept;
 
 ## 约束说明
 
-- Host对22个词元委托系统<cwctype>完整合同
-- Device交付wint_t/wctype_t/wctrans_t/WEOF、14个直接分类/转换函数与wctype/iswctype/wctrans/towctrans完整描述符家族，语义固定为C locale
-- Host 提供完整接口，设备端仅提供 C 语言区域设置相关接口
+- Host行为由系统`<cwctype>`实现，受当前C语言区域设置影响。
+- Device的宽字符分类及大小写转换固定使用C locale。
+- Host提供完整接口，设备端仅提供C语言区域设置相关接口。
 
 ## 调用示例
 
@@ -73,3 +75,7 @@ decltype(auto) example(asc::std::wint_t value, asc::std::wctype_t descriptor)
     return asc::std::iswctype(value, descriptor);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cwctype.md)

@@ -28,20 +28,22 @@
 
 头文件路径为：`<asc/std/variant>`。
 
-`asc::std::variant_npos` 表示无活动备选项的索引值。
+`asc::std::variant_npos`表示无活动备选项的索引值。
 
 标准语义参考：[cppreference `variant`](https://en.cppreference.com/w/cpp/header/variant)。
 
 ## 声明
 
 ```cpp
-inline constexpr const ::std::size_t asc::std::variant_npos
+namespace asc::std {
+inline constexpr const ::std::size_t variant_npos;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
+- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
+- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
@@ -52,3 +54,7 @@ inline constexpr const ::std::size_t asc::std::variant_npos
 
 auto value = asc::std::variant_npos;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_variant.md)

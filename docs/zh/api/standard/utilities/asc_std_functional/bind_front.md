@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::bind_front` 把调用参数固定在函数对象实参列表的前部。
+`asc::std::bind_front`把调用参数固定在函数对象实参列表的前部。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 函数原型
 
 ```cpp
-template<class Fn, class ...Args> constexpr auto asc::std::bind_front(Fn&& function, Args&&... args) noexcept(is_nothrow_constructible_v<tuple<decay_t<Args>...>, Args&&...>);
+namespace asc::std {
+template<class Fn, class ...Args> constexpr auto bind_front(Fn&& function, Args&&... args) noexcept(is_nothrow_constructible_v<tuple<decay_t<Args>...>, Args&&...>);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,7 +46,7 @@ template<class Fn, class ...Args> constexpr auto asc::std::bind_front(Fn&& funct
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Fn` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Fn` | 被调用的函数、函数指针、成员指针或函数对象类型。 |
 | `Args` | 传递给构造函数或可调用对象的实参类型列表。 |
 
 **函数参数**
@@ -62,12 +64,11 @@ template<class Fn, class ...Args> constexpr auto asc::std::bind_front(Fn&& funct
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/functional>
@@ -78,3 +79,7 @@ decltype(auto) example()
     return bound(3);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

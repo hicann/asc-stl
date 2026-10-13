@@ -28,21 +28,23 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::mdspan::rank_type` 标识维度数量的整数类型。
+`asc::std::mdspan::rank_type`标识维度数量的整数类型。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 声明
 
+所属类型：[`asc::std::mdspan`](mdspan.md)。
+
 ```cpp
-using asc::std::mdspan::rank_type = typename Extents::rank_type
+// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
+using rank_type = typename Extents::rank_type;
 ```
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整标准mdspan view家族：全部成员类型与rank/static_extent观察，默认/拷贝/移动、data_handle+维度包/array/span/extents/mapping/mapping+accessor及跨mdspan构造，赋值与deduction guides，array/span下标、size/empty/swap、data_handle/mapping/accessor/extents/extent及映射属性观察
-- C++20开放rank-one operator[]，C++2b条件开放标准多索引operator[]
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain pointer域
+- C++20开放rank-one `operator[]`，C++2b条件开放标准多索引operator[]。
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
 
@@ -57,3 +59,8 @@ void use_type()
     using alias_type = typename asc::std::mdspan<int, asc::std::extents<asc::std::size_t, 2, 3>, asc::std::layout_right, asc::std::default_accessor<int>>::rank_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::mdspan`](mdspan.md)
+- [本头文件的接口列表](asc_std_mdspan.md)

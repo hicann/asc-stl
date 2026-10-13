@@ -28,21 +28,21 @@
 
 头文件路径为：`<asc/std/unordered_map>`。
 
-`asc::std::unordered_map::unordered_map` 按本页所列构造形态初始化 `unordered_map` 对象。
+`asc::std::unordered_map::unordered_map`按本页所列构造形态初始化`unordered_map`对象。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `unordered_map`](https://en.cppreference.com/w/cpp/header/unordered_map)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 unordered_map(const Allocator& allocator);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 unordered_map(unordered_map<Key, T, Hash, Equal, Allocator>&& other) noexcept;
@@ -50,7 +50,7 @@ unordered_map(unordered_map<Key, T, Hash, Equal, Allocator>&& other) noexcept;
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -58,49 +58,49 @@ unordered_map(unordered_map<Key, T, Hash, Equal, Allocator>&& other) noexcept;
 | --- | --- | --- |
 | `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下unordered_map<Key,T,Hash,Equal,A>显式GM arena
-- empty/size/bucket_count/begin/end/insert/find/count/operator[]/clear
-- allocator回绑桶数组并在默认负载阈值上自动rehash
-- 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构
-- 仅容量充足和不抛出异常域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下unordered_map<Key,T,Hash,Equal,A>显式GM arena。
+- empty/size/bucket_count/begin/end/insert/find/count/`operator[]`/clear。
+- allocator回绑桶数组并在默认负载阈值上自动rehash。
+- 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构。
+- 仅容量充足和不抛出异常域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
-#include <asc/std/unordered_map>
+#include <asc/memory>
 #include <functional>
-#include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/unordered_map>
+#include <asc/std/utility>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void example()
+bool example()
 {
-    example_allocator<::std::pair<const int, int>> allocator{};
-    asc::std::unordered_map<int, int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<::std::pair<const int, int>>> values(allocator);
-    (void)values.empty();
+    alignas(64) unsigned char storage[16384] = {};
+    asc::monotonic_arena arena(storage, sizeof(storage));
+    using allocator = asc::arena_allocator<asc::std::pair<const int, int>>;
+    asc::std::unordered_map<int, int, ::std::hash<int>, ::std::equal_to<int>, allocator> values(allocator{arena});
+    values[1] = 7;
+    values[3] = 9;
+    return values.size() == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_unordered_map.md)

@@ -28,30 +28,39 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::integer_sequence` 在类型中保存编译期整数序列。
+`asc::std::integer_sequence`在类型中保存编译期整数序列。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 声明
 
 ```cpp
-template<class T, T ...Index> struct asc::std::integer_sequence
+namespace asc::std {
+template<class T, T ...Index> struct integer_sequence;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供完整的标准形式
+- 提供完整的标准形式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/utility>
+#include <asc/std/type_traits>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::integer_sequence<int, 1, 2, 3>;
-    (void)sizeof(selected);
+    using sequence = asc::std::integer_sequence<int, 2, 4, 6>;
+    static_assert(sequence::size() == 3);
+    static_assert(asc::std::is_same_v<typename sequence::value_type, int>);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

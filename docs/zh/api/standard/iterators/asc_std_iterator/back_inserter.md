@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::back_inserter` 创建把赋值操作转为尾部插入的输出迭代器。
+`asc::std::back_inserter`创建把赋值操作转为尾部插入的输出迭代器。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
 ```cpp
-template<class Container> [[nodiscard]] constexpr back_insert_iterator<Container> asc::std::back_inserter(Container& container) noexcept;
+namespace asc::std {
+template<class Container> [[nodiscard]] constexpr back_insert_iterator<Container> back_inserter(Container& container) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,7 +46,7 @@ template<class Container> [[nodiscard]] constexpr back_insert_iterator<Container
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Container` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Container` | 接收插入元素的容器类型；须支持该适配器调用的插入操作。 |
 
 **函数参数**
 
@@ -60,12 +62,12 @@ template<class Container> [[nodiscard]] constexpr back_insert_iterator<Container
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
 
 ```cpp
 #include <asc/std/iterator>
@@ -80,3 +82,7 @@ void example()
     *output = 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

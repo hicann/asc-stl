@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cwctype>`。
 
-`asc::std::wctype` 按当前支持的 C 区域设置规则取得或应用宽字符分类与转换描述符。
+`asc::std::wctype`按当前支持的C区域设置规则取得或应用宽字符分类与转换描述符。
 
-该接口的可用位置为 Host（完整接口）、Device（C locale 相关接口）。
+该接口的可用位置为Host（完整接口）、Device（C locale相关接口）。
 
 标准语义参考：[cppreference `cwctype`](https://en.cppreference.com/w/cpp/header/cwctype)。
 
 ## 函数原型
 
 ```cpp
-wctype_t asc::std::wctype(const char* property) noexcept;
+namespace asc::std {
+wctype_t wctype(const char* property) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,7 +48,7 @@ wctype_t asc::std::wctype(const char* property) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `property` | 输入 | 提供“按当前支持的 C 区域设置规则取得或应用宽字符分类与转换描述符”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `property` | 输入 | 以零字符终止的窄字符属性名称，例如alpha或digit。返回的描述符用于对应宽字符分类或转换函数。 |
 
 ## 返回值说明
 
@@ -56,9 +58,9 @@ wctype_t asc::std::wctype(const char* property) noexcept;
 
 ## 约束说明
 
-- Host对22个词元委托系统<cwctype>完整合同
-- Device交付wint_t/wctype_t/wctrans_t/WEOF、14个直接分类/转换函数与wctype/iswctype/wctrans/towctrans完整描述符家族，语义固定为C locale
-- Host 提供完整接口，设备端仅提供 C 语言区域设置相关接口
+- Host行为由系统`<cwctype>`实现，受当前C语言区域设置影响。
+- Device的宽字符分类及大小写转换固定使用C locale。
+- Host提供完整接口，设备端仅提供C语言区域设置相关接口。
 
 ## 调用示例
 
@@ -72,3 +74,7 @@ decltype(auto) example(const char * property)
     return asc::std::wctype(property);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cwctype.md)

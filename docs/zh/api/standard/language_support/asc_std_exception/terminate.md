@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/exception>`。
 
-`asc::std::terminate` 终止当前执行且不会返回。Host 调用当前标准终止处理函数；设备侧结束当前设备执行。
+`asc::std::terminate`终止当前执行且不会返回。Host调用当前标准终止处理函数；设备侧结束当前设备执行。
 
 标准语义参考：[cppreference `exception`](https://en.cppreference.com/w/cpp/header/exception)。
 
 ## 函数原型
 
 ```cpp
-void asc::std::terminate() noexcept;
+namespace asc::std {
+void terminate() noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -48,13 +50,13 @@ void asc::std::terminate() noexcept;
 
 ## 约束说明
 
-- 调用后不会返回
-- Host 调用当前标准终止处理函数
-- AI Core SIMD 和 AI Core SIMT 编程中终止当前设备执行。设备故障的具体状态码不属于接口保证
+- 调用后不会返回。
+- Host调用当前标准终止处理函数。
+- AI Core SIMD和AI Core SIMT编程中终止当前设备执行。设备故障的具体状态码不属于接口保证。
 
 ## 调用示例
 
-以下代码用于毕昇 ASC 翻译单元，分别展示 Host 提交侧与 AI Core 设备函数中的调用。
+以下代码用于毕昇ASC翻译单元，分别展示Host提交侧与AI Core设备函数中的调用。
 
 ```cpp
 #include <asc/std/exception>
@@ -69,3 +71,7 @@ __aicore__ void device_example()
     asc::std::terminate();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_exception.md)

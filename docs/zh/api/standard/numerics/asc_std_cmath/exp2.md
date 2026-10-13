@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::exp2` 计算以 2 为底的指数；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::exp2`计算以2为底的指数；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-float asc::std::exp2(float x) noexcept;
+namespace asc::std {
+float exp2(float x) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,17 +48,17 @@ float asc::std::exp2(float x) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 2 的指数（幂次，无量纲）；上溢返回 +inf，下溢返回 0。 |
+| `x` | 输入 | 2的指数（幂次，无量纲）；上溢返回 +inf，下溢返回0。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `float` | 返回以 2 为底的指数；Device 侧适用范围以本页 float 与执行位置约束为准的计算结果。 |
+| `float` | 返回以2为底的指数；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
 
 ## 约束说明
 
-- 提供 float 重载、标准 *f 别名以及 float lerp 回移接口
+- 提供float重载、标准 *f别名以及float lerp回移接口。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example(float x)
     return asc::std::exp2(x);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::polar` 由模长与幅角构造复数。
+`asc::std::polar`由模长与幅角构造复数。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 函数原型
 
 ```cpp
-template<class T> complex<T> asc::std::polar(const T& radius, const T& angle = T()) noexcept;
+namespace asc::std {
+template<class T> complex<T> polar(const T& radius, const T& angle = T()) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -53,7 +55,7 @@ template<class T> complex<T> asc::std::polar(const T& radius, const T& angle = T
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `radius` | 输入 | 复数的模长（非负实数，无量纲）。 |
-| `angle` | 输入 | 复数的幅角（角度量，单位为弧度）；省略时取 0。 |
+| `angle` | 输入 | 复数的幅角（角度量，单位为弧度）；省略时取0。 |
 
 ## 返回值说明
 
@@ -63,12 +65,12 @@ template<class T> complex<T> asc::std::polar(const T& radius, const T& angle = T
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/complex>
@@ -78,3 +80,7 @@ decltype(auto) example()
     return asc::std::polar(1.0f, 0.5f);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_complex.md)

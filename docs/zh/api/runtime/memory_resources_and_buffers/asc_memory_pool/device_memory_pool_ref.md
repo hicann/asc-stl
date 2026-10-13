@@ -28,29 +28,55 @@
 
 头文件路径为：`<asc/memory_pool>`。
 
-`asc::device_memory_pool_ref` 是 `device_memory_pool` 的非拥有引用，转发异步分配、延迟回收、缓存整理和统计操作；被引用的内存池必须在其使用期间保持有效。
+`asc::device_memory_pool_ref`是`device_memory_pool`的非拥有引用，转发异步分配、延迟回收、缓存整理和统计操作；被引用的内存池必须在其使用期间保持有效。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 声明
 
 ```cpp
-class asc::device_memory_pool_ref
+namespace asc {
+class device_memory_pool_ref;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供软件内存池、collect、trim、stats 以及 Event 安全复用
+- 提供软件内存池、collect、trim、stats以及Event安全复用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例在设备0上初始化Runtime，检查资源状态，并在资源释放后关闭Runtime；运行需要已安装CANN且设备可用。
 
 ```cpp
+#include <acl/acl.h>
 #include <asc/memory_pool>
 
-void use_type(const asc::device_memory_pool_ref& value)
+bool resource_example()
 {
-    (void)value;
+    asc::device_memory_pool pool;
+    asc::device_memory_pool_config config{};
+    if (!asc::device_memory_pool::create(pool, config).success()) return false;
+    asc::device_memory_pool_ref view(pool);
+    const bool ready = view.valid() && view.statistics().reserved_bytes() == 0;
+    const bool closed = pool.close().success();
+    return ready && closed && !pool.valid();
+}
+
+bool example()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) return false;
+    if (aclrtSetDevice(0) != ACL_SUCCESS) {
+        const bool finalized = aclFinalize() == ACL_SUCCESS;
+        return finalized && false;
+    }
+    const bool passed = resource_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return passed && reset && finalized;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_memory_pool.md)

@@ -28,35 +28,39 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::binary_search` 在已排序范围中判断是否存在与目标等价的元素；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::binary_search`在已排序范围中判断是否存在与目标等价的元素；无策略形式在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class ForwardIterator, class T, class Compare> [[nodiscard]] constexpr bool asc::std::binary_search(ForwardIterator first, ForwardIterator last, const T& value, Compare compare);
+namespace asc::std {
+template<class ForwardIterator, class T, class Compare> [[nodiscard]] constexpr bool binary_search(ForwardIterator first, ForwardIterator last, const T& value, Compare compare);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class ForwardIterator, class T> [[nodiscard]] constexpr bool asc::std::binary_search(ForwardIterator first, ForwardIterator last, const T& value);
+namespace asc::std {
+template<class ForwardIterator, class T> [[nodiscard]] constexpr bool binary_search(ForwardIterator first, ForwardIterator last, const T& value);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `ForwardIterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `T` | 待查找值的类型，须能作为 compare 的实参与元素比较。 |
-| `Compare` | 比较器类型；调用形式为 compare(a, b)，返回 bool 且满足严格弱序。 |
+| `T` | 待查找值的类型，须能作为compare的实参与元素比较。 |
+| `Compare` | 比较器类型；调用形式为compare(a, b)，返回bool且满足严格弱序。 |
 
 **函数参数**
 
@@ -65,9 +69,9 @@ template<class ForwardIterator, class T> [[nodiscard]] constexpr bool asc::std::
 | `first` | 输入 | 已排序输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 已排序输入范围的结束位置，不包含该位置。 |
 | `value` | 输入 | 待查找的值；判断范围内是否存在与该值等价的元素。 |
-| `compare` | 输入 | 比较器，按调用形式 compare(a, b) 返回 bool，true 表示 a 排在 b 前；须满足严格弱序，与范围排序规则一致。 |
+| `compare` | 输入 | 比较器，按调用形式compare(a, b)返回bool，true表示a排在b前；须满足严格弱序，与范围排序规则一致。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -88,17 +92,17 @@ template<class ForwardIterator, class T> [[nodiscard]] constexpr bool asc::std::
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 2 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| 原型1 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
+| 原型2 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 提供顺序执行且不进行动态内存分配的重载
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序
+- 提供顺序执行且不进行动态内存分配的重载。
+- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下 Host 片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
 
 ```cpp
 #include <asc/std/algorithm>
@@ -109,3 +113,7 @@ decltype(auto) example()
     return asc::std::binary_search(values, values + 8, 5);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

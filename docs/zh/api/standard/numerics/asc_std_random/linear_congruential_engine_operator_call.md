@@ -1,4 +1,4 @@
-# asc::std::linear_congruential_engine::operator()
+# asc::std::linear_congruential_engine::`operator()`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::linear_congruential_engine::operator()` 按 `linear_congruential_engine` 的可用运算符规则处理当前对象及操作数。
+`asc::std::linear_congruential_engine::operator()`按`linear_congruential_engine`的可用运算符规则处理当前对象及操作数。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 函数原型
 
+所属类型：[`asc::std::linear_congruential_engine`](linear_congruential_engine.md)。
+
 ```cpp
-constexpr result_type asc::std::linear_congruential_engine::operator()() noexcept;
+// asc::std::linear_congruential_engine 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr result_type operator()() noexcept;
 ```
 
 ## 参数说明
@@ -50,11 +53,11 @@ constexpr result_type asc::std::linear_congruential_engine::operator()() noexcep
 
 ## 约束说明
 
-- 提供不接收 seed_seq 的标准 seed、discard、生成和相等比较成员
+- 提供不接收seed_seq的标准seed、discard、生成和相等比较成员。
 
 ## 调用示例
 
-以下 Host 片段使用具体数值类型演示调用；状态与参数须满足本页约束。
+以下Host片段使用具体数值类型演示调用；状态与参数须满足本页约束。
 
 ```cpp
 #include <asc/std/random>
@@ -65,3 +68,8 @@ decltype(auto) example()
     return generator();
 }
 ```
+
+## 关联API
+
+- [`asc::std::linear_congruential_engine`](linear_congruential_engine.md)
+- [本头文件的接口列表](asc_std_random.md)

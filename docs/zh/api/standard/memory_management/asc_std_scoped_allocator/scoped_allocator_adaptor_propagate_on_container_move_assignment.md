@@ -28,28 +28,32 @@
 
 头文件路径为：`<asc/std/scoped_allocator>`。
 
-`asc::std::scoped_allocator_adaptor::propagate_on_container_move_assignment` 标识对应容器复制、移动或交换操作是否传播分配器。
+`asc::std::scoped_allocator_adaptor::propagate_on_container_move_assignment`标识对应容器复制、移动或交换操作是否传播分配器。
 
 标准语义参考：[cppreference `scoped_allocator`](https://en.cppreference.com/w/cpp/header/scoped_allocator)。
 
 ## 声明
 
-### 原型 1
+所属类型：[`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。
+
+### 原型1
 
 ```cpp
-using asc::std::scoped_allocator_adaptor::propagate_on_container_move_assignment = scoped_bool_constant<outer_traits::propagate_on_container_move_assignment::value || inner_allocator_type::propagate_on_container_move_assignment::value>
+// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
+using propagate_on_container_move_assignment = scoped_bool_constant<outer_traits::propagate_on_container_move_assignment::value || inner_allocator_type::propagate_on_container_move_assignment::value>;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-using asc::std::scoped_allocator_adaptor::propagate_on_container_move_assignment = typename outer_traits::propagate_on_container_move_assignment
+// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
+using propagate_on_container_move_assignment = typename outer_traits::propagate_on_container_move_assignment;
 ```
 
 ## 约束说明
 
-- 遵循 scoped_allocator_adaptor 的标准分配器传播、构造、销毁、比较和交换约束
-- 参与操作的分配器必须在当前可用位置有效，Device 侧操作不得抛出异常
+- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
+- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
 
 ## 调用示例
 
@@ -79,6 +83,11 @@ void use_type()
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
 完整示例源码：[allocator_traits.cpp](../../../../examples/allocator_traits.cpp)。
+
+## 关联API
+
+- [`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)
+- [本头文件的接口列表](asc_std_scoped_allocator.md)

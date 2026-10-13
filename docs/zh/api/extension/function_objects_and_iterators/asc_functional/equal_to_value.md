@@ -28,29 +28,35 @@
 
 头文件路径为：`<asc/functional>`。
 
-`asc::equal_to_value` 保存一个值并判断输入是否与该值相等。
+`asc::equal_to_value`保存一个值并判断输入是否与该值相等。
 
 ## 声明
 
 ```cpp
-template<class T> class asc::equal_to_value
+namespace asc {
+template<class T> class equal_to_value;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 整数或逻辑运算仅在数学性质成立时报告对应特性
-- 浮点加法不满足结合律
+- 整数或逻辑运算仅在数学性质成立时报告对应特性。
+- 浮点加法不满足结合律。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/functional>
 
-void use_type()
+bool example()
 {
-    using selected = asc::equal_to_value<int>;
-    (void)sizeof(selected);
+    asc::equal_to_value<int> is_seven(7);
+    return is_seven(7) && !is_seven(3);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_functional.md)

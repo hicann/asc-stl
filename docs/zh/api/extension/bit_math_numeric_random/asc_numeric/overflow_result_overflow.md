@@ -28,28 +28,37 @@
 
 头文件路径为：`<asc/numeric>`。
 
-`asc::overflow_result::overflow` 标记对应算术结果是否发生溢出。
+`asc::overflow_result::overflow`标记对应算术结果是否发生溢出。
 
 ## 声明
 
+所属类型：[`asc::overflow_result`](overflow_result.md)。
+
 ```cpp
-bool asc::overflow_result::overflow
+// asc::overflow_result 类内的声明节选；模板形参和其他成员由所属类提供。
+bool overflow;
 ```
 
 ## 约束说明
 
-- T、From 和 To 必须是不超过 64 位的标准非 bool 整数类型
-- 所有溢出检查均不得触发有符号整数溢出的未定义行为
+- T、From和To必须是不超过64位的标准非bool整数类型。
+- 所有溢出检查均不得触发有符号整数溢出的未定义行为。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/numeric>
 
-void example(const asc::overflow_result<int>& object)
+bool example()
 {
-    (void)object.overflow;
+    auto result = asc::add_overflow(2, 3);
+    return !result.overflow && result.value == 5;
 }
 ```
+
+## 关联API
+
+- [`asc::overflow_result`](overflow_result.md)
+- [本头文件的接口列表](asc_numeric.md)

@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cstdlib>`。
 
-`asc::std::llabs` 返回对应宽度有符号整数的绝对值。
+`asc::std::llabs`返回对应宽度有符号整数的绝对值。
 
 标准语义参考：[cppreference `cstdlib`](https://en.cppreference.com/w/cpp/header/cstdlib)。
 
 ## 函数原型
 
 ```cpp
-[[nodiscard]] constexpr long long asc::std::llabs(long long value) noexcept;
+namespace asc::std {
+[[nodiscard]] constexpr long long llabs(long long value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,7 +46,7 @@
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待取绝对值的有符号整数值，类型为 long long；为最小负值时结果无有效表示。 |
+| `value` | 输入 | 待取绝对值的有符号整数值，类型为long long；为最小负值时结果无有效表示。 |
 
 ## 返回值说明
 
@@ -54,7 +56,7 @@
 
 ## 约束说明
 
-- 提供整数重载及相应结果类型
+- 提供整数重载及相应结果类型。
 
 ## 调用示例
 
@@ -68,3 +70,7 @@ decltype(auto) example(long long value)
     return asc::std::llabs(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstdlib.md)

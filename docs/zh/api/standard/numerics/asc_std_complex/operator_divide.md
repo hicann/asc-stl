@@ -1,4 +1,4 @@
-# asc::std::operator/
+# `asc::std::operator/`
 
 ## 产品支持情况
 
@@ -28,33 +28,39 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::operator/` 按复数除法规则计算商。
+`asc::std::operator/`按复数除法规则计算商。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> constexpr complex<T> asc::std::operator/(const T& lhs, const complex<T>& rhs) noexcept;
+namespace asc::std {
+template<class T> constexpr complex<T> operator/(const T& lhs, const complex<T>& rhs) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> constexpr complex<T> asc::std::operator/(const complex<T>& lhs, const T& rhs) noexcept;
+namespace asc::std {
+template<class T> constexpr complex<T> operator/(const complex<T>& lhs, const T& rhs) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class T> constexpr complex<T> asc::std::operator/(const complex<T>& lhs, const complex<T>& rhs) noexcept;
+namespace asc::std {
+template<class T> constexpr complex<T> operator/(const complex<T>& lhs, const complex<T>& rhs) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -69,7 +75,7 @@ template<class T> constexpr complex<T> asc::std::operator/(const complex<T>& lhs
 | `lhs` | 输入 | 复数除法的左操作数（实数标量，作为被除数）。 |
 | `rhs` | 输入 | 复数除法的右操作数（复数，作为除数，须非零）。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -84,7 +90,7 @@ template<class T> constexpr complex<T> asc::std::operator/(const complex<T>& lhs
 | `lhs` | 输入 | 复数除法的左操作数（复数，作为被除数）。 |
 | `rhs` | 输入 | 复数除法的右操作数（实数标量，作为除数，须非零）。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
@@ -103,18 +109,18 @@ template<class T> constexpr complex<T> asc::std::operator/(const complex<T>& lhs
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
-| 原型 2 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
-| 原型 3 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
+| 原型1 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
+| 原型2 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
+| 原型3 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/complex>
@@ -126,3 +132,7 @@ decltype(auto) example()
     return asc::std::operator/(left, right);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_complex.md)

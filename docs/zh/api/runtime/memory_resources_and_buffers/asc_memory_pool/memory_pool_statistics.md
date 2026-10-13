@@ -28,29 +28,36 @@
 
 头文件路径为：`<asc/memory_pool>`。
 
-`asc::memory_pool_statistics` 是内存池状态快照，分别记录已向底层资源保留、正由调用方使用和已缓存待复用的字节数。
+`asc::memory_pool_statistics`是内存池状态快照，分别记录已向底层资源保留、正由调用方使用和已缓存待复用的字节数。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 声明
 
 ```cpp
-class asc::memory_pool_statistics
+namespace asc {
+class memory_pool_statistics;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供软件内存池、collect、trim、stats 以及 Event 安全复用
+- 提供软件内存池、collect、trim、stats以及Event安全复用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/memory_pool>
 
-void use_type(const asc::memory_pool_statistics& value)
+bool example()
 {
-    (void)value;
+    asc::memory_pool_statistics statistics(128, 32, 96);
+    return statistics.reserved_bytes() == 128 && statistics.used_bytes() == 32 && statistics.cached_bytes() == 96;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_memory_pool.md)

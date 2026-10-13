@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_flag_clear_explicit` 按指定内存序原子地清除标志位。
+`asc::std::atomic_flag_clear_explicit`按指定内存序原子地清除标志位。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 函数原型
 
 ```cpp
-void asc::std::atomic_flag_clear_explicit(atomic_flag* object, memory_order order) noexcept;
+namespace asc::std {
+void atomic_flag_clear_explicit(atomic_flag* object, memory_order order) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -47,7 +49,7 @@ void asc::std::atomic_flag_clear_explicit(atomic_flag* object, memory_order orde
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `object` | 输入 | 指向被置位或清除的原子标志对象的指针。 |
-| `order` | 输入 | 清除标志所用内存序，决定本次写入的可见性顺序；仅可取 relaxed、release 或 seq_cst。 |
+| `order` | 输入 | 清除标志所用内存序，决定本次写入的可见性顺序；仅可取relaxed、release或seq_cst。 |
 
 ## 返回值说明
 
@@ -55,8 +57,8 @@ void asc::std::atomic_flag_clear_explicit(atomic_flag* object, memory_order orde
 
 ## 约束说明
 
-- atomic_flag的test/test_and_set/clear成员与非volatile自由函数
-- Host 和 AI Core SIMT 编程 GM
+- atomic_flag的test/test_and_set/clear成员与非volatile自由函数。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ void example(asc::std::atomic_flag * object, asc::std::memory_order order)
     asc::std::atomic_flag_clear_explicit(object, order);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

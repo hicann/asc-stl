@@ -28,30 +28,37 @@
 
 头文件路径为：`<asc/std/variant>`。
 
-`asc::std::monostate` 提供可默认构造且可比较的空备选类型。
+`asc::std::monostate`提供可默认构造且可比较的空备选类型。
 
 标准语义参考：[cppreference `variant`](https://en.cppreference.com/w/cpp/header/variant)。
 
 ## 声明
 
 ```cpp
-struct asc::std::monostate
+namespace asc::std {
+struct monostate;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
+- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
+- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/variant>
 
-void use_type(const asc::std::monostate& value)
+bool example()
 {
-    (void)value;
+    asc::std::variant<asc::std::monostate, int> value;
+    return value.index() == 0 && asc::std::get<0>(value) == asc::std::monostate{};
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_variant.md)

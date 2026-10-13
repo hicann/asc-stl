@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::sort_heap` 把堆范围转换为有序范围；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::sort_heap`把堆范围转换为有序范围；无策略形式在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class RandomAccessIterator, class Compare> constexpr void asc::std::sort_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp);
+namespace asc::std {
+template<class RandomAccessIterator, class Compare> constexpr void sort_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class RandomAccessIterator> constexpr void asc::std::sort_heap(RandomAccessIterator first, RandomAccessIterator last);
+namespace asc::std {
+template<class RandomAccessIterator> constexpr void sort_heap(RandomAccessIterator first, RandomAccessIterator last);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -65,7 +69,7 @@ template<class RandomAccessIterator> constexpr void asc::std::sort_heap(RandomAc
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `comp` | 输入 | 用于确定元素顺序的比较对象。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -86,12 +90,12 @@ template<class RandomAccessIterator> constexpr void asc::std::sort_heap(RandomAc
 
 ## 约束说明
 
-- 提供顺序执行且不进行动态内存分配的重载
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序
+- 提供顺序执行且不进行动态内存分配的重载。
+- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下 Host 片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
 
 ```cpp
 #include <asc/std/algorithm>
@@ -103,3 +107,7 @@ void example()
     asc::std::sort_heap(values, values + 8);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

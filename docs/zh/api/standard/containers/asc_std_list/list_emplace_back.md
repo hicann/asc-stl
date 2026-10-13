@@ -28,16 +28,19 @@
 
 头文件路径为：`<asc/std/list>`。
 
-`asc::std::list::emplace_back` 在容器尾部直接构造元素。
+`asc::std::list::emplace_back`在容器尾部直接构造元素。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `list`](https://en.cppreference.com/w/cpp/header/list)。
 
 ## 函数原型
 
+所属类型：[`asc::std::list`](list.md)。
+
 ```cpp
-template<class ...Args> reference asc::std::list::emplace_back(Args&&... args);
+// asc::std::list 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class ...Args> reference emplace_back(Args&&... args);
 ```
 
 ## 参数说明
@@ -58,20 +61,20 @@ template<class ...Args> reference asc::std::list::emplace_back(Args&&... args);
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `reference` | 返回原位构造的元素引用或所选原型规定的插入结果。 |
+| `reference` | 返回新构造元素的引用。 |
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下list<T,A>显式GM arena allocator构造
-- empty/size/front/back/begin/end
-- push/emplace/pop_front/back/clear
-- 双向迭代核心、移动构造/赋值、移动前迭代器继续遍历目标节点及析构
-- 仅容量充足和不抛出异常值/allocator域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下list<T,A>显式GM arena allocator构造。
+- empty/size/front/back/begin/end。
+- push/emplace/pop_front/back/clear。
+- 双向迭代核心、移动构造/赋值、移动前迭代器继续遍历目标节点及析构。
+- 仅容量充足和不抛出异常值/allocator域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/list>
@@ -96,3 +99,8 @@ decltype(auto) example(asc::std::list<int, example_allocator<int>>& values)
     return values.emplace_back(7);
 }
 ```
+
+## 关联API
+
+- [`asc::std::list`](list.md)
+- [本头文件的接口列表](asc_std_list.md)

@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::real` 返回复数实部。
+`asc::std::real`返回复数实部。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> [[nodiscard]] constexpr T asc::std::real(const complex<T>& value);
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr T real(const complex<T>& value);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> [[nodiscard]] constexpr T asc::std::real(T value);
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr T real(T value);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -62,7 +66,7 @@ template<class T> [[nodiscard]] constexpr T asc::std::real(T value);
 | --- | --- | --- |
 | `value` | 输入 | 待读取实部的复数操作数。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -74,23 +78,23 @@ template<class T> [[nodiscard]] constexpr T asc::std::real(T value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待读取实部的实数输入（按虚部为 0 的复数处理，原样返回该值）。 |
+| `value` | 输入 | 待读取实部的实数输入（按虚部为0的复数处理，原样返回该值）。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `T` | 返回复数实部。 |
-| 原型 2 | `T` | 返回复数实部。 |
+| 原型1 | `T` | 返回复数实部。 |
+| 原型2 | `T` | 返回复数实部。 |
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下 Host 片段以具体复数值展示实部查询。
+以下Host片段以具体复数值展示实部查询。
 
 ```cpp
 #include <asc/std/complex>
@@ -101,3 +105,7 @@ decltype(auto) example()
     return asc::std::real(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_complex.md)

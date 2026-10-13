@@ -1,4 +1,4 @@
-# asc::std::operator*
+# `asc::std::operator*`
 
 ## 产品支持情况
 
@@ -28,71 +28,77 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::operator*` 执行复数乘法：原型 1 将两个 `complex<float>` 按复数乘法规则相乘；原型 2 将 `complex<float>` 的实部与虚部同乘 `float` 标量；原型 3 为 `float` 标量乘以 `complex<float>`，与原型 2 的标量乘法结果相同。
+`asc::std::operator*`执行复数乘法：原型1将两个`complex<float>`按复数乘法规则相乘；原型2将`complex<float>`的实部与虚部同乘`float`标量；原型3为`float`标量乘以`complex<float>`，与原型2的标量乘法结果相同。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-constexpr asc::std::complex<float> asc::std::operator*(const asc::std::complex<float>& lhs, const asc::std::complex<float>& rhs) noexcept;
+namespace asc::std {
+constexpr asc::std::complex<float> operator*(const asc::std::complex<float>& lhs, const asc::std::complex<float>& rhs) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr asc::std::complex<float> asc::std::operator*(const asc::std::complex<float>& lhs, float rhs) noexcept;
+namespace asc::std {
+constexpr asc::std::complex<float> operator*(const asc::std::complex<float>& lhs, float rhs) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-constexpr asc::std::complex<float> asc::std::operator*(float lhs, const asc::std::complex<float>& rhs) noexcept;
+namespace asc::std {
+constexpr asc::std::complex<float> operator*(float lhs, const asc::std::complex<float>& rhs) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 复数乘法的左操作数（complex<float>）。 |
-| `rhs` | 输入 | 复数乘法的右操作数（complex<float>）。 |
+| `lhs` | 输入 | 复数乘法的左操作数（`complex<float>`）。 |
+| `rhs` | 输入 | 复数乘法的右操作数（`complex<float>`）。 |
 
-### 原型 2 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `lhs` | 输入 | 复数乘法的左操作数（complex<float>）。 |
-| `rhs` | 输入 | 复数乘法的右操作数（标量 float，实部与虚部同乘该值）。 |
-
-### 原型 3 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 复数乘法的左操作数（标量 float，实部与虚部同乘该值）。 |
-| `rhs` | 输入 | 复数乘法的右操作数（complex<float>）。 |
+| `lhs` | 输入 | 复数乘法的左操作数（`complex<float>`）。 |
+| `rhs` | 输入 | 复数乘法的右操作数（标量float，实部与虚部同乘该值）。 |
+
+### 原型3的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `lhs` | 输入 | 复数乘法的左操作数（标量float，实部与虚部同乘该值）。 |
+| `rhs` | 输入 | 复数乘法的右操作数（`complex<float>`）。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::std::complex<float>` | 返回按对应复数算术规则计算出的复数值。 |
-| 原型 2 | `asc::std::complex<float>` | 返回按对应复数算术规则计算出的复数值。 |
-| 原型 3 | `asc::std::complex<float>` | 返回按对应复数算术规则计算出的复数值。 |
+| 原型1 | `asc::std::complex<float>` | 返回按对应复数算术规则计算出的复数值。 |
+| 原型2 | `asc::std::complex<float>` | 返回按对应复数算术规则计算出的复数值。 |
+| 原型3 | `asc::std::complex<float>` | 返回按对应复数算术规则计算出的复数值。 |
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
@@ -106,3 +112,7 @@ decltype(auto) example(const asc::std::complex<float>& lhs, const asc::std::comp
     return asc::std::operator*(lhs, rhs);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_complex.md)

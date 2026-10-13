@@ -28,126 +28,134 @@
 
 头文件路径为：`<asc/buffer>`。
 
-`asc::make_device_buffer` 使用调用方提供的 Device 内存资源创建 `device_buffer<T>`。接口可只分配存储，也可使用单个值或连续 Host 范围初始化元素；操作状态通过 `execution_status` 返回。
+`asc::make_device_buffer`使用调用方提供的Device内存资源创建`device_buffer<T>`。接口可只分配存储，也可使用单个值或连续Host范围初始化元素；操作状态通过`execution_status`返回。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> asc::execution_status asc::make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource, asc::stream_ref stream, asc::std::size_t element_count) noexcept;
+namespace asc {
+template<class T> asc::execution_status make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource, asc::stream_ref stream, asc::std::size_t element_count) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> asc::execution_status asc::make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource, asc::stream_ref stream, asc::std::size_t element_count, const T& value) noexcept;
+namespace asc {
+template<class T> asc::execution_status make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource, asc::stream_ref stream, asc::std::size_t element_count, const T& value) noexcept;
+} // namespace asc
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class T> asc::execution_status asc::make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource, asc::stream_ref stream, const T* first, const T* last) noexcept;
+namespace asc {
+template<class T> asc::execution_status make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource, asc::stream_ref stream, const T* first, const T* last) noexcept;
+} // namespace asc
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class T> asc::execution_status asc::make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource, asc::stream_ref stream, const T* first, asc::std::size_t element_count) noexcept;
+namespace asc {
+template<class T> asc::execution_status make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource, asc::stream_ref stream, const T* first, asc::std::size_t element_count) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 缓冲区的元素类型；元素数乘sizeof(T)为所需字节数，乘积须可表示。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 接收结果的 device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
-| `resource` | 输入 | Device 内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
-| `stream` | 输入 | 与缓冲关联的 Stream 引用：初始化复制等异步操作按该 Stream 提交；须保持有效直至相关异步工作完成。 |
-| `element_count` | 输入 | 元素个数（以元素计）：原型 1/2 为待分配的元素数（为 0 时返回参数无效），原型 4 为从 first 复制的元素数。 |
+| `output` | 输出 | 接收结果的device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
+| `resource` | 输入 | Device内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
+| `stream` | 输入 | 与缓冲关联的Stream引用：初始化复制等异步操作按该Stream提交；须保持有效直至相关异步工作完成。 |
+| `element_count` | 输入 | 元素个数（以元素计）：原型1/2为待分配的元素数（为0时返回参数无效），原型4为从first复制的元素数。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 缓冲区的元素类型；元素数乘sizeof(T)为所需字节数，乘积须可表示。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 接收结果的 device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
-| `resource` | 输入 | Device 内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
-| `stream` | 输入 | 与缓冲关联的 Stream 引用：初始化复制等异步操作按该 Stream 提交；须保持有效直至相关异步工作完成。 |
-| `element_count` | 输入 | 元素个数（以元素计）：原型 1/2 为待分配的元素数（为 0 时返回参数无效），原型 4 为从 first 复制的元素数。 |
-| `value` | 输入 | 填充值：先经一次 Host→Device 复制上载，再以流序倍增的 Device→Device 复制填充全部元素。 |
+| `output` | 输出 | 接收结果的device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
+| `resource` | 输入 | Device内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
+| `stream` | 输入 | 与缓冲关联的Stream引用：初始化复制等异步操作按该Stream提交；须保持有效直至相关异步工作完成。 |
+| `element_count` | 输入 | 元素个数（以元素计）：原型1/2为待分配的元素数（为0时返回参数无效），原型4为从first复制的元素数。 |
+| `value` | 输入 | 填充值：先经一次Host→Device复制上载，再以流序倍增的Device→Device复制填充全部元素。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 缓冲区的元素类型；元素数乘sizeof(T)为所需字节数，乘积须可表示。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 接收结果的 device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
-| `resource` | 输入 | Device 内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
-| `stream` | 输入 | 与缓冲关联的 Stream 引用：初始化复制等异步操作按该 Stream 提交；须保持有效直至相关异步工作完成。 |
-| `first` | 输入 | 待复制的 Host 连续元素范围首指针：原型 3 与 last 界定范围，原型 4 与 element_count 界定长度。 |
-| `last` | 输入 | 待复制的 Host 连续元素范围末指针（排他）：不得为空且不得小于 first。 |
+| `output` | 输出 | 接收结果的device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
+| `resource` | 输入 | Device内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
+| `stream` | 输入 | 与缓冲关联的Stream引用：初始化复制等异步操作按该Stream提交；须保持有效直至相关异步工作完成。 |
+| `first` | 输入 | 待复制的Host连续元素范围首指针：原型3与last界定范围，原型4与element_count界定长度。 |
+| `last` | 输入 | 待复制的Host连续元素范围末指针（排他）：不得为空且不得小于first。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 缓冲区的元素类型；元素数乘sizeof(T)为所需字节数，乘积须可表示。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 接收结果的 device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
-| `resource` | 输入 | Device 内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
-| `stream` | 输入 | 与缓冲关联的 Stream 引用：初始化复制等异步操作按该 Stream 提交；须保持有效直至相关异步工作完成。 |
-| `first` | 输入 | 待复制的 Host 连续元素范围首指针：原型 3 与 last 界定范围，原型 4 与 element_count 界定长度。 |
-| `element_count` | 输入 | 元素个数（以元素计）：原型 1/2 为待分配的元素数（为 0 时返回参数无效），原型 4 为从 first 复制的元素数。 |
+| `output` | 输出 | 接收结果的device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
+| `resource` | 输入 | Device内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
+| `stream` | 输入 | 与缓冲关联的Stream引用：初始化复制等异步操作按该Stream提交；须保持有效直至相关异步工作完成。 |
+| `first` | 输入 | 待复制的Host连续元素范围首指针：原型3与last界定范围，原型4与element_count界定长度。 |
+| `element_count` | 输入 | 元素个数（以元素计）：原型1/2为待分配的元素数（为0时返回参数无效），原型4为从first复制的元素数。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
-| 原型 2 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
-| 原型 3 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
-| 原型 4 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
+| 原型1 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
+| 原型2 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
+| 原型3 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
+| 原型4 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
 
 ## 约束说明
 
-- T 必须为可平凡复制类型
-- output、resource 和 stream 必须有效
-- 元素数量必须大于零
-- 异步初始化完成前输入范围、Stream 和内存资源必须保持有效
+- T必须为可平凡复制类型。
+- output、resource和stream必须有效。
+- 元素数量必须大于零。
+- 异步初始化完成前输入范围、Stream和内存资源必须保持有效。
 
 ## 调用示例
 
-以下 Host 片段由调用方提供有效内存资源和 Stream；缓冲区拥有分配结果。
+以下Host片段由调用方提供有效内存资源和Stream；缓冲区拥有分配结果。
 
 ```cpp
 #include <asc/buffer>
@@ -158,3 +166,7 @@ decltype(auto) example(const asc::device_memory_resource_ref& resource, asc::str
     return asc::make_device_buffer(output, resource, stream, 4);
 }
 ```
+
+## 关联API
+
+- [`asc::execution_status`](../../execution_policies_and_status/asc_execution/execution_status.md)：参数校验和任务提交状态；提交成功不表示异步工作已经完成。

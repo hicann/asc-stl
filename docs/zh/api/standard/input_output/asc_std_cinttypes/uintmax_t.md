@@ -28,42 +28,44 @@
 
 头文件路径为：`<asc/std/cinttypes>`、`<asc/std/cstdint>`。
 
-`asc::std::uintmax_t` 标识当前 ABI 支持的最大宽度整数类型。
+`asc::std::uintmax_t`标识当前ABI支持的最大宽度整数类型。
 
 标准语义参考：[cppreference `cinttypes`](https://en.cppreference.com/w/cpp/header/cinttypes)。
 
 ## 声明
 
-### 原型 1
+引入系统`<stdint.h>`提供的同名整数类型；位宽由该类型的定义保证。
 
 ```cpp
-using asc::std::uintmax_t = Uintmaxt
+namespace asc::std {
+using ::uintmax_t;
+}
 ```
-
-此原型对应头文件：`<asc/std/cstdint>`。
-
-### 原型 2
-
-```cpp
-using asc::std::uintmax_t = unsigned long long
-```
-
-此原型对应头文件：`<asc/std/cinttypes>`。
 
 ## 约束说明
 
-- 仅提供 Ascend 950 与 Host ABI 中实际存在的类型和宏
-- 提供纯整数类型运算和格式宏
+- 仅提供Ascend 950与Host ABI中实际存在的类型和宏。
+- 提供纯整数类型运算和格式宏。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/cinttypes>
+#include <asc/std/type_traits>
 
-void use_type(const asc::std::uintmax_t& value)
+bool example()
 {
-    (void)value;
+    using Integer = asc::std::uintmax_t;
+    static_assert(asc::std::is_integral_v<Integer>);
+    static_assert(asc::std::is_signed_v<Integer> == false);
+    Integer left = 2;
+    Integer right = 3;
+    return left + right == 5;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cinttypes.md)

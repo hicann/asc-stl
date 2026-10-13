@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/execution.tie_break.h>`。
 
-`asc::tie_break::prefer_smaller_index` 要求多个位置同时满足条件时优先选择较小索引。
+`asc::tie_break::prefer_smaller_index`要求多个位置同时满足条件时优先选择较小索引。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 声明
 
+所属类型：[`asc::tie_break`](tie_break.md)。
+
 ```cpp
-asc::tie_break::prefer_smaller_index
+// asc::tie_break 类内的声明节选；模板形参和其他成员由所属类提供。
+prefer_smaller_index;
 ```
 
 ## 约束说明
 
-- 仅提供三个取值
+- 仅提供三个取值。
 
 ## 调用示例
 
@@ -51,3 +54,8 @@ asc::tie_break::prefer_smaller_index
 
 auto value = asc::tie_break::prefer_smaller_index;
 ```
+
+## 关联API
+
+- [`asc::tie_break`](tie_break.md)
+- [本头文件的接口列表](asc_execution_tie_break_h.md)

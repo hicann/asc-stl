@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::uninitialized_value_construct` 在未构造的存储范围中值初始化对象。
+`asc::std::uninitialized_value_construct`在未构造的存储范围中值初始化对象。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
 ```cpp
-template<class ForwardIterator> void asc::std::uninitialized_value_construct(ForwardIterator first, ForwardIterator last);
+namespace asc::std {
+template<class ForwardIterator> void uninitialized_value_construct(ForwardIterator first, ForwardIterator last);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -59,12 +61,12 @@ template<class ForwardIterator> void asc::std::uninitialized_value_construct(For
 
 ## 约束说明
 
-- 存储由调用方提供并满足对齐要求
-- 当回滚会引发异常时，Device 侧相关操作必须不抛出异常
+- 存储由调用方提供并满足对齐要求。
+- 当回滚会引发异常时，Device侧相关操作必须不抛出异常。
 
 ## 调用示例
 
-以下 Host 片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
+以下Host片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
 
 ```cpp
 #include <asc/std/memory>
@@ -77,3 +79,7 @@ void example()
     asc::std::destroy_n(output, 4);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

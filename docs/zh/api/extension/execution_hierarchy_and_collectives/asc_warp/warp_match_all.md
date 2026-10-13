@@ -28,118 +28,130 @@
 
 头文件路径为：`<asc/warp>`。
 
-`asc::warp_match_all` 判断参与 Lane 提供的值是否全部相等。
+`asc::warp_match_all`判断参与Lane提供的值是否全部相等。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-bool asc::warp_match_all(bool value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+bool warp_match_all(bool value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-bool asc::warp_match_all(float value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+bool warp_match_all(float value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-bool asc::warp_match_all(int value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+bool warp_match_all(int value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-bool asc::warp_match_all(long long value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+bool warp_match_all(long long value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
-bool asc::warp_match_all(unsigned int value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+bool warp_match_all(unsigned int value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 6
+### 原型6
 
 ```cpp
-bool asc::warp_match_all(unsigned long long value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+bool warp_match_all(unsigned long long value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与匹配的输入值：participants 内全部 Lane 的该值按位相等时返回 true。 |
-| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
+| `value` | 输入 | 本Lane参与匹配的输入值：participants内全部Lane的该值按位相等时返回true。 |
+| `participants` | 输入 | 参与匹配的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：仅集合内的Lane参与比较。 |
 
-### 原型 2 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与匹配的输入值：participants 内全部 Lane 的该值按位相等时返回 true。 |
-| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
-
-### 原型 3 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与匹配的输入值：participants 内全部 Lane 的该值按位相等时返回 true。 |
-| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
+| `value` | 输入 | 本Lane参与匹配的输入值：participants内全部Lane的该值按位相等时返回true。 |
+| `participants` | 输入 | 参与匹配的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：仅集合内的Lane参与比较。 |
 
-### 原型 4 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与匹配的输入值：participants 内全部 Lane 的该值按位相等时返回 true。 |
-| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
-
-### 原型 5 的参数
+### 原型3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与匹配的输入值：participants 内全部 Lane 的该值按位相等时返回 true。 |
-| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
+| `value` | 输入 | 本Lane参与匹配的输入值：participants内全部Lane的该值按位相等时返回true。 |
+| `participants` | 输入 | 参与匹配的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：仅集合内的Lane参与比较。 |
 
-### 原型 6 的参数
+### 原型4的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与匹配的输入值：participants 内全部 Lane 的该值按位相等时返回 true。 |
-| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
+| `value` | 输入 | 本Lane参与匹配的输入值：participants内全部Lane的该值按位相等时返回true。 |
+| `participants` | 输入 | 参与匹配的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：仅集合内的Lane参与比较。 |
+
+### 原型5的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 本Lane参与匹配的输入值：participants内全部Lane的该值按位相等时返回true。 |
+| `participants` | 输入 | 参与匹配的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：仅集合内的Lane参与比较。 |
+
+### 原型6的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 本Lane参与匹配的输入值：participants内全部Lane的该值按位相等时返回true。 |
+| `participants` | 输入 | 参与匹配的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：仅集合内的Lane参与比较。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 2 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 3 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 4 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 5 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 6 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| 原型1 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
+| 原型2 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
+| 原型3 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
+| 原型4 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
+| 原型5 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
+| 原型6 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 所有参与的活动线程必须以收敛控制流调用
-- float 键按对象表示进行逐位匹配
+- 仅可在AI Core SIMT编程中调用。
+- 所有参与的活动线程必须以收敛控制流调用。
+- float键按对象表示进行逐位匹配。
 
 ## 调用示例
 
@@ -154,7 +166,7 @@ __aicore__ decltype(auto) example(bool value, asc::lane_mask participants = asc:
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：
 
@@ -162,3 +174,7 @@ __aicore__ decltype(auto) example(bool value, asc::lane_mask participants = asc:
 - [warp_example.h](../../../../examples/warp_collectives/warp_example.h)
 - [kernel.asc](../../../../examples/warp_collectives/kernel.asc)
 - [main.cpp](../../../../examples/warp_collectives/main.cpp)
+
+## 关联API
+
+- [`asc::lane_mask`](lane_mask.md)：Warp内Lane的位集合；第i位对应编号为i的Lane。

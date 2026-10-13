@@ -28,9 +28,9 @@
 
 头文件路径为：`<asc/std/cerrno>`。
 
-`ERANGE` 表示计算或转换结果超出可表示范围。
+`ERANGE`表示计算或转换结果超出可表示范围。
 
-该接口的可用位置为 Host（完整接口）、Device（常量接口）。
+该接口的可用位置为Host（完整接口）、Device（常量接口）。
 
 标准语义参考：[cppreference `cerrno`](https://en.cppreference.com/w/cpp/header/cerrno)。
 
@@ -42,9 +42,9 @@
 
 ## 约束说明
 
-- Host完整交付标准errno可修改状态与EDOM/EILSEQ/ERANGE
-- Device交付EDOM/EILSEQ/ERANGE三个正int常量表达式，固定产品ABI值33/84/34
-- Host 提供完整接口，设备端仅提供所列常量
+- Host完整交付标准errno可修改状态与EDOM/EILSEQ/ERANGE。
+- Device交付EDOM/EILSEQ/ERANGE三个正int常量表达式，固定产品ABI值33/84/34。
+- Host提供完整接口，设备端仅提供所列常量。
 
 ## 调用示例
 
@@ -57,3 +57,7 @@
 #error "ERANGE is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cerrno.md)

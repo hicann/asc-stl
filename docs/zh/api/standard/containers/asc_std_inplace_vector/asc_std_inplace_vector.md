@@ -1,4 +1,4 @@
-# 头文件 asc/std/inplace_vector
+# 头文件asc/std/inplace_vector
 
 提供容量固定、当前长度可变化的连续序列
 
@@ -8,7 +8,7 @@
 #include <asc/std/inplace_vector>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |
@@ -34,7 +34,7 @@
 | [asc::std::inplace_vector::inplace_vector](inplace_vector_inplace_vector.md) | 构造函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
 | [asc::std::inplace_vector::iterator](inplace_vector_iterator.md) | 类型别名 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
 | [asc::std::inplace_vector::max_size](inplace_vector_max_size.md) | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::operator=](inplace_vector_operator_assign.md) | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
+| [asc::std::inplace_vector::`operator=`](inplace_vector_operator_assign.md) | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
 | [asc::std::inplace_vector::operator\[\]](inplace_vector_operator_subscript.md) | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
 | [asc::std::inplace_vector::pointer](inplace_vector_pointer.md) | 类型别名 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
 | [asc::std::inplace_vector::pop_back](inplace_vector_pop_back.md) | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |

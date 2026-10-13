@@ -28,19 +28,19 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::dangling::dangling` 按本页所列构造形态初始化 `dangling` 对象。
+`asc::std::ranges::dangling::dangling`按本页所列构造形态初始化`dangling`对象。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr dangling();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 template<class ...Args> constexpr dangling(Args&&... args) noexcept;
@@ -48,11 +48,11 @@ template<class ...Args> constexpr dangling(Args&&... args) noexcept;
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -66,20 +66,36 @@ template<class ...Args> constexpr dangling(Args&&... args) noexcept;
 | --- | --- | --- |
 | `args` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 支持数组和用户范围，不支持仅由花括号构成的 initializer_list 表达式
+- 支持数组和用户范围，不支持仅由花括号构成的initializer_list表达式。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/algorithm>
+#include <asc/std/type_traits>
 
-void example()
+struct IsTwo { bool operator()(int value) const { return value == 2; } };
+
+bool example()
 {
-    asc::std::ranges::dangling result{};
-    (void)result;
+    auto temporary_result = asc::std::ranges::find_if(asc::std::array<int, 2>{1, 2}, IsTwo{});
+    static_assert(asc::std::is_same_v<decltype(temporary_result), asc::std::ranges::dangling>);
+    // 保存范围对象后查找，才能使用返回位置。
+    asc::std::array<int, 2> values{1, 2};
+    return *asc::std::ranges::find_if(values, IsTwo{}) == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

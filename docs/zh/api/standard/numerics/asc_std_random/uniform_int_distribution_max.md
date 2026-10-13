@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::uniform_int_distribution::max` 返回该类型允许的最大值。
+`asc::std::uniform_int_distribution::max`返回该类型允许的最大值。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 函数原型
 
+所属类型：[`asc::std::uniform_int_distribution`](uniform_int_distribution.md)。
+
 ```cpp
-[[nodiscard]] constexpr result_type asc::std::uniform_int_distribution::max() const noexcept;
+// asc::std::uniform_int_distribution 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr result_type max() const noexcept;
 ```
 
 ## 参数说明
@@ -50,17 +53,24 @@
 
 ## 约束说明
 
-- 支持全部标准整数结果类型
+- 支持全部标准整数结果类型。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/random>
+#include <asc/std/limits>
 
-void example(asc::std::uniform_int_distribution<int>& object)
+bool example()
 {
-    (void)object.max();
+    asc::std::uniform_int_distribution<int> distribution(2, 5);
+    return distribution.max() == 5;
 }
 ```
+
+## 关联API
+
+- [`asc::std::uniform_int_distribution`](uniform_int_distribution.md)
+- [本头文件的接口列表](asc_std_random.md)

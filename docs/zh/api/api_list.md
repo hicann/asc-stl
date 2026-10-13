@@ -1,8 +1,8 @@
-# ASC-STL API 列表
+# ASC-STL API列表
 
-按功能分类查找 ASC-STL 接口。各分类页面列出可用头文件、接口及支持范围。当前版本支持 Ascend 950 系列；其他列出的产品系列不支持。
+按功能分类查找ASC-STL接口。各分类页面列出可用头文件、接口及支持范围。当前版本支持Ascend 950系列；其他列出的产品系列不支持。
 
-## API 分类总览
+## API分类总览
 
 | 一级分类 | 二级分类 | 能力说明 |
 | --- | --- | --- |
@@ -31,8 +31,8 @@
 | [昇腾扩展接口](extension/extension.md) | [算法函数对象、操作属性与迭代器适配器](extension/function_objects_and_iterators/function_objects_and_iterators.md) | 算法调用对象、操作属性和迭代器适配器。 |
 | [昇腾扩展接口](extension/extension.md) | [位操作、数学与数值计算、伪随机数](extension/bit_math_numeric_random/bit_math_numeric_random.md) | 位运算、数学工具、数值运算和随机数。 |
 | [昇腾扩展接口](extension/extension.md) | [类型特征、通用工具与版本检测](extension/type_traits_and_utilities/type_traits_and_utilities.md) | 扩展类型特征、通用工具及版本检测。 |
-| [运行时接口](runtime/runtime.md) | [设备、Stream与Event管理](runtime/devices_streams_events/devices_streams_events.md) | 设备查询、Stream 和 Event 生命周期管理。 |
-| [运行时接口](runtime/runtime.md) | [核函数调用](runtime/kernel_launch/kernel_launch.md) | 从 Host 提交设备核函数。 |
+| [运行时接口](runtime/runtime.md) | [设备、Stream与Event管理](runtime/devices_streams_events/devices_streams_events.md) | 设备查询、Stream和Event生命周期管理。 |
+| [运行时接口](runtime/runtime.md) | [核函数调用](runtime/kernel_launch/kernel_launch.md) | 从Host提交设备核函数。 |
 | [运行时接口](runtime/runtime.md) | [设备端执行策略、执行要求与提交状态](runtime/execution_policies_and_status/execution_policies_and_status.md) | 执行策略、运行要求与异步提交状态。 |
 | [运行时接口](runtime/runtime.md) | [内存资源、内存池与缓冲区](runtime/memory_resources_and_buffers/memory_resources_and_buffers.md) | 设备内存资源、内存池及拥有式缓冲区。 |
 
@@ -40,6 +40,6 @@
 
 | 接口类别 | 头文件形式 | 说明 |
 | --- | --- | --- |
-| C++ 标准库接口 | `<asc/std/...>` | 使用 `asc::std` 命名空间中的标准库接口。 |
-| 昇腾扩展接口 | `<asc/...>` | 使用 `asc` 命名空间中的 Device 与并行扩展。 |
-| 运行时接口 | `<asc/...>` | 在 Host 侧管理设备资源并提交异步工作。 |
+| C++ 标准库接口 | `<asc/std/...>` | 使用`asc::std`命名空间中的标准库接口。 |
+| 昇腾扩展接口 | `<asc/...>` | 使用`asc`命名空间中的Device与并行扩展。 |
+| 运行时接口 | `<asc/...>` | 在Host侧管理设备资源并提交异步工作。 |

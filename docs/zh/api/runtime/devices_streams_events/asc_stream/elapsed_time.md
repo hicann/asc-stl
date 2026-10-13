@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/stream>`。
 
-`asc::elapsed_time` 查询两个已记录 Event 之间的 Runtime 时间间隔，并在成功时以毫秒为单位写入输出参数。
+`asc::elapsed_time`查询两个已记录Event之间的Runtime时间间隔，并在成功时以毫秒为单位写入输出参数。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 函数原型
 
 ```cpp
-bool asc::elapsed_time(asc::event_ref start, asc::event_ref end, float& milliseconds) noexcept;
+namespace asc {
+bool elapsed_time(asc::event_ref start, asc::event_ref end, float& milliseconds) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -44,20 +46,20 @@ bool asc::elapsed_time(asc::event_ref start, asc::event_ref end, float& millisec
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `start` | 输入 | 用于记录或等待执行进度的 Event 引用。 |
-| `end` | 输入 | 用于记录或等待执行进度的 Event 引用。 |
-| `milliseconds` | 输入/输出 | 接收两个 Event 之间的运行时间，单位为毫秒。 |
+| `start` | 输入 | 用于记录或等待执行进度的Event引用。 |
+| `end` | 输入 | 用于记录或等待执行进度的Event引用。 |
+| `milliseconds` | 输入/输出 | 接收两个Event之间的运行时间，单位为毫秒。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- `start` 或 `end` 为空（未持有句柄的 Event 引用）时本接口拒绝执行，直接返回 `false`，且不修改 `milliseconds`
-- milliseconds 失败时保持不变
+- `start`或`end`为空（未持有句柄的Event引用）时本接口拒绝执行，直接返回`false`，且不修改`milliseconds`。
+- milliseconds失败时保持不变。
 
 ## 调用示例
 
@@ -72,6 +74,10 @@ decltype(auto) example(asc::event_ref start, asc::event_ref end, float& millisec
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_stream.md)

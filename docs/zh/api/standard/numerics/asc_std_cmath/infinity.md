@@ -28,21 +28,23 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`INFINITY` 提供 float 类型的正无穷常量（宏）。
+`INFINITY`提供float类型的正无穷常量（宏）。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 声明
 
 ```cpp
-#define INFINITY (Builtinhugevalf())
+#define INFINITY (__builtin_huge_valf())
 ```
+
+该宏产生`float`正无穷；系统头文件已经提供该宏时保留系统定义。
 
 ## 约束说明
 
-- 提供 float 函数重载、求值类型别名、比较函数、nanf 和分类宏
+- 提供float函数重载、求值类型别名、比较函数、nanf和分类宏。
 
 ## 调用示例
 
@@ -55,3 +57,7 @@
 #error "INFINITY is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

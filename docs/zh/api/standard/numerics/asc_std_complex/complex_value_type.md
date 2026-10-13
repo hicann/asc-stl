@@ -28,20 +28,23 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::complex::value_type` 标识元素或结果的值类型。
+`asc::std::complex::value_type`标识元素或结果的值类型。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 声明
 
+所属类型：[`asc::std::complex`](complex.md)。
+
 ```cpp
-using asc::std::complex::value_type = T
+// asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
+using value_type = T;
 ```
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
@@ -55,3 +58,8 @@ void use_type()
     using alias_type = typename asc::std::complex<float>::value_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::complex`](complex.md)
+- [本头文件的接口列表](asc_std_complex.md)

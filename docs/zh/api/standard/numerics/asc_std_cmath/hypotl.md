@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::hypotl` 由 `<asc/std/cmath>` 提供，宿主 long double 二参/三参斜边，后缀 l 别名（清单外新增）
+`asc::std::hypotl`由`<asc/std/cmath>`提供，宿主long double二参/三参斜边，后缀l别名（清单外新增）
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-constexpr long double asc::std::hypotl(long double x, long double y) noexcept; constexpr long double asc::std::hypotl(long double x, long double y, long double z) noexcept
+namespace asc::std {
+constexpr long double hypotl(long double x, long double y) noexcept; constexpr long double hypotl(long double x, long double y, long double z) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -52,11 +54,11 @@ constexpr long double asc::std::hypotl(long double x, long double y) noexcept; c
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `long double` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `long double` | 平方和的平方根，避免不必要的中间溢出或下溢。 |
 
 ## 约束说明
 
-- 宿主 long double 二参/三参斜边，后缀 l 别名（清单外新增）
+- 宿主long double二参/三参斜边，后缀l别名（清单外新增）。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example(long double x, long double y, long double z)
     return asc::std::hypotl(x, y, z);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

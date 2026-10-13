@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/numeric>`。
 
-`asc::narrow` 执行窄化转换，并在结果不能无损往返时按接口约定报告失败。
+`asc::narrow`执行窄化转换，并在结果不能无损往返时按接口约定报告失败。
 
 ## 函数原型
 
 ```cpp
-template<class To, class From> constexpr To asc::narrow(From value);
+namespace asc {
+template<class To, class From> constexpr To narrow(From value);
+} // namespace asc
 ```
 
 ## 参数说明
@@ -59,8 +61,8 @@ template<class To, class From> constexpr To asc::narrow(From value);
 
 ## 约束说明
 
-- T、From 和 To 必须是不超过 64 位的标准非 bool 整数类型
-- 所有溢出检查均不得触发有符号整数溢出的未定义行为
+- T、From和To必须是不超过64位的标准非bool整数类型。
+- 所有溢出检查均不得触发有符号整数溢出的未定义行为。
 
 ## 调用示例
 
@@ -74,3 +76,7 @@ decltype(auto) example()
     return asc::narrow<unsigned char>(3);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_numeric.md)

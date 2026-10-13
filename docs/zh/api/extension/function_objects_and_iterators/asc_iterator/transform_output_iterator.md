@@ -28,29 +28,39 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::transform_output_iterator` 写入时先变换值再写到底层迭代器的输出迭代器。
+`asc::transform_output_iterator`写入时先变换值再写到底层迭代器的输出迭代器。
 
 ## 声明
 
 ```cpp
-template<class Function, class Iterator> class asc::transform_output_iterator
+namespace asc {
+template<class Function, class Iterator> class transform_output_iterator;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
-void use_type()
+int twice(int value) { return 2 * value; }
+
+bool example()
 {
-    using selected = asc::transform_output_iterator<int (*)(int), int*>;
-    (void)sizeof(selected);
+    int values[2] = {};
+    asc::transform_output_iterator<int(*)(int), int*> iterator(values, twice);
+    *iterator = 3;
+    return values[0] == 6;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

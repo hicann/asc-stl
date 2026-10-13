@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::wcslen` 计算宽字符串终止零字符之前的长度。
+`asc::std::wcslen`计算宽字符串终止零字符之前的长度。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 
 ## 函数原型
 
 ```cpp
-size_t asc::std::wcslen(const wchar_t* input) noexcept;
+namespace asc::std {
+size_t wcslen(const wchar_t* input) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,7 +46,7 @@ size_t asc::std::wcslen(const wchar_t* input) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `input` | 输入 | 提供“计算宽字符串终止零字符之前的长度”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `input` | 输入 | 被扫描的以零宽字符终止的字符串。 |
 
 ## 返回值说明
 
@@ -54,10 +56,10 @@ size_t asc::std::wcslen(const wchar_t* input) noexcept;
 
 ## 约束说明
 
-- 18个标准函数名及23个可调用签名：wmemcpy/wmemmove/wmemchr/wmemcmp/wmemset、wcscpy/wcsncpy/wcscat/wcsncat、wcschr/wcsrchr、wcscmp/wcsncmp、wcsspn/wcscspn/wcspbrk/wcsstr/wcslen
-- 5个查找函数包含const与可变指针重载
-- Host委托系统，Device纯计算实现
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain-pointer域
+- 18个标准函数名及23个可调用签名：wmemcpy/wmemmove/wmemchr/wmemcmp/wmemset、wcscpy/wcsncpy/wcscat/wcsncat、wcschr/wcsrchr、wcscmp/wcsncmp、wcsspn/wcscspn/wcspbrk/wcsstr/wcslen。
+- 5个查找函数包含const与可变指针重载。
+- Host委托系统，Device纯计算实现。
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain-pointer域。
 
 ## 调用示例
 
@@ -71,3 +73,7 @@ decltype(auto) example(const wchar_t * input)
     return asc::std::wcslen(input);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cwchar.md)

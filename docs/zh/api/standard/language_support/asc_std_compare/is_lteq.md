@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/compare>`。
 
-`asc::std::is_lteq` 判断比较类别结果是否满足名称指定的关系。
+`asc::std::is_lteq`判断比较类别结果是否满足名称指定的关系。
 
 标准语义参考：[cppreference `compare`](https://en.cppreference.com/w/cpp/header/compare)。
 
 ## 函数原型
 
 ```cpp
-constexpr bool asc::std::is_lteq(partial_ordering value) noexcept;
+namespace asc::std {
+constexpr bool is_lteq(partial_ordering value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -50,11 +52,11 @@ constexpr bool asc::std::is_lteq(partial_ordering value) noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 支持 ASC 比较类别常量、与零比较以及标准类别转换
+- 支持ASC比较类别常量、与零比较以及标准类别转换。
 
 ## 调用示例
 
@@ -68,3 +70,7 @@ decltype(auto) example(asc::std::partial_ordering value)
     return asc::std::is_lteq(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_compare.md)

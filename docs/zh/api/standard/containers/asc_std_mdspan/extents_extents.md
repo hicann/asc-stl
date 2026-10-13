@@ -28,37 +28,37 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::extents::extents` 按本页所列构造形态初始化 `extents` 对象。
+`asc::std::extents::extents`按本页所列构造形态初始化`extents`对象。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr extents();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 template<class ...OtherIndexTypes> constexpr extents(OtherIndexTypes... args);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 template<class OtherIndexType, size_t ...OtherStaticExtents> constexpr extents(const extents<OtherIndexType, OtherStaticExtents...>& other);
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
 template<class OtherIndexType, size_t Size> constexpr extents(const array<OtherIndexType, Size>& count);
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
 template<class OtherIndexType, size_t Size> constexpr extents(span<OtherIndexType, Size> count);
@@ -66,17 +66,17 @@ template<class OtherIndexType, size_t Size> constexpr extents(span<OtherIndexTyp
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherIndexTypes` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `OtherIndexTypes` | 用于初始化各动态维度的整数实参类型列表。 |
 
 **函数参数**
 
@@ -84,28 +84,28 @@ template<class OtherIndexType, size_t Size> constexpr extents(span<OtherIndexTyp
 | --- | --- | --- |
 | `args` | 输入 | 转发给对象构造或函数调用的实参列表。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherIndexType` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `OtherIndexType` | 来源extents的索引整数类型；各维长度须能在目标类型中表示。 |
 | `OtherStaticExtents` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherIndexType` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `OtherIndexType` | 来源extents的索引整数类型；各维长度须能在目标类型中表示。 |
 | `Size` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
 
 **函数参数**
@@ -114,13 +114,13 @@ template<class OtherIndexType, size_t Size> constexpr extents(span<OtherIndexTyp
 | --- | --- | --- |
 | `count` | 输入 | 参与操作的元素数量。 |
 
-### 原型 5 的参数
+### 原型5的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherIndexType` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `OtherIndexType` | 来源extents的索引整数类型；各维长度须能在目标类型中表示。 |
 | `Size` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
 
 **函数参数**
@@ -128,22 +128,30 @@ template<class OtherIndexType, size_t Size> constexpr extents(span<OtherIndexTyp
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `count` | 输入 | 参与操作的元素数量。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整dynamic_extent/extents/dextents/dims家族：零rank与正rank、默认/按rank或rank_dynamic传值/array/span/跨extents构造、标准显式性与约束、deduction guide、相等比较及rank/rank_dynamic/static_extent/extent观察
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/mdspan>
+#include <asc/std/type_traits>
 
-void example()
+bool example()
 {
-    asc::std::extents<int, 2, 3> value{};
-    (void)value;
+    asc::std::extents<int, 2, 3> shape;
+    return shape.rank() == 2 && shape.rank_dynamic() == 0 && shape.extent(0) == 2 && shape.extent(1) == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mdspan.md)

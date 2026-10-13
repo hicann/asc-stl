@@ -28,33 +28,39 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::mdspan` 以非拥有方式关联多维数据句柄、维度、布局和访问器。
+`asc::std::mdspan`以非拥有方式关联多维数据句柄、维度、布局和访问器。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 声明
 
 ```cpp
-template<class Element, class Extents, class Layout, class Accessor> class asc::std::mdspan
+namespace asc::std {
+template<class Element, class Extents, class Layout, class Accessor> class mdspan;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整标准mdspan view家族：全部成员类型与rank/static_extent观察，默认/拷贝/移动、data_handle+维度包/array/span/extents/mapping/mapping+accessor及跨mdspan构造，赋值与deduction guides，array/span下标、size/empty/swap、data_handle/mapping/accessor/extents/extent及映射属性观察
-- C++20开放rank-one operator[]，C++2b条件开放标准多索引operator[]
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain pointer域
+- C++20开放rank-one `operator[]`，C++2b条件开放标准多索引operator[]。
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/mdspan>
-#include <asc/std/cstddef>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::mdspan<int, asc::std::extents<asc::std::size_t, 2, 3>, asc::std::layout_right, asc::std::default_accessor<int>>;
-    (void)sizeof(selected);
+    int values[6] = {1, 2, 3, 4, 5, 6};
+    asc::std::mdspan<int, asc::std::extents<int, 2, 3>> view(values);
+    view(1, 2) = 9;
+    return view.extent(0) == 2 && view.extent(1) == 3 && values[5] == 9;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mdspan.md)

@@ -28,30 +28,36 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::integral_constant::type` 提供该类型特征、映射或适配器计算出的成员类型。
+`asc::std::integral_constant::type`提供该类型特征、映射或适配器计算出的成员类型。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
+所属类型：[`asc::std::integral_constant`](integral_constant.md)。
+
 ```cpp
-using asc::std::integral_constant::type = integral_constant<T, V>
+// asc::std::integral_constant 类内的声明节选；模板形参和其他成员由所属类提供。
+using type = integral_constant<T, V>;
 ```
 
 ## 约束说明
 
-- 提供特征类及其对应的 _v 辅助形式
+- 提供特征类及其对应的 _v辅助形式。
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下Host示例使用独立的预期类型或值检查接口结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
-{
-    using selected = typename asc::std::integral_constant<int, 3>::type;
-    static_assert(asc::std::is_same_v<selected, selected>);
-}
+using seven = typename asc::std::integral_constant<int, 7>::type;
+static_assert(seven::value == 7);
+static_assert(seven{}() == 7);
 ```
+
+## 关联API
+
+- [`asc::std::integral_constant`](integral_constant.md)
+- [本头文件的接口列表](asc_std_type_traits.md)

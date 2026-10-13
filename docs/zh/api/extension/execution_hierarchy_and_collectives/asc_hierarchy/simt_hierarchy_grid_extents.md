@@ -28,29 +28,38 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::simt_hierarchy::grid_extents` 保存 SIMT 层级中的 Grid 三维范围。
+`asc::simt_hierarchy::grid_extents`保存SIMT层级中的Grid三维范围。
 
 ## 声明
 
+所属类型：[`asc::simt_hierarchy`](simt_hierarchy.md)。
+
 ```cpp
-asc::extent3d asc::simt_hierarchy::grid_extents
+// asc::simt_hierarchy 类内的声明节选；模板形参和其他成员由所属类提供。
+asc::extent3d grid_extents;
 ```
 
 ## 约束说明
 
-- 提供 C++17 constexpr Host/Device 层次结构接口
-- 带 extent 的值要求每一维均非零
-- extent 总数按无符号 64 位的 x*y*z 计算
+- 提供C++17 constexpr Host/Device层次结构接口。
+- 带extent的值要求每一维均非零。
+- extent总数按无符号64位的x*y*z计算。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/hierarchy>
 
-void example(const asc::simt_hierarchy& object)
+bool example()
 {
-    (void)object.grid_extents;
+    asc::simt_hierarchy hierarchy{asc::extent3d{2, 1, 1}, asc::extent3d{32, 1, 1}};
+    return hierarchy.grid_extents.count() == 2 && hierarchy.block_extents.count() == 32;
 }
 ```
+
+## 关联API
+
+- [`asc::simt_hierarchy`](simt_hierarchy.md)
+- [本头文件的接口列表](asc_hierarchy.md)

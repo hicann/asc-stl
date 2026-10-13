@@ -28,44 +28,48 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::max` 按比较关系返回较大值的引用或范围中的最大值；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::max`按比较关系返回较大值的引用或范围中的最大值；无策略形式在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T, class Compare> [[nodiscard]] constexpr const T& asc::std::max(const T& left, const T& right, Compare compare);
+namespace asc::std {
+template<class T, class Compare> [[nodiscard]] constexpr const T& max(const T& left, const T& right, Compare compare);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> [[nodiscard]] constexpr const T& asc::std::max(const T& left, const T& right);
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr const T& max(const T& left, const T& right);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `T` | 参与比较求较大值的操作数类型。 |
-| `Compare` | 比较器类型；调用形式为 compare(a, b)，返回 bool。 |
+| `Compare` | 比较器类型；调用形式为compare(a, b)，返回bool。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与比较求较大值的左操作数；与 right 等价时返回本操作数。 |
+| `left` | 输入 | 参与比较求较大值的左操作数；与right等价时返回本操作数。 |
 | `right` | 输入 | 参与比较求较大值的右操作数。 |
-| `compare` | 输入 | 比较器，按调用形式 compare(left, right) 返回 bool，true 表示 left 小于 right；返回两者中较大者。 |
+| `compare` | 输入 | 比较器，按调用形式compare(left, right)返回bool，true表示left小于right；返回两者中较大者。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -77,24 +81,24 @@ template<class T> [[nodiscard]] constexpr const T& asc::std::max(const T& left, 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与比较求较大值的左操作数；与 right 等价时返回本操作数。 |
+| `left` | 输入 | 参与比较求较大值的左操作数；与right等价时返回本操作数。 |
 | `right` | 输入 | 参与比较求较大值的右操作数。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `const T &` | 返回较大值的引用或范围中的最大值。 |
-| 原型 2 | `const T &` | 返回较大值的引用或范围中的最大值。 |
+| 原型1 | `const T &` | 返回较大值的引用或范围中的最大值。 |
+| 原型2 | `const T &` | 返回较大值的引用或范围中的最大值。 |
 
 ## 约束说明
 
-- 提供顺序执行且不进行动态内存分配的重载
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序
+- 提供顺序执行且不进行动态内存分配的重载。
+- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下 Host 片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
 
 ```cpp
 #include <asc/std/algorithm>
@@ -105,3 +109,7 @@ decltype(auto) example()
     return asc::std::max(values[0], values[1]);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

@@ -28,29 +28,38 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::level_dimensions::extents` 保存对应 SIMT 层级的三维范围。
+`asc::level_dimensions::extents`保存对应SIMT层级的三维范围。
 
 ## 声明
 
+所属类型：[`asc::level_dimensions`](level_dimensions.md)。
+
 ```cpp
-asc::extent3d asc::level_dimensions::extents
+// asc::level_dimensions 类内的声明节选；模板形参和其他成员由所属类提供。
+asc::extent3d extents;
 ```
 
 ## 约束说明
 
-- 提供 C++17 constexpr Host/Device 层次结构接口
-- 带 extent 的值要求每一维均非零
-- extent 总数按无符号 64 位的 x*y*z 计算
+- 提供C++17 constexpr Host/Device层次结构接口。
+- 带extent的值要求每一维均非零。
+- extent总数按无符号64位的x*y*z计算。
 
 ## 调用示例
 
-以下片段从具体线程块维度对象读取 extents。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/hierarchy>
 
-void example(const asc::level_dimensions<asc::block_level>& value)
+bool example()
 {
-    (void)value.extents;
+    asc::level_dimensions<asc::block_level> dimensions{asc::extent3d{2, 3, 4}};
+    return dimensions.extents.count() == 24;
 }
 ```
+
+## 关联API
+
+- [`asc::level_dimensions`](level_dimensions.md)
+- [本头文件的接口列表](asc_hierarchy.md)

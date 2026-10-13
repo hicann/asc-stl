@@ -28,30 +28,37 @@
 
 头文件路径为：`<asc/std/source_location>`。
 
-`asc::std::source_location` 保存调用点的文件、函数、行和列信息。
+`asc::std::source_location`保存调用点的文件、函数、行和列信息。
 
 标准语义参考：[cppreference `source_location`](https://en.cppreference.com/w/cpp/header/source_location)。
 
 ## 声明
 
 ```cpp
-class asc::std::source_location
+namespace asc::std {
+class source_location;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供标准 source_location 接口
-- 当编译器不能直接提供列号时，column() 使用标准允许的回退值
+- 提供标准source_location接口。
+- 当编译器不能直接提供列号时，column()使用标准允许的回退值。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/source_location>
 
-void use_type(const asc::std::source_location& value)
+bool example()
 {
-    (void)value;
+    const auto location = asc::std::source_location::current();
+    return location.line() > 0 && location.file_name()[0] != '\0' && location.function_name()[0] != '\0';
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_source_location.md)

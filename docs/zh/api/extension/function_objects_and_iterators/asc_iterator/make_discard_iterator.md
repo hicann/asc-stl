@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::make_discard_iterator` 创建丢弃写入值的 discard_iterator。
+`asc::make_discard_iterator`创建丢弃写入值的discard_iterator。
 
 ## 函数原型
 
 ```cpp
-template<class Integer = asc::std::ptrdiff_t> constexpr asc::discard_iterator asc::make_discard_iterator(Integer index = 0);
+namespace asc {
+template<class Integer = asc::std::ptrdiff_t> constexpr asc::discard_iterator make_discard_iterator(Integer index = 0);
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,13 +44,13 @@ template<class Integer = asc::std::ptrdiff_t> constexpr asc::discard_iterator as
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Integer` | 索引类型，默认 ptrdiff_t。 |
+| `Integer` | 索引类型，默认ptrdiff_t。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 初始索引，默认 0：写入被丢弃，索引仅用于位置计数与迭代器差值。 |
+| `index` | 输入 | 初始索引，默认0：写入被丢弃，索引仅用于位置计数与迭代器差值。 |
 
 ## 返回值说明
 
@@ -58,8 +60,8 @@ template<class Integer = asc::std::ptrdiff_t> constexpr asc::discard_iterator as
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
@@ -75,3 +77,7 @@ decltype(auto) example()
     return asc::make_discard_iterator(0);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

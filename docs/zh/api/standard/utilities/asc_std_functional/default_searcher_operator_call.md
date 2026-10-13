@@ -1,4 +1,4 @@
-# asc::std::default_searcher::operator()
+# asc::std::default_searcher::`operator()`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::default_searcher::operator()` 按 `default_searcher` 的可用运算符规则处理当前对象及操作数。
+`asc::std::default_searcher::operator()`按`default_searcher`的可用运算符规则处理当前对象及操作数。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 函数原型
 
+所属类型：[`asc::std::default_searcher`](default_searcher.md)。
+
 ```cpp
-template<class ForwardIterator2> asc::std::pair<ForwardIterator2, ForwardIterator2> asc::std::default_searcher::operator()(ForwardIterator2 first, ForwardIterator2 last) const;
+// asc::std::default_searcher 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class ForwardIterator2> asc::std::pair<ForwardIterator2, ForwardIterator2> operator()(ForwardIterator2 first, ForwardIterator2 last) const;
 ```
 
 ## 参数说明
@@ -54,12 +57,12 @@ template<class ForwardIterator2> asc::std::pair<ForwardIterator2, ForwardIterato
 
 ## 约束说明
 
-- 提供标准算术类型、枚举和指针类型的 hash 特化
-- default_searcher 使用调用方管理的对象和存储
+- 提供标准算术类型、枚举和指针类型的hash特化。
+- default_searcher使用调用方管理的对象和存储。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
+以下Host片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
 
 ```cpp
 #include <asc/std/functional>
@@ -70,3 +73,8 @@ decltype(auto) example(int* pattern, int* values)
     return searcher(values, values + 4);
 }
 ```
+
+## 关联API
+
+- [`asc::std::default_searcher`](default_searcher.md)
+- [本头文件的接口列表](asc_std_functional.md)

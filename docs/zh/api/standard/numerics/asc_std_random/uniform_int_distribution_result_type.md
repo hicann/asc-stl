@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::uniform_int_distribution::result_type` 标识调用结果类型。
+`asc::std::uniform_int_distribution::result_type`标识调用结果类型。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 声明
 
+所属类型：[`asc::std::uniform_int_distribution`](uniform_int_distribution.md)。
+
 ```cpp
-using asc::std::uniform_int_distribution::result_type = IntType
+// asc::std::uniform_int_distribution 类内的声明节选；模板形参和其他成员由所属类提供。
+using result_type = IntType;
 ```
 
 ## 约束说明
 
-- 支持全部标准整数结果类型
+- 支持全部标准整数结果类型。
 
 ## 调用示例
 
@@ -54,3 +57,8 @@ void use_type()
     using alias_type = typename asc::std::uniform_int_distribution<int>::result_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::uniform_int_distribution`](uniform_int_distribution.md)
+- [本头文件的接口列表](asc_std_random.md)

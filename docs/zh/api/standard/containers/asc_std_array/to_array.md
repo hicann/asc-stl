@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/array>`。
 
-`asc::std::to_array` 从内建数组构造具有对应元素类型和长度的 array。
+`asc::std::to_array`从内建数组构造具有对应元素类型和长度的array。
 
 标准语义参考：[cppreference `array`](https://en.cppreference.com/w/cpp/header/array)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, Size> asc::std::to_array(T (&&source)[Size]) noexcept(is_nothrow_move_constructible_v<T>);
+namespace asc::std {
+template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, Size> to_array(T (&&source)[Size]) noexcept(is_nothrow_move_constructible_v<T>);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, Size> asc::std::to_array(T (&source)[Size]) noexcept(is_nothrow_constructible_v<T, T&>);
+namespace asc::std {
+template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, Size> to_array(T (&source)[Size]) noexcept(is_nothrow_constructible_v<T, T&>);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -61,9 +65,9 @@ template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入/输出 | 源内建数组。返回的 `array` 对象拥有各元素的副本（左值源）或被移动的元素（右值源），不引用源数据；调用返回后源数组即可释放或复用。 |
+| `source` | 输入/输出 | 源内建数组。返回的`array`对象拥有各元素的副本（左值源）或被移动的元素（右值源），不引用源数据；调用返回后源数组即可释放或复用。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -76,19 +80,19 @@ template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入/输出 | 源内建数组。返回的 `array` 对象拥有各元素的副本（左值源）或被移动的元素（右值源），不引用源数据；调用返回后源数组即可释放或复用。 |
+| `source` | 输入/输出 | 源内建数组。返回的`array`对象拥有各元素的副本（左值源）或被移动的元素（右值源），不引用源数据；调用返回后源数组即可释放或复用。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `array<remove_cv_t<T>, Size>` | 返回元素类型由输入数组推导、长度保持不变的 `array` 对象。 |
-| 原型 2 | `array<remove_cv_t<T>, Size>` | 返回元素类型由输入数组推导、长度保持不变的 `array` 对象。 |
+| 原型1 | `array<remove_cv_t<T>, Size>` | 返回元素类型由输入数组推导、长度保持不变的`array`对象。 |
+| 原型2 | `array<remove_cv_t<T>, Size>` | 返回元素类型由输入数组推导、长度保持不变的`array`对象。 |
 
 ## 约束说明
 
-- 支持包括零在内的所有 N
-- 成员函数和自由函数均不抛出异常
+- 支持包括零在内的所有N。
+- 成员函数和自由函数均不抛出异常。
 
 ## 调用示例
 
@@ -103,3 +107,7 @@ decltype(auto) example()
     return asc::std::to_array(values);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_array.md)

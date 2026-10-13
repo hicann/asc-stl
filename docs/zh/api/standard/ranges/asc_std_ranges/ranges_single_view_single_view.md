@@ -28,31 +28,31 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::single_view::single_view` 按本页所列构造形态初始化 `single_view` 对象。
+`asc::std::ranges::single_view::single_view`按本页所列构造形态初始化`single_view`对象。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 single_view();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr single_view(T&& value) noexcept(is_nothrow_move_constructible_v<T>);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 template<class ...Args> constexpr single_view(in_place_t tag, Args&&... args) noexcept(is_nothrow_constructible_v<T, Args...>);
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
 template<class Tp2> constexpr single_view(const Tp2& value) noexcept(is_nothrow_copy_constructible_v<Tp2>);
@@ -60,11 +60,11 @@ template<class Tp2> constexpr single_view(const Tp2& value) noexcept(is_nothrow_
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -72,7 +72,7 @@ template<class Tp2> constexpr single_view(const Tp2& value) noexcept(is_nothrow_
 | --- | --- | --- |
 | `value` | 输入/输出 | 视图唯一元素的值，被移动构造到视图中保存。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
@@ -84,10 +84,10 @@ template<class Tp2> constexpr single_view(const Tp2& value) noexcept(is_nothrow_
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `tag` | 输入 | in_place_t 标记，指示以 args 原位构造视图所存元素。 |
+| `tag` | 输入 | in_place_t标记，指示以args原位构造视图所存元素。 |
 | `args` | 输入/输出 | 转发给所存元素构造的实参包。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
@@ -101,21 +101,34 @@ template<class Tp2> constexpr single_view(const Tp2& value) noexcept(is_nothrow_
 | --- | --- | --- |
 | `value` | 输入 | 视图唯一元素的值，从该值构造所存元素。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example()
+bool example()
 {
-    asc::std::ranges::single_view<int> value{};
-    (void)value;
+    int values[] = {1, 2, 3, 4};
+    using Base = asc::std::ranges::subrange<int*>;
+    Base base(values, values + 4);
+    asc::std::ranges::single_view<int> view(7);
+    return *view.begin() == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

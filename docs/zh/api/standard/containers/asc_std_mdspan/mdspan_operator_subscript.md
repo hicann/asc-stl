@@ -1,4 +1,4 @@
-# asc::std::mdspan::operator[]
+# asc::std::mdspan::`operator[]`
 
 ## 产品支持情况
 
@@ -28,67 +28,73 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::mdspan::operator[]` 在调用方保证索引有效时访问指定元素。
+`asc::std::mdspan::operator[]`在调用方保证索引有效时访问指定元素。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::mdspan`](mdspan.md)。
+
+### 原型1
 
 ```cpp
-template<class ...Indices> constexpr reference asc::std::mdspan::operator[](Indices... indices) const noexcept requires (Extents::rank() == 1&& sizeof...(Indices) == 1);
+// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class ...Indices> constexpr reference operator[](Indices... indices) const noexcept requires (Extents::rank() == 1&& sizeof...(Indices) == 1);
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class ...Indices> constexpr reference asc::std::mdspan::operator[](Indices... indices) const noexcept requires (Extents::rank() > 1&& sizeof...(Indices) == Extents::rank());
+// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class ...Indices> constexpr reference operator[](Indices... indices) const noexcept requires (Extents::rank() > 1&& sizeof...(Indices) == Extents::rank());
 ```
 
-该原型适用于 `C++23+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++23+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class OtherIndexType> constexpr reference asc::std::mdspan::operator[](const array<OtherIndexType, Extents::rank()>& indices) const noexcept;
+// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class OtherIndexType> constexpr reference operator[](const array<OtherIndexType, Extents::rank()>& indices) const noexcept;
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class OtherIndexType> constexpr reference asc::std::mdspan::operator[](span<OtherIndexType, Extents::rank()> indices) const noexcept;
+// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class OtherIndexType> constexpr reference operator[](span<OtherIndexType, Extents::rank()> indices) const noexcept;
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Indices` | 下标实参的类型包；仅含一个成员，须可转换为 index_type。 |
+| `Indices` | 下标实参的类型包；仅含一个成员，须可转换为index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `indices` | 输入 | 元素下标；适用于秩为 1 的视图，须满足 0 <= 下标 < extent(0)，本接口不检查越界。 |
+| `indices` | 输入 | 元素下标；适用于秩为1的视图，须满足0 <= 下标 < extent(0)，本接口不检查越界。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Indices` | 按维度顺序排列的下标类型包；个数须等于秩，各类型须可转换为 index_type。 |
+| `Indices` | 按维度顺序排列的下标类型包；个数须等于秩，各类型须可转换为index_type。 |
 
 **函数参数**
 
@@ -96,54 +102,54 @@ template<class OtherIndexType> constexpr reference asc::std::mdspan::operator[](
 | --- | --- | --- |
 | `indices` | 输入 | 按维度顺序给出的元素下标包；个数须等于秩，每个下标须落在对应维长度范围内，本接口不检查越界。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherIndexType` | array 中下标的类型，须可转换为 index_type。 |
+| `OtherIndexType` | array中下标的类型，须可转换为index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `indices` | 输入 | 按维度顺序存放各维下标的 array；长度须等于秩，各下标须落在对应维长度范围内，本接口不检查越界。 |
+| `indices` | 输入 | 按维度顺序存放各维下标的array；长度须等于秩，各下标须落在对应维长度范围内，本接口不检查越界。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherIndexType` | span 中下标的类型，须可转换为 index_type。 |
+| `OtherIndexType` | span中下标的类型，须可转换为index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `indices` | 输入 | 按维度顺序存放各维下标的 span；长度须等于秩，各下标须落在对应维长度范围内，本接口不检查越界。 |
+| `indices` | 输入 | 按维度顺序存放各维下标的span；长度须等于秩，各下标须落在对应维长度范围内，本接口不检查越界。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
-| 原型 2 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
-| 原型 3 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
-| 原型 4 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型1 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型2 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型3 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型4 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
 
 ## 约束说明
 
-- 仅提供一维标量下标访问，索引必须处于有效范围内
-- 提供多维标量下标语法
-- 索引数量和每一维取值必须与 extents 相容
-- 遵循 span 的静态或动态 extent、指针和连续范围构造约束
-- AI Core SIMD 编程 仅支持地址空间相容的普通指针表示
+- 仅提供一维标量下标访问，索引必须处于有效范围内。
+- 提供多维标量下标语法。
+- 索引数量和每一维取值必须与extents相容。
+- 遵循span的静态或动态extent、指针和连续范围构造约束。
+- AI Core SIMD编程 仅支持地址空间相容的普通指针表示。
 
 ## 调用示例
 
-以下 Host 片段以具体容量或维度演示调用；对象和索引须满足本页约束。
+以下Host片段以具体容量或维度演示调用；对象和索引须满足本页约束。
 
 ```cpp
 #include <asc/std/mdspan>
@@ -154,3 +160,8 @@ decltype(auto) example(const asc::std::mdspan<int, asc::std::extents<asc::std::s
     return view[0];
 }
 ```
+
+## 关联API
+
+- [`asc::std::mdspan`](mdspan.md)
+- [本头文件的接口列表](asc_std_mdspan.md)

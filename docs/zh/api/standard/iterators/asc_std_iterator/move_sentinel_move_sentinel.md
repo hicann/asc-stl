@@ -28,25 +28,25 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::move_sentinel::move_sentinel` 按本页所列构造形态初始化 `move_sentinel` 对象。
+`asc::std::move_sentinel::move_sentinel`按本页所列构造形态初始化`move_sentinel`对象。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr move_sentinel();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr move_sentinel(Sent sentinel);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 template<class S2> constexpr move_sentinel(const move_sentinel<S2>& other);
@@ -54,47 +54,56 @@ template<class S2> constexpr move_sentinel(const move_sentinel<S2>& other);
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `sentinel` | 输入 | 被包装的哨兵；新对象保存其副本，用于与 move_iterator 比较以判定范围结束。 |
+| `sentinel` | 输入 | 被包装的哨兵；新对象保存其副本，用于与move_iterator比较以判定范围结束。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `S2` | 来源 move_sentinel 的哨兵类型；其哨兵须能转换构造为本类型的哨兵。 |
+| `S2` | 来源move_sentinel的哨兵类型；其哨兵须能转换构造为本类型的哨兵。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 复制来源 move_sentinel；新对象保存其哨兵的副本。 |
+| `other` | 输入 | 复制来源move_sentinel；新对象保存其哨兵的副本。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void example()
+bool example()
 {
-    asc::std::move_sentinel<int*> iterator{};
-    (void)iterator;
+    int values[] = {2, 4};
+    asc::std::move_sentinel<int*> iterator(values + 2);
+    return iterator.base() == values + 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

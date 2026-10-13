@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::bit_and::is_transparent` 标记函数对象支持异构参数类型的透明调用。
+`asc::std::bit_and::is_transparent`标记函数对象支持异构参数类型的透明调用。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 声明
 
+所属类型：[`asc::std::bit_and`](bit_and.md)。
+
 ```cpp
-using asc::std::bit_and::is_transparent = void
+// asc::std::bit_and 类内的声明节选；模板形参和其他成员由所属类提供。
+using is_transparent = void;
 ```
 
 ## 约束说明
 
-- 同时提供指定类型形式和透明调用形式
+- 同时提供指定类型形式和透明调用形式。
 
 ## 调用示例
 
@@ -54,3 +57,8 @@ void use_type()
     using alias_type = typename asc::std::bit_and<void>::is_transparent;
 }
 ```
+
+## 关联API
+
+- [`asc::std::bit_and`](bit_and.md)
+- [本头文件的接口列表](asc_std_functional.md)

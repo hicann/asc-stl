@@ -1,4 +1,4 @@
-# asc::lane_mask::operator<<
+# asc::lane_mask::`operator<<`
 
 ## 产品支持情况
 
@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/warp>`。
 
-`asc::lane_mask::operator<<` 返回 Lane 掩码左移指定位置后的结果。
+`asc::lane_mask::operator<<`返回Lane掩码左移指定位置后的结果。
 
 ## 函数原型
 
+所属类型：[`asc::lane_mask`](lane_mask.md)。
+
 ```cpp
-constexpr asc::lane_mask asc::lane_mask::operator<<(int shift) const noexcept;
+// asc::lane_mask 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr asc::lane_mask operator<<(int shift) const noexcept;
 ```
 
 ## 参数说明
@@ -42,18 +45,19 @@ constexpr asc::lane_mask asc::lane_mask::operator<<(int shift) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `shift` | 输入 | 左移位数（0~31）：掩码位向高位移动、低位补 0，返回新的 lane_mask，不修改本对象。 |
+| `shift` | 输入 | 左移位数（0~31）：掩码位向高位移动、低位补0，返回新的lane_mask，不修改本对象。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::lane_mask` | 返回Lane 掩码左移指定位置后的结果。 |
+| `asc::lane_mask` | 返回Lane掩码左移指定位置后的结果。 |
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 参数类型、取值范围、会合要求和对象生命周期必须满足页面声明
+- 掩码值的构造、观察和位运算可用于Host、D-SIMD与D-SIMT。
+- 每一位对应Warp中编号0—31的一个Lane；1表示该Lane被选择。
+- shift必须在[0, 31] 内；本值运算不执行Warp会合或内存同步。
 
 ## 调用示例
 
@@ -69,7 +73,7 @@ __aicore__ decltype(auto) example(Object& object, Args&&... args)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：
 
@@ -77,3 +81,7 @@ __aicore__ decltype(auto) example(Object& object, Args&&... args)
 - [warp_example.h](../../../../examples/warp_collectives/warp_example.h)
 - [kernel.asc](../../../../examples/warp_collectives/kernel.asc)
 - [main.cpp](../../../../examples/warp_collectives/main.cpp)
+
+## 关联API
+
+- [`asc::lane_mask`](lane_mask.md)：Warp内Lane的位集合；第i位对应编号为i的Lane。

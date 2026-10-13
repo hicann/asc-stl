@@ -28,29 +28,44 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::tabulate_output_iterator` 把写入的索引和值交给用户函数处理的输出迭代器。
+`asc::tabulate_output_iterator`把写入的索引和值交给用户函数处理的输出迭代器。
 
 ## 声明
 
 ```cpp
-template<class Function, class Index = asc::std::ptrdiff_t> class asc::tabulate_output_iterator
+namespace asc {
+template<class Function, class Index = asc::std::ptrdiff_t> class tabulate_output_iterator;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
-void use_type()
+struct write_at {
+    int* values;
+    void operator()(int index, int value) const { values[index] = value; }
+};
+
+bool example()
 {
-    using selected = asc::tabulate_output_iterator<void (*)(int, int)>;
-    (void)sizeof(selected);
+    int values[2] = {};
+    asc::tabulate_output_iterator<write_at> iterator(write_at{values});
+    *iterator = 3;
+    ++iterator;
+    *iterator = 7;
+    return values[0] == 3 && values[1] == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::sub_block_count` 返回当前 AICore 内可用的 Sub Block 数量。
+`asc::sub_block_count`返回当前AICore内可用的Sub Block数量。
 
 ## 函数原型
 
 ```cpp
-unsigned int asc::sub_block_count() noexcept;
+namespace asc {
+unsigned int sub_block_count() noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -48,8 +50,8 @@ unsigned int asc::sub_block_count() noexcept;
 
 ## 约束说明
 
-- 仅可在 AI Core SIMD 编程中调用
-- 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明
+- 仅可在AI Core SIMD编程中调用。
+- 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明。
 
 ## 调用示例
 
@@ -63,3 +65,7 @@ __aicore__ decltype(auto) example()
     return asc::sub_block_count();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_hierarchy.md)

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/version>`。
 
-`CANN_ASC_STL_VERSION_MINOR` 定义 ASC-STL 产品版本的次版本号，当前值为 0。
+`CANN_ASC_STL_VERSION_MINOR`定义ASC-STL产品版本的次版本号，当前值为0。
 
 ## 声明
 
@@ -38,7 +38,7 @@
 
 ## 约束说明
 
-- 提供产品版本和实际交付能力宏
+- 提供产品版本和实际交付能力宏。
 
 ## 调用示例
 
@@ -51,3 +51,7 @@
 #error "CANN_ASC_STL_VERSION_MINOR is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_version.md)

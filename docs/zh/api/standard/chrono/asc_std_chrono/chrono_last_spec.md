@@ -28,30 +28,38 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::last_spec` 表示日期、时间点或时长计算中的 `last_spec` 值类型。
+`asc::std::chrono::last_spec`表示日期、时间点或时长计算中的`last_spec`值类型。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 声明
 
 ```cpp
-struct asc::std::chrono::last_spec
+namespace asc::std::chrono {
+struct last_spec;
+} // namespace asc::std::chrono
 ```
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void use_type(const asc::std::chrono::last_spec& value)
+bool example()
 {
-    (void)value;
+    asc::std::chrono::last_spec last{};
+    auto date = asc::std::chrono::month{2} / last;
+    return static_cast<unsigned int>(date.month()) == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

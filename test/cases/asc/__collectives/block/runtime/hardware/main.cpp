@@ -18,7 +18,7 @@
 #include "../semantics.h"
 int main()
 {
-    unsigned int host[2]{};
+    unsigned int host[asc_stl_collective_test::result_count]{};
     unsigned int* device = nullptr;
     aclrtStream stream = nullptr;
     bool passed = aclInit(nullptr) == ACL_SUCCESS && aclrtSetDevice(0) == ACL_SUCCESS &&
@@ -33,7 +33,7 @@ int main()
         passed = aclrtSynchronizeStream(stream) == ACL_SUCCESS &&
             aclrtMemcpy(host, sizeof(host), device, sizeof(host), ACL_MEMCPY_DEVICE_TO_HOST) == ACL_SUCCESS;
 #if ASC_STL_B018_simt
-        passed = passed && host[0] == 2080;
+        passed = passed && asc_stl_collective_test::verify(host);
 #else
         passed = passed && host[1] == 10;
 #endif

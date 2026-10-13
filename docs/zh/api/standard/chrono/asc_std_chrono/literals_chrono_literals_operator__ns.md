@@ -28,27 +28,29 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`operator""ns` 以字面量数值构造 `chrono::nanoseconds`，整型与浮点字面量均受支持。
+`operator""ns`以字面量数值构造`chrono::nanoseconds`，整型与浮点字面量均受支持。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-asc::std::chrono::nanoseconds asc::std::literals::chrono_literals::operator""ns(unsigned long long arg)
+// asc::std::literals::chrono_literals 类内的声明节选；模板形参和其他成员由所属类提供。
+asc::std::chrono::nanoseconds operator""ns(unsigned long long arg);
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 2
+### 原型2
 
 ```cpp
-asc::std::chrono::nanoseconds asc::std::literals::chrono_literals::operator""ns(long double arg)
+// asc::std::literals::chrono_literals 类内的声明节选；模板形参和其他成员由所属类提供。
+asc::std::chrono::nanoseconds operator""ns(long double arg);
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 参数说明
 
@@ -62,12 +64,12 @@ asc::std::chrono::nanoseconds asc::std::literals::chrono_literals::operator""ns(
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::std::chrono::nanoseconds` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `asc::std::chrono::nanoseconds` | 以纳秒为单位的duration；整数形式使用对应标准整数时长类型，浮点形式使用long double表示计数。 |
 
 ## 约束说明
 
-- 整数字面量按目标表示精确转换
-- 浮点字面量截断到目标表示的 tick 数
+- 整数字面量按目标表示精确转换。
+- 浮点字面量截断到目标表示的tick数。
 
 ## 调用示例
 
@@ -81,3 +83,7 @@ decltype(auto) example(unsigned long long arg)
     return asc::std::literals::chrono_literals::operator""ns(arg);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

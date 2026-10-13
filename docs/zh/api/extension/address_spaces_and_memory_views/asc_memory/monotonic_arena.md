@@ -28,30 +28,40 @@
 
 头文件路径为：`<asc/memory>`。
 
-`asc::monotonic_arena` 在调用方提供的连续存储中按对齐要求单向分配内存。单次分配不能释放，`reset()` 可一次性复用全部容量。
+`asc::monotonic_arena`在调用方提供的连续存储中按对齐要求单向分配内存。单次分配不能释放，`reset()`可一次性复用全部容量。
 
 ## 声明
 
 ```cpp
-class asc::monotonic_arena
+namespace asc {
+class monotonic_arena;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 底层存储由调用方拥有并须在 arena 使用期间保持有效
-- alignment 必须是非零的 2 的幂
-- 空间不足时 allocate 返回空指针
-- reset 后此前取得的分配不得继续使用
+- 底层存储由调用方拥有并须在arena使用期间保持有效。
+- alignment必须是非零的2的幂。
+- 空间不足时allocate返回空指针。
+- reset后此前取得的分配不得继续使用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/memory>
 
-void use_type(const asc::monotonic_arena& value)
+bool example()
 {
-    (void)value;
+    alignas(16) unsigned char storage[64]{};
+    asc::monotonic_arena arena(storage, sizeof(storage));
+    void* first = arena.allocate(16, 16);
+    void* second = arena.allocate(16, 16);
+    return first == storage && second == storage + 16;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_memory.md)

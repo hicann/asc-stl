@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::tensor_copy_status::invalid_stage` 表示指定 Pipeline 流水级不存在。
+`asc::tensor_copy_status::invalid_stage`表示指定Pipeline流水级不存在。
 
 ## 声明
 
+所属类型：[`asc::tensor_copy_status`](tensor_copy_status.md)。
+
 ```cpp
-asc::tensor_copy_status::invalid_stage = 6
+// asc::tensor_copy_status 类内的声明节选；模板形参和其他成员由所属类提供。
+invalid_stage = 6;
 ```
 
 ## 约束说明
 
-- 描述符及状态类型可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Rank 为 1 至 5
-- 维度和步长采用 uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运
+- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Rank为1至5。
+- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
 
 ## 调用示例
 
@@ -51,3 +54,8 @@ asc::tensor_copy_status::invalid_stage = 6
 
 auto value = asc::tensor_copy_status::invalid_stage;
 ```
+
+## 关联API
+
+- [`asc::tensor_copy_status`](tensor_copy_status.md)
+- [本头文件的接口列表](asc_tensor_copy.md)

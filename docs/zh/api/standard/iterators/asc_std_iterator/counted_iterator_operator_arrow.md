@@ -1,4 +1,4 @@
-# asc::std::counted_iterator::operator->
+# asc::std::counted_iterator::`operator-`>
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::counted_iterator::operator->` 返回可用于访问所指对象成员的指针。
+`asc::std::counted_iterator::operator->`返回可用于访问所指对象成员的指针。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
+所属类型：[`asc::std::counted_iterator`](counted_iterator.md)。
+
 ```cpp
-template<class I2> [[nodiscard]] constexpr auto asc::std::counted_iterator::operator->() const noexcept;
+// asc::std::counted_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class I2> [[nodiscard]] constexpr auto operator->() const noexcept;
 ```
 
 ## 参数说明
@@ -54,12 +57,12 @@ template<class I2> [[nodiscard]] constexpr auto asc::std::counted_iterator::oper
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
 
 ```cpp
 #include <asc/std/iterator>
@@ -69,3 +72,8 @@ decltype(auto) example(const asc::std::counted_iterator<int*>& iterator)
     return (iterator.operator->());
 }
 ```
+
+## 关联API
+
+- [`asc::std::counted_iterator`](counted_iterator.md)
+- [本头文件的接口列表](asc_std_iterator.md)

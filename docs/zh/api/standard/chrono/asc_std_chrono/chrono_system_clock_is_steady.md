@@ -28,30 +28,40 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::system_clock::is_steady` 表示当前时钟的计数是否单调递增。
+`asc::std::chrono::system_clock::is_steady`表示当前时钟的计数是否单调递增。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 声明
 
+所属类型：[`asc::std::chrono::system_clock`](chrono_system_clock.md)。
+
 ```cpp
-inline constexpr const bool asc::std::chrono::system_clock::is_steady
+// asc::std::chrono::system_clock 类内的声明节选；模板形参和其他成员由所属类提供。
+inline constexpr const bool is_steady;
 ```
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
+- 本类型提供时间点、计时单位和相关类型别名；可调用的时钟操作以对应成员说明为准。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
 
-void example(const asc::std::chrono::system_clock& object)
+bool example()
 {
-    (void)object.is_steady;
+    static_assert(!asc::std::chrono::system_clock::is_steady);
+    asc::std::chrono::system_clock::time_point epoch{};
+    return epoch.time_since_epoch().count() == 0;
 }
 ```
+
+## 关联API
+
+- [`asc::std::chrono::system_clock`](chrono_system_clock.md)
+- [本头文件的接口列表](asc_std_chrono.md)

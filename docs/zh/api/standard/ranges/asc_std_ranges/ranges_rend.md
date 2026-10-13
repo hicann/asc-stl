@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::rend` 取得范围的逆序结束迭代器。
+`asc::std::ranges::rend`取得范围的逆序结束迭代器。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
@@ -37,7 +37,9 @@
 该名称是公开的常量函数对象；对象的实现类型不构成接口承诺。以下为调用形式，省略的可选参数以各原型约束为准。
 
 ```cpp
-asc::std::ranges::rend(range)
+namespace asc::std::ranges {
+rend(range);
+} // namespace asc::std::ranges
 ```
 
 ## 参数说明
@@ -52,24 +54,30 @@ asc::std::ranges::rend(range)
 
 | 调用形式 | 返回类型 |
 | --- | --- |
-| 范围 | 成员 `rend()` 的结果类型，或 `reverse_iterator<decltype(ranges::begin(range))>` |
+| 范围 | 成员`rend()`的结果类型，或`reverse_iterator<decltype(ranges::begin(range))>` |
 
 ## 约束说明
 
-- 支持数组和用户范围，不支持仅由花括号构成的 initializer_list 表达式
+- 支持数组和用户范围，不支持仅由花括号构成的initializer_list表达式。
 
 ## 调用示例
 
-以下 Host 片段以具体数组或数值演示本页调用形式。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example()
+bool example()
 {
-    // 用具体类型和实参演示已交付的调用形式。
-    int values[4] = {1, 2, 3, 4};
-    auto result_1 = asc::std::ranges::rend(values);
-    (void)result_1;
+    int values[] = {1, 2, 3, 4};
+    auto result = asc::std::ranges::rend(values);
+    return result.base() == values;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

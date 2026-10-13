@@ -28,31 +28,40 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::float_t` 标识浮点表达式的求值类型，不扩张本期 Device 数学函数精度。
+`asc::std::float_t`标识浮点表达式的求值类型，不扩张本期Device数学函数精度。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 声明
 
 ```cpp
-using asc::std::float_t = float
+namespace asc::std {
+using float_t = float;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 float 函数重载、求值类型别名、比较函数、nanf 和分类宏
+- 提供float函数重载、求值类型别名、比较函数、nanf和分类宏。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/cmath>
+#include <asc/std/type_traits>
 
-void use_type(const asc::std::float_t& value)
+bool example()
 {
-    (void)value;
+    static_assert(asc::std::is_floating_point_v<asc::std::float_t>);
+    asc::std::float_t half = 0.5;
+    return half + half == 1.0;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

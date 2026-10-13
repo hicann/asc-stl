@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::forward` 按模板参数保留实参的值类别。
+`asc::std::forward`按模板参数保留实参的值类别。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<typename T> [[nodiscard]] constexpr T&& asc::std::forward(typename std::remove_reference<T>::type&& value) noexcept;
+namespace asc::std {
+template<typename T> [[nodiscard]] constexpr T&& forward(typename std::remove_reference<T>::type&& value) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<typename T> [[nodiscard]] constexpr T&& asc::std::forward(typename std::remove_reference<T>::type& value) noexcept;
+namespace asc::std {
+template<typename T> [[nodiscard]] constexpr T&& forward(typename std::remove_reference<T>::type& value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -60,9 +64,9 @@ template<typename T> [[nodiscard]] constexpr T&& asc::std::forward(typename std:
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待转发的右值；按显式模板参数 T 以 T&& 原样转发，不产生复制或移动。 |
+| `value` | 输入/输出 | 待转发的右值；按显式模板参数T以T&& 原样转发，不产生复制或移动。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -74,30 +78,38 @@ template<typename T> [[nodiscard]] constexpr T&& asc::std::forward(typename std:
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待转发的左值；按显式模板参数 T 以 T&& 转发（引用折叠后保持左值），不产生复制或移动。 |
+| `value` | 输入/输出 | 待转发的左值；按显式模板参数T以T&& 转发（引用折叠后保持左值），不产生复制或移动。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `T &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 2 | `T &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型1 | `T &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型2 | `T &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
 
 ## 约束说明
 
-- 遵循标准约束
-- forward_like 保留 const/volatile 限定和值类别
+- 遵循标准约束。
+- forward_like保留const/volatile限定和值类别。
 
 ## 调用示例
 
-以下片段用具体数值展示本页调用。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/utility>
+#include <asc/std/type_traits>
 
-decltype(auto) example()
+bool example()
 {
     int value = 3;
-    return asc::std::forward<int&>(value);
+    auto&& reference = asc::std::forward<int&>(value);
+    static_assert(asc::std::is_same_v<decltype(reference), int&>);
+    // 在value仍存活时检查引用；函数只返回布尔值。
+    return &reference == &value && reference == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::make_obj_using_allocator` 按 uses-allocator 规则构造并返回对象。
+`asc::std::make_obj_using_allocator`按uses-allocator规则构造并返回对象。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
 ```cpp
-template<class T, class Alloc, class... Args> constexpr T asc::std::make_obj_using_allocator(const Alloc& alloc, Args&&... args);
+namespace asc::std {
+template<class T, class Alloc, class... Args> constexpr T make_obj_using_allocator(const Alloc& alloc, Args&&... args);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -52,7 +54,7 @@ template<class T, class Alloc, class... Args> constexpr T asc::std::make_obj_usi
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `alloc` | 输入 | 提供“按 uses-allocator 规则构造并返回对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `alloc` | 输入 | 提供“按uses-allocator规则构造并返回对象”使用的对象引用；被引用对象须在调用期间有效。 |
 | `args` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
 
 ## 返回值说明
@@ -63,14 +65,14 @@ template<class T, class Alloc, class... Args> constexpr T asc::std::make_obj_usi
 
 ## 约束说明
 
-- T 必须能够按分配器感知构造规则使用 allocator 和 args... 完成构造
-- allocator 以及 args... 引用的对象必须在调用期间保持有效
-- Alloc 必须能够在当前调用所在的执行空间中使用
-- 调用参数必须满足所选 T 构造函数的前置条件
+- T必须能够按分配器感知构造规则使用allocator和args... 完成构造。
+- allocator以及args... 引用的对象必须在调用期间保持有效。
+- Alloc必须能够在当前调用所在的执行空间中使用。
+- 调用参数必须满足所选T构造函数的前置条件。
 
 ## 调用示例
 
-以下 Host 片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
+以下Host片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
 
 ```cpp
 #include <asc/std/memory>
@@ -96,3 +98,7 @@ decltype(auto) example()
     return asc::std::make_obj_using_allocator<int>(allocator, 7);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

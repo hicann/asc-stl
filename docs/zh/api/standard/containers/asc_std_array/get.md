@@ -28,609 +28,665 @@
 
 头文件路径为：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
 
-`asc::std::get` 按编译期索引访问 `array`、`tuple`、`pair` 的元素，以及 `<asc/std/tuple>` 导出的 `complex<float>` 实部或虚部；`tuple` 和 `pair` 还可按唯一类型访问。返回的是原对象中元素的引用，cv 限定和值类别随实参传播；被引用对象必须继续存活。`variant` 的抛异常 `get` 重载不在本期交付范围，访问活动备选项请使用 `get_if`。
+`asc::std::get`按编译期索引访问`array`、`tuple`、`pair`的元素，以及`<asc/std/tuple>`导出的`complex<float>`实部或虚部；`tuple`和`pair`还可按唯一类型访问。返回的是原对象中元素的引用，cv限定和值类别随实参传播；被引用对象必须继续存活。`variant`的抛异常`get`重载不在本期交付范围，访问活动备选项请使用`get_if`。
 
 标准语义参考：[cppreference `array`](https://en.cppreference.com/w/cpp/header/array)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T1, class ...Args> [[nodiscard]] constexpr T1&& asc::std::get(tuple<Args...>&& value) noexcept;
+namespace asc::std {
+template<class T1, class ...Args> [[nodiscard]] constexpr T1&& get(tuple<Args...>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T1, class ...Args> [[nodiscard]] constexpr T1& asc::std::get(tuple<Args...>& value) noexcept;
+namespace asc::std {
+template<class T1, class ...Args> [[nodiscard]] constexpr T1& get(tuple<Args...>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class T1, class ...Args> [[nodiscard]] constexpr const T1&& asc::std::get(const tuple<Args...>&& value) noexcept;
+namespace asc::std {
+template<class T1, class ...Args> [[nodiscard]] constexpr const T1&& get(const tuple<Args...>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class T1, class ...Args> [[nodiscard]] constexpr const T1& asc::std::get(const tuple<Args...>& value) noexcept;
+namespace asc::std {
+template<class T1, class ...Args> [[nodiscard]] constexpr const T1& get(const tuple<Args...>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
 
-### 原型 5
+### 原型5
 
 ```cpp
-template<class T1, class T2> [[nodiscard]] constexpr T1&& asc::std::get(pair<T1, T2>&& value) noexcept;
+namespace asc::std {
+template<class T1, class T2> [[nodiscard]] constexpr T1&& get(pair<T1, T2>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
 
-### 原型 6
+### 原型6
 
 ```cpp
-template<class T1, class T2> [[nodiscard]] constexpr T1&& asc::std::get(pair<T2, T1>&& value) noexcept;
+namespace asc::std {
+template<class T1, class T2> [[nodiscard]] constexpr T1&& get(pair<T2, T1>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
 
-### 原型 7
+### 原型7
 
 ```cpp
-template<class T1, class T2> [[nodiscard]] constexpr T1& asc::std::get(pair<T1, T2>& value) noexcept;
+namespace asc::std {
+template<class T1, class T2> [[nodiscard]] constexpr T1& get(pair<T1, T2>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
 
-### 原型 8
+### 原型8
 
 ```cpp
-template<class T1, class T2> [[nodiscard]] constexpr T1& asc::std::get(pair<T2, T1>& value) noexcept;
+namespace asc::std {
+template<class T1, class T2> [[nodiscard]] constexpr T1& get(pair<T2, T1>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
 
-### 原型 9
+### 原型9
 
 ```cpp
-template<class T1, class T2> [[nodiscard]] constexpr const T1&& asc::std::get(const pair<T1, T2>&& value) noexcept;
+namespace asc::std {
+template<class T1, class T2> [[nodiscard]] constexpr const T1&& get(const pair<T1, T2>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
 
-### 原型 10
+### 原型10
 
 ```cpp
-template<class T1, class T2> [[nodiscard]] constexpr const T1&& asc::std::get(const pair<T2, T1>&& value) noexcept;
+namespace asc::std {
+template<class T1, class T2> [[nodiscard]] constexpr const T1&& get(const pair<T2, T1>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
 
-### 原型 11
+### 原型11
 
 ```cpp
-template<class T1, class T2> [[nodiscard]] constexpr const T1& asc::std::get(const pair<T1, T2>& value) noexcept;
+namespace asc::std {
+template<class T1, class T2> [[nodiscard]] constexpr const T1& get(const pair<T1, T2>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
 
-### 原型 12
+### 原型12
 
 ```cpp
-template<class T1, class T2> [[nodiscard]] constexpr const T1& asc::std::get(const pair<T2, T1>& value) noexcept;
+namespace asc::std {
+template<class T1, class T2> [[nodiscard]] constexpr const T1& get(const pair<T2, T1>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
 
-### 原型 13
+### 原型13
 
 ```cpp
-template<size_t Index, class T> [[nodiscard]] constexpr T&& asc::std::get(complex<T>&& value) noexcept;
+namespace asc::std {
+template<size_t Index, class T> [[nodiscard]] constexpr T&& get(complex<T>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
 
-### 原型 14
+### 原型14
 
 ```cpp
-template<size_t Index, class T> [[nodiscard]] constexpr T& asc::std::get(complex<T>& value) noexcept;
+namespace asc::std {
+template<size_t Index, class T> [[nodiscard]] constexpr T& get(complex<T>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
 
-### 原型 15
+### 原型15
 
 ```cpp
-template<size_t Index, class T> [[nodiscard]] constexpr const T&& asc::std::get(const complex<T>&& value) noexcept;
+namespace asc::std {
+template<size_t Index, class T> [[nodiscard]] constexpr const T&& get(const complex<T>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
 
-### 原型 16
+### 原型16
 
 ```cpp
-template<size_t Index, class T> [[nodiscard]] constexpr const T& asc::std::get(const complex<T>& value) noexcept;
+namespace asc::std {
+template<size_t Index, class T> [[nodiscard]] constexpr const T& get(const complex<T>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
 
-### 原型 17
+### 原型17
 
 ```cpp
-template<size_t Index, class ...T> [[nodiscard]] constexpr const tuple_element_t<Index, tuple<T...>>&& asc::std::get(const tuple<T...>&& value) noexcept;
+namespace asc::std {
+template<size_t Index, class ...T> [[nodiscard]] constexpr const tuple_element_t<Index, tuple<T...>>&& get(const tuple<T...>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
 
-### 原型 18
+### 原型18
 
 ```cpp
-template<size_t Index, class ...T> [[nodiscard]] constexpr const tuple_element_t<Index, tuple<T...>>& asc::std::get(const tuple<T...>& value) noexcept;
+namespace asc::std {
+template<size_t Index, class ...T> [[nodiscard]] constexpr const tuple_element_t<Index, tuple<T...>>& get(const tuple<T...>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
 
-### 原型 19
+### 原型19
 
 ```cpp
-template<size_t Index, class ...T> [[nodiscard]] constexpr tuple_element_t<Index, tuple<T...>>&& asc::std::get(tuple<T...>&& value) noexcept;
+namespace asc::std {
+template<size_t Index, class ...T> [[nodiscard]] constexpr tuple_element_t<Index, tuple<T...>>&& get(tuple<T...>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
 
-### 原型 20
+### 原型20
 
 ```cpp
-template<size_t Index, class ...T> [[nodiscard]] constexpr tuple_element_t<Index, tuple<T...>>& asc::std::get(tuple<T...>& value) noexcept;
+namespace asc::std {
+template<size_t Index, class ...T> [[nodiscard]] constexpr tuple_element_t<Index, tuple<T...>>& get(tuple<T...>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/tuple>`。
 
-### 原型 21
+### 原型21
 
 ```cpp
-template<size_t Index, class T1, class T2> [[nodiscard]] constexpr const tuple_element_t<Index, pair<T1, T2>>&& asc::std::get(const pair<T1, T2>&& value) noexcept;
+namespace asc::std {
+template<size_t Index, class T1, class T2> [[nodiscard]] constexpr const tuple_element_t<Index, pair<T1, T2>>&& get(const pair<T1, T2>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
 
-### 原型 22
+### 原型22
 
 ```cpp
-template<size_t Index, class T1, class T2> [[nodiscard]] constexpr const tuple_element_t<Index, pair<T1, T2>>& asc::std::get(const pair<T1, T2>& value) noexcept;
+namespace asc::std {
+template<size_t Index, class T1, class T2> [[nodiscard]] constexpr const tuple_element_t<Index, pair<T1, T2>>& get(const pair<T1, T2>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
 
-### 原型 23
+### 原型23
 
 ```cpp
-template<size_t Index, class T1, class T2> [[nodiscard]] constexpr tuple_element_t<Index, pair<T1, T2>>&& asc::std::get(pair<T1, T2>&& value) noexcept;
+namespace asc::std {
+template<size_t Index, class T1, class T2> [[nodiscard]] constexpr tuple_element_t<Index, pair<T1, T2>>&& get(pair<T1, T2>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
 
-### 原型 24
+### 原型24
 
 ```cpp
-template<size_t Index, class T1, class T2> [[nodiscard]] constexpr tuple_element_t<Index, pair<T1, T2>>& asc::std::get(pair<T1, T2>& value) noexcept;
+namespace asc::std {
+template<size_t Index, class T1, class T2> [[nodiscard]] constexpr tuple_element_t<Index, pair<T1, T2>>& get(pair<T1, T2>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
 
-### 原型 25
+### 原型25
 
 ```cpp
-template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr T&& asc::std::get(array<T, Size>&& value) noexcept;
+namespace asc::std {
+template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr T&& get(array<T, Size>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`。
 
-### 原型 26
+### 原型26
 
 ```cpp
-template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr T& asc::std::get(array<T, Size>& value) noexcept;
+namespace asc::std {
+template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr T& get(array<T, Size>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`。
 
-### 原型 27
+### 原型27
 
 ```cpp
-template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr const T&& asc::std::get(const array<T, Size>&& value) noexcept;
+namespace asc::std {
+template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr const T&& get(const array<T, Size>&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`。
 
-### 原型 28
+### 原型28
 
 ```cpp
-template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr const T& asc::std::get(const array<T, Size>& value) noexcept;
+namespace asc::std {
+template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr const T& get(const array<T, Size>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`。
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 按类型访问的目标元素类型；须在 tuple 的元素类型中恰好出现一次。 |
-| `Args` | tuple 各元素的类型列表。 |
+| `T1` | 按类型访问的目标元素类型；须在tuple的元素类型中恰好出现一次。 |
+| `Args` | tuple各元素的类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待按类型访问的 tuple 对象；返回其中类型为 T1 的元素的右值引用，可被移动。 |
+| `value` | 输入/输出 | 待按类型访问的tuple对象；返回其中类型为T1的元素的右值引用，可被移动。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 按类型访问的目标元素类型；须在 tuple 的元素类型中恰好出现一次。 |
-| `Args` | tuple 各元素的类型列表。 |
+| `T1` | 按类型访问的目标元素类型；须在tuple的元素类型中恰好出现一次。 |
+| `Args` | tuple各元素的类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待按类型访问的 tuple 对象；返回其中类型为 T1 的元素的引用。 |
+| `value` | 输入/输出 | 待按类型访问的tuple对象；返回其中类型为T1的元素的引用。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 按类型访问的目标元素类型；须在 tuple 的元素类型中恰好出现一次。 |
-| `Args` | tuple 各元素的类型列表。 |
+| `T1` | 按类型访问的目标元素类型；须在tuple的元素类型中恰好出现一次。 |
+| `Args` | tuple各元素的类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待按类型访问的只读 tuple 对象；返回其中类型为 T1 的元素的常量右值引用。 |
+| `value` | 输入 | 待按类型访问的只读tuple对象；返回其中类型为T1的元素的常量右值引用。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 按类型访问的目标元素类型；须在 tuple 的元素类型中恰好出现一次。 |
-| `Args` | tuple 各元素的类型列表。 |
+| `T1` | 按类型访问的目标元素类型；须在tuple的元素类型中恰好出现一次。 |
+| `Args` | tuple各元素的类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待按类型访问的只读 tuple 对象；返回其中类型为 T1 的元素的常量引用。 |
+| `value` | 输入 | 待按类型访问的只读tuple对象；返回其中类型为T1的元素的常量引用。 |
 
-### 原型 5 的参数
+### 原型5的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 按类型访问的目标成员类型；须与 pair 某一成员的类型一致。 |
-| `T2` | pair 另一成员的类型。 |
+| `T1` | 按类型访问的目标成员类型；须与pair某一成员的类型一致。 |
+| `T2` | pair另一成员的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待按类型访问的 pair 对象；返回其中类型为 T1 的成员的右值引用，可被移动。 |
+| `value` | 输入/输出 | 待按类型访问的pair对象；返回其中类型为T1的成员的右值引用，可被移动。 |
 
-### 原型 6 的参数
+### 原型6的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 按类型访问的目标成员类型；须与 pair 某一成员的类型一致。 |
-| `T2` | pair 另一成员的类型。 |
+| `T1` | 按类型访问的目标成员类型；须与pair某一成员的类型一致。 |
+| `T2` | pair另一成员的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待按类型访问的 pair 对象；返回其中类型为 T1 的成员的右值引用，可被移动。 |
+| `value` | 输入/输出 | 待按类型访问的pair对象；返回其中类型为T1的成员的右值引用，可被移动。 |
 
-### 原型 7 的参数
+### 原型7的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 按类型访问的目标成员类型；须与 pair 某一成员的类型一致。 |
-| `T2` | pair 另一成员的类型。 |
+| `T1` | 按类型访问的目标成员类型；须与pair某一成员的类型一致。 |
+| `T2` | pair另一成员的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待按类型访问的 pair 对象；返回其中类型为 T1 的成员的引用。 |
+| `value` | 输入/输出 | 待按类型访问的pair对象；返回其中类型为T1的成员的引用。 |
 
-### 原型 8 的参数
+### 原型8的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 按类型访问的目标成员类型；须与 pair 某一成员的类型一致。 |
-| `T2` | pair 另一成员的类型。 |
+| `T1` | 按类型访问的目标成员类型；须与pair某一成员的类型一致。 |
+| `T2` | pair另一成员的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待按类型访问的 pair 对象；返回其中类型为 T1 的成员的引用。 |
+| `value` | 输入/输出 | 待按类型访问的pair对象；返回其中类型为T1的成员的引用。 |
 
-### 原型 9 的参数
+### 原型9的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 按类型访问的目标成员类型；须与 pair 某一成员的类型一致。 |
-| `T2` | pair 另一成员的类型。 |
+| `T1` | 按类型访问的目标成员类型；须与pair某一成员的类型一致。 |
+| `T2` | pair另一成员的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待按类型访问的只读 pair 对象；返回其中类型为 T1 的成员的常量右值引用。 |
+| `value` | 输入 | 待按类型访问的只读pair对象；返回其中类型为T1的成员的常量右值引用。 |
 
-### 原型 10 的参数
+### 原型10的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 按类型访问的目标成员类型；须与 pair 某一成员的类型一致。 |
-| `T2` | pair 另一成员的类型。 |
+| `T1` | 按类型访问的目标成员类型；须与pair某一成员的类型一致。 |
+| `T2` | pair另一成员的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待按类型访问的只读 pair 对象；返回其中类型为 T1 的成员的常量右值引用。 |
+| `value` | 输入 | 待按类型访问的只读pair对象；返回其中类型为T1的成员的常量右值引用。 |
 
-### 原型 11 的参数
+### 原型11的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 按类型访问的目标成员类型；须与 pair 某一成员的类型一致。 |
-| `T2` | pair 另一成员的类型。 |
+| `T1` | 按类型访问的目标成员类型；须与pair某一成员的类型一致。 |
+| `T2` | pair另一成员的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待按类型访问的只读 pair 对象；返回其中类型为 T1 的成员的常量引用。 |
+| `value` | 输入 | 待按类型访问的只读pair对象；返回其中类型为T1的成员的常量引用。 |
 
-### 原型 12 的参数
+### 原型12的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 按类型访问的目标成员类型；须与 pair 某一成员的类型一致。 |
-| `T2` | pair 另一成员的类型。 |
+| `T1` | 按类型访问的目标成员类型；须与pair某一成员的类型一致。 |
+| `T2` | pair另一成员的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待按类型访问的只读 pair 对象；返回其中类型为 T1 的成员的常量引用。 |
+| `value` | 输入 | 待按类型访问的只读pair对象；返回其中类型为T1的成员的常量引用。 |
 
-### 原型 13 的参数
+### 原型13的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | complex 成员选择，编译期常量；0 取实部，1 取虚部。 |
-| `T` | complex 的标量类型，即实部与虚部的类型。 |
+| `Index` | complex成员选择，编译期常量；0取实部，1取虚部。 |
+| `T` | complex的标量类型，即实部与虚部的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待访问实部或虚部的 complex 对象；Index 为 0 取实部、为 1 取虚部，返回右值引用。 |
+| `value` | 输入/输出 | 待访问实部或虚部的complex对象；Index为0取实部、为1取虚部，返回右值引用。 |
 
-### 原型 14 的参数
+### 原型14的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | complex 成员选择，编译期常量；0 取实部，1 取虚部。 |
-| `T` | complex 的标量类型，即实部与虚部的类型。 |
+| `Index` | complex成员选择，编译期常量；0取实部，1取虚部。 |
+| `T` | complex的标量类型，即实部与虚部的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待访问实部或虚部的 complex 对象；Index 为 0 取实部、为 1 取虚部。 |
+| `value` | 输入/输出 | 待访问实部或虚部的complex对象；Index为0取实部、为1取虚部。 |
 
-### 原型 15 的参数
+### 原型15的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | complex 成员选择，编译期常量；0 取实部，1 取虚部。 |
-| `T` | complex 的标量类型，即实部与虚部的类型。 |
+| `Index` | complex成员选择，编译期常量；0取实部，1取虚部。 |
+| `T` | complex的标量类型，即实部与虚部的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待访问实部或虚部的只读 complex 对象；Index 为 0 取实部、为 1 取虚部，返回常量右值引用。 |
+| `value` | 输入 | 待访问实部或虚部的只读complex对象；Index为0取实部、为1取虚部，返回常量右值引用。 |
 
-### 原型 16 的参数
+### 原型16的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | complex 成员选择，编译期常量；0 取实部，1 取虚部。 |
-| `T` | complex 的标量类型，即实部与虚部的类型。 |
+| `Index` | complex成员选择，编译期常量；0取实部，1取虚部。 |
+| `T` | complex的标量类型，即实部与虚部的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待访问实部或虚部的只读 complex 对象；Index 为 0 取实部、为 1 取虚部。 |
+| `value` | 输入 | 待访问实部或虚部的只读complex对象；Index为0取实部、为1取虚部。 |
 
-### 原型 17 的参数
+### 原型17的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标元素下标，编译期常量；须满足 Index < sizeof...(T)。 |
-| `T` | tuple 各元素的类型列表。 |
+| `Index` | 目标元素下标，编译期常量；须满足Index < sizeof...(T)。 |
+| `T` | tuple各元素的类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待按下标访问的只读 tuple 对象；返回第 Index 个元素的常量右值引用。 |
+| `value` | 输入 | 待按下标访问的只读tuple对象；返回第Index个元素的常量右值引用。 |
 
-### 原型 18 的参数
+### 原型18的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标元素下标，编译期常量；须满足 Index < sizeof...(T)。 |
-| `T` | tuple 各元素的类型列表。 |
+| `Index` | 目标元素下标，编译期常量；须满足Index < sizeof...(T)。 |
+| `T` | tuple各元素的类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待按下标访问的只读 tuple 对象；返回第 Index 个元素的常量引用。 |
+| `value` | 输入 | 待按下标访问的只读tuple对象；返回第Index个元素的常量引用。 |
 
-### 原型 19 的参数
+### 原型19的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标元素下标，编译期常量；须满足 Index < sizeof...(T)。 |
-| `T` | tuple 各元素的类型列表。 |
+| `Index` | 目标元素下标，编译期常量；须满足Index < sizeof...(T)。 |
+| `T` | tuple各元素的类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待按下标访问的 tuple 对象；返回第 Index 个元素的右值引用，可被移动。 |
+| `value` | 输入/输出 | 待按下标访问的tuple对象；返回第Index个元素的右值引用，可被移动。 |
 
-### 原型 20 的参数
+### 原型20的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标元素下标，编译期常量；须满足 Index < sizeof...(T)。 |
-| `T` | tuple 各元素的类型列表。 |
+| `Index` | 目标元素下标，编译期常量；须满足Index < sizeof...(T)。 |
+| `T` | tuple各元素的类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待按下标访问的 tuple 对象；返回第 Index 个元素的引用。 |
+| `value` | 输入/输出 | 待按下标访问的tuple对象；返回第Index个元素的引用。 |
 
-### 原型 21 的参数
+### 原型21的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标成员下标，编译期常量；0 取 first，1 取 second。 |
-| `T1` | pair 第一成员（first）的类型。 |
-| `T2` | pair 第二成员（second）的类型。 |
+| `Index` | 目标成员下标，编译期常量；0取first，1取second。 |
+| `T1` | pair第一成员（first）的类型。 |
+| `T2` | pair第二成员（second）的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待按下标访问的只读 pair 对象；Index 为 0 取 first、为 1 取 second，返回常量右值引用。 |
+| `value` | 输入 | 待按下标访问的只读pair对象；Index为0取first、为1取second，返回常量右值引用。 |
 
-### 原型 22 的参数
+### 原型22的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标成员下标，编译期常量；0 取 first，1 取 second。 |
-| `T1` | pair 第一成员（first）的类型。 |
-| `T2` | pair 第二成员（second）的类型。 |
+| `Index` | 目标成员下标，编译期常量；0取first，1取second。 |
+| `T1` | pair第一成员（first）的类型。 |
+| `T2` | pair第二成员（second）的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待按下标访问的只读 pair 对象；Index 为 0 取 first、为 1 取 second。 |
+| `value` | 输入 | 待按下标访问的只读pair对象；Index为0取first、为1取second。 |
 
-### 原型 23 的参数
+### 原型23的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标成员下标，编译期常量；0 取 first，1 取 second。 |
-| `T1` | pair 第一成员（first）的类型。 |
-| `T2` | pair 第二成员（second）的类型。 |
+| `Index` | 目标成员下标，编译期常量；0取first，1取second。 |
+| `T1` | pair第一成员（first）的类型。 |
+| `T2` | pair第二成员（second）的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待按下标访问的 pair 对象；Index 为 0 取 first、为 1 取 second，返回右值引用。 |
+| `value` | 输入/输出 | 待按下标访问的pair对象；Index为0取first、为1取second，返回右值引用。 |
 
-### 原型 24 的参数
+### 原型24的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标成员下标，编译期常量；0 取 first，1 取 second。 |
-| `T1` | pair 第一成员（first）的类型。 |
-| `T2` | pair 第二成员（second）的类型。 |
+| `Index` | 目标成员下标，编译期常量；0取first，1取second。 |
+| `T1` | pair第一成员（first）的类型。 |
+| `T2` | pair第二成员（second）的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待按下标访问的 pair 对象；Index 为 0 取 first、为 1 取 second。 |
+| `value` | 输入/输出 | 待按下标访问的pair对象；Index为0取first、为1取second。 |
 
-### 原型 25 的参数
+### 原型25的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标元素下标，编译期常量；须满足 Index < Size。 |
+| `Index` | 目标元素下标，编译期常量；须满足Index < Size。 |
 | `T` | 数组元素类型。 |
 | `Size` | 数组长度，编译期常量。 |
 
@@ -638,15 +694,15 @@ template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr const T& as
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待按下标访问的数组对象；返回第 Index 个元素的右值引用，可被移动。 |
+| `value` | 输入/输出 | 待按下标访问的数组对象；返回第Index个元素的右值引用，可被移动。 |
 
-### 原型 26 的参数
+### 原型26的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标元素下标，编译期常量；须满足 Index < Size。 |
+| `Index` | 目标元素下标，编译期常量；须满足Index < Size。 |
 | `T` | 数组元素类型。 |
 | `Size` | 数组长度，编译期常量。 |
 
@@ -654,15 +710,15 @@ template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr const T& as
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 待按下标访问的数组对象；返回第 Index 个元素的引用。 |
+| `value` | 输入/输出 | 待按下标访问的数组对象；返回第Index个元素的引用。 |
 
-### 原型 27 的参数
+### 原型27的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标元素下标，编译期常量；须满足 Index < Size。 |
+| `Index` | 目标元素下标，编译期常量；须满足Index < Size。 |
 | `T` | 数组元素类型。 |
 | `Size` | 数组长度，编译期常量。 |
 
@@ -670,15 +726,15 @@ template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr const T& as
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待按下标访问的只读数组对象；返回第 Index 个元素的常量右值引用。 |
+| `value` | 输入 | 待按下标访问的只读数组对象；返回第Index个元素的常量右值引用。 |
 
-### 原型 28 的参数
+### 原型28的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 目标元素下标，编译期常量；须满足 Index < Size。 |
+| `Index` | 目标元素下标，编译期常量；须满足Index < Size。 |
 | `T` | 数组元素类型。 |
 | `Size` | 数组长度，编译期常量。 |
 
@@ -686,52 +742,52 @@ template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr const T& as
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待按下标访问的只读数组对象；返回第 Index 个元素的常量引用。 |
+| `value` | 输入 | 待按下标访问的只读数组对象；返回第Index个元素的常量引用。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `T1 &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 2 | `T1 &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 3 | `const T1 &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 4 | `const T1 &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 5 | `T1 &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 6 | `T1 &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 7 | `T1 &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 8 | `T1 &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 9 | `const T1 &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 10 | `const T1 &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 11 | `const T1 &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 12 | `const T1 &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 13 | `T &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 14 | `T &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 15 | `const T &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 16 | `const T &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 17 | `const tuple_element_t<Index, tuple<T...>> &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 18 | `const tuple_element_t<Index, tuple<T...>> &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 19 | `tuple_element_t<Index, tuple<T...>> &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 20 | `tuple_element_t<Index, tuple<T...>> &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 21 | `const tuple_element_t<Index, pair<T1, T2>> &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 22 | `const tuple_element_t<Index, pair<T1, T2>> &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 23 | `tuple_element_t<Index, pair<T1, T2>> &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 24 | `tuple_element_t<Index, pair<T1, T2>> &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 25 | `T &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 26 | `T &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 27 | `const T &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型 28 | `const T &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型1 | `T1 &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型2 | `T1 &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型3 | `const T1 &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型4 | `const T1 &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型5 | `T1 &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型6 | `T1 &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型7 | `T1 &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型8 | `T1 &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型9 | `const T1 &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型10 | `const T1 &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型11 | `const T1 &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型12 | `const T1 &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型13 | `T &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型14 | `T &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型15 | `const T &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型16 | `const T &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型17 | `const tuple_element_t<Index, tuple<T...>> &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型18 | `const tuple_element_t<Index, tuple<T...>> &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型19 | `tuple_element_t<Index, tuple<T...>> &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型20 | `tuple_element_t<Index, tuple<T...>> &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型21 | `const tuple_element_t<Index, pair<T1, T2>> &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型22 | `const tuple_element_t<Index, pair<T1, T2>> &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型23 | `tuple_element_t<Index, pair<T1, T2>> &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型24 | `tuple_element_t<Index, pair<T1, T2>> &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型25 | `T &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型26 | `T &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型27 | `const T &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型28 | `const T &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
 
 ## 约束说明
 
-- 索引必须落在对象元素范围内
-- 按类型访问时该类型必须唯一
-- 返回引用不延长原对象生命周期
-- 各对象类型需包含页面所列的对应公共头
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
-- pair 操作不抛出异常
-- 关系运算符均为显式提供
-- 支持包括零在内的所有 N
-- 成员函数和自由函数均不抛出异常
+- 索引必须落在对象元素范围内。
+- 按类型访问时该类型必须唯一。
+- 返回引用不延长原对象生命周期。
+- 各对象类型需包含页面所列的对应公共头。
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
+- 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 支持包括零在内的所有N。
+- 成员函数和自由函数均不抛出异常。
 
 ## 调用示例
 
@@ -746,3 +802,7 @@ decltype(auto) example()
     return asc::std::get<0>(values);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_array.md)

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/deque>`。
 
-`asc::std::deque::deque` 按本页所列构造形态初始化 `deque` 对象。
+`asc::std::deque::deque`按本页所列构造形态初始化`deque`对象。
 
 标准语义参考：[cppreference `deque`](https://en.cppreference.com/w/cpp/header/deque)。
 
@@ -46,41 +46,38 @@ deque(const Allocator& allocator) noexcept;
 | --- | --- | --- |
 | `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- deque<T,A>显式allocator构造
-- 有限块映射内的push/emplace/pop_front/back
-- empty/size/front/back/operator[]/随机访问迭代核心
-- 新端块分配时已有元素引用稳定
-- clear/析构
-- 仅容量充足和不抛出异常域
+- deque<T,A>显式allocator构造。
+- 有限块映射内的push/emplace/pop_front/back。
+- empty/size/front/back/`operator[]`/随机访问迭代核心。
+- 新端块分配时已有元素引用稳定。
+- clear/析构。
+- 仅容量充足和不抛出异常域。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
+#include <asc/memory>
 #include <asc/std/deque>
-#include <functional>
-#include <memory>
-#include <string>
-#include <utility>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void example()
+bool example()
 {
-    example_allocator<int> allocator{};
-    asc::std::deque<int, example_allocator<int>> values(allocator);
-    (void)values.empty();
+    alignas(64) unsigned char storage[16384] = {};
+    asc::monotonic_arena arena(storage, sizeof(storage));
+    asc::std::deque<int, asc::arena_allocator<int>> values(asc::arena_allocator<int>{arena});
+    values.push_back(1);
+    values.push_back(3);
+    return values.size() == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_deque.md)

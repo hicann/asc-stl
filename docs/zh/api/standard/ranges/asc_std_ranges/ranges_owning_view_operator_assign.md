@@ -1,4 +1,4 @@
-# asc::std::ranges::owning_view::operator=
+# asc::std::ranges::owning_view::`operator=`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::owning_view::operator=` 按所选赋值重载更新对象，并返回规定的结果。
+`asc::std::ranges::owning_view::operator=`按所选赋值重载更新对象，并返回规定的结果。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
+所属类型：[`asc::std::ranges::owning_view`](ranges_owning_view.md)。
+
 ```cpp
-owning_view<Rp>& asc::std::ranges::owning_view::operator=(owning_view<Rp>&& other);
+// asc::std::ranges::owning_view 类内的声明节选；模板形参和其他成员由所属类提供。
+owning_view<Rp>& operator=(owning_view<Rp>&& other);
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ owning_view<Rp>& asc::std::ranges::owning_view::operator=(owning_view<Rp>&& othe
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
 ## 返回值说明
 
@@ -54,12 +57,12 @@ owning_view<Rp>& asc::std::ranges::owning_view::operator=(owning_view<Rp>&& othe
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- owning_view仅拥有调用方传入的范围对象，不产生额外分配。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
+以下Host片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
 
 ```cpp
 #include <asc/std/ranges>
@@ -71,3 +74,8 @@ void example()
     target = static_cast<view_type&&>(source);
 }
 ```
+
+## 关联API
+
+- [`asc::std::ranges::owning_view`](ranges_owning_view.md)
+- [本头文件的接口列表](asc_std_ranges.md)

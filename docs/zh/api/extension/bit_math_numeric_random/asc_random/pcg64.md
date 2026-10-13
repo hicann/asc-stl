@@ -28,28 +28,38 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::pcg64` 使用产品默认乘数和增量参数的 pcg64_engine 别名。
+`asc::pcg64`使用产品默认乘数和增量参数的pcg64_engine别名。
 
 ## 声明
 
 ```cpp
-using asc::pcg64 = asc::pcg64_engine<2549297995355413924ULL, 4865540595714422341ULL, 6364136223846793005ULL, 1442695040888963407ULL>
+namespace asc {
+using pcg64 = pcg64_engine<2549297995355413924ULL, 4865540595714422341ULL, 6364136223846793005ULL, 1442695040888963407ULL>;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/random>
+#include <asc/std/limits>
 
-void use_type(const asc::pcg64& value)
+bool example()
 {
-    (void)value;
+    asc::pcg64 engine(7);
+    const auto first = engine();
+    engine.seed(7);
+    return engine() == first;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_random.md)

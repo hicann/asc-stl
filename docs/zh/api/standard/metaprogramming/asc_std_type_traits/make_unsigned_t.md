@@ -28,30 +28,36 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::make_unsigned_t` 产生保持宽度规则并调整整数符号性的类型，以类型别名形式提供结果。
+`asc::std::make_unsigned_t`产生保持宽度规则并调整整数符号性的类型，以类型别名形式提供结果。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
+以下用公开特征类表示本别名的等价类型，不依赖内部实现辅助名字。
+
 ```cpp
-template<class T> using asc::std::make_unsigned_t = Copycvreft<T, typename Makeunsignedimpl<remove_cv_t<T>>::type>
+namespace asc::std {
+template<class T>
+using make_unsigned_t = typename make_unsigned<T>::type;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v 辅助形式
+- 提供特征类以及标准的 _t、_v辅助形式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用独立的预期类型或值检查接口结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
-{
-    using selected = asc::std::make_unsigned_t<int>;
-    static_assert(asc::std::is_same_v<selected, selected>);
-}
+using result_type = asc::std::make_unsigned_t<int>;
+static_assert(asc::std::is_same_v<result_type, unsigned int>);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_type_traits.md)

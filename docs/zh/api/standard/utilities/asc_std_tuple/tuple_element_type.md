@@ -28,60 +28,70 @@
 
 头文件路径为：`<asc/std/tuple>`、`<asc/std/utility>`。
 
-`tuple_element<Index, T>::type` 标识受支持类 tuple 对象中指定索引处的元素类型。
+`tuple_element<Index, T>::type`标识受支持类tuple对象中指定索引处的元素类型。
 
 标准语义参考：[cppreference `tuple`](https://en.cppreference.com/w/cpp/header/tuple)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-using asc::std::tuple_element::type = T
+// asc::std::tuple_element 类内的声明节选；模板形参和其他成员由所属类提供。
+using type = T;
 ```
 
 此原型对应头文件：`<asc/std/tuple>`、`<asc/std/utility>`。
 
-### 原型 2
+### 原型2
 
 ```cpp
-using asc::std::tuple_element::type = const tuple_element_t<Index, T>
+// asc::std::tuple_element 类内的声明节选；模板形参和其他成员由所属类提供。
+using type = const tuple_element_t<Index, T>;
 ```
 
 此原型对应头文件：`<asc/std/tuple>`、`<asc/std/utility>`。
 
-### 原型 3
+### 原型3
 
 ```cpp
-using asc::std::tuple_element::type = const volatile tuple_element_t<Index, T>
+// asc::std::tuple_element 类内的声明节选；模板形参和其他成员由所属类提供。
+using type = const volatile tuple_element_t<Index, T>;
 ```
 
 此原型对应头文件：`<asc/std/tuple>`、`<asc/std/utility>`。
 
-### 原型 4
+### 原型4
 
 ```cpp
-using asc::std::tuple_element::type = volatile tuple_element_t<Index, T>
+// asc::std::tuple_element 类内的声明节选；模板形参和其他成员由所属类提供。
+using type = volatile tuple_element_t<Index, T>;
 ```
 
 此原型对应头文件：`<asc/std/tuple>`、`<asc/std/utility>`。
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
-- pair 操作不抛出异常
-- 关系运算符均为显式提供
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
+- 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下片段选用具体模板实参读取嵌套类型。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/tuple>
+#include <asc/std/type_traits>
 
-void use_type()
+bool example()
 {
-    using selected = typename asc::std::tuple_element<0, asc::std::tuple<int>>::type;
-    (void)sizeof(selected);
+    using Tuple = asc::std::tuple<int, float>;
+    static_assert(asc::std::is_same_v<asc::std::tuple_element<1, Tuple>::type, float>);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_tuple.md)

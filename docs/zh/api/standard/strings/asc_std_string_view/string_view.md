@@ -28,30 +28,37 @@
 
 头文件路径为：`<asc/std/string_view>`。
 
-`asc::std::string_view` 提供相应字符类型的非拥有字符串视图别名。
+`asc::std::string_view`提供相应字符类型的非拥有字符串视图别名。
 
 标准语义参考：[cppreference `string_view`](https://en.cppreference.com/w/cpp/header/string_view)。
 
 ## 声明
 
 ```cpp
-using asc::std::string_view = basic_string_view<char>
+namespace asc::std {
+using string_view = basic_string_view<char>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供构造、迭代和除 at 外的访问接口，以及 remove_prefix、remove_suffix、swap、data、size、starts_with、ends_with 和非抛出的比较/查找接口
-- AI Core SIMD 编程 仅支持 local 或 generic 地址空间的普通字符指针
+- 提供构造、迭代和除at外的访问接口，以及remove_prefix、remove_suffix、swap、data、size、starts_with、ends_with和非抛出的比较/查找接口。
+- AI Core SIMD编程 仅支持local或generic地址空间的普通字符指针。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/string_view>
 
-void use_type(const asc::std::string_view& value)
+bool example()
 {
-    (void)value;
+    asc::std::string_view text("abc");
+    return text.size() == 3 && text[1] == 'b';
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_string_view.md)

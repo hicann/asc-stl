@@ -28,19 +28,25 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::iter_move` 按迭代器定制规则取得可移动的引用或值。
+`asc::std::iter_move`按迭代器定制规则取得可移动的引用或值。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
+`asc::std::iter_move`是可调用对象，其具体对象类型属于实现细节。调用形式如下；`iterator`为可解引用的迭代器表达式：
+
 ```cpp
-inline constexpr const Itermove::Fn asc::std::iter_move
+namespace asc::std {
+iter_move(iterator);
+} // namespace asc::std
 ```
+
+优先调用可通过参数相关查找找到的定制`iter_move`；否则，解引用产生左值时返回其移动引用，其他情况下返回解引用结果。
 
 ## 约束说明
 
-- 支持非 I/O 范围、数组和用户容器
+- 支持非I/O范围、数组和用户容器。
 
 ## 调用示例
 
@@ -51,3 +57,7 @@ inline constexpr const Itermove::Fn asc::std::iter_move
 
 auto value = asc::std::iter_move;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

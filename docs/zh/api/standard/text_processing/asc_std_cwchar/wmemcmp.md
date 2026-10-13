@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::wmemcmp` 按字节比较两个内存区。
+`asc::std::wmemcmp`按字节比较两个内存区。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 
 ## 函数原型
 
 ```cpp
-int asc::std::wmemcmp(const wchar_t* left, const wchar_t* right, size_t count) noexcept;
+namespace asc::std {
+int wmemcmp(const wchar_t* left, const wchar_t* right, size_t count) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,8 +46,8 @@ int asc::std::wmemcmp(const wchar_t* left, const wchar_t* right, size_t count) n
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与比较的左侧宽字符数组首地址；至少可读取 count 个宽字符。 |
-| `right` | 输入 | 参与比较的右侧宽字符数组首地址；至少可读取 count 个宽字符。 |
+| `left` | 输入 | 参与比较的左侧宽字符数组首地址；至少可读取count个宽字符。 |
+| `right` | 输入 | 参与比较的右侧宽字符数组首地址；至少可读取count个宽字符。 |
 | `count` | 输入 | 参与逐元素比较的宽字符数量。 |
 
 ## 返回值说明
@@ -56,10 +58,10 @@ int asc::std::wmemcmp(const wchar_t* left, const wchar_t* right, size_t count) n
 
 ## 约束说明
 
-- 18个标准函数名及23个可调用签名：wmemcpy/wmemmove/wmemchr/wmemcmp/wmemset、wcscpy/wcsncpy/wcscat/wcsncat、wcschr/wcsrchr、wcscmp/wcsncmp、wcsspn/wcscspn/wcspbrk/wcsstr/wcslen
-- 5个查找函数包含const与可变指针重载
-- Host委托系统，Device纯计算实现
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain-pointer域
+- 18个标准函数名及23个可调用签名：wmemcpy/wmemmove/wmemchr/wmemcmp/wmemset、wcscpy/wcsncpy/wcscat/wcsncat、wcschr/wcsrchr、wcscmp/wcsncmp、wcsspn/wcscspn/wcspbrk/wcsstr/wcslen。
+- 5个查找函数包含const与可变指针重载。
+- Host委托系统，Device纯计算实现。
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain-pointer域。
 
 ## 调用示例
 
@@ -74,3 +76,7 @@ decltype(auto) example(const wchar_t * left, const wchar_t * right, asc::std::si
     return asc::std::wmemcmp(left, right, count);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cwchar.md)

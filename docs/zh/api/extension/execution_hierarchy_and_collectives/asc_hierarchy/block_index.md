@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::block_index` 返回当前 Block 的线性索引。
+`asc::block_index`返回当前Block的线性索引。
 
 ## 函数原型
 
 ```cpp
-unsigned long long asc::block_index() noexcept;
+namespace asc {
+unsigned long long block_index() noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -48,8 +50,8 @@ unsigned long long asc::block_index() noexcept;
 
 ## 约束说明
 
-- 可在 AI Core SIMD 编程、AI Core SIMT 编程中使用
-- 所选重载的类型、地址空间、取值范围和对象生命周期必须满足其公开声明
+- 可在AI Core SIMD编程、AI Core SIMT编程中使用。
+- 所选重载的类型、地址空间、取值范围和对象生命周期必须满足其公开声明。
 
 ## 调用示例
 
@@ -63,3 +65,7 @@ __aicore__ decltype(auto) example()
     return asc::block_index();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_hierarchy.md)

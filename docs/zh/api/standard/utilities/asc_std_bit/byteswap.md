@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/bit>`。
 
-`asc::std::byteswap` 按字节逆序重排整数的对象表示。
+`asc::std::byteswap`按字节逆序重排整数的对象表示。
 
 标准语义参考：[cppreference `bit`](https://en.cppreference.com/w/cpp/header/bit)。
 
 ## 函数原型
 
 ```cpp
-template<class Integer> [[nodiscard]] constexpr Integer asc::std::byteswap(Integer value) noexcept;
+namespace asc::std {
+template<class Integer> [[nodiscard]] constexpr Integer byteswap(Integer value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -60,8 +62,8 @@ template<class Integer> [[nodiscard]] constexpr Integer asc::std::byteswap(Integ
 
 ## 约束说明
 
-- 遵循标准无符号/整数约束
-- byteswap 不支持 bool，并支持标准整数位宽
+- 遵循标准无符号/整数约束。
+- byteswap不支持bool，并支持标准整数位宽。
 
 ## 调用示例
 
@@ -75,3 +77,7 @@ decltype(auto) example()
     return asc::std::byteswap(0x1234u);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_bit.md)

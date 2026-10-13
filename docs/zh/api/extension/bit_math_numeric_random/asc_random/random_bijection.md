@@ -28,29 +28,43 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::random_bijection` 在有限索引域上构造由随机种子确定的一一映射。
+`asc::random_bijection`在有限索引域上构造由随机种子确定的一一映射。
 
 ## 声明
 
 ```cpp
-template<class Index = asc::std::uint64_t, class Bijection = asc::detail::feistel_bijection<Index>> class asc::random_bijection
+namespace asc {
+template<class Index = asc::std::uint64_t, class Bijection = asc::detail::feistel_bijection<Index>> class random_bijection;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 声明中的`asc::detail`类型是当前头文件实际使用的实现类型，未另行提供同名公共别名；请使用本页的公开构造入口，不把它改写成不存在的公共类型名。
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/random>
 
-void use_type()
+bool example()
 {
-    using selected = asc::random_bijection<unsigned long long>;
-    (void)sizeof(selected);
+    asc::pcg64 generator(7);
+    asc::random_bijection<unsigned long long> permutation(4, generator);
+    bool seen[4] = {};
+    for (unsigned long long i = 0; i < 4; ++i) {
+        const auto value = permutation(i);
+        if (value >= 4 || seen[value]) return false;
+        seen[value] = true;
+    }
+    return seen[0] && seen[1] && seen[2] && seen[3];
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_random.md)

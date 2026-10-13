@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/compare>`。
 
-`asc::std::compare_partial_order_fallback` 是可直接调用的比较函数对象；优先使用可用的三路比较，否则根据 `==` 和 `<` 合成 `asc::std::partial_ordering`。
+`asc::std::compare_partial_order_fallback`是可直接调用的比较函数对象；优先使用可用的三路比较，否则根据`==`和`<`合成`asc::std::partial_ordering`。
 
 标准语义参考：[cppreference `compare`](https://en.cppreference.com/w/cpp/header/compare)。
 
@@ -37,7 +37,9 @@
 该名称是公开的常量函数对象；对象的实现类型不构成接口承诺。以下为调用形式，省略的可选参数以各原型约束为准。
 
 ```cpp
-asc::std::compare_partial_order_fallback(left, right)
+namespace asc::std {
+compare_partial_order_fallback(left, right);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -49,7 +51,7 @@ asc::std::compare_partial_order_fallback(left, right)
 
 ## 返回值说明
 
-返回 `asc::std::partial_ordering` 比较类别值；偏序比较可返回无序。
+返回`asc::std::partial_ordering`比较类别值；偏序比较可返回无序。
 
 | 调用形式 | 返回类型 |
 | --- | --- |
@@ -68,3 +70,7 @@ asc::std::compare_partial_order_fallback(left, right)
 
 inline constexpr auto example = asc::std::compare_partial_order_fallback(1, 2);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_compare.md)

@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cstddef>`。
 
-`asc::std::operator|=` 对 std::byte 值执行对应的按位或移位操作。
+`asc::std::operator|=`对std::byte值执行对应的按位或移位操作。
 
 标准语义参考：[cppreference `cstddef`](https://en.cppreference.com/w/cpp/header/cstddef)。
 
 ## 函数原型
 
 ```cpp
-constexpr byte& asc::std::operator|=(byte& lhs, byte rhs) noexcept;
+namespace asc::std {
+constexpr byte& operator|=(byte& lhs, byte rhs) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,8 +46,8 @@ constexpr byte& asc::std::operator|=(byte& lhs, byte rhs) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入/输出 | 被按位或更新的 byte 对象；更新为与 rhs 按位或的结果，返回其引用。 |
-| `rhs` | 输入 | 参与按位或的右 byte 操作数。 |
+| `lhs` | 输入/输出 | 被按位或更新的byte对象；更新为与rhs按位或的结果，返回其引用。 |
+| `rhs` | 输入 | 参与按位或的右byte操作数。 |
 
 ## 返回值说明
 
@@ -55,7 +57,7 @@ constexpr byte& asc::std::operator|=(byte& lhs, byte rhs) noexcept;
 
 ## 约束说明
 
-- 提供标准声明
+- 提供标准声明。
 
 ## 调用示例
 
@@ -69,3 +71,7 @@ decltype(auto) example(asc::std::byte & lhs, asc::std::byte rhs)
     return asc::std::operator|=(lhs, rhs);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstddef.md)

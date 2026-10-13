@@ -28,29 +28,36 @@
 
 头文件路径为：`<asc/execution.output_ordering.h>`。
 
-`asc::output_ordering` 指定并行算法对输出元素顺序的要求。
+`asc::output_ordering`指定并行算法对输出元素顺序的要求。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 声明
 
 ```cpp
-enum class asc::output_ordering
+namespace asc {
+enum class output_ordering;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 仅提供三个取值
+- 仅提供三个取值。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
-#include <asc/execution.output_ordering.h>
+#include <asc/execution.require.h>
 
-void use_type(asc::output_ordering value)
+bool example()
 {
-    (void)value;
+    auto requirements = asc::require(asc::output_ordering::unsorted);
+    return requirements.output_ordering_value() == asc::output_ordering::unsorted;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_execution_output_ordering_h.md)

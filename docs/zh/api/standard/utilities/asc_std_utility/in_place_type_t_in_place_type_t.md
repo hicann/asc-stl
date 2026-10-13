@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::in_place_type_t::in_place_type_t` 按本页所列构造形态初始化 `in_place_type_t` 对象。
+`asc::std::in_place_type_t::in_place_type_t`按本页所列构造形态初始化`in_place_type_t`对象。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
@@ -42,20 +42,30 @@ in_place_type_t();
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 提供完整的标准形式
+- 提供完整的标准形式。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/utility>
+#include <asc/std/variant>
 
-void example()
+bool example()
 {
     asc::std::in_place_type_t<int> tag{};
-    (void)tag;
+    asc::std::variant<int, float> value(tag, 7);
+    return asc::std::get<0>(value) == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

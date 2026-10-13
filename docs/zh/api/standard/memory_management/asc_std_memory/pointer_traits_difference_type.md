@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::pointer_traits::difference_type` 标识迭代器距离的有符号类型。
+`asc::std::pointer_traits::difference_type`标识迭代器距离的有符号类型。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 声明
 
+所属类型：[`asc::std::pointer_traits`](pointer_traits.md)。
+
 ```cpp
-using asc::std::pointer_traits::difference_type = ptrdiff_t
+// asc::std::pointer_traits 类内的声明节选；模板形参和其他成员由所属类提供。
+using difference_type = ptrdiff_t;
 ```
 
 ## 约束说明
 
-- 支持原始指针和用户自定义 fancy pointer，接口自身不分配内存
+- 支持原始指针和用户自定义fancy pointer，接口自身不分配内存。
 
 ## 调用示例
 
@@ -56,6 +59,11 @@ void use_type()
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
 完整示例源码：[pointer_alignment.cpp](../../../../examples/pointer_alignment.cpp)。
+
+## 关联API
+
+- [`asc::std::pointer_traits`](pointer_traits.md)
+- [本头文件的接口列表](asc_std_memory.md)

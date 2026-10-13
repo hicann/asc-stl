@@ -28,42 +28,47 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::pointer_traits` 统一访问指针类对象的元素类型与地址操作。
+`asc::std::pointer_traits`统一访问指针类对象的元素类型与地址操作。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class Ptr, class> struct asc::std::pointer_traits
+namespace asc::std {
+template<class Ptr, class> struct pointer_traits;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> struct asc::std::pointer_traits
+namespace asc::std {
+template<class T> struct pointer_traits;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 支持原始指针和用户自定义 fancy pointer，接口自身不分配内存
+- 支持原始指针和用户自定义fancy pointer，接口自身不分配内存。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/memory>
 
-template <class Ptr>
-void use_type(const asc::std::pointer_traits<Ptr>& value)
+bool example()
 {
-    (void)value;
+    int value = 7;
+    int* pointer = asc::std::pointer_traits<int*>::pointer_to(value);
+    return pointer == &value && *pointer == 7;
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+## 关联API
 
-完整示例源码：[pointer_alignment.cpp](../../../../examples/pointer_alignment.cpp)。
+- [本头文件的接口列表](asc_std_memory.md)

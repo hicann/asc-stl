@@ -45,6 +45,18 @@ using __unwrap_reference_t = typename __unwrap_reference<T>::type;
 template <class T>
 using __unwrap_ref_decay_t = __unwrap_reference_t<decay_t<T>>;
 
+template <class T>
+struct unwrap_reference : __unwrap_reference<T> {};
+
+template <class T>
+using unwrap_reference_t = typename unwrap_reference<T>::type;
+
+template <class T>
+struct unwrap_ref_decay : unwrap_reference<decay_t<T>> {};
+
+template <class T>
+using unwrap_ref_decay_t = typename unwrap_ref_decay<T>::type;
+
 CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STDDETAIL__FUNCTIONAL_UNWRAP_REF_H

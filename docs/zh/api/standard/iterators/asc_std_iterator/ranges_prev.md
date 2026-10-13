@@ -28,31 +28,38 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::ranges::prev` 返回后退指定步数的迭代器副本，constexpr 且负步数依赖随机访问能力。
+`asc::std::ranges::prev`返回后退指定步数的迭代器副本，constexpr且负步数依赖随机访问能力。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-constexpr asc::std::ranges::prev_fn asc::std::ranges::prev
+namespace asc::std::ranges {
+constexpr prev_fn prev;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 步数为非负或迭代器支持随机访问
+- 该范围迭代器操作要求C++20，且仅在Host可调用。
+
+- 步数为非负或迭代器支持随机访问。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
-#include <asc/std/ranges>
 
-void example()
+bool example()
 {
-    static int data[4] = {1, 2, 3, 4};
-    (void)asc::std::ranges::prev(data + 2);
+    int values[] = {1, 2, 3};
+    return *asc::std::ranges::prev(values + 2) == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

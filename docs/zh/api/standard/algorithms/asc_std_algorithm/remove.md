@@ -28,56 +28,60 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::remove` 把不等于目标值的元素稳定移到范围前部并返回新逻辑末尾；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::remove`把不等于目标值的元素稳定移到范围前部并返回新逻辑末尾；无策略形式在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class Forward, class T> Forward asc::std::remove(asc::device_policy policy, Forward first, Forward last, const T& value);
+namespace asc::std {
+template<class Forward, class T> Forward remove(asc::device_policy policy, Forward first, Forward last, const T& value);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host。
+该原型适用于`C++17+`，可用位置为Host。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class ForwardIterator, class T> [[nodiscard]] constexpr ForwardIterator asc::std::remove(ForwardIterator first, ForwardIterator last, const T& value_);
+namespace asc::std {
+template<class ForwardIterator, class T> [[nodiscard]] constexpr ForwardIterator remove(ForwardIterator first, ForwardIterator last, const T& value_);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `Forward` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `T` | 待移除值的类型，须可与范围内元素按 operator== 比较。 |
+| `T` | 待移除值的类型，须可与范围内元素按`operator==`比较。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
+| `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `value` | 输入 | 待移除的值，与元素按相等语义（operator==）比较；相等的元素不保留在结果逻辑范围中。 |
+| `value` | 输入 | 待移除的值，与元素按相等语义（`operator==`）比较；相等的元素不保留在结果逻辑范围中。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `ForwardIterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `T` | 待移除值的类型，须可与范围内元素按 operator== 比较。 |
+| `T` | 待移除值的类型，须可与范围内元素按`operator==`比较。 |
 
 **函数参数**
 
@@ -85,28 +89,28 @@ template<class ForwardIterator, class T> [[nodiscard]] constexpr ForwardIterator
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `value_` | 输入 | 待移除的值，与元素按相等语义（operator==）比较；相等的元素不保留在结果逻辑范围中。 |
+| `value_` | 输入 | 待移除的值，与元素按相等语义（`operator==`）比较；相等的元素不保留在结果逻辑范围中。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `Forward` | 返回保留元素之后的新逻辑末尾；容器大小不变。 |
-| 原型 2 | `ForwardIterator` | 返回保留元素之后的新逻辑末尾；容器大小不变。 |
+| 原型1 | `Forward` | 返回保留元素之后的新逻辑末尾；容器大小不变。 |
+| 原型2 | `ForwardIterator` | 返回保留元素之后的新逻辑末尾；容器大小不变。 |
 
 ## 约束说明
 
-- 使用 C++17
-- 该 Host 同步适配接口调用对应的 asc::parallel 前端
-- policy 必须包含有效 Stream 和足够的调用方临时存储
-- 接口只等待该 Stream
-- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用 asc::std::terminate
-- 提供顺序执行且不进行动态内存分配的重载
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序
+- 使用C++17。
+- 该Host同步适配接口调用对应的asc::parallel前端。
+- policy必须包含有效Stream和足够的调用方临时存储。
+- 接口只等待该Stream。
+- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用asc::std::terminate。
+- 提供顺序执行且不进行动态内存分配的重载。
+- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下 Host 片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
 
 ```cpp
 #include <asc/std/algorithm>
@@ -117,3 +121,7 @@ decltype(auto) example()
     return asc::std::remove(values, values + 8, 3);
 }
 ```
+
+## 关联API
+
+- [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。

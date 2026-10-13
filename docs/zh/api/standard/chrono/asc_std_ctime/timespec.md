@@ -28,31 +28,38 @@
 
 头文件路径为：`<asc/std/ctime>`。
 
-`asc::std::timespec` 以秒和纳秒字段保存时间值。
+`asc::std::timespec`以秒和纳秒字段保存时间值。
 
 标准语义参考：[cppreference `ctime`](https://en.cppreference.com/w/cpp/header/ctime)。
 
 ## 声明
 
 ```cpp
-struct asc::std::timespec
+namespace asc::std {
+struct timespec;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- Host 使用标准时钟
-- AI Core SIMD 编程中使用 get_sys_cnt，AI Core SIMT 编程中使用 clock64
-- Device 计数器频率为页面声明的 1 GHz，difftime 仅进行值计算
+- Host使用标准时钟。
+- AI Core SIMD编程中使用get_sys_cnt，AI Core SIMT编程中使用clock64。
+- Device计数器频率为页面声明的1 GHz，difftime仅进行值计算。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ctime>
 
-void use_type(const asc::std::timespec& value)
+bool example()
 {
-    (void)value;
+    asc::std::timespec time{2, 500000000};
+    return time.tv_sec == 2 && time.tv_nsec == 500000000;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ctime.md)

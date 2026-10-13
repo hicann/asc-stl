@@ -28,30 +28,38 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::memory_order` 列出原子操作可用的内存顺序。
+`asc::std::memory_order`列出原子操作可用的内存顺序。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 声明
 
 ```cpp
-enum asc::std::memory_order
+namespace asc::std {
+enum memory_order;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供全部标准枚举值
-- Device 侧 consume 内存序加强为 acquire
+- 提供全部标准枚举值。
+- Device侧consume内存序加强为acquire。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/atomic>
 
-void use_type(asc::std::memory_order value)
+bool example()
 {
-    (void)value;
+    asc::std::atomic<int> cell{0};
+    cell.store(7, asc::std::memory_order_release);
+    return cell.load(asc::std::memory_order_acquire) == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

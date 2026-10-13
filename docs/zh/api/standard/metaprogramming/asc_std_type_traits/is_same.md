@@ -28,23 +28,25 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::is_same` 在编译期判断两个类型相同。
+`asc::std::is_same`在编译期判断两个类型相同。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
 ```cpp
-template<class T, class U> struct asc::std::is_same
+namespace asc::std {
+template<class T, class U> struct is_same;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类和 _v 辅助形式
+- 提供特征类和 _v辅助形式。
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
+以下Host片段用具体类型实参和`static_assert`验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
@@ -59,3 +61,7 @@ void use_trait()
     static_assert(!asc::std::is_same_v<int, long>);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_type_traits.md)

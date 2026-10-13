@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::integer_sequence::size` 返回当前对象包含的元素数量。
+`asc::std::integer_sequence::size`返回当前对象包含的元素数量。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 函数原型
 
+所属类型：[`asc::std::integer_sequence`](integer_sequence.md)。
+
 ```cpp
-constexpr size_t asc::std::integer_sequence::size() noexcept;
+// asc::std::integer_sequence 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr size_t size() noexcept;
 ```
 
 ## 参数说明
@@ -50,17 +53,23 @@ constexpr size_t asc::std::integer_sequence::size() noexcept;
 
 ## 约束说明
 
-- 提供完整的标准形式
+- 提供完整的标准形式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/utility>
 
-void example(asc::std::integer_sequence<int, 1, 2, 3>& object)
+bool example()
 {
-    (void)object.size();
+    static_assert(asc::std::integer_sequence<int, 1, 2, 3>::size() == 3);
+    return true;
 }
 ```
+
+## 关联API
+
+- [`asc::std::integer_sequence`](integer_sequence.md)
+- [本头文件的接口列表](asc_std_utility.md)

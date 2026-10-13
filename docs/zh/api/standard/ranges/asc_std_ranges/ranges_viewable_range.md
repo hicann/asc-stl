@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::viewable_range` 在 C++20 及以上模式约束满足 `viewable_range` 语义的类型或表达式。
+`asc::std::ranges::viewable_range`在C++20及以上模式约束满足`viewable_range`语义的类型或表达式。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
 ```cpp
-template<class T> concept asc::std::ranges::viewable_range
+namespace asc::std::ranges {
+template<class T> concept viewable_range;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 提供完整的 C++20 range concepts 集合
+- 提供完整的C++20 range concepts集合。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class T> concept asc::std::ranges::viewable_range
 
 static_assert(asc::std::ranges::viewable_range<int (&)[4]>);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

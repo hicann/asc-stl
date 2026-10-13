@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::make_transform_iterator` 创建解引用时执行变换的输入迭代器。
+`asc::make_transform_iterator`创建解引用时执行变换的输入迭代器。
 
 ## 函数原型
 
 ```cpp
-template<class Iterator, class Function> constexpr asc::transform_iterator<Function, Iterator> asc::make_transform_iterator(Iterator iterator, Function function);
+namespace asc {
+template<class Iterator, class Function> constexpr asc::transform_iterator<Function, Iterator> make_transform_iterator(Iterator iterator, Function function);
+} // namespace asc
 ```
 
 ## 参数说明
@@ -49,8 +51,8 @@ template<class Iterator, class Function> constexpr asc::transform_iterator<Funct
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `iterator` | 输入 | 被包装的底层迭代器：其解引用结果交给 function 变换。 |
-| `function` | 输入 | 变换对象：解引用与下标结果为 function(*底层迭代器)。 |
+| `iterator` | 输入 | 被包装的底层迭代器：其解引用结果交给function变换。 |
+| `function` | 输入 | 变换对象：解引用与下标结果为function(*底层迭代器)。 |
 
 ## 返回值说明
 
@@ -60,8 +62,8 @@ template<class Iterator, class Function> constexpr asc::transform_iterator<Funct
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
@@ -77,3 +79,7 @@ decltype(auto) example()
     return asc::make_transform_iterator(values, [](int value) { return value + 1; });
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

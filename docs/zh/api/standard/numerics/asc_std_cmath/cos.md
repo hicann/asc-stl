@@ -28,33 +28,37 @@
 
 头文件路径为：`<asc/std/cmath>`、`<asc/std/complex>`。
 
-`asc::std::cos` 计算余弦值；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::cos`计算余弦值；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-float asc::std::cos(float value) noexcept;
+namespace asc::std {
+float cos(float value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/cmath>`。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> complex<T> asc::std::cos(const complex<T>& value) noexcept;
+namespace asc::std {
+template<class T> complex<T> cos(const complex<T>& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/complex>`。
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -62,7 +66,7 @@ template<class T> complex<T> asc::std::cos(const complex<T>& value) noexcept;
 | --- | --- | --- |
 | `value` | 输入 | 待计算余弦的输入值（角度量，单位为弧度）。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -80,14 +84,14 @@ template<class T> complex<T> asc::std::cos(const complex<T>& value) noexcept;
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `float` | 返回余弦值；Device 侧适用范围以本页 float 与执行位置约束为准的计算结果。 |
-| 原型 2 | `complex<T>` | 返回余弦值；Device 侧适用范围以本页 float 与执行位置约束为准的计算结果。 |
+| 原型1 | `float` | 返回余弦值；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+| 原型2 | `complex<T>` | 返回余弦值；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
 
 ## 约束说明
 
-- 提供 float 重载和标准 *f 别名
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 提供float重载和标准 *f别名。
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
@@ -101,3 +105,7 @@ decltype(auto) example(float value)
     return asc::std::cos(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

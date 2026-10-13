@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::nanf` 构造静默 NaN 值；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::nanf`构造静默NaN值；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-float asc::std::nanf(const char* tag) noexcept;
+namespace asc::std {
+float nanf(const char* tag) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,17 +48,17 @@ float asc::std::nanf(const char* tag) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `tag` | 输入 | 生成静默 NaN 所用的负载标记（以空字符结尾的字符串）；其内容映射到返回 NaN 的尾数位，空串表示无特定负载。 |
+| `tag` | 输入 | 生成静默NaN所用的负载标记（以空字符结尾的字符串）；其内容映射到返回NaN的尾数位，空串表示无特定负载。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `float` | 返回静默 NaN 值；Device 侧适用范围以本页 float 与执行位置约束为准。 |
+| `float` | 返回静默NaN值；Device侧适用范围以本页float与执行位置约束为准。 |
 
 ## 约束说明
 
-- 提供 float 函数重载、求值类型别名、比较函数、nanf 和分类宏
+- 提供float函数重载、求值类型别名、比较函数、nanf和分类宏。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example(const char * tag)
     return asc::std::nanf(tag);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

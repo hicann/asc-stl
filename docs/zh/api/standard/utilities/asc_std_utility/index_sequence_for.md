@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::index_sequence_for` 在编译期生成或保存整数索引序列类型。
+`asc::std::index_sequence_for`在编译期生成或保存整数索引序列类型。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 声明
 
 ```cpp
-template<class ...T> using asc::std::index_sequence_for = make_index_sequence<sizeof...(T)>
+namespace asc::std {
+template<class ...T> using index_sequence_for = make_index_sequence<sizeof...(T)>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供完整的标准形式
+- 提供完整的标准形式。
 
 ## 调用示例
 
@@ -54,3 +56,7 @@ void use_type()
     using selected = asc::std::index_sequence_for<int, float>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

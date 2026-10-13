@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::fdimf` 返回两个参数的正差值；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::fdimf`返回两个参数的正差值；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-float asc::std::fdimf(float x, float y) noexcept;
+namespace asc::std {
+float fdimf(float x, float y) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -47,7 +49,7 @@ float asc::std::fdimf(float x, float y) noexcept;
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `x` | 输入 | 正差运算的被减数（无量纲）。 |
-| `y` | 输入 | 正差运算的减数（无量纲）；x 不大于 y 时结果为 +0，任一操作数为 NaN 时结果为 NaN。 |
+| `y` | 输入 | 正差运算的减数（无量纲）；x不大于y时结果为 +0，任一操作数为NaN时结果为NaN。 |
 
 ## 返回值说明
 
@@ -57,7 +59,7 @@ float asc::std::fdimf(float x, float y) noexcept;
 
 ## 约束说明
 
-- 提供 float 重载、标准 *f 别名以及 float lerp 回移接口
+- 提供float重载、标准 *f别名以及float lerp回移接口。
 
 ## 调用示例
 
@@ -71,3 +73,7 @@ decltype(auto) example(float x, float y)
     return asc::std::fdimf(x, y);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

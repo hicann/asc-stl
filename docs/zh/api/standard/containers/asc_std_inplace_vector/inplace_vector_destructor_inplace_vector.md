@@ -28,9 +28,9 @@
 
 头文件路径为：`<asc/std/inplace_vector>`。
 
-`asc::std::inplace_vector::~inplace_vector` 销毁 `inplace_vector` 对象并结束其生命周期。
+`asc::std::inplace_vector::~inplace_vector`销毁`inplace_vector`对象并结束其生命周期。
 
-该接口的可用位置为 Host（完整接口）、Device（非抛出子集）。
+该接口的可用位置为Host（完整接口）、Device（非抛出子集）。
 
 标准语义参考：[cppreference `inplace_vector`](https://en.cppreference.com/w/cpp/header/inplace_vector)。
 
@@ -44,15 +44,19 @@
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 最终C++26标准inplace_vector/erase/erase_if合同：Host交付除P4022R0已删除try_append_range外的完整构造、赋值、迭代、访问、修改、try/unchecked、比较、swap、容量、零容量empty/trivial与constexpr/约束合同
-- Device交付固定容量内联存储的非抛子合同，包括观察/迭代/operator[]/front/back、不抛出异常拷移赋值析构、try/unchecked后插、pop_back/clear、不抛出异常 erase/erase_if/swap、相等与不抛出异常三路比较、完整零容量核心
-- Host 提供完整接口，设备端仅提供不抛出异常的接口
+- 元素保存在固定容量的对象内存中，不进行动态分配。
+- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
+- Host提供完整接口，设备端仅提供不抛出异常的接口。
 
 ## 调用示例
 
-以下片段假定 object 指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
+以下片段假定object指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
 
 ```cpp
 #include <asc/std/inplace_vector>
@@ -64,3 +68,7 @@ void example(example_object* object)
     object->~example_object();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_inplace_vector.md)

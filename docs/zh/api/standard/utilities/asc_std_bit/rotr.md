@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/bit>`。
 
-`asc::std::rotr` 按位宽循环右移无符号值。
+`asc::std::rotr`按位宽循环右移无符号值。
 
 标准语义参考：[cppreference `bit`](https://en.cppreference.com/w/cpp/header/bit)。
 
 ## 函数原型
 
 ```cpp
-template<class T> [[nodiscard]] constexpr T asc::std::rotr(const T value, const int count) noexcept;
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr T rotr(const T value, const int count) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -51,7 +53,7 @@ template<class T> [[nodiscard]] constexpr T asc::std::rotr(const T value, const 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 待循环右移的无符号整数值；移出的低位回填到高位。 |
-| `count` | 输入 | 循环右移的位数；按 T 的位宽取模后生效，可为不小于位宽的值。 |
+| `count` | 输入 | 循环右移的位数；按T的位宽取模后生效，可为不小于位宽的值。 |
 
 ## 返回值说明
 
@@ -61,7 +63,7 @@ template<class T> [[nodiscard]] constexpr T asc::std::rotr(const T value, const 
 
 ## 约束说明
 
-- 遵循标准无符号整数类型约束
+- 遵循标准无符号整数类型约束。
 
 ## 调用示例
 
@@ -75,3 +77,7 @@ decltype(auto) example()
     return asc::std::rotr(4u, 1);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_bit.md)

@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::pointer_traits::pointer_to` 从对象引用构造与当前指针特征相容的指针。
+`asc::std::pointer_traits::pointer_to`从对象引用构造与当前指针特征相容的指针。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
+所属类型：[`asc::std::pointer_traits`](pointer_traits.md)。
+
 ```cpp
-constexpr pointer asc::std::pointer_traits::pointer_to(conditional_t<is_void_v<element_type>, Nat, element_type>& value) noexcept;
+// asc::std::pointer_traits 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr pointer pointer_to(conditional_t<is_void_v<element_type>, Nat, element_type>& value) noexcept;
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ constexpr pointer asc::std::pointer_traits::pointer_to(conditional_t<is_void_v<e
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待以其地址构造 pointer 的对象引用；返回指针指向该对象。 |
+| `value` | 输入 | 待以其地址构造pointer的对象引用；返回指针指向该对象。 |
 
 ## 返回值说明
 
@@ -54,7 +57,7 @@ constexpr pointer asc::std::pointer_traits::pointer_to(conditional_t<is_void_v<e
 
 ## 约束说明
 
-- 支持原始指针和用户自定义 fancy pointer，接口自身不分配内存
+- 支持原始指针和用户自定义fancy pointer，接口自身不分配内存。
 
 ## 调用示例
 
@@ -70,6 +73,11 @@ decltype(auto) example(Object& object, Args&&... args)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
 完整示例源码：[pointer_alignment.cpp](../../../../examples/pointer_alignment.cpp)。
+
+## 关联API
+
+- [`asc::std::pointer_traits`](pointer_traits.md)
+- [本头文件的接口列表](asc_std_memory.md)

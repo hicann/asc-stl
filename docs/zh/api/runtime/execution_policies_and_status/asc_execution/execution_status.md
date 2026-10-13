@@ -28,29 +28,38 @@
 
 头文件路径为：`<asc/execution>`。
 
-`asc::execution_status` 保存 ASC-STL Host 执行接口的通用状态类别，并在后端 Runtime 失败时保留原生状态码。默认构造的对象表示成功。
+`asc::execution_status`保存ASC-STL Host执行接口的通用状态类别，并在后端Runtime失败时保留原生状态码。默认构造的对象表示成功。
 
 ## 声明
 
 ```cpp
-class asc::execution_status
+namespace asc {
+class execution_status;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 仅可在 Host 使用
-- 状态值可平凡复制
-- 成功状态的 code() 为 execution_errc::success，native_code() 为 0，失败状态保留可用于诊断的状态码
+- 仅可在Host使用。
+- 状态值可平凡复制。
+- 成功状态的code()为execution_errc::success，native_code()为0，失败状态保留可用于诊断的状态码。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/execution>
 
-void use_type(const asc::execution_status& value)
+bool example()
 {
-    (void)value;
+    asc::execution_status success;
+    asc::execution_status failure(asc::execution_errc::backend_error, 17);
+    return success.success() && success.code() == asc::execution_errc::success && success.native_code() == 0
+        && !failure.success() && failure.code() == asc::execution_errc::backend_error && failure.native_code() == 17;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_execution.md)

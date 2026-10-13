@@ -28,78 +28,94 @@
 
 头文件路径为：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
 
-`asc::std::tuple_size<T>` 在编译期取得受支持类 tuple 对象包含的元素数量。
+`asc::std::tuple_size<T>`在编译期取得受支持类tuple对象包含的元素数量。
 
 标准语义参考：[cppreference `array`](https://en.cppreference.com/w/cpp/header/array)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class ...T> struct asc::std::tuple_size
+namespace asc::std {
+template<class ...T> struct tuple_size;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T, T ...Indices> struct asc::std::tuple_size
+namespace asc::std {
+template<class T, T ...Indices> struct tuple_size;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class T, class U> struct asc::std::tuple_size
+namespace asc::std {
+template<class T, class U> struct tuple_size;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`。
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class T, size_t N> struct asc::std::tuple_size
+namespace asc::std {
+template<class T, size_t N> struct tuple_size;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`。
 
-### 原型 5
+### 原型5
 
 ```cpp
-template<class T> class asc::std::tuple_size
+namespace asc::std {
+template<class T> class tuple_size;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
 
-### 原型 6
+### 原型6
 
 ```cpp
-template<class T> struct asc::std::tuple_size
+namespace asc::std {
+template<class T> struct tuple_size;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
 
 ## 约束说明
 
-- 支持包括零在内的所有 N
-- 成员函数和自由函数均不抛出异常
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
-- pair 操作不抛出异常
-- 关系运算符均为显式提供
+- 支持包括零在内的所有N。
+- 成员函数和自由函数均不抛出异常。
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
+- 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/array>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::tuple_size<asc::std::array<int, 2>>;
-    (void)sizeof(selected);
+    static_assert(asc::std::tuple_size<asc::std::array<int, 3>>::value == 3);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_array.md)

@@ -1,4 +1,4 @@
-# 头文件 asc/execution.policy.h
+# 头文件asc/execution.policy.h
 
 提供设备端执行策略，用于关联Stream、临时工作空间和执行要求
 
@@ -8,7 +8,7 @@
 #include <asc/execution.policy.h>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |

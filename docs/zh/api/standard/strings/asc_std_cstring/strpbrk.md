@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/cstring>`。
 
-`asc::std::strpbrk` 查找首次属于给定字符集合的字符位置；AI Core SIMD 编程 仅接受兼容的普通指针地址空间。
+`asc::std::strpbrk`查找首次属于给定字符集合的字符位置；AI Core SIMD编程 仅接受兼容的普通指针地址空间。
 
 标准语义参考：[cppreference `cstring`](https://en.cppreference.com/w/cpp/header/cstring)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-char* asc::std::strpbrk(char* value, const char* accepted) noexcept(true);
+namespace asc::std {
+char* strpbrk(char* value, const char* accepted) noexcept(true);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-const char* asc::std::strpbrk(const char* value, const char* accepted) noexcept(true);
+namespace asc::std {
+const char* strpbrk(const char* value, const char* accepted) noexcept(true);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -57,7 +61,7 @@ const char* asc::std::strpbrk(const char* value, const char* accepted) noexcept(
 | `value` | 输入 | 被查找的窄字符串首地址，以空字符结尾。 |
 | `accepted` | 输入 | 接受字符集合，以空字符结尾的窄字符串；命中其中任一字符即为查找成功。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -70,14 +74,14 @@ const char* asc::std::strpbrk(const char* value, const char* accepted) noexcept(
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `char *` | 返回匹配位置的指针；没有匹配项时返回空指针。 |
-| 原型 2 | `const char *` | 返回匹配位置的指针；没有匹配项时返回空指针。 |
+| 原型1 | `char *` | 返回匹配位置的指针；没有匹配项时返回空指针。 |
+| 原型2 | `const char *` | 返回匹配位置的指针；没有匹配项时返回空指针。 |
 
 ## 约束说明
 
-- 在 Host 侧和 AI Core SIMT 编程中使用普通指针
-- AI Core SIMD 编程中使用 local 或 generic 地址空间的普通指针
-- 仅 memmove 允许源和目标重叠
+- 在Host侧和AI Core SIMT编程中使用普通指针。
+- AI Core SIMD编程中使用local或generic地址空间的普通指针。
+- 仅memmove允许源和目标重叠。
 
 ## 调用示例
 
@@ -91,3 +95,7 @@ decltype(auto) example(char * value, const char * accepted)
     return asc::std::strpbrk(value, accepted);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstring.md)

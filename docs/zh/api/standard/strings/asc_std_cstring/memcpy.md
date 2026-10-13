@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cstring>`。
 
-`asc::std::memcpy` 在非重叠内存区之间复制指定字节数；AI Core SIMD 编程 仅接受兼容的普通指针地址空间。
+`asc::std::memcpy`在非重叠内存区之间复制指定字节数；AI Core SIMD编程 仅接受兼容的普通指针地址空间。
 
 标准语义参考：[cppreference `cstring`](https://en.cppreference.com/w/cpp/header/cstring)。
 
 ## 函数原型
 
 ```cpp
-template<int T> void* asc::std::memcpy(void* destination, const void* source, size_t count) noexcept;
+namespace asc::std {
+template<int T> void* memcpy(void* destination, const void* source, size_t count) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,7 +46,7 @@ template<int T> void* asc::std::memcpy(void* destination, const void* source, si
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 待复制内存中对象的类型；按字节复制时须满足对象生命周期及可平凡复制要求。 |
 
 **函数参数**
 
@@ -62,9 +64,9 @@ template<int T> void* asc::std::memcpy(void* destination, const void* source, si
 
 ## 约束说明
 
-- 在 Host 侧和 AI Core SIMT 编程中使用普通指针
-- AI Core SIMD 编程中使用 local 或 generic 地址空间的普通指针
-- 仅 memmove 允许源和目标重叠
+- 在Host侧和AI Core SIMT编程中使用普通指针。
+- AI Core SIMD编程中使用local或generic地址空间的普通指针。
+- 仅memmove允许源和目标重叠。
 
 ## 调用示例
 
@@ -80,3 +82,7 @@ decltype(auto) example(void * destination, const void * source, asc::std::size_t
     return asc::std::memcpy<T>(destination, source, count);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstring.md)

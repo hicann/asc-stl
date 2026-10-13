@@ -1,4 +1,4 @@
-# asc::std::logical_not::operator()
+# asc::std::logical_not::`operator()`
 
 ## 产品支持情况
 
@@ -28,52 +28,56 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::logical_not::operator()` 对输入布尔值执行对应的逻辑运算。
+`asc::std::logical_not::operator()`对输入布尔值执行对应的逻辑运算。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::logical_not`](logical_not.md)。
+
+### 原型1
 
 ```cpp
-[[nodiscard]] constexpr bool asc::std::logical_not::operator()(const T& x) const;
+// asc::std::logical_not 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr bool operator()(const T& x) const;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> constexpr auto asc::std::logical_not::operator()(T&& x) const noexcept(noexcept(!::asc::std::forward<T>(X))) -> decltype(!::asc::std::forward<T>(X));
+// asc::std::logical_not 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class T> constexpr auto operator()(T&& x) const noexcept(noexcept(!::asc::std::forward<T>(X))) -> decltype(!::asc::std::forward<T>(X));
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 左侧操作数类型；须支持该函数对象执行的运算。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 2 | `decltype(!::asc::std::forward<T>(X))` | 返回函数对象按所选实参调用得到的结果。 |
+| 原型1 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
+| 原型2 | `decltype(!::asc::std::forward<T>(X))` | 返回函数对象按所选实参调用得到的结果。 |
 
 ## 约束说明
 
-- 同时提供指定类型形式和透明调用形式
+- 同时提供指定类型形式和透明调用形式。
 
 ## 调用示例
 
-以下 Host 片段以具体整数实参演示函数对象调用。
+以下Host片段以具体整数实参演示函数对象调用。
 
 ```cpp
 #include <asc/std/functional>
@@ -83,3 +87,8 @@ decltype(auto) example()
     return asc::std::logical_not<>{}(7);
 }
 ```
+
+## 关联API
+
+- [`asc::std::logical_not`](logical_not.md)
+- [本头文件的接口列表](asc_std_functional.md)

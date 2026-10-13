@@ -28,20 +28,22 @@
 
 头文件路径为：`<asc/std/execution>`。
 
-`asc::std::is_execution_policy_v` 在编译期判断类型是否为标准执行策略。
+`asc::std::is_execution_policy_v`在编译期判断类型是否为标准执行策略。
 
 标准语义参考：[cppreference `execution`](https://en.cppreference.com/w/cpp/header/execution)。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr const bool asc::std::is_execution_policy_v
+namespace asc::std {
+template<class T> inline constexpr const bool is_execution_policy_v;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供四种执行策略类型、对象和特征
-- 已提供的算法重载采用符合标准的顺序执行语义
+- 提供四种执行策略类型、对象和特征。
+- 已提供的算法重载采用符合标准的顺序执行语义。
 
 ## 调用示例
 
@@ -52,3 +54,7 @@ template<class T> inline constexpr const bool asc::std::is_execution_policy_v
 
 inline constexpr auto example = asc::std::is_execution_policy_v<asc::std::execution::sequenced_policy>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_execution.md)

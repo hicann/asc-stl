@@ -28,69 +28,77 @@
 
 头文件路径为：`<asc/collectives>`。
 
-`asc::block_exclusive_scan` 对同一 Block 各线程的输入执行排他前缀和。
+`asc::block_exclusive_scan`对同一Block各线程的输入执行排他前缀和。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-asc::std::int32_t asc::block_exclusive_scan(asc::block_collective_workspace<asc::std::int32_t> workspace, asc::std::int32_t value) noexcept;
+namespace asc {
+asc::std::int32_t block_exclusive_scan(asc::block_collective_workspace<asc::std::int32_t> workspace, asc::std::int32_t value) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-asc::std::uint32_t asc::block_exclusive_scan(asc::block_collective_workspace<asc::std::uint32_t> workspace, asc::std::uint32_t value) noexcept;
+namespace asc {
+asc::std::uint32_t block_exclusive_scan(asc::block_collective_workspace<asc::std::uint32_t> workspace, asc::std::uint32_t value) noexcept;
+} // namespace asc
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-float asc::block_exclusive_scan(asc::block_collective_workspace<float> workspace, float value) noexcept;
+namespace asc {
+float block_exclusive_scan(asc::block_collective_workspace<float> workspace, float value) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前 Block 的集体操作工作区：存放各 warp 的部分结果，元素数不少于 Block 内 warp 数；参与线程会合期间不得复用。 |
+| `workspace` | 输入 | 当前Block的集体操作工作区：存放各warp的部分结果，元素数不少于Block内warp数；参与线程会合期间不得复用。 |
 | `value` | 输入 | 当前线程参与排他前缀和的输入值：返回本线程之前所有线程输入的前缀和（不含本线程）。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前 Block 的集体操作工作区：存放各 warp 的部分结果，元素数不少于 Block 内 warp 数；参与线程会合期间不得复用。 |
+| `workspace` | 输入 | 当前Block的集体操作工作区：存放各warp的部分结果，元素数不少于Block内warp数；参与线程会合期间不得复用。 |
 | `value` | 输入 | 当前线程参与排他前缀和的输入值：返回本线程之前所有线程输入的前缀和（不含本线程）。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前 Block 的集体操作工作区：存放各 warp 的部分结果，元素数不少于 Block 内 warp 数；参与线程会合期间不得复用。 |
+| `workspace` | 输入 | 当前Block的集体操作工作区：存放各warp的部分结果，元素数不少于Block内warp数；参与线程会合期间不得复用。 |
 | `value` | 输入 | 当前线程参与排他前缀和的输入值：返回本线程之前所有线程输入的前缀和（不含本线程）。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::std::int32_t` | 返回线程块广播或扫描后当前线程对应的结果。 |
-| 原型 2 | `asc::std::uint32_t` | 返回线程块广播或扫描后当前线程对应的结果。 |
-| 原型 3 | `float` | 返回线程块广播或扫描后当前线程对应的结果。 |
+| 原型1 | `asc::std::int32_t` | 返回线程块广播或扫描后当前线程对应的结果。 |
+| 原型2 | `asc::std::uint32_t` | 返回线程块广播或扫描后当前线程对应的结果。 |
+| 原型3 | `float` | 返回线程块广播或扫描后当前线程对应的结果。 |
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 参数类型、取值范围、会合要求和对象生命周期必须满足页面声明
+- 仅可在AI Core SIMT编程中调用。
+- 同一block的所有线程以相同顺序会合调用；总线程数必须为32的正整数倍。
+- 工作区来自该block的动态共享UB，至少包含thread_count()/32个T，且调用期间不得被其他并发操作复用。
+- 扫描按block内展平线程编号的顺序执行加法；有符号整数的中间和须可表示。
 
 ## 调用示例
 
@@ -106,3 +114,7 @@ __aicore__ unsigned int example(unsigned int* dynamic_shared_pointer, unsigned i
     return asc::block_exclusive_scan(workspace, value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_collectives.md)

@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::nextafterf` 返回朝目标值方向的相邻可表示浮点值；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::nextafterf`返回朝目标值方向的相邻可表示浮点值；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-float asc::std::nextafterf(float x, float y) noexcept;
+namespace asc::std {
+float nextafterf(float x, float y) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -47,7 +49,7 @@ float asc::std::nextafterf(float x, float y) noexcept;
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `x` | 输入 | 求相邻可表示值的起点浮点值（无量纲）。 |
-| `y` | 输入 | 指示移动方向的目标浮点值（无量纲）；x 与 y 相等时返回 x。 |
+| `y` | 输入 | 指示移动方向的目标浮点值（无量纲）；x与y相等时返回x。 |
 
 ## 返回值说明
 
@@ -57,7 +59,7 @@ float asc::std::nextafterf(float x, float y) noexcept;
 
 ## 约束说明
 
-- 提供 float 重载、标准 *f 别名以及 float lerp 回移接口
+- 提供float重载、标准 *f别名以及float lerp回移接口。
 
 ## 调用示例
 
@@ -71,3 +73,7 @@ decltype(auto) example(float x, float y)
     return asc::std::nextafterf(x, y);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

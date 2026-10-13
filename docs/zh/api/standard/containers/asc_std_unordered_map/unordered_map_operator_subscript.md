@@ -1,4 +1,4 @@
-# asc::std::unordered_map::operator[]
+# asc::std::unordered_map::`operator[]`
 
 ## 产品支持情况
 
@@ -28,18 +28,21 @@
 
 头文件路径为：`<asc/std/unordered_map>`。
 
-`asc::std::unordered_map::operator[]` 按键查找映射值：键已存在时返回对应映射值的引用；键不存在时向容器插入由该键和默认构造的映射值组成的元素，并返回新插入元素映射值的引用。
+`asc::std::unordered_map::operator[]`按键查找映射值：键已存在时返回对应映射值的引用；键不存在时向容器插入由该键和默认构造的映射值组成的元素，并返回新插入元素映射值的引用。
 
 执行插入要求映射值类型可默认构造且容器容量充足；插入失败或构造抛出异常时容器内容保持不变。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `unordered_map`](https://en.cppreference.com/w/cpp/header/unordered_map)。
 
 ## 函数原型
 
+所属类型：[`asc::std::unordered_map`](unordered_map.md)。
+
 ```cpp
-T& asc::std::unordered_map::operator[](const Key& key);
+// asc::std::unordered_map 类内的声明节选；模板形参和其他成员由所属类提供。
+T& operator[](const Key& key);
 ```
 
 ## 参数说明
@@ -58,16 +61,16 @@ T& asc::std::unordered_map::operator[](const Key& key);
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下unordered_map<Key,T,Hash,Equal,A>显式GM arena
-- empty/size/bucket_count/begin/end/insert/find/count/operator[]/clear
-- allocator回绑桶数组并在默认负载阈值上自动rehash
-- 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构
-- 仅容量充足和不抛出异常域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下unordered_map<Key,T,Hash,Equal,A>显式GM arena。
+- empty/size/bucket_count/begin/end/insert/find/count/`operator[]`/clear。
+- allocator回绑桶数组并在默认负载阈值上自动rehash。
+- 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构。
+- 仅容量充足和不抛出异常域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/unordered_map>
@@ -92,3 +95,8 @@ decltype(auto) example(asc::std::unordered_map<int, int, ::std::hash<int>, ::std
     return values[7];
 }
 ```
+
+## 关联API
+
+- [`asc::std::unordered_map`](unordered_map.md)
+- [本头文件的接口列表](asc_std_unordered_map.md)

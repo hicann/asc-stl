@@ -28,28 +28,41 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::pcg64_engine::default_seed` 定义 PCG64 引擎的默认 64 位种子。
+`asc::pcg64_engine::default_seed`定义PCG64引擎的默认64位种子。
 
 ## 声明
 
+所属类型：[`asc::pcg64_engine`](pcg64_engine.md)。
+
 ```cpp
-static constexpr asc::std::uint64_t asc::pcg64_engine::default_seed = 0xcafef00dd15ea5e5ULL
+// asc::pcg64_engine 类内的声明节选；模板形参和其他成员由所属类提供。
+static constexpr asc::std::uint64_t default_seed = 0xcafef00dd15ea5e5ULL;
 ```
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/random>
+#include <asc/std/limits>
 
-void example(const asc::pcg64& object)
+bool example()
 {
-    (void)object.default_seed;
+    static_assert(asc::pcg64::default_seed == 0xcafef00dd15ea5e5ULL);
+    asc::pcg64 engine(7);
+    const auto first = engine();
+    engine.seed(7);
+    return engine() == first;
 }
 ```
+
+## 关联API
+
+- [`asc::pcg64_engine`](pcg64_engine.md)
+- [本头文件的接口列表](asc_random.md)

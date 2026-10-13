@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/expected>`。
 
-`asc::std::unexpected::unexpected` 按本页所列构造形态初始化 `unexpected` 对象。
+`asc::std::unexpected::unexpected`按本页所列构造形态初始化`unexpected`对象。
 
 标准语义参考：[cppreference `expected`](https://en.cppreference.com/w/cpp/header/expected)。
 
@@ -44,24 +44,32 @@ constexpr unexpected(const Error& error);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `error` | 输入 | 提供“按本页所列构造形态初始化 `unexpected` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `error` | 输入 | 提供“按本页所列构造形态初始化`unexpected`对象”使用的对象引用；被引用对象须在调用期间有效。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- T 必须为非 void 类型，E 必须为对象类型
-- 适用操作必须不抛出异常
-- 提供构造、赋值、emplace 和 swap
+- T必须为非void类型，E必须为对象类型。
+- 适用操作必须不抛出异常。
+- 提供构造、赋值、emplace和swap。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/expected>
 
-void example()
+bool example()
 {
     asc::std::unexpected<int> error(7);
-    (void)error.error();
+    return error.error() == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_expected.md)

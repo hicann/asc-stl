@@ -28,16 +28,19 @@
 
 头文件路径为：`<asc/std/forward_list>`。
 
-`asc::std::forward_list::emplace_front` 在容器首部直接构造元素。
+`asc::std::forward_list::emplace_front`在容器首部直接构造元素。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `forward_list`](https://en.cppreference.com/w/cpp/header/forward_list)。
 
 ## 函数原型
 
+所属类型：[`asc::std::forward_list`](forward_list.md)。
+
 ```cpp
-template<class ...Args> reference asc::std::forward_list::emplace_front(Args&&... args);
+// asc::std::forward_list 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class ...Args> reference emplace_front(Args&&... args);
 ```
 
 ## 参数说明
@@ -62,16 +65,16 @@ template<class ...Args> reference asc::std::forward_list::emplace_front(Args&&..
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下forward_list<T,A>显式GM arena allocator构造
-- empty/front/begin/end
-- push_front/emplace_front/pop_front/clear
-- 移动构造/赋值、移动前迭代器继续遍历目标节点及析构
-- 仅容量充足和不抛出异常值/allocator域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下forward_list<T,A>显式GM arena allocator构造。
+- empty/front/begin/end。
+- push_front/emplace_front/pop_front/clear。
+- 移动构造/赋值、移动前迭代器继续遍历目标节点及析构。
+- 仅容量充足和不抛出异常值/allocator域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/forward_list>
@@ -96,3 +99,8 @@ decltype(auto) example(asc::std::forward_list<int, example_allocator<int>>& valu
     return values.emplace_front(7);
 }
 ```
+
+## 关联API
+
+- [`asc::std::forward_list`](forward_list.md)
+- [本头文件的接口列表](asc_std_forward_list.md)

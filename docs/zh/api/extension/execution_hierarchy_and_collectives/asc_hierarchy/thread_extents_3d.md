@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::thread_extents_3d` 返回整个 Grid 的三维线程范围。
+`asc::thread_extents_3d`返回整个Grid的三维线程范围。
 
 ## 函数原型
 
 ```cpp
-asc::extent3d asc::thread_extents_3d() noexcept;
+namespace asc {
+asc::extent3d thread_extents_3d() noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -48,8 +50,8 @@ asc::extent3d asc::thread_extents_3d() noexcept;
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 参数类型、取值范围、会合要求和对象生命周期必须满足页面声明
+- 仅可在AI Core SIMT编程中调用。
+- 必须在正在执行的D-SIMT Kernel内查询；结果取自当前启动配置，本函数不执行线程同步。
 
 ## 调用示例
 
@@ -63,3 +65,7 @@ __aicore__ decltype(auto) example()
     return asc::thread_extents_3d();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_hierarchy.md)

@@ -1,4 +1,4 @@
-# asc::pinned_memory_resource_ref::operator==
+# asc::pinned_memory_resource_ref::`operator==`
 
 ## 产品支持情况
 
@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/memory_resource>`。
 
-`asc::pinned_memory_resource_ref::operator==` 判断两个引用是否关联同一个 `pinned_memory_resource` 对象。
+`asc::pinned_memory_resource_ref::operator==`判断两个引用是否关联同一个`pinned_memory_resource`对象。
 
 ## 函数原型
 
+所属类型：[`asc::pinned_memory_resource_ref`](pinned_memory_resource_ref.md)。
+
 ```cpp
-constexpr bool asc::pinned_memory_resource_ref::operator==(const asc::pinned_memory_resource_ref& other) const noexcept;
+// asc::pinned_memory_resource_ref 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr bool operator==(const asc::pinned_memory_resource_ref& other) const noexcept;
 ```
 
 ## 参数说明
@@ -42,24 +45,24 @@ constexpr bool asc::pinned_memory_resource_ref::operator==(const asc::pinned_mem
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 比较的另一操作数；本次比较不修改对象。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 仅可在 Host 调用
-- 内存资源不抛出异常
-- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐
-- 资源及其引用的生命周期由调用方管理
+- 仅可在Host调用。
+- 内存资源不抛出异常。
+- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐。
+- 资源及其引用的生命周期由调用方管理。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
 
 ```cpp
 #include <asc/memory_resource>
@@ -70,3 +73,8 @@ decltype(auto) example(const asc::pinned_memory_resource_ref& left, const asc::p
     return equal;
 }
 ```
+
+## 关联API
+
+- [`asc::pinned_memory_resource_ref`](pinned_memory_resource_ref.md)
+- [本头文件的接口列表](asc_memory_resource.md)

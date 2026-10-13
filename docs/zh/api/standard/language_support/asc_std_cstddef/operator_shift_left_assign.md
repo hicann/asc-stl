@@ -1,4 +1,4 @@
-# asc::std::operator<<=
+# `asc::std::operator<<=`
 
 ## 产品支持情况
 
@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cstddef>`。
 
-`asc::std::operator<<=` 将 `lhs` 所含 std::byte 的整数值向左移动 `shift` 位，把移位结果存回 `lhs` 并返回其引用。`shift` 须为非负整数，有效移位范围为 0 <= s < 8（以实现为准）。
+`asc::std::operator<<=`将`lhs`所含std::byte的整数值向左移动`shift`位，把移位结果存回`lhs`并返回其引用。`shift`须为非负整数，移位量须小于`unsigned int`的位宽；运算先将字节值提升为`unsigned int`，移位后再转换为`byte`。
 
 标准语义参考：[cppreference `cstddef`](https://en.cppreference.com/w/cpp/header/cstddef)。
 
 ## 函数原型
 
 ```cpp
-template<class Integer> constexpr byte& asc::std::operator<<=(byte& lhs, Integer shift) noexcept;
+namespace asc::std {
+template<class Integer> constexpr byte& operator<<=(byte& lhs, Integer shift) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -50,18 +52,18 @@ template<class Integer> constexpr byte& asc::std::operator<<=(byte& lhs, Integer
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入/输出 | 被左移更新的 byte 对象；按其底层 unsigned char 位左移 shift 位，返回其引用。 |
+| `lhs` | 输入/输出 | 被左移更新的byte对象；按其底层unsigned char位左移shift位，返回其引用。 |
 | `shift` | 输入 | 左移的位数。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `byte &` | 返回存回左移结果后的 `lhs` 引用，可继续进行赋值或复合操作。 |
+| `byte &` | 返回存回左移结果后的`lhs`引用，可继续进行赋值或复合操作。 |
 
 ## 约束说明
 
-- 提供标准声明
+- 提供标准声明。
 
 ## 调用示例
 
@@ -76,3 +78,7 @@ decltype(auto) example()
     return asc::std::operator<<=(value, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstddef.md)

@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/stack>`。
 
-`asc::std::stack::swap` 交换两个对象保存的状态或元素。
+`asc::std::stack::swap`交换两个对象保存的状态或元素。
 
 标准语义参考：[cppreference `stack`](https://en.cppreference.com/w/cpp/header/stack)。
 
 ## 函数原型
 
+所属类型：[`asc::std::stack`](stack.md)。
+
 ```cpp
-constexpr void asc::std::stack::swap(stack<T, Container>& other) noexcept(noexcept(this->c.swap(other.c)));
+// asc::std::stack 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr void swap(stack<T, Container>& other) noexcept(noexcept(this->c.swap(other.c)));
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ constexpr void asc::std::stack::swap(stack<T, Container>& other) noexcept(noexce
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 与当前对象交换状态的另一对象；交换后双方保存对方原有状态。 |
 
 ## 返回值说明
 
@@ -52,13 +55,13 @@ constexpr void asc::std::stack::swap(stack<T, Container>& other) noexcept(noexce
 
 ## 约束说明
 
-- stack<T,Container>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/back/push_back/emplace_back/pop_back/比较/swap及allocator操作必须在当前执行空间有效
-- 交付container_type/value_type/size_type/reference/const_reference和protected c，default/container/copy/move/allocator构造及copy/move赋值，empty/size/top、lvalue/rvalue push、decltype(auto) emplace、pop，条件noexcept的member/non-member swap，六个经典关系与C++20 <=>，uses_allocator特化，Container及Container+Alloc的C++17 CTAD
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- stack<T,Container>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/back/push_back/emplace_back/pop_back/比较/swap及allocator操作必须在当前执行空间有效。
+- 交付container_type/value_type/size_type/reference/const_reference和protected c，default/container/copy/move/allocator构造及copy/move赋值，empty/size/top、lvalue/rvalue push、decltype(auto) emplace、pop，条件noexcept的member/non-member swap，六个经典关系与C++20 <=>，uses_allocator特化，Container及Container+Alloc的C++17 CTAD。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段显式提供标准容器作为底层存储；设备端须提供可在目标位置调用的容器。
+以下Host片段显式提供标准容器作为底层存储；设备端须提供可在目标位置调用的容器。
 
 ```cpp
 #include <asc/std/stack>
@@ -71,3 +74,8 @@ void example(asc::std::stack<int, ::std::deque<int>>& object, asc::std::stack<in
     object.swap(other);
 }
 ```
+
+## 关联API
+
+- [`asc::std::stack`](stack.md)
+- [本头文件的接口列表](asc_std_stack.md)

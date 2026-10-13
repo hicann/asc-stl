@@ -28,49 +28,59 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::common_reference` 计算一组类型共同可用的引用类型。
+`asc::std::common_reference`计算一组类型共同可用的引用类型。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<...c...l...a...s...s...> class asc::std::common_reference
+namespace asc::std {
+template<...c...l...a...s...s...> class common_reference;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<...c...l...a...s...s...> struct asc::std::common_reference
+namespace asc::std {
+template<...c...l...a...s...s...> struct common_reference;
+} // namespace asc::std
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class T, class U, class V, class ...Rest> struct asc::std::common_reference
+namespace asc::std {
+template<class T, class U, class V, class ...Rest> struct common_reference;
+} // namespace asc::std
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class T, class U> struct asc::std::common_reference
+namespace asc::std {
+template<class T, class U> struct common_reference;
+} // namespace asc::std
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
-template<class T> struct asc::std::common_reference
+namespace asc::std {
+template<class T> struct common_reference;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v 辅助形式
+- 提供特征类以及标准的 _t、_v辅助形式。
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
+以下Host片段用具体类型实参和`static_assert`验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
@@ -84,3 +94,7 @@ void use_trait()
     static_assert(asc::std::is_same_v<asc::std::common_reference_t<int, double>, double>);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_type_traits.md)

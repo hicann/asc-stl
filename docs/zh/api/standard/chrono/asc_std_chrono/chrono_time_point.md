@@ -28,30 +28,38 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::time_point` 表示日期、时间点或时长计算中的 `time_point` 值类型。
+`asc::std::chrono::time_point`表示日期、时间点或时长计算中的`time_point`值类型。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 声明
 
 ```cpp
-template<class Clock, class Duration> class asc::std::chrono::time_point
+namespace asc::std::chrono {
+template<class Clock, class Duration> class time_point;
+} // namespace asc::std::chrono
 ```
 
 ## 约束说明
 
-- 支持用户定义时钟、值运算以及六个显式关系运算符
+- 支持用户定义时钟、值运算以及六个显式关系运算符。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/chrono>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::chrono::time_point<asc::std::chrono::system_clock>;
-    (void)sizeof(selected);
+    using point = asc::std::chrono::time_point<asc::std::chrono::system_clock, asc::std::chrono::seconds>;
+    point start(asc::std::chrono::seconds(3));
+    const point end = start + asc::std::chrono::seconds(2);
+    return start.time_since_epoch().count() == 3 && (end - start).count() == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

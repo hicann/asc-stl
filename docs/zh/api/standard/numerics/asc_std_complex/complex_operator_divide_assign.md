@@ -1,4 +1,4 @@
-# asc::std::complex::operator/=
+# asc::std::complex::`operator/=`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::complex::operator/=` 按 `complex` 的可用运算符规则处理当前对象及操作数。
+`asc::std::complex::operator/=`按`complex`的可用运算符规则处理当前对象及操作数。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 函数原型
 
+所属类型：[`asc::std::complex`](complex.md)。
+
 ```cpp
-constexpr complex<T>& asc::std::complex::operator/=(const T& rhs) noexcept;
+// asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr complex<T>& operator/=(const T& rhs) noexcept;
 ```
 
 ## 参数说明
@@ -54,12 +57,12 @@ constexpr complex<T>& asc::std::complex::operator/=(const T& rhs) noexcept;
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下 Host 片段使用具体数值类型演示调用；状态与参数须满足本页约束。
+以下Host片段使用具体数值类型演示调用；状态与参数须满足本页约束。
 
 ```cpp
 #include <asc/std/complex>
@@ -69,3 +72,8 @@ void example(asc::std::complex<float>& value)
     value /= 2.0f;
 }
 ```
+
+## 关联API
+
+- [`asc::std::complex`](complex.md)
+- [本头文件的接口列表](asc_std_complex.md)

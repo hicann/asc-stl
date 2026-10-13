@@ -28,34 +28,42 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_uint32_t` 把指定基础整数或布尔类型绑定到当前交付的原子类型别名。
+`asc::std::atomic_uint32_t`把指定基础整数或布尔类型绑定到当前交付的原子类型别名。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 声明
 
 ```cpp
-using asc::std::atomic_uint32_t = atomic<uint32_t>
+namespace asc::std {
+using atomic_uint32_t = atomic<uint32_t>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数
-- bool/8/16位用32位内部存储
-- 32/64位按有符号位模式分派
-- Host 和 AI Core SIMT 编程 GM
+- 标准整数/字符owning atomic别名及列出自由函数。
+- bool/8/16位用32位内部存储。
+- 32/64位按有符号位模式分派。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/atomic>
 
-void use_type(const asc::std::atomic_uint32_t& value)
+bool example()
 {
-    (void)value;
+    asc::std::atomic_uint32_t cell{};
+    cell.store(1, asc::std::memory_order_relaxed);
+    return cell.load(asc::std::memory_order_relaxed) == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

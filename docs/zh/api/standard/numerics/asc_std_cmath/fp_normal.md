@@ -28,9 +28,9 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`FP_NORMAL` 表示名称所指的浮点分类或特殊指数状态。
+`FP_NORMAL`表示名称所指的浮点分类或特殊指数状态。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
@@ -42,7 +42,7 @@
 
 ## 约束说明
 
-- 提供 float 函数重载、求值类型别名、比较函数、nanf 和分类宏
+- 提供float函数重载、求值类型别名、比较函数、nanf和分类宏。
 
 ## 调用示例
 
@@ -55,3 +55,7 @@
 #error "FP_NORMAL is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

@@ -28,24 +28,27 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::insert_iterator::iterator_category` 标识迭代器的传统类别标签。
+`asc::std::insert_iterator::iterator_category`标识迭代器的传统类别标签。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
+所属类型：[`asc::std::insert_iterator`](insert_iterator.md)。
+
 ```cpp
-using asc::std::insert_iterator::iterator_category = output_iterator_tag
+// asc::std::insert_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
+using iterator_category = output_iterator_tag;
 ```
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段用具体迭代器或容器类型实例化本页接口。
+以下Host片段用具体迭代器或容器类型实例化本页接口。
 
 ```cpp
 #include <asc/std/iterator>
@@ -54,11 +57,15 @@ using asc::std::insert_iterator::iterator_category = output_iterator_tag
 #include <vector>
 
 #include <asc/std/type_traits>
-#include <vector>
 
 void example()
 {
     using selected = typename asc::std::insert_iterator<::std::vector<int>>::iterator_category;
-    static_assert(asc::std::is_same_v<selected, selected>);
+    static_assert(asc::std::is_same_v<selected, asc::std::output_iterator_tag>);
 }
 ```
+
+## 关联API
+
+- [`asc::std::insert_iterator`](insert_iterator.md)
+- [本头文件的接口列表](asc_std_iterator.md)

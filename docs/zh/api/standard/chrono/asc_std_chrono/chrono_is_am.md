@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::is_am` 判断小时值是否位于上午范围。
+`asc::std::chrono::is_am`判断小时值是否位于上午范围。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
 ```cpp
-[[nodiscard]] constexpr bool asc::std::chrono::is_am(const hours& value) noexcept;
+namespace asc::std::chrono {
+[[nodiscard]] constexpr bool is_am(const hours& value) noexcept;
+} // namespace asc::std::chrono
 ```
 
 ## 参数说明
@@ -44,18 +46,17 @@
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 以 24 小时制表示的小时（hours），取值 0 到 23；处于 0 到 11（上午）时返回 true。 |
+| `value` | 输入 | 以24小时制表示的小时（hours），取值0到23；处于0到11（上午）时返回true。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
@@ -69,3 +70,7 @@ decltype(auto) example(const asc::std::chrono::hours & value)
     return asc::std::chrono::is_am(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

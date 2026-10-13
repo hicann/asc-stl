@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cstddef>`。
 
-`asc::std::to_integer` 把 std::byte 转换为指定整数类型。
+`asc::std::to_integer`把std::byte转换为指定整数类型。
 
 标准语义参考：[cppreference `cstddef`](https://en.cppreference.com/w/cpp/header/cstddef)。
 
 ## 函数原型
 
 ```cpp
-template<class Integer> constexpr Integer asc::std::to_integer(byte value) noexcept;
+namespace asc::std {
+template<class Integer> constexpr Integer to_integer(byte value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -50,17 +52,17 @@ template<class Integer> constexpr Integer asc::std::to_integer(byte value) noexc
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待转换的 byte 值；返回其底层 unsigned char 值转换到 Integer 的结果。 |
+| `value` | 输入 | 待转换的byte值；返回其底层unsigned char值转换到Integer的结果。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `Integer` | 返回当前 `byte` 所表示的指定整数类型数值。 |
+| `Integer` | 返回当前`byte`所表示的指定整数类型数值。 |
 
 ## 约束说明
 
-- 提供标准声明
+- 提供标准声明。
 
 ## 调用示例
 
@@ -74,3 +76,7 @@ decltype(auto) example()
     return asc::std::to_integer<unsigned int>(asc::std::byte{7});
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstddef.md)

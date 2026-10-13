@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-#include <asc/std/__utility/pair.h>
+#include <asc/std/utility>
 #include "support/b010_semantics.h"
+#include "support/pair_piecewise_regression.h"
 
 int main()
 {
-    return asc_stl_b010_test::evaluate_runtime();
+    return asc_stl_b010_test::evaluate_runtime() + (asc_stl_pair_piecewise_test::evaluate(7) ? 0 : 101);
 }

@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/bit>`。
 
-`asc::bitfield_insert` 使用 `source` 的低 `width` 位替换 `destination` 中从 `start` 位开始的位域，并保留目标值的其余位。
+`asc::bitfield_insert`使用`source`的低`width`位替换`destination`中从`start`位开始的位域，并保留目标值的其余位。
 
 ## 函数原型
 
 ```cpp
-template<class T> constexpr T asc::bitfield_insert(T destination, T source, int start, int width) noexcept;
+namespace asc {
+template<class T> constexpr T bitfield_insert(T destination, T source, int start, int width) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,7 +44,7 @@ template<class T> constexpr T asc::bitfield_insert(T destination, T source, int 
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 无符号整数类型；须为 uint32_t 或 uint64_t。 |
+| `T` | 无符号整数类型；须为uint32_t或uint64_t。 |
 
 **函数参数**
 
@@ -50,7 +52,7 @@ template<class T> constexpr T asc::bitfield_insert(T destination, T source, int 
 | --- | --- | --- |
 | `destination` | 输入 | 提供被替换位域所在的目标整数值；按值传入，替换结果经返回值给出，不涉及存储生命周期。 |
 | `source` | 输入 | 提供用于替换位域的源整数值；按值传入，不涉及存储生命周期。 |
-| `start` | 输入 | `destination` 中被替换位域的起始位编号（最低位为第 0 位）；不得为负。 |
+| `start` | 输入 | `destination`中被替换位域的起始位编号（最低位为第0位）；不得为负。 |
 | `width` | 输入 | 被替换位域的位数；不得为负。 |
 ## 返回值说明
 
@@ -60,8 +62,8 @@ template<class T> constexpr T asc::bitfield_insert(T destination, T source, int 
 
 ## 约束说明
 
-- T 必须为 uint32_t 或 uint64_t
-- start 和 width 不得为负且不得超出类型位宽，零位宽和全位宽操作不得产生未定义移位
+- T必须为uint32_t或uint64_t。
+- start和width不得为负且不得超出类型位宽，零位宽和全位宽操作不得产生未定义移位。
 
 ## 调用示例
 
@@ -75,3 +77,7 @@ decltype(auto) example()
     return asc::bitfield_insert(0u, 3u, 1, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_bit.md)

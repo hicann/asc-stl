@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::wcsxfrm` 在固定 C locale 下生成宽字符串排序键。
+`asc::std::wcsxfrm`在固定C locale下生成宽字符串排序键。
 
-该接口的可用位置为 Host（完整接口）、Device（C locale 相关接口）。
+该接口的可用位置为Host（完整接口）、Device（C locale相关接口）。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 
 ## 函数原型
 
 ```cpp
-size_t asc::std::wcsxfrm(wchar_t* destination, const wchar_t* source, size_t count) noexcept;
+namespace asc::std {
+size_t wcsxfrm(wchar_t* destination, const wchar_t* source, size_t count) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -58,9 +60,8 @@ size_t asc::std::wcsxfrm(wchar_t* destination, const wchar_t* source, size_t cou
 
 ## 约束说明
 
-- Host对本家族委托系统<cwchar>完整合同
-- Device交付size_t/mbstate_t/wint_t/NULL/WCHAR_MIN/WCHAR_MAX/WEOF、wcscoll/wcsxfrm/wcstok与btowc/wctob/mbrlen/mbrtowc/mbsinit/mbsrtowcs/wcrtomb/wcsrtombs，语义固定为无状态单字节C locale
-- Host 提供完整接口，设备端仅提供 C 语言区域设置相关接口
+- Host行为遵循系统`<cwchar>`提供的同名接口；字符转换和排序受当前C语言区域设置影响。
+- Device固定使用C语言区域设置，按宽字符编码顺序处理，不支持区域设置相关排序规则。
 
 ## 调用示例
 
@@ -75,3 +76,7 @@ decltype(auto) example(wchar_t * destination, const wchar_t * source, asc::std::
     return asc::std::wcsxfrm(destination, source, count);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cwchar.md)

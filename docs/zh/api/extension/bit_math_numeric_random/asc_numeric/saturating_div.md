@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/numeric>`。
 
-`asc::saturating_div` 执行饱和除法，并处理不可表示的最小值除以负一情形。
+`asc::saturating_div`执行饱和除法，并处理不可表示的最小值除以负一情形。
 
 ## 函数原型
 
 ```cpp
-template<class T> constexpr T asc::saturating_div(T left, T right) noexcept;
+namespace asc {
+template<class T> constexpr T saturating_div(T left, T right) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,7 +44,7 @@ template<class T> constexpr T asc::saturating_div(T left, T right) noexcept;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 参与饱和除法的标准整数类型（非 bool，不超过 64 位）。 |
+| `T` | 参与饱和除法的标准整数类型（非bool，不超过64位）。 |
 
 **函数参数**
 
@@ -59,8 +61,8 @@ template<class T> constexpr T asc::saturating_div(T left, T right) noexcept;
 
 ## 约束说明
 
-- T、From 和 To 必须是不超过 64 位的标准非 bool 整数类型
-- 所有溢出检查均不得触发有符号整数溢出的未定义行为
+- T、From和To必须是不超过64位的标准非bool整数类型。
+- 所有溢出检查均不得触发有符号整数溢出的未定义行为。
 
 ## 调用示例
 
@@ -74,3 +76,7 @@ decltype(auto) example()
     return asc::saturating_div(8, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_numeric.md)

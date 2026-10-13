@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_exchange` 原子地替换当前值并返回旧值；内存序与地址空间须符合本页限制。
+`asc::std::atomic_exchange`原子地替换当前值并返回旧值；内存序与地址空间须符合本页限制。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 函数原型
 
 ```cpp
-template<class T> T asc::std::atomic_exchange(atomic<T>* object, T value) noexcept;
+namespace asc::std {
+template<class T> T atomic_exchange(atomic<T>* object, T value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -63,14 +65,14 @@ template<class T> T asc::std::atomic_exchange(atomic<T>* object, T value) noexce
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数
-- bool/8/16位用32位内部存储
-- 32/64位按有符号位模式分派
-- Host 和 AI Core SIMT 编程 GM
+- 标准整数/字符owning atomic别名及列出自由函数。
+- bool/8/16位用32位内部存储。
+- 32/64位按有符号位模式分派。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
-以下 Host 片段使用具体整数原子对象；设备端对象须位于可访问的全局内存。
+以下Host片段使用具体整数原子对象；设备端对象须位于可访问的全局内存。
 
 ```cpp
 #include <asc/std/atomic>
@@ -81,3 +83,7 @@ decltype(auto) example()
     return asc::std::atomic_exchange(&value, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

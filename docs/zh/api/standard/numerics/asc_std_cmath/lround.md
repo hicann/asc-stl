@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::lround` 按半整数远离零的规则取整并返回 long；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::lround`按半整数远离零的规则取整并返回long；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-long asc::std::lround(float value) noexcept;
+namespace asc::std {
+long lround(float value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,7 +48,7 @@ long asc::std::lround(float value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待就近取整（半值远离零）并转换为 long 的输入值（无量纲）。 |
+| `value` | 输入 | 待就近取整（半值远离零）并转换为long的输入值（无量纲）。 |
 
 ## 返回值说明
 
@@ -56,7 +58,7 @@ long asc::std::lround(float value) noexcept;
 
 ## 约束说明
 
-- 提供 float 重载和标准 *f 别名，底层能力由 Ascend C 开发套件提供
+- 提供float重载和标准 *f别名，底层能力由Ascend C开发套件提供。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example(float value)
     return asc::std::lround(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

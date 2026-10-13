@@ -28,31 +28,39 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::complex` 保存实部和虚部并提供复数算术操作。
+`asc::std::complex`保存实部和虚部并提供复数算术操作。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 声明
 
 ```cpp
-template<class T> class asc::std::complex
+namespace asc::std {
+template<class T> class complex;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/complex>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::complex<float>;
-    (void)sizeof(selected);
+    asc::std::complex<float> left(1.0F, 2.0F);
+    asc::std::complex<float> right(3.0F, 4.0F);
+    const auto product = left * right;
+    return product.real() == -5.0F && product.imag() == 10.0F;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_complex.md)

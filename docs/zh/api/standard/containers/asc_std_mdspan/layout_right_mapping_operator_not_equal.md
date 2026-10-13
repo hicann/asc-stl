@@ -1,4 +1,4 @@
-# asc::std::layout_right::mapping::operator!=
+# asc::std::layout_right::mapping::`operator!=`
 
 ## 产品支持情况
 
@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::layout_right::mapping::operator!=` 为相等比较的取反：两个映射在维数相同且逐维 extent 与偏移相等时相等。
+`asc::std::layout_right::mapping::operator!=`为相等比较的取反：两个映射在维数相同且逐维extent与偏移相等时相等。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
 ```cpp
-template<class OtherExtents> friend bool asc::std::layout_right::mapping<Extents>::operator!=(const mapping<OtherExtents>&, const mapping<Extents>&) noexcept
+template<class OtherExtents> friend bool asc::std::layout_right::mapping<Extents>::operator!=(const mapping<OtherExtents>&, const mapping<Extents>&) noexcept;
 ```
 
 ## 参数说明
@@ -44,7 +44,7 @@ template<class OtherExtents> friend bool asc::std::layout_right::mapping<Extents
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherExtents` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
+| `OtherExtents` | 另一映射的维度类型，其秩及静态维度须满足比较约束。 |
 
 **函数参数**
 
@@ -57,11 +57,11 @@ template<class OtherExtents> friend bool asc::std::layout_right::mapping<Extents
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `按声明确定` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `按声明确定` | 对应的相等／顺序比较表达式成立时为true，否则为false。 |
 
 ## 约束说明
 
-- 两侧映射维数须相同；比较逐维 extent 与偏移
+- 两侧映射维数须相同；比较逐维extent与偏移。
 
 ## 调用示例
 
@@ -76,3 +76,7 @@ decltype(auto) example(Object& object, Args&&... args)
     return object.operator!=(static_cast<Args&&>(args)...);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mdspan.md)

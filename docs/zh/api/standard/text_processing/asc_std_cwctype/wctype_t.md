@@ -28,33 +28,40 @@
 
 头文件路径为：`<asc/std/cwctype>`。
 
-`asc::std::wctype_t` 标识当前 ABI 对应的时间、字符转换或宽字符类型。
+`asc::std::wctype_t`标识当前ABI对应的时间、字符转换或宽字符类型。
 
-该接口的可用位置为 Host（完整接口）、Device（C locale 相关接口）。
+该接口的可用位置为Host（完整接口）、Device（C locale相关接口）。
 
 标准语义参考：[cppreference `cwctype`](https://en.cppreference.com/w/cpp/header/cwctype)。
 
 ## 声明
 
 ```cpp
-using asc::std::wctype_t = ::std::wctype_t
+namespace asc::std {
+using wctype_t = ::std::wctype_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- Host对22个词元委托系统<cwctype>完整合同
-- Device交付wint_t/wctype_t/wctrans_t/WEOF、14个直接分类/转换函数与wctype/iswctype/wctrans/towctrans完整描述符家族，语义固定为C locale
-- Host 提供完整接口，设备端仅提供 C 语言区域设置相关接口
+- Host行为由系统`<cwctype>`实现，受当前C语言区域设置影响。
+- Device的宽字符分类及大小写转换固定使用C locale。
+- Host提供完整接口，设备端仅提供C语言区域设置相关接口。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/cwctype>
 
-void use_type(const asc::std::wctype_t& value)
+bool example()
 {
-    (void)value;
+    asc::std::wctype_t category = asc::std::wctype("digit");
+    return asc::std::iswctype(L'7', category) != 0 && asc::std::iswctype(L'A', category) == 0;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cwctype.md)

@@ -28,30 +28,37 @@
 
 头文件路径为：`<asc/launch>`。
 
-`asc::simt_launch_config` 描述 SIMT Kernel 的三维 Grid、三维 Block 和动态 UB 字节数。
+`asc::simt_launch_config`描述SIMT Kernel的三维Grid、三维Block和动态UB字节数。
 
 ## 声明
 
 ```cpp
-struct asc::simt_launch_config
+namespace asc {
+struct simt_launch_config;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 仅可在 Host 调用
-- Kernel 必须是编译期确定的目标，参数按值传递且可平凡复制
-- Stream、启动维度及参数生命周期必须有效
-- 成功仅表示任务已按 Stream 顺序提交
+- 仅可在Host调用。
+- Kernel必须是编译期确定的目标，参数按值传递且可平凡复制。
+- Stream、启动维度及参数生命周期必须有效。
+- 成功仅表示任务已按Stream顺序提交。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/launch>
 
-void use_type(const asc::simt_launch_config& value)
+bool example()
 {
-    (void)value;
+    asc::simt_launch_config config{asc::extent3d{2, 1, 1}, asc::extent3d{32, 1, 1}, 0};
+    return config.grid.count() == 2 && config.block.count() == 32 && config.dynamic_ub_bytes == 0;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_launch.md)

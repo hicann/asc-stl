@@ -28,50 +28,53 @@
 
 头文件路径为：`<asc/memory>`。
 
-`asc::arena_allocator<T>` 把 `monotonic_arena` 适配为元素分配器；分配按 `alignof(T)` 对齐，单次 `deallocate` 不回收空间。
+`asc::arena_allocator<T>`把`monotonic_arena`适配为元素分配器；分配按`alignof(T)`对齐，单次`deallocate`不回收空间。
 
-`monotonic_arena` 在集中管理的存储上按到达顺序单向分配；空间在 `reset()` 或 arena 生命周期结束后整体回收，单次 `deallocate` 不回收空间。详见 [asc::monotonic_arena](monotonic_arena.md)。
+`monotonic_arena`在集中管理的存储上按到达顺序单向分配；`reset()`仅重置分配位置，不销毁对象也不释放底层存储；arena不拥有底层存储，析构不释放它。调用方负责对象的销毁和存储的释放，单次`deallocate`不回收空间。详见[asc::monotonic_arena](monotonic_arena.md)。
 
 ## 声明
 
 ```cpp
-template<class T> class asc::arena_allocator
+namespace asc {
+template<class T> class arena_allocator;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- allocator 非拥有地引用 monotonic_arena，arena 必须在 allocator 及其分配结果使用期间保持有效
-- 元素数量乘以 sizeof(T) 不得溢出
-- 空间不足时 allocate 返回空指针
+- allocator非拥有地引用monotonic_arena，arena必须在allocator及其分配结果使用期间保持有效。
+- 元素数量乘以sizeof(T)不得溢出。
+- 空间不足时allocate返回空指针。
 
 ## 调用示例
 
-以下片段演示 arena 存储、分配器构造、分配与对象读写的完整用法；输入和执行上下文须满足本页约束。
+以下Host示例在调用方提供的存储中构造四个整数，并在重置arena前结束对象生命周期。
 
 ```cpp
 #include <asc/memory>
+#include <asc/std/memory>
 
 bool use_arena_allocator()
 {
-    // 准备 arena 使用的存储；Host 片段以本地缓冲为例，设备侧可换成 GM 区域
-    unsigned char buffer[128];
-    asc::monotonic_arena arena(buffer, sizeof(buffer));
-
-    // 以 arena 构造元素分配器；allocator 非拥有地引用 arena
+    alignas(int) unsigned char storage[128];
+    asc::monotonic_arena arena(storage, sizeof(storage));
     asc::arena_allocator<int> allocator(arena);
-
-    // 分配 4 个 int；空间不足时 allocate 返回空指针，调用方须判空
-    int* data = allocator.allocate(4);
-    if (data == nullptr) {
+    int* values = allocator.allocate(4);
+    if (values == nullptr) {
         return false;
     }
     for (int i = 0; i < 4; ++i) {
-        data[i] = i + 1;
+        asc::std::construct_at(values + i, i + 1);
     }
-    const bool ok = data[0] == 1 && data[1] == 2 && data[2] == 3 && data[3] == 4;
-
-    // 单次 deallocate 不回收空间；存储由 arena 统一管理，reset 或 arena 生命周期结束后整体释放
-    allocator.deallocate(data, 4);
-    return ok;
+    const bool ok = values[0] == 1 && values[3] == 4;
+    asc::std::destroy_n(values, 4);
+    allocator.deallocate(values, 4);
+    arena.reset();
+    // reset 只允许重新使用存储；storage 的生命周期由本函数管理。
+    return ok && arena.used() == 0;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_memory.md)

@@ -28,28 +28,37 @@
 
 头文件路径为：`<asc/execution.policy.h>`。
 
-`asc::device_policy` 是 Host 侧的 Device 执行策略值对象，用于组合 Stream、临时存储和执行要求。配置接口返回新策略，不修改原对象。
+`asc::device_policy`是Host侧的Device执行策略值对象，用于组合Stream、临时存储和执行要求。配置接口返回新策略，不修改原对象。
 
 ## 声明
 
 ```cpp
-class asc::device_policy
+namespace asc {
+class device_policy;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 绑定不可变且不拥有资源
-- 默认构造绑定空 Stream、空临时存储和默认执行要求
+- 绑定不可变且不拥有资源。
+- 默认构造绑定空Stream、空临时存储和默认执行要求。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/execution.policy.h>
 
-void use_type(const asc::device_policy& value)
+bool example()
 {
-    (void)value;
+    asc::device_policy policy;
+    return !policy.stream() && policy.temporary_storage().data() == nullptr
+        && policy.temporary_storage().size_bytes() == 0
+        && policy.requirements().determinism_value() == asc::determinism::not_guaranteed;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_execution_policy_h.md)

@@ -1,4 +1,4 @@
-# asc::std::operator-（complex 重载）（函数模板）
+# `asc::std::operator-`（complex重载）（函数模板）
 
 ## 产品支持情况
 
@@ -28,39 +28,47 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::operator-` 按该类型定义的减法或位移规则产生新值。
+`asc::std::operator-`按该类型定义的减法或位移规则产生新值。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> constexpr complex<T> asc::std::operator-(const T& lhs, const complex<T>& rhs) noexcept;
+namespace asc::std {
+template<class T> constexpr complex<T> operator-(const T& lhs, const complex<T>& rhs) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> constexpr complex<T> asc::std::operator-(const complex<T>& lhs) noexcept;
+namespace asc::std {
+template<class T> constexpr complex<T> operator-(const complex<T>& lhs) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class T> constexpr complex<T> asc::std::operator-(const complex<T>& lhs, const T& rhs) noexcept;
+namespace asc::std {
+template<class T> constexpr complex<T> operator-(const complex<T>& lhs, const T& rhs) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class T> constexpr complex<T> asc::std::operator-(const complex<T>& lhs, const complex<T>& rhs) noexcept;
+namespace asc::std {
+template<class T> constexpr complex<T> operator-(const complex<T>& lhs, const complex<T>& rhs) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -75,7 +83,7 @@ template<class T> constexpr complex<T> asc::std::operator-(const complex<T>& lhs
 | `lhs` | 输入 | 复数减法的左操作数（实数标量，作为被减数）。 |
 | `rhs` | 输入 | 复数减法的右操作数（复数，作为减数）。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -89,7 +97,7 @@ template<class T> constexpr complex<T> asc::std::operator-(const complex<T>& lhs
 | --- | --- | --- |
 | `lhs` | 输入 | 一元负号的操作数（复数），返回实部与虚部均取反的复数。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
@@ -104,7 +112,7 @@ template<class T> constexpr complex<T> asc::std::operator-(const complex<T>& lhs
 | `lhs` | 输入 | 复数减法的左操作数（复数，作为被减数）。 |
 | `rhs` | 输入 | 复数减法的右操作数（实数标量，仅从左操作数的实部中减去）。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
@@ -123,19 +131,19 @@ template<class T> constexpr complex<T> asc::std::operator-(const complex<T>& lhs
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
-| 原型 2 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
-| 原型 3 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
-| 原型 4 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
+| 原型1 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
+| 原型2 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
+| 原型3 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
+| 原型4 | `complex<T>` | 返回按对应复数算术规则计算出的复数值。 |
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/complex>
@@ -147,3 +155,7 @@ decltype(auto) example()
     return asc::std::operator-(left, right);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_complex.md)

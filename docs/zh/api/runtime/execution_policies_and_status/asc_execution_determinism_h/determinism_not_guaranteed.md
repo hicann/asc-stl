@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/execution.determinism.h>`。
 
-`asc::determinism::not_guaranteed` 表示不要求并行算法对相同输入保证结果可重复。
+`asc::determinism::not_guaranteed`表示不要求并行算法对相同输入保证结果可重复。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 声明
 
+所属类型：[`asc::determinism`](determinism.md)。
+
 ```cpp
-asc::determinism::not_guaranteed
+// asc::determinism 类内的声明节选；模板形参和其他成员由所属类提供。
+not_guaranteed;
 ```
 
 ## 约束说明
 
-- 仅提供三个取值
+- 仅提供三个取值。
 
 ## 调用示例
 
@@ -51,3 +54,8 @@ asc::determinism::not_guaranteed
 
 auto value = asc::determinism::not_guaranteed;
 ```
+
+## 关联API
+
+- [`asc::determinism`](determinism.md)
+- [本头文件的接口列表](asc_execution_determinism_h.md)

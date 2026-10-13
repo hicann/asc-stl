@@ -28,53 +28,66 @@
 
 头文件路径为：`<asc/argument>`。
 
-`asc::args::runtime_bounds::runtime_bounds` 使用调用方提供的参数初始化 `asc::args::runtime_bounds` 对象。
+`asc::args::runtime_bounds::runtime_bounds`使用调用方提供的参数初始化`asc::args::runtime_bounds`对象。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::args::runtime_bounds`](args_runtime_bounds.md)。
+
+### 原型1
 
 ```cpp
-constexpr asc::args::runtime_bounds::runtime_bounds() noexcept;
+// asc::args::runtime_bounds 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr runtime_bounds() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr asc::args::runtime_bounds::runtime_bounds(T lower, T upper) noexcept;
+// asc::args::runtime_bounds 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr runtime_bounds(T lower, T upper) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lower` | 输入 | 运行期参数边界的下限：保存于对象中并经 lower() 查询。 |
-| `upper` | 输入 | 运行期参数边界的上限：保存于对象中并经 upper() 查询。 |
+| `lower` | 输入 | 运行期参数边界的下限：保存于对象中并经lower()查询。 |
+| `upper` | 输入 | 运行期参数边界的上限：保存于对象中并经upper()查询。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 使用 C++17，可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Bounds 必须为 asc::args::no_bounds 或 asc::args::static_bounds
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期
+- 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
+- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示本页接口；对象和指针的有效期须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/argument>
 
-void example()
+bool example()
 {
-    asc::args::runtime_bounds<int> bounds{};
-    (void)bounds.lower();
+    asc::args::runtime_bounds<int> bounds(2, 8);
+    return bounds.lower() == 2 && bounds.upper() == 8;
 }
 ```
+
+## 关联API
+
+- [`asc::args::runtime_bounds`](args_runtime_bounds.md)
+- [本头文件的接口列表](asc_argument.md)

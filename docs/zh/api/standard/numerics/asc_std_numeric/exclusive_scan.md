@@ -28,39 +28,45 @@
 
 头文件路径为：`<asc/std/numeric>`。
 
-`asc::std::exclusive_scan` 以初值为首项写出不包含当前输入的前缀归约。
+`asc::std::exclusive_scan`以初值为首项写出不包含当前输入的前缀归约。
 
 标准语义参考：[cppreference `numeric`](https://en.cppreference.com/w/cpp/header/numeric)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class Input, class Output, class T, class BinaryOperation> Output asc::std::exclusive_scan(asc::device_policy policy, Input first, Input last, Output result, T init, BinaryOperation operation);
+namespace asc::std {
+template<class Input, class Output, class T, class BinaryOperation> Output exclusive_scan(asc::device_policy policy, Input first, Input last, Output result, T init, BinaryOperation operation);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host。
+该原型适用于`C++17+`，可用位置为Host。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class InputIterator, class OutputIterator, class T, class BinaryO> constexpr OutputIterator asc::std::exclusive_scan(InputIterator first, InputIterator last, OutputIterator result, T init, BinaryO binary_op);
+namespace asc::std {
+template<class InputIterator, class OutputIterator, class T, class BinaryO> constexpr OutputIterator exclusive_scan(InputIterator first, InputIterator last, OutputIterator result, T init, BinaryO binary_op);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class InputIterator, class OutputIterator, class T> constexpr OutputIterator asc::std::exclusive_scan(InputIterator first, InputIterator last, OutputIterator result, T init);
+namespace asc::std {
+template<class InputIterator, class OutputIterator, class T> constexpr OutputIterator exclusive_scan(InputIterator first, InputIterator last, OutputIterator result, T init);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -75,14 +81,14 @@ template<class InputIterator, class OutputIterator, class T> constexpr OutputIte
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
+| `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `result` | 输出 | 写入前缀结果的输出迭代器；目标范围须有足够容量。 |
 | `init` | 输入 | 前缀归约的初始累加值；输出首元素即该值，其后每个输出由该值与前缀元素归约得到。 |
-| `operation` | 输入 | 二元归约运算对象，按 operation(当前累加值, 当前元素) 生成排除当前项的前缀结果；省略该参数的重载使用 operator+。 |
+| `operation` | 输入 | 二元归约运算对象，按operation(当前累加值, 当前元素)生成排除当前项的前缀结果；省略该参数的重载使用`operator+`。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -101,9 +107,9 @@ template<class InputIterator, class OutputIterator, class T> constexpr OutputIte
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `result` | 输出 | 写入结果的输出迭代器；目标范围须有足够容量。 |
 | `init` | 输入 | 前缀归约的初始累加值；输出首元素即该值，其后每个输出由该值与前缀元素归约得到。 |
-| `binary_op` | 输入 | 二元归约运算对象，按 binary_op(当前累加值, 当前元素) 生成排除当前项的前缀结果；省略该参数的重载使用 operator+。 |
+| `binary_op` | 输入 | 二元归约运算对象，按binary_op(当前累加值, 当前元素)生成排除当前项的前缀结果；省略该参数的重载使用`operator+`。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
@@ -126,19 +132,19 @@ template<class InputIterator, class OutputIterator, class T> constexpr OutputIte
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `Output` | 返回输出范围中最后一个写入结果之后的位置。 |
-| 原型 2 | `OutputIterator` | 返回输出范围中最后一个写入结果之后的位置。 |
-| 原型 3 | `OutputIterator` | 返回输出范围中最后一个写入结果之后的位置。 |
+| 原型1 | `Output` | 返回输出范围中最后一个写入结果之后的位置。 |
+| 原型2 | `OutputIterator` | 返回输出范围中最后一个写入结果之后的位置。 |
+| 原型3 | `OutputIterator` | 返回输出范围中最后一个写入结果之后的位置。 |
 
 ## 约束说明
 
-- 使用 C++17
-- 该 Host 同步适配接口调用对应的 asc::parallel 前端
-- policy 必须包含有效 Stream 和足够的调用方临时存储
-- 接口只等待该 Stream
-- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用 asc::std::terminate
-- 提供顺序执行且不进行动态内存分配的重载
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序
+- 使用C++17。
+- 该Host同步适配接口调用对应的asc::parallel前端。
+- policy必须包含有效Stream和足够的调用方临时存储。
+- 接口只等待该Stream。
+- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用asc::std::terminate。
+- 提供顺序执行且不进行动态内存分配的重载。
+- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
@@ -154,3 +160,7 @@ decltype(auto) example()
     return asc::std::exclusive_scan(input, input + 4, output, 0);
 }
 ```
+
+## 关联API
+
+- [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。

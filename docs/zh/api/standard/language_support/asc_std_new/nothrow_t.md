@@ -28,29 +28,38 @@
 
 头文件路径为：`<asc/std/new>`。
 
-`asc::std::nothrow_t` 标记分配失败时不抛出异常的分配形式。
+`asc::std::nothrow_t`标记分配失败时不抛出异常的分配形式。
 
 标准语义参考：[cppreference `new`](https://en.cppreference.com/w/cpp/header/new)。
 
 ## 声明
 
 ```cpp
-struct asc::std::nothrow_t
+namespace asc::std {
+struct nothrow_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 placement 对象生命周期和无动态分配的接口
+- 提供placement对象生命周期和无动态分配的接口。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+该标记供接受ASC-STL标记类型的重载使用；不能把它直接传给只接受系统std::nothrow_t的new表达式。
 
 ```cpp
 #include <asc/std/new>
+#include <asc/std/type_traits>
 
-void use_type(const asc::std::nothrow_t& value)
+bool example()
 {
-    (void)value;
+    static_assert(asc::std::is_empty_v<asc::std::nothrow_t>);
+    static_assert(asc::std::is_same_v<decltype(asc::std::nothrow), const asc::std::nothrow_t>);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_new.md)

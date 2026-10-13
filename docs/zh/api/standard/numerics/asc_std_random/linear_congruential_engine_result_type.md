@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::linear_congruential_engine::result_type` 标识调用结果类型。
+`asc::std::linear_congruential_engine::result_type`标识调用结果类型。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 声明
 
+所属类型：[`asc::std::linear_congruential_engine`](linear_congruential_engine.md)。
+
 ```cpp
-using asc::std::linear_congruential_engine::result_type = UIntType
+// asc::std::linear_congruential_engine 类内的声明节选；模板形参和其他成员由所属类提供。
+using result_type = UIntType;
 ```
 
 ## 约束说明
 
-- 提供不接收 seed_seq 的标准 seed、discard、生成和相等比较成员
+- 提供不接收seed_seq的标准seed、discard、生成和相等比较成员。
 
 ## 调用示例
 
@@ -54,3 +57,8 @@ void use_type()
     using alias_type = typename asc::std::minstd_rand::result_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::linear_congruential_engine`](linear_congruential_engine.md)
+- [本头文件的接口列表](asc_std_random.md)

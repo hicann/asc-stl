@@ -28,28 +28,31 @@
 
 头文件路径为：`<asc/std/deque>`。
 
-`asc::std::deque::difference_type` 标识迭代器距离的有符号类型。
+`asc::std::deque::difference_type`标识迭代器距离的有符号类型。
 
 标准语义参考：[cppreference `deque`](https://en.cppreference.com/w/cpp/header/deque)。
 
 ## 声明
 
+所属类型：[`asc::std::deque`](deque.md)。
+
 ```cpp
-using asc::std::deque::difference_type = long
+// asc::std::deque 类内的声明节选；模板形参和其他成员由所属类提供。
+using difference_type = long;
 ```
 
 ## 约束说明
 
-- deque<T,A>显式allocator构造
-- 有限块映射内的push/emplace/pop_front/back
-- empty/size/front/back/operator[]/随机访问迭代核心
-- 新端块分配时已有元素引用稳定
-- clear/析构
-- 仅容量充足和不抛出异常域
+- deque<T,A>显式allocator构造。
+- 有限块映射内的push/emplace/pop_front/back。
+- empty/size/front/back/`operator[]`/随机访问迭代核心。
+- 新端块分配时已有元素引用稳定。
+- clear/析构。
+- 仅容量充足和不抛出异常域。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/deque>
@@ -74,3 +77,8 @@ void use_type()
     using alias_type = typename asc::std::deque<int, example_allocator<int>>::difference_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::deque`](deque.md)
+- [本头文件的接口列表](asc_std_deque.md)

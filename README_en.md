@@ -1,10 +1,10 @@
 # ASC-STL
 
-#### A C++ standard library for Ascend device programming — header-only, with a single public header organization shared by Host and Device code
+A C++ standard library for Ascend device programming — header-only, with a single public header organization shared by Host and Device code
 
-English | [简体中文](./README.md)
+English | [简体中文](README.md)
 
-[📖 API Reference](docs/zh/api/README.md) | [📚 Roadmap](docs/roadmap/ROADMAP.md) | [📄 LICENSE](LICENSE) | [🤝 Contributing](CONTRIBUTING.md)
+[📖 API Reference](docs/zh/api/README.md) | [📚 Roadmap](docs/zh/roadmap/roadmap.md) | [📄 LICENSE](LICENSE) | [🤝 Contributing](CONTRIBUTING.md)
 
 ## 🔥 Latest News
 
@@ -22,7 +22,7 @@ Code is updated weekly, and versions are released on a **biweekly** cadence:
 
 ### 📖 Documentation
 
-- Product roadmap: [ASC-STL roadmap](docs/roadmap/ROADMAP.md) · [v1.0.0 detailed roadmap](docs/roadmap/ROADMAP-v1.0.0.md)
+- Product roadmap: [ASC-STL roadmap](docs/zh/roadmap/roadmap.md) · [v1.0.0 detailed roadmap](docs/zh/roadmap/roadmap_v1_0_0.md)
 - API reference: [ASC-STL API Reference](docs/zh/api/README.md) (standard library, Ascend extensions, and Runtime interfaces)
 
 ## 🚀 Overview
@@ -45,7 +45,7 @@ Developing compute kernels for Ascend devices requires general-purpose C++ facil
 
 ### Overall Architecture
 
-![Figure 1 ASC-STL design architecture](docs/images/asc-stl-architecture-en.png)
+![Figure 1 ASC-STL design architecture](docs/en/figures/asc_stl_architecture_en.png)
 
 - ASC-STL is a header-only C++ library whose interfaces fall into three parts: the C++ standard library interfaces, the Ascend extension interfaces, and the Runtime interfaces;
 - Device-side programming capability builds on CANN Ascend C; code is compiled by the BiSheng compiler (based on Clang 15.0.5) and runs on the Ascend 950 processor;
@@ -187,15 +187,15 @@ Current status: **v1.0.0 (full release) under development, planned for October 1
 
 | Document | Description |
 | --- | --- |
-| [Product roadmap](docs/roadmap/ROADMAP.md) | Release plan and per-version capability scope |
-| [v1.0.0 detailed roadmap](docs/roadmap/ROADMAP-v1.0.0.md) | Entry-level description of the full release: C++ standard library, Ascend extensions, and Runtime capabilities |
+| [Product roadmap](docs/zh/roadmap/roadmap.md) | Release plan and per-version capability scope |
+| [v1.0.0 detailed roadmap](docs/zh/roadmap/roadmap_v1_0_0.md) | Entry-level description of the full release: C++ standard library, Ascend extensions, and Runtime capabilities |
 | [Contributing guide](CONTRIBUTING.md) | Contribution workflow, contribution scenarios, and code/test requirements |
 | [API reference](docs/zh/api/README.md) | Entry point to the ASC-STL public-interface reference: standard library, Ascend extensions, and Runtime |
 
 ## 📌 Related Plans
 
-- [ASC-STL roadmap](docs/roadmap/ROADMAP.md): library features are updated weekly, and versions have been released on a biweekly cadence since the second week of October 2026; the full v1.0.0 release (C++ standard library interfaces, Ascend extension interfaces, and Runtime interfaces in their entirety) ships on October 16, followed by v1.1.0 on October 30 (refinement plan, batch 1: quality and performance); dates for later refinement batches are TBD;
-- [v1.0.0 detailed roadmap](docs/roadmap/ROADMAP-v1.0.0.md): entry-level descriptions of the type system, algorithms, containers and views, strings and text, numerics and time, standard synchronization, memory management, and the Ascend extension and Runtime capabilities.
+- [ASC-STL roadmap](docs/zh/roadmap/roadmap.md): library features are updated weekly, and versions have been released on a biweekly cadence since the second week of October 2026; the full v1.0.0 release (C++ standard library interfaces, Ascend extension interfaces, and Runtime interfaces in their entirety) ships on October 16, followed by v1.1.0 on October 30 (refinement plan, batch 1: quality and performance); dates for later refinement batches are TBD;
+- [v1.0.0 detailed roadmap](docs/zh/roadmap/roadmap_v1_0_0.md): entry-level descriptions of the type system, algorithms, containers and views, strings and text, numerics and time, standard synchronization, memory management, and the Ascend extension and Runtime capabilities.
 
 ## 📝 Additional Information
 

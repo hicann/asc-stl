@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/launch>`。
 
-`asc::host_callback` 按指定 Stream 的任务顺序提交 Host 回调。Stream 或回调函数为空时返回参数无效，底层 Runtime 失败时保留原生状态码。
+`asc::host_callback`按指定Stream的任务顺序提交Host回调。Stream或回调函数为空时返回参数无效，底层Runtime失败时保留原生状态码。
 
 ## 函数原型
 
 ```cpp
-asc::execution_status asc::host_callback(asc::stream_ref stream, asc::host_callback_t callback, void* data) noexcept;
+namespace asc {
+asc::execution_status host_callback(asc::stream_ref stream, host_callback_t callback, void* data) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,9 +44,9 @@ asc::execution_status asc::host_callback(asc::stream_ref stream, asc::host_callb
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `stream` | 输入 | 用于按序提交异步工作的 Stream。相关资源须保持有效，直至工作完成。 |
-| `callback` | 输入 | 回调函数指针（host_callback_t = void(*)(void*)）：轮到该 Stream 队列项时在 Host 执行；为空时返回参数无效。 |
-| `data` | 输入 | 回调执行时透传的用户数据指针：生命周期须覆盖到回调在 Stream 上实际执行完毕。 |
+| `stream` | 输入 | 用于按序提交异步工作的Stream。相关资源须保持有效，直至工作完成。 |
+| `callback` | 输入 | 回调函数指针（host_callback_t = void(*)(void*)）：轮到该Stream队列项时在Host执行；为空时返回参数无效。 |
+| `data` | 输入 | 回调执行时透传的用户数据指针：生命周期须覆盖到回调在Stream上实际执行完毕。 |
 
 ## 返回值说明
 
@@ -54,9 +56,9 @@ asc::execution_status asc::host_callback(asc::stream_ref stream, asc::host_callb
 
 ## 约束说明
 
-- 仅可在 Host 调用
-- Stream 和回调函数必须有效
-- 回调及用户数据须保持有效直至执行，回调不得跨越 C 接口边界抛出异常
+- 仅可在Host调用。
+- Stream和回调函数必须有效。
+- 回调及用户数据须保持有效直至执行，回调不得跨越C接口边界抛出异常。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example(asc::stream_ref stream, asc::host_callback_t callback, vo
     return asc::host_callback(stream, callback, data);
 }
 ```
+
+## 关联API
+
+- [`asc::execution_status`](../../execution_policies_and_status/asc_execution/execution_status.md)：参数校验和任务提交状态；提交成功不表示异步工作已经完成。

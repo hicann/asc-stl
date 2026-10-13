@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/mdspan>`。
 
-`asc::to_dlpack_tensor` 把兼容的 mdspan 视图转换为 DLPack 张量描述。
+`asc::to_dlpack_tensor`把兼容的mdspan视图转换为DLPack张量描述。
 
 ## 函数原型
 
 ```cpp
-template<class Element, class Extents, class Layout, class Accessor> bool asc::to_dlpack_tensor(const asc::std::mdspan<Element, Extents, Layout, Accessor>& view, DLDeviceType device_type, int device_id, asc::dlpack_tensor<Extents::rank()>& output) noexcept;
+namespace asc {
+template<class Element, class Extents, class Layout, class Accessor> bool to_dlpack_tensor(const asc::std::mdspan<Element, Extents, Layout, Accessor>& view, DLDeviceType device_type, int device_id, asc::dlpack_tensor<Extents::rank()>& output) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,35 +44,35 @@ template<class Element, class Extents, class Layout, class Accessor> bool asc::t
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Element` | 视图的元素类型；须属于 DLPack 桥接支持的元素类型集合，否则转换返回 false。 |
-| `Extents` | 视图的维度说明类型；其 rank() 决定输出张量的秩。 |
+| `Element` | 视图的元素类型；须属于DLPack桥接支持的元素类型集合，否则转换返回false。 |
+| `Extents` | 视图的维度说明类型；其rank()决定输出张量的秩。 |
 | `Layout` | 视图的布局映射类型；其逐维步长被写入输出张量的步长数组。 |
-| `Accessor` | 视图的访问器类型；随 mdspan 一并参与推导，不改变转换结果。 |
+| `Accessor` | 视图的访问器类型；随mdspan一并参与推导，不改变转换结果。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `view` | 输入 | 被转换的 mdspan 视图（非拥有）；其数据指针须非空，否则返回 false。转换仅借用其数据地址，不获得存储所有权。 |
-| `device_type` | 输入 | 输出张量记录的设备类型（DLDeviceType 枚举值）；仅接受 kDLCPU 与 kDLExtDev，其它取值返回 false。 |
+| `view` | 输入 | 被转换的mdspan视图（非拥有）；其数据指针须非空，否则返回false。转换仅借用其数据地址，不获得存储所有权。 |
+| `device_type` | 输入 | 输出张量记录的设备类型（DLDeviceType枚举值）；仅接受kDLCPU与kDLExtDev，其它取值返回false。 |
 | `device_id` | 输入 | 输出张量记录的设备编号（int），原样写入其设备描述，不做校验。 |
-| `output` | 输出 | 接收 DLPack 张量描述的输出对象（dlpack_tensor<Extents::rank()>）；成功时写入数据指针、设备、维数、dtype 及逐维形状与步长（byte_offset 置 0），失败时不改动。 |
+| `output` | 输出 | 接收DLPack张量描述的输出对象（dlpack_tensor<Extents::rank()>）；成功时写入数据指针、设备、维数、dtype及逐维形状与步长（byte_offset置0），失败时不改动。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 提供 Host 和 GM 视图以及 AI Core SIMD 编程 UB 视图
-- 允许有符号步长
-- 可选的 Host DLPack 桥接不抛出异常
+- 提供Host和GM视图以及AI Core SIMD编程UB视图。
+- 允许有符号步长。
+- 可选的Host DLPack桥接不抛出异常。
 
 ## 调用示例
 
-DLPack 桥接接口仅在提供 DLPack 头文件时可用；以下 Host 片段借用调用方管理的视图和张量存储。
+DLPack桥接接口仅在提供DLPack头文件时可用；以下Host片段借用调用方管理的视图和张量存储。
 
 ```cpp
 #include <asc/mdspan>
@@ -89,3 +91,7 @@ decltype(auto) example(const asc::host_mdspan<int, asc::std::dextents<asc::std::
 }
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_mdspan.md)

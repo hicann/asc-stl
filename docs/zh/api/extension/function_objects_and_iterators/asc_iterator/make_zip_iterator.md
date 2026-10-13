@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::make_zip_iterator` 创建并行推进多个底层迭代器的 zip_iterator。
+`asc::make_zip_iterator`创建并行推进多个底层迭代器的zip_iterator。
 
 ## 函数原型
 
 ```cpp
-template<class... Iterators> constexpr asc::zip_iterator<Iterators...> asc::make_zip_iterator(Iterators... iterators);
+namespace asc {
+template<class... Iterators> constexpr asc::zip_iterator<Iterators...> make_zip_iterator(Iterators... iterators);
+} // namespace asc
 ```
 
 ## 参数说明
@@ -58,8 +60,8 @@ template<class... Iterators> constexpr asc::zip_iterator<Iterators...> asc::make
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
@@ -75,3 +77,7 @@ decltype(auto) example()
     return asc::make_zip_iterator(values, indices);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

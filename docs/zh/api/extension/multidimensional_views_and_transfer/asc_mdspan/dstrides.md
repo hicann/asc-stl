@@ -28,32 +28,39 @@
 
 头文件路径为：`<asc/mdspan>`。
 
-`asc::dstrides` 表示包含动态步长的 mdspan 步长类型。
+`asc::dstrides`表示包含动态步长的mdspan步长类型。
 
 ## 声明
 
-```cpp
-template<class OffsetType, asc::std::size_t Rank>
-using asc::dstrides = asc::strides<OffsetType, asc::dynamic_stride, ..., asc::dynamic_stride>;
-```
+`asc::dstrides<OffsetType, Rank>`是别名模板，等价于含`Rank`个`asc::dynamic_stride`实参的`asc::strides`，不要求调用方命名内部辅助类型。
 
-模板实参列表中共有 `Rank` 个 `asc::dynamic_stride`，即全部维度步长均为动态。
+```cpp
+using Rank2 = asc::dstrides<int, 2>;
+using Equivalent = asc::strides<int, asc::dynamic_stride, asc::dynamic_stride>;
+```
 
 ## 约束说明
 
-- 提供 Host 和 GM 视图以及 AI Core SIMD 编程 UB 视图
-- 允许有符号步长
-- 可选的 Host DLPack 桥接不抛出异常
+- `OffsetType`是可表示步长的整数类型，`Rank`是维数。
+- 所有维度步长都在构造时提供；步长可为负，后续视图访问仍须落在有效存储中。
 
 ## 调用示例
 
-以下片段选用具体模板实参展示别名类型。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/mdspan>
+#include <asc/std/type_traits>
 
-void use_type()
+bool example()
 {
-    using selected = asc::dstrides<int, 2>;
+    using Strides = asc::dstrides<int, 2>;
+    static_assert(asc::std::is_same_v<Strides, asc::strides<int, asc::dynamic_stride, asc::dynamic_stride>>);
+    Strides strides(3, 1);
+    return strides.stride(0) == 3 && strides.stride(1) == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_mdspan.md)

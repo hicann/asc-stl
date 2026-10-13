@@ -28,20 +28,20 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`result_type` 是本期均匀实数分布的 float 结果类型。
+`result_type`是本期均匀实数分布的float结果类型。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 声明
 
 ```cpp
-using asc::std::uniform_real_distribution<float>::result_type = float
+using asc::std::uniform_real_distribution<float>::result_type = float;
 ```
 
 ## 约束说明
 
-- 仅提供 uniform_real_distribution<float>
-- 结果位于指定的半开区间内，不提供 double、long double 及其他统计分布
+- 仅提供uniform_real_distribution<float>。
+- 结果位于指定的半开区间内，不提供double、long double及其他统计分布。
 
 ## 调用示例
 
@@ -55,3 +55,7 @@ void example()
     using result = asc::std::uniform_real_distribution<float>::result_type;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

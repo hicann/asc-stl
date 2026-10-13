@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::ranges::advance` 是按给定步数或哨兵推进迭代器的定制点对象；至多 n 次有界循环防无限游走。
+`asc::std::ranges::advance`是按给定步数或哨兵推进迭代器的定制点对象；至多n次有界循环防无限游走。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-constexpr asc::std::ranges::advance_fn asc::std::ranges::advance
+namespace asc::std::ranges {
+constexpr advance_fn advance;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 迭代器可按步数推进；指定哨兵时形成有效范围
+- 迭代器可按步数推进；指定哨兵时形成有效范围。
 
 ## 调用示例
 
@@ -57,3 +59,7 @@ void example()
     asc::std::ranges::advance(position, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

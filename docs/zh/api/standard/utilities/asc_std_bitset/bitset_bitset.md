@@ -28,19 +28,19 @@
 
 头文件路径为：`<asc/std/bitset>`。
 
-`asc::std::bitset::bitset` 按本页所列构造形态初始化 `bitset` 对象。
+`asc::std::bitset::bitset`按本页所列构造形态初始化`bitset`对象。
 
 标准语义参考：[cppreference `bitset`](https://en.cppreference.com/w/cpp/header/bitset)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 bitset() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 bitset(unsigned long long value) noexcept;
@@ -48,34 +48,42 @@ bitset(unsigned long long value) noexcept;
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 初始化位的无符号整数值；取其低 min(Size, 64) 个二进制位为初值，超出部分忽略。 |
+| `value` | 输入 | 初始化位的无符号整数值；取其低min(Size, 64)个二进制位为初值，超出部分忽略。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 支持默认构造和 unsigned long long 构造
-- operator[] 不进行边界检查
-- 提供整组 set、reset、flip，位运算、移位、状态检查、计数和容量查询
+- 支持默认构造和unsigned long long构造。
+- `operator[]`不进行边界检查。
+- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
 
 ## 调用示例
 
-以下 Host 片段以 8 位 bitset 演示具体调用；索引须在有效范围内。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/bitset>
 
-void example()
+bool example()
 {
-    asc::std::bitset<8> bits{};
-    (void)bits.size();
+    asc::std::bitset<8> bits(5);
+    return bits.size() == 8 && bits.count() == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_bitset.md)

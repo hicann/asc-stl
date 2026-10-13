@@ -28,28 +28,34 @@
 
 头文件路径为：`<asc/functional>`。
 
-`asc::always_false` 提供对任意参数都返回 false 的无状态谓词。
+`asc::always_false`提供对任意参数都返回false的无状态谓词。
 
 ## 声明
 
 ```cpp
-struct asc::always_false
+namespace asc {
+struct always_false;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 整数或逻辑运算仅在数学性质成立时报告对应特性
-- 浮点加法不满足结合律
+- 整数或逻辑运算仅在数学性质成立时报告对应特性。
+- 浮点加法不满足结合律。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/functional>
 
-void use_type(const asc::always_false& value)
+bool example()
 {
-    (void)value;
+    return !asc::always_false{}(7);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_functional.md)

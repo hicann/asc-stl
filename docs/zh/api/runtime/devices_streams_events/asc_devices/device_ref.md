@@ -28,29 +28,36 @@
 
 头文件路径为：`<asc/devices>`。
 
-`asc::device_ref` 是按 Runtime 序号标识 Device 的轻量值对象，可查询序号及设备属性，不拥有 Runtime 设备资源。
+`asc::device_ref`是按Runtime序号标识Device的轻量值对象，可查询序号及设备属性，不拥有Runtime设备资源。
 
 ## 声明
 
 ```cpp
-class asc::device_ref
+namespace asc {
+class device_ref;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 仅可在 Host 查询或选择 Device
-- 引用只保存设备序号且不拥有 Runtime 状态
-- 查询失败时输出参数保持原值，属性仅限当前接口列出的 AI Core、Vector Core、Warp、UB、GM、L2 与架构字段
+- 仅可在Host查询或选择Device。
+- 引用只保存设备序号且不拥有Runtime状态。
+- 查询失败时输出参数保持原值，属性仅限当前接口列出的AI Core、Vector Core、Warp、UB、GM、L2与架构字段。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/devices>
 
-void use_type(const asc::device_ref& value)
+bool example()
 {
-    (void)value;
+    asc::device_ref device(0);
+    return device.ordinal() == 0;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_devices.md)

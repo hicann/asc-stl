@@ -28,25 +28,25 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::reverse_iterator::reverse_iterator` 按本页所列构造形态初始化 `reverse_iterator` 对象。
+`asc::std::reverse_iterator::reverse_iterator`按本页所列构造形态初始化`reverse_iterator`对象。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr reverse_iterator(Iter first) noexcept(is_nothrow_copy_constructible_v<Iter>);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 template<class It2> constexpr reverse_iterator() noexcept(is_nothrow_default_constructible_v<It2>);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 template<class U> constexpr reverse_iterator(const reverse_iterator<U>& other) noexcept(Noexceptreviterconvertible<U, Iter>);
@@ -54,7 +54,7 @@ template<class U> constexpr reverse_iterator(const reverse_iterator<U>& other) n
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -62,43 +62,52 @@ template<class U> constexpr reverse_iterator(const reverse_iterator<U>& other) n
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `It2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `It2` | 来源迭代器的类型；须满足到当前底层迭代器类型的转换条件。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U` | 来源迭代器类型；须满足当前适配器的转换或赋值条件。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void example(int* data)
+bool example()
 {
-    asc::std::reverse_iterator<int*> iterator(data);
-    (void)iterator;
+    int values[] = {2, 4};
+    asc::std::reverse_iterator<int*> iterator(values + 2);
+    return *iterator == 4;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

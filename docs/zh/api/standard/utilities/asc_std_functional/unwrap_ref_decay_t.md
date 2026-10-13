@@ -28,20 +28,21 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::unwrap_ref_decay_t` 取得引用包装器保存的引用类型或按规则退化后的类型。
+`asc::std::unwrap_ref_decay_t`取得引用包装器保存的引用类型或按规则退化后的类型。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 声明
 
 ```cpp
-template<class T> using asc::std::unwrap_ref_decay_t = typename unwrap_ref_decay<T>::type
+namespace asc::std {
+template<class T> using unwrap_ref_decay_t = typename unwrap_ref_decay<T>::type;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
@@ -55,3 +56,7 @@ void use_type()
     using selected = asc::std::unwrap_ref_decay_t<int>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

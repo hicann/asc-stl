@@ -28,31 +28,35 @@
 
 头文件路径为：`<asc/std/algorithm>`、`<asc/std/utility>`。
 
-`asc::std::move` 的一参数形式把对象转换为保留原类型限定的右值引用；三参数形式把输入范围的元素按顺序移动到输出范围。
+`asc::std::move`的一参数形式把对象转换为保留原类型限定的右值引用；三参数形式把输入范围的元素按顺序移动到输出范围。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> [[nodiscard]] constexpr asc::std::remove_reference_t<T>&& asc::std::move(T&& value) noexcept;
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr asc::std::remove_reference_t<T>&& move(T&& value) noexcept;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/utility>`。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class InputIterator, class OutputIterator> constexpr OutputIterator asc::std::move(InputIterator first, InputIterator last, OutputIterator result);
+namespace asc::std {
+template<class InputIterator, class OutputIterator> constexpr OutputIterator move(InputIterator first, InputIterator last, OutputIterator result);
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/algorithm>`。
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -66,7 +70,7 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 | --- | --- | --- |
 | `value` | 输入/输出 | 待转换为右值引用的对象；返回引用不延长对象生命周期。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -87,17 +91,17 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::std::remove_reference_t<T>&&` | 返回引用同一对象的右值引用；该引用不延长原对象生命周期。 |
-| 原型 2 | `OutputIterator` | 返回输出范围中最后一个写入元素之后的位置。 |
+| 原型1 | `asc::std::remove_reference_t<T>&&` | 返回引用同一对象的右值引用；该引用不延长原对象生命周期。 |
+| 原型2 | `OutputIterator` | 返回输出范围中最后一个写入元素之后的位置。 |
 
 ## 约束说明
 
-- 一参数形式只进行值类别转换，返回引用不延长原对象生命周期
-- 三参数形式要求 [first, last) 是有效范围、输出范围容量充足，且源与目标不得以违反标准前置条件的方式重叠。
+- 一参数形式只进行值类别转换，返回引用不延长原对象生命周期。
+- 三参数形式要求[first, last)是有效范围、输出范围容量充足，且源与目标不得以违反标准前置条件的方式重叠。
 
 ## 调用示例
 
-以下 Host 片段分别检查右值引用转换和范围移动的可观察结果。
+以下Host片段分别检查右值引用转换和范围移动的可观察结果。
 
 ```cpp
 #include <asc/std/algorithm>
@@ -116,3 +120,7 @@ bool example()
     return value == 4 && end == output + 3 && output[2] == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

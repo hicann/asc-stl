@@ -28,70 +28,76 @@
 
 头文件路径为：`<asc/std/cstdlib>`。
 
-`asc::std::div` 同时计算整数商和余数并返回对应结果结构。
+`asc::std::div`同时计算整数商和余数并返回对应结果结构。
 
 标准语义参考：[cppreference `cstdlib`](https://en.cppreference.com/w/cpp/header/cstdlib)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-[[nodiscard]] constexpr div_t asc::std::div(int numerator, int denominator) noexcept;
+namespace asc::std {
+[[nodiscard]] constexpr div_t div(int numerator, int denominator) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-[[nodiscard]] constexpr ldiv_t asc::std::div(long numerator, long denominator) noexcept;
+namespace asc::std {
+[[nodiscard]] constexpr ldiv_t div(long numerator, long denominator) noexcept;
+} // namespace asc::std
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-[[nodiscard]] constexpr lldiv_t asc::std::div(long long numerator, long long denominator) noexcept;
+namespace asc::std {
+[[nodiscard]] constexpr lldiv_t div(long long numerator, long long denominator) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `numerator` | 输入 | 被除数（分子），类型分别为 int、long、long long。 |
-| `denominator` | 输入 | 除数（分母），类型与对应原型的被除数一致；不得为 0。 |
+| `numerator` | 输入 | 被除数（分子），类型分别为int、long、long long。 |
+| `denominator` | 输入 | 除数（分母），类型与对应原型的被除数一致；不得为0。 |
 
-### 原型 2 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `numerator` | 输入 | 被除数（分子），类型分别为 int、long、long long。 |
-| `denominator` | 输入 | 除数（分母），类型与对应原型的被除数一致；不得为 0。 |
-
-### 原型 3 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `numerator` | 输入 | 被除数（分子），类型分别为 int、long、long long。 |
-| `denominator` | 输入 | 除数（分母），类型与对应原型的被除数一致；不得为 0。 |
+| `numerator` | 输入 | 被除数（分子），类型分别为int、long、long long。 |
+| `denominator` | 输入 | 除数（分母），类型与对应原型的被除数一致；不得为0。 |
+
+### 原型3的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `numerator` | 输入 | 被除数（分子），类型分别为int、long、long long。 |
+| `denominator` | 输入 | 除数（分母），类型与对应原型的被除数一致；不得为0。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `div_t` | 返回对应结果结构。 |
-| 原型 2 | `ldiv_t` | 返回对应结果结构。 |
-| 原型 3 | `lldiv_t` | 返回对应结果结构。 |
+| 原型1 | `div_t` | 返回对应结果结构。 |
+| 原型2 | `ldiv_t` | 返回对应结果结构。 |
+| 原型3 | `lldiv_t` | 返回对应结果结构。 |
 
 ## 约束说明
 
-- 提供整数重载及相应结果类型
+- 提供整数重载及相应结果类型。
 
 ## 调用示例
 
@@ -105,3 +111,7 @@ decltype(auto) example(int numerator, int denominator)
     return asc::std::div(numerator, denominator);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstdlib.md)

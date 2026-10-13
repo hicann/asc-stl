@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/stream>`。
 
-`asc::event_ref::native_handle` 返回所包装的 Runtime Event 原生句柄，空引用返回空指针。
+`asc::event_ref::native_handle`返回所包装的Runtime Event原生句柄，空引用返回空指针。
 
 ## 函数原型
 
+所属类型：[`asc::event_ref`](event_ref.md)。
+
 ```cpp
-constexpr asc::event_ref::native_handle_type asc::event_ref::native_handle() const noexcept;
+// asc::event_ref 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr native_handle_type native_handle() const noexcept;
 ```
 
 ## 参数说明
@@ -44,27 +47,47 @@ constexpr asc::event_ref::native_handle_type asc::event_ref::native_handle() con
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `constexpr` | 返回所包装的 Runtime Event 原生句柄，空引用返回空指针。 |
+| `constexpr` | 返回所包装的Runtime Event原生句柄，空引用返回空指针。 |
 
 ## 约束说明
 
-- 提供可为空的非拥有 Host 引用
-- 原生句柄为不透明 void 指针
-- 仅当 CANN Runtime 调用成功时才更新查询结果和输出参数
+- 提供可为空的非拥有Host引用。
+- 原生句柄为不透明void指针。
+- 仅当CANN Runtime调用成功时才更新查询结果和输出参数。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例在设备0上初始化Runtime，检查资源状态，并在资源释放后关闭Runtime；运行需要已安装CANN且设备可用。
 
 ```cpp
+#include <acl/acl.h>
 #include <asc/stream>
 
-void example(asc::event_ref& object)
+bool resource_example()
 {
-    (void)object.native_handle();
+    asc::event owner;
+    if (!asc::make_event(owner)) return false;
+    asc::event_ref view(owner.native_handle());
+    const bool observed = static_cast<bool>(view) && view.native_handle() == owner.native_handle();
+    const bool closed = owner.close();
+    return observed && closed;
+}
+
+bool example()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) return false;
+    if (aclrtSetDevice(0) != ACL_SUCCESS) {
+        const bool finalized = aclFinalize() == ACL_SUCCESS;
+        return finalized && false;
+    }
+    const bool passed = resource_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return passed && reset && finalized;
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+## 关联API
 
-完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
+- [`asc::event_ref`](event_ref.md)
+- [本头文件的接口列表](asc_stream.md)

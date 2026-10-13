@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/stream>`。
 
-`asc::event_ref::synchronize` 阻塞 Host，直到该 Event 完成；空句柄或 Runtime 调用失败时返回 false。
+`asc::event_ref::synchronize`阻塞Host，直到该Event完成；空句柄或Runtime调用失败时返回false。
 
 ## 函数原型
 
+所属类型：[`asc::event_ref`](event_ref.md)。
+
 ```cpp
-bool asc::event_ref::synchronize() const noexcept;
+// asc::event_ref 类内的声明节选；模板形参和其他成员由所属类提供。
+bool synchronize() const noexcept;
 ```
 
 ## 参数说明
@@ -44,27 +47,50 @@ bool asc::event_ref::synchronize() const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 提供可为空的非拥有 Host 引用
-- 原生句柄为不透明 void 指针
-- 仅当 CANN Runtime 调用成功时才更新查询结果和输出参数
+- 提供可为空的非拥有Host引用。
+- 原生句柄为不透明void指针。
+- 仅当CANN Runtime调用成功时才更新查询结果和输出参数。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例在设备0上初始化Runtime，检查资源状态，并在资源释放后关闭Runtime；运行需要已安装CANN且设备可用。
 
 ```cpp
+#include <acl/acl.h>
 #include <asc/stream>
 
-void example(asc::event_ref& object)
+bool resource_example()
 {
-    (void)object.synchronize();
+    asc::event owner;
+    if (!asc::make_event(owner)) return false;
+    asc::event_ref view(owner.native_handle());
+    asc::stream stream;
+    if (!asc::make_stream(stream)) return false;
+    if (!owner.record(stream)) return false;
+    const bool observed = view.synchronize();
+    const bool closed = owner.close();
+    return observed && closed;
+}
+
+bool example()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) return false;
+    if (aclrtSetDevice(0) != ACL_SUCCESS) {
+        const bool finalized = aclFinalize() == ACL_SUCCESS;
+        return finalized && false;
+    }
+    const bool passed = resource_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return passed && reset && finalized;
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+## 关联API
 
-完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
+- [`asc::event_ref`](event_ref.md)
+- [本头文件的接口列表](asc_stream.md)

@@ -28,37 +28,43 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::conjunction` 对一组布尔特征执行短路逻辑与。
+`asc::std::conjunction`对一组布尔特征执行短路逻辑与。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<...c...l...a...s...s...> struct asc::std::conjunction
+namespace asc::std {
+template<...c...l...a...s...s...> struct conjunction;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class Arg, class ...Args> struct asc::std::conjunction
+namespace asc::std {
+template<class Arg, class ...Args> struct conjunction;
+} // namespace asc::std
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class Arg> struct asc::std::conjunction
+namespace asc::std {
+template<class Arg> struct conjunction;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v 辅助形式
+- 提供特征类以及标准的 _t、_v辅助形式。
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
+以下Host片段用具体类型实参和`static_assert`验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
@@ -72,3 +78,7 @@ void use_trait()
     static_assert(!asc::std::conjunction_v<asc::std::true_type, asc::std::is_integral<double>>);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_type_traits.md)

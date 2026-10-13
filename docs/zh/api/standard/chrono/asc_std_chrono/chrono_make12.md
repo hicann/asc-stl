@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::make12` 把 24 小时制数值转换为 12 小时制表示。
+`asc::std::chrono::make12`把24小时制数值转换为12小时制表示。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
 ```cpp
-[[nodiscard]] constexpr hours asc::std::chrono::make12(const hours& value) noexcept;
+namespace asc::std::chrono {
+[[nodiscard]] constexpr hours make12(const hours& value) noexcept;
+} // namespace asc::std::chrono
 ```
 
 ## 参数说明
@@ -44,18 +46,17 @@
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 以 24 小时制表示的小时（hours，计数单位为小时），取值 0 到 23；返回对应的 1 到 12 小时制小时。 |
+| `value` | 输入 | 以24小时制表示的小时（hours，计数单位为小时），取值0到23；返回对应的1到12小时制小时。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `hours` | 返回转换后的 12 小时制或 24 小时制小时值。 |
+| `hours` | 返回转换后的12小时制或24小时制小时值。 |
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
@@ -69,3 +70,7 @@ decltype(auto) example(const asc::std::chrono::hours & value)
     return asc::std::chrono::make12(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

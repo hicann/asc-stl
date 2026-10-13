@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::allocate_at_least` 请求分配器分配至少 n 个对象的内存，返回包含指针与实际容量的 `allocation_result`，容量不小于请求值。
+`asc::std::allocate_at_least`请求分配器分配至少n个对象的内存，返回包含指针与实际容量的`allocation_result`，容量不小于请求值。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
 ```cpp
-template<class Alloc> asc::std::allocation_result<typename asc::std::allocator_traits<Alloc>::pointer> asc::std::allocate_at_least(Alloc& a, size_t n)
+namespace asc::std {
+template<class Alloc> asc::std::allocation_result<typename asc::std::allocator_traits<Alloc>::pointer> allocate_at_least(Alloc& a, size_t n);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,7 +46,7 @@ template<class Alloc> asc::std::allocation_result<typename asc::std::allocator_t
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Alloc` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
+| `Alloc` | 用于本次分配的分配器类型；须满足allocator_traits的分配与数量约定。 |
 
 **函数参数**
 
@@ -57,11 +59,11 @@ template<class Alloc> asc::std::allocation_result<typename asc::std::allocator_t
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::std::allocation_result<typename asc::std::allocator_traits<Alloc>::pointer>` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `asc::std::allocation_result<typename asc::std::allocator_traits<Alloc>::pointer>` | 返回分配地址ptr和实际可容纳的元素数量count；count不小于请求数量。 |
 
 ## 约束说明
 
-- 分配器须满足分配器约定；返回容量不小于请求的对象数
+- 分配器须满足分配器约定；返回容量不小于请求的对象数。
 
 ## 调用示例
 
@@ -76,3 +78,7 @@ decltype(auto) example(Alloc& a, size_t n)
     return asc::std::allocate_at_least(a, n);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

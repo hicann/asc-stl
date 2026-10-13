@@ -1,4 +1,4 @@
-# asc::std::tuple::operator=
+# asc::std::tuple::`operator=`
 
 ## 产品支持情况
 
@@ -28,34 +28,40 @@
 
 头文件路径为：`<asc/std/tuple>`。
 
-`asc::std::tuple::operator=` 按所选赋值重载更新对象，并返回规定的结果。
+`asc::std::tuple::operator=`按所选赋值重载更新对象，并返回规定的结果。
 
 标准语义参考：[cppreference `tuple`](https://en.cppreference.com/w/cpp/header/tuple)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::tuple`](tuple.md)。
+
+### 原型1
 
 ```cpp
-tuple<Types...>& asc::std::tuple::operator=(const tuple<Types...>& other);
+// asc::std::tuple 类内的声明节选；模板形参和其他成员由所属类提供。
+tuple<Types...>& operator=(const tuple<Types...>& other);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-tuple<Types...>& asc::std::tuple::operator=(tuple<Types...>&& other);
+// asc::std::tuple 类内的声明节选；模板形参和其他成员由所属类提供。
+tuple<Types...>& operator=(tuple<Types...>&& other);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class... Other, enable_if_t<sizeof...(Other) == sizeof...(Types), int> = 0> tuple<Types...>& asc::std::tuple::operator=(const tuple<Other...>& other);
+// asc::std::tuple 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class... Other, enable_if_t<sizeof...(Other) == sizeof...(Types), int> = 0> tuple<Types...>& operator=(const tuple<Other...>& other);
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class... Other, enable_if_t<sizeof...(Other) == sizeof...(Types), int> = 0> tuple<Types...>& asc::std::tuple::operator=(tuple<Other...>&& other);
+// asc::std::tuple 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class... Other, enable_if_t<sizeof...(Other) == sizeof...(Types), int> = 0> tuple<Types...>& operator=(tuple<Other...>&& other);
 ```
 
 ## 参数说明
@@ -64,27 +70,27 @@ template<class... Other, enable_if_t<sizeof...(Other) == sizeof...(Types), int> 
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Other` | 原型 3、4 的逐元素赋值来源 tuple 的元素类型包，元素数须与 `Types...` 相同。 |
+| `Other` | 原型3、4的逐元素赋值来源tuple的元素类型包，元素数须与`Types...`相同。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 赋值来源 tuple：原型 1、3 为左值引用逐元素拷贝赋值，原型 2、4 为右值引用逐元素移动赋值。 |
+| `other` | 输入 | 赋值来源tuple：原型1、3为左值引用逐元素拷贝赋值，原型2、4为右值引用逐元素移动赋值。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1-4 | `tuple<Types...>&` | 返回赋值后的自身引用。 |
+| 原型1-4 | `tuple<Types...>&` | 返回赋值后的自身引用。 |
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
 
 ## 调用示例
 
-以下 Host 片段使用具体数值类型演示调用；状态与参数须满足本页约束。
+以下Host片段使用具体数值类型演示调用；状态与参数须满足本页约束。
 
 ```cpp
 #include <asc/std/tuple>
@@ -95,3 +101,8 @@ void example()
     target = source;
 }
 ```
+
+## 关联API
+
+- [`asc::std::tuple`](tuple.md)
+- [本头文件的接口列表](asc_std_tuple.md)

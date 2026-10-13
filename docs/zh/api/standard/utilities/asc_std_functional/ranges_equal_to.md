@@ -28,29 +28,35 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::ranges::equal_to` 把名称所指的比较关系包装为可调用对象。
+`asc::std::ranges::equal_to`把名称所指的比较关系包装为可调用对象。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 声明
 
 ```cpp
-struct asc::std::ranges::equal_to
+namespace asc::std::ranges {
+struct equal_to;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 同时提供指定类型形式和透明调用形式
+- 同时提供指定类型形式和透明调用形式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/functional>
 
-void use_type(const asc::std::ranges::equal_to& value)
+bool example()
 {
-    (void)value;
+    return asc::std::ranges::equal_to{}(2, 3) == false;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

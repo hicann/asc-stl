@@ -28,26 +28,32 @@
 
 头文件路径为：`<asc/collectives>`。
 
-`asc::block_reduce_add` 对同一线程块内参与调用的线程值求和，并返回归约结果。调用线程须按集体操作的会合要求同时参与，工作区在调用期间不得被其他操作复用。
+`asc::block_reduce_add`对同一线程块内参与调用的线程值求和，并返回归约结果。调用线程须按集体操作的会合要求同时参与，工作区在调用期间不得被其他操作复用。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-asc::std::int32_t asc::block_reduce_add(asc::block_collective_workspace<asc::std::int32_t> workspace, asc::std::int32_t value) noexcept;
+namespace asc {
+asc::std::int32_t block_reduce_add(asc::block_collective_workspace<asc::std::int32_t> workspace, asc::std::int32_t value) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-asc::std::uint32_t asc::block_reduce_add(asc::block_collective_workspace<asc::std::uint32_t> workspace, asc::std::uint32_t value) noexcept;
+namespace asc {
+asc::std::uint32_t block_reduce_add(asc::block_collective_workspace<asc::std::uint32_t> workspace, asc::std::uint32_t value) noexcept;
+} // namespace asc
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-float asc::block_reduce_add(asc::block_collective_workspace<float> workspace, float value) noexcept;
+namespace asc {
+float block_reduce_add(asc::block_collective_workspace<float> workspace, float value) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -59,20 +65,21 @@ float asc::block_reduce_add(asc::block_collective_workspace<float> workspace, fl
 
 ## 数据类型
 
-支持 `int32_t`、`uint32_t` 和 `float`；工作区元素类型、输入值类型和返回值类型必须一致。
+支持`int32_t`、`uint32_t`和`float`；工作区元素类型、输入值类型和返回值类型必须一致。
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::std::int32_t` | 返回参与线程输入值的有符号整数和。 |
-| 原型 2 | `asc::std::uint32_t` | 返回参与线程输入值的无符号整数和。 |
-| 原型 3 | `float` | 返回参与线程输入值的浮点和。 |
+| 原型1 | `asc::std::int32_t` | 返回参与线程输入值的有符号整数和。 |
+| 原型2 | `asc::std::uint32_t` | 返回参与线程输入值的无符号整数和。 |
+| 原型3 | `float` | 返回参与线程输入值的浮点和。 |
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 参数类型、取值范围、会合要求和对象生命周期必须满足页面声明
+- 仅可在AI Core SIMT编程中调用。
+- 同一block的所有线程以相同顺序会合调用；总线程数必须为32的正整数倍。
+- 工作区来自该block的动态共享UB，至少包含thread_count()/32个T，且调用期间不得被其他并发操作复用。
 
 ## 调用示例
 
@@ -89,7 +96,7 @@ __aicore__ unsigned int example(unsigned int* dynamic_shared_pointer, unsigned i
 }
 ```
 
-## 关联 API
+## 关联API
 
 - [asc::make_block_collective_workspace](make_block_collective_workspace.md)
 - [asc::block_reduce_max](block_reduce_max.md)

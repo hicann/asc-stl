@@ -28,29 +28,41 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::linear_congruential_engine::default_seed` 给出当前随机引擎的默认种子、递推参数或轮次数值。
+`asc::std::linear_congruential_engine::default_seed`给出当前随机引擎的默认种子、递推参数或轮次数值。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 声明
 
+所属类型：[`asc::std::linear_congruential_engine`](linear_congruential_engine.md)。
+
 ```cpp
-inline constexpr const result_type asc::std::linear_congruential_engine::default_seed
+// asc::std::linear_congruential_engine 类内的声明节选；模板形参和其他成员由所属类提供。
+inline constexpr const result_type default_seed;
 ```
 
 ## 约束说明
 
-- 提供不接收 seed_seq 的标准 seed、discard、生成和相等比较成员
+- 提供不接收seed_seq的标准seed、discard、生成和相等比较成员。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/random>
+#include <asc/std/limits>
 
-void example(const asc::std::minstd_rand& object)
+bool example()
 {
-    (void)object.default_seed;
+    using Engine = asc::std::minstd_rand;
+    static_assert(Engine::default_seed == 1);
+    Engine engine(1);
+    return engine() == 48271;
 }
 ```
+
+## 关联API
+
+- [`asc::std::linear_congruential_engine`](linear_congruential_engine.md)
+- [本头文件的接口列表](asc_std_random.md)

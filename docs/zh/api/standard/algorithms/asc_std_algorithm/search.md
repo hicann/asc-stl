@@ -28,40 +28,46 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::search` 返回子序列在范围内首次出现的起始位置；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::search`返回子序列在范围内首次出现的起始位置；无策略形式在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class ForwardIterator, class Searcher> [[nodiscard]] constexpr ForwardIterator asc::std::search(ForwardIterator first, ForwardIterator last, const Searcher& searcher);
+namespace asc::std {
+template<class ForwardIterator, class Searcher> [[nodiscard]] constexpr ForwardIterator search(ForwardIterator first, ForwardIterator last, const Searcher& searcher);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class ForwardIterator1, class ForwardIterator2, class BinaryPredicate> [[nodiscard]] constexpr ForwardIterator1 asc::std::search(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 pattern_first, ForwardIterator2 pattern_last, BinaryPredicate predicate);
+namespace asc::std {
+template<class ForwardIterator1, class ForwardIterator2, class BinaryPredicate> [[nodiscard]] constexpr ForwardIterator1 search(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 pattern_first, ForwardIterator2 pattern_last, BinaryPredicate predicate);
+} // namespace asc::std
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class ForwardIterator1, class ForwardIterator2> [[nodiscard]] constexpr ForwardIterator1 asc::std::search(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 pattern_first, ForwardIterator2 pattern_last);
+namespace asc::std {
+template<class ForwardIterator1, class ForwardIterator2> [[nodiscard]] constexpr ForwardIterator1 search(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 pattern_first, ForwardIterator2 pattern_last);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `ForwardIterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `Searcher` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Searcher` | 搜索器类型；调用searcher(first, last)返回匹配范围的起止迭代器。 |
 
 **函数参数**
 
@@ -71,7 +77,7 @@ template<class ForwardIterator1, class ForwardIterator2> [[nodiscard]] constexpr
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `searcher` | 输入 | 提供“查询子序列在范围内首次出现的起始位置”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -91,7 +97,7 @@ template<class ForwardIterator1, class ForwardIterator2> [[nodiscard]] constexpr
 | `pattern_last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
@@ -113,18 +119,18 @@ template<class ForwardIterator1, class ForwardIterator2> [[nodiscard]] constexpr
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `ForwardIterator` | 返回子序列在范围内首次出现的起始位置。 |
-| 原型 2 | `ForwardIterator1` | 返回子序列在范围内首次出现的起始位置。 |
-| 原型 3 | `ForwardIterator1` | 返回子序列在范围内首次出现的起始位置。 |
+| 原型1 | `ForwardIterator` | 返回子序列在范围内首次出现的起始位置。 |
+| 原型2 | `ForwardIterator1` | 返回子序列在范围内首次出现的起始位置。 |
+| 原型3 | `ForwardIterator1` | 返回子序列在范围内首次出现的起始位置。 |
 
 ## 约束说明
 
-- 支持当前版本列出的迭代器、哨兵和可调用对象重载
-- 标准执行策略重载采用顺序执行
+- 支持当前版本列出的迭代器、哨兵和可调用对象重载。
+- 标准执行策略重载采用顺序执行。
 
 ## 调用示例
 
-以下 Host 片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
 
 ```cpp
 #include <asc/std/algorithm>
@@ -136,3 +142,7 @@ decltype(auto) example()
     return asc::std::search(values, values + 8, other, other + 3);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

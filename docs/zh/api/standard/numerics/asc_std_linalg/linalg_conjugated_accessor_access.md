@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/linalg>`。
 
-`asc::std::linalg::conjugated_accessor::access` 通过访问器取得指定索引处的元素引用。
+`asc::std::linalg::conjugated_accessor::access`读取指定索引处的元素，并按值返回共轭运算结果，不修改原元素。
 
 标准语义参考：[cppreference `linalg`](https://en.cppreference.com/w/cpp/header/linalg)。
 
 ## 函数原型
 
+所属类型：[`asc::std::linalg::conjugated_accessor`](linalg_conjugated_accessor.md)。
+
 ```cpp
-constexpr reference asc::std::linalg::conjugated_accessor::access(data_handle_type pointer, size_t index) const noexcept;
+// asc::std::linalg::conjugated_accessor 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr reference access(data_handle_type pointer, size_t index) const noexcept;
 ```
 
 ## 参数说明
@@ -51,26 +54,31 @@ constexpr reference asc::std::linalg::conjugated_accessor::access(data_handle_ty
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `reference` | 返回给定多维索引对应的元素引用或访问结果。 |
+| `reference` | 按值返回共轭结果；`reference`是结果类型的别名，不表示必然返回C++ 引用。 |
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库公共入口的完整7实体合同：scaled/scaled_accessor、conjugated/conjugated_accessor、transposed/layout_transpose、conjugate_transposed
-- 包括access/offset/nested accessor/factor、转换构造、算术类型共轭不变、ADL可共轭类型、双重共轭/转置消去、rank-2静态/动态extents交换、layout_left/right/stride与通用layout_transpose mapping全部观察/比较
-- 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 数据句柄须能经嵌套访问器访问该索引；底层存储在调用期间保持有效。
+- 元素类型和共轭操作须满足嵌套访问器及共轭函数的要求。
 
 ## 调用示例
 
-以下 Host 片段使用具体范围或访问器演示调用；底层存储在调用期间须保持有效。
+以下Host示例验证共轭结果及原数据不变。
 
 ```cpp
 #include <asc/std/linalg>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::complex<float> values[2]{};
+    asc::std::complex<float> values[1] = {{2.0F, 3.0F}};
     using accessor_type = asc::std::linalg::conjugated_accessor<asc::std::default_accessor<asc::std::complex<float>>>;
     accessor_type accessor{};
-    return accessor.access(values, 0);
+    const auto result = accessor.access(values, 0);
+    return result.real() == 2.0F && result.imag() == -3.0F && values[0].imag() == 3.0F;
 }
 ```
+
+## 关联API
+
+- [`asc::std::linalg::conjugated_accessor`](linalg_conjugated_accessor.md)
+- [本头文件的接口列表](asc_std_linalg.md)

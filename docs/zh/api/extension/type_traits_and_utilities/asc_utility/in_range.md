@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/utility>`。
 
-`asc::in_range` 判断 `value` 是否位于包含两端点的闭区间 `[first, last]` 内。
+`asc::in_range`判断`value`是否位于包含两端点的闭区间`[first, last]`内。
 
 ## 函数原型
 
 ```cpp
-template<class T> constexpr bool asc::in_range(T value, T first, T last) noexcept;
+namespace asc {
+template<class T> constexpr bool in_range(T value, T first, T last) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,26 +44,26 @@ template<class T> constexpr bool asc::in_range(T value, T first, T last) noexcep
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 三个操作数共用的算术类型；value、first、last 须为同一类型。 |
+| `T` | 三个操作数共用的算术类型；value、first、last须为同一类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待判断的值；位于闭区间 [first, last] 内（含两端）时返回 true。 |
-| `first` | 输入 | 闭区间的下端点（含）；须满足 first <= last。 |
-| `last` | 输入 | 闭区间的上端点（含）；须满足 first <= last。 |
+| `value` | 输入 | 待判断的值；位于闭区间[first, last] 内（含两端）时返回true。 |
+| `first` | 输入 | 闭区间的下端点（含）；须满足first <= last。 |
+| `last` | 输入 | 闭区间的上端点（含）；须满足first <= last。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- in_range 的操作数必须为同一算术类型且满足 first <= last
-- static_for 对半开编译期区间内的每个索引恰好调用一次可调用对象
+- in_range的操作数必须为同一算术类型且满足first <= last。
+- static_for对半开编译期区间内的每个索引恰好调用一次可调用对象。
 
 ## 调用示例
 
@@ -75,3 +77,7 @@ decltype(auto) example()
     return asc::in_range(3, 0, 10);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_utility.md)

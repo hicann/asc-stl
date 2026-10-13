@@ -28,33 +28,41 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_ref` 以非拥有方式对已有对象执行原子操作。
+`asc::std::atomic_ref`以非拥有方式对已有对象执行原子操作。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 声明
 
 ```cpp
-template<class T> class asc::std::atomic_ref
+namespace asc::std {
+template<class T> class atomic_ref;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 原子对象的类型、地址空间、作用域和内存序必须匹配
-- Device 作用域的 64 位对象位于 GM，UB 原子操作仅使用 memory_order_relaxed
+- 原子对象的类型、地址空间、作用域和内存序必须匹配。
+- Device作用域的64位对象位于GM，UB原子操作仅使用memory_order_relaxed。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/atomic>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::atomic_ref<int>;
-    (void)sizeof(selected);
+    int value = 1;
+    asc::std::atomic_ref<int> reference(value);
+    reference.store(4);
+    return value == 4;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

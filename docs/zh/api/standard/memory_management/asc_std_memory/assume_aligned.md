@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::assume_aligned` 在调用方保证对齐前置条件时向编译器表达指针对齐信息。
+`asc::std::assume_aligned`在调用方保证对齐前置条件时向编译器表达指针对齐信息。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
 ```cpp
-template<size_t Align, class T> [[nodiscard]] constexpr T* asc::std::assume_aligned(T* pointer) noexcept;
+namespace asc::std {
+template<size_t Align, class T> [[nodiscard]] constexpr T* assume_aligned(T* pointer) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -51,7 +53,7 @@ template<size_t Align, class T> [[nodiscard]] constexpr T* asc::std::assume_alig
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 提供“在调用方保证对齐前置条件时向编译器表达指针对齐信息”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `pointer` | 输入 | 须已满足模板实参指定字节对齐的地址；函数不调整地址，不满足对齐要求时行为未定义。 |
 
 ## 返回值说明
 
@@ -61,7 +63,7 @@ template<size_t Align, class T> [[nodiscard]] constexpr T* asc::std::assume_alig
 
 ## 约束说明
 
-- 支持原始指针和用户自定义 fancy pointer，接口自身不分配内存
+- 支持原始指针和用户自定义fancy pointer，接口自身不分配内存。
 
 ## 调用示例
 
@@ -77,6 +79,10 @@ decltype(auto) example(T * pointer)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
 完整示例源码：[pointer_alignment.cpp](../../../../examples/pointer_alignment.cpp)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

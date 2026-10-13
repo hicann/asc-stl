@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/stream>`。
 
-`asc::event_ref::record` 把该 Event 记录到指定 Stream 中，用于标记此前任务完成的位置。
+`asc::event_ref::record`把该Event记录到指定Stream中，用于标记此前任务完成的位置。
 
 ## 函数原型
 
+所属类型：[`asc::event_ref`](event_ref.md)。
+
 ```cpp
-bool asc::event_ref::record(asc::stream_ref stream) const noexcept;
+// asc::event_ref 类内的声明节选；模板形参和其他成员由所属类提供。
+bool record(asc::stream_ref stream) const noexcept;
 ```
 
 ## 参数说明
@@ -42,19 +45,19 @@ bool asc::event_ref::record(asc::stream_ref stream) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `stream` | 输入 | 用于按序提交异步工作的 Stream。相关资源须保持有效，直至工作完成。 |
+| `stream` | 输入 | 用于按序提交异步工作的Stream。相关资源须保持有效，直至工作完成。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 提供可为空的非拥有 Host 引用
-- 原生句柄为不透明 void 指针
-- 仅当 CANN Runtime 调用成功时才更新查询结果和输出参数
+- 提供可为空的非拥有Host引用。
+- 原生句柄为不透明void指针。
+- 仅当CANN Runtime调用成功时才更新查询结果和输出参数。
 
 ## 调用示例
 
@@ -70,6 +73,11 @@ decltype(auto) example(Object& object, Args&&... args)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
+
+## 关联API
+
+- [`asc::event_ref`](event_ref.md)
+- [本头文件的接口列表](asc_stream.md)

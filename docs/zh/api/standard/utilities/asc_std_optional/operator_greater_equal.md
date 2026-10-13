@@ -1,4 +1,4 @@
-# asc::std::operator>=（optional 重载）（函数模板）
+# `asc::std::operator>=`（optional）
 
 ## 产品支持情况
 
@@ -26,160 +26,64 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/std/optional>`、`<asc/std/string_view>`、`<asc/std/variant>`。
+头文件路径为：`<asc/std/optional>`。
 
-`asc::std::operator>=` 判断左操作数是否不小于右操作数。
-
-标准语义参考：[cppreference `optional`](https://en.cppreference.com/w/cpp/header/optional)。
+比较可选值、普通值或空值标记。两个空值相等；空值小于任意含值对象。只有双方都含值时才比较所存储的值，普通值按含值一侧处理。
 
 ## 函数原型
 
-### 原型 1
+以下为`asc::std`命名空间中的函数模板声明；执行空间宏已省略。
 
 ```cpp
-template<class T, class U> constexpr bool asc::std::operator>=(const T& value, const asc::std::optional<U>& optional_value);
+template<class T, class U>
+constexpr bool operator>=(const optional<T>& left, const optional<U>& right);
+
+template<class T, class U>
+constexpr bool operator>=(const optional<T>& left, const U& right);
+
+template<class T, class U>
+constexpr bool operator>=(const T& left, const optional<U>& right);
+
+template<class T>
+constexpr bool operator>=(const optional<T>& left, nullopt_t right) noexcept;
+
+template<class T>
+constexpr bool operator>=(nullopt_t left, const optional<T>& right) noexcept;
 ```
-
-此原型对应头文件：`<asc/std/optional>`。
-
-### 原型 2
-
-```cpp
-template<class T, class U> constexpr bool asc::std::operator>=(const asc::std::optional<T>& left, const asc::std::optional<U>& right);
-```
-
-此原型对应头文件：`<asc/std/optional>`。
-
-### 原型 3
-
-```cpp
-template<class T, class U> constexpr bool asc::std::operator>=(const asc::std::optional<T>& optional_value, const U& value);
-```
-
-此原型对应头文件：`<asc/std/optional>`。
-
-### 原型 4
-
-```cpp
-template<class T> constexpr bool asc::std::operator>=(asc::std::nullopt_t, const asc::std::optional<T>& value) noexcept;
-```
-
-此原型对应头文件：`<asc/std/optional>`。
-
-### 原型 5
-
-```cpp
-template<class T> constexpr bool asc::std::operator>=(const asc::std::optional<T>& value, asc::std::nullopt_t) noexcept;
-```
-
-此原型对应头文件：`<asc/std/optional>`。
 
 ## 参数说明
 
-### 原型 1 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `optional_value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `left` | 输入 | 比较的左操作数，比较不修改它。 |
+| `right` | 输入 | 比较的右操作数，比较不修改它。 |
 
-### 原型 2 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
-
-### 原型 3 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `optional_value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-
-### 原型 4 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-
-### 原型 5 的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+`T`、`U`是可选值的元素类型或另一侧普通值的类型；`nullopt_t`表示空状态。
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型 1-5 | `bool` | 比较成立时为 `true`，否则为 `false`。 |
+返回`bool`，比较关系成立时为`true`，否则为`false`。
 
 ## 约束说明
 
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
-- T 必须是普通的非引用对象类型
-- Host 遵循有效的 C++17 操作
-- Device 侧构造、赋值、调用和交换所依赖的操作必须不抛出异常
-- 提供构造、迭代和除 at 外的访问接口，以及 remove_prefix、remove_suffix、swap、data、size、starts_with、ends_with 和非抛出的比较/查找接口
-- AI Core SIMD 编程 仅支持 local 或 generic 地址空间的普通字符指针
+- 所存储值的对应比较表达式须合法且结果可转换为`bool`。
+- 本页重载属于optional；variant与string_view的重载分别见各自模块。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/optional>
 
-template <class T, class U>
-decltype(auto) example(const T& value, const asc::std::optional<U>& optional_value)
+bool example()
 {
-    return asc::std::operator>=(value, optional_value);
+    asc::std::optional<int> left(2);
+    asc::std::optional<int> right(2);
+    return (left >= right) && (left >= 2) && (2 >= right);
 }
 ```
 
-变体比较运算符由 `<asc/std/variant>` 提供；string_view 比较运算符见 [string_view 重载页](../../strings/asc_std_string_view/operator_operator_greater_equal.md)。
+## 相关比较接口
+
+原混合页面中的其他类型重载现分别收录于：[variant](../asc_std_variant/operator_greater_equal.md)、[array](../../containers/asc_std_array/operator_greater_equal.md)、[string_view](../../strings/asc_std_string_view/operator_greater_equal.md)。

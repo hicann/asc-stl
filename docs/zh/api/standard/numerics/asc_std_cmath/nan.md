@@ -28,9 +28,9 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`NAN` 提供 float 类型的非数值（NaN）常量（宏）。
+`NAN`提供float类型的非数值（NaN）常量（宏）。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
@@ -42,7 +42,7 @@
 
 ## 约束说明
 
-- 提供 float 函数重载、求值类型别名、比较函数、nanf 和分类宏
+- 提供float函数重载、求值类型别名、比较函数、nanf和分类宏。
 
 ## 调用示例
 
@@ -55,3 +55,7 @@
 #error "NAN is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

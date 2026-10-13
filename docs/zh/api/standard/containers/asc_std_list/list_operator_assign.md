@@ -1,4 +1,4 @@
-# asc::std::list::operator=
+# asc::std::list::`operator=`
 
 ## 产品支持情况
 
@@ -28,16 +28,19 @@
 
 头文件路径为：`<asc/std/list>`。
 
-`asc::std::list::operator=` 按所选赋值重载更新对象，并返回规定的结果。
+`asc::std::list::operator=`按所选赋值重载更新对象，并返回规定的结果。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `list`](https://en.cppreference.com/w/cpp/header/list)。
 
 ## 函数原型
 
+所属类型：[`asc::std::list`](list.md)。
+
 ```cpp
-list<T, Allocator>& asc::std::list::operator=(list<T, Allocator>&& other) noexcept;
+// asc::std::list 类内的声明节选；模板形参和其他成员由所属类提供。
+list<T, Allocator>& operator=(list<T, Allocator>&& other) noexcept;
 ```
 
 ## 参数说明
@@ -46,7 +49,7 @@ list<T, Allocator>& asc::std::list::operator=(list<T, Allocator>&& other) noexce
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
 ## 返回值说明
 
@@ -56,16 +59,16 @@ list<T, Allocator>& asc::std::list::operator=(list<T, Allocator>&& other) noexce
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下list<T,A>显式GM arena allocator构造
-- empty/size/front/back/begin/end
-- push/emplace/pop_front/back/clear
-- 双向迭代核心、移动构造/赋值、移动前迭代器继续遍历目标节点及析构
-- 仅容量充足和不抛出异常值/allocator域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下list<T,A>显式GM arena allocator构造。
+- empty/size/front/back/begin/end。
+- push/emplace/pop_front/back/clear。
+- 双向迭代核心、移动构造/赋值、移动前迭代器继续遍历目标节点及析构。
+- 仅容量充足和不抛出异常值/allocator域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/list>
@@ -90,3 +93,8 @@ void example(asc::std::list<int, example_allocator<int>>& target, asc::std::list
     target = static_cast<asc::std::list<int, example_allocator<int>>&&>(source);
 }
 ```
+
+## 关联API
+
+- [`asc::std::list`](list.md)
+- [本头文件的接口列表](asc_std_list.md)

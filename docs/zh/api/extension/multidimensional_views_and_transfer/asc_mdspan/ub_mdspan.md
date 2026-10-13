@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/mdspan>`。
 
-`asc::ub_mdspan` 使用 ub_accessor 访问 UB 数据的 mdspan 别名。
+`asc::ub_mdspan`使用ub_accessor访问UB数据的mdspan别名。
 
 ## 声明
 
 ```cpp
-template<class Element, class Extents, class Layout = asc::std::layout_right, class Accessor = asc::std::default_accessor<Element>> using asc::ub_mdspan = asc::std::mdspan<Element, Extents, Layout, asc::ub_accessor<Accessor>>
+namespace asc {
+template<class Element, class Extents, class Layout = asc::std::layout_right, class Accessor = asc::std::default_accessor<Element>> using ub_mdspan = asc::std::mdspan<Element, Extents, Layout, asc::ub_accessor<Accessor>>;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供 Host 和 GM 视图以及 AI Core SIMD 编程 UB 视图
-- 允许有符号步长
-- 可选的 Host DLPack 桥接不抛出异常
+- 提供Host和GM视图以及AI Core SIMD编程UB视图。
+- 允许有符号步长。
+- 可选的Host DLPack桥接不抛出异常。
 
 ## 调用示例
 
@@ -61,3 +63,7 @@ void use_type()
     using selected = asc::ub_mdspan<int, asc::std::extents<asc::std::size_t, 4>>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_mdspan.md)

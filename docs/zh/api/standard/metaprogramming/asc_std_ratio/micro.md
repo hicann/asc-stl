@@ -28,29 +28,37 @@
 
 头文件路径为：`<asc/std/ratio>`。
 
-`asc::std::micro` 提供对应 SI 十进制前缀的编译期有理数别名。
+`asc::std::micro`提供对应SI十进制前缀的编译期有理数别名。
 
 标准语义参考：[cppreference `ratio`](https://en.cppreference.com/w/cpp/header/ratio)。
 
 ## 声明
 
 ```cpp
-using asc::std::micro = ratio<1LL, 1000000LL>
+namespace asc::std {
+using micro = ratio<1LL, 1000000LL>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供完整的 C++20 ratio 接口
+- 分母不得为零；规范化后的分子和分母必须可由`intmax_t`表示。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ratio>
 
-void use_type(const asc::std::micro& value)
+bool example()
 {
-    (void)value;
+    static_assert(asc::std::micro::num == 1LL);
+    static_assert(asc::std::micro::den == 1000000LL);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ratio.md)

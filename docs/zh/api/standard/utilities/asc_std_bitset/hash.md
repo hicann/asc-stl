@@ -28,53 +28,66 @@
 
 头文件路径为：`<asc/std/bitset>`、`<asc/std/functional>`、`<asc/std/variant>`。
 
-`asc::std::hash<T>` 为已交付的算术、指针、位集合和其他明确支持的值类型提供哈希函数对象；是否存在相应特化以所选 `T` 的声明为准。
+`asc::std::hash<T>`为已交付的算术、指针、位集合和其他明确支持的值类型提供哈希函数对象；是否存在相应特化以所选`T`的声明为准。
 
 标准语义参考：[cppreference `bitset`](https://en.cppreference.com/w/cpp/header/bitset)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> struct asc::std::hash
+namespace asc::std {
+template<class T> struct hash;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/functional>`。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class... Types> struct asc::std::hash<asc::std::variant<Types...>>
+namespace asc::std {
+template<class... Types> struct hash<asc::std::variant<Types...>>;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/variant>`。
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<size_t Size> struct asc::std::hash<asc::std::bitset<Size>>
+namespace asc::std {
+template<size_t Size> struct hash<asc::std::bitset<Size>>;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/bitset>`。
 
 ## 约束说明
 
-- 主模板对枚举类型按底层整型取哈希，其余类型按对象字节序列取哈希；对所选 `T` 是否存在可用特化以实际声明为准
-- 提供算术类型、枚举类型、指针类型和 nullptr_t 的 hash 特化，各 operator() 均为非抛出并返回 size_t
-- variant<Types...> 特化要求各备选类型可哈希，将活跃备选值的哈希与其索引的哈希合成，valueless_by_exception 时取固定哨兵值
-- bitset<Size> 特化按位序列取哈希，operator() 为 constexpr、非抛出并返回 size_t
+- 主模板对枚举类型按底层整型取哈希，其余类型按对象字节序列取哈希；对所选`T`是否存在可用特化以实际声明为准。
+- 提供算术类型、枚举类型、指针类型和nullptr_t的hash特化，各`operator()`均为非抛出并返回size_t。
+- variant<Types...> 特化要求各备选类型可哈希，将活跃备选值的哈希与其索引的哈希合成，valueless_by_exception时取固定哨兵值。
+- bitset<Size> 特化按位序列取哈希，`operator()`为constexpr、非抛出并返回size_t。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/bitset>
+#include <asc/std/functional>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::hash<asc::std::bitset<8>>;
-    (void)sizeof(selected);
+    asc::std::bitset<8> first(5);
+    asc::std::bitset<8> second(5);
+    asc::std::hash<asc::std::bitset<8>> hash;
+    return first == second && hash(first) == hash(second);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_bitset.md)

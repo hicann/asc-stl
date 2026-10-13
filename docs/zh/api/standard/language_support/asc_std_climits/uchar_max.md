@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/climits>`。
 
-`UCHAR_MAX` 给出 `UCHAR` 对应整数类型或大小的界限值。
+`UCHAR_MAX`给出`UCHAR`对应整数类型或大小的界限值。
 
 标准语义参考：[cppreference `climits`](https://en.cppreference.com/w/cpp/header/climits)。
 
 ## 声明
 
 ```cpp
-#define UCHAR_MAX (SCHARMAX* 2U + 1U)
+#define UCHAR_MAX 255
 ```
+
+当前目标的`unsigned char`为8位；若系统头文件已定义该宏，产品保留系统定义。
 
 ## 约束说明
 
-- 仅提供编译器 ABI 实际支持的宏
+- 仅提供编译器ABI实际支持的宏。
 
 ## 调用示例
 
@@ -53,3 +55,7 @@
 #error "UCHAR_MAX is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_climits.md)

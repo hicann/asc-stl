@@ -28,33 +28,42 @@
 
 头文件路径为：`<asc/std/semaphore>`。
 
-`asc::std::counting_semaphore` 用许可计数协调线程获取与释放资源。
+`asc::std::counting_semaphore`用许可计数协调线程获取与释放资源。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `semaphore`](https://en.cppreference.com/w/cpp/header/semaphore)。
 
 ## 声明
 
 ```cpp
-template<long long LeastMaxValue> class asc::std::counting_semaphore
+namespace asc::std {
+template<long long LeastMaxValue> class counting_semaphore;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- Host 侧对象管理 Ascend 950 的 GM 状态
-- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足
+- Host侧对象管理Ascend 950的GM状态。
+- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/semaphore>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::counting_semaphore<4>;
-    (void)sizeof(selected);
+    asc::std::counting_semaphore<2> permits(1);
+    if (!permits.try_acquire()) return false;
+    if (permits.try_acquire()) return false;
+    permits.release();
+    return permits.try_acquire();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_semaphore.md)

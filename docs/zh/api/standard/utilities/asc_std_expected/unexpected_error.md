@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/expected>`。
 
-`asc::std::unexpected::error` 返回错误状态中保存的错误对象引用。
+`asc::std::unexpected::error`返回错误状态中保存的错误对象引用。
 
 标准语义参考：[cppreference `expected`](https://en.cppreference.com/w/cpp/header/expected)。
 
 ## 函数原型
 
+所属类型：[`asc::std::unexpected`](unexpected.md)。
+
 ```cpp
-constexpr const Error& asc::std::unexpected::error() const& noexcept;
+// asc::std::unexpected 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr const Error& error() const& noexcept;
 ```
 
 ## 参数说明
@@ -50,19 +53,26 @@ constexpr const Error& asc::std::unexpected::error() const& noexcept;
 
 ## 约束说明
 
-- T 必须为非 void 类型，E 必须为对象类型
-- 适用操作必须不抛出异常
-- 提供构造、赋值、emplace 和 swap
+- T必须为非void类型，E必须为对象类型。
+- 适用操作必须不抛出异常。
+- 提供构造、赋值、emplace和swap。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/expected>
 
-void example(asc::std::unexpected<int>& object)
+bool example()
 {
-    (void)object.error();
+    asc::std::unexpected<int> error(7);
+    error.error() = 9;
+    return error.error() == 9;
 }
 ```
+
+## 关联API
+
+- [`asc::std::unexpected`](unexpected.md)
+- [本头文件的接口列表](asc_std_expected.md)

@@ -28,21 +28,23 @@
 
 头文件路径为：`<asc/std/expected>`。
 
-`asc::std::unexpect` 标记从错误值构造 `expected` 的原位构造形式。
+`asc::std::unexpect`标记从错误值构造`expected`的原位构造形式。
 
 标准语义参考：[cppreference `expected`](https://en.cppreference.com/w/cpp/header/expected)。
 
 ## 声明
 
 ```cpp
-inline constexpr const unexpect_t asc::std::unexpect
+namespace asc::std {
+inline constexpr const unexpect_t unexpect;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- T 必须为非 void 类型，E 必须为对象类型
-- 适用操作必须不抛出异常
-- 提供构造、赋值、emplace 和 swap
+- T必须为非void类型，E必须为对象类型。
+- 适用操作必须不抛出异常。
+- 提供构造、赋值、emplace和swap。
 
 ## 调用示例
 
@@ -53,3 +55,7 @@ inline constexpr const unexpect_t asc::std::unexpect
 
 auto value = asc::std::unexpect;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_expected.md)

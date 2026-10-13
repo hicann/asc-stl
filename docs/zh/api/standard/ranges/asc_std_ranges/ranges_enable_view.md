@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::enable_view` 标记类型可作为范围视图使用。
+`asc::std::ranges::enable_view`标记类型可作为范围视图使用。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr const bool asc::std::ranges::enable_view
+namespace asc::std::ranges {
+template<class T> inline constexpr const bool enable_view;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 提供完整的 C++20 range concepts 集合
+- 提供完整的C++20 range concepts集合。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class T> inline constexpr const bool asc::std::ranges::enable_view
 
 inline constexpr auto example = asc::std::ranges::enable_view<asc::std::ranges::single_view<int>>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

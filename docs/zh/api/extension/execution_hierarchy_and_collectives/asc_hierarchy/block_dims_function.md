@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::block_dims` 创建 Block 层级的三维尺寸描述。
+`asc::block_dims`创建Block层级的三维尺寸描述。
 
 ## 函数原型
 
 ```cpp
-constexpr asc::level_dimensions<asc::block_level> asc::block_dims(asc::extent3d extents) noexcept;
+namespace asc {
+constexpr asc::level_dimensions<asc::block_level> block_dims(asc::extent3d extents) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -52,9 +54,9 @@ constexpr asc::level_dimensions<asc::block_level> asc::block_dims(asc::extent3d 
 
 ## 约束说明
 
-- 提供 C++17 constexpr Host/Device 层次结构接口
-- 带 extent 的值要求每一维均非零
-- extent 总数按无符号 64 位的 x*y*z 计算
+- 提供C++17 constexpr Host/Device层次结构接口。
+- 带extent的值要求每一维均非零。
+- extent总数按无符号64位的x*y*z计算。
 
 ## 调用示例
 
@@ -68,3 +70,7 @@ decltype(auto) example(asc::extent3d extents)
     return asc::block_dims(extents);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_hierarchy.md)

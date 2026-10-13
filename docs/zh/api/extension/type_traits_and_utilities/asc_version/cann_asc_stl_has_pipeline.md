@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/version>`。
 
-`CANN_ASC_STL_HAS_PIPELINE` 定义为 1，表示当前版本提供两阶段生产者/消费者 Pipeline 接口。
+`CANN_ASC_STL_HAS_PIPELINE`定义为1，表示当前版本提供两阶段生产者/消费者Pipeline接口。
 
 ## 声明
 
@@ -38,7 +38,7 @@
 
 ## 约束说明
 
-- 提供产品版本和实际交付能力宏
+- 提供产品版本和实际交付能力宏。
 
 ## 调用示例
 
@@ -51,3 +51,7 @@
 #error "CANN_ASC_STL_HAS_PIPELINE is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_version.md)

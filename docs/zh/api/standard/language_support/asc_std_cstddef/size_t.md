@@ -28,37 +28,44 @@
 
 头文件路径为：`<asc/std/cstddef>`、`<asc/std/cuchar>`、`<asc/std/cwchar>`。
 
-`asc::std::size_t` 标识当前 C++ ABI 对应的大小、指针差值、空指针或最大对齐类型。
+`asc::std::size_t`标识当前C++ ABI对应的大小、指针差值、空指针或最大对齐类型。
 
 标准语义参考：[cppreference `cstddef`](https://en.cppreference.com/w/cpp/header/cstddef)。
 
 ## 声明
 
 ```cpp
-using asc::std::size_t = unsigned long
+namespace asc::std {
+using size_t = unsigned long;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/cstddef>`、`<asc/std/cuchar>`、`<asc/std/cwchar>`。
 
 ## 约束说明
 
-- Host委托系统<cuchar>完整合同
-- Device交付size_t/mbstate_t，C++11起的mbrtoc16/c16rtomb/mbrtoc32/c32rtomb和C++20起的mbrtoc8/c8rtomb
-- Device固定C locale的ASCII/NUL、count==0、空输入/输出、重置、显式或空state无状态路径与size_t(-1)/(-2)错误/未完成返回
-- Host 提供完整接口，设备端仅提供 C 语言区域设置相关接口
-- Host对本家族委托系统<cwchar>完整合同
-- Device交付size_t/mbstate_t/wint_t/NULL/WCHAR_MIN/WCHAR_MAX/WEOF、wcscoll/wcsxfrm/wcstok与btowc/wctob/mbrlen/mbrtowc/mbsinit/mbsrtowcs/wcrtomb/wcsrtombs，语义固定为无状态单字节C locale
-- 提供标准声明
+- `asc::std::size_t`是无符号整数类型，用于表示对象字节数、元素数量和索引。
+- 最大可表示值取决于目标平台的地址宽度；从更宽或有符号整数转换前应检查范围。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/cstddef>
+#include <asc/std/type_traits>
 
-void use_type(const asc::std::size_t& value)
+bool example()
 {
-    (void)value;
+    using Integer = asc::std::size_t;
+    static_assert(asc::std::is_integral_v<Integer>);
+    static_assert(asc::std::is_signed_v<Integer> == false);
+    Integer left = 2;
+    Integer right = 3;
+    return left + right == 5;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstddef.md)

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cinttypes>`。
 
-`PRIdMAX` 提供最大宽度有符号整数（intmax_t）的 printf 格式转换说明符；本产品采用 LP64 数据模型，intmax_t 为 long。
+`PRIdMAX`提供最大宽度有符号整数（intmax_t）的printf格式转换说明符；本产品采用LP64数据模型，intmax_t为long。
 
 标准语义参考：[cppreference `cinttypes`](https://en.cppreference.com/w/cpp/header/cinttypes)。
 
@@ -40,7 +40,7 @@
 
 ## 约束说明
 
-- 提供纯整数类型运算和格式宏
+- 提供纯整数类型运算和格式宏。
 
 ## 调用示例
 
@@ -53,3 +53,7 @@
 #error "PRIdMAX is required by this public Header"
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cinttypes.md)

@@ -28,30 +28,33 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::invoke_result_t` 取得以给定参数调用函数对象时的结果类型，以类型别名形式提供结果。
+`asc::std::invoke_result_t`取得以给定参数调用函数对象时的结果类型，以类型别名形式提供结果。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
 ```cpp
-template<class Fn, class ...Args> using asc::std::invoke_result_t = typename invoke_result<Fn, Args...>::type
+namespace asc::std {
+template<class Fn, class ...Args> using invoke_result_t = typename invoke_result<Fn, Args...>::type;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v 辅助形式
+- 提供特征类以及标准的 _t、_v辅助形式。
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下Host示例使用独立的预期类型或值检查接口结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
-{
-    using selected = asc::std::invoke_result_t<int(*)(int), int>;
-    static_assert(asc::std::is_same_v<selected, selected>);
-}
+using result_type = asc::std::invoke_result_t<int (*)(double), double>;
+static_assert(asc::std::is_same_v<result_type, int>);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_type_traits.md)

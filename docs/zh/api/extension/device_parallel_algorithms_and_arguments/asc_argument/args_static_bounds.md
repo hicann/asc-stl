@@ -28,30 +28,36 @@
 
 头文件路径为：`<asc/argument>`。
 
-`asc::args::static_bounds` 在类型中编码编译期下界和上界。
+`asc::args::static_bounds`在类型中编码编译期下界和上界。
 
 ## 声明
 
 ```cpp
-template<auto Lower, auto Upper> class asc::args::static_bounds
+// asc::args 类内的声明节选；模板形参和其他成员由所属类提供。
+template<auto Lower, auto Upper> class static_bounds;
 ```
 
 ## 约束说明
 
-- 使用 C++17，可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Bounds 必须为 asc::args::no_bounds 或 asc::args::static_bounds
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期
+- 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
+- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/argument>
 
-void use_type()
+bool example()
 {
-    using selected = asc::args::static_bounds<0, 10>;
-    (void)sizeof(selected);
+    using limits = asc::args::static_bounds<0, 10>;
+    static_assert(limits::lower() == 0 && limits::upper() == 10);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_argument.md)

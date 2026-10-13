@@ -28,20 +28,22 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::unreachable_sentinel` 提供永远不与有效迭代器相等的哨兵对象。
+`asc::std::unreachable_sentinel`提供永远不与有效迭代器相等的哨兵对象。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-inline constexpr const unreachable_sentinel_t asc::std::unreachable_sentinel
+namespace asc::std {
+inline constexpr const unreachable_sentinel_t unreachable_sentinel;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
@@ -52,3 +54,7 @@ inline constexpr const unreachable_sentinel_t asc::std::unreachable_sentinel
 
 auto value = asc::std::unreachable_sentinel;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

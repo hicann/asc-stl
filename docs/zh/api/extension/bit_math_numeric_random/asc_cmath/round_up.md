@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/cmath>`。
 
-`asc::round_up` 将整数 `a` 向上舍入到不小于它的最小 `b` 的整数倍。
+`asc::round_up`将整数`a`向上舍入到不小于它的最小`b`的整数倍。
 
 ## 函数原型
 
 ```cpp
-template<class T, class U> constexpr auto asc::round_up(T a, U b) noexcept;
+namespace asc {
+template<class T, class U> constexpr auto round_up(T a, U b) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -50,7 +52,7 @@ template<class T, class U> constexpr auto asc::round_up(T a, U b) noexcept;
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `a` | 输入 | 待向上取整的被舍入值。 |
-| `b` | 输入 | 舍入粒度（对齐步长）；不得为 0。 |
+| `b` | 输入 | 舍入粒度（对齐步长）；不得为0。 |
 
 ## 返回值说明
 
@@ -60,9 +62,9 @@ template<class T, class U> constexpr auto asc::round_up(T a, U b) noexcept;
 
 ## 约束说明
 
-- T 和 U 必须为非 bool 的整数或枚举类型
-- b 必须为正数
-- 结果必须可表示
+- T和U必须为非bool的整数或枚举类型。
+- b必须为正数。
+- 结果必须可表示。
 
 ## 调用示例
 
@@ -76,3 +78,7 @@ decltype(auto) example()
     return asc::round_up(5u, 4u);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_cmath.md)

@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::wcsrtombs` 在调用方保存的多字节转换状态下处理宽字符或多字节序列。
+`asc::std::wcsrtombs`在调用方保存的多字节转换状态下处理宽字符或多字节序列。
 
-该接口的可用位置为 Host（完整接口）、Device（C locale 相关接口）。
+该接口的可用位置为Host（完整接口）、Device（C locale相关接口）。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 
 ## 函数原型
 
 ```cpp
-size_t asc::std::wcsrtombs(char* destination, const wchar_t** source, size_t count, mbstate_t* state) noexcept;
+namespace asc::std {
+size_t wcsrtombs(char* destination, const wchar_t** source, size_t count, mbstate_t* state) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -49,7 +51,7 @@ size_t asc::std::wcsrtombs(char* destination, const wchar_t** source, size_t cou
 | `destination` | 输出 | 用于接收结果的目标存储。本调用为同步执行，返回时写入已完成；目标存储在调用期间保持有效即可，且须为待写入内容预留足够空间。 |
 | `source` | 输入 | 源数据或源对象。本调用为同步执行，返回时读取已完成；源存储在调用期间保持有效即可。 |
 | `count` | 输入 | 参与操作的元素数量。 |
-| `state` | 输入 | 提供“在调用方保存的多字节转换状态下处理宽字符或多字节序列”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `state` | 输入/输出 | 存储多字节转换进度的mbstate_t对象；根据转换结果更新它，空指针使用内部状态。 |
 
 ## 返回值说明
 
@@ -59,9 +61,9 @@ size_t asc::std::wcsrtombs(char* destination, const wchar_t** source, size_t cou
 
 ## 约束说明
 
-- Host对本家族委托系统<cwchar>完整合同
-- Device交付size_t/mbstate_t/wint_t/NULL/WCHAR_MIN/WCHAR_MAX/WEOF、wcscoll/wcsxfrm/wcstok与btowc/wctob/mbrlen/mbrtowc/mbsinit/mbsrtowcs/wcrtomb/wcsrtombs，语义固定为无状态单字节C locale
-- Host 提供完整接口，设备端仅提供 C 语言区域设置相关接口
+- Host行为遵循系统`<cwchar>`提供的同名接口；字符转换和排序受当前C语言区域设置影响。
+- Device固定为无状态单字节转换，仅支持ASCII及空字符；超出范围时按本接口返回值说明报告失败。
+- 不同字符序列使用独立状态对象；字符串输出缓冲区须具有足够容量。
 
 ## 调用示例
 
@@ -76,3 +78,7 @@ decltype(auto) example(char * destination, const wchar_t ** source, asc::std::si
     return asc::std::wcsrtombs(destination, source, count, state);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cwchar.md)

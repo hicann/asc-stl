@@ -28,31 +28,42 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::empty_view` 惰性地观察、筛选、组合或变换输入范围；底层存储仍由调用方管理。
+`asc::std::ranges::empty_view`惰性地观察、筛选、组合或变换输入范围；底层存储仍由调用方管理。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
 ```cpp
-template<class T> class asc::std::ranges::empty_view
+namespace asc::std::ranges {
+template<class T> class empty_view;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::ranges::empty_view<int>;
-    (void)sizeof(selected);
+    int values[] = {1, 2, 3, 4};
+    using Base = asc::std::ranges::subrange<int*>;
+    Base base(values, values + 4);
+    asc::std::ranges::empty_view<int> view;
+    return view.empty() && view.begin() == view.end();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

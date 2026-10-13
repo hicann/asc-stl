@@ -34,4 +34,292 @@
 #include <asc/memory>
 #include <asc/warp>
 
+namespace asc {
+
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+
+template <class T>
+class block_collective_workspace;
+
+namespace detail {
+
+template <class T>
+struct block_collective_workspace_access;
+
+template <class T>
+inline constexpr bool is_block_collective_value_v =
+    __is_same(T, __INT32_TYPE__) || __is_same(T, __UINT32_TYPE__) || __is_same(T, float);
+
+}  // namespace detail
+
+template <class T>
+class block_collective_workspace {
+    static_assert(detail::is_block_collective_value_v<T>, "unsupported block collective value type");
+
+public:
+    CANN_ASC_STL_SIMT_API constexpr __UINT32_TYPE__ size() const noexcept
+    {
+        return element_count_;
+    }
+
+private:
+    friend struct detail::block_collective_workspace_access<T>;
+
+    CANN_ASC_STL_SIMT_API constexpr block_collective_workspace(T* pointer, __UINT32_TYPE__ element_count) noexcept
+        : pointer_(pointer), element_count_(element_count)
+    {}
+
+    T* pointer_;
+    __UINT32_TYPE__ element_count_;
+};
+
+namespace detail {
+
+template <class T>
+struct block_collective_workspace_access {
+    static CANN_ASC_STL_SIMT_API T* data(block_collective_workspace<T> workspace) noexcept
+    {
+        return workspace.pointer_;
+    }
+
+    static CANN_ASC_STL_SIMT_API block_collective_workspace<T> make(T* pointer, __UINT32_TYPE__ count) noexcept
+    {
+        return block_collective_workspace<T>(pointer, count);
+    }
+};
+
+}  // namespace detail
+
+template <class T>
+CANN_ASC_STL_SIMT_API block_collective_workspace<T> make_block_collective_workspace(
+    T* dynamic_shared_pointer, __UINT32_TYPE__ element_count) noexcept
+{
+    static_assert(detail::is_block_collective_value_v<T>, "unsupported block collective value type");
+    return detail::block_collective_workspace_access<T>::make(dynamic_shared_pointer, element_count);
+}
+
+template <class T>
+CANN_ASC_STL_SIMT_API constexpr __SIZE_TYPE__ block_collective_workspace_bytes(__UINT32_TYPE__ thread_count) noexcept
+{
+    static_assert(detail::is_block_collective_value_v<T>, "unsupported block collective value type");
+    return static_cast<__SIZE_TYPE__>(thread_count / 32u) * sizeof(T);
+}
+
+CANN_ASC_STL_SIMT_API __INT32_TYPE__ block_reduce_add(
+    block_collective_workspace<__INT32_TYPE__> workspace, __INT32_TYPE__ value) noexcept
+{
+    return detail::block_reduce_add_impl(
+        detail::block_collective_workspace_access<__INT32_TYPE__>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API __UINT32_TYPE__ block_reduce_add(
+    block_collective_workspace<__UINT32_TYPE__> workspace, __UINT32_TYPE__ value) noexcept
+{
+    return detail::block_reduce_add_impl(
+        detail::block_collective_workspace_access<__UINT32_TYPE__>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API float block_reduce_add(block_collective_workspace<float> workspace, float value) noexcept
+{
+    return detail::block_reduce_add_impl(detail::block_collective_workspace_access<float>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API __INT32_TYPE__ block_reduce_min(
+    block_collective_workspace<__INT32_TYPE__> workspace, __INT32_TYPE__ value) noexcept
+{
+    return detail::block_reduce_min_impl(
+        detail::block_collective_workspace_access<__INT32_TYPE__>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API __UINT32_TYPE__ block_reduce_min(
+    block_collective_workspace<__UINT32_TYPE__> workspace, __UINT32_TYPE__ value) noexcept
+{
+    return detail::block_reduce_min_impl(
+        detail::block_collective_workspace_access<__UINT32_TYPE__>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API float block_reduce_min(block_collective_workspace<float> workspace, float value) noexcept
+{
+    return detail::block_reduce_min_impl(detail::block_collective_workspace_access<float>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API __INT32_TYPE__ block_reduce_max(
+    block_collective_workspace<__INT32_TYPE__> workspace, __INT32_TYPE__ value) noexcept
+{
+    return detail::block_reduce_max_impl(
+        detail::block_collective_workspace_access<__INT32_TYPE__>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API __UINT32_TYPE__ block_reduce_max(
+    block_collective_workspace<__UINT32_TYPE__> workspace, __UINT32_TYPE__ value) noexcept
+{
+    return detail::block_reduce_max_impl(
+        detail::block_collective_workspace_access<__UINT32_TYPE__>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API float block_reduce_max(block_collective_workspace<float> workspace, float value) noexcept
+{
+    return detail::block_reduce_max_impl(detail::block_collective_workspace_access<float>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API __INT32_TYPE__ block_inclusive_scan(
+    block_collective_workspace<__INT32_TYPE__> workspace, __INT32_TYPE__ value) noexcept
+{
+    return detail::block_inclusive_scan_add_impl(
+        detail::block_collective_workspace_access<__INT32_TYPE__>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API __UINT32_TYPE__ block_inclusive_scan(
+    block_collective_workspace<__UINT32_TYPE__> workspace, __UINT32_TYPE__ value) noexcept
+{
+    return detail::block_inclusive_scan_add_impl(
+        detail::block_collective_workspace_access<__UINT32_TYPE__>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API float block_inclusive_scan(block_collective_workspace<float> workspace, float value) noexcept
+{
+    return detail::block_inclusive_scan_add_impl(
+        detail::block_collective_workspace_access<float>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API __INT32_TYPE__ block_exclusive_scan(
+    block_collective_workspace<__INT32_TYPE__> workspace, __INT32_TYPE__ value) noexcept
+{
+    return detail::block_exclusive_scan_add_impl(
+        detail::block_collective_workspace_access<__INT32_TYPE__>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API __UINT32_TYPE__ block_exclusive_scan(
+    block_collective_workspace<__UINT32_TYPE__> workspace, __UINT32_TYPE__ value) noexcept
+{
+    return detail::block_exclusive_scan_add_impl(
+        detail::block_collective_workspace_access<__UINT32_TYPE__>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API float block_exclusive_scan(block_collective_workspace<float> workspace, float value) noexcept
+{
+    return detail::block_exclusive_scan_add_impl(
+        detail::block_collective_workspace_access<float>::data(workspace), value);
+}
+
+CANN_ASC_STL_SIMT_API __INT32_TYPE__ block_broadcast(
+    block_collective_workspace<__INT32_TYPE__> workspace, __INT32_TYPE__ value, __UINT32_TYPE__ source_thread) noexcept
+{
+    return detail::block_broadcast_impl(
+        detail::block_collective_workspace_access<__INT32_TYPE__>::data(workspace), value, source_thread);
+}
+
+CANN_ASC_STL_SIMT_API __UINT32_TYPE__ block_broadcast(block_collective_workspace<__UINT32_TYPE__> workspace,
+    __UINT32_TYPE__ value, __UINT32_TYPE__ source_thread) noexcept
+{
+    return detail::block_broadcast_impl(
+        detail::block_collective_workspace_access<__UINT32_TYPE__>::data(workspace), value, source_thread);
+}
+
+CANN_ASC_STL_SIMT_API float block_broadcast(
+    block_collective_workspace<float> workspace, float value, __UINT32_TYPE__ source_thread) noexcept
+{
+    return detail::block_broadcast_impl(
+        detail::block_collective_workspace_access<float>::data(workspace), value, source_thread);
+}
+
+CANN_ASC_STL_SIMT_API bool block_all(block_collective_workspace<__UINT32_TYPE__> workspace, bool predicate) noexcept
+{
+    return detail::block_all_impl(
+        detail::block_collective_workspace_access<__UINT32_TYPE__>::data(workspace), predicate);
+}
+
+CANN_ASC_STL_SIMT_API bool block_any(block_collective_workspace<__UINT32_TYPE__> workspace, bool predicate) noexcept
+{
+    return detail::block_any_impl(
+        detail::block_collective_workspace_access<__UINT32_TYPE__>::data(workspace), predicate);
+}
+
+#endif  // CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+
+#if CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+
+CANN_ASC_STL_DEVICE_API __INT32_TYPE__ ub_reduce_add(ub_span<const __INT32_TYPE__> input) noexcept
+{
+    return detail::ub_reduce_add_impl(input);
+}
+
+CANN_ASC_STL_DEVICE_API __UINT32_TYPE__ ub_reduce_add(ub_span<const __UINT32_TYPE__> input) noexcept
+{
+    return detail::ub_reduce_add_impl(input);
+}
+
+CANN_ASC_STL_DEVICE_API float ub_reduce_add(ub_span<const float> input) noexcept
+{
+    return detail::ub_reduce_add_impl(input);
+}
+
+CANN_ASC_STL_DEVICE_API __INT32_TYPE__ ub_reduce_min(ub_span<const __INT32_TYPE__> input) noexcept
+{
+    return detail::ub_reduce_min_impl(input);
+}
+
+CANN_ASC_STL_DEVICE_API __UINT32_TYPE__ ub_reduce_min(ub_span<const __UINT32_TYPE__> input) noexcept
+{
+    return detail::ub_reduce_min_impl(input);
+}
+
+CANN_ASC_STL_DEVICE_API float ub_reduce_min(ub_span<const float> input) noexcept
+{
+    return detail::ub_reduce_min_impl(input);
+}
+
+CANN_ASC_STL_DEVICE_API __INT32_TYPE__ ub_reduce_max(ub_span<const __INT32_TYPE__> input) noexcept
+{
+    return detail::ub_reduce_max_impl(input);
+}
+
+CANN_ASC_STL_DEVICE_API __UINT32_TYPE__ ub_reduce_max(ub_span<const __UINT32_TYPE__> input) noexcept
+{
+    return detail::ub_reduce_max_impl(input);
+}
+
+CANN_ASC_STL_DEVICE_API float ub_reduce_max(ub_span<const float> input) noexcept
+{
+    return detail::ub_reduce_max_impl(input);
+}
+
+CANN_ASC_STL_DEVICE_API void ub_inclusive_scan(
+    ub_span<__INT32_TYPE__> output, ub_span<const __INT32_TYPE__> input) noexcept
+{
+    detail::ub_inclusive_scan_add_impl(output, input);
+}
+
+CANN_ASC_STL_DEVICE_API void ub_inclusive_scan(
+    ub_span<__UINT32_TYPE__> output, ub_span<const __UINT32_TYPE__> input) noexcept
+{
+    detail::ub_inclusive_scan_add_impl(output, input);
+}
+
+CANN_ASC_STL_DEVICE_API void ub_inclusive_scan(ub_span<float> output, ub_span<const float> input) noexcept
+{
+    detail::ub_inclusive_scan_add_impl(output, input);
+}
+
+CANN_ASC_STL_DEVICE_API void ub_exclusive_scan(
+    ub_span<__INT32_TYPE__> output, ub_span<const __INT32_TYPE__> input) noexcept
+{
+    detail::ub_exclusive_scan_add_impl(output, input);
+}
+
+CANN_ASC_STL_DEVICE_API void ub_exclusive_scan(
+    ub_span<__UINT32_TYPE__> output, ub_span<const __UINT32_TYPE__> input) noexcept
+{
+    detail::ub_exclusive_scan_add_impl(output, input);
+}
+
+CANN_ASC_STL_DEVICE_API void ub_exclusive_scan(ub_span<float> output, ub_span<const float> input) noexcept
+{
+    detail::ub_exclusive_scan_add_impl(output, input);
+}
+
+#endif  // CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+
+}  // namespace asc
+
 #endif  // CANN_ASC_STL_ASC_COLLECTIVES

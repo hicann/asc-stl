@@ -28,21 +28,23 @@
 
 头文件路径为：`<asc/std/bitset>`。
 
-`asc::std::bitset::base` 标识位集合采用的底层存储类型。
+`asc::std::bitset::base`标识位集合采用的底层存储类型。
 
 标准语义参考：[cppreference `bitset`](https://en.cppreference.com/w/cpp/header/bitset)。
 
 ## 声明
 
+`asc::std::bitset<Size>::base`是当前实现公开的底层存储类型别名，具体类型属于实现细节，不应假定存在名为Bitset或Nwords的公共类型／参数。一般代码应使用bitset的公开成员。
+
 ```cpp
-using asc::std::bitset::base = Bitset<Nwords, Size>
+using Storage = asc::std::bitset<8>::base;
 ```
 
 ## 约束说明
 
-- 支持默认构造和 unsigned long long 构造
-- operator[] 不进行边界检查
-- 提供整组 set、reset、flip，位运算、移位、状态检查、计数和容量查询
+- 支持默认构造和unsigned long long构造。
+- `operator[]`不进行边界检查。
+- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
 
 ## 调用示例
 
@@ -56,3 +58,7 @@ void use_type()
     using alias_type = typename asc::std::bitset<8>::base;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_bitset.md)

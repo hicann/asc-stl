@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/atomic>`。
 
-`asc::atomic_thread_fence` 在 AI Core SIMT 编程中按指定内存序和作用域建立线程栅栏；`relaxed` 不执行栅栏，`release` 建立发布顺序。
+`asc::atomic_thread_fence`在AI Core SIMT编程中按指定内存序和作用域建立线程栅栏；`relaxed`不执行栅栏，`release`建立发布顺序。
 
 ## 函数原型
 
 ```cpp
-void asc::atomic_thread_fence(asc::std::memory_order order, asc::memory_scope scope) noexcept;
+namespace asc {
+void atomic_thread_fence(asc::std::memory_order order, asc::memory_scope scope) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,8 +44,8 @@ void asc::atomic_thread_fence(asc::std::memory_order order, asc::memory_scope sc
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `order` | 输入 | 仅支持 `asc::std::memory_order_relaxed` 或 `asc::std::memory_order_release`；其他取值不属于交付范围。 |
-| `scope` | 输入 | 选择 `asc::memory_scope::block` 或 `asc::memory_scope::device`，分别表示线程块或设备作用域。 |
+| `order` | 输入 | 仅接受`memory_order_relaxed`（无操作）或`memory_order_release`（发布栅栏）；其他值不受支持。 |
+| `scope` | 输入 | 选择`asc::memory_scope::block`或`asc::memory_scope::device`，分别表示线程块或设备作用域。 |
 
 ## 返回值说明
 
@@ -51,25 +53,30 @@ void asc::atomic_thread_fence(asc::std::memory_order order, asc::memory_scope sc
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- order 仅为 relaxed 或 release，scope 仅为 block 或 device
+- 仅可在AI Core SIMT编程中调用。
+- order仅为relaxed或release，scope仅为block或device。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下SIMT核函数由单个线程初始化并访问一个GM原子单元；无其他并发访问，预期output[0]为1。Host须在核函数完成后读取结果。
 
 ```cpp
 #include <asc/atomic>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
+#include <asc/std/new>
 
-__aicore__ void example()
+__global__ void example(int* storage, unsigned int* output)
 {
-    // 在设备作用域发布此前的写入。
+    // 仅启动1个block、1个线程；storage和output均为Host分配的GM。
+    *storage = 7;
+    asc::atomic_ref<int> cell(*storage);
+    cell.store(7, asc::std::memory_order_relaxed);
     asc::atomic_thread_fence(asc::std::memory_order_release, asc::memory_scope::device);
+    output[0] = (cell.load(asc::std::memory_order_relaxed) == 7) ? 1U : 0U;
 }
 ```
+
+完整工程及运行步骤见[《atomic_operations示例》](../../../../examples/atomic_operations/README.md)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_atomic.md)

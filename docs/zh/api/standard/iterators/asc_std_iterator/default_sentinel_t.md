@@ -28,30 +28,41 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::default_sentinel_t` 标识对应迭代器能力或结束哨兵类别。
+`asc::std::default_sentinel_t`标识对应迭代器能力或结束哨兵类别。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-struct asc::std::default_sentinel_t
+namespace asc::std {
+struct default_sentinel_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void use_type(const asc::std::default_sentinel_t& value)
+bool example()
 {
-    (void)value;
+    int values[] = {2, 4};
+    asc::std::counted_iterator<int*> it(values, 2);
+    asc::std::default_sentinel_t last;
+    int sum = 0;
+    for (; it != last; ++it) sum += *it;
+    return sum == 6;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

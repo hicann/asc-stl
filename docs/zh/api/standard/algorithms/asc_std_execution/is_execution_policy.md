@@ -28,31 +28,38 @@
 
 头文件路径为：`<asc/std/execution>`。
 
-`asc::std::is_execution_policy` 标记标准执行策略形式；具体执行路径以本页约束为准。
+`asc::std::is_execution_policy`标记标准执行策略形式；具体执行路径以本页约束为准。
 
 标准语义参考：[cppreference `execution`](https://en.cppreference.com/w/cpp/header/execution)。
 
 ## 声明
 
 ```cpp
-template<class T> struct asc::std::is_execution_policy
+namespace asc::std {
+template<class T> struct is_execution_policy;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供四种执行策略类型、对象和特征
-- 已提供的算法重载采用符合标准的顺序执行语义
+- 提供四种执行策略类型、对象和特征。
+- 已提供的算法重载采用符合标准的顺序执行语义。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/execution>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::is_execution_policy<asc::std::execution::sequenced_policy>;
-    (void)sizeof(selected);
+    static_assert(asc::std::is_execution_policy<asc::std::execution::sequenced_policy>::value);
+    static_assert(!asc::std::is_execution_policy<int>::value);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_execution.md)

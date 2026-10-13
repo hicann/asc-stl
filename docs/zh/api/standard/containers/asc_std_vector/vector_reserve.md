@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/vector>`。
 
-`asc::std::vector::reserve` 请求至少可容纳指定数量元素的存储容量。
+`asc::std::vector::reserve`请求至少可容纳指定数量元素的存储容量。
 
 标准语义参考：[cppreference `vector`](https://en.cppreference.com/w/cpp/header/vector)。
 
 ## 函数原型
 
+所属类型：[`asc::std::vector`](vector.md)。
+
 ```cpp
-void asc::std::vector::reserve(size_type requested);
+// asc::std::vector 类内的声明节选；模板形参和其他成员由所属类提供。
+void reserve(size_type requested);
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ void asc::std::vector::reserve(size_type requested);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `requested` | 输入 | 请求的最小容量，单位为元素个数；大于当前 capacity() 时重分配存储使容量不小于该值，否则容量不变；不得超过 max_size()。 |
+| `requested` | 输入 | 请求的最小容量，单位为元素个数；大于当前capacity()时重分配存储使容量不小于该值，否则容量不变；不得超过max_size()。 |
 
 ## 返回值说明
 
@@ -52,11 +55,11 @@ void asc::std::vector::reserve(size_type requested);
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造
-- empty/size/capacity/data/begin/end/operator[]/front/back
-- reserve与容量内push_back/emplace_back/pop_back/clear
-- 同allocator或允许传播域的移动构造/赋值与析构
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域
+- vector<T,A>显式allocator构造。
+- empty/size/capacity/data/begin/end/`operator[]`/front/back。
+- reserve与容量内push_back/emplace_back/pop_back/clear。
+- 同allocator或允许传播域的移动构造/赋值与析构。
+- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
 
 ## 调用示例
 
@@ -72,6 +75,11 @@ decltype(auto) example(Object& object, Args&&... args)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
 完整示例源码：[explicit_allocator_vector.cpp](../../../../examples/explicit_allocator_vector.cpp)。
+
+## 关联API
+
+- [`asc::std::vector`](vector.md)
+- [本头文件的接口列表](asc_std_vector.md)

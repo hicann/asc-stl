@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/devices>`。
 
-`asc::devices` 按序号把最多 `capacity` 个 Device 引用写入调用方数组，并通过 `count` 返回 Runtime 报告的完整 Device 数量。
+`asc::devices`按序号把最多`capacity`个Device引用写入调用方数组，并通过`count`返回Runtime报告的完整Device数量。
 
 ## 函数原型
 
 ```cpp
-bool asc::devices(asc::device_ref* output, asc::std::uint32_t capacity, asc::std::uint32_t& count) noexcept;
+namespace asc {
+bool devices(asc::device_ref* output, asc::std::uint32_t capacity, asc::std::uint32_t& count) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,21 +44,21 @@ bool asc::devices(asc::device_ref* output, asc::std::uint32_t capacity, asc::std
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 接收 device_ref 的调用方数组首地址：写入 min(capacity, Device 总数) 个按序号递增的引用；capacity 非 0 时不得为空。 |
-| `capacity` | 输入 | 数组可容纳的 device_ref 个数：仅限制实际写入数量，不影响 count 报告的总数。 |
-| `count` | 输入/输出 | Runtime 报告的 Device 总数经该引用写入：可能大于 capacity（此时仅写入前 capacity 个引用）。 |
+| `output` | 输出 | 接收device_ref的调用方数组首地址：写入min(capacity, Device总数)个按序号递增的引用；capacity非0时不得为空。 |
+| `capacity` | 输入 | 数组可容纳的device_ref个数：仅限制实际写入数量，不影响count报告的总数。 |
+| `count` | 输入/输出 | Runtime报告的Device总数经该引用写入：可能大于capacity（此时仅写入前capacity个引用）。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 仅可在 Host 查询或选择 Device
-- 引用只保存设备序号且不拥有 Runtime 状态
-- 查询失败时输出参数保持原值，属性仅限当前接口列出的 AI Core、Vector Core、Warp、UB、GM、L2 与架构字段
+- 仅可在Host查询或选择Device。
+- 引用只保存设备序号且不拥有Runtime状态。
+- 查询失败时输出参数保持原值，属性仅限当前接口列出的AI Core、Vector Core、Warp、UB、GM、L2与架构字段。
 
 ## 调用示例
 
@@ -76,3 +78,7 @@ decltype(auto) example(asc::device_ref* output, asc::std::uint32_t capacity, asc
     return asc::devices(output, capacity, count);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_devices.md)

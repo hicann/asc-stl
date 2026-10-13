@@ -28,118 +28,130 @@
 
 头文件路径为：`<asc/warp>`。
 
-`asc::warp_match_any` 返回与当前 Lane 值相等的参与 Lane 掩码。
+`asc::warp_match_any`返回与当前Lane值相等的参与Lane掩码。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-asc::lane_mask asc::warp_match_any(bool value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+asc::lane_mask warp_match_any(bool value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-asc::lane_mask asc::warp_match_any(float value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+asc::lane_mask warp_match_any(float value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-asc::lane_mask asc::warp_match_any(int value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+asc::lane_mask warp_match_any(int value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-asc::lane_mask asc::warp_match_any(long long value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+asc::lane_mask warp_match_any(long long value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
-asc::lane_mask asc::warp_match_any(unsigned int value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+asc::lane_mask warp_match_any(unsigned int value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
-### 原型 6
+### 原型6
 
 ```cpp
-asc::lane_mask asc::warp_match_any(unsigned long long value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+namespace asc {
+asc::lane_mask warp_match_any(unsigned long long value, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与匹配的输入值：返回掩码中置位的 Lane 与本 Lane 的该值按位相等。 |
-| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
+| `value` | 输入 | 本Lane参与匹配的输入值：返回掩码中置位的Lane与本Lane的该值按位相等。 |
+| `participants` | 输入 | 参与匹配的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：仅集合内的Lane参与比较。 |
 
-### 原型 2 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与匹配的输入值：返回掩码中置位的 Lane 与本 Lane 的该值按位相等。 |
-| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
-
-### 原型 3 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与匹配的输入值：返回掩码中置位的 Lane 与本 Lane 的该值按位相等。 |
-| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
+| `value` | 输入 | 本Lane参与匹配的输入值：返回掩码中置位的Lane与本Lane的该值按位相等。 |
+| `participants` | 输入 | 参与匹配的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：仅集合内的Lane参与比较。 |
 
-### 原型 4 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与匹配的输入值：返回掩码中置位的 Lane 与本 Lane 的该值按位相等。 |
-| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
-
-### 原型 5 的参数
+### 原型3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与匹配的输入值：返回掩码中置位的 Lane 与本 Lane 的该值按位相等。 |
-| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
+| `value` | 输入 | 本Lane参与匹配的输入值：返回掩码中置位的Lane与本Lane的该值按位相等。 |
+| `participants` | 输入 | 参与匹配的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：仅集合内的Lane参与比较。 |
 
-### 原型 6 的参数
+### 原型4的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 本 Lane 参与匹配的输入值：返回掩码中置位的 Lane 与本 Lane 的该值按位相等。 |
-| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
+| `value` | 输入 | 本Lane参与匹配的输入值：返回掩码中置位的Lane与本Lane的该值按位相等。 |
+| `participants` | 输入 | 参与匹配的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：仅集合内的Lane参与比较。 |
+
+### 原型5的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 本Lane参与匹配的输入值：返回掩码中置位的Lane与本Lane的该值按位相等。 |
+| `participants` | 输入 | 参与匹配的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：仅集合内的Lane参与比较。 |
+
+### 原型6的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 本Lane参与匹配的输入值：返回掩码中置位的Lane与本Lane的该值按位相等。 |
+| `participants` | 输入 | 参与匹配的Lane集合掩码（lane_mask，bit i对应Lane i，默认lane_mask::all()）：仅集合内的Lane参与比较。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::lane_mask` | 返回与当前 Lane 值相等的参与 Lane 掩码。 |
-| 原型 2 | `asc::lane_mask` | 返回与当前 Lane 值相等的参与 Lane 掩码。 |
-| 原型 3 | `asc::lane_mask` | 返回与当前 Lane 值相等的参与 Lane 掩码。 |
-| 原型 4 | `asc::lane_mask` | 返回与当前 Lane 值相等的参与 Lane 掩码。 |
-| 原型 5 | `asc::lane_mask` | 返回与当前 Lane 值相等的参与 Lane 掩码。 |
-| 原型 6 | `asc::lane_mask` | 返回与当前 Lane 值相等的参与 Lane 掩码。 |
+| 原型1 | `asc::lane_mask` | 返回与当前Lane值相等的参与Lane掩码。 |
+| 原型2 | `asc::lane_mask` | 返回与当前Lane值相等的参与Lane掩码。 |
+| 原型3 | `asc::lane_mask` | 返回与当前Lane值相等的参与Lane掩码。 |
+| 原型4 | `asc::lane_mask` | 返回与当前Lane值相等的参与Lane掩码。 |
+| 原型5 | `asc::lane_mask` | 返回与当前Lane值相等的参与Lane掩码。 |
+| 原型6 | `asc::lane_mask` | 返回与当前Lane值相等的参与Lane掩码。 |
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 所有参与的活动线程必须以收敛控制流调用
-- float 键按对象表示进行逐位匹配
+- 仅可在AI Core SIMT编程中调用。
+- 所有参与的活动线程必须以收敛控制流调用。
+- float键按对象表示进行逐位匹配。
 
 ## 调用示例
 
@@ -154,7 +166,7 @@ __aicore__ decltype(auto) example(bool value, asc::lane_mask participants = asc:
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：
 
@@ -162,3 +174,7 @@ __aicore__ decltype(auto) example(bool value, asc::lane_mask participants = asc:
 - [warp_example.h](../../../../examples/warp_collectives/warp_example.h)
 - [kernel.asc](../../../../examples/warp_collectives/kernel.asc)
 - [main.cpp](../../../../examples/warp_collectives/main.cpp)
+
+## 关联API
+
+- [`asc::lane_mask`](lane_mask.md)：Warp内Lane的位集合；第i位对应编号为i的Lane。

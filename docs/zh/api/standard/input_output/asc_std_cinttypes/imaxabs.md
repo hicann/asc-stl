@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cinttypes>`。
 
-`asc::std::imaxabs` 返回对应宽度有符号整数的绝对值。
+`asc::std::imaxabs`返回对应宽度有符号整数的绝对值。
 
 标准语义参考：[cppreference `cinttypes`](https://en.cppreference.com/w/cpp/header/cinttypes)。
 
 ## 函数原型
 
 ```cpp
-constexpr intmax_t asc::std::imaxabs(intmax_t value) noexcept;
+namespace asc::std {
+constexpr intmax_t imaxabs(intmax_t value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,7 +46,7 @@ constexpr intmax_t asc::std::imaxabs(intmax_t value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待取绝对值的 intmax_t 有符号整数；为最小负值 INTMAX_MIN 时其绝对值无法以 intmax_t 表示。 |
+| `value` | 输入 | 待取绝对值的intmax_t有符号整数；为最小负值INTMAX_MIN时其绝对值无法以intmax_t表示。 |
 
 ## 返回值说明
 
@@ -54,7 +56,7 @@ constexpr intmax_t asc::std::imaxabs(intmax_t value) noexcept;
 
 ## 约束说明
 
-- 提供纯整数类型运算和格式宏
+- 提供纯整数类型运算和格式宏。
 
 ## 调用示例
 
@@ -68,3 +70,7 @@ decltype(auto) example(asc::std::intmax_t value)
     return asc::std::imaxabs(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cinttypes.md)

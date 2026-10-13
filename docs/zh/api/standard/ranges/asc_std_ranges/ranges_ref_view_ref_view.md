@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::ref_view::ref_view` 按本页所列构造形态初始化 `ref_view` 对象。
+`asc::std::ranges::ref_view::ref_view`按本页所列构造形态初始化`ref_view`对象。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
@@ -52,22 +52,34 @@ template<class T> constexpr ref_view(T&& value);
 | --- | --- | --- |
 | `value` | 输入/输出 | 被引用的底层范围对象；视图保存指向它的指针，须保证其生存期覆盖视图使用期。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
+    int values[] = {1, 2, 3, 4};
+    using Base = asc::std::ranges::subrange<int*>;
+    Base base(values, values + 4);
     asc::std::ranges::ref_view<int[4]> view(values);
-    (void)view.begin();
+    return *view.begin() == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

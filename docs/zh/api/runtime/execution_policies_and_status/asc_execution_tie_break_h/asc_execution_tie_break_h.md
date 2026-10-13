@@ -1,4 +1,4 @@
-# 头文件 asc/execution.tie_break.h
+# 头文件asc/execution.tie_break.h
 
 提供多个结果同时满足条件时的选择规则
 
@@ -8,7 +8,7 @@
 #include <asc/execution.tie_break.h>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |

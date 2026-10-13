@@ -28,29 +28,40 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::zip_function` 把 tuple 参数展开后调用用户函数。
+`asc::zip_function`把tuple参数展开后调用用户函数。
 
 ## 声明
 
 ```cpp
-template<class Function> class asc::zip_function
+namespace asc {
+template<class Function> class zip_function;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
-void use_type()
+int add_values(int left, int right) { return left + right; }
+
+bool example()
 {
-    using selected = asc::zip_function<int (*)(int, int)>;
-    (void)sizeof(selected);
+    int left = 2;
+    int right = 3;
+    auto zipped = asc::make_zip_iterator(&left, &right);
+    asc::zip_function<int(*)(int, int)> add(add_values);
+    return add(*zipped) == 5;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

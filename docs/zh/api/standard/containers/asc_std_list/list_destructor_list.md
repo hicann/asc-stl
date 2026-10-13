@@ -28,9 +28,9 @@
 
 头文件路径为：`<asc/std/list>`。
 
-`asc::std::list::~list` 销毁 `list` 对象并结束其生命周期。
+`asc::std::list::~list`销毁`list`对象并结束其生命周期。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `list`](https://en.cppreference.com/w/cpp/header/list)。
 
@@ -44,18 +44,22 @@
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- Host及AI Core SIMT 编程下list<T,A>显式GM arena allocator构造
-- empty/size/front/back/begin/end
-- push/emplace/pop_front/back/clear
-- 双向迭代核心、移动构造/赋值、移动前迭代器继续遍历目标节点及析构
-- 仅容量充足和不抛出异常值/allocator域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下list<T,A>显式GM arena allocator构造。
+- empty/size/front/back/begin/end。
+- push/emplace/pop_front/back/clear。
+- 双向迭代核心、移动构造/赋值、移动前迭代器继续遍历目标节点及析构。
+- 仅容量充足和不抛出异常值/allocator域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段假定 object 指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
+以下片段假定object指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
 
 ```cpp
 #include <asc/std/list>
@@ -82,3 +86,7 @@ void example(example_object* object)
     object->~example_object();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_list.md)

@@ -28,28 +28,31 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::allocator_traits::pointer` 标识元素指针类型。
+`asc::std::allocator_traits::pointer`标识元素指针类型。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 声明
 
+`asc::std::allocator_traits<Allocator>::pointer`是成员类型别名。
+
+若Allocator提供pointer，则采用该类型；否则为value_type*。
+
+在依赖类型上下文中按以下形式使用：
+
 ```cpp
-using asc::std::allocator_traits::pointer = typename Pointer<value_type, allocator_type>::type
+template<class Allocator>
+using selected_pointer = typename asc::std::allocator_traits<Allocator>::pointer;
 ```
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg
-- uses_allocator/uses_allocator_v
-- allocator_traits 的 C++20 成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator 含 pair 递归构造
-- C++23 allocation_result 与标准 allocator_traits::allocate_at_least
-- 均限用户显式提供且在调用执行空间有效的 allocator
+- 若Allocator提供pointer，则采用该类型；否则为value_type*。
+- `Allocator`是调用方显式提供的分配器类型；本成员类型查询不执行分配。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/memory>
@@ -74,3 +77,7 @@ void use_type()
     using alias_type = typename asc::std::allocator_traits<example_allocator<int>>::pointer;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

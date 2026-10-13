@@ -28,31 +28,38 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::ranges::next` 返回推进指定步数后的迭代器副本，负步数依赖双向能力。
+`asc::std::ranges::next`返回推进指定步数后的迭代器副本，负步数依赖双向能力。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-constexpr asc::std::ranges::next_fn asc::std::ranges::next
+namespace asc::std::ranges {
+constexpr next_fn next;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 步数推进不越过哨兵；负步数要求迭代器双向
+- 该范围迭代器操作要求C++20，且仅在Host可调用。
+
+- 步数推进不越过哨兵；负步数要求迭代器双向。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
-#include <asc/std/ranges>
 
-void example()
+bool example()
 {
-    static int data[4] = {1, 2, 3, 4};
-    (void)asc::std::ranges::next(data);
+    int values[] = {1, 2, 3};
+    return *asc::std::ranges::next(values) == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

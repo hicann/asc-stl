@@ -28,31 +28,35 @@
 
 头文件路径为：`<asc/std/string>`。
 
-`asc::std::basic_string::back` 返回末元素的引用；对象必须非空。
+`asc::std::basic_string::back`返回末元素的引用；对象必须非空。
 
 标准语义参考：[cppreference `string`](https://en.cppreference.com/w/cpp/header/string)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::basic_string`](basic_string.md)。
+
+### 原型1
 
 ```cpp
-const_reference asc::std::basic_string::back() const noexcept;
+// asc::std::basic_string 类内的声明节选；模板形参和其他成员由所属类提供。
+const_reference back() const noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-reference asc::std::basic_string::back() noexcept;
+// asc::std::basic_string 类内的声明节选；模板形参和其他成员由所属类提供。
+reference back() noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 无参数。
 
@@ -60,40 +64,35 @@ reference asc::std::basic_string::back() noexcept;
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `const_reference` | 返回末元素的引用。 |
-| 原型 2 | `reference` | 返回末元素的引用。 |
+| 原型1 | `const_reference` | 返回末元素的引用。 |
+| 原型2 | `reference` | 返回末元素的引用。 |
 
 ## 约束说明
 
-- basic_string<char,Traits,A>显式allocator构造
-- plain/local字符来源的append/push_back/clear
-- size/capacity/data/c_str/迭代/索引与析构
-- 仅容量充足和不抛出异常域
+- basic_string<char,Traits,A>显式allocator构造。
+- plain/local字符来源的append/push_back/clear。
+- size/capacity/data/c_str/迭代/索引与析构。
+- 仅容量充足和不抛出异常域。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
-#include <asc/std/string>
-#include <functional>
 #include <memory>
 #include <string>
-#include <utility>
+#include <asc/std/string>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void example(asc::std::basic_string<char, ::std::char_traits<char>, example_allocator<char>>& object)
+bool example()
 {
-    (void)object.back();
+    using string_type = asc::std::basic_string<char, ::std::char_traits<char>, ::std::allocator<char>>;
+    string_type text(::std::allocator<char>{});
+    text += "hi";
+    return text.back() == 'i';
 }
 ```
+
+## 关联API
+
+- [`asc::std::basic_string`](basic_string.md)
+- [本头文件的接口列表](asc_std_string.md)

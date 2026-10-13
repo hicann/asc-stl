@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/work_queue>`。
 
-`asc::acquire_work` 从共享工作队列中原子领取一个互不重叠的索引区间，并将区间写入 `chunk`。返回 false 表示没有剩余工作。
+`asc::acquire_work`从共享工作队列中原子领取一个互不重叠的索引区间，并将区间写入`chunk`。返回false表示没有剩余工作。
 
-该接口的可用位置为 AI Core SIMD 编程、AI Core SIMT 编程。
+该接口的可用位置为AI Core SIMD编程、AI Core SIMT编程。
 
 ## 函数原型
 
 ```cpp
-template<class Index> bool asc::acquire_work(asc::work_queue_ref<Index> queue, asc::work_chunk<Index>& chunk) noexcept;
+namespace asc {
+template<class Index> bool acquire_work(asc::work_queue_ref<Index> queue, asc::work_chunk<Index>& chunk) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -57,17 +59,17 @@ template<class Index> bool asc::acquire_work(asc::work_queue_ref<Index> queue, a
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- Index 必须为受支持的 32 位或 64 位无符号整数
-- 队列引用及其游标在并发领取期间必须保持有效
-- 接口不保证领取顺序或公平性
+- Index必须为受支持的32位或64位无符号整数。
+- 队列引用及其游标在并发领取期间必须保持有效。
+- 接口不保证领取顺序或公平性。
 
 ## 调用示例
 
-以下片段演示 AI Core SIMT 编程中的队列领取；普通 AI Core SIMD 编程应使用页面列出的全局内存游标指针重载。
+以下片段演示AI Core SIMT编程中的队列领取；普通AI Core SIMD编程应使用页面列出的全局内存游标指针重载。
 
 ```cpp
 #include <asc/work_queue>
@@ -78,3 +80,7 @@ __aicore__ decltype(auto) example(asc::work_queue_ref<unsigned int> queue)
     return asc::acquire_work(queue, chunk);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_work_queue.md)

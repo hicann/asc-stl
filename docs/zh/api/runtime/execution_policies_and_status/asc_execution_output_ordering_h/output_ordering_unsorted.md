@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/execution.output_ordering.h>`。
 
-`asc::output_ordering::unsorted` 表示不要求输出元素按排序关系排列。
+`asc::output_ordering::unsorted`表示不要求输出元素按排序关系排列。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 声明
 
+所属类型：[`asc::output_ordering`](output_ordering.md)。
+
 ```cpp
-asc::output_ordering::unsorted
+// asc::output_ordering 类内的声明节选；模板形参和其他成员由所属类提供。
+unsorted;
 ```
 
 ## 约束说明
 
-- 仅提供三个取值
+- 仅提供三个取值。
 
 ## 调用示例
 
@@ -51,3 +54,8 @@ asc::output_ordering::unsorted
 
 auto value = asc::output_ordering::unsorted;
 ```
+
+## 关联API
+
+- [`asc::output_ordering`](output_ordering.md)
+- [本头文件的接口列表](asc_execution_output_ordering_h.md)

@@ -28,30 +28,35 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::integral_constant::value_type` 标识元素或结果的值类型。
+`asc::std::integral_constant::value_type`标识元素或结果的值类型。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
+所属类型：[`asc::std::integral_constant`](integral_constant.md)。
+
 ```cpp
-using asc::std::integral_constant::value_type = T
+// asc::std::integral_constant 类内的声明节选；模板形参和其他成员由所属类提供。
+using value_type = T;
 ```
 
 ## 约束说明
 
-- 提供特征类及其对应的 _v 辅助形式
+- 提供特征类及其对应的 _v辅助形式。
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下Host示例使用独立的预期类型或值检查接口结果。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
-{
-    using selected = typename asc::std::integral_constant<int, 3>::value_type;
-    static_assert(asc::std::is_same_v<selected, selected>);
-}
+using value_type = typename asc::std::integral_constant<int, 7>::value_type;
+static_assert(asc::std::is_same_v<value_type, int>);
 ```
+
+## 关联API
+
+- [`asc::std::integral_constant`](integral_constant.md)
+- [本头文件的接口列表](asc_std_type_traits.md)

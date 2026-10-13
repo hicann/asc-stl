@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/memory_resource>`。
 
-`asc::pinned_memory_resource::allocate` 分配指定字节数的页锁定 Host 内存，并把地址写入原本为空的输出指针。
+`asc::pinned_memory_resource::allocate`分配指定字节数的页锁定Host内存，并把地址写入原本为空的输出指针。
 
 ## 函数原型
 
+所属类型：[`asc::pinned_memory_resource`](pinned_memory_resource.md)。
+
 ```cpp
-asc::execution_status asc::pinned_memory_resource::allocate(void** output, asc::std::size_t bytes, asc::std::size_t alignment = alignof(asc::std::max_align_t)) const noexcept;
+// asc::pinned_memory_resource 类内的声明节选；模板形参和其他成员由所属类提供。
+asc::execution_status allocate(void** output, asc::std::size_t bytes, asc::std::size_t alignment = alignof(asc::std::max_align_t)) const noexcept;
 ```
 
 ## 参数说明
@@ -42,35 +45,40 @@ asc::execution_status asc::pinned_memory_resource::allocate(void** output, asc::
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 提供“分配指定字节数的页锁定 Host 内存，并把地址写入原本为空的输出指针”所需的数据地址；可访问范围和生命周期须满足约束。 |
-| `bytes` | 输入 | 处理的数据量，单位为字节。 |
+| `output` | 输出 | 用于接收分配地址的可写指针槽；槽本身非空且调用前 *output为nullptr。成功时写入资源分配的地址，失败时按返回状态处理。 |
+| `bytes` | 输入 | 本次申请的非零字节数。 |
 | `alignment` | 输入 | 要求的对齐值，单位为字节。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
+| `asc::execution_status` | 返回本次同步分配／释放的状态；成功时本次操作已经完成。 |
 
 ## 约束说明
 
-- 仅可在 Host 调用
-- 内存资源不抛出异常
-- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐
-- 资源及其引用的生命周期由调用方管理
+- 仅可在Host调用。
+- 内存资源不抛出异常。
+- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐。
+- 资源及其引用的生命周期由调用方管理。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
 
 ```cpp
 #include <asc/memory_resource>
 
-decltype(auto) example(asc::pinned_memory_resource& resource)
+asc::execution_status example(const asc::pinned_memory_resource& resource)
 {
-    // 调用前完成 CANN 初始化，并保证资源引用有效。
+    // 调用前完成 CANN 初始化；device 资源还要求当前 Device 与绑定值一致。
     void* pointer = nullptr;
-    if (resource.allocate(&pointer, 64).success())
-        return resource.deallocate(pointer, 64);
+    const auto status = resource.allocate(&pointer, 64);
+    if (!status.success()) return status;
+    return resource.deallocate(pointer, 64);
 }
 ```
+
+## 关联API
+
+- [`asc::execution_status`](../../execution_policies_and_status/asc_execution/execution_status.md)：参数校验和任务提交状态；提交成功不表示异步工作已经完成。

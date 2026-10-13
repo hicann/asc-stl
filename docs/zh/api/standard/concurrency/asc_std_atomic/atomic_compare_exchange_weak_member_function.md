@@ -28,64 +28,68 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic::compare_exchange_weak` 尝试比较并交换当前值，允许报告伪失败以适配重试循环。
+`asc::std::atomic::compare_exchange_weak`尝试比较并交换当前值，允许报告伪失败以适配重试循环。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::atomic`](atomic.md)。
+
+### 原型1
 
 ```cpp
-bool asc::std::atomic::compare_exchange_weak(T& expected, T desired, memory_order success) noexcept;
+// asc::std::atomic 类内的声明节选；模板形参和其他成员由所属类提供。
+bool compare_exchange_weak(T& expected, T desired, memory_order success) noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-bool asc::std::atomic::compare_exchange_weak(T& expected, T desired, memory_order success, memory_order failure) noexcept;
+// asc::std::atomic 类内的声明节选；模板形参和其他成员由所属类提供。
+bool compare_exchange_weak(T& expected, T desired, memory_order success, memory_order failure) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `expected` | 输入/输出 | 提供预期值或目标值；比较失败时函数把观察到的当前原子值写入 `expected`；weak 形式允许伪失败（值相等也可能返回 `false`），strong 形式不允许伪失败。 |
+| `expected` | 输入/输出 | 提供预期值或目标值；比较失败时函数把观察到的当前原子值写入`expected`；weak形式允许伪失败（值相等也可能返回`false`），strong形式不允许伪失败。 |
 | `desired` | 输入 | 比较相等时写入原子对象的目标值。 |
 | `success` | 输入 | 比较交换成功分支使用的内存序，约束交换写入的可见性顺序。 |
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `expected` | 输入/输出 | 提供预期值或目标值；比较失败时函数把观察到的当前原子值写入 `expected`；weak 形式允许伪失败（值相等也可能返回 `false`），strong 形式不允许伪失败。 |
+| `expected` | 输入/输出 | 提供预期值或目标值；比较失败时函数把观察到的当前原子值写入`expected`；weak形式允许伪失败（值相等也可能返回`false`），strong形式不允许伪失败。 |
 | `desired` | 输入 | 比较相等时写入原子对象的目标值。 |
 | `success` | 输入 | 比较交换成功分支使用的内存序，约束交换写入的可见性顺序。 |
-| `failure` | 输入 | 比较交换失败分支（仅读取）使用的内存序；不得为 release 或 acq_rel，且不得强于 success。 |
+| `failure` | 输入 | 比较交换失败分支（仅读取）使用的内存序；不得为release或acq_rel，且不得强于success。 |
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `bool` | 完成交换时返回 `true`；比较失败或伪失败（值相等也可能发生）时返回 `false`。 |
-| 原型 2 | `bool` | 完成交换时返回 `true`；比较失败或伪失败（值相等也可能发生）时返回 `false`。 |
+| 原型1 | `bool` | 完成交换时返回`true`；比较失败或伪失败（值相等也可能发生）时返回`false`。 |
+| 原型2 | `bool` | 完成交换时返回`true`；比较失败或伪失败（值相等也可能发生）时返回`false`。 |
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数
-- bool/8/16位用32位内部存储
-- 32/64位按有符号位模式分派
-- Host 和 AI Core SIMT 编程 GM
+- 标准整数/字符owning atomic别名及列出自由函数。
+- bool/8/16位用32位内部存储。
+- 32/64位按有符号位模式分派。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
-以下 Host 片段演示原子操作；设备端对象须放在本页规定的有效内存空间。
+以下Host片段演示原子操作；设备端对象须放在本页规定的有效内存空间。
 
 ```cpp
 #include <asc/std/atomic>
@@ -96,3 +100,8 @@ decltype(auto) example(asc::std::atomic<int>& value)
     return value.compare_exchange_weak(expected, 2, asc::std::memory_order_relaxed);
 }
 ```
+
+## 关联API
+
+- [`asc::std::atomic`](atomic.md)
+- [本头文件的接口列表](asc_std_atomic.md)

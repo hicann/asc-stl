@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/collectives>`。
 
-`asc::block_collective_workspace_bytes` 计算指定线程数的 Block 集体操作所需工作区字节数。
+`asc::block_collective_workspace_bytes`计算指定线程数的Block集体操作所需工作区字节数。
 
-该接口的可用位置为 AI Core SIMT 编程。
+该接口的可用位置为AI Core SIMT编程。
 
 ## 函数原型
 
 ```cpp
-template<class T> constexpr asc::std::size_t asc::block_collective_workspace_bytes(asc::std::uint32_t thread_count) noexcept;
+namespace asc {
+template<class T> constexpr asc::std::size_t block_collective_workspace_bytes(asc::std::uint32_t thread_count) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -44,7 +46,7 @@ template<class T> constexpr asc::std::size_t asc::block_collective_workspace_byt
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 每个参与线程读写的元素类型，决定工作区的大小与对齐。 |
 
 **函数参数**
 
@@ -60,8 +62,8 @@ template<class T> constexpr asc::std::size_t asc::block_collective_workspace_byt
 
 ## 约束说明
 
-- T 仅可为 int32_t、uint32_t 或 float
-- thread_count 必须是 32 的倍数且位于 [32, 1024] 范围内
+- T仅可为int32_t、uint32_t或float。
+- thread_count必须是32的倍数且位于[32, 1024] 范围内。
 
 ## 调用示例
 
@@ -83,3 +85,7 @@ __aicore__ asc::std::size_t example()
     return asc::block_collective_workspace_bytes<unsigned int>(64u);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_collectives.md)

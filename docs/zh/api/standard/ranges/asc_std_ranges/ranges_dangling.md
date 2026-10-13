@@ -28,29 +28,44 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::dangling` 标记临时范围的不可借用结果或提供视图适配辅助能力。
+`asc::std::ranges::dangling`标记临时范围的不可借用结果或提供视图适配辅助能力。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
 ```cpp
-struct asc::std::ranges::dangling
+namespace asc::std::ranges {
+struct dangling;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 支持数组和用户范围，不支持仅由花括号构成的 initializer_list 表达式
+- 支持数组和用户范围，不支持仅由花括号构成的initializer_list表达式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/algorithm>
+#include <asc/std/type_traits>
 
-void use_type(const asc::std::ranges::dangling& value)
+struct IsTwo { bool operator()(int value) const { return value == 2; } };
+
+bool example()
 {
-    (void)value;
+    auto temporary_result = asc::std::ranges::find_if(asc::std::array<int, 2>{1, 2}, IsTwo{});
+    static_assert(asc::std::is_same_v<decltype(temporary_result), asc::std::ranges::dangling>);
+    // 保存范围对象后查找，才能使用返回位置。
+    asc::std::array<int, 2> values{1, 2};
+    return *asc::std::ranges::find_if(values, IsTwo{}) == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

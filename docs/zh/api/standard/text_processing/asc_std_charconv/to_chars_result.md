@@ -28,30 +28,38 @@
 
 头文件路径为：`<asc/std/charconv>`。
 
-`asc::std::to_chars_result` 保存字符写入停止位置和错误状态。
+`asc::std::to_chars_result`保存字符写入停止位置和错误状态。
 
 标准语义参考：[cppreference `charconv`](https://en.cppreference.com/w/cpp/header/charconv)。
 
 ## 声明
 
 ```cpp
-struct asc::std::to_chars_result
+namespace asc::std {
+struct to_chars_result;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 支持所有标准有符号/无符号整数类型以及 2 至 36 进制
-- AI Core SIMD 编程 缓冲区必须是 local 或 generic 地址空间的普通 char 指针
+- 支持所有标准有符号/无符号整数类型以及2至36进制。
+- AI Core SIMD编程 缓冲区必须是local或generic地址空间的普通char指针。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/charconv>
 
-void use_type(const asc::std::to_chars_result& value)
+bool example()
 {
-    (void)value;
+    char text[4] = {};
+    asc::std::to_chars_result result = asc::std::to_chars(text, text + 4, 42);
+    return result.ec == asc::std::errc{} && result.ptr == text + 2 && text[0] == '4' && text[1] == '2';
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_charconv.md)

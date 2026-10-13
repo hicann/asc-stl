@@ -28,18 +28,20 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::warp_size` 定义一个 Warp 包含的 Lane 数量，当前为 32。
+`asc::warp_size`定义一个Warp包含的Lane数量，当前为32。
 
 ## 声明
 
 ```cpp
-inline constexpr unsigned int asc::warp_size = 32
+namespace asc {
+inline constexpr unsigned int warp_size = 32;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 可在 Host、AI Core SIMD 编程、AI Core SIMT 编程中使用
-- 所选重载的类型、地址空间、取值范围和对象生命周期必须满足其公开声明
+- 可在Host、AI Core SIMD编程、AI Core SIMT编程中使用。
+- 所选重载的类型、地址空间、取值范围和对象生命周期必须满足其公开声明。
 
 ## 调用示例
 
@@ -50,3 +52,7 @@ inline constexpr unsigned int asc::warp_size = 32
 
 auto value = asc::warp_size;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_hierarchy.md)

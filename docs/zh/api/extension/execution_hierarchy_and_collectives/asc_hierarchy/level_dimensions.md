@@ -28,30 +28,36 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::level_dimensions` 把三维范围与指定的 SIMT 层级类型关联。
+`asc::level_dimensions`把三维范围与指定的SIMT层级类型关联。
 
 ## 声明
 
 ```cpp
-template<class Level> struct asc::level_dimensions
+namespace asc {
+template<class Level> struct level_dimensions;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供 C++17 constexpr Host/Device 层次结构接口
-- 带 extent 的值要求每一维均非零
-- extent 总数按无符号 64 位的 x*y*z 计算
+- 提供C++17 constexpr Host/Device层次结构接口。
+- 带extent的值要求每一维均非零。
+- extent总数按无符号64位的x*y*z计算。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/hierarchy>
 
-void use_type()
+bool example()
 {
-    using selected = asc::level_dimensions<asc::block_level>;
-    (void)sizeof(selected);
+    asc::level_dimensions<asc::block_level> dimensions{asc::extent3d{64, 1, 1}};
+    return dimensions.extents.x == 64 && dimensions.extents.y == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_hierarchy.md)

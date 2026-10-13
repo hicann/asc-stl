@@ -28,33 +28,45 @@
 
 头文件路径为：`<asc/std/barrier>`。
 
-`asc::std::barrier::arrival_token` 标识线程已到达的屏障阶段。
+`asc::std::barrier::arrival_token`标识线程已到达的屏障阶段。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `barrier`](https://en.cppreference.com/w/cpp/header/barrier)。
 
 ## 声明
 
+所属类型：[`asc::std::barrier`](barrier.md)。
+
 ```cpp
-class asc::std::barrier::arrival_token
+// asc::std::barrier 类内的声明节选；模板形参和其他成员由所属类提供。
+class arrival_token;
 ```
 
 ## 约束说明
 
-- Host 侧对象管理 Ascend 950 的 GM 状态
-- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足
+- Host侧对象管理Ascend 950的GM状态。
+- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下片段通过具体容器或分布类型实例化嵌套类。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/barrier>
+#include <asc/std/utility>
 
-void use_type()
+bool example()
 {
-    using selected = typename asc::std::barrier<>::arrival_token;
-    (void)sizeof(selected);
+    asc::std::barrier<> barrier(1);
+    auto token = barrier.arrive();
+    barrier.wait(asc::std::move(token));
+    barrier.arrive_and_wait();
+    return true;
 }
 ```
+
+## 关联API
+
+- [`asc::std::barrier`](barrier.md)
+- [本头文件的接口列表](asc_std_barrier.md)

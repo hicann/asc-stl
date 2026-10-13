@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/linalg>`。
 
-`asc::std::linalg::scaled` 创建按标量缩放元素的非拥有多维视图。
+`asc::std::linalg::scaled`创建按标量缩放元素的非拥有多维视图。
 
 标准语义参考：[cppreference `linalg`](https://en.cppreference.com/w/cpp/header/linalg)。
 
 ## 函数原型
 
 ```cpp
-template<class ScalingFactor, class ElementType, class Extents, class Layout, class Accessor> [[nodiscard]] constexpr mdspan<Detail::Scaledelementtype<ScalingFactor, Accessor>, Extents, Layout, scaled_accessor<ScalingFactor, Accessor>> asc::std::linalg::scaled(ScalingFactor factor, mdspan<ElementType, Extents, Layout, Accessor> input);
+namespace asc::std::linalg {
+template<class ScalingFactor, class ElementType, class Extents, class Layout, class Accessor> [[nodiscard]] constexpr mdspan<Detail::Scaledelementtype<ScalingFactor, Accessor>, Extents, Layout, scaled_accessor<ScalingFactor, Accessor>> scaled(ScalingFactor factor, mdspan<ElementType, Extents, Layout, Accessor> input);
+} // namespace asc::std::linalg
 ```
 
 ## 参数说明
@@ -65,13 +67,11 @@ template<class ScalingFactor, class ElementType, class Extents, class Layout, cl
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库公共入口的完整7实体合同：scaled/scaled_accessor、conjugated/conjugated_accessor、transposed/layout_transpose、conjugate_transposed
-- 包括access/offset/nested accessor/factor、转换构造、算术类型共轭不变、ADL可共轭类型、双重共轭/转置消去、rank-2静态/动态extents交换、layout_left/right/stride与通用layout_transpose mapping全部观察/比较
-- 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段展示固定缓冲或多维视图的具体调用；底层存储须保持有效。
+以下Host片段展示固定缓冲或多维视图的具体调用；底层存储须保持有效。
 
 ```cpp
 #include <asc/std/linalg>
@@ -85,3 +85,7 @@ decltype(auto) example()
     return asc::std::linalg::scaled(2, view);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_linalg.md)

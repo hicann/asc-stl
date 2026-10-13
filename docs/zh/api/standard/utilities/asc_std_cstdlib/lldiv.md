@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cstdlib>`。
 
-`asc::std::lldiv` 同时计算整数商和余数并返回对应结果结构。
+`asc::std::lldiv`同时计算整数商和余数并返回对应结果结构。
 
 标准语义参考：[cppreference `cstdlib`](https://en.cppreference.com/w/cpp/header/cstdlib)。
 
 ## 函数原型
 
 ```cpp
-[[nodiscard]] constexpr lldiv_t asc::std::lldiv(long long numerator, long long denominator) noexcept;
+namespace asc::std {
+[[nodiscard]] constexpr lldiv_t lldiv(long long numerator, long long denominator) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,8 +46,8 @@
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `numerator` | 输入 | 被除数（分子），类型为 long long。 |
-| `denominator` | 输入 | 除数（分母），类型为 long long；不得为 0。 |
+| `numerator` | 输入 | 被除数（分子），类型为long long。 |
+| `denominator` | 输入 | 除数（分母），类型为long long；不得为0。 |
 
 ## 返回值说明
 
@@ -55,7 +57,7 @@
 
 ## 约束说明
 
-- 提供整数重载及相应结果类型
+- 提供整数重载及相应结果类型。
 
 ## 调用示例
 
@@ -69,3 +71,7 @@ decltype(auto) example(long long numerator, long long denominator)
     return asc::std::lldiv(numerator, denominator);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstdlib.md)

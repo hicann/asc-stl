@@ -28,30 +28,39 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::tensor_copy_descriptor` 描述多维 Tensor 搬运的范围、源/目标步长和两侧填充。
+`asc::tensor_copy_descriptor`描述多维Tensor搬运的范围、源/目标步长和两侧填充。
 
 ## 声明
 
 ```cpp
-template<unsigned Rank> class asc::tensor_copy_descriptor
+namespace asc {
+template<unsigned Rank> class tensor_copy_descriptor;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 描述符及状态类型可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Rank 为 1 至 5
-- 维度和步长采用 uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运
+- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Rank为1至5。
+- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/tensor_copy>
+#include <asc/std/type_traits>
 
-void use_type()
+bool example()
 {
-    using selected = asc::tensor_copy_descriptor<2>;
-    (void)sizeof(selected);
+    using Descriptor = asc::tensor_copy_descriptor<2>;
+    static_assert(asc::std::is_same_v<Descriptor::size_type, unsigned int>);
+    Descriptor descriptor;
+    return descriptor.rank() == 2 && descriptor.validate() == asc::tensor_copy_status::zero_extent;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_tensor_copy.md)

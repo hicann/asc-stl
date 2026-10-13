@@ -28,20 +28,21 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::dims` 按指定维度数构造运行期维度长度类型。
+`asc::std::dims`按指定维度数构造运行期维度长度类型。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 声明
 
 ```cpp
-template<size_t Rank, class IndexType> using asc::std::dims = dextents<IndexType, Rank>
+namespace asc::std {
+template<size_t Rank, class IndexType> using dims = dextents<IndexType, Rank>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整dynamic_extent/extents/dextents/dims家族：零rank与正rank、默认/按rank或rank_dynamic传值/array/span/跨extents构造、标准显式性与约束、deduction guide、相等比较及rank/rank_dynamic/static_extent/extent观察
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
@@ -55,3 +56,7 @@ void use_type()
     using selected = asc::std::dims<2, int>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mdspan.md)

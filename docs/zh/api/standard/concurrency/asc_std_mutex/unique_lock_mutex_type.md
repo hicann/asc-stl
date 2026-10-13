@@ -28,34 +28,52 @@
 
 头文件路径为：`<asc/std/mutex>`。
 
-`asc::std::unique_lock::mutex_type` 标识锁包装器引用的 Lockable 类型。
+`asc::std::unique_lock::mutex_type`标识锁包装器引用的Lockable类型。
 
 标准语义参考：[cppreference `mutex`](https://en.cppreference.com/w/cpp/header/mutex)。
 
 ## 声明
 
+所属类型：[`asc::std::unique_lock`](unique_lock.md)。
+
 ```cpp
-using asc::std::unique_lock::mutex_type = Mutex
+// asc::std::unique_lock 类内的声明节选；模板形参和其他成员由所属类提供。
+using mutex_type = Mutex;
 ```
 
 ## 约束说明
 
-- unique_lock<Mutex>的mutex_type，default/普通/defer/try/adopt构造、删除copy、move构造/赋值和析构
-- 有效状态上的lock/try_lock/unlock/swap/release/mutex/owns_lock/operator bool及非成员swap
-- 显式非抛Device Lockable域
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- unique_lock<Mutex>的mutex_type，default/普通/defer/try/adopt构造、删除copy、move构造/赋值和析构。
+- 有效状态上的lock/try_lock/unlock/swap/release/mutex/owns_lock/operator bool及非成员swap。
+- 显式非抛Device Lockable域。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段用满足所需锁操作的具体类型读取嵌套别名。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/mutex>
+#include <asc/std/type_traits>
 
-struct example_mutex { void lock() {} bool try_lock() { return true; } void unlock() {} void lock_shared() {} bool try_lock_shared() { return true; } void unlock_shared() {} };
-void use_type()
+struct Mutex {
+    bool locked = false;
+    void lock() { locked = true; }
+    bool try_lock() { if (locked) return false; locked = true; return true; }
+    void unlock() { locked = false; }
+    void lock_shared() { lock(); }
+    bool try_lock_shared() { return try_lock(); }
+    void unlock_shared() { unlock(); }
+};
+
+bool example()
 {
-    using selected = typename asc::std::unique_lock<example_mutex>::mutex_type;
-    (void)sizeof(selected);
+    static_assert(asc::std::is_same_v<asc::std::unique_lock<Mutex>::mutex_type, Mutex>);
+    return true;
 }
 ```
+
+## 关联API
+
+- [`asc::std::unique_lock`](unique_lock.md)
+- [本头文件的接口列表](asc_std_mutex.md)

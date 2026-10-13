@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::layout_stride::mapping::strides` 返回各维步长数组。
+`asc::std::layout_stride::mapping::strides`返回各维步长数组。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
 ```cpp
-asc::std::array<typename asc::std::layout_stride::mapping<Extents>::index_type, Extents::rank()> asc::std::layout_stride::mapping<Extents>::strides() const noexcept
+asc::std::array<typename asc::std::layout_stride::mapping<Extents>::index_type, Extents::rank()> asc::std::layout_stride::mapping<Extents>::strides() const noexcept;
 ```
 
 ## 参数说明
@@ -46,11 +46,11 @@ asc::std::array<typename asc::std::layout_stride::mapping<Extents>::index_type, 
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `按声明确定` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `按声明确定` | 按维度顺序保存各维步长的数组副本。 |
 
 ## 约束说明
 
-- 步长数组与维数一致，恒不抛出
+- 步长数组与维数一致，恒不抛出。
 
 ## 调用示例
 
@@ -65,3 +65,7 @@ decltype(auto) example(Object& object, Args&&... args)
     return object.strides(static_cast<Args&&>(args)...);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mdspan.md)

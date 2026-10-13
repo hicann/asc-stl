@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/deque>`。
 
-`asc::std::deque::pop_back` 移除容器尾部的元素；对象必须非空。
+`asc::std::deque::pop_back`移除容器尾部的元素；对象必须非空。
 
 标准语义参考：[cppreference `deque`](https://en.cppreference.com/w/cpp/header/deque)。
 
 ## 函数原型
 
+所属类型：[`asc::std::deque`](deque.md)。
+
 ```cpp
-void asc::std::deque::pop_back();
+// asc::std::deque 类内的声明节选；模板形参和其他成员由所属类提供。
+void pop_back();
 ```
 
 ## 参数说明
@@ -48,37 +51,34 @@ void asc::std::deque::pop_back();
 
 ## 约束说明
 
-- deque<T,A>显式allocator构造
-- 有限块映射内的push/emplace/pop_front/back
-- empty/size/front/back/operator[]/随机访问迭代核心
-- 新端块分配时已有元素引用稳定
-- clear/析构
-- 仅容量充足和不抛出异常域
+- deque<T,A>显式allocator构造。
+- 有限块映射内的push/emplace/pop_front/back。
+- empty/size/front/back/`operator[]`/随机访问迭代核心。
+- 新端块分配时已有元素引用稳定。
+- clear/析构。
+- 仅容量充足和不抛出异常域。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
+#include <asc/memory>
 #include <asc/std/deque>
-#include <functional>
-#include <memory>
-#include <string>
-#include <utility>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void example(asc::std::deque<int, example_allocator<int>>& object)
+bool example()
 {
-    (void)object.pop_back();
+    alignas(64) unsigned char storage[16384] = {};
+    asc::monotonic_arena arena(storage, sizeof(storage));
+    asc::std::deque<int, asc::arena_allocator<int>> values(asc::arena_allocator<int>{arena});
+    values.push_back(1);
+    values.push_back(3);
+    values.pop_back();
+    return values.back() == 1;
 }
 ```
+
+## 关联API
+
+- [`asc::std::deque`](deque.md)
+- [本头文件的接口列表](asc_std_deque.md)

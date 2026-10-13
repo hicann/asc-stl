@@ -28,40 +28,49 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::indirectly_readable_traits` 在编译期取得对应迭代器属性类型。
+`asc::std::indirectly_readable_traits`在编译期取得对应迭代器属性类型。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class Index> struct asc::std::indirectly_readable_traits
+namespace asc::std {
+template<class Index> struct indirectly_readable_traits;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> struct asc::std::indirectly_readable_traits
+namespace asc::std {
+template<class T> struct indirectly_readable_traits;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 C++20 公开迭代器概念和特征接口
+- 提供C++20公开迭代器概念和特征接口。
 
 ## 调用示例
 
-以下 Host 片段用具体迭代器或容器类型实例化本页接口。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/iterator>
-
 #include <asc/std/type_traits>
+#include <asc/std/vector>
+#include <asc/std/forward_list>
 
-void example()
+bool example()
 {
-    using selected = asc::std::indirectly_readable_traits<int*>;
-    (void)sizeof(selected);
+    static_assert(asc::std::is_same_v<asc::std::indirectly_readable_traits<const int*>::value_type, int>);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

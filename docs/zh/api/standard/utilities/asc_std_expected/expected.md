@@ -28,32 +28,39 @@
 
 头文件路径为：`<asc/std/expected>`。
 
-`asc::std::expected` 在成功值与错误值之间保存一个活动状态。
+`asc::std::expected`在成功值与错误值之间保存一个活动状态。
 
 标准语义参考：[cppreference `expected`](https://en.cppreference.com/w/cpp/header/expected)。
 
 ## 声明
 
 ```cpp
-template<class Value, class Error> class asc::std::expected
+namespace asc::std {
+template<class Value, class Error> class expected;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- T 必须为非 void 类型，E 必须为对象类型
-- 适用操作必须不抛出异常
-- 提供构造、赋值、emplace 和 swap
+- T必须为非void类型，E必须为对象类型。
+- 适用操作必须不抛出异常。
+- 提供构造、赋值、emplace和swap。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/expected>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::expected<int, int>;
-    (void)sizeof(selected);
+    asc::std::expected<int, int> value(7);
+    asc::std::expected<int, int> failure(asc::std::unexpect, 3);
+    return value.has_value() && *value == 7 && !failure.has_value() && failure.error() == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_expected.md)

@@ -28,21 +28,24 @@
 
 头文件路径为：`<asc/std/bitset>`。
 
-`asc::std::bitset::reference` 标识可写元素引用类型。
+`asc::std::bitset::reference`标识可写元素引用类型。
 
 标准语义参考：[cppreference `bitset`](https://en.cppreference.com/w/cpp/header/bitset)。
 
 ## 声明
 
+所属类型：[`asc::std::bitset`](bitset.md)。
+
 ```cpp
-using asc::std::bitset::reference = typename base::reference
+// asc::std::bitset 类内的声明节选；模板形参和其他成员由所属类提供。
+using reference = typename base::reference;
 ```
 
 ## 约束说明
 
-- 支持默认构造和 unsigned long long 构造
-- operator[] 不进行边界检查
-- 提供整组 set、reset、flip，位运算、移位、状态检查、计数和容量查询
+- 支持默认构造和unsigned long long构造。
+- `operator[]`不进行边界检查。
+- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
 
 ## 调用示例
 
@@ -56,3 +59,8 @@ void use_type()
     using alias_type = typename asc::std::bitset<8>::reference;
 }
 ```
+
+## 关联API
+
+- [`asc::std::bitset`](bitset.md)
+- [本头文件的接口列表](asc_std_bitset.md)

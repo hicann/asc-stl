@@ -28,26 +28,29 @@
 
 头文件路径为：`<asc/std/string>`。
 
-`asc::std::basic_string::allocator_type` 标识当前对象使用的分配器类型。
+`asc::std::basic_string::allocator_type`标识当前对象使用的分配器类型。
 
 标准语义参考：[cppreference `string`](https://en.cppreference.com/w/cpp/header/string)。
 
 ## 声明
 
+所属类型：[`asc::std::basic_string`](basic_string.md)。
+
 ```cpp
-using asc::std::basic_string::allocator_type = Allocator
+// asc::std::basic_string 类内的声明节选；模板形参和其他成员由所属类提供。
+using allocator_type = Allocator;
 ```
 
 ## 约束说明
 
-- basic_string<char,Traits,A>显式allocator构造
-- plain/local字符来源的append/push_back/clear
-- size/capacity/data/c_str/迭代/索引与析构
-- 仅容量充足和不抛出异常域
+- basic_string<char,Traits,A>显式allocator构造。
+- plain/local字符来源的append/push_back/clear。
+- size/capacity/data/c_str/迭代/索引与析构。
+- 仅容量充足和不抛出异常域。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/string>
@@ -72,3 +75,8 @@ void use_type()
     using alias_type = typename asc::std::basic_string<char, ::std::char_traits<char>, example_allocator<char>>::allocator_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::basic_string`](basic_string.md)
+- [本头文件的接口列表](asc_std_string.md)

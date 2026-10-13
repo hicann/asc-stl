@@ -28,9 +28,9 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_flag::atomic_flag` 按本页所列构造形态初始化 `atomic_flag` 对象。
+`asc::std::atomic_flag::atomic_flag`按本页所列构造形态初始化`atomic_flag`对象。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
@@ -44,21 +44,30 @@ constexpr atomic_flag() noexcept;
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- atomic_flag的test/test_and_set/clear成员与非volatile自由函数
-- Host 和 AI Core SIMT 编程 GM
+- atomic_flag的test/test_and_set/clear成员与非volatile自由函数。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
-以下 Host 片段演示原子操作；设备端对象须放在本页规定的有效内存空间。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/atomic>
 
-void example()
+bool example()
 {
     asc::std::atomic_flag flag{};
-    (void)flag;
+    flag.clear();
+    return !flag.test_and_set() && flag.test_and_set();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

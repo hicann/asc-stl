@@ -28,42 +28,54 @@
 
 头文件路径为：`<asc/std/optional>`。
 
-`asc::std::optional` 选择性地保存一个值。
+`asc::std::optional`选择性地保存一个值。
 
 标准语义参考：[cppreference `optional`](https://en.cppreference.com/w/cpp/header/optional)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> class asc::std::optional
+namespace asc::std {
+template<class T> class optional;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> class asc::std::optional<T&>
+namespace asc::std {
+template<class T> class optional<T&>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- T 必须是普通的非引用对象类型
-- Host 遵循有效的 C++17 操作
-- Device 侧构造、赋值、调用和交换所依赖的操作必须不抛出异常
-- 引用特化仅允许安全的同类型左值绑定
-- 采用借用指针语义，不提供容易产生悬空引用的转换
+- T必须是普通的非引用对象类型。
+- Host遵循有效的C++17操作。
+- Device侧构造、赋值、调用和交换所依赖的操作必须不抛出异常。
+- 引用特化仅允许安全的同类型左值绑定。
+- 采用借用指针语义，不提供容易产生悬空引用的转换。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/optional>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::optional<int>;
-    (void)sizeof(selected);
+    asc::std::optional<int> value;
+    const bool initially_empty = !value.has_value();
+    value.emplace(7);
+    const bool stored = value.has_value() && *value == 7;
+    value.reset();
+    return initially_empty && stored && !value.has_value();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_optional.md)

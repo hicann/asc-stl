@@ -28,30 +28,42 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::philox4x64` 提供对应随机数引擎或分布参数的类型别名。
+`asc::std::philox4x64`提供对应随机数引擎或分布参数的类型别名。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 声明
 
 ```cpp
-using asc::std::philox4x64 = philox_engine<uint_fast64_t, 64, 4, 10, 14581110107779764567UL, 11400714819323198485UL, 15197193596820024467UL, 13503953896175478587UL>
+namespace asc::std {
+using philox4x64 = philox_engine<uint_fast64_t, 64, 4, 10, 14581110107779764567UL, 11400714819323198485UL, 15197193596820024467UL, 13503953896175478587UL>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/random>
+#include <asc/std/limits>
 
-void use_type(const asc::std::philox4x64& value)
+bool example()
 {
-    (void)value;
+    using Engine = asc::std::philox4x64;
+    Engine engine(7);
+    const auto first = engine();
+    engine.seed(7);
+    // 重设相同种子应重现序列的第一个值。
+    return engine() == first;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

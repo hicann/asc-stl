@@ -28,31 +28,35 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`conditional<B, T, U>` 按编译期布尔值在两个类型之间选择。
+`conditional<B, T, U>`按编译期布尔值在两个类型之间选择。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<bool B, class If, class Then> struct asc::std::conditional
+namespace asc::std {
+template<bool B, class If, class Then> struct conditional;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class If, class Then> struct asc::std::conditional<false, If, Then>
+namespace asc::std {
+template<class If, class Then> struct conditional<false, If, Then>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v 辅助形式
+- 提供特征类以及标准的 _t、_v辅助形式。
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参和 `static_assert` 验证本页类型特征的结果。
+以下Host片段用具体类型实参和`static_assert`验证本页类型特征的结果。
 
 ```cpp
 #include <asc/std/type_traits>
@@ -66,3 +70,7 @@ void use_trait()
     static_assert(!asc::std::is_same_v<asc::std::conditional_t<true, int, long>, long>);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_type_traits.md)

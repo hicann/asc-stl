@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::hh_mm_ss::operator precision` 由 `<asc/std/chrono>` 提供，把时分秒拆分值还原为precision精度的总时长。接口遵循对应 C++ 标准设施的语义；ASC-STL 的语言模式和调用位置以本页声明为准。
+`asc::std::chrono::hh_mm_ss::operator precision`由`<asc/std/chrono>`提供，把时分秒拆分值还原为precision精度的总时长。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
 ```cpp
-explicit constexpr asc::std::chrono::hh_mm_ss::operator precision() const noexcept
+explicit constexpr asc::std::chrono::hh_mm_ss::operator precision() const noexcept;
 ```
 
 ## 参数说明
@@ -46,22 +46,27 @@ explicit constexpr asc::std::chrono::hh_mm_ss::operator precision() const noexce
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `explicit constexpr` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `precision` | 按该对象的符号及小时、分钟、秒和小数秒合成的duration。 |
 
 ## 约束说明
 
-- 转换结果等价于to_duration()，即为构造时传入的原始时长
+- 转换结果等价于to_duration()，即为构造时传入的原始时长。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    asc::std::chrono::hh_mm_ss<asc::std::chrono::seconds> object{};
-    (void)object.operator asc::std::chrono::seconds();
+    asc::std::chrono::hh_mm_ss<asc::std::chrono::seconds> value{asc::std::chrono::seconds{3661}};
+    return static_cast<asc::std::chrono::seconds>(value).count() == 3661;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

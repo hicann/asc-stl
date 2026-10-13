@@ -28,32 +28,44 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::repeat_view` 惰性地观察、筛选、组合或变换输入范围；底层存储仍由调用方管理。
+`asc::std::ranges::repeat_view`惰性地观察、筛选、组合或变换输入范围；底层存储仍由调用方管理。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
 ```cpp
-template<class T, class Bound> class asc::std::ranges::repeat_view
+namespace asc::std::ranges {
+template<class T, class Bound> class repeat_view;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 七个列出名称
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 七个列出名称。
+- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::ranges::repeat_view<int, int>;
-    (void)sizeof(selected);
+    int values[] = {1, 2, 3, 4};
+    using Base = asc::std::ranges::subrange<int*>;
+    Base base(values, values + 4);
+    asc::std::ranges::repeat_view<int, int> view(7, 3);
+    return *view.begin() == 7 && view.size() == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

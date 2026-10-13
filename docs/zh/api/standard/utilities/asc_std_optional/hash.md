@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/optional>`。
 
-`asc::std::hash<asc::std::optional<T>>` 由 `<asc/std/optional>` 提供，optional 的哈希特化：空值哈希 0，有值时 hash<remove_const_t<T>>{}(*value)；使 unordered 容器可直接容纳 optional。CSV hash 行 target_headers 不含 optional，故记新增。
+`asc::std::hash<asc::std::optional<T>>`由`<asc/std/optional>`提供，optional的哈希特化：空值哈希0，有值时hash<remove_const_t<T>>{}(*value)；使unordered容器可直接容纳optional。CSV hash行target_headers不含optional，故记新增。
 
 标准语义参考：[cppreference `optional`](https://en.cppreference.com/w/cpp/header/optional)。
 
 ## 函数原型
 
 ```cpp
-template <class T> struct hash<optional<T>> { size_t operator()(const optional<T>& value) const; }
+template <class T> struct hash<optional<T>> { size_t operator()(const optional<T>& value) const; };
 ```
 
 ## 参数说明
@@ -44,25 +44,25 @@ template <class T> struct hash<optional<T>> { size_t operator()(const optional<T
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | optional 所含值的类型；须存在对应的 hash 特化。 |
+| `T` | optional所含值的类型；须存在对应的hash特化。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 被计算哈希的 optional 对象；不含值时哈希值为 0，含值时为 hash<remove_const_t<T>>{}(*value)。 |
+| `value` | 输入 | 被计算哈希的optional对象；不含值时哈希值为0，含值时为hash<remove_const_t<T>>{}(*value)。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `按声明确定` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `size_t` | 空optional返回0；含值时返回所存值的hash结果。 |
 
 ## 约束说明
 
-- T 须使 hash<remove_const_t<T>> 可调用，即 remove_const_t<T> 为可哈希类型
-- 空 optional 的哈希值为 0；含值时返回 hash<remove_const_t<T>>{}(*value)
-- operator() 接受 const optional<T>& 并返回 size_t，使 unordered 容器可直接容纳 optional<T>
+- T须使hash<remove_const_t<T>> 可调用，即remove_const_t<T> 为可哈希类型。
+- 空optional的哈希值为0；含值时返回hash<remove_const_t<T>>{}(*value)。
+- `operator()`接受const optional<T>& 并返回size_t，使unordered容器可直接容纳optional<T>。
 
 ## 调用示例
 
@@ -77,3 +77,7 @@ decltype(auto) example(const asc::std::optional<T>& value)
     return asc::std::hash(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_optional.md)

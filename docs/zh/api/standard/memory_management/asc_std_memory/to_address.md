@@ -28,33 +28,37 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::to_address` 把原始或自定义指针转换为底层原始地址。
+`asc::std::to_address`把原始或自定义指针转换为底层原始地址。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class Pointer> constexpr auto asc::std::to_address(const Pointer& pointer) noexcept -> decltype(::asc::std::__to_address(pointer));
+namespace asc::std {
+template<class Pointer> constexpr auto to_address(const Pointer& pointer) noexcept -> decltype(::asc::std::__to_address(pointer));
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> constexpr T* asc::std::to_address(T* pointer) noexcept;
+namespace asc::std {
+template<class T> constexpr T* to_address(T* pointer) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Pointer` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Pointer` | 待取得底层原始地址的指针或类指针类型。 |
 
 **函数参数**
 
@@ -62,7 +66,7 @@ template<class T> constexpr T* asc::std::to_address(T* pointer) noexcept;
 | --- | --- | --- |
 | `pointer` | 输入 | 提供“把原始或自定义指针转换为底层原始地址”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -74,18 +78,18 @@ template<class T> constexpr T* asc::std::to_address(T* pointer) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 提供“把原始或自定义指针转换为底层原始地址”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `pointer` | 输入 | 待取得原始对象地址的指针或类指针对象；不解引用指向的对象，也不转移其所有权。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `auto` | 返回与输入指针或指针类对象对应的原始地址。 |
-| 原型 2 | `T*` | 返回与输入指针或指针类对象对应的原始地址。 |
+| 原型1 | `auto` | 返回与输入指针或指针类对象对应的原始地址。 |
+| 原型2 | `T*` | 返回与输入指针或指针类对象对应的原始地址。 |
 
 ## 约束说明
 
-- 支持原始指针和用户自定义 fancy pointer，接口自身不分配内存
+- 支持原始指针和用户自定义fancy pointer，接口自身不分配内存。
 
 ## 调用示例
 
@@ -101,6 +105,10 @@ decltype(auto) example(const Pointer & pointer)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
 完整示例源码：[pointer_alignment.cpp](../../../../examples/pointer_alignment.cpp)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

@@ -1,4 +1,4 @@
-# asc::std::reference_wrapper::operator()
+# asc::std::reference_wrapper::`operator()`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::reference_wrapper::operator()` 按 `reference_wrapper` 的可用运算符规则处理当前对象及操作数。
+`asc::std::reference_wrapper::operator()`按`reference_wrapper`的可用运算符规则处理当前对象及操作数。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 函数原型
 
+所属类型：[`asc::std::reference_wrapper`](reference_wrapper.md)。
+
 ```cpp
-template<class ...ArgTypes> constexpr invoke_result_t<type&, ArgTypes...> asc::std::reference_wrapper::operator()(ArgTypes&&... args) const noexcept(is_nothrow_invocable_v<T&, ArgTypes...>);
+// asc::std::reference_wrapper 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class ...ArgTypes> constexpr invoke_result_t<type&, ArgTypes...> operator()(ArgTypes&&... args) const noexcept(is_nothrow_invocable_v<T&, ArgTypes...>);
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ template<class ...ArgTypes> constexpr invoke_result_t<type&, ArgTypes...> asc::s
 
 | 参数名 | 描述 |
 | --- | --- |
-| `ArgTypes` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `ArgTypes` | 转发给被包装可调用对象的实参类型列表。 |
 
 ## 返回值说明
 
@@ -54,12 +57,11 @@ template<class ...ArgTypes> constexpr invoke_result_t<type&, ArgTypes...> asc::s
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
+以下Host片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
 
 ```cpp
 #include <asc/std/functional>
@@ -72,3 +74,8 @@ decltype(auto) example(function_object& function)
     return reference(7);
 }
 ```
+
+## 关联API
+
+- [`asc::std::reference_wrapper`](reference_wrapper.md)
+- [本头文件的接口列表](asc_std_functional.md)

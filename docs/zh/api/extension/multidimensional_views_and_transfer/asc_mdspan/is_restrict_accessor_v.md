@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/mdspan>`。
 
-`asc::is_restrict_accessor_v` 表示类型是否为 restrict mdspan 访问器。
+`asc::is_restrict_accessor_v`表示类型是否为restrict mdspan访问器。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr bool asc::is_restrict_accessor_v
+namespace asc {
+template<class T> inline constexpr bool is_restrict_accessor_v;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供 Host 和 GM 视图以及 AI Core SIMD 编程 UB 视图
-- 允许有符号步长
-- 可选的 Host DLPack 桥接不抛出异常
+- 提供Host和GM视图以及AI Core SIMD编程UB视图。
+- 允许有符号步长。
+- 可选的Host DLPack桥接不抛出异常。
 
 ## 调用示例
 
@@ -57,3 +59,7 @@ template<class T> inline constexpr bool asc::is_restrict_accessor_v
 
 inline constexpr auto example = asc::is_restrict_accessor_v<asc::restrict_accessor<asc::std::default_accessor<int>>>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_mdspan.md)

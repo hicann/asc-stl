@@ -28,55 +28,55 @@
 
 头文件路径为：`<asc/std/queue>`。
 
-`asc::std::queue::queue` 按本页所列构造形态初始化 `queue` 对象。
+`asc::std::queue::queue`按本页所列构造形态初始化`queue`对象。
 
 标准语义参考：[cppreference `queue`](https://en.cppreference.com/w/cpp/header/queue)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr queue();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr queue(Container&& container);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 constexpr queue(const Container& container);
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
 template<class Alloc> constexpr queue(Container&& container, const Alloc& allocator);
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
 template<class Alloc> constexpr queue(const Alloc& allocator);
 ```
 
-### 原型 6
+### 原型6
 
 ```cpp
 template<class Alloc> constexpr queue(const Container& container, const Alloc& allocator);
 ```
 
-### 原型 7
+### 原型7
 
 ```cpp
 template<class Alloc> constexpr queue(const queue<T, Container>& container, const Alloc& allocator);
 ```
 
-### 原型 8
+### 原型8
 
 ```cpp
 template<class Alloc> constexpr queue(queue<T, Container>&& container, const Alloc& allocator);
@@ -84,27 +84,27 @@ template<class Alloc> constexpr queue(queue<T, Container>&& container, const All
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `container` | 输入/输出 | 提供“按本页所列构造形态初始化 `queue` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `container` | 输入/输出 | 提供“按本页所列构造形态初始化`queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `container` | 输入 | 提供“按本页所列构造形态初始化 `queue` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `container` | 输入 | 提供“按本页所列构造形态初始化`queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
@@ -116,10 +116,10 @@ template<class Alloc> constexpr queue(queue<T, Container>&& container, const All
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `container` | 输入/输出 | 提供“按本页所列构造形态初始化 `queue` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `container` | 输入/输出 | 提供“按本页所列构造形态初始化`queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
 | `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
 
-### 原型 5 的参数
+### 原型5的参数
 
 **模板参数**
 
@@ -133,7 +133,7 @@ template<class Alloc> constexpr queue(queue<T, Container>&& container, const All
 | --- | --- | --- |
 | `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
 
-### 原型 6 的参数
+### 原型6的参数
 
 **模板参数**
 
@@ -145,10 +145,10 @@ template<class Alloc> constexpr queue(queue<T, Container>&& container, const All
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `container` | 输入 | 提供“按本页所列构造形态初始化 `queue` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `container` | 输入 | 提供“按本页所列构造形态初始化`queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
 | `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
 
-### 原型 7 的参数
+### 原型7的参数
 
 **模板参数**
 
@@ -160,10 +160,10 @@ template<class Alloc> constexpr queue(queue<T, Container>&& container, const All
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `container` | 输入 | 提供“按本页所列构造形态初始化 `queue` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `container` | 输入 | 提供“按本页所列构造形态初始化`queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
 | `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
 
-### 原型 8 的参数
+### 原型8的参数
 
 **模板参数**
 
@@ -175,28 +175,36 @@ template<class Alloc> constexpr queue(queue<T, Container>&& container, const All
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `container` | 输入/输出 | 提供“按本页所列构造形态初始化 `queue` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `container` | 输入/输出 | 提供“按本页所列构造形态初始化`queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
 | `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- queue<T,Container>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/front/back/push_back/emplace_back/pop_front/比较/swap及allocator操作必须在当前执行空间有效
-- 交付container_type/value_type/size_type/reference/const_reference和protected c，default/container/copy/move/allocator构造及copy/move赋值，empty/size/front/back、lvalue/rvalue push、decltype(auto) emplace、pop，条件noexcept的member/non-member swap，六个经典关系与C++20 <=>，uses_allocator特化，Container及Container+Alloc的C++17 CTAD
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- queue<T,Container>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/front/back/push_back/emplace_back/pop_front/比较/swap及allocator操作必须在当前执行空间有效。
+- 交付container_type/value_type/size_type/reference/const_reference和protected c，default/container/copy/move/allocator构造及copy/move赋值，empty/size/front/back、lvalue/rvalue push、decltype(auto) emplace、pop，条件noexcept的member/non-member swap，六个经典关系与C++20 <=>，uses_allocator特化，Container及Container+Alloc的C++17 CTAD。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段显式提供标准容器作为底层存储；设备端须提供可在目标位置调用的容器。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
-#include <asc/std/queue>
 #include <deque>
-#include <functional>
-#include <vector>
+#include <asc/std/queue>
 
-void example()
+bool example()
 {
-    asc::std::queue<int, ::std::deque<int>> value{};
-    (void)value;
+    asc::std::queue<int, ::std::deque<int>> values;
+    values.push(1);
+    values.push(3);
+    return values.size() == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_queue.md)

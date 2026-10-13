@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::nexttowardl` 由 `<asc/std/cmath>` 提供，nexttoward 的 long double 后缀别名，仅宿主
+`asc::std::nexttowardl`由`<asc/std/cmath>`提供，nexttoward的long double后缀别名，仅宿主
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-constexpr long double asc::std::nexttowardl(long double value, long double toward) noexcept
+namespace asc::std {
+constexpr long double nexttowardl(long double value, long double toward) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -45,17 +47,17 @@ constexpr long double asc::std::nexttowardl(long double value, long double towar
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 求相邻可表示值的起点浮点值（无量纲）。 |
-| `toward` | 输入 | 指示移动方向的目标值（long double 精度，无量纲）；value 等于 toward 时返回 value。 |
+| `toward` | 输入 | 指示移动方向的目标值（long double精度，无量纲）；value等于toward时返回value。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `long double` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `long double` | 从输入沿目标方向相邻的可表示值；相等时返回目标值。 |
 
 ## 约束说明
 
-- nexttoward 的 long double 后缀别名，仅宿主
+- nexttoward的long double后缀别名，仅宿主。
 
 ## 调用示例
 
@@ -69,3 +71,7 @@ decltype(auto) example(long double value, long double toward)
     return asc::std::nexttowardl(value, toward);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

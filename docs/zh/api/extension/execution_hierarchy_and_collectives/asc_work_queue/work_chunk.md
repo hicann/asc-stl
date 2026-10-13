@@ -28,38 +28,38 @@
 
 头文件路径为：`<asc/work_queue>`。
 
-`asc::work_chunk<Index>` 表示一次成功领取得到的半开任务区间 `[begin, end)`，可查询区间是否为空及包含的索引数量。
+`asc::work_chunk<Index>`表示一次成功领取得到的半开任务区间`[begin, end)`，可查询区间是否为空及包含的索引数量。
 
-该接口的可用位置为 AI Core SIMD 编程、AI Core SIMT 编程。
+该接口的可用位置为AI Core SIMD编程、AI Core SIMT编程。
 
 ## 声明
 
 ```cpp
-template<class Index> class asc::work_chunk
+namespace asc {
+template<class Index> class work_chunk;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- Index 必须为受支持的 32 位或 64 位无符号整数
-- 区间按 [begin, end) 解释，begin 不小于 end 时 empty 为 true 且 size 为 0
+- Index必须为受支持的32位或64位无符号整数。
+- 区间按[begin, end)解释，begin不小于end时empty为true且size为0。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/work_queue>
-#include <asc/std/array>
-#include <asc/std/cstddef>
 #include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
 
-__aicore__ void example()
+bool example()
 {
-    // 明确指定索引类型，并查询一次领取的区间大小。
-    asc::work_chunk<asc::std::uint32_t> chunk(2u, 5u);
-    (void)chunk.size();
+    asc::work_chunk<asc::std::uint32_t> chunk(2U, 5U);
+    return chunk.begin == 2 && chunk.end == 5 && chunk.size() == 3 && !chunk.empty();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_work_queue.md)

@@ -1,4 +1,4 @@
-# asc::std::optional<T&>::operator->
+# asc::std::optional<T&>::`operator-`>
 
 ## 产品支持情况
 
@@ -28,14 +28,15 @@
 
 头文件路径为：`<asc/std/optional>`。
 
-`asc::std::optional<T&>::operator->` 返回可用于访问所指对象成员的指针。
+`asc::std::optional<T&>::operator->`返回可用于访问所指对象成员的指针。
 
 标准语义参考：[cppreference `optional`](https://en.cppreference.com/w/cpp/header/optional)。
 
 ## 函数原型
 
 ```cpp
-constexpr T* asc::std::optional<T&>::operator->() const noexcept;
+// asc::std::optional<T&> 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr T* operator->() const noexcept;
 ```
 
 ## 参数说明
@@ -50,12 +51,12 @@ constexpr T* asc::std::optional<T&>::operator->() const noexcept;
 
 ## 约束说明
 
-- 引用特化仅允许安全的同类型左值绑定
-- 采用借用指针语义，不提供容易产生悬空引用的转换
+- 引用特化仅允许安全的同类型左值绑定。
+- 采用借用指针语义，不提供容易产生悬空引用的转换。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
+以下Host片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
 
 ```cpp
 #include <asc/std/optional>
@@ -66,3 +67,7 @@ decltype(auto) example(int& value)
     return reference.operator->();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_optional.md)

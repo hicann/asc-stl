@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/bit>`。
 
-`asc::std::popcount` 统计置位的二进制位数。
+`asc::std::popcount`统计置位的二进制位数。
 
 标准语义参考：[cppreference `bit`](https://en.cppreference.com/w/cpp/header/bit)。
 
 ## 函数原型
 
 ```cpp
-template<class T> [[nodiscard]] constexpr int asc::std::popcount(T value) noexcept;
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr int popcount(T value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -50,7 +52,7 @@ template<class T> [[nodiscard]] constexpr int asc::std::popcount(T value) noexce
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待统计的无符号整数值；统计其二进制表示中为 1 的位数。 |
+| `value` | 输入 | 待统计的无符号整数值；统计其二进制表示中为1的位数。 |
 
 ## 返回值说明
 
@@ -60,7 +62,7 @@ template<class T> [[nodiscard]] constexpr int asc::std::popcount(T value) noexce
 
 ## 约束说明
 
-- 遵循标准无符号整数类型约束
+- 遵循标准无符号整数类型约束。
 
 ## 调用示例
 
@@ -74,3 +76,7 @@ decltype(auto) example()
     return asc::std::popcount(7u);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_bit.md)

@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::powl` 由 `<asc/std/cmath>` 提供，宿主 long double 幂，后缀 l 别名
+`asc::std::powl`由`<asc/std/cmath>`提供，宿主long double幂，后缀l别名
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-constexpr long double asc::std::powl(long double base, long double exponent) noexcept
+namespace asc::std {
+constexpr long double powl(long double base, long double exponent) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -51,11 +53,11 @@ constexpr long double asc::std::powl(long double base, long double exponent) noe
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `long double` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `long double` | 底数的指数次幂。 |
 
 ## 约束说明
 
-- 宿主 long double 幂，后缀 l 别名
+- 宿主long double幂，后缀l别名。
 
 ## 调用示例
 
@@ -69,3 +71,7 @@ decltype(auto) example(long double base, long double exponent)
     return asc::std::powl(base, exponent);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

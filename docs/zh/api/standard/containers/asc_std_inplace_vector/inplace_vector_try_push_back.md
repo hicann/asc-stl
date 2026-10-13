@@ -28,29 +28,33 @@
 
 头文件路径为：`<asc/std/inplace_vector>`。
 
-`asc::std::inplace_vector::try_push_back` 尝试在容器末尾追加 `value`。容量充足时构造新元素并返回其引用；容器已满时返回空结果，容器内容保持不变。
+`asc::std::inplace_vector::try_push_back`尝试在容器末尾追加`value`。容量充足时构造新元素并返回其引用；容器已满时返回空结果，容器内容保持不变。
 
-该接口的可用位置为 Host（完整接口）、Device（非抛出子集）。
+该接口的可用位置为Host（完整接口）、Device（非抛出子集）。
 
 标准语义参考：[cppreference `inplace_vector`](https://en.cppreference.com/w/cpp/header/inplace_vector)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::inplace_vector`](inplace_vector.md)。
+
+### 原型1
 
 ```cpp
-optional<reference> asc::std::inplace_vector::try_push_back(T&& value);
+// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
+optional<reference> try_push_back(T&& value);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-optional<reference> asc::std::inplace_vector::try_push_back(const T& value);
+// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
+optional<reference> try_push_back(const T& value);
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -58,7 +62,7 @@ optional<reference> asc::std::inplace_vector::try_push_back(const T& value);
 | --- | --- | --- |
 | `value` | 输入 | 待复制或移动到容器末尾的元素。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -70,13 +74,15 @@ optional<reference> asc::std::inplace_vector::try_push_back(const T& value);
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `optional<reference>` | 插入成功时返回包含新元素引用的 optional；容量不足时返回空 optional。 |
-| 原型 2 | `optional<reference>` | 插入成功时返回包含新元素引用的 optional；容量不足时返回空 optional。 |
+| 原型1 | `optional<reference>` | 插入成功时返回包含新元素引用的optional；容量不足时返回空optional。 |
+| 原型2 | `optional<reference>` | 插入成功时返回包含新元素引用的optional；容量不足时返回空optional。 |
 
 ## 约束说明
 
-- value 必须能够复制或移动构造为 T
-- Device 侧所选构造操作必须不抛出异常
+- 元素保存在固定容量的对象内存中，不进行动态分配。
+- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
+- value必须能够复制或移动构造为T。
+- Device侧所选构造操作必须不抛出异常。
 - 插入成功后返回的引用只在对应元素未被移除且容器仍然存活时有效。
 
 ## 调用示例
@@ -100,3 +106,8 @@ bool example()
         && values.size() == 2;
 }
 ```
+
+## 关联API
+
+- [`asc::std::inplace_vector`](inplace_vector.md)
+- [本头文件的接口列表](asc_std_inplace_vector.md)

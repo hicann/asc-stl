@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/variant>`。
 
-`asc::std::variant::~variant` 销毁 `variant` 对象并结束其生命周期。
+`asc::std::variant::~variant`销毁`variant`对象并结束其生命周期。
 
 标准语义参考：[cppreference `variant`](https://en.cppreference.com/w/cpp/header/variant)。
 
@@ -42,14 +42,18 @@
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
+- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
+- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下片段假定 object 指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
+以下片段假定object指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
 
 ```cpp
 #include <asc/std/variant>
@@ -61,3 +65,7 @@ void example(example_object* object)
     object->~example_object();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_variant.md)

@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::forward_like` 按示范类型复制 const/volatile 限定和值类别。
+`asc::std::forward_like`按示范类型复制const/volatile限定和值类别。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 函数原型
 
 ```cpp
-template<class T, class U> [[nodiscard]] constexpr auto asc::std::forward_like(U&& ux) noexcept -> ForwardLike<T, U>;
+namespace asc::std {
+template<class T, class U> [[nodiscard]] constexpr auto forward_like(U&& ux) noexcept -> ForwardLike<T, U>;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,14 +46,14 @@ template<class T, class U> [[nodiscard]] constexpr auto asc::std::forward_like(U
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 提供目标const限定和左／右值引用类别的参考类型。 |
+| `U` | 被转发实参的推导类型；返回表达式采用T指定的const限定和引用类别。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `ux` | 输入/输出 | 提供“按示范类型复制 const/volatile 限定和值类别”使用的对象引用；被引用对象须在调用期间有效。 |
+| `ux` | 输入/输出 | 提供“按示范类型复制const/volatile限定和值类别”使用的对象引用；被引用对象须在调用期间有效。 |
 
 ## 返回值说明
 
@@ -61,19 +63,27 @@ template<class T, class U> [[nodiscard]] constexpr auto asc::std::forward_like(U
 
 ## 约束说明
 
-- 遵循标准约束
-- forward_like 保留 const/volatile 限定和值类别
+- 遵循标准约束。
+- forward_like保留const/volatile限定和值类别。
 
 ## 调用示例
 
-以下片段用具体数值展示本页调用。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/utility>
+#include <asc/std/type_traits>
 
-decltype(auto) example()
+bool example()
 {
     int value = 3;
-    return asc::std::forward_like<int&>(value);
+    auto&& reference = asc::std::forward_like<int&>(value);
+    static_assert(asc::std::is_same_v<decltype(reference), int&>);
+    // 在value仍存活时检查引用；函数只返回布尔值。
+    return &reference == &value && reference == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

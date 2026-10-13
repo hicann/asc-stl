@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/execution>`。
 
-`asc::execution_errc::invalid_argument` 表示调用方提供的参数不满足接口要求，例如 Stream、回调函数或启动维度无效。
+`asc::execution_errc::invalid_argument`表示调用方提供的参数不满足接口要求，例如Stream、回调函数或启动维度无效。
 
 ## 声明
 
+所属类型：[`asc::execution_errc`](execution_errc.md)。
+
 ```cpp
-asc::execution_errc::invalid_argument = 1
+// asc::execution_errc 类内的声明节选；模板形参和其他成员由所属类提供。
+invalid_argument = 1;
 ```
 
 ## 约束说明
 
-- 仅可在 Host 使用
-- 状态值可平凡复制
-- 成功状态的 code() 为 execution_errc::success，native_code() 为 0，失败状态保留可用于诊断的状态码
+- 仅可在Host使用。
+- 状态值可平凡复制。
+- 成功状态的code()为execution_errc::success，native_code()为0，失败状态保留可用于诊断的状态码。
 
 ## 调用示例
 
@@ -51,3 +54,8 @@ asc::execution_errc::invalid_argument = 1
 
 auto value = asc::execution_errc::invalid_argument;
 ```
+
+## 关联API
+
+- [`asc::execution_errc`](execution_errc.md)
+- [本头文件的接口列表](asc_execution.md)

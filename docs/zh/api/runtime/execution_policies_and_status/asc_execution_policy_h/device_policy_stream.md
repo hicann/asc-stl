@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/execution.policy.h>`。
 
-`asc::device_policy::stream` 返回当前策略绑定的非拥有 Stream 引用。
+`asc::device_policy::stream`返回当前策略绑定的非拥有Stream引用。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 函数原型
 
+所属类型：[`asc::device_policy`](device_policy.md)。
+
 ```cpp
-constexpr asc::stream_ref asc::device_policy::stream() const noexcept;
+// asc::device_policy 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr asc::stream_ref stream() const noexcept;
 ```
 
 ## 参数说明
@@ -46,22 +49,29 @@ constexpr asc::stream_ref asc::device_policy::stream() const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::stream_ref` | 返回当前策略绑定的非拥有 Stream 引用。 |
+| `asc::stream_ref` | 返回当前策略绑定的非拥有Stream引用。 |
 
 ## 约束说明
 
-- 绑定不可变且不拥有资源
-- 默认构造绑定空 Stream、空临时存储和默认执行要求
+- 绑定不可变且不拥有资源。
+- 默认构造绑定空Stream、空临时存储和默认执行要求。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/execution.policy.h>
 
-void example(asc::device_policy& object)
+bool example()
 {
-    (void)object.stream();
+    asc::device_policy policy;
+    return !policy.stream() && policy.temporary_storage().data() == nullptr
+        && policy.temporary_storage().size_bytes() == 0
+        && policy.requirements().determinism_value() == asc::determinism::not_guaranteed;
 }
 ```
+
+## 关联API
+
+- [`asc::device_policy`](device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。

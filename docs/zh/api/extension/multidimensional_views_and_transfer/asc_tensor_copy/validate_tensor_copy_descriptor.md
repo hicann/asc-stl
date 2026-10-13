@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::validate_tensor_copy_descriptor` 检查 Tensor Copy Descriptor 的范围、步长和大小计算是否合法。
+`asc::validate_tensor_copy_descriptor`检查Tensor Copy Descriptor的范围、步长和大小计算是否合法。
 
 ## 函数原型
 
 ```cpp
-template<unsigned Rank> constexpr asc::tensor_copy_status asc::validate_tensor_copy_descriptor(const asc::tensor_copy_descriptor<Rank>& descriptor) noexcept;
+namespace asc {
+template<unsigned Rank> constexpr asc::tensor_copy_status validate_tensor_copy_descriptor(const asc::tensor_copy_descriptor<Rank>& descriptor) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -58,9 +60,9 @@ template<unsigned Rank> constexpr asc::tensor_copy_status asc::validate_tensor_c
 
 ## 约束说明
 
-- 描述符及状态类型可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Rank 为 1 至 5
-- 维度和步长采用 uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运
+- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Rank为1至5。
+- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
 
 ## 调用示例
 
@@ -78,3 +80,7 @@ decltype(auto) example()
     return asc::validate_tensor_copy_descriptor(descriptor);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_tensor_copy.md)

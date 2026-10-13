@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_fetch_or_explicit` 原子执行按位或并返回修改前的值；内存序与地址空间须符合本页限制。
+`asc::std::atomic_fetch_or_explicit`原子执行按位或并返回修改前的值；内存序与地址空间须符合本页限制。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 函数原型
 
 ```cpp
-template<class T> T asc::std::atomic_fetch_or_explicit(atomic<T>* object, T value, memory_order order) noexcept;
+namespace asc::std {
+template<class T> T atomic_fetch_or_explicit(atomic<T>* object, T value, memory_order order) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -54,7 +56,7 @@ template<class T> T asc::std::atomic_fetch_or_explicit(atomic<T>* object, T valu
 | --- | --- | --- |
 | `object` | 输入 | 指向被读改写的原子对象的指针。 |
 | `value` | 输入 | 与原子对象当前值做按位或的操作数；返回修改前的值。 |
-| `order` | 输入 | 读改写所用内存序，决定本次操作的可见性顺序；可取 memory_order 各枚举值。 |
+| `order` | 输入 | 读改写所用内存序，决定本次操作的可见性顺序；可取memory_order各枚举值。 |
 
 ## 返回值说明
 
@@ -64,14 +66,14 @@ template<class T> T asc::std::atomic_fetch_or_explicit(atomic<T>* object, T valu
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数
-- bool/8/16位用32位内部存储
-- 32/64位按有符号位模式分派
-- Host 和 AI Core SIMT 编程 GM
+- 标准整数/字符owning atomic别名及列出自由函数。
+- bool/8/16位用32位内部存储。
+- 32/64位按有符号位模式分派。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
-以下 Host 片段使用具体整数原子对象；设备端对象须位于可访问的全局内存。
+以下Host片段使用具体整数原子对象；设备端对象须位于可访问的全局内存。
 
 ```cpp
 #include <asc/std/atomic>
@@ -82,3 +84,7 @@ decltype(auto) example()
     return asc::std::atomic_fetch_or_explicit(&value, 2, asc::std::memory_order_relaxed);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

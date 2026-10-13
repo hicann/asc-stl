@@ -28,27 +28,34 @@
 
 头文件路径为：`<asc/memory>`。
 
-`asc::pointer_attributes` 保存指针所处内存空间、Host/Device 可访问性以及所属分配的字节数。
+`asc::pointer_attributes`保存指针所处内存空间、Host/Device可访问性以及所属分配的字节数。
 
 ## 声明
 
 ```cpp
-class asc::pointer_attributes
+namespace asc {
+class pointer_attributes;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 属性对象仅描述查询结果，不拥有或延长指针及其底层分配的生命周期
+- 属性对象仅描述查询结果，不拥有或延长指针及其底层分配的生命周期。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/memory>
 
-void use_type(const asc::pointer_attributes& value)
+bool example()
 {
-    (void)value;
+    asc::pointer_attributes attributes;
+    return attributes.space == asc::memory_space::local;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_memory.md)

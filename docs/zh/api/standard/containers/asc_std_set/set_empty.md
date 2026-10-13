@@ -28,16 +28,19 @@
 
 头文件路径为：`<asc/std/set>`。
 
-`asc::std::set::empty` 判断当前对象是否不含元素。
+`asc::std::set::empty`判断当前对象是否不含元素。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `set`](https://en.cppreference.com/w/cpp/header/set)。
 
 ## 函数原型
 
+所属类型：[`asc::std::set`](set.md)。
+
 ```cpp
-bool asc::std::set::empty() const noexcept;
+// asc::std::set 类内的声明节选；模板形参和其他成员由所属类提供。
+bool empty() const noexcept;
 ```
 
 ## 参数说明
@@ -48,42 +51,40 @@ bool asc::std::set::empty() const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 对象不含元素时返回 `true`，否则返回 `false`。 |
+| `bool` | 对象不含元素时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下set<Key,Compare,A>显式GM arena
-- allocator以及Compare+allocator构造
-- empty/size/begin/end/insert/find/count/clear
-- AVL平衡与对数级插入/查找核心
-- 重复键拒绝、有序迭代、移动和析构
-- 仅容量充足和不抛出异常键/比较/allocator域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下set<Key,Compare,A>显式GM arena。
+- allocator以及Compare+allocator构造。
+- empty/size/begin/end/insert/find/count/clear。
+- AVL平衡与对数级插入/查找核心。
+- 重复键拒绝、有序迭代、移动和析构。
+- 仅容量充足和不抛出异常键/比较/allocator域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
-#include <asc/std/set>
+#include <asc/memory>
 #include <functional>
-#include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/set>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void example(asc::std::set<int, ::std::less<int>, example_allocator<int>>& object)
+bool example()
 {
-    (void)object.empty();
+    alignas(64) unsigned char storage[16384] = {};
+    asc::monotonic_arena arena(storage, sizeof(storage));
+    asc::std::set<int, ::std::less<int>, asc::arena_allocator<int>> values(asc::arena_allocator<int>{arena});
+    values.insert(1);
+    values.insert(3);
+    values.insert(3);
+    return !values.empty();
 }
 ```
+
+## 关联API
+
+- [`asc::std::set`](set.md)
+- [本头文件的接口列表](asc_std_set.md)

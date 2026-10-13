@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::grid` 提供 Grid 层级的全局常量标签。
+`asc::grid`提供Grid层级的全局常量标签。
 
 ## 声明
 
 ```cpp
-inline constexpr asc::grid_level asc::grid{}
+namespace asc {
+inline constexpr grid_level grid{}
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供 C++17 constexpr Host/Device 层次结构接口
-- 带 extent 的值要求每一维均非零
-- extent 总数按无符号 64 位的 x*y*z 计算
+- 提供C++17 constexpr Host/Device层次结构接口。
+- 带extent的值要求每一维均非零。
+- extent总数按无符号64位的x*y*z计算。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ inline constexpr asc::grid_level asc::grid{}
 
 auto value = asc::grid;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_hierarchy.md)

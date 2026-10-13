@@ -1,4 +1,4 @@
-# asc::std::philox_engine::operator()
+# asc::std::philox_engine::`operator()`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::philox_engine::operator()` 按 `philox_engine` 的可用运算符规则处理当前对象及操作数。
+`asc::std::philox_engine::operator()`按`philox_engine`的可用运算符规则处理当前对象及操作数。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 函数原型
 
+所属类型：[`asc::std::philox_engine`](philox_engine.md)。
+
 ```cpp
-constexpr UIntType asc::std::philox_engine::operator()() noexcept;
+// asc::std::philox_engine 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr UIntType operator()() noexcept;
 ```
 
 ## 参数说明
@@ -50,12 +53,12 @@ constexpr UIntType asc::std::philox_engine::operator()() noexcept;
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下 Host 片段使用具体数值类型演示调用；状态与参数须满足本页约束。
+以下Host片段使用具体数值类型演示调用；状态与参数须满足本页约束。
 
 ```cpp
 #include <asc/std/random>
@@ -66,3 +69,8 @@ decltype(auto) example()
     return generator();
 }
 ```
+
+## 关联API
+
+- [`asc::std::philox_engine`](philox_engine.md)
+- [本头文件的接口列表](asc_std_random.md)

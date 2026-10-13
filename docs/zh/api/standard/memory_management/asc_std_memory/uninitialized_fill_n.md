@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::uninitialized_fill_n` 在未构造存储中对指定数量对象执行名称所指的构造、复制或移动操作。
+`asc::std::uninitialized_fill_n`在未构造存储中对指定数量对象执行名称所指的构造、复制或移动操作。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 函数原型
 
 ```cpp
-template<class ForwardIterator, class Size, class T> ForwardIterator asc::std::uninitialized_fill_n(ForwardIterator first, Size count, const T& value);
+namespace asc::std {
+template<class ForwardIterator, class Size, class T> ForwardIterator uninitialized_fill_n(ForwardIterator first, Size count, const T& value);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,14 +48,14 @@ template<class ForwardIterator, class Size, class T> ForwardIterator asc::std::u
 | --- | --- |
 | `ForwardIterator` | 指向目标未构造存储的迭代器类型；须满足原型要求的遍历能力。 |
 | `Size` | 表示待构造对象个数的类型，通常为整型或迭代器差值类型。 |
-| `T` | 待在存储中构造的对象类型，即 value 的类型。 |
+| `T` | 待在存储中构造的对象类型，即value的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `first` | 输入 | 目标存储范围的起始迭代器或指针；所指存储尚未构造对象。 |
-| `count` | 输入 | 从 first 起待以 value 构造的对象个数。 |
+| `count` | 输入 | 从first起待以value构造的对象个数。 |
 | `value` | 输入 | 待复制构造到每个位置的值。 |
 
 ## 返回值说明
@@ -64,12 +66,12 @@ template<class ForwardIterator, class Size, class T> ForwardIterator asc::std::u
 
 ## 约束说明
 
-- 存储由调用方提供并满足对齐要求
-- 当回滚会引发异常时，Device 侧相关操作必须不抛出异常
+- 存储由调用方提供并满足对齐要求。
+- 当回滚会引发异常时，Device侧相关操作必须不抛出异常。
 
 ## 调用示例
 
-以下 Host 片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
+以下Host片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
 
 ```cpp
 #include <asc/std/memory>
@@ -82,3 +84,7 @@ decltype(auto) example()
     asc::std::destroy_n(output, 4);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

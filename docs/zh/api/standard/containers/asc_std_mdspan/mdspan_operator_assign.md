@@ -1,4 +1,4 @@
-# asc::std::mdspan::operator=
+# asc::std::mdspan::`operator=`
 
 ## 产品支持情况
 
@@ -28,58 +28,61 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::mdspan::operator=` 按所选赋值重载更新对象，并返回规定的结果。
+`asc::std::mdspan::operator=`按所选赋值重载更新对象，并返回规定的结果。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::mdspan`](mdspan.md)。
+
+### 原型1
 
 ```cpp
-constexpr mdspan<Element, Extents, Layout, Accessor>& asc::std::mdspan::operator=(const mdspan<Element, Extents, Layout, Accessor>& other);
+// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr mdspan<Element, Extents, Layout, Accessor>& operator=(const mdspan<Element, Extents, Layout, Accessor>& other);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr mdspan<Element, Extents, Layout, Accessor>& asc::std::mdspan::operator=(mdspan<Element, Extents, Layout, Accessor>&& other);
+// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr mdspan<Element, Extents, Layout, Accessor>& operator=(mdspan<Element, Extents, Layout, Accessor>&& other);
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `mdspan<Element, Extents, Layout, Accessor> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 2 | `mdspan<Element, Extents, Layout, Accessor> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型1 | `mdspan<Element, Extents, Layout, Accessor> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型2 | `mdspan<Element, Extents, Layout, Accessor> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整标准mdspan view家族：全部成员类型与rank/static_extent观察，默认/拷贝/移动、data_handle+维度包/array/span/extents/mapping/mapping+accessor及跨mdspan构造，赋值与deduction guides，array/span下标、size/empty/swap、data_handle/mapping/accessor/extents/extent及映射属性观察
-- C++20开放rank-one operator[]，C++2b条件开放标准多索引operator[]
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain pointer域
+- C++20开放rank-one `operator[]`，C++2b条件开放标准多索引operator[]。
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
 
-以下 Host 片段以具体容量或维度演示调用；对象和索引须满足本页约束。
+以下Host片段以具体容量或维度演示调用；对象和索引须满足本页约束。
 
 ```cpp
 #include <asc/std/mdspan>
@@ -90,3 +93,8 @@ void example(asc::std::mdspan<int, asc::std::extents<asc::std::size_t, 2, 3>, as
     target = source;
 }
 ```
+
+## 关联API
+
+- [`asc::std::mdspan`](mdspan.md)
+- [本头文件的接口列表](asc_std_mdspan.md)

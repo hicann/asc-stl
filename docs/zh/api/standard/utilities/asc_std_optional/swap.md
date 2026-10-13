@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/optional>`。
 
-`asc::std::swap(optional<T>&, optional<T>&)` 由 `<asc/std/optional>` 提供，自由函数 swap，ADL 与非限定调用点命中并转发成员 swap。
+`asc::std::swap(optional<T>&, optional<T>&)`由`<asc/std/optional>`提供，自由函数swap，ADL与非限定调用点命中并转发成员swap。
 
 标准语义参考：[cppreference `optional`](https://en.cppreference.com/w/cpp/header/optional)。
 
 ## 函数原型
 
 ```cpp
-template <class T> constexpr enable_if_t<is_move_constructible_v<T> && is_swappable_v<T>, void> swap(optional<T>& left, optional<T>& right) noexcept(noexcept(left.swap(right)))
+template <class T> constexpr enable_if_t<is_move_constructible_v<T> && is_swappable_v<T>, void> swap(optional<T>& left, optional<T>& right) noexcept(noexcept(left.swap(right)));
 ```
 
 ## 参数说明
@@ -44,7 +44,7 @@ template <class T> constexpr enable_if_t<is_move_constructible_v<T> && is_swappa
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
+| `T` | 两侧optional的存储元素类型；元素须支持移动构造和交换。 |
 
 **函数参数**
 
@@ -57,11 +57,11 @@ template <class T> constexpr enable_if_t<is_move_constructible_v<T> && is_swappa
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `按声明确定` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `void` | 无返回值；交换两对象的含值状态及其存储值。 |
 
 ## 约束说明
 
-- 自由函数 swap，ADL 与非限定调用点命中并转发成员 swap。
+- 自由函数swap，ADL与非限定调用点命中并转发成员swap。
 
 ## 调用示例
 
@@ -76,3 +76,7 @@ decltype(auto) example(asc::std::optional<T>& left, asc::std::optional<T>& right
     return asc::std::swap(left, right);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_optional.md)

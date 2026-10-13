@@ -28,21 +28,23 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::from_range` 标记构造容器时从输入范围读取元素。
+`asc::std::from_range`标记构造容器时从输入范围读取元素。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
 ```cpp
-inline constexpr const from_range_t asc::std::from_range
+namespace asc::std {
+inline constexpr const from_range_t from_range;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 七个列出名称
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 七个列出名称。
+- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
@@ -53,3 +55,7 @@ inline constexpr const from_range_t asc::std::from_range
 
 auto value = asc::std::from_range;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

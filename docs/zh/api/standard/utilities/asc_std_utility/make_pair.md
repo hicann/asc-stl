@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::make_pair` 根据两个值构造 pair，并应用规定的类型退化规则。
+`asc::std::make_pair`根据两个值构造pair，并应用规定的类型退化规则。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 函数原型
 
 ```cpp
-template<class T1, class T2> constexpr pair<unwrap_ref_decay_t<T1>, unwrap_ref_decay_t<T2>> asc::std::make_pair(T1&& left, T2&& right);
+namespace asc::std {
+template<class T1, class T2> constexpr pair<unwrap_ref_decay_t<T1>, unwrap_ref_decay_t<T2>> make_pair(T1&& left, T2&& right);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,26 +46,26 @@ template<class T1, class T2> constexpr pair<unwrap_ref_decay_t<T1>, unwrap_ref_d
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 首元素实参的类型；经 decay 及引用解包后决定结果 pair 的 first 类型。 |
-| `T2` | 次元素实参的类型；经 decay 及引用解包后决定结果 pair 的 second 类型。 |
+| `T1` | 首元素实参的类型；经decay及引用解包后决定结果pair的first类型。 |
+| `T2` | 次元素实参的类型；经decay及引用解包后决定结果pair的second类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入/输出 | 构造 first 成员的来源值；左值被复制、右值被移动，右值移动后处于有效但未指定状态。 |
-| `right` | 输入/输出 | 构造 second 成员的来源值；左值被复制、右值被移动，右值移动后处于有效但未指定状态。 |
+| `left` | 输入/输出 | 构造first成员的来源值；左值被复制、右值被移动，右值移动后处于有效但未指定状态。 |
+| `right` | 输入/输出 | 构造second成员的来源值；左值被复制、右值被移动，右值移动后处于有效但未指定状态。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `pair<unwrap_ref_decay_t<T1>, unwrap_ref_decay_t<T2>>` | 返回保存两个输入值的新 `pair` 对象。 |
+| `pair<unwrap_ref_decay_t<T1>, unwrap_ref_decay_t<T2>>` | 返回保存两个输入值的新`pair`对象。 |
 
 ## 约束说明
 
-- pair 操作不抛出异常
-- 关系运算符均为显式提供
+- 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
@@ -77,3 +79,7 @@ decltype(auto) example()
     return asc::std::make_pair(1, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

@@ -28,24 +28,27 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic::storage_type` 标识原子对象保存的底层单元类型。
+`asc::std::atomic::storage_type`标识原子对象保存的底层单元类型。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 声明
 
+所属类型：[`asc::std::atomic`](atomic.md)。
+
 ```cpp
-using asc::std::atomic::storage_type = typename owned_atomic_storage<T>::type
+// asc::std::atomic 类内的声明节选；模板形参和其他成员由所属类提供。
+using storage_type = typename owned_atomic_storage<T>::type;
 ```
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数
-- bool/8/16位用32位内部存储
-- 32/64位按有符号位模式分派
-- Host 和 AI Core SIMT 编程 GM
+- 标准整数/字符owning atomic别名及列出自由函数。
+- bool/8/16位用32位内部存储。
+- 32/64位按有符号位模式分派。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
@@ -59,3 +62,8 @@ void use_type()
     using alias_type = typename asc::std::atomic<int>::storage_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::atomic`](atomic.md)
+- [本头文件的接口列表](asc_std_atomic.md)

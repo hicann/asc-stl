@@ -28,23 +28,28 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::projected` 把投影函数作用于迭代器引用类型，供范围算法约束检查使用。
+`asc::std::projected`把投影函数作用于迭代器引用类型，供范围算法约束检查使用。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
 ```cpp
-template<class It, class Proj> using asc::std::projected = typename Projectedimpl<It, Proj>::Type
+namespace asc::std {
+template<class It, class Proj, class = void>
+struct projected;
+}
 ```
+
+当`indirect_result_t<Proj&, It>`有效时，提供对应特化及投影结果的`value_type`。此类型用于算法约束，不表示可在运行时创建并解引用的实际投影迭代器。
 
 ## 约束说明
 
-- 提供 C++20 公开迭代器概念和特征接口
+- 提供C++20公开迭代器概念和特征接口。
 
 ## 调用示例
 
-以下 Host 片段用具体迭代器或容器类型实例化本页接口。
+以下Host片段用具体迭代器或容器类型实例化本页接口。
 
 ```cpp
 #include <asc/std/iterator>
@@ -56,6 +61,10 @@ struct example_identity { int& operator()(int& value) const { return value; } };
 void example()
 {
     using selected = asc::std::projected<int*, example_identity>;
-    static_assert(asc::std::is_same_v<selected, selected>);
+    static_assert(asc::std::is_same_v<typename selected::value_type, int>);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

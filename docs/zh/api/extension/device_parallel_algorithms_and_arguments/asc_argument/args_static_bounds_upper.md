@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/argument>`。
 
-`asc::args::static_bounds::upper` 返回边界对象保存或编码的上界。
+`asc::args::static_bounds::upper`返回边界对象保存或编码的上界。
 
 ## 函数原型
 
+所属类型：[`asc::args::static_bounds`](args_static_bounds.md)。
+
 ```cpp
-static constexpr decltype(Upper) asc::args::static_bounds::upper() noexcept;
+// asc::args::static_bounds 类内的声明节选；模板形参和其他成员由所属类提供。
+static constexpr decltype(Upper) upper() noexcept;
 ```
 
 ## 参数说明
@@ -48,19 +51,26 @@ static constexpr decltype(Upper) asc::args::static_bounds::upper() noexcept;
 
 ## 约束说明
 
-- 使用 C++17，可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Bounds 必须为 asc::args::no_bounds 或 asc::args::static_bounds
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期
+- 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
+- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/argument>
 
-void example(asc::args::static_bounds<0, 10>& object)
+bool example()
 {
-    (void)object.upper();
+    static_assert(asc::args::static_bounds<0, 10>::lower() == 0);
+    static_assert(asc::args::static_bounds<0, 10>::upper() == 10);
+    return true;
 }
 ```
+
+## 关联API
+
+- [`asc::args::static_bounds`](args_static_bounds.md)
+- [本头文件的接口列表](asc_argument.md)

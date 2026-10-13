@@ -28,21 +28,23 @@
 
 头文件路径为：`<asc/semaphore>`。
 
-`asc::binary_semaphore` 把最大计数固定为 1 的 counting_semaphore 别名。
+`asc::binary_semaphore`把最大计数固定为1的counting_semaphore别名。
 
 ## 声明
 
 ```cpp
-template<asc::memory_scope Scope> using asc::binary_semaphore = asc::counting_semaphore<Scope, 1>
+namespace asc {
+template<asc::memory_scope Scope> using binary_semaphore = asc::counting_semaphore<Scope, 1>;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 使用 C++17
-- 在 AI Core SIMT 编程 中操作调用方管理的 GM 状态
-- Scope 必须为 asc::memory_scope::block 或 asc::memory_scope::device
-- 所有阻塞参与者必须能够并发推进
-- 复制构造和复制赋值已删除
+- 使用C++17。
+- 在AI Core SIMT编程 中操作调用方管理的GM状态。
+- Scope必须为asc::memory_scope::block或asc::memory_scope::device。
+- 所有阻塞参与者必须能够并发推进。
+- 复制构造和复制赋值已删除。
 
 ## 调用示例
 
@@ -56,3 +58,7 @@ __aicore__ void use_type()
     using selected = asc::binary_semaphore<asc::memory_scope::device>;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_semaphore.md)

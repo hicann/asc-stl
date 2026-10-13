@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::equivalence_relation` 在 C++20 及以上模式约束构成等价关系的二元关系：在满足 `relation` 的四种调用组合均有效的基础上，语义上还要求 `r(a, a)` 为真、关系对称（`r(a, b)` 蕴含 `r(b, a)`）且传递（`r(a, b)` 与 `r(b, c)` 蕴含 `r(a, c)`）。
+`asc::std::equivalence_relation`在C++20及以上模式约束构成等价关系的二元关系：在满足`relation`的四种调用组合均有效的基础上，语义上还要求`r(a, a)`为真、关系对称（`r(a, b)`蕴含`r(b, a)`）且传递（`r(a, b)`与`r(b, c)`蕴含`r(a, c)`）。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 
 ## 声明
 
 ```cpp
-template<class Rp, class T, class U> concept asc::std::equivalence_relation
+namespace asc::std {
+template<class Rp, class T, class U> concept equivalence_relation;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供完整的公开 C++20 concepts 集合
+- 提供完整的公开C++20 concepts集合。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class Rp, class T, class U> concept asc::std::equivalence_relation
 
 static_assert(asc::std::equivalence_relation<bool (*)(int, int), int, int>);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_concepts.md)

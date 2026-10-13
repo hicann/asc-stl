@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::conj` 返回复数的共轭值。
+`asc::std::conj`返回复数的共轭值。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T> [[nodiscard]] constexpr Asccomplexcomplextype<T> asc::std::conj(T value);
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr Asccomplexcomplextype<T> conj(T value);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> [[nodiscard]] constexpr complex<T> asc::std::conj(const complex<T>& value);
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr complex<T> conj(const complex<T>& value);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -60,9 +64,9 @@ template<class T> [[nodiscard]] constexpr complex<T> asc::std::conj(const comple
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待求共轭的实数输入（按虚部为 0 的复数处理，共轭为其自身）。 |
+| `value` | 输入 | 待求共轭的实数输入（按虚部为0的复数处理，共轭为其自身）。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -80,17 +84,17 @@ template<class T> [[nodiscard]] constexpr complex<T> asc::std::conj(const comple
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `Asccomplexcomplextype<T>` | 返回复数的共轭值。 |
-| 原型 2 | `complex<T>` | 返回复数的共轭值。 |
+| 原型1 | `Asccomplexcomplextype<T>` | 返回复数的共轭值。 |
+| 原型2 | `complex<T>` | 返回复数的共轭值。 |
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/complex>
@@ -101,3 +105,7 @@ decltype(auto) example()
     return asc::std::conj(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_complex.md)

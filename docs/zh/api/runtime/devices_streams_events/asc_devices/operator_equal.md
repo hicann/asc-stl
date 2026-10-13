@@ -1,4 +1,4 @@
-# asc::operator==（函数）
+# `asc::operator==`（函数）
 
 ## 产品支持情况
 
@@ -28,11 +28,11 @@
 
 头文件路径为：`<asc/devices>`、`<asc/stream>`。
 
-`asc::operator==` 比较两个 Device 引用的序号，或比较两个 Stream/Event 引用保存的原生句柄是否相同。
+`asc::operator==`比较两个Device引用的序号，或比较两个Stream/Event引用保存的原生句柄是否相同。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr bool asc::operator==(asc::device_ref lhs, asc::device_ref rhs) noexcept;
@@ -40,7 +40,7 @@ constexpr bool asc::operator==(asc::device_ref lhs, asc::device_ref rhs) noexcep
 
 此原型对应头文件：`<asc/devices>`。
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr bool asc::operator==(asc::event_ref lhs, asc::event_ref rhs) noexcept;
@@ -48,7 +48,7 @@ constexpr bool asc::operator==(asc::event_ref lhs, asc::event_ref rhs) noexcept;
 
 此原型对应头文件：`<asc/stream>`。
 
-### 原型 3
+### 原型3
 
 ```cpp
 constexpr bool asc::operator==(asc::stream_ref lhs, asc::stream_ref rhs) noexcept;
@@ -58,49 +58,49 @@ constexpr bool asc::operator==(asc::stream_ref lhs, asc::stream_ref rhs) noexcep
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 参与比较的左侧 Device 引用：按两个引用的设备序号判定是否相等。 |
-| `rhs` | 输入 | 参与比较的右侧 Device 引用：按两个引用的设备序号判定是否相等。 |
+| `lhs` | 输入 | 参与比较的左侧Device引用：按两个引用的设备序号判定是否相等。 |
+| `rhs` | 输入 | 参与比较的右侧Device引用：按两个引用的设备序号判定是否相等。 |
 
-### 原型 2 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `lhs` | 输入 | 参与比较的左侧 Event 引用：按各自保存的原生事件句柄判定是否相同。 |
-| `rhs` | 输入 | 参与比较的右侧 Event 引用：按各自保存的原生事件句柄判定是否相同。 |
-
-### 原型 3 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 参与比较的左侧 Stream 引用：按各自保存的原生流句柄判定是否相同。 |
-| `rhs` | 输入 | 参与比较的右侧 Stream 引用：按各自保存的原生流句柄判定是否相同。 |
+| `lhs` | 输入 | 参与比较的左侧Event引用：按各自保存的原生事件句柄判定是否相同。 |
+| `rhs` | 输入 | 参与比较的右侧Event引用：按各自保存的原生事件句柄判定是否相同。 |
+
+### 原型3的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `lhs` | 输入 | 参与比较的左侧Stream引用：按各自保存的原生流句柄判定是否相同。 |
+| `rhs` | 输入 | 参与比较的右侧Stream引用：按各自保存的原生流句柄判定是否相同。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 2 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
-| 原型 3 | `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| 原型1 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
+| 原型2 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
+| 原型3 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 仅可在 Host 查询或选择 Device
-- 引用只保存设备序号且不拥有 Runtime 状态
-- 查询失败时输出参数保持原值，属性仅限当前接口列出的 AI Core、Vector Core、Warp、UB、GM、L2 与架构字段
-- 提供可为空的非拥有 Host 引用
-- 原生句柄为不透明 void 指针
-- 仅当 CANN Runtime 调用成功时才更新查询结果和输出参数
+- 仅可在Host查询或选择Device。
+- 引用只保存设备序号且不拥有Runtime状态。
+- 查询失败时输出参数保持原值，属性仅限当前接口列出的AI Core、Vector Core、Warp、UB、GM、L2与架构字段。
+- 提供可为空的非拥有Host引用。
+- 原生句柄为不透明void指针。
+- 仅当CANN Runtime调用成功时才更新查询结果和输出参数。
 
 ## 调用示例
 
@@ -115,6 +115,10 @@ decltype(auto) example(asc::device_ref lhs, asc::device_ref rhs)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Ascend 950 真机编译与运行验证。
+对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
 
 完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_devices.md)

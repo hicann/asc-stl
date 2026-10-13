@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/bitset>`。
 
-`asc::std::bitset::size` 返回当前对象包含的元素数量。
+`asc::std::bitset::size`返回当前对象包含的元素数量。
 
 标准语义参考：[cppreference `bitset`](https://en.cppreference.com/w/cpp/header/bitset)。
 
 ## 函数原型
 
+所属类型：[`asc::std::bitset`](bitset.md)。
+
 ```cpp
-size_t asc::std::bitset::size() const noexcept;
+// asc::std::bitset 类内的声明节选；模板形参和其他成员由所属类提供。
+size_t size() const noexcept;
 ```
 
 ## 参数说明
@@ -50,19 +53,25 @@ size_t asc::std::bitset::size() const noexcept;
 
 ## 约束说明
 
-- 支持默认构造和 unsigned long long 构造
-- operator[] 不进行边界检查
-- 提供整组 set、reset、flip，位运算、移位、状态检查、计数和容量查询
+- 支持默认构造和unsigned long long构造。
+- `operator[]`不进行边界检查。
+- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/bitset>
 
-void example(asc::std::bitset<8>& object)
+bool example()
 {
-    (void)object.size();
+    asc::std::bitset<8> bits(5);
+    return bits.size() == 8;
 }
 ```
+
+## 关联API
+
+- [`asc::std::bitset`](bitset.md)
+- [本头文件的接口列表](asc_std_bitset.md)

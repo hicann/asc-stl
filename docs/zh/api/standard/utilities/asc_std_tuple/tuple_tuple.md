@@ -28,59 +28,61 @@
 
 头文件路径为：`<asc/std/tuple>`。
 
-`asc::std::tuple::tuple` 按本页所列构造形态初始化 `tuple` 对象。
+`asc::std::tuple::tuple`按本页所列构造形态初始化`tuple`对象。
 
 标准语义参考：[cppreference `tuple`](https://en.cppreference.com/w/cpp/header/tuple)。
 
 ## 函数原型
 
-### 原型 1
+以下为`asc::std::tuple<Types...>`的类内构造声明；`Types...`来自所属类模板。
+
+### 原型1
 
 ```cpp
 constexpr tuple();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 tuple(const tuple<Types...>& other);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 tuple(tuple<Types...>&& other);
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class... Values, enable_if_t<sizeof...(Values) == sizeof...(Types), int>> constexpr explicit tuple(Values&&... values);
+template<class... Values, enable_if_t<sizeof...(Values) == sizeof...(Types), int> = 0> constexpr explicit tuple(Values&&... values);
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
@@ -92,21 +94,33 @@ template<class... Values, enable_if_t<sizeof...(Values) == sizeof...(Types), int
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `values` | 输入/输出 | 逐元素构造的转发实参包；第 i 个实参经转发（左值复制、右值移动）初始化新 tuple 的第 i 个元素，被移动的右值实参随后处于有效但未指定状态。 |
+| `values` | 输入/输出 | 逐元素构造的转发实参包；第i个实参经转发（左值复制、右值移动）初始化新tuple的第i个元素，被移动的右值实参随后处于有效但未指定状态。 |
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
 
 ## 调用示例
 
-以下 Host 片段使用具体数值类型演示调用；状态与参数须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/tuple>
+#include <asc/std/utility>
 
-void example()
+bool example()
 {
-    asc::std::tuple<int, int> value{};
-    (void)value;
+    asc::std::tuple<int, int> zero;
+    asc::std::tuple<int, int> values(2, 4);
+    auto copy = values;
+    auto moved = asc::std::move(copy);
+    return asc::std::get<0>(zero) == 0 && asc::std::get<0>(moved) == 2 && asc::std::get<1>(moved) == 4;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_tuple.md)

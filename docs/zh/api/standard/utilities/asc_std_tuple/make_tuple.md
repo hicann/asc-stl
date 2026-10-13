@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/tuple>`。
 
-`asc::std::make_tuple` 按类型退化规则从实参构造 tuple。
+`asc::std::make_tuple`按类型退化规则从实参构造tuple。
 
 标准语义参考：[cppreference `tuple`](https://en.cppreference.com/w/cpp/header/tuple)。
 
 ## 函数原型
 
 ```cpp
-template<class ...T> [[nodiscard]] constexpr tuple<unwrap_ref_decay_t<T>...> asc::std::make_tuple(T&&... values) noexcept(is_nothrow_constructible_v<tuple<unwrap_ref_decay_t<T>...>, T...>);
+namespace asc::std {
+template<class ...T> [[nodiscard]] constexpr tuple<unwrap_ref_decay_t<T>...> make_tuple(T&&... values) noexcept(is_nothrow_constructible_v<tuple<unwrap_ref_decay_t<T>...>, T...>);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,23 +46,23 @@ template<class ...T> [[nodiscard]] constexpr tuple<unwrap_ref_decay_t<T>...> asc
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 各实参的类型；经 decay 及引用解包后决定结果 tuple 的对应元素类型。 |
+| `T` | 各实参的类型；经decay及引用解包后决定结果tuple的对应元素类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `values` | 输入/输出 | 构造结果 tuple 的各实参；按值语义复制或移入结果，被移动的实参移动后处于有效但未指定状态。 |
+| `values` | 输入/输出 | 构造结果tuple的各实参；按值语义复制或移入结果，被移动的实参移动后处于有效但未指定状态。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `tuple<unwrap_ref_decay_t<T>...>` | 返回按给定元素或 tuple 组合得到的新 tuple。 |
+| `tuple<unwrap_ref_decay_t<T>...>` | 返回按给定元素或tuple组合得到的新tuple。 |
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
+- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
 
 ## 调用示例
 
@@ -74,3 +76,7 @@ decltype(auto) example()
     return asc::std::make_tuple(1, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_tuple.md)

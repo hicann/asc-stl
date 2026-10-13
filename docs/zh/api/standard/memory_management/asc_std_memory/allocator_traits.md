@@ -28,54 +28,49 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::allocator_traits` 统一访问分配器的类型、分配和对象构造操作。
+`asc::std::allocator_traits`统一访问分配器的类型、分配和对象构造操作。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 声明
 
 ```cpp
-template<class Allocator> struct asc::std::allocator_traits
+namespace asc::std {
+template<class Allocator> struct allocator_traits;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg
-- uses_allocator/uses_allocator_v
-- allocator_traits 的 C++20 成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator 含 pair 递归构造
-- C++23 allocation_result 与标准 allocator_traits::allocate_at_least
-- 均限用户显式提供且在调用执行空间有效的 allocator
+- allocator_arg_t/allocator_arg。
+- uses_allocator/uses_allocator_v。
+- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
+- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
+- C++23 allocation_result与标准allocator_traits::allocate_at_least。
+- 均限用户显式提供且在调用执行空间有效的allocator。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
-#include <asc/std/memory>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/memory>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void use_type()
+bool example()
 {
-    using selected = asc::std::allocator_traits<example_allocator<int>>;
-    (void)sizeof(selected);
+    using Allocator = ::std::allocator<int>;
+    using Traits = asc::std::allocator_traits<Allocator>;
+    Allocator allocator;
+    int* pointer = Traits::allocate(allocator, 1);
+    Traits::construct(allocator, pointer, 7);
+    const bool passed = *pointer == 7;
+    Traits::destroy(allocator, pointer);
+    Traits::deallocate(allocator, pointer, 1);
+    return passed;
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+## 关联API
 
-完整示例源码：[allocator_traits.cpp](../../../../examples/allocator_traits.cpp)。
+- [本头文件的接口列表](asc_std_memory.md)

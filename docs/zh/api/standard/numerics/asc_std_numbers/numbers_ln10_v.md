@@ -28,32 +28,34 @@
 
 头文件路径为：`<asc/std/numbers>`。
 
-`asc::std::numbers::ln10_v` 由 `<asc/std/numbers>` 提供，提供 `ln10_v` 常量或变量。接口遵循对应 C++ 标准设施的语义；ASC-STL 的语言模式和调用位置以本页声明为准。
+`asc::std::numbers::ln10_v`由`<asc/std/numbers>`提供，提供`ln10_v`常量或变量。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
 
 标准语义参考：[cppreference `numbers`](https://en.cppreference.com/w/cpp/header/numbers)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-asc::std::numbers::ln10_v :
+namespace asc::std::numbers {
+ln10_v :;
+} // namespace asc::std::numbers
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 2
+### 原型2
 
 ```cpp
 template <class Tp> constexpr Tp ln10_v = __numbers<Tp>::__ln10();
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 约束说明
 
-- 提供 float 变量模板
-- ln(10) 变量模板，同上边界
+- 提供float变量模板。
+- ln(10)变量模板，同上边界。
 
 ## 调用示例
 
@@ -65,3 +67,7 @@ template <class Tp> constexpr Tp ln10_v = __numbers<Tp>::__ln10();
 constexpr float value = asc::std::numbers::ln10_v<float>;
 static_assert(value > 2.3f && value < 2.31f);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_numbers.md)

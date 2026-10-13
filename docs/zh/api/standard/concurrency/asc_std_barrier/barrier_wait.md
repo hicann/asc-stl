@@ -28,16 +28,19 @@
 
 头文件路径为：`<asc/std/barrier>`。
 
-`asc::std::barrier::wait` 等待对应同步阶段、计数或许可满足完成条件。
+`asc::std::barrier::wait`等待对应同步阶段、计数或许可满足完成条件。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `barrier`](https://en.cppreference.com/w/cpp/header/barrier)。
 
 ## 函数原型
 
+所属类型：[`asc::std::barrier`](barrier.md)。
+
 ```cpp
-void asc::std::barrier::wait(arrival_token&& token) const;
+// asc::std::barrier 类内的声明节选；模板形参和其他成员由所属类提供。
+void wait(arrival_token&& token) const;
 ```
 
 ## 参数说明
@@ -54,12 +57,12 @@ void asc::std::barrier::wait(arrival_token&& token) const;
 
 ## 约束说明
 
-- Host 侧对象管理 Ascend 950 的 GM 状态
-- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足
+- Host侧对象管理Ascend 950的GM状态。
+- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下 Host 片段使用一个可独立完成的参与者演示调用；多参与者场景须保证并发推进。
+以下Host片段使用一个可独立完成的参与者演示调用；多参与者场景须保证并发推进。
 
 ```cpp
 #include <asc/std/barrier>
@@ -71,3 +74,8 @@ void example()
     barrier.wait(static_cast<asc::std::barrier<>::arrival_token&&>(token));
 }
 ```
+
+## 关联API
+
+- [`asc::std::barrier`](barrier.md)
+- [本头文件的接口列表](asc_std_barrier.md)

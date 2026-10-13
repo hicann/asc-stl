@@ -28,27 +28,29 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`operator""if` 以纯虚数字面量构造 `complex<float>`，等价于 `complex<float>{0.0f, static_cast<float>(arg)}`。
+`operator""if`以纯虚数字面量构造`complex<float>`，等价于`complex<float>{0.0f, static_cast<float>(arg)}`。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-[[nodiscard]] constexpr asc::std::complex<float> asc::std::literals::complex_literals::operator""if(long double arg) noexcept;
+// asc::std::literals::complex_literals 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr asc::std::complex<float> operator""if(long double arg) noexcept;
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host。
+该原型适用于`C++17+`，可用位置为Host。
 
-### 原型 2
+### 原型2
 
 ```cpp
-[[nodiscard]] constexpr asc::std::complex<float> asc::std::literals::complex_literals::operator""if(unsigned long long arg) noexcept;
+// asc::std::literals::complex_literals 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr asc::std::complex<float> operator""if(unsigned long long arg) noexcept;
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host。
+该原型适用于`C++17+`，可用位置为Host。
 
 ## 参数说明
 
@@ -62,12 +64,12 @@
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::std::complex<float>` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `asc::std::complex<float>` | 实部为0、虚部为字面量数值的float复数。 |
 
 ## 约束说明
 
-- 虚部取字面量数值转换到 float 的结果，实部为零
-- 整数字面量先转换为 float 再作为虚部，实部为零
+- 虚部取字面量数值转换到float的结果，实部为零。
+- 整数字面量先转换为float再作为虚部，实部为零。
 
 ## 调用示例
 
@@ -81,3 +83,7 @@ decltype(auto) example(long double arg)
     return asc::std::literals::complex_literals::operator""if(arg);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_complex.md)

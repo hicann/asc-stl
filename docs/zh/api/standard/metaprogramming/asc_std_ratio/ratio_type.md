@@ -28,19 +28,22 @@
 
 头文件路径为：`<asc/std/ratio>`。
 
-`asc::std::ratio::type` 提供该类型特征、映射或适配器计算出的成员类型。
+`asc::std::ratio::type`提供该类型特征、映射或适配器计算出的成员类型。
 
 标准语义参考：[cppreference `ratio`](https://en.cppreference.com/w/cpp/header/ratio)。
 
 ## 声明
 
+所属类型：[`asc::std::ratio`](ratio.md)。
+
 ```cpp
-using asc::std::ratio::type = ratio<num, den>
+// asc::std::ratio 类内的声明节选；模板形参和其他成员由所属类提供。
+using type = ratio<num, den>;
 ```
 
 ## 约束说明
 
-- 提供完整的 C++20 ratio 接口
+- 分母不得为零；规范化后的分子和分母必须可由`intmax_t`表示。
 
 ## 调用示例
 
@@ -54,3 +57,8 @@ void use_type()
     using alias_type = typename asc::std::ratio<1, 2>::type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::ratio`](ratio.md)
+- [本头文件的接口列表](asc_std_ratio.md)

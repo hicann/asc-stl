@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::mem_fn` 把成员指针包装为可调用对象。
+`asc::std::mem_fn`把成员指针包装为可调用对象。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 函数原型
 
 ```cpp
-template<class Rp, class T> constexpr Memfn<Rp T::*> asc::std::mem_fn(Rp T::* member) noexcept;
+namespace asc::std {
+template<class Rp, class T> constexpr Memfn<Rp T::*> mem_fn(Rp T::* member) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,14 +46,14 @@ template<class Rp, class T> constexpr Memfn<Rp T::*> asc::std::mem_fn(Rp T::* me
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rp` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `Rp` | 成员指针的成员类型；函数成员时包含其函数类型。 |
+| `T` | 成员指针所属的类类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `member` | 输入 | 提供“把成员指针包装为可调用对象”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `member` | 输入 | 成员对象或成员函数指针；返回的函数对象在调用时以给定对象、对象指针或reference_wrapper访问该成员。 |
 
 ## 返回值说明
 
@@ -61,12 +63,11 @@ template<class Rp, class T> constexpr Memfn<Rp T::*> asc::std::mem_fn(Rp T::* me
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
-以下 Host 片段使用具体对象展示接口调用。
+以下Host片段使用具体对象展示接口调用。
 
 ```cpp
 #include <asc/std/functional>
@@ -79,3 +80,7 @@ decltype(auto) example()
     return call(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

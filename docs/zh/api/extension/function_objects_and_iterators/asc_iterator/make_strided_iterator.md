@@ -28,25 +28,29 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::make_strided_iterator` 从底层随机访问迭代器构造定步长适配器；单参数重载使用步长 1，双参数重载使用给定的正或负非零步长。
+`asc::make_strided_iterator`从底层随机访问迭代器构造定步长适配器；单参数重载使用步长1，双参数重载使用给定的正或负非零步长。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class Iterator, class Stride> constexpr asc::strided_iterator<Iterator, Stride> asc::make_strided_iterator(Iterator iterator, Stride stride);
+namespace asc {
+template<class Iterator, class Stride> constexpr asc::strided_iterator<Iterator, Stride> make_strided_iterator(Iterator iterator, Stride stride);
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class Iterator> constexpr asc::strided_iterator<Iterator> asc::make_strided_iterator(Iterator iterator);
+namespace asc {
+template<class Iterator> constexpr asc::strided_iterator<Iterator> make_strided_iterator(Iterator iterator);
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -59,10 +63,10 @@ template<class Iterator> constexpr asc::strided_iterator<Iterator> asc::make_str
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `iterator` | 输入 | 被包装的底层迭代器：本迭代器每前进 1 步，底层迭代器前进 stride 个位置。 |
-| `stride` | 输入 | 每步跨越的底层元素个数：前进/后退 1 步对应底层迭代器移动 stride 个位置，须非零。 |
+| `iterator` | 输入 | 被包装的底层迭代器：本迭代器每前进1步，底层迭代器前进stride个位置。 |
+| `stride` | 输入 | 每步跨越的底层元素个数：前进/后退1步对应底层迭代器移动stride个位置，须非零。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -74,21 +78,21 @@ template<class Iterator> constexpr asc::strided_iterator<Iterator> asc::make_str
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `iterator` | 输入 | 被包装的底层迭代器：该原型为步长 1 的退化形式，按单位步长访问。 |
+| `iterator` | 输入 | 被包装的底层迭代器：该原型为步长1的退化形式，按单位步长访问。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::strided_iterator<Iterator, Stride>` | 返回保存调用方参数的迭代器适配器；底层范围须在使用期间保持有效。 |
-| 原型 2 | `asc::strided_iterator<Iterator>` | 返回保存调用方参数的迭代器适配器；底层范围须在使用期间保持有效。 |
+| 原型1 | `asc::strided_iterator<Iterator, Stride>` | 返回保存调用方参数的迭代器适配器；底层范围须在使用期间保持有效。 |
+| 原型2 | `asc::strided_iterator<Iterator>` | 返回保存调用方参数的迭代器适配器；底层范围须在使用期间保持有效。 |
 
 ## 约束说明
 
-- 底层迭代器须支持随机访问，步长须为非零整数
-- 返回对象不拥有底层范围
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 底层迭代器须支持随机访问，步长须为非零整数。
+- 返回对象不拥有底层范围。
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
@@ -104,3 +108,7 @@ decltype(auto) example()
     return asc::make_strided_iterator(values, 2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

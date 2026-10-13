@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::acosf` 计算反余弦值；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::acosf`计算反余弦值；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-float asc::std::acosf(float value) noexcept;
+namespace asc::std {
+float acosf(float value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,17 +48,17 @@ float asc::std::acosf(float value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待计算的无量纲余弦值；有效定义域为 [-1, 1]。 |
+| `value` | 输入 | 待计算的无量纲余弦值；有效定义域为[-1, 1]。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `float` | 以 float 精度返回反余弦弧度值，取值范围为 [0, π]；输入超出 [-1, 1] 时返回 NaN。 |
+| `float` | 以float精度返回反余弦弧度值，取值范围为[0, π]；输入超出[-1, 1] 时返回NaN。 |
 
 ## 约束说明
 
-- 提供 float 重载和标准 *f 别名
+- 提供float重载和标准 *f别名。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example(float value)
     return asc::std::acosf(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

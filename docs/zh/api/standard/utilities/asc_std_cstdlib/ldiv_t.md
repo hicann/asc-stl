@@ -28,29 +28,36 @@
 
 头文件路径为：`<asc/std/cstdlib>`。
 
-`asc::std::ldiv_t` 保存 `long` 除法的商与余数。
+`asc::std::ldiv_t`保存`long`除法的商与余数。
 
 标准语义参考：[cppreference `cstdlib`](https://en.cppreference.com/w/cpp/header/cstdlib)。
 
 ## 声明
 
 ```cpp
-struct asc::std::ldiv_t
+namespace asc::std {
+struct ldiv_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供整数重载及相应结果类型
+- 提供整数重载及相应结果类型。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/cstdlib>
 
-void use_type(const asc::std::ldiv_t& value)
+bool example()
 {
-    (void)value;
+    asc::std::ldiv_t result = asc::std::ldiv(17, 5);
+    return result.quot == 3 && result.rem == 2;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstdlib.md)

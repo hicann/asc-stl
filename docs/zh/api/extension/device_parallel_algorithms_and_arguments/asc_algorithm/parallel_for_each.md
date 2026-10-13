@@ -28,14 +28,15 @@
 
 头文件路径为：`<asc/algorithm>`。
 
-`asc::parallel::for_each` 异步对输入范围内的每个元素调用给定函数对象。
+`asc::parallel::for_each`异步对输入范围内的每个元素调用给定函数对象。
 
-接口通过 [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md) 指定 Stream、临时存储和执行要求，并异步提交 Device 任务；返回的 [`asc::execution_status`](../../../runtime/execution_policies_and_status/asc_execution/execution_status.md) 表示参数校验与任务提交状态，提交成功不等于异步执行已完成。
+接口通过[`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md)指定Stream、临时存储和执行要求，并异步提交Device任务；返回的[`asc::execution_status`](../../../runtime/execution_policies_and_status/asc_execution/execution_status.md)表示参数校验与任务提交状态，提交成功不等于异步执行已完成。
 
 ## 函数原型
 
 ```cpp
-template<class Input, class Function> asc::execution_status asc::parallel::for_each(asc::device_policy policy, Input first, Input last, Function function) noexcept;
+// asc::parallel 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Input, class Function> asc::execution_status for_each(asc::device_policy policy, Input first, Input last, Function function) noexcept;
 ```
 
 ## 参数说明
@@ -51,10 +52,10 @@ template<class Input, class Function> asc::execution_status asc::parallel::for_e
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `policy` | 输入 | Device 执行策略（device_policy）：提供任务提交所用的 Stream 与调用方临时存储；返回值仅反映提交状态，提交成功不表示异步工作已完成。 |
+| `policy` | 输入 | Device执行策略（device_policy）：提供任务提交所用的Stream与调用方临时存储；返回值仅反映提交状态，提交成功不表示异步工作已完成。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `function` | 输入 | 函数对象：对 [first, last) 内每个元素调用一次 function(元素)；须可平凡复制并可在 AI Core 调用。 |
+| `function` | 输入 | 函数对象：对[first, last)内每个元素调用一次function(元素)；须可平凡复制并可在AI Core调用。 |
 
 ## 返回值说明
 
@@ -64,16 +65,16 @@ template<class Input, class Function> asc::execution_status asc::parallel::for_e
 
 ## 约束说明
 
-- 使用 C++17，并从毕昇 ASC 翻译单元的 Host 侧提交
-- 输入范围必须连续、支持随机访问且可由 Device 访问
-- 可调用对象和传输值必须可平凡复制并可在 AI Core 调用
-- policy 必须包含有效 Stream 和足够的调用方临时存储
-- 标量、数量或索引输出位于 GM，并在 Stream 完成前保持有效
-- 参数或能力不满足要求时不会提交任务
+- 使用C++17，并从毕昇ASC翻译单元的Host侧提交。
+- 输入范围必须连续、支持随机访问且可由Device访问。
+- 可调用对象和传输值必须可平凡复制并可在AI Core调用。
+- policy必须包含有效Stream和足够的调用方临时存储。
+- 标量、数量或索引输出位于GM，并在Stream完成前保持有效。
+- 参数或能力不满足要求时不会提交任务。
 
 ## 调用示例
 
-以下片段在毕昇 ASC 翻译单元的 Host 提交侧调用；Stream、临时存储和 GM 参数须在异步任务完成前有效。
+以下片段在毕昇ASC翻译单元的Host提交侧调用；Stream、临时存储和GM参数须在异步任务完成前有效。
 
 ```cpp
 #include <asc/algorithm>
@@ -86,3 +87,7 @@ decltype(auto) example(asc::device_policy policy, int* input)
     return asc::parallel::for_each(policy, input, input + 4, action{});
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_algorithm.md)

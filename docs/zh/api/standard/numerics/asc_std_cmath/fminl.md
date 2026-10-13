@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::fminl` 返回两个 long double 实参中较小者；任一实参为 NaN 时返回另一个实参。
+`asc::std::fminl`返回两个long double实参中较小者；任一实参为NaN时返回另一个实参。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-long double asc::std::fminl(long double value1, long double value2) noexcept
+namespace asc::std {
+long double fminl(long double value1, long double value2) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,18 +46,18 @@ long double asc::std::fminl(long double value1, long double value2) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value1` | 输入 | 参与求较小值的第一个操作数（无量纲）；任一操作数为 NaN 时返回另一个操作数。 |
-| `value2` | 输入 | 参与求较小值的第二个操作数（无量纲）；任一操作数为 NaN 时返回另一个操作数。 |
+| `value1` | 输入 | 参与求较小值的第一个操作数（无量纲）；任一操作数为NaN时返回另一个操作数。 |
+| `value2` | 输入 | 参与求较小值的第二个操作数（无量纲）；任一操作数为NaN时返回另一个操作数。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `long double` | 返回该操作产生的值，具体含义由所选原型确定。 |
+| `long double` | 两个实参中较小的值；恰有一个NaN时返回另一实参。 |
 
 ## 约束说明
 
-- NaN 感知：仅当两实参均为 NaN 时返回 NaN，恒不抛出
+- NaN感知：仅当两实参均为NaN时返回NaN，恒不抛出。
 
 ## 调用示例
 
@@ -69,3 +71,7 @@ decltype(auto) example(long double value1, long double value2)
     return asc::std::fminl(value1, value2);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

@@ -118,6 +118,7 @@ def case_root(test_root: Path, target: str) -> Path:
 
 
 NEGATIVE_DIAGNOSTIC_MARKERS = {
+    "block_value_type_simt.fail.asc": "unsupported block collective value type",
     "seed_sequence.fail.cpp": "no viable conversion",
     "value.fail.cpp": "deleted",
     "void.fail.cpp": "undefined template",
@@ -249,7 +250,7 @@ def negative_modes(target: str, name: str) -> tuple[tuple[str, bool], ...]:
         return (("simd", False),)
     if name == "simt_excluded.fail.asc":
         return (("simt", True),)
-    if name in ("ub_span_dsimt.fail.asc", "pipeline_dsimt.fail.asc"):
+    if name in ("ub_span_dsimt.fail.asc", "pipeline_dsimt.fail.asc", "block_value_type_simt.fail.asc"):
         return (("simt", True),)
     if name == "ub_dsimt.fail.asc":
         return (("simt", True),)
@@ -398,6 +399,9 @@ def expected_negative_diagnostic(task: CompileTask, output: str) -> bool:
     lowered = output.lower()
     marker = NEGATIVE_DIAGNOSTIC_MARKERS.get(task.negative_name, "deleted")
     expected = marker.lower() in lowered
+    if task.target == "asc/collectives" and task.negative_name == "simd_excluded.fail.asc":
+        expected = "no member named 'block_reduce_add'" in lowered
+
     if task.target == "asc/__atomic/scoped_atomic.h" and task.negative_name == "simd_excluded.fail.asc":
         expected = expected or "deleted" in lowered
     if task.target == "asc/__atomic/scoped_atomic.h" and task.negative_name == "unsupported_type.fail.asc":

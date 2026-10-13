@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cctype>`。
 
-`asc::std::toupper` 按当前支持的 C 区域设置规则转换字符大小写。
+`asc::std::toupper`按当前支持的C区域设置规则转换字符大小写。
 
 标准语义参考：[cppreference `cctype`](https://en.cppreference.com/w/cpp/header/cctype)。
 
 ## 函数原型
 
 ```cpp
-int asc::std::toupper(int value) noexcept;
+namespace asc::std {
+int toupper(int value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,7 +46,7 @@ int asc::std::toupper(int value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待转换大小写的字符值；须可表示为 unsigned char 或等于 EOF；无可转换项时原样返回。 |
+| `value` | 输入 | 待转换大小写的字符值；须可表示为unsigned char或等于EOF；无可转换项时原样返回。 |
 
 ## 返回值说明
 
@@ -54,11 +56,11 @@ int asc::std::toupper(int value) noexcept;
 
 ## 约束说明
 
-- 14个标准函数isalnum/isalpha/isblank/iscntrl/isdigit/isgraph/islower/isprint/ispunct/isspace/isupper/isxdigit/tolower/toupper完整交付
-- Host委托系统当前C locale
-- Device执行环境固定C locale
-- EOF与全部256个unsigned-char值的合法输入域
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 输入必须为`EOF`或可由`unsigned char`表示的值；其他负值不满足先决条件。
+- Host委托系统当前C locale。
+- Device执行环境固定C locale。
+- EOF与全部256个unsigned-char值的合法输入域。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
@@ -72,3 +74,7 @@ decltype(auto) example(int value)
     return asc::std::toupper(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cctype.md)

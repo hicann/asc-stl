@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::remquof` 同时计算浮点余数及商的低位信息；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::remquof`同时计算浮点余数及商的低位信息；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-float asc::std::remquof(float x, float y, int* quotient) noexcept;
+namespace asc::std {
+float remquof(float x, float y, int* quotient) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,9 +48,9 @@ float asc::std::remquof(float x, float y, int* quotient) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | IEEE 余数运算的被除数（无量纲）。 |
-| `y` | 输入 | IEEE 余数运算的除数（无量纲，须非零；为 0 时返回 NaN）。 |
-| `quotient` | 输出 | 输出指针：写入商对 2^3 的余数（商的低 3 位，符号随 x/y 的商）；存储由调用方提供。 |
+| `x` | 输入 | IEEE余数运算的被除数（无量纲）。 |
+| `y` | 输入 | IEEE余数运算的除数（无量纲，须非零；为0时返回NaN）。 |
+| `quotient` | 输出 | 输出指针：写入商对2^3的余数（商的低3位，符号随x/y的商）；存储由调用方提供。 |
 
 ## 返回值说明
 
@@ -58,7 +60,7 @@ float asc::std::remquof(float x, float y, int* quotient) noexcept;
 
 ## 约束说明
 
-- 提供 float 重载、标准 *f 别名以及 float lerp 回移接口
+- 提供float重载、标准 *f别名以及float lerp回移接口。
 
 ## 调用示例
 
@@ -72,3 +74,7 @@ decltype(auto) example(float x, float y, int * quotient)
     return asc::std::remquof(x, y, quotient);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

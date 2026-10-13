@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cstring>`。
 
-`asc::std::memset` 把指定数量的字节写成同一个字节值；AI Core SIMD 编程 仅接受兼容的普通指针地址空间。
+`asc::std::memset`把指定数量的字节写成同一个字节值；AI Core SIMD编程 仅接受兼容的普通指针地址空间。
 
 标准语义参考：[cppreference `cstring`](https://en.cppreference.com/w/cpp/header/cstring)。
 
 ## 函数原型
 
 ```cpp
-void* asc::std::memset(void* destination, int value, size_t count) noexcept;
+namespace asc::std {
+void* memset(void* destination, int value, size_t count) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -45,7 +47,8 @@ void* asc::std::memset(void* destination, int value, size_t count) noexcept;
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `destination` | 输出 | 用于接收结果的目标存储。本调用为同步执行，返回时写入已完成；目标存储在调用期间保持有效即可，且须为待写入内容预留足够空间。 |
-| `value` | 输入 | 写入每个字节的字节值；转换为 unsigned char 后写入。 || `count` | 输入 | 参与操作的元素数量。 |
+| `value` | 输入 | 写入每个字节的字节值；转换为unsigned char后写入。 |
+| `count` | 输入 | 参与操作的元素数量。 |
 
 ## 返回值说明
 
@@ -55,9 +58,9 @@ void* asc::std::memset(void* destination, int value, size_t count) noexcept;
 
 ## 约束说明
 
-- 在 Host 侧和 AI Core SIMT 编程中使用普通指针
-- AI Core SIMD 编程中使用 local 或 generic 地址空间的普通指针
-- 仅 memmove 允许源和目标重叠
+- 在Host侧和AI Core SIMT编程中使用普通指针。
+- AI Core SIMD编程中使用local或generic地址空间的普通指针。
+- 仅memmove允许源和目标重叠。
 
 ## 调用示例
 
@@ -72,3 +75,7 @@ decltype(auto) example(void * destination, int value, asc::std::size_t count)
     return asc::std::memset(destination, value, count);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstring.md)

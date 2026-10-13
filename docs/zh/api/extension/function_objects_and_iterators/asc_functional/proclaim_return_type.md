@@ -28,12 +28,16 @@
 
 头文件路径为：`<asc/functional>`。
 
-`asc::proclaim_return_type` 包装函数对象并显式声明其返回类型。
+`asc::proclaim_return_type`包装函数对象并显式声明其返回类型。
 
 ## 函数原型
 
+以下为声明摘要，具体返回类型由实现定义，是可保存并调用的包装对象。
+
 ```cpp
-template<class R, class Function> constexpr asc::detail::return_type_wrapper<R, asc::std::decay_t<Function>> asc::proclaim_return_type(Function&& function) noexcept;
+namespace asc {
+template<class R, class Function> constexpr auto proclaim_return_type(Function&& function) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,7 +46,7 @@ template<class R, class Function> constexpr asc::detail::return_type_wrapper<R, 
 
 | 参数名 | 描述 |
 | --- | --- |
-| `R` | 输入范围或视图的类型；须满足所选原型的遍历要求。 |
+| `R` | 包装器承诺返回的类型；被包装调用的结果须能转换到该类型。 |
 | `Function` | 对输入值执行本页操作的可调用对象类型。 |
 
 **函数参数**
@@ -59,8 +63,8 @@ template<class R, class Function> constexpr asc::detail::return_type_wrapper<R, 
 
 ## 约束说明
 
-- 整数或逻辑运算仅在数学性质成立时报告对应特性
-- 浮点加法不满足结合律
+- 整数或逻辑运算仅在数学性质成立时报告对应特性。
+- 浮点加法不满足结合律。
 
 ## 调用示例
 
@@ -74,3 +78,7 @@ decltype(auto) example()
     return asc::proclaim_return_type<int>([](int value) { return value + 1; });
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_functional.md)

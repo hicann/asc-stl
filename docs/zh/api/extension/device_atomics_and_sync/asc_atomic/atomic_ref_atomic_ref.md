@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/atomic>`。
 
-`asc::atomic_ref::atomic_ref` 使用调用方提供的参数初始化 `asc::atomic_ref` 对象。
+`asc::atomic_ref::atomic_ref`使用调用方提供的参数初始化`asc::atomic_ref`对象。
 
-该接口的可用位置为 AI Core SIMT 编程。
+该接口的可用位置为AI Core SIMT编程。
 
 ## 函数原型
 
+所属类型：[`asc::atomic_ref`](atomic_ref.md)。
+
 ```cpp
-explicit asc::atomic_ref::atomic_ref(T& object) noexcept;
+// asc::atomic_ref 类内的声明节选；模板形参和其他成员由所属类提供。
+explicit atomic_ref(T& object) noexcept;
 ```
 
 ## 参数说明
@@ -44,30 +47,39 @@ explicit asc::atomic_ref::atomic_ref(T& object) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `object` | 输入/输出 | 提供“使用调用方提供的参数初始化 `asc::atomic_ref` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `object` | 输入/输出 | 提供“使用调用方提供的参数初始化`asc::atomic_ref`对象”使用的对象引用；被引用对象须在调用期间有效。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 原子对象的类型、地址空间、作用域和内存序必须匹配
-- Device 作用域的 64 位对象位于 GM，UB 原子操作仅使用 memory_order_relaxed
+- 原子对象的类型、地址空间、作用域和内存序必须匹配。
+- Device作用域的64位对象位于GM，UB原子操作仅使用memory_order_relaxed。
 
 ## 调用示例
 
-以下 AI Core SIMT 片段使用调用方管理的 GM 原子单元；初始化与并发访问须满足本页约束。
+以下SIMT核函数由单个线程初始化并访问一个GM原子单元；无其他并发访问，预期output[0]为1。Host须在核函数完成后读取结果。
 
 ```cpp
 #include <asc/atomic>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
+#include <asc/std/new>
 
-__aicore__ void example(int* gm_cell)
+__global__ void example(int* storage, unsigned int* output)
 {
-    // gm_cell 指向调用方管理的 GM 整数单元。
-    asc::atomic_ref<int> value(*gm_cell);
-    (void)value.load(asc::std::memory_order_relaxed);
+    // 仅启动1个block、1个线程；storage和output均为Host分配的GM。
+    *storage = 7;
+    asc::atomic_ref<int> cell(*storage);
+    cell.store(7, asc::std::memory_order_relaxed);
+
+    output[0] = (cell.load(asc::std::memory_order_relaxed) == 7) ? 1U : 0U;
 }
 ```
+
+完整工程及运行步骤见[《atomic_operations示例》](../../../../examples/atomic_operations/README.md)。
+
+## 关联API
+
+- [`asc::atomic_ref`](atomic_ref.md)
+- [本头文件的接口列表](asc_atomic.md)

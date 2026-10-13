@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/pipeline>`。
 
-`asc::pipeline_ref::consumer_release` 通知指定流水级的消费已经完成，可由生产者复用。
+`asc::pipeline_ref::consumer_release`通知指定流水级的消费已经完成，可由生产者复用。
 
 ## 函数原型
 
+所属类型：[`asc::pipeline_ref`](pipeline_ref.md)。
+
 ```cpp
-void asc::pipeline_ref::consumer_release(unsigned int stage) const noexcept;
+// asc::pipeline_ref 类内的声明节选；模板形参和其他成员由所属类提供。
+void consumer_release(unsigned int stage) const noexcept;
 ```
 
 ## 参数说明
@@ -42,7 +45,7 @@ void asc::pipeline_ref::consumer_release(unsigned int stage) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `stage` | 输入 | 流水级编号，从 0 起且须小于构造时确定的流水级数（1 或 2）；本调用通知该级 Store 事件，表示该级已消费完毕、存储缓冲可由生产者复用。 |
+| `stage` | 输入 | 流水级编号，从0起且须小于构造时确定的流水级数（1或2）；本调用通知该级Store事件，表示该级已消费完毕、存储缓冲可由生产者复用。 |
 
 ## 返回值说明
 
@@ -50,12 +53,12 @@ void asc::pipeline_ref::consumer_release(unsigned int stage) const noexcept;
 
 ## 约束说明
 
-- 仅可在 AI Core SIMD 编程中调用
-- 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明
+- 仅可在AI Core SIMD编程中调用。
+- 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明。
 
 ## 调用示例
 
-以下 AI Core SIMD 片段演示阶段操作；事件 ID 和调用顺序须满足本页约束。
+以下AI Core SIMD片段演示阶段操作；事件ID和调用顺序须满足本页约束。
 
 ```cpp
 #include <asc/pipeline>
@@ -66,3 +69,8 @@ __aicore__ void example(const asc::pipeline_ref& pipeline, unsigned int stage)
     pipeline.consumer_release(stage);
 }
 ```
+
+## 关联API
+
+- [`asc::pipeline_ref`](pipeline_ref.md)
+- [本头文件的接口列表](asc_pipeline.md)

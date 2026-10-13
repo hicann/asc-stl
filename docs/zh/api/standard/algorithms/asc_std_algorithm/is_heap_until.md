@@ -28,57 +28,63 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::is_heap_until` 返回范围中不再满足堆顺序的首个位置；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::is_heap_until`返回范围中不再满足堆顺序的首个位置；无策略形式在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class Random, class Compare> Random asc::std::is_heap_until(asc::device_policy policy, Random first, Random last, Compare compare);
+namespace asc::std {
+template<class Random, class Compare> Random is_heap_until(asc::device_policy policy, Random first, Random last, Compare compare);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host。
+该原型适用于`C++17+`，可用位置为Host。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class RandomAccessIterator, class Compare> [[nodiscard]] constexpr RandomAccessIterator asc::std::is_heap_until(RandomAccessIterator first, RandomAccessIterator last, Compare comp);
+namespace asc::std {
+template<class RandomAccessIterator, class Compare> [[nodiscard]] constexpr RandomAccessIterator is_heap_until(RandomAccessIterator first, RandomAccessIterator last, Compare comp);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class RandomAccessIterator> [[nodiscard]] constexpr RandomAccessIterator asc::std::is_heap_until(RandomAccessIterator first, RandomAccessIterator last);
+namespace asc::std {
+template<class RandomAccessIterator> [[nodiscard]] constexpr RandomAccessIterator is_heap_until(RandomAccessIterator first, RandomAccessIterator last);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Random` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Random` | 输入范围的随机访问迭代器类型。 |
 | `Compare` | 定义元素先后顺序的比较对象类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
+| `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `compare` | 输入 | 用于确定元素顺序的比较对象。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -95,7 +101,7 @@ template<class RandomAccessIterator> [[nodiscard]] constexpr RandomAccessIterato
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `comp` | 输入 | 用于确定元素顺序的比较对象。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
@@ -114,23 +120,23 @@ template<class RandomAccessIterator> [[nodiscard]] constexpr RandomAccessIterato
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `Random` | 返回首个破坏堆顺序的元素位置；全部满足时返回末尾。 |
-| 原型 2 | `RandomAccessIterator` | 返回首个破坏堆顺序的元素位置；全部满足时返回末尾。 |
-| 原型 3 | `RandomAccessIterator` | 返回首个破坏堆顺序的元素位置；全部满足时返回末尾。 |
+| 原型1 | `Random` | 返回首个破坏堆顺序的元素位置；全部满足时返回末尾。 |
+| 原型2 | `RandomAccessIterator` | 返回首个破坏堆顺序的元素位置；全部满足时返回末尾。 |
+| 原型3 | `RandomAccessIterator` | 返回首个破坏堆顺序的元素位置；全部满足时返回末尾。 |
 
 ## 约束说明
 
-- 使用 C++17
-- 该 Host 同步适配接口调用对应的 asc::parallel 前端
-- policy 必须包含有效 Stream 和足够的调用方临时存储
-- 接口只等待该 Stream
-- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用 asc::std::terminate
-- 提供顺序执行且不进行动态内存分配的重载
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序
+- 使用C++17。
+- 该Host同步适配接口调用对应的asc::parallel前端。
+- policy必须包含有效Stream和足够的调用方临时存储。
+- 接口只等待该Stream。
+- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用asc::std::terminate。
+- 提供顺序执行且不进行动态内存分配的重载。
+- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下 Host 片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
 
 ```cpp
 #include <asc/std/algorithm>
@@ -141,3 +147,7 @@ decltype(auto) example()
     return asc::std::is_heap_until(values, values + 8);
 }
 ```
+
+## 关联API
+
+- [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。

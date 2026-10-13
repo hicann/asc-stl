@@ -1024,7 +1024,8 @@
       "semantic_case": "asc/__collectives/block.h",
       "negative_cases": [
         "simd_excluded.fail.asc",
-        "ub_span_dsimt.fail.asc"
+        "ub_span_dsimt.fail.asc",
+        "block_value_type_simt.fail.asc"
       ],
       "runtime_case": "asc/__collectives/block.h",
       "applicability": {
@@ -16831,9 +16832,10 @@
       "visibility": "public",
       "dependencies": [
         "asc/__config",
-        "asc/__functional/metadata.h"
+        "asc/__functional/metadata.h",
+        "asc/std/functional"
       ],
-      "semantic_case": "asc/argument",
+      "semantic_case": "asc/functional",
       "applicability": {
         "host_header": true,
         "device_header": true,

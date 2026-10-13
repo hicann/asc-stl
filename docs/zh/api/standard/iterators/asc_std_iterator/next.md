@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::next` 返回向前推进指定距离后的迭代器。
+`asc::std::next`返回向前推进指定距离后的迭代器。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
 ```cpp
-template<class InputIterator> constexpr InputIterator asc::std::next(InputIterator x, asc::std::iter_difference_t<InputIterator> n = 1);
+namespace asc::std {
+template<class InputIterator> constexpr InputIterator next(InputIterator x, asc::std::iter_difference_t<InputIterator> n = 1);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -61,11 +63,11 @@ template<class InputIterator> constexpr InputIterator asc::std::next(InputIterat
 
 ## 约束说明
 
-- 支持非 I/O 范围、数组和用户容器
+- 支持非I/O范围、数组和用户容器。
 
 ## 调用示例
 
-以下 Host 片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
 
 ```cpp
 #include <asc/std/iterator>
@@ -76,3 +78,7 @@ decltype(auto) example()
     return asc::std::next(values, 1);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

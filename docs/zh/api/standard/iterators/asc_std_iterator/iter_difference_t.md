@@ -28,23 +28,28 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::iter_difference_t` 按名称所指的范围或迭代器属性计算结果类型。
+`asc::std::iter_difference_t`按名称所指的范围或迭代器属性计算结果类型。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
+`asc::std::iter_difference_t<I>`是迭代器`I`的有符号差值类型。去除`I`的cv/ref后，按迭代器特征与`incrementable_traits`的选择规则取得`difference_type`。以下是使用形式：
+
 ```cpp
-template<class Index> using asc::std::iter_difference_t = typename Selecttraits<remove_cvref_t<Index>, incrementable_traits<remove_cvref_t<Index>>>::difference_type
+namespace asc::std {
+template<class I>
+using difference_type = iter_difference_t<I>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 C++20 公开迭代器概念和特征接口
+- 提供C++20公开迭代器概念和特征接口。
 
 ## 调用示例
 
-以下 Host 片段用具体迭代器或容器类型实例化本页接口。
+以下Host片段用具体迭代器或容器类型实例化本页接口。
 
 ```cpp
 #include <asc/std/iterator>
@@ -54,6 +59,10 @@ template<class Index> using asc::std::iter_difference_t = typename Selecttraits<
 void example()
 {
     using selected = asc::std::iter_difference_t<int*>;
-    static_assert(asc::std::is_same_v<selected, selected>);
+    static_assert(asc::std::is_same_v<selected, asc::std::ptrdiff_t>);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

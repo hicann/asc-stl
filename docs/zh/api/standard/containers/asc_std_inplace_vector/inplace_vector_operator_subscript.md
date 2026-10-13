@@ -1,4 +1,4 @@
-# asc::std::inplace_vector::operator[]
+# asc::std::inplace_vector::`operator[]`
 
 ## 产品支持情况
 
@@ -28,61 +28,65 @@
 
 头文件路径为：`<asc/std/inplace_vector>`。
 
-`asc::std::inplace_vector::operator[]` 在调用方保证索引有效时访问指定元素。
+`asc::std::inplace_vector::operator[]`在调用方保证索引有效时访问指定元素。
 
-该接口的可用位置为 Host（完整接口）、Device（非抛出子集）。
+该接口的可用位置为Host（完整接口）、Device（非抛出子集）。
 
 标准语义参考：[cppreference `inplace_vector`](https://en.cppreference.com/w/cpp/header/inplace_vector)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::inplace_vector`](inplace_vector.md)。
+
+### 原型1
 
 ```cpp
-const_reference asc::std::inplace_vector::operator[](size_type index) const noexcept;
+// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
+const_reference operator[](size_type index) const noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-reference asc::std::inplace_vector::operator[](size_type index) noexcept;
+// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
+reference operator[](size_type index) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 待访问元素的下标，从 0 起；本接口不检查越界，调用方须保证 index < size()。 |
+| `index` | 输入 | 待访问元素的下标，从0起；本接口不检查越界，调用方须保证index < size()。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 待访问元素的下标，从 0 起；本接口不检查越界，调用方须保证 index < size()。 |
+| `index` | 输入 | 待访问元素的下标，从0起；本接口不检查越界，调用方须保证index < size()。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `const_reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
-| 原型 2 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型1 | `const_reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型2 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
 
 ## 约束说明
 
-- 前置条件：`index < size()`；`operator[]` 不执行边界检查，越界访问后果未定义
-- 最终C++26标准inplace_vector/erase/erase_if合同：Host交付除P4022R0已删除try_append_range外的完整构造、赋值、迭代、访问、修改、try/unchecked、比较、swap、容量、零容量empty/trivial与constexpr/约束合同
-- Device交付固定容量内联存储的非抛子合同，包括观察/迭代/operator[]/front/back、不抛出异常拷移赋值析构、try/unchecked后插、pop_back/clear、不抛出异常 erase/erase_if/swap、相等与不抛出异常三路比较、完整零容量核心
-- Host 提供完整接口，设备端仅提供不抛出异常的接口
+- 元素保存在固定容量的对象内存中，不进行动态分配。
+- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
+- 前置条件：`index < size()`；`operator[]`不执行边界检查，越界访问后果未定义。
+- Host提供完整接口，设备端仅提供不抛出异常的接口。
 
 ## 调用示例
 
-以下 Host 片段以具体容量或维度演示调用；对象和索引须满足本页约束。
+以下Host片段以具体容量或维度演示调用；对象和索引须满足本页约束。
 
 ```cpp
 #include <asc/std/inplace_vector>
@@ -93,3 +97,8 @@ decltype(auto) example(const asc::std::inplace_vector<int, 8>& values)
         return values[0];
 }
 ```
+
+## 关联API
+
+- [`asc::std::inplace_vector`](inplace_vector.md)
+- [本头文件的接口列表](asc_std_inplace_vector.md)

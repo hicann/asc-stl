@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`enable_borrowed_range<T>` 表示类型 `T` 的临时范围是否允许安全返回其迭代器；用户仅对符合借用语义的类型特化。
+`enable_borrowed_range<T>`表示类型`T`的临时范围是否允许安全返回其迭代器；用户仅对符合借用语义的类型特化。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
 ```cpp
-template<class T> inline constexpr const bool asc::std::ranges::enable_borrowed_range
+namespace asc::std::ranges {
+template<class T> inline constexpr const bool enable_borrowed_range;
+} // namespace asc::std::ranges
 ```
 
 ## 约束说明
 
-- 提供完整的 C++20 range concepts 集合
+- 提供完整的C++20 range concepts集合。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ template<class T> inline constexpr const bool asc::std::ranges::enable_borrowed_
 
 inline constexpr auto example = asc::std::ranges::enable_borrowed_range<int[4]>;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

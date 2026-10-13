@@ -28,24 +28,27 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::allocator_traits::is_always_equal` 标识该分配器的任意实例是否始终可相等比较。
+`asc::std::allocator_traits::is_always_equal`标识该分配器的任意实例是否始终可相等比较。
 
 标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
 
 ## 声明
 
+`asc::std::allocator_traits<Allocator>::is_always_equal`优先使用Allocator自身的同名成员类型；否则为is_empty<Allocator>。
+
 ```cpp
-using asc::std::allocator_traits::is_always_equal = typename Isalwaysequal<allocator_type>::type
+template<class Allocator>
+using selected = typename asc::std::allocator_traits<Allocator>::is_always_equal;
 ```
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg
-- uses_allocator/uses_allocator_v
-- allocator_traits 的 C++20 成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator 含 pair 递归构造
-- C++23 allocation_result 与标准 allocator_traits::allocate_at_least
-- 均限用户显式提供且在调用执行空间有效的 allocator
+- allocator_arg_t/allocator_arg。
+- uses_allocator/uses_allocator_v。
+- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
+- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
+- C++23 allocation_result与标准allocator_traits::allocate_at_least。
+- 均限用户显式提供且在调用执行空间有效的allocator。
 
 ## 调用示例
 
@@ -75,6 +78,10 @@ void use_type()
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
 完整示例源码：[allocator_traits.cpp](../../../../examples/allocator_traits.cpp)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_memory.md)

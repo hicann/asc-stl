@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::make_transform_output_iterator` 创建写入前执行变换的输出迭代器。
+`asc::make_transform_output_iterator`创建写入前执行变换的输出迭代器。
 
 ## 函数原型
 
 ```cpp
-template<class Iterator, class Function> constexpr asc::transform_output_iterator<Function, Iterator> asc::make_transform_output_iterator(Iterator iterator, Function function);
+namespace asc {
+template<class Iterator, class Function> constexpr asc::transform_output_iterator<Function, Iterator> make_transform_output_iterator(Iterator iterator, Function function);
+} // namespace asc
 ```
 
 ## 参数说明
@@ -50,7 +52,7 @@ template<class Iterator, class Function> constexpr asc::transform_output_iterato
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `iterator` | 输入 | 被包装的底层输出迭代器：变换后的值写入该迭代器所指位置。 |
-| `function` | 输入 | 写入变换对象：赋给本迭代器的值先经 function 变换再写入底层迭代器。 |
+| `function` | 输入 | 写入变换对象：赋给本迭代器的值先经function变换再写入底层迭代器。 |
 
 ## 返回值说明
 
@@ -60,8 +62,8 @@ template<class Iterator, class Function> constexpr asc::transform_output_iterato
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
@@ -77,3 +79,7 @@ decltype(auto) example()
     return asc::make_transform_output_iterator(values, [](int value) { return value + 1; });
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

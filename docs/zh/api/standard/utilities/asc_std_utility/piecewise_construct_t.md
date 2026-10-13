@@ -28,30 +28,39 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::piecewise_construct_t` 标记 pair 的两个元素分别使用独立参数组构造。
+`asc::std::piecewise_construct_t`标记pair的两个元素分别使用独立参数组构造。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 声明
 
 ```cpp
-struct asc::std::piecewise_construct_t
+namespace asc::std {
+struct piecewise_construct_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- pair 操作不抛出异常
-- 关系运算符均为显式提供
+- 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/utility>
+#include <asc/std/tuple>
 
-void use_type(const asc::std::piecewise_construct_t& value)
+bool example()
 {
-    (void)value;
+    asc::std::piecewise_construct_t tag{};
+    asc::std::pair<int, int> value(tag, asc::std::make_tuple(2), asc::std::make_tuple(3));
+    return value.first == 2 && value.second == 3;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

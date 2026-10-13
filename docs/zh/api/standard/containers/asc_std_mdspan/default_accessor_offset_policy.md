@@ -28,20 +28,22 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::default_accessor::offset_policy` 标识组合访问器或布局内部使用的偏移与嵌套布局策略。
+`asc::std::default_accessor::offset_policy`标识组合访问器或布局内部使用的偏移与嵌套布局策略。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 声明
 
+所属类型：[`asc::std::default_accessor`](default_accessor.md)。
+
 ```cpp
-using asc::std::default_accessor::offset_policy = default_accessor<Element>
+// asc::std::default_accessor 类内的声明节选；模板形参和其他成员由所属类提供。
+using offset_policy = default_accessor<Element>;
 ```
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整layout_left/layout_right/layout_stride mapping及default_accessor/aligned_accessor家族：零rank与正rank、默认/extents/array/span/跨mapping或accessor构造、标准显式性与约束、索引映射、要求d_span_size/stride/extents、唯一/穷尽/步长观察、mapping比较、access/offset及byte_alignment
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain pointer域
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
 
@@ -55,3 +57,8 @@ void use_type()
     using alias_type = typename asc::std::default_accessor<int>::offset_policy;
 }
 ```
+
+## 关联API
+
+- [`asc::std::default_accessor`](default_accessor.md)
+- [本头文件的接口列表](asc_std_mdspan.md)

@@ -28,19 +28,21 @@
 
 头文件路径为：`<asc/std/new>`。
 
-`asc::std::nothrow` 标记分配失败时不抛出异常的分配形式。
+`asc::std::nothrow`标记分配失败时不抛出异常的分配形式。
 
 标准语义参考：[cppreference `new`](https://en.cppreference.com/w/cpp/header/new)。
 
 ## 声明
 
 ```cpp
-inline constexpr const nothrow_t asc::std::nothrow
+namespace asc::std {
+inline constexpr const nothrow_t nothrow;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 placement 对象生命周期和无动态分配的接口
+- 提供placement对象生命周期和无动态分配的接口。
 
 ## 调用示例
 
@@ -51,3 +53,7 @@ inline constexpr const nothrow_t asc::std::nothrow
 
 auto value = asc::std::nothrow;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_new.md)

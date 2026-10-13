@@ -28,20 +28,22 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::reference_wrapper::type` 提供该类型特征、映射或适配器计算出的成员类型。
+`asc::std::reference_wrapper::type`提供该类型特征、映射或适配器计算出的成员类型。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 声明
 
+所属类型：[`asc::std::reference_wrapper`](reference_wrapper.md)。
+
 ```cpp
-using asc::std::reference_wrapper::type = T
+// asc::std::reference_wrapper 类内的声明节选；模板形参和其他成员由所属类提供。
+using type = T;
 ```
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
@@ -55,3 +57,8 @@ void use_type()
     using alias_type = typename asc::std::reference_wrapper<int>::type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::reference_wrapper`](reference_wrapper.md)
+- [本头文件的接口列表](asc_std_functional.md)

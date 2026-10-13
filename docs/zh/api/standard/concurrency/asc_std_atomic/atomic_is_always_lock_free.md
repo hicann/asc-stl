@@ -28,34 +28,45 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic::is_always_lock_free` 表示当前原子类型的操作是否始终无锁。
+`asc::std::atomic::is_always_lock_free`表示当前原子类型的操作是否始终无锁。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 声明
 
+所属类型：[`asc::std::atomic`](atomic.md)。
+
 ```cpp
-inline constexpr const bool asc::std::atomic::is_always_lock_free
+// asc::std::atomic 类内的声明节选；模板形参和其他成员由所属类提供。
+inline constexpr const bool is_always_lock_free;
 ```
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数
-- bool/8/16位用32位内部存储
-- 32/64位按有符号位模式分派
-- Host 和 AI Core SIMT 编程 GM
+- 标准整数/字符owning atomic别名及列出自由函数。
+- bool/8/16位用32位内部存储。
+- 32/64位按有符号位模式分派。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/atomic>
 
-void example(const asc::std::atomic<int>& object)
+bool example()
 {
-    (void)object.is_always_lock_free;
+    asc::std::atomic<int> cell{3};
+    const bool lock_free = cell.is_lock_free();
+    // 始终无锁的类型，在运行时也必须报告无锁。
+    return (!asc::std::atomic<int>::is_always_lock_free || lock_free) && cell.load() == 3;
 }
 ```
+
+## 关联API
+
+- [`asc::std::atomic`](atomic.md)
+- [本头文件的接口列表](asc_std_atomic.md)

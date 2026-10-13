@@ -28,29 +28,39 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::permutation_iterator` 使用索引迭代器重排访问数据迭代器中的元素。
+`asc::permutation_iterator`使用索引迭代器重排访问数据迭代器中的元素。
 
 ## 声明
 
 ```cpp
-template<class Iterator, class IndexIterator = Iterator> class asc::permutation_iterator
+namespace asc {
+template<class Iterator, class IndexIterator = Iterator> class permutation_iterator;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
-void use_type()
+bool example()
 {
-    using selected = asc::permutation_iterator<int*, int*>;
-    (void)sizeof(selected);
+    int values[3] = {10, 20, 30};
+    int indices[2] = {2, 0};
+    asc::permutation_iterator<int*, int*> iterator(values, indices);
+    const bool first = *iterator == 30;
+    ++iterator;
+    return first && *iterator == 10;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

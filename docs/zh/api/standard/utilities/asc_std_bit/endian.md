@@ -28,30 +28,38 @@
 
 头文件路径为：`<asc/std/bit>`。
 
-`asc::std::endian` 列出大端、小端与本机字节序标签。
+`asc::std::endian`列出大端、小端与本机字节序标签。
 
 标准语义参考：[cppreference `bit`](https://en.cppreference.com/w/cpp/header/bit)。
 
 ## 声明
 
 ```cpp
-enum asc::std::endian
+namespace asc::std {
+enum endian;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- `endian::native` 与 `endian::little` 或 `endian::big` 之一相等，不支持混合字节序
-- 本产品宿主与设备环境均为小端，即 `endian::native == endian::little`
+- `endian::native`与`endian::little`或`endian::big`之一相等，不支持混合字节序。
+- 本产品宿主与设备环境均为小端，即`endian::native == endian::little`。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/bit>
 
-void use_type(asc::std::endian value)
+bool example()
 {
-    (void)value;
+    static_assert(asc::std::endian::little != asc::std::endian::big);
+    // 当前支持的Host和Device使用纯大端或纯小端字节序。
+    return asc::std::endian::native == asc::std::endian::little || asc::std::endian::native == asc::std::endian::big;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_bit.md)

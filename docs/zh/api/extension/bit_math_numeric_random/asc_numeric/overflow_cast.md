@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/numeric>`。
 
-`asc::overflow_cast` 转换整数类型并同时返回结果和越界标志。
+`asc::overflow_cast`转换整数类型并同时返回结果和越界标志。
 
 ## 函数原型
 
 ```cpp
-template<class To, class From> constexpr asc::overflow_result<To> asc::overflow_cast(From value) noexcept;
+namespace asc {
+template<class To, class From> constexpr asc::overflow_result<To> overflow_cast(From value) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -59,8 +61,8 @@ template<class To, class From> constexpr asc::overflow_result<To> asc::overflow_
 
 ## 约束说明
 
-- T、From 和 To 必须是不超过 64 位的标准非 bool 整数类型
-- 所有溢出检查均不得触发有符号整数溢出的未定义行为
+- T、From和To必须是不超过64位的标准非bool整数类型。
+- 所有溢出检查均不得触发有符号整数溢出的未定义行为。
 
 ## 调用示例
 
@@ -74,3 +76,7 @@ decltype(auto) example()
     return asc::overflow_cast<unsigned char>(300);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_numeric.md)

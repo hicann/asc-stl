@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/optional>`。
 
-`asc::std::optional::operator bool` 按 `optional` 的可用运算符规则处理当前对象及操作数。
+`asc::std::optional::operator bool`按`optional`的可用运算符规则处理当前对象及操作数。
 
 标准语义参考：[cppreference `optional`](https://en.cppreference.com/w/cpp/header/optional)。
 
@@ -46,17 +46,17 @@ constexpr explicit asc::std::optional::operator bool() const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `explicit` | 当前对象处于有效或有值状态时返回 `true`，否则返回 `false`。 |
+| `explicit` | 当前对象处于有效或有值状态时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- T 必须是普通的非引用对象类型
-- Host 遵循有效的 C++17 操作
-- Device 侧构造、赋值、调用和交换所依赖的操作必须不抛出异常
+- T必须是普通的非引用对象类型。
+- Host遵循有效的C++17操作。
+- Device侧构造、赋值、调用和交换所依赖的操作必须不抛出异常。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
+以下Host片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
 
 ```cpp
 #include <asc/std/optional>
@@ -67,3 +67,7 @@ decltype(auto) example()
     return static_cast<bool>(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_optional.md)

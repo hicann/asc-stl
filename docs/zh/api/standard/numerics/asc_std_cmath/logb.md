@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::logb` 返回浮点值的浮点指数；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::logb`返回浮点值的浮点指数；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-float asc::std::logb(float x) noexcept;
+namespace asc::std {
+float logb(float x) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -46,7 +48,7 @@ float asc::std::logb(float x) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 待提取规范化指数的输入值（无量纲）；±0 返回 -inf，±inf 返回 +inf，NaN 返回 NaN。 |
+| `x` | 输入 | 待提取规范化指数的输入值（无量纲）；±0返回 -inf，±inf返回 +inf，NaN返回NaN。 |
 
 ## 返回值说明
 
@@ -56,7 +58,7 @@ float asc::std::logb(float x) noexcept;
 
 ## 约束说明
 
-- 提供 float 重载和标准 *f 别名，底层能力由 Ascend C 开发套件提供
+- 提供float重载和标准 *f别名，底层能力由Ascend C开发套件提供。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example(float x)
     return asc::std::logb(x);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

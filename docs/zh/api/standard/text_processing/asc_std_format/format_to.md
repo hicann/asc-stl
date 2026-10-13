@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/format>`。
 
-`asc::std::format_to` 校验格式串并在调用方容量或结果大小约束内完成定长格式化。
+`asc::std::format_to`校验格式串并在调用方容量或结果大小约束内完成定长格式化。
 
-该接口自 C++20+ 模式起提供。
+该接口自C++20+ 模式起提供。
 
 标准语义参考：[cppreference `format`](https://en.cppreference.com/w/cpp/header/format)。
 
 ## 函数原型
 
 ```cpp
-template<class ...Args> char* asc::std::format_to(char* output, format_string<Args...> format, Args&&... args);
+namespace asc::std {
+template<class ...Args> char* format_to(char* output, format_string<Args...> format, Args&&... args);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -52,7 +54,7 @@ template<class ...Args> char* asc::std::format_to(char* output, format_string<Ar
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 提供“校验格式串并在调用方容量或结果大小约束内完成定长格式化”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `output` | 输出 | 接收格式化字符的输出迭代器；原始指针须指向足够的可写存储。 |
 | `format` | 输入 | 转发给对象构造或函数调用的实参列表。 |
 | `args` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
 
@@ -60,19 +62,19 @@ template<class ...Args> char* asc::std::format_to(char* output, format_string<Ar
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `char *` | 返回格式化输出结束位置；`format_to_n` 还报告完整结果所需字符数。 |
+| `char *` | 返回格式化输出结束位置；`format_to_n`还报告完整结果所需字符数。 |
 
 ## 约束说明
 
-- format_to、format_to_n、formatted_size的调用方固定char*输出子集
-- bool/char/C字符串默认{}，非bool/char标准整数的{}及d/x/X/o/b
-- 转义花括号、截断、负n、总长度和允许未使用尾部参数
-- 不分配
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- format_to、format_to_n、formatted_size的调用方固定char*输出子集。
+- bool/char/C字符串默认{}，非bool/char标准整数的{}及d/x/X/o/b。
+- 转义花括号、截断、负n、总长度和允许未使用尾部参数。
+- 不分配。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段展示固定缓冲或多维视图的具体调用；底层存储须保持有效。
+以下Host片段展示固定缓冲或多维视图的具体调用；底层存储须保持有效。
 
 ```cpp
 #include <asc/std/format>
@@ -83,3 +85,7 @@ decltype(auto) example()
     return asc::std::format_to(output, "{}", 7);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_format.md)

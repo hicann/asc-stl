@@ -28,29 +28,33 @@
 
 头文件路径为：`<asc/std/forward_list>`。
 
-`asc::std::forward_list::push_front` 在容器首部插入一个元素。
+`asc::std::forward_list::push_front`在容器首部插入一个元素。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `forward_list`](https://en.cppreference.com/w/cpp/header/forward_list)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::forward_list`](forward_list.md)。
+
+### 原型1
 
 ```cpp
-void asc::std::forward_list::push_front(T&& value);
+// asc::std::forward_list 类内的声明节选；模板形参和其他成员由所属类提供。
+void push_front(T&& value);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-void asc::std::forward_list::push_front(const T& value);
+// asc::std::forward_list 类内的声明节选；模板形参和其他成员由所属类提供。
+void push_front(const T& value);
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -58,7 +62,7 @@ void asc::std::forward_list::push_front(const T& value);
 | --- | --- | --- |
 | `value` | 输入/输出 | 待插入到容器首部的元素值；以移动方式构造新元素，插入后新元素即链表首元素，源对象处于有效但未指定的移后状态。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -72,16 +76,16 @@ void asc::std::forward_list::push_front(const T& value);
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下forward_list<T,A>显式GM arena allocator构造
-- empty/front/begin/end
-- push_front/emplace_front/pop_front/clear
-- 移动构造/赋值、移动前迭代器继续遍历目标节点及析构
-- 仅容量充足和不抛出异常值/allocator域
-- Host 和 AI Core SIMT 编程
+- Host及AI Core SIMT编程下forward_list<T,A>显式GM arena allocator构造。
+- empty/front/begin/end。
+- push_front/emplace_front/pop_front/clear。
+- 移动构造/赋值、移动前迭代器继续遍历目标节点及析构。
+- 仅容量充足和不抛出异常值/allocator域。
+- Host和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/forward_list>
@@ -106,3 +110,8 @@ void example(asc::std::forward_list<int, example_allocator<int>>& values)
     values.push_front(7);
 }
 ```
+
+## 关联API
+
+- [`asc::std::forward_list`](forward_list.md)
+- [本头文件的接口列表](asc_std_forward_list.md)

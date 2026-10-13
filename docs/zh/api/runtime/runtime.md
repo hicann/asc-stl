@@ -1,17 +1,17 @@
 # 运行时接口
 
-运行时接口提供 Host 侧设备资源、Stream、异步提交和内存资源管理能力。
+运行时接口提供Host侧设备资源、Stream、异步提交和内存资源管理能力。
 
 ## 分类总览
 
 | 能力分类 | 说明 |
 | --- | --- |
-| [设备、Stream与Event管理](devices_streams_events/devices_streams_events.md) | 设备查询、Stream 和 Event 生命周期管理。 |
-| [核函数调用](kernel_launch/kernel_launch.md) | 从 Host 提交设备核函数。 |
+| [设备、Stream与Event管理](devices_streams_events/devices_streams_events.md) | 设备查询、Stream和Event生命周期管理。 |
+| [核函数调用](kernel_launch/kernel_launch.md) | 从Host提交设备核函数。 |
 | [设备端执行策略、执行要求与提交状态](execution_policies_and_status/execution_policies_and_status.md) | 执行策略、运行要求与异步提交状态。 |
 | [内存资源、内存池与缓冲区](memory_resources_and_buffers/memory_resources_and_buffers.md) | 设备内存资源、内存池及拥有式缓冲区。 |
 
-## API 支持列表
+## API支持列表
 
 | API | 头文件 | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- | --- |
@@ -40,8 +40,8 @@
 | [asc::npu_arch::ascend_3101](devices_streams_events/asc_devices/npu_arch_ascend_3101.md) | asc/devices | 枚举值 | C++17+ | Host | Ascend 950 |
 | [asc::npu_arch::ascend_3510](devices_streams_events/asc_devices/npu_arch_ascend_3510.md) | asc/devices | 枚举值 | C++17+ | Host | Ascend 950 |
 | [asc::npu_arch::unknown](devices_streams_events/asc_devices/npu_arch_unknown.md) | asc/devices | 枚举值 | C++17+ | Host | Ascend 950 |
-| [asc::operator!=（函数）](devices_streams_events/asc_devices/operator_not_equal.md) | asc/devices | 函数 | C++17+ | Host | Ascend 950 |
-| [asc::operator==（函数）](devices_streams_events/asc_devices/operator_equal.md) | asc/devices | 函数 | C++17+ | Host | Ascend 950 |
+| [`asc::operator!=`（函数）](devices_streams_events/asc_devices/operator_not_equal.md) | asc/devices | 函数 | C++17+ | Host | Ascend 950 |
+| [`asc::operator==`（函数）](devices_streams_events/asc_devices/operator_equal.md) | asc/devices | 函数 | C++17+ | Host | Ascend 950 |
 | [asc::set_current_device](devices_streams_events/asc_devices/set_current_device.md) | asc/devices | 函数 | C++17+ | Host | Ascend 950 |
 | [asc::execution_errc](execution_policies_and_status/asc_execution/execution_errc.md) | asc/execution | 枚举 | C++17+ | Host | Ascend 950 |
 | [asc::execution_errc::backend_error](execution_policies_and_status/asc_execution/execution_errc_backend_error.md) | asc/execution | 枚举值 | C++17+ | Host | Ascend 950 |
@@ -105,8 +105,8 @@
 | [asc::device_memory_resource_ref::deallocate](memory_resources_and_buffers/asc_memory_resource/device_memory_resource_ref_deallocate.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
 | [asc::device_memory_resource_ref::device_memory_resource_ref](memory_resources_and_buffers/asc_memory_resource/device_memory_resource_ref_device_memory_resource_ref.md) | asc/memory_resource | 构造函数 | C++17+ | Host | Ascend 950 |
 | [asc::device_memory_resource_ref::device_ordinal](memory_resources_and_buffers/asc_memory_resource/device_memory_resource_ref_device_ordinal.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
-| [asc::device_memory_resource_ref::operator!=](memory_resources_and_buffers/asc_memory_resource/device_memory_resource_ref_operator_not_equal.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
-| [asc::device_memory_resource_ref::operator==](memory_resources_and_buffers/asc_memory_resource/device_memory_resource_ref_operator_equal.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
+| [asc::device_memory_resource_ref::`operator!=`](memory_resources_and_buffers/asc_memory_resource/device_memory_resource_ref_operator_not_equal.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
+| [asc::device_memory_resource_ref::`operator==`](memory_resources_and_buffers/asc_memory_resource/device_memory_resource_ref_operator_equal.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
 | [asc::device_memory_resource_ref::properties](memory_resources_and_buffers/asc_memory_resource/device_memory_resource_ref_properties.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
 | [asc::device_memory_resource_ref::valid](memory_resources_and_buffers/asc_memory_resource/device_memory_resource_ref_valid.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
 | [asc::memory_resource_properties](memory_resources_and_buffers/asc_memory_resource/memory_resource_properties.md) | asc/memory_resource | 类 | C++17+ | Host | Ascend 950 |
@@ -122,8 +122,8 @@
 | [asc::pinned_memory_resource_ref](memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref.md) | asc/memory_resource | 类 | C++17+ | Host | Ascend 950 |
 | [asc::pinned_memory_resource_ref::allocate](memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref_allocate.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
 | [asc::pinned_memory_resource_ref::deallocate](memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref_deallocate.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
-| [asc::pinned_memory_resource_ref::operator!=](memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref_operator_not_equal.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
-| [asc::pinned_memory_resource_ref::operator==](memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref_operator_equal.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
+| [asc::pinned_memory_resource_ref::`operator!=`](memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref_operator_not_equal.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
+| [asc::pinned_memory_resource_ref::`operator==`](memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref_operator_equal.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
 | [asc::pinned_memory_resource_ref::pinned_memory_resource_ref](memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref_pinned_memory_resource_ref.md) | asc/memory_resource | 构造函数 | C++17+ | Host | Ascend 950 |
 | [asc::pinned_memory_resource_ref::properties](memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref_properties.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
 | [asc::pinned_memory_resource_ref::valid](memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref_valid.md) | asc/memory_resource | 成员函数 | C++17+ | Host | Ascend 950 |
@@ -133,7 +133,7 @@
 | [asc::event](devices_streams_events/asc_stream/event.md) | asc/stream | 类 | C++17+ | Host | Ascend 950 |
 | [asc::event::close](devices_streams_events/asc_stream/event_close.md) | asc/stream | 成员函数 | C++17+ | Host | Ascend 950 |
 | [asc::event::event](devices_streams_events/asc_stream/event_event.md) | asc/stream | 构造函数 | C++17+ | Host | Ascend 950 |
-| [asc::event::operator=](devices_streams_events/asc_stream/event_operator_assign.md) | asc/stream | 成员函数 | C++17+ | Host | Ascend 950 |
+| [asc::event::`operator=`](devices_streams_events/asc_stream/event_operator_assign.md) | asc/stream | 成员函数 | C++17+ | Host | Ascend 950 |
 | [asc::event::release](devices_streams_events/asc_stream/event_release.md) | asc/stream | 成员函数 | C++17+ | Host | Ascend 950 |
 | [asc::event::~event](devices_streams_events/asc_stream/event_destructor_event.md) | asc/stream | 析构函数 | C++17+ | Host | Ascend 950 |
 | [asc::event_ref](devices_streams_events/asc_stream/event_ref.md) | asc/stream | 类 | C++17+ | Host | Ascend 950 |
@@ -147,7 +147,7 @@
 | [asc::make_stream](devices_streams_events/asc_stream/make_stream.md) | asc/stream | 函数 | C++17+ | Host | Ascend 950 |
 | [asc::stream](devices_streams_events/asc_stream/stream.md) | asc/stream | 类 | C++17+ | Host | Ascend 950 |
 | [asc::stream::close](devices_streams_events/asc_stream/stream_close.md) | asc/stream | 成员函数 | C++17+ | Host | Ascend 950 |
-| [asc::stream::operator=](devices_streams_events/asc_stream/stream_operator_assign.md) | asc/stream | 成员函数 | C++17+ | Host | Ascend 950 |
+| [asc::stream::`operator=`](devices_streams_events/asc_stream/stream_operator_assign.md) | asc/stream | 成员函数 | C++17+ | Host | Ascend 950 |
 | [asc::stream::release](devices_streams_events/asc_stream/stream_release.md) | asc/stream | 成员函数 | C++17+ | Host | Ascend 950 |
 | [asc::stream::stream](devices_streams_events/asc_stream/stream_stream.md) | asc/stream | 构造函数 | C++17+ | Host | Ascend 950 |
 | [asc::stream::~stream](devices_streams_events/asc_stream/stream_destructor_stream.md) | asc/stream | 析构函数 | C++17+ | Host | Ascend 950 |

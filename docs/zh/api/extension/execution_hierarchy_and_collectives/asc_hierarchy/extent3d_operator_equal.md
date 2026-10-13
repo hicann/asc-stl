@@ -1,4 +1,4 @@
-# asc::extent3d::operator==
+# asc::extent3d::`operator==`
 
 ## 产品支持情况
 
@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::extent3d::operator==` 比较两个三维范围的 X、Y、Z 是否全部相等。
+`asc::extent3d::operator==`比较两个三维范围的X、Y、Z是否全部相等。
 
 ## 函数原型
 
+所属类型：[`asc::extent3d`](extent3d.md)。
+
 ```cpp
-constexpr bool asc::extent3d::operator==(asc::extent3d other) const noexcept;
+// asc::extent3d 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr bool operator==(asc::extent3d other) const noexcept;
 ```
 
 ## 参数说明
@@ -42,23 +45,23 @@ constexpr bool asc::extent3d::operator==(asc::extent3d other) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 比较的另一操作数；本次比较不修改对象。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 提供 C++17 constexpr Host/Device 层次结构接口
-- 带 extent 的值要求每一维均非零
-- extent 总数按无符号 64 位的 x*y*z 计算
+- 提供C++17 constexpr Host/Device层次结构接口。
+- 带extent的值要求每一维均非零。
+- extent总数按无符号64位的x*y*z计算。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示本页接口；对象和指针的有效期须满足本页约束。
+以下Host片段使用具体类型演示本页接口；对象和指针的有效期须满足本页约束。
 
 ```cpp
 #include <asc/hierarchy>
@@ -69,3 +72,8 @@ decltype(auto) example(asc::extent3d left, asc::extent3d right)
     return equal;
 }
 ```
+
+## 关联API
+
+- [`asc::extent3d`](extent3d.md)
+- [本头文件的接口列表](asc_hierarchy.md)

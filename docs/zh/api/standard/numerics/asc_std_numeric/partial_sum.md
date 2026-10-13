@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/numeric>`。
 
-`asc::std::partial_sum` 依次写出前缀归约结果。
+`asc::std::partial_sum`依次写出前缀归约结果。
 
 标准语义参考：[cppreference `numeric`](https://en.cppreference.com/w/cpp/header/numeric)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class InputIterator, class OutputIterator, class BinaryOperation> constexpr OutputIterator asc::std::partial_sum(InputIterator first, InputIterator last, OutputIterator result, BinaryOperation binary_op);
+namespace asc::std {
+template<class InputIterator, class OutputIterator, class BinaryOperation> constexpr OutputIterator partial_sum(InputIterator first, InputIterator last, OutputIterator result, BinaryOperation binary_op);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class InputIterator, class OutputIterator> constexpr OutputIterator asc::std::partial_sum(InputIterator first, InputIterator last, OutputIterator result);
+namespace asc::std {
+template<class InputIterator, class OutputIterator> constexpr OutputIterator partial_sum(InputIterator first, InputIterator last, OutputIterator result);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -65,9 +69,9 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `result` | 输出 | 写入结果的输出迭代器；目标范围须有足够容量。 |
-| `binary_op` | 输入 | 二元归约运算对象，按 binary_op(当前部分和, 当前元素) 生成前缀结果；省略该参数的重载使用 operator+。 |
+| `binary_op` | 输入 | 二元归约运算对象，按binary_op(当前部分和, 当前元素)生成前缀结果；省略该参数的重载使用`operator+`。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -88,13 +92,13 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `OutputIterator` | 返回输出范围中最后一个写入结果之后的位置。 |
-| 原型 2 | `OutputIterator` | 返回输出范围中最后一个写入结果之后的位置。 |
+| 原型1 | `OutputIterator` | 返回输出范围中最后一个写入结果之后的位置。 |
+| 原型2 | `OutputIterator` | 返回输出范围中最后一个写入结果之后的位置。 |
 
 ## 约束说明
 
-- 提供顺序迭代器/值重载
-- 本族中标准定义的执行策略重载采用顺序执行语义
+- 提供顺序迭代器/值重载。
+- 本族中标准定义的执行策略重载采用顺序执行语义。
 
 ## 调用示例
 
@@ -110,3 +114,7 @@ decltype(auto) example()
     return asc::std::partial_sum(input, input + 4, output);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_numeric.md)

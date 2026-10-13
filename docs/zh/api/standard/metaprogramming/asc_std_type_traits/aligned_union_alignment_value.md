@@ -28,26 +28,34 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::aligned_union::alignment_value` 在编译期给出对应类型特征的值或对齐要求。
+`asc::std::aligned_union::alignment_value`在编译期给出对应类型特征的值或对齐要求。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
+所属类型：[`asc::std::aligned_union`](aligned_union.md)。
+
 ```cpp
-const size_t asc::std::aligned_union::alignment_value
+// asc::std::aligned_union 类内的声明节选；模板形参和其他成员由所属类提供。
+const size_t alignment_value;
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v 辅助形式
+- 提供特征类以及标准的 _t、_v辅助形式。
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下Host片段用具体类型实参实例化本页类型特征。
 
 ```cpp
 #include <asc/std/type_traits>
 
 inline constexpr auto example = asc::std::aligned_union<16, int, float>::alignment_value;
 ```
+
+## 关联API
+
+- [`asc::std::aligned_union`](aligned_union.md)
+- [本头文件的接口列表](asc_std_type_traits.md)

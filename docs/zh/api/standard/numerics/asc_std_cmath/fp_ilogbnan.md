@@ -28,22 +28,26 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`FP_ILOGBNAN` 是 `asc::std::ilogb` 接收 NaN 时返回的标准失败值。
+`FP_ILOGBNAN`是`asc::std::ilogb`接收NaN时返回的标准失败值。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 声明
 
+宏的具体整数值由数学实现定义。使用宏名判断对应的NaN指数结果，不依赖固定数值。
+
 ```cpp
-#define FP_ILOGBNAN 2147483647
+#include <asc/std/cmath>
+
+constexpr auto nan_exponent = FP_ILOGBNAN;
 ```
 
 ## 约束说明
 
-- 包含 `<asc/std/cmath>` 后始终定义
-- 宏值等于 `2147483647`
+- 包含`<asc/std/cmath>`后始终定义。
+- 宏值为INT_MIN或INT_MAX，由当前数学实现决定。
 
 ## 调用示例
 
@@ -51,9 +55,14 @@
 
 ```cpp
 #include <asc/std/cmath>
+#include <asc/std/climits>
 
 #ifndef FP_ILOGBNAN
 #error "FP_ILOGBNAN is required by this public Header"
 #endif
-static_assert(FP_ILOGBNAN == 2147483647);
+static_assert(FP_ILOGBNAN == INT_MIN || FP_ILOGBNAN == INT_MAX);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

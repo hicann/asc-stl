@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::make_counting_iterator` 创建从指定初值开始的 counting_iterator。
+`asc::make_counting_iterator`创建从指定初值开始的counting_iterator。
 
 ## 函数原型
 
 ```cpp
-template<class Start> constexpr asc::counting_iterator<Start> asc::make_counting_iterator(Start start);
+namespace asc {
+template<class Start> constexpr asc::counting_iterator<Start> make_counting_iterator(Start start);
+} // namespace asc
 ```
 
 ## 参数说明
@@ -58,8 +60,8 @@ template<class Start> constexpr asc::counting_iterator<Start> asc::make_counting
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
@@ -75,3 +77,7 @@ decltype(auto) example()
     return asc::make_counting_iterator(0);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

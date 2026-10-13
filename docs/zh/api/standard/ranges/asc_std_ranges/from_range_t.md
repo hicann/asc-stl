@@ -28,31 +28,40 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::from_range_t` 标记临时范围的不可借用结果或提供视图适配辅助能力。
+`asc::std::from_range_t`标记临时范围的不可借用结果或提供视图适配辅助能力。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
 ```cpp
-struct asc::std::from_range_t
+namespace asc::std {
+struct from_range_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 七个列出名称
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 七个列出名称。
+- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+`from_range_t`是区分范围构造重载的标记类型。以下检查公开标记对象的类型；容器是否支持该重载，以对应容器原型为准。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/type_traits>
 
-void use_type(const asc::std::from_range_t& value)
+bool example()
 {
-    (void)value;
+    static_assert(asc::std::is_empty_v<asc::std::from_range_t>);
+    static_assert(asc::std::is_same_v<decltype(asc::std::from_range), const asc::std::from_range_t>);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

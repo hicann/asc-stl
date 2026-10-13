@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::reference_wrapper::reference_wrapper` 按本页所列构造形态初始化 `reference_wrapper` 对象。
+`asc::std::reference_wrapper::reference_wrapper`按本页所列构造形态初始化`reference_wrapper`对象。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
@@ -44,30 +44,39 @@ template<class U, class> constexpr reference_wrapper(U&& value) noexcept(noexcep
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U` | 被包装对象的来源类型；须能以左值引用绑定（U& 有效），且不能是 reference_wrapper 自身。 |
+| `U` | 被包装对象的来源类型；须能以左值引用绑定（U& 有效），且不能是reference_wrapper自身。 |
 | `未命名参数2` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 被包装对象的来源；构造后的 reference_wrapper 保存指向该对象的引用，不拥有其所有权，对象生命周期须覆盖包装器使用期。 |
+| `value` | 输入/输出 | 被包装对象的来源；构造后的reference_wrapper保存指向该对象的引用，不拥有其所有权，对象生命周期须覆盖包装器使用期。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/functional>
 
-void example(int& value)
+bool example()
 {
+    int value = 7;
     asc::std::reference_wrapper<int> reference(value);
-    (void)reference.get();
+    reference.get() = 9;
+    return value == 9;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

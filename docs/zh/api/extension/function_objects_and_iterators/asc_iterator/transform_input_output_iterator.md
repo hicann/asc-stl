@@ -28,29 +28,41 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::transform_input_output_iterator` 读取时执行输入变换、写入时执行输出变换的迭代器适配器。
+`asc::transform_input_output_iterator`读取时执行输入变换、写入时执行输出变换的迭代器适配器。
 
 ## 声明
 
 ```cpp
-template<class InputFunction, class OutputFunction, class Iterator> class asc::transform_input_output_iterator
+namespace asc {
+template<class InputFunction, class OutputFunction, class Iterator> class transform_input_output_iterator;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂
-- 操作数必须在当前执行位置有效
+- 提供惰性、非拥有的迭代器适配器及其工厂。
+- 操作数必须在当前执行位置有效。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
-void use_type()
+int twice(int value) { return 2 * value; }
+int half(int value) { return value / 2; }
+
+bool example()
 {
-    using selected = asc::transform_input_output_iterator<int (*)(int), int (*)(int), int*>;
-    (void)sizeof(selected);
+    int value = 3;
+    asc::transform_input_output_iterator<int(*)(int), int(*)(int), int*> iterator(&value, twice, half);
+    const bool read = (*iterator).read() == 6;
+    *iterator = 10;
+    return read && value == 5;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_iterator.md)

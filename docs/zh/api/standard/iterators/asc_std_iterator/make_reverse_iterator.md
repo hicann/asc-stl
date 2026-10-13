@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::make_reverse_iterator` 创建逆序遍历的迭代器适配器。
+`asc::std::make_reverse_iterator`创建逆序遍历的迭代器适配器。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
 ```cpp
-template<class Iter> [[nodiscard]] constexpr reverse_iterator<Iter> asc::std::make_reverse_iterator(Iter value) noexcept(is_nothrow_copy_constructible_v<Iter>);
+namespace asc::std {
+template<class Iter> [[nodiscard]] constexpr reverse_iterator<Iter> make_reverse_iterator(Iter value) noexcept(is_nothrow_copy_constructible_v<Iter>);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -60,12 +62,12 @@ template<class Iter> [[nodiscard]] constexpr reverse_iterator<Iter> asc::std::ma
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
 
 ```cpp
 #include <asc/std/iterator>
@@ -76,3 +78,7 @@ decltype(auto) example()
     return asc::std::make_reverse_iterator(values + 4);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

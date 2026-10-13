@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/span>`。
 
-`asc::std::as_writable_bytes` 把可写 span 转换为可写字节视图而不拥有存储。
+`asc::std::as_writable_bytes`把可写span转换为可写字节视图而不拥有存储。
 
 标准语义参考：[cppreference `span`](https://en.cppreference.com/w/cpp/header/span)。
 
 ## 函数原型
 
 ```cpp
-template<class T, size_t Extent> auto asc::std::as_writable_bytes(span<T, Extent> value) noexcept;
+namespace asc::std {
+template<class T, size_t Extent> auto as_writable_bytes(span<T, Extent> value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,25 +46,25 @@ template<class T, size_t Extent> auto asc::std::as_writable_bytes(span<T, Extent
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | span 的元素类型；字节视图长度按元素个数与 sizeof(T) 计算。 |
-| `Extent` | span 的编译期元素数量；为 dynamic_extent 时字节视图长度也为动态。 |
+| `T` | span的元素类型；字节视图长度按元素个数与sizeof(T)计算。 |
+| `Extent` | span的编译期元素数量；为dynamic_extent时字节视图长度也为动态。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待转换的源 span；其元素存储被重解释为可写字节（span<byte>），通过字节视图写入即修改源元素。 |
+| `value` | 输入 | 待转换的源span；其元素存储被重解释为可写字节（span<byte>），通过字节视图写入即修改源元素。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `auto` | 返回观察同一存储的非拥有字节视图；原 span 不转移所有权。 |
+| `auto` | 返回观察同一存储的非拥有字节视图；原span不转移所有权。 |
 
 ## 约束说明
 
-- 支持固定或动态 extent，以及指针、数组和兼容的连续范围
-- AI Core SIMD 编程 中仅当元素指针或范围可表示为标准普通指针时才可使用，不提供非标准 GM/UB 指针重载
+- 支持固定或动态extent，以及指针、数组和兼容的连续范围。
+- AI Core SIMD编程 中仅当元素指针或范围可表示为标准普通指针时才可使用，不提供非标准GM/UB指针重载。
 
 ## 调用示例
 
@@ -78,3 +80,7 @@ decltype(auto) example()
     return asc::std::as_writable_bytes(view);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_span.md)

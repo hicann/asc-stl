@@ -28,30 +28,38 @@
 
 头文件路径为：`<asc/std/limits>`。
 
-`asc::std::numeric_limits` 提供类型可表示范围、精度和数值特征。
+`asc::std::numeric_limits`提供类型可表示范围、精度和数值特征。
 
 标准语义参考：[cppreference `limits`](https://en.cppreference.com/w/cpp/header/limits)。
 
 ## 声明
 
 ```cpp
-template<class T> class asc::std::numeric_limits
+namespace asc::std {
+template<class T> class numeric_limits;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 支持全部标准算术类型及其 cv 限定形式
+- 支持全部标准算术类型及其cv限定形式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/limits>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::numeric_limits<int>;
-    (void)sizeof(selected);
+    static_assert(asc::std::numeric_limits<int>::is_integer);
+    static_assert(asc::std::numeric_limits<int>::min() < 0);
+    static_assert(asc::std::numeric_limits<unsigned>::min() == 0);
+    return asc::std::numeric_limits<int>::max() > 0;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_limits.md)

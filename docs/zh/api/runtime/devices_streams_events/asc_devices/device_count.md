@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/devices>`。
 
-`asc::device_count` 查询当前 Runtime 可用的 Device 数量；查询失败时返回 false 且不更新输出参数。
+`asc::device_count`查询当前Runtime可用的Device数量；查询失败时返回false且不更新输出参数。
 
 ## 函数原型
 
 ```cpp
-bool asc::device_count(asc::std::uint32_t& count) noexcept;
+namespace asc {
+bool device_count(asc::std::uint32_t& count) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -48,13 +50,13 @@ bool asc::device_count(asc::std::uint32_t& count) noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 仅可在 Host 查询或选择 Device
-- 引用只保存设备序号且不拥有 Runtime 状态
-- 查询失败时输出参数保持原值，属性仅限当前接口列出的 AI Core、Vector Core、Warp、UB、GM、L2 与架构字段
+- 仅可在Host查询或选择Device。
+- 引用只保存设备序号且不拥有Runtime状态。
+- 查询失败时输出参数保持原值，属性仅限当前接口列出的AI Core、Vector Core、Warp、UB、GM、L2与架构字段。
 
 ## 调用示例
 
@@ -74,3 +76,7 @@ decltype(auto) example(asc::std::uint32_t& count)
     return asc::device_count(count);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_devices.md)

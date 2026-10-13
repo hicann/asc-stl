@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/expected>`。
 
-`asc::std::expected::~expected` 销毁 `expected` 对象并结束其生命周期。
+`asc::std::expected::~expected`销毁`expected`对象并结束其生命周期。
 
 标准语义参考：[cppreference `expected`](https://en.cppreference.com/w/cpp/header/expected)。
 
@@ -42,15 +42,19 @@ constexpr ~expected();
 
 无参数。
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- T 必须为非 void 类型，E 必须为对象类型
-- 适用操作必须不抛出异常
-- 提供构造、赋值、emplace 和 swap
+- T必须为非void类型，E必须为对象类型。
+- 适用操作必须不抛出异常。
+- 提供构造、赋值、emplace和swap。
 
 ## 调用示例
 
-以下片段假定 object 指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
+以下片段假定object指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
 
 ```cpp
 #include <asc/std/expected>
@@ -62,3 +66,7 @@ void example(example_object* object)
     object->~example_object();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_expected.md)

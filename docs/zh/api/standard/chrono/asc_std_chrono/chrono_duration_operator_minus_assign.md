@@ -1,4 +1,4 @@
-# asc::std::chrono::duration::operator-=
+# asc::std::chrono::duration::`operator-=`
 
 ## 产品支持情况
 
@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::duration::operator-=` 按给定距离或操作数反向更新当前值。
+`asc::std::chrono::duration::operator-=`按给定距离或操作数反向更新当前值。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
+所属类型：[`asc::std::chrono::duration`](chrono_duration.md)。
+
 ```cpp
-constexpr duration<Re, Period>& asc::std::chrono::duration::operator-=(const duration<Re, Period>& other);
+// asc::std::chrono::duration 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr duration<Re, Period>& operator-=(const duration<Re, Period>& other);
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ constexpr duration<Re, Period>& asc::std::chrono::duration::operator-=(const dur
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
 
 ## 返回值说明
 
@@ -54,11 +57,11 @@ constexpr duration<Re, Period>& asc::std::chrono::duration::operator-=(const dur
 
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符
+- 提供值运算以及六个显式关系运算符。
 
 ## 调用示例
 
-以下 Host 片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host片段以具体日期或时间类型演示调用；数值须满足本页约束。
 
 ```cpp
 #include <asc/std/chrono>
@@ -68,3 +71,8 @@ void example(asc::std::chrono::duration<int>& value)
     value -= asc::std::chrono::duration<int>{1};
 }
 ```
+
+## 关联API
+
+- [`asc::std::chrono::duration`](chrono_duration.md)
+- [本头文件的接口列表](asc_std_chrono.md)

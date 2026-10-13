@@ -28,24 +28,27 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::front_insert_iterator::difference_type` 标识迭代器距离的有符号类型。
+`asc::std::front_insert_iterator::difference_type`标识迭代器距离的有符号类型。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
+所属类型：[`asc::std::front_insert_iterator`](front_insert_iterator.md)。
+
 ```cpp
-using asc::std::front_insert_iterator::difference_type = ptrdiff_t
+// asc::std::front_insert_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
+using difference_type = ptrdiff_t;
 ```
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器
-- 关系运算符均为显式提供
+- 使用调用方提供的迭代器或容器。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
-以下 Host 片段用具体迭代器或容器类型实例化本页接口。
+以下Host片段用具体迭代器或容器类型实例化本页接口。
 
 ```cpp
 #include <asc/std/iterator>
@@ -54,11 +57,19 @@ using asc::std::front_insert_iterator::difference_type = ptrdiff_t
 #include <vector>
 
 #include <asc/std/type_traits>
-#include <deque>
 
 void example()
 {
     using selected = typename asc::std::front_insert_iterator<::std::deque<int>>::difference_type;
-    static_assert(asc::std::is_same_v<selected, selected>);
+    #if __cplusplus >= 202002L
+    static_assert(asc::std::is_same_v<selected, asc::std::ptrdiff_t>);
+#else
+    static_assert(asc::std::is_same_v<selected, void>);
+#endif
 }
 ```
+
+## 关联API
+
+- [`asc::std::front_insert_iterator`](front_insert_iterator.md)
+- [本头文件的接口列表](asc_std_iterator.md)

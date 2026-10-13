@@ -13,8 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <asc/std/__functional/unwrap_ref.h>
+#include <asc/std/functional>
 #include "support/b008_semantics.h"
+
+static_assert(asc::std::is_same_v<asc::std::unwrap_reference_t<int&>, int&>);
+static_assert(asc::std::is_same_v<asc::std::unwrap_reference_t<asc::std::reference_wrapper<int>>, int&>);
+static_assert(asc::std::is_same_v<asc::std::unwrap_reference_t<const asc::std::reference_wrapper<int>>,
+    const asc::std::reference_wrapper<int>>);
+static_assert(asc::std::is_same_v<asc::std::unwrap_ref_decay_t<const asc::std::reference_wrapper<int>&>, int&>);
+static_assert(asc::std::is_same_v<typename asc::std::unwrap_ref_decay<int (&)[3]>::type, int*>);
 
 int main()
 {

@@ -28,85 +28,97 @@
 
 头文件路径为：`<asc/std/complex>`。
 
-`asc::std::complex::imag` 返回复数虚部。
+`asc::std::complex::imag`返回复数虚部。
 
 标准语义参考：[cppreference `complex`](https://en.cppreference.com/w/cpp/header/complex)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::complex`](complex.md)。
+
+### 原型1
 
 ```cpp
-[[nodiscard]] value_type asc::std::complex::imag() const volatile;
+// asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] value_type imag() const volatile;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-[[nodiscard]] constexpr value_type asc::std::complex::imag() const;
+// asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr value_type imag() const;
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-void asc::std::complex::imag(value_type value) volatile;
+// asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
+void imag(value_type value) volatile;
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-constexpr void asc::std::complex::imag(value_type value);
+// asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr void imag(value_type value);
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 无参数。
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待写入虚部的新值（value_type 标量，无量纲）。 |
+| `value` | 输入 | 待写入虚部的新值（value_type标量，无量纲）。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待写入虚部的新值（value_type 标量，无量纲）。 |
+| `value` | 输入 | 待写入虚部的新值（value_type标量，无量纲）。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `value_type` | 返回复数虚部。 |
-| 原型 2 | `value_type` | 返回复数虚部。 |
-| 原型 3 | `void` | 无返回值。 |
-| 原型 4 | `void` | 无返回值。 |
+| 原型1 | `value_type` | 返回复数虚部。 |
+| 原型2 | `value_type` | 返回复数虚部。 |
+| 原型3 | `void` | 无返回值。 |
+| 原型4 | `void` | 无返回值。 |
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 `complex<float>` 运算
-- 接口可用性取决于相应的 float 数学能力
+- 仅提供页面声明的float或`complex<float>`运算。
+- 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/complex>
 
-void example(asc::std::complex<float>& object)
+bool example()
 {
-    (void)object.imag();
+    asc::std::complex<float> value(2.0f, 3.0f);
+    return value.real() == 2.0f && value.imag() == 3.0f;
 }
 ```
+
+## 关联API
+
+- [`asc::std::complex`](complex.md)
+- [本头文件的接口列表](asc_std_complex.md)

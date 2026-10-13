@@ -1,4 +1,4 @@
-# asc::equal_to_value::operator()
+# asc::equal_to_value::`operator()`
 
 ## 产品支持情况
 
@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/functional>`。
 
-`asc::equal_to_value::operator()` 比较输入值与对象保存的值是否相等。
+`asc::equal_to_value::operator()`比较输入值与对象保存的值是否相等。
 
 ## 函数原型
 
+所属类型：[`asc::equal_to_value`](equal_to_value.md)。
+
 ```cpp
-constexpr bool asc::equal_to_value::operator()(const T& value) const noexcept(noexcept(value == stored_value));
+// asc::equal_to_value 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr bool operator()(const T& value) const noexcept(noexcept(value == stored_value));
 ```
 
 ## 参数说明
@@ -44,16 +47,16 @@ constexpr bool asc::equal_to_value::operator()(const T& value) const noexcept(no
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 整数或逻辑运算仅在数学性质成立时报告对应特性
-- 浮点加法不满足结合律
+- 整数或逻辑运算仅在数学性质成立时报告对应特性。
+- 浮点加法不满足结合律。
 
 ## 调用示例
 
-以下 Host 片段以具体值演示调用；输入须满足本页约束。
+以下Host片段以具体值演示调用；输入须满足本页约束。
 
 ```cpp
 #include <asc/functional>
@@ -64,3 +67,8 @@ decltype(auto) example()
     return equals_seven(7);
 }
 ```
+
+## 关联API
+
+- [`asc::equal_to_value`](equal_to_value.md)
+- [本头文件的接口列表](asc_functional.md)

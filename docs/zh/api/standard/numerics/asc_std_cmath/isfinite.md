@@ -28,16 +28,18 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::isfinite` 判断浮点值是否有限；Device 侧适用范围以本页 float 与执行位置约束为准。
+`asc::std::isfinite`判断浮点值是否有限；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
 ```cpp
-bool asc::std::isfinite(float x) noexcept;
+namespace asc::std {
+bool isfinite(float x) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -52,11 +54,11 @@ bool asc::std::isfinite(float x) noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 提供 float 函数重载、求值类型别名、比较函数、nanf 和分类宏
+- 提供float函数重载、求值类型别名、比较函数、nanf和分类宏。
 
 ## 调用示例
 
@@ -70,3 +72,7 @@ decltype(auto) example(float x)
     return asc::std::isfinite(x);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cmath.md)

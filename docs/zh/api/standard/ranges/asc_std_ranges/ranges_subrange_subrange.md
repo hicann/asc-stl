@@ -28,37 +28,37 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::subrange::subrange` 按本页所列构造形态初始化 `subrange` 对象。
+`asc::std::ranges::subrange::subrange`按本页所列构造形态初始化`subrange`对象。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 subrange();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 template<class It> constexpr subrange(It first, Sent sentinel);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 template<class It> constexpr subrange(It first, Sent sentinel, make_unsigned_t<iter_difference_t<Iter>> last);
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
 template<class Range> constexpr subrange(Range&& base);
 ```
 
-### 原型 5
+### 原型5
 
 ```cpp
 template<class Range> constexpr subrange(Range&& base, make_unsigned_t<iter_difference_t<Iter>> first);
@@ -66,11 +66,11 @@ template<class Range> constexpr subrange(Range&& base, make_unsigned_t<iter_diff
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -83,9 +83,9 @@ template<class Range> constexpr subrange(Range&& base, make_unsigned_t<iter_diff
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `first` | 输入 | 子范围的起始迭代器或指针。 |
-| `sentinel` | 输入 | 子范围的尾后哨兵，与 first 配对界定范围。 |
+| `sentinel` | 输入 | 子范围的尾后哨兵，与first配对界定范围。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
@@ -98,10 +98,10 @@ template<class Range> constexpr subrange(Range&& base, make_unsigned_t<iter_diff
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `first` | 输入 | 子范围的起始迭代器或指针。 |
-| `sentinel` | 输入 | 子范围的尾后哨兵，与 first 配对界定范围。 |
-| `last` | 输入 | 范围内元素个数，类型为迭代器差值的无符号版本；须与实际长度一致，供 size() 免遍历使用。 |
+| `sentinel` | 输入 | 子范围的尾后哨兵，与first配对界定范围。 |
+| `last` | 输入 | 范围内元素个数，类型为迭代器差值的无符号版本；须与实际长度一致，供size()免遍历使用。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
@@ -115,7 +115,7 @@ template<class Range> constexpr subrange(Range&& base, make_unsigned_t<iter_diff
 | --- | --- | --- |
 | `base` | 输入/输出 | 被截取的底层范围或视图；视图按值包装，左值容器按首尾迭代器截取。 |
 
-### 原型 5 的参数
+### 原型5的参数
 
 **模板参数**
 
@@ -128,23 +128,36 @@ template<class Range> constexpr subrange(Range&& base, make_unsigned_t<iter_diff
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `base` | 输入/输出 | 被截取的底层范围或视图；视图按值包装，左值容器按首尾迭代器截取。 |
-| `first` | 输入 | 范围内元素个数，类型为迭代器差值的无符号版本；须与 base 范围实际长度一致，供 size() 免遍历使用。 |
+| `first` | 输入 | 范围内元素个数，类型为迭代器差值的无符号版本；须与base范围实际长度一致，供size()免遍历使用。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- C++20 视图不进行动态内存分配
-- owning_view 仅拥有调用方传入的范围对象，不产生额外分配
+- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example()
+bool example()
 {
-    asc::std::ranges::subrange<int*> value{};
-    (void)value;
+    int values[] = {1, 2, 3, 4};
+    using Base = asc::std::ranges::subrange<int*>;
+    Base base(values, values + 4);
+    Base view(values, values + 4);
+    return *view.begin() == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ranges.md)

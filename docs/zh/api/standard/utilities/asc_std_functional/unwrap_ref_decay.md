@@ -28,31 +28,38 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::unwrap_ref_decay` 计算引用包装器解包与类型退化后的结果类型。
+`asc::std::unwrap_ref_decay`计算引用包装器解包与类型退化后的结果类型。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 声明
 
 ```cpp
-template<class T> struct asc::std::unwrap_ref_decay
+namespace asc::std {
+template<class T> struct unwrap_ref_decay;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/functional>
+#include <asc/std/type_traits>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::unwrap_ref_decay<int>;
-    (void)sizeof(selected);
+    static_assert(asc::std::is_same_v<typename asc::std::unwrap_ref_decay<const asc::std::reference_wrapper<int>&>::type, int&>);
+    static_assert(asc::std::is_same_v<typename asc::std::unwrap_ref_decay<int(&)[3]>::type, int*>);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

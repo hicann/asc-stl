@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/linalg>`。
 
-`asc::std::linalg::scaled_accessor::scaling_factor` 返回组合视图使用的缩放因子。
+`asc::std::linalg::scaled_accessor::scaling_factor`返回组合视图使用的缩放因子。
 
 标准语义参考：[cppreference `linalg`](https://en.cppreference.com/w/cpp/header/linalg)。
 
 ## 函数原型
 
+所属类型：[`asc::std::linalg::scaled_accessor`](linalg_scaled_accessor.md)。
+
 ```cpp
-[[nodiscard]] constexpr ScalingFactor asc::std::linalg::scaled_accessor::scaling_factor() const noexcept;
+// asc::std::linalg::scaled_accessor 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr ScalingFactor scaling_factor() const noexcept;
 ```
 
 ## 参数说明
@@ -50,13 +53,11 @@
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库公共入口的完整7实体合同：scaled/scaled_accessor、conjugated/conjugated_accessor、transposed/layout_transpose、conjugate_transposed
-- 包括access/offset/nested accessor/factor、转换构造、算术类型共轭不变、ADL可共轭类型、双重共轭/转置消去、rank-2静态/动态extents交换、layout_left/right/stride与通用layout_transpose mapping全部观察/比较
-- 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用具体范围或访问器演示调用；底层存储在调用期间须保持有效。
+以下Host片段使用具体范围或访问器演示调用；底层存储在调用期间须保持有效。
 
 ```cpp
 #include <asc/std/linalg>
@@ -68,3 +69,8 @@ decltype(auto) example()
     return accessor.scaling_factor();
 }
 ```
+
+## 关联API
+
+- [`asc::std::linalg::scaled_accessor`](linalg_scaled_accessor.md)
+- [本头文件的接口列表](asc_std_linalg.md)

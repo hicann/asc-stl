@@ -46,6 +46,8 @@
 #include "../../../../support/b028_allocator.h"
 #include "../../../../support/tensor_descriptor_boundaries.h"
 #include "../../../../support/w09_w10_semantics.h"
+#include "../../../../support/functional_properties.h"
+#include "../../../../support/pair_piecewise_regression.h"
 #include "../../../../support/w11_w12_semantics.h"
 #include "../../../../support/v1_algorithm_semantics.h"
 
@@ -74,8 +76,10 @@ CANN_ASC_STL_DEVICE_API void evaluate_simd(ResultPointer result, InputPointer in
             asc::gm_span<const unsigned int>(input, 24), descriptor, 0u) != asc::tensor_copy_status::success;
     pipeline.consumer_wait(0);
     pipeline.wait();
+    const asc::ub_span<const unsigned int> source(stage, 24);
+    asc::gm_span<unsigned int> destination(result, 24);
     for (unsigned int index = 0; index < 24; ++index)
-        result[index] = stage[index];
+        destination[index] = source[index];
 
     const unsigned int zero_extent[2] = {3, 0};
     const auto invalid = asc::make_tensor_copy_descriptor<2>(
@@ -313,6 +317,8 @@ CANN_ASC_STL_API unsigned int evaluate_single_thread(asc::monotonic_arena& arena
     failures += asc_stl_w09_w10_test::evaluate_memory_variant() != 0;
     failures += asc_stl_w09_w10_test::evaluate_mutex() != 0;
     failures += asc_stl_w09_w10_test::evaluate_mdspan() != 0;
+    failures += !asc_stl_functional_properties::evaluate(descriptor_maximum);
+    failures += !asc_stl_pair_piecewise_test::evaluate(static_cast<int>(descriptor_maximum & 7U));
     failures += asc_stl_w09_w10_test::evaluate_extension_mdspan() != 0;
 #if !CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
     failures += asc_stl_w11_w12_test::evaluate(result) != 0;

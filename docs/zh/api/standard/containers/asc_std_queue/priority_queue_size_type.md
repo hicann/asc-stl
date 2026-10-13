@@ -28,25 +28,27 @@
 
 头文件路径为：`<asc/std/queue>`。
 
-`asc::std::priority_queue::size_type` 标识容器大小的无符号类型。
+`asc::std::priority_queue::size_type`标识容器大小的无符号类型。
 
 标准语义参考：[cppreference `queue`](https://en.cppreference.com/w/cpp/header/queue)。
 
 ## 声明
 
+所属类型：[`asc::std::priority_queue`](priority_queue.md)。
+
 ```cpp
-using asc::std::priority_queue::size_type = typename Container::size_type
+// asc::std::priority_queue 类内的声明节选；模板形参和其他成员由所属类提供。
+using size_type = typename Container::size_type;
 ```
 
 ## 约束说明
 
-- priority_queue<T,Container,Compare=less<typename Container::value_type>>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/front/operator[]/push_back/emplace_back/pop_back/size/empty/swap及allocator操作必须在当前执行空间有效，Compare必须定义Device可调的strict-weak-order且可在已验证移动交换域使用
-- 交付container_type/value_compare/value_type/size_type/reference/const_reference及protected c/comp，default/Compare/Container/copy/move/allocator构造及赋值，N4861两类InputIterator构造，empty/size/top、lvalue/rvalue push、void emplace、pop，member/non-member swap、uses_allocator特化，以及Compare+Container、InputIterator+Compare+Container、Compare+Container+Alloc三类显式Container CTAD
-- 堆序语义为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 此别名表示所属类型用于元素数量或大小的无符号整数类型；读取类型本身不分配内存，也不访问元素。
+- 构造、分配和访问的运行条件见所属类型[asc::std::priority_queue](priority_queue.md)。
 
 ## 调用示例
 
-以下 Host 片段显式提供标准容器作为底层存储；设备端须提供可在目标位置调用的容器。
+以下Host片段显式提供标准容器作为底层存储；设备端须提供可在目标位置调用的容器。
 
 ```cpp
 #include <asc/std/queue>
@@ -59,3 +61,8 @@ void use_type()
     using alias_type = typename asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>::size_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::priority_queue`](priority_queue.md)
+- [本头文件的接口列表](asc_std_queue.md)

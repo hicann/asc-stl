@@ -28,47 +28,55 @@
 
 头文件路径为：`<asc/std/numeric>`。
 
-`asc::std::transform_reduce` 先逐项变换再归约结果。
+`asc::std::transform_reduce`先逐项变换再归约结果。
 
 标准语义参考：[cppreference `numeric`](https://en.cppreference.com/w/cpp/header/numeric)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class Input, class T, class BinaryOperation, class UnaryOperation> T asc::std::transform_reduce(asc::device_policy policy, Input first, Input last, T init, BinaryOperation binary_operation, UnaryOperation unary_operation);
+namespace asc::std {
+template<class Input, class T, class BinaryOperation, class UnaryOperation> T transform_reduce(asc::device_policy policy, Input first, Input last, T init, BinaryOperation binary_operation, UnaryOperation unary_operation);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host。
+该原型适用于`C++17+`，可用位置为Host。
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class InputIterator, class T, class BinaryO, class UnaryO> [[nodiscard]] constexpr T asc::std::transform_reduce(InputIterator first, InputIterator last, T initial, BinaryO reduce_operation, UnaryO transform_operation);
+namespace asc::std {
+template<class InputIterator, class T, class BinaryO, class UnaryO> [[nodiscard]] constexpr T transform_reduce(InputIterator first, InputIterator last, T initial, BinaryO reduce_operation, UnaryO transform_operation);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class InputIterator1, class InputIterator2, class T, class BinaryOp1, class BinaryOp2> [[nodiscard]] constexpr T asc::std::transform_reduce(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, T initial, BinaryOp1 reduce_operation, BinaryOp2 transform_op);
+namespace asc::std {
+template<class InputIterator1, class InputIterator2, class T, class BinaryOp1, class BinaryOp2> [[nodiscard]] constexpr T transform_reduce(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, T initial, BinaryOp1 reduce_operation, BinaryOp2 transform_op);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型 4
+### 原型4
 
 ```cpp
-template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] constexpr T asc::std::transform_reduce(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, T initial);
+namespace asc::std {
+template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] constexpr T transform_reduce(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, T initial);
+} // namespace asc::std
 ```
 
-该原型适用于 `C++17+`，可用位置为 Host、AI Core SIMD 编程、AI Core SIMT 编程。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -83,14 +91,14 @@ template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] cons
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
+| `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `init` | 输入 | 归约初值，作为逐元素合并的起始累加值；范围为空时原样返回该值。 |
-| `binary_operation` | 输入 | 二元归约运算对象，把 unary_operation 作用于当前元素后的结果并入当前累加值。 |
+| `binary_operation` | 输入 | 二元归约运算对象，把unary_operation作用于当前元素后的结果并入当前累加值。 |
 | `unary_operation` | 输入 | 一元变换运算对象，先作用于每个输入元素，再参与归约。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -111,7 +119,7 @@ template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] cons
 | `reduce_operation` | 输入 | 二元归约运算对象，把逐项变换或组合的结果并入当前累加值。 |
 | `transform_operation` | 输入 | 一元变换运算对象，先作用于第一个范围的每个元素，再参与归约。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
@@ -134,7 +142,7 @@ template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] cons
 | `reduce_operation` | 输入 | 二元归约运算对象，把逐项变换或组合的结果并入当前累加值。 |
 | `transform_op` | 输入 | 二元组合运算对象，作用于两个范围中对应位置的元素。 |
 
-### 原型 4 的参数
+### 原型4的参数
 
 **模板参数**
 
@@ -157,20 +165,20 @@ template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] cons
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `T` | 返回输入值按接口规定运算后的数值结果。 |
-| 原型 2 | `T` | 返回输入值按接口规定运算后的数值结果。 |
-| 原型 3 | `T` | 返回输入值按接口规定运算后的数值结果。 |
-| 原型 4 | `T` | 返回输入值按接口规定运算后的数值结果。 |
+| 原型1 | `T` | 返回输入值按接口规定运算后的数值结果。 |
+| 原型2 | `T` | 返回输入值按接口规定运算后的数值结果。 |
+| 原型3 | `T` | 返回输入值按接口规定运算后的数值结果。 |
+| 原型4 | `T` | 返回输入值按接口规定运算后的数值结果。 |
 
 ## 约束说明
 
-- 使用 C++17
-- 该 Host 同步适配接口调用对应的 asc::parallel 前端
-- policy 必须包含有效 Stream 和足够的调用方临时存储
-- 接口只等待该 Stream
-- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用 asc::std::terminate
-- 提供顺序执行且不进行动态内存分配的重载
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序
+- 使用C++17。
+- 该Host同步适配接口调用对应的asc::parallel前端。
+- policy必须包含有效Stream和足够的调用方临时存储。
+- 接口只等待该Stream。
+- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用asc::std::terminate。
+- 提供顺序执行且不进行动态内存分配的重载。
+- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
@@ -186,3 +194,7 @@ decltype(auto) example()
     return asc::std::transform_reduce(input, input + 4, 0, [](int a, int b) { return a + b; }, [](int a) { return a * 2; });
 }
 ```
+
+## 关联API
+
+- [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。

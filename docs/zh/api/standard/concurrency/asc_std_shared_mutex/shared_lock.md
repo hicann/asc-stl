@@ -28,34 +28,53 @@
 
 头文件路径为：`<asc/std/shared_mutex>`。
 
-`asc::std::shared_lock` 按对象生命周期管理调用方提供的锁。
+`asc::std::shared_lock`按对象生命周期管理调用方提供的锁。
 
 标准语义参考：[cppreference `shared_mutex`](https://en.cppreference.com/w/cpp/header/shared_mutex)。
 
 ## 声明
 
 ```cpp
-template<class Mutex> class asc::std::shared_lock
+namespace asc::std {
+template<class Mutex> class shared_lock;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- shared_lock<Mutex>的mutex_type，default/普通/defer/try/adopt构造、删除copy、move构造/赋值和析构
-- 有效状态上的lock/try_lock/unlock/swap/release/mutex/owns_lock/operator bool及非成员swap
-- 显式非抛Device SharedLockable域
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- shared_lock<Mutex>的mutex_type，default/普通/defer/try/adopt构造、删除copy、move构造/赋值和析构。
+- 有效状态上的lock/try_lock/unlock/swap/release/mutex/owns_lock/operator bool及非成员swap。
+- 显式非抛Device SharedLockable域。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/shared_mutex>
 
-struct example_mutex { void lock() {} bool try_lock() { return true; } void unlock() {} void lock_shared() {} bool try_lock_shared() { return true; } void unlock_shared() {} };
-void use_type()
+struct Mutex {
+    bool locked = false;
+    void lock() { locked = true; }
+    bool try_lock() { if (locked) return false; locked = true; return true; }
+    void unlock() { locked = false; }
+    void lock_shared() { lock(); }
+    bool try_lock_shared() { return try_lock(); }
+    void unlock_shared() { unlock(); }
+};
+
+bool example()
 {
-    using selected = asc::std::shared_lock<example_mutex>;
-    (void)sizeof(selected);
+    Mutex mutex;
+    {
+        asc::std::shared_lock<Mutex> lock(mutex);
+        if (!mutex.locked) return false;
+    }
+    return !mutex.locked;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_shared_mutex.md)

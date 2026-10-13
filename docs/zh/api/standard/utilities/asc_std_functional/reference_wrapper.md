@@ -28,31 +28,38 @@
 
 头文件路径为：`<asc/std/functional>`。
 
-`asc::std::reference_wrapper` 以可复制对象保存另一个对象的引用。
+`asc::std::reference_wrapper`以可复制对象保存另一个对象的引用。
 
 标准语义参考：[cppreference `functional`](https://en.cppreference.com/w/cpp/header/functional)。
 
 ## 声明
 
 ```cpp
-template<class T> class asc::std::reference_wrapper
+namespace asc::std {
+template<class T> class reference_wrapper;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式
-- invoke_r 为 C++23 回移提供的接口
+- 支持标准可调用对象和成员指针形式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/functional>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::reference_wrapper<int>;
-    (void)sizeof(selected);
+    int value = 3;
+    asc::std::reference_wrapper<int> reference(value);
+    reference.get() = 7;
+    return value == 7 && &reference.get() == &value;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_functional.md)

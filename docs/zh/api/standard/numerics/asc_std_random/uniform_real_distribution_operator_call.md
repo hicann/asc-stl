@@ -1,4 +1,4 @@
-# asc::std::uniform_real_distribution::operator()
+# asc::std::uniform_real_distribution::`operator()`
 
 ## 产品支持情况
 
@@ -28,19 +28,19 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::uniform_real_distribution::operator()` 按 `uniform_real_distribution` 的可用运算符规则处理当前对象及操作数。
+`asc::std::uniform_real_distribution::operator()`按`uniform_real_distribution`的可用运算符规则处理当前对象及操作数。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 template<class URng> constexpr float asc::std::uniform_real_distribution<float>::operator()(URng& engine) const noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 template<class URng> constexpr float asc::std::uniform_real_distribution<float>::operator()(URng& engine, const param_type& parameters) const noexcept;
@@ -48,37 +48,37 @@ template<class URng> constexpr float asc::std::uniform_real_distribution<float>:
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `URng` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `URng` | 均匀随机位生成器类型，提供无参调用、min和max。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `URng` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `URng` | 均匀随机位生成器类型，提供无参调用、min和max。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `float` | 返回推进随机引擎后产生的下一个随机值。 |
-| 原型 2 | `float` | 返回推进随机引擎后产生的下一个随机值。 |
+| 原型1 | `float` | 返回推进随机引擎后产生的下一个随机值。 |
+| 原型2 | `float` | 返回推进随机引擎后产生的下一个随机值。 |
 
 ## 约束说明
 
-- 仅提供 uniform_real_distribution<float>
-- 结果位于指定的半开区间内，不提供 double、long double 及其他统计分布
+- 仅提供uniform_real_distribution<float>。
+- 结果位于指定的半开区间内，不提供double、long double及其他统计分布。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
+以下Host片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
 
 ```cpp
 #include <asc/std/random>
@@ -98,3 +98,7 @@ decltype(auto) example()
     return distribution(generator);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

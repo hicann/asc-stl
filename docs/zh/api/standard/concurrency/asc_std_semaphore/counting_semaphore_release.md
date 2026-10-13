@@ -28,16 +28,19 @@
 
 头文件路径为：`<asc/std/semaphore>`。
 
-`asc::std::counting_semaphore::release` 增加指定数量的信号量许可，并使可推进的等待者继续执行。
+`asc::std::counting_semaphore::release`增加指定数量的信号量许可，并使可推进的等待者继续执行。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `semaphore`](https://en.cppreference.com/w/cpp/header/semaphore)。
 
 ## 函数原型
 
+所属类型：[`asc::std::counting_semaphore`](counting_semaphore.md)。
+
 ```cpp
-void asc::std::counting_semaphore::release(long long update) noexcept;
+// asc::std::counting_semaphore 类内的声明节选；模板形参和其他成员由所属类提供。
+void release(long long update) noexcept;
 ```
 
 ## 参数说明
@@ -46,7 +49,7 @@ void asc::std::counting_semaphore::release(long long update) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `update` | 输入 | 本次增加的许可数量，须为正数；增加后的内部计数不得超过 max()。 |
+| `update` | 输入 | 本次增加的许可数量，须为正数；增加后的内部计数不得超过max()。 |
 
 ## 返回值说明
 
@@ -54,12 +57,12 @@ void asc::std::counting_semaphore::release(long long update) noexcept;
 
 ## 约束说明
 
-- Host 侧对象管理 Ascend 950 的 GM 状态
-- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足
+- Host侧对象管理Ascend 950的GM状态。
+- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下 Host 片段使用一个可独立完成的参与者演示调用；多参与者场景须保证并发推进。
+以下Host片段使用一个可独立完成的参与者演示调用；多参与者场景须保证并发推进。
 
 ```cpp
 #include <asc/std/semaphore>
@@ -71,3 +74,8 @@ void example()
     semaphore.acquire();
 }
 ```
+
+## 关联API
+
+- [`asc::std::counting_semaphore`](counting_semaphore.md)
+- [本头文件的接口列表](asc_std_semaphore.md)

@@ -28,31 +28,35 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::uniform_int_distribution::param` 返回当前分布或随机引擎的参数对象。
+`asc::std::uniform_int_distribution::param`返回当前分布或随机引擎的参数对象。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::uniform_int_distribution`](uniform_int_distribution.md)。
+
+### 原型1
 
 ```cpp
-[[nodiscard]] constexpr param_type asc::std::uniform_int_distribution::param() const noexcept;
+// asc::std::uniform_int_distribution 类内的声明节选；模板形参和其他成员由所属类提供。
+[[nodiscard]] constexpr param_type param() const noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr void asc::std::uniform_int_distribution::param(const param_type& parameters) noexcept;
+// asc::std::uniform_int_distribution 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr void param(const param_type& parameters) noexcept;
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -64,22 +68,29 @@ constexpr void asc::std::uniform_int_distribution::param(const param_type& param
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `param_type` | 返回当前分布或随机引擎的参数对象。 |
-| 原型 2 | `void` | 无返回值。 |
+| 原型1 | `param_type` | 返回当前分布或随机引擎的参数对象。 |
+| 原型2 | `void` | 无返回值。 |
 
 ## 约束说明
 
-- 支持全部标准整数结果类型
+- 支持全部标准整数结果类型。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/random>
+#include <asc/std/limits>
 
-void example(asc::std::uniform_int_distribution<int>& object)
+bool example()
 {
-    (void)object.param();
+    asc::std::uniform_int_distribution<int> distribution(2, 5);
+    return distribution.param().a() == 2 && distribution.param().b() == 5;
 }
 ```
+
+## 关联API
+
+- [`asc::std::uniform_int_distribution`](uniform_int_distribution.md)
+- [本头文件的接口列表](asc_std_random.md)

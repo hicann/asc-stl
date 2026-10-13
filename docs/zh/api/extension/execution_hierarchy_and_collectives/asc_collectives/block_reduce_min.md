@@ -28,69 +28,76 @@
 
 头文件路径为：`<asc/collectives>`。
 
-`asc::block_reduce_min` 对同一 Block 各线程的值求最小值并返回归约结果。
+`asc::block_reduce_min`对同一Block各线程的值求最小值并返回归约结果。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-asc::std::int32_t asc::block_reduce_min(asc::block_collective_workspace<asc::std::int32_t> workspace, asc::std::int32_t value) noexcept;
+namespace asc {
+asc::std::int32_t block_reduce_min(asc::block_collective_workspace<asc::std::int32_t> workspace, asc::std::int32_t value) noexcept;
+} // namespace asc
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-asc::std::uint32_t asc::block_reduce_min(asc::block_collective_workspace<asc::std::uint32_t> workspace, asc::std::uint32_t value) noexcept;
+namespace asc {
+asc::std::uint32_t block_reduce_min(asc::block_collective_workspace<asc::std::uint32_t> workspace, asc::std::uint32_t value) noexcept;
+} // namespace asc
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-float asc::block_reduce_min(asc::block_collective_workspace<float> workspace, float value) noexcept;
+namespace asc {
+float block_reduce_min(asc::block_collective_workspace<float> workspace, float value) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前 Block 的集体操作工作区：存放各 warp 的部分结果，元素数不少于 Block 内 warp 数；参与线程会合期间不得复用。 |
-| `value` | 输入 | 当前线程参与求最小值的输入值：返回 Block 内各线程该值中的最小值。 |
+| `workspace` | 输入 | 当前Block的集体操作工作区：存放各warp的部分结果，元素数不少于Block内warp数；参与线程会合期间不得复用。 |
+| `value` | 输入 | 当前线程参与求最小值的输入值：返回Block内各线程该值中的最小值。 |
 
-### 原型 2 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `workspace` | 输入 | 当前 Block 的集体操作工作区：存放各 warp 的部分结果，元素数不少于 Block 内 warp 数；参与线程会合期间不得复用。 |
-| `value` | 输入 | 当前线程参与求最小值的输入值：返回 Block 内各线程该值中的最小值。 |
-
-### 原型 3 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前 Block 的集体操作工作区：存放各 warp 的部分结果，元素数不少于 Block 内 warp 数；参与线程会合期间不得复用。 |
-| `value` | 输入 | 当前线程参与求最小值的输入值：返回 Block 内各线程该值中的最小值。 |
+| `workspace` | 输入 | 当前Block的集体操作工作区：存放各warp的部分结果，元素数不少于Block内warp数；参与线程会合期间不得复用。 |
+| `value` | 输入 | 当前线程参与求最小值的输入值：返回Block内各线程该值中的最小值。 |
+
+### 原型3的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `workspace` | 输入 | 当前Block的集体操作工作区：存放各warp的部分结果，元素数不少于Block内warp数；参与线程会合期间不得复用。 |
+| `value` | 输入 | 当前线程参与求最小值的输入值：返回Block内各线程该值中的最小值。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `asc::std::int32_t` | 返回参与线程或连续范围按接口名称归约后的结果。 |
-| 原型 2 | `asc::std::uint32_t` | 返回参与线程或连续范围按接口名称归约后的结果。 |
-| 原型 3 | `float` | 返回参与线程或连续范围按接口名称归约后的结果。 |
+| 原型1 | `asc::std::int32_t` | 返回参与线程或连续范围按接口名称归约后的结果。 |
+| 原型2 | `asc::std::uint32_t` | 返回参与线程或连续范围按接口名称归约后的结果。 |
+| 原型3 | `float` | 返回参与线程或连续范围按接口名称归约后的结果。 |
 
 ## 约束说明
 
-- 仅可在 AI Core SIMT 编程中调用
-- 参数类型、取值范围、会合要求和对象生命周期必须满足页面声明
+- 仅可在AI Core SIMT编程中调用。
+- 同一block的所有线程以相同顺序会合调用；总线程数必须为32的正整数倍。
+- 工作区来自该block的动态共享UB，至少包含thread_count()/32个T，且调用期间不得被其他并发操作复用。
 
 ## 调用示例
 
@@ -106,3 +113,7 @@ __aicore__ unsigned int example(unsigned int* dynamic_shared_pointer, unsigned i
     return asc::block_reduce_min(workspace, value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_collectives.md)

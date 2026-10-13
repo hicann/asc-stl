@@ -28,30 +28,40 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`uniform_real_distribution<float>` 从调用方随机引擎生成指定半开区间内的 float 值；本期不提供 double 或 long double 分布特化。
+`uniform_real_distribution<float>`从调用方随机引擎生成指定半开区间内的float值；本期不提供double或long double分布特化。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 声明
 
 ```cpp
-template<> class asc::std::uniform_real_distribution<float>
+namespace asc::std {
+template<> class uniform_real_distribution<float>;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 仅提供 uniform_real_distribution<float>
-- 结果位于指定的半开区间内，不提供 double、long double 及其他统计分布
+- 仅提供uniform_real_distribution<float>。
+- 结果位于指定的半开区间内，不提供double、long double及其他统计分布。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/random>
+#include <asc/std/limits>
 
-void use_type(const asc::std::uniform_real_distribution<float>& value)
+bool example()
 {
-    (void)value;
+    asc::std::uniform_real_distribution<float> distribution(2.0f, 5.0f);
+    asc::std::minstd_rand engine(7);
+    const auto value = distribution(engine);
+    return value >= 2.0f && value < 5.0f;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

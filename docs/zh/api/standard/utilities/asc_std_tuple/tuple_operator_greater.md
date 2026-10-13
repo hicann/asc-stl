@@ -1,4 +1,4 @@
-# asc::std::tuple::operator>
+# `asc::std::operator>`（tuple）
 
 ## 产品支持情况
 
@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/tuple>`。
 
-`asc::std::tuple::operator>` 判断左操作数是否大于右操作数。
+`asc::std::operator>`（tuple自由比较函数模板） 判断左操作数是否大于右操作数。
 
 标准语义参考：[cppreference `tuple`](https://en.cppreference.com/w/cpp/header/tuple)。
 
@@ -44,27 +44,28 @@ template<class... Left, class... Right> constexpr bool asc::std::operator>(const
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Left`、`Right` | 两个 tuple 的元素类型包，元素个数须相同。 |
+| `Left`、`Right` | 两个tuple的元素类型包，元素个数须相同。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left`、`right` | 输入 | 参与比较的两个 tuple。 |
+| `left`、`right` | 输入 | 参与比较的两个tuple。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 两 tuple 按字典序大于比较（等价于右操作数 < 左操作数）时为 `true`，否则为 `false`。 |
+| `bool` | 两tuple按字典序大于比较（等价于右操作数 < 左操作数）时为`true`，否则为`false`。 |
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配
+- 两侧tuple的元素数量必须相同；各对应元素须支持本运算要求的比较。
+- 相等要求全部对应元素相等；顺序比较按字典序，从首个不等元素确定结果。
 
 ## 调用示例
 
-以下 Host 片段使用具体数值类型演示调用；状态与参数须满足本页约束。
+以下Host片段使用具体数值类型演示调用；状态与参数须满足本页约束。
 
 ```cpp
 #include <asc/std/tuple>
@@ -75,3 +76,7 @@ decltype(auto) example()
     return (left > right);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_tuple.md)

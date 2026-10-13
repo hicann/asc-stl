@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/cmath>`。
 
-`asc::integer_log2` 返回正整数以 2 为底的对数向下取整结果。
+`asc::integer_log2`返回正整数以2为底的对数向下取整结果。
 
 ## 函数原型
 
 ```cpp
-template<class T> constexpr int asc::integer_log2(T value) noexcept;
+namespace asc {
+template<class T> constexpr int integer_log2(T value) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,24 +44,24 @@ template<class T> constexpr int asc::integer_log2(T value) noexcept;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 输入值的整数或枚举类型（不含 bool）。 |
+| `T` | 输入值的整数或枚举类型（不含bool）。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待求以 2 为底对数向下取整的整数值；须大于零。 |
+| `value` | 输入 | 待求以2为底对数向下取整的整数值；须大于零。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `int` | 返回正整数以 2 为底的对数向下取整结果。 |
+| `int` | 返回正整数以2为底的对数向下取整结果。 |
 
 ## 约束说明
 
-- T 必须为非 bool 的整数或枚举类型
-- value 必须大于零
+- T必须为非bool的整数或枚举类型。
+- value必须大于零。
 
 ## 调用示例
 
@@ -73,3 +75,7 @@ decltype(auto) example()
     return asc::integer_log2(8u);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_cmath.md)

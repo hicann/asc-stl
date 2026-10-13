@@ -1,4 +1,4 @@
-# 头文件 asc/execution.require.h
+# 头文件asc/execution.require.h
 
 提供为设备端执行策略附加执行要求的组合功能
 
@@ -8,7 +8,7 @@
 #include <asc/execution.require.h>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |

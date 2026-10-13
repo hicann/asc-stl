@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::time_point_cast` 把时间点转换为指定精度的时间点类型。
+`asc::std::chrono::time_point_cast`把时间点转换为指定精度的时间点类型。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
 ```cpp
-template<class ToDuration, class Clock, class Duration> [[nodiscard]] constexpr time_point<Clock, ToDuration> asc::std::chrono::time_point_cast(const time_point<Clock, Duration>& value);
+namespace asc::std::chrono {
+template<class ToDuration, class Clock, class Duration> [[nodiscard]] constexpr time_point<Clock, ToDuration> time_point_cast(const time_point<Clock, Duration>& value);
+} // namespace asc::std::chrono
 ```
 
 ## 参数说明
@@ -45,7 +47,7 @@ template<class ToDuration, class Clock, class Duration> [[nodiscard]] constexpr 
 | 参数名 | 描述 |
 | --- | --- |
 | `ToDuration` | 转换到的目标时长类型，作为结果时间点的计时精度。 |
-| `Clock` | 时间点所属的时钟类型，如 system_clock。 |
+| `Clock` | 时间点所属的时钟类型，如system_clock。 |
 | `Duration` | 源时间点的时长类型。 |
 
 **函数参数**
@@ -62,7 +64,7 @@ template<class ToDuration, class Clock, class Duration> [[nodiscard]] constexpr 
 
 ## 约束说明
 
-- 支持用户定义时钟、值运算以及六个显式关系运算符
+- 支持用户定义时钟、值运算以及六个显式关系运算符。
 
 ## 调用示例
 
@@ -77,3 +79,7 @@ decltype(auto) example()
     return asc::std::chrono::time_point_cast<asc::std::chrono::seconds>(value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

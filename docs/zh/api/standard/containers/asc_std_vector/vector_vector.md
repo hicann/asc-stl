@@ -28,19 +28,19 @@
 
 头文件路径为：`<asc/std/vector>`。
 
-`asc::std::vector::vector` 按本页所列构造形态初始化 `vector` 对象。
+`asc::std::vector::vector`按本页所列构造形态初始化`vector`对象。
 
 标准语义参考：[cppreference `vector`](https://en.cppreference.com/w/cpp/header/vector)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 vector(const Allocator& allocator) noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 vector(vector<T, Allocator>&& other) noexcept;
@@ -48,7 +48,7 @@ vector(vector<T, Allocator>&& other) noexcept;
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -56,21 +56,25 @@ vector(vector<T, Allocator>&& other) noexcept;
 | --- | --- | --- |
 | `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造
-- empty/size/capacity/data/begin/end/operator[]/front/back
-- reserve与容量内push_back/emplace_back/pop_back/clear
-- 同allocator或允许传播域的移动构造/赋值与析构
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域
+- vector<T,A>显式allocator构造。
+- empty/size/capacity/data/begin/end/`operator[]`/front/back。
+- reserve与容量内push_back/emplace_back/pop_back/clear。
+- 同allocator或允许传播域的移动构造/赋值与析构。
+- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
 
 ## 调用示例
 
@@ -86,6 +90,10 @@ asc::std::vector<T, Allocator> make_object(Args&&... args)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
 完整示例源码：[explicit_allocator_vector.cpp](../../../../examples/explicit_allocator_vector.cpp)。
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_vector.md)

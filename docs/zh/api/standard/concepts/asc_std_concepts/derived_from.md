@@ -28,20 +28,22 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::derived_from` 在 C++20 及以上模式约束 `Derived`（派生类型）公有且无歧义地派生自 `Base`（基类型），具体判据为 `is_base_of_v<Base, Derived>` 与 `is_convertible_v<const volatile Derived*, const volatile Base*>` 同时成立。
+`asc::std::derived_from`在C++20及以上模式约束`Derived`（派生类型）公有且无歧义地派生自`Base`（基类型），具体判据为`is_base_of_v<Base, Derived>`与`is_convertible_v<const volatile Derived*, const volatile Base*>`同时成立。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 
 ## 声明
 
 ```cpp
-template<class Derived, class Base> concept asc::std::derived_from
+namespace asc::std {
+template<class Derived, class Base> concept derived_from;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 仅在 C++20 及以上模式（`__cpp_concepts >= 201907L`）可用
-- 概念成立条件：`Derived` 与 `Base` 是同一类型，或 `Derived` 公开且无歧义地继承自 `Base`（可访问基类且无歧义路径）
+- 仅在C++20及以上模式（`__cpp_concepts >= 201907L`）可用。
+- 概念成立条件：`is_base_of_v<Base, Derived>`与`is_convertible_v<const volatile Derived*, const volatile Base*>`同时成立；普通整数类型即使相同也不满足此概念。
 
 ## 调用示例
 
@@ -54,3 +56,7 @@ struct base {};
 struct derived : base {};
 static_assert(asc::std::derived_from<derived, base>);
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_concepts.md)

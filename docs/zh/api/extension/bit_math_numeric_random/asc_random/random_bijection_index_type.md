@@ -28,18 +28,21 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::random_bijection::index_type` 表示 random_bijection 使用的索引类型。
+`asc::random_bijection::index_type`表示random_bijection使用的索引类型。
 
 ## 声明
 
+所属类型：[`asc::random_bijection`](random_bijection.md)。
+
 ```cpp
-using asc::random_bijection::index_type = Index
+// asc::random_bijection 类内的声明节选；模板形参和其他成员由所属类提供。
+using index_type = Index;
 ```
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
@@ -53,3 +56,8 @@ void use_type()
     using alias_type = typename asc::random_bijection<unsigned long long>::index_type;
 }
 ```
+
+## 关联API
+
+- [`asc::random_bijection`](random_bijection.md)
+- [本头文件的接口列表](asc_random.md)

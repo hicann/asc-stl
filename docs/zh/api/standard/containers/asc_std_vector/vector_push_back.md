@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/vector>`。
 
-`asc::std::vector::push_back` 在容器尾部插入一个元素。
+`asc::std::vector::push_back`在容器尾部插入一个元素。
 
 标准语义参考：[cppreference `vector`](https://en.cppreference.com/w/cpp/header/vector)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::vector`](vector.md)。
+
+### 原型1
 
 ```cpp
-void asc::std::vector::push_back(T&& value);
+// asc::std::vector 类内的声明节选；模板形参和其他成员由所属类提供。
+void push_back(T&& value);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-void asc::std::vector::push_back(const T& value);
+// asc::std::vector 类内的声明节选；模板形参和其他成员由所属类提供。
+void push_back(const T& value);
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
@@ -56,7 +60,7 @@ void asc::std::vector::push_back(const T& value);
 | --- | --- | --- |
 | `value` | 输入（可能被移动） | 提供插入到容器末尾的元素；函数可能移动该实参，移动后其处于有效但未指定状态。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -70,11 +74,11 @@ void asc::std::vector::push_back(const T& value);
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造
-- empty/size/capacity/data/begin/end/operator[]/front/back
-- reserve与容量内push_back/emplace_back/pop_back/clear
-- 同allocator或允许传播域的移动构造/赋值与析构
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域
+- vector<T,A>显式allocator构造。
+- empty/size/capacity/data/begin/end/`operator[]`/front/back。
+- reserve与容量内push_back/emplace_back/pop_back/clear。
+- 同allocator或允许传播域的移动构造/赋值与析构。
+- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
 
 ## 调用示例
 
@@ -90,6 +94,11 @@ decltype(auto) example(Object& object, Args&&... args)
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
 完整示例源码：[explicit_allocator_vector.cpp](../../../../examples/explicit_allocator_vector.cpp)。
+
+## 关联API
+
+- [`asc::std::vector`](vector.md)
+- [本头文件的接口列表](asc_std_vector.md)

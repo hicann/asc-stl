@@ -28,25 +28,25 @@
 
 头文件路径为：`<asc/std/random>`。
 
-构造 float 均匀实数分布，并设置或保留默认的半开采样区间。
+构造float均匀实数分布，并设置或保留默认的半开采样区间。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr asc::std::uniform_real_distribution<float>::uniform_real_distribution() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr explicit asc::std::uniform_real_distribution<float>::uniform_real_distribution(const param_type& parameters) noexcept;
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 constexpr explicit asc::std::uniform_real_distribution<float>::uniform_real_distribution(float a, float b = 1.0F) noexcept;
@@ -54,11 +54,11 @@ constexpr explicit asc::std::uniform_real_distribution<float>::uniform_real_dist
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -66,30 +66,41 @@ constexpr explicit asc::std::uniform_real_distribution<float>::uniform_real_dist
 | --- | --- | --- |
 | `parameters` | 输入 | 分布参数对象引用；以其保存的半开采样区间初始化本分布。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `a` | 输入 | 半开采样区间的下界；生成值满足 a <= x < b。 |
-| `b` | 输入 | 半开采样区间的上界；省略时为 1.0F（见原型 3 的默认实参）。 |
+| `a` | 输入 | 半开采样区间的下界；生成值满足a <= x < b。 |
+| `b` | 输入 | 半开采样区间的上界；省略时为1.0F（见原型3的默认实参）。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 仅提供 uniform_real_distribution<float>
-- 结果位于指定的半开区间内，不提供 double、long double 及其他统计分布
+- 仅提供uniform_real_distribution<float>。
+- 结果位于指定的半开区间内，不提供double、long double及其他统计分布。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/random>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    asc::std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
-    (void)distribution;
+    asc::std::uniform_real_distribution<float> distribution(2.0f, 5.0f);
+    asc::std::minstd_rand engine(7);
+    const auto value = distribution(engine);
+    return value >= 2.0f && value < 5.0f;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

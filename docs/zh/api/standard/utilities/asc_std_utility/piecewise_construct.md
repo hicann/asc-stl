@@ -28,20 +28,22 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::piecewise_construct` 标记对应类型或索引的原位构造方式。
+`asc::std::piecewise_construct`标记对应类型或索引的原位构造方式。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 声明
 
 ```cpp
-inline constexpr const piecewise_construct_t asc::std::piecewise_construct
+namespace asc::std {
+inline constexpr const piecewise_construct_t piecewise_construct;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- pair 操作不抛出异常
-- 关系运算符均为显式提供
+- 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
+- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
 
 ## 调用示例
 
@@ -52,3 +54,7 @@ inline constexpr const piecewise_construct_t asc::std::piecewise_construct
 
 auto value = asc::std::piecewise_construct;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

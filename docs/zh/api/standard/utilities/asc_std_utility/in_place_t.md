@@ -28,29 +28,38 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::in_place_t` 标记在现有存储中原位构造对象。
+`asc::std::in_place_t`标记在现有存储中原位构造对象。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 声明
 
 ```cpp
-struct asc::std::in_place_t
+namespace asc::std {
+struct in_place_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供完整的标准形式
+- 提供完整的标准形式。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/utility>
+#include <asc/std/optional>
 
-void use_type(const asc::std::in_place_t& value)
+bool example()
 {
-    (void)value;
+    asc::std::in_place_t tag{};
+    asc::std::optional<int> value(tag, 7);
+    return value.has_value() && *value == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

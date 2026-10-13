@@ -28,64 +28,72 @@
 
 头文件路径为：`<asc/std/scoped_allocator>`。
 
-`asc::std::scoped_allocator_adaptor` 在容器与嵌套元素构造间传递分配器，或把分配器重绑定到新元素类型。
+`asc::std::scoped_allocator_adaptor`在容器与嵌套元素构造间传递分配器，或把分配器重绑定到新元素类型。
 
 标准语义参考：[cppreference `scoped_allocator`](https://en.cppreference.com/w/cpp/header/scoped_allocator)。
 
 ## 声明
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class OuterAlloc, class ...InnerAllocs> class asc::std::scoped_allocator_adaptor
+namespace asc::std {
+template<class OuterAlloc, class ...InnerAllocs> class scoped_allocator_adaptor;
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class OuterAlloc, class FirstInner, class ...RestInner> class asc::std::scoped_allocator_adaptor
+namespace asc::std {
+template<class OuterAlloc, class FirstInner, class ...RestInner> class scoped_allocator_adaptor;
+} // namespace asc::std
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-template<class OuterAlloc> class asc::std::scoped_allocator_adaptor
+namespace asc::std {
+template<class OuterAlloc> class scoped_allocator_adaptor;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 遵循 scoped_allocator_adaptor 的标准分配器传播、构造、销毁、比较和交换约束
-- 参与操作的分配器必须在当前可用位置有效，Device 侧操作不得抛出异常
+- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
+- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
-#include <asc/std/scoped_allocator>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/scoped_allocator>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
+template<class T>
+struct ExampleAllocator : ::std::allocator<T> {
     using pointer = T*;
+    using const_pointer = const T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    template<class U> struct rebind { using other = ExampleAllocator<U>; };
+    ExampleAllocator() = default;
+    template<class U> ExampleAllocator(const ExampleAllocator<U>&) noexcept {}
 };
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::scoped_allocator_adaptor<example_allocator<int>>;
-    (void)sizeof(selected);
+    asc::std::scoped_allocator_adaptor<ExampleAllocator<int>> allocator;
+    int* pointer = allocator.allocate(1);
+    allocator.construct(pointer, 7);
+    const bool passed = *pointer == 7;
+    allocator.destroy(pointer);
+    allocator.deallocate(pointer, 1);
+    return passed;
 }
 ```
 
-对应完整工程使用 `C++17`，并通过Host 编译与运行验证。
+## 关联API
 
-完整示例源码：[allocator_traits.cpp](../../../../examples/allocator_traits.cpp)。
+- [本头文件的接口列表](asc_std_scoped_allocator.md)

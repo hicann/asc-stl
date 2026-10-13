@@ -28,16 +28,19 @@
 
 头文件路径为：`<asc/std/barrier>`。
 
-`asc::std::barrier::arrive` 登记当前参与者到达同步阶段并返回阶段令牌。
+`asc::std::barrier::arrive`登记当前参与者到达同步阶段并返回阶段令牌。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `barrier`](https://en.cppreference.com/w/cpp/header/barrier)。
 
 ## 函数原型
 
+所属类型：[`asc::std::barrier`](barrier.md)。
+
 ```cpp
-arrival_token asc::std::barrier::arrive(long long update);
+// asc::std::barrier 类内的声明节选；模板形参和其他成员由所属类提供。
+arrival_token arrive(long long update);
 ```
 
 ## 参数说明
@@ -46,7 +49,7 @@ arrival_token asc::std::barrier::arrive(long long update);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `update` | 输入 | 本次登记的到达数量，须为正数（缺省为 1）；单个阶段内的到达总数不得超过初始参与数。 |
+| `update` | 输入 | 本次登记的到达数量，须为正数（缺省为1）；单个阶段内的到达总数不得超过初始参与数。 |
 
 ## 返回值说明
 
@@ -56,12 +59,12 @@ arrival_token asc::std::barrier::arrive(long long update);
 
 ## 约束说明
 
-- Host 侧对象管理 Ascend 950 的 GM 状态
-- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足
+- Host侧对象管理Ascend 950的GM状态。
+- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下 Host 片段使用一个可独立完成的参与者演示调用；多参与者场景须保证并发推进。
+以下Host片段使用一个可独立完成的参与者演示调用；多参与者场景须保证并发推进。
 
 ```cpp
 #include <asc/std/barrier>
@@ -73,3 +76,8 @@ void example()
     barrier.wait(static_cast<asc::std::barrier<>::arrival_token&&>(token));
 }
 ```
+
+## 关联API
+
+- [`asc::std::barrier`](barrier.md)
+- [本头文件的接口列表](asc_std_barrier.md)

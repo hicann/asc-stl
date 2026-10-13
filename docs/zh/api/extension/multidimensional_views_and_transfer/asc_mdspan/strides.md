@@ -28,30 +28,36 @@
 
 头文件路径为：`<asc/mdspan>`。
 
-`asc::strides` 在类型中保存或编码 mdspan 各维步长。
+`asc::strides`在类型中保存或编码mdspan各维步长。
 
 ## 声明
 
 ```cpp
-template<class OffsetType, asc::std::ptrdiff_t... StaticStrides> class asc::strides
+namespace asc {
+template<class OffsetType, asc::std::ptrdiff_t... StaticStrides> class strides;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供 Host 和 GM 视图以及 AI Core SIMD 编程 UB 视图
-- 允许有符号步长
-- 可选的 Host DLPack 桥接不抛出异常
+- 提供Host和GM视图以及AI Core SIMD编程UB视图。
+- 允许有符号步长。
+- 可选的Host DLPack桥接不抛出异常。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/mdspan>
 
-void use_type()
+bool example()
 {
-    using selected = asc::strides<int, 1, 2>;
-    (void)sizeof(selected);
+    asc::strides<int, asc::dynamic_stride, 1> values(4);
+    return values.rank() == 2 && values.rank_dynamic() == 1 && values.stride(0) == 4 && values.stride(1) == 1;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_mdspan.md)

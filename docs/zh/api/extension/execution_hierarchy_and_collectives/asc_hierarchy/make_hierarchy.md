@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::make_hierarchy` 由 Grid 和 Block 尺寸构造 SIMT 层级描述。
+`asc::make_hierarchy`由Grid和Block尺寸构造SIMT层级描述。
 
 ## 函数原型
 
 ```cpp
-constexpr asc::simt_hierarchy asc::make_hierarchy(asc::level_dimensions<asc::grid_level> grid, asc::level_dimensions<asc::block_level> block) noexcept;
+namespace asc {
+constexpr asc::simt_hierarchy make_hierarchy(asc::level_dimensions<asc::grid_level> grid, asc::level_dimensions<asc::block_level> block) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,8 +44,8 @@ constexpr asc::simt_hierarchy asc::make_hierarchy(asc::level_dimensions<asc::gri
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `grid` | 输入 | Grid 级维度描述（level_dimensions<grid_level>，由 grid_dims 获得）：携带 Grid 三维尺寸，每维非零。 |
-| `block` | 输入 | Block 级维度描述（level_dimensions<block_level>，由 block_dims 获得）：携带 Block 三维尺寸，每维非零。 |
+| `grid` | 输入 | Grid级维度描述（level_dimensions<grid_level>，由grid_dims获得）：携带Grid三维尺寸，每维非零。 |
+| `block` | 输入 | Block级维度描述（level_dimensions<block_level>，由block_dims获得）：携带Block三维尺寸，每维非零。 |
 
 ## 返回值说明
 
@@ -53,9 +55,9 @@ constexpr asc::simt_hierarchy asc::make_hierarchy(asc::level_dimensions<asc::gri
 
 ## 约束说明
 
-- 提供 C++17 constexpr Host/Device 层次结构接口
-- 带 extent 的值要求每一维均非零
-- extent 总数按无符号 64 位的 x*y*z 计算
+- 提供C++17 constexpr Host/Device层次结构接口。
+- 带extent的值要求每一维均非零。
+- extent总数按无符号64位的x*y*z计算。
 
 ## 调用示例
 
@@ -69,3 +71,7 @@ decltype(auto) example(asc::level_dimensions<asc::grid_level> grid, asc::level_d
     return asc::make_hierarchy(grid, block);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_hierarchy.md)

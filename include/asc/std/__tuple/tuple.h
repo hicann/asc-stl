@@ -129,12 +129,12 @@ public:
     template <size_t Index>
     CANN_ASC_STL_API constexpr decltype(auto) __get() && noexcept
     {
-        return ::asc::std::move(base::template get<Index>());
+        return static_cast<tuple_element_t<Index, tuple>&&>(base::template get<Index>());
     }
     template <size_t Index>
     CANN_ASC_STL_API constexpr decltype(auto) __get() const&& noexcept
     {
-        return ::asc::std::move(base::template get<Index>());
+        return static_cast<const tuple_element_t<Index, tuple>&&>(base::template get<Index>());
     }
     CANN_ASC_STL_API constexpr void swap(tuple& other) noexcept(noexcept(base::swap(other)))
     {

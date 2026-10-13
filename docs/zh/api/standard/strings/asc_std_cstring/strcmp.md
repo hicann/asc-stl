@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/cstring>`。
 
-`asc::std::strcmp` 按字符顺序比较两个窄字符串；AI Core SIMD 编程 仅接受兼容的普通指针地址空间。
+`asc::std::strcmp`按字符顺序比较两个窄字符串；AI Core SIMD编程 仅接受兼容的普通指针地址空间。
 
 标准语义参考：[cppreference `cstring`](https://en.cppreference.com/w/cpp/header/cstring)。
 
 ## 函数原型
 
 ```cpp
-[[nodiscard]] constexpr int asc::std::strcmp(const char* left, const char* right);
+namespace asc::std {
+[[nodiscard]] constexpr int strcmp(const char* left, const char* right);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -55,9 +57,9 @@
 
 ## 约束说明
 
-- 在 Host 侧和 AI Core SIMT 编程中使用普通指针
-- AI Core SIMD 编程中使用 local 或 generic 地址空间的普通指针
-- 仅 memmove 允许源和目标重叠
+- 在Host侧和AI Core SIMT编程中使用普通指针。
+- AI Core SIMD编程中使用local或generic地址空间的普通指针。
+- 仅memmove允许源和目标重叠。
 
 ## 调用示例
 
@@ -71,3 +73,7 @@ decltype(auto) example(const char * left, const char * right)
     return asc::std::strcmp(left, right);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_cstring.md)

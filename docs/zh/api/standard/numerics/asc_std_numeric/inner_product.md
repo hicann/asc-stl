@@ -28,27 +28,31 @@
 
 头文件路径为：`<asc/std/numeric>`。
 
-`asc::std::inner_product` 对两个范围逐项组合并从初值归约结果。
+`asc::std::inner_product`对两个范围逐项组合并从初值归约结果。
 
 标准语义参考：[cppreference `numeric`](https://en.cppreference.com/w/cpp/header/numeric)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class InputIterator1, class InputIterator2, class T, class BinaryOperation1, class BinaryOperation2> [[nodiscard]] constexpr T asc::std::inner_product(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, T init, BinaryOperation1 binary_op1, BinaryOperation2 binary_op2);
+namespace asc::std {
+template<class InputIterator1, class InputIterator2, class T, class BinaryOperation1, class BinaryOperation2> [[nodiscard]] constexpr T inner_product(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, T init, BinaryOperation1 binary_op1, BinaryOperation2 binary_op2);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] constexpr T asc::std::inner_product(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, T init);
+namespace asc::std {
+template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] constexpr T inner_product(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, T init);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
@@ -68,10 +72,10 @@ template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] cons
 | `last1` | 输入 | 第一个输入范围的结束位置，不包含该位置。 |
 | `first2` | 输入 | 第二个输入范围的起始迭代器；该范围长度不得小于第一个范围。 |
 | `init` | 输入 | 归约初值，作为逐元素合并的起始累加值；范围为空时原样返回该值。 |
-| `binary_op1` | 输入 | 二元归约运算对象，把 binary_op2 组合两个范围对应元素的结果并入当前累加值。 |
+| `binary_op1` | 输入 | 二元归约运算对象，把binary_op2组合两个范围对应元素的结果并入当前累加值。 |
 | `binary_op2` | 输入 | 二元组合运算对象，作用于两个范围中对应位置的元素；省略该参数的重载使用逐项相乘。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -94,13 +98,13 @@ template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] cons
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `T` | 返回输入值按接口规定运算后的数值结果。 |
-| 原型 2 | `T` | 返回输入值按接口规定运算后的数值结果。 |
+| 原型1 | `T` | 返回输入值按接口规定运算后的数值结果。 |
+| 原型2 | `T` | 返回输入值按接口规定运算后的数值结果。 |
 
 ## 约束说明
 
-- 提供顺序迭代器/值重载
-- 本族中标准定义的执行策略重载采用顺序执行语义
+- 提供顺序迭代器/值重载。
+- 本族中标准定义的执行策略重载采用顺序执行语义。
 
 ## 调用示例
 
@@ -115,3 +119,7 @@ decltype(auto) example()
     return asc::std::inner_product(input, input + 4, input, 0);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_numeric.md)

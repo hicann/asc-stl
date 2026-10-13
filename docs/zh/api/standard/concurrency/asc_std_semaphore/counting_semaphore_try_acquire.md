@@ -28,16 +28,19 @@
 
 头文件路径为：`<asc/std/semaphore>`。
 
-`asc::std::counting_semaphore::try_acquire` 尝试消耗一个信号量许可并报告结果。
+`asc::std::counting_semaphore::try_acquire`尝试消耗一个信号量许可并报告结果。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `semaphore`](https://en.cppreference.com/w/cpp/header/semaphore)。
 
 ## 函数原型
 
+所属类型：[`asc::std::counting_semaphore`](counting_semaphore.md)。
+
 ```cpp
-bool asc::std::counting_semaphore::try_acquire() noexcept;
+// asc::std::counting_semaphore 类内的声明节选；模板形参和其他成员由所属类提供。
+bool try_acquire() noexcept;
 ```
 
 ## 参数说明
@@ -48,22 +51,31 @@ bool asc::std::counting_semaphore::try_acquire() noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- Host 侧对象管理 Ascend 950 的 GM 状态
-- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足
+- Host侧对象管理Ascend 950的GM状态。
+- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/semaphore>
 
-void example(asc::std::counting_semaphore<4>& object)
+bool example()
 {
-    (void)object.try_acquire();
+    asc::std::counting_semaphore<4> slots(1);
+    slots.acquire();
+    const bool empty = !slots.try_acquire();
+    slots.release();
+    return empty && slots.try_acquire() && slots.max() >= 1;
 }
 ```
+
+## 关联API
+
+- [`asc::std::counting_semaphore`](counting_semaphore.md)
+- [本头文件的接口列表](asc_std_semaphore.md)

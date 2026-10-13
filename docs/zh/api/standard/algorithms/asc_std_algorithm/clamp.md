@@ -28,33 +28,37 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::clamp` 用于将 `value` 限制在由 `lower` 和 `upper` 确定的闭区间内，自 C++17 起提供。当 `value` 位于下界之前时返回 `lower`，位于上界之后时返回 `upper`，否则返回 `value`；需要使用自定义顺序时，可通过 `compare` 参数指定比较规则。
+`asc::std::clamp`用于将`value`限制在由`lower`和`upper`确定的闭区间内，自C++17起提供。当`value`位于下界之前时返回`lower`，位于上界之后时返回`upper`，否则返回`value`；需要使用自定义顺序时，可通过`compare`参数指定比较规则。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
-template<class T, class Compare> [[nodiscard]] constexpr const T& asc::std::clamp(const T& value, const T& lower, const T& upper, Compare compare);
+namespace asc::std {
+template<class T, class Compare> [[nodiscard]] constexpr const T& clamp(const T& value, const T& lower, const T& upper, Compare compare);
+} // namespace asc::std
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-template<class T> [[nodiscard]] constexpr const T& asc::std::clamp(const T& value, const T& lower, const T& upper);
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr const T& clamp(const T& value, const T& lower, const T& upper);
+} // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | value、lower 和 upper 的类型；三个参数必须能够按照所选比较规则进行比较。 |
+| `T` | value、lower和upper的类型；三个参数必须能够按照所选比较规则进行比较。 |
 | `Compare` | 自定义比较对象的类型；该对象用于判断第一个参数是否位于第二个参数之前。 |
 
 **函数参数**
@@ -64,15 +68,15 @@ template<class T> [[nodiscard]] constexpr const T& asc::std::clamp(const T& valu
 | `value` | 输入 | 待限制到指定区间内的值。 |
 | `lower` | 输入 | 区间下界。 |
 | `upper` | 输入 | 区间上界。 |
-| `compare` | 输入 | 自定义比较对象；compare(left, right) 返回 true 时表示 left 位于 right 之前。 |
+| `compare` | 输入 | 自定义比较对象；compare(left, right)返回true时表示left位于right之前。 |
 
-### 原型 2 的参数
+### 原型2的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | value、lower 和 upper 的类型；三个参数必须能够按照所选比较规则进行比较。 |
+| `T` | value、lower和upper的类型；三个参数必须能够按照所选比较规则进行比较。 |
 
 **函数参数**
 
@@ -86,14 +90,14 @@ template<class T> [[nodiscard]] constexpr const T& asc::std::clamp(const T& valu
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `const T &` | 返回 value、lower 或 upper 中一个对象的常量引用；被引用对象在结果使用期间必须保持有效。 |
-| 原型 2 | `const T &` | 返回 value、lower 或 upper 中一个对象的常量引用；被引用对象在结果使用期间必须保持有效。 |
+| 原型1 | `const T &` | 返回value、lower或upper中一个对象的常量引用；被引用对象在结果使用期间必须保持有效。 |
+| 原型2 | `const T &` | 返回value、lower或upper中一个对象的常量引用；被引用对象在结果使用期间必须保持有效。 |
 
 ## 约束说明
 
-- lower 和 upper 必须按所选比较关系构成有效区间
-- compare 必须建立严格弱序且不能修改参与比较的对象
-- 返回引用不延长 value、lower 或 upper 的生命周期
+- lower和upper必须按所选比较关系构成有效区间。
+- compare必须建立严格弱序且不能修改参与比较的对象。
+- 返回引用不延长value、lower或upper的生命周期。
 
 ## 调用示例
 
@@ -121,3 +125,7 @@ bool example()
         && upper_result == 10 && &upper_result == &upper;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_algorithm.md)

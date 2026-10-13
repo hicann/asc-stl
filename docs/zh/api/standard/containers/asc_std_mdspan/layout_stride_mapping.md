@@ -28,32 +28,41 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`layout_stride::mapping<Extents>` 按调用方提供的各维步长把多维索引映射到线性存储偏移。
+`layout_stride::mapping<Extents>`按调用方提供的各维步长把多维索引映射到线性存储偏移。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 声明
 
+所属类型：[`asc::std::layout_stride`](layout_stride.md)。
+
 ```cpp
-template<class Extents> class asc::std::layout_stride::mapping
+// asc::std::layout_stride 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Extents> class mapping;
 ```
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整layout_left/layout_right/layout_stride mapping及default_accessor/aligned_accessor家族：零rank与正rank、默认/extents/array/span/跨mapping或accessor构造、标准显式性与约束、索引映射、要求d_span_size/stride/extents、唯一/穷尽/步长观察、mapping比较、access/offset及byte_alignment
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain pointer域
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/mdspan>
-#include <asc/std/cstddef>
+#include <asc/std/array>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::layout_stride::mapping<asc::std::extents<asc::std::size_t, 2, 3>>;
-    (void)sizeof(selected);
+    using shape = asc::std::extents<int, 2, 3>;
+    asc::std::array<int, 2> strides{{4, 1}};
+    asc::std::layout_stride::mapping<shape> mapping(shape{}, strides);
+    return mapping(1, 2) == 6 && mapping.required_span_size() == 7 && !mapping.is_exhaustive();
 }
 ```
+
+## 关联API
+
+- [`asc::std::layout_stride`](layout_stride.md)
+- [本头文件的接口列表](asc_std_mdspan.md)

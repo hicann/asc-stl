@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::mdspan::data_handle` 返回当前多维视图的底层数据句柄。
+`asc::std::mdspan::data_handle`返回当前多维视图的底层数据句柄。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 函数原型
 
+所属类型：[`asc::std::mdspan`](mdspan.md)。
+
 ```cpp
-constexpr data_handle_type asc::std::mdspan::data_handle() const noexcept;
+// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr data_handle_type data_handle() const noexcept;
 ```
 
 ## 参数说明
@@ -50,20 +53,27 @@ constexpr data_handle_type asc::std::mdspan::data_handle() const noexcept;
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库的完整标准mdspan view家族：全部成员类型与rank/static_extent观察，默认/拷贝/移动、data_handle+维度包/array/span/extents/mapping/mapping+accessor及跨mdspan构造，赋值与deduction guides，array/span下标、size/empty/swap、data_handle/mapping/accessor/extents/extent及映射属性观察
-- C++20开放rank-one operator[]，C++2b条件开放标准多索引operator[]
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程兼容plain pointer域
+- C++20开放rank-one `operator[]`，C++2b条件开放标准多索引operator[]。
+- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/mdspan>
-#include <asc/std/cstddef>
+#include <asc/std/type_traits>
 
-void example(asc::std::mdspan<int, asc::std::extents<asc::std::size_t, 2, 3>, asc::std::layout_right, asc::std::default_accessor<int>>& object)
+bool example()
 {
-    (void)object.data_handle();
+    int values[] = {1, 2, 3, 4, 5, 6};
+    using Extents = asc::std::extents<asc::std::size_t, 2, 3>;
+    asc::std::mdspan<int, Extents> view(values);
+    return view.data_handle() == values;
 }
 ```
+
+## 关联API
+
+- [`asc::std::mdspan`](mdspan.md)
+- [本头文件的接口列表](asc_std_mdspan.md)

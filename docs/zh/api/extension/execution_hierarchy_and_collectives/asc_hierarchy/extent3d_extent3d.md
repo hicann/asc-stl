@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::extent3d::extent3d` 使用调用方提供的参数初始化 `asc::extent3d` 对象。
+`asc::extent3d::extent3d`使用调用方提供的参数初始化`asc::extent3d`对象。
 
 ## 函数原型
 
+所属类型：[`asc::extent3d`](extent3d.md)。
+
 ```cpp
-constexpr asc::extent3d::extent3d(unsigned int x = 1, unsigned int y = 1, unsigned int z = 1) noexcept;
+// asc::extent3d 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr extent3d(unsigned int x = 1, unsigned int y = 1, unsigned int z = 1) noexcept;
 ```
 
 ## 参数说明
@@ -42,26 +45,35 @@ constexpr asc::extent3d::extent3d(unsigned int x = 1, unsigned int y = 1, unsign
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | x 维（第 1 维）的元素个数，无符号 32 位，缺省 1；带 extent 的值要求该维非零。 |
-| `y` | 输入 | y 维（第 2 维）的元素个数，无符号 32 位，缺省 1；带 extent 的值要求该维非零。 |
-| `z` | 输入 | z 维（第 3 维）的元素个数，无符号 32 位，缺省 1；带 extent 的值要求该维非零。 |
+| `x` | 输入 | x维（第1维）的元素个数，无符号32位，缺省1；带extent的值要求该维非零。 |
+| `y` | 输入 | y维（第2维）的元素个数，无符号32位，缺省1；带extent的值要求该维非零。 |
+| `z` | 输入 | z维（第3维）的元素个数，无符号32位，缺省1；带extent的值要求该维非零。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 提供 C++17 constexpr Host/Device 层次结构接口
-- 带 extent 的值要求每一维均非零
-- extent 总数按无符号 64 位的 x*y*z 计算
+- 提供C++17 constexpr Host/Device层次结构接口。
+- 带extent的值要求每一维均非零。
+- extent总数按无符号64位的x*y*z计算。
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示本页接口；对象和指针的有效期须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/hierarchy>
 
-void example()
+bool example()
 {
     asc::extent3d dimensions(2, 3, 4);
-    (void)dimensions.count();
+    return dimensions.x == 2 && dimensions.y == 3 && dimensions.z == 4 && dimensions.count() == 24;
 }
 ```
+
+## 关联API
+
+- [`asc::extent3d`](extent3d.md)
+- [本头文件的接口列表](asc_hierarchy.md)

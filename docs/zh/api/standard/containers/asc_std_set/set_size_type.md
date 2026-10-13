@@ -28,31 +28,29 @@
 
 头文件路径为：`<asc/std/set>`。
 
-`asc::std::set::size_type` 标识容器大小的无符号类型。
+`asc::std::set::size_type`标识容器大小的无符号类型。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `set`](https://en.cppreference.com/w/cpp/header/set)。
 
 ## 声明
 
+所属类型：[`asc::std::set`](set.md)。
+
 ```cpp
-using asc::std::set::size_type = unsigned long
+// asc::std::set 类内的声明节选；模板形参和其他成员由所属类提供。
+using size_type = unsigned long;
 ```
 
 ## 约束说明
 
-- Host及AI Core SIMT 编程下set<Key,Compare,A>显式GM arena
-- allocator以及Compare+allocator构造
-- empty/size/begin/end/insert/find/count/clear
-- AVL平衡与对数级插入/查找核心
-- 重复键拒绝、有序迭代、移动和析构
-- 仅容量充足和不抛出异常键/比较/allocator域
-- Host 和 AI Core SIMT 编程
+- 此别名表示所属类型用于元素数量或大小的无符号整数类型；读取类型本身不分配内存，也不访问元素。
+- 构造、分配和访问的运行条件见所属类型[asc::std::set](set.md)。
 
 ## 调用示例
 
-以下 Host 片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
 
 ```cpp
 #include <asc/std/set>
@@ -77,3 +75,8 @@ void use_type()
     using alias_type = typename asc::std::set<int, ::std::less<int>, example_allocator<int>>::size_type;
 }
 ```
+
+## 关联API
+
+- [`asc::std::set`](set.md)
+- [本头文件的接口列表](asc_std_set.md)

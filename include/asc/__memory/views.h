@@ -78,7 +78,7 @@ public:
     {
         return size_ == 0;
     }
-    CANN_ASC_STL_API constexpr T& operator[](size_type index) const noexcept
+    CANN_ASC_STL_API constexpr CANN_ASC_STL_DETAIL_MEMORY_GM T& operator[](size_type index) const noexcept
     {
         return data_[index];
     }
@@ -133,7 +133,7 @@ public:
     {
         return size_ == 0;
     }
-    CANN_ASC_STL_API constexpr T& operator[](size_type index) const noexcept
+    CANN_ASC_STL_API constexpr CANN_ASC_STL_DETAIL_MEMORY_UB T& operator[](size_type index) const noexcept
     {
         return data_[index];
     }

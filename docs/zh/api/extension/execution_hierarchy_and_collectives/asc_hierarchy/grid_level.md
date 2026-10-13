@@ -28,29 +28,36 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::grid_level` 作为 SIMT Grid 层级的类型标签。
+`asc::grid_level`作为SIMT Grid层级的类型标签。
 
 ## 声明
 
 ```cpp
-struct asc::grid_level
+namespace asc {
+struct grid_level;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 提供 C++17 constexpr Host/Device 层次结构接口
-- 带 extent 的值要求每一维均非零
-- extent 总数按无符号 64 位的 x*y*z 计算
+- 提供C++17 constexpr Host/Device层次结构接口。
+- 带extent的值要求每一维均非零。
+- extent总数按无符号64位的x*y*z计算。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/hierarchy>
 
-void use_type(const asc::grid_level& value)
+bool example()
 {
-    (void)value;
+    asc::level_dimensions<asc::grid_level> dimensions{asc::extent3d{2, 3, 4}};
+    return dimensions.extents.count() == 24;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_hierarchy.md)

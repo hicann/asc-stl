@@ -28,24 +28,25 @@
 
 头文件路径为：`<asc/std/mdspan>`、`<asc/std/span>`。
 
-`asc::std::dynamic_extent` 标记多维结构中长度在运行期确定的维度。
+`asc::std::dynamic_extent`标记多维结构中长度在运行期确定的维度。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
 ## 声明
 
 ```cpp
-inline constexpr const size_t asc::std::dynamic_extent
+namespace asc::std {
+inline constexpr const size_t dynamic_extent;
+} // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/mdspan>`、`<asc/std/span>`。
 
 ## 约束说明
 
-- 支持固定或动态 extent，以及指针、数组和兼容的连续范围
-- AI Core SIMD 编程 中仅当元素指针或范围可表示为标准普通指针时才可使用，不提供非标准 GM/UB 指针重载
-- 固定当前版本的 C++ 标准库的完整dynamic_extent/extents/dextents/dims家族：零rank与正rank、默认/按rank或rank_dynamic传值/array/span/跨extents构造、标准显式性与约束、deduction guide、相等比较及rank/rank_dynamic/static_extent/extent观察
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 支持固定或动态extent，以及指针、数组和兼容的连续范围。
+- AI Core SIMD编程 中仅当元素指针或范围可表示为标准普通指针时才可使用，不提供非标准GM/UB指针重载。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
@@ -56,3 +57,7 @@ inline constexpr const size_t asc::std::dynamic_extent
 
 auto value = asc::std::dynamic_extent;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_mdspan.md)

@@ -297,8 +297,7 @@ CANN_ASC_STL_API constexpr size_t __submdspan_offset(
     const array<index_type, extents_type::rank()> offsets = {
         ::asc::std::__first_extent_from_slice<index_type, SliceIndices>(slices...)...};
 
-    using sub_extents = __mdspan_detail::__get_subextents_t<extents_type, Slices...>;
-    for (size_t index = 0; index != sub_extents::rank(); ++index) {
+    for (size_t index = 0; index != extents_type::rank(); ++index) {
         // 若任一 first_<index_type, k>(slices...) 等于 extents().extent(k)，
         // 则 offset 为 (*this).required_span_size()
         if (offsets[index] == mapping.extents().extent(index)) {
@@ -321,7 +320,8 @@ CANN_ASC_STL_API constexpr size_t __submdspan_offset(const LayoutMapping& mappin
 template <class SliceType, class = void>
 struct __is_strided_slice_stride_of_one_impl : false_type {};
 template <class SliceType>
-struct __is_strided_slice_stride_of_one_impl<SliceType, void_t<typename SliceType::stride_type>>
+struct __is_strided_slice_stride_of_one_impl<SliceType,
+    void_t<typename SliceType::stride_type, decltype(SliceType::stride_type::value)>>
     : bool_constant<__is_strided_slice<remove_cv_t<SliceType>> &&
           __mdspan_detail::__integral_constant_like_v<typename SliceType::stride_type> &&
           (SliceType::stride_type::value == 1)> {};
@@ -347,20 +347,28 @@ CANN_ASC_STL_API constexpr bool __is_unit_stride_slice()
 }
 
 // [mdspan.sub.map.left]
-template <class LayoutMapping, class SubExtents, class Slice, class... OtherSlices>
+template <class LayoutMapping, class SubExtents, class... Slices>
 CANN_ASC_STL_API constexpr bool __can_layout_left()
 {
-    // [mdspan.sub.map.left-1.2]
     if constexpr (SubExtents::rank() == 0) {
         return true;
-    } else if constexpr (sizeof...(OtherSlices) == 0) {
-        // [mdspan.sub.map.left-1.3.2]
-        return ::asc::std::__is_unit_stride_slice<LayoutMapping, Slice>();
-    } else if constexpr (is_convertible_v<Slice, full_extent_t>) {
-        // [mdspan.sub.map.left-1.3.1]
-        return ::asc::std::__can_layout_left<LayoutMapping, SubExtents, OtherSlices...>();
     } else {
-        return false;
+        constexpr bool indexed[] = {is_convertible_v<Slices, typename LayoutMapping::index_type>...};
+        constexpr bool full[] = {is_convertible_v<Slices, full_extent_t>...};
+        constexpr bool unit[] = {::asc::std::__is_unit_stride_slice<LayoutMapping, Slices>()...};
+        size_t last = sizeof...(Slices);
+        while (last != 0 && indexed[last - 1]) {
+            --last;
+        }
+        if (last == 0 || !unit[last - 1]) {
+            return false;
+        }
+        for (size_t index = 0; index + 1 < last; ++index) {
+            if (!full[index]) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 
@@ -392,20 +400,28 @@ CANN_ASC_STL_API constexpr auto __submdspan_mapping_impl(
 }
 
 // [mdspan.sub.map.right]
-template <class LayoutMapping, class SubExtents, class Slice, class... OtherSlices>
+template <class LayoutMapping, class SubExtents, class... Slices>
 CANN_ASC_STL_API constexpr bool __can_layout_right()
 {
-    // [mdspan.sub.map.right-1.2]
     if constexpr (SubExtents::rank() == 0) {
         return true;
-    } else if constexpr (sizeof...(OtherSlices) == 0) {
-        // [mdspan.sub.map.right-1.3.2]
-        return ::asc::std::__is_unit_stride_slice<LayoutMapping, Slice>();
-    } else if constexpr (is_convertible_v<Slice, full_extent_t>) {
-        // [mdspan.sub.map.right-1.3.1]
-        return ::asc::std::__can_layout_right<LayoutMapping, SubExtents, OtherSlices...>();
     } else {
-        return false;
+        constexpr bool indexed[] = {is_convertible_v<Slices, typename LayoutMapping::index_type>...};
+        constexpr bool full[] = {is_convertible_v<Slices, full_extent_t>...};
+        constexpr bool unit[] = {::asc::std::__is_unit_stride_slice<LayoutMapping, Slices>()...};
+        size_t first = 0;
+        while (first != sizeof...(Slices) && indexed[first]) {
+            ++first;
+        }
+        if (first == sizeof...(Slices) || !unit[first]) {
+            return false;
+        }
+        for (size_t index = first + 1; index < sizeof...(Slices); ++index) {
+            if (!full[index]) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 

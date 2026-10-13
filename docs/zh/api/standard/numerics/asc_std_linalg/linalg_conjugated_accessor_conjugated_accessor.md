@@ -28,25 +28,25 @@
 
 头文件路径为：`<asc/std/linalg>`。
 
-`asc::std::linalg::conjugated_accessor::conjugated_accessor` 按本页所列构造形态初始化 `conjugated_accessor` 对象。
+`asc::std::linalg::conjugated_accessor::conjugated_accessor`按本页所列构造形态初始化`conjugated_accessor`对象。
 
 标准语义参考：[cppreference `linalg`](https://en.cppreference.com/w/cpp/header/linalg)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 constexpr conjugated_accessor();
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr conjugated_accessor(const NestedAccessor& accessor);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
 template<class OtherNestedAccessor> constexpr conjugated_accessor(const conjugated_accessor<OtherNestedAccessor>& other);
@@ -54,49 +54,60 @@ template<class OtherNestedAccessor> constexpr conjugated_accessor(const conjugat
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `accessor` | 输入 | 提供“按本页所列构造形态初始化 `conjugated_accessor` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `accessor` | 输入 | 提供“按本页所列构造形态初始化`conjugated_accessor`对象”使用的对象引用；被引用对象须在调用期间有效。 |
 
-### 原型 3 的参数
+### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherNestedAccessor` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `OtherNestedAccessor` | 来源访问器类型；须能转换为当前嵌套访问器类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
+
+## 返回值说明
+
+无返回值。
 
 ## 约束说明
 
-- 固定当前版本的 C++ 标准库公共入口的完整7实体合同：scaled/scaled_accessor、conjugated/conjugated_accessor、transposed/layout_transpose、conjugate_transposed
-- 包括access/offset/nested accessor/factor、转换构造、算术类型共轭不变、ADL可共轭类型、双重共轭/转置消去、rank-2静态/动态extents交换、layout_left/right/stride与通用layout_transpose mapping全部观察/比较
-- 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下 Host 片段使用具体范围或访问器演示调用；底层存储在调用期间须保持有效。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/linalg>
+#include <asc/std/complex>
+#include <asc/std/type_traits>
 
-void example()
+using Accessor = asc::std::linalg::conjugated_accessor<asc::std::default_accessor<asc::std::complex<float>>>;
+
+bool example()
 {
-    using accessor_type = asc::std::linalg::conjugated_accessor<asc::std::default_accessor<asc::std::complex<float>>>;
-    accessor_type accessor{};
-    (void)accessor;
+    asc::std::complex<float> values[] = {{2.0f, 3.0f}};
+    Accessor accessor;
+    auto value = accessor.access(values, 0);
+    return value.real() == 2.0f && value.imag() == -3.0f;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_linalg.md)

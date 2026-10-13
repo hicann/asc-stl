@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/ctime>`。
 
-`asc::std::difftime` 计算两个时间值之间以秒为单位的差。
+`asc::std::difftime`计算两个时间值之间以秒为单位的差。
 
 标准语义参考：[cppreference `ctime`](https://en.cppreference.com/w/cpp/header/ctime)。
 
 ## 函数原型
 
 ```cpp
-constexpr double asc::std::difftime(time_t end, time_t start) noexcept;
+namespace asc::std {
+constexpr double difftime(time_t end, time_t start) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -45,7 +47,7 @@ constexpr double asc::std::difftime(time_t end, time_t start) noexcept;
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `end` | 输入 | 结束时刻的日历时间（time_t，单位为秒）。 |
-| `start` | 输入 | 起始时刻的日历时间（time_t，单位为秒）；返回 end 减 start 的秒数差。 |
+| `start` | 输入 | 起始时刻的日历时间（time_t，单位为秒）；返回end减start的秒数差。 |
 
 ## 返回值说明
 
@@ -55,9 +57,9 @@ constexpr double asc::std::difftime(time_t end, time_t start) noexcept;
 
 ## 约束说明
 
-- Host 使用标准时钟
-- AI Core SIMD 编程中使用 get_sys_cnt，AI Core SIMT 编程中使用 clock64
-- Device 计数器频率为页面声明的 1 GHz，difftime 仅进行值计算
+- Host使用标准时钟。
+- AI Core SIMD编程中使用get_sys_cnt，AI Core SIMT编程中使用clock64。
+- Device计数器频率为页面声明的1 GHz，difftime仅进行值计算。
 
 ## 调用示例
 
@@ -71,3 +73,7 @@ decltype(auto) example(asc::std::time_t end, asc::std::time_t start)
     return asc::std::difftime(end, start);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_ctime.md)

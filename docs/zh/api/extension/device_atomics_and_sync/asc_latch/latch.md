@@ -28,32 +28,37 @@
 
 头文件路径为：`<asc/latch>`。
 
-`asc::latch` 提供计数只递减一次、归零后永久放行等待者的线程同步对象。
+`asc::latch`提供计数只递减一次、归零后永久放行等待者的线程同步对象。
 
 ## 声明
 
 ```cpp
-template<asc::memory_scope Scope> class asc::latch
+namespace asc {
+template<asc::memory_scope Scope> class latch;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 使用 C++17
-- 在 AI Core SIMT 编程 中操作调用方管理的 GM 状态
-- Scope 必须为 asc::memory_scope::block 或 asc::memory_scope::device
-- 所有阻塞参与者必须能够并发推进
-- 复制构造和复制赋值已删除
+- 使用C++17。
+- 在AI Core SIMT编程 中操作调用方管理的GM状态。
+- Scope必须为asc::memory_scope::block或asc::memory_scope::device。
+- 所有阻塞参与者必须能够并发推进。
+- 复制构造和复制赋值已删除。
 
 ## 调用示例
 
-以下片段用具体模板实参实例化类型；实际对象仍须满足本页构造与生命周期约束。
+以下片段用于D-SIMT编译。latch位于已初始化的共享GM存储；期望计数等于参与线程数，每个参与者调用一次。计数归零后不可重置复用。
 
 ```cpp
 #include <asc/latch>
 
-__aicore__ void use_type()
+__aicore__ void example(asc::latch<asc::memory_scope::block>& latch)
 {
-    using selected = asc::latch<asc::memory_scope::device>;
-    (void)sizeof(selected);
+    latch.arrive_and_wait();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_latch.md)

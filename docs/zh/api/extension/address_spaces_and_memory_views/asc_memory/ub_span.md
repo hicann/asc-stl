@@ -28,30 +28,39 @@
 
 头文件路径为：`<asc/memory>`。
 
-`asc::ub_span<T>` 是不拥有存储的 UB 连续内存视图，保存首元素指针和元素数量，可用于访问、切片和查询字节数。
+`asc::ub_span<T>`是不拥有存储的UB连续内存视图，保存首元素指针和元素数量，可用于访问、切片和查询字节数。
 
 ## 声明
 
 ```cpp
-template<class T> class asc::ub_span
+namespace asc {
+template<class T> class ub_span;
+} // namespace asc
 ```
 
 ## 约束说明
 
-- 仅可在 AI Core SIMD 编程中使用
-- 视图不管理存储生命周期
-- 底层 UB 区域必须在视图使用期间保持有效
+- D-SIMD下，元素下标访问返回保留UB（__ubuf__） 地址空间及元素const限定的引用；Host下为普通引用。
+- 仅可在AI Core SIMD编程中使用。
+- 视图不管理存储生命周期。
+- 底层UB区域必须在视图使用期间保持有效。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下片段用于D-SIMD编译。调用方提供至少4个int的有效UB区域；本视图不负责分配或释放。
 
 ```cpp
 #include <asc/memory>
 
-void use_type()
+__aicore__ bool example(__ubuf__ int* storage)
 {
-    using selected = asc::ub_span<int>;
-    (void)sizeof(selected);
+    asc::ub_span<int> values(storage, 4);
+    values[1] = 7;
+    auto tail = values.subspan(1, 2);
+    return tail.size() == 2 && tail[0] == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_memory.md)

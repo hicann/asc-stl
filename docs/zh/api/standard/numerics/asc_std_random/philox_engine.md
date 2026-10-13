@@ -28,31 +28,40 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::philox_engine` 保存计数器型伪随机引擎的状态并生成数值。
+`asc::std::philox_engine`保存计数器型伪随机引擎的状态并生成数值。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 声明
 
 ```cpp
-template<class UIntType, size_t WordSize, size_t WordCount, size_t NumRounds, UIntType... Constants> class asc::std::philox_engine
+namespace asc::std {
+template<class UIntType, size_t WordSize, size_t WordCount, size_t NumRounds, UIntType... Constants> class philox_engine;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式
-- 不提供 SeedSequence、流式输入输出或共享全局状态
+- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
+- 不提供SeedSequence、流式输入输出或共享全局状态。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/std/random>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::philox4x32;
-    (void)sizeof(selected);
+    asc::std::philox4x32 first;
+    asc::std::philox4x32 second;
+    const auto a = first();
+    const auto b = second();
+    return a == b && first() == second();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

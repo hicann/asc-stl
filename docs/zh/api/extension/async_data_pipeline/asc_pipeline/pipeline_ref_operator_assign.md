@@ -1,4 +1,4 @@
-# asc::pipeline_ref::operator=
+# asc::pipeline_ref::`operator=`
 
 ## 产品支持情况
 
@@ -28,12 +28,15 @@
 
 头文件路径为：`<asc/pipeline>`。
 
-`asc::pipeline_ref::operator=` 复制另一引用保存的流水级 Event 配置。
+`asc::pipeline_ref::operator=`复制另一引用保存的流水级Event配置。
 
 ## 函数原型
 
+所属类型：[`asc::pipeline_ref`](pipeline_ref.md)。
+
 ```cpp
-asc::pipeline_ref& asc::pipeline_ref::operator=(const asc::pipeline_ref&) noexcept;
+// asc::pipeline_ref 类内的声明节选；模板形参和其他成员由所属类提供。
+asc::pipeline_ref& operator=(const asc::pipeline_ref&) noexcept;
 ```
 
 ## 参数说明
@@ -52,12 +55,12 @@ asc::pipeline_ref& asc::pipeline_ref::operator=(const asc::pipeline_ref&) noexce
 
 ## 约束说明
 
-- 仅可在 AI Core SIMD 编程中调用
-- 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明
+- 仅可在AI Core SIMD编程中调用。
+- 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明。
 
 ## 调用示例
 
-以下 AI Core SIMD 片段演示阶段操作；事件 ID 和调用顺序须满足本页约束。
+以下AI Core SIMD片段演示阶段操作；事件ID和调用顺序须满足本页约束。
 
 ```cpp
 #include <asc/pipeline>
@@ -67,3 +70,8 @@ __aicore__ void example(asc::pipeline_ref& target, const asc::pipeline_ref& sour
     target = source;
 }
 ```
+
+## 关联API
+
+- [`asc::pipeline_ref`](pipeline_ref.md)
+- [本头文件的接口列表](asc_pipeline.md)

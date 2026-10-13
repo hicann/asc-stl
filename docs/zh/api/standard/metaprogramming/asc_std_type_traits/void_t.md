@@ -28,23 +28,26 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`void_t<Types...>` 在所列类型均有效时产生 `void`，用于 C++17 检测式约束。
+`void_t<Types...>`在所列类型均有效时产生`void`，用于C++17检测式约束。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
 ## 声明
 
 ```cpp
-template<...c...l...a...s...s...> using asc::std::void_t = void
+namespace asc::std {
+template<class... Types>
+using void_t = void;
+}
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v 辅助形式
+- 提供特征类以及标准的 _t、_v辅助形式。
 
 ## 调用示例
 
-以下 Host 片段用 `static_assert` 验证特征结果，并以检测惯用法演示 `void_t` 的典型用途。
+以下Host片段用`static_assert`验证特征结果，并以检测惯用法演示`void_t`的典型用途。
 
 ```cpp
 #include <asc/std/type_traits>
@@ -71,3 +74,7 @@ void use_void_t()
     static_assert(!has_value_type<int>::value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_type_traits.md)

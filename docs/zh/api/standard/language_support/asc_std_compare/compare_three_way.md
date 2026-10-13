@@ -28,31 +28,38 @@
 
 头文件路径为：`<asc/std/compare>`。
 
-`asc::std::compare_three_way` 按名称指定的比较强度比较两个值，并返回 ASC 比较类别。
+`asc::std::compare_three_way`按名称指定的比较强度比较两个值，并返回ASC比较类别。
 
-该接口自 C++20+ 模式起提供。
+该接口自C++20+ 模式起提供。
 
 标准语义参考：[cppreference `compare`](https://en.cppreference.com/w/cpp/header/compare)。
 
 ## 声明
 
 ```cpp
-struct asc::std::compare_three_way
+namespace asc::std {
+struct compare_three_way;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 操作数必须为算术类型，或用户定义的 <=> 必须返回 ASC 比较类别
+- 操作数必须为算术类型，或用户定义的 <=> 必须返回ASC比较类别。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
+#include <compare>
 #include <asc/std/compare>
 
-void use_type(const asc::std::compare_three_way& value)
+bool example()
 {
-    (void)value;
+    return asc::std::compare_three_way{}(2, 3) < 0;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_compare.md)

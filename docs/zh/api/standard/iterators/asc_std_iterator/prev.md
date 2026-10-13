@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::prev` 返回向后移动指定距离后的迭代器。
+`asc::std::prev`返回向后移动指定距离后的迭代器。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
 ```cpp
-template<class InputIter> constexpr InputIter asc::std::prev(InputIter value, typename iterator_traits<InputIter>::difference_type count = 1);
+namespace asc::std {
+template<class InputIter> constexpr InputIter prev(InputIter value, typename iterator_traits<InputIter>::difference_type count = 1);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,14 +46,14 @@ template<class InputIter> constexpr InputIter asc::std::prev(InputIter value, ty
 
 | 参数名 | 描述 |
 | --- | --- |
-| `InputIter` | 双向迭代器类型（count 为正时须支持递减步进）。 |
+| `InputIter` | 双向迭代器类型（count为正时须支持递减步进）。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待向后移动的迭代器（按值传入，不被修改）；返回其后移 count 步的副本。 |
-| `count` | 输入 | 向后移动的步数（difference_type），默认 1；负值表示前移。 |
+| `value` | 输入 | 待向后移动的迭代器（按值传入，不被修改）；返回其后移count步的副本。 |
+| `count` | 输入 | 向后移动的步数（difference_type），默认1；负值表示前移。 |
 
 ## 返回值说明
 
@@ -61,11 +63,11 @@ template<class InputIter> constexpr InputIter asc::std::prev(InputIter value, ty
 
 ## 约束说明
 
-- 支持非 I/O 范围、数组和用户容器
+- 支持非I/O范围、数组和用户容器。
 
 ## 调用示例
 
-以下 Host 片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
 
 ```cpp
 #include <asc/std/iterator>
@@ -76,3 +78,7 @@ decltype(auto) example()
     return asc::std::prev(values + 2, 1);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_iterator.md)

@@ -28,30 +28,36 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`param_type` 保存 float 均匀实数分布的区间边界参数。
+`param_type`保存float均匀实数分布的区间边界参数。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
 ## 声明
 
 ```cpp
-class asc::std::uniform_real_distribution<float>::param_type
+class asc::std::uniform_real_distribution<float>::param_type;
 ```
 
 ## 约束说明
 
-- 仅提供 uniform_real_distribution<float>
-- 结果位于指定的半开区间内，不提供 double、long double 及其他统计分布
+- 仅提供uniform_real_distribution<float>。
+- 结果位于指定的半开区间内，不提供double、long double及其他统计分布。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/random>
+#include <asc/std/limits>
 
-void use_type(const asc::std::uniform_real_distribution<float>::param_type& value)
+bool example()
 {
-    (void)value;
+    asc::std::uniform_real_distribution<float>::param_type parameters(2.0f, 5.0f);
+    return parameters.a() == 2.0f && parameters.b() == 5.0f;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_random.md)

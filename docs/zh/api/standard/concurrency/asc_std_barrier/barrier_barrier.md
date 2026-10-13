@@ -28,11 +28,11 @@
 
 头文件路径为：`<asc/std/barrier>`。
 
-`asc::std::barrier::barrier` 按本页所列构造形态初始化 `barrier` 对象。
+`asc::std::barrier::barrier`按本页所列构造形态初始化`barrier`对象。
 
-`completion` 为阶段完成函数对象：每轮（phase）所有参与线程到达屏障且到达计数计满时，由其中一个线程以无参形式调用；若该调用抛出异常，则调用 `std::terminate`。未显式提供时使用不做任何操作的默认完成函数。
+`completion`为阶段完成函数对象：每轮（phase）所有参与线程到达屏障且到达计数计满时，由其中一个线程以无参形式调用；完成函数的调用必须不抛出异常。未显式提供时使用不做任何操作的默认完成函数。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `barrier`](https://en.cppreference.com/w/cpp/header/barrier)。
 
@@ -50,14 +50,18 @@ barrier(long long expected, CompletionFunction completion);
 | --- | --- | --- |
 | `expected` | 输入 | 初始参与线程数，须为正数；每个阶段的到达计数达到该值时触发完成函数并开启下一阶段。 |
 | `completion` | 输入 | 阶段完成函数；在每阶段全部参与者到达后被调用一次，缺省为空完成函数。 |
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- Host 侧对象管理 Ascend 950 的 GM 状态
-- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足
+- Host侧对象管理Ascend 950的GM状态。
+- 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下 Host 片段使用一个可独立完成的参与者演示调用；多参与者场景须保证并发推进。
+以下Host片段使用一个可独立完成的参与者演示调用；多参与者场景须保证并发推进。
 
 ```cpp
 #include <asc/std/barrier>
@@ -68,3 +72,7 @@ void example()
     barrier.arrive_and_wait();
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_barrier.md)

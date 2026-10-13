@@ -28,20 +28,21 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::February` 表示日历中的 February 月份值。
+`asc::std::chrono::February`表示日历中的February月份值。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 声明
 
 ```cpp
-inline constexpr const month asc::std::chrono::February
+namespace asc::std::chrono {
+inline constexpr const month February;
+} // namespace asc::std::chrono
 ```
 
 ## 约束说明
 
-- 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
+- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
 
 ## 调用示例
 
@@ -52,3 +53,7 @@ inline constexpr const month asc::std::chrono::February
 
 auto value = asc::std::chrono::February;
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_chrono.md)

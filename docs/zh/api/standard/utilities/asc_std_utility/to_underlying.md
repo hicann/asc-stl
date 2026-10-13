@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::to_underlying` 返回枚举值对应的底层整数值。
+`asc::std::to_underlying`返回枚举值对应的底层整数值。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 函数原型
 
 ```cpp
-template<class T> [[nodiscard]] constexpr underlying_type_t<T> asc::std::to_underlying(T value) noexcept;
+namespace asc::std {
+template<class T> [[nodiscard]] constexpr underlying_type_t<T> to_underlying(T value) noexcept;
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -60,8 +62,8 @@ template<class T> [[nodiscard]] constexpr underlying_type_t<T> asc::std::to_unde
 
 ## 约束说明
 
-- to_underlying 仅接受枚举类型
-- unreachable 保留标准语义前置条件，但不添加当前工具链不支持的 noreturn 属性
+- to_underlying仅接受枚举类型。
+- unreachable保留标准语义前置条件，但不添加当前工具链不支持的noreturn属性。
 
 ## 调用示例
 
@@ -76,3 +78,7 @@ decltype(auto) example()
     return asc::std::to_underlying(code::value);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

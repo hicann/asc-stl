@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/mdspan>`。
 
-`asc::to_gm_mdspan` 从 GM 数据指针、范围和步长创建 gm_mdspan。
+`asc::to_gm_mdspan`从GM数据指针、范围和步长创建gm_mdspan。
 
 ## 函数原型
 
 ```cpp
-template<class Element, asc::std::size_t Rank, class Layout = asc::layout_stride_relaxed> bool asc::to_gm_mdspan(const DLTensor& tensor, asc::gm_mdspan<Element, asc::std::dextents<asc::std::size_t, Rank>, Layout>& output) noexcept;
+namespace asc {
+template<class Element, asc::std::size_t Rank, class Layout = asc::layout_stride_relaxed> bool to_gm_mdspan(const DLTensor& tensor, asc::gm_mdspan<Element, asc::std::dextents<asc::std::size_t, Rank>, Layout>& output) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -42,7 +44,7 @@ template<class Element, asc::std::size_t Rank, class Layout = asc::layout_stride
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Element` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Element` | 视图所访问元素的类型；底层存储须包含相应有效对象。 |
 | `Rank` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
 | `Layout` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
 
@@ -57,17 +59,17 @@ template<class Element, asc::std::size_t Rank, class Layout = asc::layout_stride
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回 `true`，否则返回 `false`。 |
+| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 提供 Host 和 GM 视图以及 AI Core SIMD 编程 UB 视图
-- 允许有符号步长
-- 可选的 Host DLPack 桥接不抛出异常
+- 提供Host和GM视图以及AI Core SIMD编程UB视图。
+- 允许有符号步长。
+- 可选的Host DLPack桥接不抛出异常。
 
 ## 调用示例
 
-DLPack 桥接接口仅在提供 DLPack 头文件时可用；以下 Host 片段借用调用方管理的视图和张量存储。
+DLPack桥接接口仅在提供DLPack头文件时可用；以下Host片段借用调用方管理的视图和张量存储。
 
 ```cpp
 #include <asc/mdspan>
@@ -86,3 +88,7 @@ decltype(auto) example(const DLTensor& tensor, asc::gm_mdspan<int, asc::std::dex
 }
 #endif
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_mdspan.md)

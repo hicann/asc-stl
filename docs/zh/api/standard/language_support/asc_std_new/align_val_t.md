@@ -28,29 +28,38 @@
 
 头文件路径为：`<asc/std/new>`。
 
-`asc::std::align_val_t` 把扩展对齐值传给定位对象生命周期接口。
+`asc::std::align_val_t`把扩展对齐值传给定位对象生命周期接口。
 
 标准语义参考：[cppreference `new`](https://en.cppreference.com/w/cpp/header/new)。
 
 ## 声明
 
 ```cpp
-enum asc::std::align_val_t
+namespace asc::std {
+enum align_val_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供 placement 对象生命周期和无动态分配的接口
+- 提供placement对象生命周期和无动态分配的接口。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+该枚举携带对齐字节数，值应为2的幂。它与系统std::align_val_t是不同类型，不能直接传给系统的对齐new重载。
 
 ```cpp
 #include <asc/std/new>
+#include <asc/std/cstddef>
 
-void use_type(asc::std::align_val_t value)
+bool example()
 {
-    (void)value;
+    constexpr asc::std::align_val_t alignment{64};
+    static_assert(static_cast<asc::std::size_t>(alignment) == 64);
+    return true;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_new.md)

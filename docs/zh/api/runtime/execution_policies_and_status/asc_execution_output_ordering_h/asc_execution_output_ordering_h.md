@@ -1,4 +1,4 @@
-# 头文件 asc/execution.output_ordering.h
+# 头文件asc/execution.output_ordering.h
 
 提供并行算法的输出顺序要求
 
@@ -8,7 +8,7 @@
 #include <asc/execution.output_ordering.h>
 ```
 
-## API 列表
+## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |

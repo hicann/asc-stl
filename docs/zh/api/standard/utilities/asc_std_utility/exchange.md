@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/std/utility>`。
 
-`asc::std::exchange` 以新值替换对象并返回旧值。
+`asc::std::exchange`以新值替换对象并返回旧值。
 
 标准语义参考：[cppreference `utility`](https://en.cppreference.com/w/cpp/header/utility)。
 
 ## 函数原型
 
 ```cpp
-template<class T1, class T2> constexpr T1 asc::std::exchange(T1& object, T2&& new_value) noexcept(is_nothrow_move_constructible_v<T1>&& is_nothrow_assignable_v<T1&, T2>);
+namespace asc::std {
+template<class T1, class T2> constexpr T1 exchange(T1& object, T2&& new_value) noexcept(is_nothrow_move_constructible_v<T1>&& is_nothrow_assignable_v<T1&, T2>);
+} // namespace asc::std
 ```
 
 ## 参数说明
@@ -44,15 +46,15 @@ template<class T1, class T2> constexpr T1 asc::std::exchange(T1& object, T2&& ne
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 被替换对象的类型；须可移动构造且可被 T2 赋值。 |
-| `T2` | 新值的类型；须可赋给 T1&。 |
+| `T1` | 被替换对象的类型；须可移动构造且可被T2赋值。 |
+| `T2` | 新值的类型；须可赋给T1&。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `object` | 输入/输出 | 被替换的对象；其旧值经移动作为返回值返回，调用后保存 new_value。 |
-| `new_value` | 输入/输出 | 赋给 object 的新值；以右值赋值时被移动，移动后处于有效但未指定状态。 |
+| `object` | 输入/输出 | 被替换的对象；其旧值经移动作为返回值返回，调用后保存new_value。 |
+| `new_value` | 输入/输出 | 赋给object的新值；以右值赋值时被移动，移动后处于有效但未指定状态。 |
 
 ## 返回值说明
 
@@ -62,8 +64,8 @@ template<class T1, class T2> constexpr T1 asc::std::exchange(T1& object, T2&& ne
 
 ## 约束说明
 
-- 遵循标准约束
-- forward_like 保留 const/volatile 限定和值类别
+- 遵循标准约束。
+- forward_like保留const/volatile限定和值类别。
 
 ## 调用示例
 
@@ -78,3 +80,7 @@ decltype(auto) example()
     return asc::std::exchange(value, 4);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_utility.md)

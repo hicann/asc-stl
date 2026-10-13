@@ -1,4 +1,4 @@
-# asc::std::scoped_allocator_adaptor::operator=
+# asc::std::scoped_allocator_adaptor::`operator=`
 
 ## 产品支持情况
 
@@ -28,87 +28,93 @@
 
 头文件路径为：`<asc/std/scoped_allocator>`。
 
-`asc::std::scoped_allocator_adaptor::operator=` 按所选赋值重载更新对象，并返回规定的结果。
+`asc::std::scoped_allocator_adaptor::operator=`按所选赋值重载更新对象，并返回规定的结果。
 
 标准语义参考：[cppreference `scoped_allocator`](https://en.cppreference.com/w/cpp/header/scoped_allocator)。
 
 ## 函数原型
 
-### 原型 1
+所属类型：[`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。
+
+### 原型1
 
 ```cpp
-constexpr scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>& asc::std::scoped_allocator_adaptor::operator=(const scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>& other);
+// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>& operator=(const scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>& other);
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
-constexpr scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>& asc::std::scoped_allocator_adaptor::operator=(scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>&& other);
+// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>& operator=(scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>&& other);
 ```
 
-### 原型 3
+### 原型3
 
 ```cpp
-constexpr scoped_allocator_adaptor<OuterAllocator>& asc::std::scoped_allocator_adaptor::operator=(const scoped_allocator_adaptor<OuterAllocator>& other);
+// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr scoped_allocator_adaptor<OuterAllocator>& operator=(const scoped_allocator_adaptor<OuterAllocator>& other);
 ```
 
-### 原型 4
+### 原型4
 
 ```cpp
-constexpr scoped_allocator_adaptor<OuterAllocator>& asc::std::scoped_allocator_adaptor::operator=(scoped_allocator_adaptor<OuterAllocator>&& other);
+// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr scoped_allocator_adaptor<OuterAllocator>& operator=(scoped_allocator_adaptor<OuterAllocator>&& other);
 ```
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
-### 原型 2 的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
-
-### 原型 3 的参数
+### 原型2的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
-### 原型 4 的参数
+### 原型3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
+
+### 原型4的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 2 | `scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 3 | `scoped_allocator_adaptor<OuterAllocator> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型 4 | `scoped_allocator_adaptor<OuterAllocator> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型1 | `scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型2 | `scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型3 | `scoped_allocator_adaptor<OuterAllocator> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型4 | `scoped_allocator_adaptor<OuterAllocator> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 
 ## 约束说明
 
-- 遵循 scoped_allocator_adaptor 的标准分配器传播、构造、销毁、比较和交换约束
-- 参与操作的分配器必须在当前可用位置有效，Device 侧操作不得抛出异常
+- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
+- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
 
 ## 调用示例
 
-以下 Host 片段使用显式提供的分配器并完整释放存储；设备端须改用目标位置可调用的分配器。
+以下Host片段使用显式提供的分配器并完整释放存储；设备端须改用目标位置可调用的分配器。
 
 ```cpp
 #include <asc/std/scoped_allocator>
@@ -133,3 +139,8 @@ void example(asc::std::scoped_allocator_adaptor<example_allocator<int>>& target,
     target = source;
 }
 ```
+
+## 关联API
+
+- [`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)
+- [本头文件的接口列表](asc_std_scoped_allocator.md)

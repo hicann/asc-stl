@@ -28,20 +28,21 @@
 
 头文件路径为：`<asc/execution.policy.h>`。
 
-`asc::execution::device` 是默认构造的 Device 执行策略对象，可通过链式调用绑定 Stream、临时存储和执行要求。
+`asc::execution::device`是默认构造的Device执行策略对象，可通过链式调用绑定Stream、临时存储和执行要求。
 
-该接口的可用位置为 Host。
+该接口的可用位置为Host。
 
 ## 声明
 
 ```cpp
-inline constexpr asc::device_policy asc::execution::device
+// asc::execution 类内的声明节选；模板形参和其他成员由所属类提供。
+inline constexpr asc::device_policy device;
 ```
 
 ## 约束说明
 
-- 绑定不可变且不拥有资源
-- 默认构造绑定空 Stream、空临时存储和默认执行要求
+- 绑定不可变且不拥有资源。
+- 默认构造绑定空Stream、空临时存储和默认执行要求。
 
 ## 调用示例
 
@@ -52,3 +53,7 @@ inline constexpr asc::device_policy asc::execution::device
 
 auto value = asc::execution::device;
 ```
+
+## 关联API
+
+- [`asc::device_policy`](device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。

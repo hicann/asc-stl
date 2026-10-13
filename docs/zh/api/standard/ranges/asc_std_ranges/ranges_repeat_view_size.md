@@ -28,14 +28,17 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::repeat_view::size` 返回当前对象包含的元素数量。
+`asc::std::ranges::repeat_view::size`返回当前对象包含的元素数量。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 函数原型
 
+所属类型：[`asc::std::ranges::repeat_view`](ranges_repeat_view.md)。
+
 ```cpp
-template<class Bound2> constexpr auto asc::std::ranges::repeat_view::size() const;
+// asc::std::ranges::repeat_view 类内的声明节选；模板形参和其他成员由所属类提供。
+template<class Bound2> constexpr auto size() const;
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ template<class Bound2> constexpr auto asc::std::ranges::repeat_view::size() cons
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Bound2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Bound2` | repeat_view的次数边界类型；有界形式才提供相应的大小查询。 |
 
 ## 返回值说明
 
@@ -54,19 +57,31 @@ template<class Bound2> constexpr auto asc::std::ranges::repeat_view::size() cons
 
 ## 约束说明
 
-- 七个列出名称
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure
-- Host、AI Core SIMD 编程 和 AI Core SIMT 编程
+- 七个列出名称。
+- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
+- Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
 
-void example(asc::std::ranges::repeat_view<int, int>& object)
+bool example()
 {
-    (void)object.size();
+    int values[] = {1, 2, 3, 4};
+    using Base = asc::std::ranges::subrange<int*>;
+    Base base(values, values + 4);
+    asc::std::ranges::repeat_view<int, int> view(7, 3);
+    return view.size() == 3;
 }
 ```
+
+## 关联API
+
+- [`asc::std::ranges::repeat_view`](ranges_repeat_view.md)
+- [本头文件的接口列表](asc_std_ranges.md)

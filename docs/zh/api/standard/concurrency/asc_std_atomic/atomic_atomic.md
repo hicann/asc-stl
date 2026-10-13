@@ -28,21 +28,21 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic::atomic` 按本页所列构造形态初始化 `atomic` 对象。
+`asc::std::atomic::atomic`按本页所列构造形态初始化`atomic`对象。
 
-该接口的可用位置为 Host、AI Core SIMT 编程。
+该接口的可用位置为Host、AI Core SIMT编程。
 
 标准语义参考：[cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic)。
 
 ## 函数原型
 
-### 原型 1
+### 原型1
 
 ```cpp
 atomic() noexcept;
 ```
 
-### 原型 2
+### 原型2
 
 ```cpp
 constexpr atomic(T value) noexcept;
@@ -50,11 +50,11 @@ constexpr atomic(T value) noexcept;
 
 ## 参数说明
 
-### 原型 1 的参数
+### 原型1的参数
 
 无参数。
 
-### 原型 2 的参数
+### 原型2的参数
 
 **函数参数**
 
@@ -62,16 +62,20 @@ constexpr atomic(T value) noexcept;
 | --- | --- | --- |
 | `value` | 输入 | 原子对象的初值；构造时写入，使初始状态确定。 |
 
+## 返回值说明
+
+无返回值。
+
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数
-- bool/8/16位用32位内部存储
-- 32/64位按有符号位模式分派
-- Host 和 AI Core SIMT 编程 GM
+- 标准整数/字符owning atomic别名及列出自由函数。
+- bool/8/16位用32位内部存储。
+- 32/64位按有符号位模式分派。
+- Host和AI Core SIMT编程GM。
 
 ## 调用示例
 
-以下 Host 片段演示原子操作；设备端对象须放在本页规定的有效内存空间。
+以下Host片段演示原子操作；设备端对象须放在本页规定的有效内存空间。
 
 ```cpp
 #include <asc/std/atomic>
@@ -82,3 +86,7 @@ void example()
     value.store(0, asc::std::memory_order_relaxed);
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_atomic.md)

@@ -28,31 +28,39 @@
 
 头文件路径为：`<asc/std/expected>`。
 
-`asc::std::unexpect_t` 标记以错误值原位构造 expected 的形式。
+`asc::std::unexpect_t`标记以错误值原位构造expected的形式。
 
 标准语义参考：[cppreference `expected`](https://en.cppreference.com/w/cpp/header/expected)。
 
 ## 声明
 
 ```cpp
-struct asc::std::unexpect_t
+namespace asc::std {
+struct unexpect_t;
+} // namespace asc::std
 ```
 
 ## 约束说明
 
-- T 必须为非 void 类型，E 必须为对象类型
-- 适用操作必须不抛出异常
-- 提供构造、赋值、emplace 和 swap
+- T必须为非void类型，E必须为对象类型。
+- 适用操作必须不抛出异常。
+- 提供构造、赋值、emplace和swap。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/expected>
 
-void use_type(const asc::std::unexpect_t& value)
+bool example()
 {
-    (void)value;
+    asc::std::unexpect_t tag{};
+    asc::std::expected<int, int> result(tag, 7);
+    return !result.has_value() && result.error() == 7;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_std_expected.md)

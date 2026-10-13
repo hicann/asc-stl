@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::make_tensor_copy_descriptor` 由各维范围、源/目标步长和填充数组构造 Tensor Copy Descriptor。
+`asc::make_tensor_copy_descriptor`由各维范围、源/目标步长和填充数组构造Tensor Copy Descriptor。
 
 ## 函数原型
 
 ```cpp
-template<unsigned Rank> constexpr asc::tensor_copy_descriptor<Rank> asc::make_tensor_copy_descriptor(const unsigned int (&extents)[Rank], const unsigned int (&source_strides)[Rank], const unsigned int (&destination_strides)[Rank], const unsigned int (&left_padding)[Rank], const unsigned int (&right_padding)[Rank]) noexcept;
+namespace asc {
+template<unsigned Rank> constexpr asc::tensor_copy_descriptor<Rank> make_tensor_copy_descriptor(const unsigned int (&extents)[Rank], const unsigned int (&source_strides)[Rank], const unsigned int (&destination_strides)[Rank], const unsigned int (&left_padding)[Rank], const unsigned int (&right_padding)[Rank]) noexcept;
+} // namespace asc
 ```
 
 ## 参数说明
@@ -51,8 +53,8 @@ template<unsigned Rank> constexpr asc::tensor_copy_descriptor<Rank> asc::make_te
 | `extents` | 输入 | 各维的有效长度；维度数量和取值范围须满足本页约束。 |
 | `source_strides` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
 | `destination_strides` | 输出 | 用于接收结果的目标存储。异步操作完成前，其存储须保持有效。 |
-| `left_padding` | 输入 | 提供“由各维范围、源/目标步长和填充数组构造 Tensor Copy Descriptor”使用的对象引用；被引用对象须在调用期间有效。 |
-| `right_padding` | 输入 | 提供“由各维范围、源/目标步长和填充数组构造 Tensor Copy Descriptor”使用的对象引用；被引用对象须在调用期间有效。 |
+| `left_padding` | 输入 | 提供“由各维范围、源/目标步长和填充数组构造Tensor Copy Descriptor”使用的对象引用；被引用对象须在调用期间有效。 |
+| `right_padding` | 输入 | 提供“由各维范围、源/目标步长和填充数组构造Tensor Copy Descriptor”使用的对象引用；被引用对象须在调用期间有效。 |
 
 ## 返回值说明
 
@@ -62,9 +64,9 @@ template<unsigned Rank> constexpr asc::tensor_copy_descriptor<Rank> asc::make_te
 
 ## 约束说明
 
-- 描述符及状态类型可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
-- Rank 为 1 至 5
-- 维度和步长采用 uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运
+- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
+- Rank为1至5。
+- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
 
 ## 调用示例
 
@@ -82,3 +84,7 @@ decltype(auto) example()
     return descriptor;
 }
 ```
+
+## 关联API
+
+- [本头文件的接口列表](asc_tensor_copy.md)
