@@ -56,7 +56,10 @@ asc::execution_status asc::device_memory_resource::allocate(void** output, asc::
 
 - 仅可在 Host 调用
 - 内存资源不抛出异常
-- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐
+- bytes 须大于 0，零大小请求按无效参数拒绝
+- alignment 须为 2 的幂且不超过 32 字节（默认 32），否则按无效参数拒绝
+- output 须为非空指针，且调用前其指向为空指针；请求未通过校验时返回 invalid_argument，此时不写入 output；底层分配失败时返回错误状态，是否写入 output 以运行时行为为准
+- 释放时须使用同一资源及原始大小和对齐
 - 资源及其引用的生命周期由调用方管理
 
 ## 调用示例

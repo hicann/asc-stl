@@ -60,8 +60,7 @@ template<class T> [[nodiscard]] constexpr int asc::std::bit_width(T value) noexc
 
 ## 约束说明
 
-- 遵循标准无符号/整数约束
-- byteswap 不支持 bool，并支持标准整数位宽
+- 遵循标准无符号整数类型约束
 
 ## 调用示例
 

@@ -73,6 +73,7 @@ reference asc::std::vector::operator[](size_type index) noexcept;
 
 ## 约束说明
 
+- 前置条件：`index < size()`；`operator[]` 不执行边界检查，越界访问后果未定义
 - vector<T,A>显式allocator构造
 - empty/size/capacity/data/begin/end/operator[]/front/back
 - reserve与容量内push_back/emplace_back/pop_back/clear

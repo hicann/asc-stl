@@ -64,6 +64,8 @@ template<class T, class U> [[nodiscard]] constexpr common_type_t<T, U> asc::std:
 
 - 提供顺序迭代器/值重载
 - 本族中标准定义的执行策略重载采用顺序执行语义
+- 模板参数 `T`、`U` 须为整型且非 `bool`，否则触发编译期断言
+- 两参数的绝对值与最小公倍数结果均须能由公共结果类型 `common_type_t<T, U>` 表示，违反该先决条件时结果不受保证
 
 ## 调用示例
 

@@ -145,6 +145,7 @@ template<class T> T asc::std::abs(const complex<T>& value) noexcept;
 ## 约束说明
 
 - 提供整数重载及相应结果类型
+- 整数重载（原型 1、原型 2、原型 3）要求参数的绝对值可由返回类型表示，例如 `abs(INT_MIN)` 不满足该要求，行为无定义
 - 提供 float 重载、标准 *f 别名以及已确认的 float lerp 回移接口
 - 仅提供页面声明的 float 或 complex<float> 运算
 - 接口可用性取决于相应的 float 数学能力

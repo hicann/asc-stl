@@ -61,8 +61,8 @@ template<class To, class From> [[nodiscard]] constexpr To asc::std::bit_cast(con
 
 ## 约束说明
 
-- 遵循标准无符号/整数约束
-- byteswap 不支持 bool，并支持标准整数位宽
+- `To` 与 `From` 须满足 `sizeof(To) == sizeof(From)` 且均为可平凡复制类型
+- 编译器提供 `__builtin_bit_cast` 时调用可用于常量表达式；否则经 `memcpy` 回退实现，此时 `To` 须可默认构造
 
 ## 调用示例
 

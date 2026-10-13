@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/numeric>`。
 
-`asc::std::midpoint` 在避免不必要溢出的前提下求中点。
+`asc::std::midpoint` 在避免不必要溢出的前提下求中点。整数重载的舍入朝向第一参数。
 
 标准语义参考：[cppreference `numeric`](https://en.cppreference.com/w/cpp/header/numeric)。
 
@@ -113,6 +113,9 @@ template<class T> [[nodiscard]] constexpr enable_if_t<is_integral_v<T>&& !is_sam
 
 - 提供顺序迭代器/值重载
 - 本族中标准定义的执行策略重载采用顺序执行语义
+- 整数重载的两实参可同号或异号
+- 整数重载经无符号差值计算中点，结果不因 `left + right` 中间量溢出而失真
+- 指针重载的两实参须指向同一数组对象内的元素或其尾后位置，否则行为无定义
 
 ## 调用示例
 

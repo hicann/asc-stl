@@ -44,7 +44,7 @@ void* asc::std::memset(void* destination, int value, size_t count) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `destination` | 输出 | 用于接收结果的目标存储。异步操作完成前，其存储须保持有效。 |
+| `destination` | 输出 | 用于接收结果的目标存储。本调用为同步执行，返回时写入已完成；目标存储在调用期间保持有效即可，且须为待写入内容预留足够空间。 |
 | `value` | 输入 | 参与操作或用于初始化、比较的值。 |
 | `count` | 输入 | 参与操作的元素数量。 |
 

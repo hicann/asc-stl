@@ -61,7 +61,7 @@ template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入/输出 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source` | 输入/输出 | 源内建数组。返回的 `array` 对象拥有各元素的副本（左值源）或被移动的元素（右值源），不引用源数据；调用返回后源数组即可释放或复用。 |
 
 ### 原型 2 的参数
 
@@ -76,7 +76,7 @@ template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入/输出 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `source` | 输入/输出 | 源内建数组。返回的 `array` 对象拥有各元素的副本（左值源）或被移动的元素（右值源），不引用源数据；调用返回后源数组即可释放或复用。 |
 
 ## 返回值说明
 

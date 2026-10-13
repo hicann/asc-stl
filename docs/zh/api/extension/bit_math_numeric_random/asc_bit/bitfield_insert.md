@@ -48,8 +48,8 @@ template<class T> constexpr T asc::bitfield_insert(T destination, T source, int 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `destination` | 输出 | 用于接收结果的目标存储。异步操作完成前，其存储须保持有效。 |
-| `source` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
+| `destination` | 输入 | 提供被替换位域所在的目标整数值；按值传入，替换结果经返回值给出，不涉及存储生命周期。 |
+| `source` | 输入 | 提供用于替换位域的源整数值；按值传入，不涉及存储生命周期。 |
 | `start` | 输入 | 指定“使用 `source` 的低 `width` 位替换 `destination` 中从 `start` 位开始的位域，并保留目标值的其余位”使用的标量值；取值须满足声明和约束。 |
 | `width` | 输入 | 指定“使用 `source` 的低 `width` 位替换 `destination` 中从 `start` 位开始的位域，并保留目标值的其余位”使用的标量值；取值须满足声明和约束。 |
 

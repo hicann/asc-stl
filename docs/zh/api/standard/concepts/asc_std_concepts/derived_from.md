@@ -40,7 +40,8 @@ template<class Dp, class Value> concept asc::std::derived_from
 
 ## 约束说明
 
-- 提供完整的公开 C++20 concepts 集合
+- 仅在 C++20 及以上模式（`__cpp_concepts >= 201907L`）可用
+- 概念成立条件：`Derived` 与 `Base` 是同一类型，或 `Derived` 公开且无歧义地继承自 `Base`（可访问基类且无歧义路径）
 
 ## 调用示例
 

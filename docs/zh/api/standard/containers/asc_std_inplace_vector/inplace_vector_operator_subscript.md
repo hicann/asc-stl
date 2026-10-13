@@ -75,6 +75,7 @@ reference asc::std::inplace_vector::operator[](size_type index) noexcept;
 
 ## 约束说明
 
+- 前置条件：`index < size()`；`operator[]` 不执行边界检查，越界访问后果未定义
 - 最终C++26标准inplace_vector/erase/erase_if合同：Host交付除P4022R0已删除try_append_range外的完整构造、赋值、迭代、访问、修改、try/unchecked、比较、swap、容量、零容量empty/trivial与constexpr/约束合同
 - Device交付固定容量内联存储的非抛子合同，包括观察/迭代/operator[]/front/back、不抛出异常拷移赋值析构、try/unchecked后插、pop_back/clear、不抛出异常 erase/erase_if/swap、相等与不抛出异常三路比较、完整零容量核心
 - Host 提供完整接口，设备端仅提供不抛出异常的接口

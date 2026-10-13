@@ -238,13 +238,12 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator>=(type_id
 
 ## 约束说明
 
-- Device 侧备选类型以及所选构造、赋值和交换操作必须不抛出异常
-- index、operator*、emplace、swap 和 visit 仅提供非抛出路径
-- T 必须是普通的非引用对象类型
-- Host 遵循有效的 C++17 操作
-- Device 侧构造、赋值、调用和交换所依赖的操作必须不抛出异常
-- 提供构造、迭代和除 at 外的访问接口，以及 remove_prefix、remove_suffix、swap、data、size、starts_with、ends_with 和非抛出的比较/查找接口
-- AI Core SIMD 编程 仅支持 local 或 generic 地址空间的普通字符指针
+- 本页约束说明仅针对 `<asc/std/optional>` 提供的 `operator>=` 重载（原型 2 至原型 6）；原型 1、7、8 为 `<asc/std/variant>`、`<asc/std/string_view>` 的同名运算符，不属于本页约束范围
+- 参与比较的重载集合：`optional<T>` 与 `optional<U>`、`optional<T>` 与 `U` 类型的值、`T` 类型的值与 `optional<U>`，以及 `optional<T>` 与 `nullopt_t` 的两种操作数顺序
+- `optional` 的模板实参须为非引用对象类型；与裸值（`T`/`U` 类型操作数）比较时，裸值始终按含值状态处理
+- 无值状态参与比较的规则：右侧无值时结果恒为 `true`；右侧含值且左侧无值时结果为 `false`；两侧均含值时结果为 `*right <= *left`（即按所含值不小于比较）
+- 两侧均含值（或与裸值比较的 `optional` 一侧含值）时才计算所含值的比较表达式，`T` 与 `U` 须支持 `const` 操作数上 `operator>=` 的有效比较，异常语义跟随该比较表达式
+- 与 `nullopt_t` 的比较只判断是否含值，不访问所含值，对 `T` 无可比较要求，相应重载标记为 `noexcept`
 
 ## 调用示例
 

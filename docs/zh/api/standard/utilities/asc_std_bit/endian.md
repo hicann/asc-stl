@@ -40,8 +40,8 @@ enum asc::std::endian
 
 ## 约束说明
 
-- 遵循标准无符号/整数约束
-- byteswap 不支持 bool，并支持标准整数位宽
+- `endian::native` 与 `endian::little` 或 `endian::big` 之一相等，不支持混合字节序
+- 本产品宿主与设备环境均为小端，即 `endian::native == endian::little`
 
 ## 调用示例
 
