@@ -46,8 +46,8 @@ void asc::std::atomic::store(T value, memory_order order) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `order` | 输入 | 参与本次原子读取、写入或读改写操作的值。 |
+| `value` | 输入 | 写入原子对象的新值。 |
+| `order` | 输入 | 写入所用内存序，决定本次写入对其他线程的可见性顺序；仅可取 relaxed、release 或 seq_cst。 |
 
 ## 返回值说明
 

@@ -58,7 +58,7 @@ bitset(unsigned long long value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 初始化位的无符号整数值；取其低 min(Size, 64) 个二进制位为初值，超出部分忽略。 |
 
 ## 约束说明
 

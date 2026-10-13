@@ -96,9 +96,9 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Mapping` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `FirstIndex` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `SecondIndex` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Mapping` | 源视图的布局映射类型（含维度信息），如 layout_right::mapping。 |
+| `FirstIndex` | 第一维切片下标的整数类型，须可转换为 index_type。 |
+| `SecondIndex` | 第二维切片下标的整数类型，须可转换为 index_type。 |
 
 **函数参数**
 
@@ -106,7 +106,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 | --- | --- | --- |
 | `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_index` | 输入 | 提供“计算混合切片的映射与起始偏移，不拥有底层存储”所需的输入对象；类型须满足所选原型约束。 |
+| `second_index` | 输入 | asc::std::full_extent 标记；表示第二维整维保留在结果中。 |
 
 ### 原型 2 的参数
 
@@ -114,8 +114,8 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Mapping` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Index` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Mapping` | 源视图的布局映射类型（含维度信息），如 layout_right::mapping。 |
+| `Index` | 切片下标的整数类型，须可转换为 index_type。 |
 
 **函数参数**
 
@@ -123,7 +123,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 | --- | --- | --- |
 | `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_index` | 输入 | 提供“计算混合切片的映射与起始偏移，不拥有底层存储”所需的输入对象；类型须满足所选原型约束。 |
+| `second_index` | 输入 | asc::std::full_extent 标记；表示第二维整维保留在结果中。 |
 
 ### 原型 3 的参数
 
@@ -131,8 +131,8 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Mapping` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Index` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Mapping` | 源视图的布局映射类型（含维度信息），如 layout_right::mapping。 |
+| `Index` | 切片下标的整数类型，须可转换为 index_type。 |
 
 **函数参数**
 
@@ -140,7 +140,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 | --- | --- | --- |
 | `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_index` | 输入 | 提供“计算混合切片的映射与起始偏移，不拥有底层存储”所需的输入对象；类型须满足所选原型约束。 |
+| `second_index` | 输入 | asc::std::full_extent 标记；表示第二维整维保留在结果中。 |
 
 ### 原型 4 的参数
 
@@ -148,10 +148,10 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Mapping` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Offset` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `SliceExtent` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Stride` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Mapping` | 源视图的布局映射类型（含维度信息），如 layout_right::mapping。 |
+| `Offset` | 第一维跨步切片的起始偏移类型（strided_slice::offset），须为整数类型。 |
+| `SliceExtent` | 第一维跨步切片的长度类型（strided_slice::extent），须为整数类型。 |
+| `Stride` | 第一维跨步切片的步长类型（strided_slice::stride），须为整数类型。 |
 
 **函数参数**
 
@@ -159,7 +159,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 | --- | --- | --- |
 | `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_index` | 输入 | 提供“计算混合切片的映射与起始偏移，不拥有底层存储”所需的输入对象；类型须满足所选原型约束。 |
+| `second_index` | 输入 | asc::std::full_extent 标记；表示第二维整维保留在结果中。 |
 
 ### 原型 5 的参数
 
@@ -167,10 +167,10 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Mapping` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Offset` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `SliceExtent` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Stride` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Mapping` | 源视图的布局映射类型（含维度信息），如 layout_right::mapping。 |
+| `Offset` | 第二维跨步切片的起始偏移类型（strided_slice::offset），须为整数类型。 |
+| `SliceExtent` | 第二维跨步切片的长度类型（strided_slice::extent），须为整数类型。 |
+| `Stride` | 第二维跨步切片的步长类型（strided_slice::stride），须为整数类型。 |
 
 **函数参数**
 
@@ -186,8 +186,8 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Mapping` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Pair` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Mapping` | 源视图的布局映射类型（含维度信息），如 layout_right::mapping。 |
+| `Pair` | 表示闭区间 [first, last] 的下标对类型，两个成员须可转换为 index_type。 |
 
 **函数参数**
 
@@ -195,7 +195,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 | --- | --- | --- |
 | `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_index` | 输入 | 提供“计算混合切片的映射与起始偏移，不拥有底层存储”所需的输入对象；类型须满足所选原型约束。 |
+| `second_index` | 输入 | asc::std::full_extent 标记；表示第二维整维保留在结果中。 |
 
 ### 原型 7 的参数
 
@@ -203,8 +203,8 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Mapping` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Pair` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Mapping` | 源视图的布局映射类型（含维度信息），如 layout_right::mapping。 |
+| `Pair` | 表示闭区间 [first, last] 的下标对类型，两个成员须可转换为 index_type。 |
 
 **函数参数**
 
@@ -220,7 +220,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Mapping` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
+| `Mapping` | 源视图的布局映射类型（含维度信息），如 layout_right::mapping。 |
 
 **函数参数**
 
@@ -234,7 +234,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Mapping` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
+| `Mapping` | 源视图的布局映射类型（含维度信息），如 layout_right::mapping。 |
 
 **函数参数**
 
@@ -242,7 +242,7 @@ template<class Mapping> constexpr auto asc::std::submdspan_mapping(const Mapping
 | --- | --- | --- |
 | `source` | 输入 | 源数据或源对象。本调用为同步的编译期映射计算，source 被同步读取，调用期间有效即可。 |
 | `first_index` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_index` | 输入 | 提供“计算混合切片的映射与起始偏移，不拥有底层存储”所需的输入对象；类型须满足所选原型约束。 |
+| `second_index` | 输入 | asc::std::full_extent 标记；表示第二维整维保留在结果中。 |
 
 ## 返回值说明
 

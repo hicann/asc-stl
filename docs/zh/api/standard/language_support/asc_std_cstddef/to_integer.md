@@ -44,13 +44,13 @@ template<class Integer> constexpr Integer asc::std::to_integer(byte value) noexc
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Integer` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Integer` | 转换目标的整数类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待转换的 byte 值；返回其底层 unsigned char 值转换到 Integer 的结果。 |
 
 ## 返回值说明
 

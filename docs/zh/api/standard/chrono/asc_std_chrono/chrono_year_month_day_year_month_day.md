@@ -88,9 +88,9 @@ constexpr year_month_day(year_month_day&& other) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `year_value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `month_value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `day_value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `year_value` | 输入 | 年份值，-32767 到 32767 为有效范围，正数表示公元纪年。 |
+| `month_value` | 输入 | 月份值，1 到 12 表示一月至十二月。 |
+| `day_value` | 输入 | 日值，1 到 31 表示有效日；0 与 32 到 255 亦可保存，但 ok() 判为 false。 |
 
 ### 原型 3 的参数
 
@@ -98,7 +98,7 @@ constexpr year_month_day(year_month_day&& other) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 以本地时区天数表示的日期（local_days），换算为年、月、日。 |
 
 ### 原型 4 的参数
 
@@ -106,7 +106,7 @@ constexpr year_month_day(year_month_day&& other) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 以系统时点天数表示的日期（sys_days），换算为年、月、日。 |
 
 ### 原型 5 的参数
 
@@ -114,7 +114,7 @@ constexpr year_month_day(year_month_day&& other) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 用于复制构造的 year_month_day 对象。 |
 
 ### 原型 6 的参数
 
@@ -122,7 +122,7 @@ constexpr year_month_day(year_month_day&& other) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 以年份加月末标记表示的日期（year_month_day_last），取该月最后一天。 |
 
 ### 原型 7 的参数
 
@@ -130,7 +130,7 @@ constexpr year_month_day(year_month_day&& other) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 用于移动构造的 year_month_day 对象；移动后源对象处于有效但未指定状态。 |
 
 ## 约束说明
 

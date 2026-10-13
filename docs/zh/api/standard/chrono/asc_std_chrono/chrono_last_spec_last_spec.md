@@ -64,7 +64,7 @@ constexpr last_spec(last_spec&& value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 用于复制构造的 last_spec 标记对象。 |
 
 ### 原型 3 的参数
 
@@ -72,7 +72,7 @@ constexpr last_spec(last_spec&& value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入/输出 | 用于移动构造的 last_spec 标记对象。 |
 
 ## 约束说明
 

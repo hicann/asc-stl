@@ -44,8 +44,8 @@ constexpr reference asc::std::default_accessor::access(data_handle_type pointer,
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 提供“通过访问器取得指定索引处的元素引用”所需的输入对象；类型须满足所选原型约束。 |
-| `index` | 输入 | 指定“通过访问器取得指定索引处的元素引用”使用的标量值；取值须满足声明和约束。 |
+| `pointer` | 输入 | 指向被访问元素存储的数据句柄（元素指针）；须可访问自其起第 index 个元素。 |
+| `index` | 输入 | 相对 pointer 的元素下标，从 0 起；返回 *(pointer + index) 处的元素引用。 |
 
 ## 返回值说明
 

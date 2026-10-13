@@ -44,7 +44,7 @@ constexpr long double asc::std::nearbyintl(long double value) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待按当前舍入模式取整的输入值（无量纲）；与 rint 的区别是不触发不精确浮点异常。 |
 
 ## 返回值说明
 

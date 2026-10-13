@@ -52,7 +52,7 @@ template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDu
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待转换的时长；无法精确表示时向零截断。 |
 
 ## 返回值说明
 

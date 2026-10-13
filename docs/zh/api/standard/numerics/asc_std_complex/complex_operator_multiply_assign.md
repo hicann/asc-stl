@@ -44,7 +44,7 @@ constexpr complex<T>& asc::std::complex::operator*=(const T& rhs) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `rhs` | 输入 | 参与本页所述数学运算的输入值。 |
+| `rhs` | 输入 | 乘法赋值的右操作数（实数标量，当前对象的实部与虚部同乘该值）。 |
 
 ## 返回值说明
 

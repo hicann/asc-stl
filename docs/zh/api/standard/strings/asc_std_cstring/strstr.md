@@ -54,8 +54,8 @@ const char* asc::std::strstr(const char* value, const char* needle) noexcept(tru
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `needle` | 输入 | 提供“查找子字符串首次出现的位置”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `value` | 输入 | 被查找的窄字符串首地址，以空字符结尾。 |
+| `needle` | 输入 | 待查找的子串，以空字符结尾的窄字符串；为空串时直接返回 value。 |
 
 ### 原型 2 的参数
 
@@ -63,8 +63,8 @@ const char* asc::std::strstr(const char* value, const char* needle) noexcept(tru
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `needle` | 输入 | 提供“查找子字符串首次出现的位置”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `value` | 输入 | 被查找的窄字符串首地址，以空字符结尾。 |
+| `needle` | 输入 | 待查找的子串，以空字符结尾的窄字符串；为空串时直接返回 value。 |
 
 ## 返回值说明
 

@@ -78,7 +78,7 @@ template<class U> constexpr asc::std::optional& asc::std::optional::operator=(co
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 提供“按所选赋值重载更新对象，并返回规定的结果”所需的输入对象；类型须满足所选原型约束。 |
+| `asc` | 输入 | nullopt_t 空状态标记（nullopt 常量）；赋值后当前对象销毁所含值并置为空。 |
 
 ### 原型 2 的参数
 
@@ -86,7 +86,7 @@ template<class U> constexpr asc::std::optional& asc::std::optional::operator=(co
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 移动赋值来源 optional；其值被移动到当前对象，移动后处于有效但未指定状态。 |
 
 ### 原型 3 的参数
 
@@ -94,7 +94,7 @@ template<class U> constexpr asc::std::optional& asc::std::optional::operator=(co
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 复制赋值来源 optional；其值被复制到当前对象。 |
 
 ### 原型 4 的参数
 
@@ -102,13 +102,13 @@ template<class U> constexpr asc::std::optional& asc::std::optional::operator=(co
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U` | 赋值来源值的类型；不能是 optional 特化。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入/输出 | 赋给当前对象的新值；左值被复制、右值被移动，右值移动后处于有效但未指定状态。 |
 
 ### 原型 5 的参数
 
@@ -116,13 +116,13 @@ template<class U> constexpr asc::std::optional& asc::std::optional::operator=(co
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U` | 来源 optional 所含值的类型，可与 T 不同。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 移动赋值来源 optional，所含值类型可与 T 不同；其值经转换移动到当前对象，移动后处于有效但未指定状态。 |
 
 ### 原型 6 的参数
 
@@ -130,13 +130,13 @@ template<class U> constexpr asc::std::optional& asc::std::optional::operator=(co
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U` | 来源 optional 所含值的类型，可与 T 不同。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 复制赋值来源 optional，所含值类型可与 T 不同；其值经转换复制到当前对象。 |
 
 ## 返回值说明
 

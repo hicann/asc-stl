@@ -46,7 +46,7 @@ void asc::std::counting_semaphore::release(long long update) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `update` | 输入 | 指定“增加指定数量的信号量许可，并使可推进的等待者继续执行”使用的标量值；取值须满足声明和约束。 |
+| `update` | 输入 | 本次增加的许可数量，须为正数；增加后的内部计数不得超过 max()。 |
 
 ## 返回值说明
 

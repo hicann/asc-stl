@@ -44,7 +44,7 @@ constexpr long double asc::std::logl(long double value) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待求自然对数的输入值（无量纲）；定义域为 (0, +∞)，±0 返回 -inf，负数返回 NaN。 |
 
 ## 返回值说明
 

@@ -64,14 +64,14 @@ template<class OtherElement> constexpr aligned_accessor(default_accessor<OtherEl
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherElement` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `OtherByteAlignment` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
+| `OtherElement` | 源对齐访问器的元素类型，须与本访问器的元素类型兼容。 |
+| `OtherByteAlignment` | 源对齐访问器的字节对齐值，编译期常量；须不小于本访问器的 ByteAlignment。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 待转换的另一对齐访问器；其字节对齐不低于本访问器的 byte_alignment，本对象取得与其等价的访问策略。 |
 
 ### 原型 3 的参数
 
@@ -79,13 +79,13 @@ template<class OtherElement> constexpr aligned_accessor(default_accessor<OtherEl
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherElement` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `OtherElement` | 源 default_accessor 的元素类型，须与本访问器的元素类型兼容。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `accessor` | 输入 | 提供“按本页所列构造形态初始化 `aligned_accessor` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `accessor` | 输入 | 被转换的 default_accessor 对象；本对象改为按该元素类型的默认对齐执行访问。 |
 
 ## 约束说明
 

@@ -44,7 +44,7 @@ void asc::std::basic_string::reserve(size_type requested);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `requested` | 输入 | 提供“请求至少可容纳指定数量元素的存储容量”所需的输入对象；类型须满足所选原型约束。 |
+| `requested` | 输入 | 请求的最低存储容量，单位为字符；调用后 capacity() 不小于该值，须不大于 max_size()。 |
 
 ## 返回值说明
 

@@ -75,8 +75,8 @@ template<class InputIterator> [[nodiscard]] constexpr typename iterator_traits<I
 | 参数名 | 描述 |
 | --- | --- |
 | `Input` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `T` | 输入范围元素或参与运算的值类型。 |
-| `BinaryOperation` | 对输入值执行本页操作的可调用对象类型。 |
+| `T` | 归约初值、中间累加值与返回结果的类型。 |
+| `BinaryOperation` | 逐步合并累加值的二元运算可调用对象类型：接受两个 T 值并返回可转换为 T 的结果。 |
 
 **函数参数**
 
@@ -85,8 +85,8 @@ template<class InputIterator> [[nodiscard]] constexpr typename iterator_traits<I
 | `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `init` | 输入 | 提供“按标准许可的求值顺序归约输入范围”所需的输入对象；类型须满足所选原型约束。 |
-| `operation` | 输入 | 提供“按标准许可的求值顺序归约输入范围”所需的输入对象；类型须满足所选原型约束。 |
+| `init` | 输入 | 归约初值，作为逐元素合并的起始累加值；范围为空时原样返回该值。 |
+| `operation` | 输入 | 二元归约运算对象，按 operation(当前累加值, 当前元素) 逐步合并；省略该参数的重载使用 operator+。 |
 
 ### 原型 2 的参数
 
@@ -95,8 +95,8 @@ template<class InputIterator> [[nodiscard]] constexpr typename iterator_traits<I
 | 参数名 | 描述 |
 | --- | --- |
 | `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `T` | 输入范围元素或参与运算的值类型。 |
-| `BinaryO` | 对输入值执行本页操作的可调用对象类型。 |
+| `T` | 归约初值、中间累加值与返回结果的类型。 |
+| `BinaryO` | 逐步合并累加值的二元运算可调用对象类型：接受两个 T 值并返回可转换为 T 的结果。 |
 
 **函数参数**
 
@@ -104,8 +104,8 @@ template<class InputIterator> [[nodiscard]] constexpr typename iterator_traits<I
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `init` | 输入 | 提供“按标准许可的求值顺序归约输入范围”所需的输入对象；类型须满足所选原型约束。 |
-| `binary_op` | 输入 | 提供“按标准许可的求值顺序归约输入范围”所需的输入对象；类型须满足所选原型约束。 |
+| `init` | 输入 | 归约初值，作为逐元素合并的起始累加值；范围为空时原样返回该值。 |
+| `binary_op` | 输入 | 二元归约运算对象，按 binary_op(当前累加值, 当前元素) 逐步合并；省略该参数的重载使用 operator+。 |
 
 ### 原型 3 的参数
 
@@ -114,7 +114,7 @@ template<class InputIterator> [[nodiscard]] constexpr typename iterator_traits<I
 | 参数名 | 描述 |
 | --- | --- |
 | `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `T` | 输入范围元素或参与运算的值类型。 |
+| `T` | 归约初值、中间累加值与返回结果的类型。 |
 
 **函数参数**
 
@@ -122,7 +122,7 @@ template<class InputIterator> [[nodiscard]] constexpr typename iterator_traits<I
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `init` | 输入 | 提供“按标准许可的求值顺序归约输入范围”所需的输入对象；类型须满足所选原型约束。 |
+| `init` | 输入 | 归约初值，作为逐元素合并的起始累加值；范围为空时原样返回该值。 |
 
 ### 原型 4 的参数
 

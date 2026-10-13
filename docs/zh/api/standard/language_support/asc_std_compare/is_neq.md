@@ -44,7 +44,7 @@ constexpr bool asc::std::is_neq(partial_ordering value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 被检测的比较类别值（partial_ordering）；判断其是否表示“不相等”关系。 |
 
 ## 返回值说明
 

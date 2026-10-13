@@ -46,8 +46,8 @@ int asc::std::iswctype(wint_t value, wctype_t descriptor) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `descriptor` | 输入 | 提供“按当前支持的 C 区域设置规则分类输入字符”所需的输入对象；类型须满足所选原型约束。 |
+| `value` | 输入 | 待分类的宽字符（wint_t）；取值须可表示为宽字符或等于 WEOF，等于 WEOF 时结果为 0。 |
+| `descriptor` | 输入 | 字符分类描述符（wctype_t），由 wctype 取得；指定参与判断的分类类别（如字母、数字、空白）。 |
 
 ## 返回值说明
 

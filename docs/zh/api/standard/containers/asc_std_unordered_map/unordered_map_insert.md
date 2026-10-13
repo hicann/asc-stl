@@ -56,7 +56,7 @@ pair<iterator, bool> asc::std::unordered_map::insert(value_type&& value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待插入的键值对（value_type 为 pair<const Key, T>）；按键的哈希值定位目标桶，键不存在时复制构造新元素，键已存在时不插入。 |
 
 ### 原型 2 的参数
 
@@ -64,7 +64,7 @@ pair<iterator, bool> asc::std::unordered_map::insert(value_type&& value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入/输出 | 待插入的键值对；按键的哈希值定位目标桶，键不存在时以移动方式构造新元素，键已存在时不插入且源对象不被消耗。 |
 
 ## 返回值说明
 

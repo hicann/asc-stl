@@ -54,7 +54,7 @@ constexpr front_insert_iterator<Container>& asc::std::front_insert_iterator::ope
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待插入到容器头部的元素值；以复制方式插入（push_front(value)）。 |
 
 ### 原型 2 的参数
 
@@ -62,7 +62,7 @@ constexpr front_insert_iterator<Container>& asc::std::front_insert_iterator::ope
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入/输出 | 待插入到容器头部的元素值；以移动方式插入（push_front(std::move(value))），移动后处于有效但未指定状态。 |
 
 ## 返回值说明
 

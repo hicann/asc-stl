@@ -44,7 +44,7 @@ constexpr long asc::std::lroundl(long double value) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待就近取整（半值远离零）并转换为 long 的输入值（无量纲）。 |
 
 ## 返回值说明
 

@@ -94,7 +94,7 @@ template<class... Args> constexpr explicit asc::std::optional::optional(asc::std
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 提供“按本页所列构造形态初始化 `optional` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `asc` | 输入 | nullopt_t 空状态标记（nullopt 常量）；构造不含值的空 optional。 |
 
 ### 原型 3 的参数
 
@@ -102,7 +102,7 @@ template<class... Args> constexpr explicit asc::std::optional::optional(asc::std
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 移动来源 optional；其值被移动到新对象，移动后处于有效但未指定状态。 |
 
 ### 原型 4 的参数
 
@@ -110,7 +110,7 @@ template<class... Args> constexpr explicit asc::std::optional::optional(asc::std
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 复制来源 optional；其值被复制到新对象。 |
 
 ### 原型 5 的参数
 
@@ -118,13 +118,13 @@ template<class... Args> constexpr explicit asc::std::optional::optional(asc::std
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U` | 构造所含值的来源类型（默认为 T）。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入/输出 | 构造所含值的来源；左值被复制、右值被移动，右值移动后处于有效但未指定状态。 |
 
 ### 原型 6 的参数
 
@@ -132,13 +132,13 @@ template<class... Args> constexpr explicit asc::std::optional::optional(asc::std
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U` | 来源 optional 所含值的类型，可与 T 不同。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 移动来源 optional，所含值类型可与 T 不同；其值经转换移动，移动后处于有效但未指定状态。 |
 
 ### 原型 7 的参数
 
@@ -146,13 +146,13 @@ template<class... Args> constexpr explicit asc::std::optional::optional(asc::std
 
 | 参数名 | 描述 |
 | --- | --- |
-| `U` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `U` | 来源 optional 所含值的类型，可与 T 不同。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 复制来源 optional，所含值类型可与 T 不同；其值经转换复制到新对象。 |
 
 ### 原型 8 的参数
 
@@ -160,14 +160,14 @@ template<class... Args> constexpr explicit asc::std::optional::optional(asc::std
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Args` | 传递给构造函数或可调用对象的实参类型列表。 |
+| `Args` | 原位构造所含值的实参类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 提供“按本页所列构造形态初始化 `optional` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `args` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
+| `asc` | 输入 | in_place_t 原位构造标记；表示以 args 原位构造所含值。 |
+| `args` | 输入/输出 | 原位构造所含值的实参；按序转发，右值被移动后处于有效但未指定状态。 |
 
 ## 约束说明
 

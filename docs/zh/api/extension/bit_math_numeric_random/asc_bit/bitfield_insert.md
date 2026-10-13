@@ -42,7 +42,7 @@ template<class T> constexpr T asc::bitfield_insert(T destination, T source, int 
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 无符号整数类型；须为 uint32_t 或 uint64_t。 |
 
 **函数参数**
 
@@ -50,9 +50,8 @@ template<class T> constexpr T asc::bitfield_insert(T destination, T source, int 
 | --- | --- | --- |
 | `destination` | 输入 | 提供被替换位域所在的目标整数值；按值传入，替换结果经返回值给出，不涉及存储生命周期。 |
 | `source` | 输入 | 提供用于替换位域的源整数值；按值传入，不涉及存储生命周期。 |
-| `start` | 输入 | 指定“使用 `source` 的低 `width` 位替换 `destination` 中从 `start` 位开始的位域，并保留目标值的其余位”使用的标量值；取值须满足声明和约束。 |
-| `width` | 输入 | 指定“使用 `source` 的低 `width` 位替换 `destination` 中从 `start` 位开始的位域，并保留目标值的其余位”使用的标量值；取值须满足声明和约束。 |
-
+| `start` | 输入 | `destination` 中被替换位域的起始位编号（最低位为第 0 位）；不得为负。 |
+| `width` | 输入 | 被替换位域的位数；不得为负。 |
 ## 返回值说明
 
 | 返回值类型 | 含义 |

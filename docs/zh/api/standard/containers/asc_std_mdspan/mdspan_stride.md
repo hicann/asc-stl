@@ -44,7 +44,7 @@ constexpr index_type asc::std::mdspan::stride(rank_type rank_index) const noexce
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `rank_index` | 输入 | 提供“查询指定维度相邻元素之间的步长”所需的输入对象；类型须满足所选原型约束。 |
+| `rank_index` | 输入 | 待查询步长的维度编号，从 0 起；须满足 rank_index < rank()，返回该维相邻元素相隔的元素个数。 |
 
 ## 返回值说明
 

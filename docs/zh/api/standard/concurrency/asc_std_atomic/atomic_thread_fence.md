@@ -46,7 +46,7 @@ void asc::std::atomic_thread_fence(memory_order order) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `order` | 输入 | 提供“在指定作用域建立原子内存操作的线程间顺序约束”所需的输入对象；类型须满足所选原型约束。 |
+| `order` | 输入 | 围栏的内存序；为当前线程建立原子访问间的顺序约束，如 acquire、release 或 seq_cst。 |
 
 ## 返回值说明
 

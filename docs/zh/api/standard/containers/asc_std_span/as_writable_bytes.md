@@ -44,14 +44,14 @@ template<class T, size_t Extent> auto asc::std::as_writable_bytes(span<T, Extent
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Extent` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
+| `T` | span 的元素类型；字节视图长度按元素个数与 sizeof(T) 计算。 |
+| `Extent` | span 的编译期元素数量；为 dynamic_extent 时字节视图长度也为动态。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待转换的源 span；其元素存储被重解释为可写字节（span<byte>），通过字节视图写入即修改源元素。 |
 
 ## 返回值说明
 

@@ -54,13 +54,13 @@ template<class T> [[nodiscard]] constexpr reference_wrapper<const T> asc::std::c
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 被包装对象的类型；包装后以 const T 形式访问。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 被包装的常量左值对象；返回指向 const T 的引用包装器，对象生命周期须覆盖包装器使用期。 |
 
 ### 原型 2 的参数
 
@@ -68,13 +68,13 @@ template<class T> [[nodiscard]] constexpr reference_wrapper<const T> asc::std::c
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 被包装对象的类型；包装后以 const T 形式访问。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 已有的 reference_wrapper<T> 对象；返回指向同一目标的常量引用包装器。 |
 
 ## 返回值说明
 

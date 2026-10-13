@@ -44,8 +44,8 @@ constexpr long double asc::std::nexttowardl(long double value, long double towar
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `toward` | 输入 | 控制本次操作的标量值；有效取值由声明和约束说明共同确定。 |
+| `value` | 输入 | 求相邻可表示值的起点浮点值（无量纲）。 |
+| `toward` | 输入 | 指示移动方向的目标值（long double 精度，无量纲）；value 等于 toward 时返回 value。 |
 
 ## 返回值说明
 

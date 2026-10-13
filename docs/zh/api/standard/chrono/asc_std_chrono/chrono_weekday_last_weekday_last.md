@@ -60,7 +60,7 @@ constexpr weekday_last(weekday_last&& weekday_value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `weekday_value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `weekday_value` | 输入 | 星期几值，0 到 6 有效且 0 表示星期日；7 到 255 亦可保存，但 ok() 判为 false。 |
 
 ### 原型 2 的参数
 
@@ -68,7 +68,7 @@ constexpr weekday_last(weekday_last&& weekday_value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `weekday_value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `weekday_value` | 输入 | 用于复制构造的 weekday_last 对象。 |
 
 ### 原型 3 的参数
 
@@ -76,7 +76,7 @@ constexpr weekday_last(weekday_last&& weekday_value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `weekday_value` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `weekday_value` | 输入/输出 | 用于移动构造的 weekday_last 对象；移动后源对象处于有效但未指定状态。 |
 
 ## 约束说明
 

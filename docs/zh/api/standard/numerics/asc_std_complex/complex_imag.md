@@ -74,7 +74,7 @@ constexpr void asc::std::complex::imag(value_type value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待写入虚部的新值（value_type 标量，无量纲）。 |
 
 ### 原型 4 的参数
 
@@ -82,7 +82,7 @@ constexpr void asc::std::complex::imag(value_type value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待写入虚部的新值（value_type 标量，无量纲）。 |
 
 ## 返回值说明
 

@@ -58,7 +58,7 @@ constexpr hh_mm_ss(Duration duration) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `duration` | 输入 | 提供“按本页所列构造形态初始化 `hh_mm_ss` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `duration` | 输入 | 待拆分为时、分、秒的时长；计时单位由其 period 决定，负时长记录符号并按绝对值拆分。 |
 
 ## 约束说明
 

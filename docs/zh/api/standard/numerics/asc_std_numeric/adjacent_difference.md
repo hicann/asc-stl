@@ -68,7 +68,7 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 | --- | --- |
 | `Input` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
 | `Output` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
-| `BinaryOperation` | 对输入值执行本页操作的可调用对象类型。 |
+| `BinaryOperation` | 计算相邻差分的二元运算可调用对象类型：接受前一项与当前项，返回差分结果。 |
 
 **函数参数**
 
@@ -77,8 +77,8 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 | `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `result` | 输出 | 提供“依次写出相邻输入元素的差分”所需的输入对象；类型须满足所选原型约束。 |
-| `operation` | 输入 | 提供“依次写出相邻输入元素的差分”所需的输入对象；类型须满足所选原型约束。 |
+| `result` | 输出 | 写入差分结果的输出迭代器；目标范围须有足够容量。 |
+| `operation` | 输入 | 二元差分运算对象，按 operation(前一项, 当前项) 计算相邻元素差分；省略该参数的重载使用 operator-。 |
 
 ### 原型 2 的参数
 
@@ -88,7 +88,7 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 | --- | --- |
 | `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
 | `OutputIterator` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
-| `BinaryOperation` | 对输入值执行本页操作的可调用对象类型。 |
+| `BinaryOperation` | 计算相邻差分的二元运算可调用对象类型：接受前一项与当前项，返回差分结果。 |
 
 **函数参数**
 
@@ -97,7 +97,7 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `result` | 输出 | 写入结果的输出迭代器；目标范围须有足够容量。 |
-| `binary_op` | 输入 | 提供“依次写出相邻输入元素的差分”所需的输入对象；类型须满足所选原型约束。 |
+| `binary_op` | 输入 | 二元差分运算对象，按 binary_op(前一项, 当前项) 计算相邻元素差分；省略该参数的重载使用 operator-。 |
 
 ### 原型 3 的参数
 

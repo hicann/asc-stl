@@ -44,7 +44,7 @@ constexpr long double asc::std::erfcl(long double value) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 互补误差函数 erfc(x) = 1 - erf(x) 的输入值（无量纲）；大参数下比用 1 - erf(x) 计算更精确。 |
 
 ## 返回值说明
 

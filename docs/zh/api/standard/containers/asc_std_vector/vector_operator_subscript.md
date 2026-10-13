@@ -54,7 +54,7 @@ reference asc::std::vector::operator[](size_type index) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 提供“在调用方保证索引有效时访问指定元素”所需的输入对象；类型须满足所选原型约束。 |
+| `index` | 输入 | 待访问元素的下标，从 0 起；本接口不检查越界，调用方须保证 index < size()。 |
 
 ### 原型 2 的参数
 
@@ -62,7 +62,7 @@ reference asc::std::vector::operator[](size_type index) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 提供“在调用方保证索引有效时访问指定元素”所需的输入对象；类型须满足所选原型约束。 |
+| `index` | 输入 | 待访问元素的下标，从 0 起；本接口不检查越界，调用方须保证 index < size()。 |
 
 ## 返回值说明
 

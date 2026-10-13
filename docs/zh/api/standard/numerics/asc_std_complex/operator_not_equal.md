@@ -82,8 +82,8 @@ template<class T> constexpr bool asc::std::operator!=(const complex<T>& lhs, con
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 内容不等比较的左操作数（basic_string_view，按 Traits 逐字符比较，内容不同时为真）。 |
+| `right` | 输入 | 内容不等比较的右操作数（basic_string_view，按 Traits 逐字符比较，内容不同时为真）。 |
 
 ### 原型 2 的参数
 
@@ -91,8 +91,8 @@ template<class T> constexpr bool asc::std::operator!=(const complex<T>& lhs, con
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 不等比较的左操作数（空 tuple，任何两个空 tuple 均相等，结果恒为假）。 |
+| `right` | 输入 | 不等比较的右操作数（空 tuple，任何两个空 tuple 均相等，结果恒为假）。 |
 
 ### 原型 3 的参数
 
@@ -100,8 +100,8 @@ template<class T> constexpr bool asc::std::operator!=(const complex<T>& lhs, con
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 不等比较的左操作数（均匀实数分布对象，按分布参数比较，参数不同时为真）。 |
+| `right` | 输入 | 不等比较的右操作数（均匀实数分布对象，按分布参数比较，参数不同时为真）。 |
 
 ### 原型 4 的参数
 
@@ -109,8 +109,8 @@ template<class T> constexpr bool asc::std::operator!=(const complex<T>& lhs, con
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 不等比较的左操作数（分布参数对象 param_type，按参数取值比较，取值不同时为真）。 |
+| `right` | 输入 | 不等比较的右操作数（分布参数对象 param_type，按参数取值比较，取值不同时为真）。 |
 
 ### 原型 5 的参数
 
@@ -124,8 +124,8 @@ template<class T> constexpr bool asc::std::operator!=(const complex<T>& lhs, con
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 参与本页所述数学运算的输入值。 |
-| `rhs` | 输入 | 参与本页所述数学运算的输入值。 |
+| `lhs` | 输入 | 不等比较的左操作数（complex，实部或虚部不同时为真）。 |
+| `rhs` | 输入 | 不等比较的右操作数（complex）。 |
 
 ## 返回值说明
 

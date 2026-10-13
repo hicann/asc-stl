@@ -44,8 +44,8 @@ constexpr data_handle_type asc::std::default_accessor::offset(data_handle_type p
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 提供“按映射结果移动底层数据句柄”所需的输入对象；类型须满足所选原型约束。 |
-| `index` | 输入 | 指定“按映射结果移动底层数据句柄”使用的标量值；取值须满足声明和约束。 |
+| `pointer` | 输入 | 被前移的元素数据句柄。 |
+| `index` | 输入 | 前移的元素个数，非负值；结果为 pointer + index。 |
 
 ## 返回值说明
 

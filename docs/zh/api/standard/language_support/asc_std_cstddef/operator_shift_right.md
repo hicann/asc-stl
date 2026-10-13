@@ -44,14 +44,14 @@ template<class Integer> constexpr byte asc::std::operator>>(byte lhs, Integer sh
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Integer` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Integer` | 移位位数的整数类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 提供“对 std::byte 值执行对应的按位或移位操作”所需的输入对象；类型须满足所选原型约束。 |
-| `shift` | 输入 | 提供“对 std::byte 值执行对应的按位或移位操作”所需的输入对象；类型须满足所选原型约束。 |
+| `lhs` | 输入 | 参与右移的 byte 操作数；按其底层 unsigned char 位右移。 |
+| `shift` | 输入 | 右移的位数。 |
 
 ## 返回值说明
 

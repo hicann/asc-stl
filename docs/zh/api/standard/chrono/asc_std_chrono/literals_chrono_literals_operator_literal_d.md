@@ -44,7 +44,7 @@ constexpr chrono::day asc::std::literals::chrono_literals::operator""d(unsigned 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 字面量整数值（无符号）；转换为表示日的 day 对象，如 5d 表示 5 日。 |
 
 ## 返回值说明
 

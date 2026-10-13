@@ -64,7 +64,7 @@ template<class S2> constexpr move_sentinel(const move_sentinel<S2>& other);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `sentinel` | 输入 | 提供“按本页所列构造形态初始化 `move_sentinel` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `sentinel` | 输入 | 被包装的哨兵；新对象保存其副本，用于与 move_iterator 比较以判定范围结束。 |
 
 ### 原型 3 的参数
 
@@ -72,13 +72,13 @@ template<class S2> constexpr move_sentinel(const move_sentinel<S2>& other);
 
 | 参数名 | 描述 |
 | --- | --- |
-| `S2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `S2` | 来源 move_sentinel 的哨兵类型；其哨兵须能转换构造为本类型的哨兵。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 复制来源 move_sentinel；新对象保存其哨兵的副本。 |
 
 ## 约束说明
 

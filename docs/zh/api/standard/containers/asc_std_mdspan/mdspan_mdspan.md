@@ -106,7 +106,7 @@ template<class OtherIndexType, size_t Size> constexpr mdspan(data_handle_type po
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 待复制的另一 mdspan 视图；本对象拷贝其数据句柄、布局映射与访问器，与它共享同一底层存储且不拥有该存储。 |
 
 ### 原型 3 的参数
 
@@ -114,8 +114,8 @@ template<class OtherIndexType, size_t Size> constexpr mdspan(data_handle_type po
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 提供“按本页所列构造形态初始化 `mdspan` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `extents` | 输入 | 各维的有效长度；维度数量和取值范围须满足本页约束。 |
+| `pointer` | 输入 | 指向被视图首元素的数据句柄；须指向可覆盖各维长度乘积个元素的连续存储。 |
+| `extents` | 输入 | 维度描述对象（extents）；其秩与各维长度须与 pointer 指向的存储匹配。 |
 
 ### 原型 4 的参数
 
@@ -123,8 +123,8 @@ template<class OtherIndexType, size_t Size> constexpr mdspan(data_handle_type po
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 提供“按本页所列构造形态初始化 `mdspan` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `mapping` | 输入 | 提供“按本页所列构造形态初始化 `mdspan` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `pointer` | 输入 | 指向被视图首元素的数据句柄；须指向可覆盖各维长度乘积个元素的连续存储。 |
+| `mapping` | 输入 | 布局映射对象；定义各维索引到数据句柄偏移的换算规则，本对象保存其副本。 |
 
 ### 原型 5 的参数
 
@@ -132,9 +132,9 @@ template<class OtherIndexType, size_t Size> constexpr mdspan(data_handle_type po
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 提供“按本页所列构造形态初始化 `mdspan` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `mapping` | 输入 | 提供“按本页所列构造形态初始化 `mdspan` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
-| `accessor` | 输入 | 提供“按本页所列构造形态初始化 `mdspan` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `pointer` | 输入 | 指向被视图首元素的数据句柄；须指向可覆盖各维长度乘积个元素的连续存储。 |
+| `mapping` | 输入 | 布局映射对象；定义各维索引到数据句柄偏移的换算规则，本对象保存其副本。 |
+| `accessor` | 输入 | 访问器对象；定义元素访问方式与对齐要求，本对象保存其副本。 |
 
 ### 原型 6 的参数
 
@@ -142,7 +142,7 @@ template<class OtherIndexType, size_t Size> constexpr mdspan(data_handle_type po
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 被移动构造的另一 mdspan 视图；其数据句柄、布局映射与访问器转移给本对象，移动后它处于有效但未指定的状态。 |
 
 ### 原型 7 的参数
 
@@ -150,14 +150,14 @@ template<class OtherIndexType, size_t Size> constexpr mdspan(data_handle_type po
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherIndexTypes` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `OtherIndexTypes` | 依次给出各维长度的整数类型包；各类型须可转换为 index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 提供“按本页所列构造形态初始化 `mdspan` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `args` | 输入 | 转发给对象构造或函数调用的实参列表。 |
+| `pointer` | 输入 | 指向被视图首元素的数据句柄；须指向可覆盖各维长度乘积个元素的连续存储。 |
+| `args` | 输入 | 按维度顺序给出的各维长度实参包；个数须等于秩且各值非负。 |
 
 ### 原型 8 的参数
 
@@ -165,16 +165,16 @@ template<class OtherIndexType, size_t Size> constexpr mdspan(data_handle_type po
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherElement` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `OtherExtents` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `OtherLayout` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `OtherAccessor` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `OtherElement` | 源 mdspan 的元素类型，须可转换为本视图的元素类型。 |
+| `OtherExtents` | 源 mdspan 的维度描述类型，须与本视图的秩和静态维长度兼容。 |
+| `OtherLayout` | 源 mdspan 的布局策略类型，须与本视图的布局兼容。 |
+| `OtherAccessor` | 源 mdspan 的访问器类型，其元素类型须可转换为本视图的元素类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 用于跨类型构造的另一 mdspan 视图；其元素类型可转换为本视图的元素类型，维度与访问策略兼容。 |
 
 ### 原型 9 的参数
 
@@ -182,15 +182,15 @@ template<class OtherIndexType, size_t Size> constexpr mdspan(data_handle_type po
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherIndexType` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Size` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `OtherIndexType` | count 中各维长度的整数类型，须可转换为 index_type。 |
+| `Size` | count 的元素个数，编译期常量，须等于本视图的秩。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 提供“按本页所列构造形态初始化 `mdspan` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `pointer` | 输入 | 指向被视图首元素的数据句柄；须指向可覆盖各维长度乘积个元素的连续存储。 |
+| `count` | 输入 | 按维度顺序存放各维长度的 array；元素个数须等于秩且各值非负。 |
 
 ### 原型 10 的参数
 
@@ -198,15 +198,15 @@ template<class OtherIndexType, size_t Size> constexpr mdspan(data_handle_type po
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherIndexType` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Size` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `OtherIndexType` | count 中各维长度的整数类型，须可转换为 index_type。 |
+| `Size` | count 的元素个数，编译期常量，须等于本视图的秩。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 提供“按本页所列构造形态初始化 `mdspan` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `pointer` | 输入 | 指向被视图首元素的数据句柄；须指向可覆盖各维长度乘积个元素的连续存储。 |
+| `count` | 输入 | 按维度顺序存放各维长度的 span；元素个数须等于秩且各值非负。 |
 
 ## 约束说明
 

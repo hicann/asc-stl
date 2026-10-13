@@ -44,7 +44,7 @@ constexpr void asc::std::philox_engine::seed(UIntType value = default_seed) noex
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 用于初始化引擎状态的种子值，将引擎重置为该种子对应的状态；省略时取 default_seed。 |
 
 ## 返回值说明
 

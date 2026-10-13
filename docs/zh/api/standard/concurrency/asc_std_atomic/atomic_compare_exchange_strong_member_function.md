@@ -57,9 +57,8 @@ bool asc::std::atomic::compare_exchange_strong(T& expected, T desired, memory_or
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `expected` | 输入/输出 | 提供预期值或目标值；比较失败时函数把观察到的当前原子值写入 `expected`；strong 形式不允许伪失败，weak 形式允许伪失败（值相等也可能返回 `false`）。 |
-| `desired` | 输入 | 提供“比较当前值与 expected”所需的输入对象；类型须满足所选原型约束。 |
-| `success` | 输入 | 提供“比较当前值与 expected”所需的输入对象；类型须满足所选原型约束。 |
-
+| `desired` | 输入 | 比较相等时写入原子对象的目标值。 |
+| `success` | 输入 | 比较交换成功分支使用的内存序，约束交换写入的可见性顺序。 |
 ### 原型 2 的参数
 
 **函数参数**
@@ -67,10 +66,9 @@ bool asc::std::atomic::compare_exchange_strong(T& expected, T desired, memory_or
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `expected` | 输入/输出 | 提供预期值或目标值；比较失败时函数把观察到的当前原子值写入 `expected`；strong 形式不允许伪失败，weak 形式允许伪失败（值相等也可能返回 `false`）。 |
-| `desired` | 输入 | 提供“比较当前值与 expected”所需的输入对象；类型须满足所选原型约束。 |
-| `success` | 输入 | 提供“比较当前值与 expected”所需的输入对象；类型须满足所选原型约束。 |
-| `failure` | 输入 | 提供“比较当前值与 expected”所需的输入对象；类型须满足所选原型约束。 |
-
+| `desired` | 输入 | 比较相等时写入原子对象的目标值。 |
+| `success` | 输入 | 比较交换成功分支使用的内存序，约束交换写入的可见性顺序。 |
+| `failure` | 输入 | 比较交换失败分支（仅读取）使用的内存序；不得为 release 或 acq_rel，且不得强于 success。 |
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |

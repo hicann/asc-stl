@@ -46,7 +46,7 @@ float asc::std::tgammaf(float value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待计算 Gamma 函数的输入值（无量纲）；非正整数（含 ±0）为极点，按符号返回 ±inf 或 NaN。 |
 
 ## 返回值说明
 

@@ -56,7 +56,7 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 | --- | --- |
 | `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
 | `OutputIterator` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
-| `BinaryOperation` | 对输入值执行本页操作的可调用对象类型。 |
+| `BinaryOperation` | 前缀归约的二元运算可调用对象类型：接受当前部分和与当前元素，返回新的部分和。 |
 
 **函数参数**
 
@@ -65,7 +65,7 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `result` | 输出 | 写入结果的输出迭代器；目标范围须有足够容量。 |
-| `binary_op` | 输入 | 提供“依次写出前缀归约结果”所需的输入对象；类型须满足所选原型约束。 |
+| `binary_op` | 输入 | 二元归约运算对象，按 binary_op(当前部分和, 当前元素) 生成前缀结果；省略该参数的重载使用 operator+。 |
 
 ### 原型 2 的参数
 

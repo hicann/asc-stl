@@ -46,8 +46,8 @@ wint_t asc::std::towctrans(wint_t value, wctrans_t descriptor) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `descriptor` | 输入 | 提供“按当前支持的 C 区域设置规则取得或应用宽字符分类与转换描述符”所需的输入对象；类型须满足所选原型约束。 |
+| `value` | 输入 | 待转换的宽字符（wint_t）；取值须可表示为宽字符或等于 WEOF，等于 WEOF 时原样返回。 |
+| `descriptor` | 输入 | 字符转换描述符（wctrans_t），由 wctrans 取得；指定把宽字符映射为大写或小写所用的转换规则。 |
 
 ## 返回值说明
 

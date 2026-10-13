@@ -44,7 +44,7 @@ constexpr long double asc::std::erfl(long double value) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 误差函数的输入值（无量纲，为积分上限）；±0 返回 ±0，±inf 返回 ±1。 |
 
 ## 返回值说明
 

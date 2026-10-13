@@ -44,7 +44,7 @@ constexpr long double asc::std::logbl(long double value) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待提取规范化指数的输入值（无量纲）；±0 返回 -inf，±inf 返回 +inf，NaN 返回 NaN。 |
 
 ## 返回值说明
 

@@ -46,7 +46,7 @@ bool asc::std::atomic_flag::test(memory_order order) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `order` | 输入 | 提供“读取原子标志当前是否置位”所需的输入对象；类型须满足所选原型约束。 |
+| `order` | 输入 | 读取标志所用内存序，决定本次读取的可见性顺序；仅可取 relaxed、consume、acquire 或 seq_cst。 |
 
 ## 返回值说明
 

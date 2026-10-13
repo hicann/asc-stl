@@ -44,8 +44,7 @@ constexpr long double asc::std::frexpl(long double value, int* exponent) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `exponent` | 输出 | 输出参数，函数将二进制指数写入该指针所指对象；指针须有效（指向可写 `int`）。 |
+| `value` | 输入 | 待分解为规范化尾数与指数的输入值（无量纲）。 || `exponent` | 输出 | 输出参数，函数将二进制指数写入该指针所指对象；指针须有效（指向可写 `int`）。 |
 
 ## 返回值说明
 

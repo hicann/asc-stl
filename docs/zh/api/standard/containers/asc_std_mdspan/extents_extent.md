@@ -44,7 +44,7 @@ constexpr index_type asc::std::extents::extent(rank_type index) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 提供“查询指定维度的动态或静态长度”所需的输入对象；类型须满足所选原型约束。 |
+| `index` | 输入 | 待查询长度的维度编号，从 0 起；须小于维度总数（rank()），返回该维的静态或动态长度。 |
 
 ## 返回值说明
 

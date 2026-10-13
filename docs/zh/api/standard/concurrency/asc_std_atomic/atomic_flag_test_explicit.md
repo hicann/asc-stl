@@ -46,8 +46,8 @@ bool asc::std::atomic_flag_test_explicit(const atomic_flag* object, memory_order
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `object` | 输入 | 提供“按指定内存序读取原子标志”所需的数据地址；可访问范围和生命周期须满足约束。 |
-| `order` | 输入 | 提供“按指定内存序读取原子标志”所需的输入对象；类型须满足所选原型约束。 |
+| `object` | 输入 | 指向被读取的原子标志对象的指针。 |
+| `order` | 输入 | 读取标志所用内存序，决定本次读取的可见性顺序；仅可取 relaxed、consume、acquire 或 seq_cst。 |
 
 ## 返回值说明
 

@@ -64,7 +64,7 @@ reference asc::std::inplace_vector::unchecked_push_back(const T& value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待尾部插入的元素值；以复制方式构造，本接口不检查容量，调用方须保证 size() < capacity()，否则行为未定义。 |
 
 ## 返回值说明
 

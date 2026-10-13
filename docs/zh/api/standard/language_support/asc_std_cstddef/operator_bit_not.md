@@ -44,7 +44,7 @@ constexpr byte asc::std::operator~(byte value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 被按位取反的 byte 值；按其底层 unsigned char 逐位取反。 |
 
 ## 返回值说明
 

@@ -48,9 +48,8 @@ barrier(long long expected, CompletionFunction completion);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `expected` | 输入 | 指定“按本页所列构造形态初始化 `barrier` 对象”使用的标量值；取值须满足声明和约束。 |
-| `completion` | 输入 | 阶段完成函数对象：每轮（phase）所有参与线程到达屏障且计满时由其中一个线程无参调用；若其抛出异常则调用 `std::terminate`。 |
-
+| `expected` | 输入 | 初始参与线程数，须为正数；每个阶段的到达计数达到该值时触发完成函数并开启下一阶段。 |
+| `completion` | 输入 | 阶段完成函数；在每阶段全部参与者到达后被调用一次，缺省为空完成函数。 |
 ## 约束说明
 
 - Host 侧对象管理 Ascend 950 的 GM 状态

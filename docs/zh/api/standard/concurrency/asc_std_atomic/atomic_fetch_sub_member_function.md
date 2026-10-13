@@ -46,8 +46,8 @@ T asc::std::atomic::fetch_sub(T value, memory_order order) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `order` | 输入 | 参与本次原子读取、写入或读改写操作的值。 |
+| `value` | 输入 | 从原子对象当前值中减去的操作数；返回修改前的值。 |
+| `order` | 输入 | 读改写所用内存序，决定本次操作的可见性顺序；可取 memory_order 各枚举值。 |
 
 ## 返回值说明
 

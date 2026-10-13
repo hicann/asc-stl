@@ -44,7 +44,7 @@ constexpr long double asc::std::log1pl(long double value) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待计算 ln(1 + x) 的输入值（无量纲）；定义域为 (-1, +∞)，-1 返回 -inf，小于 -1 返回 NaN，输入接近 0 时保持精度。 |
 
 ## 返回值说明
 

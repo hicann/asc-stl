@@ -46,16 +46,16 @@ template<class T, asc::std::size_t Capacity, class Predicate> typename inplace_v
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `Capacity` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `Predicate` | 判断元素是否满足条件的可调用对象类型。 |
+| `T` | inplace_vector 的元素类型。 |
+| `Capacity` | inplace_vector 的固定容量，编译期常量。 |
+| `Predicate` | 一元谓词类型；以元素为实参调用，返回值须可转换为 bool。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `values` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
-| `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `values` | 输入/输出 | 被清理的固定容量容器；使谓词为真的元素全部被移除，其余元素前移并保持相对次序。 |
+| `predicate` | 输入 | 一元谓词；对每个元素调用一次，返回 true 的元素被移除。 |
 
 ## 返回值说明
 

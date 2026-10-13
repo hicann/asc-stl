@@ -82,7 +82,7 @@ constexpr weekday(weekday&& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 以本地时区天数表示的时点天数，换算出对应星期几（0 到 6）构造对象。 |
 
 ### 原型 3 的参数
 
@@ -90,7 +90,7 @@ constexpr weekday(weekday&& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 以系统时点天数（sys_days）表示的日期，换算出对应星期几构造对象。 |
 
 ### 原型 4 的参数
 
@@ -98,7 +98,7 @@ constexpr weekday(weekday&& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 星期几值，0 到 6 有效且 0 表示星期日；7 到 255 亦可保存，但 ok() 判为 false。 |
 
 ### 原型 5 的参数
 
@@ -106,7 +106,7 @@ constexpr weekday(weekday&& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 用于复制构造的 weekday 对象。 |
 
 ### 原型 6 的参数
 
@@ -114,7 +114,7 @@ constexpr weekday(weekday&& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入/输出 | 用于移动构造的 weekday 对象；移动后源对象处于有效但未指定状态。 |
 
 ## 约束说明
 

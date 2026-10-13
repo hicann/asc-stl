@@ -70,8 +70,8 @@ constexpr weekday_indexed(weekday_indexed&& weekday_value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `weekday_value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `index` | 输入 | 指定“按本页所列构造形态初始化 `weekday_indexed` 对象”使用的标量值；取值须满足声明和约束。 |
+| `weekday_value` | 输入 | 星期几值，0 到 6 有效且 0 表示星期日；7 到 255 亦可保存，但 ok() 判为 false。 |
+| `index` | 输入 | 该月的第几个星期几，1 到 5 有效；0 亦可保存，但 ok() 判为 false。 |
 
 ### 原型 3 的参数
 
@@ -79,7 +79,7 @@ constexpr weekday_indexed(weekday_indexed&& weekday_value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `weekday_value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `weekday_value` | 输入 | 用于复制构造的 weekday_indexed 对象。 |
 
 ### 原型 4 的参数
 
@@ -87,7 +87,7 @@ constexpr weekday_indexed(weekday_indexed&& weekday_value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `weekday_value` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `weekday_value` | 输入/输出 | 用于移动构造的 weekday_indexed 对象；移动后源对象处于有效但未指定状态。 |
 
 ## 约束说明
 

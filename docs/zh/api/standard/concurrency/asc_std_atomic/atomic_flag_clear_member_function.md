@@ -46,7 +46,7 @@ void asc::std::atomic_flag::clear(memory_order order) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `order` | 输入 | 提供“移除全部元素并使容器变为空”所需的输入对象；类型须满足所选原型约束。 |
+| `order` | 输入 | 清除标志所用内存序，决定本次写入的可见性顺序；仅可取 relaxed、release 或 seq_cst。 |
 
 ## 返回值说明
 

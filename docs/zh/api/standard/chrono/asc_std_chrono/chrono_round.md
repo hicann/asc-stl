@@ -54,15 +54,15 @@ template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDu
 
 | 参数名 | 描述 |
 | --- | --- |
-| `ToDuration` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Clock` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Duration` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `ToDuration` | 转换到的目标时长类型。 |
+| `Clock` | 时间点所属的时钟类型，如 system_clock。 |
+| `Duration` | 源时间点的时长类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待四舍五入转换的时间点；恰在半途时向偶数取整。 |
 
 ### 原型 2 的参数
 
@@ -78,7 +78,7 @@ template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDu
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待四舍五入转换的时长；恰在半途时向偶数取整。 |
 
 ## 返回值说明
 

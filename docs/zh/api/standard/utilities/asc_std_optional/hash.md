@@ -44,13 +44,13 @@ template <class T> struct hash<optional<T>> { size_t operator()(const optional<T
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 控制接口实例化时使用的类型或编译期值，须满足约束说明。 |
+| `T` | optional 所含值的类型；须存在对应的 hash 特化。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 被计算哈希的 optional 对象；不含值时哈希值为 0，含值时为 hash<remove_const_t<T>>{}(*value)。 |
 
 ## 返回值说明
 

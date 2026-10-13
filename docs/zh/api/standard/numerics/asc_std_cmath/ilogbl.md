@@ -44,7 +44,7 @@ constexpr int asc::std::ilogbl(long double value) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待提取以 2 为底的规范化指数的输入值（无量纲）；±0、±inf、NaN 等特殊值返回约定常量（如 FP_ILOGB0、FP_ILOGBNAN）。 |
 
 ## 返回值说明
 

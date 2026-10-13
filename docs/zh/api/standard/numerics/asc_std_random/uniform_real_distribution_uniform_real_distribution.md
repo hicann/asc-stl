@@ -64,7 +64,7 @@ constexpr explicit asc::std::uniform_real_distribution<float>::uniform_real_dist
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `parameters` | 输入 | 提供“构造 float 均匀实数分布，并设置或保留默认的半开采样区间”使用的对象引用；被引用对象须在调用期间有效。 |
+| `parameters` | 输入 | 分布参数对象引用；以其保存的半开采样区间初始化本分布。 |
 
 ### 原型 3 的参数
 
@@ -72,8 +72,8 @@ constexpr explicit asc::std::uniform_real_distribution<float>::uniform_real_dist
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `a` | 输入 | 指定“构造 float 均匀实数分布，并设置或保留默认的半开采样区间”使用的标量值；取值须满足声明和约束。 |
-| `b` | 输入 | 指定“构造 float 均匀实数分布，并设置或保留默认的半开采样区间”使用的标量值；取值须满足声明和约束。 |
+| `a` | 输入 | 半开采样区间的下界；生成值满足 a <= x < b。 |
+| `b` | 输入 | 半开采样区间的上界；省略时为 1.0F（见原型 3 的默认实参）。 |
 
 ## 约束说明
 

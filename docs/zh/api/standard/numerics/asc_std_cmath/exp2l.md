@@ -44,7 +44,7 @@ constexpr long double asc::std::exp2l(long double value) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 2 的指数（幂次，无量纲）；上溢返回 +inf，下溢返回 0。 |
 
 ## 返回值说明
 

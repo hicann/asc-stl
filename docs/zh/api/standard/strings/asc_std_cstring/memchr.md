@@ -54,9 +54,9 @@ void* asc::std::memchr(void* value, int character, size_t count) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `character` | 输入 | 指定“在指定字节范围中查找目标字节”使用的标量值；取值须满足声明和约束。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `value` | 输入 | 被查找的字节缓冲区首地址；可读范围至少包含 count 个字节。 |
+| `character` | 输入 | 待查找的目标字节值；按 unsigned char 解释后逐字节比较。 |
+| `count` | 输入 | 被查找的字节数，即缓冲区长度，单位为字节。 |
 
 ### 原型 2 的参数
 
@@ -64,9 +64,9 @@ void* asc::std::memchr(void* value, int character, size_t count) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `character` | 输入 | 指定“在指定字节范围中查找目标字节”使用的标量值；取值须满足声明和约束。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `value` | 输入 | 被查找的字节缓冲区首地址；可读范围至少包含 count 个字节。 |
+| `character` | 输入 | 待查找的目标字节值；按 unsigned char 解释后逐字节比较。 |
+| `count` | 输入 | 被查找的字节数，即缓冲区长度，单位为字节。 |
 
 ## 返回值说明
 

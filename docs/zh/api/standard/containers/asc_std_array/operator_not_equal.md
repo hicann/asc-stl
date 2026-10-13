@@ -122,14 +122,14 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator!=(type_id
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Types` | 传递给构造函数或可调用对象的实参类型列表。 |
+| `Types` | variant 的备选项类型列表。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 参与不相等比较的左侧 variant；两侧处于不同备选项、或同备选项但值不等时结果为 true。 |
+| `right` | 输入 | 参与不相等比较的右侧 variant。 |
 
 ### 原型 2 的参数
 
@@ -137,15 +137,15 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator!=(type_id
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 容器保存或处理的元素类型。 |
-| `U` | 容器保存或处理的元素类型。 |
+| `T` | 左侧比较值的类型，须可用 operator== 与 U 比较。 |
+| `U` | 右侧 optional 所含值的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `optional_value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 与 optional 比较的普通值；optional 不含值或所含值与之不等时结果为 true。 |
+| `optional_value` | 输入 | 被比较的 optional 对象。 |
 
 ### 原型 3 的参数
 
@@ -153,15 +153,15 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator!=(type_id
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 容器保存或处理的元素类型。 |
-| `U` | 容器保存或处理的元素类型。 |
+| `T` | 左侧 optional 所含值的类型。 |
+| `U` | 右侧 optional 所含值的类型，须可用 operator== 与 T 比较。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 参与比较的左侧 optional；一侧为空另一侧含值、或两侧都含值但不等时结果为 true。 |
+| `right` | 输入 | 参与比较的右侧 optional。 |
 
 ### 原型 4 的参数
 
@@ -169,15 +169,15 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator!=(type_id
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 容器保存或处理的元素类型。 |
-| `U` | 容器保存或处理的元素类型。 |
+| `T` | 左侧 optional 所含值的类型。 |
+| `U` | 右侧比较值的类型，须可用 operator== 与 T 比较。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `optional_value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `optional_value` | 输入 | 被比较的 optional 对象。 |
+| `value` | 输入 | 与 optional 比较的普通值；optional 不含值或所含值与之不等时结果为 true。 |
 
 ### 原型 5 的参数
 
@@ -185,14 +185,14 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator!=(type_id
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 容器保存或处理的元素类型。 |
+| `T` | optional 所含值的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 提供“比较两个对象是否不相等”所需的输入对象；类型须满足所选原型约束。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `未命名参数1` | 输入 | 原型中的无名形参，类型为 nullopt_t，实参写作 asc::std::nullopt；optional 含值时比较结果为 true。 |
+| `value` | 输入 | 被比较的 optional 对象。 |
 
 ### 原型 6 的参数
 
@@ -200,14 +200,14 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator!=(type_id
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 容器保存或处理的元素类型。 |
+| `T` | optional 所含值的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `asc` | 输入 | 提供“比较两个对象是否不相等”所需的输入对象；类型须满足所选原型约束。 |
+| `value` | 输入 | 被比较的 optional 对象。 |
+| `未命名参数1` | 输入 | 原型中的无名形参，类型为 nullopt_t，实参写作 asc::std::nullopt；optional 含值时比较结果为 true。 |
 
 ### 原型 7 的参数
 
@@ -215,18 +215,18 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator!=(type_id
 
 | 参数名 | 描述 |
 | --- | --- |
-| `UIntType` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `WordSize` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `WordCount` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `NumRounds` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `Constants` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
+| `UIntType` | 引擎生成的整数类型。 |
+| `WordSize` | 每个字的位宽，编译期常量。 |
+| `WordCount` | 状态包含的字数，编译期常量。 |
+| `NumRounds` | 混合轮数，编译期常量。 |
+| `Constants` | 引擎常数包，编译期常量。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 参与不相等比较的左侧 philox 引擎。 |
+| `right` | 输入 | 参与不相等比较的右侧 philox 引擎；两侧内部状态不同时结果为 true。 |
 
 ### 原型 8 的参数
 
@@ -234,15 +234,15 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator!=(type_id
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 容器保存或处理的元素类型。 |
-| `Size` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `T` | 数组元素类型，两侧须一致，须支持 operator==。 |
+| `Size` | 数组长度，编译期常量，两侧须相同。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 参与逐元素比较的左侧数组。 |
+| `right` | 输入 | 参与逐元素比较的右侧数组；任一对应元素不相等时结果为 true。 |
 
 ### 原型 9 的参数
 
@@ -250,14 +250,14 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator!=(type_id
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 容器保存或处理的元素类型。 |
+| `T` | 原型声明中的占位模板参数（声明写作 template<int T>）；实际的字符类型 CharT 与特征类型 Traits 由字符串视图操作数推导。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 参与不相等比较的左侧字符串视图。 |
+| `right` | 输入 | 参与不相等比较的右侧字符串视图；长度不同或任一位置字符不同时结果为 true。 |
 
 ### 原型 10 的参数
 
@@ -265,14 +265,14 @@ template<unsigned int> [[nodiscard]] constexpr bool asc::std::operator!=(type_id
 
 | 参数名 | 描述 |
 | --- | --- |
-| `未命名参数1` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
+| `未命名参数1` | 原型声明中的无名占位模板参数；实际的字符类型 CharT 与特征类型 Traits 由字符串视图操作数推导。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 参与不相等比较的左侧字符串视图。 |
+| `right` | 输入 | 参与不相等比较的右侧字符串视图；长度不同或任一位置字符不同时结果为 true。 |
 
 ## 返回值说明
 

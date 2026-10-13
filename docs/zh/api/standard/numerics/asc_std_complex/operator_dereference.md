@@ -60,8 +60,8 @@ constexpr asc::std::complex<float> asc::std::operator*(float lhs, const asc::std
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 参与本页所述数学运算的输入值。 |
-| `rhs` | 输入 | 参与本页所述数学运算的输入值。 |
+| `lhs` | 输入 | 复数乘法的左操作数（complex<float>）。 |
+| `rhs` | 输入 | 复数乘法的右操作数（complex<float>）。 |
 
 ### 原型 2 的参数
 
@@ -69,8 +69,8 @@ constexpr asc::std::complex<float> asc::std::operator*(float lhs, const asc::std
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 参与本页所述数学运算的输入值。 |
-| `rhs` | 输入 | 参与本页所述数学运算的输入值。 |
+| `lhs` | 输入 | 复数乘法的左操作数（complex<float>）。 |
+| `rhs` | 输入 | 复数乘法的右操作数（标量 float，实部与虚部同乘该值）。 |
 
 ### 原型 3 的参数
 
@@ -78,8 +78,8 @@ constexpr asc::std::complex<float> asc::std::operator*(float lhs, const asc::std
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 参与本页所述数学运算的输入值。 |
-| `rhs` | 输入 | 参与本页所述数学运算的输入值。 |
+| `lhs` | 输入 | 复数乘法的左操作数（标量 float，实部与虚部同乘该值）。 |
+| `rhs` | 输入 | 复数乘法的右操作数（complex<float>）。 |
 
 ## 返回值说明
 

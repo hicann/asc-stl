@@ -44,7 +44,7 @@ constexpr long double asc::std::lgammal(long double value) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待计算 Gamma 函数绝对值自然对数的输入值（无量纲）；非正整数为极点，返回 ±inf。 |
 
 ## 返回值说明
 

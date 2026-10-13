@@ -44,7 +44,7 @@ bitset<Size> asc::std::bitset::operator>>(size_t shift) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `shift` | 输入 | 指定“按 `bitset` 的可用运算符规则处理当前对象及操作数”使用的标量值；取值须满足声明和约束。 |
+| `shift` | 输入 | 右移的位数；返回移位后的新 bitset，原对象不变，空出的高位补 0。 |
 
 ## 返回值说明
 

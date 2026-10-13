@@ -44,7 +44,7 @@ constexpr chrono::year asc::std::literals::chrono_literals::operator""y(unsigned
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 字面量整数值（无符号）；转换为表示年份的 year 对象，如 2026y 表示 2026 年。 |
 
 ## 返回值说明
 

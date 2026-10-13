@@ -90,17 +90,17 @@ template<class Extents> constexpr auto asc::std::submdspan_extents(const Extents
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Extents` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `FirstIndex` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `SecondIndex` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Extents` | 被切片的源维度描述类型（extents）；本组原型处理其前两维的切片。 |
+| `FirstIndex` | 第一维切片下标的整数类型，须可转换为 index_type。 |
+| `SecondIndex` | 第二维切片下标的整数类型，须可转换为 index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `extents` | 输入 | 各维的有效长度；维度数量和取值范围须满足本页约束。 |
-| `first_slice` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_slice` | 输入 | 提供“计算整数索引与 full_extent 混合切片的结果维度，不访问元素存储”所需的输入对象；类型须满足所选原型约束。 |
+| `extents` | 输入 | 被切片的源维度描述对象；本组原型对其前两维应用切片。 |
+| `first_slice` | 输入 | 第一维的整数切片下标；结果维度中该维固定为该单一索引。 |
+| `second_slice` | 输入 | 第二维的整数切片下标；结果维度中该维固定为该单一索引。 |
 
 ### 原型 2 的参数
 
@@ -108,16 +108,16 @@ template<class Extents> constexpr auto asc::std::submdspan_extents(const Extents
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Extents` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Index` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Extents` | 被切片的源维度描述类型（extents）；本组原型处理其前两维的切片。 |
+| `Index` | 切片下标的整数类型，须可转换为 index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `extents` | 输入 | 各维的有效长度；维度数量和取值范围须满足本页约束。 |
-| `first_slice` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_slice` | 输入 | 提供“计算整数索引与 full_extent 混合切片的结果维度，不访问元素存储”所需的输入对象；类型须满足所选原型约束。 |
+| `extents` | 输入 | 被切片的源维度描述对象；本组原型对其前两维应用切片。 |
+| `first_slice` | 输入 | 第一维的整数切片下标；结果维度中该维固定为该单一索引。 |
+| `second_slice` | 输入 | asc::std::full_extent 标记；表示第二维整维保留在结果中。 |
 
 ### 原型 3 的参数
 
@@ -125,16 +125,16 @@ template<class Extents> constexpr auto asc::std::submdspan_extents(const Extents
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Extents` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Index` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Extents` | 被切片的源维度描述类型（extents）；本组原型处理其前两维的切片。 |
+| `Index` | 切片下标的整数类型，须可转换为 index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `extents` | 输入 | 各维的有效长度；维度数量和取值范围须满足本页约束。 |
-| `first_slice` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_slice` | 输入 | 提供“计算整数索引与 full_extent 混合切片的结果维度，不访问元素存储”所需的输入对象；类型须满足所选原型约束。 |
+| `extents` | 输入 | 被切片的源维度描述对象；本组原型对其前两维应用切片。 |
+| `first_slice` | 输入 | asc::std::full_extent 标记；表示第一维整维保留在结果中。 |
+| `second_slice` | 输入 | 第二维的整数切片下标；结果维度中该维固定为该单一索引。 |
 
 ### 原型 4 的参数
 
@@ -142,18 +142,18 @@ template<class Extents> constexpr auto asc::std::submdspan_extents(const Extents
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Extents` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Offset` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `SliceExtent` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Stride` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Extents` | 被切片的源维度描述类型（extents）；本组原型处理其前两维的切片。 |
+| `Offset` | 第一维跨步切片的起始偏移类型（strided_slice::offset），须为整数类型。 |
+| `SliceExtent` | 第一维跨步切片的长度类型（strided_slice::extent），须为整数类型。 |
+| `Stride` | 第一维跨步切片的步长类型（strided_slice::stride），须为整数类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `extents` | 输入 | 各维的有效长度；维度数量和取值范围须满足本页约束。 |
-| `first_slice` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_slice` | 输入 | 提供“计算整数索引与 full_extent 混合切片的结果维度，不访问元素存储”所需的输入对象；类型须满足所选原型约束。 |
+| `extents` | 输入 | 被切片的源维度描述对象；本组原型对其前两维应用切片。 |
+| `first_slice` | 输入 | 第一维的跨步切片描述（strided_slice：起始偏移、长度、步长）。 |
+| `second_slice` | 输入 | asc::std::full_extent 标记；表示第二维整维保留在结果中。 |
 
 ### 原型 5 的参数
 
@@ -161,18 +161,18 @@ template<class Extents> constexpr auto asc::std::submdspan_extents(const Extents
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Extents` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Offset` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `SliceExtent` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Stride` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Extents` | 被切片的源维度描述类型（extents）；本组原型处理其前两维的切片。 |
+| `Offset` | 第二维跨步切片的起始偏移类型（strided_slice::offset），须为整数类型。 |
+| `SliceExtent` | 第二维跨步切片的长度类型（strided_slice::extent），须为整数类型。 |
+| `Stride` | 第二维跨步切片的步长类型（strided_slice::stride），须为整数类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `extents` | 输入 | 各维的有效长度；维度数量和取值范围须满足本页约束。 |
-| `first_slice` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_slice` | 输入 | 提供“计算整数索引与 full_extent 混合切片的结果维度，不访问元素存储”使用的对象引用；被引用对象须在调用期间有效。 |
+| `extents` | 输入 | 被切片的源维度描述对象；本组原型对其前两维应用切片。 |
+| `first_slice` | 输入 | asc::std::full_extent 标记；表示第一维整维保留在结果中。 |
+| `second_slice` | 输入 | 第二维的跨步切片描述（strided_slice：起始偏移、长度、步长）。 |
 
 ### 原型 6 的参数
 
@@ -180,16 +180,16 @@ template<class Extents> constexpr auto asc::std::submdspan_extents(const Extents
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Extents` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Pair` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Extents` | 被切片的源维度描述类型（extents）；本组原型处理其前两维的切片。 |
+| `Pair` | 表示闭区间 [first, last] 的下标对类型，两个成员须可转换为 index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `extents` | 输入 | 各维的有效长度；维度数量和取值范围须满足本页约束。 |
-| `first_slice` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_slice` | 输入 | 提供“计算整数索引与 full_extent 混合切片的结果维度，不访问元素存储”所需的输入对象；类型须满足所选原型约束。 |
+| `extents` | 输入 | 被切片的源维度描述对象；本组原型对其前两维应用切片。 |
+| `first_slice` | 输入 | 第一维的闭区间下标对 {first, last}；结果该维长度为 last - first + 1。 |
+| `second_slice` | 输入 | asc::std::full_extent 标记；表示第二维整维保留在结果中。 |
 
 ### 原型 7 的参数
 
@@ -197,16 +197,16 @@ template<class Extents> constexpr auto asc::std::submdspan_extents(const Extents
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Extents` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Pair` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Extents` | 被切片的源维度描述类型（extents）；本组原型处理其前两维的切片。 |
+| `Pair` | 表示闭区间 [first, last] 的下标对类型，两个成员须可转换为 index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `extents` | 输入 | 各维的有效长度；维度数量和取值范围须满足本页约束。 |
-| `first_slice` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_slice` | 输入 | 提供按位置访问或组合的元素集合。 |
+| `extents` | 输入 | 被切片的源维度描述对象；本组原型对其前两维应用切片。 |
+| `first_slice` | 输入 | asc::std::full_extent 标记；表示第一维整维保留在结果中。 |
+| `second_slice` | 输入 | 第二维的闭区间下标对 {first, last}；结果该维长度为 last - first + 1。 |
 
 ### 原型 8 的参数
 
@@ -214,15 +214,15 @@ template<class Extents> constexpr auto asc::std::submdspan_extents(const Extents
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Extents` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
+| `Extents` | 被切片的源维度描述类型（extents）；本组原型处理其前两维的切片。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `extents` | 输入 | 各维的有效长度；维度数量和取值范围须满足本页约束。 |
-| `first_slice` | 输入 | 输入范围的起始迭代器或指针。 |
-| `second_slice` | 输入 | 提供“计算整数索引与 full_extent 混合切片的结果维度，不访问元素存储”所需的输入对象；类型须满足所选原型约束。 |
+| `extents` | 输入 | 被切片的源维度描述对象；本组原型对其前两维应用切片。 |
+| `first_slice` | 输入 | asc::std::full_extent 标记；表示第一维整维保留在结果中。 |
+| `second_slice` | 输入 | asc::std::full_extent 标记；表示第二维整维保留在结果中。 |
 
 ## 返回值说明
 

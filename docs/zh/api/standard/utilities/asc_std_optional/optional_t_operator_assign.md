@@ -54,7 +54,7 @@ constexpr asc::std::optional<T&>& asc::std::optional<T&>::operator=(const asc::s
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 提供“按所选赋值重载更新对象，并返回规定的结果”所需的输入对象；类型须满足所选原型约束。 |
+| `asc` | 输入 | nullopt_t 空状态标记（nullopt 常量）；赋值后当前 optional 不再引用任何对象。 |
 
 ### 原型 2 的参数
 
@@ -62,7 +62,7 @@ constexpr asc::std::optional<T&>& asc::std::optional<T&>::operator=(const asc::s
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `参数1` | 输入 | 提供当前值、错误或备选项状态；所选原型决定读取或更新方式。 |
+| `参数1` | 输入 | 复制来源 optional<T&>；当前对象重新绑定到其引用的同一目标，被引用对象本身不被修改。 |
 
 ## 返回值说明
 

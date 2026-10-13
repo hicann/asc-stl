@@ -60,8 +60,8 @@ constexpr month_weekday_last(month_weekday_last&& month_value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `month_value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `weekday_value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `month_value` | 输入 | 月份值，1 到 12 表示一月至十二月。 |
+| `weekday_value` | 输入 | 月末星期几描述（weekday_last），指定该月的最后一个星期几。 |
 
 ### 原型 2 的参数
 
@@ -69,7 +69,7 @@ constexpr month_weekday_last(month_weekday_last&& month_value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `month_value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `month_value` | 输入 | 用于复制构造的 month_weekday_last 对象。 |
 
 ### 原型 3 的参数
 
@@ -77,7 +77,7 @@ constexpr month_weekday_last(month_weekday_last&& month_value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `month_value` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `month_value` | 输入/输出 | 用于移动构造的 month_weekday_last 对象；移动后源对象处于有效但未指定状态。 |
 
 ## 约束说明
 

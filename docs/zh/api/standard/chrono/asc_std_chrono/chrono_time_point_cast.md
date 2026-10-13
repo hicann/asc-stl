@@ -44,15 +44,15 @@ template<class ToDuration, class Clock, class Duration> [[nodiscard]] constexpr 
 
 | 参数名 | 描述 |
 | --- | --- |
-| `ToDuration` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Clock` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Duration` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `ToDuration` | 转换到的目标时长类型，作为结果时间点的计时精度。 |
+| `Clock` | 时间点所属的时钟类型，如 system_clock。 |
+| `Duration` | 源时间点的时长类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待转换的时间点；无法精确表示时向零截断。 |
 
 ## 返回值说明
 

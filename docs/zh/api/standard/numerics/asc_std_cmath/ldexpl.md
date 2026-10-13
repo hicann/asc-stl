@@ -44,8 +44,8 @@ constexpr long double asc::std::ldexpl(long double value, int exponent) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `exponent` | 输入 | 控制本次操作的标量值；有效取值由声明和约束说明共同确定。 |
+| `value` | 输入 | 待按 2 的整数次幂缩放的浮点值（无量纲）。 |
+| `exponent` | 输入 | 以 2 为底的整数指数（int，无量纲），结果为 value * 2^exponent。 |
 
 ## 返回值说明
 

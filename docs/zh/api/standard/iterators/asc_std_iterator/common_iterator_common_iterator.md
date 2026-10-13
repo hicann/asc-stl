@@ -82,7 +82,7 @@ template<class I2, class S2> constexpr common_iterator(const common_iterator<I2,
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
+| `first` | 输入 | 被包装的迭代器；适配器保存其副本，作为当前遍历位置。 |
 
 ### 原型 3 的参数
 
@@ -90,7 +90,7 @@ template<class I2, class S2> constexpr common_iterator(const common_iterator<I2,
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `sentinel` | 输入 | 提供“按本页所列构造形态初始化 `common_iterator` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `sentinel` | 输入 | 被包装的哨兵；适配器保存其副本，作为范围结束标记。 |
 
 ### 原型 4 的参数
 
@@ -98,7 +98,7 @@ template<class I2, class S2> constexpr common_iterator(const common_iterator<I2,
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入/输出 | 移动来源 common_iterator；其迭代器与哨兵被移动到新对象，移动后处于有效但未指定状态。 |
 
 ### 原型 5 的参数
 
@@ -106,7 +106,7 @@ template<class I2, class S2> constexpr common_iterator(const common_iterator<I2,
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 复制来源 common_iterator；其迭代器与哨兵被复制到新对象。 |
 
 ### 原型 6 的参数
 
@@ -114,14 +114,14 @@ template<class I2, class S2> constexpr common_iterator(const common_iterator<I2,
 
 | 参数名 | 描述 |
 | --- | --- |
-| `I2` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `S2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `I2` | 来源 common_iterator 的迭代器类型；须能转换构造为 Iter。 |
+| `S2` | 来源 common_iterator 的哨兵类型；须能转换构造为 Sent。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待复制、移动、比较或交换的另一个对象；具体操作由所选原型决定。 |
+| `other` | 输入 | 复制来源 common_iterator（迭代器/哨兵类型可不同）；二者经转换复制到新对象。 |
 
 ## 约束说明
 

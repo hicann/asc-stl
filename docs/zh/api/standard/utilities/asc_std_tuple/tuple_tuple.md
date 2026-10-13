@@ -92,8 +92,7 @@ template<class... Values, enable_if_t<sizeof...(Values) == sizeof...(Types), int
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `values` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
-
+| `values` | 输入/输出 | 由迭代器解引用引用组成的 tuple 对象；以其各元素构造新 tuple 的对应元素。 |
 ## 约束说明
 
 - 构造、赋值、交换及相关自由函数均不进行动态内存分配

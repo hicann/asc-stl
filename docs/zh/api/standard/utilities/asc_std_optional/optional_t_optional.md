@@ -70,7 +70,7 @@ constexpr asc::std::optional<T&>::optional(const asc::std::optional<T&>&) noexce
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入/输出 | 被绑定的对象；新 optional 保存指向它的引用，对象生命周期须覆盖 optional 使用期。 |
 
 ### 原型 3 的参数
 
@@ -78,7 +78,7 @@ constexpr asc::std::optional<T&>::optional(const asc::std::optional<T&>&) noexce
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 提供“按本页所列构造形态初始化 `optional<T&>` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `asc` | 输入 | nullopt_t 空状态标记（nullopt 常量）；构造不含引用的空 optional。 |
 
 ### 原型 4 的参数
 
@@ -86,7 +86,7 @@ constexpr asc::std::optional<T&>::optional(const asc::std::optional<T&>&) noexce
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `参数1` | 输入 | 提供当前值、错误或备选项状态；所选原型决定读取或更新方式。 |
+| `参数1` | 输入 | 复制来源 optional<T&>；新对象绑定到其引用的同一目标。 |
 
 ## 约束说明
 

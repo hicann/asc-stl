@@ -46,7 +46,7 @@ template<class T> bool asc::std::atomic_compare_exchange_strong(atomic<T>* objec
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 原子对象存储的值类型。 |
 
 **函数参数**
 
@@ -54,8 +54,7 @@ template<class T> bool asc::std::atomic_compare_exchange_strong(atomic<T>* objec
 | --- | --- | --- |
 | `object` | 输入 | 提供“比较当前值与 expected”所需的数据地址；可访问范围和生命周期须满足约束。 |
 | `expected` | 输入/输出 | 提供预期值或目标值的地址；比较失败时函数把观察到的当前原子值写入 `*expected`；strong 形式不允许伪失败，weak 形式允许伪失败（值相等也可能返回 `false`）。 |
-| `desired` | 输入 | 提供“比较当前值与 expected”所需的输入对象；类型须满足所选原型约束。 |
-
+| `desired` | 输入 | 比较相等时写入原子对象的目标值。 |
 ## 返回值说明
 
 | 返回值类型 | 含义 |

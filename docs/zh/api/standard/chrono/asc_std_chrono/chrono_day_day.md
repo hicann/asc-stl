@@ -70,7 +70,7 @@ constexpr day(unsigned int value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 用于复制构造的 day 对象。 |
 
 ### 原型 3 的参数
 
@@ -78,7 +78,7 @@ constexpr day(unsigned int value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入/输出 | 用于移动构造的 day 对象；移动后源对象处于有效但未指定状态。 |
 
 ### 原型 4 的参数
 
@@ -86,7 +86,7 @@ constexpr day(unsigned int value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 日值，1 到 31 表示有效日；0 与 32 到 255 亦可保存，但 ok() 判为 false。 |
 
 ## 约束说明
 

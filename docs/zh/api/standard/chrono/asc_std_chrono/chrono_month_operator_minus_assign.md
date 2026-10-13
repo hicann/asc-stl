@@ -44,7 +44,7 @@ constexpr month& asc::std::chrono::month::operator-=(const months& value) noexce
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 从当前月份减去的月数（months 时长，计数单位为月）；结果按十二进制回绕并保持在 1 到 12 内。 |
 
 ## 返回值说明
 

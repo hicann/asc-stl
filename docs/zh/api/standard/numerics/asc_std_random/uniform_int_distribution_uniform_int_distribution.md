@@ -64,7 +64,7 @@ constexpr uniform_int_distribution(result_type minimum, result_type maximum) noe
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `parameters` | 输入 | 提供“按本页所列构造形态初始化 `uniform_int_distribution` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `parameters` | 输入 | 分布参数对象引用；以其保存的闭区间参数初始化本分布。 |
 
 ### 原型 3 的参数
 
@@ -72,8 +72,8 @@ constexpr uniform_int_distribution(result_type minimum, result_type maximum) noe
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `minimum` | 输入 | 提供“按本页所列构造形态初始化 `uniform_int_distribution` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `maximum` | 输入 | 提供“按本页所列构造形态初始化 `uniform_int_distribution` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `minimum` | 输入 | 闭采样区间的下界；生成值不小于该值。 |
+| `maximum` | 输入 | 闭采样区间的上界；生成值不大于该值。 |
 
 ## 约束说明
 

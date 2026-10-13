@@ -44,7 +44,7 @@ constexpr size_t asc::std::extents::static_extent(rank_type index) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 提供“查询指定维度的编译期静态长度”所需的输入对象；类型须满足所选原型约束。 |
+| `index` | 输入 | 待查询静态长度的维度编号，从 0 起；须小于维度总数（rank()），该维为动态维时返回 dynamic_extent。 |
 
 ## 返回值说明
 

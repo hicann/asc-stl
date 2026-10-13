@@ -44,7 +44,7 @@ constexpr time_point<Clock, Duration>& asc::std::chrono::time_point::operator-=(
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 从当前时间点减去的时长；计时单位由其 period 决定，结果仍以同一 Clock 为基准。 |
 
 ## 返回值说明
 

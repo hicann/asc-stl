@@ -92,7 +92,7 @@ template<class T> T asc::std::abs(const complex<T>& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 参与本页所述数学运算的输入值。 |
+| `x` | 输入 | 待求绝对值的整数输入（int）。 |
 
 ### 原型 2 的参数
 
@@ -100,7 +100,7 @@ template<class T> T asc::std::abs(const complex<T>& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 参与本页所述数学运算的输入值。 |
+| `x` | 输入 | 待求绝对值的整数输入（long）。 |
 
 ### 原型 3 的参数
 
@@ -108,7 +108,7 @@ template<class T> T asc::std::abs(const complex<T>& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 参与本页所述数学运算的输入值。 |
+| `x` | 输入 | 待求绝对值的整数输入（long long）。 |
 
 ### 原型 4 的参数
 
@@ -116,7 +116,7 @@ template<class T> T asc::std::abs(const complex<T>& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 参与本页所述数学运算的输入值。 |
+| `x` | 输入 | 待求浮点绝对值的输入值（无量纲）。 |
 
 ### 原型 5 的参数
 
@@ -124,13 +124,13 @@ template<class T> T asc::std::abs(const complex<T>& value) noexcept;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 复数操作数的成分（实部与虚部）值类型，须为浮点类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待求模（绝对值）的复数操作数，模为实部与虚部构成向量的长度。 |
 
 ## 返回值说明
 

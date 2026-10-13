@@ -54,7 +54,7 @@ reference asc::std::basic_string::operator[](size_type index) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 提供“在调用方保证索引有效时访问指定元素”所需的输入对象；类型须满足所选原型约束。 |
+| `index` | 输入 | 待访问字符的下标（从 0 起）；调用方须保证 index < size()，本运算符不做越界检查。 |
 
 ### 原型 2 的参数
 
@@ -62,7 +62,7 @@ reference asc::std::basic_string::operator[](size_type index) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 提供“在调用方保证索引有效时访问指定元素”所需的输入对象；类型须满足所选原型约束。 |
+| `index` | 输入 | 待访问字符的下标（从 0 起）；调用方须保证 index < size()，本运算符不做越界检查。 |
 
 ## 返回值说明
 

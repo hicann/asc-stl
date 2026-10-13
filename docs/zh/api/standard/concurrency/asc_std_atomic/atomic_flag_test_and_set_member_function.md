@@ -46,7 +46,7 @@ bool asc::std::atomic_flag::test_and_set(memory_order order) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `order` | 输入 | 提供“原子地置位标志并返回原有状态”所需的输入对象；类型须满足所选原型约束。 |
+| `order` | 输入 | 置位并读取原值所用内存序，决定本次操作的可见性顺序；可取 memory_order 各枚举值。 |
 
 ## 返回值说明
 

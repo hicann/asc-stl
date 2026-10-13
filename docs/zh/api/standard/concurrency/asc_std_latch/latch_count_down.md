@@ -46,7 +46,7 @@ void asc::std::latch::count_down(long long update) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `update` | 输入 | 指定“减少 latch 计数但不等待归零”使用的标量值；取值须满足声明和约束。 |
+| `update` | 输入 | 本次减少的计数数量，须为正数且不超过剩余计数。 |
 
 ## 返回值说明
 

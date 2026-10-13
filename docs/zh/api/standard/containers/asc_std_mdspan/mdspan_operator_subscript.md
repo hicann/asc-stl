@@ -74,13 +74,13 @@ template<class OtherIndexType> constexpr reference asc::std::mdspan::operator[](
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Indices` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Indices` | 下标实参的类型包；仅含一个成员，须可转换为 index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `indices` | 输入 | 提供“在调用方保证索引有效时访问指定元素”所需的输入对象；类型须满足所选原型约束。 |
+| `indices` | 输入 | 元素下标；适用于秩为 1 的视图，须满足 0 <= 下标 < extent(0)，本接口不检查越界。 |
 
 ### 原型 2 的参数
 
@@ -88,13 +88,13 @@ template<class OtherIndexType> constexpr reference asc::std::mdspan::operator[](
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Indices` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Indices` | 按维度顺序排列的下标类型包；个数须等于秩，各类型须可转换为 index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `indices` | 输入 | 提供“在调用方保证索引有效时访问指定元素”所需的输入对象；类型须满足所选原型约束。 |
+| `indices` | 输入 | 按维度顺序给出的元素下标包；个数须等于秩，每个下标须落在对应维长度范围内，本接口不检查越界。 |
 
 ### 原型 3 的参数
 
@@ -102,13 +102,13 @@ template<class OtherIndexType> constexpr reference asc::std::mdspan::operator[](
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherIndexType` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `OtherIndexType` | array 中下标的类型，须可转换为 index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `indices` | 输入 | 提供“在调用方保证索引有效时访问指定元素”使用的对象引用；被引用对象须在调用期间有效。 |
+| `indices` | 输入 | 按维度顺序存放各维下标的 array；长度须等于秩，各下标须落在对应维长度范围内，本接口不检查越界。 |
 
 ### 原型 4 的参数
 
@@ -116,13 +116,13 @@ template<class OtherIndexType> constexpr reference asc::std::mdspan::operator[](
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherIndexType` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `OtherIndexType` | span 中下标的类型，须可转换为 index_type。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `indices` | 输入 | 提供“在调用方保证索引有效时访问指定元素”所需的输入对象；类型须满足所选原型约束。 |
+| `indices` | 输入 | 按维度顺序存放各维下标的 span；长度须等于秩，各下标须落在对应维长度范围内，本接口不检查越界。 |
 
 ## 返回值说明
 

@@ -90,8 +90,8 @@ template<class T> constexpr bool asc::std::operator==(const complex<T>& lhs, con
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 内容相等比较的左操作数（basic_string_view，按 Traits 逐字符比较内容）。 |
+| `right` | 输入 | 内容相等比较的右操作数（basic_string_view，按 Traits 逐字符比较内容）。 |
 
 ### 原型 2 的参数
 
@@ -99,8 +99,8 @@ template<class T> constexpr bool asc::std::operator==(const complex<T>& lhs, con
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 相等比较的左操作数（空 tuple，与任何空 tuple 比较结果均为相等）。 |
+| `right` | 输入 | 相等比较的右操作数（空 tuple，与任何空 tuple 比较结果均为相等）。 |
 
 ### 原型 3 的参数
 
@@ -108,8 +108,8 @@ template<class T> constexpr bool asc::std::operator==(const complex<T>& lhs, con
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 相等比较的左操作数（均匀实数分布对象，按分布参数判断相等）。 |
+| `right` | 输入 | 相等比较的右操作数（均匀实数分布对象，按分布参数判断相等）。 |
 
 ### 原型 4 的参数
 
@@ -117,8 +117,8 @@ template<class T> constexpr bool asc::std::operator==(const complex<T>& lhs, con
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 参与本次比较或运算的左侧操作数。 |
-| `right` | 输入 | 参与本次比较或运算的右侧操作数。 |
+| `left` | 输入 | 相等比较的左操作数（分布参数对象 param_type，按参数取值判断相等）。 |
+| `right` | 输入 | 相等比较的右操作数（分布参数对象 param_type，按参数取值判断相等）。 |
 
 ### 原型 5 的参数
 
@@ -126,15 +126,15 @@ template<class T> constexpr bool asc::std::operator==(const complex<T>& lhs, con
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T1` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
-| `T2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T1` | 左右 pair 第一个元素（first）的类型。 |
+| `T2` | 左右 pair 第二个元素（second）的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 提供按位置访问或组合的元素集合。 |
-| `rhs` | 输入 | 提供按位置访问或组合的元素集合。 |
+| `lhs` | 输入 | 逐元素相等比较的左操作数（pair，first 与 second 均相等时为真）。 |
+| `rhs` | 输入 | 逐元素相等比较的右操作数（pair）。 |
 
 ### 原型 6 的参数
 
@@ -142,14 +142,14 @@ template<class T> constexpr bool asc::std::operator==(const complex<T>& lhs, con
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 左右复数操作数的成分（实部与虚部）值类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 参与本页所述数学运算的输入值。 |
-| `rhs` | 输入 | 参与本页所述数学运算的输入值。 |
+| `lhs` | 输入 | 相等比较的左操作数（complex，实部与虚部均相等时为真）。 |
+| `rhs` | 输入 | 相等比较的右操作数（complex）。 |
 
 ## 返回值说明
 

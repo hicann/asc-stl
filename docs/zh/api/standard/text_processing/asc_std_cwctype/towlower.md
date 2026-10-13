@@ -46,7 +46,7 @@ wint_t asc::std::towlower(wint_t value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待转换大小写的宽字符（wint_t）；取值须可表示为宽字符或等于 WEOF，等于 WEOF 时原样返回。 |
 
 ## 返回值说明
 

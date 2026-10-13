@@ -44,7 +44,7 @@ constexpr long double asc::std::cbrtl(long double value) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待求立方根的输入值（无量纲）；定义域为全体实数，负数返回负的立方根。 |
 
 ## 返回值说明
 

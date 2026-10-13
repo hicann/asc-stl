@@ -44,14 +44,14 @@ template<class InputIter> constexpr InputIter asc::std::prev(InputIter value, ty
 
 | 参数名 | 描述 |
 | --- | --- |
-| `InputIter` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
+| `InputIter` | 双向迭代器类型（count 为正时须支持递减步进）。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `value` | 输入 | 待向后移动的迭代器（按值传入，不被修改）；返回其后移 count 步的副本。 |
+| `count` | 输入 | 向后移动的步数（difference_type），默认 1；负值表示前移。 |
 
 ## 返回值说明
 

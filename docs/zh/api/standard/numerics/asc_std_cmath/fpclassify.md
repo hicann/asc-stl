@@ -46,7 +46,7 @@ int asc::std::fpclassify(float x) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 参与本页所述数学运算的输入值。 |
+| `x` | 输入 | 待分类为 FP_NAN、FP_INFINITE、FP_NORMAL、FP_SUBNORMAL 或 FP_ZERO 之一的输入值（无量纲）。 |
 
 ## 返回值说明
 

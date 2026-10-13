@@ -66,7 +66,7 @@ constexpr expected(unexpect_t tag, const Error& error);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 构造期望值所用的源值；被复制为新对象的期望值。 |
 
 ### 原型 2 的参数
 
@@ -74,7 +74,7 @@ constexpr expected(unexpect_t tag, const Error& error);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 复制来源 expected；其期望值或错误值连同状态被复制到新对象。 |
 
 ### 原型 3 的参数
 
@@ -82,7 +82,7 @@ constexpr expected(unexpect_t tag, const Error& error);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 错误值来源（unexpected 包装）；新对象以意外状态保存其错误值的副本。 |
 
 ### 原型 4 的参数
 
@@ -90,8 +90,8 @@ constexpr expected(unexpect_t tag, const Error& error);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `tag` | 输入 | 提供“按本页所列构造形态初始化 `expected` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `error` | 输入 | 提供“按本页所列构造形态初始化 `expected` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `tag` | 输入 | unexpect_t 消歧标记；本身不携带数据，表示按意外状态构造对象。 |
+| `error` | 输入 | 构造错误值所用的源错误值；被复制为新对象意外状态中的错误值。 |
 
 ## 约束说明
 

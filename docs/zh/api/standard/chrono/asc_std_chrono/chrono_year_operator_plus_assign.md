@@ -44,7 +44,7 @@ constexpr year& asc::std::chrono::year::operator+=(const years& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 加到当前年份的年数（years 时长，计数单位为年）；结果超出 -32767 到 32767 时存储值未指定。 |
 
 ## 返回值说明
 
