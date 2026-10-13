@@ -2,6 +2,8 @@
 
 #### 面向昇腾设备编程的 C++ 标准库 —— 纯头文件实现，为 Host 与 Device 提供统一的公共 Header 组织
 
+简体中文 | [English](./README_en.md)
+
 [📖 api文档](docs/zh/api/README.md) | [📚 路线图](docs/roadmap/ROADMAP.md) | [📄 LICENSE](LICENSE) | [🤝 贡献指南](CONTRIBUTING.md)
 
 ## 🔥 最新动态
