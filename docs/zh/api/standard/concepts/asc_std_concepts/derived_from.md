@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::derived_from` 在 C++20 及以上模式约束满足 `derived_from` 语义的类型或表达式。
+`asc::std::derived_from` 在 C++20 及以上模式约束 `Derived`（派生类型）公有且无歧义地派生自 `Base`（基类型），具体判据为 `is_base_of_v<Base, Derived>` 与 `is_convertible_v<const volatile Derived*, const volatile Base*>` 同时成立。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 
 ## 声明
 
 ```cpp
-template<class Dp, class Value> concept asc::std::derived_from
+template<class Derived, class Base> concept asc::std::derived_from
 ```
 
 ## 约束说明

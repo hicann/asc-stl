@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::strict_weak_order` 在 C++20 及以上模式约束满足 `strict_weak_order` 语义的类型或表达式。
+`asc::std::strict_weak_order` 在 C++20 及以上模式约束构成严格弱序的二元关系：在满足 `relation` 的四种调用组合均有效的基础上，语义上还要求非自反（`r(a, a)` 为假）、传递，且不可比关系（既非 `r(a, b)` 亦非 `r(b, a)`）自身具有传递性。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 

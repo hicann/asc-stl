@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::equivalence_relation` 在 C++20 及以上模式约束满足 `equivalence_relation` 语义的类型或表达式。
+`asc::std::equivalence_relation` 在 C++20 及以上模式约束构成等价关系的二元关系：在满足 `relation` 的四种调用组合均有效的基础上，语义上还要求 `r(a, a)` 为真、关系对称（`r(a, b)` 蕴含 `r(b, a)`）且传递（`r(a, b)` 与 `r(b, c)` 蕴含 `r(a, c)`）。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 

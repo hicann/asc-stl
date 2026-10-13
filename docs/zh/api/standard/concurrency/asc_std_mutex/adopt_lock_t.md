@@ -41,7 +41,7 @@ struct asc::std::adopt_lock_t
 ## 约束说明
 
 - defer_lock_t、try_to_lock_t、adopt_lock_t及对应defer_lock、try_to_lock、adopt_lock三个inline constexpr对象
-- 纯词汇类型与对象，不拥有或操作锁
+- 纯类型与对象，不拥有或操作锁
 - Host、AI Core SIMD 编程 和 AI Core SIMT 编程
 
 ## 调用示例

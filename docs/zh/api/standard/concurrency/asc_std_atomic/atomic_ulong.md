@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_ulong` 把指定基础整数或布尔类型绑定到当前交付的原子对象词汇。
+`asc::std::atomic_ulong` 把指定基础整数或布尔类型绑定到当前交付的原子类型别名。
 
 该接口的可用位置为 Host、AI Core SIMT 编程。
 

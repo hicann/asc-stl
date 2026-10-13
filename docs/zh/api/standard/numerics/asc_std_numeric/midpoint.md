@@ -104,9 +104,9 @@ template<class T> [[nodiscard]] constexpr enable_if_t<is_integral_v<T>&& !is_sam
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型 1 | `enable_if_t<is_floating_point_v<Fp>, Fp>` | 返回两个数值或指针端点之间的中点。 |
-| 原型 2 | `> [[nodiscard]] constexpr T *` | 返回两个数值或指针端点之间的中点。 |
-| 原型 3 | `enable_if_t<is_integral_v<T> && !is_same_v<bool, T> && !is_null_pointer_v<T>, T>` | 返回两个数值或指针端点之间的中点。 |
+| 原型 1 | `Fp` | 返回两个浮点数的中点。 |
+| 原型 2 | `T *` | 返回指向两指针之间中点元素的指针。 |
+| 原型 3 | `T` | 返回两个整数的中点。 |
 
 ## 约束说明
 

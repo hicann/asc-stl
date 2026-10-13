@@ -30,6 +30,8 @@
 
 `asc::std::chrono::month_weekday::ok` 判断当前日历字段组合是否表示有效日期。
 
+`month_weekday` 组合月与"第 n 个星期几"两个字段：月取值在 `[1, 12]`，星期取值在 `[0, 6]`（0 表示星期日、6 表示星期六）且序号取值在 `[1, 5]`，全部满足时返回 `true`，否则返回 `false`。
+
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
@@ -51,7 +53,7 @@
 ## 约束说明
 
 - 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady词汇
+- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
 
 ## 调用示例
 

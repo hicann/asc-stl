@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::iterator` 提供传统迭代器类型定义所需的类别与值类型词汇。
+`asc::std::iterator` 提供传统迭代器类型定义所需的类别与值类型。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 

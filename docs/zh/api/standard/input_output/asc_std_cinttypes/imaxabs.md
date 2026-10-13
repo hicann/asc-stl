@@ -54,7 +54,7 @@ constexpr intmax_t asc::std::imaxabs(intmax_t value) noexcept;
 
 ## 约束说明
 
-- 提供纯整数词汇类型运算和格式宏
+- 提供纯整数类型运算和格式宏
 
 ## 调用示例
 

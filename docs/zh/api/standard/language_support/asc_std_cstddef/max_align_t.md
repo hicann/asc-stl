@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cstddef>`。
 
-`asc::std::max_align_t` 标识当前 C++ ABI 对应的大小、指针差值、空指针或最大对齐词汇类型。
+`asc::std::max_align_t` 标识当前 C++ ABI 对应的大小、指针差值、空指针或最大对齐类型。
 
 标准语义参考：[cppreference `cstddef`](https://en.cppreference.com/w/cpp/header/cstddef)。
 

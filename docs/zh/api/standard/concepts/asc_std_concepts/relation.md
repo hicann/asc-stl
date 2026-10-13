@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::relation` 在 C++20 及以上模式约束满足 `relation` 语义的类型或表达式。
+`asc::std::relation` 在 C++20 及以上模式约束可调用对象 `R` 在 `T` 与 `U` 两个取值域上构成二元关系：设 `r` 为 `R` 类型的表达式、`a` 为 `T` 类型、`b` 为 `U` 类型，则调用组合 `r(a, a)`、`r(b, b)`、`r(a, b)`、`r(b, a)` 均有效且返回结果可转换为 `bool`；`equivalence_relation`、`strict_weak_order` 等语义概念在此之上进一步施加等价关系或严格弱序约束。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 
 ## 声明
 
 ```cpp
-template<class Rp, class T, class U> concept asc::std::relation
+template<class R, class T, class U> concept asc::std::relation
 ```
 
 ## 约束说明

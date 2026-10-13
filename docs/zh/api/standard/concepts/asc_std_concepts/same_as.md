@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::same_as` 在 C++20 及以上模式约束满足 `same_as` 语义的类型或表达式。
+`asc::std::same_as` 在 C++20 及以上模式约束 `T` 与 `U` 是同一类型，具体判据为 `is_same_v<T, U>` 与 `is_same_v<U, T>` 同时成立；双向判定保证 `same_as<T, U>` 与 `same_as<U, T>` 结果一致。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 

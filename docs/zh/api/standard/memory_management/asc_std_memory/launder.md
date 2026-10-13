@@ -89,7 +89,7 @@ template<class T> [[nodiscard]] constexpr T* asc::std::launder(T* pointer) noexc
 
 ## 约束说明
 
-- 提供 placement 对象生命周期和无动态分配的词汇接口
+- 提供 placement 对象生命周期和无动态分配的接口
 - 存储由调用方提供并满足对齐要求
 - 当回滚会引发异常时，Device 侧相关操作必须不抛出异常
 

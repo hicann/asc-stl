@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::microseconds` 表示日期、时间点或时长计算中的 `microseconds` 值词汇。
+`asc::std::chrono::microseconds` 表示日期、时间点或时长计算中的 `microseconds` 值类型。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

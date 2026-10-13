@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::treat_as_floating_point` 表示日期、时间点或时长计算中的 `treat_as_floating_point` 值词汇。
+`asc::std::chrono::treat_as_floating_point` 表示日期、时间点或时长计算中的 `treat_as_floating_point` 值类型。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

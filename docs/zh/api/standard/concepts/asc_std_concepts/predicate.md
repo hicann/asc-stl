@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::predicate` 在 C++20 及以上模式约束满足 `predicate` 语义的类型或表达式。
+`asc::std::predicate` 在 C++20 及以上模式约束可作谓词使用的可调用体：`Fn` 须可以 `Args...` 正则调用（`regular_invocable`，不修改操作数），且调用结果满足 boolean-testable（可显式转换为 `bool` 并用于条件判断）。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 

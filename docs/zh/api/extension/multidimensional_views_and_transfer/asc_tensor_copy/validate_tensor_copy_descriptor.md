@@ -58,7 +58,7 @@ template<unsigned Rank> constexpr asc::tensor_copy_status asc::validate_tensor_c
 
 ## 约束说明
 
-- 描述符及状态词汇可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
+- 描述符及状态类型可在 Host、AI Core SIMD 编程 和 AI Core SIMT 编程中使用
 - Rank 为 1 至 5
 - 维度和步长采用 uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运
 

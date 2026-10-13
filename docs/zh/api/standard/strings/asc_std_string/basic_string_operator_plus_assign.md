@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/string>`。
 
-`asc::std::basic_string::operator+=` 按给定距离或操作数更新当前值。
+`asc::std::basic_string::operator+=` 在当前字符串末尾追加操作数，并返回当前字符串的引用：原型 1 追加单个字符 `value`；原型 2 追加以空字符结尾的字符串 `text`。
 
 标准语义参考：[cppreference `string`](https://en.cppreference.com/w/cpp/header/string)。
 
@@ -54,7 +54,7 @@ basic_string<CharT, Traits, Allocator>& asc::std::basic_string::operator+=(const
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 追加到当前字符串末尾的单个字符。 |
 
 ### 原型 2 的参数
 
@@ -62,7 +62,7 @@ basic_string<CharT, Traits, Allocator>& asc::std::basic_string::operator+=(const
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `text` | 输入 | 提供“按给定距离或操作数更新当前值”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `text` | 输入 | 追加到当前字符串末尾、以空字符结尾的字符串首地址；可访问范围和生命周期须满足约束。 |
 
 ## 返回值说明
 

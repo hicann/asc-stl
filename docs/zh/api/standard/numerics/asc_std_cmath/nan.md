@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`NAN` 提供正无穷大或非数值浮点常量。
+`NAN` 提供 float 类型的非数值（NaN）常量（宏）。
 
 该接口的可用位置为 Host、AI Core SIMT 编程。
 

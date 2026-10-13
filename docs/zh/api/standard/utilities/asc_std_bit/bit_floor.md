@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/bit>`。
 
-`asc::std::bit_floor` 返回不大于输入的最大二次幂。
+`asc::std::bit_floor` 返回不大于输入的最大 2 的幂。
 
 标准语义参考：[cppreference `bit`](https://en.cppreference.com/w/cpp/header/bit)。
 
@@ -56,7 +56,7 @@ template<class T> [[nodiscard]] constexpr T asc::std::bit_floor(T value) noexcep
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `T` | 返回不大于输入的最大二次幂。 |
+| `T` | 返回不大于输入的最大 2 的幂。 |
 
 ## 约束说明
 

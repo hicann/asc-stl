@@ -54,7 +54,7 @@ bool asc::make_event(asc::event& output) noexcept;
 
 ## 约束说明
 
-- rejects nonempty output
+- `output` 非空（已持有句柄）时本接口拒绝执行，直接返回 `false`，不创建新的 Runtime Event，也不修改 `output`
 - output 失败时保持不变
 
 ## 调用示例

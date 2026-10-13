@@ -55,7 +55,7 @@ void* ::operator new[](asc::std::size_t, void* ptr) noexcept;
 
 ## 约束说明
 
-- 提供 placement 对象生命周期和无动态分配的词汇接口
+- 提供 placement 对象生命周期和无动态分配的接口
 
 ## 调用示例
 

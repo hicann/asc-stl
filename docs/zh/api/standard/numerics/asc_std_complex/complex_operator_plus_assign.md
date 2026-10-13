@@ -79,7 +79,7 @@ template<class U> constexpr complex<T>& asc::std::complex::operator+=(const comp
 
 ## 约束说明
 
-- 仅提供页面声明的 float 或 complex<float> 运算
+- 仅提供页面声明的 float 或 `complex<float>` 运算
 - 接口可用性取决于相应的 float 数学能力
 
 ## 调用示例

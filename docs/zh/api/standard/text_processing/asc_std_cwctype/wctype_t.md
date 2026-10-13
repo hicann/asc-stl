@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cwctype>`。
 
-`asc::std::wctype_t` 标识当前 ABI 对应的时间、字符转换或宽字符词汇类型。
+`asc::std::wctype_t` 标识当前 ABI 对应的时间、字符转换或宽字符类型。
 
 该接口的可用位置为 Host（完整接口）、Device（C locale 相关接口）。
 

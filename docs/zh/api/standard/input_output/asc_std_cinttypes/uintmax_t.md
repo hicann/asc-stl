@@ -53,7 +53,7 @@ using asc::std::uintmax_t = unsigned long long
 ## 约束说明
 
 - 仅提供 Ascend 950 与 Host ABI 中实际存在的类型和宏
-- 提供纯整数词汇类型运算和格式宏
+- 提供纯整数类型运算和格式宏
 
 ## 调用示例
 

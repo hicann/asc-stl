@@ -146,7 +146,7 @@ template<class T> constexpr bool asc::std::operator!=(const complex<T>& lhs, con
 - 结果位于指定的半开区间内，不提供 double、long double 及其他统计分布
 - pair 操作不抛出异常
 - 关系运算符均为显式提供
-- 仅提供页面声明的 float 或 complex<float> 运算
+- 仅提供页面声明的 float 或 `complex<float>` 运算
 - 接口可用性取决于相应的 float 数学能力
 
 ## 调用示例

@@ -41,7 +41,7 @@ inline constexpr const month asc::std::chrono::October
 ## 约束说明
 
 - 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady词汇
+- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
 
 ## 调用示例
 

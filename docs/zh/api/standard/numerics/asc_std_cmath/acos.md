@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cmath>`、`<asc/std/complex>`。
 
-`asc::std::acos` 计算反余弦，实数结果以弧度表示，取值范围为 [0, π]。float 重载可在 Host 侧和 AI Core SIMT 编程中调用，double 和 long double 重载仅可在 Host 调用并保持对应精度；复数重载仅支持 complex<float>。
+`asc::std::acos` 计算反余弦，实数结果以弧度表示，取值范围为 [0, π]。float 重载可在 Host 侧和 AI Core SIMT 编程中调用，double 和 long double 重载仅可在 Host 调用并保持对应精度；复数重载仅支持 `complex<float>`。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
@@ -125,7 +125,7 @@ template<class T> complex<T> asc::std::acos(const complex<T>& value) noexcept;
 
 ## 约束说明
 
-- float 和 complex<float> 重载可在 Host 与 AI Core SIMT 编程中调用
+- float 和 `complex<float>` 重载可在 Host 与 AI Core SIMT 编程中调用
 - double 与 long double 重载限 Host 调用
 - 复数重载的 T 仅支持 float
 - 实数有效定义域为 [-1, 1]，域外输入和 NaN 的处理遵循对应数学后端

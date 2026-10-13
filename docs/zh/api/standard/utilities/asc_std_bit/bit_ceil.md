@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/bit>`。
 
-`asc::std::bit_ceil` 返回不小于输入的最小二次幂。
+`asc::std::bit_ceil` 返回不小于输入的最小 2 的幂。
 
 标准语义参考：[cppreference `bit`](https://en.cppreference.com/w/cpp/header/bit)。
 
@@ -56,7 +56,7 @@ template<class T> [[nodiscard]] constexpr T asc::std::bit_ceil(T value) noexcept
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `T` | 返回不小于输入的最小二次幂。 |
+| `T` | 返回不小于输入的最小 2 的幂。 |
 
 ## 约束说明
 

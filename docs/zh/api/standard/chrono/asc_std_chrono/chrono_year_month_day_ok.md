@@ -30,6 +30,8 @@
 
 `asc::std::chrono::year_month_day::ok` 判断当前日历字段组合是否表示有效日期。
 
+`year_month_day` 组合年、月、日三个字段：年取值在 `[-32767, 32767]`、月取值在 `[1, 12]`，且日取值在 1 到该年该月实际天数之间（按闰年规则验证，例如 2 月 29 日仅在该年为闰年时有效）时返回 `true`，否则返回 `false`。
+
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
@@ -51,7 +53,7 @@
 ## 约束说明
 
 - 纯日历/组合/别名/字面量为Host、AI Core SIMD 编程 和 AI Core SIMT 编程
-- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady词汇
+- system_clock仅为sys_time精确形状提供类型、rep/period/duration/time_point和is_steady类型
 
 ## 调用示例
 

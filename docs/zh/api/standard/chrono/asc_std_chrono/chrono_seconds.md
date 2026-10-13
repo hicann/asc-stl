@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::seconds` 表示日期、时间点或时长计算中的 `seconds` 值词汇。
+`asc::std::chrono::seconds` 表示日期、时间点或时长计算中的 `seconds` 值类型。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

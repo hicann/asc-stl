@@ -55,7 +55,7 @@ constexpr imaxdiv_t asc::std::imaxdiv(intmax_t numerator, intmax_t denominator) 
 
 ## 约束说明
 
-- 提供纯整数词汇类型运算和格式宏
+- 提供纯整数类型运算和格式宏
 
 ## 调用示例
 

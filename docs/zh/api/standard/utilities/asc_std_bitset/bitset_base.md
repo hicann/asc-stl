@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/bitset>`。
 
-`asc::std::bitset::base` 标识位集合采用的底层存储词汇类型。
+`asc::std::bitset::base` 标识位集合采用的底层存储类型。
 
 标准语义参考：[cppreference `bitset`](https://en.cppreference.com/w/cpp/header/bitset)。
 

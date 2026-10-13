@@ -56,7 +56,7 @@ bool asc::elapsed_time(asc::event_ref start, asc::event_ref end, float& millisec
 
 ## 约束说明
 
-- rejects null events
+- `start` 或 `end` 为空（未持有句柄的 Event 引用）时本接口拒绝执行，直接返回 `false`，且不修改 `milliseconds`
 - milliseconds 失败时保持不变
 
 ## 调用示例
