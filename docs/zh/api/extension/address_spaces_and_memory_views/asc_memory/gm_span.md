@@ -44,14 +44,24 @@ template<class T> class asc::gm_span
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下片段演示视图构造、大小查询、元素访问与切片；输入和执行上下文须满足本页约束。
 
 ```cpp
 #include <asc/memory>
 
-void use_type()
+bool use_gm_span()
 {
-    using selected = asc::gm_span<int>;
-    (void)sizeof(selected);
+    // 视图不拥有存储：Host 片段以本地数组充当底层存储，设备侧则指向 GM 区域；
+    // 底层存储必须在视图使用期间保持有效
+    int storage[4] = {1, 2, 3, 4};
+    asc::gm_span<int> view(storage, 4);
+
+    bool ok = view.size() == 4 && !view.empty();
+    ok = ok && view.size_bytes() == 4 * sizeof(int);
+    ok = ok && view.data()[0] == 1 && view[1] == 2;  // 数据指针与下标访问
+    ok = ok && view.first(2)[1] == 2;                // 切片：前 2 个元素
+    ok = ok && view.last(1)[0] == 4;                 // 切片：后 1 个元素
+    ok = ok && view.subspan(1, 2)[0] == 2;           // 切片：偏移 1 起 2 个元素
+    return ok;
 }
 ```

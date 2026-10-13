@@ -78,15 +78,16 @@ template<class D2> constexpr decltype(auto) asc::std::ranges::view_interface::ba
 
 ## 调用示例
 
-以下 Host 片段使用具体范围或访问器演示调用；底层存储在调用期间须保持有效。
+以下 Host 片段在底层存储存活期内完成访问，返回元素值的副本，不把局部数组元素引用传出函数。
 
 ```cpp
 #include <asc/std/ranges>
 
-decltype(auto) example()
+int read_last_element()
 {
     int values[4] = {1, 2, 3, 4};
     asc::std::ranges::ref_view<int[4]> view(values);
+    // 前置条件：视图非空（back 对空视图是未定义行为）
     return view.back();
 }
 ```

@@ -73,6 +73,7 @@ reference asc::std::deque::operator[](size_type index) noexcept;
 
 ## 约束说明
 
+- 前置条件：`index < size()`；`operator[]` 不执行边界检查，越界访问后果未定义
 - deque<T,A>显式allocator构造
 - 有限块映射内的push/emplace/pop_front/back
 - empty/size/front/back/operator[]/随机访问迭代核心
@@ -86,10 +87,8 @@ reference asc::std::deque::operator[](size_type index) noexcept;
 
 ```cpp
 #include <asc/std/deque>
-#include <functional>
+#include <cstddef>
 #include <memory>
-#include <string>
-#include <utility>
 
 template <class T>
 struct example_allocator : ::std::allocator<T> {
@@ -102,9 +101,19 @@ struct example_allocator : ::std::allocator<T> {
     template <class U> example_allocator(const example_allocator<U>&) noexcept {}
 };
 
-decltype(auto) example(const asc::std::deque<int, example_allocator<int>>& values)
+int read_first(const asc::std::deque<int, example_allocator<int>>& values)
 {
-    if (!values.empty())
-        return values[0];
+    // 先建立非空前提：空容器路径同样返回，保证每条执行路径都有返回值
+    if (values.empty()) {
+        return -1;
+    }
+    return values[0];  // 读取首元素；返回元素值的副本，不把容器内部引用传出函数
+}
+
+void write_first(asc::std::deque<int, example_allocator<int>>& values, int new_value)
+{
+    if (!values.empty()) {
+        values[0] = new_value;  // 非空前提下经非 const 下标写入
+    }
 }
 ```

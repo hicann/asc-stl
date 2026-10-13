@@ -60,15 +60,17 @@ constexpr reference asc::std::aligned_accessor::access(data_handle_type pointer,
 
 ## 调用示例
 
-以下 Host 片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
+以下 Host 片段在底层存储存活期内完成访问，返回元素值的副本，不把局部数组元素引用传出函数。
 
 ```cpp
 #include <asc/std/mdspan>
 
-decltype(auto) example()
+int read_first_element()
 {
+    // aligned_accessor<int, 16> 要求数据指针按 16 字节对齐，故存储显式 alignas(16)
     alignas(16) int values[4] = {1, 2, 3, 4};
     asc::std::aligned_accessor<int, 16> accessor{};
+    // 前置条件：索引 0 < 4；access 不执行边界检查
     return accessor.access(values, 0);
 }
 ```

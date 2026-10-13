@@ -69,17 +69,24 @@ template<class InputIterator, class Size, class ForwardIterator> ForwardIterator
 
 ## 调用示例
 
-以下 Host 片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
+以下 Host 片段在函数内完成构造、结果校验与销毁，不把指向局部存储的指针传出函数。
 
 ```cpp
 #include <asc/std/memory>
 
-decltype(auto) example()
+bool copy_elements()
 {
     alignas(int) unsigned char storage[sizeof(int) * 4];
     int* output = reinterpret_cast<int*>(storage);
-    int input[4] = {1, 2, 3, 4};
-    return asc::std::uninitialized_copy_n(input, 4, output);
-    asc::std::destroy_n(output, 4);
+    const int input[4] = {1, 2, 3, 4};
+
+    // 以元素数量控制构造；返回值是最后一个完成构造的对象之后的位置
+    int* result = asc::std::uninitialized_copy_n(input, 4, output);
+    bool ok = result == output + 4;
+    for (int i = 0; i < 4; ++i) {
+        ok = ok && output[i] == input[i];
+    }
+    asc::std::destroy_n(output, 4);  // 构造了 4 个对象就销毁 4 个
+    return ok;
 }
 ```

@@ -44,14 +44,32 @@ template<class T> class asc::arena_allocator
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下片段演示 arena 存储、分配器构造、分配与对象读写的完整用法；输入和执行上下文须满足本页约束。
 
 ```cpp
 #include <asc/memory>
 
-void use_type()
+bool use_arena_allocator()
 {
-    using selected = asc::arena_allocator<int>;
-    (void)sizeof(selected);
+    // 准备 arena 使用的存储；Host 片段以本地缓冲为例，设备侧可换成 GM 区域
+    unsigned char buffer[128];
+    asc::monotonic_arena arena(buffer, sizeof(buffer));
+
+    // 以 arena 构造元素分配器；allocator 非拥有地引用 arena
+    asc::arena_allocator<int> allocator(arena);
+
+    // 分配 4 个 int；空间不足时 allocate 返回空指针，调用方须判空
+    int* data = allocator.allocate(4);
+    if (data == nullptr) {
+        return false;
+    }
+    for (int i = 0; i < 4; ++i) {
+        data[i] = i + 1;
+    }
+    const bool ok = data[0] == 1 && data[1] == 2 && data[2] == 3 && data[3] == 4;
+
+    // 单次 deallocate 不回收空间；存储由 arena 统一管理，reset 或 arena 生命周期结束后整体释放
+    allocator.deallocate(data, 4);
+    return ok;
 }
 ```

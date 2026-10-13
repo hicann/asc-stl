@@ -44,14 +44,30 @@ template<...c...l...a...s...s...> using asc::std::void_t = void
 
 ## 调用示例
 
-以下 Host 片段用具体类型实参实例化本页类型特征。
+以下 Host 片段用 `static_assert` 验证特征结果，并以检测惯用法演示 `void_t` 的典型用途。
 
 ```cpp
 #include <asc/std/type_traits>
 
-void example()
+template <class T, class = asc::std::void_t<>>
+struct has_value_type : asc::std::false_type
+{};
+
+template <class T>
+struct has_value_type<T, asc::std::void_t<typename T::value_type>> : asc::std::true_type
+{};
+
+void use_void_t()
 {
-    using selected = asc::std::void_t<int>;
-    static_assert(asc::std::is_same_v<selected, selected>);
+    // void_t 的结果就是 void
+    static_assert(asc::std::is_same_v<asc::std::void_t<int>, void>);
+
+    // 检测惯用法：void_t 让“表达式合法”的实参走真分支，成员不存在时落入 false_type
+    struct with_value_type
+    {
+        using value_type = int;
+    };
+    static_assert(has_value_type<with_value_type>::value);
+    static_assert(!has_value_type<int>::value);
 }
 ```
