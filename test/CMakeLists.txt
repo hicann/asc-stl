@@ -56,6 +56,13 @@ add_test(
         --include ${ASC_STL_INCLUDE_ROOT})
 set_tests_properties(gate.dependencies PROPERTIES LABELS "metadata;static-rules;affected-regression;nightly")
 
+add_test(
+    NAME compatibility.hardware-device-discovery
+    COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/check_hardware_device.py)
+set_tests_properties(
+    compatibility.hardware-device-discovery
+    PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 30)
+
 if(ASC_STL_ENABLE_HOST_TESTS)
     add_test(
         NAME compatibility.cann-sdk-layout

@@ -21,10 +21,7 @@ if ! source "$ROOT/scripts/cann-env.sh"; then
     echo "BLOCKED_ENVIRONMENT: CANN hardware environment is unavailable." >&2
     exit 2
 fi
-if [ ! -e /dev/davinci0 ]; then
-    echo "BLOCKED_ENVIRONMENT: Ascend device 0 is not available." >&2
-    exit 2
-fi
+python3 "$ROOT/scripts/hardware_device.py"
 
 SOURCE_CASE_ROOT="$ROOT/test/cases/asc/std/source_location/runtime/hardware"
 FOUNDATION_CASE_ROOT="$ROOT/test/cases/asc/std/__cstring/memcpy/runtime/hardware"
@@ -49,6 +46,7 @@ W08_CASE_ROOT="$ROOT/test/cases/asc/tensor_copy/runtime/hardware"
 W13_W14_CASE_ROOT="$ROOT/test/cases/asc/std/linalg/runtime/hardware"
 BUILD_ROOT="${ASC_STL_HARDWARE_BUILD_DIR:-$ROOT/build/hardware}"
 RUNS="${ASC_STL_HARDWARE_RUNS:-3}"
+BUILD_JOBS="${CMAKE_BUILD_PARALLEL_LEVEL:-2}"
 CASE_RESULTS="$BUILD_ROOT/hardware-case-results.csv"
 HW1_RESULTS="$BUILD_ROOT/hw1-passed-cases.txt"
 mkdir -p "$BUILD_ROOT"
@@ -88,67 +86,67 @@ for standard in 17 20; do
     W13_W14_BUILD_DIR="$BUILD_ROOT/cxx$standard/w13-w14"
     cmake -S "$SOURCE_CASE_ROOT" -B "$SOURCE_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$SOURCE_BUILD_DIR" -j2
+    cmake --build "$SOURCE_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$FOUNDATION_CASE_ROOT" -B "$FOUNDATION_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$FOUNDATION_BUILD_DIR" -j2
+    cmake --build "$FOUNDATION_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B016_CASE_ROOT" -B "$B016_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B016_BUILD_DIR" -j2
+    cmake --build "$B016_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B019_CASE_ROOT" -B "$B019_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B019_BUILD_DIR" -j2
+    cmake --build "$B019_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B022_CASE_ROOT" -B "$B022_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B022_BUILD_DIR" -j2
+    cmake --build "$B022_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B017_WARP_CASE_ROOT" -B "$B017_WARP_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B017_WARP_BUILD_DIR" -j2
+    cmake --build "$B017_WARP_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B018_COLLECTIVES_CASE_ROOT" -B "$B018_COLLECTIVES_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B018_COLLECTIVES_BUILD_DIR" -j2
+    cmake --build "$B018_COLLECTIVES_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B013_SCOPED_ATOMIC_CASE_ROOT" -B "$B013_SCOPED_ATOMIC_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B013_SCOPED_ATOMIC_BUILD_DIR" -j2
+    cmake --build "$B013_SCOPED_ATOMIC_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B015_COMPLEX_CASE_ROOT" -B "$B015_COMPLEX_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B015_COMPLEX_BUILD_DIR" -j2
+    cmake --build "$B015_COMPLEX_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B014_CSTDLIB_CASE_ROOT" -B "$B014_CSTDLIB_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B014_CSTDLIB_BUILD_DIR" -j2
+    cmake --build "$B014_CSTDLIB_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B021_CTIME_CASE_ROOT" -B "$B021_CTIME_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B021_CTIME_BUILD_DIR" -j2
+    cmake --build "$B021_CTIME_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B023_CASE_ROOT" -B "$B023_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B023_BUILD_DIR" -j2
+    cmake --build "$B023_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B025_MEMORY_POOL_CASE_ROOT" -B "$B025_MEMORY_POOL_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B025_MEMORY_POOL_BUILD_DIR" -j2
+    cmake --build "$B025_MEMORY_POOL_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B026_WORK_QUEUE_CASE_ROOT" -B "$B026_WORK_QUEUE_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B026_WORK_QUEUE_BUILD_DIR" -j2
+    cmake --build "$B026_WORK_QUEUE_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B026_CMATH_CASE_ROOT" -B "$B026_CMATH_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B026_CMATH_BUILD_DIR" -j2
+    cmake --build "$B026_CMATH_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B026_TENSOR_COPY_CASE_ROOT" -B "$B026_TENSOR_COPY_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B026_TENSOR_COPY_BUILD_DIR" -j2
+    cmake --build "$B026_TENSOR_COPY_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B024_ITERATOR_CASE_ROOT" -B "$B024_ITERATOR_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B024_ITERATOR_BUILD_DIR" -j2
+    cmake --build "$B024_ITERATOR_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B027_BITSET_CASE_ROOT" -B "$B027_BITSET_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B027_BITSET_BUILD_DIR" -j2
+    cmake --build "$B027_BITSET_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B028_LIST_CASE_ROOT" -B "$B028_LIST_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$B028_LIST_BUILD_DIR" -j2
+    cmake --build "$B028_LIST_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$W08_CASE_ROOT" -B "$W08_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$W08_BUILD_DIR" -j2
+    cmake --build "$W08_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$W13_W14_CASE_ROOT" -B "$W13_W14_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$W13_W14_BUILD_DIR" -j2
+    cmake --build "$W13_W14_BUILD_DIR" -j"$BUILD_JOBS"
 
     for run_index in $(seq 1 "$RUNS"); do
         echo "C++$standard source_location hardware run $run_index/$RUNS: D-SIMD"

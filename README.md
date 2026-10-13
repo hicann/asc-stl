@@ -150,6 +150,18 @@ bash scripts/ci-quick-check.sh
 cmake -B build -DBUILD_TESTING=ON && cmake --build build -j && cd build && ctest
 ```
 
+真实设备回归使用 `bash scripts/ci-hardware-check.sh`，默认执行 C++17/C++20
+各三轮。当前测试入口要求只暴露一个可读写的 `/dev/davinci[0-9]+` 计算设备节点；
+容器中的节点可能是 `/dev/davinci4` 等非零编号，不能把物理节点尾数当作 ACL 逻辑
+设备号。测试使用逻辑设备 0，实际初始化和执行结果仍由运行时测试确认。无计算设备、
+权限不足或存在多个计算设备时，入口会报告 `BLOCKED_ENVIRONMENT` 并以状态码 2
+退出；`davinci_manager` 不计入计算设备。
+
+可选 `ASC_STL_HARDWARE_DEVICE_NODE` 用来校验预期的物理节点，不改变逻辑设备号，
+也不从多设备中选择一个。构建遵循 `CMAKE_BUILD_PARALLEL_LEVEL`，未设置时保持
+两路并行；例如 `CMAKE_BUILD_PARALLEL_LEVEL=8 bash scripts/ci-hardware-check.sh`。
+硬件用例不由上面的三个云端 Host/Device/cannsim CI 入口触发。
+
 ## 🧰 IDE 支持
 
 工程已配置 `CMAKE_EXPORT_COMPILE_COMMANDS`，构建后会在构建目录生成 `compile_commands.json`，供 clangd / VS Code 等 IDE 使用。纯头文件库自身没有编译单元，该数据库由测试编译目标产生：
