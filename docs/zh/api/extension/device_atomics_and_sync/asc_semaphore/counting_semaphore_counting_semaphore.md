@@ -42,7 +42,7 @@ constexpr explicit asc::counting_semaphore::counting_semaphore(asc::std::ptrdiff
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `desired` | 输入 | 指定“使用调用方提供的参数初始化 `asc::counting_semaphore` 对象”使用的标量值；取值须满足声明和约束。 |
+| `desired` | 输入 | 信号量的初始许可数，默认 0；acquire 消耗许可，release 增加许可。 |
 
 ## 约束说明
 

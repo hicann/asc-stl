@@ -49,11 +49,11 @@ template<class Input, class T> asc::execution_status asc::parallel::find(asc::de
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
+| `policy` | 输入 | Device 执行策略（device_policy）：提供任务提交所用的 Stream 与调用方临时存储；返回值仅反映提交状态，提交成功不表示异步工作已完成。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `output_index` | 输出 | 提供“异步查找第一个等于给定值的元素，并把其位置索引写入 GM 输出参数”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `value` | 输入 | 待查找的目标值：与输入元素判等以定位首个命中元素。 |
+| `output_index` | 输出 | 首个等于 value 的元素下标（从 0 起，以元素计）经该 GM 指针异步写入；未找到时写入范围长度。须 Stream 同步后读取。 |
 
 ## 返回值说明
 

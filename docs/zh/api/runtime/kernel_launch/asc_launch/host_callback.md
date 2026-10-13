@@ -43,8 +43,8 @@ asc::execution_status asc::host_callback(asc::stream_ref stream, asc::host_callb
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `stream` | 输入 | 用于按序提交异步工作的 Stream。相关资源须保持有效，直至工作完成。 |
-| `callback` | 输入 | 提供“按指定 Stream 的任务顺序提交 Host 回调”所需的输入对象；类型须满足所选原型约束。 |
-| `data` | 输入 | 提供“按指定 Stream 的任务顺序提交 Host 回调”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `callback` | 输入 | 回调函数指针（host_callback_t = void(*)(void*)）：轮到该 Stream 队列项时在 Host 执行；为空时返回参数无效。 |
+| `data` | 输入 | 回调执行时透传的用户数据指针：生命周期须覆盖到回调在 Stream 上实际执行完毕。 |
 
 ## 返回值说明
 

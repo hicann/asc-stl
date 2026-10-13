@@ -70,15 +70,15 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `delta` | 输入 | 指定“读取同一分组中 Lane 编号增加 delta 后的值”使用的标量值；取值须满足声明和约束。 |
-| `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
+| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自同一分组内编号为 本 Lane 编号 + delta 的 Lane。 |
+| `delta` | 输入 | 目标 Lane 相对本 Lane 编号的正向偏移量。 |
+| `participants` | 输入 | 参与本操作的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：自身或目标不在集合内时结果无效。 |
 
 ### 原型 2 的参数
 
@@ -86,15 +86,15 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `delta` | 输入 | 指定“读取同一分组中 Lane 编号增加 delta 后的值”使用的标量值；取值须满足声明和约束。 |
-| `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
+| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自同一分组内编号为 本 Lane 编号 + delta 的 Lane。 |
+| `delta` | 输入 | 目标 Lane 相对本 Lane 编号的正向偏移量。 |
+| `participants` | 输入 | 参与本操作的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：自身或目标不在集合内时结果无效。 |
 
 ### 原型 3 的参数
 
@@ -102,15 +102,15 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `delta` | 输入 | 指定“读取同一分组中 Lane 编号增加 delta 后的值”使用的标量值；取值须满足声明和约束。 |
-| `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
+| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自同一分组内编号为 本 Lane 编号 + delta 的 Lane。 |
+| `delta` | 输入 | 目标 Lane 相对本 Lane 编号的正向偏移量。 |
+| `participants` | 输入 | 参与本操作的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：自身或目标不在集合内时结果无效。 |
 
 ### 原型 4 的参数
 
@@ -118,15 +118,15 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `delta` | 输入 | 指定“读取同一分组中 Lane 编号增加 delta 后的值”使用的标量值；取值须满足声明和约束。 |
-| `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
+| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自同一分组内编号为 本 Lane 编号 + delta 的 Lane。 |
+| `delta` | 输入 | 目标 Lane 相对本 Lane 编号的正向偏移量。 |
+| `participants` | 输入 | 参与本操作的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：自身或目标不在集合内时结果无效。 |
 
 ### 原型 5 的参数
 
@@ -134,15 +134,15 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `delta` | 输入 | 指定“读取同一分组中 Lane 编号增加 delta 后的值”使用的标量值；取值须满足声明和约束。 |
-| `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
+| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自同一分组内编号为 本 Lane 编号 + delta 的 Lane。 |
+| `delta` | 输入 | 目标 Lane 相对本 Lane 编号的正向偏移量。 |
+| `participants` | 输入 | 参与本操作的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：自身或目标不在集合内时结果无效。 |
 
 ## 返回值说明
 

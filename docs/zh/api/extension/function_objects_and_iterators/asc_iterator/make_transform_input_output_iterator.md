@@ -43,16 +43,16 @@ template<class Iterator, class InputFunction, class OutputFunction> constexpr as
 | 参数名 | 描述 |
 | --- | --- |
 | `Iterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `InputFunction` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `OutputFunction` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
+| `InputFunction` | 读取变换的可调用对象类型：读取时按 input_function(*底层迭代器) 变换。 |
+| `OutputFunction` | 写入变换的可调用对象类型：写入时先经 output_function 变换再存入底层迭代器。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `iterator` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
-| `input_function` | 输入 | 提供“创建同时具有输入和输出变换的迭代器”所需的输入对象；类型须满足所选原型约束。 |
-| `output_function` | 输出 | 提供“创建同时具有输入和输出变换的迭代器”所需的输入对象；类型须满足所选原型约束。 |
+| `iterator` | 输入 | 被包装的底层迭代器：读写实际作用于该迭代器所指位置。 |
+| `input_function` | 输入 | 读取变换对象：解引用读取结果为 input_function(*底层迭代器)。 |
+| `output_function` | 输入 | 写入变换对象：赋给本迭代器的值先经 output_function 变换再写入底层位置。 |
 
 ## 返回值说明
 

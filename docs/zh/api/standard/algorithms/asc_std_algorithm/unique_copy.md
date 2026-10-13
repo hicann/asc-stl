@@ -68,7 +68,7 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 | --- | --- |
 | `Input` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
 | `Output` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
-| `BinaryPredicate` | 判断元素是否满足条件的可调用对象类型。 |
+| `BinaryPredicate` | 判断相邻元素是否等价的二元谓词类型。 |
 
 **函数参数**
 
@@ -77,8 +77,8 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 | `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `result` | 输出 | 提供“复制范围并跳过连续等价的重复元素”所需的输入对象；类型须满足所选原型约束。 |
-| `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `result` | 输出 | 写入结果的输出迭代器；目标范围容量须足以容纳去重后的结果。 |
+| `predicate` | 输入 | 二元谓词，按调用形式 predicate(elem1, elem2) 返回 bool；返回 true 视为相邻等价，每组等价元素仅复制首个。 |
 
 ### 原型 2 的参数
 
@@ -88,7 +88,7 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 | --- | --- |
 | `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
 | `OutputIterator` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
-| `BinaryPredicate` | 判断元素是否满足条件的可调用对象类型。 |
+| `BinaryPredicate` | 判断相邻元素是否等价的二元谓词类型。 |
 
 **函数参数**
 
@@ -97,7 +97,7 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator asc
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `result` | 输出 | 写入结果的输出迭代器；目标范围须有足够容量。 |
-| `pred` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `pred` | 输入 | 二元谓词，按调用形式 pred(elem1, elem2) 返回 bool；返回 true 视为相邻等价，每组等价元素仅复制首个。 |
 
 ### 原型 3 的参数
 

@@ -44,8 +44,8 @@ constexpr imaxdiv_t asc::std::imaxdiv(intmax_t numerator, intmax_t denominator) 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `numerator` | 输入 | 提供“同时计算最大宽度整数的商和余数”所需的输入对象；类型须满足所选原型约束。 |
-| `denominator` | 输入 | 提供“同时计算最大宽度整数的商和余数”所需的输入对象；类型须满足所选原型约束。 |
+| `numerator` | 输入 | 被除数（intmax_t 有符号整数）；返回值的 quot、rem 分别为其除以 denominator 的商与余数。 |
+| `denominator` | 输入 | 除数（intmax_t 有符号整数）；为 0 时整数除法行为未定义。 |
 
 ## 返回值说明
 

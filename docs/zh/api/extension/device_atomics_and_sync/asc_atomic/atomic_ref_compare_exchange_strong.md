@@ -45,9 +45,9 @@ bool asc::atomic_ref::compare_exchange_strong(T& expected, T desired, asc::std::
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `expected` | 输入/输出 | 提供预期值或目标值；比较失败时函数把观察到的当前原子值写入 `expected`；strong 形式不允许伪失败，仅在实际比较失败时返回 `false`。 |
-| `desired` | 输入 | 提供“比较当前值与 expected，相等时写入 desired，否则回写实际值”所需的输入对象；类型须满足所选原型约束。 |
-| `success` | 输入 | 提供“比较当前值与 expected，相等时写入 desired，否则回写实际值”所需的输入对象；类型须满足所选原型约束。 |
-| `failure` | 输入 | 提供“比较当前值与 expected，相等时写入 desired，否则回写实际值”所需的输入对象；类型须满足所选原型约束。 |
+| `desired` | 输入 | 比较相等时写入原子对象的目标值。 |
+| `success` | 输入 | 比较交换成功分支使用的内存序，约束交换写入的可见性顺序。 |
+| `failure` | 输入 | 比较交换失败分支（仅读取）使用的内存序；不得为 release 或 acq_rel。 |
 
 ## 返回值说明
 

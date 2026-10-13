@@ -44,8 +44,8 @@ void asc::std::scoped_allocator_adaptor::deallocate(pointer pointer, size_type c
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 提供“通过对应分配器释放原先申请的存储”所需的输入对象；类型须满足所选原型约束。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `pointer` | 输入 | 先前由同一适配器 allocate 返回且尚未释放的存储地址。 |
+| `count` | 输入 | 待释放存储可容纳的元素个数，须与分配时传入的元素个数一致。 |
 
 ## 返回值说明
 

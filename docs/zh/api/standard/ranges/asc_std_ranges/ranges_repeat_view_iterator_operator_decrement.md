@@ -44,7 +44,7 @@ constexpr auto asc::std::ranges::repeat_view::iterator::operator--(int)
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 后置自减占位 int 实参（通常传入 0）；其值不被读取，仅用于区分前置形式。 |
 
 ## 返回值说明
 

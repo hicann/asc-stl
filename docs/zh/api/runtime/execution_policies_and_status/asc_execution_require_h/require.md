@@ -78,7 +78,7 @@ constexpr asc::execution_requirements asc::require(asc::tie_break value) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 确定性要求枚举值（asc::determinism：device_to_device、run_to_run、not_guaranteed）：在默认组合基础上设置该维度。 |
 
 ### 原型 2 的参数
 
@@ -86,8 +86,8 @@ constexpr asc::execution_requirements asc::require(asc::tie_break value) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `base` | 输入 | 提供“创建执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度”所需的输入对象；类型须满足所选原型约束。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `base` | 输入 | 现有执行要求组合：返回的组合仅替换其中的确定性维度，其余维度保留原值。 |
+| `value` | 输入 | 确定性要求枚举值（asc::determinism）：替换 base 组合中的确定性维度。 |
 
 ### 原型 3 的参数
 
@@ -95,8 +95,8 @@ constexpr asc::execution_requirements asc::require(asc::tie_break value) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `base` | 输入 | 提供“创建执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度”所需的输入对象；类型须满足所选原型约束。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `base` | 输入 | 现有执行要求组合：返回的组合仅替换其中的输出顺序维度，其余维度保留原值。 |
+| `value` | 输入 | 输出顺序要求枚举值（asc::output_ordering）：替换 base 组合中的输出顺序维度。 |
 
 ### 原型 4 的参数
 
@@ -104,8 +104,8 @@ constexpr asc::execution_requirements asc::require(asc::tie_break value) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `base` | 输入 | 提供“创建执行要求组合，或在现有组合中替换确定性、输出顺序或相同键值处理规则中的一个维度，并保留其余维度”所需的输入对象；类型须满足所选原型约束。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `base` | 输入 | 现有执行要求组合：返回的组合仅替换其中的相同键值处理维度，其余维度保留原值。 |
+| `value` | 输入 | 相同键值处理规则枚举值（asc::tie_break）：替换 base 组合中的该维度。 |
 
 ### 原型 5 的参数
 
@@ -113,7 +113,7 @@ constexpr asc::execution_requirements asc::require(asc::tie_break value) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 输出顺序要求枚举值（asc::output_ordering：sorted、stable_sorted、unsorted）：在默认组合基础上设置该维度。 |
 
 ### 原型 6 的参数
 
@@ -121,7 +121,7 @@ constexpr asc::execution_requirements asc::require(asc::tie_break value) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 相同键值处理规则枚举值（asc::tie_break：unspecified、prefer_smaller_index、prefer_larger_index）：在默认组合基础上设置该维度。 |
 
 ## 返回值说明
 

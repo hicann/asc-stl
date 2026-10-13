@@ -58,10 +58,10 @@ explicit asc::pipeline_ref::pipeline_ref(asc::pipeline_event_id load_event, asc:
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `load_event0` | 输入 | 提供“使用调用方提供的参数初始化 `asc::pipeline_ref` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `store_event0` | 输入 | 提供“使用调用方提供的参数初始化 `asc::pipeline_ref` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `load_event1` | 输入 | 提供“使用调用方提供的参数初始化 `asc::pipeline_ref` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `store_event1` | 输入 | 提供“使用调用方提供的参数初始化 `asc::pipeline_ref` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `load_event0` | 输入 | 两级流水线第 0 级的 Load 事件 ID（pipeline_event_id）：MTE2 GM→UB 搬入完成事件的编号；由调用方提供并在流水线有效期内独占。 |
+| `store_event0` | 输入 | 两级流水线第 0 级的 Store 事件 ID（pipeline_event_id）：MTE3 UB→GM 搬出排空事件的编号；由调用方提供并在流水线有效期内独占。 |
+| `load_event1` | 输入 | 两级流水线第 1 级的 Load 事件 ID（pipeline_event_id）：MTE2 GM→UB 搬入完成事件的编号；由调用方提供并在流水线有效期内独占。 |
+| `store_event1` | 输入 | 两级流水线第 1 级的 Store 事件 ID（pipeline_event_id）：MTE3 UB→GM 搬出排空事件的编号；由调用方提供并在流水线有效期内独占。 |
 
 ### 原型 2 的参数
 
@@ -69,7 +69,7 @@ explicit asc::pipeline_ref::pipeline_ref(asc::pipeline_event_id load_event, asc:
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `参数1` | 输入 | 管理当前异步搬运阶段的流水线引用；等待完成前须保持有效。 |
+| `参数1` | 输入 | 待复制的另一 `pipeline_ref`：复制构造复制其阶段与事件 ID 借用状态，两对象共享同一组事件。 |
 
 ### 原型 3 的参数
 
@@ -77,8 +77,8 @@ explicit asc::pipeline_ref::pipeline_ref(asc::pipeline_event_id load_event, asc:
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `load_event` | 输入 | 提供“使用调用方提供的参数初始化 `asc::pipeline_ref` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `store_event` | 输入 | 提供“使用调用方提供的参数初始化 `asc::pipeline_ref` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `load_event` | 输入 | 单级流水线的 Load 事件 ID（pipeline_event_id）：MTE2 GM→UB 搬入完成事件的编号；由调用方提供并在流水线有效期内独占。 |
+| `store_event` | 输入 | 单级流水线的 Store 事件 ID（pipeline_event_id）：MTE3 UB→GM 搬出排空事件的编号；由调用方提供并在流水线有效期内独占。 |
 
 ## 约束说明
 

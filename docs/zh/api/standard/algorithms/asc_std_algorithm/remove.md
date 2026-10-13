@@ -59,7 +59,7 @@ template<class ForwardIterator, class T> [[nodiscard]] constexpr ForwardIterator
 | 参数名 | 描述 |
 | --- | --- |
 | `Forward` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `T` | 输入范围元素或参与运算的值类型。 |
+| `T` | 待移除值的类型，须可与范围内元素按 operator== 比较。 |
 
 **函数参数**
 
@@ -68,7 +68,7 @@ template<class ForwardIterator, class T> [[nodiscard]] constexpr ForwardIterator
 | `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待移除的值，与元素按相等语义（operator==）比较；相等的元素不保留在结果逻辑范围中。 |
 
 ### 原型 2 的参数
 
@@ -77,7 +77,7 @@ template<class ForwardIterator, class T> [[nodiscard]] constexpr ForwardIterator
 | 参数名 | 描述 |
 | --- | --- |
 | `ForwardIterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `T` | 输入范围元素或参与运算的值类型。 |
+| `T` | 待移除值的类型，须可与范围内元素按 operator== 比较。 |
 
 **函数参数**
 
@@ -85,7 +85,7 @@ template<class ForwardIterator, class T> [[nodiscard]] constexpr ForwardIterator
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `value_` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value_` | 输入 | 待移除的值，与元素按相等语义（operator==）比较；相等的元素不保留在结果逻辑范围中。 |
 
 ## 返回值说明
 

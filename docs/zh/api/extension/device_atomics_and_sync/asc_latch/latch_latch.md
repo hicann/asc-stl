@@ -42,7 +42,7 @@ constexpr explicit asc::latch::latch(asc::std::ptrdiff_t expected) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `expected` | 输入 | 指定“使用调用方提供的参数初始化 `asc::latch` 对象”使用的标量值；取值须满足声明和约束。 |
+| `expected` | 输入 | latch 的初始计数值，即打开前所需的总到达次数；计数减至 0 后 latch 打开并保持打开。 |
 
 ## 约束说明
 

@@ -58,7 +58,7 @@ template<class BidirectionalIterator, class OutputIterator> constexpr OutputIter
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Bidirectional` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Bidirectional` | 读取输入范围元素的迭代器类型；须支持双向遍历，以便按相反顺序读取。 |
 | `Output` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
 
 **函数参数**
@@ -68,7 +68,7 @@ template<class BidirectionalIterator, class OutputIterator> constexpr OutputIter
 | `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `result` | 输出 | 提供“按相反顺序复制范围”所需的输入对象；类型须满足所选原型约束。 |
+| `result` | 输出 | 写入结果的输出迭代器；目标范围容量须足以容纳全部复制元素，结果为输入元素的逆序。 |
 
 ### 原型 2 的参数
 

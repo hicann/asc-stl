@@ -42,8 +42,8 @@ constexpr explicit asc::barrier::barrier(asc::std::ptrdiff_t expected, Completio
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `expected` | 输入 | 指定“使用调用方提供的参数初始化 `asc::barrier` 对象”使用的标量值；取值须满足声明和约束。 |
-| `completion` | 输入 | 用于确定元素顺序的比较对象。 |
+| `expected` | 输入 | 每阶段期望到达的参与者数量：全部到达后触发完成函数并进入下一阶段；须为正。 |
+| `completion` | 输入 | 阶段完成函数：本阶段全部参与者到达后、进入下一阶段前调用；默认为空实现。 |
 
 ## 约束说明
 

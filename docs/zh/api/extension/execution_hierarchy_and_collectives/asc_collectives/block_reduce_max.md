@@ -58,8 +58,8 @@ float asc::block_reduce_max(asc::block_collective_workspace<float> workspace, fl
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `workspace` | 输入 | 当前 Block 的集体操作工作区：存放各 warp 的部分结果，元素数不少于 Block 内 warp 数；参与线程会合期间不得复用。 |
+| `value` | 输入 | 当前线程参与求最大值的输入值：返回 Block 内各线程该值中的最大值。 |
 
 ### 原型 2 的参数
 
@@ -67,8 +67,8 @@ float asc::block_reduce_max(asc::block_collective_workspace<float> workspace, fl
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `workspace` | 输入 | 当前 Block 的集体操作工作区：存放各 warp 的部分结果，元素数不少于 Block 内 warp 数；参与线程会合期间不得复用。 |
+| `value` | 输入 | 当前线程参与求最大值的输入值：返回 Block 内各线程该值中的最大值。 |
 
 ### 原型 3 的参数
 
@@ -76,8 +76,8 @@ float asc::block_reduce_max(asc::block_collective_workspace<float> workspace, fl
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `workspace` | 输入 | 当前 Block 的集体操作工作区：存放各 warp 的部分结果，元素数不少于 Block 内 warp 数；参与线程会合期间不得复用。 |
+| `value` | 输入 | 当前线程参与求最大值的输入值：返回 Block 内各线程该值中的最大值。 |
 
 ## 返回值说明
 

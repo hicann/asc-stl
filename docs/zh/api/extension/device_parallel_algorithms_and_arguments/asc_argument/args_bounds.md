@@ -52,8 +52,8 @@ template<class T> constexpr asc::args::runtime_bounds<T> asc::args::bounds(T low
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Lower` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `Upper` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
+| `Lower` | 编译期边界下限：作为 static_bounds<Lower, Upper> 的 lower()，要求 Lower ≤ Upper。 |
+| `Upper` | 编译期边界上限：作为 static_bounds<Lower, Upper> 的 upper()。 |
 
 ### 原型 2 的参数
 
@@ -61,14 +61,14 @@ template<class T> constexpr asc::args::runtime_bounds<T> asc::args::bounds(T low
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 运行期边界值的类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lower` | 输入 | 提供“创建编译期或运行期参数边界对象”所需的输入对象；类型须满足所选原型约束。 |
-| `upper` | 输入 | 提供“创建编译期或运行期参数边界对象”所需的输入对象；类型须满足所选原型约束。 |
+| `lower` | 输入 | 运行期边界下限：存入返回的 runtime_bounds<T> 并经 lower() 查询。 |
+| `upper` | 输入 | 运行期边界上限：存入返回的 runtime_bounds<T> 并经 upper() 查询。 |
 
 ## 返回值说明
 

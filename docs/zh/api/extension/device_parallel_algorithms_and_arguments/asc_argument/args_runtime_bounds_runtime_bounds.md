@@ -56,8 +56,8 @@ constexpr asc::args::runtime_bounds::runtime_bounds(T lower, T upper) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lower` | 输入 | 提供“使用调用方提供的参数初始化 `asc::args::runtime_bounds` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `upper` | 输入 | 提供“使用调用方提供的参数初始化 `asc::args::runtime_bounds` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `lower` | 输入 | 运行期参数边界的下限：保存于对象中并经 lower() 查询。 |
+| `upper` | 输入 | 运行期参数边界的上限：保存于对象中并经 upper() 查询。 |
 
 ## 约束说明
 

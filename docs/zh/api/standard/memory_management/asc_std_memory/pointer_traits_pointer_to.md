@@ -44,7 +44,7 @@ constexpr pointer asc::std::pointer_traits::pointer_to(conditional_t<is_void_v<e
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待以其地址构造 pointer 的对象引用；返回指针指向该对象。 |
 
 ## 返回值说明
 

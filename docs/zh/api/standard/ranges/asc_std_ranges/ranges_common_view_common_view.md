@@ -58,7 +58,7 @@ constexpr common_view(View base) noexcept(is_nothrow_move_constructible_v<View>)
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `base` | 输入 | 提供“按本页所列构造形态初始化 `common_view` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `base` | 输入 | 被适配的底层视图；当其迭代器与哨兵类型不同（非 common 范围）时，本视图将其呈现为迭代器/哨兵同型的公共范围。 |
 
 ## 约束说明
 

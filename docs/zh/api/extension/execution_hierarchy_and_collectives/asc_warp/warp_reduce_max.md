@@ -58,7 +58,7 @@ unsigned int asc::warp_reduce_max(unsigned int value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 本 Lane 参与归约的输入值：返回整个 warp 各 Lane 该值中的最大值。 |
 
 ### 原型 2 的参数
 
@@ -66,7 +66,7 @@ unsigned int asc::warp_reduce_max(unsigned int value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 本 Lane 参与归约的输入值：返回整个 warp 各 Lane 该值中的最大值。 |
 
 ### 原型 3 的参数
 
@@ -74,7 +74,7 @@ unsigned int asc::warp_reduce_max(unsigned int value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 本 Lane 参与归约的输入值：返回整个 warp 各 Lane 该值中的最大值。 |
 
 ## 返回值说明
 

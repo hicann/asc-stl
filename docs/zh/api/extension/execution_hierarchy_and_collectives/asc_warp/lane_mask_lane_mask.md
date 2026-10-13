@@ -42,7 +42,7 @@ constexpr explicit asc::lane_mask::lane_mask(unsigned int value = 0) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 32 位 Lane 掩码原始值（unsigned int，默认 0 即空掩码）：bit i（0 起）置 1 表示 Lane i 属于该集合。 |
 
 ## 约束说明
 

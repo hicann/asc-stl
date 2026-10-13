@@ -52,8 +52,8 @@ constexpr explicit asc::args::immediate::immediate(T value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `bounds` | 输入 | 提供“使用调用方提供的参数初始化 `asc::args::immediate` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `value` | 输入 | 提交时对 Host 可用的立即参数值：保存于包装对象并经 value() 读取。 |
+| `bounds` | 输入 | 该立即参数取值的边界对象（no_bounds/static_bounds/runtime_bounds）。 |
 
 ### 原型 2 的参数
 
@@ -61,7 +61,7 @@ constexpr explicit asc::args::immediate::immediate(T value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 提交时对 Host 可用的立即参数值：保存于包装对象并经 value() 读取。 |
 
 ## 约束说明
 

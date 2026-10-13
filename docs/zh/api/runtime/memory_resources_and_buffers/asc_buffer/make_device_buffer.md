@@ -70,10 +70,10 @@ template<class T> asc::execution_status asc::make_device_buffer(asc::device_buff
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 提供“使用调用方提供的 Device 内存资源创建 `device_buffer<T>`”使用的对象引用；被引用对象须在调用期间有效。 |
-| `resource` | 输入 | 由调用方提供并管理生命周期的内存资源。 |
-| `stream` | 输入 | 用于按序提交异步工作的 Stream。相关资源须保持有效，直至工作完成。 |
-| `element_count` | 输入 | 参与操作的元素数量。 |
+| `output` | 输出 | 接收结果的 device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
+| `resource` | 输入 | Device 内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
+| `stream` | 输入 | 与缓冲关联的 Stream 引用：初始化复制等异步操作按该 Stream 提交；须保持有效直至相关异步工作完成。 |
+| `element_count` | 输入 | 元素个数（以元素计）：原型 1/2 为待分配的元素数（为 0 时返回参数无效），原型 4 为从 first 复制的元素数。 |
 
 ### 原型 2 的参数
 
@@ -87,11 +87,11 @@ template<class T> asc::execution_status asc::make_device_buffer(asc::device_buff
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 提供“使用调用方提供的 Device 内存资源创建 `device_buffer<T>`”使用的对象引用；被引用对象须在调用期间有效。 |
-| `resource` | 输入 | 由调用方提供并管理生命周期的内存资源。 |
-| `stream` | 输入 | 用于按序提交异步工作的 Stream。相关资源须保持有效，直至工作完成。 |
-| `element_count` | 输入 | 参与操作的元素数量。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `output` | 输出 | 接收结果的 device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
+| `resource` | 输入 | Device 内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
+| `stream` | 输入 | 与缓冲关联的 Stream 引用：初始化复制等异步操作按该 Stream 提交；须保持有效直至相关异步工作完成。 |
+| `element_count` | 输入 | 元素个数（以元素计）：原型 1/2 为待分配的元素数（为 0 时返回参数无效），原型 4 为从 first 复制的元素数。 |
+| `value` | 输入 | 填充值：先经一次 Host→Device 复制上载，再以流序倍增的 Device→Device 复制填充全部元素。 |
 
 ### 原型 3 的参数
 
@@ -105,11 +105,11 @@ template<class T> asc::execution_status asc::make_device_buffer(asc::device_buff
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 提供“使用调用方提供的 Device 内存资源创建 `device_buffer<T>`”使用的对象引用；被引用对象须在调用期间有效。 |
-| `resource` | 输入 | 由调用方提供并管理生命周期的内存资源。 |
-| `stream` | 输入 | 用于按序提交异步工作的 Stream。相关资源须保持有效，直至工作完成。 |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
+| `output` | 输出 | 接收结果的 device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
+| `resource` | 输入 | Device 内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
+| `stream` | 输入 | 与缓冲关联的 Stream 引用：初始化复制等异步操作按该 Stream 提交；须保持有效直至相关异步工作完成。 |
+| `first` | 输入 | 待复制的 Host 连续元素范围首指针：原型 3 与 last 界定范围，原型 4 与 element_count 界定长度。 |
+| `last` | 输入 | 待复制的 Host 连续元素范围末指针（排他）：不得为空且不得小于 first。 |
 
 ### 原型 4 的参数
 
@@ -123,11 +123,11 @@ template<class T> asc::execution_status asc::make_device_buffer(asc::device_buff
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 提供“使用调用方提供的 Device 内存资源创建 `device_buffer<T>`”使用的对象引用；被引用对象须在调用期间有效。 |
-| `resource` | 输入 | 由调用方提供并管理生命周期的内存资源。 |
-| `stream` | 输入 | 用于按序提交异步工作的 Stream。相关资源须保持有效，直至工作完成。 |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `element_count` | 输入 | 参与操作的元素数量。 |
+| `output` | 输出 | 接收结果的 device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
+| `resource` | 输入 | Device 内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
+| `stream` | 输入 | 与缓冲关联的 Stream 引用：初始化复制等异步操作按该 Stream 提交；须保持有效直至相关异步工作完成。 |
+| `first` | 输入 | 待复制的 Host 连续元素范围首指针：原型 3 与 last 界定范围，原型 4 与 element_count 界定长度。 |
+| `element_count` | 输入 | 元素个数（以元素计）：原型 1/2 为待分配的元素数（为 0 时返回参数无效），原型 4 为从 first 复制的元素数。 |
 
 ## 返回值说明
 

@@ -49,8 +49,8 @@ template<class Iterator, class Function> constexpr asc::transform_iterator<Funct
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `iterator` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
-| `function` | 输入 | 提供“创建解引用时执行变换的输入迭代器”所需的输入对象；类型须满足所选原型约束。 |
+| `iterator` | 输入 | 被包装的底层迭代器：其解引用结果交给 function 变换。 |
+| `function` | 输入 | 变换对象：解引用与下标结果为 function(*底层迭代器)。 |
 
 ## 返回值说明
 

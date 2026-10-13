@@ -54,13 +54,13 @@ template<class RARange> constexpr decltype(auto) asc::std::ranges::view_interfac
 
 | 参数名 | 描述 |
 | --- | --- |
-| `RARange` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `RARange` | 派生自 view_interface 的随机访问范围/视图类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 提供“在调用方保证索引有效时访问指定元素”所需的输入对象；类型须满足所选原型约束。 |
+| `index` | 输入 | 元素下标，从 0 起；调用方须保证 0 <= index < 范围长度，接口不检查越界。 |
 
 ### 原型 2 的参数
 
@@ -68,13 +68,13 @@ template<class RARange> constexpr decltype(auto) asc::std::ranges::view_interfac
 
 | 参数名 | 描述 |
 | --- | --- |
-| `RARange` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `RARange` | 派生自 view_interface 的随机访问范围/视图类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 提供“在调用方保证索引有效时访问指定元素”所需的输入对象；类型须满足所选原型约束。 |
+| `index` | 输入 | 元素下标，从 0 起；调用方须保证 0 <= index < 范围长度，接口不检查越界。 |
 
 ## 返回值说明
 

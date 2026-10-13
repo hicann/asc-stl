@@ -42,7 +42,7 @@ void asc::pipeline_ref::producer_acquire(unsigned int stage) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `stage` | 输入 | 指定“等待指定流水级可由生产者写入”使用的标量值；取值须满足声明和约束。 |
+| `stage` | 输入 | 流水级编号，从 0 起且须小于构造时确定的流水级数（1 或 2）；本调用等待该级 Store 事件（MTE3 搬出已排空）并通知该级存储缓冲可回填。 |
 
 ## 返回值说明
 

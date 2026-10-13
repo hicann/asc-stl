@@ -42,7 +42,7 @@ bool asc::set_current_device(asc::device_ref device) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `device` | 输入 | 提供“请求 Runtime 将指定 `device_ref` 设置为当前线程使用的 Device，并用布尔值报告是否成功”所需的输入对象；类型须满足所选原型约束。 |
+| `device` | 输入 | 目标 device_ref：请求 Runtime 将其序号设为当前线程的 Device，成功返回 true。 |
 
 ## 返回值说明
 

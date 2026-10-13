@@ -70,7 +70,7 @@ template<class Tp2> constexpr single_view(const Tp2& value) noexcept(is_nothrow_
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入/输出 | 视图唯一元素的值，被移动构造到视图中保存。 |
 
 ### 原型 3 的参数
 
@@ -78,14 +78,14 @@ template<class Tp2> constexpr single_view(const Tp2& value) noexcept(is_nothrow_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Args` | 传递给构造函数或可调用对象的实参类型列表。 |
+| `Args` | 转发给所存元素构造的实参类型包。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `tag` | 输入 | 提供“按本页所列构造形态初始化 `single_view` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `args` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
+| `tag` | 输入 | in_place_t 标记，指示以 args 原位构造视图所存元素。 |
+| `args` | 输入/输出 | 转发给所存元素构造的实参包。 |
 
 ### 原型 4 的参数
 
@@ -93,13 +93,13 @@ template<class Tp2> constexpr single_view(const Tp2& value) noexcept(is_nothrow_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Tp2` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `Tp2` | 可转换为视图所存元素类型的实参类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 视图唯一元素的值，从该值构造所存元素。 |
 
 ## 约束说明
 

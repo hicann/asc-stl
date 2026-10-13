@@ -60,7 +60,7 @@ template<class InputIterator, class OutputIterator, class T> constexpr OutputIte
 | --- | --- |
 | `Input` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
 | `Output` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
-| `T` | 输入范围元素或参与运算的值类型。 |
+| `T` | 待剔除值的类型，须可与输入元素按 operator== 比较。 |
 
 **函数参数**
 
@@ -69,8 +69,8 @@ template<class InputIterator, class OutputIterator, class T> constexpr OutputIte
 | `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `result` | 输出 | 提供“只复制不等于目标值的元素”所需的输入对象；类型须满足所选原型约束。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `result` | 输出 | 写入结果的输出迭代器；目标范围容量须足以容纳全部保留元素。 |
+| `value` | 输入 | 待剔除的值；输入元素与之按相等语义（operator==）比较，相等者不复制。 |
 
 ### 原型 2 的参数
 
@@ -80,7 +80,7 @@ template<class InputIterator, class OutputIterator, class T> constexpr OutputIte
 | --- | --- |
 | `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
 | `OutputIterator` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
-| `T` | 输入范围元素或参与运算的值类型。 |
+| `T` | 待剔除值的类型，须可与输入元素按 operator== 比较。 |
 
 **函数参数**
 
@@ -89,7 +89,7 @@ template<class InputIterator, class OutputIterator, class T> constexpr OutputIte
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `result` | 输出 | 写入结果的输出迭代器；目标范围须有足够容量。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待剔除的值；输入元素与之按相等语义（operator==）比较，相等者不复制。 |
 
 ## 返回值说明
 

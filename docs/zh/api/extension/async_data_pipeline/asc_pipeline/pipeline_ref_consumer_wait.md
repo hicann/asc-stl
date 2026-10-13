@@ -42,7 +42,7 @@ void asc::pipeline_ref::consumer_wait(unsigned int stage) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `stage` | 输入 | 指定“等待指定流水级的生产提交完成”使用的标量值；取值须满足声明和约束。 |
+| `stage` | 输入 | 流水级编号，从 0 起且须小于构造时确定的流水级数（1 或 2）；本调用阻塞至该级 Load 事件（MTE2 搬入完成）被通知。 |
 
 ## 返回值说明
 

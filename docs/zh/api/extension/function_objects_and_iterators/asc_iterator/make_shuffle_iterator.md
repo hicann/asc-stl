@@ -42,15 +42,15 @@ template<class Bijection, class Index = asc::std::size_t> constexpr asc::shuffle
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Bijection` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Index` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Bijection` | 确定性映射对象类型：以当前索引为输入计算重排后的访问结果。 |
+| `Index` | 迭代器内部游标的索引类型，默认 size_t。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `bijection` | 输入 | 提供“创建按确定性映射重排访问顺序的 shuffle_iterator”所需的输入对象；类型须满足所选原型约束。 |
-| `start` | 输入 | 提供“创建按确定性映射重排访问顺序的 shuffle_iterator”所需的输入对象；类型须满足所选原型约束。 |
+| `bijection` | 输入 | 确定性映射对象：解引用与下标结果为 bijection(当前索引)。 |
+| `start` | 输入 | 游标起始索引，默认 0：随迭代递增并作为 bijection 的输入。 |
 
 ## 返回值说明
 

@@ -58,7 +58,7 @@ explicit asc::atomic::atomic(T desired) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `desired` | 输入 | 提供“使用调用方提供的参数初始化 `asc::atomic` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `desired` | 输入 | 对象初值：以该值初始化原子对象的内部存储。 |
 
 ## 约束说明
 

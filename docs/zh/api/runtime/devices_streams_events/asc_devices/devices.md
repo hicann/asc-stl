@@ -42,9 +42,9 @@ bool asc::devices(asc::device_ref* output, asc::std::uint32_t capacity, asc::std
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 提供“按序号把最多 `capacity` 个 Device 引用写入调用方数组，并通过 `count` 返回 Runtime 报告的完整 Device 数量”所需的数据地址；可访问范围和生命周期须满足约束。 |
-| `capacity` | 输入 | 提供“按序号把最多 `capacity` 个 Device 引用写入调用方数组，并通过 `count` 返回 Runtime 报告的完整 Device 数量”所需的输入对象；类型须满足所选原型约束。 |
-| `count` | 输入/输出 | 参与操作的元素数量。 |
+| `output` | 输出 | 接收 device_ref 的调用方数组首地址：写入 min(capacity, Device 总数) 个按序号递增的引用；capacity 非 0 时不得为空。 |
+| `capacity` | 输入 | 数组可容纳的 device_ref 个数：仅限制实际写入数量，不影响 count 报告的总数。 |
+| `count` | 输入/输出 | Runtime 报告的 Device 总数经该引用写入：可能大于 capacity（此时仅写入前 capacity 个引用）。 |
 
 ## 返回值说明
 

@@ -42,9 +42,9 @@ constexpr asc::memory_resource_properties::memory_resource_properties(bool host_
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `host_accessible` | 输入 | 指定“构造函数保存 Host 可访问性、Device 可访问性和最大字节对齐三个资源属性”使用的标量值；取值须满足声明和约束。 |
-| `device_accessible` | 输入 | 指定“构造函数保存 Host 可访问性、Device 可访问性和最大字节对齐三个资源属性”使用的标量值；取值须满足声明和约束。 |
-| `maximum_alignment` | 输入 | 要求的对齐值，单位为字节。 |
+| `host_accessible` | 输入 | 资源是否 Host 可访问：该资源分配的内存能否由 Host 直接读写。 |
+| `device_accessible` | 输入 | 资源是否 Device 可访问：该资源分配的内存能否由 Device（AI Core）直接读写。 |
+| `maximum_alignment` | 输入 | 资源支持的最大字节对齐（如 64）：allocate 请求的对齐不得超过该值。 |
 
 ## 约束说明
 

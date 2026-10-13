@@ -59,7 +59,7 @@ template<class InputIterator, class T> [[nodiscard]] constexpr Iterdifft<InputIt
 | 参数名 | 描述 |
 | --- | --- |
 | `Input` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `T` | 输入范围元素或参与运算的值类型。 |
+| `T` | 待计数值的类型，须可与输入元素按 operator== 比较。 |
 
 **函数参数**
 
@@ -68,7 +68,7 @@ template<class InputIterator, class T> [[nodiscard]] constexpr Iterdifft<InputIt
 | `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待计数的值，与输入范围内元素按相等语义（operator==）比较。 |
 
 ### 原型 2 的参数
 
@@ -77,7 +77,7 @@ template<class InputIterator, class T> [[nodiscard]] constexpr Iterdifft<InputIt
 | 参数名 | 描述 |
 | --- | --- |
 | `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `T` | 输入范围元素或参与运算的值类型。 |
+| `T` | 待计数值的类型，须可与输入元素按 operator== 比较。 |
 
 **函数参数**
 
@@ -85,7 +85,7 @@ template<class InputIterator, class T> [[nodiscard]] constexpr Iterdifft<InputIt
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 待计数的值，与输入范围内元素按相等语义（operator==）比较。 |
 
 ## 返回值说明
 

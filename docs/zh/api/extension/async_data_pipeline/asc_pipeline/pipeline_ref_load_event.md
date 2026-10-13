@@ -42,7 +42,7 @@ asc::pipeline_event_id asc::pipeline_ref::load_event(unsigned int stage) const n
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `stage` | 输入 | 指定“查询指定流水级使用的 Load Event 编号”使用的标量值；取值须满足声明和约束。 |
+| `stage` | 输入 | 流水级编号，从 0 起且须小于构造时确定的流水级数（1 或 2）；返回该级 Load 事件 ID。 |
 
 ## 返回值说明
 

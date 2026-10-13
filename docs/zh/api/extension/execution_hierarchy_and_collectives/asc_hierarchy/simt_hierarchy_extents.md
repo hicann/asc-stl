@@ -52,7 +52,7 @@ constexpr asc::extent3d asc::simt_hierarchy::extents(asc::grid_level) const noex
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 提供“查询指定 SIMT 层级的三维范围”所需的输入对象；类型须满足所选原型约束。 |
+| `asc` | 输入 | 级别标签：传入 asc::block（block_level 值）选择 Block 级，返回该级的 extent3d 三维尺寸。 |
 
 ### 原型 2 的参数
 
@@ -60,7 +60,7 @@ constexpr asc::extent3d asc::simt_hierarchy::extents(asc::grid_level) const noex
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 提供“查询指定 SIMT 层级的三维范围”所需的输入对象；类型须满足所选原型约束。 |
+| `asc` | 输入 | 级别标签：传入 asc::grid（grid_level 值）选择 Grid 级，返回该级的 extent3d 三维尺寸。 |
 
 ## 返回值说明
 

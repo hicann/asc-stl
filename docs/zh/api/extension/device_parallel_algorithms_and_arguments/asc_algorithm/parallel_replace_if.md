@@ -50,11 +50,11 @@ template<class Forward, class UnaryPredicate, class T> asc::execution_status asc
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
+| `policy` | 输入 | Device 执行策略（device_policy）：提供任务提交所用的 Stream 与调用方临时存储；返回值仅反映提交状态，提交成功不表示异步工作已完成。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
-| `new_value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `new_value` | 输入 | 替换后的新值：满足谓词的元素被原地改写为该值。 |
 
 ## 返回值说明
 

@@ -44,8 +44,8 @@ bool asc::make_stream(asc::stream& output, asc::std::uint32_t priority = 0) noex
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 提供“按指定优先级创建 Runtime Stream，并把所有权写入空的 `stream` 对象”使用的对象引用；被引用对象须在调用期间有效。 |
-| `priority` | 输入 | 提供“按指定优先级创建 Runtime Stream，并把所有权写入空的 `stream` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `output` | 输出 | 待接收新建 Stream 的空 stream 对象引用：须尚未持有句柄，成功后获得新 Runtime Stream 的所有权；已持有句柄时直接返回失败。 |
+| `priority` | 输入 | 新建 Stream 的优先级（uint32_t，传给底层 Runtime；0 为常规优先级）。 |
 
 ## 返回值说明
 

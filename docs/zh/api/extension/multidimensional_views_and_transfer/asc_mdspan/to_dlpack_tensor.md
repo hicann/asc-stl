@@ -42,19 +42,19 @@ template<class Element, class Extents, class Layout, class Accessor> bool asc::t
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Element` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
-| `Extents` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Layout` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
-| `Accessor` | 多维视图使用的维度、索引映射、布局或访问策略类型。 |
+| `Element` | 视图的元素类型；须属于 DLPack 桥接支持的元素类型集合，否则转换返回 false。 |
+| `Extents` | 视图的维度说明类型；其 rank() 决定输出张量的秩。 |
+| `Layout` | 视图的布局映射类型；其逐维步长被写入输出张量的步长数组。 |
+| `Accessor` | 视图的访问器类型；随 mdspan 一并参与推导，不改变转换结果。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `view` | 输入 | 提供非拥有多维数据视图；底层存储须在视图使用期间有效。 |
-| `device_type` | 输入 | 目标设备的类型标识，用于构造兼容的张量描述。 |
-| `device_id` | 输入 | 指定“把兼容的 mdspan 视图转换为 DLPack 张量描述”使用的标量值；取值须满足声明和约束。 |
-| `output` | 输出 | 提供“把兼容的 mdspan 视图转换为 DLPack 张量描述”使用的对象引用；被引用对象须在调用期间有效。 |
+| `view` | 输入 | 被转换的 mdspan 视图（非拥有）；其数据指针须非空，否则返回 false。转换仅借用其数据地址，不获得存储所有权。 |
+| `device_type` | 输入 | 输出张量记录的设备类型（DLDeviceType 枚举值）；仅接受 kDLCPU 与 kDLExtDev，其它取值返回 false。 |
+| `device_id` | 输入 | 输出张量记录的设备编号（int），原样写入其设备描述，不做校验。 |
+| `output` | 输出 | 接收 DLPack 张量描述的输出对象（dlpack_tensor<Extents::rank()>）；成功时写入数据指针、设备、维数、dtype 及逐维形状与步长（byte_offset 置 0），失败时不改动。 |
 
 ## 返回值说明
 

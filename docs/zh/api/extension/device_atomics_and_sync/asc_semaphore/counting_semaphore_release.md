@@ -42,7 +42,7 @@ void asc::counting_semaphore::release(asc::std::ptrdiff_t update = 1) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `update` | 输入 | 指定“按指定数量原子增加信号量许可并唤醒等待者”使用的标量值；取值须满足声明和约束。 |
+| `update` | 输入 | 许可增加量，默认 1：按该值原子增加内部计数并唤醒等待者。 |
 
 ## 返回值说明
 

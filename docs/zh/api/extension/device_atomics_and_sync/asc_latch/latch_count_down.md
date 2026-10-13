@@ -42,7 +42,7 @@ void asc::latch::count_down(asc::std::ptrdiff_t update = 1) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `update` | 输入 | 指定“按指定数量减少 latch 计数但不等待归零”使用的标量值；取值须满足声明和约束。 |
+| `update` | 输入 | 计数减少量，默认 1；须非负且不超过当前计数，减至 0 时不等待。 |
 
 ## 返回值说明
 

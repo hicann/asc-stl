@@ -49,10 +49,10 @@ template<class Input, class Output> asc::execution_status asc::parallel::copy(as
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
+| `policy` | 输入 | Device 执行策略（device_policy）：提供任务提交所用的 Stream 与调用方临时存储；返回值仅反映提交状态，提交成功不表示异步工作已完成。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `result` | 输出 | 提供“异步把输入范围中的元素按顺序复制到目标范围”所需的输入对象；类型须满足所选原型约束。 |
+| `result` | 输出 | 输出范围的起始迭代器：输入元素按原顺序经该范围异步写入，容量不小于输入元素数。 |
 
 ## 返回值说明
 

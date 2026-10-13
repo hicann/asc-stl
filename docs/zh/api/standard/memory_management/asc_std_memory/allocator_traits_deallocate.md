@@ -45,8 +45,8 @@ constexpr void asc::std::allocator_traits::deallocate(allocator_type& allocator,
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `allocator` | 输入/输出 | 负责对象存储分配与释放的分配器。 |
-| `pointer` | 输入 | 提供“通过对应分配器释放原先申请的存储”所需的输入对象；类型须满足所选原型约束。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `pointer` | 输入 | 先前由同一分配器 allocate 返回且尚未释放的存储地址。 |
+| `count` | 输入 | 待释放存储可容纳的元素个数，须与分配时传入的元素个数一致。 |
 
 ## 返回值说明
 

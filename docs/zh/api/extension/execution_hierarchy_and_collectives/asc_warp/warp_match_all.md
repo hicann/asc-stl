@@ -76,8 +76,8 @@ bool asc::warp_match_all(unsigned long long value, asc::lane_mask participants =
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
+| `value` | 输入 | 本 Lane 参与匹配的输入值：participants 内全部 Lane 的该值按位相等时返回 true。 |
+| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
 
 ### 原型 2 的参数
 
@@ -85,8 +85,8 @@ bool asc::warp_match_all(unsigned long long value, asc::lane_mask participants =
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
+| `value` | 输入 | 本 Lane 参与匹配的输入值：participants 内全部 Lane 的该值按位相等时返回 true。 |
+| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
 
 ### 原型 3 的参数
 
@@ -94,8 +94,8 @@ bool asc::warp_match_all(unsigned long long value, asc::lane_mask participants =
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
+| `value` | 输入 | 本 Lane 参与匹配的输入值：participants 内全部 Lane 的该值按位相等时返回 true。 |
+| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
 
 ### 原型 4 的参数
 
@@ -103,8 +103,8 @@ bool asc::warp_match_all(unsigned long long value, asc::lane_mask participants =
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
+| `value` | 输入 | 本 Lane 参与匹配的输入值：participants 内全部 Lane 的该值按位相等时返回 true。 |
+| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
 
 ### 原型 5 的参数
 
@@ -112,8 +112,8 @@ bool asc::warp_match_all(unsigned long long value, asc::lane_mask participants =
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
+| `value` | 输入 | 本 Lane 参与匹配的输入值：participants 内全部 Lane 的该值按位相等时返回 true。 |
+| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
 
 ### 原型 6 的参数
 
@@ -121,8 +121,8 @@ bool asc::warp_match_all(unsigned long long value, asc::lane_mask participants =
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
+| `value` | 输入 | 本 Lane 参与匹配的输入值：participants 内全部 Lane 的该值按位相等时返回 true。 |
+| `participants` | 输入 | 参与匹配的 Lane 集合掩码（lane_mask，bit i 对应 Lane i，默认 lane_mask::all()）：仅集合内的 Lane 参与比较。 |
 
 ## 返回值说明
 

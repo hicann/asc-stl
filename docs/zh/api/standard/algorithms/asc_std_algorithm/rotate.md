@@ -66,7 +66,7 @@ template<class ForwardIterator> constexpr ForwardIterator asc::std::rotate(Forwa
 | --- | --- | --- |
 | `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `middle` | 输入 | 提供“把范围围绕指定中间位置旋转”所需的输入对象；类型须满足所选原型约束。 |
+| `middle` | 输入 | 旋转分界迭代器，须位于 [first, last) 内；旋转后 middle 成为新范围起始，原 [first, middle) 段移到末尾。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 
 ### 原型 2 的参数
@@ -82,7 +82,7 @@ template<class ForwardIterator> constexpr ForwardIterator asc::std::rotate(Forwa
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `middle` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
+| `middle` | 输入 | 旋转分界迭代器，须位于 [first, last) 内；旋转后 middle 成为新范围起始，原 [first, middle) 段移到末尾。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 
 ## 返回值说明

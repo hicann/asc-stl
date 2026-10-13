@@ -49,8 +49,8 @@ template<class Iterator, class Function> constexpr asc::transform_output_iterato
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `iterator` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
-| `function` | 输入 | 提供“创建写入前执行变换的输出迭代器”所需的输入对象；类型须满足所选原型约束。 |
+| `iterator` | 输入 | 被包装的底层输出迭代器：变换后的值写入该迭代器所指位置。 |
+| `function` | 输入 | 写入变换对象：赋给本迭代器的值先经 function 变换再写入底层迭代器。 |
 
 ## 返回值说明
 

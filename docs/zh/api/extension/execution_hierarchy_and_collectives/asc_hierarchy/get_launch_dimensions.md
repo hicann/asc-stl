@@ -42,7 +42,7 @@ constexpr asc::launch_dimensions asc::get_launch_dimensions(asc::simt_hierarchy 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `hierarchy` | 输入 | 提供“从 simt_hierarchy 提取 Grid 和 Block 启动尺寸”所需的输入对象；类型须满足所选原型约束。 |
+| `hierarchy` | 输入 | 待提取启动尺寸的 simt_hierarchy 对象：其 Grid 与 Block 三维尺寸被复制进返回的 launch_dimensions。 |
 
 ## 返回值说明
 

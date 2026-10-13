@@ -82,7 +82,7 @@ template<class BoundSentinel2> constexpr iota_view(Iterator start, Sentinel boun
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `start` | 输入 | 提供“按本页所列构造形态初始化 `iota_view` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `start` | 输入 | 序列起始值；视图从该值起按递增生成元素。 |
 
 ### 原型 3 的参数
 
@@ -90,8 +90,8 @@ template<class BoundSentinel2> constexpr iota_view(Iterator start, Sentinel boun
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `start` | 输入 | 提供“按本页所列构造形态初始化 `iota_view` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `bound` | 输入 | 提供“按本页所列构造形态初始化 `iota_view` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `start` | 输入 | 序列起始值；视图从该值起按递增生成元素。 |
+| `bound` | 输入 | 序列上界哨兵值；元素生成到等于 bound 之前结束。 |
 
 ### 原型 4 的参数
 
@@ -99,14 +99,14 @@ template<class BoundSentinel2> constexpr iota_view(Iterator start, Sentinel boun
 
 | 参数名 | 描述 |
 | --- | --- |
-| `BoundSentinel2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `BoundSentinel2` | bound 的实际类型；须可与视图迭代器比较相等或为兼容的哨兵类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `start` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
-| `bound` | 输入 | 提供“按本页所列构造形态初始化 `iota_view` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `start` | 输入 | 起始迭代器，包装序列起始值。 |
+| `bound` | 输入 | 结束哨兵，界定序列上界。 |
 
 ### 原型 5 的参数
 
@@ -114,14 +114,14 @@ template<class BoundSentinel2> constexpr iota_view(Iterator start, Sentinel boun
 
 | 参数名 | 描述 |
 | --- | --- |
-| `BoundSentinel2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `BoundSentinel2` | bound 的实际类型；须可与视图迭代器比较相等或为兼容的哨兵类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `start` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
-| `bound` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
+| `start` | 输入 | 起始迭代器，包装序列起始值。 |
+| `bound` | 输入 | 结束迭代器，包装序列上界值。 |
 
 ### 原型 6 的参数
 
@@ -129,14 +129,14 @@ template<class BoundSentinel2> constexpr iota_view(Iterator start, Sentinel boun
 
 | 参数名 | 描述 |
 | --- | --- |
-| `BoundSentinel2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `BoundSentinel2` | bound 的实际类型；须可与视图迭代器比较相等或为兼容的哨兵类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `start` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
-| `bound` | 输入 | 提供“按本页所列构造形态初始化 `iota_view` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `start` | 输入 | 起始迭代器，包装序列起始值。 |
+| `bound` | 输入 | 结束哨兵，界定序列上界。 |
 
 ## 约束说明
 

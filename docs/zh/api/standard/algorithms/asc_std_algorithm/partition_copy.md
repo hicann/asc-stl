@@ -70,9 +70,9 @@ template<class InputIterator, class OutputIterator1, class OutputIterator2, clas
 | `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `true_result` | 输出 | 提供“按谓词把元素分别复制到两个输出范围”所需的输入对象；类型须满足所选原型约束。 |
-| `false_result` | 输出 | 提供“按谓词把元素分别复制到两个输出范围”所需的输入对象；类型须满足所选原型约束。 |
-| `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `true_result` | 输出 | 写入结果的输出迭代器之一；谓词返回 true 的元素复制到该范围，容量须足以容纳对应元素。 |
+| `false_result` | 输出 | 写入结果的输出迭代器之一；谓词返回 false 的元素复制到该范围，容量须足以容纳对应元素。 |
+| `predicate` | 输入 | 一元谓词，按调用形式 predicate(elem) 返回 bool，决定元素复制到哪个输出范围。 |
 
 ### 原型 2 的参数
 
@@ -91,9 +91,9 @@ template<class InputIterator, class OutputIterator1, class OutputIterator2, clas
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `out_true` | 输入 | 写入结果的输出迭代器；目标范围须有足够容量。 |
-| `out_false` | 输入 | 写入结果的输出迭代器；目标范围须有足够容量。 |
-| `pred` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `out_true` | 输出 | 写入结果的输出迭代器之一；谓词返回 true 的元素复制到该范围，容量须足以容纳对应元素。 |
+| `out_false` | 输出 | 写入结果的输出迭代器之一；谓词返回 false 的元素复制到该范围，容量须足以容纳对应元素。 |
+| `pred` | 输入 | 一元谓词，按调用形式 pred(elem) 返回 bool，决定元素复制到哪个输出范围。 |
 
 ## 返回值说明
 

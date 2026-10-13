@@ -55,9 +55,9 @@ template<class ForwardIterator, class Size, class T> [[nodiscard]] constexpr For
 | 参数名 | 描述 |
 | --- | --- |
 | `ForwardIterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `Size` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
-| `T` | 输入范围元素或参与运算的值类型。 |
-| `BinaryPredicate` | 判断元素是否满足条件的可调用对象类型。 |
+| `Size` | 表示待匹配序列长度的类型，通常为整型或迭代器差值类型。 |
+| `T` | 待匹配值的类型，须可与范围内元素按 operator== 比较或作为 pred 实参。 |
+| `BinaryPredicate` | 判断元素与待匹配值是否等价的二元谓词类型。 |
 
 **函数参数**
 
@@ -65,9 +65,9 @@ template<class ForwardIterator, class Size, class T> [[nodiscard]] constexpr For
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `count` | 输入 | 参与操作的元素数量。 |
-| `value_` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `pred` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `count` | 输入 | 待匹配的连续元素个数。 |
+| `value_` | 输入 | 待匹配的值；在范围内查找连续 count 个与该值等价元素的序列起始位置。 |
+| `pred` | 输入 | 二元谓词，按调用形式 pred(elem, value_) 返回 bool；返回 true 视为元素匹配。 |
 
 ### 原型 2 的参数
 
@@ -76,8 +76,8 @@ template<class ForwardIterator, class Size, class T> [[nodiscard]] constexpr For
 | 参数名 | 描述 |
 | --- | --- |
 | `ForwardIterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `Size` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
-| `T` | 输入范围元素或参与运算的值类型。 |
+| `Size` | 表示待匹配序列长度的类型，通常为整型或迭代器差值类型。 |
+| `T` | 待匹配值的类型，须可与范围内元素按 operator== 比较。 |
 
 **函数参数**
 
@@ -85,8 +85,8 @@ template<class ForwardIterator, class Size, class T> [[nodiscard]] constexpr For
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `count` | 输入 | 参与操作的元素数量。 |
-| `value_` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `count` | 输入 | 待匹配的连续元素个数。 |
+| `value_` | 输入 | 待匹配的值；在范围内查找连续 count 个与该值等价（operator==）元素的序列起始位置。 |
 
 ## 返回值说明
 

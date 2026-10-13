@@ -54,7 +54,7 @@ pointer asc::std::scoped_allocator_adaptor::allocate(size_type count, const_void
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `count` | 输入 | 待申请存储可容纳的元素个数，按 count 个 value_type 对象申请。 |
 
 ### 原型 2 的参数
 
@@ -62,8 +62,8 @@ pointer asc::std::scoped_allocator_adaptor::allocate(size_type count, const_void
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `count` | 输入 | 参与操作的元素数量。 |
-| `hint` | 输入 | 提供“向调用方提供的分配器申请对象存储”所需的输入对象；类型须满足所选原型约束。 |
+| `count` | 输入 | 待申请存储可容纳的元素个数，按 count 个 value_type 对象申请。 |
+| `hint` | 输入 | 局部性提示地址，通常取自同一适配器先前返回的指针；可为空，底层分配器可忽略。 |
 
 ## 返回值说明
 

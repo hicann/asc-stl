@@ -42,13 +42,13 @@ template<class Integer = asc::std::ptrdiff_t> constexpr asc::discard_iterator as
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Integer` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Integer` | 索引类型，默认 ptrdiff_t。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 提供“创建丢弃写入值的 discard_iterator”所需的输入对象；类型须满足所选原型约束。 |
+| `index` | 输入 | 初始索引，默认 0：写入被丢弃，索引仅用于位置计数与迭代器差值。 |
 
 ## 返回值说明
 

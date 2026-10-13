@@ -42,7 +42,7 @@ constexpr explicit asc::device_ref::device_ref(asc::std::uint32_t ordinal) noexc
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `ordinal` | 输入 | 提供“构造函数使用给定的零基 Runtime Device 序号创建引用值”所需的输入对象；类型须满足所选原型约束。 |
+| `ordinal` | 输入 | Runtime Device 序号（uint32_t，0 起）：引用仅保存该序号，不拥有 Runtime 状态。 |
 
 ## 约束说明
 

@@ -52,7 +52,7 @@ constexpr unsigned long long asc::simt_hierarchy::count(asc::grid_level) const n
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 提供“查询指定 SIMT 层级包含的线性元素数量”所需的输入对象；类型须满足所选原型约束。 |
+| `asc` | 输入 | 级别标签：传入 asc::block（block_level 值）选择 Block 级，返回该级三维尺寸的元素总数 x*y*z。 |
 
 ### 原型 2 的参数
 
@@ -60,7 +60,7 @@ constexpr unsigned long long asc::simt_hierarchy::count(asc::grid_level) const n
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 提供“查询指定 SIMT 层级包含的线性元素数量”所需的输入对象；类型须满足所选原型约束。 |
+| `asc` | 输入 | 级别标签：传入 asc::grid（grid_level 值）选择 Grid 级，返回该级三维尺寸的元素总数 x*y*z。 |
 
 ## 返回值说明
 

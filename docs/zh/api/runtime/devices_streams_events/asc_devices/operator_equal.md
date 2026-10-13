@@ -64,8 +64,8 @@ constexpr bool asc::operator==(asc::stream_ref lhs, asc::stream_ref rhs) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 提供“比较两个 Device 引用的序号，或比较两个 Stream/Event 引用保存的原生句柄是否相同”所需的输入对象；类型须满足所选原型约束。 |
-| `rhs` | 输入 | 提供“比较两个 Device 引用的序号，或比较两个 Stream/Event 引用保存的原生句柄是否相同”所需的输入对象；类型须满足所选原型约束。 |
+| `lhs` | 输入 | 参与比较的左侧 Device 引用：按两个引用的设备序号判定是否相等。 |
+| `rhs` | 输入 | 参与比较的右侧 Device 引用：按两个引用的设备序号判定是否相等。 |
 
 ### 原型 2 的参数
 
@@ -73,8 +73,8 @@ constexpr bool asc::operator==(asc::stream_ref lhs, asc::stream_ref rhs) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 用于记录或等待执行进度的 Event 引用。 |
-| `rhs` | 输入 | 用于记录或等待执行进度的 Event 引用。 |
+| `lhs` | 输入 | 参与比较的左侧 Event 引用：按各自保存的原生事件句柄判定是否相同。 |
+| `rhs` | 输入 | 参与比较的右侧 Event 引用：按各自保存的原生事件句柄判定是否相同。 |
 
 ### 原型 3 的参数
 
@@ -82,8 +82,8 @@ constexpr bool asc::operator==(asc::stream_ref lhs, asc::stream_ref rhs) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 提交或等待异步任务的 Stream 引用；任务完成前须保持有效。 |
-| `rhs` | 输入 | 提交或等待异步任务的 Stream 引用；任务完成前须保持有效。 |
+| `lhs` | 输入 | 参与比较的左侧 Stream 引用：按各自保存的原生流句柄判定是否相同。 |
+| `rhs` | 输入 | 参与比较的右侧 Stream 引用：按各自保存的原生流句柄判定是否相同。 |
 
 ## 返回值说明
 

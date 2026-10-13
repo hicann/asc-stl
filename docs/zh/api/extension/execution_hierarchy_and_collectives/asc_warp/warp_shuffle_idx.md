@@ -70,13 +70,13 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自编号为 source_lane 的 Lane。 |
 | `source_lane` | 输入 | 读取值的来源 Lane 在当前宽度分组内的索引；该参数为标量索引，不涉及存储生命周期。 |
 | `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
 
@@ -86,13 +86,13 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自编号为 source_lane 的 Lane。 |
 | `source_lane` | 输入 | 读取值的来源 Lane 在当前宽度分组内的索引；该参数为标量索引，不涉及存储生命周期。 |
 | `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
 
@@ -102,13 +102,13 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自编号为 source_lane 的 Lane。 |
 | `source_lane` | 输入 | 读取值的来源 Lane 在当前宽度分组内的索引；该参数为标量索引，不涉及存储生命周期。 |
 | `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
 
@@ -118,13 +118,13 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自编号为 source_lane 的 Lane。 |
 | `source_lane` | 输入 | 读取值的来源 Lane 在当前宽度分组内的索引；该参数为标量索引，不涉及存储生命周期。 |
 | `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
 
@@ -134,13 +134,13 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> asc::warp_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Width` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Width` | 洗牌分组宽度（编译期整数，取 1/2/4/8/16/32，默认 32）：Lane 按 Width 分组，目标 Lane 须与调用 Lane 同组。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `value` | 输入 | 本 Lane 提供参与洗牌的值：返回值来自编号为 source_lane 的 Lane。 |
 | `source_lane` | 输入 | 读取值的来源 Lane 在当前宽度分组内的索引；该参数为标量索引，不涉及存储生命周期。 |
 | `participants` | 输入 | 指定参与线程束操作的活动 Lane 集合。 |
 

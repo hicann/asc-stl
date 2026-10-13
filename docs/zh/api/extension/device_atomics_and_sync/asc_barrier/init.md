@@ -52,15 +52,15 @@ template<asc::memory_scope Scope, class CompletionFunction> void asc::init(asc::
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Scope` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `CompletionFunction` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Scope` | 同步作用域枚举值（asc::memory_scope::block 或 device）：限定栅栏原子操作的可见与同步范围。 |
+| `CompletionFunction` | 阶段完成函数类型：本阶段全部参与者到达后调用；默认为空实现。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `object` | 输入 | 提供“在调用方提供的存储中初始化 barrier 及其期望参与者数量”所需的数据地址；可访问范围和生命周期须满足约束。 |
-| `expected` | 输入 | 指定“在调用方提供的存储中初始化 barrier 及其期望参与者数量”使用的标量值；取值须满足声明和约束。 |
+| `object` | 输入 | 指向调用方提供的 GM 存储中 barrier 对象的指针：以 placement new 就地构造，存储生命周期须覆盖所有并发访问。 |
+| `expected` | 输入 | 每阶段期望到达的参与者数量：全部到达后触发完成函数并进入下一阶段；须为正。 |
 
 ### 原型 2 的参数
 
@@ -68,16 +68,16 @@ template<asc::memory_scope Scope, class CompletionFunction> void asc::init(asc::
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Scope` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `CompletionFunction` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Scope` | 同步作用域枚举值（asc::memory_scope::block 或 device）：限定栅栏原子操作的可见与同步范围。 |
+| `CompletionFunction` | 阶段完成函数类型：本阶段全部参与者到达后调用；默认为空实现。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `object` | 输入 | 提供“在调用方提供的存储中初始化 barrier 及其期望参与者数量”所需的数据地址；可访问范围和生命周期须满足约束。 |
-| `expected` | 输入 | 指定“在调用方提供的存储中初始化 barrier 及其期望参与者数量”使用的标量值；取值须满足声明和约束。 |
-| `completion` | 输入 | 用于确定元素顺序的比较对象。 |
+| `object` | 输入 | 指向调用方提供的 GM 存储中 barrier 对象的指针：以 placement new 就地构造，存储生命周期须覆盖所有并发访问。 |
+| `expected` | 输入 | 每阶段期望到达的参与者数量：全部到达后触发完成函数并进入下一阶段；须为正。 |
+| `completion` | 输入 | 阶段完成函数：本阶段全部参与者到达后、进入下一阶段前调用；默认为空实现。 |
 
 ## 返回值说明
 

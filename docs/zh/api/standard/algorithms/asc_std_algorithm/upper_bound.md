@@ -55,17 +55,17 @@ template<class ForwardIterator, class T> [[nodiscard]] constexpr ForwardIterator
 | 参数名 | 描述 |
 | --- | --- |
 | `ForwardIterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `T` | 输入范围元素或参与运算的值类型。 |
-| `Compare` | 定义元素先后顺序的比较对象类型。 |
+| `T` | 待查找分界值的类型，须能作为 comp 的实参与元素比较。 |
+| `Compare` | 比较器类型；调用形式为 comp(value, elem)，返回 bool 且满足严格弱序。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `comp` | 输入 | 用于确定元素顺序的比较对象。 |
+| `first` | 输入 | 已排序输入范围的起始迭代器或指针。 |
+| `last` | 输入 | 已排序输入范围的结束位置，不包含该位置。 |
+| `value` | 输入 | 待查找的分界值；查找首个满足 comp(value, elem) 的元素位置。 |
+| `comp` | 输入 | 比较器，按调用形式 comp(value, elem) 返回 bool，true 表示 value 排在 elem 前；须满足严格弱序，与范围排序规则一致。 |
 
 ### 原型 2 的参数
 
@@ -80,9 +80,9 @@ template<class ForwardIterator, class T> [[nodiscard]] constexpr ForwardIterator
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
+| `first` | 输入 | 已排序输入范围的起始迭代器或指针。 |
+| `last` | 输入 | 已排序输入范围的结束位置，不包含该位置。 |
+| `value` | 输入 | 待查找的分界值；查找首个大于该值的元素位置。 |
 
 ## 返回值说明
 

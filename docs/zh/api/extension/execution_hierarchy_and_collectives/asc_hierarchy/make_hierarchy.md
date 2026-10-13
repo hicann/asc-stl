@@ -42,8 +42,8 @@ constexpr asc::simt_hierarchy asc::make_hierarchy(asc::level_dimensions<asc::gri
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `grid` | 输入 | 提供“由 Grid 和 Block 尺寸构造 SIMT 层级描述”所需的输入对象；类型须满足所选原型约束。 |
-| `block` | 输入 | 提供“由 Grid 和 Block 尺寸构造 SIMT 层级描述”所需的输入对象；类型须满足所选原型约束。 |
+| `grid` | 输入 | Grid 级维度描述（level_dimensions<grid_level>，由 grid_dims 获得）：携带 Grid 三维尺寸，每维非零。 |
+| `block` | 输入 | Block 级维度描述（level_dimensions<block_level>，由 block_dims 获得）：携带 Block 三维尺寸，每维非零。 |
 
 ## 返回值说明
 

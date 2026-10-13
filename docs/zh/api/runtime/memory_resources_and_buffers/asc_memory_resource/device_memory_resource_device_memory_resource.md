@@ -42,7 +42,7 @@ constexpr explicit asc::device_memory_resource::device_memory_resource(int devic
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `device_ordinal` | 输入 | 指定“构造函数保存后续分配和释放操作所针对的 Runtime Device 序号”使用的标量值；取值须满足声明和约束。 |
+| `device_ordinal` | 输入 | 目标 Runtime Device 序号（int，0 起）：后续分配与释放前把该 Device 设为当前 Device。 |
 
 ## 约束说明
 

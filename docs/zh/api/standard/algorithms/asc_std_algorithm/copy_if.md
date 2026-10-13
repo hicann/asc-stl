@@ -69,8 +69,8 @@ template<class InputIterator, class OutputIterator, class Predicate> constexpr O
 | `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `result` | 输出 | 提供“按顺序复制满足谓词的元素”所需的输入对象；类型须满足所选原型约束。 |
-| `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `result` | 输出 | 写入结果的输出迭代器；目标范围容量须足以容纳全部满足谓词的元素。 |
+| `predicate` | 输入 | 一元谓词，按调用形式 predicate(elem) 返回 bool；仅返回 true 的元素被复制。 |
 
 ### 原型 2 的参数
 
@@ -89,7 +89,7 @@ template<class InputIterator, class OutputIterator, class Predicate> constexpr O
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `result` | 输出 | 写入结果的输出迭代器；目标范围须有足够容量。 |
-| `pred` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `pred` | 输入 | 一元谓词，按调用形式 pred(elem) 返回 bool；仅返回 true 的元素被复制。 |
 
 ## 返回值说明
 

@@ -49,8 +49,8 @@ template<class Function, class... Iterators> constexpr asc::zip_transform_iterat
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入 | 提供“创建解引用时对多个输入执行函数的 zip_transform_iterator”所需的输入对象；类型须满足所选原型约束。 |
-| `iterators` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
+| `function` | 输入 | 合并函数对象：解引用时把打包的多元组引用交给 function 求值得到结果。 |
+| `iterators` | 输入 | 被打包的各底层迭代器（零个或多个）：以 zip 迭代器方式同步前进。 |
 
 ## 返回值说明
 

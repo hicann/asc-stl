@@ -58,8 +58,8 @@ constexpr transform_view(View base, Fn operation);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `base` | 输入 | 提供“按本页所列构造形态初始化 `transform_view` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `operation` | 输入 | 提供“按本页所列构造形态初始化 `transform_view` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `base` | 输入 | 被变换的底层视图。 |
+| `operation` | 输入 | 变换函数，按调用形式 operation(elem) 调用，返回值作为视图对应元素的值。 |
 
 ## 约束说明
 

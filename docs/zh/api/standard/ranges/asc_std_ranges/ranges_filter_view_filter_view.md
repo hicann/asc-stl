@@ -54,8 +54,8 @@ template<class View2, class Pred2> constexpr filter_view() noexcept(is_nothrow_d
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `base` | 输入 | 提供“按本页所列构造形态初始化 `filter_view` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `base` | 输入 | 被过滤的底层视图；视图遍历时跳过不满足谓词的元素。 |
+| `predicate` | 输入 | 一元谓词，按调用形式 predicate(elem) 返回 bool；仅保留返回 true 的元素。 |
 
 ### 原型 2 的参数
 
@@ -64,7 +64,7 @@ template<class View2, class Pred2> constexpr filter_view() noexcept(is_nothrow_d
 | 参数名 | 描述 |
 | --- | --- |
 | `View2` | 输入范围或视图的类型；须满足所选原型的遍历要求。 |
-| `Pred2` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Pred2` | 谓词类型；调用形式为 pred(elem)，返回 bool。 |
 
 ## 约束说明
 

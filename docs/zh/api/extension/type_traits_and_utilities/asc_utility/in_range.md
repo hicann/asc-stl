@@ -42,15 +42,15 @@ template<class T> constexpr bool asc::in_range(T value, T first, T last) noexcep
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 本接口处理或保存的值类型；须满足原型中的类型约束。 |
+| `T` | 三个操作数共用的算术类型；value、first、last 须为同一类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
+| `value` | 输入 | 待判断的值；位于闭区间 [first, last] 内（含两端）时返回 true。 |
+| `first` | 输入 | 闭区间的下端点（含）；须满足 first <= last。 |
+| `last` | 输入 | 闭区间的上端点（含）；须满足 first <= last。 |
 
 ## 返回值说明
 

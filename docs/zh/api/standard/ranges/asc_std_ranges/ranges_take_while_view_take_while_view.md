@@ -58,8 +58,8 @@ constexpr take_while_view(View base, Pred predicate);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `base` | 输入 | 提供“按本页所列构造形态初始化 `take_while_view` 对象”所需的输入对象；类型须满足所选原型约束。 |
-| `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `base` | 输入 | 被适配的底层视图；视图呈现从起点到谓词首次返回 false 之前的元素。 |
+| `predicate` | 输入 | 一元谓词，按调用形式 predicate(elem) 返回 bool；返回 false 时迭代终止。 |
 
 ## 约束说明
 

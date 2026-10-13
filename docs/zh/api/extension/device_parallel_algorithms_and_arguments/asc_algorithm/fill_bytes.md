@@ -43,9 +43,9 @@ asc::execution_status asc::fill_bytes(asc::stream_ref stream, void* destination,
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `stream` | 输入 | 用于按序提交异步工作的 Stream。相关资源须保持有效，直至工作完成。 |
-| `destination` | 输出 | 用于接收结果的目标存储。异步操作完成前，其存储须保持有效。 |
-| `value` | 输入 | 参与操作或用于初始化、比较的值。 |
-| `bytes` | 输入 | 处理的数据量，单位为字节。 |
+| `destination` | 输出 | 待填充的目标内存起始地址：须可写且覆盖 bytes 字节，异步完成前保持有效。 |
+| `value` | 输入 | 填充值（unsigned char，0~255）：以该字节逐字节重复写入目标区域。 |
+| `bytes` | 输入 | 填充的字节数，单位为字节；为 0 时不提交任务并直接返回成功。 |
 
 ## 返回值说明
 

@@ -59,7 +59,7 @@ template<class InputIterator, class Size, class Function> constexpr InputIterato
 | 参数名 | 描述 |
 | --- | --- |
 | `Input` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `Size` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Size` | 表示待处理元素个数的类型，通常为整型或迭代器差值类型。 |
 | `Function` | 对输入值执行本页操作的可调用对象类型。 |
 
 **函数参数**
@@ -68,8 +68,8 @@ template<class InputIterator, class Size, class Function> constexpr InputIterato
 | --- | --- | --- |
 | `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `count` | 输入 | 参与操作的元素数量。 |
-| `function` | 输入 | 提供“从起始位置起对指定数量的元素调用函数对象”所需的输入对象；类型须满足所选原型约束。 |
+| `count` | 输入 | 从 first 起待应用函数对象的元素个数。 |
+| `function` | 输入 | 可调用对象，从 first 起对每个元素以调用形式 function(elem) 调用一次。 |
 
 ### 原型 2 的参数
 
@@ -78,7 +78,7 @@ template<class InputIterator, class Size, class Function> constexpr InputIterato
 | 参数名 | 描述 |
 | --- | --- |
 | `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `Size` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Size` | 表示待处理元素个数的类型，通常为整型或迭代器差值类型。 |
 | `Function` | 对输入值执行本页操作的可调用对象类型。 |
 
 **函数参数**
@@ -86,8 +86,8 @@ template<class InputIterator, class Size, class Function> constexpr InputIterato
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `orig_n` | 输入 | 提供“从起始位置起对指定数量的元素调用函数对象”所需的输入对象；类型须满足所选原型约束。 |
-| `f` | 输入 | 提供“从起始位置起对指定数量的元素调用函数对象”所需的输入对象；类型须满足所选原型约束。 |
+| `orig_n` | 输入 | 从 first 起待应用函数对象的元素个数。 |
+| `f` | 输入 | 可调用对象，从 first 起对每个元素以调用形式 f(elem) 调用一次。 |
 
 ## 返回值说明
 

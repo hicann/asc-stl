@@ -53,14 +53,14 @@ template<class Iterator> constexpr asc::strided_iterator<Iterator> asc::make_str
 | 参数名 | 描述 |
 | --- | --- |
 | `Iterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `Stride` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Stride` | 步长类型（整数）。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `iterator` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
-| `stride` | 输入 | 提供“从底层随机访问迭代器构造定步长适配器”所需的输入对象；类型须满足所选原型约束。 |
+| `iterator` | 输入 | 被包装的底层迭代器：本迭代器每前进 1 步，底层迭代器前进 stride 个位置。 |
+| `stride` | 输入 | 每步跨越的底层元素个数：前进/后退 1 步对应底层迭代器移动 stride 个位置，须非零。 |
 
 ### 原型 2 的参数
 
@@ -74,7 +74,7 @@ template<class Iterator> constexpr asc::strided_iterator<Iterator> asc::make_str
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `iterator` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
+| `iterator` | 输入 | 被包装的底层迭代器：该原型为步长 1 的退化形式，按单位步长访问。 |
 
 ## 返回值说明
 

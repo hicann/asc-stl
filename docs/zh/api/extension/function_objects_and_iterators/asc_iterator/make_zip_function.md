@@ -48,7 +48,7 @@ template<class Function> constexpr asc::zip_function<Function> asc::make_zip_fun
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入 | 提供“创建把 tuple 参数展开后调用目标函数的适配器”所需的输入对象；类型须满足所选原型约束。 |
+| `function` | 输入 | 被适配的目标函数对象：收到 tuple 型引用时展开其全部元素并按 function(元素…) 调用。 |
 
 ## 返回值说明
 

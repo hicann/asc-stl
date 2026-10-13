@@ -42,13 +42,13 @@ template<class Start> constexpr asc::counting_iterator<Start> asc::make_counting
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Start` | 所选原型使用的类型参数；其可用操作由约束说明限定。 |
+| `Start` | 计数器产生值的类型：解引用与下标返回该类型的计数值。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `start` | 输入 | 提供“创建从指定初值开始的 counting_iterator”所需的输入对象；类型须满足所选原型约束。 |
+| `start` | 输入 | 计数起始值：解引用产生该值，迭代前进时逐次递增。 |
 
 ## 返回值说明
 

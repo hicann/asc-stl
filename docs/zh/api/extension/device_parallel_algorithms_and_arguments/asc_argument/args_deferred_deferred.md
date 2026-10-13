@@ -52,8 +52,8 @@ constexpr explicit asc::args::deferred::deferred(const T* data) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `data` | 输入 | 提供“使用调用方提供的参数初始化 `asc::args::deferred` 对象”所需的数据地址；可访问范围和生命周期须满足约束。 |
-| `bounds` | 输入 | 提供“使用调用方提供的参数初始化 `asc::args::deferred` 对象”所需的输入对象；类型须满足所选原型约束。 |
+| `data` | 输入 | 指向 Device 侧延迟数据的指针：值仅在流序到达后才可读；包装对象不复制数据，使用期间不得为空且所指存储须覆盖整个使用周期。 |
+| `bounds` | 输入 | 该延迟参数取值的边界对象（no_bounds/static_bounds/runtime_bounds）：供后端无需同步读取 Device 数据即可做安全选择。 |
 
 ### 原型 2 的参数
 
@@ -61,7 +61,7 @@ constexpr explicit asc::args::deferred::deferred(const T* data) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `data` | 输入 | 提供“使用调用方提供的参数初始化 `asc::args::deferred` 对象”所需的数据地址；可访问范围和生命周期须满足约束。 |
+| `data` | 输入 | 指向 Device 侧延迟数据的指针：值仅在流序到达后才可读；包装对象不复制数据，使用期间不得为空且所指存储须覆盖整个使用周期。 |
 
 ## 约束说明
 

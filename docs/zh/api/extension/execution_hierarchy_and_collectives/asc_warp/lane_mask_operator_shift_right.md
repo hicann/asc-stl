@@ -42,7 +42,7 @@ constexpr asc::lane_mask asc::lane_mask::operator>>(int shift) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `shift` | 输入 | 指定“查询 Lane 掩码右移指定位置后的结果”使用的标量值；取值须满足声明和约束。 |
+| `shift` | 输入 | 右移位数（0~31）：掩码位向低位移动、高位补 0，返回新的 lane_mask，不修改本对象。 |
 
 ## 返回值说明
 

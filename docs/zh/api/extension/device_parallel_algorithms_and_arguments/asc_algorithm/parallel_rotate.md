@@ -48,9 +48,9 @@ template<class Forward> asc::execution_status asc::parallel::rotate(asc::device_
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
+| `policy` | 输入 | Device 执行策略（device_policy）：提供任务提交所用的 Stream 与调用方临时存储；返回值仅反映提交状态，提交成功不表示异步工作已完成。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `middle` | 输入 | 提供“异步原地旋转输入范围，使 middle 指向的元素成为新的首元素”所需的输入对象；类型须满足所选原型约束。 |
+| `middle` | 输入 | 旋转支点迭代器，位于 [first, last) 内：旋转后 [middle, last) 前移、middle 所指元素成为新的首元素。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 
 ## 返回值说明

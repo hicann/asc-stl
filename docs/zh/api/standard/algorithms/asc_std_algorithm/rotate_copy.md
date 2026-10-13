@@ -67,9 +67,9 @@ template<class ForwardIterator, class OutputIterator> constexpr OutputIterator a
 | --- | --- | --- |
 | `policy` | 输入 | Device 执行策略，用于指定 Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `middle` | 输入 | 提供“将旋转后的元素顺序复制到输出范围”所需的输入对象；类型须满足所选原型约束。 |
+| `middle` | 输入 | 旋转分界迭代器，须位于 [first, last) 内；输出顺序为 [middle, last) 后接 [first, middle)。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `result` | 输出 | 提供“将旋转后的元素顺序复制到输出范围”所需的输入对象；类型须满足所选原型约束。 |
+| `result` | 输出 | 写入结果的输出迭代器；目标范围容量须足以容纳全部复制元素。 |
 
 ### 原型 2 的参数
 
@@ -85,7 +85,7 @@ template<class ForwardIterator, class OutputIterator> constexpr OutputIterator a
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `middle` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
+| `middle` | 输入 | 旋转分界迭代器，须位于 [first, last) 内；输出顺序为 [middle, last) 后接 [first, middle)。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `result` | 输出 | 写入结果的输出迭代器；目标范围须有足够容量。 |
 
