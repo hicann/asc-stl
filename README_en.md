@@ -48,7 +48,7 @@ Developing compute kernels for Ascend devices requires general-purpose C++ facil
 ![Figure 1 ASC-STL design architecture](docs/en/figures/asc_stl_architecture_en.png)
 
 - ASC-STL is a header-only C++ library whose interfaces fall into three parts: the C++ standard library interfaces, the Ascend extension interfaces, and the Runtime interfaces;
-- Device-side programming capability builds on CANN Ascend C; code is compiled by the BiSheng compiler (based on Clang 15.0.5) and runs on the Ascend 950 processor;
+- Device-side programming capability builds on CANN Ascend C; code is compiled by the BiSheng compiler (based on Clang 15.0.5) and runs on the Ascend 950PR&&DT processor;
 - Runtime dependencies are the CANN Runtime (AscendCL Runtime API) and the NPU driver, which provide device management, kernel invocation, memory management, and device access.
 
 ### Choosing the Right Facilities
@@ -99,7 +99,7 @@ The public headers under `include/asc/std/` provide the standard-library entry p
 | BiSheng CCE / clang | 15.0.5 |
 | g++ | C++17 as the product minimum; the full Host test suite additionally requires C++20 support |
 | CMake | ≥ 3.20 |
-| Processor | Ascend 950 processor |
+| Processor | Ascend 950PR&&DT processor |
 
 Different builds of the same CANN version may use different SDK directory layouts. The device-layer queries first include `c_api/utils/sys_var.h` and fall back to `c_api/sys_var/sys_var.h`; a compilation error is raised when neither is present. The 64-bit multiply-overflow check for Tensor descriptors uses 32-bit segmented arithmetic to keep older BiSheng versions from emitting a device-side `__multi3` symbol that cannot be linked on the dynamic-descriptor path; the public interfaces and status codes are unchanged.
 

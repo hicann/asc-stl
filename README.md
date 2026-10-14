@@ -49,7 +49,7 @@
 ![图1 ASC-STL设计架构](docs/zh/figures/asc_stl_design_architecture_v3.png)
 
 - ASC-STL为纯头文件C++ 库，接口分为C++ 标准库接口、昇腾扩展接口和Runtime接口三部分；
-- 设备侧编程能力基于CANN Ascend C提供，代码由毕昇编译器（基于Clang 15.0.5）编译，运行于昇腾950处理器；
+- 设备侧编程能力基于CANN Ascend C提供，代码由毕昇编译器（基于Clang 15.0.5）编译，运行于昇腾950PR&&DT处理器；
 - 运行时依赖CANN Runtime（AscendCL Runtime API）与NPU驱动，提供设备管理、核函数调用、内存管理及设备访问能力。
 
 ### 如何选择能力
@@ -99,7 +99,7 @@ asc-stl/
 | 毕昇CCE / clang | 15.0.5 |
 | g++ | 产品最低使用C++17；完整Host测试同时需要C++20支持 |
 | CMake | ≥ 3.20 |
-| 处理器 | 昇腾950处理器 |
+| 处理器 | 昇腾950PR&&DT处理器 |
 
 CANN同一版本的不同构建可能采用不同SDK目录布局。设备层查询会优先包含
 `c_api/utils/sys_var.h`，缺少时使用`c_api/sys_var/sys_var.h`；两者均缺少时会给出
