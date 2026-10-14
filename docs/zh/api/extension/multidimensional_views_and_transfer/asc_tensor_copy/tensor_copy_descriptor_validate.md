@@ -54,7 +54,7 @@ constexpr asc::tensor_copy_status asc::tensor_copy_descriptor<Rank>::validate() 
 
 - 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
 - Rank为1至5。
-- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
+- 维度和步长采用uint32_t，校验零维（zero_extent）、零步长（zero_stride）、填充超过255、元素总量溢出与源/目标步长跨度累计溢出（溢出类统一按size_overflow返回），校验本身不启动异步搬运。
 
 ## 调用示例
 

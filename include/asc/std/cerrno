@@ -27,6 +27,11 @@
 #pragma system_header
 #endif
 
+// Contract note: the registered errno row delivers the full mutable errno
+// state plus EDOM/EILSEQ/ERANGE on Host, while Device intentionally ships
+// only the three E* constant expressions (portable_constants.h) and no errno
+// object. Do not "complete" the device side with an errno lvalue; that would
+// be unregistered surface drift.
 #include <asc/std/__cerrno/portable_constants.h>
 
 #endif  // CANN_ASC_STL_ASC_STD_CERRNO

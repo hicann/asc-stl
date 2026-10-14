@@ -27,7 +27,9 @@
 #pragma system_header
 #endif
 
-#include <asc/std/__map/map.h>
+// Keep the engine header ahead of the container header; map.h is
+// self-contained, and this ordering stays canonical for the family.
 #include <asc/std/__tree/tree.h>
+#include <asc/std/__map/map.h>
 
 #endif  // CANN_ASC_STL_ASC_STD_MAP

@@ -27,8 +27,11 @@
 #pragma system_header
 #endif
 
-#ifndef CANN_ASC_STL_DETAIL_LOCK_TAG_VOCABULARY
-#define CANN_ASC_STL_DETAIL_LOCK_TAG_VOCABULARY
+// Single authoritative source of the lock-tag vocabulary. The lock RAII
+// headers (lock_guard/scoped_lock/unique_lock/shared_lock) include this
+// file instead of carrying their own copies; the historical copy-with-
+// macro-guard scheme is retired so the vocabulary can never drift between
+// translation units.
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -45,7 +48,5 @@ inline constexpr try_to_lock_t try_to_lock{};
 inline constexpr adopt_lock_t adopt_lock{};
 
 CANN_ASC_STL_END_NAMESPACE
-
-#endif
 
 #endif  // CANN_ASC_STL_ASC_STD___MUTEX_LOCK_TAGS_H

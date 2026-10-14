@@ -30,6 +30,20 @@
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #include <cerrno>
 #else
+// Frozen product ABI on device: EDOM/EILSEQ/ERANGE are the fixed constants
+// 33/84/34 (registered errno contract; note these are the glibc values --
+// MSVC spells EILSEQ 42 and macOS 92). A toolchain that predefined one of
+// them with a different value would silently steal the #ifndef guards and
+// drift off the frozen ABI, so a conflicting predefinition is a hard error.
+#if defined(EDOM) && EDOM != 33
+#error "predefined EDOM conflicts with the frozen ASC-STL device ABI value 33"
+#endif
+#if defined(EILSEQ) && EILSEQ != 84
+#error "predefined EILSEQ conflicts with the frozen ASC-STL device ABI value 84"
+#endif
+#if defined(ERANGE) && ERANGE != 34
+#error "predefined ERANGE conflicts with the frozen ASC-STL device ABI value 34"
+#endif
 #ifndef EDOM
 #define EDOM 33
 #endif

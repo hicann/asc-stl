@@ -27,13 +27,15 @@
 #pragma system_header
 #endif
 
-// Keep dynamic Device descriptor validation away from a BiSheng optimization
-// that lowers its runtime arithmetic to an unavailable __multi3 helper.
-#if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
-#define CANN_ASC_STL_DETAIL_TENSOR_VALIDATE_OPTNONE __attribute__((optnone))
-#else
+// Simulator finding (cann-9.2.0-beta.2, dav-3510 vector core): the optnone
+// attribute previously applied here miscompiles the validate() body on the
+// CCE device path - validate() returned size_overflow for every descriptor,
+// which made tensor_load_async retire before producer_commit and deadlocked
+// pipeline consumer_wait (w08.simd). Plain 64-bit multiply/division and the
+// segmented checked_multiply below all compile, link and execute correctly
+// at -O3 on the pinned toolchain, so no optnone guard is applied; the
+// segmented 32-bit multiply stays as defensive arithmetic only.
 #define CANN_ASC_STL_DETAIL_TENSOR_VALIDATE_OPTNONE
-#endif
 
 // Tensor-transfer descriptor value vocabulary for the later public
 // <asc/tensor_copy>.  A descriptor records, per dimension, the extent, the GM
@@ -100,6 +102,26 @@ private:
     size_type left_padding_[Rank]{};
     size_type right_padding_[Rank]{};
 
+    // Accumulates (count - 1) * stride - the reach of the furthest element
+    // from the base - into span, with wrap detection on both the multiply and
+    // the accumulate.  Shared by validate() so a standalone validation
+    // verdict covers the same stride arithmetic the transfer paths apply.
+    CANN_ASC_STL_API CANN_ASC_STL_DETAIL_TENSOR_VALIDATE_OPTNONE constexpr bool accumulate_stride_span(
+        unsigned long long& span, unsigned long long count, size_type stride) const noexcept
+    {
+        const unsigned long long reach = count - 1;
+        // 除零守卫：零步长无最远元素可达，直接判溢出，下方除数永不为 0。
+        if (stride == 0 || reach > ~0ULL / stride) {
+            return false;
+        }
+        const unsigned long long contribution = reach * stride;
+        if (contribution > ~0ULL - span) {
+            return false;
+        }
+        span += contribution;
+        return true;
+    }
+
 public:
     constexpr tensor_copy_descriptor() noexcept = default;
 
@@ -132,6 +154,8 @@ public:
     CANN_ASC_STL_API CANN_ASC_STL_DETAIL_TENSOR_VALIDATE_OPTNONE constexpr tensor_copy_status validate() const noexcept
     {
         unsigned long long elements = 1;
+        unsigned long long source_span = 1;
+        unsigned long long destination_span = 1;
         for (unsigned dimension = 0; dimension < Rank; ++dimension) {
             if (extents_[dimension] == 0) {
                 return tensor_copy_status::zero_extent;
@@ -139,9 +163,23 @@ public:
             if (source_strides_[dimension] == 0 || destination_strides_[dimension] == 0) {
                 return tensor_copy_status::zero_stride;
             }
+            // The ND-DMA pad counters are 8-bit hardware fields, so padding
+            // above 255 is not transferable; it is rejected here instead of
+            // being silently truncated by the backend narrowing.
+            if (left_padding_[dimension] > size_type(255) || right_padding_[dimension] > size_type(255)) {
+                return tensor_copy_status::size_overflow;
+            }
+            // extents_[dimension] >= 1 past the zero-extent screen above, so
+            // the padded row below never re-wraps to zero in this loop.
             const unsigned long long padded = static_cast<unsigned long long>(extents_[dimension]) +
                 left_padding_[dimension] + right_padding_[dimension];
+            // elements *= padded 走 32 位分段乘法：旧 BiSheng 会把 64x64 乘法
+            // 降级成设备侧不可用的 __multi3 链接符号。
             if (padded == 0 || !detail::tensor_copy_checked_multiply(elements, padded, elements)) {
+                return tensor_copy_status::size_overflow;
+            }
+            if (!accumulate_stride_span(source_span, extents_[dimension], source_strides_[dimension]) ||
+                !accumulate_stride_span(destination_span, padded, destination_strides_[dimension])) {
                 return tensor_copy_status::size_overflow;
             }
         }
@@ -152,6 +190,9 @@ public:
     {
         unsigned long long elements = 1;
         for (unsigned dimension = 0; dimension < Rank; ++dimension) {
+            // Unlike validate(), this walk carries no zero-extent screen, so
+            // the zero test below is the live division guard, not a dead
+            // branch: an all-zero descriptor reaches it with padded == 0.
             const unsigned long long padded = static_cast<unsigned long long>(extents_[dimension]) +
                 left_padding_[dimension] + right_padding_[dimension];
             if (padded == 0 || !detail::tensor_copy_checked_multiply(elements, padded, elements)) {
@@ -161,6 +202,10 @@ public:
         return elements;
     }
 
+    // Destination row pitch in elements: the padded innermost row length the
+    // UB stage must be sized and pitched for.  The byte width - four times
+    // larger for float - is what tensor_copy_required_alignment reports; the
+    // two same-named results must not be mixed up at a call site.
     CANN_ASC_STL_API constexpr size_type required_alignment() const noexcept
     {
         // The padded innermost row length decides the destination alignment the
@@ -168,6 +213,11 @@ public:
         return extents_[Rank - 1] + left_padding_[Rank - 1] + right_padding_[Rank - 1];
     }
 
+    // A dimension outside [0, Rank) is a caller precondition violation the
+    // no-status vocabulary reports nowhere: the write is silently skipped,
+    // exactly as the registered dynamic-violation contract prescribes.
+    // make_tensor_copy_descriptor is the sanctioned bulk writer and never
+    // crosses the bound.
     CANN_ASC_STL_API constexpr void set_dimension(unsigned dimension, size_type extent_value, size_type source_stride,
         size_type destination_stride, size_type left_pad, size_type right_pad) noexcept
     {
@@ -213,7 +263,12 @@ template <class T, unsigned Rank>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned int tensor_copy_required_alignment(
     const tensor_copy_descriptor<Rank>& descriptor) noexcept
 {
-    return descriptor.required_alignment() * static_cast<unsigned int>(sizeof(T));
+    // Byte width of the member above, computed in 64 bits because the padded
+    // row (uint32 elements) times the element size can leave the 32-bit
+    // result range.  Overflow reports as zero - the same sentinel convention
+    // tensor_copy_required_elements already uses for its own overflow.
+    const unsigned long long bytes = static_cast<unsigned long long>(descriptor.required_alignment()) * sizeof(T);
+    return bytes > ~0u ? 0u : static_cast<unsigned int>(bytes);
 }
 
 }  // namespace asc

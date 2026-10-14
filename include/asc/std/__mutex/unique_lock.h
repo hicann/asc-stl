@@ -27,26 +27,8 @@
 #pragma system_header
 #endif
 
-#ifndef CANN_ASC_STL_DETAIL_LOCK_TAG_VOCABULARY
-#define CANN_ASC_STL_DETAIL_LOCK_TAG_VOCABULARY
-
-CANN_ASC_STL_BEGIN_NAMESPACE
-
-namespace __lock_detail {
-template <int Value>
-struct __lock_tag {};
-}  // namespace __lock_detail
-
-using defer_lock_t = __lock_detail::__lock_tag<0>;
-using try_to_lock_t = __lock_detail::__lock_tag<1>;
-using adopt_lock_t = __lock_detail::__lock_tag<2>;
-inline constexpr defer_lock_t defer_lock{};
-inline constexpr try_to_lock_t try_to_lock{};
-inline constexpr adopt_lock_t adopt_lock{};
-
-CANN_ASC_STL_END_NAMESPACE
-
-#endif
+#include <asc/std/__exception/terminate.h>
+#include <asc/std/__mutex/lock_tags.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -90,21 +72,37 @@ public:
     }
     CANN_ASC_STL_API void lock()
     {
+        // Hosted precondition checks: the registered contract only defines
+        // behavior on a valid (mutex-associated, correct ownership) state;
+        // instead of dereferencing a null mutex on the default-constructed
+        // state, fail fast. std hosted throws system_error here; the device
+        // path stays zero-cost by compiling the checks out.
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        if (mutex_ == nullptr)
+            ::asc::std::terminate();
+#endif
         mutex_->lock();
         owns_ = true;
     }
     CANN_ASC_STL_API bool try_lock()
     {
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        if (mutex_ == nullptr || owns_)
+            ::asc::std::terminate();
+#endif
         owns_ = mutex_->try_lock();
         return owns_;
     }
     CANN_ASC_STL_API void unlock()
     {
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        if (mutex_ == nullptr || !owns_)
+            ::asc::std::terminate();
+#endif
         mutex_->unlock();
         owns_ = false;
     }
-    CANN_ASC_STL_API void swap(  // NOLINT(build/include_what_you_use)
-        unique_lock& other) noexcept
+    CANN_ASC_STL_API void swap(unique_lock& other) noexcept  // NOLINT(build/include_what_you_use)
     {
         mutex_type* mutex = mutex_;
         const bool owns = owns_;
@@ -139,8 +137,8 @@ private:
 };
 
 template <class Mutex>
-CANN_ASC_STL_API void swap(  // NOLINT(build/include_what_you_use)
-    unique_lock<Mutex>& left, unique_lock<Mutex>& right) noexcept
+CANN_ASC_STL_API void swap(
+    unique_lock<Mutex>& left, unique_lock<Mutex>& right) noexcept  // NOLINT(build/include_what_you_use)
 {
     left.swap(right);
 }

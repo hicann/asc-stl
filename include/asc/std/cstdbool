@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-#ifndef CANN_ASC_STL_STD_CSTDBOOL
-#define CANN_ASC_STL_STD_CSTDBOOL
+#ifndef CANN_ASC_STL_ASC_STD_CSTDBOOL
+#define CANN_ASC_STL_ASC_STD_CSTDBOOL
 
+// Deliberate empty tombstone: <cstdbool> is deprecated by [depr.c.headers]
+// (bool/true/false are core language in C++). C++17 [cstdbool.syn] still
+// defines __bool_true_false_are_defined for C portability probes, but that
+// macro is intentionally NOT provided here: the registry records zero names
+// for this header and adding the macro would be unregistered public surface.
 #include <asc/__config>
 
 #if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
@@ -27,4 +32,4 @@
 #pragma system_header
 #endif
 
-#endif  // CANN_ASC_STL_STD_CSTDBOOL
+#endif  // CANN_ASC_STL_ASC_STD_CSTDBOOL

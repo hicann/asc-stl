@@ -42,6 +42,12 @@
 #define CANN_ASC_STL_NO_UNIQUE_ADDRESS
 #endif
 
+// CCE and the pure-SIMT wrapper frontend reject (or mis-codegen) the
+// [[noreturn]] attribute on AI Core device functions (observed with the
+// 2026-09 BiSheng/CCE toolchains), so the attribute is deliberately dropped
+// there and the macro expands to nothing. Do not "fix" the empty branch by
+// reinstating the attribute on device compilers; only host compilers keep
+// the annotation.
 #if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
 #define CANN_ASC_STL_NORETURN
 #else

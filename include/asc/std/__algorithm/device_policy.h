@@ -32,12 +32,19 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// Adapter entry for the asc::std synchronous overloads whose first parameter
-// is exactly asc::device_policy: it composes the asynchronous parallel
-// frontend contract with the immutable policy vocabulary so the later public
-// <asc/std/algorithm> facade re-exports both through one owned path.  The
-// adapter adds no entity of its own; every callable surface stays owned by
-// the frontend and policy headers above.
+// Adapter entry that lets the asc::parallel::* asynchronous algorithm
+// frontends (registered under the asc/algorithm facade, defined in
+// asc/__algorithm/frontend.h) and the asc::device_policy vocabulary be pulled
+// in through the <asc/std/algorithm> facade by including this one header.
+// Note what this header is not: there is no asc::std::sort(device_policy, ...)
+// overload set here - the device-policy entry points live in namespace
+// asc::parallel and exist only on __clang__ builds that define
+// CANN_ASC_STL_USE_SIMT_LAUNCH. Include-cost note: the <asc/algorithm> facade
+// below transitively carries the whole parallel/runtime stack (__parallel
+// kernels, collectives, execution, memory, stream, launch); splitting a
+// lightweight frontend-declaration subset back out is a header-layering
+// decision deferred to the facade owners, and non-clang builds pay the
+// include cost while the frontends themselves compile away.
 
 CANN_ASC_STL_END_NAMESPACE
 

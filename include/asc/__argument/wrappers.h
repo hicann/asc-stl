@@ -27,14 +27,19 @@
 #pragma system_header
 #endif
 
-// Algorithm-argument wrapper backend for the later public <asc/argument>
-// facade. `constant` communicates a compile-time-known value; `immediate`
-// means the value is available to Host dispatch at submission; `deferred`
-// means the referenced Device value becomes available only in stream order.
-// Bounds permit safe compile-time/backend selection without synchronously
-// reading deferred Device data. The wrappers never allocate, never copy
-// Device storage and never synchronize a stream; internal unwrap/access
-// traits and sequence helpers stay private.
+// Algorithm-argument wrapper backend.  Status: the public <asc/argument>
+// facade currently defines its own self-contained wrapper classes and does
+// not consume this backend; these types stay delivered because the unit
+// tests (test/cases/asc/__argument/wrappers) pin their semantics, and they
+// remain the designated layering target should the facade ever delegate to
+// them.  Removing the file or rewiring the facade onto it is a product
+// decision.  Vocabulary: `constant` communicates a compile-time-known value;
+// `immediate` means the value is available to Host dispatch at submission;
+// `deferred` means the referenced Device value becomes available only in
+// stream order.  Bounds permit safe compile-time/backend selection without
+// synchronously reading deferred Device data.  The wrappers never allocate,
+// never copy Device storage and never synchronize a stream; internal
+// unwrap/access traits and sequence helpers stay private.
 namespace asc::detail {
 
 struct no_bounds_state {
@@ -101,15 +106,14 @@ struct deferred_argument {
 template <class T, class Bounds = no_bounds_state>
 struct deferred_sequence_argument {
     const T* first{};
-    unsigned long long length{};
+    __SIZE_TYPE__ length{};
     Bounds bounds{};
 
-    CANN_ASC_STL_API constexpr deferred_sequence_argument(
-        const T* given_first, unsigned long long given_length) noexcept
+    CANN_ASC_STL_API constexpr deferred_sequence_argument(const T* given_first, __SIZE_TYPE__ given_length) noexcept
         : first(given_first), length(given_length)
     {}
     CANN_ASC_STL_API constexpr deferred_sequence_argument(
-        const T* given_first, unsigned long long given_length, Bounds given_bounds) noexcept
+        const T* given_first, __SIZE_TYPE__ given_length, Bounds given_bounds) noexcept
         : first(given_first), length(given_length), bounds(given_bounds)
     {}
 

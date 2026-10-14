@@ -27,9 +27,15 @@
 #pragma system_header
 #endif
 
-#include <asc/__parallel/temporary_storage.h>
-#include <asc/launch>
 namespace asc::detail {
+// Sequential-semantics baseline and a contract note: the inclusive branch
+// folds the init into the first output (out[0] = binary(init, in[0])), which
+// is this library's registered scan signature and differs from C++17
+// std::inclusive_scan, whose overloads carry no init value. Parallelization
+// path (later runtime work, kept as an anchor): iterative Hillis-Steele or
+// Blelloch up-sweep/down-sweep over a ping-pong buffer carved from the policy
+// temporary storage, with per-block exclusive offsets chained between tiles;
+// both forms are non-recursive loops and therefore AI Core legal.
 template <class Input, class Output, class T, class BinaryOperation, class UnaryOperation>
 struct scan_operation {
     Input first;
@@ -53,6 +59,9 @@ struct scan_operation {
         }
     }
 };
+// Identity unary operation consumed by the scan frontends in
+// asc/__algorithm/frontend.h (the non-transform scan flavors pass it as the
+// unary stage); also pinned directly by the runtime semantics suite.
 template <class T>
 struct identity_operation {
     CANN_ASC_STL_DEVICE_API T operator()(const T& value) const

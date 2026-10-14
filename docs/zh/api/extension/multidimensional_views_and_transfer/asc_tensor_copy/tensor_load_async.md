@@ -67,6 +67,7 @@ template<class T, unsigned Rank> asc::tensor_copy_status tensor_load_async(const
 ## 约束说明
 
 - 仅可在AI Core SIMD编程中调用。
+- 源与目标两端地址须落在搬运引擎的 32 字节数据块边界上；任一端未对齐分别返回 insufficient_source/insufficient_destination（该硬件边界检查独立于 tensor_copy_required_alignment 的行距结果）。
 - 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明。
 
 ## 调用示例

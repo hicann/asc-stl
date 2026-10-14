@@ -27,9 +27,17 @@
 #pragma system_header
 #endif
 
-#include <asc/__parallel/temporary_storage.h>
-#include <asc/launch>
 namespace asc::detail {
+// Zip merge over two sorted runs in one pass. Tie handling is deliberate and
+// load-bearing for stability: when compare(*first2, *first1) is false the
+// element of the first (left) run is emitted first, so equal keys keep their
+// input order. Rewriting the branch as compare(*first1, *first2) would flip
+// the tie to the right run and silently break every stable consumer
+// (merge_sort_operation in merge_sort.h relies on this exact tie rule).
+// Parallelization path (later runtime work, kept as an anchor): merge-path
+// partitioning - each tile binary-searches its diagonal alignment point in
+// both runs and merges its tile independently; until that plan lands, this
+// single-work-item scan is the documented sequential baseline.
 template <class Input1, class Input2, class Output, class Compare>
 struct merge_operation {
     Input1 first1;

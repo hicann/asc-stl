@@ -44,9 +44,9 @@ template<class T, asc::std::size_t Capacity> class inplace_vector;
 
 ## 约束说明
 
-- 元素保存在固定容量的对象内存中，不进行动态分配。
-- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
-- Host提供完整接口，设备端仅提供不抛出异常的接口。
+- 最终C++26标准inplace_vector/erase/erase_if合同：Host交付除P4022R0已删除try_append_range外的完整构造、赋值、迭代、访问、修改（含投抛成员 at/push_back/emplace_back/resize，越界抛 out_of_range、容量已满抛 bad_alloc）、try/unchecked、六个比较运算符与三路比较、swap、容量、零容量empty/trivial与constexpr/约束合同。
+- Device交付固定容量内联存储的非抛子合同，包括观察/迭代/operator[]/front/back、不抛出异常拷移赋值析构、try/unchecked后插、pop_back/clear、不抛出异常 erase/erase_if/swap、相等与不抛出异常三路比较、完整零容量核心。
+- Host 提供完整接口，设备端仅提供不抛出异常的接口。
 
 ## 调用示例
 

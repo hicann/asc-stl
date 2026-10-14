@@ -30,7 +30,22 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace detail {
-struct list_node_contract {};
+
+// Doubly-linked node backing asc::std::list.  The links are raw pointers so
+// the node layout stays addressable without instantiating the container's
+// allocator rebound to the node type.
+template <class T>
+struct list_node {
+    list_node* previous;
+    list_node* next;
+    T value;
+
+    template <class... Args>
+    CANN_ASC_STL_HOST_SIMT_API list_node(list_node* before, list_node* after, Args&&... args)
+        : previous(before), next(after), value(static_cast<Args&&>(args)...)
+    {}
+};
+
 }  // namespace detail
 
 CANN_ASC_STL_END_NAMESPACE

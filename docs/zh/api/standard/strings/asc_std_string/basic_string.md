@@ -43,6 +43,7 @@ template<class CharT, class Traits, class Allocator> class basic_string;
 ## 约束说明
 
 - basic_string<char,Traits,A>显式allocator构造。
+- 来自以空字符结尾 const CharT* 指针的赋值（operator=(const CharT*)，覆盖原内容后追加）；拷贝与移动赋值不交付。
 - plain/local字符来源的append/push_back/clear。
 - size/capacity/data/c_str/迭代/索引与析构。
 - 仅容量充足和不抛出异常域。

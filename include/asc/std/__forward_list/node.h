@@ -30,7 +30,21 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace detail {
-struct forward_list_node_contract {};
+
+// Singly-linked node backing asc::std::forward_list.  The link is a raw
+// pointer so the node layout stays addressable without instantiating the
+// container's allocator rebound to the node type.
+template <class T>
+struct forward_list_node {
+    forward_list_node* next;
+    T value;
+
+    template <class... Args>
+    CANN_ASC_STL_HOST_SIMT_API explicit forward_list_node(forward_list_node* successor, Args&&... args)
+        : next(successor), value(static_cast<Args&&>(args)...)
+    {}
+};
+
 }  // namespace detail
 
 CANN_ASC_STL_END_NAMESPACE

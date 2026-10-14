@@ -27,8 +27,22 @@
 #pragma system_header
 #endif
 
-#include <asc/execution>
-#include <asc/launch>
+// BiSheng's optimized pure-SIMT lowering can stall on these value-based
+// operations. Keep the workaround local to them; predicate overloads retain
+// their normal optimization path. CANN_ASC_STL_DISABLE_BISHENG_WORKAROUND
+// drops both attributes for A/B measurement after a compiler upgrade; the
+// guard below must be re-pinned to the exact BiSheng version that reproduces
+// the stall (and removed once that version is out of support) - define it
+// with -D only, never in-tree.
+#if !defined(CANN_ASC_STL_DISABLE_BISHENG_WORKAROUND) && \
+    (defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__))
+#define CANN_ASC_STL_DETAIL_REPLACE_NOINLINE __attribute__((noinline))
+#define CANN_ASC_STL_DETAIL_REPLACE_COPY_NOINLINE __attribute__((optnone, noinline))
+#else
+#define CANN_ASC_STL_DETAIL_REPLACE_NOINLINE
+#define CANN_ASC_STL_DETAIL_REPLACE_COPY_NOINLINE
+#endif
+
 namespace asc::detail {
 template <class T>
 CANN_ASC_STL_DEVICE_API void parallel_swap(T& left, T& right)
@@ -37,6 +51,11 @@ CANN_ASC_STL_DEVICE_API void parallel_swap(T& left, T& right)
     left = static_cast<T&&>(right);
     right = static_cast<T&&>(value);
 }
+// transform_operation stays as the sequential reference body of the
+// element-wise copy/transform family: the runtime semantics suite (cannsim
+// kernel) pins its exact braced layout. The copy/replace/swap frontends no
+// longer keep serial twins here; they submit through the grid-stride channel
+// at the bottom of this file.
 template <class Input, class Output, class UnaryOperation>
 struct transform_operation {
     Input first;
@@ -47,55 +66,6 @@ struct transform_operation {
     {
         for (Input current = first; current != last; ++current, ++result)
             *result = operation(*current);
-    }
-};
-template <class Input, class Output>
-struct copy_operation {
-    Input first;
-    Input last;
-    Output result;
-    CANN_ASC_STL_DEVICE_API void operator()()
-    {
-        for (Input current = first; current != last; ++current, ++result)
-            *result = *current;
-    }
-};
-template <class Input, class Size, class Output>
-struct copy_n_operation {
-    Input first;
-    Size count;
-    Output result;
-    CANN_ASC_STL_DEVICE_API void operator()()
-    {
-        for (Size index{}; index < count; ++index)
-            result[index] = first[index];
-    }
-};
-template <class Forward, class T, class Predicate>
-struct replace_operation {
-    Forward first;
-    Forward last;
-    Predicate predicate;
-    T value;
-    CANN_ASC_STL_DEVICE_API void operator()()
-    {
-        for (Forward current = first; current != last; ++current)
-            if (predicate(*current))
-                *current = value;
-    }
-};
-template <class Input, class Output, class T, class Predicate>
-struct replace_copy_operation {
-    Input first;
-    Input last;
-    Output result;
-    Predicate predicate;
-    T value;
-    CANN_ASC_STL_DEVICE_API void operator()()
-    {
-        for (Input current = first; current != last; ++current, ++result) {
-            *result = predicate(*current) ? value : *current;
-        }
     }
 };
 template <class Bidirectional>
@@ -134,6 +104,9 @@ struct rotate_operation {
     Forward last;
     CANN_ASC_STL_DEVICE_API void operator()()
     {
+        // Swap-relay rotation (not move-relay): each step exchanges the two
+        // ranges element-wise, re-anchoring on whichever side is exhausted
+        // first, until the write cursor catches the read cursor.
         if (first == middle || middle == last)
             return;
         Forward write = first;
@@ -177,17 +150,20 @@ struct shift_left_operation {
             *first = static_cast<decltype(*source)&&>(*source);
     }
 };
-template <class Bidirectional>
+template <class Random>
 struct shift_right_operation {
-    Bidirectional first;
-    Bidirectional last;
+    Random first;
+    Random last;
     __SIZE_TYPE__ count;
     CANN_ASC_STL_DEVICE_API void operator()()
     {
+        // Random access by contract (the length and target cursors below are
+        // computed with iterator arithmetic), so the parameter is named for
+        // the actual requirement.
         auto length = last - first;
         if (count >= static_cast<__SIZE_TYPE__>(length))
             return;
-        Bidirectional source = last - static_cast<decltype(length)>(count);
+        Random source = last - static_cast<decltype(length)>(count);
         while (source != first) {
             --source;
             --last;
@@ -195,17 +171,106 @@ struct shift_right_operation {
         }
     }
 };
-template <class Forward1, class Forward2>
-struct swap_ranges_operation {
-    Forward1 first;
-    Forward1 last;
-    Forward2 second;
-    CANN_ASC_STL_DEVICE_API void operator()()
+// Grid-stride companions of the element-wise operations, shaped for the
+// coordinate-parameterized kernel: each device thread visits the elements
+// whose linear index is congruent to its thread index modulo the total thread
+// count, so every element is still read and written exactly once while the
+// launch spans the whole grid. copy/copy_n share one body through the count
+// parameter; the value-based replace twins carry the BiSheng lowering
+// workaround attributes on their hot paths, mirroring the historical serial
+// twins they replaced.
+template <class Input, class Output, class UnaryOperation>
+struct grid_strided_transform_operation {
+    Input first;
+    __SIZE_TYPE__ count;
+    Output result;
+    UnaryOperation operation;
+    CANN_ASC_STL_DEVICE_API void operator()(__SIZE_TYPE__ index, __SIZE_TYPE__ stride)
     {
-        for (; first != last; ++first, ++second)
-            parallel_swap(*first, *second);
+        for (; index < count; index += stride) {
+            result[index] = operation(first[index]);
+        }
+    }
+};
+template <class Input, class Output>
+struct grid_strided_copy_operation {
+    Input first;
+    __SIZE_TYPE__ count;
+    Output result;
+    CANN_ASC_STL_DEVICE_API void operator()(__SIZE_TYPE__ index, __SIZE_TYPE__ stride)
+    {
+        for (; index < count; index += stride)
+            result[index] = first[index];
+    }
+};
+template <class Forward, class T>
+struct grid_strided_replace_value_operation {
+    Forward first;
+    __SIZE_TYPE__ count;
+    T old_value;
+    T new_value;
+    CANN_ASC_STL_DEVICE_API CANN_ASC_STL_DETAIL_REPLACE_NOINLINE void operator()(
+        __SIZE_TYPE__ index, __SIZE_TYPE__ stride)
+    {
+        for (; index < count; index += stride)
+            if (first[index] == old_value)
+                first[index] = new_value;
+    }
+};
+template <class Forward, class T, class Predicate>
+struct grid_strided_replace_operation {
+    Forward first;
+    __SIZE_TYPE__ count;
+    Predicate predicate;
+    T value;
+    CANN_ASC_STL_DEVICE_API void operator()(__SIZE_TYPE__ index, __SIZE_TYPE__ stride)
+    {
+        for (; index < count; index += stride)
+            if (predicate(first[index]))
+                first[index] = value;
+    }
+};
+template <class Input, class Output, class T, class Predicate>
+struct grid_strided_replace_copy_operation {
+    Input first;
+    __SIZE_TYPE__ count;
+    Output result;
+    Predicate predicate;
+    T value;
+    CANN_ASC_STL_DEVICE_API void operator()(__SIZE_TYPE__ index, __SIZE_TYPE__ stride)
+    {
+        for (; index < count; index += stride)
+            result[index] = predicate(first[index]) ? value : first[index];
+    }
+};
+template <class Input, class Output, class T, class Predicate>
+struct grid_strided_replace_copy_equal_operation {
+    Input first;
+    __SIZE_TYPE__ count;
+    Output result;
+    Predicate predicate;
+    T value;
+    CANN_ASC_STL_DEVICE_API CANN_ASC_STL_DETAIL_REPLACE_COPY_NOINLINE void operator()(
+        __SIZE_TYPE__ index, __SIZE_TYPE__ stride)
+    {
+        for (; index < count; index += stride)
+            result[index] = predicate(first[index]) ? value : first[index];
+    }
+};
+template <class Forward1, class Forward2>
+struct grid_strided_swap_ranges_operation {
+    Forward1 first;
+    __SIZE_TYPE__ count;
+    Forward2 second;
+    CANN_ASC_STL_DEVICE_API void operator()(__SIZE_TYPE__ index, __SIZE_TYPE__ stride)
+    {
+        for (; index < count; index += stride)
+            parallel_swap(first[index], second[index]);
     }
 };
 }  // namespace asc::detail
+
+#undef CANN_ASC_STL_DETAIL_REPLACE_NOINLINE
+#undef CANN_ASC_STL_DETAIL_REPLACE_COPY_NOINLINE
 
 #endif  // CANN_ASC_STL_ASC___PARALLEL_TRANSFORM_H

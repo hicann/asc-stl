@@ -27,10 +27,12 @@
 #pragma system_header
 #endif
 
-#include <asc/__parallel/scan.h>
-#include <asc/__parallel/temporary_storage.h>
-#include <asc/launch>
+#include <asc/__parallel/radix_sort.h>
 namespace asc::detail {
+// Hoare-style two-end exchange: satisfies the std::partition contract of a
+// two-block range without preserving relative order (unlike
+// stable_partition_operation below, which keeps input order). The returned
+// left-first distance is the length of the satisfied block.
 template <class Forward, class Predicate>
 struct partition_operation {
     Forward first;
@@ -80,18 +82,52 @@ struct partition_copy_operation {
                 ++rejected;
             }
         }
-        output[0] = selected;
-        output[1] = rejected;
+        // The frontend contract exposes a single selected-count sink: only the
+        // true count is written; the rejected count is the input length minus
+        // it, so callers never need to reserve a second slot.
+        *output = selected;
     }
 };
 template <class Bidirectional, class Predicate>
 struct stable_partition_operation {
+    using element = range_element<Bidirectional>;
+
     Bidirectional first;
     Bidirectional last;
     __SIZE_TYPE__* output;
     Predicate predicate;
+    element* buffer;
     CANN_ASC_STL_DEVICE_API void operator()()
     {
+        if (buffer != nullptr) {
+            // Buffered two-pass form, O(n) moves: first sweep gathers the
+            // satisfying elements into the front of the policy temporary
+            // storage, second sweep appends the rest, final sweep copies the
+            // compacted sequence back. Relative order inside both blocks is
+            // preserved, matching the rotation fallback below.
+            __SIZE_TYPE__ selected = 0;
+            for (Bidirectional current = first; current != last; ++current) {
+                if (predicate(*current)) {
+                    buffer[selected] = static_cast<decltype(*current)&&>(*current);
+                    ++selected;
+                }
+            }
+            __SIZE_TYPE__ unselected = selected;
+            for (Bidirectional current = first; current != last; ++current) {
+                if (!predicate(*current)) {
+                    buffer[unselected] = static_cast<decltype(*current)&&>(*current);
+                    ++unselected;
+                }
+            }
+            for (__SIZE_TYPE__ index = 0; index < unselected; ++index) {
+                first[index] = static_cast<decltype(buffer[index])&&>(buffer[index]);
+            }
+            *output = selected;
+            return;
+        }
+        // Storage-less fallback: stable forward rotation, worst-case O(n^2)
+        // moves but no auxiliary memory; the frontend hands the buffer in
+        // whenever the policy temporary storage covers one element per input.
         Bidirectional write = first;
         for (Bidirectional current = first; current != last; ++current) {
             if (!predicate(*current))

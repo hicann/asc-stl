@@ -28,11 +28,9 @@
 #endif
 
 #include <asc/__detail/attributes.h>
-#include <asc/std/__concepts/concept_macros.h>
-#include <asc/std/__concepts/convertible_to.h>
 #include <asc/std/__format/validation.h>
-#include <asc/std/__type_traits/remove_cvref.h>
-#include <asc/std/string_view>
+#include <asc/std/__type_traits/is_same.h>
+#include <asc/std/__type_traits/type_identity.h>
 
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 
@@ -44,23 +42,40 @@ using input_pointer = const __gm__ char*;
 #else
 using input_pointer = const char*;
 #endif
+
+// Parameter view of a compile-time format literal. The vector-core __gm__
+// address space qualifier lives on the alias, so the constructor and the
+// validator below spell a single signature in every execution space instead
+// of piecing the member initializer list together across #if branches.
+#if defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+template <class CharT, __SIZE_TYPE__ Size>
+using input_array = const __gm__ CharT (&)[Size];
+#else
+template <class CharT, __SIZE_TYPE__ Size>
+using input_array = const CharT (&)[Size];
+#endif
 }  // namespace __format_detail
 
+// Registered subset: basic_format_string<char, Args...>. The assertion moves
+// wide-character instantiation failures to the class itself with a
+// product-level message instead of a deep member-initialization mismatch.
 template <class CharT, class... Args>
 class basic_format_string {
+    static_assert(is_same<CharT, char>::value,
+        "ASC-STL format strings support char only; wchar_t is not part of the registered subset");
+
 public:
     template <__SIZE_TYPE__ Size>
-#if defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
-    CANN_ASC_STL_API consteval basic_format_string(const __gm__ CharT (&text)[Size]) noexcept
-#else
-    CANN_ASC_STL_API consteval basic_format_string(const CharT (&text)[Size]) noexcept : data_(text), size_(Size - 1)
-#endif
-#if defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+    CANN_ASC_STL_API consteval basic_format_string(__format_detail::input_array<CharT, Size> text) noexcept
         : data_(text), size_(Size - 1)
-#endif
     {
         validate(text);
     }
+
+    // Extension members of the ASC subset: std::basic_format_string names
+    // this access get(); data()/size() are the wiring the fixed-buffer
+    // renderer consumes and are kept as the in-library face of the stored
+    // literal.
     CANN_ASC_STL_API constexpr __format_detail::input_pointer data() const noexcept
     {
         return data_;
@@ -71,37 +86,48 @@ public:
     }
 
 private:
-    template <__SIZE_TYPE__ Size>
-#if defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
-    CANN_ASC_STL_API static constexpr void validate(const __gm__ CharT (&text)[Size]) noexcept
-#else
-    CANN_ASC_STL_API static constexpr void validate(const CharT (&text)[Size]) noexcept
-#endif
+    CANN_ASC_STL_API static constexpr bool escaped_field(char current, char next) noexcept
     {
-        constexpr bool numeric[] = {
-            (__format_detail::is_integral<__format_detail::remove_cvref_t<Args>>::value &&
-                !__format_detail::is_same<__format_detail::remove_cvref_t<Args>, bool>::value &&
-                !__format_detail::is_same<__format_detail::remove_cvref_t<Args>, char>::value)...,
-            false};
+        return (current == '{' || current == '}') && next == current;
+    }
+    CANN_ASC_STL_API static constexpr bool empty_field(char current, char next) noexcept
+    {
+        return current == '{' && next == '}';
+    }
+    CANN_ASC_STL_API static constexpr bool typed_field(char current, char next, char closing, bool complete) noexcept
+    {
+        return current == '{' && complete && next == ':' && closing == '}';
+    }
+    CANN_ASC_STL_API static constexpr bool numeric_presentation(char value) noexcept
+    {
+        return value == 'd' || value == 'x' || value == 'X' || value == 'o' || value == 'b';
+    }
+    template <__SIZE_TYPE__ Size>
+    CANN_ASC_STL_API static constexpr void validate(__format_detail::input_array<CharT, Size> text) noexcept
+    {
+        constexpr bool numeric[] = {__format_detail::is_format_integer<Args>::value..., false};
         __SIZE_TYPE__ field = 0;
         for (__SIZE_TYPE__ position = 0; position + 1 < Size;) {
             const char current = text[position++];
-            if ((current == '{' || current == '}') && position + 1 < Size && text[position] == current) {
+            // text[position] is at worst the NUL terminator of the literal
+            // (the loop guard keeps position <= Size - 1), which never
+            // matches a brace, so no extra reachability check is needed.
+            if (escaped_field(current, text[position])) {
                 ++position;
                 continue;
             }
-            if (current == '{' && position < Size && text[position] == '}') {
+            if (empty_field(current, text[position])) {
                 if (field >= sizeof...(Args))
                     __builtin_trap();
                 ++field;
                 ++position;
                 continue;
             }
-            if (current == '{' && position + 2 < Size && text[position] == ':' && text[position + 2] == '}') {
+            const bool complete = position + 2 < Size;
+            const char closing = complete ? text[position + 2] : '\0';
+            if (typed_field(current, text[position], closing, complete)) {
                 const char presentation = text[position + 1];
-                if (field >= sizeof...(Args) || !numeric[field] ||
-                    !(presentation == 'd' || presentation == 'x' || presentation == 'X' || presentation == 'o' ||
-                        presentation == 'b')) {
+                if (field >= sizeof...(Args) || !numeric[field] || !numeric_presentation(presentation)) {
                     __builtin_trap();
                 }
                 ++field;
@@ -115,14 +141,8 @@ private:
     __format_detail::input_pointer data_;
     __SIZE_TYPE__ size_;
 };
-namespace __format_detail {
-template <class T>
-struct type_identity {
-    using type = T;
-};
-}  // namespace __format_detail
 template <class... Args>
-using format_string = basic_format_string<char, typename __format_detail::type_identity<Args>::type...>;
+using format_string = basic_format_string<char, type_identity_t<Args>...>;
 
 CANN_ASC_STL_END_NAMESPACE
 

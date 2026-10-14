@@ -57,7 +57,7 @@ def main() -> int:
     execution_coordinate = re.compile(r"\bW\d{2}[-_]B\d{3}\b", re.IGNORECASE)
     for path in sorted(item for item in product_root.rglob("*") if item.is_file()):
         relative = path.relative_to(product_root).as_posix()
-        if relative.startswith("build/"):
+        if relative.startswith("build/") or relative.startswith(".git"):
             continue
         if execution_coordinate.search(relative):
             violations.append(f"{relative}: implementation execution coordinate leaked into product path")

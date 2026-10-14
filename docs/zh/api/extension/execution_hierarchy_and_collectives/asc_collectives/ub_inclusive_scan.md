@@ -92,6 +92,7 @@ void ub_inclusive_scan(asc::ub_span<float> output, asc::ub_span<const float> inp
 ## 约束说明
 
 - 仅可在AI Core SIMD编程中调用。
+- 实际计算与写入长度裁剪为 min(input.size(), output.size())：输出短于输入时按较短一端截断，不越界写出。
 - 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明。
 
 ## 调用示例

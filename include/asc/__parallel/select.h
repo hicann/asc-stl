@@ -27,9 +27,12 @@
 #pragma system_header
 #endif
 
-#include <asc/__parallel/temporary_storage.h>
-#include <asc/launch>
 namespace asc::detail {
+// Sequential-semantics baseline: the select/compact family writes through a
+// running count, i.e. a serial dependency. Parallelization path (later runtime
+// work, kept as an anchor): evaluate the predicate per element, prefix-scan
+// the boolean flags into stable target offsets and scatter in parallel - the
+// same flag-scan + two-cursor scatter construction planned for partition.
 template <class Input, class Output, class Predicate>
 struct select_copy_operation {
     Input first;
@@ -56,6 +59,11 @@ struct select_in_place_operation {
     Predicate predicate;
     CANN_ASC_STL_DEVICE_API void operator()()
     {
+        // Compaction with a self-assignment guard: elements are moved only
+        // once the write cursor lags the read cursor. *output carries the
+        // number of retained elements, so the logical end is result + count
+        // and the tail beyond it holds unspecified leftovers - exactly the
+        // std::remove_if contract.
         Forward write = first;
         __SIZE_TYPE__ count{};
         for (; first != last; ++first)
@@ -81,6 +89,11 @@ struct unique_copy_operation {
             *output = 0;
             return;
         }
+        // Keeps the previous key as a value snapshot instead of re-reading
+        // the last written output slot: the output iterator may be
+        // write-only (a discard sink only counts), unlike unique_operation
+        // below, whose in-place "write position is the previous value"
+        // idiom relies on the readable input range and saves one copy.
         __SIZE_TYPE__ count = 1;
         auto previous = *first;
         result[0] = previous;

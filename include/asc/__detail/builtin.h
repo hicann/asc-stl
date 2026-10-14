@@ -23,13 +23,33 @@
 #define CANN_ASC_STL_DETAIL_HAS_BUILTIN(builtin) 0
 #endif
 
+// Portable trap. All compiler builtins used by the library must be routed
+// through this module, never called bare at the use site (bare calls break
+// the MSVC syntax-compatibility story promised by the other detail headers).
+// MSVC has no __builtin_trap; __fastfail is its intrinsic equivalent and a
+// plain abort() is the last-resort hosted fallback.
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_trap) || defined(__GNUC__) || defined(__clang__)
+#define CANN_ASC_STL_DETAIL_BUILTIN_TRAP() __builtin_trap()
+#elif defined(_MSC_VER)
+#include <intrin.h>
+#define CANN_ASC_STL_DETAIL_BUILTIN_TRAP() __fastfail(0)
+#else
+extern "C" void abort();
+#define CANN_ASC_STL_DETAIL_BUILTIN_TRAP() abort()
+#endif
+
 #if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_trap) || defined(__GNUC__)
 #define CANN_ASC_STL_DETAIL_BUILTIN_UNREACHABLE() \
     do {                                          \
-        __builtin_trap();                         \
+        CANN_ASC_STL_DETAIL_BUILTIN_TRAP();       \
         __builtin_unreachable();                  \
     } while (false)
 #else
+// Placeholder fallback only: on targets without a trap builtin the marker
+// degrades to a spin loop. Production backends (GCC/Clang/CCE) all take the
+// trap branch above; treat this arm as a syntax-compatibility stub, not as
+// an observable failure strategy - an AI Core kernel reaching it would hang
+// its core instead of reporting a fault.
 #define CANN_ASC_STL_DETAIL_BUILTIN_UNREACHABLE() \
     do {                                          \
         for (;;) {                                \

@@ -29,12 +29,44 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+namespace __execution_detail {
+// Static self-description of the execution policy tags: every tag carries its
+// kind on the type itself, so trait layers (policy_dispatch, later algorithm
+// constraints) read the identity directly from the policy instead of keeping
+// parallel specialization tables that can drift from these definitions. The
+// member name follows the internal __ prefix convention and the tags keep
+// their implicit, unannotated default constructors.
+enum class __policy_kind : unsigned int {
+    sequenced,
+    parallel,
+    parallel_unsequenced,
+    unsequenced,
+};
+}  // namespace __execution_detail
+
 namespace execution {
 
-class sequenced_policy {};
-class parallel_policy {};
-class parallel_unsequenced_policy {};
-class unsequenced_policy {};
+class sequenced_policy {
+public:
+    static constexpr __execution_detail::__policy_kind __asc_policy_kind = __execution_detail::__policy_kind::sequenced;
+};
+
+class parallel_policy {
+public:
+    static constexpr __execution_detail::__policy_kind __asc_policy_kind = __execution_detail::__policy_kind::parallel;
+};
+
+class parallel_unsequenced_policy {
+public:
+    static constexpr __execution_detail::__policy_kind __asc_policy_kind =
+        __execution_detail::__policy_kind::parallel_unsequenced;
+};
+
+class unsequenced_policy {
+public:
+    static constexpr __execution_detail::__policy_kind __asc_policy_kind =
+        __execution_detail::__policy_kind::unsequenced;
+};
 
 inline constexpr sequenced_policy seq{};
 inline constexpr parallel_policy par{};

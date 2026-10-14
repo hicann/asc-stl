@@ -27,36 +27,57 @@
 #pragma system_header
 #endif
 
+// Implementation root for the later public <asc/std/cinttypes>: the intmax
+// vocabulary (intmax_t/uintmax_t/imaxdiv_t plus imaxabs/imaxdiv) and its
+// helpers live here so the facade stays a pure forwarding unit. The
+// arithmetic is pure integer with no runtime dependency, so it stays valid
+// in every execution space. INTMAX_MIN keeps its two's-complement identity:
+// intmax_abs reports the sentinel pair and intmax_abs_representable lets
+// callers reject the minimum as a domain error instead of wrapping.
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace detail {
 
-// Pure-integer intmax vocabulary owned by this native path: the absolute
-// value, division and remainder helpers avoid any floating-point or runtime
-// dependency so they stay valid in every execution space.  INT64_MIN keeps
-// its two's-complement identity; intmax_abs reports the sentinel pair so
-// callers can reject it as a domain error instead of wrapping.
-CANN_ASC_STL_API constexpr __INT64_TYPE__ intmax_max() noexcept
+CANN_ASC_STL_API constexpr __INTMAX_TYPE__ intmax_max() noexcept
 {
-    return static_cast<__INT64_TYPE__>(~static_cast<__UINT64_TYPE__>(0) >> 1);
+    return static_cast<__INTMAX_TYPE__>(~static_cast<__UINTMAX_TYPE__>(0) >> 1);
 }
 
-CANN_ASC_STL_API constexpr __INT64_TYPE__ intmax_min() noexcept
+CANN_ASC_STL_API constexpr __INTMAX_TYPE__ intmax_min() noexcept
 {
     return ~intmax_max();
 }
 
-CANN_ASC_STL_API constexpr __INT64_TYPE__ intmax_abs(__INT64_TYPE__ value) noexcept
+CANN_ASC_STL_API constexpr __INTMAX_TYPE__ intmax_abs(__INTMAX_TYPE__ value) noexcept
 {
     return value < 0 ? -value : value;
 }
 
-CANN_ASC_STL_API constexpr bool intmax_abs_representable(__INT64_TYPE__ value) noexcept
+CANN_ASC_STL_API constexpr bool intmax_abs_representable(__INTMAX_TYPE__ value) noexcept
 {
     return value != intmax_min();
 }
 
 }  // namespace detail
+
+using intmax_t = __INTMAX_TYPE__;
+using uintmax_t = __UINTMAX_TYPE__;
+struct imaxdiv_t {
+    intmax_t quot;
+    intmax_t rem;
+};
+CANN_ASC_STL_API constexpr intmax_t imaxabs(intmax_t value) noexcept
+{
+    return ::asc::std::detail::intmax_abs(value);
+}
+CANN_ASC_STL_API constexpr imaxdiv_t imaxdiv(intmax_t numerator, intmax_t denominator) noexcept
+{
+    // 除零守卫：零除数替换为 1（与 __chrono/__safe_divisor 同例，避免设备侧
+    // 静态检查的除零告警），此时 quot = numerator、rem = 0。
+    const intmax_t divisor = denominator == intmax_t(0) ? intmax_t(1) : denominator;
+    return {numerator / divisor, numerator % divisor};
+}
 
 CANN_ASC_STL_END_NAMESPACE
 

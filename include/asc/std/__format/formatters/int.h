@@ -28,19 +28,29 @@
 #endif
 
 #include <asc/__detail/attributes.h>
-#include <asc/std/__algorithm/max.h>
 #include <asc/std/__format/format_integral.h>
-#include <asc/std/__type_traits/is_signed.h>
-#include <asc/std/__type_traits/make_nbit_int.h>
-#include <asc/std/climits>
-#include <asc/std/cstdint>
+#include <asc/std/__format/output_buffer.h>
+#include <asc/std/__format/validation.h>
 
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __format_detail {
-struct integer_formatter_tag {};
+// Generic integral lane; bool, char, the character-sized integer types and
+// pointers route to the dedicated write_argument overloads instead.
+template <class T>
+CANN_ASC_STL_API constexpr void write_argument(output_buffer& buffer, T value, unsigned int base, bool upper) noexcept
+{
+    static_assert(is_format_integer<T>::value,
+        "ASC-STL format supports the standard integer types up to 64 bits; bool and char use their default "
+        "presentation, and the wide character types and 128-bit integers are outside the registered subset");
+    char digits[65]{};
+    const __SIZE_TYPE__ count = integral_digits(digits, value, base, upper);
+    for (__SIZE_TYPE__ index = 0; index < count; ++index) {
+        buffer.put(digits[index]);
+    }
+}
 }  // namespace __format_detail
 
 CANN_ASC_STL_END_NAMESPACE

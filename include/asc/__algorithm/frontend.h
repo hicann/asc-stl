@@ -27,6 +27,7 @@
 #pragma system_header
 #endif
 
+#include <asc/__algorithm/byte_operations.h>
 #include <asc/__parallel/adjacent_difference.h>
 #include <asc/__parallel/find.h>
 #include <asc/__parallel/for.h>
@@ -39,13 +40,15 @@
 #include <asc/__parallel/select.h>
 #include <asc/__parallel/temporary_storage.h>
 #include <asc/__parallel/transform.h>
+#include <asc/__runtime/launch.h>
 #include <asc/execution>
 #include <asc/execution.policy.h>
-
-namespace asc::std {
-using size_t = __SIZE_TYPE__;
-using uint32_t = __UINT32_TYPE__;
-}  // namespace asc::std
+#include <asc/std/__functional/operations.h>
+#include <asc/std/__type_traits/is_floating_point.h>
+#include <asc/std/__type_traits/is_integral.h>
+#include <asc/std/__type_traits/remove_cvref.h>
+#include <asc/std/cstddef>
+#include <asc/std/cstdint>
 
 namespace asc::detail {
 
@@ -67,21 +70,147 @@ struct negated_predicate {
         return !predicate(value);
     }
 };
+
+// True when Compare is one of the asc::std::less specializations, i.e. the
+// sort frontend may route natural-order arithmetic keys to the radix kernel.
+template <class Compare>
+struct natural_order_compare {
+    static constexpr bool value = false;
+};
 template <class T>
-struct passthrough {
-    CANN_ASC_STL_DEVICE_API T operator()(const T& value) const
-    {
-        return value;
-    }
+struct natural_order_compare<asc::std::less<T>> {
+    static constexpr bool value = true;
 };
 
+// Grid-stride companions of the element-wise operations live beside their
+// families in asc/__parallel/for.h and asc/__parallel/transform.h: each
+// device thread visits the elements whose linear index is congruent to its
+// thread index modulo the total thread count, so every element is still
+// visited exactly once while the launch spans the whole grid.
+
+// Derives a conservative 1-D launch geometry for an element-wise operation
+// over count elements. The grid-stride loops absorb any excess, so the caps
+// only bound parallelism, never coverage.
+CANN_ASC_STL_HOST_API launch_state elementwise_launch_state(__SIZE_TYPE__ count) noexcept
+{
+    constexpr unsigned int block_threads = 256;
+    constexpr unsigned int block_limit = 65535;
+    launch_state state{};
+    state.threads = count < block_threads ? static_cast<unsigned int>(count) : block_threads;
+    if (state.threads == 0) {
+        state.threads = 1;
+    }
+    const __SIZE_TYPE__ blocks_needed = (count + state.threads - 1) / state.threads;
+    state.blocks = blocks_needed > block_limit ? block_limit : static_cast<unsigned int>(blocks_needed);
+    if (state.blocks == 0) {
+        state.blocks = 1;
+    }
+    return state;
+}
+
 #if defined(__clang__) && defined(CANN_ASC_STL_USE_SIMT_LAUNCH)
+// Availability gate: every asc::parallel::* frontend in this header exists
+// only on __clang__ builds that define CANN_ASC_STL_USE_SIMT_LAUNCH (the CCE
+// toolchain contract); the macro is a build-time contract with no in-tree
+// default, so a build that omits it compiles the facade to plain includes
+// with no parallel names. The registry semantic column is expected to state
+// the same availability rule; adding Host fallback stubs that return
+// execution_status{execution_errc::unsupported} on other toolchains would
+// widen the public surface and stays a product decision.
+//
+// Result-sink contract, pinned here for all frontends below: the scalar,
+// predicate, iterator-position and selected-count results are written to
+// explicit caller-owned sinks that must live in device global memory; the
+// values become valid in the policy stream's order and are never copied
+// through host addresses. Passing a host (stack) pointer to an output
+// parameter is a contract violation the frontend does not validate.
 template <class Operation>
 CANN_ASC_STL_HOST_API execution_status submit(device_policy policy, Operation operation) noexcept
 {
     static_assert(__is_trivially_copyable(Operation), "ASC-STL parallel operation state must be trivially copyable");
     execution_status status = validate_parallel_policy(policy);
     return status.success() ? submit_parallel_operation(policy.stream(), operation) : status;
+}
+
+// Element-wise submission channel: routes the operation through the
+// coordinate-parameterized kernel so pure per-element work runs grid-strided
+// across the launch. The routed families are for_each/for_each_n,
+// transform, copy/copy_n, fill/fill_n, generate/generate_n, the replace
+// family and swap_ranges - all free of cross-element dependencies, so the
+// visit order is an implementation detail (stateful callables keep the
+// exactly-once-per-element guarantee but not the sequential call order).
+// Order- and dependency-sensitive operations (reduce, scan, merge,
+// adjacent_difference, find, select, partition and both sorts) intentionally
+// keep the single-thread submit channel above: their device-side semantics
+// are sequential, and parallelizing them needs the batched plans tracked for
+// the later runtime work rather than an unsafe thread fan-out here.
+template <class Operation>
+CANN_ASC_STL_HOST_API execution_status submit_elementwise(
+    device_policy policy, __SIZE_TYPE__ count, Operation operation) noexcept
+{
+    static_assert(__is_trivially_copyable(Operation), "ASC-STL parallel operation state must be trivially copyable");
+    execution_status status = validate_parallel_policy(policy);
+    return status.success() ? submit_parallel_operation(policy.stream(), elementwise_launch_state(count), operation) :
+                              status;
+}
+
+template <class Value>
+struct synchronous_slot {
+    device_policy backend_policy{};
+    Value* device_value{};
+    Value host_value{};
+    execution_status status{};
+};
+
+struct synchronous_indices {
+    ::asc::std::size_t values[2]{};
+};
+
+template <class Value>
+CANN_ASC_STL_HOST_API synchronous_slot<Value> make_synchronous_slot(device_policy policy) noexcept
+{
+    synchronous_slot<Value> slot{};
+    // Shares the null-stream/size validation with the sort frontends through
+    // require_temporary_storage instead of duplicating it here.
+    execution_status status = require_temporary_storage(policy, sizeof(Value));
+    if (!status.success()) {
+        slot.status = status;
+        return slot;
+    }
+    temporary_storage_ref storage = policy.temporary_storage();
+    const auto begin = reinterpret_cast<__UINTPTR_TYPE__>(storage.data());
+    const auto end = begin + storage.size_bytes();
+    if (end < begin) {
+        slot.status = execution_status{execution_errc::invalid_argument};
+        return slot;
+    }
+    const auto address = (end - sizeof(Value)) & ~static_cast<__UINTPTR_TYPE__>(alignof(Value) - 1);
+    if (address < begin) {
+        slot.status = execution_status{execution_errc::insufficient_storage};
+        return slot;
+    }
+    slot.backend_policy = policy.with_temporary_storage(
+        temporary_storage_ref(storage.data(), static_cast<__SIZE_TYPE__>(address - begin), memory_space::global));
+    slot.device_value = reinterpret_cast<Value*>(address);
+    return slot;
+}
+
+CANN_ASC_STL_HOST_API execution_status finish_synchronous(device_policy policy, execution_status status) noexcept
+{
+    if (!status.success())
+        return status;
+    return policy.stream().synchronize() ? execution_status{} : execution_status{execution_errc::backend_error, -1};
+}
+
+template <class Value>
+CANN_ASC_STL_HOST_API execution_status finish_synchronous(
+    device_policy policy, execution_status status, synchronous_slot<Value>& slot) noexcept
+{
+    if (!status.success())
+        return status;
+    status = copy_bytes_runtime(
+        policy.stream(), &slot.host_value, slot.device_value, sizeof(Value), copy_direction::device_to_host);
+    return finish_synchronous(policy, status);
 }
 #endif
 
@@ -129,10 +258,12 @@ CANN_ASC_STL_HOST_API execution_status any_of(device_policy policy, Input first,
 }
 
 template <class Input, class Output>
-CANN_ASC_STL_HOST_API execution_status copy(  // NOLINT(build/include_what_you_use)
-    device_policy policy, Input first, Input last, Output result) noexcept
+CANN_ASC_STL_HOST_API execution_status copy(
+    device_policy policy, Input first, Input last, Output result) noexcept  // NOLINT(build/include_what_you_use)
 {
-    return detail::submit(policy, detail::copy_operation<Input, Output>{first, last, result});
+    const __SIZE_TYPE__ count = static_cast<__SIZE_TYPE__>(last - first);
+    return detail::submit_elementwise(
+        policy, count, detail::grid_strided_copy_operation<Input, Output>{first, count, result});
 }
 
 template <class Input, class Output, class UnaryPredicate>
@@ -148,7 +279,9 @@ CANN_ASC_STL_HOST_API execution_status copy_if(device_policy policy, Input first
 template <class Input, class Size, class Output>
 CANN_ASC_STL_HOST_API execution_status copy_n(device_policy policy, Input first, Size count, Output result) noexcept
 {
-    return detail::submit(policy, detail::copy_n_operation<Input, Size, Output>{first, count, result});
+    const __SIZE_TYPE__ total = count > 0 ? static_cast<__SIZE_TYPE__>(count) : 0;
+    return detail::submit_elementwise(
+        policy, total, detail::grid_strided_copy_operation<Input, Output>{first, total, result});
 }
 
 template <class Input, class T>
@@ -186,20 +319,24 @@ CANN_ASC_STL_HOST_API execution_status exclusive_scan(
     device_policy policy, Input first, Input last, Output result, T init, BinaryOperation operation) noexcept
 {
     return detail::submit(policy,
-        detail::scan_operation<Input, Output, T, BinaryOperation, detail::passthrough<T>>{
+        detail::scan_operation<Input, Output, T, BinaryOperation, detail::identity_operation<T>>{
             first, last, result, init, operation, {}, false});
 }
 
 template <class Forward, class T>
 CANN_ASC_STL_HOST_API execution_status fill(device_policy policy, Forward first, Forward last, const T& value) noexcept
 {
-    return detail::submit(policy, detail::fill_operation<Forward, Forward, T>{first, last, value});
+    const __SIZE_TYPE__ count = static_cast<__SIZE_TYPE__>(last - first);
+    return detail::submit_elementwise(
+        policy, count, detail::grid_strided_fill_operation<Forward, T>{first, count, value});
 }
 
 template <class Output, class Size, class T>
 CANN_ASC_STL_HOST_API execution_status fill_n(device_policy policy, Output first, Size count, const T& value) noexcept
 {
-    return detail::submit(policy, detail::fill_n_operation<Output, Size, T>{first, count, value});
+    const __SIZE_TYPE__ total = count > 0 ? static_cast<__SIZE_TYPE__>(count) : 0;
+    return detail::submit_elementwise(
+        policy, total, detail::grid_strided_fill_operation<Output, T>{first, total, value});
 }
 
 template <class Input, class T>
@@ -236,28 +373,36 @@ template <class Input, class Function>
 CANN_ASC_STL_HOST_API execution_status for_each(
     device_policy policy, Input first, Input last, Function function) noexcept
 {
-    return detail::submit(policy, detail::for_each_operation<Input, Input, Function>{first, last, function});
+    const __SIZE_TYPE__ count = static_cast<__SIZE_TYPE__>(last - first);
+    return detail::submit_elementwise(
+        policy, count, detail::grid_strided_for_each_operation<Input, Function>{first, count, function});
 }
 
 template <class Input, class Size, class Function>
 CANN_ASC_STL_HOST_API execution_status for_each_n(
     device_policy policy, Input first, Size count, Function function) noexcept
 {
-    return detail::submit(policy, detail::for_each_n_operation<Input, Size, Function>{first, count, function});
+    const __SIZE_TYPE__ total = count > 0 ? static_cast<__SIZE_TYPE__>(count) : 0;
+    return detail::submit_elementwise(
+        policy, total, detail::grid_strided_for_each_operation<Input, Function>{first, total, function});
 }
 
 template <class Forward, class Generator>
 CANN_ASC_STL_HOST_API execution_status generate(
     device_policy policy, Forward first, Forward last, Generator generator) noexcept
 {
-    return detail::submit(policy, detail::generate_operation<Forward, Forward, Generator>{first, last, generator});
+    const __SIZE_TYPE__ count = static_cast<__SIZE_TYPE__>(last - first);
+    return detail::submit_elementwise(
+        policy, count, detail::grid_strided_generate_operation<Forward, Generator>{first, count, generator});
 }
 
 template <class Output, class Size, class Generator>
 CANN_ASC_STL_HOST_API execution_status generate_n(
     device_policy policy, Output first, Size count, Generator generator) noexcept
 {
-    return detail::submit(policy, detail::generate_n_operation<Output, Size, Generator>{first, count, generator});
+    const __SIZE_TYPE__ total = count > 0 ? static_cast<__SIZE_TYPE__>(count) : 0;
+    return detail::submit_elementwise(
+        policy, total, detail::grid_strided_generate_operation<Output, Generator>{first, total, generator});
 }
 
 template <class Input, class Output, class T, class BinaryOperation>
@@ -265,7 +410,7 @@ CANN_ASC_STL_HOST_API execution_status inclusive_scan(
     device_policy policy, Input first, Input last, Output result, T init, BinaryOperation operation) noexcept
 {
     return detail::submit(policy,
-        detail::scan_operation<Input, Output, T, BinaryOperation, detail::passthrough<T>>{
+        detail::scan_operation<Input, Output, T, BinaryOperation, detail::identity_operation<T>>{
             first, last, result, init, operation, {}, true});
 }
 
@@ -444,33 +589,38 @@ template <class Forward, class T>
 CANN_ASC_STL_HOST_API execution_status replace(
     device_policy policy, Forward first, Forward last, const T& old_value, const T& new_value) noexcept
 {
-    return detail::submit(
-        policy, detail::replace_operation<Forward, T, detail::equal_value<T>>{first, last, {old_value}, new_value});
+    const __SIZE_TYPE__ count = static_cast<__SIZE_TYPE__>(last - first);
+    return detail::submit_elementwise(
+        policy, count, detail::grid_strided_replace_value_operation<Forward, T>{first, count, old_value, new_value});
 }
 
 template <class Input, class Output, class T>
 CANN_ASC_STL_HOST_API execution_status replace_copy(
     device_policy policy, Input first, Input last, Output result, const T& old_value, const T& new_value) noexcept
 {
-    return detail::submit(policy,
-        detail::replace_copy_operation<Input, Output, T, detail::equal_value<T>>{
-            first, last, result, {old_value}, new_value});
+    const __SIZE_TYPE__ count = static_cast<__SIZE_TYPE__>(last - first);
+    return detail::submit_elementwise(policy, count,
+        detail::grid_strided_replace_copy_equal_operation<Input, Output, T, detail::equal_value<T>>{
+            first, count, result, {old_value}, new_value});
 }
 
 template <class Input, class Output, class UnaryPredicate, class T>
 CANN_ASC_STL_HOST_API execution_status replace_copy_if(
     device_policy policy, Input first, Input last, Output result, UnaryPredicate predicate, const T& new_value) noexcept
 {
-    return detail::submit(policy,
-        detail::replace_copy_operation<Input, Output, T, UnaryPredicate>{first, last, result, predicate, new_value});
+    const __SIZE_TYPE__ count = static_cast<__SIZE_TYPE__>(last - first);
+    return detail::submit_elementwise(policy, count,
+        detail::grid_strided_replace_copy_operation<Input, Output, T, UnaryPredicate>{
+            first, count, result, predicate, new_value});
 }
 
 template <class Forward, class UnaryPredicate, class T>
 CANN_ASC_STL_HOST_API execution_status replace_if(
     device_policy policy, Forward first, Forward last, UnaryPredicate predicate, const T& new_value) noexcept
 {
-    return detail::submit(
-        policy, detail::replace_operation<Forward, T, UnaryPredicate>{first, last, predicate, new_value});
+    const __SIZE_TYPE__ count = static_cast<__SIZE_TYPE__>(last - first);
+    return detail::submit_elementwise(policy, count,
+        detail::grid_strided_replace_operation<Forward, T, UnaryPredicate>{first, count, predicate, new_value});
 }
 
 template <class Bidirectional>
@@ -515,10 +665,36 @@ CANN_ASC_STL_HOST_API execution_status shift_right(
 }
 
 template <class Random, class Compare>
-CANN_ASC_STL_HOST_API execution_status sort(  // NOLINT(build/include_what_you_use)
-    device_policy policy, Random first, Random last, Compare compare) noexcept
+CANN_ASC_STL_HOST_API execution_status sort(
+    device_policy policy, Random first, Random last, Compare compare) noexcept  // NOLINT(build/include_what_you_use)
 {
-    return detail::submit(policy, detail::radix_sort_operation<Random, Compare>{first, last, compare});
+    using element = typename asc::std::remove_cvref<decltype(*first)>::type;
+    const __SIZE_TYPE__ count = static_cast<__SIZE_TYPE__>(last - first);
+    // Natural-order arithmetic keys of at most eight bytes take the LSD radix
+    // kernel; every other comparator drives the iterative bottom-up merge
+    // kernel. Both are non-recursive and hold the O(N log N) frontend contract
+    // when the policy provides the scratch the registry contract requires;
+    // without scratch, or below the insertion threshold, both kernels fall
+    // back to the shared stable insertion path.
+    constexpr bool radix_path = detail::natural_order_compare<Compare>::value &&
+        (asc::std::is_integral<element>::value || asc::std::is_floating_point<element>::value) && sizeof(element) <= 8;
+    if (radix_path) {
+        constexpr __SIZE_TYPE__ histogram_bytes = 256 * sizeof(__SIZE_TYPE__);
+        if (detail::require_temporary_storage(policy, histogram_bytes + count * sizeof(element)).success()) {
+            __SIZE_TYPE__* histogram = detail::temporary_storage_pointer<__SIZE_TYPE__>(policy);
+            // The histogram block is a whole number of size_t slots, so the
+            // element scratch behind it stays suitably aligned for the
+            // at-most-eight-byte keys accepted above.
+            element* scratch = detail::temporary_storage_pointer<element>(policy, histogram_bytes);
+            return detail::submit(
+                policy, detail::radix_sort_operation<Random, Compare>{first, last, compare, histogram, scratch});
+        }
+    }
+    element* buffer = nullptr;
+    if (detail::require_temporary_storage(policy, count * sizeof(element)).success()) {
+        buffer = detail::temporary_storage_pointer<element>(policy);
+    }
+    return detail::submit(policy, detail::merge_sort_operation<Random, Compare>{first, last, compare, buffer});
 }
 
 template <class Bidirectional, class UnaryPredicate>
@@ -527,23 +703,36 @@ CANN_ASC_STL_HOST_API execution_status stable_partition(device_policy policy, Bi
 {
     if (output_count == nullptr)
         return execution_status{execution_errc::invalid_argument};
+    // One buffer element per input element turns the O(n^2) rotation fallback
+    // into the O(n) two-pass form; without policy storage the operation keeps
+    // the storage-less rotation path.
+    using element = typename asc::std::remove_cvref<decltype(*first)>::type;
+    const __SIZE_TYPE__ count = static_cast<__SIZE_TYPE__>(last - first);
+    element* buffer = nullptr;
+    if (detail::require_temporary_storage(policy, count * sizeof(element)).success()) {
+        buffer = detail::temporary_storage_pointer<element>(policy);
+    }
     return detail::submit(policy,
-        detail::stable_partition_operation<Bidirectional, UnaryPredicate>{first, last, output_count, predicate});
+        detail::stable_partition_operation<Bidirectional, UnaryPredicate>{
+            first, last, output_count, predicate, buffer});
 }
 
 template <class Forward1, class Forward2>
 CANN_ASC_STL_HOST_API execution_status swap_ranges(
     device_policy policy, Forward1 first1, Forward1 last1, Forward2 first2) noexcept
 {
-    return detail::submit(policy, detail::swap_ranges_operation<Forward1, Forward2>{first1, last1, first2});
+    const __SIZE_TYPE__ count = static_cast<__SIZE_TYPE__>(last1 - first1);
+    return detail::submit_elementwise(
+        policy, count, detail::grid_strided_swap_ranges_operation<Forward1, Forward2>{first1, count, first2});
 }
 
 template <class Input, class Output, class UnaryOperation>
 CANN_ASC_STL_HOST_API execution_status transform(
     device_policy policy, Input first, Input last, Output result, UnaryOperation operation) noexcept
 {
-    return detail::submit(
-        policy, detail::transform_operation<Input, Output, UnaryOperation>{first, last, result, operation});
+    const __SIZE_TYPE__ count = static_cast<__SIZE_TYPE__>(last - first);
+    return detail::submit_elementwise(policy, count,
+        detail::grid_strided_transform_operation<Input, Output, UnaryOperation>{first, count, result, operation});
 }
 
 template <class Input, class Output, class T, class BinaryOperation, class UnaryOperation>

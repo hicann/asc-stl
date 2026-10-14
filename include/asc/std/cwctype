@@ -29,6 +29,9 @@
 
 #include <asc/std/__cwctype/classification.h>
 #include <asc/std/__cwctype/descriptors.h>
+// WEOF is defined verbatim (behind the same #ifndef guard) by
+// __cwchar/fixed_c_locale.h on the device side; this duplicate keeps the
+// facade self-contained. Keep both texts in sync and keep the guards.
 #ifndef WEOF
 #define WEOF (static_cast<asc::std::wint_t>(-1))
 #endif

@@ -27,19 +27,14 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__tree/tree.h>
+#include <asc/std/__utility/pair.h>
+
 namespace asc::std {
 
-template <class First, class Second>
-struct __arena_pair;
-namespace __arena_associative_detail {
-template <class Key, class Mapped>
-struct __arena_pair_key;
-template <class Key, class Value, class KeyOfValue, class Compare, class Allocator>
-class basic_tree;
-template <class Key, class Value, class KeyOfValue, class Hash, class Equal, class Allocator>
-class basic_hash_table;
-}  // namespace __arena_associative_detail
-
+// Members use CANN_ASC_STL_API like the set/unordered_* family: under the
+// CCE SIMD branch CANN_ASC_STL_HOST_SIMT_API would degrade these to host-only
+// calls, diverging from the sibling associative containers.
 template <class Key, class T, class Compare, class Allocator>
 class map {
 public:
@@ -52,59 +47,59 @@ private:
 public:
     using size_type = __SIZE_TYPE__;
     using iterator = typename tree_type::iterator;
-    CANN_ASC_STL_HOST_SIMT_API explicit map(const Allocator& allocator) : tree_(Compare{}, allocator)
+    CANN_ASC_STL_API explicit map(const Allocator& allocator) : tree_(Compare{}, allocator)
     {}
-    CANN_ASC_STL_HOST_SIMT_API map(const Compare& compare, const Allocator& allocator) : tree_(compare, allocator)
+    CANN_ASC_STL_API map(const Compare& compare, const Allocator& allocator) : tree_(compare, allocator)
     {}
     map(const map&) = delete;
     map& operator=(const map&) = delete;
-    CANN_ASC_STL_HOST_SIMT_API map(map&&) noexcept = default;
-    CANN_ASC_STL_HOST_SIMT_API map& operator=(map&&) noexcept = default;
-    CANN_ASC_STL_HOST_SIMT_API bool empty() const noexcept
+    CANN_ASC_STL_API map(map&&) noexcept = default;
+    CANN_ASC_STL_API map& operator=(map&&) noexcept = default;
+    CANN_ASC_STL_API bool empty() const noexcept
     {
         return tree_.empty();
     }
-    CANN_ASC_STL_HOST_SIMT_API size_type size() const noexcept
+    CANN_ASC_STL_API size_type size() const noexcept
     {
         return tree_.size();
     }
-    CANN_ASC_STL_HOST_SIMT_API iterator begin() noexcept
+    CANN_ASC_STL_API iterator begin() noexcept
     {
         return tree_.begin();
     }
-    CANN_ASC_STL_HOST_SIMT_API iterator end() noexcept
+    CANN_ASC_STL_API iterator end() noexcept
     {
         return tree_.end();
     }
-    CANN_ASC_STL_HOST_SIMT_API __arena_pair<iterator, bool> insert(const value_type& value)
+    CANN_ASC_STL_API pair<iterator, bool> insert(const value_type& value)
     {
-        return tree_.insert(value);
+        __arena_pair<iterator, bool> result = tree_.insert(value);
+        return pair<iterator, bool>(result.first, result.second);  // NOLINT(build/include_what_you_use)
     }
-    CANN_ASC_STL_HOST_SIMT_API __arena_pair<iterator, bool> insert(value_type&& value)
+    CANN_ASC_STL_API pair<iterator, bool> insert(value_type&& value)
     {
-        return tree_.insert(static_cast<value_type&&>(value));
+        __arena_pair<iterator, bool> result = tree_.insert(static_cast<value_type&&>(value));
+        return pair<iterator, bool>(result.first, result.second);  // NOLINT(build/include_what_you_use)
     }
-    CANN_ASC_STL_HOST_SIMT_API iterator find(const Key& key) noexcept
+    CANN_ASC_STL_API iterator find(const Key& key) noexcept
     {
         return tree_.find(key);
     }
-    CANN_ASC_STL_HOST_SIMT_API size_type count(const Key& key) noexcept
+    CANN_ASC_STL_API size_type count(const Key& key) noexcept
     {
         return tree_.count(key);
     }
-    CANN_ASC_STL_HOST_SIMT_API T& operator[](const Key& key)
+    CANN_ASC_STL_API T& operator[](const Key& key)
     {
         iterator found = find(key);
         if (found != end())
             return found->second;
-#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+        // insert() reports arena exhaustion by failing fast instead of
+        // returning an invalid iterator, so the returned node is always
+        // dereferenceable and the extra find() round trip is unnecessary.
         return tree_.insert(value_type(key, T{})).first->second;
-#else
-        tree_.insert(value_type(key, T{}));
-        return find(key)->second;
-#endif
     }
-    CANN_ASC_STL_HOST_SIMT_API void clear() noexcept
+    CANN_ASC_STL_API void clear() noexcept
     {
         tree_.clear();
     }

@@ -58,10 +58,15 @@ struct buffer_state {
 CANN_ASC_STL_API constexpr __SIZE_TYPE__ buffer_element_bytes(
     __SIZE_TYPE__ element_size, __SIZE_TYPE__ element_count) noexcept
 {
-    if (element_size == 0 || element_count == 0) {
+    if (element_size == 0 || element_count == 0)
         return 0;
-    }
     const __SIZE_TYPE__ total = element_size * element_count;
+    // The division round-trip alone is sufficient: unsigned wraparound makes
+    // total < element_size * element_count, hence total / element_count <
+    // element_size, so a failed round-trip already rejects every overflow.
+    // The remainder test is kept purely as belt-and-braces documentation of
+    // the exact-multiple expectation; it can never fail when the round-trip
+    // holds.
     return total / element_count == element_size && total % element_size == 0 ? total : 0;
 }
 

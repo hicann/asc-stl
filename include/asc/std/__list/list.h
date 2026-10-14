@@ -27,24 +27,19 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__exception/terminate.h>
+#include <asc/std/__iterator/iterator_traits.h>
+#include <asc/std/__list/node.h>
+#include <asc/std/__memory/pointer_traits.h>
+#include <asc/std/__new/nonallocating_new.h>
+
 namespace asc::std {
 
 template <class T, class Allocator>
 class list {
-    struct node;
+    using node = detail::list_node<T>;
     using node_allocator = typename Allocator::template rebind<node>::other;
     using node_pointer = typename node_allocator::pointer;
-
-    struct node {
-        node_pointer previous;
-        node_pointer next;
-        T value;
-
-        template <class... Args>
-        CANN_ASC_STL_HOST_SIMT_API node(node_pointer before, node_pointer after, Args&&... args)
-            : previous(before), next(after), value(static_cast<Args&&>(args)...)
-        {}
-    };
 
 public:
     using value_type = T;
@@ -55,13 +50,14 @@ public:
 
     class iterator {
     public:
+        using iterator_category = bidirectional_iterator_tag;
         using value_type = T;
         using difference_type = __PTRDIFF_TYPE__;
         using pointer = T*;
         using reference = T&;
 
         CANN_ASC_STL_HOST_SIMT_API iterator() = default;
-        CANN_ASC_STL_HOST_SIMT_API iterator(node_pointer current, node_pointer tail) : current_(current), tail_(tail)
+        CANN_ASC_STL_HOST_SIMT_API iterator(list* owner, node* current) : owner_(owner), current_(current)
         {}
         CANN_ASC_STL_HOST_SIMT_API reference operator*() const
         {
@@ -84,7 +80,7 @@ public:
         }
         CANN_ASC_STL_HOST_SIMT_API iterator& operator--()
         {
-            current_ = current_ == nullptr ? tail_ : current_->previous;
+            current_ = current_ == nullptr ? owner_->tail_ : current_->previous;
             return *this;
         }
         CANN_ASC_STL_HOST_SIMT_API iterator operator--(int)
@@ -103,8 +99,8 @@ public:
         }
 
     private:
-        node_pointer current_ = nullptr;
-        node_pointer tail_ = nullptr;
+        list* owner_ = nullptr;
+        node* current_ = nullptr;
     };
 
     CANN_ASC_STL_HOST_SIMT_API explicit list(const Allocator& allocator) noexcept : allocator_(allocator)
@@ -163,11 +159,11 @@ public:
     }
     CANN_ASC_STL_HOST_SIMT_API iterator begin() noexcept
     {
-        return iterator(head_, tail_);
+        return iterator(this, head_);
     }
     CANN_ASC_STL_HOST_SIMT_API iterator end() noexcept
     {
-        return iterator(nullptr, tail_);
+        return iterator(this, nullptr);
     }
     CANN_ASC_STL_HOST_SIMT_API void push_front(const T& value)
     {
@@ -188,7 +184,7 @@ public:
     template <class... Args>
     CANN_ASC_STL_HOST_SIMT_API reference emplace_front(Args&&... args)
     {
-        node_pointer created = make_node(nullptr, head_, static_cast<Args&&>(args)...);
+        node* created = make_node(nullptr, head_, static_cast<Args&&>(args)...);
         if (head_ != nullptr)
             head_->previous = created;
         else
@@ -200,7 +196,7 @@ public:
     template <class... Args>
     CANN_ASC_STL_HOST_SIMT_API reference emplace_back(Args&&... args)
     {
-        node_pointer created = make_node(tail_, nullptr, static_cast<Args&&>(args)...);
+        node* created = make_node(tail_, nullptr, static_cast<Args&&>(args)...);
         if (tail_ != nullptr)
             tail_->next = created;
         else
@@ -211,7 +207,12 @@ public:
     }
     CANN_ASC_STL_HOST_SIMT_API void pop_front()
     {
-        node_pointer removed = head_;
+        if (head_ == nullptr) {
+            // Popping an empty list violates the precondition; fail with a
+            // diagnostic instead of dereferencing null.
+            ::asc::std::terminate();
+        }
+        node* removed = head_;
         head_ = removed->next;
         if (head_ != nullptr)
             head_->previous = nullptr;
@@ -222,7 +223,12 @@ public:
     }
     CANN_ASC_STL_HOST_SIMT_API void pop_back()
     {
-        node_pointer removed = tail_;
+        if (tail_ == nullptr) {
+            // Popping an empty list violates the precondition; fail with a
+            // diagnostic instead of dereferencing null.
+            ::asc::std::terminate();
+        }
+        node* removed = tail_;
         tail_ = removed->previous;
         if (tail_ != nullptr)
             tail_->next = nullptr;
@@ -238,24 +244,36 @@ public:
     }
 
 private:
+    CANN_ASC_STL_HOST_SIMT_API void raise_allocation_failure() const
+    {
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        throw ::std::bad_alloc();
+#else
+        ::asc::std::terminate();
+#endif
+    }
     template <class... Args>
-    CANN_ASC_STL_HOST_SIMT_API node_pointer make_node(node_pointer before, node_pointer after, Args&&... args)
+    CANN_ASC_STL_HOST_SIMT_API node* make_node(node* before, node* after, Args&&... args)
     {
         node_allocator nodes(allocator_);
         node_pointer created = nodes.allocate(1);
-        ::new (static_cast<void*>(created)) node(before, after, static_cast<Args&&>(args)...);
-        return created;
+        if (created == nullptr)
+            raise_allocation_failure();
+        // Links are raw node*: reach through the allocated pointer just for
+        // construction and deallocation.
+        ::new (static_cast<void*>(::asc::std::to_address(created))) node(before, after, static_cast<Args&&>(args)...);
+        return ::asc::std::to_address(created);
     }
-    CANN_ASC_STL_HOST_SIMT_API void destroy_node(node_pointer removed)
+    CANN_ASC_STL_HOST_SIMT_API void destroy_node(node* removed)
     {
         node_allocator nodes(allocator_);
         removed->~node();
-        nodes.deallocate(removed, 1);
+        nodes.deallocate(::asc::std::pointer_traits<node_pointer>::pointer_to(*removed), 1);
     }
 
     Allocator allocator_;
-    node_pointer head_ = nullptr;
-    node_pointer tail_ = nullptr;
+    node* head_ = nullptr;
+    node* tail_ = nullptr;
     size_type size_ = 0;
 };
 

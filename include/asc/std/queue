@@ -27,6 +27,9 @@
 #pragma system_header
 #endif
 
+// Typical use: asc::std::queue<int, asc::std::deque<int>> q; or
+// asc::std::queue q(asc::std::deque<int>{}); (CTAD).  The underlying
+// container must provide pop_front, so vector cannot back a queue.
 #include <asc/std/__container_adaptor/priority_queue.h>
 #include <asc/std/__container_adaptor/queue.h>
 

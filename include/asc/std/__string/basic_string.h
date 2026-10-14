@@ -27,13 +27,20 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__exception/terminate.h>
+#include <asc/std/__string/char_traits.h>
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// Byte-oriented traits for arena-domain strings: the same observable
+// semantics as char_traits, kept as a distinct type for arena call sites.
 template <class CharT>
-struct arena_char_traits {
-    using char_type = CharT;
-};
+struct arena_char_traits : __asc_char_traits_impl<CharT, int> {};
 
+// Arena-friendly string: a fixed inline short buffer keeps short strings
+// allocation-free so the nothrow construction domain stays nothrow, and the
+// allocator is only reached once the content outgrows the inline buffer.
+// All character handling goes through Traits so custom traits take effect.
 template <class CharT, class Traits, class Allocator>
 class basic_string {
 public:
@@ -50,20 +57,32 @@ public:
 
     CANN_ASC_STL_API explicit basic_string(const Allocator& allocator) noexcept : allocator_(allocator)
     {
-        reserve(0);
+        adopt_inline_storage();
     }
     CANN_ASC_STL_API basic_string(const CharT* text, const Allocator& allocator) : allocator_(allocator)
     {
-        reserve(0);
-        append(text);
+        adopt_inline_storage();
+        // Measure once and reserve once: constructing from a literal must not
+        // pay a second reallocation after the initial buffer, and short
+        // literals stay in the inline storage without allocating.
+        const size_type count = traits_type::length(text);
+        reserve(count);
+        traits_type::copy(data_, text, count);
+        size_ = count;
+        traits_type::assign(data_[size_], CharT{});
     }
     basic_string(const basic_string&) = delete;
     basic_string& operator=(const basic_string&) = delete;
     basic_string(basic_string&&) = delete;
     basic_string& operator=(basic_string&&) = delete;
+    CANN_ASC_STL_API basic_string& operator=(const CharT* text)
+    {
+        clear();
+        return append(text);
+    }
     CANN_ASC_STL_API ~basic_string()
     {
-        if (data_ != nullptr) {
+        if (heap_allocated_) {
             allocator_.deallocate(data_, capacity_ + 1);
         }
     }
@@ -143,42 +162,38 @@ public:
 
     CANN_ASC_STL_API void reserve(size_type requested)
     {
-        if (data_ != nullptr && requested <= capacity_) {
+        if (requested <= capacity_)
             return;
-        }
-        const size_type next_capacity = requested > capacity_ ? requested : capacity_;
-        pointer replacement = allocator_.allocate(next_capacity + 1);
+        pointer replacement = allocator_.allocate(requested + 1);
         if (replacement == nullptr) {
-            return;
+            // Keeping the stale buffer would let push_back/append/clear write
+            // out of bounds once the arena is exhausted, so fail fast through
+            // the shared failure path instead of returning silently.
+            terminate();
         }
-        for (size_type index = 0; index < size_; ++index) {
-            replacement[index] = data_[index];
-        }
-        replacement[size_] = CharT{};
-        if (data_ != nullptr) {
+        traits_type::copy(replacement, data_, size_);
+        traits_type::assign(replacement[size_], CharT{});
+        if (heap_allocated_) {
             allocator_.deallocate(data_, capacity_ + 1);
         }
         data_ = replacement;
-        capacity_ = next_capacity;
+        capacity_ = requested;
+        heap_allocated_ = true;
     }
     CANN_ASC_STL_API void push_back(CharT value)
     {
         ensure(size_ + 1);
-        data_[size_++] = value;
-        data_[size_] = CharT{};
+        traits_type::assign(data_[size_], value);
+        ++size_;
+        traits_type::assign(data_[size_], CharT{});
     }
     CANN_ASC_STL_API basic_string& append(const CharT* text)
     {
-        size_type count = 0;
-        while (text[count] != CharT{}) {
-            ++count;
-        }
+        const size_type count = traits_type::length(text);
         ensure(size_ + count);
-        for (size_type index = 0; index < count; ++index) {
-            data_[size_ + index] = text[index];
-        }
+        traits_type::copy(data_ + size_, text, count);
         size_ += count;
-        data_[size_] = CharT{};
+        traits_type::assign(data_[size_], CharT{});
         return *this;
     }
     CANN_ASC_STL_API basic_string& operator+=(const CharT* text)
@@ -193,21 +208,34 @@ public:
     CANN_ASC_STL_API void clear() noexcept
     {
         size_ = 0;
-        data_[0] = CharT{};
+        traits_type::assign(data_[0], CharT{});
     }
 
 private:
+    CANN_ASC_STL_API void adopt_inline_storage() noexcept
+    {
+        data_ = inline_storage_;
+        capacity_ = short_capacity;
+        traits_type::assign(data_[0], CharT{});
+    }
     CANN_ASC_STL_API void ensure(size_type requested)
     {
         if (requested > capacity_) {
-            reserve(capacity_ == 0 ? requested : (requested > capacity_ * 2 ? requested : capacity_ * 2));
+            // If doubling wrapped around it lands below the request, so
+            // taking the larger of the two never under-provisions.
+            const size_type doubled = capacity_ * 2;
+            reserve(requested > doubled ? requested : doubled);
         }
     }
+
+    static constexpr size_type short_capacity = 16;
 
     Allocator allocator_;
     pointer data_ = nullptr;
     size_type size_ = 0;
     size_type capacity_ = 0;
+    bool heap_allocated_ = false;
+    value_type inline_storage_[short_capacity + 1];  // NOLINT(runtime/arrays)
 };
 
 CANN_ASC_STL_END_NAMESPACE

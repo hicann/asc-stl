@@ -38,12 +38,30 @@ namespace asc::detail {
 // Some ordinary-AICore compiler revisions lower a uint64_t relational
 // comparison through the signed 64-bit predicate.  Compare the two words
 // explicitly so indices at and above 2^63 retain unsigned ordering.
+// Regression anchor: this workaround was required by the ordinary-AICore
+// toolchain revisions the product was validated on (the signed-predicate
+// lowering).  When a newer toolchain is adopted, re-probe a plain `<` on
+// values straddling 2^63 before simplifying this back.
 CANN_ASC_STL_API constexpr bool work_uint64_less(__UINT64_TYPE__ lhs, __UINT64_TYPE__ rhs) noexcept
 {
     const __UINT32_TYPE__ lhs_high = static_cast<__UINT32_TYPE__>(lhs >> 32);
     const __UINT32_TYPE__ rhs_high = static_cast<__UINT32_TYPE__>(rhs >> 32);
     return lhs_high < rhs_high ||
         (lhs_high == rhs_high && static_cast<__UINT32_TYPE__>(lhs) < static_cast<__UINT32_TYPE__>(rhs));
+}
+
+// Stop of the chunk claimed at current: "cursor + grain size must not
+// overflow" is a documented caller precondition of the queue, and a violated
+// one must not wrap into an inverted chunk (a wrapped stop is small, passes
+// the less-than test and yields end < begin).  A stop that cannot be
+// represented saturates to the maximum instead, where the end bound wins the
+// clamp exactly as the unrepresentable true stop would - the final chunk
+// then still covers [current, end).
+CANN_ASC_STL_API constexpr __UINT64_TYPE__ work_saturating_stop(
+    __UINT64_TYPE__ current, __UINT64_TYPE__ grain_size) noexcept
+{
+    constexpr __UINT64_TYPE__ maximum = ~static_cast<__UINT64_TYPE__>(0);
+    return current > maximum - grain_size ? maximum : current + grain_size;
 }
 
 // Caller-owned global-memory work cursor for dynamic work claiming.  The cell
@@ -74,7 +92,7 @@ struct work_cursor {
             return false;
         }
         claimed_begin = current;
-        const __UINT64_TYPE__ claimed_stop = current + grain_size;
+        const __UINT64_TYPE__ claimed_stop = work_saturating_stop(current, grain_size);
         claimed_end = work_uint64_less(claimed_stop, end) ? claimed_stop : end;
         return true;
     }
@@ -83,17 +101,20 @@ struct work_cursor {
 #if CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
 // Ordinary-AICore core claim: the caller owns the cursor in global memory, so
 // the atomic advances the __gm__-qualified cell through the CANN scalar
-// atomic; the clamping contract matches the member claim exactly.
-CANN_ASC_STL_DEVICE_API bool work_cursor_try_claim(
-    __gm__ work_cursor* cursor, __UINT64_TYPE__& claimed_begin, __UINT64_TYPE__& claimed_end) noexcept
+// atomic.  The bound and grain travel by value, so a claim never re-reads the
+// immutable fields sharing the cursor's cache line with the atomic cell -
+// only the cell itself is touched - and the clamping contract (including the
+// saturating stop above) matches the member claim exactly.
+CANN_ASC_STL_DEVICE_API bool work_cursor_try_claim(__gm__ work_cursor* cursor, __UINT64_TYPE__ grain_size,
+    __UINT64_TYPE__ end, __UINT64_TYPE__& claimed_begin, __UINT64_TYPE__& claimed_end) noexcept
 {
-    const __UINT64_TYPE__ current = asc_atomic_add(&cursor->next, cursor->grain_size);
-    if (!work_uint64_less(current, cursor->end)) {
+    const __UINT64_TYPE__ current = asc_atomic_add(&cursor->next, grain_size);
+    if (!work_uint64_less(current, end)) {
         return false;
     }
     claimed_begin = current;
-    const __UINT64_TYPE__ claimed_stop = current + cursor->grain_size;
-    claimed_end = work_uint64_less(claimed_stop, cursor->end) ? claimed_stop : cursor->end;
+    const __UINT64_TYPE__ claimed_stop = work_saturating_stop(current, grain_size);
+    claimed_end = work_uint64_less(claimed_stop, end) ? claimed_stop : end;
     return true;
 }
 #endif

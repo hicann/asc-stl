@@ -27,6 +27,15 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__exception/terminate.h>
+#include <asc/std/__new/nonallocating_new.h>
+#include <asc/std/__utility/exception_guard.h>
+#include <asc/std/__utility/move.h>
+
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#include <stdexcept>
+#endif
+
 namespace asc::std {
 
 template <class T, class Allocator>
@@ -144,9 +153,28 @@ public:
             return;
         pointer replacement = allocator_.allocate(requested);
         if (replacement == nullptr)
-            return;
+            raise_allocation_failure();
+        // Two-phase migration: construct every element into the replacement
+        // buffer first and only destroy the old elements and release the old
+        // buffer afterwards, so a throwing move constructor leaves the
+        // original sequence intact.  The guard releases the half-built
+        // replacement buffer while unwinding.
+        size_type constructed = 0;
+        auto rollback = [&]() {
+            while (constructed != 0) {
+                --constructed;
+                (replacement + constructed)->~T();
+            }
+            allocator_.deallocate(replacement, requested);
+        };
+        auto guard = ::asc::std::__make_exception_guard(rollback);
         for (size_type index = 0; index < size_; ++index) {
-            ::new (static_cast<void*>(replacement + index)) T(static_cast<T&&>(data_[index]));
+            ::new (static_cast<void*>(replacement + index))
+                T(::asc::std::move(data_[index]));  // NOLINT(build/include_what_you_use)
+            ++constructed;
+        }
+        guard.__complete();
+        for (size_type index = 0; index < size_; ++index) {
             data_[index].~T();
         }
         if (data_ != nullptr)
@@ -185,10 +213,40 @@ public:
     }
 
 private:
+    CANN_ASC_STL_API static constexpr size_type max_size() noexcept
+    {
+        // Conservative upper bound on the element count this vector can index;
+        // doubling past it would wrap the capacity computation.
+        return static_cast<size_type>(-1) / sizeof(T);
+    }
+    CANN_ASC_STL_API void raise_allocation_failure() const
+    {
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        throw ::std::bad_alloc();
+#else
+        ::asc::std::terminate();
+#endif
+    }
+    CANN_ASC_STL_API void raise_length_failure() const
+    {
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        throw ::std::length_error("asc::std::vector: requested capacity exceeds max_size()");
+#else
+        ::asc::std::terminate();
+#endif
+    }
     CANN_ASC_STL_API void ensure_one_more()
     {
-        if (size_ == capacity_)
-            reserve(capacity_ == 0 ? 2 : capacity_ * 2);
+        if (size_ != capacity_)
+            return;
+        const size_type requested = size_ + 1;
+        const size_type doubled = capacity_ == 0 ? static_cast<size_type>(2) : capacity_ * 2;
+        // If doubling wrapped around it lands below the request, so taking the
+        // larger of the two never under-provisions the new capacity.
+        const size_type next = requested > doubled ? requested : doubled;
+        if (next > max_size())
+            raise_length_failure();
+        reserve(next);
     }
     CANN_ASC_STL_API void release() noexcept
     {

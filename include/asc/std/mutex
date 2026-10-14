@@ -22,6 +22,12 @@
 #pragma system_header
 #endif
 
+// This facade ships the lock RAII wrappers and the multi-mutex algorithm
+// only (lock_guard, scoped_lock, unique_lock, try_lock, the lock-tag
+// vocabulary). It deliberately defines no asc::std::mutex/timed_mutex class:
+// the Mutex concept itself is supplied by the caller, matching the
+// registered surface -- do not look for a std-style mutex type here.
+
 #include <asc/std/__mutex/lock_guard.h>
 #include <asc/std/__mutex/lock_tags.h>
 #include <asc/std/__mutex/scoped_lock.h>

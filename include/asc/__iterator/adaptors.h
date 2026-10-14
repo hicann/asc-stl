@@ -29,9 +29,15 @@
 
 namespace asc::detail {
 
-// Index-bound adaptor state shared by the lazy iterator adaptors of the
-// later public facade: an adaptor borrows its source position and exposes
-// only the offset arithmetic, so no lazy view owns the underlying range.
+// Index-bound adaptor state.  Status: the lazy iterator adaptors of the
+// public <asc/iterator> facade each carry their own state members and do not
+// share this base; it stays delivered because the semantics suite
+// (test/support/b024_semantics.h) pins it, and it remains the designated
+// shared base (the dev-side zip_common.h pattern) should the facade adaptors
+// ever be consolidated onto one implementation.  Removing the file or
+// rewiring the facade onto it is a product decision.  An adaptor borrows its
+// source position and exposes only the offset arithmetic, so no lazy view
+// owns the underlying range.
 template <class Source>
 struct iterator_adaptor_state {
     Source source;

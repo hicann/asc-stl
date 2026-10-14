@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::tensor_copy_status::insufficient_destination`表示目标视图不足以覆盖Descriptor所需元素。
+`asc::tensor_copy_status::insufficient_destination` 表示目标视图不足以覆盖 Descriptor 所需元素；在 GM→UB 加载方向，目标端地址未满足搬运引擎 32 字节对齐要求时同样返回本状态。
 
 ## 声明
 

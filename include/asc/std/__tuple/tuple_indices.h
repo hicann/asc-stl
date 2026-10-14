@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef CANN_ASC_STL_STD_DETAIL_TUPLE_TUPLE_INDICES_H
-#define CANN_ASC_STL_STD_DETAIL_TUPLE_TUPLE_INDICES_H
+#ifndef CANN_ASC_STL_ASC_STD___TUPLE_TUPLE_INDICES_H
+#define CANN_ASC_STL_ASC_STD___TUPLE_TUPLE_INDICES_H
 
 #include <asc/__config>
 
@@ -43,4 +43,4 @@ using __make_tuple_indices_t = typename __make_tuple_indices<Ep, Sp>::type;
 
 CANN_ASC_STL_END_NAMESPACE
 
-#endif  // CANN_ASC_STL_STD_DETAIL_TUPLE_TUPLE_INDICES_H
+#endif  // CANN_ASC_STL_ASC_STD___TUPLE_TUPLE_INDICES_H

@@ -28,15 +28,19 @@
 #endif
 
 #include <asc/__pipeline/pipeline.h>
-#include <asc/memory>
 
 #if CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+
+#include <asc/memory>
 
 namespace asc {
 
 // Caller-owned hardware event identifier handed to the borrowed coordinator.
 // The caller guarantees that each ID is exclusively owned for the lifetime of
 // the pipeline so it cannot collide with an existing TPipe/TQue instance.
+// The identifier keeps its unsigned int width through the coordinator state;
+// only the C API boundary narrows into event_t, whose probe-validated budget
+// is the four slots 0..3, so callers should stay inside that budget.
 using pipeline_event_id = unsigned int;
 
 // Borrowed one/two-stage coordinator between global and unified-buffer
@@ -45,14 +49,29 @@ using pipeline_event_id = unsigned int;
 class pipeline_ref {
 public:
     CANN_ASC_STL_DEVICE_API explicit pipeline_ref(pipeline_event_id load_event, pipeline_event_id store_event) noexcept
-        : state_{1, {static_cast<unsigned char>(load_event), 0}, {static_cast<unsigned char>(store_event), 0}}
-    {}
+    {
+        state_.stages = 1;
+        state_.load_events[0] = load_event;
+        state_.store_events[0] = store_event;
+        // The unused second slots stay zero and are never read: every access
+        // is guarded by the stage bounds diagnostic below.
+        state_.load_events[1] = 0;
+        state_.store_events[1] = 0;
+        detail::pipeline_allocate_auxiliary_events(
+            state_.stages, state_.load_events, state_.store_events, state_.drain_event, state_.war_event);
+    }
 
     CANN_ASC_STL_DEVICE_API pipeline_ref(pipeline_event_id load_event0, pipeline_event_id store_event0,
         pipeline_event_id load_event1, pipeline_event_id store_event1) noexcept
-        : state_{2, {static_cast<unsigned char>(load_event0), static_cast<unsigned char>(load_event1)},
-              {static_cast<unsigned char>(store_event0), static_cast<unsigned char>(store_event1)}}
-    {}
+    {
+        state_.stages = 2;
+        state_.load_events[0] = load_event0;
+        state_.store_events[0] = store_event0;
+        state_.load_events[1] = load_event1;
+        state_.store_events[1] = store_event1;
+        detail::pipeline_allocate_auxiliary_events(
+            state_.stages, state_.load_events, state_.store_events, state_.drain_event, state_.war_event);
+    }
 
     CANN_ASC_STL_DEVICE_API pipeline_ref(const pipeline_ref&) noexcept = default;
     CANN_ASC_STL_DEVICE_API pipeline_ref& operator=(const pipeline_ref&) noexcept = default;
@@ -64,11 +83,13 @@ public:
 
     CANN_ASC_STL_DEVICE_API pipeline_event_id load_event(unsigned int stage) const noexcept
     {
+        require_valid_stage(stage);
         return state_.load_events[stage];
     }
 
     CANN_ASC_STL_DEVICE_API pipeline_event_id store_event(unsigned int stage) const noexcept
     {
+        require_valid_stage(stage);
         return state_.store_events[stage];
     }
 
@@ -76,11 +97,13 @@ public:
     // publish that the stage's store slot may be refilled.
     CANN_ASC_STL_DEVICE_API void producer_acquire(unsigned int stage) const noexcept
     {
-        detail::pipeline_producer_acquire(state_.store_events[stage]);
+        require_valid_stage(stage);
+        detail::pipeline_producer_acquire(state_.drain_event, state_.war_event);
     }
 
     CANN_ASC_STL_DEVICE_API void producer_commit(unsigned int stage) const noexcept
     {
+        require_valid_stage(stage);
         detail::pipeline_load_commit(state_.load_events[stage]);
     }
 
@@ -88,11 +111,13 @@ public:
     // that the stage's store buffer was drained.
     CANN_ASC_STL_DEVICE_API void consumer_wait(unsigned int stage) const noexcept
     {
+        require_valid_stage(stage);
         detail::pipeline_load_wait(state_.load_events[stage]);
     }
 
     CANN_ASC_STL_DEVICE_API void consumer_release(unsigned int stage) const noexcept
     {
+        require_valid_stage(stage);
         detail::pipeline_store_release(state_.store_events[stage]);
     }
 
@@ -103,6 +128,23 @@ public:
     }
 
 private:
+    // Stage-bounds diagnostic shared by the event queries and the four
+    // protocol entries: every access is defined for stage < stages() only.
+    // A violation is a caller defect and traps loudly instead of reading out
+    // of bounds or silently synchronizing on the wrong (or the unused zero)
+    // event slot - a one-stage pipeline asked for stage 1 must not quietly
+    // fall back to event 0.
+    CANN_ASC_STL_DEVICE_API void require_valid_stage(unsigned int stage) const noexcept
+    {
+        if (stage >= state_.stages) {
+            // The cce back end lowers builtin traps to an uncallable abort symbol; an
+            // invalid volatile store emits the device fault instead.
+            *reinterpret_cast<volatile unsigned char*>(-1) = 0;
+            for (;;) {
+            }
+        }
+    }
+
     detail::pipeline_state state_;
 };
 
@@ -117,14 +159,36 @@ CANN_ASC_STL_DEVICE_API pipeline_ref make_pipeline(pipeline_event_id load_event0
     return pipeline_ref(load_event0, store_event0, load_event1, store_event1);
 }
 
-// Type-safe asynchronous transfers restricted to the approved scalar set and
-// the two supported directions.  Both ranges must meet the C API alignment
-// requirement and hold equal element counts whose byte size fits a 32-bit
-// transfer length.
+// Canonical per-round sequence for one stage (a two-stage pipeline rotates
+// stages so round i+1 overlaps round i):
+//
+//   producer_acquire(stage)   retire the consumer's scalar reads and the
+//                             store engine's in-flight use of the stage
+//                             buffer before refilling it
+//   copy_async(..., ub, gm)   issue the MTE2 refill; this direction embeds
+//                             no wait (the gate above is the required
+//                             producer_acquire, which is why the pipeline
+//                             and stage parameters go unused here)
+//   producer_commit(stage)    publish the issued load
+//   consumer_wait(stage)      block until the refill is visible
+//   ... compute over the UB stage buffer ...
+//   consumer_release(stage)   retire the scalar pipe's reads
+//   copy_async(..., gm, ub)   issue the MTE3 drain; this direction embeds
+//                             pipeline_store_wait on the stage's store event,
+//                             so it MUST follow consumer_release on the same
+//                             stage - the embedded wait blocks on an event
+//                             nobody else ever sets
+//   pipeline.wait()           after the last round, drain every pipe
+//
+// The two directions are deliberately asymmetric: skipping the waits would
+// race the engines, and duplicating them into the load direction would
+// double-synchronize on events the canonical sequence already pairs.
 template <class T>
 CANN_ASC_STL_DEVICE_API void copy_async(
     const pipeline_ref& pipeline, unsigned int stage, ub_span<T> destination, gm_span<const T> source) noexcept
 {
+    static_assert(detail::is_pipeline_copy_element<T>::value,
+        "copy_async supports the approved int8/uint8/int16/uint16/int32/uint32/float element set only");
     detail::pipeline_copy_gm2ub<T>(
         destination.data(), source.data(), static_cast<unsigned int>(destination.size_bytes()));
     (void)pipeline;
@@ -135,8 +199,10 @@ template <class T>
 CANN_ASC_STL_DEVICE_API void copy_async(
     const pipeline_ref& pipeline, unsigned int stage, gm_span<T> destination, ub_span<const T> source) noexcept
 {
-    detail::pipeline_copy_ub2gm<T>(static_cast<unsigned char>(pipeline.store_event(stage)), destination.data(),
-        source.data(), static_cast<unsigned int>(source.size_bytes()));
+    static_assert(detail::is_pipeline_copy_element<T>::value,
+        "copy_async supports the approved int8/uint8/int16/uint16/int32/uint32/float element set only");
+    detail::pipeline_copy_ub2gm<T>(
+        pipeline.store_event(stage), destination.data(), source.data(), static_cast<unsigned int>(source.size_bytes()));
 }
 
 }  // namespace asc

@@ -27,23 +27,19 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__exception/terminate.h>
+#include <asc/std/__forward_list/node.h>
+#include <asc/std/__iterator/iterator_traits.h>
+#include <asc/std/__memory/pointer_traits.h>
+#include <asc/std/__new/nonallocating_new.h>
+
 namespace asc::std {
 
 template <class T, class Allocator>
 class forward_list {
-    struct node;
+    using node = detail::forward_list_node<T>;
     using node_allocator = typename Allocator::template rebind<node>::other;
     using node_pointer = typename node_allocator::pointer;
-
-    struct node {
-        node_pointer next;
-        T value;
-
-        template <class... Args>
-        CANN_ASC_STL_API explicit node(node_pointer successor, Args&&... args)
-            : next(successor), value(static_cast<Args&&>(args)...)
-        {}
-    };
 
 public:
     using value_type = T;
@@ -54,55 +50,57 @@ public:
 
     class iterator {
     public:
+        using iterator_category = forward_iterator_tag;
         using value_type = T;
         using difference_type = __PTRDIFF_TYPE__;
         using pointer = T*;
         using reference = T&;
 
-        CANN_ASC_STL_API iterator() = default;
-        CANN_ASC_STL_API explicit iterator(node_pointer current) : current_(current)
+        CANN_ASC_STL_HOST_SIMT_API iterator() = default;
+        CANN_ASC_STL_HOST_SIMT_API explicit iterator(node* current) : current_(current)
         {}
-        CANN_ASC_STL_API reference operator*() const
+        CANN_ASC_STL_HOST_SIMT_API reference operator*() const
         {
             return current_->value;
         }
-        CANN_ASC_STL_API pointer operator->() const
+        CANN_ASC_STL_HOST_SIMT_API pointer operator->() const
         {
             return &current_->value;
         }
-        CANN_ASC_STL_API iterator& operator++()
+        CANN_ASC_STL_HOST_SIMT_API iterator& operator++()
         {
             current_ = current_->next;
             return *this;
         }
-        CANN_ASC_STL_API iterator operator++(int)
+        CANN_ASC_STL_HOST_SIMT_API iterator operator++(int)
         {
             iterator previous = *this;
             ++*this;
             return previous;
         }
-        friend CANN_ASC_STL_API bool operator==(iterator left, iterator right)
+        friend CANN_ASC_STL_HOST_SIMT_API bool operator==(iterator left, iterator right)
         {
             return left.current_ == right.current_;
         }
-        friend CANN_ASC_STL_API bool operator!=(iterator left, iterator right)
+        friend CANN_ASC_STL_HOST_SIMT_API bool operator!=(iterator left, iterator right)
         {
             return !(left == right);
         }
 
     private:
-        node_pointer current_ = nullptr;
+        node* current_ = nullptr;
     };
 
-    CANN_ASC_STL_API explicit forward_list(const Allocator& allocator) noexcept : allocator_(allocator)
+    CANN_ASC_STL_HOST_SIMT_API explicit forward_list(const Allocator& allocator) noexcept : allocator_(allocator)
     {}
     forward_list(const forward_list&) = delete;
     forward_list& operator=(const forward_list&) = delete;
-    CANN_ASC_STL_API forward_list(forward_list&& other) noexcept : allocator_(other.allocator_), head_(other.head_)
+    CANN_ASC_STL_HOST_SIMT_API forward_list(forward_list&& other) noexcept
+        : allocator_(other.allocator_), head_(other.head_)
     {
         other.head_ = nullptr;
     }
-    CANN_ASC_STL_API forward_list& operator=(forward_list&& other) noexcept
+    CANN_ASC_STL_HOST_SIMT_API forward_list& operator=(forward_list&& other) noexcept
     {
         if (this != &other) {
             clear();
@@ -112,65 +110,84 @@ public:
         }
         return *this;
     }
-    CANN_ASC_STL_API ~forward_list()
+    CANN_ASC_STL_HOST_SIMT_API ~forward_list()
     {
         clear();
     }
 
-    CANN_ASC_STL_API bool empty() const noexcept
+    CANN_ASC_STL_HOST_SIMT_API bool empty() const noexcept
     {
         return head_ == nullptr;
     }
-    CANN_ASC_STL_API reference front() noexcept
+    CANN_ASC_STL_HOST_SIMT_API reference front() noexcept
     {
         return head_->value;
     }
-    CANN_ASC_STL_API const_reference front() const noexcept
+    CANN_ASC_STL_HOST_SIMT_API const_reference front() const noexcept
     {
         return head_->value;
     }
-    CANN_ASC_STL_API iterator begin() noexcept
+    CANN_ASC_STL_HOST_SIMT_API iterator begin() noexcept
     {
         return iterator(head_);
     }
-    CANN_ASC_STL_API iterator end() noexcept
+    CANN_ASC_STL_HOST_SIMT_API iterator end() noexcept
     {
         return iterator(nullptr);
     }
-    CANN_ASC_STL_API void push_front(const T& value)
+    CANN_ASC_STL_HOST_SIMT_API void push_front(const T& value)
     {
         emplace_front(value);
     }
-    CANN_ASC_STL_API void push_front(T&& value)
+    CANN_ASC_STL_HOST_SIMT_API void push_front(T&& value)
     {
         emplace_front(static_cast<T&&>(value));
     }
     template <class... Args>
-    CANN_ASC_STL_API reference emplace_front(Args&&... args)
+    CANN_ASC_STL_HOST_SIMT_API reference emplace_front(Args&&... args)
     {
         node_allocator nodes(allocator_);
         node_pointer created = nodes.allocate(1);
-        ::new (static_cast<void*>(created)) node(head_, static_cast<Args&&>(args)...);
-        head_ = created;
+        if (created == nullptr)
+            raise_allocation_failure();
+        // Links are raw node*: reach through the allocated pointer just for
+        // construction and deallocation.
+        node* created_node = ::asc::std::to_address(created);
+        ::new (static_cast<void*>(created_node)) node(head_, static_cast<Args&&>(args)...);
+        head_ = created_node;
         return head_->value;
     }
-    CANN_ASC_STL_API void pop_front()
+    CANN_ASC_STL_HOST_SIMT_API void pop_front()
     {
+        if (head_ == nullptr) {
+            // Popping an empty list violates the precondition; fail with a
+            // diagnostic instead of dereferencing null.
+            ::asc::std::terminate();
+        }
         node_allocator nodes(allocator_);
-        node_pointer removed = head_;
+        node* removed = head_;
         head_ = head_->next;
         removed->~node();
-        nodes.deallocate(removed, 1);
+        nodes.deallocate(::asc::std::pointer_traits<node_pointer>::pointer_to(*removed), 1);
     }
-    CANN_ASC_STL_API void clear() noexcept
+    CANN_ASC_STL_HOST_SIMT_API void clear() noexcept
     {
         while (head_ != nullptr)
             pop_front();
     }
 
 private:
+    CANN_ASC_STL_HOST_SIMT_API void raise_allocation_failure() const
+    {
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        throw ::std::bad_alloc();
+#else
+        ::asc::std::terminate();
+#endif
+    }
+
     Allocator allocator_;
-    node_pointer head_ = nullptr;
+    node* head_ = nullptr;
 };
 
 }  // namespace asc::std

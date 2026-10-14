@@ -27,7 +27,6 @@
 #pragma system_header
 #endif
 
-#include <asc/__detail/attributes.h>
 #include <asc/std/__cstddef/types.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE

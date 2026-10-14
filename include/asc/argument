@@ -27,6 +27,9 @@
 #pragma system_header
 #endif
 
+// Backend retained for unit-test coverage and as the designated layering
+// target; the facade classes below are self-contained and do not consume it.
+// Dropping the include or delegating to the backend is a product decision.
 #include <asc/__argument/wrappers.h>
 
 namespace asc::args {
@@ -82,7 +85,7 @@ class immediate {
 public:
     CANN_ASC_STL_API constexpr explicit immediate(T value) noexcept : value_(value), bounds_{}
     {}
-    CANN_ASC_STL_API constexpr immediate(T value, Bounds bounds) noexcept : value_(value), bounds_(bounds)
+    CANN_ASC_STL_API constexpr explicit immediate(T value, Bounds bounds) noexcept : value_(value), bounds_(bounds)
     {}
     CANN_ASC_STL_API constexpr T& value() & noexcept
     {
@@ -103,7 +106,7 @@ class deferred {
 public:
     CANN_ASC_STL_API constexpr explicit deferred(const T* data) noexcept : data_(data), bounds_{}
     {}
-    CANN_ASC_STL_API constexpr deferred(const T* data, Bounds bounds) noexcept : data_(data), bounds_(bounds)
+    CANN_ASC_STL_API constexpr explicit deferred(const T* data, Bounds bounds) noexcept : data_(data), bounds_(bounds)
     {}
     CANN_ASC_STL_API constexpr const T* data() const noexcept
     {
@@ -118,10 +121,10 @@ private:
 template <class T, class Bounds = no_bounds>
 class deferred_sequence {
 public:
-    CANN_ASC_STL_API constexpr deferred_sequence(const T* data, __SIZE_TYPE__ size) noexcept
+    CANN_ASC_STL_API constexpr explicit deferred_sequence(const T* data, __SIZE_TYPE__ size) noexcept
         : data_(data), size_(size), bounds_{}
     {}
-    CANN_ASC_STL_API constexpr deferred_sequence(const T* data, __SIZE_TYPE__ size, Bounds bounds) noexcept
+    CANN_ASC_STL_API constexpr explicit deferred_sequence(const T* data, __SIZE_TYPE__ size, Bounds bounds) noexcept
         : data_(data), size_(size), bounds_(bounds)
     {}
     CANN_ASC_STL_API constexpr const T* data() const noexcept
@@ -139,6 +142,12 @@ private:
     Bounds bounds_;
 };
 
+// Bounds factories.  Reviewed against the device freeze contract: the library
+// itself never initializes a constexpr variable through these CANN_ASC_STL_API
+// functions (constant-expression evaluation inside function bodies is the
+// recorded usage); a constexpr global initializer would reference an
+// API-marked function and must not be added without revisiting the chrono-style
+// tag-construction plus friend-factory shape.
 template <auto Lower, auto Upper>
 CANN_ASC_STL_API constexpr static_bounds<Lower, Upper> bounds() noexcept
 {

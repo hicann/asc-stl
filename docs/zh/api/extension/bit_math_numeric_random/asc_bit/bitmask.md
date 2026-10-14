@@ -61,8 +61,8 @@ template<class T = asc::std::uint32_t> constexpr T bitmask(int start, int width)
 
 ## 约束说明
 
-- T必须为uint32_t或uint64_t。
-- start和width不得为负且不得超出类型位宽，零位宽和全位宽操作不得产生未定义移位。
+- T 必须为 uint32_t 或 uint64_t。
+- start/width 越界（负值、超位宽或 start+width 越过类型位宽窗口）时钳制返回 T{0}，不再构成未定义行为；零位宽同样返回 T{0}，全位宽窗口正常生成全 1 掩码，任何合法输入都不产生未定义移位。
 
 ## 调用示例
 

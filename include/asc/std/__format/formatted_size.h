@@ -29,17 +29,19 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__cstddef/types.h>
-#include <asc/std/__format/format_string.h>
-#include <asc/std/__utility/move.h>
-#include <asc/std/string_view>
+#include <asc/std/__format/format_to.h>
 
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-namespace __format_detail {
-struct formatted_size_tag {};
-}  // namespace __format_detail
+// Measures the formatted length without writing: render_all runs against a
+// null sink and only the character count is reported.
+template <class... Args>
+CANN_ASC_STL_API constexpr size_t formatted_size(format_string<Args...> format, Args&&... args) noexcept
+{
+    return __format_detail::render_all(nullptr, 0, format, static_cast<Args&&>(args)...).total;
+}
 
 CANN_ASC_STL_END_NAMESPACE
 

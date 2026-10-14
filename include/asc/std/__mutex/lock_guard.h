@@ -27,26 +27,7 @@
 #pragma system_header
 #endif
 
-#ifndef CANN_ASC_STL_DETAIL_LOCK_TAG_VOCABULARY
-#define CANN_ASC_STL_DETAIL_LOCK_TAG_VOCABULARY
-
-CANN_ASC_STL_BEGIN_NAMESPACE
-
-namespace __lock_detail {
-template <int Value>
-struct __lock_tag {};
-}  // namespace __lock_detail
-
-using defer_lock_t = __lock_detail::__lock_tag<0>;
-using try_to_lock_t = __lock_detail::__lock_tag<1>;
-using adopt_lock_t = __lock_detail::__lock_tag<2>;
-inline constexpr defer_lock_t defer_lock{};
-inline constexpr try_to_lock_t try_to_lock{};
-inline constexpr adopt_lock_t adopt_lock{};
-
-CANN_ASC_STL_END_NAMESPACE
-
-#endif
+#include <asc/std/__mutex/lock_tags.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 

@@ -28,12 +28,21 @@
 #endif
 
 // Implementation root for the later public <asc/std/cwctype>: the fourteen
-// direct wide classification and conversion functions.  Host delegates to the
-// system locale while Device implements the fixed C locale with pure range
-// semantics, so WEOF and every other out-of-domain value classifies as false
-// and converts unchanged.  The wint_t alias repeats the identical underlying
-// type also spelled by the descriptors root; the same-type redeclaration is
-// legal when the later public facade composes both roots.
+// direct wide classification and conversion functions.  Host delegates to
+// the system locale while Device implements the fixed C locale with pure
+// range semantics.  The fixed-C-locale predicates live as constexpr detail
+// cores so in-library constant evaluation can reuse them on the host side
+// as well, while the public facades keep their registered signatures; the
+// cores deliberately coexist as wint_t overloads with the narrow-character
+// cores of the __cctype root.
+//
+// Out-of-domain inputs: Device classifies WEOF and every other value
+// outside the portable source range as false and converts it unchanged.
+// Host preserves the C standard contract instead, where a wint_t value not
+// representable as a wchar_t nor equal to WEOF is undefined behavior.
+// The wint_t alias repeats the identical underlying type also spelled by
+// the descriptors root; the same-type redeclaration is legal when the
+// later public facade composes both roots.
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #include <cwctype>
@@ -47,10 +56,97 @@ using wint_t = unsigned int;
 using wint_t = ::std::wint_t;
 #endif
 
+namespace detail {
+
+CANN_ASC_STL_API constexpr bool is_upper(wint_t value) noexcept
+{
+    return value >= L'A' && value <= L'Z';
+}
+
+CANN_ASC_STL_API constexpr bool is_lower(wint_t value) noexcept
+{
+    return value >= L'a' && value <= L'z';
+}
+
+CANN_ASC_STL_API constexpr bool is_alpha(wint_t value) noexcept
+{
+    return is_upper(value) || is_lower(value);
+}
+
+CANN_ASC_STL_API constexpr bool is_digit(wint_t value) noexcept
+{
+    return value >= L'0' && value <= L'9';
+}
+
+CANN_ASC_STL_API constexpr bool is_xdigit(wint_t value) noexcept
+{
+    return is_digit(value) || (value >= L'A' && value <= L'F') || (value >= L'a' && value <= L'f');
+}
+
+CANN_ASC_STL_API constexpr bool is_alnum(wint_t value) noexcept
+{
+    return is_alpha(value) || is_digit(value);
+}
+
+CANN_ASC_STL_API constexpr bool is_blank(wint_t value) noexcept
+{
+    return value == L' ' || value == L'\t';
+}
+
+CANN_ASC_STL_API constexpr bool is_space(wint_t value) noexcept
+{
+    return value == L' ' || (value >= L'\t' && value <= L'\r');
+}
+
+CANN_ASC_STL_API constexpr bool is_cntrl(wint_t value) noexcept
+{
+    return value < wint_t(0x20) || value == wint_t(0x7f);
+}
+
+CANN_ASC_STL_API constexpr bool is_print(wint_t value) noexcept
+{
+    return value >= wint_t(0x20) && value <= wint_t(0x7e);
+}
+
+CANN_ASC_STL_API constexpr bool is_graph(wint_t value) noexcept
+{
+    return value >= wint_t(0x21) && value <= wint_t(0x7e);
+}
+
+CANN_ASC_STL_API constexpr bool is_punct(wint_t value) noexcept
+{
+    return is_graph(value) && !is_alnum(value);
+}
+
+CANN_ASC_STL_API constexpr wint_t to_lower(wint_t value) noexcept
+{
+    return is_upper(value) ? value + (L'a' - L'A') : value;
+}
+
+CANN_ASC_STL_API constexpr wint_t to_upper(wint_t value) noexcept
+{
+    return is_lower(value) ? value - (L'a' - L'A') : value;
+}
+
+}  // namespace detail
+
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// WEOF is all bits set in the unsigned device wint_t, so it must fall
+// outside every classification range; pinned statically so future range
+// edits cannot silently break the documented out-of-domain contract.
+static_assert(!(detail::is_upper(static_cast<wint_t>(-1)) || detail::is_lower(static_cast<wint_t>(-1)) ||
+                  detail::is_alpha(static_cast<wint_t>(-1)) || detail::is_digit(static_cast<wint_t>(-1)) ||
+                  detail::is_xdigit(static_cast<wint_t>(-1)) || detail::is_alnum(static_cast<wint_t>(-1)) ||
+                  detail::is_blank(static_cast<wint_t>(-1)) || detail::is_space(static_cast<wint_t>(-1)) ||
+                  detail::is_cntrl(static_cast<wint_t>(-1)) || detail::is_print(static_cast<wint_t>(-1)) ||
+                  detail::is_graph(static_cast<wint_t>(-1)) || detail::is_punct(static_cast<wint_t>(-1))),
+    "WEOF must not satisfy any wide classification predicate");
+#endif
+
 CANN_ASC_STL_API int iswupper(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return value >= L'A' && value <= L'Z';
+    return ::asc::std::detail::is_upper(value);
 #else
     return ::std::iswupper(value);
 #endif
@@ -59,7 +155,7 @@ CANN_ASC_STL_API int iswupper(wint_t value) noexcept
 CANN_ASC_STL_API int iswlower(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return value >= L'a' && value <= L'z';
+    return ::asc::std::detail::is_lower(value);
 #else
     return ::std::iswlower(value);
 #endif
@@ -68,7 +164,7 @@ CANN_ASC_STL_API int iswlower(wint_t value) noexcept
 CANN_ASC_STL_API int iswalpha(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return iswupper(value) || iswlower(value);
+    return ::asc::std::detail::is_alpha(value);
 #else
     return ::std::iswalpha(value);
 #endif
@@ -77,7 +173,7 @@ CANN_ASC_STL_API int iswalpha(wint_t value) noexcept
 CANN_ASC_STL_API int iswdigit(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return value >= L'0' && value <= L'9';
+    return ::asc::std::detail::is_digit(value);
 #else
     return ::std::iswdigit(value);
 #endif
@@ -86,7 +182,7 @@ CANN_ASC_STL_API int iswdigit(wint_t value) noexcept
 CANN_ASC_STL_API int iswxdigit(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return iswdigit(value) || (value >= L'A' && value <= L'F') || (value >= L'a' && value <= L'f');
+    return ::asc::std::detail::is_xdigit(value);
 #else
     return ::std::iswxdigit(value);
 #endif
@@ -95,7 +191,7 @@ CANN_ASC_STL_API int iswxdigit(wint_t value) noexcept
 CANN_ASC_STL_API int iswalnum(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return iswalpha(value) || iswdigit(value);
+    return ::asc::std::detail::is_alnum(value);
 #else
     return ::std::iswalnum(value);
 #endif
@@ -104,7 +200,7 @@ CANN_ASC_STL_API int iswalnum(wint_t value) noexcept
 CANN_ASC_STL_API int iswblank(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return value == L' ' || value == L'\t';
+    return ::asc::std::detail::is_blank(value);
 #else
     return ::std::iswblank(value);
 #endif
@@ -113,7 +209,7 @@ CANN_ASC_STL_API int iswblank(wint_t value) noexcept
 CANN_ASC_STL_API int iswspace(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return value == L' ' || (value >= L'\t' && value <= L'\r');
+    return ::asc::std::detail::is_space(value);
 #else
     return ::std::iswspace(value);
 #endif
@@ -122,7 +218,7 @@ CANN_ASC_STL_API int iswspace(wint_t value) noexcept
 CANN_ASC_STL_API int iswcntrl(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return value < 0x20 || value == 0x7f;
+    return ::asc::std::detail::is_cntrl(value);
 #else
     return ::std::iswcntrl(value);
 #endif
@@ -131,7 +227,7 @@ CANN_ASC_STL_API int iswcntrl(wint_t value) noexcept
 CANN_ASC_STL_API int iswprint(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return value >= 0x20 && value <= 0x7e;
+    return ::asc::std::detail::is_print(value);
 #else
     return ::std::iswprint(value);
 #endif
@@ -140,7 +236,7 @@ CANN_ASC_STL_API int iswprint(wint_t value) noexcept
 CANN_ASC_STL_API int iswgraph(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return value >= 0x21 && value <= 0x7e;
+    return ::asc::std::detail::is_graph(value);
 #else
     return ::std::iswgraph(value);
 #endif
@@ -149,7 +245,7 @@ CANN_ASC_STL_API int iswgraph(wint_t value) noexcept
 CANN_ASC_STL_API int iswpunct(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return iswgraph(value) && !iswalnum(value);
+    return ::asc::std::detail::is_punct(value);
 #else
     return ::std::iswpunct(value);
 #endif
@@ -158,7 +254,7 @@ CANN_ASC_STL_API int iswpunct(wint_t value) noexcept
 CANN_ASC_STL_API wint_t towlower(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return iswupper(value) ? value + (L'a' - L'A') : value;
+    return ::asc::std::detail::to_lower(value);
 #else
     return ::std::towlower(value);
 #endif
@@ -167,7 +263,7 @@ CANN_ASC_STL_API wint_t towlower(wint_t value) noexcept
 CANN_ASC_STL_API wint_t towupper(wint_t value) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return iswlower(value) ? value - (L'a' - L'A') : value;
+    return ::asc::std::detail::to_upper(value);
 #else
     return ::std::towupper(value);
 #endif

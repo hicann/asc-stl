@@ -29,11 +29,23 @@
 
 namespace asc {
 
+// Policy for resolving equal extremes in min/max_element-style fronts.
 enum class tie_break {
+    // Any implementation choice is allowed; implementations pick their
+    // fastest path and the returned index among equal elements is
+    // unspecified.
     unspecified,
+    // Among equal elements the earliest (smallest index) is returned.
     prefer_smaller_index,
+    // Among equal elements the latest (largest index) is returned.
     prefer_larger_index,
 };
+
+// Current behaviour boundary: the value is recorded and observable through
+// execution_requirements::tie_break_value(), but the parallel extreme-value
+// fronts do not yet consult the policy, so results currently behave as
+// `unspecified` regardless of the requested tie break.  Honouring the policy
+// is a parallel-backend follow-up.
 
 }  // namespace asc
 

@@ -38,6 +38,8 @@
 | [asc::std::atomic::is_always_lock_free](atomic_is_always_lock_free.md) | 变量 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::atomic::is_lock_free](atomic_is_lock_free_member_function.md) | 成员函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::atomic::load](atomic_load_member_function.md) | 成员函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::atomic::operator T](atomic_operator_t.md) | 成员函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::atomic::operator=](atomic_operator_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::atomic::storage_type](atomic_storage_type.md) | 类型别名 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::atomic::store](atomic_store_member_function.md) | 成员函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::atomic::value_type](atomic_value_type.md) | 类型别名 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
@@ -96,6 +98,10 @@
 | [asc::std::atomic_long](atomic_long.md) | 类型别名 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::atomic_ptrdiff_t](atomic_ptrdiff_t.md) | 类型别名 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::atomic_ref](atomic_ref.md) | 类模板 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::atomic_ref::fetch_and](atomic_ref_fetch_and.md) | 成员函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::atomic_ref::fetch_or](atomic_ref_fetch_or.md) | 成员函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::atomic_ref::fetch_xor](atomic_ref_fetch_xor.md) | 成员函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::atomic_ref::operator=](atomic_ref_operator_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::atomic_schar](atomic_schar.md) | 类型别名 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::atomic_short](atomic_short.md) | 类型别名 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::atomic_signed_lock_free](atomic_signed_lock_free.md) | 类型别名 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |

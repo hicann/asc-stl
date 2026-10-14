@@ -29,6 +29,10 @@
 #define CANN_ASC_STL_DETAIL_DIAGNOSTIC_POP() CANN_ASC_STL_DETAIL_PRAGMA(GCC diagnostic pop)
 #define CANN_ASC_STL_DETAIL_DIAGNOSTIC_IGNORE(option) CANN_ASC_STL_DETAIL_PRAGMA(GCC diagnostic ignored option)
 #else
+// MSVC (and any unknown compiler): diagnostic push/pop degrade to no-ops.
+// MSVC is detected but not a supported target (see the note in <asc/__config>),
+// so a #pragma warning(...) mapping is intentionally NOT provided here; the
+// IGNORE arguments in supported builds are GCC/clang spelling anyway.
 #define CANN_ASC_STL_DETAIL_DIAGNOSTIC_PUSH()
 #define CANN_ASC_STL_DETAIL_DIAGNOSTIC_POP()
 #define CANN_ASC_STL_DETAIL_DIAGNOSTIC_IGNORE(option)

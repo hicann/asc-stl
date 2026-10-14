@@ -29,26 +29,47 @@
 
 namespace asc::detail {
 
-// Extension math backend vocabulary shared by the later public <asc/cmath>
-// operations: the classification and sign primitives are expressed through
-// compiler builtins so Host, D-SIMD and D-SIMT share one spelling.  The
-// delivered float math itself is owned by the standard __cmath backend.
+// Extension math backend vocabulary.  Status: the public <asc/cmath> facade
+// implements its own integer/sincos vocabulary and currently consumes none of
+// these classification primitives; they stay delivered because the semantics
+// suite (test/support/b024_semantics.h) pins their behaviour, and they remain
+// the designated primitives should the facade delegate to them.  Removing the
+// file or wiring the facade onto it is a product decision.  The
+// classification and sign primitives are expressed through compiler builtins
+// so Host, D-SIMD and D-SIMT share one spelling.  The delivered float math
+// itself is owned by the standard __cmath backend.
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 CANN_ASC_STL_API constexpr bool math_is_nan(float value) noexcept
+#else
+CANN_ASC_STL_API bool math_is_nan(float value) noexcept
+#endif
 {
     return __builtin_isnan(value);
 }
 
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 CANN_ASC_STL_API constexpr bool math_is_inf(float value) noexcept
+#else
+CANN_ASC_STL_API bool math_is_inf(float value) noexcept
+#endif
 {
     return __builtin_isinf(value);
 }
 
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+CANN_ASC_STL_API constexpr bool math_sign_bit(float value) noexcept
+#else
 CANN_ASC_STL_API bool math_sign_bit(float value) noexcept
+#endif
 {
     return __builtin_signbit(value);
 }
 
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 CANN_ASC_STL_API constexpr float math_quiet_nan() noexcept
+#else
+CANN_ASC_STL_API float math_quiet_nan() noexcept
+#endif
 {
     return __builtin_nanf("");
 }
@@ -58,8 +79,10 @@ CANN_ASC_STL_API constexpr float math_infinity() noexcept
     return __builtin_huge_valf();
 }
 
-// A zero input returns the input unchanged so the standard signed-zero
-// contract survives backend dispatch.
+// Truncation towards zero (NOT half-away-from-zero rounding: 2.5 gives 2,
+// not 3) that preserves the sign of a zero input, so the standard signed-zero
+// contract survives backend dispatch.  Callers wanting std::round semantics
+// must not route through this primitive.
 CANN_ASC_STL_API constexpr float math_round_preserve_zero(float value) noexcept
 {
     if (value == 0.0f || math_is_nan(value) || math_is_inf(value)) {

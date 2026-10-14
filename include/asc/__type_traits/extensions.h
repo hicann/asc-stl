@@ -37,14 +37,18 @@ namespace asc {
 // True when comparing object representations byte by byte gives the same
 // answer as comparing values with operator==.  Standard integer types satisfy
 // the precondition; floating-point types do not (signed zero and NaN), and no
-// CCE register-vector type is classified.
-template <class _Tp>
+// CCE register-vector type is classified.  cv-qualified views of a comparable
+// type stay comparable (the qualifiers do not change the object
+// representation), so the cv forms forward to the unqualified answer instead
+// of silently falling back to false and disabling byte-wise fast paths for
+// const-element containers.
+template <class T>
 struct is_bitwise_comparable {
     static constexpr bool value = false;
 };
 
-template <class _Tp>
-inline constexpr bool is_bitwise_comparable_v = is_bitwise_comparable<_Tp>::value;
+template <class T>
+inline constexpr bool is_bitwise_comparable_v = is_bitwise_comparable<T>::value;
 
 #define CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(...) \
     template <>                                     \
@@ -65,29 +69,41 @@ CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(long long)
 CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE(unsigned long long)
 #undef CANN_ASC_STL_DETAIL_BITWISE_COMPARABLE
 
+template <class T>
+struct is_bitwise_comparable<const T> : is_bitwise_comparable<T> {};
+template <class T>
+struct is_bitwise_comparable<volatile T> : is_bitwise_comparable<T> {};
+template <class T>
+struct is_bitwise_comparable<const volatile T> : is_bitwise_comparable<T> {};
+
 // True for extended floating-point types beyond the three standard ones.  No
 // such type is part of the delivered public surface yet; low-precision types
 // opt in when their public contract is approved.
-template <class _Tp>
+template <class T>
 struct is_extended_floating_point {
     static constexpr bool value = false;
 };
 
-template <class _Tp>
-inline constexpr bool is_extended_floating_point_v = is_extended_floating_point<_Tp>::value;
+template <class T>
+inline constexpr bool is_extended_floating_point_v = is_extended_floating_point<T>::value;
 
 // True when relocation (destroy the source, bitwise copy to the destination)
 // is equivalent to moving the object with memcpy.  Trivially copyable types
 // satisfy the precondition because trivial copyability already requires a
 // trivial, non-deleted destructor.  A type with custom copy/destruction whose
 // object is still memcpy-safe may opt in through an explicit specialization.
-template <class _Tp>
+// The struct is the customization point on purpose: the _v alias reads
+// through it, so a single struct specialization is enough and the _v variable
+// stays non-specializable.  (The dev-side reference instead makes the
+// variable template the customization point; switching forms would break
+// existing struct specializations and is a registry-level decision.)
+template <class T>
 struct is_trivially_relocatable {
-    static constexpr bool value = __is_trivially_copyable(_Tp);
+    static constexpr bool value = __is_trivially_copyable(T);
 };
 
-template <class _Tp>
-inline constexpr bool is_trivially_relocatable_v = is_trivially_relocatable<_Tp>::value;
+template <class T>
+inline constexpr bool is_trivially_relocatable_v = is_trivially_relocatable<T>::value;
 
 }  // namespace asc
 

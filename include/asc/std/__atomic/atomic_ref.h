@@ -103,6 +103,12 @@ public:
     atomic_ref(const atomic_ref&) noexcept = default;
     atomic_ref& operator=(const atomic_ref&) = delete;
 
+    CANN_ASC_STL_SIMT_API T operator=(T value) const noexcept
+    {
+        store(value);
+        return value;
+    }
+
     CANN_ASC_STL_SIMT_API bool is_lock_free() const noexcept
     {
         return true;
@@ -180,6 +186,30 @@ public:
         __atomic_ref_detail::fence_after(order, address_);
         return old;
     }
+
+    CANN_ASC_STL_SIMT_API T fetch_and(T value, memory_order order = memory_order_seq_cst) const noexcept
+    {
+        __atomic_ref_detail::fence_before(order);
+        const T old = ::asc::detail::atomic_and(address_, value);
+        __atomic_ref_detail::fence_after(order, address_);
+        return old;
+    }
+
+    CANN_ASC_STL_SIMT_API T fetch_or(T value, memory_order order = memory_order_seq_cst) const noexcept
+    {
+        __atomic_ref_detail::fence_before(order);
+        const T old = ::asc::detail::atomic_or(address_, value);
+        __atomic_ref_detail::fence_after(order, address_);
+        return old;
+    }
+
+    CANN_ASC_STL_SIMT_API T fetch_xor(T value, memory_order order = memory_order_seq_cst) const noexcept
+    {
+        __atomic_ref_detail::fence_before(order);
+        const T old = ::asc::detail::atomic_xor(address_, value);
+        __atomic_ref_detail::fence_after(order, address_);
+        return old;
+    }
 #elif !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     explicit atomic_ref(T& value) noexcept : address_(&value)
     {}
@@ -201,6 +231,12 @@ public:
         __atomic_store_n(address_, value, static_cast<int>(order));
     }
 
+    T operator=(T value) const noexcept
+    {
+        store(value);
+        return value;
+    }
+
     T exchange(T value, memory_order order = memory_order_seq_cst) const noexcept
     {
         return __atomic_exchange_n(address_, value, static_cast<int>(order));
@@ -208,8 +244,8 @@ public:
 
     bool compare_exchange_strong(T& expected, T desired, memory_order success, memory_order failure) const noexcept
     {
-        return __atomic_compare_exchange_n(
-            address_, &expected, desired, false, static_cast<int>(success), static_cast<int>(failure));
+        return __atomic_compare_exchange_n(address_, &expected, desired, false, static_cast<int>(success),
+            static_cast<int>(::asc::detail::atomic_failure_order(failure)));
     }
 
     bool compare_exchange_strong(T& expected, T desired, memory_order order = memory_order_seq_cst) const noexcept
@@ -219,8 +255,8 @@ public:
 
     bool compare_exchange_weak(T& expected, T desired, memory_order success, memory_order failure) const noexcept
     {
-        return __atomic_compare_exchange_n(
-            address_, &expected, desired, true, static_cast<int>(success), static_cast<int>(failure));
+        return __atomic_compare_exchange_n(address_, &expected, desired, true, static_cast<int>(success),
+            static_cast<int>(::asc::detail::atomic_failure_order(failure)));
     }
 
     bool compare_exchange_weak(T& expected, T desired, memory_order order = memory_order_seq_cst) const noexcept
@@ -236,6 +272,21 @@ public:
     T fetch_sub(T value, memory_order order = memory_order_seq_cst) const noexcept
     {
         return __atomic_fetch_sub(address_, value, static_cast<int>(order));
+    }
+
+    T fetch_and(T value, memory_order order = memory_order_seq_cst) const noexcept
+    {
+        return __atomic_fetch_and(address_, value, static_cast<int>(order));
+    }
+
+    T fetch_or(T value, memory_order order = memory_order_seq_cst) const noexcept
+    {
+        return __atomic_fetch_or(address_, value, static_cast<int>(order));
+    }
+
+    T fetch_xor(T value, memory_order order = memory_order_seq_cst) const noexcept
+    {
+        return __atomic_fetch_xor(address_, value, static_cast<int>(order));
     }
 #else
     explicit atomic_ref(T&) = delete;

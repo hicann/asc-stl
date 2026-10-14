@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CANN_ASC_STL_STD_DETAIL_CWCHAR_ALGORITHMS_H
-#define CANN_ASC_STL_STD_DETAIL_CWCHAR_ALGORITHMS_H
+#ifndef CANN_ASC_STL_ASC_STD___CWCHAR_ALGORITHMS_H
+#define CANN_ASC_STL_ASC_STD___CWCHAR_ALGORITHMS_H
 
 #include <asc/__config>
 
@@ -326,4 +326,4 @@ CANN_ASC_STL_API wchar_t* wmemset(wchar_t* destination, wchar_t value, __SIZE_TY
 
 CANN_ASC_STL_END_NAMESPACE
 
-#endif  // CANN_ASC_STL_STD_DETAIL_CWCHAR_ALGORITHMS_H
+#endif  // CANN_ASC_STL_ASC_STD___CWCHAR_ALGORITHMS_H

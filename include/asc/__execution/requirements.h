@@ -29,6 +29,14 @@
 
 namespace asc::detail {
 
+// Execution-space requirement bitset.  Status: the public
+// <asc/execution.require.h> facade exposes the execution_requirements value
+// triple (determinism/output_ordering/tie_break) and does not consume this
+// vocabulary; the bitset stays delivered because the semantics suite
+// (test/support/b014_semantics.h) pins it, and it remains the reserved
+// vocabulary for future parallelism-degree negotiation.  Removing it or
+// exposing it through the facade is a product decision; note the
+// near-collision with the public execution_requirements class name.
 enum class execution_requirement : unsigned char {
     none = 0,
     host = 1,
@@ -41,6 +49,29 @@ CANN_ASC_STL_API constexpr execution_requirement operator|(
     execution_requirement left, execution_requirement right) noexcept
 {
     return static_cast<execution_requirement>(static_cast<unsigned char>(left) | static_cast<unsigned char>(right));
+}
+
+CANN_ASC_STL_API constexpr execution_requirement operator&(
+    execution_requirement left, execution_requirement right) noexcept
+{
+    return static_cast<execution_requirement>(static_cast<unsigned char>(left) & static_cast<unsigned char>(right));
+}
+
+CANN_ASC_STL_API constexpr execution_requirement operator~(execution_requirement value) noexcept
+{
+    return static_cast<execution_requirement>(~static_cast<unsigned char>(value));
+}
+
+CANN_ASC_STL_API constexpr execution_requirement operator|=(
+    execution_requirement& left, execution_requirement right) noexcept
+{
+    return left = left | right;
+}
+
+CANN_ASC_STL_API constexpr execution_requirement operator&=(
+    execution_requirement& left, execution_requirement right) noexcept
+{
+    return left = left & right;
 }
 
 CANN_ASC_STL_API constexpr bool has_requirement(execution_requirement value, execution_requirement expected) noexcept

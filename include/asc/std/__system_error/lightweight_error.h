@@ -27,25 +27,19 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__system_error/errc.h>
+#include <asc/std/__type_traits/integral_constant.h>
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#ifndef CANN_ASC_STL_DETAIL_ERRC_DEFINED
-#define CANN_ASC_STL_DETAIL_ERRC_DEFINED
-enum class errc { invalid_argument = 22, result_out_of_range = 34, value_too_large = 75 };
-#endif
-
+// UnaryTypeTrait protocol: inheriting integral_constant keeps ::type, the
+// bool conversion and trait composition available to generic code.
 template <class T>
-struct is_error_code_enum {
-    static constexpr bool value = false;
-};
+struct is_error_code_enum : false_type {};
 template <class T>
-struct is_error_condition_enum {
-    static constexpr bool value = false;
-};
+struct is_error_condition_enum : false_type {};
 template <>
-struct is_error_condition_enum<errc> {
-    static constexpr bool value = true;
-};
+struct is_error_condition_enum<errc> : true_type {};
 
 CANN_ASC_STL_END_NAMESPACE
 

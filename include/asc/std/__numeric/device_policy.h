@@ -32,14 +32,21 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// Adapter entry for the seven asc::std synchronous numeric overloads whose
-// first parameter is exactly asc::device_policy (adjacent_difference,
-// exclusive_scan, inclusive_scan, reduce, transform_exclusive_scan,
-// transform_inclusive_scan, transform_reduce): it composes the asynchronous
-// parallel numeric frontend contract with the immutable policy vocabulary so
-// the later public <asc/std/numeric> facade re-exports both through one
-// owned path.  The adapter adds no entity of its own; every callable surface
-// stays owned by the frontend and policy headers above.
+// Adapter entry that lets the asc::parallel numeric frontends
+// (adjacent_difference, exclusive_scan, inclusive_scan, reduce,
+// transform_exclusive_scan, transform_inclusive_scan, transform_reduce -
+// registered under the asc/algorithm facade, defined in
+// asc/__algorithm/frontend.h) and the asc::device_policy vocabulary be pulled
+// in through the <asc/std/numeric> facade by including this one header. Note
+// what this header is not: there is no asc::std::reduce(policy, ...) overload
+// set here - the device-policy entry points live in namespace asc::parallel,
+// return execution_status and write results to caller-owned GM sinks, and
+// exist only on __clang__ builds that define CANN_ASC_STL_USE_SIMT_LAUNCH.
+// Include-cost note: <asc/algorithm> below transitively carries the whole
+// algorithm parallel/runtime stack for the sake of the numeric frontends;
+// splitting a lightweight subset header is a facade-layering decision
+// deferred to the facade owners (keep it in lockstep with the __algorithm
+// adapter twin).
 
 CANN_ASC_STL_END_NAMESPACE
 

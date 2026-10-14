@@ -27,6 +27,8 @@
 #pragma system_header
 #endif
 
+#include <asc/__memory/buffers.h>
+
 #if CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
 #define CANN_ASC_STL_DETAIL_MEMORY_GM __gm__
 #define CANN_ASC_STL_DETAIL_MEMORY_UB __ubuf__
@@ -72,6 +74,9 @@ public:
     }
     CANN_ASC_STL_API constexpr size_type size_bytes() const noexcept
     {
+        // Precondition: size_ * sizeof(T) must not overflow size_type; the
+        // span is a view over storage that exists, so realistic sizes cannot
+        // wrap (only adversarial hand-constructed spans could).
         return size_ * sizeof(T);
     }
     CANN_ASC_STL_API constexpr bool empty() const noexcept
@@ -82,17 +87,20 @@ public:
     {
         return data_[index];
     }
+    // Slicing is fail-closed like the rest of the memory layer: a count or
+    // offset outside [0, size()] yields an empty span instead of a wrapped
+    // pointer, both on host and device compilation.
     CANN_ASC_STL_API constexpr gm_span first(size_type count) const noexcept
     {
-        return {data_, count};
+        return count > size_ ? gm_span{} : gm_span{data_, count};
     }
     CANN_ASC_STL_API constexpr gm_span last(size_type count) const noexcept
     {
-        return {data_ + size_ - count, count};
+        return count > size_ ? gm_span{} : gm_span{data_ + size_ - count, count};
     }
     CANN_ASC_STL_API constexpr gm_span subspan(size_type offset, size_type count) const noexcept
     {
-        return {data_ + offset, count};
+        return offset > size_ || count > size_ - offset ? gm_span{} : gm_span{data_ + offset, count};
     }
 
 private:
@@ -127,6 +135,7 @@ public:
     }
     CANN_ASC_STL_API constexpr size_type size_bytes() const noexcept
     {
+        // Same no-overflow precondition as gm_span::size_bytes.
         return size_ * sizeof(T);
     }
     CANN_ASC_STL_API constexpr bool empty() const noexcept
@@ -137,17 +146,18 @@ public:
     {
         return data_[index];
     }
+    // Slicing is fail-closed exactly as gm_span.
     CANN_ASC_STL_API constexpr ub_span first(size_type count) const noexcept
     {
-        return {data_, count};
+        return count > size_ ? ub_span{} : ub_span{data_, count};
     }
     CANN_ASC_STL_API constexpr ub_span last(size_type count) const noexcept
     {
-        return {data_ + size_ - count, count};
+        return count > size_ ? ub_span{} : ub_span{data_ + size_ - count, count};
     }
     CANN_ASC_STL_API constexpr ub_span subspan(size_type offset, size_type count) const noexcept
     {
-        return {data_ + offset, count};
+        return offset > size_ || count > size_ - offset ? ub_span{} : ub_span{data_ + offset, count};
     }
 
 private:
@@ -168,15 +178,25 @@ public:
         : storage_(static_cast<unsigned char*>(storage)), size_(size)
     {}
 
+    // Fail-closed bump allocation. Zero-byte requests are rejected (return
+    // nullptr) so two zero-size allocations can never alias one address, and
+    // the request is checked against the remaining bytes before any offset
+    // arithmetic, which makes the offset+size addition below non-wrapping.
     CANN_ASC_STL_API constexpr void* allocate(__SIZE_TYPE__ size, __SIZE_TYPE__ alignment) noexcept
     {
-        if (alignment == 0 || (alignment & (alignment - 1U)) != 0 || storage_ == nullptr) {
+        if (storage_ == nullptr || size == 0 || size > remaining()) {
+            return nullptr;
+        }
+        if (alignment == 0 || (alignment & (alignment - 1U)) != 0) {
             return nullptr;
         }
         const auto base = reinterpret_cast<__UINTPTR_TYPE__>(storage_ + used_);
         const auto aligned = (base + alignment - 1U) & ~(alignment - 1U);
         const auto next = static_cast<__SIZE_TYPE__>(aligned - reinterpret_cast<__UINTPTR_TYPE__>(storage_)) + size;
         if (next > size_) {
+            // The alignment padding pushed the offset past the end; `next`
+            // cannot have wrapped here because both the offset and the size
+            // are individually bounded by size_.
             return nullptr;
         }
         used_ = next;
@@ -205,6 +225,12 @@ private:
     __SIZE_TYPE__ used_{};
 };
 
+// Non-standard allocator over a monotonic_arena. Contract (deliberate
+// deviation from the C++ named allocator requirements): it exists for
+// non-standard containers and hand-written allocation paths, never for
+// std-compatible containers; a count whose byte size overflows, a zero
+// count, and arena exhaustion all return nullptr instead of raising, so
+// callers must null-check the result.
 template <class T>
 class arena_allocator {
 public:
@@ -223,7 +249,13 @@ public:
 
     CANN_ASC_STL_API constexpr T* allocate(__SIZE_TYPE__ count) noexcept
     {
-        return arena_ == nullptr ? nullptr : static_cast<T*>(arena_->allocate(count * sizeof(T), alignof(T)));
+        if (arena_ == nullptr || count == 0) {
+            return nullptr;
+        }
+        // Overflow-checked byte size: a wrapped count*sizeof(T) reports zero
+        // and turns into a nullptr instead of a silently tiny allocation.
+        const __SIZE_TYPE__ bytes = detail::buffer_element_bytes(sizeof(T), count);
+        return bytes == 0 ? nullptr : static_cast<T*>(arena_->allocate(bytes, alignof(T)));
     }
     CANN_ASC_STL_API constexpr void deallocate(T*, __SIZE_TYPE__) noexcept
     {}
@@ -290,6 +322,8 @@ public:
 template <class Integer>
 CANN_ASC_STL_API constexpr Integer aligned_size(Integer size, Integer alignment) noexcept
 {
+    // Precondition: size + alignment - 1 must not overflow Integer; callers
+    // round real buffer sizes, for which the slack cannot wrap.
     return alignment == 0 ? size : static_cast<Integer>((size + alignment - 1) / alignment * alignment);
 }
 

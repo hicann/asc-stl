@@ -28,6 +28,5 @@
 #endif
 
 #include <asc/std/__forward_list/forward_list.h>
-#include <asc/std/__forward_list/node.h>
 
 #endif  // CANN_ASC_STL_ASC_STD_FORWARD_LIST

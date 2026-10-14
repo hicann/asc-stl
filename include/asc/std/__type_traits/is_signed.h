@@ -33,7 +33,9 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_signed)
+// BiSheng/CCE 的 __has_builtin 会报告 __is_signed，但 dav 后端不支持在
+// 类型上下文使用该内建 trait，设备编译一律走纯库回退。
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_signed) && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 template <class T>
 struct is_signed : bool_constant<__is_signed(T)> {};

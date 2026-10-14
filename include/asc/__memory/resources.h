@@ -44,6 +44,16 @@ extern "C" int aclrtMallocHost(void** pointer, __SIZE_TYPE__ bytes);
 extern "C" int aclrtFreeHost(void* pointer);
 #endif
 
+// Allocation policy constant. ACL_MEM_MALLOC_HUGE_FIRST is numerically 0 in
+// the real header; the internal macro keeps one spelling for the policy so
+// the header-present and header-absent arms cannot drift apart, and a future
+// toolkit that renumbers the enum only needs this single place updated.
+#if defined(CANN_ASC_STL_DETAIL_HAS_ACL_MEMORY_RUNTIME)
+#define CANN_ASC_STL_DETAIL_ACL_MALLOC_HUGE_FIRST ACL_MEM_MALLOC_HUGE_FIRST
+#else
+#define CANN_ASC_STL_DETAIL_ACL_MALLOC_HUGE_FIRST 0
+#endif
+
 namespace asc::detail {
 struct memory_resource_state {
     void* handle{};
@@ -53,19 +63,15 @@ CANN_ASC_STL_HOST_API int memory_current_device(int* device) noexcept
 {
     return ::aclrtGetDevice(device);
 }
-CANN_ASC_STL_HOST_API int memory_allocate_device(void** output, ::asc::std::size_t bytes) noexcept
+CANN_ASC_STL_HOST_API int memory_allocate_device(void** output, __SIZE_TYPE__ bytes) noexcept
 {
-#if defined(CANN_ASC_STL_DETAIL_HAS_ACL_MEMORY_RUNTIME)
-    return ::aclrtMalloc(output, bytes, ACL_MEM_MALLOC_HUGE_FIRST);
-#else
-    return ::aclrtMalloc(output, bytes, 0);
-#endif
+    return ::aclrtMalloc(output, bytes, CANN_ASC_STL_DETAIL_ACL_MALLOC_HUGE_FIRST);
 }
 CANN_ASC_STL_HOST_API int memory_deallocate_device(void* pointer) noexcept
 {
     return ::aclrtFree(pointer);
 }
-CANN_ASC_STL_HOST_API int memory_allocate_pinned(void** output, ::asc::std::size_t bytes) noexcept
+CANN_ASC_STL_HOST_API int memory_allocate_pinned(void** output, __SIZE_TYPE__ bytes) noexcept
 {
     return ::aclrtMallocHost(output, bytes);
 }
@@ -74,6 +80,8 @@ CANN_ASC_STL_HOST_API int memory_deallocate_pinned(void* pointer) noexcept
     return ::aclrtFreeHost(pointer);
 }
 }  // namespace asc::detail
+
+#undef CANN_ASC_STL_DETAIL_ACL_MALLOC_HUGE_FIRST
 
 #if defined(CANN_ASC_STL_DETAIL_HAS_ACL_MEMORY_RUNTIME)
 #undef CANN_ASC_STL_DETAIL_HAS_ACL_MEMORY_RUNTIME

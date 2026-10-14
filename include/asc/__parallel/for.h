@@ -26,31 +26,11 @@
 #pragma system_header
 #endif
 
-#include <asc/execution>
-#include <asc/launch>
 namespace asc::detail {
-template <class First, class Last, class Function>
-struct for_each_operation {
-    First first;
-    Last last;
-    Function function;
-    CANN_ASC_STL_DEVICE_API void operator()()
-    {
-        for (First current = first; current != last; ++current)
-            function(*current);
-    }
-};
-template <class First, class Size, class Function>
-struct for_each_n_operation {
-    First first;
-    Size count;
-    Function function;
-    CANN_ASC_STL_DEVICE_API void operator()()
-    {
-        for (Size index{}; index < count; ++index)
-            function(first[index]);
-    }
-};
+// fill_operation stays as the iterator-pair sequential reference body: the
+// runtime semantics suite (cannsim kernel) pins its exact braced layout. The
+// for_each/fill_n/generate frontends no longer keep serial twins here; they
+// submit through the grid-stride channel below.
 template <class First, class Last, class T>
 struct fill_operation {
     First first;
@@ -62,36 +42,46 @@ struct fill_operation {
             *current = value;
     }
 };
-template <class First, class Size, class T>
-struct fill_n_operation {
-    First first;
-    Size count;
-    T value;
-    CANN_ASC_STL_DEVICE_API void operator()()
+// Grid-stride companions of the for/fill/generate operations, shaped for the
+// coordinate-parameterized kernel: each device thread visits the elements
+// whose linear index is congruent to its thread index modulo the total thread
+// count, so every element is still visited exactly once while the launch
+// spans the whole grid. One body per family covers both frontend shapes
+// (iterator pair and first+count) through the count parameter. Note for the
+// callable-taking variants: a stateful callable keeps its "invoked exactly
+// once per element" guarantee but loses the sequential call order under this
+// channel.
+template <class Input, class Function>
+struct grid_strided_for_each_operation {
+    Input first;
+    __SIZE_TYPE__ count;
+    Function function;
+    CANN_ASC_STL_DEVICE_API void operator()(__SIZE_TYPE__ index, __SIZE_TYPE__ stride)
     {
-        for (Size index{}; index < count; ++index)
+        for (; index < count; index += stride) {
+            function(first[index]);
+        }
+    }
+};
+template <class First, class T>
+struct grid_strided_fill_operation {
+    First first;
+    __SIZE_TYPE__ count;
+    T value;
+    CANN_ASC_STL_DEVICE_API void operator()(__SIZE_TYPE__ index, __SIZE_TYPE__ stride)
+    {
+        for (; index < count; index += stride)
             first[index] = value;
     }
 };
-template <class First, class Last, class Generator>
-struct generate_operation {
+template <class First, class Generator>
+struct grid_strided_generate_operation {
     First first;
-    Last last;
+    __SIZE_TYPE__ count;
     Generator generator;
-    CANN_ASC_STL_DEVICE_API void operator()()
+    CANN_ASC_STL_DEVICE_API void operator()(__SIZE_TYPE__ index, __SIZE_TYPE__ stride)
     {
-        for (First current = first; current != last; ++current)
-            *current = generator();
-    }
-};
-template <class First, class Size, class Generator>
-struct generate_n_operation {
-    First first;
-    Size count;
-    Generator generator;
-    CANN_ASC_STL_DEVICE_API void operator()()
-    {
-        for (Size index{}; index < count; ++index)
+        for (; index < count; index += stride)
             first[index] = generator();
     }
 };

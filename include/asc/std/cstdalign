@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-#ifndef CANN_ASC_STL_STD_CSTDALIGN
-#define CANN_ASC_STL_STD_CSTDALIGN
+#ifndef CANN_ASC_STL_ASC_STD_CSTDALIGN
+#define CANN_ASC_STL_ASC_STD_CSTDALIGN
 
+// Deliberate empty tombstone: <cstdalign> is deprecated by [depr.c.headers]
+// and amounts to alignas spelling guidance in C++. C++17 [cstdalign.syn]
+// still defines __alignas_is_defined for C portability probes, but that
+// macro is intentionally NOT provided here: the registry records zero names
+// for this header and adding the macro would be unregistered public surface.
 #include <asc/__config>
 
 #if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
@@ -27,4 +32,4 @@
 #pragma system_header
 #endif
 
-#endif  // CANN_ASC_STL_STD_CSTDALIGN
+#endif  // CANN_ASC_STL_ASC_STD_CSTDALIGN

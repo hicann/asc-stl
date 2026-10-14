@@ -44,8 +44,19 @@ public:
     {}
     CANN_ASC_STL_SIMT_API void release(__PTRDIFF_TYPE__ update = 1) noexcept
     {
+        // std precondition, enforced fail-fast: a negative update, or a
+        // release that pushes the permit count past max() (LeastMaxValue),
+        // is undefined behavior and silently breaks exclusion invariants --
+        // a binary_semaphore would hand out more than one permit. Trap at
+        // the source (dev parity: debug-build asserts).
+        if (update < 0)
+            ::asc::detail::atomic_trap();
         atomic_ref<__INT64_TYPE__, Scope> permits(state_.permits);
-        (void)permits.fetch_add(static_cast<__INT64_TYPE__>(update), std::memory_order_release);
+        const __INT64_TYPE__ previous =
+            permits.fetch_add(static_cast<__INT64_TYPE__>(update), std::memory_order_release);
+        const __INT64_TYPE__ ceiling = static_cast<__INT64_TYPE__>(LeastMaxValue) - static_cast<__INT64_TYPE__>(update);
+        if (previous < 0 || previous > ceiling)
+            ::asc::detail::atomic_trap();
     }
     CANN_ASC_STL_SIMT_API bool try_acquire() noexcept
     {
@@ -61,7 +72,16 @@ public:
     }
     CANN_ASC_STL_SIMT_API void acquire() noexcept
     {
+        // Poll tightly first, then delay between polls. Cross-core use
+        // caveat: a core whose threads all spin in acquire() leaves no
+        // slot for a release() scheduled on the same core; do not let
+        // releasers and acquirers monopolize all threads of one core.
+        ::asc::detail::spin_backoff tester;
         while (!try_acquire()) {
+            if (tester.poll()) {
+                continue;
+            }
+            tester.backoff();
         }
     }
     CANN_ASC_STL_SIMT_API static constexpr __PTRDIFF_TYPE__ max() noexcept

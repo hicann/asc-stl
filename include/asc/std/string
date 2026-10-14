@@ -23,5 +23,6 @@
 #endif
 
 #include <asc/std/__string/basic_string.h>
+#include <asc/std/__string/char_traits.h>
 
 #endif  // CANN_ASC_STL_ASC_STD_STRING

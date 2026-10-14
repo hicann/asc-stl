@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CANN_ASC_STL_STD_DETAIL_CWCHAR_FIXED_C_LOCALE_H
-#define CANN_ASC_STL_STD_DETAIL_CWCHAR_FIXED_C_LOCALE_H
+#ifndef CANN_ASC_STL_ASC_STD___CWCHAR_FIXED_C_LOCALE_H
+#define CANN_ASC_STL_ASC_STD___CWCHAR_FIXED_C_LOCALE_H
 
 #include <asc/__config>
 
@@ -30,10 +30,16 @@
 // Collation, explicit-state tokenization and the fixed-C-locale conversion
 // set. Host delegates to the system <cwchar>; Device implements the stateless
 // single-byte C locale with pure integer and character semantics. This root
-// owns the one definition of the conversion state type because only its
-// functions consume it; the wint_t alias repeats the identical underlying
-// type also spelled by the types root, which is a legal same-type alias
-// redeclaration when the later public facade composes both roots.
+// owns the one definition of the conversion state type and of the WEOF macro
+// because only its functions consume either; the wint_t alias repeats the
+// identical underlying type also spelled by the types root, which is a legal
+// same-type alias redeclaration when the later public facade composes both
+// roots.
+//
+// Device error reporting: conversion failures return (size_t)-1 only and
+// errno is deliberately not maintained on device (no EILSEQ store), matching
+// the registered cerrno device contract where errno itself does not cross
+// the device boundary.
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #include <cwchar>
 #endif
@@ -298,4 +304,4 @@ CANN_ASC_STL_API __SIZE_TYPE__ wcsrtombs(
 
 CANN_ASC_STL_END_NAMESPACE
 
-#endif  // CANN_ASC_STL_STD_DETAIL_CWCHAR_FIXED_C_LOCALE_H
+#endif  // CANN_ASC_STL_ASC_STD___CWCHAR_FIXED_C_LOCALE_H

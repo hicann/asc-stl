@@ -29,9 +29,17 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-namespace __time_vocabulary {
+namespace detail {
+
+// Pure documentation marker: the device time vocabulary (clock_t, time_t
+// and friends) is delivered by the ctime facade over the compiler-provided
+// types, with no conditional compilation to anchor. `available` records
+// that availability for maintainers; no code consumes it today, and it is
+// not registered surface. Lives in the reserved detail layer like the other
+// C-wrapper roots' internals.
 inline constexpr bool available = true;
-}
+
+}  // namespace detail
 
 CANN_ASC_STL_END_NAMESPACE
 

@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef CANN_ASC_STL_STD_DETAIL_TUPLE_TUPLE_SIZE_H
-#define CANN_ASC_STL_STD_DETAIL_TUPLE_TUPLE_SIZE_H
+#ifndef CANN_ASC_STL_ASC_STD___TUPLE_TUPLE_SIZE_H
+#define CANN_ASC_STL_ASC_STD___TUPLE_TUPLE_SIZE_H
 
 #include <asc/__config>
 
@@ -58,4 +58,4 @@ inline constexpr size_t tuple_size_v = tuple_size<T>::value;
 
 CANN_ASC_STL_END_NAMESPACE
 
-#endif  // CANN_ASC_STL_STD_DETAIL_TUPLE_TUPLE_SIZE_H
+#endif  // CANN_ASC_STL_ASC_STD___TUPLE_TUPLE_SIZE_H

@@ -27,17 +27,22 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__type_traits/is_void.h>
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// Alignment validity in one template: the void lane checks plain power-of-two
+// alignment, the typed lane additionally requires enough alignment for T. A
+// single entry point avoids a same-signature overload pair and keeps one
+// judgement source for every caller.
+template <class T = void>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool __is_valid_alignment(__SIZE_TYPE__ alignment) noexcept
 {
-    return alignment != 0 && (alignment & (alignment - 1)) == 0;
-}
-
-template <class T>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool __is_valid_alignment(__SIZE_TYPE__ alignment) noexcept
-{
-    return alignment >= alignof(T) && __is_valid_alignment(alignment);
+    if constexpr (is_void_v<T>) {
+        return alignment != 0 && (alignment & (alignment - 1)) == 0;
+    } else {
+        return alignment >= alignof(T) && __is_valid_alignment(alignment);
+    }
 }
 
 CANN_ASC_STL_END_NAMESPACE

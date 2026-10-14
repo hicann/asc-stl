@@ -26,6 +26,7 @@
       "target": "asc/__algorithm/frontend.h",
       "visibility": "private",
       "dependencies": [
+        "asc/__algorithm/byte_operations.h",
         "asc/__config",
         "asc/__parallel/adjacent_difference.h",
         "asc/__parallel/find.h",
@@ -39,8 +40,15 @@
         "asc/__parallel/select.h",
         "asc/__parallel/temporary_storage.h",
         "asc/__parallel/transform.h",
+        "asc/__runtime/launch.h",
         "asc/execution",
-        "asc/execution.policy.h"
+        "asc/execution.policy.h",
+        "asc/std/__functional/operations.h",
+        "asc/std/__type_traits/is_floating_point.h",
+        "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/cstddef",
+        "asc/std/cstdint"
       ],
       "semantic_case": "asc/__algorithm/frontend.h",
       "applicability": {
@@ -98,7 +106,8 @@
       "target": "asc/__bit/operations.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/cassert"
       ],
       "applicability": {
         "host_header": true,
@@ -398,7 +407,8 @@
       "target": "asc/__memory/pools.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/__memory/buffers.h"
       ],
       "semantic_case": "asc/algorithm",
       "applicability": {
@@ -431,7 +441,8 @@
       "target": "asc/__memory/views.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/__memory/buffers.h"
       ],
       "applicability": {
         "host_header": true,
@@ -470,9 +481,7 @@
       "target": "asc/__parallel/adjacent_difference.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config",
-        "asc/__parallel/temporary_storage.h",
-        "asc/launch"
+        "asc/__config"
       ],
       "semantic_case": "asc/__algorithm/frontend.h",
       "applicability": {
@@ -489,9 +498,7 @@
       "target": "asc/__parallel/find.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config",
-        "asc/__parallel/temporary_storage.h",
-        "asc/launch"
+        "asc/__config"
       ],
       "semantic_case": "asc/__parallel/find.h",
       "applicability": {
@@ -508,9 +515,7 @@
       "target": "asc/__parallel/for.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config",
-        "asc/execution",
-        "asc/launch"
+        "asc/__config"
       ],
       "semantic_case": "asc/__parallel/for.h",
       "device_compile_cases": [
@@ -532,9 +537,7 @@
       "target": "asc/__parallel/merge.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config",
-        "asc/__parallel/temporary_storage.h",
-        "asc/launch"
+        "asc/__config"
       ],
       "semantic_case": "asc/__parallel/reduce.h",
       "applicability": {
@@ -553,8 +556,7 @@
       "dependencies": [
         "asc/__config",
         "asc/__parallel/merge.h",
-        "asc/__parallel/temporary_storage.h",
-        "asc/launch"
+        "asc/__parallel/radix_sort.h"
       ],
       "semantic_case": "asc/__parallel/reduce.h",
       "applicability": {
@@ -572,9 +574,7 @@
       "visibility": "private",
       "dependencies": [
         "asc/__config",
-        "asc/__parallel/scan.h",
-        "asc/__parallel/temporary_storage.h",
-        "asc/launch"
+        "asc/__parallel/radix_sort.h"
       ],
       "semantic_case": "asc/__parallel/partition.h",
       "applicability": {
@@ -592,8 +592,10 @@
       "visibility": "private",
       "dependencies": [
         "asc/__config",
-        "asc/__parallel/temporary_storage.h",
-        "asc/launch"
+        "asc/std/__type_traits/is_floating_point.h",
+        "asc/std/__type_traits/is_unsigned.h",
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__utility/declval.h"
       ],
       "semantic_case": "asc/__parallel/reduce.h",
       "applicability": {
@@ -610,9 +612,7 @@
       "target": "asc/__parallel/reduce.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config",
-        "asc/__parallel/temporary_storage.h",
-        "asc/launch"
+        "asc/__config"
       ],
       "semantic_case": "asc/__parallel/reduce.h",
       "applicability": {
@@ -629,9 +629,7 @@
       "target": "asc/__parallel/scan.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config",
-        "asc/__parallel/temporary_storage.h",
-        "asc/launch"
+        "asc/__config"
       ],
       "semantic_case": "asc/__parallel/reduce.h",
       "applicability": {
@@ -648,9 +646,7 @@
       "target": "asc/__parallel/select.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config",
-        "asc/__parallel/temporary_storage.h",
-        "asc/launch"
+        "asc/__config"
       ],
       "semantic_case": "asc/__parallel/partition.h",
       "applicability": {
@@ -687,9 +683,7 @@
       "target": "asc/__parallel/transform.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config",
-        "asc/execution",
-        "asc/launch"
+        "asc/__config"
       ],
       "semantic_case": "asc/__parallel/transform.h",
       "device_compile_cases": [
@@ -761,7 +755,9 @@
       "target": "asc/__runtime/launch.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/execution",
+        "asc/stream"
       ],
       "semantic_case": "asc/execution.policy.h",
       "applicability": {
@@ -3485,7 +3481,9 @@
       "target": "asc/std/__atomic/backend.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__atomic/memory_order.h",
+        "asc/std/__exception/terminate.h"
       ],
       "semantic_case": "asc/atomic",
       "applicability": {
@@ -4651,7 +4649,9 @@
       "target": "asc/std/__cmath/neg.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_integral.h"
       ],
       "applicability": {
         "host_header": true,
@@ -4812,7 +4812,12 @@
       "visibility": "private",
       "dependencies": [
         "asc/__config",
-        "asc/std/__cmath/neg.h"
+        "asc/std/__cmath/neg.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/is_signed.h",
+        "asc/std/__type_traits/make_unsigned.h"
       ],
       "applicability": {
         "host_header": true,
@@ -5991,7 +5996,8 @@
       "dependencies": [
         "asc/__config",
         "asc/std/__execution/execution_policy.h",
-        "asc/std/__execution/type_traits.h"
+        "asc/std/__execution/type_traits.h",
+        "asc/std/__type_traits/is_same.h"
       ],
       "semantic_case": "asc/algorithm",
       "applicability": {
@@ -6007,7 +6013,8 @@
       "target": "asc/std/__execution/type_traits.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__type_traits/integral_constant.h"
       ],
       "semantic_case": "asc/std/__iterator/move_iterator.h",
       "applicability": {
@@ -6972,7 +6979,6 @@
       "visibility": "private",
       "dependencies": [
         "asc/__config",
-        "asc/__detail/attributes.h",
         "asc/std/__cstddef/types.h"
       ],
       "applicability": {
@@ -9506,12 +9512,12 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__cstddef/types.h",
         "asc/std/__fwd/get.h",
         "asc/std/__tuple/tuple.h",
         "asc/std/__tuple/tuple_element.h",
         "asc/std/__type_traits/is_same.h",
-        "asc/std/__utility/move.h",
-        "asc/std/cstdint"
+        "asc/std/__utility/move.h"
       ],
       "semantic_case": "asc/std/cstdlib",
       "runtime_case": "asc/std/cstdlib",
@@ -9622,7 +9628,6 @@
         "asc/std/__fwd/get.h",
         "asc/std/__fwd/tuple.h",
         "asc/std/__memory/allocator_arg_t.h",
-        "asc/std/__tuple/tuple_constraints.h",
         "asc/std/__tuple/tuple_element.h",
         "asc/std/__tuple/tuple_indices.h",
         "asc/std/__tuple/tuple_leaf.h",
@@ -9631,9 +9636,16 @@
         "asc/std/__type_traits/common_reference.h",
         "asc/std/__type_traits/common_type.h",
         "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_assignable.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_copy_assignable.h",
+        "asc/std/__type_traits/is_copy_constructible.h",
+        "asc/std/__type_traits/is_move_assignable.h",
         "asc/std/__type_traits/is_nothrow_assignable.h",
         "asc/std/__type_traits/is_nothrow_constructible.h",
         "asc/std/__type_traits/is_nothrow_default_constructible.h",
+        "asc/std/__type_traits/is_nothrow_move_assignable.h",
         "asc/std/__type_traits/is_same.h",
         "asc/std/__type_traits/remove_cvref.h",
         "asc/std/__utility/forward.h",
@@ -9660,17 +9672,15 @@
         "asc/__detail/attributes.h",
         "asc/std/__tuple/get.h",
         "asc/std/__tuple/make_tuple_types.h",
-        "asc/std/__tuple/tie.h",
         "asc/std/__tuple/tuple.h",
-        "asc/std/__tuple/tuple_element.h",
         "asc/std/__tuple/tuple_indices.h",
         "asc/std/__tuple/tuple_like.h",
         "asc/std/__tuple/tuple_size.h",
         "asc/std/__tuple/tuple_types.h",
-        "asc/std/__type_traits/copy_cvref.h",
         "asc/std/__type_traits/remove_cvref.h",
         "asc/std/__type_traits/remove_reference.h",
-        "asc/std/__utility/forward.h"
+        "asc/std/__utility/forward.h",
+        "asc/std/__utility/move.h"
       ],
       "semantic_case": "asc/std/cstdlib",
       "runtime_case": "asc/std/cstdlib",
@@ -9688,43 +9698,7 @@
       "visibility": "private",
       "dependencies": [
         "asc/__config",
-        "asc/__detail/attributes.h",
-        "asc/std/__fwd/get.h",
-        "asc/std/__fwd/pair.h",
-        "asc/std/__fwd/subrange.h",
-        "asc/std/__fwd/tuple.h",
-        "asc/std/__memory/allocator_arg_t.h",
-        "asc/std/__tuple/make_tuple_types.h",
-        "asc/std/__tuple/tuple_element.h",
-        "asc/std/__tuple/tuple_indices.h",
-        "asc/std/__tuple/tuple_like.h",
-        "asc/std/__tuple/tuple_size.h",
-        "asc/std/__tuple/tuple_types.h",
-        "asc/std/__type_traits/conditional.h",
-        "asc/std/__type_traits/disjunction.h",
-        "asc/std/__type_traits/integral_constant.h",
-        "asc/std/__type_traits/is_assignable.h",
-        "asc/std/__type_traits/is_comparable.h",
-        "asc/std/__type_traits/is_constructible.h",
-        "asc/std/__type_traits/is_convertible.h",
-        "asc/std/__type_traits/is_copy_assignable.h",
-        "asc/std/__type_traits/is_copy_constructible.h",
-        "asc/std/__type_traits/is_default_constructible.h",
-        "asc/std/__type_traits/is_implicitly_default_constructible.h",
-        "asc/std/__type_traits/is_move_assignable.h",
-        "asc/std/__type_traits/is_move_constructible.h",
-        "asc/std/__type_traits/is_nothrow_assignable.h",
-        "asc/std/__type_traits/is_nothrow_constructible.h",
-        "asc/std/__type_traits/is_nothrow_copy_assignable.h",
-        "asc/std/__type_traits/is_nothrow_copy_constructible.h",
-        "asc/std/__type_traits/is_nothrow_default_constructible.h",
-        "asc/std/__type_traits/is_nothrow_move_assignable.h",
-        "asc/std/__type_traits/is_nothrow_move_constructible.h",
-        "asc/std/__type_traits/is_same.h",
-        "asc/std/__type_traits/lazy.h",
-        "asc/std/__type_traits/remove_cvref.h",
-        "asc/std/__type_traits/remove_reference.h",
-        "asc/std/__utility/declval.h"
+        "asc/__detail/attributes.h"
       ],
       "applicability": {
         "host_header": true,
@@ -9776,26 +9750,18 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
-        "asc/std/__fwd/get.h",
-        "asc/std/__fwd/tuple.h",
+        "asc/std/__cstddef/types.h",
         "asc/std/__memory/allocator_arg_t.h",
-        "asc/std/__tuple/make_tuple_types.h",
         "asc/std/__tuple/sfinae_helpers.h",
-        "asc/std/__tuple/tuple_constraints.h",
-        "asc/std/__tuple/tuple_element.h",
-        "asc/std/__tuple/tuple_indices.h",
-        "asc/std/__tuple/tuple_types.h",
-        "asc/std/__type_traits/fold.h",
         "asc/std/__type_traits/integral_constant.h",
-        "asc/std/__type_traits/is_assignable.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_convertible.h",
         "asc/std/__type_traits/is_empty.h",
         "asc/std/__type_traits/is_final.h",
-        "asc/std/__type_traits/is_nothrow_assignable.h",
-        "asc/std/__type_traits/is_nothrow_constructible.h",
         "asc/std/__type_traits/is_nothrow_default_constructible.h",
         "asc/std/__type_traits/is_same.h",
         "asc/std/__type_traits/is_swappable.h",
-        "asc/std/__type_traits/remove_const.h",
+        "asc/std/__type_traits/remove_cv.h",
         "asc/std/__type_traits/remove_cvref.h",
         "asc/std/__utility/forward.h",
         "asc/std/__utility/move.h",
@@ -9817,7 +9783,6 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
-        "asc/std/__concepts/concept_macros.h",
         "asc/std/__fwd/array.h",
         "asc/std/__fwd/complex.h",
         "asc/std/__fwd/pair.h",
@@ -9825,7 +9790,6 @@
         "asc/std/__fwd/tuple.h",
         "asc/std/__tuple/tuple_size.h",
         "asc/std/__tuple/tuple_types.h",
-        "asc/std/__type_traits/integral_constant.h",
         "asc/std/__type_traits/remove_cvref.h",
         "asc/std/cstddef"
       ],
@@ -11039,8 +11003,7 @@
       "target": "asc/std/__type_traits/is_non_narrowing_convertible.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config",
-        "asc/__detail/compiler.h"
+        "asc/__config"
       ],
       "applicability": {
         "host_header": true,
@@ -14036,7 +13999,11 @@
       "target": "asc/std/__deque/deque.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__deque/block_map.h",
+        "asc/std/__exception/terminate.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__new/nonallocating_new.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14053,7 +14020,12 @@
       "target": "asc/std/__forward_list/forward_list.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__exception/terminate.h",
+        "asc/std/__forward_list/node.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__memory/pointer_traits.h",
+        "asc/std/__new/nonallocating_new.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14087,7 +14059,11 @@
       "target": "asc/std/__vector/vector.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__exception/terminate.h",
+        "asc/std/__new/nonallocating_new.h",
+        "asc/std/__utility/exception_guard.h",
+        "asc/std/__utility/move.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14104,7 +14080,12 @@
       "target": "asc/std/__list/list.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__exception/terminate.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__list/node.h",
+        "asc/std/__memory/pointer_traits.h",
+        "asc/std/__new/nonallocating_new.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14138,7 +14119,9 @@
       "target": "asc/std/__map/map.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__tree/tree.h",
+        "asc/std/__utility/pair.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14155,7 +14138,11 @@
       "target": "asc/std/__tree/tree.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__cstddef/types.h",
+        "asc/std/__exception/terminate.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__memory/allocator_traits.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14172,7 +14159,9 @@
       "target": "asc/std/__set/set.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__tree/tree.h",
+        "asc/std/__utility/pair.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14189,7 +14178,9 @@
       "target": "asc/std/__string/basic_string.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__exception/terminate.h",
+        "asc/std/__string/char_traits.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14223,7 +14214,9 @@
       "target": "asc/std/__unordered_map/unordered_map.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__hash_table/hash_table.h",
+        "asc/std/__utility/pair.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14381,8 +14374,7 @@
       "visibility": "public",
       "dependencies": [
         "asc/__config",
-        "asc/std/__list/list.h",
-        "asc/std/__list/node.h"
+        "asc/std/__list/list.h"
       ],
       "semantic_case": "asc/std/list",
       "applicability": {
@@ -14454,7 +14446,9 @@
       "target": "asc/std/__system_error/lightweight_error.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__system_error/errc.h",
+        "asc/std/__type_traits/integral_constant.h"
       ],
       "semantic_case": "asc/std/list",
       "applicability": {
@@ -14653,7 +14647,6 @@
       ],
       "semantic_case": "asc/tensor_copy",
       "negative_cases": [
-        "store_excluded.fail.asc",
         "ub_span_dsimt.fail.asc"
       ],
       "applicability": {
@@ -14758,7 +14751,8 @@
       "target": "asc/std/__mutex/lock_guard.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__mutex/lock_tags.h"
       ],
       "semantic_case": "asc/std/semaphore",
       "applicability": {
@@ -14792,7 +14786,8 @@
       "target": "asc/std/__mutex/scoped_lock.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__mutex/lock_tags.h"
       ],
       "semantic_case": "asc/std/semaphore",
       "applicability": {
@@ -14826,7 +14821,9 @@
       "target": "asc/std/__mutex/unique_lock.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__exception/terminate.h",
+        "asc/std/__mutex/lock_tags.h"
       ],
       "semantic_case": "asc/std/semaphore",
       "applicability": {
@@ -14843,7 +14840,8 @@
       "target": "asc/std/__mutex/shared_lock.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__mutex/lock_tags.h"
       ],
       "semantic_case": "asc/std/latch",
       "applicability": {
@@ -14975,7 +14973,6 @@
       "visibility": "public",
       "dependencies": [
         "asc/__config",
-        "asc/std/__deque/block_map.h",
         "asc/std/__deque/deque.h"
       ],
       "semantic_case": "asc/std/deque",
@@ -15001,8 +14998,7 @@
       "visibility": "public",
       "dependencies": [
         "asc/__config",
-        "asc/std/__forward_list/forward_list.h",
-        "asc/std/__forward_list/node.h"
+        "asc/std/__forward_list/forward_list.h"
       ],
       "semantic_case": "asc/std/bitset",
       "negative_cases": [
@@ -15191,7 +15187,8 @@
       "visibility": "public",
       "dependencies": [
         "asc/__config",
-        "asc/std/__string/basic_string.h"
+        "asc/std/__string/basic_string.h",
+        "asc/std/__string/char_traits.h"
       ],
       "semantic_case": "asc/std/bitset",
       "negative_cases": [
@@ -15238,8 +15235,7 @@
       "target": "asc/iterator",
       "visibility": "public",
       "dependencies": [
-        "asc/__config",
-        "asc/__iterator/adaptors.h"
+        "asc/__config"
       ],
       "semantic_case": "asc/iterator",
       "negative_cases": [
@@ -15303,7 +15299,8 @@
       "target": "asc/std/__memory/is_valid_alignment.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__type_traits/is_void.h"
       ],
       "semantic_case": "asc/std/__memory/align.h",
       "applicability": {
@@ -16521,18 +16518,8 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
-        "asc/std/__charconv/to_chars.h",
-        "asc/std/__cmath/uabs.h",
-        "asc/std/__iterator/iterator_traits.h",
-        "asc/std/__type_traits/always_false.h",
-        "asc/std/__type_traits/is_same.h",
         "asc/std/__type_traits/is_signed.h",
-        "asc/std/__type_traits/make_nbit_int.h",
-        "asc/std/__type_traits/make_unsigned.h",
-        "asc/std/__utility/cmp.h",
-        "asc/std/__utility/move.h",
-        "asc/std/__utility/to_underlying.h",
-        "asc/std/climits"
+        "asc/std/__type_traits/make_unsigned.h"
       ],
       "semantic_case": "asc/std/format",
       "applicability": {
@@ -16550,8 +16537,10 @@
       "visibility": "private",
       "dependencies": [
         "asc/__config",
-        "asc/__detail/attributes.h",
-        "asc/std/__cstddef/types.h"
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/remove_cvref.h"
       ],
       "semantic_case": "asc/std/format",
       "applicability": {
@@ -16570,11 +16559,9 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
-        "asc/std/__concepts/concept_macros.h",
-        "asc/std/__concepts/convertible_to.h",
         "asc/std/__format/validation.h",
-        "asc/std/__type_traits/remove_cvref.h",
-        "asc/std/string_view"
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/type_identity.h"
       ],
       "semantic_case": "asc/std/format",
       "applicability": {
@@ -16594,12 +16581,7 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/std/__cstddef/types.h",
-        "asc/std/__iterator/incrementable_traits.h",
-        "asc/std/__memory/addressof.h",
-        "asc/std/__utility/cmp.h",
-        "asc/std/__utility/ctad_support.h",
-        "asc/std/__utility/move.h",
-        "asc/std/string_view"
+        "asc/std/__format/format_to.h"
       ],
       "semantic_case": "asc/std/format",
       "applicability": {
@@ -16618,11 +16600,8 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
-        "asc/std/__string/char_traits.h",
-        "asc/std/__type_traits/is_null_pointer.h",
-        "asc/std/__type_traits/is_pointer.h",
-        "asc/std/__utility/to_underlying.h",
-        "asc/std/string_view"
+        "asc/std/__format/format_string.h",
+        "asc/std/__format/output_buffer.h"
       ],
       "semantic_case": "asc/std/format",
       "applicability": {
@@ -16641,12 +16620,9 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
-        "asc/std/__algorithm/max.h",
         "asc/std/__format/format_integral.h",
-        "asc/std/__type_traits/is_signed.h",
-        "asc/std/__type_traits/make_nbit_int.h",
-        "asc/std/climits",
-        "asc/std/cstdint"
+        "asc/std/__format/output_buffer.h",
+        "asc/std/__format/validation.h"
       ],
       "semantic_case": "asc/std/format",
       "applicability": {
@@ -16663,7 +16639,8 @@
       "target": "asc/std/__format/output_buffer.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/__detail/attributes.h"
       ],
       "semantic_case": "asc/std/format",
       "applicability": {
@@ -16682,10 +16659,12 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
-        "asc/std/__concepts/concept_macros.h",
         "asc/std/__format/format_string.h",
-        "asc/std/__iterator/concepts.h",
-        "asc/std/__utility/move.h"
+        "asc/std/__format/formatters/bool.h",
+        "asc/std/__format/formatters/char.h",
+        "asc/std/__format/formatters/int.h",
+        "asc/std/__format/formatters/str.h",
+        "asc/std/__format/output_buffer.h"
       ],
       "semantic_case": "asc/std/format",
       "applicability": {
@@ -16705,9 +16684,7 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/std/__cstddef/types.h",
-        "asc/std/__format/format_string.h",
-        "asc/std/__utility/move.h",
-        "asc/std/string_view"
+        "asc/std/__format/format_to.h"
       ],
       "semantic_case": "asc/std/format",
       "applicability": {
@@ -16726,7 +16703,8 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
-        "asc/std/__format/format_integral.h"
+        "asc/std/__format/formatters/str.h",
+        "asc/std/__format/output_buffer.h"
       ],
       "semantic_case": "asc/std/format",
       "applicability": {
@@ -16745,10 +16723,7 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
-        "asc/std/__concepts/concept_macros.h",
-        "asc/std/__format/format_integral.h",
-        "asc/std/__type_traits/is_same.h",
-        "asc/std/__type_traits/make_unsigned.h"
+        "asc/std/__format/output_buffer.h"
       ],
       "semantic_case": "asc/std/format",
       "applicability": {
@@ -16868,7 +16843,10 @@
       "target": "asc/std/__iterator/iota_iterator.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/is_integral.h"
       ],
       "semantic_case": "asc/std/ranges",
       "applicability": {
@@ -17618,29 +17596,19 @@
       "visibility": "private",
       "dependencies": [
         "asc/__config",
-        "asc/__detail/attributes.h",
-        "asc/std/__algorithm/ranges_min.h",
-        "asc/std/__algorithm/ranges_min_element.h",
-        "asc/std/__concepts/convertible_to.h",
-        "asc/std/__functional/invoke.h",
-        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/iterator_traits.h",
         "asc/std/__ranges/access.h",
         "asc/std/__ranges/all.h",
-        "asc/std/__ranges/concepts.h",
-        "asc/std/__ranges/empty_view.h",
-        "asc/std/__ranges/enable_borrowed_range.h",
         "asc/std/__ranges/size.h",
         "asc/std/__ranges/view_interface.h",
-        "asc/std/__tuple/apply.h",
-        "asc/std/__tuple/get.h",
         "asc/std/__tuple/tuple.h",
-        "asc/std/__tuple/tuple_size.h",
-        "asc/std/__type_traits/common_type.h",
-        "asc/std/__type_traits/make_unsigned.h",
-        "asc/std/__type_traits/maybe_const.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_same.h",
         "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
         "asc/std/__utility/forward.h",
-        "asc/std/__utility/integer_sequence.h",
         "asc/std/__utility/move.h"
       ],
       "semantic_case": "asc/std/ranges",

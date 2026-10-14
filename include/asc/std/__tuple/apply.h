@@ -43,27 +43,31 @@ template <class Function, class Tuple, size_t... Indices>
 CANN_ASC_STL_API constexpr decltype(auto) __apply_tuple_impl(
     Function&& function, Tuple&& value, __tuple_indices<Indices...>)
 {
-    return ::asc::std::invoke(::asc::std::forward<Function>(function),  // NOLINT(build/include_what_you_use)
-        ::asc::std::get<Indices>(::asc::std::forward<Tuple>(value))...);
+    // Unqualified get: alongside the asc::std overloads found from this
+    // namespace, ADL can pick up accessors of user-defined tuple-like types.
+    return ::asc::std::invoke(
+        ::asc::std::forward<Function>(function), get<Indices>(::asc::std::forward<Tuple>(value))...);
 }
 template <class Function, class Tuple>
 CANN_ASC_STL_API constexpr decltype(auto) apply(Function&& function, Tuple&& value)
 {
     using tuple_type = remove_reference_t<Tuple>;
-    return __apply_tuple_impl(::asc::std::forward<Function>(function),  // NOLINT(build/include_what_you_use)
-        ::asc::std::forward<Tuple>(value), __make_tuple_indices_t<tuple_size<tuple_type>::value>{});
+    return __apply_tuple_impl(::asc::std::forward<Function>(function), ::asc::std::forward<Tuple>(value),
+        __make_tuple_indices_t<tuple_size<tuple_type>::value>{});
 }
 template <class T, class Tuple, size_t... Indices>
-CANN_ASC_STL_API constexpr T __make_from_tuple_impl(Tuple&& value, __tuple_indices<Indices...>)
+CANN_ASC_STL_API constexpr T __make_from_tuple_impl(Tuple&& value, __tuple_indices<Indices...>) noexcept(
+    noexcept(T(get<Indices>(::asc::std::forward<Tuple>(value))...)))
 {
-    return T(::asc::std::get<Indices>(::asc::std::forward<Tuple>(value))...);
+    return T(get<Indices>(::asc::std::forward<Tuple>(value))...);
 }
 template <class T, class Tuple>
-CANN_ASC_STL_API constexpr T make_from_tuple(Tuple&& value)
+CANN_ASC_STL_API constexpr T make_from_tuple(Tuple&& value) noexcept(noexcept(__make_from_tuple_impl<T>(
+    ::asc::std::forward<Tuple>(value), __make_tuple_indices_t<tuple_size<remove_reference_t<Tuple>>::value>{})))
 {
     using tuple_type = remove_reference_t<Tuple>;
     return __make_from_tuple_impl<T>(::asc::std::forward<Tuple>(value),  // NOLINT(build/include_what_you_use)
-        __make_tuple_indices_t<tuple_size<tuple_type>::value>{});
+        __make_tuple_indices_t<tuple_size<tuple_type>::value>{});        // NOLINT(build/include_what_you_use)
 }
 
 CANN_ASC_STL_END_NAMESPACE

@@ -27,7 +27,6 @@
 #pragma system_header
 #endif
 
-#include <asc/std/__deque/block_map.h>
 #include <asc/std/__deque/deque.h>
 
 #endif  // CANN_ASC_STL_ASC_STD_DEQUE

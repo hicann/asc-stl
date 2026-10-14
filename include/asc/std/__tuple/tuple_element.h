@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CANN_ASC_STL_STD_DETAIL_TUPLE_TUPLE_ELEMENT_H
-#define CANN_ASC_STL_STD_DETAIL_TUPLE_TUPLE_ELEMENT_H
+#ifndef CANN_ASC_STL_ASC_STD___TUPLE_TUPLE_ELEMENT_H
+#define CANN_ASC_STL_ASC_STD___TUPLE_TUPLE_ELEMENT_H
 
 #include <asc/__config>
 
@@ -51,4 +51,4 @@ struct tuple_element<Index, const volatile T> {
 
 CANN_ASC_STL_END_NAMESPACE
 
-#endif  // CANN_ASC_STL_STD_DETAIL_TUPLE_TUPLE_ELEMENT_H
+#endif  // CANN_ASC_STL_ASC_STD___TUPLE_TUPLE_ELEMENT_H

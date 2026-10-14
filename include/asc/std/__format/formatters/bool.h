@@ -28,14 +28,18 @@
 #endif
 
 #include <asc/__detail/attributes.h>
-#include <asc/std/__format/format_integral.h>
+#include <asc/std/__format/formatters/str.h>
+#include <asc/std/__format/output_buffer.h>
 
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __format_detail {
-struct bool_formatter_tag {};
+CANN_ASC_STL_API constexpr void write_argument(output_buffer& buffer, bool value, unsigned int, bool) noexcept
+{
+    write_text(buffer, value ? "true" : "false");
+}
 }  // namespace __format_detail
 
 CANN_ASC_STL_END_NAMESPACE

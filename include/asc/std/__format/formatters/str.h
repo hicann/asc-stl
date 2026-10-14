@@ -28,18 +28,49 @@
 #endif
 
 #include <asc/__detail/attributes.h>
-#include <asc/std/__string/char_traits.h>
-#include <asc/std/__type_traits/is_null_pointer.h>
-#include <asc/std/__type_traits/is_pointer.h>
-#include <asc/std/__utility/to_underlying.h>
-#include <asc/std/string_view>
+#include <asc/std/__format/format_string.h>
+#include <asc/std/__format/output_buffer.h>
 
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __format_detail {
-struct string_formatter_tag {};
+CANN_ASC_STL_API constexpr void write_text(output_buffer& buffer, input_pointer text) noexcept
+{
+    while (*text != '\0') {
+        buffer.put(*text++);
+    }
+}
+
+// NTCTS arguments are required to be non-null by contract; the consteval
+// validator only checks the format string, never run-time arguments, so a
+// null pointer writes nothing here instead of being dereferenced (on the
+// device the resulting UB would be unobservable).
+CANN_ASC_STL_API constexpr void write_argument(output_buffer& buffer, const char* value, unsigned int, bool) noexcept
+{
+    if (value == nullptr) {
+        return;
+    }
+    while (*value != '\0') {
+        buffer.put(*value++);
+    }
+}
+
+CANN_ASC_STL_API constexpr void write_argument(
+    output_buffer& buffer, char* value, unsigned int base, bool upper) noexcept
+{
+    write_argument(buffer, static_cast<const char*>(value), base, upper);
+}
+
+template <__SIZE_TYPE__ Size>
+CANN_ASC_STL_API constexpr void write_argument(
+    output_buffer& buffer, const char (&value)[Size], unsigned int, bool) noexcept
+{
+    for (__SIZE_TYPE__ index = 0; index + 1 < Size; ++index) {
+        buffer.put(value[index]);
+    }
+}
 }  // namespace __format_detail
 
 CANN_ASC_STL_END_NAMESPACE

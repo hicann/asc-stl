@@ -29,22 +29,32 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__cstddef/types.h>
-#include <asc/std/__iterator/incrementable_traits.h>
-#include <asc/std/__memory/addressof.h>
-#include <asc/std/__utility/cmp.h>
-#include <asc/std/__utility/ctad_support.h>
-#include <asc/std/__utility/move.h>
-#include <asc/std/string_view>
+#include <asc/std/__format/format_to.h>
 
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// Aggregated result of format_to_n. Deliberately carries no deduction guide:
+// the frozen device contract keeps CTAD off the public face and callers spell
+// format_to_n_result<char*> out explicitly.
 template <class Out>
 struct format_to_n_result {
     Out out;
     ptrdiff_t size;
 };
+
+// Bounded form of format_to: writes at most count characters and reports the
+// untruncated size a full-capacity buffer would have received.
+template <class... Args>
+CANN_ASC_STL_API constexpr format_to_n_result<char*> format_to_n(
+    char* output, ptrdiff_t count, format_string<Args...> format, Args&&... args) noexcept
+{
+    const __SIZE_TYPE__ capacity = count < 0 ? 0 : static_cast<__SIZE_TYPE__>(count);
+    const auto result = __format_detail::render_all(output, capacity, format, static_cast<Args&&>(args)...);
+    const __SIZE_TYPE__ written = result.total < capacity ? result.total : capacity;
+    return {output + written, static_cast<ptrdiff_t>(result.total)};
+}
 
 CANN_ASC_STL_END_NAMESPACE
 

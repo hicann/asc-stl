@@ -28,50 +28,18 @@
 #endif
 
 #include <asc/__detail/attributes.h>
-
-// 序言内联等价语义：基座 __config 未提供 hosted/freestanding 门（参见
-// __string/constexpr_c_functions.h 的同形内联定义，#ifndef 守卫以便未来集中定义胜出）。
-#ifndef CANN_ASC_STL_DETAIL_HOSTED
-#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-#define CANN_ASC_STL_DETAIL_HOSTED() 0
-#else
-#define CANN_ASC_STL_DETAIL_HOSTED() 1
-#endif
-#endif  // CANN_ASC_STL_DETAIL_HOSTED
-
-#ifndef CANN_ASC_STL_DETAIL_FREESTANDING
-#define CANN_ASC_STL_DETAIL_FREESTANDING() !CANN_ASC_STL_DETAIL_HOSTED()
-#endif  // CANN_ASC_STL_DETAIL_FREESTANDING
-
-#if CANN_ASC_STL_DETAIL_HOSTED()
 #include <stddef.h>
-#else  // ^^^ CANN_ASC_STL_DETAIL_HOSTED() ^^^ / vvv CANN_ASC_STL_DETAIL_FREESTANDING() vvv
-#if !defined(offsetof)
-#if defined(__GNUC__) || defined(__clang__) || defined(__CCE__)
+
+#ifndef offsetof
 #define offsetof(type, member) __builtin_offsetof(type, member)
-#else
-#define offsetof(type, member) \
-    ((__SIZE_TYPE__)((char*)&(((type*)0)->member) - (char*)0))  // NOLINT(readability/casting,runtime/casting)
 #endif
-#endif  // !offsetof
-#endif  // CANN_ASC_STL_DETAIL_FREESTANDING()
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_FREESTANDING()
-// 独立/设备侧不引入 <stddef.h>：ptrdiff_t/size_t 用编译器预定义拼写；
-// max_align_t 保持与全局同源（冻结合同断言 is_same_v<asc::std::max_align_t,
-// ::max_align_t>，编译器自带 stddef.h 在设备侧同样可用）。
 using ::max_align_t;
-using ptrdiff_t = __PTRDIFF_TYPE__;
-using size_t = __SIZE_TYPE__;
-#else   // ^^^ CANN_ASC_STL_DETAIL_FREESTANDING() ^^^ / vvv CANN_ASC_STL_DETAIL_HOSTED() vvv
-using ::max_align_t;
+using nullptr_t = decltype(nullptr);
 using ::ptrdiff_t;
 using ::size_t;
-#endif  // CANN_ASC_STL_DETAIL_HOSTED()
-
-using nullptr_t = decltype(nullptr);
 
 CANN_ASC_STL_END_NAMESPACE
 

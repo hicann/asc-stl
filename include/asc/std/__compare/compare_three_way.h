@@ -38,7 +38,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 struct compare_three_way {
     template <class T, class U>
-    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto operator()(T&& left, U&& right) const
+    CANN_ASC_STL_API constexpr auto operator()(T&& left, U&& right) const
     {
         return static_cast<T&&>(left) <=> static_cast<U&&>(right);
     }

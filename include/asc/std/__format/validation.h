@@ -27,74 +27,28 @@
 #pragma system_header
 #endif
 
-#include <asc/__detail/attributes.h>
-#include <asc/std/__cstddef/types.h>
+#include <asc/std/__type_traits/integral_constant.h>
+#include <asc/std/__type_traits/is_integral.h>
+#include <asc/std/__type_traits/is_same.h>
+#include <asc/std/__type_traits/remove_cvref.h>
 
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __format_detail {
-template <class T, class U>
-struct is_same {
-    static constexpr bool value = false;
-};
+// Value-domain predicate of the registered format subset, composed from the
+// project type traits instead of local replicas. The integer presentations
+// (d/x/X/o/b) accept the standard integer types up to 64 bits: bool and
+// (narrow) char keep their dedicated presentations through the write_argument
+// overloads, the character-sized integer types (wchar_t, char8_t, char16_t,
+// char32_t) are outside the registered domain, and 128-bit integers are
+// rejected because the digit buffers are sized for 64-bit magnitudes.
 template <class T>
-struct is_same<T, T> {
-    static constexpr bool value = true;
-};
-template <class T>
-struct is_integral {
-    static constexpr bool value = false;
-};
-#define CANN_ASC_STL_DETAIL_FORMAT_INTEGER(Type) \
-    template <>                                  \
-    struct is_integral<Type> {                   \
-        static constexpr bool value = true;      \
-    };
-CANN_ASC_STL_DETAIL_FORMAT_INTEGER(bool)
-CANN_ASC_STL_DETAIL_FORMAT_INTEGER(char)
-CANN_ASC_STL_DETAIL_FORMAT_INTEGER(signed char)
-CANN_ASC_STL_DETAIL_FORMAT_INTEGER(unsigned char)
-CANN_ASC_STL_DETAIL_FORMAT_INTEGER(short)
-CANN_ASC_STL_DETAIL_FORMAT_INTEGER(unsigned short)
-CANN_ASC_STL_DETAIL_FORMAT_INTEGER(int)
-CANN_ASC_STL_DETAIL_FORMAT_INTEGER(unsigned int)
-CANN_ASC_STL_DETAIL_FORMAT_INTEGER(long)
-CANN_ASC_STL_DETAIL_FORMAT_INTEGER(unsigned long)
-CANN_ASC_STL_DETAIL_FORMAT_INTEGER(long long)
-CANN_ASC_STL_DETAIL_FORMAT_INTEGER(unsigned long long)
-#undef CANN_ASC_STL_DETAIL_FORMAT_INTEGER
-template <class T>
-struct remove_reference {
-    using type = T;
-};
-template <class T>
-struct remove_reference<T&> {
-    using type = T;
-};
-template <class T>
-struct remove_reference<T&&> {
-    using type = T;
-};
-template <class T>
-struct remove_cv {
-    using type = T;
-};
-template <class T>
-struct remove_cv<const T> {
-    using type = T;
-};
-template <class T>
-struct remove_cv<volatile T> {
-    using type = T;
-};
-template <class T>
-struct remove_cv<const volatile T> {
-    using type = T;
-};
-template <class T>
-using remove_cvref_t = typename remove_cv<typename remove_reference<T>::type>::type;
+struct is_format_integer : bool_constant<is_integral_v<remove_cvref_t<T>> && !is_same_v<remove_cvref_t<T>, bool> &&
+                               !is_same_v<remove_cvref_t<T>, char> && !is_same_v<remove_cvref_t<T>, wchar_t> &&
+                               !is_same_v<remove_cvref_t<T>, char8_t> && !is_same_v<remove_cvref_t<T>, char16_t> &&
+                               !is_same_v<remove_cvref_t<T>, char32_t> && sizeof(remove_cvref_t<T>) <= 8> {};
 }  // namespace __format_detail
 
 CANN_ASC_STL_END_NAMESPACE

@@ -31,10 +31,13 @@
 // vocabulary (wctype_t/wctrans_t, wctype/wctrans) and the descriptor-driven
 // queries (iswctype/towctrans).  This root shares one delivery unit with the
 // classification root and therefore cannot include it; the dispatch repeats
-// the fixed-C-locale range predicates through local detail helpers so both
-// roots stay self-contained.  The wint_t alias repeats the identical
-// underlying type also spelled by the classification root, which is a legal
-// same-type redeclaration when the later public facade composes both roots.
+// the fixed-C-locale range predicates through local detail helpers (the
+// wide_* spelling, disjoint from the classification root's is_* cores) so
+// both roots stay self-contained while contributing to the same reserved
+// asc::std::detail layer used by the other C-wrapper roots.  The wint_t
+// alias repeats the identical underlying type also spelled by the
+// classification root, which is a legal same-type redeclaration when the
+// later public facade composes both roots.
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #include <cwctype>
@@ -53,7 +56,13 @@ using wctrans_t = ::std::wctrans_t;
 #endif
 
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-namespace __cwctype_descriptor_detail {
+namespace detail {
+
+enum : wctrans_t {
+    trans_none = 0,
+    trans_lower = 1,
+    trans_upper = 2,
+};
 
 enum : wctype_t {
     class_none = 0,
@@ -160,22 +169,21 @@ CANN_ASC_STL_API bool wide_matches(wint_t value, wctype_t descriptor) noexcept
 
 CANN_ASC_STL_API wint_t wide_convert(wint_t value, wctrans_t descriptor) noexcept
 {
-    if (descriptor == 1) {
+    if (descriptor == trans_lower) {
         return wide_is_upper(value) ? value + (L'a' - L'A') : value;
     }
-    if (descriptor == 2) {
+    if (descriptor == trans_upper) {
         return wide_is_lower(value) ? value - (L'a' - L'A') : value;
     }
     return value;
 }
 
-}  // namespace __cwctype_descriptor_detail
+}  // namespace detail
 #endif
 
 CANN_ASC_STL_API wctype_t wctype(const char* property) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    namespace detail = __cwctype_descriptor_detail;
     if (property == nullptr) {
         return detail::class_none;
     }
@@ -212,7 +220,7 @@ CANN_ASC_STL_API wctype_t wctype(const char* property) noexcept
 CANN_ASC_STL_API int iswctype(wint_t value, wctype_t descriptor) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return __cwctype_descriptor_detail::wide_matches(value, descriptor) ? 1 : 0;
+    return detail::wide_matches(value, descriptor) ? 1 : 0;
 #else
     return ::std::iswctype(value, descriptor);
 #endif
@@ -221,15 +229,14 @@ CANN_ASC_STL_API int iswctype(wint_t value, wctype_t descriptor) noexcept
 CANN_ASC_STL_API wctrans_t wctrans(const char* property) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    namespace detail = __cwctype_descriptor_detail;
     if (property == nullptr) {
-        return 0;
+        return detail::trans_none;
     }
     if (detail::match_property(property, 't', 'o', 'l', 'o', 'w', 'e', 'r'))
-        return 1;
+        return detail::trans_lower;
     if (detail::match_property(property, 't', 'o', 'u', 'p', 'p', 'e', 'r'))
-        return 2;
-    return 0;
+        return detail::trans_upper;
+    return detail::trans_none;
 #else
     return ::std::wctrans(property);
 #endif
@@ -238,7 +245,7 @@ CANN_ASC_STL_API wctrans_t wctrans(const char* property) noexcept
 CANN_ASC_STL_API wint_t towctrans(wint_t value, wctrans_t descriptor) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    return __cwctype_descriptor_detail::wide_convert(value, descriptor);
+    return detail::wide_convert(value, descriptor);
 #else
     return ::std::towctrans(value, descriptor);
 #endif

@@ -17,6 +17,12 @@
 #ifndef CANN_ASC_STL_DETAIL_PREPROCESSOR_H
 #define CANN_ASC_STL_DETAIL_PREPROCESSOR_H
 
+// Reserved preprocessing vocabulary. Nothing inside the library consumes
+// these helpers yet - they are the designated spelling for any future
+// macro-machinery need (overload families, token pasting, stringization) so
+// such code does not reinvent local variants. Adding consumers is welcome;
+// do not copy the patterns ad hoc into feature headers instead of here.
+
 #define CANN_ASC_STL_DETAIL_PP_EXPAND(...) __VA_ARGS__
 #define CANN_ASC_STL_DETAIL_PP_CAT_IMPL(left, right) left##right
 #define CANN_ASC_STL_DETAIL_PP_CAT(left, right) CANN_ASC_STL_DETAIL_PP_CAT_IMPL(left, right)

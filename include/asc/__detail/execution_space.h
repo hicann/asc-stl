@@ -17,6 +17,16 @@
 #ifndef CANN_ASC_STL_DETAIL_EXECUTION_SPACE_H
 #define CANN_ASC_STL_DETAIL_EXECUTION_SPACE_H
 
+// Design decision (do not "fix"): under CCE the whole translation unit is
+// treated as a device compilation (DEVICE_COMPILATION() == 1) even for its
+// host-qualified functions, so host fast paths gated on
+// `!DEVICE_COMPILATION()` never activate inside a CCE unit - the frozen
+// hosted/device double gate degrades to its safe single gate there. This is
+// deliberate: a mixed-SIMD unit may lower any function to AI Core code, and
+// letting host-only symbols (host libc, acl runtime calls) leak into it is
+// the failure mode this conservative reading prevents. Host fast paths
+// activate only in pure host compilers (GCC/Clang/MSVC).
+
 #if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
 #define CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() 1
 #define CANN_ASC_STL_DETAIL_SIMT_COMPILATION() 1

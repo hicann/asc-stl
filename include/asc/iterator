@@ -27,10 +27,16 @@
 #pragma system_header
 #endif
 
-#include <asc/__iterator/adaptors.h>
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #include <iterator>
 #else
+// Device builds cannot include the host <iterator> tree, so the iterator
+// category used by strided_iterator below is forward-declared instead. The
+// declaration pins the definition in asc/std/__iterator/iterator_traits.h,
+// which must stay a class type for this to remain a valid redeclaration;
+// changing the asc::std tag vocabulary requires updating this facade in the
+// same change (the host branch above keeps them in lockstep through the
+// system header).
 namespace asc::std {
 struct random_access_iterator_tag;
 }
@@ -203,6 +209,54 @@ CANN_ASC_STL_API constexpr bool operator==(
     return lhs.index() == rhs.index();
 }
 
+template <class T, class Index>
+CANN_ASC_STL_API constexpr bool operator!=(
+    const constant_iterator<T, Index>& lhs, const constant_iterator<T, Index>& rhs)
+{
+    return !(lhs == rhs);
+}
+
+template <class T, class Index>
+CANN_ASC_STL_API constexpr bool operator<(
+    const constant_iterator<T, Index>& lhs, const constant_iterator<T, Index>& rhs)
+{
+    return lhs.index() < rhs.index();
+}
+
+template <class T, class Index>
+CANN_ASC_STL_API constexpr bool operator>(
+    const constant_iterator<T, Index>& lhs, const constant_iterator<T, Index>& rhs)
+{
+    return rhs.index() < lhs.index();
+}
+
+template <class T, class Index>
+CANN_ASC_STL_API constexpr bool operator<=(
+    const constant_iterator<T, Index>& lhs, const constant_iterator<T, Index>& rhs)
+{
+    return !(rhs.index() < lhs.index());
+}
+
+template <class T, class Index>
+CANN_ASC_STL_API constexpr bool operator>=(
+    const constant_iterator<T, Index>& lhs, const constant_iterator<T, Index>& rhs)
+{
+    return !(lhs.index() < rhs.index());
+}
+
+template <class T, class Index>
+CANN_ASC_STL_API constexpr constant_iterator<T, Index> operator+(Index n, const constant_iterator<T, Index>& iterator)
+{
+    return iterator + n;
+}
+
+template <class T, class Index>
+CANN_ASC_STL_API constexpr constant_iterator<T, Index> operator-(constant_iterator<T, Index> iterator, Index n)
+{
+    iterator -= n;
+    return iterator;
+}
+
 template <class T, class Index = __PTRDIFF_TYPE__>
 CANN_ASC_STL_API constexpr constant_iterator<T, Index> make_constant_iterator(T value, Index index = 0)
 {
@@ -279,6 +333,56 @@ CANN_ASC_STL_API constexpr bool operator==(
     return lhs.base() == rhs.base();
 }
 
+template <class Start, class Difference>
+CANN_ASC_STL_API constexpr bool operator!=(
+    const counting_iterator<Start, Difference>& lhs, const counting_iterator<Start, Difference>& rhs)
+{
+    return !(lhs == rhs);
+}
+
+template <class Start, class Difference>
+CANN_ASC_STL_API constexpr bool operator<(
+    const counting_iterator<Start, Difference>& lhs, const counting_iterator<Start, Difference>& rhs)
+{
+    return lhs.base() < rhs.base();
+}
+
+template <class Start, class Difference>
+CANN_ASC_STL_API constexpr bool operator>(
+    const counting_iterator<Start, Difference>& lhs, const counting_iterator<Start, Difference>& rhs)
+{
+    return rhs.base() < lhs.base();
+}
+
+template <class Start, class Difference>
+CANN_ASC_STL_API constexpr bool operator<=(
+    const counting_iterator<Start, Difference>& lhs, const counting_iterator<Start, Difference>& rhs)
+{
+    return !(rhs.base() < lhs.base());
+}
+
+template <class Start, class Difference>
+CANN_ASC_STL_API constexpr bool operator>=(
+    const counting_iterator<Start, Difference>& lhs, const counting_iterator<Start, Difference>& rhs)
+{
+    return !(lhs.base() < rhs.base());
+}
+
+template <class Start, class Difference>
+CANN_ASC_STL_API constexpr counting_iterator<Start, Difference> operator+(
+    Difference n, const counting_iterator<Start, Difference>& iterator)
+{
+    return iterator + n;
+}
+
+template <class Start, class Difference>
+CANN_ASC_STL_API constexpr counting_iterator<Start, Difference> operator-(
+    counting_iterator<Start, Difference> iterator, Difference n)
+{
+    iterator -= n;
+    return iterator;
+}
+
 template <class Start>
 CANN_ASC_STL_API constexpr counting_iterator<Start> make_counting_iterator(Start start)
 {
@@ -316,9 +420,19 @@ public:
         ++index_;
         return *this;
     }
+    CANN_ASC_STL_API constexpr discard_iterator& operator--()
+    {
+        --index_;
+        return *this;
+    }
     CANN_ASC_STL_API constexpr discard_iterator& operator+=(difference_type n)
     {
         index_ += n;
+        return *this;
+    }
+    CANN_ASC_STL_API constexpr discard_iterator& operator-=(difference_type n)
+    {
+        index_ -= n;
         return *this;
     }
     CANN_ASC_STL_API constexpr difference_type index() const
@@ -334,6 +448,59 @@ template <class Integer = __PTRDIFF_TYPE__>
 CANN_ASC_STL_API constexpr discard_iterator make_discard_iterator(Integer index = 0)
 {
     return discard_iterator(index);
+}
+
+CANN_ASC_STL_API constexpr discard_iterator operator+(discard_iterator iterator, __PTRDIFF_TYPE__ n)
+{
+    iterator += n;
+    return iterator;
+}
+
+CANN_ASC_STL_API constexpr discard_iterator operator+(__PTRDIFF_TYPE__ n, discard_iterator iterator)
+{
+    iterator += n;
+    return iterator;
+}
+
+CANN_ASC_STL_API constexpr discard_iterator operator-(discard_iterator iterator, __PTRDIFF_TYPE__ n)
+{
+    iterator -= n;
+    return iterator;
+}
+
+CANN_ASC_STL_API constexpr __PTRDIFF_TYPE__ operator-(const discard_iterator& lhs, const discard_iterator& rhs)
+{
+    return lhs.index() - rhs.index();
+}
+
+CANN_ASC_STL_API constexpr bool operator==(const discard_iterator& lhs, const discard_iterator& rhs)
+{
+    return lhs.index() == rhs.index();
+}
+
+CANN_ASC_STL_API constexpr bool operator!=(const discard_iterator& lhs, const discard_iterator& rhs)
+{
+    return !(lhs == rhs);
+}
+
+CANN_ASC_STL_API constexpr bool operator<(const discard_iterator& lhs, const discard_iterator& rhs)
+{
+    return lhs.index() < rhs.index();
+}
+
+CANN_ASC_STL_API constexpr bool operator>(const discard_iterator& lhs, const discard_iterator& rhs)
+{
+    return rhs.index() < lhs.index();
+}
+
+CANN_ASC_STL_API constexpr bool operator<=(const discard_iterator& lhs, const discard_iterator& rhs)
+{
+    return !(rhs.index() < lhs.index());
+}
+
+CANN_ASC_STL_API constexpr bool operator>=(const discard_iterator& lhs, const discard_iterator& rhs)
+{
+    return !(lhs.index() < rhs.index());
 }
 
 template <class Iterator, class IndexIterator = Iterator>
@@ -357,10 +524,64 @@ public:
         ++index_;
         return *this;
     }
+    CANN_ASC_STL_API constexpr permutation_iterator& operator--()
+    {
+        --index_;
+        return *this;
+    }
     CANN_ASC_STL_API constexpr permutation_iterator& operator+=(difference_type n)
     {
         index_ += n;
         return *this;
+    }
+    CANN_ASC_STL_API constexpr permutation_iterator& operator-=(difference_type n)
+    {
+        index_ -= n;
+        return *this;
+    }
+    CANN_ASC_STL_API friend constexpr permutation_iterator operator+(permutation_iterator iterator, difference_type n)
+    {
+        iterator += n;
+        return iterator;
+    }
+    CANN_ASC_STL_API friend constexpr permutation_iterator operator+(difference_type n, permutation_iterator iterator)
+    {
+        iterator += n;
+        return iterator;
+    }
+    CANN_ASC_STL_API friend constexpr permutation_iterator operator-(permutation_iterator iterator, difference_type n)
+    {
+        iterator -= n;
+        return iterator;
+    }
+    CANN_ASC_STL_API friend constexpr difference_type operator-(
+        const permutation_iterator& lhs, const permutation_iterator& rhs)
+    {
+        return lhs.index_ - rhs.index_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator==(const permutation_iterator& lhs, const permutation_iterator& rhs)
+    {
+        return lhs.index_ == rhs.index_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator!=(const permutation_iterator& lhs, const permutation_iterator& rhs)
+    {
+        return !(lhs == rhs);
+    }
+    CANN_ASC_STL_API friend constexpr bool operator<(const permutation_iterator& lhs, const permutation_iterator& rhs)
+    {
+        return lhs.index_ < rhs.index_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator>(const permutation_iterator& lhs, const permutation_iterator& rhs)
+    {
+        return rhs.index_ < lhs.index_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator<=(const permutation_iterator& lhs, const permutation_iterator& rhs)
+    {
+        return !(rhs.index_ < lhs.index_);
+    }
+    CANN_ASC_STL_API friend constexpr bool operator>=(const permutation_iterator& lhs, const permutation_iterator& rhs)
+    {
+        return !(lhs.index_ < rhs.index_);
     }
 
 private:
@@ -455,6 +676,12 @@ public:
     {
         return (left.iterator_ - right.iterator_) / left.stride_;
     }
+    // Equality contract: comparison looks at the base position only. Two
+    // strided iterators over the same base with different strides compare
+    // equal when their base positions coincide - the stride participates in
+    // arithmetic (advance, distance), never in equality. Postfix ++/-- are
+    // provided on strided_iterator only; the other adaptors stay
+    // prefix-only until a consumer needs the postfix form.
     CANN_ASC_STL_API friend constexpr bool operator==(const strided_iterator& left, const strided_iterator& right)
     {
         return left.iterator_ == right.iterator_;
@@ -525,6 +752,45 @@ public:
         ++current_;
         return *this;
     }
+    CANN_ASC_STL_API constexpr shuffle_iterator& operator+=(difference_type n)
+    {
+        current_ += n;
+        return *this;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator==(const shuffle_iterator& lhs, const shuffle_iterator& rhs)
+    {
+        return lhs.current_ == rhs.current_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator!=(const shuffle_iterator& lhs, const shuffle_iterator& rhs)
+    {
+        return !(lhs == rhs);
+    }
+    CANN_ASC_STL_API friend constexpr bool operator<(const shuffle_iterator& lhs, const shuffle_iterator& rhs)
+    {
+        return lhs.current_ < rhs.current_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator>(const shuffle_iterator& lhs, const shuffle_iterator& rhs)
+    {
+        return rhs.current_ < lhs.current_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator<=(const shuffle_iterator& lhs, const shuffle_iterator& rhs)
+    {
+        return !(rhs.current_ < lhs.current_);
+    }
+    CANN_ASC_STL_API friend constexpr bool operator>=(const shuffle_iterator& lhs, const shuffle_iterator& rhs)
+    {
+        return !(lhs.current_ < rhs.current_);
+    }
+    CANN_ASC_STL_API friend constexpr shuffle_iterator operator+(shuffle_iterator iterator, difference_type n)
+    {
+        iterator += n;
+        return iterator;
+    }
+    CANN_ASC_STL_API friend constexpr shuffle_iterator operator+(difference_type n, shuffle_iterator iterator)
+    {
+        iterator += n;
+        return iterator;
+    }
 
 private:
     Bijection bijection_;
@@ -557,6 +823,45 @@ public:
     {
         ++iterator_;
         return *this;
+    }
+    CANN_ASC_STL_API constexpr transform_iterator& operator+=(difference_type n)
+    {
+        iterator_ += n;
+        return *this;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator==(const transform_iterator& lhs, const transform_iterator& rhs)
+    {
+        return lhs.iterator_ == rhs.iterator_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator!=(const transform_iterator& lhs, const transform_iterator& rhs)
+    {
+        return !(lhs == rhs);
+    }
+    CANN_ASC_STL_API friend constexpr bool operator<(const transform_iterator& lhs, const transform_iterator& rhs)
+    {
+        return lhs.iterator_ < rhs.iterator_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator>(const transform_iterator& lhs, const transform_iterator& rhs)
+    {
+        return rhs.iterator_ < lhs.iterator_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator<=(const transform_iterator& lhs, const transform_iterator& rhs)
+    {
+        return !(rhs.iterator_ < lhs.iterator_);
+    }
+    CANN_ASC_STL_API friend constexpr bool operator>=(const transform_iterator& lhs, const transform_iterator& rhs)
+    {
+        return !(lhs.iterator_ < rhs.iterator_);
+    }
+    CANN_ASC_STL_API friend constexpr transform_iterator operator+(transform_iterator iterator, difference_type n)
+    {
+        iterator += n;
+        return iterator;
+    }
+    CANN_ASC_STL_API friend constexpr transform_iterator operator+(difference_type n, transform_iterator iterator)
+    {
+        iterator += n;
+        return iterator;
     }
 
 private:
@@ -602,6 +907,53 @@ public:
     {
         ++iterator_;
         return *this;
+    }
+    CANN_ASC_STL_API constexpr transform_output_iterator& operator+=(__PTRDIFF_TYPE__ n)
+    {
+        iterator_ += n;
+        return *this;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator==(
+        const transform_output_iterator& lhs, const transform_output_iterator& rhs)
+    {
+        return lhs.iterator_ == rhs.iterator_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator!=(
+        const transform_output_iterator& lhs, const transform_output_iterator& rhs)
+    {
+        return !(lhs == rhs);
+    }
+    CANN_ASC_STL_API friend constexpr bool operator<(
+        const transform_output_iterator& lhs, const transform_output_iterator& rhs)
+    {
+        return lhs.iterator_ < rhs.iterator_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator>(
+        const transform_output_iterator& lhs, const transform_output_iterator& rhs)
+    {
+        return rhs.iterator_ < lhs.iterator_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator<=(
+        const transform_output_iterator& lhs, const transform_output_iterator& rhs)
+    {
+        return !(rhs.iterator_ < lhs.iterator_);
+    }
+    CANN_ASC_STL_API friend constexpr bool operator>=(
+        const transform_output_iterator& lhs, const transform_output_iterator& rhs)
+    {
+        return !(lhs.iterator_ < rhs.iterator_);
+    }
+    CANN_ASC_STL_API friend constexpr transform_output_iterator operator+(
+        transform_output_iterator iterator, __PTRDIFF_TYPE__ n)
+    {
+        iterator += n;
+        return iterator;
+    }
+    CANN_ASC_STL_API friend constexpr transform_output_iterator operator+(
+        __PTRDIFF_TYPE__ n, transform_output_iterator iterator)
+    {
+        iterator += n;
+        return iterator;
     }
 
 private:
@@ -654,6 +1006,53 @@ public:
         ++iterator_;
         return *this;
     }
+    CANN_ASC_STL_API constexpr transform_input_output_iterator& operator+=(__PTRDIFF_TYPE__ n)
+    {
+        iterator_ += n;
+        return *this;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator==(
+        const transform_input_output_iterator& lhs, const transform_input_output_iterator& rhs)
+    {
+        return lhs.iterator_ == rhs.iterator_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator!=(
+        const transform_input_output_iterator& lhs, const transform_input_output_iterator& rhs)
+    {
+        return !(lhs == rhs);
+    }
+    CANN_ASC_STL_API friend constexpr bool operator<(
+        const transform_input_output_iterator& lhs, const transform_input_output_iterator& rhs)
+    {
+        return lhs.iterator_ < rhs.iterator_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator>(
+        const transform_input_output_iterator& lhs, const transform_input_output_iterator& rhs)
+    {
+        return rhs.iterator_ < lhs.iterator_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator<=(
+        const transform_input_output_iterator& lhs, const transform_input_output_iterator& rhs)
+    {
+        return !(rhs.iterator_ < lhs.iterator_);
+    }
+    CANN_ASC_STL_API friend constexpr bool operator>=(
+        const transform_input_output_iterator& lhs, const transform_input_output_iterator& rhs)
+    {
+        return !(lhs.iterator_ < rhs.iterator_);
+    }
+    CANN_ASC_STL_API friend constexpr transform_input_output_iterator operator+(
+        transform_input_output_iterator iterator, __PTRDIFF_TYPE__ n)
+    {
+        iterator += n;
+        return iterator;
+    }
+    CANN_ASC_STL_API friend constexpr transform_input_output_iterator operator+(
+        __PTRDIFF_TYPE__ n, transform_input_output_iterator iterator)
+    {
+        iterator += n;
+        return iterator;
+    }
 
 private:
     Iterator iterator_;
@@ -703,6 +1102,51 @@ public:
         ++index_;
         return *this;
     }
+    CANN_ASC_STL_API constexpr tabulate_output_iterator& operator+=(Index n)
+    {
+        index_ += n;
+        return *this;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator==(
+        const tabulate_output_iterator& lhs, const tabulate_output_iterator& rhs)
+    {
+        return lhs.index_ == rhs.index_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator!=(
+        const tabulate_output_iterator& lhs, const tabulate_output_iterator& rhs)
+    {
+        return !(lhs == rhs);
+    }
+    CANN_ASC_STL_API friend constexpr bool operator<(
+        const tabulate_output_iterator& lhs, const tabulate_output_iterator& rhs)
+    {
+        return lhs.index_ < rhs.index_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator>(
+        const tabulate_output_iterator& lhs, const tabulate_output_iterator& rhs)
+    {
+        return rhs.index_ < lhs.index_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator<=(
+        const tabulate_output_iterator& lhs, const tabulate_output_iterator& rhs)
+    {
+        return !(rhs.index_ < lhs.index_);
+    }
+    CANN_ASC_STL_API friend constexpr bool operator>=(
+        const tabulate_output_iterator& lhs, const tabulate_output_iterator& rhs)
+    {
+        return !(lhs.index_ < rhs.index_);
+    }
+    CANN_ASC_STL_API friend constexpr tabulate_output_iterator operator+(tabulate_output_iterator iterator, Index n)
+    {
+        iterator += n;
+        return iterator;
+    }
+    CANN_ASC_STL_API friend constexpr tabulate_output_iterator operator+(Index n, tabulate_output_iterator iterator)
+    {
+        iterator += n;
+        return iterator;
+    }
 
 private:
     Function function_;
@@ -730,6 +1174,30 @@ public:
     {
         increment();
         return *this;
+    }
+    template <__SIZE_TYPE__... I>
+    CANN_ASC_STL_API constexpr bool equal(const zip_iterator& other, detail::iterator_index_sequence<I...>) const
+    {
+        bool result = true;
+        int unused[] = {0,
+            (result = result &&
+                    detail::iterator_storage_get<I, Iterators...>::apply(iterators_) ==
+                        detail::iterator_storage_get<I, Iterators...>::apply(other.iterators_),
+                0)...};
+        (void)unused;
+        return result;
+    }
+    CANN_ASC_STL_API constexpr bool equal(const zip_iterator& other) const
+    {
+        return equal(other, typename detail::make_iterator_index_sequence<sizeof...(Iterators)>::type{});
+    }
+    CANN_ASC_STL_API friend constexpr bool operator==(const zip_iterator& lhs, const zip_iterator& rhs)
+    {
+        return lhs.equal(rhs);
+    }
+    CANN_ASC_STL_API friend constexpr bool operator!=(const zip_iterator& lhs, const zip_iterator& rhs)
+    {
+        return !(lhs == rhs);
     }
 
 private:
@@ -804,6 +1272,16 @@ public:
     {
         ++iterator_;
         return *this;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator==(
+        const zip_transform_iterator& lhs, const zip_transform_iterator& rhs)
+    {
+        return lhs.iterator_ == rhs.iterator_;
+    }
+    CANN_ASC_STL_API friend constexpr bool operator!=(
+        const zip_transform_iterator& lhs, const zip_transform_iterator& rhs)
+    {
+        return !(lhs == rhs);
     }
 
 private:

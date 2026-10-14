@@ -28,7 +28,6 @@
 #endif
 
 #include <asc/__detail/attributes.h>
-#include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__fwd/array.h>
 #include <asc/std/__fwd/complex.h>
 #include <asc/std/__fwd/pair.h>
@@ -36,12 +35,14 @@
 #include <asc/std/__fwd/tuple.h>
 #include <asc/std/__tuple/tuple_size.h>
 #include <asc/std/__tuple/tuple_types.h>
-#include <asc/std/__type_traits/integral_constant.h>
-#include <asc/std/__type_traits/remove_cvref.h>
 #include <asc/std/cstddef>
+#include <asc/std/__type_traits/remove_cvref.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// Extended tuple-like detection: true for every type that participates in
+// the tuple protocol (tuple_size / tuple_element / get). This variable
+// template form is SFINAE-friendly and works without concepts.
 template <class T>
 inline constexpr bool __tuple_like_ext = false;
 template <class T>
@@ -63,12 +64,10 @@ inline constexpr bool __tuple_like_ext<ranges::subrange<Iter, Sent, Kind>> = tru
 template <class... Types>
 inline constexpr bool __tuple_like_ext<__tuple_types<Types...>> = true;
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
+// pair-like（二元 tuple 协议类型）判定：供 ranges::subrange 的 pair 构造约束
+// 使用。变量模板形式与 __tuple_like_ext 一致，无 concepts 环境也可用。
 template <class T>
-concept __tuple_like = __tuple_like_ext<remove_cvref_t<T>>;
-template <class T>
-concept __pair_like = __tuple_like<T> && tuple_size<remove_cvref_t<T>>::value == 2;
-#endif
+inline constexpr bool __pair_like = __tuple_like_ext<remove_cvref_t<T>> && tuple_size<remove_cvref_t<T>>::value == 2;
 
 CANN_ASC_STL_END_NAMESPACE
 

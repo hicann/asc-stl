@@ -28,6 +28,5 @@
 #endif
 
 #include <asc/std/__list/list.h>
-#include <asc/std/__list/node.h>
 
 #endif  // CANN_ASC_STL_ASC_STD_LIST

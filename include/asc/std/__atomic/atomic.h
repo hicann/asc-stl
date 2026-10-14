@@ -202,6 +202,17 @@ public:
     {
         return static_cast<T>(::asc::detail::atomic_xor(&storage_, static_cast<storage_type>(value)));
     }
+
+    CANN_ASC_STL_SIMT_API T operator=(T value) noexcept
+    {
+        store(value);
+        return value;
+    }
+
+    CANN_ASC_STL_SIMT_API operator T() const noexcept
+    {
+        return load();
+    }
 #elif !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     atomic() noexcept = default;
     // NOLINTNEXTLINE(runtime/explicit)
@@ -223,6 +234,17 @@ public:
         __atomic_store_n(&storage_, static_cast<storage_type>(value), static_cast<int>(order));
     }
 
+    T operator=(T value) noexcept
+    {
+        store(value);
+        return value;
+    }
+
+    operator T() const noexcept
+    {
+        return load();
+    }
+
     T exchange(T value, memory_order order = memory_order_seq_cst) noexcept
     {
         return static_cast<T>(
@@ -242,8 +264,9 @@ public:
     bool compare_exchange_strong(T& expected, T desired, memory_order success, memory_order failure) noexcept
     {
         storage_type expected_storage = static_cast<storage_type>(expected);
-        const bool swapped = __atomic_compare_exchange_n(&storage_, &expected_storage,
-            static_cast<storage_type>(desired), false, static_cast<int>(success), static_cast<int>(failure));
+        const bool swapped =
+            __atomic_compare_exchange_n(&storage_, &expected_storage, static_cast<storage_type>(desired), false,
+                static_cast<int>(success), static_cast<int>(::asc::detail::atomic_failure_order(failure)));
         if (!swapped) {
             expected = static_cast<T>(expected_storage);
         }

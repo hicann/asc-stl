@@ -28,17 +28,17 @@
 #endif
 
 #include <asc/__detail/attributes.h>
-#include <asc/std/__concepts/concept_macros.h>
-#include <asc/std/__format/format_integral.h>
-#include <asc/std/__type_traits/is_same.h>
-#include <asc/std/__type_traits/make_unsigned.h>
+#include <asc/std/__format/output_buffer.h>
 
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __format_detail {
-struct character_formatter_tag {};
+CANN_ASC_STL_API constexpr void write_argument(output_buffer& buffer, char value, unsigned int, bool) noexcept
+{
+    buffer.put(value);
+}
 }  // namespace __format_detail
 
 CANN_ASC_STL_END_NAMESPACE

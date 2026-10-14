@@ -27,6 +27,8 @@
 #pragma system_header
 #endif
 
+#include <asc/__detail/attributes.h>
+
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 
 CANN_ASC_STL_BEGIN_NAMESPACE

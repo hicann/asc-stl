@@ -28,6 +28,12 @@
 #endif
 
 namespace asc::detail {
+// Placement contract: a barrier_state must reside in device global memory
+// that every participating thread accesses through the same address (never
+// in per-core private storage or an on-chip local copy). Phase completion is
+// a cross-thread handshake on these fields through device-scope atomics; a
+// copy that is not globally visible would never observe the completing
+// thread's phase release.
 struct barrier_state {
     __INT64_TYPE__ expected;
     __INT64_TYPE__ remaining;

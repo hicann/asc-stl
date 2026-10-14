@@ -27,6 +27,12 @@
 #pragma system_header
 #endif
 
+// Host debug builds surface out-of-domain arguments through assert; device
+// and release builds keep the silent clamp documented below.
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#include <asc/std/cassert>
+#endif
+
 // Bit extension backend for the later public <asc/bit> facade. The four
 // primitives accept the supported unsigned integer types, are implemented
 // with standard bit operations, and run in Host, ordinary AICore and pure
@@ -34,6 +40,14 @@
 // a compiler may optimize them onto equivalents when available.
 namespace asc::detail {
 
+// The shift-loop is the deliberately portable default.  The dev-side
+// reference additionally gates a hardware __brev path (pure SIMT on 950PR/DT
+// with devkit >= 90200000, mixed vector cores always fall back), but that
+// gate stays dark on every released devkit because the __brev lowering is
+// still broken there, and this tree carries no 950-arch/devkit capability
+// vocabulary to express it safely.  Wiring the intrinsic path requires the
+// capability macros plus on-target CCE validation first; until then the loop
+// below is the single implementation for every execution space.
 template <class T>
 CANN_ASC_STL_API constexpr T bit_reverse_impl(T value) noexcept
 {
@@ -58,6 +72,14 @@ template <class T>
 CANN_ASC_STL_API constexpr T bitfield_extract_impl(T value, int position, int width) noexcept
 {
     const int total = static_cast<int>(sizeof(T)) * 8;
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    // The clamps below are a release/device safety net, not part of the
+    // documented domain: debug Host builds fail fast on out-of-domain
+    // arguments instead of silently returning a zero field.
+    assert(width >= 0);
+    assert(position >= 0 && position < total);
+    assert(width <= total - position);
+#endif
     if (width <= 0 || position < 0 || position >= total) {
         return T{0};
     }
@@ -71,6 +93,12 @@ template <class T>
 CANN_ASC_STL_API constexpr T bitfield_insert_impl(T destination, T source, int position, int width) noexcept
 {
     const int total = static_cast<int>(sizeof(T)) * 8;
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    // Same debug fail-fast contract as bitfield_extract_impl.
+    assert(width >= 0);
+    assert(position >= 0 && position < total);
+    assert(width <= total - position);
+#endif
     if (width <= 0 || position < 0 || position >= total) {
         return destination;
     }

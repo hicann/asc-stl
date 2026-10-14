@@ -60,11 +60,16 @@ CANN_ASC_STL_SIMT_API T block_reduce_impl(T* workspace, T value, Operation opera
 {
     const auto lane = lane_id();
     const auto flat_thread = static_cast<unsigned int>(thread_index());
-    const auto warp = flat_thread / warp_size;
-    const auto warps = static_cast<unsigned int>(thread_count()) / warp_size;
+    // One warp-partition vocabulary for the whole library: the hierarchy
+    // queries own the warp indexing, and their ceil-division warp count keeps
+    // every partial tail warp contributing should a caller ever relax the
+    // registered multiple-of-32 block contract (a floor division here would
+    // drop the tail warp's slot from both the leader write and the fold).
+    const auto warp = warp_index();
+    const auto warps = warp_count();
     T warp_value = value;
     for (unsigned int offset = warp_size / 2; offset != 0; offset /= 2) {
-        const T other = warp_shuffle_down_value<32>(warp_value, static_cast<int>(offset));
+        const T other = warp_shuffle_down_value<warp_size>(warp_value, static_cast<int>(offset));
         if (lane + offset < warp_size) {
             warp_value = operation(warp_value, other);
         }
@@ -104,6 +109,12 @@ CANN_ASC_STL_SIMT_API T block_reduce_max_impl(T* workspace, T value) noexcept
     return block_reduce_impl(workspace, value, collective_max<T>);
 }
 
+// The source thread must be a valid flat thread index of the invoking block
+// in the fixed flat-thread order the registered contract names: no thread
+// matches an out-of-range index, workspace[0] keeps whatever a previous
+// collective left there and every thread broadcasts that stale value.  The
+// no-status, no-trap contract keeps this a documented caller precondition
+// rather than a runtime check.
 template <class T>
 CANN_ASC_STL_SIMT_API T block_broadcast_impl(T* workspace, T value, unsigned int source_thread) noexcept
 {
@@ -121,18 +132,19 @@ CANN_ASC_STL_SIMT_API T block_scan_add_impl(T* workspace, T value) noexcept
 {
     const auto lane = lane_id();
     const auto flat_thread = static_cast<unsigned int>(thread_index());
-    const auto warp = flat_thread / warp_size;
-    const auto warps = static_cast<unsigned int>(thread_count()) / warp_size;
+    // Same single warp-partition vocabulary as block_reduce_impl.
+    const auto warp = warp_index();
+    const auto warps = warp_count();
     T inclusive = value;
     for (unsigned int offset = 1; offset < warp_size; offset *= 2) {
-        const T other = warp_shuffle_up_value<32>(inclusive, static_cast<int>(offset));
+        const T other = warp_shuffle_up_value<warp_size>(inclusive, static_cast<int>(offset));
         if (lane >= offset) {
             inclusive = other + inclusive;
         }
     }
     T exclusive{};
     if constexpr (!Inclusive) {
-        const T previous = warp_shuffle_up_value<32>(inclusive, 1);
+        const T previous = warp_shuffle_up_value<warp_size>(inclusive, 1);
         if (lane != 0) {
             exclusive = previous;
         }

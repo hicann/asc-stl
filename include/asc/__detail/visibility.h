@@ -17,7 +17,16 @@
 #ifndef CANN_ASC_STL_DETAIL_VISIBILITY_H
 #define CANN_ASC_STL_DETAIL_VISIBILITY_H
 
+// Visibility policy: every library-internal symbol carries VISIBILITY_HIDDEN
+// (via the CANN_ASC_STL_*_API macros) so nothing leaks from an embedding TU;
+// the single deliberate VISIBILITY_DEFAULT user is the public piecewise
+// construct tag. The _WIN32 arm is kept distinct from the fallback arm on
+// purpose: Windows (including MinGW, which defines both _WIN32 and __GNUC__)
+// must not receive ELF visibility attributes, and having the arm explicit
+// with the same empty body documents that decision instead of relying on
+// falling through the GNUC check above.
 #if defined(_WIN32)
+// Windows (including MinGW): no ELF visibility attributes.
 #define CANN_ASC_STL_DETAIL_VISIBILITY_HIDDEN
 #define CANN_ASC_STL_DETAIL_VISIBILITY_DEFAULT
 #elif defined(__GNUC__) || defined(__clang__)

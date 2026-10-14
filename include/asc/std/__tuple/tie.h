@@ -43,13 +43,14 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr tuple<Types&...> tie(Types&...
 template <class... Types>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr tuple<Types&&...> forward_as_tuple(Types&&... values) noexcept
 {
-    return tuple<Types&&...>(::asc::std::forward<Types>(values)...);  // NOLINT(build/include_what_you_use)
+    return tuple<Types&&...>(::asc::std::forward<Types>(values)...);
 }
 template <class... Types>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr tuple<__unwrap_ref_decay_t<Types>...> make_tuple(Types&&... values)
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr tuple<unwrap_ref_decay_t<Types>...> make_tuple(
+    Types&&... values) noexcept(is_nothrow_constructible_v<tuple<unwrap_ref_decay_t<Types>...>, Types...>)
 {
-    return tuple<__unwrap_ref_decay_t<Types>...>(  // NOLINT(build/include_what_you_use)
-        ::asc::std::forward<Types>(values)...);    // NOLINT(build/include_what_you_use)
+    return tuple<unwrap_ref_decay_t<Types>...>(  // NOLINT(build/include_what_you_use)
+        ::asc::std::forward<Types>(values)...);  // NOLINT(build/include_what_you_use)
 }
 
 CANN_ASC_STL_END_NAMESPACE

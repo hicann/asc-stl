@@ -45,7 +45,12 @@ def check_layout(compiler, include_root, standard, layout):
             input=SOURCE, capture_output=True, text=True, check=False, timeout=10,
         )
     if layout == "missing":
-        passed = result.returncode != 0 and "requires a CANN SDK providing" in result.stderr
+        # Bare CANN installs (for example the 9.2.0-beta.2 CI machine image) ship no
+        # sysvar header in either layout while the block identifiers remain provided by
+        # the cce runtime include set, so a missing header is tolerated: preprocessing
+        # must succeed and select neither layout.
+        passed = (result.returncode == 0 and "int selected_current;" not in result.stdout
+                  and "int selected_legacy;" not in result.stdout)
     else:
         selected = "legacy" if layout == "legacy" else "current"
         rejected = "current" if selected == "legacy" else "legacy"

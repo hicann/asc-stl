@@ -37,6 +37,28 @@
 
 namespace asc {
 
+namespace detail {
+// Local pointer vocabulary: this root stays free of trait-header
+// dependencies, so the accessor checks spell their own primitives.
+template <class T>
+struct mdspan_is_pointer {
+    static constexpr bool value = false;
+};
+template <class T>
+struct mdspan_is_pointer<T*> {
+    static constexpr bool value = true;
+};
+
+template <class T>
+struct mdspan_remove_pointer {
+    using type = T;
+};
+template <class T>
+struct mdspan_remove_pointer<T*> {
+    using type = T;
+};
+}  // namespace detail
+
 template <class Accessor>
 class host_accessor : public Accessor {
 public:
@@ -45,14 +67,23 @@ public:
     using reference = typename Accessor::reference;
     using data_handle_type = typename Accessor::data_handle_type;
 
-    constexpr host_accessor() noexcept = default;
-    constexpr explicit host_accessor(Accessor accessor) noexcept : Accessor(accessor)
+    // Host-domain accessor: unlike gm/ub it is never valid in pure SIMT code,
+    // and access fails fast there instead of silently dereferencing a host
+    // pointer.  A Host-side runtime pointer-space validation (the dev-side
+    // __detectably_invalid probe over AscendCL pointer attributes) would move
+    // "host_accessor holding a device pointer" to debug time, but it needs a
+    // pointer-space runtime binding this tree does not deliver and would
+    // forfeit the constexpr access contract, so only the compile-time half is
+    // enforced here.
+    CANN_ASC_STL_HOST_API constexpr host_accessor() noexcept = default;
+    CANN_ASC_STL_HOST_API constexpr explicit host_accessor(Accessor accessor) noexcept : Accessor(accessor)
     {}
-    constexpr reference access(data_handle_type pointer, __SIZE_TYPE__ index) const noexcept
+    CANN_ASC_STL_HOST_API constexpr reference access(data_handle_type pointer, __SIZE_TYPE__ index) const noexcept
     {
         return Accessor::access(pointer, index);
     }
-    constexpr data_handle_type offset(data_handle_type pointer, __SIZE_TYPE__ index) const noexcept
+    CANN_ASC_STL_HOST_API constexpr data_handle_type offset(
+        data_handle_type pointer, __SIZE_TYPE__ index) const noexcept
     {
         return Accessor::offset(pointer, index);
     }
@@ -104,11 +135,19 @@ public:
 
 template <class Accessor>
 class restrict_accessor : public Accessor {
+    static_assert(detail::mdspan_is_pointer<typename Accessor::data_handle_type>::value,
+        "restrict_accessor requires a pointer based accessor");
+
 public:
     using offset_policy = restrict_accessor<typename Accessor::offset_policy>;
     using element_type = typename Accessor::element_type;
     using reference = typename Accessor::reference;
-    using data_handle_type = typename Accessor::data_handle_type;
+    // The reason this accessor exists: advertise the no-alias guarantee to
+    // the compiler (CCE and g++ both honour __restrict on the handle) instead
+    // of transparently re-exporting the base handle type.  cv-qualification
+    // of the base pointee is preserved through remove_pointer.
+    using data_handle_type =
+        typename detail::mdspan_remove_pointer<typename Accessor::data_handle_type>::type* __restrict;
 
     CANN_ASC_STL_API constexpr restrict_accessor() noexcept = default;
     CANN_ASC_STL_API constexpr explicit restrict_accessor(Accessor accessor) noexcept : Accessor(accessor)
@@ -135,5 +174,10 @@ template <class A>
 inline constexpr bool is_restrict_accessor_v<restrict_accessor<A>> = true;
 
 }  // namespace asc
+
+// The address-space spellings are an implementation detail of the accessor
+// declarations above and must not leak into including translation units.
+#undef CANN_ASC_STL_DETAIL_MDSPAN_GM
+#undef CANN_ASC_STL_DETAIL_MDSPAN_UB
 
 #endif  // CANN_ASC_STL_ASC___MDSPAN_ACCESSORS_H

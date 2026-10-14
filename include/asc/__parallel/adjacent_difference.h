@@ -27,9 +27,14 @@
 #pragma system_header
 #endif
 
-#include <asc/__parallel/temporary_storage.h>
-#include <asc/launch>
 namespace asc::detail {
+// Sequential-semantics baseline: one work item walks the whole range in order,
+// so output[i] sees exactly the previous input element as the subtrahend.
+// Parallelization path (later runtime work, kept as an anchor): the difference
+// for element i depends only on input[i] and input[i-1], so a grid-strided
+// launch can evaluate every element concurrently once the first element
+// forwards its value as the init of its block; until that plan lands, the
+// single-thread submit channel is the documented semantics.
 template <class Input, class Output, class BinaryOperation>
 struct adjacent_difference_operation {
     Input first;

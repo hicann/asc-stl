@@ -41,6 +41,8 @@ class pipeline_ref;
 ## 约束说明
 
 - 仅可在AI Core SIMD编程中调用。
+- stage 边界检查由事件查询与协议入口共享：stage 不小于 stages() 的访问触发诊断终止（trap），不会静默回退到其他（或未用的零号）事件槽。
+- 事件号在存储、查询与同步全程保持 pipeline_event_id（unsigned int）宽度，仅在底层 C API 边界收窄，不存在 255 截断。
 - 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明。
 
 ## 调用示例

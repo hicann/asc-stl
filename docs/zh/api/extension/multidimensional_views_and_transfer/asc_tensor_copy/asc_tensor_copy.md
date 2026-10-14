@@ -37,4 +37,5 @@
 | [asc::tensor_copy_status::zero_extent](tensor_copy_status_zero_extent.md) | 枚举值 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::tensor_copy_status::zero_stride](tensor_copy_status_zero_stride.md) | 枚举值 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::tensor_load_async](tensor_load_async.md) | 函数模板 | C++17+ | AI Core SIMD编程 | Ascend 950 |
+| [asc::tensor_store_async](tensor_store_async.md) | 函数模板 | C++17+ | AI Core SIMD编程 | Ascend 950 |
 | [asc::validate_tensor_copy_descriptor](validate_tensor_copy_descriptor.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |

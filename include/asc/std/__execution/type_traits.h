@@ -27,6 +27,8 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__type_traits/integral_constant.h>
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace execution {
@@ -37,15 +39,11 @@ class unsequenced_policy;
 }  // namespace execution
 
 template <class T>
-struct is_execution_policy {
-    static constexpr bool value = false;
-};
+struct is_execution_policy : integral_constant<bool, false> {};
 
 #define CANN_ASC_STL_DETAIL_EXECUTION_POLICY_TRAIT(policy) \
     template <>                                            \
-    struct is_execution_policy<execution::policy> {        \
-        static constexpr bool value = true;                \
-    }
+    struct is_execution_policy<execution::policy> : integral_constant<bool, true> {}
 
 CANN_ASC_STL_DETAIL_EXECUTION_POLICY_TRAIT(sequenced_policy);
 CANN_ASC_STL_DETAIL_EXECUTION_POLICY_TRAIT(parallel_policy);

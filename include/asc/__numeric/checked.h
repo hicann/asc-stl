@@ -28,16 +28,25 @@
 #endif
 
 // Checked and saturating arithmetic backend for the later public <asc/numeric>
-// facade. Following the confirmed design, the implementation relies on no
+// facade. Following the confirmed design, the portable layer relies on no
 // single compiler builtin: signed arithmetic goes through the portable
 // unsigned decomposition (two's-complement wrap is well defined for unsigned
 // types), range comparison, and division-based magnitude verification, all of
 // which are valid in Host, ordinary AICore and pure SIMT and stay free of
-// signed-overflow undefined behavior at every optimization level. The
+// signed-overflow undefined behavior at every optimization level.  This
+// portable layer remains the single semantic source for every device path;
+// Host translation units whose compiler provides the checked-arithmetic
+// builtins take a fast path below that is behaviourally identical (same
+// wrapped value, same overflow flag, same constexpr answers).  The
 // non-saturating forms return the wrapped bit pattern together with the
 // overflow flag; the saturating forms clamp to the target bounds in the
 // direction determined by the operation. __int128 is not part of the
 // supported matrix.
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_add_overflow)
+#define CANN_ASC_STL_DETAIL_CHECKED_HOST_BUILTINS 1
+#else
+#define CANN_ASC_STL_DETAIL_CHECKED_HOST_BUILTINS 0
+#endif
 namespace asc::detail {
 
 template <class T>
@@ -55,6 +64,10 @@ template <class TrueType, class FalseType>
 struct checked_conditional<true, TrueType, FalseType> {
     using type = TrueType;
 };
+
+// checked_conditional is a local std::conditional replica kept on purpose:
+// this root is deliberately self-contained (see the header comment) and
+// avoids pulling trait headers into every numeric consumer.
 
 // Same-width unsigned counterpart for the supported standard integer widths.
 template <class T>
@@ -91,6 +104,11 @@ CANN_ASC_STL_API constexpr T checked_maximum() noexcept
 template <class T>
 CANN_ASC_STL_API constexpr overflow_result<T> add_overflow_impl(T left, T right) noexcept
 {
+#if CANN_ASC_STL_DETAIL_CHECKED_HOST_BUILTINS
+    T value{};
+    const bool overflow = __builtin_add_overflow(left, right, &value);
+    return overflow_result<T>{value, overflow};
+#else
     using Unsigned = checked_unsigned_t<T>;
     const Unsigned sum = static_cast<Unsigned>(left) + static_cast<Unsigned>(right);
     const T value = static_cast<T>(sum);
@@ -100,11 +118,17 @@ CANN_ASC_STL_API constexpr overflow_result<T> add_overflow_impl(T left, T right)
     } else {
         return overflow_result<T>{value, sum < static_cast<Unsigned>(left)};
     }
+#endif
 }
 
 template <class T>
 CANN_ASC_STL_API constexpr overflow_result<T> sub_overflow_impl(T left, T right) noexcept
 {
+#if CANN_ASC_STL_DETAIL_CHECKED_HOST_BUILTINS
+    T value{};
+    const bool overflow = __builtin_sub_overflow(left, right, &value);
+    return overflow_result<T>{value, overflow};
+#else
     using Unsigned = checked_unsigned_t<T>;
     const Unsigned difference = static_cast<Unsigned>(left) - static_cast<Unsigned>(right);
     const T value = static_cast<T>(difference);
@@ -114,6 +138,7 @@ CANN_ASC_STL_API constexpr overflow_result<T> sub_overflow_impl(T left, T right)
     } else {
         return overflow_result<T>{value, static_cast<Unsigned>(left) < static_cast<Unsigned>(right)};
     }
+#endif
 }
 
 template <class T>
@@ -122,6 +147,11 @@ CANN_ASC_STL_API constexpr overflow_result<T> mul_overflow_impl(T left, T right)
     if (left == 0 || right == 0) {
         return overflow_result<T>{T{0}, false};
     }
+#if CANN_ASC_STL_DETAIL_CHECKED_HOST_BUILTINS
+    T value{};
+    const bool overflow = __builtin_mul_overflow(left, right, &value);
+    return overflow_result<T>{value, overflow};
+#else
     using Unsigned = checked_unsigned_t<T>;
     if constexpr (!(static_cast<T>(-1) < T{0})) {
         const Unsigned product = static_cast<Unsigned>(left) * static_cast<Unsigned>(right);
@@ -143,6 +173,7 @@ CANN_ASC_STL_API constexpr overflow_result<T> mul_overflow_impl(T left, T right)
     const T value =
         negative ? static_cast<T>(static_cast<Unsigned>(0) - product_magnitude) : static_cast<T>(product_magnitude);
     return overflow_result<T>{value, overflow};
+#endif
 }
 
 template <class T>
@@ -204,5 +235,8 @@ CANN_ASC_STL_API constexpr overflow_result<T> saturating_div_impl(T left, T righ
 }
 
 }  // namespace asc::detail
+
+// Local gate macro, undefined again to keep the macro surface clean.
+#undef CANN_ASC_STL_DETAIL_CHECKED_HOST_BUILTINS
 
 #endif  // CANN_ASC_STL_ASC___NUMERIC_CHECKED_H

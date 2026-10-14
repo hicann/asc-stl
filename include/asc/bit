@@ -42,26 +42,36 @@ CANN_ASC_STL_API constexpr T bit_reverse(T value) noexcept
     return detail::bit_reverse_impl(value);
 }
 
+// Parameter vocabulary note: the window arguments are (position, width)
+// throughout this facade, matching the detail layer in asc/__bit/operations.h
+// (bitmask_low_impl and the bitfield_* helpers). The T default exists only on
+// bitmask - its historical zero-argument call sites read the u32 pattern -
+// while the bit_reverse/bitfield_* family keeps T explicit because their
+// result width always mirrors the argument width the caller names.
 template <class T = __UINT32_TYPE__>
-CANN_ASC_STL_API constexpr T bitmask(int start, int width) noexcept
+CANN_ASC_STL_API constexpr T bitmask(int position, int width) noexcept
 {
     static_assert(detail::is_public_bit_type_v<T>, "bitmask requires uint32_t or uint64_t");
     const int digits = static_cast<int>(sizeof(T)) * 8;
-    return width == 0 || start == digits ? T{0} : static_cast<T>(detail::bitmask_low_impl<T>(width) << start);
+    // Full window validation: a position/width pair reaching outside the
+    // digit range clamps to zero instead of shifting by a negative or
+    // oversized count, mirroring the bitfield_* helpers below.
+    const bool valid = position >= 0 && width >= 0 && position <= digits && width <= digits - position;
+    return !valid || width == 0 ? T{0} : static_cast<T>(detail::bitmask_low_impl<T>(width) << position);
 }
 
 template <class T>
-CANN_ASC_STL_API constexpr T bitfield_extract(T value, int start, int width) noexcept
+CANN_ASC_STL_API constexpr T bitfield_extract(T value, int position, int width) noexcept
 {
     static_assert(detail::is_public_bit_type_v<T>, "bitfield_extract requires uint32_t or uint64_t");
-    return detail::bitfield_extract_impl(value, start, width);
+    return detail::bitfield_extract_impl(value, position, width);
 }
 
 template <class T>
-CANN_ASC_STL_API constexpr T bitfield_insert(T destination, T source, int start, int width) noexcept
+CANN_ASC_STL_API constexpr T bitfield_insert(T destination, T source, int position, int width) noexcept
 {
     static_assert(detail::is_public_bit_type_v<T>, "bitfield_insert requires uint32_t or uint64_t");
-    return detail::bitfield_insert_impl(destination, source, start, width);
+    return detail::bitfield_insert_impl(destination, source, position, width);
 }
 
 }  // namespace asc

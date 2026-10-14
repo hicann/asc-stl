@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef CANN_ASC_STL_STD_CISO646
-#define CANN_ASC_STL_STD_CISO646
+#ifndef CANN_ASC_STL_ASC_STD_CISO646
+#define CANN_ASC_STL_ASC_STD_CISO646
 
+// Deliberate empty tombstone: <ciso646> is deprecated by [depr.c.headers]
+// and has no effect in C++ (the alternative operator spellings are core
+// language), so this product keeps the header includable for compatibility
+// with deliberately zero registered names.
 #include <asc/__config>
 
 #if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
@@ -27,4 +31,4 @@
 #pragma system_header
 #endif
 
-#endif  // CANN_ASC_STL_STD_CISO646
+#endif  // CANN_ASC_STL_ASC_STD_CISO646

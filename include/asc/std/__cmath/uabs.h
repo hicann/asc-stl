@@ -28,61 +28,31 @@
 #endif
 
 #include <asc/std/__cmath/neg.h>
+#include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/is_integral.h>
+#include <asc/std/__type_traits/is_same.h>
+#include <asc/std/__type_traits/is_signed.h>
+#include <asc/std/__type_traits/make_unsigned.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class T>
-struct __uabs_type;
-template <>
-struct __uabs_type<char> {
-    using type = unsigned char;
-};
-template <>
-struct __uabs_type<signed char> {
-    using type = unsigned char;
-};
-template <>
-struct __uabs_type<unsigned char> {
-    using type = unsigned char;
-};
-template <>
-struct __uabs_type<short> {
-    using type = unsigned short;
-};
-template <>
-struct __uabs_type<unsigned short> {
-    using type = unsigned short;
-};
-template <>
-struct __uabs_type<int> {
-    using type = unsigned int;
-};
-template <>
-struct __uabs_type<unsigned int> {
-    using type = unsigned int;
-};
-template <>
-struct __uabs_type<long> {
-    using type = unsigned long;
-};
-template <>
-struct __uabs_type<unsigned long> {
-    using type = unsigned long;
-};
-template <>
-struct __uabs_type<long long> {
-    using type = unsigned long long;
-};
-template <>
-struct __uabs_type<unsigned long long> {
-    using type = unsigned long long;
-};
-
-template <class T>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr typename __uabs_type<T>::type __uabs(T value) noexcept
+// Unsigned-view absolute value of an integral argument. The result type is
+// derived through make_unsigned, so a single definition covers every
+// integral type and future additions instead of a hand-written
+// specialization table; bool keeps a readable diagnostic instead of an
+// incomplete-type error. The result type is deduced in the body so the
+// static_assert is reached before make_unsigned<bool> substitution drops
+// the candidate from the overload set.
+template <class T, enable_if_t<is_integral<T>::value, int> = 0>
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto __uabs(T value) noexcept
 {
-    using U = typename __uabs_type<T>::type;
-    return value < T(0) ? static_cast<U>(__neg(value)) : static_cast<U>(value);
+    static_assert(!is_same<T, bool>::value, "__uabs is not defined for bool");
+    using unsigned_type = make_unsigned_t<T>;
+    if constexpr (is_signed<T>::value) {
+        return value < T(0) ? static_cast<unsigned_type>(__neg(value)) : static_cast<unsigned_type>(value);
+    } else {
+        return static_cast<unsigned_type>(value);
+    }
 }
 
 CANN_ASC_STL_END_NAMESPACE

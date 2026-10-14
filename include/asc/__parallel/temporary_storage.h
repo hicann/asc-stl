@@ -33,6 +33,17 @@
 
 namespace asc::detail {
 
+// Caller-owned scratch contract: submission never allocates and never
+// synchronizes, so every byte of working memory an algorithm needs must
+// already be reachable through the policy's temporary_storage_ref. The two
+// entry points below are the uniform gate for that contract:
+// validate_parallel_policy/require_temporary_storage front-load the
+// null-stream and capacity checks before anything is submitted, and the
+// *_pointer helpers carve typed, aligned views out of the registered block.
+// Parallelized algorithms (sort buffers, scan scratch, two-phase reduction
+// partials) must route through this gate instead of introducing runtime
+// allocation on the submit path.
+
 CANN_ASC_STL_HOST_API execution_status validate_parallel_policy(device_policy policy) noexcept
 {
     return policy.stream() ? execution_status{} : execution_status{execution_errc::invalid_argument};
@@ -51,11 +62,32 @@ CANN_ASC_STL_HOST_API execution_status require_temporary_storage(device_policy p
     return execution_status{};
 }
 
+// Carves a T-typed view out of the policy storage at the given byte offset.
+// Defenses, mirroring the aligned-slot arithmetic of make_synchronous_slot:
+// the offset is rounded up to alignof(T), because an unaligned global-memory
+// access is a hardware fault on the device, and a request that would cross
+// the end of the storage block yields nullptr instead of a silently invalid
+// pointer. Callers that passed require_temporary_storage always receive a
+// usable pointer; nullptr therefore means the caller skipped the gate or
+// asked for a type larger than the whole block.
 template <class T>
 CANN_ASC_STL_HOST_API T* temporary_storage_pointer(device_policy policy, __SIZE_TYPE__ offset = 0) noexcept
 {
-    unsigned char* data = static_cast<unsigned char*>(policy.temporary_storage().data());
-    return reinterpret_cast<T*>(data + offset);
+    temporary_storage_ref storage = policy.temporary_storage();
+    unsigned char* data = static_cast<unsigned char*>(storage.data());
+    if (data == nullptr || storage.space() != memory_space::global) {
+        return nullptr;
+    }
+    const __SIZE_TYPE__ capacity = storage.size_bytes();
+    if (offset > capacity) {
+        return nullptr;
+    }
+    const __SIZE_TYPE__ alignment = alignof(T);
+    const __SIZE_TYPE__ adjustment = (alignment - offset % alignment) % alignment;
+    if (adjustment > capacity - offset || sizeof(T) > capacity - offset - adjustment) {
+        return nullptr;
+    }
+    return reinterpret_cast<T*>(data + offset + adjustment);
 }
 
 }  // namespace asc::detail

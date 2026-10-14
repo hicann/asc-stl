@@ -28,13 +28,18 @@
 #endif
 
 // Product version and exact delivered-capability macros. A capability macro is
-// defined only while its complete promised contract is locally delivered; the
-// later public <asc/version> facade aggregates these roots together with the
-// standard feature-test vocabulary.
+// defined only while its complete promised contract is locally delivered. The
+// public <asc/version> facade exports exactly these product roots; the
+// standard feature-test vocabulary (__cpp_lib_* macros) is delivered
+// separately through <asc/std/version> and is intentionally NOT aggregated
+// here.
 #define CANN_ASC_STL_VERSION_MAJOR 1
 #define CANN_ASC_STL_VERSION_MINOR 0
 #define CANN_ASC_STL_VERSION_PATCH 0
-#define CANN_ASC_STL_VERSION 10000
+// Single source of truth: derived from the components so a bump of
+// MAJOR/MINOR/PATCH can never leave the packed integer stale.
+#define CANN_ASC_STL_VERSION \
+    (CANN_ASC_STL_VERSION_MAJOR * 10000 + CANN_ASC_STL_VERSION_MINOR * 100 + CANN_ASC_STL_VERSION_PATCH)
 
 // The device policy and immutable execution-requirement vocabulary are
 // delivered with their complete promised contract.

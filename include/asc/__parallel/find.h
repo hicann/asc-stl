@@ -27,9 +27,18 @@
 #pragma system_header
 #endif
 
-#include <asc/__parallel/temporary_storage.h>
-#include <asc/launch>
+// Slot-type conventions shared by the functors in this header (kept aligned
+// with the frontend signatures and the registry contract): iterator-position
+// results (find_if, adjacent_find, is_heap_until, is_sorted_until, mismatch)
+// are written to __SIZE_TYPE__ sinks; boolean results (is_heap, is_sorted,
+// is_partitioned) are written to unsigned int sinks.
 namespace asc::detail {
+// Sequential-semantics baseline: the scan below short-circuits on the first
+// match and therefore always reports the leftmost satisfying index.
+// Parallelization path (later runtime work, kept as an anchor): each thread
+// that hits a match performs a 64-bit atomic min of its index into the GM
+// slot, which the host presets to the element count (the "not found" value);
+// the minimum over all racers is still the leftmost match.
 template <class Input, class Predicate>
 struct find_index_operation {
     Input first;
@@ -193,6 +202,10 @@ struct mismatch_operation {
             ++first2;
             ++index;
         }
+        // The frontend contract exposes two index slots mirroring the pair
+        // returned by std::mismatch; both cursors always advance in lockstep,
+        // so the two offsets are equal by construction. Writing both keeps the
+        // sink shape stable should the ranges ever desynchronize.
         output[0] = index;
         output[1] = index;
     }

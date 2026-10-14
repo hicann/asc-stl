@@ -42,8 +42,18 @@ public:
     {}
     CANN_ASC_STL_SIMT_API void count_down(__PTRDIFF_TYPE__ update = 1) noexcept
     {
+        // Misuse fails fast instead of hanging: a non-positive update or a
+        // combined count_down past the initial value drives the counter
+        // negative, try_wait() never observes zero, and wait() spins
+        // forever (dev parity -- count_down asserts update > 0 and
+        // old >= update there).
+        if (update <= 0)
+            ::asc::detail::atomic_trap();
         atomic_ref<__INT64_TYPE__, Scope> counter(state_.count);
-        (void)counter.fetch_sub(static_cast<__INT64_TYPE__>(update), std::memory_order_release);
+        const __INT64_TYPE__ previous =
+            counter.fetch_sub(static_cast<__INT64_TYPE__>(update), std::memory_order_release);
+        if (previous < static_cast<__INT64_TYPE__>(update))
+            ::asc::detail::atomic_trap();
     }
     CANN_ASC_STL_SIMT_API bool try_wait() const noexcept
     {
@@ -52,7 +62,18 @@ public:
     }
     CANN_ASC_STL_SIMT_API void wait() const noexcept
     {
+        // Poll tightly first, then delay between polls so a waiter cannot
+        // starve the thread that still owes a count_down. Forward-progress
+        // caveat: mixing count_down and wait on threads of the same block
+        // risks deadlock regardless of backoff when the waiting threads
+        // occupy all of the block's execution slots; keep the counting
+        // side on threads that can run ahead of the waiting side.
+        ::asc::detail::spin_backoff tester;
         while (!try_wait()) {
+            if (tester.poll()) {
+                continue;
+            }
+            tester.backoff();
         }
     }
     CANN_ASC_STL_SIMT_API void arrive_and_wait(__PTRDIFF_TYPE__ update = 1) noexcept
@@ -62,6 +83,11 @@ public:
     }
     CANN_ASC_STL_SIMT_API static constexpr __PTRDIFF_TYPE__ max() noexcept
     {
+        // Conservative INT32_MAX rather than the int64 state's full range:
+        // it keeps the three synchronization primitives on one documented
+        // bound (barrier::max and the counting_semaphore default match) and
+        // mirrors common std library latch implementations. The int64 count
+        // state supports any value up to this bound without narrowing.
         return 2147483647;
     }
 #else

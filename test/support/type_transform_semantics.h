@@ -242,7 +242,7 @@ static_assert(is_member_object_pointer<int host_struct::*>::value);
 // __type_traits/is_member_pointer.h: member pointer classification.
 static_assert(is_member_pointer_v<int host_struct::*>);
 static_assert(is_member_pointer_v<int (host_struct::*)(double)>);
-static_assert(is_member_pointer_v<const int (union_type::*)()>);
+static_assert(is_member_pointer_v<int (union_type::*)()>);
 static_assert(!is_member_pointer_v<int*>);
 static_assert(!is_member_pointer_v<empty>);
 static_assert(is_member_pointer<int host_struct::*>::value);

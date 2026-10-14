@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::tensor_copy_status::size_overflow`表示Tensor存储大小计算超出可表示范围。
+`asc::tensor_copy_status::size_overflow` 表示 Tensor 存储大小计算超出可表示范围，包括元素总量溢出、填充超过 255 与源/目标步长跨度累计溢出。
 
 ## 声明
 

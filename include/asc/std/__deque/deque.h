@@ -27,35 +27,33 @@
 #pragma system_header
 #endif
 
-#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-#include <new>
-#endif
+#include <asc/std/__deque/block_map.h>
+#include <asc/std/__exception/terminate.h>
+#include <asc/std/__iterator/iterator_traits.h>
+#include <asc/std/__new/nonallocating_new.h>
 
-#ifndef CANN_ASC_STL_DETAIL_PLACEMENT_NEW_DECLARED
-#define CANN_ASC_STL_DETAIL_PLACEMENT_NEW_DECLARED
-#if CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
-CANN_ASC_STL_DEVICE_API void* operator new(__SIZE_TYPE__, void* address) noexcept
-{
-    return address;
-}
-#elif CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-void* operator new(__SIZE_TYPE__, void* address) noexcept;
-#endif
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#include <stdexcept>
 #endif
 
 namespace asc::std {
 
+// Fixed-capacity deque over a finite block map: block_count blocks of
+// elements_per_block elements each (16 element slots), anchored at
+// initial_position so both ends can grow before reallocating blocks.  The
+// block table itself lives in detail::deque_block_map.  Growth beyond the
+// block map and block allocation failure are rejected with a diagnostic
+// instead of indexing out of bounds.
 template <class T, class Allocator>
 class deque {
     static constexpr __SIZE_TYPE__ elements_per_block = 4;
     static constexpr __SIZE_TYPE__ block_count = 4;
+    static constexpr __SIZE_TYPE__ element_capacity = elements_per_block * block_count;
     static constexpr __SIZE_TYPE__ initial_position = 8;
 
     struct block {
         alignas(T) unsigned char storage[sizeof(T) * elements_per_block];
     };
-
-    using block_allocator = typename Allocator::template rebind<block>::other;
 
 public:
     using value_type = T;
@@ -67,6 +65,7 @@ public:
 
     class iterator {
     public:
+        using iterator_category = random_access_iterator_tag;
         using value_type = T;
         using difference_type = __PTRDIFF_TYPE__;
         using pointer = T*;
@@ -140,13 +139,21 @@ public:
         {
             return right < left;
         }
+        friend CANN_ASC_STL_API bool operator<=(iterator left, iterator right)
+        {
+            return !(right < left);
+        }
+        friend CANN_ASC_STL_API bool operator>=(iterator left, iterator right)
+        {
+            return !(left < right);
+        }
 
     private:
         deque* owner_ = nullptr;
         size_type position_ = 0;
     };
 
-    CANN_ASC_STL_API explicit deque(const Allocator& allocator) noexcept : allocator_(allocator)
+    CANN_ASC_STL_API explicit deque(const Allocator& allocator) noexcept : blocks_(allocator)
     {}
     deque(const deque&) = delete;
     deque& operator=(const deque&) = delete;
@@ -216,6 +223,8 @@ public:
     template <class... Args>
     CANN_ASC_STL_API reference emplace_front(Args&&... args)
     {
+        if (begin_ == 0)
+            raise_capacity_overflow();
         --begin_;
         T* address = address_at(begin_, true);
         ::new (static_cast<void*>(address)) T(static_cast<Args&&>(args)...);
@@ -224,6 +233,8 @@ public:
     template <class... Args>
     CANN_ASC_STL_API reference emplace_back(Args&&... args)
     {
+        if (end_ == element_capacity)
+            raise_capacity_overflow();
         T* address = address_at(end_, true);
         ::new (static_cast<void*>(address)) T(static_cast<Args&&>(args)...);
         ++end_;
@@ -246,20 +257,39 @@ public:
     }
 
 private:
+    CANN_ASC_STL_API void raise_capacity_overflow() const
+    {
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        throw ::std::length_error("asc::std::deque: fixed block map exhausted");
+#else
+        ::asc::std::terminate();
+#endif
+    }
+    CANN_ASC_STL_API void raise_allocation_failure() const
+    {
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+        throw ::std::bad_alloc();
+#else
+        ::asc::std::terminate();
+#endif
+    }
     CANN_ASC_STL_API T* address_at(size_type position, bool create)
     {
         const size_type block_index = position / elements_per_block;
-        if (blocks_[block_index] == nullptr && create) {
-            block_allocator blocks(allocator_);
-            blocks_[block_index] = blocks.allocate(1);
-        }
-        unsigned char* bytes = blocks_[block_index]->storage;
+        if (block_index >= block_count)
+            raise_capacity_overflow();
+        block* target = create ? blocks_.ensure_allocated(block_index) : blocks_.at(block_index);
+        if (create && target == nullptr)
+            raise_allocation_failure();
+        unsigned char* bytes = target->storage;
         return reinterpret_cast<T*>(bytes) + position % elements_per_block;
     }
     CANN_ASC_STL_API const T* address_at(size_type position, bool) const
     {
         const size_type block_index = position / elements_per_block;
-        const unsigned char* bytes = blocks_[block_index]->storage;
+        if (block_index >= block_count)
+            raise_capacity_overflow();
+        const unsigned char* bytes = blocks_.at(block_index)->storage;
         return reinterpret_cast<const T*>(bytes) + position % elements_per_block;
     }
     CANN_ASC_STL_API reference value_at(size_type position)
@@ -273,19 +303,12 @@ private:
     CANN_ASC_STL_API void release() noexcept
     {
         clear();
-        block_allocator blocks(allocator_);
-        for (size_type index = 0; index < block_count; ++index) {
-            if (blocks_[index] != nullptr) {
-                blocks.deallocate(blocks_[index], 1);
-                blocks_[index] = nullptr;
-            }
-        }
+        blocks_.release();
         begin_ = initial_position;
         end_ = initial_position;
     }
 
-    Allocator allocator_;
-    block* blocks_[block_count]{};
+    detail::deque_block_map<block, block_count, Allocator> blocks_;
     size_type begin_ = initial_position;
     size_type end_ = initial_position;
 };

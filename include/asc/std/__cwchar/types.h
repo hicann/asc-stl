@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CANN_ASC_STL_STD_DETAIL_CWCHAR_TYPES_H
-#define CANN_ASC_STL_STD_DETAIL_CWCHAR_TYPES_H
+#ifndef CANN_ASC_STL_ASC_STD___CWCHAR_TYPES_H
+#define CANN_ASC_STL_ASC_STD___CWCHAR_TYPES_H
 
 #include <asc/__config>
 
@@ -31,13 +31,22 @@
 // carry edges among themselves: the shared vocabulary uses compiler-provided
 // underlying types and idempotent macro guards so each root stays
 // self-contained and the later public facade composes them without
-// redefinition. The conversion state type is defined once by the
-// fixed-C-locale root, the only root whose functions consume it.
+// redefinition. Ownership ledger, kept authoritative here: the conversion
+// state type and the WEOF macro are defined by the fixed-C-locale root (the
+// only root whose functions consume either; do not add a second definition
+// elsewhere), while the wint_t alias is intentionally spelled identically in
+// four roots -- types.h and fixed_c_locale.h here plus the two __cwctype
+// roots -- and the WEOF text is duplicated verbatim behind its #ifndef guard
+// by the cwctype facade so that facade stays self-contained. All of these
+// are legal same-type redeclarations; keep the guards in place.
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #include <cwchar>
 #endif
 
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// NULL is a registered cwchar macro on the device side, so it is exported
+// (never #undef'd); the nullptr spelling is only a fallback for toolchains
+// that do not predefine NULL themselves.
 #if !defined(NULL)
 #define NULL nullptr
 #endif
@@ -45,7 +54,14 @@
 #define WCHAR_MAX __WCHAR_MAX__
 #endif
 #if !defined(WCHAR_MIN)
+#if defined(__WCHAR_UNSIGNED__)
+// Unsigned wchar_t platforms (typically 16-bit wchar ABIs): the minimum is
+// zero; the signed negation formula below would produce a negative int
+// expression and skew `wc < WCHAR_MIN` style comparisons.
+#define WCHAR_MIN 0
+#else
 #define WCHAR_MIN (-__WCHAR_MAX__ - 1)
+#endif
 #endif
 #endif
 
@@ -61,4 +77,4 @@ using wint_t = ::std::wint_t;
 
 CANN_ASC_STL_END_NAMESPACE
 
-#endif  // CANN_ASC_STL_STD_DETAIL_CWCHAR_TYPES_H
+#endif  // CANN_ASC_STL_ASC_STD___CWCHAR_TYPES_H

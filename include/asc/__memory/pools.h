@@ -27,6 +27,8 @@
 #pragma system_header
 #endif
 
+#include <asc/__memory/buffers.h>
+
 namespace asc::detail {
 
 struct pool_block {
@@ -51,20 +53,69 @@ public:
     CANN_ASC_STL_HOST_API constexpr bool register_block(
         void* pointer, __SIZE_TYPE__ bytes, __SIZE_TYPE__ alignment = alignof(void*)) noexcept
     {
-        if (pointer == nullptr || bytes == 0 || size_ == Capacity)
+        // Alignments are powers of two by contract (same rule as the buffer
+        // and resource layers); rejecting here keeps the acquire-side
+        // divisibility check exact. A magnitude comparison such as
+        // block.alignment >= alignment is only equivalent to it when both
+        // sides are powers of two.
+        // Inlined from buffer_alignment_valid: this host-side entry cannot call the
+        // dual-attributes helper under pure SIMT (host -> aicore is rejected),
+        // and the rule is two arithmetic lines.
+        if (pointer == nullptr || bytes == 0 || alignment == 0 || (alignment & (alignment - 1)) != 0)
             return false;
-        blocks_[size_++] = {pointer, bytes, alignment, 0, true};
+        // Slots must not grow monotonically. The steady-state recycle cycle
+        // driven by the pool frontend (register, acquire, complete, register
+        // the same pointer again) refreshes the existing entry instead of
+        // appending a fresh slot; otherwise the bounded table saturates and
+        // the pool silently degrades into a non-caching allocator.
+        __SIZE_TYPE__ index = size_;
+        for (__SIZE_TYPE__ scan = 0; scan != size_; ++scan) {
+            if (blocks_[scan].pointer == pointer) {
+                index = scan;
+                break;
+            }
+        }
+        if (index == size_ && size_ == Capacity) {
+            // Table full: reclaim an entry whose block is not available. Such
+            // an entry only matters if the same pointer is registered again,
+            // which lands in the refresh path above, so overwriting it is
+            // lossless for the cache.
+            for (__SIZE_TYPE__ scan = 0; scan != size_; ++scan) {
+                if (!blocks_[scan].available) {
+                    index = scan;
+                    break;
+                }
+            }
+            if (index == size_)
+                return false;
+        }
+        if (index == size_) {
+            blocks_[size_++] = {pointer, bytes, alignment, 0, true};
+            total_bytes_ += bytes;
+            return true;
+        }
+        pool_block& block = blocks_[index];
+        total_bytes_ -= block.bytes;
         total_bytes_ += bytes;
+        block.pointer = pointer;
+        block.bytes = bytes;
+        block.alignment = alignment;
+        block.completion_token = 0;
+        block.available = true;
         return true;
     }
 
     CANN_ASC_STL_HOST_API constexpr void* acquire(
         __SIZE_TYPE__ bytes, __SIZE_TYPE__ alignment, unsigned long long completed_token) noexcept
     {
+        // Alignment sufficiency is divisibility, not magnitude: a block is
+        // usable for a request only when its alignment is a multiple of the
+        // requested one (every registered alignment is a power of two, so a
+        // zero or non-power-of-two request never matches).
         for (__SIZE_TYPE__ index = 0; index != size_; ++index) {
             pool_block& block = blocks_[index];
             if (block.available && block.completion_token <= completed_token && block.bytes >= bytes &&
-                block.alignment >= alignment) {
+                alignment != 0 && block.alignment % alignment == 0) {
                 block.available = false;
                 ++reuse_hits_;
                 return block.pointer;

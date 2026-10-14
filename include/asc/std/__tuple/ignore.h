@@ -31,6 +31,12 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// Deliberately assignment-only. The dev tree additionally carries a variadic
+// constructor so ignore can double as a value placeholder in structured
+// bindings; the registered product surface only consumes ignore as a tie()
+// assignment sink, and a single constexpr object with no user-provided
+// constructors stays trivially usable in constant expressions on host and
+// device alike.
 struct __ignore_t {
     template <class T>
     CANN_ASC_STL_API constexpr const __ignore_t& operator=(T&&) const noexcept

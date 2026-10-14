@@ -32,9 +32,11 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 namespace __lock_detail {
 
 template <class Mutex>
-CANN_ASC_STL_API int __try_lock_impl(int, Mutex& mutex)
+CANN_ASC_STL_API int __try_lock_impl(int index, Mutex& mutex)
 {
-    return mutex.try_lock() ? -1 : 0;
+    // The base case must report its own index: returning a constant 0 here
+    // mislabeled every failure past the second mutex.
+    return mutex.try_lock() ? -1 : index;
 }
 
 template <class Mutex, class... Mutexes>
@@ -53,6 +55,10 @@ CANN_ASC_STL_API int __try_lock_impl(int index, Mutex& mutex, Mutexes&... mutexe
 template <class... Mutexes>
 CANN_ASC_STL_API int try_lock(Mutexes&... mutexes)
 {
+    // The registered semantics cover "two or more" explicitly non-throwing
+    // Device Lockable mutexes (std::try_lock likewise has no single-mutex
+    // overload); a lone mutex goes through Mutex::try_lock directly.
+    static_assert(sizeof...(Mutexes) >= 2, "asc::std::try_lock requires two or more mutexes");
     return __lock_detail::__try_lock_impl(0, mutexes...);
 }
 

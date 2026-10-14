@@ -46,9 +46,13 @@ struct metadata_bool {
 };
 
 // Associativity over the supported integer and logical operator vocabulary.
-// Integer multiplication over signed types is not registered: overflow makes
-// the mathematical property false under wrapping.
-template <class Operator>
+// The optional value type refines the answer per operand type: with the
+// default (void) the registration is type-agnostic, and multiply_op answers
+// false for signed operand types because overflow makes the mathematical
+// property false under wrapping (the public facade additionally gates
+// signedness through its metadata_domain/metadata_unsigned layer, so this is
+// defense in depth rather than the sole guard).
+template <class Operator, class T = void>
 struct is_associative_op : metadata_bool<false> {};
 
 struct add_op {};
@@ -61,24 +65,30 @@ struct bitwise_xor_op {};
 struct minimum_op {};
 struct maximum_op {};
 
-template <>
-struct is_associative_op<add_op> : metadata_bool<true> {};
-template <>
-struct is_associative_op<multiply_op> : metadata_bool<true> {};
-template <>
-struct is_associative_op<logical_and_op> : metadata_bool<true> {};
-template <>
-struct is_associative_op<logical_or_op> : metadata_bool<true> {};
-template <>
-struct is_associative_op<bitwise_and_op> : metadata_bool<true> {};
-template <>
-struct is_associative_op<bitwise_or_op> : metadata_bool<true> {};
-template <>
-struct is_associative_op<bitwise_xor_op> : metadata_bool<true> {};
-template <>
-struct is_associative_op<minimum_op> : metadata_bool<true> {};
-template <>
-struct is_associative_op<maximum_op> : metadata_bool<true> {};
+template <class T>
+struct is_associative_op<add_op, T> : metadata_bool<true> {};
+
+template <class T, bool IsVoid = __is_same(T, void)>
+struct multiply_associativity : metadata_bool<(static_cast<T>(-1) > T{0})> {};
+template <class T>
+struct multiply_associativity<T, true> : metadata_bool<true> {};
+template <class T>
+struct is_associative_op<multiply_op, T> : multiply_associativity<T> {};
+
+template <class T>
+struct is_associative_op<logical_and_op, T> : metadata_bool<true> {};
+template <class T>
+struct is_associative_op<logical_or_op, T> : metadata_bool<true> {};
+template <class T>
+struct is_associative_op<bitwise_and_op, T> : metadata_bool<true> {};
+template <class T>
+struct is_associative_op<bitwise_or_op, T> : metadata_bool<true> {};
+template <class T>
+struct is_associative_op<bitwise_xor_op, T> : metadata_bool<true> {};
+template <class T>
+struct is_associative_op<minimum_op, T> : metadata_bool<true> {};
+template <class T>
+struct is_associative_op<maximum_op, T> : metadata_bool<true> {};
 
 // Commutativity: every registered associative operator above except that the
 // property also holds for equality-style comparisons, which are not reducers

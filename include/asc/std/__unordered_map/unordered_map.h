@@ -27,18 +27,10 @@
 #pragma system_header
 #endif
 
-namespace asc::std {
+#include <asc/std/__hash_table/hash_table.h>
+#include <asc/std/__utility/pair.h>
 
-template <class First, class Second>
-struct __arena_pair;
-namespace __arena_associative_detail {
-template <class Key, class Mapped>
-struct __arena_pair_key;
-template <class Key, class Value, class KeyOfValue, class Compare, class Allocator>
-class basic_tree;
-template <class Key, class Value, class KeyOfValue, class Hash, class Equal, class Allocator>
-class basic_hash_table;
-}  // namespace __arena_associative_detail
+namespace asc::std {
 
 template <class Key, class T, class Hash, class Equal, class Allocator>
 class unordered_map {
@@ -78,13 +70,15 @@ public:
     {
         return table_.end();
     }
-    CANN_ASC_STL_API __arena_pair<iterator, bool> insert(const value_type& value)
+    CANN_ASC_STL_API pair<iterator, bool> insert(const value_type& value)
     {
-        return table_.insert(value);
+        __arena_pair<iterator, bool> result = table_.insert(value);
+        return pair<iterator, bool>(result.first, result.second);  // NOLINT(build/include_what_you_use)
     }
-    CANN_ASC_STL_API __arena_pair<iterator, bool> insert(value_type&& value)
+    CANN_ASC_STL_API pair<iterator, bool> insert(value_type&& value)
     {
-        return table_.insert(static_cast<value_type&&>(value));
+        __arena_pair<iterator, bool> result = table_.insert(static_cast<value_type&&>(value));
+        return pair<iterator, bool>(result.first, result.second);  // NOLINT(build/include_what_you_use)
     }
     CANN_ASC_STL_API iterator find(const Key& key) noexcept
     {
@@ -99,12 +93,10 @@ public:
         iterator found = find(key);
         if (found != end())
             return found->second;
-#if defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
+        // insert() reports arena exhaustion by failing fast instead of
+        // returning an invalid iterator, so the returned node is always
+        // dereferenceable and the extra find() round trip is unnecessary.
         return table_.insert(value_type(key, T{})).first->second;
-#else
-        table_.insert(value_type(key, T{}));
-        return find(key)->second;
-#endif
     }
     CANN_ASC_STL_API void clear() noexcept
     {

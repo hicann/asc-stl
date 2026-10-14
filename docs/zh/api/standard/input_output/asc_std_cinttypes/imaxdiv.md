@@ -47,7 +47,7 @@ constexpr imaxdiv_t imaxdiv(intmax_t numerator, intmax_t denominator) noexcept;
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `numerator` | 输入 | 被除数（intmax_t有符号整数）；返回值的quot、rem分别为其除以denominator的商与余数。 |
-| `denominator` | 输入 | 除数（intmax_t有符号整数）；为0时整数除法行为未定义。 |
+| `denominator` | 输入 | 除数（intmax_t有符号整数）；为0时按除零守卫替换为1计算，此时quot等于numerator、rem为0。 |
 
 ## 返回值说明
 

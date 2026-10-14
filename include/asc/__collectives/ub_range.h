@@ -45,6 +45,12 @@ CANN_ASC_STL_DEVICE_API T ub_reduce_add_impl(ub_span<const T> input) noexcept
 template <class T>
 CANN_ASC_STL_DEVICE_API T ub_reduce_min_impl(ub_span<const T> input) noexcept
 {
+    // The registered contract declares the min/max input nonempty; an empty
+    // span is still handled defensively (value-initialized result, matching
+    // ub_reduce_add_impl) instead of reading out of bounds.
+    if (input.size() == 0) {
+        return T{};
+    }
     T result = input.data()[0];
     for (__SIZE_TYPE__ index = 1; index < input.size(); ++index) {
         if (input.data()[index] < result) {
@@ -57,6 +63,10 @@ CANN_ASC_STL_DEVICE_API T ub_reduce_min_impl(ub_span<const T> input) noexcept
 template <class T>
 CANN_ASC_STL_DEVICE_API T ub_reduce_max_impl(ub_span<const T> input) noexcept
 {
+    // Empty input: same defensive contract as ub_reduce_min_impl.
+    if (input.size() == 0) {
+        return T{};
+    }
     T result = input.data()[0];
     for (__SIZE_TYPE__ index = 1; index < input.size(); ++index) {
         if (result < input.data()[index]) {
@@ -66,11 +76,18 @@ CANN_ASC_STL_DEVICE_API T ub_reduce_max_impl(ub_span<const T> input) noexcept
     return result;
 }
 
+// Registered scan contract: the two ranges have equal size and may alias
+// only by exact in-place equality.  In-place aliasing is safe for both scan
+// directions here because every element is read before the same-index write.
+// A short output is a size-contract violation the no-status, no-trap
+// vocabulary cannot report, so each walk is clipped to the shorter range
+// instead of writing past the output's end.
 template <class T>
 CANN_ASC_STL_DEVICE_API void ub_inclusive_scan_add_impl(ub_span<T> output, ub_span<const T> input) noexcept
 {
+    const __SIZE_TYPE__ count = input.size() < output.size() ? input.size() : output.size();
     T prefix{};
-    for (__SIZE_TYPE__ index = 0; index < input.size(); ++index) {
+    for (__SIZE_TYPE__ index = 0; index < count; ++index) {
         prefix = prefix + input.data()[index];
         output.data()[index] = prefix;
     }
@@ -79,8 +96,9 @@ CANN_ASC_STL_DEVICE_API void ub_inclusive_scan_add_impl(ub_span<T> output, ub_sp
 template <class T>
 CANN_ASC_STL_DEVICE_API void ub_exclusive_scan_add_impl(ub_span<T> output, ub_span<const T> input) noexcept
 {
+    const __SIZE_TYPE__ count = input.size() < output.size() ? input.size() : output.size();
     T prefix{};
-    for (__SIZE_TYPE__ index = 0; index < input.size(); ++index) {
+    for (__SIZE_TYPE__ index = 0; index < count; ++index) {
         const T value = input.data()[index];
         output.data()[index] = prefix;
         prefix = prefix + value;

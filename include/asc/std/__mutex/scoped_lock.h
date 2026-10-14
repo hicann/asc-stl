@@ -27,32 +27,42 @@
 #pragma system_header
 #endif
 
-#ifndef CANN_ASC_STL_DETAIL_LOCK_TAG_VOCABULARY
-#define CANN_ASC_STL_DETAIL_LOCK_TAG_VOCABULARY
-
-CANN_ASC_STL_BEGIN_NAMESPACE
-
-namespace __lock_detail {
-template <int Value>
-struct __lock_tag {};
-}  // namespace __lock_detail
-
-using defer_lock_t = __lock_detail::__lock_tag<0>;
-using try_to_lock_t = __lock_detail::__lock_tag<1>;
-using adopt_lock_t = __lock_detail::__lock_tag<2>;
-inline constexpr defer_lock_t defer_lock{};
-inline constexpr try_to_lock_t try_to_lock{};
-inline constexpr adopt_lock_t adopt_lock{};
-
-CANN_ASC_STL_END_NAMESPACE
-
-#endif
+#include <asc/std/__mutex/lock_tags.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __lock_detail {
 struct __scoped_defer_t {};
+
+// Backoff for the variadic try-lock retry loop. A bare spin risks starving
+// a mutex holder co-resident on the same scheduler slot, so each failed
+// attempt pays a small delay before retrying. Hosted builds hint the
+// processor; device builds have no scheduler to yield to and only delay.
+// Device-side constraint: the retry loop can only make progress when the
+// mutex holder is not co-scheduled with this thread on the same
+// warp/scheduling bundle -- keep owners and waiters on distinct cores, or
+// provide a Mutex whose lock() blocks.
+CANN_ASC_STL_API void retry_backoff() noexcept
+{
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#if defined(__x86_64__) || defined(__i386__)
+    __builtin_ia32_pause();
+#elif defined(__aarch64__)
+    asm volatile("yield" ::: "memory");
+#endif
+#else
+    for (int delay = 0; delay < 32; ++delay) {
+        __asm__ __volatile__("" ::: "memory");
+    }
+#endif
+}
 }  // namespace __lock_detail
+
+// Registered contract shapes are scoped_lock<> and scoped_lock<Mutex>; the
+// variadic partial specialization below is a deliberate extension beyond
+// that surface (same class template name, forward-compatible superset for
+// multi-mutex dead-avoidance). Behavior of the extension is anchored by the
+// same acquire/adopt semantics as the registered shapes.
 
 template <class... Mutexes>
 class scoped_lock;
@@ -97,7 +107,14 @@ private:
     friend class scoped_lock;
     CANN_ASC_STL_API scoped_lock(__lock_detail::__scoped_defer_t, Mutex& mutex) noexcept : mutex_(mutex)
     {}
-    CANN_ASC_STL_API bool __try_lock_all()
+    // All three __try_lock_all shapes are noexcept on purpose: the contract
+    // behind this class is the registered "explicitly non-throwing Device
+    // Lockable" mutex. A Mutex::try_lock that escapes an exception here used
+    // to unwind through nodes that unconditionally unlock in their
+    // destructors -- including nodes that had not acquired their mutex --
+    // so the misuse now fails fast via termination instead of corrupting
+    // lock state during unwinding.
+    CANN_ASC_STL_API bool __try_lock_all() noexcept
     {
         return mutex_.try_lock();
     }
@@ -111,6 +128,7 @@ public:
         : mutex_(mutex), remaining_(__lock_detail::__scoped_defer_t{}, mutexes...)
     {
         while (!__try_lock_all()) {
+            __lock_detail::retry_backoff();
         }
     }
     CANN_ASC_STL_API scoped_lock(adopt_lock_t, Mutex& mutex, Mutexes&... mutexes) noexcept
@@ -129,7 +147,7 @@ private:
     CANN_ASC_STL_API scoped_lock(__lock_detail::__scoped_defer_t, Mutex& mutex, Mutexes&... mutexes) noexcept
         : mutex_(mutex), remaining_(__lock_detail::__scoped_defer_t{}, mutexes...)
     {}
-    CANN_ASC_STL_API bool __try_lock_all()
+    CANN_ASC_STL_API bool __try_lock_all() noexcept
     {
         if (!mutex_.try_lock())
             return false;

@@ -25,6 +25,31 @@
 
 #define CANN_ASC_STL_DETAIL_HAS_CXX17() (CANN_ASC_STL_DETAIL_CPLUSPLUS >= 201703L)
 #define CANN_ASC_STL_DETAIL_HAS_CXX20() (CANN_ASC_STL_DETAIL_CPLUSPLUS >= 202002L)
+#define CANN_ASC_STL_DETAIL_HAS_CXX23() (CANN_ASC_STL_DETAIL_CPLUSPLUS >= 202302L)
+
+// Numeric standard-version ladder, mirroring the __cplusplus checkpoints
+// (199711L -> 2003, 201103L -> 2011, ..., 202302L -> 2023, newer -> 2024).
+// Guarded so a surrounding build that already established a value for it is
+// never redefined; numeric comparisons against CANN_ASC_STL_DETAIL_STD_VER
+// are the preferred spelling for dialect ladders, keeping the boolean
+// HAS_CXX*() gates for feature code.
+#ifndef CANN_ASC_STL_DETAIL_STD_VER
+#if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
+#define CANN_ASC_STL_DETAIL_STD_VER 2003
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201103L
+#define CANN_ASC_STL_DETAIL_STD_VER 2011
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201402L
+#define CANN_ASC_STL_DETAIL_STD_VER 2014
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201703L
+#define CANN_ASC_STL_DETAIL_STD_VER 2017
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202002L
+#define CANN_ASC_STL_DETAIL_STD_VER 2020
+#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202302L
+#define CANN_ASC_STL_DETAIL_STD_VER 2023
+#else
+#define CANN_ASC_STL_DETAIL_STD_VER 2024
+#endif
+#endif  // CANN_ASC_STL_DETAIL_STD_VER
 
 #if defined(__cpp_concepts) && __cpp_concepts >= 201907L
 #define CANN_ASC_STL_DETAIL_HAS_CONCEPTS() 1

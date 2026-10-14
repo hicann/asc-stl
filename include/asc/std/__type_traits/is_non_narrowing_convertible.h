@@ -27,12 +27,33 @@
 #pragma system_header
 #endif
 
-#include <asc/__detail/compiler.h>
-
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// Layering decision, recorded for maintainers: the non-narrowing probe lives
+// in asc::std::__asc_internal (reserved name, inside the library namespace).
+// asc::std::complex consumes it through unqualified __asc_internal:: lookup
+// from inside asc::std, which resolves to this header. The historical dev
+// tree spells the namespace at global scope; that placement is to be aligned
+// to this one by the platform owners (dev tree is not edited here).
 namespace __asc_internal {
 
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// Ranked-probe declval: no variadic catch-all, so both Host compilers and CCE
+// aicore parsing accept the detection. In device translation units the probe
+// declarations carry the host-device annotation, otherwise referencing them
+// from aicore code (complex<T>'s converting constructor is HD-ALL) would be
+// rejected or undefined by the CCE device parser.
+template <class T>
+CANN_ASC_STL_HOST_DEVICE T&& __asc_declval(int);
+template <class T>
+CANN_ASC_STL_HOST_DEVICE T __asc_declval(long);
+template <class T>
+CANN_ASC_STL_HOST_DEVICE decltype(__asc_internal::__asc_declval<T>(0)) __asc_declval() noexcept;
+
+// Accepts any implicitly convertible argument.
+template <class T>
+CANN_ASC_STL_HOST_DEVICE void __asc_accepts_implicit_conversion(T) noexcept;
+#else   // ^^^ device compilation ^^^ / vvv host compilation
 // Ranked-probe declval: no variadic catch-all, so both Host compilers and CCE
 // aicore parsing accept the detection.
 template <class T>
@@ -45,6 +66,7 @@ decltype(__asc_internal::__asc_declval<T>(0)) __asc_declval() noexcept;
 // Accepts any implicitly convertible argument.
 template <class T>
 void __asc_accepts_implicit_conversion(T) noexcept;
+#endif  // device compilation
 
 template <class...>
 using __asc_void_t = void;

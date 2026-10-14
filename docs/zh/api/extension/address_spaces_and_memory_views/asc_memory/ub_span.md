@@ -44,6 +44,7 @@ template<class T> class ub_span;
 - 仅可在AI Core SIMD编程中使用。
 - 视图不管理存储生命周期。
 - 底层UB区域必须在视图使用期间保持有效。
+- operator[] 的索引范围由调用方保证有效；first/last/subspan 切片采用失效闭合语义，计数或偏移越出 [0, size()] 时返回空视图，不产生回绕指针。
 
 ## 调用示例
 

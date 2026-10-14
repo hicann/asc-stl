@@ -28,58 +28,14 @@
 #endif
 
 #include <asc/__detail/attributes.h>
-#include <asc/std/__fwd/get.h>
-#include <asc/std/__fwd/pair.h>
-#include <asc/std/__fwd/subrange.h>
-#include <asc/std/__fwd/tuple.h>
-#include <asc/std/__memory/allocator_arg_t.h>
-#include <asc/std/__tuple/make_tuple_types.h>
-#include <asc/std/__tuple/tuple_element.h>
-#include <asc/std/__tuple/tuple_indices.h>
-#include <asc/std/__tuple/tuple_like.h>
-#include <asc/std/__tuple/tuple_size.h>
-#include <asc/std/__tuple/tuple_types.h>
-#include <asc/std/__type_traits/conditional.h>
-#include <asc/std/__type_traits/disjunction.h>
-#include <asc/std/__type_traits/integral_constant.h>
-#include <asc/std/__type_traits/is_assignable.h>
-#include <asc/std/__type_traits/is_comparable.h>
-#include <asc/std/__type_traits/is_constructible.h>
-#include <asc/std/__type_traits/is_convertible.h>
-#include <asc/std/__type_traits/is_copy_assignable.h>
-#include <asc/std/__type_traits/is_copy_constructible.h>
-#include <asc/std/__type_traits/is_default_constructible.h>
-#include <asc/std/__type_traits/is_implicitly_default_constructible.h>
-#include <asc/std/__type_traits/is_move_assignable.h>
-#include <asc/std/__type_traits/is_move_constructible.h>
-#include <asc/std/__type_traits/is_nothrow_assignable.h>
-#include <asc/std/__type_traits/is_nothrow_constructible.h>
-#include <asc/std/__type_traits/is_nothrow_copy_assignable.h>
-#include <asc/std/__type_traits/is_nothrow_copy_constructible.h>
-#include <asc/std/__type_traits/is_nothrow_default_constructible.h>
-#include <asc/std/__type_traits/is_nothrow_move_assignable.h>
-#include <asc/std/__type_traits/is_nothrow_move_constructible.h>
-#include <asc/std/__type_traits/is_same.h>
-#include <asc/std/__type_traits/lazy.h>
-#include <asc/std/__type_traits/remove_cvref.h>
-#include <asc/std/__type_traits/remove_reference.h>
-#include <asc/std/__utility/declval.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-template <class To, class From>
-struct __tuple_constructible : is_constructible<To, From> {};
-template <class To, class From>
-struct __tuple_convertible : is_convertible<From, To> {};
-template <class To, class From>
-struct __tuple_assignable : is_assignable<To&, From> {};
-
-template <class T1, class T2, class U1, class U2>
-inline constexpr bool __pair_constructible_v = is_constructible_v<T1, U1> && is_constructible_v<T2, U2>;
-template <class T1, class T2, class U1, class U2>
-inline constexpr bool __pair_convertible_v = is_convertible_v<U1, T1> && is_convertible_v<U2, T2>;
-template <class T1, class T2, class U1, class U2>
-inline constexpr bool __pair_assignable_v = is_assignable_v<T1&, U1> && is_assignable_v<T2&, U2>;
+// This header deliberately exports nothing. The former constraint primitives
+// (__tuple_constructible/__tuple_convertible/__tuple_assignable and the
+// __pair_*_v set) had no consumers: the tuple constructor face applies its
+// per-element enable_if constraints directly in tuple.h / tuple_leaf.h. The
+// file itself is retained because the frozen test assets still include it.
 
 CANN_ASC_STL_END_NAMESPACE
 

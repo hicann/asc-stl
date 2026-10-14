@@ -30,6 +30,8 @@
 
 `asc::std::acosl`在Host上以long double精度计算反余弦，结果以弧度表示，取值范围为[0, π]。long double的实际精度由Host平台和工具链决定，不保证高于double。
 
+cmath 的 `l` 后缀宿主别名族（如 `sinl`、`fabsl`、`sqrtl` 等）当前均已交付：各别名与 `acosl` 一样仅限 Host 车道，经对应的 `__builtin_*l` 入口路由，本库不在设备车道暴露 long double。
+
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型

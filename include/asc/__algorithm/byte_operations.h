@@ -31,10 +31,24 @@
 #include <asc/execution.policy.h>
 #include <asc/stream>
 
+// Prefer the official AscendCL header when it is reachable and fall back to
+// the minimal manual declarations otherwise, mirroring the binding pattern of
+// <asc/__runtime/stream.h> and <asc/__runtime/devices.h>: the official header
+// makes signature drift visible at compile time, the fallback keeps Host-only
+// translation units without an AscendCL installation parsable.
+#if !defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) && defined(__has_include)
+#if __has_include(<acl/acl_rt.h>)
+#include <acl/acl_rt.h>
+#define CANN_ASC_STL_DETAIL_HAS_ACL_COPY_RUNTIME 1
+#endif
+#endif
+
+#if !defined(CANN_ASC_STL_DETAIL_HAS_ACL_COPY_RUNTIME)
 extern "C" int aclrtMemcpyAsync(
     void* destination, __SIZE_TYPE__ destination_size, const void* source, __SIZE_TYPE__ bytes, int kind, void* stream);
 extern "C" int aclrtMemsetAsync(
     void* destination, __SIZE_TYPE__ destination_size, int value, __SIZE_TYPE__ bytes, void* stream);
+#endif
 
 namespace asc::std {
 using size_t = __SIZE_TYPE__;
@@ -42,11 +56,14 @@ using size_t = __SIZE_TYPE__;
 
 namespace asc {
 namespace detail {
+// AscendCL aclrtMemcpyKind values, including the runtime pointer
+// classification, so the enumerators stay at their ACL offsets.
 enum class copy_direction : int {
+    host_to_host = 0,
     host_to_device = 1,
     device_to_host = 2,
     device_to_device = 3,
-    inferred = 4,
+    automatic = 4,
 };
 
 CANN_ASC_STL_HOST_API execution_status copy_bytes_runtime(stream_ref stream, void* destination, const void* source,
@@ -63,10 +80,17 @@ CANN_ASC_STL_HOST_API execution_status copy_bytes_runtime(stream_ref stream, voi
 }
 }  // namespace detail
 
+// Raw-byte copy through the AscendCL stream.  The void*/bytes form cannot
+// validate the destination capacity or the element nature (the dev-side
+// reference delivers span/mdspan overloads that check both before enqueueing,
+// including trivially-copyable and non-const destination constraints); here
+// the caller guarantees that the destination offers at least `bytes` of
+// writable storage.  A capacity-aware public overload is a registry decision
+// and must not change this signature.
 CANN_ASC_STL_HOST_API execution_status copy_bytes(
     stream_ref stream, void* destination, const void* source, ::asc::std::size_t bytes) noexcept
 {
-    return detail::copy_bytes_runtime(stream, destination, source, bytes, detail::copy_direction::inferred);
+    return detail::copy_bytes_runtime(stream, destination, source, bytes, detail::copy_direction::automatic);
 }
 
 CANN_ASC_STL_HOST_API execution_status fill_bytes(

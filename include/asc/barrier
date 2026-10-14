@@ -55,11 +55,19 @@ public:
     {}
     CANN_ASC_STL_SIMT_API barrier_arrival_token arrive(__PTRDIFF_TYPE__ update = 1) noexcept
     {
+        // Misuse fails fast instead of hanging: a negative update or more
+        // arrivals than the phase expects drives remaining negative, the
+        // phase never flips, and every waiter spins forever with no trace
+        // (dev parity -- arrive() asserts update and remaining there).
+        if (update < 0)
+            ::asc::detail::atomic_trap();
         atomic_ref<__UINT64_TYPE__, Scope> phase(state_.phase);
         atomic_ref<__INT64_TYPE__, Scope> remaining(state_.remaining);
         const __UINT64_TYPE__ old_phase = phase.load(std::memory_order_relaxed);
         const __INT64_TYPE__ previous =
             remaining.fetch_sub(static_cast<__INT64_TYPE__>(update), std::memory_order_acq_rel);
+        if (previous < static_cast<__INT64_TYPE__>(update))
+            ::asc::detail::atomic_trap();
         if (previous == update) {
             atomic_ref<__INT64_TYPE__, Scope> expected(state_.expected);
             completion_();
@@ -71,7 +79,17 @@ public:
     CANN_ASC_STL_SIMT_API void wait(barrier_arrival_token&& token) const noexcept
     {
         atomic_ref<__UINT64_TYPE__, Scope> phase(const_cast<__UINT64_TYPE__&>(state_.phase));
+        // Poll tightly first, then delay between polls: in SIMT's
+        // non-preemptive model a bare spin monopolizes the execution slot
+        // and can starve the thread that completes the phase. Block scope
+        // should prefer the hardware ub/barrier primitives over this
+        // software phase spin whenever they are applicable.
+        ::asc::detail::spin_backoff tester;
         while (phase.load(std::memory_order_acquire) == token.phase_) {
+            if (tester.poll()) {
+                continue;
+            }
+            tester.backoff();
         }
     }
     CANN_ASC_STL_SIMT_API void arrive_and_wait() noexcept
@@ -81,8 +99,13 @@ public:
     }
     CANN_ASC_STL_SIMT_API void arrive_and_drop() noexcept
     {
+        // Dropping below an expected count of one breaks every later phase;
+        // trap at the source rather than letting phases hang (dev parity:
+        // expected >= 0 assert).
         atomic_ref<__INT64_TYPE__, Scope> expected(state_.expected);
-        (void)expected.fetch_sub(1, std::memory_order_relaxed);
+        const __INT64_TYPE__ previous = expected.fetch_sub(1, std::memory_order_relaxed);
+        if (previous <= 0)
+            ::asc::detail::atomic_trap();
         (void)arrive();
     }
     CANN_ASC_STL_SIMT_API static constexpr __PTRDIFF_TYPE__ max() noexcept
@@ -98,6 +121,11 @@ private:
 };
 
 #if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+// Placement: object must address device global memory visible to every
+// participating thread (the barrier_state fields are the cross-thread
+// handshake; see __synchronization/barrier.h for the full contract). Do not
+// init() over stack storage or per-core scratch -- the backend rejects
+// atomics on such objects or silently drops cross-core visibility.
 template <memory_scope Scope, class CompletionFunction>
 CANN_ASC_STL_SIMT_API void init(barrier<Scope, CompletionFunction>* object, __PTRDIFF_TYPE__ expected) noexcept
 {

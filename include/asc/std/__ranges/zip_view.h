@@ -27,38 +27,83 @@
 #pragma system_header
 #endif
 
-#include <asc/__detail/attributes.h>
-#include <asc/std/__algorithm/ranges_min.h>
-#include <asc/std/__algorithm/ranges_min_element.h>
-#include <asc/std/__concepts/convertible_to.h>
-#include <asc/std/__functional/invoke.h>
-#include <asc/std/__iterator/concepts.h>
+#include <asc/std/__iterator/iterator_traits.h>
 #include <asc/std/__ranges/access.h>
 #include <asc/std/__ranges/all.h>
-#include <asc/std/__ranges/concepts.h>
-#include <asc/std/__ranges/empty_view.h>
-#include <asc/std/__ranges/enable_borrowed_range.h>
 #include <asc/std/__ranges/size.h>
 #include <asc/std/__ranges/view_interface.h>
-#include <asc/std/__tuple/apply.h>
-#include <asc/std/__tuple/get.h>
 #include <asc/std/__tuple/tuple.h>
-#include <asc/std/__tuple/tuple_size.h>
-#include <asc/std/__type_traits/common_type.h>
-#include <asc/std/__type_traits/make_unsigned.h>
-#include <asc/std/__type_traits/maybe_const.h>
+#include <asc/std/__type_traits/conditional.h>
+#include <asc/std/__type_traits/is_convertible.h>
+#include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/remove_cvref.h>
+#include <asc/std/__type_traits/void_t.h>
+#include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/forward.h>
-#include <asc/std/__utility/integer_sequence.h>
 #include <asc/std/__utility/move.h>
+
+// Registered contract: zip_view zips exactly two random-access, sized views
+// (views::zip wraps its operands with views::all first). begin()/end()/size()
+// pin that contract with static assertions at instantiation time, and the
+// const overloads additionally require const iterability whose iterator
+// types are identical to the non-const ones.
 namespace asc::std::ranges {
+namespace __zip_detail {
+// Underlying iterator category, read through iterator_traits. Iterators whose
+// traits fall back to the empty primary template conservatively degrade to
+// input_iterator_tag.
+template <class Iter, class = void>
+struct __iterator_category_of {
+    using type = input_iterator_tag;
+};
+template <class Iter>
+struct __iterator_category_of<Iter, void_t<typename iterator_traits<Iter>::iterator_category>> {
+    using type = typename iterator_traits<Iter>::iterator_category;
+};
+template <class Iter>
+using __iterator_category_of_t = typename __iterator_category_of<Iter>::type;
+
+// The weaker of two tag types: Left converts to Right exactly when Left is the
+// more derived (stronger) tag, so the weaker one is Right in that case.
+template <class Left, class Right>
+using __weaker_category = conditional_t<is_convertible_v<Left, Right>, Right, Left>;
+
+// Zip category: the weakest of the two underlying categories, weakened further
+// to random_access_iterator_tag at most, since zipping never preserves
+// contiguity.
+template <class First, class Second>
+using __zip_category =
+    __weaker_category<__weaker_category<__iterator_category_of_t<First>, __iterator_category_of_t<Second>>,
+        random_access_iterator_tag>;
+
+// Sized-range probe backing the registered contract checks in the members.
+template <class View, class = void>
+struct __is_sized_range {
+    static constexpr bool value = false;
+};
+template <class View>
+struct __is_sized_range<View, void_t<decltype(ranges::size(::asc::std::declval<View&>()))>> {
+    static constexpr bool value = true;
+};
+}  // namespace __zip_detail
+
 template <class FirstView, class SecondView>
 class zip_view : public view_interface<zip_view<FirstView, SecondView>> {
     using first_iterator = iterator_t<FirstView>;
     using second_iterator = iterator_t<SecondView>;
+    // The iterator type is deliberately private: the registered zip_view
+    // surface is the constructors plus begin/end/size, and callers name the
+    // iterator only through auto/decltype. Do not widen this exposure.
     class iterator {
     public:
         using difference_type = __PTRDIFF_TYPE__;
+        using reference = ::asc::std::tuple<decltype(*::asc::std::declval<const first_iterator&>()),
+            decltype(*::asc::std::declval<const second_iterator&>())>;
+        using value_type = ::asc::std::tuple<remove_cvref_t<decltype(*::asc::std::declval<const first_iterator&>())>,
+            remove_cvref_t<decltype(*::asc::std::declval<const second_iterator&>())>>;
+        using pointer = void;
+        using iterator_concept = __zip_detail::__zip_category<first_iterator, second_iterator>;
+        using iterator_category = iterator_concept;
         CANN_ASC_STL_API constexpr iterator(first_iterator first, second_iterator second)
             : first_(first), second_(second)
         {}
@@ -72,10 +117,34 @@ class zip_view : public view_interface<zip_view<FirstView, SecondView>> {
             ++second_;
             return *this;
         }
+        CANN_ASC_STL_API constexpr iterator operator++(int)
+        {
+            auto copy = *this;
+            ++*this;
+            return copy;
+        }
+        CANN_ASC_STL_API constexpr iterator& operator--()
+        {
+            --first_;
+            --second_;
+            return *this;
+        }
+        CANN_ASC_STL_API constexpr iterator operator--(int)
+        {
+            auto copy = *this;
+            --*this;
+            return copy;
+        }
         CANN_ASC_STL_API constexpr iterator& operator+=(difference_type amount)
         {
             first_ += amount;
             second_ += amount;
+            return *this;
+        }
+        CANN_ASC_STL_API constexpr iterator& operator-=(difference_type amount)
+        {
+            first_ -= amount;
+            second_ -= amount;
             return *this;
         }
         CANN_ASC_STL_API constexpr auto operator[](difference_type amount) const
@@ -88,10 +157,25 @@ class zip_view : public view_interface<zip_view<FirstView, SecondView>> {
             value += amount;
             return value;
         }
+        friend CANN_ASC_STL_API constexpr iterator operator+(difference_type amount, iterator value)
+        {
+            value += amount;
+            return value;
+        }
+        friend CANN_ASC_STL_API constexpr iterator operator-(iterator value, difference_type amount)
+        {
+            value -= amount;
+            return value;
+        }
         friend CANN_ASC_STL_API constexpr difference_type operator-(const iterator& left, const iterator& right)
         {
             return left.first_ - right.first_;
         }
+        // Lockstep invariant: both lanes are advanced by identical amounts
+        // and every iterator of this view is produced by begin()/end()
+        // (end() == begin() + min(sizes)), so the lanes never diverge and
+        // comparing the first lane is sufficient. Iterators originating from
+        // different zip_view objects are not comparable by contract.
         friend CANN_ASC_STL_API constexpr bool operator==(const iterator& left, const iterator& right)
         {
             return left.first_ == right.first_;
@@ -99,6 +183,22 @@ class zip_view : public view_interface<zip_view<FirstView, SecondView>> {
         friend CANN_ASC_STL_API constexpr bool operator!=(const iterator& left, const iterator& right)
         {
             return !(left == right);
+        }
+        friend CANN_ASC_STL_API constexpr bool operator<(const iterator& left, const iterator& right)
+        {
+            return left.first_ < right.first_;
+        }
+        friend CANN_ASC_STL_API constexpr bool operator<=(const iterator& left, const iterator& right)
+        {
+            return !(right < left);
+        }
+        friend CANN_ASC_STL_API constexpr bool operator>(const iterator& left, const iterator& right)
+        {
+            return right < left;
+        }
+        friend CANN_ASC_STL_API constexpr bool operator>=(const iterator& left, const iterator& right)
+        {
+            return !(left < right);
         }
 
     private:
@@ -113,21 +213,38 @@ public:
     {}
     CANN_ASC_STL_API constexpr iterator begin()
     {
+        static_assert(is_convertible<__zip_detail::__zip_category<first_iterator, second_iterator>,
+                          random_access_iterator_tag>::value,
+            "asc::std::ranges::zip_view requires random-access underlying iterators "
+            "(registered contract: two-way random-access zip)");
         return {ranges::begin(first_), ranges::begin(second_)};
     }
     CANN_ASC_STL_API constexpr iterator begin() const
     {
+        static_assert(is_convertible<__zip_detail::__zip_category<first_iterator, second_iterator>,
+                          random_access_iterator_tag>::value,
+            "asc::std::ranges::zip_view requires random-access underlying iterators "
+            "(registered contract: two-way random-access zip)");
+        static_assert(
+            is_same<decltype(ranges::begin(::asc::std::declval<const FirstView&>())), first_iterator>::value &&
+                is_same<decltype(ranges::begin(::asc::std::declval<const SecondView&>())), second_iterator>::value,
+            "asc::std::ranges::zip_view const iteration requires const-iterable views whose "
+            "iterator types are identical to the non-const ones");
         return {ranges::begin(first_), ranges::begin(second_)};
     }
     CANN_ASC_STL_API constexpr iterator end()
     {
-        const auto count = size();
-        return begin() + static_cast<__PTRDIFF_TYPE__>(count);
+        static_assert(
+            __zip_detail::__is_sized_range<FirstView>::value && __zip_detail::__is_sized_range<SecondView>::value,
+            "asc::std::ranges::zip_view requires sized underlying views (registered contract)");
+        return begin() + static_cast<__PTRDIFF_TYPE__>(size());
     }
     CANN_ASC_STL_API constexpr iterator end() const
     {
-        const auto count = size();
-        return begin() + static_cast<__PTRDIFF_TYPE__>(count);
+        static_assert(
+            __zip_detail::__is_sized_range<FirstView>::value && __zip_detail::__is_sized_range<SecondView>::value,
+            "asc::std::ranges::zip_view requires sized underlying views (registered contract)");
+        return begin() + static_cast<__PTRDIFF_TYPE__>(size());
     }
     CANN_ASC_STL_API constexpr __SIZE_TYPE__ size() noexcept(
         noexcept(ranges::size(first_)) && noexcept(ranges::size(second_)))

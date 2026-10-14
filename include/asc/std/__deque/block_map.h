@@ -30,7 +30,57 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace detail {
-struct deque_block_map_contract {};
+
+// Fixed-capacity block table backing asc::std::deque: a fixed number of
+// block slots, each lazily allocated from the block allocator on first use
+// and all released when the table is destroyed.  Growth beyond the table is
+// rejected by the owning container, keeping indexing bounds-checkable.
+template <class Block, __SIZE_TYPE__ BlockCount, class Allocator>
+class deque_block_map {
+    using block_allocator = typename Allocator::template rebind<Block>::other;
+
+public:
+    CANN_ASC_STL_API explicit deque_block_map(const Allocator& allocator) noexcept : allocator_(allocator)
+    {}
+    deque_block_map(const deque_block_map&) = delete;
+    deque_block_map& operator=(const deque_block_map&) = delete;
+    CANN_ASC_STL_API ~deque_block_map()
+    {
+        release();
+    }
+
+    // Returns the block stored at index without allocating; nullptr when the
+    // slot has not been populated yet.
+    CANN_ASC_STL_API Block* at(__SIZE_TYPE__ index) const noexcept
+    {
+        return blocks_[index];
+    }
+    // Returns the block stored at index, allocating it on first use.  A
+    // nullptr result reports allocator failure; the caller diagnoses it.
+    CANN_ASC_STL_API Block* ensure_allocated(__SIZE_TYPE__ index)
+    {
+        if (blocks_[index] == nullptr) {
+            block_allocator blocks(allocator_);
+            blocks_[index] = blocks.allocate(1);
+        }
+        return blocks_[index];
+    }
+    CANN_ASC_STL_API void release() noexcept
+    {
+        block_allocator blocks(allocator_);
+        for (__SIZE_TYPE__ index = 0; index < BlockCount; ++index) {
+            if (blocks_[index] != nullptr) {
+                blocks.deallocate(blocks_[index], 1);
+                blocks_[index] = nullptr;
+            }
+        }
+    }
+
+private:
+    Allocator allocator_;
+    Block* blocks_[BlockCount]{};
+};
+
 }  // namespace detail
 
 CANN_ASC_STL_END_NAMESPACE

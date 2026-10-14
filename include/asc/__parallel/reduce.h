@@ -27,9 +27,16 @@
 #pragma system_header
 #endif
 
-#include <asc/__parallel/temporary_storage.h>
-#include <asc/launch>
 namespace asc::detail {
+// Sequential-semantics baseline: the reductions below are strict left folds,
+// so their results (including floating-point rounding) are run-to-run
+// deterministic without relying on associativity. Parallelization path
+// (later runtime work, kept as an anchor): fixed-shape two-phase reduction -
+// each block folds its slice serially left-to-right into a partial slot, a
+// second pass combines the partials in ascending block order. Both the shape
+// and the combination order stay fixed, keeping float results deterministic;
+// free atomic accumulation must stay out because its result depends on thread
+// arrival order.
 template <class Input, class T, class BinaryOperation, class UnaryOperation>
 struct transform_reduce_operation {
     Input first;
@@ -86,6 +93,11 @@ struct bool_reduce_operation {
     bool invert;
     CANN_ASC_STL_DEVICE_API void operator()()
     {
+        // Deliberately no short circuit: the whole range is scanned even once
+        // the accumulator is decided. A parallel evaluation cannot stop on the
+        // first deciding element anyway, and for pure predicates the trailing
+        // evaluations are unobservable, so the full scan keeps the serial and
+        // the future parallel contract identical.
         bool value = require_all;
         for (; first != last; ++first) {
             bool current = predicate(*first);
@@ -130,14 +142,25 @@ struct extremum_operation {
             *output = 0;
             return;
         }
+        // The comparison direction is selected once before the loop instead
+        // of per element; strict comparison keeps the first extremum, matching
+        // std::min_element/std::max_element.
         Forward best = first;
         __SIZE_TYPE__ best_index{};
         __SIZE_TYPE__ index = 1;
-        for (++first; first != last; ++first, ++index) {
-            bool replace = maximum ? compare(*best, *first) : compare(*first, *best);
-            if (replace) {
-                best = first;
-                best_index = index;
+        if (maximum) {
+            for (++first; first != last; ++first, ++index) {
+                if (compare(*best, *first)) {
+                    best = first;
+                    best_index = index;
+                }
+            }
+        } else {
+            for (++first; first != last; ++first, ++index) {
+                if (compare(*first, *best)) {
+                    best = first;
+                    best_index = index;
+                }
             }
         }
         *output = best_index;

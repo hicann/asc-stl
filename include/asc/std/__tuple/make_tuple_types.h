@@ -47,30 +47,42 @@ template <class Tuple, class Indices>
 struct __make_tuple_types_flat;
 template <template <class...> class Tuple, class... T, size_t... I>
 struct __make_tuple_types_flat<Tuple<T...>, __tuple_indices<I...>> {
-    using list = __type_list<T...>;
+    using __tuple_types_list = __type_list<T...>;
     template <class U, class Apply = __apply_cvref_fn<U>>
-    using __apply_quals = __tuple_types<__type_call1<Apply, __type_at_c<I, list>>...>;
+    using __apply_quals = __tuple_types<__type_call1<Apply, __type_at_c<I, __tuple_types_list>>...>;
 };
 template <class V, size_t N, size_t... I>
 struct __make_tuple_types_flat<array<V, N>, __tuple_indices<I...>> {
     template <size_t>
-    using value_type = V;
+    using __value_type = V;
     template <class U, class Apply = __apply_cvref_fn<U>>
-    using __apply_quals = __tuple_types<__type_call1<Apply, value_type<I>>...>;
+    using __apply_quals = __tuple_types<__type_call1<Apply, __value_type<I>>...>;
 };
 template <class V, size_t... I>
 struct __make_tuple_types_flat<complex<V>, __tuple_indices<I...>> {
     static_assert(sizeof...(I) == 2, "complex has two tuple elements");
     template <size_t>
-    using value_type = V;
+    using __value_type = V;
     template <class U, class Apply = __apply_cvref_fn<U>>
-    using __apply_quals = __tuple_types<__type_call1<Apply, value_type<I>>...>;
+    using __apply_quals = __tuple_types<__type_call1<Apply, __value_type<I>>...>;
 };
-template <class T, size_t End = tuple_size<remove_reference_t<T>>::value, size_t Start = 0>
+template <class T, size_t End = tuple_size<remove_reference_t<T>>::value, size_t Start = 0,
+    bool SameSize = (End == tuple_size<remove_reference_t<T>>::value)>
 struct __make_tuple_types {
     static_assert(Start <= End, "invalid tuple type range");
     using raw = remove_cv_t<remove_reference_t<T>>;
     using type = typename __make_tuple_types_flat<raw, __make_tuple_indices_t<End, Start>>::template __apply_quals<T>;
+};
+// Identity fast paths: an unqualified tuple / __tuple_types spanning its full
+// element range already is the requested __tuple_types - skip the cvref
+// projection over the whole element list.
+template <class... Types, size_t End>
+struct __make_tuple_types<tuple<Types...>, End, 0, true> {  // NOLINT(build/include_what_you_use)
+    using type = __tuple_types<Types...>;
+};
+template <class... Types, size_t End>
+struct __make_tuple_types<__tuple_types<Types...>, End, 0, true> {
+    using type = __tuple_types<Types...>;
 };
 template <class T, size_t End = tuple_size<remove_reference_t<T>>::value, size_t Start = 0>
 using __make_tuple_types_t = typename __make_tuple_types<T, End, Start>::type;

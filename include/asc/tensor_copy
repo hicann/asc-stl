@@ -49,7 +49,15 @@ CANN_ASC_STL_DEVICE_API bool tensor_copy_required_extent(
         }
         const unsigned long long stride =
             source_layout ? descriptor.source_stride(dimension) : descriptor.destination_stride(dimension);
-        const unsigned long long contribution = (count - 1) * stride;
+        // Both the reach multiply and the accumulation are wrap-checked: a
+        // uint32 extent padded past 2^32 times a uint32 stride can leave the
+        // 64-bit range, and an unchecked product would wrap small and pass.
+        // A zero count or stride cannot address a furthest element at all.
+        const unsigned long long reach = count - 1;
+        if (count == 0 || stride == 0 || reach > ~0ULL / stride) {
+            return false;
+        }
+        const unsigned long long contribution = reach * stride;
         if (contribution > ~0ULL - result) {
             return false;
         }
@@ -60,6 +68,13 @@ CANN_ASC_STL_DEVICE_API bool tensor_copy_required_extent(
 
 }  // namespace detail
 
+// Registered GM-to-UB staged transfer (the entry's own contract text is the
+// load-side one quoted above).  Stage-buffer reuse across rounds: this entry
+// validates, issues the ND-DMA load and commits it, but the acquire that
+// retires the previous round's consumer reads and MTE3 drains of the same
+// stage buffer stays with the caller - call pipeline.producer_acquire(stage)
+// before re-loading a stage whose buffer a previous round still owns; the
+// canonical round sequence is documented on asc::copy_async in <asc/pipeline>.
 template <class T, unsigned Rank>
 CANN_ASC_STL_DEVICE_API tensor_copy_status tensor_load_async(const pipeline_ref& pipeline, unsigned int stage,
     ub_span<T> destination, gm_span<const T> source, const tensor_copy_descriptor<Rank>& descriptor,
@@ -84,8 +99,69 @@ CANN_ASC_STL_DEVICE_API tensor_copy_status tensor_load_async(const pipeline_ref&
     if (destination.size() < destination_elements) {
         return tensor_copy_status::insufficient_destination;
     }
+    // The aligned-transfer contract of the borrowed C API: both endpoints of
+    // the load must sit on the engine's 32-byte datablock boundary.  The
+    // check uses that hardware boundary rather than the (row-pitch) result of
+    // tensor_copy_required_alignment, so a legitimately staged destination
+    // whose padded row length is not itself a power-of-two divisor is not
+    // falsely rejected.
+    if (!detail::tensor_copy_address_aligned(destination.data())) {
+        return tensor_copy_status::insufficient_destination;
+    }
+    if (!detail::tensor_copy_address_aligned(source.data())) {
+        return tensor_copy_status::insufficient_source;
+    }
     detail::tensor_copy_load_ndim(destination.data(), source.data(), descriptor, fill_value);
     pipeline.producer_commit(stage);
+    return tensor_copy_status::success;
+}
+
+// Registered UB-to-GM mirror of tensor_load_async (registry row
+// ASC-API-15709EE23496; that row's contract text was copied from the load
+// entry and says "before issuing a load" - this direction issues a store).
+// The descriptor is reused as a round trip: source_strides keep describing
+// the global-memory layout and destination_strides the padded
+// unified-buffer layout a load writes, so the store reads each extent row
+// past its left padding and skips the padding fill instead of transferring
+// it.  No fill value is written because the global-memory side has no
+// padding, which is why the store carries no fill argument.  The public
+// status reports descriptor, size and stage validation before issuing the
+// store; the innermost run must additionally fit the 32-bit byte length of
+// the copy engine, and both endpoints of every run meet the C API alignment
+// requirement by the same caller precondition tensor_copy_required_alignment
+// documents for the load.  The trailing consumer_release is the canonical
+// round's consumer-side retire step: this entry replaces the
+// copy_async(..., gm, ub) + consumer_release pair of the plain pipeline
+// vocabulary, so callers must have finished their scalar reads of the stage
+// buffer before invoking it.
+template <class T, unsigned Rank>
+CANN_ASC_STL_DEVICE_API tensor_copy_status tensor_store_async(const pipeline_ref& pipeline, unsigned int stage,
+    gm_span<T> destination, ub_span<const T> source, const tensor_copy_descriptor<Rank>& descriptor) noexcept
+{
+    const tensor_copy_status descriptor_status = descriptor.validate();
+    if (descriptor_status != tensor_copy_status::success) {
+        return descriptor_status;
+    }
+    if (stage >= pipeline.stages()) {
+        return tensor_copy_status::invalid_stage;
+    }
+    if (descriptor.extent(Rank - 1) > ~0u / sizeof(T)) {
+        return tensor_copy_status::size_overflow;
+    }
+    unsigned long long destination_elements = 0;
+    unsigned long long source_elements = 0;
+    if (!detail::tensor_copy_required_extent(descriptor, true, false, destination_elements) ||
+        !detail::tensor_copy_required_extent(descriptor, false, true, source_elements)) {
+        return tensor_copy_status::size_overflow;
+    }
+    if (destination.size() < destination_elements) {
+        return tensor_copy_status::insufficient_destination;
+    }
+    if (source.size() < source_elements) {
+        return tensor_copy_status::insufficient_source;
+    }
+    detail::tensor_copy_store_ndim(destination.data(), source.data(), descriptor);
+    pipeline.consumer_release(stage);
     return tensor_copy_status::success;
 }
 

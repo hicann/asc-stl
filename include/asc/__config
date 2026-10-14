@@ -27,13 +27,29 @@
 #pragma system_header
 #endif
 
-#include <asc/__detail/attributes.h>
-#include <asc/__detail/builtin.h>
-#include <asc/__detail/diagnostics.h>
-#include <asc/__detail/execution_space.h>
-#include <asc/__detail/feature_detection.h>
-#include <asc/__detail/preprocessor.h>
-#include <asc/__detail/visibility.h>
+// System-header contract: the three CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_*
+// macros are NOT defined anywhere inside this tree. They are external opt-in
+// switches - a build system (or an embedding user) defines the one matching
+// the compiling compiler to mark ASC-STL headers as system headers, which
+// suppresses diagnostics originating from compiler-specific implementation
+// details. Leaving all three undefined keeps every diagnostic visible, which
+// is the default for this deliverable; each public facade carries an
+// equivalent guarded pragma block for the same opt-in.
+
+// Supported compilers: GCC, Clang, and the CCE/BiSheng AI Core toolchains.
+// MSVC is detected (compiler.h) and kept syntax-compatible in the detail
+// headers, but it is NOT a supported target: the runtime layer links the
+// CANN host libraries and the device path needs CCE. MSVC-specific branches
+// elsewhere in __detail therefore settle for benign no-op fallbacks by
+// design rather than being gaps to fill in.
+
+#include <asc/__detail/attributes.h>         // IWYU pragma: export
+#include <asc/__detail/builtin.h>            // IWYU pragma: export
+#include <asc/__detail/diagnostics.h>        // IWYU pragma: export
+#include <asc/__detail/execution_space.h>    // IWYU pragma: export
+#include <asc/__detail/feature_detection.h>  // IWYU pragma: export
+#include <asc/__detail/preprocessor.h>       // IWYU pragma: export
+#include <asc/__detail/visibility.h>         // IWYU pragma: export
 
 #if !CANN_ASC_STL_DETAIL_HAS_CXX17()
 #error "ASC-STL requires C++17 or newer"
