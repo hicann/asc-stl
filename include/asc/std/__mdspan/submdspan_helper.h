@@ -55,15 +55,15 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// [mdspan.sub.overview]-2.5：切片序列到结果秩的映射。
+// [mdspan.sub.overview]-2.5: mapping from the slice sequence to the resulting rank.
 template <class IndexType, class... SliceTypes>
 CANN_ASC_STL_API constexpr array<size_t, sizeof...(SliceTypes)> __map_rank(size_t count = 0) noexcept
 {
     return {(is_convertible_v<SliceTypes, IndexType> ? dynamic_extent : count++)...};
 }
 
-// index-pair-like 判定（合入源树为 concept，此处为 SFINAE 安全的变量模板形态，
-// 基于 tuple_size/tuple_element 检测）。
+// index-pair-like detection as a SFINAE-safe variable template (detected via
+// tuple_size/tuple_element) rather than a concept.
 template <class T, class IndexType, class = void>
 struct __index_pair_like_impl : false_type {};
 template <class T, class IndexType>
@@ -142,7 +142,7 @@ CANN_ASC_STL_API constexpr auto __index_cast(From&& from) noexcept
 template <size_t Index, class... Slices>
 CANN_ASC_STL_API constexpr decltype(auto) __get_slice_at(Slices&&... slices) noexcept
 {
-    // 经 ADL 引入 ::asc::std::get 以支持宿主库类型。
+    // Introduce ::asc::std::get via ADL to support host-library types.
     using ::asc::std::get;
     auto tuple_value =
         ::asc::std::forward_as_tuple(::asc::std::forward<Slices>(slices)...);  // NOLINT(build/include_what_you_use)
@@ -163,7 +163,7 @@ CANN_ASC_STL_API constexpr IndexType __first_extent_from_slice(Slices... slices)
         return ::asc::std::__index_cast<IndexType>(slice);
     } else {
         if constexpr (__index_pair_like<slice_type, IndexType>) {
-            // 经 ADL 引入 ::asc::std::get 以支持宿主库类型。
+            // Introduce ::asc::std::get via ADL to support host-library types.
             using ::asc::std::get;
             return ::asc::std::__index_cast<IndexType>(get<0>(slice));
         } else if constexpr (__is_strided_slice<slice_type>) {
@@ -187,7 +187,7 @@ CANN_ASC_STL_API constexpr typename Extents::index_type __last_extent_from_slice
         return ::asc::std::__index_cast<index_type>(::asc::std::__de_ice(slice) + 1);
     } else {
         if constexpr (__index_pair_like<slice_type, index_type>) {
-            // 经 ADL 引入 ::asc::std::get 以支持宿主库类型。
+            // Introduce ::asc::std::get via ADL to support host-library types.
             using ::asc::std::get;
             return ::asc::std::__index_cast<index_type>(get<1>(slice));
         } else if constexpr (__is_strided_slice<slice_type>) {

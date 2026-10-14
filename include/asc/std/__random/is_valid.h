@@ -39,29 +39,33 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// [rand.req.genl]（P4037R1 措辞）：对应 RealType 模板形参的实参必须是
-// cv 非限定的（扩展）浮点类型，否则程序非良构。判定保持 cv 敏感：
-// const float 等带限定浮点类型不满足要求（此前经剥 cv 的 is_floating_point_v
-// 误放行）。
+// [rand.req.genl] (P4037R1 wording): the argument for a RealType template
+// parameter must be a cv-unqualified (extended) floating-point type, otherwise
+// the program is ill-formed. The check is deliberately cv-sensitive: qualified
+// floating-point types such as const float do not qualify (is_floating_point_v
+// alone would wrongly admit them, since it ignores cv-qualifiers).
 template <class T>
 inline constexpr bool __asc_random_is_valid_realtype = is_floating_point_v<T> && is_same_v<T, remove_cv_t<T>>;
 
-// [rand.req.genl]（P4037R1 措辞）：对应 IntType 模板形参的实参必须是
-// cv 非限定的（扩展）整数类型；__is_integer_v 恰为该语义：含 signed char
-// 与 unsigned char，排除 char、bool 与各种字符宽字符类型。
+// [rand.req.genl] (P4037R1 wording): the argument for an IntType template
+// parameter must be a cv-unqualified (extended) integer type; __is_integer_v
+// is exactly that semantic: it includes signed char and unsigned char while
+// excluding char, bool, and the character/wide-character types.
 template <class T>
 inline constexpr bool __asc_random_is_valid_inttype = __is_integer_v<T>;
 
-// [rand.req.genl]（P4037R1 措辞）：对应 UIntType 模板形参的实参必须是
-// cv 非限定的（扩展）无符号整数类型。P4037R1 4.5 节把 unsigned char
-// 纳入实现定义子集，使 linear_congruential_engine<unsigned char, ...>
-// 一类窄引擎可用。
+// [rand.req.genl] (P4037R1 wording): the argument for a UIntType template
+// parameter must be a cv-unqualified (extended) unsigned integer type.
+// P4037R1 section 4.5 admits unsigned char into the implementation-defined
+// subset, which keeps narrow engines such as
+// linear_congruential_engine<unsigned char, ...> usable.
 template <class T>
 inline constexpr bool __asc_random_is_valid_uinttype = __is_unsigned_integer_v<T>;
 
-// [rand.req.urng]：G 满足均匀随机位生成器要求，当且仅当 invoke_result_t<G&>
-// 为无符号整数类型，且 G 提供与之一致的嵌套 result_type。带符号结果类型
-// 的发生器被拒绝（分布实现无法处理）。
+// [rand.req.urng]: G satisfies the uniform random bit generator requirements
+// if and only if invoke_result_t<G&> is an unsigned integer type and G
+// provides a matching nested result_type. Generators with signed result
+// types are rejected (the distribution implementations cannot handle them).
 template <class, class = void>
 inline constexpr bool __asc_random_is_valid_urng = false;
 template <class G>

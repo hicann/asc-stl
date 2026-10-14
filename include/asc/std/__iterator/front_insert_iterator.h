@@ -35,8 +35,8 @@
 #include <asc/std/__utility/move.h>
 #include <asc/std/cstddef>
 
-// Migrated from dev __asc/dialect.h: base asc/__config has no standard-version
-// number macro, so key it on CANN_ASC_STL_DETAIL_CPLUSPLUS instead.
+// Base asc/__config has no standard-version number macro, so key the local
+// STD_VER ladder on CANN_ASC_STL_DETAIL_CPLUSPLUS instead.
 #ifndef CANN_ASC_STL_DETAIL_STD_VER
 #if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
 #define CANN_ASC_STL_DETAIL_STD_VER 2003

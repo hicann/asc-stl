@@ -31,10 +31,11 @@
 #include <asc/std/__cstddef/types.h>
 #include <asc/std/cstdint>
 
-// 基座未提供断言宏（合入源树由方言层集中定义）：按 __mdspan/empty_base.h 的
-// 同形内联，#ifndef 守卫以便与未来集中定义冲突时集中定义胜出。
+// No centralized assertion macro is available yet, so it is defined inline
+// behind an #ifndef guard; a future centralized definition then wins.
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
-// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查。
+// Always a no-op on device (no assertion mechanism); checked on host only when
+// ASC_ENABLE_HOST_ASSERTIONS is explicitly enabled.
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #else
@@ -51,8 +52,8 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __memset_detail {
 
-// 目的地址范围合法性（非空且地址不回绕）探测，供断言使用。
-// 合入源树位于顶层 __memory/check_address.h，基座无该头，内联于此。
+// Destination-range validity check (non-null, no address wraparound), used by
+// the assertion below.
 CANN_ASC_STL_API bool __is_valid_address_range(const void* pointer, size_t count) noexcept
 {
     if (count == 0) {
@@ -72,9 +73,10 @@ CANN_ASC_STL_API void* memset(void* destination, int value, __SIZE_TYPE__ count)
 #if CANN_ASC_STL_DETAIL_HOSTED() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     return ::memset(destination, value, count);
 #else
-    // 设备 TU：__builtin_memset 仅在长度为编译期常量时完全内联；运行期长度会
-    // 降低为对外部 libc memset 的调用，而 aicore 链接没有 libc。常量长度走
-    // 内建内联路径；运行期长度回退为字节循环。
+    // Device TU: __builtin_memset fully inlines only when the length is a
+    // compile-time constant; a runtime length degrades to a call to the libc
+    // memset, and the aicore link has no libc. Constant lengths take the
+    // builtin inline path; runtime lengths fall back to a byte loop.
     if (__builtin_constant_p(count)) {
         return __builtin_memset(destination, value, count);
     }

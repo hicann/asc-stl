@@ -37,9 +37,9 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/promote.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -52,7 +52,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 //! @brief Largest of two values. NaN-aware: a NaN operand yields the
 //! other operand; -0.0 and +0.0 may be returned in either order (the
-//! comparison cannot distinguish them), matching the source contract.
+//! comparison cannot distinguish them).
 //!
 //! Floating arguments take the comparison path — no arithmetic beyond
 //! the ordering itself. Integral arguments widen to double on host; the

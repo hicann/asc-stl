@@ -68,9 +68,10 @@ inline constexpr bool __can_borrow = is_lvalue_reference_v<T> || enable_borrowed
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
-// begin 结果校验保持表达式有效性级（含 decay 转换）：产品冻结用例要求仅有
-// operator-> 的经典代理迭代器可经 begin 路由（ranges::data 的回退依赖此形状），
-// 严于 input_or_output_iterator 的标准校验会破坏既有交付面。
+// Validation of the begin result stays at expression-validity level (including the
+// decay conversion): classic proxy iterators exposing only operator-> must route
+// through begin (the ranges::data fallback depends on this shape); a check stricter
+// than input_or_output_iterator would break existing accepted uses.
 template <class T>
 concept __member_begin = __can_borrow<T> && __workaround_52970<T> &&
     requires(T&& value) { static_cast<decay_t<decltype((value.begin()))>>(value.begin()); };
@@ -80,10 +81,11 @@ concept __unqualified_begin = !__member_begin<T> && __can_borrow<T> && __class_o
     requires(T&& value) { static_cast<decay_t<decltype((begin(value)))>>(begin(value)); };
 
 struct __begin_fn {
-    // 未知边界数组的 begin 自 C++17 起为缺陷报告接纳；gcc 11 以下未实现，按编译器版本门控。
+    // begin for arrays of unknown bound was adopted as a defect report since C++17;
+    // gcc below 11 does not implement it, so gate on the compiler version.
 #if !defined(__GNUC__) || defined(__clang__) || __GNUC__ >= 11
     template <class T>
-        requires(sizeof(T) >= 0)  // 不允许不完整元素类型
+        requires(sizeof(T) >= 0)  // Disallow incomplete element types
     CANN_ASC_STL_API constexpr T* operator()(T (&array)[]) const noexcept
     {
         return array;
@@ -91,7 +93,7 @@ struct __begin_fn {
 #endif
 
     template <class T, size_t N>
-        requires(sizeof(T) >= 0)  // 不允许不完整元素类型
+        requires(sizeof(T) >= 0)  // Disallow incomplete element types
     CANN_ASC_STL_API constexpr T* operator()(T (&array)[N]) const noexcept
     {
         return array;
@@ -120,8 +122,9 @@ struct __begin_fn {
 
 #else  // ^^^ concepts ^^^ / vvv !concepts vvv
 
-// 非概念路径保持基座惯用形状（void_t 探测 + enable_if_t 分派）；begin 结果上的
-// input_or_output_iterator 概念校验与 decay 转换在此路径降级为表达式有效性级检查。
+// The non-concepts path keeps the conventional shape (void_t detection + enable_if_t
+// dispatch); the input_or_output_iterator concept check and the decay conversion on
+// the begin result degrade to expression-validity-level checks on this path.
 template <class T, class = void>
 struct __has_member_begin : false_type {};
 template <class T>
@@ -153,7 +156,8 @@ struct __begin_fn {
 }  // namespace __access_detail
 
 inline constexpr __access_detail::__begin_fn begin{};
-// 内部实现统一经 __fn 类型调用，避免公开 CPO 对象参与 ADL 名字查找被劫持。
+// Internal callers invoke the __fn type so the public CPO object is not found via
+// ADL and cannot be hijacked.
 using __begin_cpo = __access_detail::__begin_fn;
 
 // [range.range]
@@ -193,7 +197,7 @@ concept __unqualified_end =
 
 struct __end_fn {
     template <class T, size_t N>
-        requires(sizeof(T) >= 0)  // 不允许不完整元素类型
+        requires(sizeof(T) >= 0)  // Disallow incomplete element types
     CANN_ASC_STL_API constexpr T* operator()(T (&array)[N]) const noexcept
     {
         return array + N;
@@ -222,8 +226,9 @@ struct __end_fn {
 
 #else  // ^^^ concepts ^^^ / vvv !concepts vvv
 
-// 非概念路径保持基座惯用形状（void_t 探测 + enable_if_t 分派）；end 结果上的
-// sentinel_for 概念校验与 decay 转换在此路径降级为表达式有效性级检查。
+// The non-concepts path keeps the conventional shape (void_t detection + enable_if_t
+// dispatch); the sentinel_for concept check and the decay conversion on the end
+// result degrade to expression-validity-level checks on this path.
 template <class T, class = void>
 struct __has_member_end : false_type {};
 template <class T>
@@ -254,7 +259,8 @@ struct __end_fn {
 }  // namespace __end_detail
 
 inline constexpr __end_detail::__end_fn end{};
-// 内部实现统一经 __fn 类型调用，避免公开 CPO 对象参与 ADL 名字查找被劫持。
+// Internal callers invoke the __fn type so the public CPO object is not found via
+// ADL and cannot be hijacked.
 using __end_cpo = __end_detail::__end_fn;
 
 // [range.access.cbegin]

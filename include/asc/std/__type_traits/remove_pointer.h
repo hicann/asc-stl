@@ -29,8 +29,8 @@
 
 #include <asc/__detail/attributes.h>
 
-// Inline equivalent of the dev builtin hook (dev __asc/builtin.h): use the
-// compiler's __remove_pointer type transform when available.
+// Builtin hook for the __remove_pointer type transform: use the compiler's
+// __remove_pointer when available.
 #if !defined(CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_POINTER)
 #if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__remove_pointer)
 #define CANN_ASC_STL_DETAIL_BUILTIN_REMOVE_POINTER(...) __remove_pointer(__VA_ARGS__)

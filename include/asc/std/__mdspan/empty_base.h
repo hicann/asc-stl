@@ -49,10 +49,11 @@
 #include <asc/std/__utility/swap.h>
 #include <asc/std/cstddef>
 
-// 基座未提供下列宏（合入源树定义于 __asc 方言支撑头）：内联其语义的最小等价，
-// #ifndef 守卫以免与未来基座定义冲突。
+// Minimal inline equivalents of macros that no other header in this library provides;
+// the #ifndef guards avoid conflicts with any future external definitions.
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
-// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查。
+// The device side has no assertion mechanism, so this is always a no-op there; on the
+// host it checks only when ASC_ENABLE_HOST_ASSERTIONS is explicitly enabled.
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #else
@@ -62,7 +63,7 @@
 #endif  // CANN_ASC_STL_DETAIL_ASSERT
 
 #ifndef CANN_ASC_STL_DETAIL_STD_VER
-// 与 __cplusplus 对应的简化标准版本号（合入源树 __asc/dialect.h 语义）。
+// Simplified standard-version number corresponding to __cplusplus.
 #if __cplusplus <= 199711L
 #define CANN_ASC_STL_DETAIL_STD_VER 2003
 #elif __cplusplus <= 201103L
@@ -82,20 +83,20 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 前置声明：与 __mdspan/extents.h 的主模板一致，供下方判定使用。
+// Forward declaration, identical to the primary template in __mdspan/extents.h, used by the trait below.
 template <class IndexType, size_t... StaticExtents>
 class extents;
 
 namespace __mdspan_detail {
 
-// extents 特化判定（合入源树位于 __fwd/extents.h，基座无该头，内联于此）。
+// Detects specializations of extents.
 template <class T>
 inline constexpr bool __is_asc_std_extents_v = false;
 template <class IndexType, size_t... StaticExtents>
 inline constexpr bool __is_asc_std_extents_v<extents<IndexType, StaticExtents...>> = true;
 
-// integral-constant-like 判定的类型无关实现（基座仅有 C++20 concept 版本，
-// 此处为 SFINAE 安全的变量模板形态，供 C++17 路径使用）。
+// Type-agnostic integral-constant-like detection as a SFINAE-safe variable template;
+// the C++20 concept form is not usable on the C++17 path.
 template <class T, class = void>
 struct __integral_constant_like_impl : false_type {};
 template <class T>
@@ -107,13 +108,13 @@ struct __integral_constant_like_impl<T, void_t<decltype(T::value)>> {
 template <class T>
 inline constexpr bool __integral_constant_like_v = __integral_constant_like_impl<T>::value;
 
-// 一组索引均可隐式且 noexcept 地转换为 index_type（合入源树为 concept，此处为
-// 变量模板形态以保证 C++17 与设备编译可用）。
+// Every index must convert to index_type implicitly and noexcept; variable-template
+// form so it is usable on the C++17 and device-compilation paths.
 template <class IndexType, class... Indices>
 inline constexpr bool __all_convertible_to_index_type = ((is_convertible_v<Indices, IndexType> && ... && true) &&
     (is_nothrow_constructible_v<IndexType, Indices> && ... && true));
 
-// 乘法溢出探测：返回是否溢出，结果经 res 写出。
+// Detects multiplication overflow: returns whether the product overflows and writes it through res.
 template <class T>
 CANN_ASC_STL_API constexpr bool __mul_overflow(T left, T right, T* res) noexcept
 {
@@ -121,7 +122,7 @@ CANN_ASC_STL_API constexpr bool __mul_overflow(T left, T right, T* res) noexcept
     return left != T{0} && ((*res / left) != right);
 }
 
-// 非负整数值能否无损表示为目标整数类型。
+// Whether a non-negative integer value is losslessly representable in the target integer type.
 template <class To, class From, enable_if_t<__is_integer_v<To>, int> = 0>
 CANN_ASC_STL_API constexpr bool __is_representable_as(From value) noexcept
 {
@@ -134,7 +135,7 @@ CANN_ASC_STL_API constexpr bool __is_representable_as(From value) noexcept
     }
 }
 
-// extents 的尺寸乘积能否以 index_type 表示（不溢出）。
+// Whether the product of all extents fits in index_type without overflow.
 template <class Extents>
 CANN_ASC_STL_API constexpr bool __required_span_size_is_representable(const Extents& ext) noexcept
 {
@@ -153,7 +154,7 @@ CANN_ASC_STL_API constexpr bool __required_span_size_is_representable(const Exte
     return result;
 }
 
-// 单个索引是否落在相应 extent 的半开区间内。
+// Whether a single index lies within the half-open range of the corresponding extent.
 template <class IndexType, class From, enable_if_t<__is_integer_v<IndexType>, int> = 0>
 CANN_ASC_STL_API constexpr bool __is_index_in_extent(IndexType extent, From value) noexcept
 {
@@ -184,8 +185,10 @@ CANN_ASC_STL_API constexpr bool __is_multidimensional_index_in(const Extents& ex
 
 }  // namespace __mdspan_detail
 
-// EBCO（空基类优化）压缩存储：按元素是否为空类型分别以成员/基类方式保存，
-// 提供 __get<I>() 受检访问、约束化构造与逐元素交换；1/2/3 元素各一特化。
+// EBCO (empty-base optimization) compressed storage: stores each element as a base
+// class when it is an empty type, otherwise as a member; provides bound-checked
+// __get<I>() access, constrained constructors, and per-element swap; one
+// specialization each for 1/2/3 elements.
 template <size_t Index, class Elem, bool = is_empty_v<Elem>>
 struct __mdspan_ebco_impl {
     Elem elem_;
@@ -290,7 +293,8 @@ struct __mdspan_ebco<Elem1, Elem2> : __mdspan_ebco_impl<0, Elem1>, __mdspan_ebco
     static constexpr bool __is_nothrow_constructible_from_one_arg =
         is_nothrow_constructible_v<Elem1, Arg1> && is_nothrow_default_constructible_v<Elem2>;
 
-    // 单参转换构造的自引用排除约束（避免 C++20 概念求值上的循环依赖）。
+    // Excludes this class itself from the one-argument converting constructor
+    // (avoids a circular dependency in C++20 concept evaluation).
     template <class Arg1,
         enable_if_t<!is_same_v<__mdspan_ebco, remove_cvref_t<Arg1>> && __is_constructible_from_one_arg<Arg1>, int> = 0>
     CANN_ASC_STL_API constexpr __mdspan_ebco(Arg1&& arg1) noexcept(__is_nothrow_constructible_from_one_arg<Arg1>)

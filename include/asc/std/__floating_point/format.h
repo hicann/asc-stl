@@ -33,9 +33,9 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/cfloat>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the base __config does not provide it): long double is host-only — ASC
-// device compilation (AI Core) does not support long double.
+// <asc/__config> does not provide CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE():
+// inline the gate here — long double is host-only, ASC device compilation
+// (AI Core) does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -44,10 +44,9 @@
 #endif
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE
 
-// Inline equivalents of the dev FP6 / FP4 scalar capability gates: the scalar
-// FP6 E2M3 / E3M2 and FP4 E2M1 spellings have no ASC SIMT equivalent (only the
-// packed X2/X4 vector variants exist upstream), so the probes below compile
-// them out on every target this delivery supports.
+// Inline FP6 / FP4 scalar capability gates: the scalar FP6 E2M3 / E3M2 and
+// FP4 E2M1 spellings have no ASC SIMT equivalent (only the packed X2/X4
+// vector variants exist upstream), so the probes below compile them out.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_FP6_E2M3)
 #define CANN_ASC_STL_DETAIL_HAS_FP6_E2M3() 0
 #endif  // CANN_ASC_STL_DETAIL_HAS_FP6_E2M3
@@ -93,7 +92,8 @@ CANN_ASC_STL_NODISCARD constexpr __fp_format __fp_format_of_basic() noexcept
     } else if constexpr (is_same_v<T, double>) {
         return __fp_format::__binary64;
     } else if constexpr (is_same_v<T, long double>) {
-// 探测用编译器预定义宏（设备侧 <cfloat> 宏面按需裁剪，__LDBL_* 内建恒在）。
+// Probe via compiler-predefined macros (the device-side <cfloat> macro surface
+// is trimmed as needed; the __LDBL_* builtins are always available).
 #if __LDBL_MIN_EXP__ == -1021 && __LDBL_MAX_EXP__ == 1024 && __LDBL_MANT_DIG__ == 53
         return __fp_format::__binary64;
 #elif __LDBL_MIN_EXP__ == -16381 && __LDBL_MAX_EXP__ == 16384 && __LDBL_MANT_DIG__ == 64

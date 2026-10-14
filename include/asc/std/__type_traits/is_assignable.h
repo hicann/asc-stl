@@ -48,7 +48,7 @@ inline constexpr bool is_assignable_v = __is_assignable(T1, T2);
 
 #else
 
-// The upstream catch-all __is_assignable_test(...) probe is not portable to
+// A catch-all __is_assignable_test(...) probe is not portable to
 // CCE aicore, so the negative overload takes long: the int overload still
 // wins exactly for viable argument pairs and the conversion fallback covers
 // the rest.

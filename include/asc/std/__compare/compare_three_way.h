@@ -32,9 +32,9 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 // The three-way comparison call operator is language-level C++20: it is
-// exposed only in C++20-or-newer modes, matching the frozen conditional
-// exposure rule for language-only facilities. C++17 parses the Header
-// without the callable surface.
+// exposed only in C++20-or-newer modes, matching the conditional exposure
+// rule for language-only facilities. C++17 parses the header without the
+// callable surface.
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 struct compare_three_way {
     template <class T, class U>

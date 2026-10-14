@@ -62,14 +62,14 @@
 #include <asc/std/__utility/in_place.h>
 #include <asc/std/__utility/move.h>
 
-// Migrated from dev __asc/visibility.h: ASC-STL keeps only the inline
-// semantics for ABI hidden; base asc/__detail/visibility.h has no such macro.
+// asc/__detail/visibility.h provides no such macro, so define it here,
+// keeping only the inline semantics for hiding from the ABI.
 #ifndef CANN_ASC_STL_DETAIL_HIDE_FROM_ABI
 #define CANN_ASC_STL_DETAIL_HIDE_FROM_ABI inline
 #endif
 
-// Migrated from dev __asc/dialect.h: base asc/__config has no standard-version
-// level macro; key it on the base feature detection helper instead.
+// asc/__config provides no standard-version level macro, so key this on its
+// feature detection helper instead.
 #ifndef CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 #define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 constexpr
@@ -514,7 +514,8 @@ struct __expected_move<T, E, __smf_availability::__deleted> : __expected_copy<T,
     CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __expected_move& operator=(__expected_move&&) = default;
 };
 
-// Need to also check against is_nothrow_move_constructible in the trivial case as that is stupidly in the constraints
+// The trivial case must also check is_nothrow_move_constructible because the
+// wording places that requirement in the constraints.
 template <class T, class E>
 inline constexpr __smf_availability __expected_can_copy_assign =
     (is_trivially_destructible_v<T> || is_same_v<T, void>) && is_trivially_destructible_v<E> &&

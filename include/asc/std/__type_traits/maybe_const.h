@@ -36,7 +36,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 template <bool _Const, class _Tp>
 using __maybe_const = conditional_t<_Const, const _Tp, _Tp>;
 
-// 兼容 master 侧既有消费方使用的旧名
+// Old name kept for compatibility with existing consumers.
 template <bool _Const, class _Tp>
 using maybe_const = __maybe_const<_Const, _Tp>;
 

@@ -71,11 +71,11 @@
 #endif  // !ASC_ENABLE_HOST_ASSERTIONS
 
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// ASC 设备侧无断言机制
+// ASC device side has no assertion mechanism
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #elif defined(ASC_ENABLE_HOST_ASSERTIONS)
 #ifdef NDEBUG
-// NDEBUG 下 <assert.h> 未必已包含，手工补声明
+// <assert.h> is not necessarily included under NDEBUG; declare the prototype manually
 extern "C" {
 void __assert_fail(const char* __assertion, const char* __file, unsigned int __line, const char* __function) noexcept
     __attribute__((__noreturn__));
@@ -91,12 +91,16 @@ void __assert_fail(const char* __assertion, const char* __file, unsigned int __l
 #endif  // !CANN_ASC_STL_DETAIL_ASSERT
 
 namespace asc::std::ranges {
-// 设备编译下 concept 约束求值不可用（纯 SIMT 后端），回退到弱约束版本，两分支公开接口一致。
+// Under device compilation, concept constraint evaluation is unavailable (pure SIMT
+// backend), so fall back to a weakly constrained version; both branches expose the
+// same public interface.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 template <class _View, bool = forward_range<_View>>
 struct __filter_iterator_category {
-    // 非 forward 底层无类别可算，按 input 迭代器呈现（本库 traits 抽取要求类别成员存在）。
+    // A non-forward underlying iterator has no computable category, so present as an
+    // input iterator (this library's traits extraction requires the category member
+    // to exist).
     using iterator_category = input_iterator_tag;
 };
 
@@ -119,7 +123,8 @@ class filter_view : public view_interface<filter_view<_View, _Pred>> {
     _View __base_;
     __movable_box<_Pred> __pred_;
 
-    // begin() 结果缓存：底层至少 forward_range 时提供摊还 O(1) 的 begin()。
+    // begin() result cache: provides an amortized O(1) begin() when the underlying
+    // range is at least a forward_range.
     static constexpr bool __use_cache = forward_range<_View>;
     using _cache_type = conditional_t<__use_cache, __non_propagating_cache<iterator_t<_View>>, __empty_cache>;
     _cache_type __cached_begin_;
@@ -240,8 +245,9 @@ public:
             return ::asc::std::iter_move(__it.__current_);
         }
 
-        // iter_swap 经命名空间级 CPO 默认路径分派（底层迭代器交换），
-        // 隐藏友元形态与 CPO 变量名冲突（同 reverse_iterator 先例）。
+        // iter_swap dispatches through the namespace-level CPO default path (which
+        // swaps the underlying iterators); a hidden-friend form would clash with the
+        // CPO variable name (as with reverse_iterator).
     };
 
     class __sentinel {

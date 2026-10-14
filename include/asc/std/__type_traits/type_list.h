@@ -673,7 +673,7 @@ using __type_switch =
     __type_call<__type_switch_fn<decltype(Label), Cases...>, integral_constant<decltype(Label), Label>>;
 
 namespace __detail {
-// The upstream pack-pointer formulation ends in a variadic parameter that CCE
+// The pack-pointer formulation ends in a variadic parameter that CCE
 // aicore rejects at parse time, so concatenation is a recursive trait.
 template <class... Lists>
 struct __type_concat_impl {};
@@ -780,8 +780,8 @@ template <class List, class Fn>
 using __type_transform = __type_call1<List, __detail::__type_transform_fn<Fn>>;
 
 namespace __detail {
-// The upstream preprocessor-generated specialization ladders are outside the
-// planned dependency closure, so the folds are recursive traits.
+// Preprocessor-generated specialization ladders would pull in headers outside
+// this header's dependency closure, so the folds are recursive traits.
 template <class Fn, class State, class... Ts>
 struct __type_fold_right_term {
     using type = State;

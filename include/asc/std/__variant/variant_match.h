@@ -55,8 +55,9 @@ struct __variant_find_exact<T, Head, Tail...>
                                        static_cast<__SIZE_TYPE__>(-1) :
                                        1 + __variant_find_exact<T, Tail...>::value)> {};
 
-// 隐式转换探针：仅当 Source 能隐式转换为 Destination（函数形参式）且不发生
-// 列表初始化窄化时，重载决议匹配才放行该备选。
+// Implicit-conversion probe: overload resolution admits the alternative only
+// when Source converts implicitly to Destination (function-parameter style)
+// and no list-initialization narrowing occurs.
 template <class Destination>
 CANN_ASC_STL_API void __variant_accept_implicit_conversion(Destination) noexcept
 {}
@@ -88,7 +89,8 @@ struct __variant_narrowing_check {
     using apply = typename conversion<Destination, Source>::type;
 };
 
-// 算术备选按窄化检查参与匹配，其余备选仅需常规隐式转换。
+// Arithmetic alternatives participate in matching under the narrowing check;
+// all other alternatives only require a regular implicit conversion.
 template <class Destination, class Source>
 using __variant_check_for_narrowing = typename conditional_t<is_arithmetic_v<Destination>, __variant_narrowing_check,
     __variant_no_narrowing_check>::template apply<Destination, Source>;
@@ -99,7 +101,8 @@ struct __variant_overload {
     CANN_ASC_STL_API auto operator()(T, Source&&) const -> __variant_check_for_narrowing<T, Source>;
 };
 
-// bool 备选只接受真正的 bool 实参，杜绝整型/指针经标准转换窃据 bool 位。
+// The bool alternative accepts only genuine bool arguments, preventing
+// integers/pointers from usurping the bool slot via standard conversions.
 template <class T, __SIZE_TYPE__>
 struct __variant_overload_bool {
     template <class Source, class Arg = remove_cvref_t<Source>>
@@ -134,7 +137,8 @@ template <class... Types>
 using __variant_make_overloads =
     typename __variant_make_overloads_imp<__make_indices_imp<sizeof...(Types), 0>>::template apply<Types...>;
 
-// 以重载决议选出 T 的最佳匹配备选；歧义或无匹配时该别名不可用（SFINAE 友好）。
+// Overload resolution picks the best-matching alternative for T; on ambiguity
+// or no match the alias is unavailable (SFINAE-friendly).
 template <class T, class... Types>
 using __variant_best_match_t = typename __invoke_result_t<__variant_make_overloads<Types...>, T, T>::type;
 

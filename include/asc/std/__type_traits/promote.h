@@ -30,9 +30,8 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__utility/declval.h>
 
-// Inline equivalents of the dev extended-data-type capability gates (dev
-// __asc/extended_data_types.h; the base __config does not provide them; same
-// inline copies as __type_traits/is_extended_floating_point.h). half and
+// <asc/__config> does not define the extended-data-type capability gates
+// (same inline copies as __type_traits/is_extended_floating_point.h). half and
 // bfloat16_t are baseline CCE scalar types, so they are available in every ASC
 // device compilation mode.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_HALF)
@@ -51,7 +50,7 @@
 #endif
 #endif  // CANN_ASC_STL_DETAIL_HAS_BFLOAT16
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_FLOAT128() gate:
+// <asc/__config> does not define the CANN_ASC_STL_DETAIL_HAS_FLOAT128() gate:
 // __float128 needs __int128, a Linux non-ARM64 target, a compiler that
 // advertises the type, host compilation only (CCE device compilation does not
 // support __float128), and GCC must not run strict-ANSI without extended

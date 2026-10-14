@@ -57,7 +57,7 @@ struct __asc_is_referenceable
 #endif  // defined(CANN_ASC_STL_DETAIL_BUILTIN_IS_REFERENCEABLE) &&
         // !defined(CANN_ASC_STL_DETAIL_USE_IS_REFERENCEABLE_FALLBACK)
 
-// 兼容 master 侧既有消费方的旧名
+// Old name kept for compatibility with existing consumers.
 template <class _Tp>
 using __is_referenceable = __asc_is_referenceable<_Tp>;
 

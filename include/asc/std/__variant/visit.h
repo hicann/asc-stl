@@ -47,15 +47,16 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 无值变体进入分派前在此终止（基座变体不引入 bad_variant_access，以 trap 兜底，
-// 与 get.h 的越界处理同构）。
+// A valueless variant terminates here before dispatch (this variant
+// implementation does not introduce bad_variant_access; a trap is the
+// fallback, mirroring the out-of-bounds handling in get.h).
 template <class... Variants>
 CANN_ASC_STL_API constexpr void __visit_check_valueless(const Variants&... variants)
 {
     ((variants.valueless_by_exception() ? __builtin_trap() : static_cast<void>(0)), ...);
 }
 
-// 逐层绑定已确定备选的访问器：visitor(已绑定备选..., 后续实参...)。
+// Visitor with one resolved alternative bound in: visitor(bound alternative..., trailing arguments...).
 template <class Visitor, class Alternative>
 struct __visit_bound_visitor {
     Visitor& visitor;
@@ -68,13 +69,15 @@ struct __visit_bound_visitor {
     }
 };
 
-// 单变元：全部备选按实参值类别调用 visitor 的结果会合类型。
+// Unary case: the common type of invoking the visitor on every alternative
+// with the argument's value category.
 template <class Visitor, class Variant, size_t... Indices>
 CANN_ASC_STL_API auto __visit_common_last(__tuple_indices<Indices...>)
     -> common_type_t<
         __invoke_result_t<Visitor, decltype(__variant_get_alt<Indices>(::asc::std::declval<Variant>()))>...>;
 
-// 多变元递归层：首变元逐备选绑定后，对余下变元递归求会合类型。
+// Multi-argument recursion layer: bind the first variant's alternatives one
+// by one, then compute the common type recursively over the remaining variants.
 template <class Visitor, class Variant, class... Rest>
 struct __visit_common;
 
@@ -96,7 +99,8 @@ struct __visit_common<Visitor, Variant> {
         __make_indices_imp<variant_size_v<remove_cvref_t<Variant>>, 0>{}));
 };
 
-// 双变元专用：两侧备选均按实参值类别参与，两重展开求会合类型。
+// Binary-variant specialization: alternatives on both sides participate with
+// their argument value categories; a twofold expansion computes the common type.
 template <class Visitor, class Left, class Right, size_t LeftIndex, size_t... RightIndices>
 CANN_ASC_STL_API auto __visit_common_row(__tuple_indices<RightIndices...>)
     -> common_type_t<__invoke_result_t<Visitor, decltype(__variant_get_alt<LeftIndex>(::asc::std::declval<Left>())),
@@ -144,7 +148,8 @@ CANN_ASC_STL_API constexpr Result __visit_two(Visitor&& visitor, Left&& left, Ri
     }
 }
 
-// 三元及以上：每层消解一个变元的活跃备选，余下变元递归分派。
+// Ternary and above: each level resolves one variant's active alternative;
+// the remaining variants are dispatched recursively.
 template <class Result, __SIZE_TYPE__ Index, class Visitor, class Variant, class... Rest>
 CANN_ASC_STL_API constexpr Result __visit_n(Visitor&& visitor, Variant&& value, Rest&&... rest)
 {
@@ -161,7 +166,7 @@ CANN_ASC_STL_API constexpr Result __visit_n(Visitor&& visitor, Variant&& value, 
         return ::asc::std::__visit_n<Result, Index + 1>(::asc::std::forward<Visitor>(visitor),
             ::asc::std::forward<Variant>(value), ::asc::std::forward<Rest>(rest)...);
     } else {
-        // 无值变体已在入口拦截，正常流程不会抵达此处
+        // Valueless variants were intercepted at the entry points; normal flow never reaches here.
         CANN_ASC_STL_DETAIL_UNREACHABLE();
     }
 }

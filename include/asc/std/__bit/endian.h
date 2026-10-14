@@ -29,9 +29,8 @@
 
 #include <asc/__detail/attributes.h>
 
-// Centralized endianness probing, inlined here with #ifndef guards (equivalent to the dev
-// __asc/architecture.h definitions) so a future centralized definition in <asc/__config> wins.
-// Determining the endianness
+// Centralized endianness probing, inlined here with #ifndef guards so a future
+// centralized definition in <asc/__config> wins.
 #ifndef CANN_ASC_STL_DETAIL_ENDIAN_LITTLE
 #define CANN_ASC_STL_DETAIL_ENDIAN_LITTLE() 0xDEAD
 #endif  // CANN_ASC_STL_DETAIL_ENDIAN_LITTLE
@@ -69,8 +68,8 @@
 #endif  // ^^^ has endian.h ^^^
 
 #if !defined(CANN_ASC_STL_DETAIL_ENDIAN_NATIVE)
-// Failed to determine the endianness of the host architecture; default to little-endian like dev
-// does (dev additionally emits a warning here).
+// Failed to determine the endianness of the host architecture; default to
+// little-endian in that case.
 #define CANN_ASC_STL_DETAIL_ENDIAN_NATIVE() CANN_ASC_STL_DETAIL_ENDIAN_LITTLE()
 #endif  // !defined(CANN_ASC_STL_DETAIL_ENDIAN_NATIVE)
 #endif  // CANN_ASC_STL_DETAIL_ENDIAN_NATIVE

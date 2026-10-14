@@ -438,7 +438,7 @@ CANN_ASC_STL_API constexpr auto operator-(
 }
 #endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
-// Note: the upstream hidden-friend iter_move cannot be declared here:
+// Note: a hidden-friend iter_move cannot be declared here:
 // asc::std::iter_move is a customization-point object (a namespace-scope
 // variable), and a same-named friend function in an asc::std class is
 // ill-formed ("redeclared as a different kind of entity"). The equivalent

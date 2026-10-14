@@ -34,9 +34,9 @@
 #include <asc/std/cstdint>
 #include <asc/std/limits>
 
-// 基座 __config 未提供 dev 的 CANN_ASC_STL_DETAIL_ASSUME（dev 定义于
-// asc/std/__asc/attributes.h）：内联其语义的最小等价，#ifndef 守卫以免
-// 与未来基座定义冲突。
+// The shared <asc/__config> does not provide CANN_ASC_STL_DETAIL_ASSUME:
+// inline a minimal equivalent of its semantics, guarded by #ifndef so a
+// future centralized definition wins.
 #ifndef CANN_ASC_STL_DETAIL_ASSUME
 #if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_assume)
 #define CANN_ASC_STL_DETAIL_ASSUME(...) __builtin_assume(__VA_ARGS__)
@@ -47,7 +47,8 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-//! @brief 计算 @p value 的置位个数（Kernighan 位清除法：每次消去最低置位）。
+//! @brief Counts the set bits in @p value (Kernighan's bit-clearing method:
+//! clears the lowest set bit on each iteration).
 template <class T>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr __unsigned_integer_result_t<T, int> popcount(T value) noexcept
 {

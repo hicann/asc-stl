@@ -29,8 +29,8 @@
 
 // Operation-traits backend for the later public <asc/functional> facade.
 // Metadata is registered only where the documented mathematical property is
-// true for the approved standard operators and the ASC minimum/maximum
-// reducers; floating-point addition is deliberately not associative. The
+// true for the standard operators and the ASC minimum/maximum reducers;
+// floating-point addition is deliberately not associative. The
 // reduce/scan backends consume these traits to select legal parallelization,
 // so every spelling is a compile-time constant expression valid in Host,
 // ordinary AICore and pure SIMT.

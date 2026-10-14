@@ -167,7 +167,8 @@ CANN_ASC_STL_API int evaluate_algorithms()
     if (empty_point != partitioned) {
         return 11;
     }
-    // ranges::iota_view（批次七确认项）：有界取值/长度/随机访问类别、单参默认边界为无限。
+    // ranges::iota_view: bounded form exposes values/size/random-access category;
+    // the single-argument form defaults to an unbounded range.
     {
         auto bounded = asc::std::ranges::views::iota(0, 5);
         int probed[5]{};
@@ -196,7 +197,7 @@ CANN_ASC_STL_API int evaluate_algorithms()
     static_assert(asc::std::ranges::random_access_range<asc::std::ranges::iota_view<int, int>>);
     static_assert(asc::std::ranges::sized_range<asc::std::ranges::iota_view<int, int>>);
 #endif
-    // counted_iterator 哨兵减法方向（批次七确认项：value-sentinel 为 -count）。
+    // counted_iterator sentinel subtraction direction: iterator minus sentinel is -count.
     {
         int storage[4]{};
         asc::std::counted_iterator<int*> counter(storage, 3);

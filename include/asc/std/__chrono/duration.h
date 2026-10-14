@@ -57,16 +57,18 @@ inline constexpr bool __is_asc_std_duration_v<volatile duration<_Rep, _Period>> 
 template <class _Rep, class _Period>
 inline constexpr bool __is_asc_std_duration_v<const volatile duration<_Rep, _Period>> = true;
 
-// 基座 asc/std/ratio 未提供 __is_asc_std_ratio_v，按 dev 语义内联于 chrono 作用域（等价于
-// dev ratio 头中的同名 trait），用于 duration 的 static_assert 检查。
+// asc/std/ratio provides no __is_asc_std_ratio_v, so the equivalent trait is
+// defined here in the chrono scope for duration's static_assert checks.
 template <class _Tp>
 inline constexpr bool __is_asc_std_ratio_v = false;
 
 template <intmax_t _Num, intmax_t _Den>
 inline constexpr bool __is_asc_std_ratio_v<ratio<_Num, _Den>> = true;
 
-// 除零守卫：仅整型 rep 把 0 除数替换为 1 以避免设备侧静态检查的除零告警；
-// 浮点 rep 保持标准语义（除以 0.0 得 ±inf、取模得 NaN），不做替换。
+// Division-by-zero guard: only integral reps substitute 1 for a zero divisor
+// to avoid divide-by-zero diagnostics in device-side static checks;
+// floating-point reps keep the standard semantics (division by 0.0 yields
+// +/-inf, modulus yields NaN) and are not substituted.
 template <class _Rep>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr _Rep __safe_divisor(const _Rep& __rhs)
 {

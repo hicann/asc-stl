@@ -188,7 +188,7 @@ CANN_ASC_STL_DEVICE_API void pipeline_drain() noexcept
     asc_sync_pipe(pipe_t::PIPE_ALL);
 }
 
-// Aligned asynchronous transfers for the approved scalar set.  The typed C
+// Aligned asynchronous transfers for the supported scalar set.  The typed C
 // API overloads resolve per element type; both ranges meet the alignment
 // requirement by caller precondition.
 template <class T>

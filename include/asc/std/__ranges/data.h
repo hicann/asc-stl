@@ -55,9 +55,10 @@ namespace __data_detail {
 template <class T>
 inline constexpr bool __ptr_to_object = is_pointer_v<T> && is_object_v<remove_pointer_t<T>>;
 
-// 两级分派：成员 data()（返回指针指向对象） -> to_address(ranges::begin(t))。
-// 概念约束在此以基座惯用的 void_t 探测结构 + enable_if_t 展开，
-// 与 access.h/size.h 的基座写法保持一致，C++17 与设备路径同样可用。
+// Two-level dispatch: member data() (returning a pointer to an object) falls back
+// to to_address(ranges::begin(t)). Concept constraints are expanded here as the
+// conventional void_t detection structs + enable_if_t, matching access.h/size.h,
+// so the C++17 and device paths work identically.
 template <class T, class = void>
 struct __has_member_data : false_type {};
 template <class T>
@@ -89,7 +90,8 @@ struct __fn {
 
 inline constexpr __data_detail::__fn data{};
 
-// 内部避免直接使用 CPO 对象（__tile__ 访问问题），统一走 __fn 类型。
+// Internal uses go through the __fn type rather than the CPO object directly
+// (avoids the __tile__ access problem).
 using __data_cpo = __data_detail::__fn;
 
 // [range.prim.cdata]
@@ -117,7 +119,8 @@ struct __fn {
 
 inline constexpr __cdata_detail::__fn cdata{};
 
-// 内部避免直接使用 CPO 对象（__tile__ 访问问题），统一走 __fn 类型。
+// Internal uses go through the __fn type rather than the CPO object directly
+// (avoids the __tile__ access problem).
 using __cdata_cpo = __cdata_detail::__fn;
 
 }  // namespace ranges

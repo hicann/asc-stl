@@ -86,7 +86,7 @@ struct __is_invalid_lvalue_to_rvalue_cast<ToRef&&, FromRef&> {
 template <class To>
 CANN_ASC_STL_API void __constructible_eat(To);
 
-// The upstream __test_nary/__test_unary catch-alls __test(...) are not
+// The __test_nary/__test_unary catch-alls __test(...) are not
 // portable to CCE aicore, so the negative overloads take long: the int
 // overloads still win exactly when the construction expression is well-formed
 // and the conversion fallback covers the rest.
@@ -100,7 +100,7 @@ CANN_ASC_STL_API is_destructible<Tp> __constructible_test_unary(int);
 template <class, class>
 CANN_ASC_STL_API false_type __constructible_test_unary(long);
 
-// The upstream three-rank __test_cast probe ends in a __test(...) catch-all.
+// The usual three-rank __test_cast probe ends in a __test(...) catch-all.
 // The cast detection is instead a two-stage partial-specialization probe over
 // a local void alias (the __type_traits/promote.h detection pattern): the
 // __eat copy-initialization wins when well-formed, otherwise the static_cast

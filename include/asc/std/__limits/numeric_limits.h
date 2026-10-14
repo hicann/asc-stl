@@ -422,11 +422,10 @@ public:
     static constexpr float_round_style round_style = round_to_nearest;
 };
 
-// Unlike the source tree, the long double facet stays unconditionally
-// defined: the public contract requires numeric_limits to stay instantiable
-// for every standard arithmetic type in every compilation mode, and the
-// metadata below is compile-time constant regardless of AI-core support for
-// long double arithmetic.
+// The long double facet stays unconditionally defined: the public contract
+// requires numeric_limits to stay instantiable for every standard arithmetic
+// type in every compilation mode, and the metadata below is compile-time
+// constant regardless of AI-core support for long double arithmetic.
 template <>
 class __numeric_limits_impl<long double, __numeric_limits_type::__floating_point> {
 public:

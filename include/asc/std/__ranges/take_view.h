@@ -61,7 +61,9 @@
 #include <asc/std/__utility/move.h>
 
 namespace asc::std::ranges {
-// 设备编译下 concept 约束求值不可用（纯 SIMT 后端），回退到弱约束版本，两分支公开接口一致。
+// Under device compilation, concept constraint evaluation is unavailable (pure SIMT
+// backend), so fall back to a weakly constrained version; both branches expose the
+// same public interface.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 template <class _View>
@@ -104,7 +106,8 @@ public:
         {
             return __lhs.count() == 0 || __lhs.base() == __rhs.__end_;
         }
-        // C++17 源头的反序 ==/!= 双侧保留：C++20 下显式候选与改写语义一致。
+        // Both reversed ==/!= overloads are kept for C++17 compatibility; under
+        // C++20 the explicit candidates agree with the rewritten operators.
         CANN_ASC_STL_API friend constexpr bool operator==(const __sentinel& __lhs, const _Iter<_Const>& __rhs)
         {
             return __rhs.count() == 0 || __rhs.base() == __lhs.__end_;
@@ -318,7 +321,8 @@ inline constexpr bool enable_borrowed_range<take_view<_Tp>> = enable_borrowed_ra
 namespace views {
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 适配器分发内部符号（span/basic_string_view/subrange/iota_view/repeat_view 的直通与特化判定）。
+// Adaptor dispatch internals (passthrough and specialization detection for
+// span/basic_string_view/subrange/iota_view/repeat_view).
 namespace __take_detail {
 
 template <class _Tp>
@@ -374,7 +378,7 @@ template <class _Tp, class _Bound>
 inline constexpr bool __is_repeat_specialization<repeat_view<_Tp, _Bound>, void> = true;
 
 struct __fn {
-    // empty_view 直通：结果即为原（空）范围。
+    // empty_view passthrough: the result is the original (empty) range.
     template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>>
         requires convertible_to<_Np, range_difference_t<_Range>> && __is_empty_view<_RawRange>
     CANN_ASC_STL_API constexpr auto operator()(_Range&& __range, _Np&&) const -> _RawRange
@@ -383,7 +387,8 @@ struct __fn {
             ::asc::std::forward<_Range>(__range));
     }
 
-    // span / basic_string_view / subrange 直通：重建同类型区间。
+    // span / basic_string_view / subrange passthrough: rebuild a range of the same
+    // type.
     template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>,
         class _Dist = range_difference_t<_Range>>
         requires convertible_to<_Np, range_difference_t<_Range>> &&
@@ -397,7 +402,8 @@ struct __fn {
                     static_cast<_Dist>(::asc::std::ranges::size(__rng)), ::asc::std::forward<_Np>(__n)));
     }
 
-    // repeat_view 且满足 sized_range：重复值不变、截断到 min(次数, n)。
+    // repeat_view satisfying sized_range: the repeated value is unchanged,
+    // truncated to min(count, n).
     template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>,
         class _Dist = range_difference_t<_Range>>
         requires convertible_to<_Np, range_difference_t<_Range>> && __is_repeat_specialization<_RawRange> &&
@@ -410,7 +416,7 @@ struct __fn {
             ::asc::std::min<_Dist>(__dist, ::asc::std::forward<_Np>(__n)));  // NOLINT(build/include_what_you_use)
     }
 
-    // repeat_view 其余情形：以 n 作为新的重复次数。
+    // repeat_view in the remaining case: n becomes the new repetition count.
     template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>,
         class _Dist = range_difference_t<_Range>>
         requires convertible_to<_Np, range_difference_t<_Range>> && __is_repeat_specialization<_RawRange> &&
@@ -423,7 +429,8 @@ struct __fn {
             ::asc::std::forward_like<_Range>(__value), static_cast<_Dist>(::asc::std::forward<_Np>(__n)));
     }
 
-    // iota_view 特化：以首值加 min(距离, n) 为新哨兵。
+    // iota_view specialization: the new sentinel is the first value plus
+    // min(distance, n).
     template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>,
         class _Dist = range_difference_t<_Range>>
         requires convertible_to<_Np, range_difference_t<_Range>> && (!__is_empty_view<_RawRange>) &&
@@ -437,7 +444,7 @@ struct __fn {
                     static_cast<_Dist>(::asc::std::ranges::size(__rng)), ::asc::std::forward<_Np>(__n)));
     }
 
-    // 其余一般情形：包一层 take_view。
+    // General case: wrap in a take_view.
     template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>>
         requires(!__is_empty_view<_RawRange>) && (!__is_repeat_specialization<_RawRange>) &&
         (!(random_access_range<_RawRange> && sized_range<_RawRange> &&

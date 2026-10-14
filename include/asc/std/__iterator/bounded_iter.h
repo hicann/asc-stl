@@ -35,8 +35,8 @@
 #include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/move.h>
 
-// Migrated from dev __asc/dialect.h and __asc/visibility.h: base asc/__config
-// has no standard-version number macro and no ABI-hiding macro of its own.
+// Base asc/__config provides no standard-version number macro and no
+// ABI-hiding macro of its own, so define local equivalents here.
 #ifndef CANN_ASC_STL_DETAIL_STD_VER
 #if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
 #define CANN_ASC_STL_DETAIL_STD_VER 2003
@@ -59,7 +59,7 @@
 #define CANN_ASC_STL_DETAIL_HIDE_FROM_ABI inline
 #endif
 
-// Minimal equivalent inlining of the dev assertion chain (#ifndef guarded
+// Minimal equivalent inlining of the assertion chain (#ifndef guarded
 // against other headers): debug builds (_DEBUG/DEBUG) enable assertions;
 // the device side has no assertion mechanism and stays a no-op.
 #ifndef CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
@@ -82,11 +82,11 @@
 
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// ASC 设备侧无断言机制
+// No assertion mechanism exists on the ASC device side.
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #elif defined(ASC_ENABLE_HOST_ASSERTIONS)
 #ifdef NDEBUG
-// NDEBUG 下 <assert.h> 未必已包含，手工补声明
+// <assert.h> may not have been included under NDEBUG, so declare __assert_fail manually
 extern "C" {
 void __assert_fail(const char* __assertion, const char* __file, unsigned int __line, const char* __function) noexcept
     __attribute__((__noreturn__));
@@ -103,10 +103,9 @@ void __assert_fail(const char* __assertion, const char* __file, unsigned int __l
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// Minimal local equivalent of the traversal probe gating this wrapper: the
-// shared probe of the dev tree lives in its iterator traits header, which the
-// base keeps protected, so keep a file-local copy (same pattern as other base
-// headers). Both sub-probes are SFINAE-friendly in C++17 mode.
+// File-local equivalent of the traversal probe gating this wrapper, kept here
+// because the shared probe is not exposed by the iterator traits header. Both
+// sub-probes are SFINAE-friendly in C++17 mode.
 namespace __bounded_iter_detail {
 template <class Iter, class Tag, class = void>
 inline constexpr bool __has_iterator_category_convertible_to = false;

@@ -36,9 +36,9 @@
 #include <asc/std/limits>
 #include <limits>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -52,7 +52,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 //! @brief Absolute value of @p x.
 //!
 //! Floating arguments clear the sign bit through their storage
-//! representation — bit-exact with the source semantics, so -0.0 yields
+//! representation — bit-exact with the reference semantics, so -0.0 yields
 //! +0.0 and NaNs stay NaNs, with no floating-point arithmetic involved.
 //! Integral arguments widen to double on host; the vector cores have no
 //! double-precision arithmetic, so the widening is rejected at compile

@@ -55,12 +55,12 @@ public:
 
     CANN_ASC_STL_API constexpr aligned_accessor() noexcept = default;
 
-    // 数组指针可转换判定（(*)[] 拼写集中一处，约束处用别名保持可读）。
+    // Array-pointer convertibility check; centralizes the (*)[] spelling so constraints stay readable.
     template <class From, class To>
     static constexpr bool __pointer_arrays_convertible_v =
         is_convertible_v<From (*)[], To (*)[]>;  // NOLINT(whitespace/parens)
 
-    // 仅放行兼容元素类型且不降低对齐要求的转换（数组指针可转换 + 新对齐不小于旧对齐）。
+    // Only allow conversions between compatible element types that do not weaken the alignment requirement.
     template <class OtherElement, size_t OtherByteAlignment,
         enable_if_t<__pointer_arrays_convertible_v<OtherElement, Element> && (OtherByteAlignment >= byte_alignment),
             int> = 0>

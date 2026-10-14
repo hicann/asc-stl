@@ -114,7 +114,8 @@ template <class Iter>
 inline constexpr bool __has_member_iterator_concept<Iter, void_t<typename Iter::iterator_concept>> = true;
 
 // Deduce the effective category from the maximum of iterator_concept and
-// iterator_category, mirroring the upstream category-or-concept mapping.
+// iterator_category, mirroring the category-or-concept mapping of
+// iterator_traits.
 template <class Iter>
 CANN_ASC_STL_API constexpr auto __iterator_traits_category_or_concept() noexcept
 {
@@ -203,7 +204,7 @@ template <class Iter>
 inline constexpr bool __noexcept_move_iter_iter_move =
     noexcept(::asc::std::iter_move(::asc::std::declval<const Iter&>()));
 
-// Note: the upstream hidden-friend iter_move cannot be declared here:
+// Note: a hidden-friend iter_move cannot be declared here:
 // asc::std::iter_move is a customization-point object (a namespace-scope
 // variable), and a same-named friend function in an asc::std class is
 // ill-formed ("redeclared as a different kind of entity"). The equivalent

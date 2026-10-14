@@ -56,7 +56,8 @@ public:
     CANN_ASC_STL_API constexpr conjugated_accessor(const NestedAccessor& accessor) : nested_accessor_(accessor)
     {}
 
-    // 嵌套访问器可隐式转换：非显式转换构造（mdspan 访问器组合转换的标准要求）。
+    // Implicitly convertible nested accessor: non-explicit converting
+    // constructor (standard mdspan requirement for accessor composition).
     template <class OtherNestedAccessor,
         enable_if_t<is_constructible_v<NestedAccessor, const OtherNestedAccessor&> &&
                 is_convertible_v<OtherNestedAccessor, NestedAccessor>,
@@ -65,7 +66,7 @@ public:
         : nested_accessor_(other.nested_accessor())
     {}
 
-    // 嵌套访问器不可隐式转换：显式转换构造。
+    // Non-implicitly-convertible nested accessor: explicit converting constructor.
     template <class OtherNestedAccessor,
         enable_if_t<is_constructible_v<NestedAccessor, const OtherNestedAccessor&> &&
                 !is_convertible_v<OtherNestedAccessor, NestedAccessor>,
@@ -98,10 +99,13 @@ template <class Element, class Extents, class Layout, class Accessor>
 CANN_ASC_STL_API constexpr auto conjugated(mdspan<Element, Extents, Layout, Accessor> input)
 {
     using value_type = typename decltype(input)::value_type;
-    // P3050 优化：算术类型、或找不到限定 conj 的类型不额外包装 conjugated_accessor，
-    // 直接原样返回（仅嵌套 conjugated_accessor 场景由下方特化重载解包）。
-    // 算术分支先短路，避免求 _HasConj<算术> 时实例化本库 float-only 的
-    // complex<T>（标量 conj 重载返回 complex<T>）导致硬错误。
+    // P3050 optimization: arithmetic types, and types with no viable qualified
+    // conj, are returned as-is instead of being wrapped in a conjugated_accessor
+    // (the nested conjugated_accessor case is unwrapped by the specialization
+    // overload below). The arithmetic branch short-circuits first: evaluating
+    // _HasConj for an arithmetic type would instantiate this library's
+    // float-only complex<T> (the scalar conj overload returns complex<T>),
+    // causing a hard error.
     if constexpr (is_arithmetic_v<value_type>) {
         return mdspan<Element, Extents, Layout, Accessor>(input.data_handle(), input.mapping(), input.accessor());
     } else if constexpr (!__conj_if_needed::_HasConj<value_type>) {

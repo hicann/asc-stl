@@ -35,9 +35,9 @@
 #include <asc/std/__type_traits/is_floating_point.h>
 #include <asc/std/__type_traits/is_integral.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -51,7 +51,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 //! @brief Classification through the storage representation: the exponent
 //! field alone separates normal numbers from everything else — an all-zero
 //! exponent encodes zero or subnormal, an all-ones exponent encodes infinity
-//! or NaN. Bit-exact with the source semantics for every IEEE-754 style
+//! or NaN. Bit-exact with the reference semantics for every IEEE-754 style
 //! format, standard and extended alike, without touching numeric_limits or
 //! any floating-point arithmetic. Formats beyond the delivered storage
 //! vocabulary (x87 fp80 / binary128 native long double) classify through the
@@ -74,7 +74,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool __isnormal_impl(Tp x) noe
 
 //! @brief Reports whether @p x is a normal number: non-zero, not subnormal,
 //! not infinity and not NaN. Constexpr on every path, host and device alike,
-//! built from the migrated floating-point storage surface.
+//! built from the floating-point storage surface.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool isnormal(float x) noexcept
 {
     return ::asc::std::__isnormal_impl(x);
@@ -93,8 +93,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool isnormal(long double x) n
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
 //! @brief Extended floating-point formats (half, bfloat16 and friends)
-//! classify through the same exponent-field check, replacing the source's
-//! per-format overloads with the extended floating-point surface.
+//! classify through the same exponent-field check; no per-format overloads
+//! are needed, the extended floating-point surface covers them.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool isnormal(Tp x) noexcept
 {
@@ -102,7 +102,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool isnormal(Tp x) noexcept
 }
 
 //! @brief Integral values are never subnormal, infinite or NaN: they are
-//! normal exactly when non-zero, matching the source contract.
+//! normal exactly when non-zero.
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool isnormal(Tp x) noexcept
 {

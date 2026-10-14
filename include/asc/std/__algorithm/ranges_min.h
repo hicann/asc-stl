@@ -40,10 +40,12 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 断言宏：基座无集中定义（方言层持有），按 __mdspan/empty_base.h 的同形内联，
-// #ifndef 守卫以免与未来集中定义冲突。
+// Assert macro: no centralized definition exists yet (mirrors the inline shape
+// of __mdspan/empty_base.h); the #ifndef guard avoids conflicts with a future
+// centralized definition.
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
-// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查。
+// Always a no-op on the device side (no assertion mechanism there); checked on
+// the host side only when ASC_ENABLE_HOST_ASSERTIONS is explicitly enabled.
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #else

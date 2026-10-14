@@ -42,7 +42,9 @@ template <class _Iter1, class _Iter2, class _BinaryPred, class _Proj1 = identity
 concept indirectly_comparable =
     indirect_binary_predicate<_BinaryPred, projected<_Iter1, _Proj1>, projected<_Iter2, _Proj2>>;
 #else
-// 设备编译下 projected 链的约束求值不可靠（iter_reference_t 硬错误），采用不经 projected 的等价公式。
+// Constraint evaluation through the projected chain is unreliable under device
+// compilation (iter_reference_t is a hard error), so use an equivalent
+// formulation that bypasses projected.
 template <class _Iter1, class _Iter2, class _BinaryPred, class _Proj1 = identity, class _Proj2 = identity>
 concept indirectly_comparable = indirectly_readable<_Iter1> && indirectly_readable<_Iter2> &&
     copy_constructible<_BinaryPred> && copy_constructible<_Proj1> && copy_constructible<_Proj2> &&

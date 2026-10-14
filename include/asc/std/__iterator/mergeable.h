@@ -45,7 +45,8 @@ concept mergeable = input_iterator<_Input1> && input_iterator<_Input2> && weakly
     indirectly_copyable<_Input1, _Output> && indirectly_copyable<_Input2, _Output> &&
     indirect_strict_weak_order<_Comp, projected<_Input1, _Proj1>, projected<_Input2, _Proj2>>;
 #else
-// 设备编译下 projected 链的约束求值不可靠，采用不经 projected 的等价公式。
+// Constraint evaluation through the projected chain is unreliable under device
+// compilation, so use an equivalent formulation that bypasses projected.
 concept mergeable = input_iterator<_Input1> && input_iterator<_Input2> && weakly_incrementable<_Output> &&
     indirectly_copyable<_Input1, _Output> && indirectly_copyable<_Input2, _Output> && copy_constructible<_Comp> &&
     copy_constructible<_Proj1> && copy_constructible<_Proj2> &&

@@ -45,8 +45,10 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 
-// 概念约束（equality_comparable_with / totally_ordered_with）按 [concept.equalitycomparable]/
-// [concept.totallyordered] 校验比较结果可布尔化；设备编译与非概念路径保持基座无约束形状。
+// The concept constraints (equality_comparable_with / totally_ordered_with)
+// verify per [concept.equalitycomparable]/[concept.totallyordered] that
+// comparison results are boolean-testable; device compilation and the
+// non-concepts path keep the unconstrained shape.
 
 struct equal_to {
     template <class _Tp, class _Up>

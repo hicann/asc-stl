@@ -122,7 +122,7 @@ private:
     __INT64_TYPE__ count_;
 };
 
-// [thread.semaphore.binary]：计数值至多为 1 的计数信号量别名。
+// [thread.semaphore.binary]: alias for a counting semaphore with a maximum count of 1.
 using binary_semaphore = counting_semaphore<1>;
 
 CANN_ASC_STL_END_NAMESPACE

@@ -53,13 +53,13 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 
-//! @brief CRTP 基类：继承它的类型即被库识别为 range adaptor closure，
-//! 并获得管道运算符，使 `x | f` 等价于 `f(x)`，`f1 | f2` 组合为等价于
-//! `f2(f1(x))` 的新 closure。
+//! @brief CRTP base: a type deriving from it is recognized by the library as a
+//! range adaptor closure and gains the pipe operator, so `x | f` is equivalent
+//! to `f(x)` and `f1 | f2` composes into a new closure equivalent to `f2(f1(x))`.
 template <class _Tp, enable_if_t<is_class_v<_Tp>, int> = 0, enable_if_t<is_same_v<_Tp, remove_cv_t<_Tp>>, int> = 0>
 struct __range_adaptor_closure {};
 
-//! @brief 把任意函数对象包装成可用 `x | f` 调用的 adaptor closure。
+//! @brief Wraps an arbitrary function object into an adaptor closure invocable as `x | f`.
 template <class _Fn>
 struct __pipeable : _Fn, __range_adaptor_closure<__pipeable<_Fn>> {
     CANN_ASC_STL_API constexpr explicit __pipeable(_Fn&& __f) : _Fn(::asc::std::move(__f))
@@ -113,9 +113,10 @@ CANN_ASC_STL_API constexpr auto operator|(_Closure&& __closure, _OtherClosure&& 
         ::asc::std::forward<_OtherClosure>(__other_closure), ::asc::std::forward<_Closure>(__closure)));
 }
 
-#else  // ^^^ concept 约束版（设备编译禁用） ^^^ / vvv SFINAE 回退版 vvv
+#else  // ^^^ concept-constrained version (disabled for device compilation) ^^^ / vvv SFINAE fallback version vvv
 
-// 概念约束在此以基座惯用的 void_t 探测结构 + enable_if_t 展开，语义与概念版一致。
+// Concept constraints are expanded here as the conventional void_t detection
+// structs + enable_if_t, with semantics identical to the concepts version.
 template <class _Tp, class = void>
 struct __is_range_like : false_type {};
 template <class _Tp>
@@ -170,9 +171,9 @@ CANN_ASC_STL_API constexpr auto operator|(_Closure&& __closure, _OtherClosure&& 
         ::asc::std::forward<_Closure>(__closure)));  // NOLINT(build/include_what_you_use)
 }
 
-#endif  // 概念约束版 / SFINAE 回退版
+#endif  // concept-constrained version / SFINAE fallback version
 
-//! @brief 公开基类：用户继承它来声明自定义 range adaptor closure。
+//! @brief Public base: derive from it to declare a custom range adaptor closure.
 template <class Derived>
 class range_adaptor_closure : public __range_adaptor_closure<Derived> {};
 

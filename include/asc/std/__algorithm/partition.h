@@ -40,9 +40,9 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __partition_detail {
 
-// Minimal local equivalents of the traversal probes used by the migrated
-// implementation: a category probe against iterator_traits and a concept probe
-// against a member iterator_concept, both SFINAE-friendly in C++17 mode.
+// Minimal local traversal probes: a category probe against iterator_traits and
+// a concept probe against a member iterator_concept, both SFINAE-friendly in
+// C++17 mode.
 template <class Iter, class Tag, class = void>
 inline constexpr bool __has_iterator_category_convertible_to = false;
 

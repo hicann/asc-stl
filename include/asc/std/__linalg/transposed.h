@@ -34,9 +34,10 @@
 #include <asc/std/array>
 #include <asc/std/mdspan>
 
-// dev 版 <asc/std/__asc/assert.h> 断言链的最小等价内联（与已合入的
-// __algorithm/comp_ref_type.h 同款，#ifndef 守卫防重）：
-// debug 构建（_DEBUG/DEBUG）启用宿主断言；设备侧无断言机制，恒为 no-op。
+// Minimal inline equivalent of the <asc/std/__asc/assert.h> assertion chain,
+// guarded with #ifndef against duplicate definitions:
+// debug builds (_DEBUG/DEBUG) enable host assertions; the device side has no
+// assertion mechanism and is always a no-op.
 #ifndef CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
 #if defined(_DEBUG) || defined(DEBUG)
 #define CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
@@ -57,11 +58,12 @@
 
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// ASC 设备侧无断言机制
+// The ASC device side has no assertion mechanism
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #elif defined(ASC_ENABLE_HOST_ASSERTIONS)
 #ifdef NDEBUG
-// NDEBUG 下 <assert.h> 未必已包含，手工补声明
+// <assert.h> is not necessarily included under NDEBUG, so declare
+// __assert_fail manually
 extern "C" {
 void __assert_fail(const char* __assertion, const char* __file, unsigned int __line, const char* __function) noexcept
     __attribute__((__noreturn__));
@@ -80,7 +82,7 @@ namespace asc::std::linalg {
 
 namespace __detail {
 
-// 在别名本身施加 rank==2 约束（SFINAE 友好）。
+// Impose the rank == 2 constraint on the alias itself (SFINAE-friendly).
 template <class Extents, enable_if_t<Extents::rank() == 2, int> = 0>
 struct __transpose_extents_t_impl {
     using type = extents<typename Extents::index_type, Extents::static_extent(1), Extents::static_extent(0)>;
@@ -251,9 +253,10 @@ struct __transposed_layout {
     template <class OriginalMapping>
     CANN_ASC_STL_API static constexpr auto __mapping(const OriginalMapping& orig_map)
     {
-        // 注意：嵌套映射的公开成员名是 extents_type、layout_transpose 的成员类是
-        // mapping（此处修正迁移残留的 __extents_type/__mapping 拼写，否则自定义或
-        // padded 布局路径一实例化即编译错误）。
+        // Note: the nested mapping's public member is named extents_type and
+        // layout_transpose's member class is named mapping (not the reserved
+        // __extents_type/__mapping spellings); the latter would break custom or
+        // padded layout paths with a compile error as soon as instantiated.
         using extents_type = __transpose_extents_t<typename OriginalMapping::extents_type>;
         using return_mapping_type = typename layout_type::template mapping<extents_type>;
         return return_mapping_type{orig_map};
@@ -307,13 +310,15 @@ struct __transposed_layout<layout_stride> {
     }
 };
 
-// 后续可支持 padded 布局的专门优化，走主模板的 layout_transpose 包装路径。
+// Padded layouts could later get a dedicated optimization; for now they take
+// the primary template's layout_transpose wrapper path.
 
 template <class NestedLayout>
 struct __transposed_layout<layout_transpose<NestedLayout>> {
     using layout_type = NestedLayout;
 
-    // 补回解包入口：恢复 transposed(transposed(m)) 双重转置往返。
+    // Unwrapping entry point: restores the transposed(transposed(m))
+    // double-transpose round trip.
     template <class OriginalExtents>
     CANN_ASC_STL_API static constexpr auto __mapping(
         const typename layout_transpose<NestedLayout>::template mapping<OriginalExtents>& orig_map)

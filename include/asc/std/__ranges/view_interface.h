@@ -46,8 +46,10 @@
 #include <asc/std/__type_traits/remove_cv.h>
 #include <asc/std/__utility/declval.h>
 
-// 断言链的最小等价内联（#ifndef 守卫防重）：
-// debug 构建（_DEBUG/DEBUG）启用 ENABLE_DEBUG_MODE，进而启用宿主断言；设备侧无断言机制，恒为 no-op。
+// Minimal equivalent inlining of the assertion chain (#ifndef guards prevent
+// redefinition): debug builds (_DEBUG/DEBUG) enable ENABLE_DEBUG_MODE, which in
+// turn enables host assertions; the device side has no assertion mechanism, so the
+// macro is always a no-op there.
 #ifndef CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
 #if defined(_DEBUG) || defined(DEBUG)
 #define CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
@@ -68,11 +70,11 @@
 
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// ASC 设备侧无断言机制
+// ASC device side has no assertion mechanism
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #elif defined(ASC_ENABLE_HOST_ASSERTIONS)
 #ifdef NDEBUG
-// NDEBUG 下 <assert.h> 未必已包含，手工补声明
+// <assert.h> is not necessarily included under NDEBUG; declare the prototype manually
 extern "C" {
 void __assert_fail(const char* __assertion, const char* __file, unsigned int __line, const char* __function) noexcept
     __attribute__((__noreturn__));
@@ -91,10 +93,14 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 
-// 本文件可能经 enable_view.h 尾部引入、于 concepts.h 尚未定义其 ranges 概念体的包含窗口内被解析，
-// 编译器在模板体定义期即检查未声明名字，故 ranges 概念在此以仅依赖已完备头文件的私有等价展开表达
-// （展开文本与 concepts.h 逐条等价）。迭代器层概念与 iterator_t 在 __iterator/concepts.h 与 access.h
-// 中先行完备，可放心直接使用。
+// This file can be pulled in at the tail of enable_view.h, i.e. parsed during a
+// window in the include chain where concepts.h has not yet defined its ranges
+// concept bodies; the compiler checks for undeclared names already at
+// template-definition time, so the ranges concepts here are expressed as private
+// equivalents depending only on already-complete headers (each expansion is
+// clause-for-clause equivalent to concepts.h). Iterator-level concepts and
+// iterator_t are already complete in __iterator/concepts.h and access.h, so they
+// can be used directly.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <class _Tp>
 concept __vi_range = requires(_Tp& __t) {
@@ -271,7 +277,8 @@ public:
         return ::asc::std::ranges::__begin_cpo{}(__derived())[__index];
     }
 #else
-    // C++17 与设备侧形态：约束不可求值（基座无概念回退），成员按基座现状为无约束版本。
+    // C++17 and device-side shape: constraints are not evaluable (no concept
+    // fallback), so the members are unconstrained.
     CANN_ASC_STL_API constexpr bool empty()
     {
         return ::asc::std::ranges::__begin_cpo{}(__derived()) == ::asc::std::ranges::__end_cpo{}(__derived());

@@ -35,10 +35,10 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/cstdint>
 
-// The master tree does not provide the assertion gate used by the source
-// implementation: inline its minimal equivalent (same shape as
-// __utility/unreachable.h). Device compilation has no assertion mechanism;
-// host checks are opt-in via ASC_ENABLE_HOST_ASSERTIONS.
+// The assertion gate is not provided centrally here, so its minimal
+// equivalent is inlined (same shape as __utility/unreachable.h). Device
+// compilation has no assertion mechanism; host checks are opt-in via
+// ASC_ENABLE_HOST_ASSERTIONS.
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
@@ -48,10 +48,9 @@
 #endif
 #endif  // CANN_ASC_STL_DETAIL_ASSERT
 
-// Inline equivalent of the source tree three-way-comparison gate: the
-// comparison_category member stays disabled until the ordering vocabulary
-// (asc::std::strong_ordering from __compare/ordering.h) is wired into this
-// header, mirroring the source-tree default of 0.
+// Inline three-way-comparison gate: the comparison_category member stays
+// disabled until the ordering vocabulary (asc::std::strong_ordering from
+// __compare/ordering.h) is wired into this header, so it defaults to 0.
 #ifndef CANN_ASC_STL_DETAIL_HAS_SPACESHIP_OPERATOR
 #define CANN_ASC_STL_DETAIL_HAS_SPACESHIP_OPERATOR() 0
 #endif  // CANN_ASC_STL_DETAIL_HAS_SPACESHIP_OPERATOR

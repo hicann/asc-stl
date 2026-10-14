@@ -32,12 +32,15 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// CCE 下禁用 __is_pointer 特性关键字快路径：libstdc++ bits/cpp_type_traits.h
-// 声明了同名模板，ASC 工具链的辅助编译遍（dav-c310-vec）里该声明会遮蔽特性
-// 关键字，使 __is_pointer(_Tp) 被解析为对模板的调用（950 真机 2026-09 复现，
-// 仅当宿主 <vector> 等先行包含时触发）。回退分支语义完备（_Tp* 特化 +
-// remove_cv），CCE 一律走回退；真 clang 的关键字优先级不受声明影响，保留快路径。
-// 需要手工切换时可定义 CANN_ASC_STL_DETAIL_USE_IS_POINTER_FALLBACK 强制回退。
+// The __is_pointer keyword fast path is disabled under CCE: libstdc++
+// bits/cpp_type_traits.h declares a same-named template, and in the ASC
+// toolchain's auxiliary compilation pass (dav-c310-vec) that declaration
+// shadows the keyword, so __is_pointer(_Tp) parses as a call to the template
+// (triggered only when host headers such as <vector> are included first). The
+// fallback branch is semantically complete (_Tp* specialization plus
+// remove_cv), so CCE always takes it; on real clang the declaration never
+// affects keyword precedence, so the fast path is kept there. Define
+// CANN_ASC_STL_DETAIL_USE_IS_POINTER_FALLBACK to force the fallback manually.
 #if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_pointer) && !defined(CANN_ASC_STL_DETAIL_USE_IS_POINTER_FALLBACK) && \
     !CANN_ASC_STL_DETAIL_COMPILER_CCE
 

@@ -41,8 +41,9 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __unwrap_iter_detail {
 
-// 连续遍历探测的最小本地等价（与 __algorithm/partition.h 同款）：category/concept
-// 双探测在 C++17 下 SFINAE 友好，指针特化恒为连续。
+// Minimal local contiguous-traversal probes: the dual category/concept probes
+// are SFINAE-friendly under C++17; the pointer specialization is always
+// contiguous.
 template <class Iter, class Tag, class = void>
 inline constexpr bool __has_iterator_category_convertible_to = false;
 
@@ -68,11 +69,13 @@ inline constexpr bool __has_contiguous_traversal<Tp*> = true;
 
 }  // namespace __unwrap_iter_detail
 
-// __unwrap_iter 负责剥掉迭代器包装（reverse_iterator/__wrap_iter 等），减少模板实例化
-// 数量并为 copy/sort 等启用指针化快径；__rewrap_iter 负责把解包结果还原为原迭代器类型。
+// __unwrap_iter strips iterator wrappers (reverse_iterator/__wrap_iter etc.),
+// reducing the number of template instantiations and enabling pointer-based
+// fast paths for copy/sort and the like; __rewrap_iter restores the unwrapped
+// result to the original iterator type.
 template <class Iterator, bool = __unwrap_iter_detail::__has_contiguous_traversal<Iterator>>
 struct __unwrap_iter_impl {
-    // 非连续迭代器：原样返回
+    // Non-contiguous iterators: returned unchanged.
     static CANN_ASC_STL_API constexpr Iterator __rewrap(Iterator, Iterator __iter)
     {
         return __iter;
@@ -83,7 +86,7 @@ struct __unwrap_iter_impl {
     }
 };
 
-// 连续迭代器：解包为裸指针
+// Contiguous iterators: unwrap to a raw pointer.
 template <class Iterator>
 struct __unwrap_iter_impl<Iterator, true> {
     using __to_address_t = decltype(::asc::std::__to_address(::asc::std::declval<Iterator>()));

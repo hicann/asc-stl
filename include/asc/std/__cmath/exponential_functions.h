@@ -38,9 +38,9 @@
 #include <asc/std/__type_traits/promote.h>
 #include <asc/std/__type_traits/is_constant_evaluated.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -51,14 +51,19 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 指数/缩放族三层分派（承 dev 语义、基座宏形状）：主名 float 与后缀别名
-// 经 backend 路由——纯 SIMT TU 走 simt_api 标量库（__aicore__ 可达，含
-// 指针出参 frexpf 形态；expf/exp2f 冲刷次正规输入输出），其余走编译器内
-// 建；double/long double/整型提升与后缀 l 别名仅宿主（向量核无 double 精
-// 度，设备禁 long double）；扩展浮点经 float 精度中转并保持原格式往返。
+// Exponential/scaling family, three-layer dispatch: the primary float name
+// and the suffix aliases route through the backend — pure SIMT TUs go to the
+// simt_api scalar library (reachable from __aicore__, including the frexpf
+// form with the pointer out-param; expf/exp2f flush subnormal inputs and
+// outputs), everything else uses the compiler builtins; double/long
+// double/integral promotion and the l-suffix alias are host-only (the vector
+// cores have no double-precision arithmetic, and long double is forbidden on
+// device); extended floating point transits through float precision and
+// round-trips in its original format.
 
-// 对齐 dev 的指数族扩展浮点集合：仅 half/bfloat16（fp8 标量转换路径在该
-// 编译器不可用，暴露重载会宣告编译期即失败的调用）。
+// Extended floating point set for the exponential family: half/bfloat16 only
+// (the fp8 scalar conversion path is unavailable on this compiler, so
+// exposing the overloads would advertise calls that fail to compile).
 template <class Tp>
 inline constexpr bool __expo_supported_extended_v = false;
 #if CANN_ASC_STL_DETAIL_HAS_HALF()
@@ -70,7 +75,7 @@ template <>
 inline constexpr bool __expo_supported_extended_v<bfloat16_t> = true;
 #endif
 
-//! @brief 自然指数 e^@p value。
+//! @brief Natural exponential e^@p value.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float exp(
     float value) noexcept
 {
@@ -83,14 +88,15 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(expf, __builtin_expf, (value));
 }
 
-//! @brief 扩展浮点（half/bfloat16）exp：float 精度中转，原格式返回。
+//! @brief Extended floating point (half/bfloat16) exp: transits through
+//! float precision, returns in the original format.
 template <class Tp, ::asc::std::enable_if_t<__expo_supported_extended_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp exp(Tp value) noexcept
 {
     return static_cast<Tp>(::asc::std::exp(static_cast<float>(value)));
 }
 
-//! @brief 2 的 @p value 次幂。
+//! @brief 2 raised to the power @p value.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float exp2(
     float value) noexcept
 {
@@ -109,7 +115,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::exp2(static_cast<float>(value)));
 }
 
-//! @brief e^@p value - 1，@p value 接近 0 时保持精度。
+//! @brief e^@p value - 1; preserves precision when @p value is close to 0.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float expm1(
     float value) noexcept
 {
@@ -129,7 +135,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::expm1(static_cast<float>(value)));
 }
 
-//! @brief 分解为尾数（[0.5, 1) 或 0）与以 2 为底的指数（经 @p exponent 出参）。
+//! @brief Decomposes into a mantissa ([0.5, 1) or 0) and a base-2 exponent
+//! (delivered through the @p exponent out-param).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float frexp(
     float value, int* exponent) noexcept
 {
@@ -149,7 +156,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::frexp(static_cast<float>(value), exponent));
 }
 
-//! @brief @p value * 2^@p exponent（逆 frexp）。
+//! @brief @p value * 2^@p exponent (inverse of frexp).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float ldexp(
     float value, int exponent) noexcept
 {
@@ -169,8 +176,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::ldexp(static_cast<float>(value), exponent));
 }
 
-//! @brief 以 float 拆分整数与小数部分（整数部分经 @p integer_part 出参，
-//! 与 @p value 同符号）。
+//! @brief Splits into integral and fractional parts (integral part delivered
+//! through the @p integer_part out-param, with the same sign as @p value).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float modf(
     float value, float* integer_part) noexcept
 {
@@ -183,7 +190,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return __builtin_modff(value, integer_part);
 }
 
-//! @brief @p value * FLT_RADIX^@p exponent（FLT_RADIX = 2）。
+//! @brief @p value * FLT_RADIX^@p exponent (FLT_RADIX = 2).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float scalbn(
     float value, int exponent) noexcept
 {
@@ -203,7 +210,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::scalbn(static_cast<float>(value), exponent));
 }
 
-//! @brief 同 scalbn，指数为 long。
+//! @brief Same as scalbn, with a long exponent.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float scalbln(
     float value, long exponent) noexcept
 {
@@ -223,7 +230,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::scalbln(static_cast<float>(value), exponent));
 }
 
-//! @brief @p base 的 @p exponent 次幂。
+//! @brief @p base raised to the power @p exponent.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float pow(
     float base, float exponent) noexcept
 {
@@ -244,8 +251,10 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 宿主全类型面：double/long double 主名、后缀 l 别名与整型提升。整型提升
-// 整型提升对齐 <cmath> 标准：整型实参提升为 double 计算并返回 double。
+// Full host type surface: double/long double primary names, the l-suffix
+// alias, and integral promotion. Integral promotion aligns with the <cmath>
+// standard: integral arguments are promoted to double, computed and returned
+// as double.
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double exp(double value) noexcept
 {
@@ -437,10 +446,11 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr __promote_t<Tp, Up> pow(T
 
 #endif  // !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
-//! @brief 常量求值安全的 scalbn（dev 同源 __constexpr_scalbn 语义，供复数
-//! 除法等内部件使用）：常量上下文用平方求幂循环（覆盖 INT_MIN 全幅无符号
-//! 量，上游参考版本循环每非零指数漏一个基数因子，此处修正）；运行时分派回
-//! scalbn（设备硬件 / 宿主 libm）。
+//! @brief Constant-evaluation-safe scalbn (used by internal components such
+//! as complex division): in constant contexts a square-and-multiply loop
+//! covers the full unsigned magnitude of INT_MIN (a plain square-and-multiply
+//! loop drops one base factor for every nonzero exponent — avoided here); at
+//! runtime it dispatches back to scalbn (device hardware / host libm).
 template <class Tp>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp __constexpr_scalbn(
     Tp value, int exponent) noexcept
@@ -451,8 +461,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
         const bool negative = exponent < 0;
         unsigned int magnitude =
             negative ? static_cast<unsigned int>(-(exponent + 1)) + 1U : static_cast<unsigned int>(exponent);
-        // 在册浮点格式（binary16/32/64、bfloat16）基数均为 2，直用字面
-        // 量，避免设备 TU 的 limits 特化依赖。
+        // The delivered floating point formats (binary16/32/64, bfloat16)
+        // all have radix 2, so use the literal directly and avoid a
+        // dependency on the limits specialization in device TUs.
         Tp multiplier = negative ? Tp(1) / Tp(2) : Tp(2);
         while (magnitude != 0) {
             if ((magnitude & 1U) != 0U)

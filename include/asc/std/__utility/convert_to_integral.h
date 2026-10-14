@@ -32,8 +32,8 @@
 #include <asc/std/__type_traits/is_floating_point.h>
 #include <asc/std/__type_traits/underlying_type.h>
 
-// 基座 __config 未提供 CANN_ASC_STL_DETAIL_HAS_INT128（定义于合入源树的
-// extended_data_types.h）：内联其语义的最小等价，#ifndef 守卫以免与未来基座定义冲突。
+// <asc/__config> does not define CANN_ASC_STL_DETAIL_HAS_INT128; provide a
+// minimal equivalent here, #ifndef-guarded against a future definition.
 #ifndef CANN_ASC_STL_DETAIL_HAS_INT128
 #if !defined(ASC_DISABLE_INT128_SUPPORT) && defined(__linux__) && defined(__SIZEOF_INT128__)
 #define CANN_ASC_STL_DETAIL_HAS_INT128() 1

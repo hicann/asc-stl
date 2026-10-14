@@ -35,10 +35,11 @@
 #include <asc/std/cstddef>
 #include <asc/std/cstdint>
 
-// 基座未提供断言宏（合入源树由方言层集中定义）：按 __mdspan/empty_base.h 的
-// 同形内联，#ifndef 守卫以免与未来集中定义冲突。
+// The shared configuration provides no assertion macro, so inline the minimal
+// equivalent here, #ifndef-guarded against a future centralized definition.
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
-// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查。
+// No-op on the device side (no assertion mechanism there); on the host side,
+// checked only when ASC_ENABLE_HOST_ASSERTIONS is explicitly enabled.
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #else
@@ -53,12 +54,15 @@ template <size_t Alignment, class T>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr T* assume_aligned(T* pointer) noexcept
 {
     static_assert(__is_valid_alignment<T>(Alignment), "invalid alignment for T");
-    // 常量求值期不做运行时假设：直接原样返回（保守回退取“视为常量求值”）。
+    // Make no runtime alignment assumption during constant evaluation: return
+    // the pointer unchanged (the conservative fallback assumes constant
+    // evaluation).
     if (!__default_is_constant_evaluated()) {
         CANN_ASC_STL_DETAIL_ASSERT(
             reinterpret_cast<uintptr_t>(pointer) % Alignment == 0, "Alignment assumption is violated");
 #if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_assume_aligned) || defined(__GNUC__)
-        // 内建不接受 volatile 指针：剥掉后按原指针类型返回。
+        // The builtin does not accept volatile pointers: strip it and return in
+        // the original pointer type.
         using ValueType = remove_volatile_t<T>;
         return static_cast<T*>(__builtin_assume_aligned(const_cast<ValueType*>(pointer), Alignment));
 #endif

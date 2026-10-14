@@ -146,7 +146,9 @@ __mu(Ti& ti, Uj&)
 template <class Ti, bool IsReferenceWrapper, bool IsBindEx, bool IsPh, class TupleUj>
 struct __mu_return_impl;
 
-// 当嵌套 bind 表达式对实参不可调用时回退为 __nat，避免 __mu_return 求值硬错误（SFINAE 友好）。
+// Falls back to __nat when a nested bind expression is not invocable with the
+// arguments, avoiding a hard error in the __mu_return deduction
+// (SFINAE-friendly).
 template <bool Invocable, class Ti, class... Uj>
 struct __mu_return_invocable {
     using type = __nat;

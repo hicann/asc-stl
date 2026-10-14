@@ -69,10 +69,12 @@ inline constexpr bool enable_view<T,
 
 }  // namespace asc::std::ranges
 
-// 保持本头文件原有可观察行为：此前 view_interface 的完整定义随本文件交付，
-// 下游仅包含本文件即获得完整类型。定义已移至 view_interface.h，此处在
-// 前向声明之后引入；若正处在 concepts.h 的包含链中途则跳过（其正文中
-// 使用的概念名尚未可见），此时下游按惯例各自直接包含 view_interface.h。
+// Preserve this header's original observable behavior: view_interface used to be
+// fully defined in this file, so downstream code including only this file must get
+// the complete type. The definition lives in view_interface.h, included here after
+// the forward declaration; skip it while in the middle of the concepts.h include
+// chain (the concept names used in its body are not visible yet) — in that case
+// downstream code includes view_interface.h directly, as usual.
 #ifndef CANN_ASC_STL_ASC_STD___RANGES_CONCEPTS_H
 #include <asc/std/__ranges/view_interface.h>
 #endif

@@ -35,9 +35,9 @@
 #include <asc/std/__type_traits/is_integral.h>
 #include <asc/std/__type_traits/is_same.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -46,8 +46,10 @@
 #endif
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE
 
-// C99 ilogb 特殊值契约宏（宿主 <math.h> 已包含时沿用其取值，保证与
-// ::ilogb 运行时结果一致；设备 TU 无该头，给出 glibc 同款回退值）。
+// C99 ilogb special-value contract macros (when the host <math.h> is already
+// included its values are reused, keeping consistency with the runtime
+// ::ilogb result; device TUs lack that header, so glibc-identical fallback
+// values are provided).
 #ifndef FP_ILOGB0
 #define FP_ILOGB0 (-2147483647 - 1)
 #endif
@@ -55,9 +57,11 @@
 #define FP_ILOGBNAN 2147483647
 #endif
 
-// 纯 SIMT TU 的 half/bfloat16 硬件对数族（承 dev 真机证据链）：hlog 族
-// 走专用硬件路径，其饱和模式会按 SIMT API 文档改变特殊值；头存在性经
-// __has_include 探测，旧谱系工具链自动退回 float 精度中转。
+// Hardware logarithm family for half/bfloat16 in pure SIMT TUs: the hlog
+// family takes the dedicated hardware path, whose saturation mode changes
+// the special values per the SIMT API documentation; header presence is
+// probed with __has_include — older toolchain lineages fall back to the
+// float-precision transit.
 #if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
 #if defined(__has_include)
 #if __has_include(<simt_api/asc_fp16.h>)
@@ -73,13 +77,15 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 对数族三层分派（承 dev 语义、基座宏形状）：主名 float 与后缀别名经
-// backend 路由——纯 SIMT TU 走 simt_api 标量库（__aicore__ 可达），其余
-// 走编译器内建；double/long double/整型提升与后缀 l 别名仅宿主（向量核
-// 无 double 精度，设备禁 long double）；扩展浮点经 float 精度中转并保持
-// 原格式往返。
+// Logarithm family, three-layer dispatch: the primary float name and the
+// suffix aliases route through the backend — pure SIMT TUs go to the simt_api
+// scalar library (reachable from __aicore__), everything else uses the
+// compiler builtins; double/long double/integral promotion and the l-suffix
+// alias are host-only (the vector cores have no double-precision arithmetic,
+// and long double is forbidden on device); extended floating point transits
+// through float precision and round-trips in its original format.
 
-//! @brief 自然对数 ln(@p value)。
+//! @brief Natural logarithm ln(@p value).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float log(
     float value) noexcept
 {
@@ -92,8 +98,10 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(logf, __builtin_logf, (value));
 }
 
-//! @brief 扩展浮点（half/bfloat16/fp8 族）log：SIMT 硬件 hlog 族优先
-//! （饱和模式特殊值按 SIMT API 文档），否则 float 精度中转，原格式返回。
+//! @brief Extended floating point (half/bfloat16/fp8 family) log: SIMT
+//! hardware hlog family first (saturation-mode special values per the SIMT
+//! API documentation), otherwise float-precision transit, returned in the
+//! original format.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp log(Tp value) noexcept
 {
@@ -110,7 +118,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
         return static_cast<Tp>(::asc::std::log(static_cast<float>(value)));
 }
 
-//! @brief 常用对数 log10(@p value)。
+//! @brief Common (base-10) logarithm log10(@p value).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float log10(
     float value) noexcept
 {
@@ -140,7 +148,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
         return static_cast<Tp>(::asc::std::log10(static_cast<float>(value)));
 }
 
-//! @brief log(1 + @p value)，@p value 接近 0 时保持精度。
+//! @brief log(1 + @p value); preserves precision when @p value is close to 0.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float log1p(
     float value) noexcept
 {
@@ -160,7 +168,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::log1p(static_cast<float>(value)));
 }
 
-//! @brief 以 2 为底的对数。
+//! @brief Base-2 logarithm.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float log2(
     float value) noexcept
 {
@@ -189,9 +197,10 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
         return static_cast<Tp>(::asc::std::log2(static_cast<float>(value)));
 }
 
-//! @brief @p value 的规范化指数（无偏 exponent，整型返回）。NaN 契约：
-//! 设备原生 ilogbf 对 NaN 返回 ASCRT_MIN_VAL_S，此处按 C++ 契约返回
-//! FP_ILOGBNAN；0 返回 FP_ILOGB0。
+//! @brief Normalized exponent of @p value (unbiased exponent, returned as an
+//! integer). NaN contract: the device's native ilogbf returns ASCRT_MIN_VAL_S
+//! for NaN, so FP_ILOGBNAN is returned here per the C++ contract; 0 returns
+//! FP_ILOGB0.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR int ilogb(
     float value) noexcept
 {
@@ -215,8 +224,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return ::asc::std::ilogb(static_cast<float>(value));
 }
 
-//! @brief @p value 的规范化指数（浮点返回）。±0 → -inf，±inf → +inf，
-//! NaN → NaN。
+//! @brief Normalized exponent of @p value (returned as floating point).
+//! ±0 -> -inf, ±inf -> +inf, NaN -> NaN.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float logb(
     float value) noexcept
 {
@@ -236,8 +245,10 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 宿主全类型面：double/long double 主名、后缀 l 别名与整型提升。整型提升
-// 整型提升对齐 <cmath> 标准：整型实参提升为 double 计算并返回 double。
+// Full host type surface: double/long double primary names, the l-suffix
+// alias, and integral promotion. Integral promotion aligns with the <cmath>
+// standard: integral arguments are promoted to double, computed and returned
+// as double.
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double log(double value) noexcept
 {

@@ -55,14 +55,17 @@
 
 namespace asc::std::ranges {
 
-// 计数迭代器的迭代器概念层级：整型值具备完整随机访问运算，其余弱递增类型保守降级为输入迭代器。
+// Iterator concept hierarchy for the counting iterator: integral values have full
+// random-access operations; other weakly-incrementable types conservatively degrade
+// to input iterators.
 template <class Value>
 using __iota_iterator_concept = conditional_t<is_integral_v<Value>, random_access_iterator_tag, input_iterator_tag>;
 
 template <class Value, class Bound = unreachable_sentinel_t>
 class iota_view : public view_interface<iota_view<Value, Bound>> {
 public:
-    // 保持基座公开成员名 iterator；实现改为本文件内嵌计数迭代器（不再依赖 __iota_iterator）。
+    // The public member name stays 'iterator'; the implementation is a counting
+    // iterator nested in this file (no dependency on __iota_iterator).
     class iterator {
     public:
         using iterator_concept = __iota_iterator_concept<Value>;
@@ -164,7 +167,8 @@ public:
     };
     using __iterator = iterator;
 
-    // 异构有界哨兵：保存原始 Bound，避免窄化回 Value 造成的截断。
+    // Heterogeneous bounded sentinel: stores the original Bound, avoiding the
+    // truncation a narrowing conversion back to Value would cause.
     struct __sentinel {
         friend class iota_view;
 
@@ -288,7 +292,8 @@ public:
 #endif
     {
         if constexpr (is_integral_v<Value> && is_integral_v<Bound>) {
-            // 按无符号模运算求跨度，避免有符号相减的未定义行为。
+            // Compute the span with unsigned modular arithmetic, avoiding the
+            // undefined behavior of a signed subtraction.
             if (value_ < 0) {
                 if (bound_sentinel_ < 0) {
                     return ::asc::std::__to_unsigned_like(-value_) - ::asc::std::__to_unsigned_like(-bound_sentinel_);
@@ -306,7 +311,8 @@ private:
     Bound bound_sentinel_ = Bound();
 };
 
-// 混用有符号/无符号端点的推导不参与标准 C++20 形状，予以排除。
+// Deduction with mixed signed/unsigned endpoints is not part of the standard C++20
+// shape, so it is excluded.
 template <class Value, class Bound,
     enable_if_t<!is_integral_v<Value> || !is_integral_v<Bound> || (is_signed_v<Value> == is_signed_v<Bound>), int> = 0>
 iota_view(Value, Bound) -> iota_view<Value, Bound>;
@@ -315,7 +321,8 @@ template <class V, class B>
 inline constexpr bool enable_borrowed_range<iota_view<V, B>> = true;
 namespace views {
 struct __iota_fn {
-    // 单参形态生成无界计数区间（终哨兵为 unreachable）。
+    // The single-argument form generates an unbounded counting range (the end
+    // sentinel is unreachable).
     template <class Value>
     CANN_ASC_STL_API constexpr iota_view<Value> operator()(Value value) const noexcept
     {

@@ -49,9 +49,11 @@ namespace __for_each_n {
 
 struct __fn {
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    // 约束保持表达式级（可解引用、可自增、谓词可经投影调用）：冻结用例以仅有
-    // operator*/operator++ 的经典裸迭代器调用本定制点，标准 input_iterator 级
-    // 校验会破坏既有交付面。
+    // Constraints stay expression-level (dereferenceable, incrementable,
+    // predicate invocable through the projection): existing callers invoke this
+    // customization point with classic bare iterators exposing only
+    // operator*/operator++, which standard input_iterator-level validation
+    // would reject.
     template <class _Iter, class _Func, class _Proj = identity>
         requires requires {
             *::asc::std::declval<_Iter&>();

@@ -47,8 +47,10 @@
 namespace asc::std::ranges {
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
-// 类级合同（C++20 [range.owning.view]）：可移动的区间；初始化器列表底层数组生存期不随视图，
-// 任何标准路径下都禁止持有（约束保持 SFINAE 友好，供 views::all 的 CTAD 探测优雅失败）。
+// Class-level contract (C++20 [range.owning.view]): a movable range; the backing
+// array of an initializer_list does not outlive the view, so owning one is
+// forbidden on every standard path (the constraint stays SFINAE-friendly so the
+// CTAD probing in views::all can fail gracefully).
 template <class Range>
     requires range<Range> && movable<Range> && (!__is_asc_std_initializer_list<remove_cvref_t<Range>>)
 class owning_view : public view_interface<owning_view<Range>> {
@@ -144,10 +146,12 @@ private:
 
 #else
 
-// 非 concepts 路径（C++17 与设备编译）：保持基座惯用的惰性模板成员形状。
+// Non-concepts path (C++17 and device compilation): keeps the conventional
+// lazily-instantiated template-member shape.
 template <class Range>
 class owning_view : public view_interface<owning_view<Range>> {
-    // 初始化器列表元素悬垂风险极高，此路径下同样禁止持有。
+    // initializer_list elements dangle almost immediately, so owning one is
+    // forbidden on this path too.
     static_assert(!__is_asc_std_initializer_list<remove_cvref_t<Range>>,
         "owning_view must not own an initializer_list; wrap it in another view first");
 

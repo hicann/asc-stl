@@ -41,9 +41,11 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 策略化内部入口（支持哨兵、返回到达末尾的迭代器）：供 ranges 等策略迁移头复用。
-// _AlgPolicy 需提供静态 iter_move/iter_swap；基座无 dev 侧 __make_heap 策略入口，
-// 建堆走公开 make_heap（比较器按值拷贝，语义等价）。
+// Policy-taking internal entry (supports sentinels, returns the iterator
+// reached at the end): reused by ranges and other policy-based entries.
+// _AlgPolicy must provide static iter_move/iter_swap; there is no policy-taking
+// __make_heap entry, so heap construction goes through the public make_heap
+// (comparator copied by value, semantically equivalent).
 template <class _AlgPolicy, class _Compare, class _RandomAccessIterator, class _Sentinel>
 CANN_ASC_STL_API constexpr _RandomAccessIterator __partial_sort_impl(
     _RandomAccessIterator __first, _RandomAccessIterator __middle, _Sentinel __last, _Compare&& __comp)
@@ -85,8 +87,9 @@ CANN_ASC_STL_API constexpr _RandomAccessIterator __partial_sort(
         __first, __middle, __last, static_cast<__comp_ref_type<_Compare>>(__comp));
 }
 
-//! @brief 部分排序：使 [first, middle) 按升序含整个区间最小的 (middle - first) 个元素，
-//! 余下元素置于 [middle, last) 无序。
+//! @brief Partial sort: make [first, middle) contain, in ascending order, the
+//! smallest (middle - first) elements of the whole range; the remaining elements
+//! are placed unordered in [middle, last).
 template <class _RandomAccessIterator, class _Compare>
 CANN_ASC_STL_API constexpr void partial_sort(
     _RandomAccessIterator __first, _RandomAccessIterator __middle, _RandomAccessIterator __last, _Compare __comp)
@@ -98,7 +101,7 @@ CANN_ASC_STL_API constexpr void partial_sort(
         ::asc::std::move(__middle), ::asc::std::move(__last), __comp);  // NOLINT(build/include_what_you_use)
 }
 
-//! @brief 部分排序（默认 less 比较）。
+//! @brief Partial sort (default less comparison).
 template <class _RandomAccessIterator>
 CANN_ASC_STL_API constexpr void partial_sort(
     _RandomAccessIterator __first, _RandomAccessIterator __middle, _RandomAccessIterator __last)

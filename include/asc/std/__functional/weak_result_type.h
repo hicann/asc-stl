@@ -37,7 +37,8 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 仿函数类型适配：T 自带 result_type 成员时向宿主类透出该类型。
+// Functor type adaptation: expose T's own result_type member to the host
+// class when present.
 template <class T, class = void>
 inline constexpr bool __has_member_result_type = false;
 

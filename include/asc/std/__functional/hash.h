@@ -49,7 +49,9 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 基座无 unary_function 头文件，此处内联最小等价（空布局基类，仅统一特化的来源形状）。
+// No unary_function header is available here, so inline the minimal
+// equivalent (an empty base class kept only to shape the specializations
+// uniformly).
 template <class Arg, class Result>
 struct __unary_function {};
 
@@ -61,8 +63,9 @@ CANN_ASC_STL_API Size __loadword(const void* p)
     return r;
 }
 
-// size_t 为 32 位时用 murmur2，64 位时用 cityhash64：
-// cityhash64 依赖 64x64 位乘法，在 32 位系统上过慢。
+// Use murmur2 when size_t is 32 bits and cityhash64 when it is 64 bits:
+// cityhash64 relies on 64x64-bit multiplication, which is too slow on 32-bit
+// systems.
 template <class Size, size_t = sizeof(Size) * CHAR_BIT>
 struct __murmur2_or_cityhash;
 
@@ -109,7 +112,7 @@ struct __murmur2_or_cityhash<Size, 64> {
     CANN_ASC_STL_API Size operator()(const void* key, Size len);
 
 private:
-    // 位于 2^63 与 2^64 之间的若干素数。
+    // Some primes between 2^63 and 2^64.
     static const Size k0 = 0xc3a5c85c97cb3127ULL;
     static const Size k1 = 0xb492b66fbe98f273ULL;
     static const Size k2 = 0x9ae16a3b2f90404fULL;
@@ -173,7 +176,8 @@ private:
         return __hash_len_16(__rotate(a - b, 43) + __rotate(c, 30) + d, a + __rotate(b ^ k3, 20) - c + len);
     }
 
-    // 为 48 字节生成 16 字节哈希：快速且粗糙，调用方最好传入“随机感”的 a 与 b。
+    // Return a 16-byte hash for 48 bytes: quick and dirty; callers should
+    // pass "random-looking" values for a and b.
     static CANN_ASC_STL_API pair<Size, Size> __weak_hash_len_32_with_seeds(
         Size w, Size x, Size y, Size z, Size a, Size b)
     {
@@ -186,14 +190,14 @@ private:
         return pair<Size, Size>(a + z, b + c);
     }
 
-    // 为 s[0]...s[31]、a、b 生成 16 字节哈希：快速且粗糙。
+    // Return a 16-byte hash from s[0]...s[31], a, and b: quick and dirty.
     static CANN_ASC_STL_API pair<Size, Size> __weak_hash_len_32_with_seeds(const char* s, Size a, Size b)
     {
         return __weak_hash_len_32_with_seeds(
             __loadword<Size>(s), __loadword<Size>(s + 8), __loadword<Size>(s + 16), __loadword<Size>(s + 24), a, b);
     }
 
-    // 为 33 到 64 字节生成 8 字节哈希。
+    // Return an 8-byte hash for 33 to 64 bytes.
     static CANN_ASC_STL_API Size __hash_len_33_to_64(const char* s, size_t len)
     {
         Size z = __loadword<Size>(s + 24);
@@ -234,7 +238,8 @@ CANN_ASC_STL_API Size __murmur2_or_cityhash<Size, 64>::operator()(const void* ke
         return __hash_len_33_to_64(s, len);
     }
 
-    // 超过 64 字节时先哈希尾部，随后循环中保留 56 字节状态：v、w、x、y、z。
+    // For lengths over 64 bytes, hash the tail first, then keep 56 bytes of
+    // state (v, w, x, y, z) across the loop.
     Size x = __loadword<Size>(s + len - 40);
     Size y = __loadword<Size>(s + len - 16) + __loadword<Size>(s + len - 56);
     Size z = __hash_len_16(__loadword<Size>(s + len - 48) + len, __loadword<Size>(s + len - 24));
@@ -242,7 +247,8 @@ CANN_ASC_STL_API Size __murmur2_or_cityhash<Size, 64>::operator()(const void* ke
     pair<Size, Size> w = __weak_hash_len_32_with_seeds(s + len - 32, y + k1, x);
     x = x * k1 + __loadword<Size>(s);
 
-    // len 缩到最近的 64 倍数，按 64 字节块处理。
+    // Shrink len down to the nearest multiple of 64 and process the data in
+    // 64-byte blocks.
     len = (len - 1) & ~static_cast<Size>(63);
     do {
         x = __rotate(x + y + v.first + __loadword<Size>(s + 8), 37) * k1;
@@ -341,7 +347,7 @@ struct __scalar_hash<Tp, 4> : public __unary_function<Tp, size_t> {
     }
 };
 
-// __hash_combine 的合成输入对（内部符号）。
+// Synthetic input pair for __hash_combine (internal symbol).
 struct __hash_combine_pair {
     size_t first;
     size_t second;
@@ -491,7 +497,7 @@ template <>
 struct hash<float> : public __scalar_hash<float> {
     CANN_ASC_STL_API size_t operator()(float v) const noexcept
     {
-        // -0.0 与 0.0 应得到相同哈希
+        // -0.0 and 0.0 must hash the same
         if (v == 0.0f) {
             return 0;
         }
@@ -504,11 +510,13 @@ struct hash<double> : public __scalar_hash<double> {
     CANN_ASC_STL_API size_t operator()(double v) const noexcept
     {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-        // AI Core 禁止双精度算术：±0.0 归一化判定不可用，退回纯位模式哈希
-        // （联合体位复制，不含浮点算术；设备侧无有效双精度载荷）。
+        // AI Core forbids double-precision arithmetic: the ±0.0 normalization
+        // check is unavailable, so fall back to a pure bit-pattern hash
+        // (union bit copy, no floating-point arithmetic; the device side has
+        // no effective double-precision payload).
         return __scalar_hash<double>::operator()(v);
 #else
-        // -0.0 与 0.0 应得到相同哈希
+        // -0.0 and 0.0 must hash the same
         if (v == 0.0) {
             return 0;
         }
@@ -524,12 +532,12 @@ struct hash<long double> : public __scalar_hash<long double> {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
         return __scalar_hash<long double>::operator()(v);
 #else
-        // -0.0 与 0.0 应得到相同哈希
+        // -0.0 and 0.0 must hash the same
         if (v == 0.0L) {
             return 0;
         }
 #if defined(__x86_64__) && defined(__linux__)
-        // 清零填充位，保证同值同哈希
+        // Zero the padding bits so equal values hash the same
         union {
             long double t;
             struct {
@@ -548,8 +556,10 @@ struct hash<long double> : public __scalar_hash<long double> {
     }
 };
 
-// 基座主模板的字节级 FNV-1a 哈希，保留为非枚举类型的回退路径：
-// variant 哈希合成等内部路径按任意可平凡复制类型使用主模板，不得因特化面扩展而失去可用性。
+// Byte-wise FNV-1a hash kept as the fallback path of the primary template for
+// non-enum types: internal paths such as variant hash synthesis use the
+// primary template for arbitrary trivially-copyable types, so it must remain
+// usable as the specialization surface grows.
 template <class T>
 struct __byte_hash : public __unary_function<T, size_t> {
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API size_t operator()(const T& value) const noexcept
@@ -564,7 +574,8 @@ struct __byte_hash : public __unary_function<T, size_t> {
     }
 };
 
-// 枚举类型转发到底层整型特化（主模板）。
+// Enum types forward to the specialization for the underlying integral type
+// (primary template).
 template <class T, bool = is_enum_v<T>>
 struct __primary_hash;
 template <class T>

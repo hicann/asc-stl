@@ -36,9 +36,9 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/promote.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -49,16 +49,22 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// fdim 三层分派（承 dev 语义、基座宏形状）：float 主名与后缀别名经 backend
-// 路由——纯 SIMT TU 走 simt_api 标量库（__aicore__ 可达），其余走编译器内
-// 建；double/long double 主名、后缀 l 别名与 mixed-type promote 仅宿主（向
-// 量核禁 double，设备禁 long double）；扩展浮点（half/bfloat16/fp8 族）经
-// float 精度中转并保持原格式往返。基座手写 isnan+比较路径收敛为原生
-// fdimf 委托（NaN 传播与 x<=y 返 +0 契约由其承载）；dev 的同型整型重载由
-// mixed-type promote 模板覆盖（int+int 与 int+long 均归一 double，消除仅
-// float/double 重载并存时整型调用的歧义）。
+// fdim, three-layer dispatch: the float primary name and suffix aliases
+// route through the backend — pure SIMT TUs go to the simt_api scalar
+// library (reachable from __aicore__), everything else uses the compiler
+// builtins; double/long double primary names, the l-suffix alias, and
+// mixed-type promote are host-only (double is forbidden on the vector cores,
+// long double on device); extended floating point (half/bfloat16/fp8 family)
+// transits through float precision and round-trips in its original format.
+// What was a handwritten isnan+comparison path is converged into native
+// fdimf delegation (NaN propagation and the x<=y yields +0 contract are
+// carried by it); same-shape integral overloads are covered by the
+// mixed-type promote template (int+int and int+long both unify to double,
+// removing the ambiguity of integral calls when only the float/double
+// overloads coexist).
 
-//! @brief 正差 fdim(x, y) = x > y ? x - y : +0（任一参数 NaN 返回 NaN）。
+//! @brief Positive difference fdim(x, y) = x > y ? x - y : +0 (returns NaN
+//! if either argument is NaN).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float fdim(
     float x, float y) noexcept
 {
@@ -71,7 +77,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(fdimf, __builtin_fdimf, (x, y));
 }
 
-//! @brief 扩展浮点（half/bfloat16/fp8 族）fdim：float 精度中转，原格式返回。
+//! @brief Extended floating point (half/bfloat16/fp8 family) fdim: transits
+//! through float precision, returns in the original format.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp fdim(
     Tp x, Tp y) noexcept
@@ -80,8 +87,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 宿主全类型面：double/long double 主名、后缀 l 别名与 mixed-type promote
-// （int+float 混型经 __promote_t 归一到公共宽度，与 libstdc++ 同型）。
+// Full host type surface: double/long double primary names, the l-suffix
+// alias, and mixed-type promote (a mixed int+float call normalizes to the
+// common width through __promote_t, same shape as libstdc++).
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double fdim(double x, double y) noexcept
 {

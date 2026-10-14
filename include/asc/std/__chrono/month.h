@@ -40,7 +40,8 @@ private:
 
     constexpr month(unsigned __value, int) noexcept : __month_(__value)
     {}
-    // record 裁定局部采纳队友版零初始化：默认构造后确定 ok() == false，消除读取未初始化无符号值的 UB 风险
+    // Zero-initialized: a default-constructed month deterministically yields ok() == false, avoiding the
+    // undefined behavior of reading an uninitialized unsigned value
     unsigned char __month_{};
 
     CANN_ASC_STL_API constexpr void __add_clamped(long long __add) noexcept

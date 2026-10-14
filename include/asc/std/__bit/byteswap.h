@@ -35,11 +35,11 @@
 #include <asc/std/cstdint>
 #include <asc/std/limits>
 
-// 2026-09-01 晟腾 950 真机实验：CANN 9.2 真机（aicore）上 __builtin_bswap
-// 数值正确，但 CANN 9.0.0 的 dav 向量核（aiv）后端对任何宽度的运行时
-// bswap 均无法 select（16/32/64 全部 Cannot select，常量折叠路径除外）。
-// 故 builtin 仅用于宿主 TU；设备 TU 一律走可移植移位循环（真机已验）。
-// 源侧 __byte_perm 设备路径不迁移。
+// On CANN 9.2 real hardware (aicore) __builtin_bswap yields correct values,
+// but the CANN 9.0.0 dav vector-core (aiv) backend cannot select a runtime
+// bswap of any width (16/32/64 all fail with "Cannot select", except on the
+// constant-folding path). The builtins are therefore host-TU only; device TUs
+// always take the portable shift loop (verified on hardware).
 #if defined(__has_builtin) && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #if __has_builtin(__builtin_bswap16)
 #define CANN_ASC_STL_BUILTIN_BSWAP16(__v) __builtin_bswap16(__v)
@@ -49,9 +49,9 @@
 #endif
 #endif  // __has_builtin
 
-// 基座 __config 未提供 dev 的 CANN_ASC_STL_DETAIL_HAS_INT128 / PRAGMA_UNROLL_FULL
-// （dev 定义于 asc/std/__asc/extended_data_types.h、__asc/compiler.h）：内联其
-// 语义的最小等价，#ifndef 守卫以免与未来基座定义冲突。
+// The shared <asc/__config> does not provide CANN_ASC_STL_DETAIL_HAS_INT128 /
+// PRAGMA_UNROLL_FULL: inline minimal equivalents of their semantics, guarded
+// by #ifndef so a future centralized definition wins.
 #ifndef CANN_ASC_STL_DETAIL_HAS_INT128
 #if !defined(ASC_DISABLE_INT128_SUPPORT) && defined(__linux__) && defined(__SIZEOF_INT128__)
 #define CANN_ASC_STL_DETAIL_HAS_INT128() 1
@@ -80,7 +80,8 @@ struct __byteswap_allowed<bool> {
     static constexpr bool value = false;
 };
 
-//! @brief 通用字节序反转回退：按字节循环移位重组（constexpr，任意宽度）。
+//! @brief Generic byte-order swap fallback: rebuilds the value with a per-byte
+//! shift loop (constexpr, any width).
 template <class _Tp>
 [[nodiscard]] CANN_ASC_STL_API constexpr _Tp __byteswap_generic(_Tp __val) noexcept
 {
@@ -116,14 +117,14 @@ template <class _Tp>
 [[nodiscard]] CANN_ASC_STL_API constexpr uint64_t __byteswap_impl(uint64_t __val) noexcept
 {
 #if defined(CANN_ASC_STL_BUILTIN_BSWAP32)
-    // 宿主：两个 32 位 builtin 交换 + 半字交换（避免部分版本对 64 位
-    // builtin 的支持差异；与源侧 __byte_perm 的 64 位分解同构）
+    // Host: two 32-bit builtin swaps plus a half-word swap (avoids version
+    // differences in 64-bit builtin support)
     const uint32_t __lo = static_cast<uint32_t>(__val);
     const uint32_t __hi = static_cast<uint32_t>(__val >> 32);
     return (static_cast<uint64_t>(CANN_ASC_STL_BUILTIN_BSWAP32(__lo)) << 32) |
         static_cast<uint64_t>(CANN_ASC_STL_BUILTIN_BSWAP32(__hi));
 #else
-    // 设备：可移植移位循环（aiv 后端无标量 bswap）
+    // Device: portable shift loop (the aiv backend has no scalar bswap)
     return ::asc::std::__byteswap_generic(__val);
 #endif
 }
@@ -131,17 +132,18 @@ template <class _Tp>
 #if CANN_ASC_STL_DETAIL_HAS_INT128()
 [[nodiscard]] CANN_ASC_STL_API constexpr __uint128_t __byteswap_impl(__uint128_t __val) noexcept
 {
-    // CCE 无 bswap128 builtin：递归分解为两个已验证的 64 位交换（基座
-    // numeric_limits 无 int128 特化，等价展开 dev __byteswap_recursive
-    // 的 128 位实例：高半字交换置于低位、低半字交换置于高位）
+    // CCE has no bswap128 builtin: decompose into two already-verified 64-bit
+    // swaps (the base numeric_limits has no int128 specialization; the swapped
+    // high half lands in the low position and vice versa)
     constexpr int __shift = 64;
     return static_cast<__uint128_t>(::asc::std::__byteswap_impl(static_cast<uint64_t>(__val >> __shift))) |
         (static_cast<__uint128_t>(::asc::std::__byteswap_impl(static_cast<uint64_t>(__val))) << __shift);
 }
 #endif  // CANN_ASC_STL_DETAIL_HAS_INT128()
 
-//! @brief 反转 @p value 的字节序（按对象表示逐字节反转）；单字节类型恒等，
-//! bool 与非整型不参与（遵循上游标准库的整数契约，bool 显式排除）。
+//! @brief Reverses the byte order of @p value (per-byte reversal of the object
+//! representation); single-byte types are the identity, and bool and
+//! non-integral types do not participate (bool is explicitly excluded).
 template <class Integer>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr Integer byteswap(Integer value) noexcept
 {

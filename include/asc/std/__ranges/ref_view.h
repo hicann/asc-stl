@@ -51,7 +51,8 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 
-// 判定 _Tp 能否转换为 _Range 的左值（排除把右值绑定到左值引用的路径）。
+// Detects whether _Tp can convert to an lvalue of _Range (excludes binding an
+// rvalue to an lvalue reference).
 template <class _Range>
 struct __conversion_tester {
     CANN_ASC_STL_API static void __fun(_Range&);
@@ -64,8 +65,9 @@ template <class _Tp, class _Range>
 struct __convertible_to_lvalue<_Tp, _Range,
     void_t<decltype(__conversion_tester<_Range>::__fun(::asc::std::declval<_Tp>()))>> : true_type {};
 
-// 成员门控：empty()/size()/data() 仅在对应 CPO 可调用时提供，
-// 以基座惯用的 void_t 探测结构 + enable_if_t 展开，C++17 与设备路径同样可用。
+// Member gating: empty()/size()/data() are provided only when the corresponding CPO
+// is invocable, expanded as the conventional void_t detection structs + enable_if_t
+// so the C++17 and device paths work identically.
 template <class T, class = void>
 struct __ref_view_has_empty : false_type {};
 template <class T>

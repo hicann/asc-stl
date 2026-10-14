@@ -31,10 +31,11 @@
 #include <asc/std/__cstddef/types.h>
 #include <asc/std/cstdint>
 
-// 基座未提供断言宏（合入源树由方言层集中定义）：按 __mdspan/empty_base.h 的
-// 同形内联，#ifndef 守卫以免与未来集中定义冲突。
+// No centralized assertion macro is available yet, so it is defined inline
+// behind an #ifndef guard; a future centralized definition then wins.
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
-// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查。
+// Always a no-op on device (no assertion mechanism); checked on host only when
+// ASC_ENABLE_HOST_ASSERTIONS is explicitly enabled.
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #else
@@ -51,8 +52,8 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __memcpy_detail {
 
-// 源/目的地址范围合法性（非空且地址不回绕）与区间重叠探测，供断言使用。
-// 合入源树位于顶层 __memory/check_address.h，基座无该头，内联于此。
+// Address-range validity (non-null, no address wraparound) and range-overlap
+// detection, used by the assertions below.
 CANN_ASC_STL_API bool __is_valid_address_range(const void* pointer, size_t count) noexcept
 {
     if (count == 0) {
@@ -72,16 +73,18 @@ CANN_ASC_STL_API bool __are_ptrs_overlapping(const void* left, const void* right
 
 }  // namespace __memcpy_detail
 
-// 旧编译器仍会触发与宿主 memcpy 的名字冲突（仅在宿主侧有 ::memcpy 可引）。
+// Old compilers still hit a name conflict with the host ::memcpy (an issue only
+// where ::memcpy is visible, i.e. hosted TUs); they use a using-declaration instead.
 #if CANN_ASC_STL_DETAIL_HOSTED() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && defined(__GNUC__) && \
     !defined(__clang__) && __GNUC__ <= 9
 
 using ::memcpy;
 
-#else  // ^^^ GCC <= 9 宿主 ^^^ / vvv 其余编译器与设备 TU vvv
+#else  // ^^^ hosted GCC <= 9 ^^^ / vvv other compilers and device TUs vvv
 
-// 模板参数用于避免外部代码不带命名空间限定调用 memcpy 时的名字二义性：
-// 函数模板在重载决议中优先级低于非模板函数。
+// The dummy template parameter avoids an ambiguity when outside code calls
+// memcpy without a namespace qualifier: a function template ranks below a
+// non-template function in overload resolution.
 template <int = 0>
 CANN_ASC_STL_API void* memcpy(void* destination, const void* source, __SIZE_TYPE__ count) noexcept
 {
@@ -94,9 +97,11 @@ CANN_ASC_STL_API void* memcpy(void* destination, const void* source, __SIZE_TYPE
 #if CANN_ASC_STL_DETAIL_HOSTED() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     return ::memcpy(destination, source, count);
 #else
-    // 设备 TU：__builtin_memcpy 仅在长度为编译期常量时完全内联；运行期长度会
-    // 降低为对外部 libc memcpy 的调用，而 aicore 链接没有 libc。常量长度走
-    // 内建内联路径；运行期长度回退为字节循环（memcpy 的不重叠契约下等价）。
+    // Device TU: __builtin_memcpy fully inlines only when the length is a
+    // compile-time constant; a runtime length degrades to a call to the libc
+    // memcpy, and the aicore link has no libc. Constant lengths take the
+    // builtin inline path; runtime lengths fall back to a byte loop (equivalent
+    // under memcpy's non-overlap contract).
     if (__builtin_constant_p(count)) {
         return __builtin_memcpy(destination, source, count);
     }
@@ -109,7 +114,7 @@ CANN_ASC_STL_API void* memcpy(void* destination, const void* source, __SIZE_TYPE
 #endif
 }
 
-#endif  // GCC <= 9 宿主
+#endif  // hosted GCC <= 9
 
 CANN_ASC_STL_END_NAMESPACE
 

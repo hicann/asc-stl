@@ -49,8 +49,10 @@
 #include <asc/std/__type_traits/remove_reference.h>
 #include <asc/std/__utility/declval.h>
 
-// 设备编译不引入宿主 initializer_list（保持负向合同的诊断面）：宿主侧内联
-// 最小等价探测，设备侧恒 false（viewable_range 不做花括号列表排除）。
+// Device compilation does not include the host <initializer_list> (preserving the
+// diagnostics for the not-supported case): the host side inlines a minimal
+// equivalent probe, while the device side is constant false (viewable_range then
+// performs no braced-init-list exclusion).
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #include <initializer_list>
 #endif
@@ -74,7 +76,7 @@ inline constexpr bool __is_asc_std_initializer_list = false;
 
 template <class T>
 concept range = requires(T& value) {
-    __begin_cpo{}(value);  // 有时保持相等性
+    __begin_cpo{}(value);  // need not be equality-preserving
     __end_cpo{}(value);
 };
 template <range R>

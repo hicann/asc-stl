@@ -59,7 +59,8 @@ namespace __mdspan_detail {
 // ------------------------------------------------------------------
 // ------------ __static_array --------------------------------------
 // ------------------------------------------------------------------
-// 提供静态值序列的按索引读取（值全部编码在模板参数中，无运行期存储）。
+// Provides index-based access to a static sequence of values (all values are encoded
+// as template parameters; there is no runtime storage).
 template <class Tp, Tp... Values>
 struct __static_array {
     CANN_ASC_STL_API static constexpr size_t __size() noexcept
@@ -83,9 +84,10 @@ struct __static_array {
 // ------------------------------------------------------------------
 // ------------ __extents_dynamic_array -----------------------------
 // ------------------------------------------------------------------
-// 类 array 的最小运行期存储：size 0 特化为真正的空类型，使全静态 extents
-// 不占存储（空基类优化）。上游实现名为 __possibly_empty_array，因
-// layout_stride.h 已内联同名副本，此处换名避免同一定义域重定义。
+// Minimal array-like runtime storage; the size 0 specialization is a truly empty
+// type so that fully static extents take up no storage (empty-base optimization).
+// The upstream implementation names this __possibly_empty_array; renamed here
+// because layout_stride.h already inlines a copy under that name.
 template <class Tp, size_t Size>
 struct __extents_dynamic_array {
     Tp values_[Size];
@@ -115,7 +117,7 @@ struct __extents_dynamic_array<Tp, 0> {
 // ------------------------------------------------------------------
 // ------------ __static_partial_sums --------------------------------
 // ------------------------------------------------------------------
-// 编译期前缀和（动态值下标映射用），可按索引读取。
+// Compile-time prefix sums (for dynamic-value index mapping), readable by index.
 template <size_t... Values>
 struct __static_partial_sums {
     CANN_ASC_STL_API static constexpr array<size_t, sizeof...(Values)> __static_partial_sums_impl()
@@ -140,9 +142,11 @@ struct __static_partial_sums {
 // ------------------------------------------------------------------
 // ------------ __maybe_static_array --------------------------------
 // ------------------------------------------------------------------
-// 静态/动态混合值序列：静态值编码在模板参数中，仅动态值占用运行期存储；
-// 动态值的位置以标签值（dynamic_extent）标记。构造时校验提供的值与
-// 静态值一致（防止把长度错误的实参悄悄映射到静态维度）。
+// Mixed static/dynamic value sequence: static values are encoded as template
+// parameters and only dynamic values take runtime storage; dynamic positions are
+// marked with the tag value (dynamic_extent). Construction validates that provided
+// values match the static ones (so wrongly sized arguments are not silently mapped
+// onto static dimensions).
 
 template <class TStatic, TStatic DynTag, TStatic... Values>
 inline constexpr size_t __count_dynamic_v = (size_t{0} + ... + static_cast<size_t>(Values == DynTag));
@@ -153,7 +157,7 @@ struct __maybe_static_array : private __extents_dynamic_array<TDynamic, __count_
     static_assert(is_convertible_v<TDynamic, TStatic>, "__maybe_static_array: TDynamic must be convertible to TStatic");
 
 private:
-    // 静态值成员与动态值下标映射
+    // Static values and the dynamic-value index mapping
     static constexpr size_t __size_ = sizeof...(Values);
     static constexpr size_t __size_dynamic_ = __count_dynamic_v<TStatic, DynTag, Values...>;
     using __static_values = __static_array<TStatic, Values...>;
@@ -185,9 +189,9 @@ public:
                     (*static_cast<__dynamic_values*>(this))[__dynamic_idx_map::__get(index)] =
                         static_cast<TDynamic>(vals[index]);
                 } else {
-                    // 不校验会让越界在后续才暴露，例如：
+                    // Without this check an out-of-bounds extent would only surface later, e.g.
                     // mdspan<int, extents<int, 10>> m(new int[N], span<int, 1>(&N));
-                    // 分配和长度看似匹配，但 m 仍认为其范围是 10 而非 N。
+                    // allocation and length look matching, but m still believes its range is 10, not N.
                     CANN_ASC_STL_DETAIL_ASSERT(static_cast<TDynamic>(vals[index]) == static_cast<TDynamic>(static_val),
                         "extents construction: mismatch of provided arguments with static extents.");
                 }
@@ -195,14 +199,15 @@ public:
         }
     }
 
-    // 仅动态值构造（覆盖 rank() == 0 的情形）；排除全 span 实参以免与 span 构造二义。
+    // Dynamic-values-only constructor (covers the rank() == 0 case); excludes all-span
+    // arguments to avoid ambiguity with the span constructor.
     template <class... DynVals,
         enable_if_t<(sizeof...(DynVals) == __size_dynamic_) && !__fold_and_v<__is_asc_std_span_v<DynVals>...>, int> = 0>
     CANN_ASC_STL_API constexpr __maybe_static_array(DynVals... vals) noexcept
         : __dynamic_values{static_cast<TDynamic>(vals)...}
     {}
 
-    // 全值构造（rank > 0 时按 rank 提供全部维度）
+    // Construct from all values (for rank > 0, all dimensions are provided by rank)
     template <class... DynVals,
         enable_if_t<(sizeof...(DynVals) != __size_dynamic_) && !__fold_and_v<__is_asc_std_span_v<DynVals>...>, int> = 0>
     CANN_ASC_STL_API constexpr __maybe_static_array(DynVals... vals) noexcept : __dynamic_values{}
@@ -214,16 +219,16 @@ public:
             if (static_val == DynTag) {
                 (*static_cast<__dynamic_values*>(this))[__dynamic_idx_map::__get(index)] = all_values[index];
             } else {
-                // 不校验会让越界在后续才暴露，例如：
+                // Without this check an out-of-bounds extent would only surface later, e.g.
                 // mdspan<int, extents<int, 10>> m(new int[5], 5);
-                // 右侧构造看似正确，但 m 仍认为其范围是 10 而非 5。
+                // the right-hand construction looks correct, but m still believes its range is 10, not 5.
                 CANN_ASC_STL_DETAIL_ASSERT(all_values[index] == static_cast<TDynamic>(static_val),
                     "extents construction: mismatch of provided arguments with static extents.");
             }
         }
     }
 
-    // 访问
+    // Access
     CANN_ASC_STL_API static constexpr TStatic __static_value(size_t index) noexcept
     {
         if constexpr (__size_ > 0) {
@@ -250,7 +255,7 @@ public:
         return __value(index);
     }
 
-    // 观察器
+    // Observers
     CANN_ASC_STL_API static constexpr size_t __size()
     {
         return __size_;
@@ -261,13 +266,15 @@ public:
     }
 };
 
-// 目标类型能否无损表示源类型的极值（按无符号量级比较，判窄化）。
+// Whether the target type can losslessly represent the source type's extreme values
+// (compared as unsigned magnitudes; detects narrowing).
 template <class To, class From>
 inline constexpr bool __potentially_narrowing = static_cast<make_unsigned_t<To>>((numeric_limits<To>::max)()) <
     static_cast<make_unsigned_t<From>>((numeric_limits<From>::max)());  // NOLINT(build/include_what_you_use)
 
-// 一组值是否都能以目标整数类型表示且非负（复数变参与 span 两种入口；
-// 单值判定 __is_representable_as 由 __mdspan/empty_base.h 提供）。
+// Whether a set of values are all representable as the target integer type and
+// non-negative (two entry points: variadic pack and span; the single-value predicate
+// __is_representable_as comes from __mdspan/empty_base.h).
 template <class To, class... From, enable_if_t<__is_integer_v<To>, int> = 0>
 CANN_ASC_STL_API constexpr bool __are_representable_as(From... values)
 {
@@ -293,10 +300,11 @@ CANN_ASC_STL_API constexpr bool __are_representable_as(span<From, Size> values)
 // ------------ extents ----------------------------------------------
 // ------------------------------------------------------------------
 
-// 用于在不同（非）explicit 构造间委托的标签。
+// Tag used to delegate between the different (non-)explicit constructors.
 struct __extent_delegate_tag {};
 
-// 多维数组的维度描述，mdspan/mdarray 与布局映射共用。
+// Description of the dimensions of a multidimensional array; shared by mdspan/mdarray
+// and the layout mappings.
 template <class IndexType, size_t... Extents>
 class extents : private __mdspan_detail::__maybe_static_array<IndexType, size_t, dynamic_extent, Extents...> {
 public:
@@ -316,7 +324,7 @@ private:
     using __storage_base = __mdspan_detail::__maybe_static_array<IndexType, size_t, dynamic_extent, Extents...>;
 
 public:
-    // [mdspan.extents.obs]，多维索引空间观察器
+    // [mdspan.extents.obs], multidimensional index space observers
     CANN_ASC_STL_API static constexpr rank_type rank() noexcept
     {
         return __rank_;
@@ -335,10 +343,11 @@ public:
         return __storage_base::__static_value(r);
     }
 
-    // [mdspan.extents.cons]，构造
+    // [mdspan.extents.cons], constructors
     CANN_ASC_STL_API constexpr extents() noexcept = default;
 
-    // 按动态维度数或全 rank 提供值；前置条件校验在 __maybe_static_array 构造中完成。
+    // Values supplied by dynamic-dimension count or by full rank; precondition checks
+    // are done in the __maybe_static_array constructor.
     template <class... OtherIndexTypes,
         enable_if_t<(sizeof...(OtherIndexTypes) == __rank_ || sizeof...(OtherIndexTypes) == __rank_dynamic_) &&
                 __mdspan_detail::__all_convertible_to_index_type<index_type, OtherIndexTypes...>,
@@ -346,8 +355,8 @@ public:
     CANN_ASC_STL_API constexpr explicit extents(OtherIndexTypes... dynvals) noexcept
         : __storage_base(static_cast<index_type>(dynvals)...)
     {
-        // 不校验会导致越界在后续才暴露，例如
-        // mdspan m(ptr, dextents<char, 1>(200u)); 会让 m 得到 -56 的维度。
+        // Without the check an out-of-bounds extent would only surface later, e.g.
+        // mdspan m(ptr, dextents<char, 1>(200u)) would give m a dimension of -56.
         CANN_ASC_STL_DETAIL_ASSERT(__mdspan_detail::__are_representable_as<index_type>(dynvals...),
             "extents ctor: arguments must be representable as index_type and nonnegative");
     }
@@ -373,9 +382,9 @@ public:
         enable_if_t<(Size == __rank_dynamic_) && __is_convertible_to_index_type<OtherIndexType>, int> = 0>
     CANN_ASC_STL_API constexpr extents(span<OtherIndexType, Size> exts) noexcept : __storage_base(exts)
     {
-        // 不校验会导致越界在后续才暴露，例如
-        // array a{200u}; mdspan<int, dextents<char, 1>> m(ptr, extents(span<unsigned, 1>(a)));
-        // 会让 m 得到 -56 的维度。
+        // Without the check an out-of-bounds extent would only surface later, e.g.
+        // array a{200u}; mdspan<int, dextents<char, 1>> m(ptr, extents(span<unsigned, 1>(a)))
+        // would give m a dimension of -56.
         CANN_ASC_STL_DETAIL_ASSERT(__mdspan_detail::__are_representable_as<index_type>(exts),
             "extents ctor: arguments must be representable as index_type and nonnegative");
     }
@@ -390,7 +399,8 @@ public:
     }
 
 private:
-    // 从其他 extents 特化构造存储：静态位取其当前值，动态位按位收集。
+    // Build storage from another extents specialization: static slots take their
+    // current values, dynamic slots are collected position by position.
     template <size_t DynCount, size_t Idx, class OtherExtents, class... DynamicValues>
     CANN_ASC_STL_API constexpr __storage_base __construct_vals_from_extents(integral_constant<size_t, DynCount>,
         integral_constant<size_t, Idx>, const OtherExtents& exts, DynamicValues... dynamic_values) noexcept
@@ -424,9 +434,9 @@ private:
                 CANN_ASC_STL_DETAIL_ASSERT(::asc::std::in_range<index_type>(other.extent(r)),
                     "extents ctor: arguments must be representable as index_type and nonnegative");
 
-                // 不校验会导致越界在后续才暴露，例如
+                // Without the check an out-of-bounds extent would only surface later, e.g.
                 // mdspan<int, extents<int, 10>> m = mdspan<int, dextents<int, 1>>(new int[5], 5);
-                // 右侧构造正确，但 m 仍认为其范围是 10 而非 5。
+                // the right-hand construction is correct, but m still believes its range is 10, not 5.
                 CANN_ASC_STL_DETAIL_ASSERT((__storage_base::__static_value(r) == dynamic_extent) ||
                         (static_cast<index_type>(other.extent(r)) ==
                             static_cast<index_type>(__storage_base::__static_value(r))),
@@ -436,7 +446,8 @@ private:
     }
 
 public:
-    // 跨 extents 特化的转换构造（按标准显式性拆分两个约束重载）
+    // Converting constructor across extents specializations (split into two
+    // constrained overloads per the standard's explicitness rules)
     template <class OtherIndexType, size_t... OtherExtents>
     static constexpr bool __is_explicit_conversion =
         (((Extents != dynamic_extent) && (OtherExtents == dynamic_extent)) || ...) ||
@@ -462,7 +473,7 @@ public:
         : extents(__extent_delegate_tag{}, other)
     {}
 
-    // 相等比较
+    // Equality comparison
     template <class OtherIndexType, size_t... OtherExtents>
     CANN_ASC_STL_API friend constexpr bool operator==(
         const extents& left, const extents<OtherIndexType, OtherExtents...>& right) noexcept
@@ -493,13 +504,12 @@ public:
 #endif  // CANN_ASC_STL_DETAIL_STD_VER <= 2017
 };
 
-// 无 nvcc 式类型转换问题的推导辅助。
+// Deduction helper that avoids nvcc-style type-conversion issues.
 struct __to_dynamic_extent {
     template <class>
     static constexpr size_t value = dynamic_extent;
 };
 
-// extents 的推导指引
 template <class... IndexTypes>
 extents(IndexTypes...) -> extents<size_t, __to_dynamic_extent::template value<IndexTypes>...>;
 

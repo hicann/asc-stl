@@ -31,7 +31,8 @@
 #include <asc/std/__type_traits/always_false.h>
 #include <asc/std/cstdint>
 
-// Feature macros inlined from the dev dialect layer (not present in the base config).
+// <asc/__config> does not define these feature macros; provide minimal
+// equivalents here, #ifndef-guarded against future definitions.
 #ifndef CANN_ASC_STL_DETAIL_HAS_INT128
 #if !defined(ASC_DISABLE_INT128_SUPPORT) && defined(__linux__) && defined(__SIZEOF_INT128__)
 #define CANN_ASC_STL_DETAIL_HAS_INT128() 1

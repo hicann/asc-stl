@@ -37,9 +37,10 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 通用内部实现（dev 语义）：sentinel/转发引用形参，尾段整段复制后以 pair 返回
-// 两迭代器终值。基座 copy.h 无带策略的 __copy 变体，尾段改写等价的内联循环并
-// 直接构造 pair（语义等价，见 notes）。
+// General internal implementation: sentinel/forwarding-reference parameters;
+// after the tail is copied as a whole, the two iterators' final values are
+// returned in a pair. No policy-taking __copy variant is available here, so the
+// tail is an equivalent inline loop that constructs the pair directly.
 template <class _AlgPolicy, class _Comp, class _InIter1, class _Sent1, class _InIter2, class _Sent2, class _OutIter>
 CANN_ASC_STL_API constexpr pair<remove_cvref_t<_InIter1>, remove_cvref_t<_OutIter>> __set_difference(
     _InIter1&& __first1, _Sent1&& __last1, _InIter2&& __first2, _Sent2&& __last2, _OutIter&& __result, _Comp&& __comp)
@@ -70,8 +71,10 @@ CANN_ASC_STL_API constexpr OutputIterator set_difference(InputIterator1 first1, 
     InputIterator2 first2, InputIterator2 last2, OutputIterator result, Compare compare)
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    // CCE 设备侧：经 pair 返回输出迭代器会附加段偏移，破坏其本地地址表示，
-    // 走手写循环直接返回（与宿主路径语义等价）。
+    // CCE device side: returning the output iterator through a pair would attach
+    // a segment offset and break its local address representation, so use a
+    // handwritten loop that returns directly (semantically equivalent to the
+    // host path).
     while (first1 != last1 && first2 != last2) {
         if (compare(*first1, *first2)) {
             *result++ = *first1++;

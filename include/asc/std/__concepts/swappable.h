@@ -77,7 +77,8 @@ concept __swappable_arrays = !__unqualified_swappable_with<T (&)[N], U (&)[N]> &
 
 #else  // ^^^ concepts ^^^ / vvv !concepts vvv
 
-// 非概念路径（含设备编译）：按基座惯用的 void_t 探测 + bool 变量模板展开，语义与概念版对齐。
+// Non-concept path (also used for device compilation): void_t detection
+// unfolded into bool variable templates, matching the concept version's semantics.
 template <class T, class U, class = void>
 inline constexpr bool __unqualified_swappable_with_impl = false;
 
@@ -102,8 +103,8 @@ template <class T, class U, class = void>
 inline constexpr bool __noexcept_swappable_arrays = false;
 
 struct __fn {
-    // (2.1) `S` 为 `(void)swap(E1, E2)`：若 E1/E2 具有类或枚举类型且（非受限）swap(E1, E2) 可行（名字 swap
-    // 按非受限查找）。
+    // (2.1) `S` is `(void)swap(E1, E2)`: E1/E2 have class or enumeration type and
+    // (unqualified) swap(E1, E2) is valid (the name `swap` is found by unqualified lookup).
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     template <class T, class U>
         requires __unqualified_swappable_with<T, U>
@@ -113,7 +114,7 @@ struct __fn {
         swap(::asc::std::forward<T>(t), ::asc::std::forward<U>(u));
     }
 
-    // (2.2) 否则，若 E1/E2 为等 extents 数组左值，逐元素递归分派。
+    // (2.2) Otherwise, if E1/E2 are array lvalues of equal extent, dispatch element-wise recursively.
     template <class T, class U, size_t N>
         requires __swappable_arrays<T, U, N>
     CANN_ASC_STL_API constexpr void operator()(T (&t)[N], U (&u)[N]) const noexcept(__noexcept_swappable_arrays<T, U>)
@@ -123,7 +124,8 @@ struct __fn {
         }
     }
 
-    // (2.3) 否则，若 E1/E2 为同型 T 的左值且 T 可移动构造/移动赋值，用 exchange 移动交换。
+    // (2.3) Otherwise, if E1/E2 are lvalues of the same type T and T is move
+    // constructible/move assignable, swap by moving through exchange.
     template <class T>
         requires __exchangeable<T>
     CANN_ASC_STL_API constexpr void operator()(T& x, T& y) const
@@ -157,7 +159,8 @@ struct __fn {
 };
 
 #if !(CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION())
-// 数组可交换探测需 __fn 完整后方能书写（元素调用可行性）。
+// The swappable-arrays detection needs __fn to be complete (it requires the
+// element call to be a valid expression), so it is defined after __fn.
 template <class T, class U, size_t N>
 inline constexpr bool __swappable_arrays<T, U, N,
     void_t<decltype(::asc::std::declval<const __fn&>()(
@@ -173,7 +176,8 @@ inline constexpr bool __noexcept_swappable_arrays<T, U, void_t<type_identity_t<T
 
 inline constexpr __swap_detail::__fn swap{};
 
-// 内部避免直接使用 CPO 对象（__tile__ 访问问题），统一走 __fn 类型。
+// Internal code avoids using the CPO object directly (a __tile__ access issue)
+// and uniformly goes through the __fn type instead.
 using __swap_cpo = __swap_detail::__fn;
 
 }  // namespace ranges

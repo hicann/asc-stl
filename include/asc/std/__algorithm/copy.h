@@ -43,9 +43,10 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 通用逐元素拷贝，返回 (源尾, 目标尾)，供需要源尾迭代器的内部算法复用。
-// 首个模板参数为算法策略占位（默认 void）：内部算法可以 __copy<策略>(...)
-// 形式复用本模板，经典路径不使用策略。
+// General element-wise copy returning (source end, result end), for internal
+// algorithms that need the source-end iterator. The first template parameter is
+// a policy placeholder (defaults to void) so internal algorithms can reuse this
+// template as __copy<policy>(...); the classic path uses no policy.
 template <class _AlgPolicy = void, class _InputIterator, class _OutputIterator>
 CANN_ASC_STL_API constexpr pair<_InputIterator, _OutputIterator> __copy(
     _InputIterator __first, _InputIterator __last, _OutputIterator __result)
@@ -56,13 +57,15 @@ CANN_ASC_STL_API constexpr pair<_InputIterator, _OutputIterator> __copy(
     return {__last, __result};
 }
 
-// memmove 快径分派：常量求值期返回 false 走 constexpr 逐元素回退；运行期
-// 宿主优先编译器内建（常量长度可完全内联），否则 hosted libc ::memmove。
-// 设备 TU 上两条路都不可用——__builtin_memmove 对运行时长度会 lower 为对
-// libc 的外部调用，而 aicore 链接无 libc——一律返回 false 走 constexpr 循
-// 环，语义等价、性能次优。
-// 注：命名与 copy_backward.h 内联的 __dispatch_memmove 区分（该文件先于
-// 本文件落地，重名会在同时包含时构成重定义）。
+// memmove fast-path dispatch: returns false during constant evaluation to take
+// the constexpr element-wise fallback; at runtime the host prefers the compiler
+// builtin (constant lengths can be fully inlined), otherwise hosted libc
+// ::memmove. Neither path is available in a device TU — for runtime lengths
+// __builtin_memmove lowers to an external libc call and the aicore link has no
+// libc — so it always returns false to take the constexpr loop, semantically
+// equivalent but slower.
+// Note: named to differ from the __dispatch_memmove inlined in copy_backward.h;
+// a duplicate name would be a redefinition when both headers are included.
 template <class _Tp, class _Up>
 CANN_ASC_STL_API constexpr bool __memmove_dispatch(_Up* __result, _Tp* __first, const size_t __n)
 {
@@ -78,9 +81,10 @@ CANN_ASC_STL_API constexpr bool __memmove_dispatch(_Up* __result, _Tp* __first, 
     return false;
 }
 
-// 常量求值期的尾部重叠探测：指针关系比较在常量表达式中对不相干对象并非
-// 合法，改用等值线性扫描（结果仅在两区间真重叠时影响循环方向，扫描扑空
-// 即视为不重叠）。
+// Tail-overlap detection for constant evaluation: relational pointer
+// comparison is not valid in constant expressions for unrelated objects, so use
+// an equality linear scan instead (the result only affects the loop direction
+// when the ranges truly overlap; a scan that finds nothing means no overlap).
 template <class _Tp, class _Up>
 CANN_ASC_STL_API constexpr bool __constexpr_tail_overlap_fallback(_Tp* __first, _Up* __needle, _Tp* __last)
 {
@@ -104,8 +108,9 @@ CANN_ASC_STL_API constexpr bool __constexpr_tail_overlap(_Tp* __first, _Up* __ne
     return ::asc::std::__constexpr_tail_overlap_fallback(__first, __needle, __last);
 }
 
-// 平凡可拷贝指针特化：优先 memmove 快径；回退路径按区间重叠方向选择反向
-// 或正向逐元素循环，保持 memmove 语义。
+// Trivially copyable pointer specialization: prefer the memmove fast path; the
+// fallback picks a backward or forward element-wise loop based on the overlap
+// direction, preserving memmove semantics.
 template <class _AlgPolicy = void, class _Tp, class _Up, enable_if_t<is_same_v<remove_const_t<_Tp>, _Up>, int> = 0,
     enable_if_t<is_trivially_copyable_v<_Up>, int> = 0>
 CANN_ASC_STL_API constexpr pair<_Tp*, _Up*> __copy(  // NOLINT(build/include_what_you_use)

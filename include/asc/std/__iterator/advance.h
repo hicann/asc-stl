@@ -38,8 +38,10 @@
 #include <asc/std/__utility/convert_to_integral.h>
 #include <asc/std/__utility/move.h>
 
-// dev 版 <asc/std/__asc/assert.h> 断言链的最小等价内联（规则册条款5，#ifndef 守卫防重）：
-// debug 构建（_DEBUG/DEBUG）启用 ENABLE_DEBUG_MODE，进而启用宿主断言；设备侧无断言机制，恒为 no-op。
+// Minimal equivalent inlining of the <asc/std/__asc/assert.h> assertion chain
+// (#ifndef guards prevent redefinition): debug builds (_DEBUG/DEBUG) enable
+// ENABLE_DEBUG_MODE and thereby host assertions; the device side has no
+// assertion mechanism and stays a no-op.
 #ifndef CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
 #if defined(_DEBUG) || defined(DEBUG)
 #define CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
@@ -60,11 +62,11 @@
 
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// ASC 设备侧无断言机制
+// No assertion mechanism exists on the ASC device side.
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #elif defined(ASC_ENABLE_HOST_ASSERTIONS)
 #ifdef NDEBUG
-// NDEBUG 下 <assert.h> 未必已包含，按 dev 版做法手工补声明
+// <assert.h> may not have been included under NDEBUG, so declare __assert_fail manually
 extern "C" {
 void __assert_fail(const char* __assertion, const char* __file, unsigned int __line, const char* __function) noexcept
     __attribute__((__noreturn__));
@@ -83,9 +85,11 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __advance_detail {
 
-// 本文件内联的遍历探测（与 __iterator/distance.h 的同名探测同形）：对
-// iterator_traits<Iter>::iterator_category 与成员 iterator_concept 各做一次 SFINAE 友好的
-// tag 可转换性探测，用于 if constexpr 分派以支持指向不完整类型的指针。
+// Traversal probe inlined in this file (same shape as the identically named
+// probe in __iterator/distance.h): performs one SFINAE-friendly tag
+// convertibility probe each on iterator_traits<Iter>::iterator_category and on
+// the member iterator_concept; used by if constexpr dispatch to support
+// pointers to incomplete types.
 template <class Iter, class Tag, class = void>
 inline constexpr bool __has_iterator_category_convertible_to = false;
 

@@ -35,9 +35,10 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 2+2 迭代器：按两个范围的较短者截断，返回双方停止位置。
-// 首个模板参数为算法策略占位（默认 void），供按策略分派的内部算法以
-// __swap_ranges<策略>(...) 形式复用。
+// 2+2 iterators: truncate at the shorter of the two ranges, return both stop
+// positions. The first template parameter is a policy placeholder (defaults to
+// void) so policy-dispatched internal algorithms can reuse this template as
+// __swap_ranges<policy>(...).
 template <class _AlgPolicy = void, class _ForwardIterator1, class _Sentinel1, class _ForwardIterator2, class _Sentinel2>
 CANN_ASC_STL_API constexpr pair<_ForwardIterator1, _ForwardIterator2> __swap_ranges(
     _ForwardIterator1 __first1, _Sentinel1 __last1, _ForwardIterator2 __first2, _Sentinel2 __last2)
@@ -50,7 +51,7 @@ CANN_ASC_STL_API constexpr pair<_ForwardIterator1, _ForwardIterator2> __swap_ran
     return {::asc::std::move(__first1), ::asc::std::move(__first2)};  // NOLINT(build/include_what_you_use)
 }
 
-// 2+1 迭代器：要求第二范围不短于第一范围。
+// 2+1 iterators: requires the second range to be no shorter than the first.
 template <class _AlgPolicy = void, class _ForwardIterator1, class _Sentinel1, class _ForwardIterator2>
 CANN_ASC_STL_API constexpr pair<_ForwardIterator1, _ForwardIterator2> __swap_ranges(
     _ForwardIterator1 __first1, _Sentinel1 __last1, _ForwardIterator2 __first2)

@@ -34,8 +34,10 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 内部 merge：比较器按 __comp_ref_type 传引用（调试模式下为严格弱序断言包
-// 装），一侧取尽后尾段经 ::asc::std::copy 收尾，继承 copy 的快径实现。
+// Internal merge: the comparator is passed by reference via __comp_ref_type
+// (a strict-weak-ordering assertion wrapper in debug mode); once one side is
+// exhausted, the tail is finished via ::asc::std::copy, inheriting copy's fast
+// paths.
 template <class _Compare, class _InputIterator1, class _InputIterator2, class _OutputIterator>
 CANN_ASC_STL_API constexpr _OutputIterator __merge(_InputIterator1 __first1, _InputIterator1 __last1,
     _InputIterator2 __first2, _InputIterator2 __last2, _OutputIterator __result, _Compare __comp)

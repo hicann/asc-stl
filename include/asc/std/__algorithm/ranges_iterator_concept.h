@@ -34,8 +34,11 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
-// 按 concept 链（contiguous -> random_access -> bidirectional -> forward -> input）推导迭代器标签，
-// 与上游参考实现一致且 constexpr。CCE 铁律1：设备编译下禁用 concept 约束求值，回退到基座 SFINAE 探测版。
+// Deduce the iterator tag through the concept chain
+// (contiguous -> random_access -> bidirectional -> forward -> input), matching
+// the upstream reference implementation, and constexpr. Under CCE device
+// compilation concept-constraint evaluation is disabled; the SFINAE-probing
+// version below is used instead.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <class _IterMaybeQualified>
 CANN_ASC_STL_API constexpr auto __get_iterator_concept()

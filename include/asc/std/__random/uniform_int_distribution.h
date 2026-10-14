@@ -39,12 +39,13 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-//! @brief 独立位引擎：把任意 URNG 的输出重组成指定位宽的无偏位流。
+//! @brief Independent-bits engine: regroups any URNG's output into an
+//! unbiased bit stream of the requested width.
 //!
-//! __bit_log2/countl_zero 均为已迁移并在 950 真机验证的位设施；
-//! 全程无符号算术，host 与 AI-core 路径统一。拒绝上限按工作类型位宽
-//! （而非结果类型位宽）守卫，非二次幂范围引擎的同种子输出序列与
-//! libc++ 对齐。
+//! All arithmetic is unsigned, giving one unified host and AI-core path.
+//! The rejection limits are guarded at the working-type width (not the
+//! result-type width), so engines with non-power-of-two ranges produce the
+//! same seeded output sequence as libc++.
 template <class Engine, class UIntType>
 class __independent_bits_engine {
 public:

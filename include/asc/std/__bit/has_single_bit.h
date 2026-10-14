@@ -34,8 +34,8 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// Mandated to participate only for unsigned integer types (the dev `requires
-// __asc_is_unsigned_integer_v<_Tp>` expressed with the baseline enable_if_t idiom).
+// Mandated to participate only for unsigned integer types (the constraint is
+// expressed with the enable_if_t idiom rather than a requires-clause).
 template <class _Tp, enable_if_t<__is_unsigned_integer_v<_Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool has_single_bit(_Tp __t) noexcept
 {

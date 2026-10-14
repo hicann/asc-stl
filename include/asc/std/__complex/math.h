@@ -77,8 +77,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API complex<T> proj(T value) noexc
 template <class T>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API complex<T> polar(const T& radius, const T& angle = T()) noexcept
 {
-    // C99 契约：负半径/NaN 半径 → (NaN, NaN)；NaN 角与 Inf 角的组合按
-    // isinf(radius) 区分（Inf 半径保 radius，否则 (NaN, NaN)/（radius, NaN)）。
+    // C99 contract: a negative or NaN radius -> (NaN, NaN); NaN-angle and
+    // infinite-angle combinations are separated by isinf(radius) (an
+    // infinite radius keeps radius, otherwise (NaN, NaN)/(radius, NaN)).
     if (::asc::std::isnan(radius) || ::asc::std::signbit(radius)) {
         return complex<T>(numeric_limits<T>::quiet_NaN(),  // NOLINT(build/include_what_you_use)
             numeric_limits<T>::quiet_NaN());               // NOLINT(build/include_what_you_use)
@@ -97,8 +98,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API complex<T> polar(const T& radi
             numeric_limits<T>::quiet_NaN());               // NOLINT(build/include_what_you_use)
     }
     const auto direction = ::asc::std::__sincos(angle);
-    // 0 与 Inf 的乘积产生 NaN 时归零（C99 polar 定义：有限半径与 0 倍 Inf 的
-    // 三角结果组合按 0 处理）。
+    // Fold a 0 * infinity product that yields NaN to zero (C99 polar
+    // definition: a finite radius combined with a 0-times-infinity
+    // trigonometric result is treated as 0).
     T x = radius * direction.cos;
     if (::asc::std::isnan(x)) {
         x = 0;

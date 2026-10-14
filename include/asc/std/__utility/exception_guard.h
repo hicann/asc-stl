@@ -33,8 +33,8 @@
 #include <asc/std/__utility/exchange.h>
 #include <asc/std/__utility/move.h>
 
-// 基座 __config 未提供下列宏（合入源树定义于 dialect/exceptions/assert 支撑头）：
-// 内联其语义的最小等价，#ifndef 守卫以免与未来基座定义冲突。
+// <asc/__config> does not define the following macros; provide minimal
+// equivalents here, #ifndef-guarded against future definitions.
 #ifndef CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
 #if __cplusplus >= 202002L
 #define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 constexpr
@@ -56,7 +56,8 @@
 #endif  // CANN_ASC_STL_DETAIL_HAS_EXCEPTIONS
 
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
-// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查。
+// The device side has no assertion mechanism, so this is always a no-op; on
+// the host it checks only when ASC_ENABLE_HOST_ASSERTIONS is explicitly enabled.
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #else

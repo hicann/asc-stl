@@ -291,7 +291,7 @@ static_assert(is_same_v<__copy_cvref_t<const int&&, long>, const long&&>);
 static_assert(is_same_v<__copy_cvref_t<volatile int&&, long>, volatile long&&>);
 static_assert(is_same_v<__copy_cvref_t<const volatile int&&, long>, const volatile long&&>);
 
-// __type_traits/is_extended_arithmetic.h: arithmetic plus approved extended vocabulary.
+// __type_traits/is_extended_arithmetic.h: arithmetic plus the delivered extended vocabulary.
 static_assert(__is_extended_arithmetic_v<int>);
 static_assert(__is_extended_arithmetic_v<float>);
 static_assert(__is_extended_arithmetic_v<const double>);

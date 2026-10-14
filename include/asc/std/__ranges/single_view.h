@@ -59,7 +59,8 @@ namespace ranges {
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
-// 概念版：__movable_box 存储，仅移动、不可默认构造的元素类型也可用。
+// Concepts version: stored in a __movable_box, so move-only and
+// non-default-constructible element types work too.
 template <move_constructible _Tp>
     requires is_object_v<_Tp>
 class single_view : public view_interface<single_view<_Tp>> {
@@ -123,11 +124,12 @@ public:
     }
 };
 
-#else  // ^^^ 概念版（设备编译禁用） ^^^ / vvv SFINAE 回退版 vvv
+#else  // ^^^ concepts version (disabled for device compilation) ^^^ / vvv SFINAE fallback version vvv
 
-// 回退版：直接成员存储（无基座 __movable_box 的 C++17 定义），
-// 成员不带默认初始化器，配合 enable_if 约束的默认构造，
-// 不可默认构造的仅移动类型仍可通过移动/in_place 路径构造。
+// Fallback version: direct member storage (__movable_box has no C++17
+// definition). The member has no default initializer; combined with the
+// enable_if-constrained default constructor, move-only types that are not
+// default-constructible can still be constructed via the move/in_place paths.
 template <class _Tp>
 class single_view : public view_interface<single_view<_Tp>> {
     CANN_ASC_STL_NO_UNIQUE_ADDRESS _Tp __value_;
@@ -190,7 +192,7 @@ public:
     }
 };
 
-#endif  // 概念版 / SFINAE 回退版
+#endif  // concepts version / SFINAE fallback version
 
 template <class _Tp>
 single_view(_Tp) -> single_view<_Tp>;

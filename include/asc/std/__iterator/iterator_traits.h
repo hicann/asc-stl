@@ -100,12 +100,15 @@ struct iterator_traits<T*, enable_if_t<is_convertible_v<T (*)[], const volatile 
     using iterator_concept = contiguous_iterator_tag;
 };
 
-// 迭代器概念标签的内部推导机制：_ITER_TRAITS 缓存去引用限定后的 trait 选择结果；
-// _ITER_CONCEPT 按优先级阶梯（裸指针 -> iterator_traits::iterator_concept ->
-// iterator_traits::iterator_category）推导迭代器的概念标签，供迭代器概念家族
-// （input/forward/bidirectional/random_access/contiguous）做标签派生检查。
-// 三级皆不可用时缓存主模板不含 type，保持 SFINAE 友好（由概念侧的
-// requires { typename _ITER_CONCEPT<It>; } 先行探测）。
+// Internal deduction mechanism for iterator concept tags: _ITER_TRAITS caches
+// the trait selection result after stripping cv/reference qualifiers;
+// _ITER_CONCEPT deduces an iterator's concept tag via a priority ladder
+// (raw pointer -> iterator_traits::iterator_concept ->
+// iterator_traits::iterator_category) for the tag-derivation checks of the
+// iterator concept family (input/forward/bidirectional/random_access/
+// contiguous). When none of the three tiers is available, the cached primary
+// template has no type member, keeping this SFINAE-friendly (probed first by
+// the concept side's `requires { typename _ITER_CONCEPT<It>; }`).
 template <class Iter>
 struct __iter_traits_cache {
     using type = iterator_traits<remove_cvref_t<Iter>>;
@@ -114,7 +117,7 @@ struct __iter_traits_cache {
 template <class Iter>
 using _ITER_TRAITS = typename __iter_traits_cache<Iter>::type;
 
-// 仅以返回类型参与推导，不需要定义体。
+// Participates in deduction through its return type only; no definition is needed.
 template <class Ty>
 auto __iter_concept_fn(Ty*, __priority_tag<3>) -> contiguous_iterator_tag;
 template <class Iter>

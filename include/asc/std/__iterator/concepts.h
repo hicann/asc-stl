@@ -102,7 +102,7 @@ concept indirectly_writable = requires(Out&& output, T&& value) {
 
 // [iterator.concept.winc]
 template <class It>
-concept weakly_incrementable = !same_as<It, bool> &&  // 部分编译器对 bool 的自增处理有缺陷，显式排除
+concept weakly_incrementable = !same_as<It, bool> &&  // Some compilers mishandle increment on bool; excluded explicitly
     movable<It> && requires(It value) {
         typename iter_difference_t<It>;
         requires signed_integral<iter_difference_t<It>>;

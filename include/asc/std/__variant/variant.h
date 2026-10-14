@@ -57,7 +57,8 @@
 #include <asc/std/__variant/variant_match.h>
 #include <asc/std/__variant/variant_visit.h>
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 花括号列表构造/emplace 重载经宿主 initializer_list 提供（设备侧不参与）。
+// Brace-list constructor/emplace overloads go through the host initializer_list
+// (the device side does not participate).
 #include <initializer_list>
 #endif
 
@@ -256,7 +257,7 @@ private:
     __SIZE_TYPE__ index_ = variant_npos;
 };
 
-// 成员 swap 的自由函数形式：ADL 与非限定 swap 调用点都命中本重载。
+// Free-function form of member swap: both ADL and unqualified swap call sites resolve to this overload.
 template <class... Types>
 CANN_ASC_STL_API constexpr void swap(  // NOLINT(build/include_what_you_use)
     variant<Types...>& left, variant<Types...>& right) noexcept(noexcept(left.swap(right)))

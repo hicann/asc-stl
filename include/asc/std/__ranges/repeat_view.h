@@ -70,11 +70,11 @@
 #endif  // !ASC_ENABLE_HOST_ASSERTIONS
 
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// ASC 设备侧无断言机制
+// ASC device side has no assertion mechanism
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #elif defined(ASC_ENABLE_HOST_ASSERTIONS)
 #ifdef NDEBUG
-// NDEBUG 下 <assert.h> 未必已包含，手工补声明
+// <assert.h> is not necessarily included under NDEBUG; declare the prototype manually
 extern "C" {
 void __assert_fail(const char* __assertion, const char* __file, unsigned int __line, const char* __function) noexcept
     __attribute__((__noreturn__));
@@ -91,7 +91,8 @@ void __assert_fail(const char* __assertion, const char* __file, unsigned int __l
 
 namespace asc::std::ranges {
 
-// 迭代器/哨兵可用的整数类约束（基座 __iterator/concepts.h 无此内部件，按 dev 语义就地内联）。
+// Integer-like constraints for iterators/sentinels, inlined here because
+// __iterator/concepts.h does not provide these internals.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 template <class T>
@@ -106,7 +107,8 @@ concept __integer_like_with_usable_difference_type =
 
 #else  // ^^^ concepts ^^^ / vvv !concepts vvv
 
-// 非概念路径：用 trait 等价式表达（usable_difference_type 检查降为整型判定，与基座同级）。
+// Non-concepts path: expressed as trait equivalents (the usable_difference_type
+// check degrades to an integral check).
 template <class T>
 inline constexpr bool __integer_like = is_integral_v<T> && !is_same_v<T, bool>;
 
@@ -118,7 +120,8 @@ inline constexpr bool __integer_like_with_usable_difference_type = __integer_lik
 
 #endif  // !concepts
 
-// _IotaDiffT 等价：有符号整型即自身；否则取 ptrdiff_t 与该类型的公共类型。
+// Equivalent of _IotaDiffT: a signed-integer-like type maps to itself; otherwise
+// take the common type of ptrdiff_t and T.
 template <class T>
 using __repeat_view_iterator_difference_t =
     conditional_t<__signed_integer_like<T>, T, common_type_t<__PTRDIFF_TYPE__, T>>;
@@ -128,9 +131,11 @@ template <move_constructible T, semiregular Bound = __PTRDIFF_TYPE__>
     requires(is_object_v<T> && is_same_v<T, remove_cv_t<T>> &&
         (__integer_like_with_usable_difference_type<Bound> || is_same_v<Bound, unreachable_sentinel_t>))
 #else   // ^^^ concepts ^^^ / vvv !concepts vvv
-// 设备编译下 concept 约束求值不可用（纯 SIMT 后端），非概念路径保持与基座同级的无约束形状。
-// Bound 默认值与无界构造入口按产品冻结合同保持基座形状（有界 __PTRDIFF_TYPE__；views::repeat 仅双参，
-// 单参无界形态为负向边界用例显式排除）。
+// Under device compilation, concept constraint evaluation is unavailable (pure SIMT
+// backend), so the non-concepts path stays unconstrained. The Bound default and the
+// construction entry points preserve the existing public shape (bounded
+// __PTRDIFF_TYPE__; views::repeat provides only the two-argument form — the
+// single-argument unbounded form is deliberately excluded).
 template <class T, class Bound = __PTRDIFF_TYPE__>
 #endif  // !concepts
 class repeat_view : public view_interface<repeat_view<T, Bound>> {
@@ -351,8 +356,9 @@ public:
     }
 
 private:
-    // 概念路径用 __movable_box 支持仅可移动元素；非概念路径（C++17 与设备编译）保持
-    // 基座惯用的平凡成员形状（基座 __movable_box 仅在 C++20 下提供）。
+    // The concepts path uses __movable_box to support move-only elements; the
+    // non-concepts path (C++17 and device compilation) keeps a plain member, since
+    // __movable_box is provided only under C++20.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     CANN_ASC_STL_NO_UNIQUE_ADDRESS __movable_box<T> value_;
 #else
@@ -365,7 +371,8 @@ template <class T, class Bound>
 repeat_view(T, Bound) -> repeat_view<T, Bound>;
 
 namespace views {
-// 按产品冻结合同仅提供双参有界形态；单参无界 repeat 为负向边界用例显式排除，不提供入口。
+// Only the two-argument bounded form is provided; the single-argument unbounded
+// repeat is deliberately excluded and has no entry point.
 struct __repeat_fn {
     template <class T, class Bound>
     CANN_ASC_STL_API constexpr repeat_view<remove_cvref_t<T>, remove_cvref_t<Bound>> operator()(

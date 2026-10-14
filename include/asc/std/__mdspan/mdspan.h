@@ -66,22 +66,23 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __mdspan_detail {
 
-// 推导指引用：整型常量类实参映射为静态 extent，其余为动态 extent
-// （合入源树位于 span，基座无此符号，内联于此并置于内部命名空间）。
+// For deduction guides: integral-constant-like arguments map to a static extent, all
+// others to a dynamic extent.
 template <class T, bool = __mdspan_detail::__integral_constant_like_v<T>>
 inline constexpr size_t __maybe_static_ext = dynamic_extent;
 
 template <class T>
 inline constexpr size_t __maybe_static_ext<T, true> = {static_cast<size_t>(T::value)};
 
-// array/span 构造路径的实参数量与 rank 的匹配判定（合入源树为 concept，此处为变量模板）。
+// Whether the argument count of the array/span construction paths matches the
+// dynamic-rank or full-rank requirement; variable-template form of a concept.
 template <class Extents, size_t Size>
 inline constexpr bool __matches_dynamic_rank_helper = (Size == Extents::rank_dynamic());
 
 template <class Extents, size_t Size>
 inline constexpr bool __matches_static_rank_helper = (Size == Extents::rank()) && (Size != Extents::rank_dynamic());
 
-// [mdspan.layout.general]：LayoutPolicy 是否对其 Extents 合法。
+// [mdspan.layout.general]: whether the LayoutPolicy is valid for its Extents.
 template <class Layout, class Extents, class = void>
 struct __is_valid_layout_mapping_impl : false_type {};
 template <class Layout, class Extents>
@@ -91,7 +92,7 @@ struct __is_valid_layout_mapping_impl<Layout, Extents, void_t<typename Layout::t
 template <class Layout, class Extents>
 inline constexpr bool __is_valid_layout_mapping = __is_valid_layout_mapping_impl<Layout, Extents>::value;
 
-// accessor 是否提供 __detectably_invalid 调试探测。
+// Whether the accessor provides the __detectably_invalid debug probe.
 template <class AccessorPolicy, class = void>
 struct __has_detect_invalidity_impl : false_type {};
 template <class AccessorPolicy>
@@ -201,7 +202,7 @@ public:
         : base()
     {
         if constexpr (__mdspan_detail::__has_detect_invalidity<accessor_type>) {
-            [[maybe_unused]] const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+            [[maybe_unused]] const auto& tmp = mapping();  // silence unused-result warnings
             CANN_ASC_STL_DETAIL_ASSERT(!accessor().__detectably_invalid(data_handle(), tmp.required_span_size()),
                 "mdspan: invalid data handle");
         }
@@ -216,7 +217,7 @@ public:
         : base(::asc::std::move(pointer), extents_type(static_cast<index_type>(::asc::std::move(exts))...))
     {
         if constexpr (__mdspan_detail::__has_detect_invalidity<accessor_type>) {
-            [[maybe_unused]] const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+            [[maybe_unused]] const auto& tmp = mapping();
             CANN_ASC_STL_DETAIL_ASSERT(!accessor().__detectably_invalid(data_handle(), tmp.required_span_size()),
                 "mdspan: invalid data handle");
         }
@@ -230,7 +231,7 @@ public:
         : base(::asc::std::move(pointer), extents_type{exts})
     {
         if constexpr (__mdspan_detail::__has_detect_invalidity<accessor_type>) {
-            [[maybe_unused]] const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+            [[maybe_unused]] const auto& tmp = mapping();
             CANN_ASC_STL_DETAIL_ASSERT(!accessor().__detectably_invalid(data_handle(), tmp.required_span_size()),
                 "mdspan: invalid data handle");
         }
@@ -244,7 +245,7 @@ public:
         : base(::asc::std::move(pointer), extents_type{exts})
     {
         if constexpr (__mdspan_detail::__has_detect_invalidity<accessor_type>) {
-            [[maybe_unused]] const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+            [[maybe_unused]] const auto& tmp = mapping();
             CANN_ASC_STL_DETAIL_ASSERT(!accessor().__detectably_invalid(data_handle(), tmp.required_span_size()),
                 "mdspan: invalid data handle");
         }
@@ -258,7 +259,7 @@ public:
         : base(::asc::std::move(pointer), extents_type{exts})
     {
         if constexpr (__mdspan_detail::__has_detect_invalidity<accessor_type>) {
-            [[maybe_unused]] const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+            [[maybe_unused]] const auto& tmp = mapping();
             CANN_ASC_STL_DETAIL_ASSERT(!accessor().__detectably_invalid(data_handle(), tmp.required_span_size()),
                 "mdspan: invalid data handle");
         }
@@ -272,7 +273,7 @@ public:
         : base(::asc::std::move(pointer), extents_type{exts})
     {
         if constexpr (__mdspan_detail::__has_detect_invalidity<accessor_type>) {
-            [[maybe_unused]] const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+            [[maybe_unused]] const auto& tmp = mapping();
             CANN_ASC_STL_DETAIL_ASSERT(!accessor().__detectably_invalid(data_handle(), tmp.required_span_size()),
                 "mdspan: invalid data handle");
         }
@@ -285,7 +286,7 @@ public:
         : base(::asc::std::move(pointer), exts)
     {
         if constexpr (__mdspan_detail::__has_detect_invalidity<accessor_type>) {
-            [[maybe_unused]] const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+            [[maybe_unused]] const auto& tmp = mapping();
             CANN_ASC_STL_DETAIL_ASSERT(!accessor().__detectably_invalid(data_handle(), tmp.required_span_size()),
                 "mdspan: invalid data handle");
         }
@@ -296,7 +297,7 @@ public:
         : base(::asc::std::move(pointer), m)
     {
         if constexpr (__mdspan_detail::__has_detect_invalidity<accessor_type>) {
-            [[maybe_unused]] const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+            [[maybe_unused]] const auto& tmp = mapping();
             CANN_ASC_STL_DETAIL_ASSERT(!accessor().__detectably_invalid(data_handle(), tmp.required_span_size()),
                 "mdspan: invalid data handle");
         }
@@ -306,7 +307,7 @@ public:
         : base(::asc::std::move(pointer), m, a)
     {
         if constexpr (__mdspan_detail::__has_detect_invalidity<accessor_type>) {
-            [[maybe_unused]] const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+            [[maybe_unused]] const auto& tmp = mapping();
             CANN_ASC_STL_DETAIL_ASSERT(!accessor().__detectably_invalid(data_handle(), tmp.required_span_size()),
                 "mdspan: invalid data handle");
         }
@@ -355,7 +356,8 @@ public:
             int> = 0>
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr reference operator[](OtherIndexTypes... indices) const
     {
-        // 标准布局会检查该前置条件，但用户自定义布局可能不会，故在此检查。
+        // The standard layouts check this precondition, but user-defined layouts may not,
+        // so check it here.
         CANN_ASC_STL_DETAIL_ASSERT(__mdspan_detail::__is_multidimensional_index_in(extents(), indices...),
             "mdspan: operator[] out of bounds access");
         return accessor().access(data_handle(), mapping()(static_cast<index_type>(::asc::std::move(indices))...));
@@ -375,7 +377,8 @@ public:
     CANN_ASC_STL_API constexpr decltype(auto) __op_bracket(
         const array<OtherIndexType, Extents::rank()>& indices, index_sequence<Idxs...>) const noexcept
     {
-        // 标准布局会检查该前置条件，但用户自定义布局可能不会，故在此检查。
+        // The standard layouts check this precondition, but user-defined layouts may not,
+        // so check it here.
         CANN_ASC_STL_DETAIL_ASSERT(__mdspan_detail::__is_multidimensional_index_in(extents(), indices[Idxs]...),
             "mdspan: operator[array] out of bounds access");
         return mapping()(indices[Idxs]...);
@@ -408,12 +411,14 @@ public:
         return accessor().access(data_handle(), __op_bracket(indices, make_index_sequence<rank()>()));
     }
 
-    // 非标准扩展：多维下标经 operator() 访问，避免破坏既有用户。
+    // Non-standard extension: multidimensional subscript access through operator(),
+    // kept to avoid breaking existing users.
     template <class... Indices,
         enable_if_t<__mdspan_detail::__all_convertible_to_index_type<index_type, Indices...>, int> = 0>
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr reference operator()(Indices... indices) const
     {
-        // 标准布局会检查该前置条件，但用户自定义布局可能不会，故在此检查。
+        // The standard layouts check this precondition, but user-defined layouts may not,
+        // so check it here.
         CANN_ASC_STL_DETAIL_ASSERT(__mdspan_detail::__is_multidimensional_index_in(extents(), indices...),
             "mdspan: operator() out of bounds access");
         return accessor().access(data_handle(), mapping()(indices...));
@@ -444,7 +449,8 @@ public:
 
     CANN_ASC_STL_API constexpr size_type size() const noexcept
     {
-        // size() 语义上不保证与任何可访问区间相关，仅保留检查能力。
+        // By its semantics size() is not guaranteed to relate to any accessible range;
+        // only the representability check is kept.
         CANN_ASC_STL_DETAIL_ASSERT(__check_size(), "mdspan: size() is not representable as size_type");
         return __op_size(make_index_sequence<rank()>());
     }
@@ -499,44 +505,47 @@ public:
     CANN_ASC_STL_API constexpr bool is_unique() const
         noexcept(noexcept(::asc::std::declval<const mapping_type&>().is_unique()))
     {
-        const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+        const auto& tmp = mapping();  // silence unused-result warnings
         return tmp.is_unique();
     }
     CANN_ASC_STL_API constexpr bool is_exhaustive() const
         noexcept(noexcept(::asc::std::declval<const mapping_type&>().is_exhaustive()))
     {
-        const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+        const auto& tmp = mapping();
         return tmp.is_exhaustive();
     }
     CANN_ASC_STL_API constexpr bool is_strided() const
         noexcept(noexcept(::asc::std::declval<const mapping_type&>().is_strided()))
     {
-        const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+        const auto& tmp = mapping();
         return tmp.is_strided();
     }
     CANN_ASC_STL_API constexpr index_type stride(rank_type r) const
     {
-        const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+        const auto& tmp = mapping();
         return static_cast<index_type>(tmp.stride(r));
     }
 
 private:
-    // 跨 mdspan 构造的静态 extent 一致性断言（标准前置条件）。
+    // Static-extent consistency assertion for cross-mdspan construction (a standard
+    // precondition).
     template <class OtherElementType, class OtherExtents, class OtherLayoutPolicy, class OtherAccessor>
     CANN_ASC_STL_API constexpr void __assert_slices_match(
         const mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, OtherAccessor>& other) const
     {
         if constexpr (__mdspan_detail::__has_detect_invalidity<accessor_type>) {
-            [[maybe_unused]] const auto& tmp = mapping();  // 规避 clang 对 nodiscard 的告警
+            [[maybe_unused]] const auto& tmp = mapping();  // silence unused-result warnings
             CANN_ASC_STL_DETAIL_ASSERT(!accessor().__detectably_invalid(data_handle(), tmp.required_span_size()),
                 "mdspan: invalid data handle");
         }
         if constexpr (extents_type::rank() != 0) {
-            // 该前置条件属于标准，但几乎不可能被触发：extents 构造已检查，
-            // 且 mapping 必须保存 extents（extents() 返回 const 引用）。
-            // 仅当 mapping 转换构造只按动态 extent 构造自身 extents 时才可能触发，
-            // 例如 mdspan<int, dextents<char, 1>, ...> m = mdspan<int, dextents<unsigned, 1>, ...>(ptr, 200)
-            // 会导致 m 的 extent 为 -56。
+            // This precondition comes from the standard but is nearly impossible to
+            // trigger: the extents constructor already checks it, and a mapping must
+            // store its extents (extents() returns a const reference). It can only fire
+            // when a mapping's converting constructor rebuilds its extents from the
+            // dynamic extents only, e.g.
+            // mdspan<int, dextents<char, 1>, ...> m = mdspan<int, dextents<unsigned, 1>, ...>(ptr, 200)
+            // would give m an extent of -56.
             for (size_t r = 0; r != extents_type::rank(); ++r) {
                 CANN_ASC_STL_DETAIL_ASSERT(
                     (static_extent(r) == dynamic_extent) || ::asc::std::cmp_equal(other.extent(r), static_extent(r)),
@@ -563,8 +572,8 @@ mdspan(Element*, const array<OtherIndexType, Size>&) -> mdspan<Element, dextents
 template <class Element, class OtherIndexType, size_t Size>
 mdspan(Element*, span<OtherIndexType, Size>) -> mdspan<Element, dextents<size_t, Size>>;
 
-// 所有构造函数接受的是 data_handle_type（来自 accessor）而非 Element*，
-// 会干扰自动推导，故显式提供该指引。
+// All constructors take data_handle_type (from the accessor) rather than Element*,
+// which would defeat automatic deduction, so this guide is provided explicitly.
 template <class Element, class OtherIndexType, size_t... ExtentsPack>
 mdspan(Element*,
     const extents<OtherIndexType, ExtentsPack...>&) -> mdspan<Element, extents<OtherIndexType, ExtentsPack...>>;

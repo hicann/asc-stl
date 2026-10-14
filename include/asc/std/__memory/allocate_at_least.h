@@ -32,8 +32,8 @@
 #include <asc/std/__utility/ctad_support.h>
 #include <asc/std/cstddef>
 
-// 基座 __config 未提供 dev 的标准版本号宏（dev 定义于 asc/std/__asc/dialect.h），
-// 按 __bit/reference.h 的既有内联模式补最小等价，#ifndef 守卫防重。
+// Base asc/__config provides no standard-version number macro, so define the
+// minimal equivalent here, #ifndef-guarded against redefinition.
 #ifndef CANN_ASC_STL_DETAIL_STD_VER
 #if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
 #define CANN_ASC_STL_DETAIL_STD_VER 2003
@@ -54,8 +54,9 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// [allocator.globals]：count 采用第二模板参数（默认 size_t），
-// 与标准 allocation_result 及既有单参用法（经默认实参）兼容。
+// [allocator.globals]: count uses the second template parameter (defaulting
+// to size_t), staying compatible with the standard allocation_result and with
+// existing single-argument uses (through the default argument).
 template <class Pointer, class SizeType = ::asc::std::size_t>
 struct allocation_result {
     Pointer ptr;

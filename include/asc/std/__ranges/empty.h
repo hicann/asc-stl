@@ -46,18 +46,21 @@ namespace ranges {
 
 namespace __empty_detail {
 
-// 三级分派：成员 empty() -> ranges::size()==0 -> begin()==end()。
-// 概念约束在此以基座惯用的 void_t 探测结构 + enable_if_t 展开，
-// 与 access.h/size.h 的基座写法保持一致，C++17 与设备路径同样可用。
+// Three-level dispatch: member empty() -> ranges::size()==0 -> begin()==end().
+// Concept constraints are expanded here as the conventional void_t detection
+// structs + enable_if_t, matching access.h/size.h, so the C++17 and device paths
+// work identically.
 template <class T, class = void>
 struct __has_member_empty : false_type {};
 template <class T>
 struct __has_member_empty<T, void_t<decltype(static_cast<bool>(::asc::std::declval<T>().empty()))>> : true_type {};
 
-// 说明：基座 size CPO 在无概念分支下的 operator() 为无约束推导返回型，
-// 对任意类型直接探测其可调用性会触发函数体实例化硬错误；该分支下按其
-// 内部分派件等价重建（成员 size / ADL size / begin-end 差），探测全程
-// SFINAE 安全，语义与 __size_cpo{}(t) 可调用一致。
+// Note: in the no-concepts branch, the size CPO's operator() is an unconstrained
+// function with a deduced return type, so probing its callability on an arbitrary
+// type would hard-error once the body is instantiated; this branch therefore
+// rebuilds its internal dispatch equivalently (member size / ADL size / begin-end
+// difference). The probe is SFINAE-safe throughout and matches the semantics of
+// "__size_cpo{}(t) is callable".
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 template <class T, class = void>
@@ -119,7 +122,8 @@ struct __fn {
 
 inline constexpr __empty_detail::__fn empty{};
 
-// 内部避免直接使用 CPO 对象（__tile__ 访问问题），统一走 __fn 类型。
+// Internal uses go through the __fn type rather than the CPO object directly
+// (avoids the __tile__ access problem).
 using __empty_cpo = __empty_detail::__fn;
 
 }  // namespace ranges

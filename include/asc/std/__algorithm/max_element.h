@@ -38,9 +38,9 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __max_element_detail {
 
-// Minimal local equivalent of the input-traversal probe used by the migrated
-// implementation: a category probe against iterator_traits and a concept probe
-// against a member iterator_concept, both SFINAE-friendly in C++17 mode.
+// Minimal local input-traversal probe: a category probe against
+// iterator_traits and a concept probe against a member iterator_concept, both
+// SFINAE-friendly in C++17 mode.
 template <class Iter, class Tag, class = void>
 inline constexpr bool __has_iterator_category_convertible_to = false;
 

@@ -48,15 +48,17 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 可选分配器成员探测框架：缺席成员按标准规定回退（pointer→T*、propagate_*→false_type、
-// is_always_equal→is_empty、rebind→模板形重绑定等），使 C++20 极简分配器可用。
+// Optional allocator member probing framework: absent members fall back as
+// the standard prescribes (pointer→T*, propagate_*→false_type,
+// is_always_equal→is_empty, rebind→template-parameter rebinding, etc.), so
+// C++20 minimal allocators are usable.
 #define CANN_ASC_STL_DETAIL_ALLOCATOR_TRAITS_HAS_XXX(NAME, PROPERTY) \
     template <class Allocator, class = void>                         \
     inline constexpr bool NAME##_v = false;                          \
     template <class Allocator>                                       \
     inline constexpr bool NAME##_v<Allocator, void_t<typename Allocator::PROPERTY>> = true;
 
-// __allocator_pointer：Allocator::pointer 缺席时回退 value_type*。
+// __allocator_pointer: falls back to value_type* when Allocator::pointer is absent.
 CANN_ASC_STL_DETAIL_ALLOCATOR_TRAITS_HAS_XXX(__allocator_has_pointer, pointer)
 template <class T, class Allocator, bool = __allocator_has_pointer_v<Allocator>>
 struct __allocator_pointer {
@@ -67,7 +69,7 @@ struct __allocator_pointer<T, Allocator, false> {
     using type = T*;
 };
 
-// __allocator_const_pointer：Allocator::const_pointer 缺席时经 pointer_traits 重绑定。
+// __allocator_const_pointer: rebound through pointer_traits when Allocator::const_pointer is absent.
 CANN_ASC_STL_DETAIL_ALLOCATOR_TRAITS_HAS_XXX(__allocator_has_const_pointer, const_pointer)
 template <class T, class Pointer, class Allocator, bool = __allocator_has_const_pointer_v<Allocator>>
 struct __allocator_const_pointer {
@@ -78,7 +80,7 @@ struct __allocator_const_pointer<T, Pointer, Allocator, false> {
     using type = typename pointer_traits<Pointer>::template rebind<const T>;
 };
 
-// __allocator_void_pointer：Allocator::void_pointer 缺席时经 pointer_traits 重绑定。
+// __allocator_void_pointer: rebound through pointer_traits when Allocator::void_pointer is absent.
 CANN_ASC_STL_DETAIL_ALLOCATOR_TRAITS_HAS_XXX(__allocator_has_void_pointer, void_pointer)
 template <class Pointer, class Allocator, bool = __allocator_has_void_pointer_v<Allocator>>
 struct __allocator_void_pointer {
@@ -89,7 +91,7 @@ struct __allocator_void_pointer<Pointer, Allocator, false> {
     using type = typename pointer_traits<Pointer>::template rebind<void>;
 };
 
-// __allocator_const_void_pointer：Allocator::const_void_pointer 缺席时经 pointer_traits 重绑定。
+// __allocator_const_void_pointer: rebound through pointer_traits when Allocator::const_void_pointer is absent.
 CANN_ASC_STL_DETAIL_ALLOCATOR_TRAITS_HAS_XXX(__allocator_has_const_void_pointer, const_void_pointer)
 template <class Pointer, class Allocator, bool = __allocator_has_const_void_pointer_v<Allocator>>
 struct __allocator_const_void_pointer {
@@ -100,7 +102,8 @@ struct __allocator_const_void_pointer<Pointer, Allocator, false> {
     using type = typename pointer_traits<Pointer>::template rebind<const void>;
 };
 
-// __allocator_difference_type：Allocator::difference_type 缺席时取 pointer_traits 的差型。
+// __allocator_difference_type: takes the pointer_traits difference type when
+// Allocator::difference_type is absent.
 CANN_ASC_STL_DETAIL_ALLOCATOR_TRAITS_HAS_XXX(__allocator_has_difference_type, difference_type)
 template <class Allocator, class Pointer, bool = __allocator_has_difference_type_v<Allocator>>
 struct __allocator_difference_type {
@@ -111,7 +114,8 @@ struct __allocator_difference_type<Allocator, Pointer, false> {
     using type = typename pointer_traits<Pointer>::difference_type;
 };
 
-// __allocator_size_type：Allocator::size_type 缺席时取差型的无符号版本。
+// __allocator_size_type: takes the unsigned version of the difference type
+// when Allocator::size_type is absent.
 CANN_ASC_STL_DETAIL_ALLOCATOR_TRAITS_HAS_XXX(__allocator_has_size_type, size_type)
 template <class Allocator, class DifferenceType, bool = __allocator_has_size_type_v<Allocator>>
 struct __allocator_size_type {
@@ -122,7 +126,8 @@ struct __allocator_size_type<Allocator, DifferenceType, false> {
     using type = make_unsigned_t<DifferenceType>;
 };
 
-// __allocator_propagate_on_*：传播策略缺席时回退 false_type。
+// __allocator_propagate_on_*: falls back to false_type when the propagation
+// policy is absent.
 CANN_ASC_STL_DETAIL_ALLOCATOR_TRAITS_HAS_XXX(
     __allocator_has_propagate_on_container_copy_assignment, propagate_on_container_copy_assignment)
 template <class Allocator, bool = __allocator_has_propagate_on_container_copy_assignment_v<Allocator>>
@@ -155,7 +160,7 @@ struct __allocator_propagate_on_container_swap<Allocator, false> {
     using type = false_type;
 };
 
-// __allocator_is_always_equal：缺席时回退 is_empty<Allocator>。
+// __allocator_is_always_equal: falls back to is_empty<Allocator> when absent.
 CANN_ASC_STL_DETAIL_ALLOCATOR_TRAITS_HAS_XXX(__allocator_has_is_always_equal, is_always_equal)
 template <class Allocator, bool = __allocator_has_is_always_equal_v<Allocator>>
 struct __allocator_is_always_equal {
@@ -166,14 +171,15 @@ struct __allocator_is_always_equal<Allocator, false> {
     using type = is_empty<Allocator>;
 };
 
-// __allocator_has_member_rebind：探测 Allocator::rebind<U>::other 是否可用。
+// __allocator_has_member_rebind: probes whether Allocator::rebind<U>::other is available.
 template <class T, class U, class = void>
 struct __allocator_has_member_rebind : false_type {};
 template <class T, class U>
 struct __allocator_has_member_rebind<T, U, void_t<typename T::template rebind<U>::other>> : true_type {};
 
-// __allocator_traits_rebind：成员 rebind 优先；模板形分配器（Alloc<T, Args...>）缺席成员
-// rebind 时回退 Alloc<U, Args...>。
+// __allocator_traits_rebind: the member rebind takes precedence; a
+// template-shaped allocator (Alloc<T, Args...>) falls back to Alloc<U, Args...>
+// when the member rebind is absent.
 template <class T, class U, bool = __allocator_has_member_rebind<T, U>::value>
 struct __allocator_traits_rebind {
     static_assert(__allocator_has_member_rebind<T, U>::value, "This allocator has to implement rebind");
@@ -184,7 +190,7 @@ struct __allocator_traits_rebind<Alloc<T, Args...>, U, false> {
     using type = Alloc<U, Args...>;
 };
 
-// __allocator_has_allocate_hint：探测带提示 allocate(n, hint) 重载。
+// __allocator_has_allocate_hint: probes for the hinted allocate(n, hint) overload.
 template <class Allocator, class SizeType, class ConstVoidPointer, class = void>
 inline constexpr bool __allocator_has_allocate_hint = false;
 template <class Allocator, class SizeType, class ConstVoidPointer>
@@ -192,7 +198,7 @@ inline constexpr bool __allocator_has_allocate_hint<Allocator, SizeType, ConstVo
     void_t<decltype((void)::asc::std::declval<Allocator&>().allocate(
         ::asc::std::declval<SizeType>(), ::asc::std::declval<ConstVoidPointer>()))>> = true;
 
-// __allocator_has_construct：探测分配器自带 construct 成员。
+// __allocator_has_construct: probes for an allocator-provided construct member.
 template <class, class Allocator, class... Args>
 inline constexpr bool __allocator_has_construct_impl = false;
 template <class Allocator, class... Args>
@@ -202,14 +208,15 @@ inline constexpr bool __allocator_has_construct_impl<
 template <class Allocator, class... Args>
 inline constexpr bool __allocator_has_construct = __allocator_has_construct_impl<void, Allocator, Args...>;
 
-// __allocator_has_destroy：探测分配器自带 destroy 成员。
+// __allocator_has_destroy: probes for an allocator-provided destroy member.
 template <class Allocator, class Pointer, class = void>
 inline constexpr bool __allocator_has_destroy = false;
 template <class Allocator, class Pointer>
 inline constexpr bool __allocator_has_destroy<Allocator, Pointer,
     void_t<decltype((void)::asc::std::declval<Allocator&>().destroy(::asc::std::declval<Pointer>()))>> = true;
 
-// __allocator_has_max_size：探测分配器自带 max_size 成员（const 限定，与调用点一致）。
+// __allocator_has_max_size: probes for an allocator-provided max_size member
+// (const-qualified, matching the call site).
 template <class Allocator, class = void>
 inline constexpr bool __allocator_has_max_size = false;
 template <class Allocator>
@@ -217,7 +224,8 @@ inline constexpr bool
     __allocator_has_max_size<Allocator, void_t<decltype((void)::asc::std::declval<const Allocator&>().max_size())>> =
         true;
 
-// __allocator_has_select_on_container_copy_construction：探测复制构造选择钩子（const 限定）。
+// __allocator_has_select_on_container_copy_construction: probes for the
+// copy-construction selection hook (const-qualified).
 template <class Allocator, class = void>
 inline constexpr bool __allocator_has_select_on_container_copy_construction = false;
 template <class Allocator>

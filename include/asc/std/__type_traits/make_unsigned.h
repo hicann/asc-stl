@@ -37,7 +37,8 @@
 #include <asc/std/__type_traits/type_list.h>
 #include <asc/std/cstddef>
 
-// Feature macro inlined from the dev dialect layer (not present in the base config).
+// <asc/__config> does not define CANN_ASC_STL_DETAIL_HAS_INT128; provide a
+// minimal equivalent here, #ifndef-guarded against a future definition.
 #ifndef CANN_ASC_STL_DETAIL_HAS_INT128
 #if !defined(ASC_DISABLE_INT128_SUPPORT) && defined(__linux__) && defined(__SIZEOF_INT128__)
 #define CANN_ASC_STL_DETAIL_HAS_INT128() 1
@@ -48,8 +49,8 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 见 make_signed.h：类型列表路径不依赖编译器版本差异，
-// 避免依赖编译器尚不稳定的内建类型变换。
+// See make_signed.h: the type-list path avoids compiler-version differences
+// and any reliance on builtin type transforms that are not yet stable.
 using __unsigned_types = __type_list<unsigned char, unsigned short, unsigned int, unsigned long, unsigned long long
 #if CANN_ASC_STL_DETAIL_HAS_INT128()
     ,

@@ -37,9 +37,9 @@
 #include <asc/std/cstdint>
 #include <asc/std/limits>
 
-// 基座 __config 未提供 dev 的 CANN_ASC_STL_DETAIL_ASSUME / ASSERT（dev 定义
-// 于 asc/std/__asc/attributes.h、__asc/assert.h）：内联其语义的最小等价，
-// #ifndef 守卫以免与未来基座定义冲突。
+// The shared <asc/__config> does not provide CANN_ASC_STL_DETAIL_ASSUME /
+// ASSERT: inline minimal equivalents of their semantics, guarded by #ifndef so
+// a future centralized definition wins.
 #ifndef CANN_ASC_STL_DETAIL_ASSUME
 #if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_assume)
 #define CANN_ASC_STL_DETAIL_ASSUME(...) __builtin_assume(__VA_ARGS__)
@@ -48,8 +48,8 @@
 #endif
 #endif  // CANN_ASC_STL_DETAIL_ASSUME
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
-// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS
-// 时检查（与 dev __asc/assert.h 的开关语义一致）。
+// Always a no-op on device (no assertion mechanism); on host, checked only
+// when ASC_ENABLE_HOST_ASSERTIONS is explicitly enabled.
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #else
@@ -60,21 +60,23 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-//! @brief 向下取整的 log2：最高置位的位置。
+//! @brief Floor of log2: the position of the highest set bit.
 //!
-//! 2026-08-31 晟腾 950 真机实验：源侧 PTX `bfind`/`shl` 快速路径无 ASC 对应
-//! 内在指令，而 `countl_zero` 已在真机验证（builtin clz 统一三路），故
-//! host/device/constexpr 统一为 `digits - 1 - countl_zero` 单一表达式；
-//! @p __t 为 0 时结果为 -1（按无符号回绕参与上层运算，与源侧约定一致）。
+//! The PTX `bfind`/`shl` fast path has no equivalent ASC intrinsic, while
+//! `countl_zero` is verified on hardware (builtin clz, one form shared by
+//! host/device/constexpr), so all three paths use the single expression
+//! `digits - 1 - countl_zero`; for @p __t == 0 the result is -1, which wraps
+//! as unsigned and is relied on by the callers below.
 template <class _Tp>
 CANN_ASC_STL_API constexpr uint32_t __bit_log2(_Tp __t) noexcept
 {
     return static_cast<uint32_t>(numeric_limits<_Tp>::digits - 1) - static_cast<uint32_t>(::asc::std::countl_zero(__t));
 }
 
-//! @brief 表示 @p value 所需的最小位数；@p value 为 0 时结果为 0。
+//! @brief Minimum number of bits needed to represent @p value; 0 for
+//! @p value == 0.
 //!
-//! @p value 为 0 时 __bit_log2 回绕为 0xFFFFFFFF，加一得 0。
+//! For @p value == 0, __bit_log2 wraps to 0xFFFFFFFF and adding 1 yields 0.
 template <class T>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr __unsigned_integer_result_t<T, int> bit_width(T value) noexcept
 {
@@ -83,28 +85,31 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr __unsigned_integer_result_t<T,
     return static_cast<int>(__ret);
 }
 
-//! @brief 不小于 @p value 的最小 2 的幂。
+//! @brief Smallest power of 2 not less than @p value.
 //!
-//! 950 真机实验：超宽移位（`1u << 32` 等）实测结果为 0（与源侧 PTX 语义
-//! 一致），但 CCE 会给出 -Wshift-count-overflow 警告（C++ 标准为未定义
-//! 行为）。因此不迁源侧 `max(1, shl)` 的移位技巧，统一用显式三目守卫，
-//! 把 0/1 的结果落在常量分支上。
+//! Measured on hardware, over-wide shifts (`1u << 32` etc.) in fact yield 0
+//! (matching PTX semantics), but CCE emits -Wshift-count-overflow for them and
+//! the C++ standard makes them undefined behavior. An explicit ternary guard is
+//! therefore used instead of the `max(1, shl)` shift trick, keeping the 0/1
+//! results on a constant branch.
 template <class T>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr __unsigned_integer_result_t<T, T> bit_ceil(T value) noexcept
 {
     using _Up = _If<(sizeof(T) <= 4), uint32_t, T>;
     CANN_ASC_STL_DETAIL_ASSERT(
         value <= numeric_limits<T>::max() / 2, "bit_ceil overflow");  // NOLINT(build/include_what_you_use)
-    // value == 0 时 value - 1 全 1，bit_width 给出位宽，常量分支返回 1
+    // For value == 0, value - 1 is all ones, bit_width yields the width, and
+    // the constant branch returns 1
     const auto __width = static_cast<uint32_t>(::asc::std::bit_width(static_cast<_Up>(value) - 1));
     const auto __ret = static_cast<T>(value <= 1 ? _Up{1} : _Up{1} << __width);
     CANN_ASC_STL_DETAIL_ASSUME(__ret >= value);
     return __ret;
 }
 
-//! @brief 不大于 @p value 的最大 2 的幂；@p value 为 0 时结果为 0。
+//! @brief Largest power of 2 not greater than @p value; 0 for @p value == 0.
 //!
-//! 同 bit_ceil：0 的情形落在常量分支，不依赖超宽移位语义。
+//! As with bit_ceil: the 0 case lands on a constant branch and does not rely
+//! on over-wide shift semantics.
 template <class T>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr __unsigned_integer_result_t<T, T> bit_floor(T value) noexcept
 {

@@ -76,7 +76,7 @@ template <class T>
 CANN_ASC_STL_API constexpr enable_if_t<is_floating_point_v<T>, T> midpoint(T left, T right) noexcept
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    // 设备侧 numeric_limits 极值不可达，用编译器内建常量替代
+    // numeric_limits extremes are unavailable on the device side; use compiler builtin constants instead
     constexpr T low = static_cast<T>(__DBL_MIN__) * 2;
     constexpr T high = static_cast<T>(__DBL_MAX__) / 2;
 #else

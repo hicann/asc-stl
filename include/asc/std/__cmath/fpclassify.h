@@ -34,9 +34,9 @@
 #include <asc/std/__type_traits/is_extended_floating_point.h>
 #include <asc/std/__type_traits/is_integral.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -45,11 +45,14 @@
 #endif
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE
 
-// 分类返回值沿用基座裸字面量形状（glibc/门面编号：FP_NAN=0、FP_INFINITE=1、
-// FP_ZERO=2、FP_SUBNORMAL=3、FP_NORMAL=4）。FP_* 宏面不在本头定义：宿主侧
-// 由 asc/std/cmath 门面在文件尾提供同值回退、宿主 math.h 已含时沿用其值；
-// 若在此处以宏预定义，其后引入的宿主 math.h 的 FP_NAN 枚举技法（枚举成员
-// 与宏同名）将被宏展开破坏。
+// Classification return values use the glibc/facade numbering as bare
+// literals (FP_NAN=0, FP_INFINITE=1, FP_ZERO=2, FP_SUBNORMAL=3, FP_NORMAL=4).
+// The FP_* macro surface is not defined in this header: on the host the
+// asc/std/cmath facade provides same-value fallbacks at the end of the file,
+// and when host math.h is already included its values are reused;
+// predefining the macros here would break, through macro expansion, the
+// FP_NAN enum technique (an enum member named like the macro) of a host
+// math.h included afterwards.
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -58,7 +61,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 //! explicit integer bit, any other significand is a NaN — the explicit-bit
 //! formats such as the x87 extended layout included) from zero/subnormal
 //! (all-zero exponent, distinguished by the significand) and the normal
-//! numbers. Bit-exact with the source semantics, constexpr and free of
+//! numbers. Bit-exact with the reference semantics, constexpr and free of
 //! floating-point arithmetic and of any numeric_limits surface on every
 //! compilation path — usable for the extended floating-point formats too.
 template <class Tp>
@@ -97,17 +100,19 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr int fpclassify(long double x) 
 }
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
-//! @brief 扩展浮点（half/bfloat16/fp8 族）分类：直接走存储位级（无
-//! numeric_limits 面依赖），原格式判定。
+//! @brief Extended floating point (half/bfloat16/fp8 family) classification:
+//! goes directly through the storage bits (no numeric_limits surface
+//! dependency), judged in the original format.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr int fpclassify(Tp x) noexcept
 {
     return ::asc::std::__fpclassify_impl(x);
 }
 
-//! @brief 整型实参分类：0 为 FP_ZERO，其余（含 bool）恒为 FP_NORMAL（任何
-//! 整型经浮点表示后均为有限正规数）。精确匹配消歧 int→float/int→double
-//! 同秩转换。
+//! @brief Classification for integral arguments: 0 is FP_ZERO, everything
+//! else (bool included) is always FP_NORMAL (any integral type is a finite
+//! normal number once given a floating-point representation). Exact matching
+//! disambiguates the equal-rank int->float/int->double conversions.
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr int fpclassify(Tp x) noexcept
 {

@@ -41,7 +41,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 //!
 //! Unsigned types have no sign and report false. Signed integral types
 //! compare against zero. Floating-point types inspect the sign bit
-//! through their storage representation — bit-exact with the source
+//! through their storage representation — bit-exact with the reference
 //! semantics, so negative zero and NaNs carrying a set sign bit report
 //! true, and no floating-point arithmetic is involved on any path.
 //! Formats beyond the delivered storage vocabulary (x87 fp80 / binary128

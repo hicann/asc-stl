@@ -50,10 +50,11 @@ CANN_ASC_STL_API constexpr _OutputIterator __copy_backward(
     return __result;
 }
 
-// 基座 copy.h 尚无 __dispatch_memmove，按 dev 语义内联最小等价实现：
-// 常量求值期返回 false 走 constexpr 逐元素回退；运行期宿主用 builtin/libc
-// memmove 返回 true；设备 TU 上两条路均不可用（aicore 链接无 libc），一律
-// 返回 false 走 constexpr 循环，语义等价、性能次优。
+// Minimal inline memmove dispatch: returns false during constant evaluation to
+// take the constexpr element-wise fallback; at runtime the host uses
+// builtin/libc memmove and returns true; neither path is available in a device
+// TU (the aicore link has no libc), so it always returns false to take the
+// constexpr loop, semantically equivalent but slower.
 template <class _Tp, class _Up>
 CANN_ASC_STL_API constexpr bool __dispatch_memmove(_Up* __result, _Tp* __first, const size_t __n)
 {

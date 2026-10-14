@@ -33,10 +33,10 @@
 #include <asc/std/__type_traits/remove_const.h>
 #include <asc/std/climits>
 
-// Inline equivalents of the source-tree dialect gates (the master __config
-// does not provide them): guarded with #ifndef so a future central definition
-// wins. Hosted availability mirrors the source tree: device (AI-core)
-// compilation is freestanding and must not reach the C runtime.
+// Inline definitions of the hosted/freestanding gates (not provided by a
+// central config): guarded with #ifndef so a future central definition wins.
+// Device (AI-core) compilation is freestanding and must not reach the C
+// runtime.
 #ifndef CANN_ASC_STL_DETAIL_HOSTED
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #define CANN_ASC_STL_DETAIL_HOSTED() 0

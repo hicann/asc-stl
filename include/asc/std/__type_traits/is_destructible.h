@@ -52,7 +52,7 @@ inline constexpr bool is_destructible_v = __is_destructible(T);
 //  Otherwise, return "declval<Up&>().~Up()" is well-formed
 //    where Up is remove_all_extents<T>::type
 //
-// The upstream catch-all __test(...) probe is not portable to CCE aicore,
+// A catch-all __test(...) probe is not portable to CCE aicore,
 // so the well-formedness check is a partial specialization over a local
 // void alias (the __type_traits/promote.h detection pattern).
 template <class...>

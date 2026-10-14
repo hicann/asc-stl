@@ -52,7 +52,8 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 过滤出"不可转换为 index_type"（即会贡献结果 extent）的切片下标序列。
+// Filter the positions of slices not convertible to index_type (i.e. the ones that
+// contribute a resulting extent).
 template <class IndexType, class... Slices, size_t... FilteredIndices>
 CANN_ASC_STL_API constexpr auto __filter_slices_convertible_to_index(
     index_sequence<FilteredIndices...>, index_sequence<>) noexcept
@@ -74,7 +75,7 @@ CANN_ASC_STL_API constexpr auto __filter_slices_convertible_to_index(
     }
 }
 
-// [mdspan.sub.extents-4.2.2]：index-pair-like 且两端为整型常量。
+// [mdspan.sub.extents-4.2.2]: index-pair-like with both ends integral constants.
 template <class Extents, class SliceType, class = void>
 struct __subextents_is_index_pair_impl : false_type {};
 
@@ -88,7 +89,7 @@ struct __subextents_is_index_pair_impl<Extents, SliceType,
 template <class Extents, class SliceType>
 inline constexpr bool __subextents_is_index_pair = __subextents_is_index_pair_impl<Extents, SliceType>::value;
 
-// [mdspan.sub.extents-4.2.3]：整型常量 extent 为 0 的 strided_slice。
+// [mdspan.sub.extents-4.2.3]: strided_slice whose integral-constant extent is 0.
 template <class Extents, class SliceType, class = void>
 struct __subextents_is_strided_slice_zero_extent_impl : false_type {};
 
@@ -105,7 +106,7 @@ template <class Extents, class SliceType>
 inline constexpr bool __subextents_is_strided_slice_zero_extent =
     __subextents_is_strided_slice_zero_extent_impl<Extents, SliceType>::value;
 
-// [mdspan.sub.extents-4.2.4]：extent/stride 均为整型常量的 strided_slice。
+// [mdspan.sub.extents-4.2.4]: strided_slice with integral-constant extent and stride.
 template <class SliceType, class = void>
 struct __subextents_is_strided_slice_impl : false_type {};
 

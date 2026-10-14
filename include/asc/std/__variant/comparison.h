@@ -38,9 +38,9 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 // The variant, pair and tuple relational surface is owned by the completed
-// definition headers this path aggregates; every operator declared here is the
-// same entity re-exported through the CCCL-mirrored comparison path that the
-// public <asc/std/variant> facade composes.
+// definition headers this path aggregates; every operator is the same entity
+// re-exported through the comparison path composed into the public
+// <asc/std/variant> facade.
 
 CANN_ASC_STL_END_NAMESPACE
 

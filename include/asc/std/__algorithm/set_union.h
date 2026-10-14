@@ -35,7 +35,8 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 内部返回结构（dev 语义）：三终点迭代器打包，供后续 ranges 入口复用
+// Internal result structure: packs the three end iterators, for reuse by the
+// ranges entry.
 template <class _InIter1, class _InIter2, class _OutIter>
 struct __set_union_result {
     _InIter1 __in1_;
@@ -49,8 +50,9 @@ struct __set_union_result {
     {}
 };
 
-// 通用内部实现（dev 语义）：哨兵形参 + 主循环单点写出 + 尾段整段搬移。
-// 基座 copy.h 无带策略的 __copy 变体，尾段改写等价内联循环（语义等价，见 notes）。
+// General internal implementation: sentinel parameters + single-point writes in
+// the main loop + moving the tail as a whole. No policy-taking __copy variant is
+// available here, so the tail is an equivalent inline loop.
 template <class _AlgPolicy, class _Compare, class _InIter1, class _Sent1, class _InIter2, class _Sent2, class _OutIter>
 CANN_ASC_STL_API constexpr __set_union_result<_InIter1, _InIter2, _OutIter> __set_union(
     _InIter1 __first1, _Sent1 __last1, _InIter2 __first2, _Sent2 __last2, _OutIter __result, _Compare&& __comp)
@@ -95,8 +97,9 @@ CANN_ASC_STL_API constexpr OutputIterator set_union(InputIterator1 first1, Input
     InputIterator2 last2, OutputIterator result, Compare compare)
 {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    // CCE 设备侧：经返回结构搬运输出迭代器会附加段偏移，走手写循环直接返回
-    // （与 set_difference 的设备分支同策略）。
+    // CCE device side: moving the output iterator through the result structure
+    // would attach a segment offset, so use a handwritten loop that returns
+    // directly (same strategy as the device branch of set_difference).
     while (first1 != last1 && first2 != last2) {
         if (compare(*first2, *first1)) {
             *result++ = *first2++;

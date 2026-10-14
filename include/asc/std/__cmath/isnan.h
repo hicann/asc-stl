@@ -36,9 +36,9 @@
 #include <asc/std/__type_traits/is_integral.h>
 #include <asc/std/cstdint>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -47,7 +47,7 @@
 #endif
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_FLOAT128() gate: __float128
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_FLOAT128() gate: __float128
 // needs __int128, a Linux non-ARM64 target, a compiler that advertises the type,
 // host compilation only, and GCC must not run strict-ANSI without extended
 // numeric literals.

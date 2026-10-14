@@ -36,9 +36,9 @@
 #include <asc/std/limits>
 #include <limits>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (master __config does not provide it): long double is host-only — ASC device
-// compilation (AI Core) does not support long double (dev __asc/dialect.h).
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -55,7 +55,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 //! have no sign to take and return their magnitude unchanged. Floating
 //! arguments are rebuilt through their storage representation: exponent
 //! and mantissa of @p x combined with the sign bit of @p y — bit-exact
-//! with the source semantics, no arithmetic involved. Formats beyond the
+//! with the reference semantics, no arithmetic involved. Formats beyond the
 //! delivered storage vocabulary (x87 fp80 / binary128 native long double)
 //! recombine through the compiler's bit-exact copysign builtin, which is
 //! the same magnitude-of-x / sign-of-y bit operation.
@@ -69,7 +69,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto copysign(Tp x, Tp y) noex
         // gate covers every device context (mixed CCE and pure SIMT alike —
         // __CCE__ alone is not defined in pure-SIMT TUs, where the unselected
         // double-widening branch still parses inside the aicore-reachable
-        // template body and gets rejected; modulo.h real-machine finding).
+        // template body and gets rejected.
         static_assert(sizeof(Tp) == 0, "integral copysign widens to double, which AI-core TUs do not support");
 #else
         if constexpr (!numeric_limits<Tp>::is_signed) {
@@ -93,10 +93,11 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto copysign(Tp x, Tp y) noex
                 (::asc::std::__fp_get_storage(y) & __fp_sign_mask_of_v<Tp>);
             return ::asc::std::__fp_from_storage<Tp>(static_cast<__fp_storage_of_t<Tp>>(val));
         } else {
-            // master 的 storage 词汇表未交付 >64 位格式（x87 fp80 /
-            // binary128 的宿主 long double）：位级符号重组改经编译器
-            // bit-exact copysign 内建（x 的指数+尾数、y 的符号位，同一
-            // 位运算语义）。
+            // The storage vocabulary does not cover >64-bit formats (x87 fp80 /
+            // binary128 native long double): the bit-level sign recombination
+            // goes through the compiler's bit-exact copysign builtin
+            // (exponent+mantissa of x, sign bit of y — the same bit-operation
+            // semantics).
             return __builtin_copysign(x, y);
         }
     }

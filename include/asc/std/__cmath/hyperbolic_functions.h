@@ -34,9 +34,9 @@
 #include <asc/std/__type_traits/is_extended_floating_point.h>
 #include <asc/std/__type_traits/is_integral.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -47,13 +47,15 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 双曲族三层分派（承 dev 语义、基座宏形状）：主名 float 与后缀别名经
-// backend 路由——纯 SIMT TU 走 simt_api 标量库（__aicore__ 可达），其余走
-// 编译器内建；double/long double/整型提升与后缀 l 别名仅宿主（向量核无
-// double 精度，设备禁 long double）；扩展浮点经 float 精度中转并保持原格
-// 式往返。
+// Hyperbolic family, three-layer dispatch: the primary float name and the
+// suffix aliases route through the backend — pure SIMT TUs go to the simt_api
+// scalar library (reachable from __aicore__), everything else uses the
+// compiler builtins; double/long double/integral promotion and the l-suffix
+// alias are host-only (the vector cores have no double-precision arithmetic,
+// and long double is forbidden on device); extended floating point transits
+// through float precision and round-trips in its original format.
 
-//! @brief 双曲正弦 sinh(@p value) = (e^x - e^-x) / 2。
+//! @brief Hyperbolic sine sinh(@p value) = (e^x - e^-x) / 2.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float sinh(
     float value) noexcept
 {
@@ -66,14 +68,15 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(sinhf, __builtin_sinhf, (value));
 }
 
-//! @brief 扩展浮点（half/bfloat16/fp8 族）sinh：float 精度中转，原格式返回。
+//! @brief Extended floating point (half/bfloat16/fp8 family) sinh: transits
+//! through float precision, returns in the original format.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp sinh(Tp value) noexcept
 {
     return static_cast<Tp>(::asc::std::sinh(static_cast<float>(value)));
 }
 
-//! @brief 双曲余弦 cosh(@p value) = (e^x + e^-x) / 2。
+//! @brief Hyperbolic cosine cosh(@p value) = (e^x + e^-x) / 2.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float cosh(
     float value) noexcept
 {
@@ -92,7 +95,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::cosh(static_cast<float>(value)));
 }
 
-//! @brief 双曲正切 tanh(@p value) = sinh(x) / cosh(x)。
+//! @brief Hyperbolic tangent tanh(@p value) = sinh(x) / cosh(x).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float tanh(
     float value) noexcept
 {
@@ -112,8 +115,10 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 宿主全类型面：double/long double 主名、后缀 l 别名与整型提升。整型提升
-// 整型提升对齐 <cmath> 标准：整型实参提升为 double 计算并返回 double。
+// Full host type surface: double/long double primary names, the l-suffix
+// alias, and integral promotion. Integral promotion aligns with the <cmath>
+// standard: integral arguments are promoted to double, computed and returned
+// as double.
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double sinh(double value) noexcept
 {

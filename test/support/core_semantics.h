@@ -153,7 +153,7 @@ static_assert(!asc::std::__is_nothrow_callable_v<throwing_callable, int>);
 static_assert(asc::std::__is_callable<callable_sum, int, int>::value);
 static_assert(!asc::std::__is_nothrow_callable<throwing_callable, int>::value);
 
-// __type_traits/is_extended_floating_point.h: no approved Ascend extended types.
+// __type_traits/is_extended_floating_point.h: no Ascend extended type is delivered.
 static_assert(!asc::std::__is_extended_floating_point_v<float>);
 static_assert(!asc::std::__is_extended_floating_point_v<double>);
 static_assert(!asc::std::__is_extended_floating_point_v<long double>);

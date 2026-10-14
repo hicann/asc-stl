@@ -31,8 +31,8 @@
 #include <asc/std/__chrono/duration.h>
 #include <asc/std/__chrono/time_point.h>
 
-// Migrated from dev __asc/visibility.h: ASC-STL keeps only the inline
-// semantics for ABI hidden; base asc/__detail/visibility.h has no such macro.
+// asc/__detail/visibility.h provides no such macro, so define it here,
+// keeping only the inline semantics for hiding from the ABI.
 #ifndef CANN_ASC_STL_DETAIL_HIDE_FROM_ABI
 #define CANN_ASC_STL_DETAIL_HIDE_FROM_ABI inline
 #endif

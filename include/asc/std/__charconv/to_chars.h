@@ -44,11 +44,15 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// [charconv.syn] chars_format：门面 <asc/std/charconv> 在场时由门面统一提供（门面守卫宏作为
-// 在场标志）；本头独立编译时经共享守卫内联同一份定义，与 __charconv/from_chars.h 共用，避免重定义。
+// [charconv.syn] chars_format: when the facade <asc/std/charconv> is present
+// it provides the definition uniformly (the facade guard macro serves as the
+// presence flag); when this header is compiled standalone, the same
+// definition is inlined behind a shared guard, shared with
+// __charconv/from_chars.h to avoid redefinition.
 #if !defined(CANN_ASC_STL_ASC_STD_CHARCONV) && !defined(CANN_ASC_STL_DETAIL_CHARCONV_CHARS_FORMAT_DEFINED)
 #define CANN_ASC_STL_DETAIL_CHARCONV_CHARS_FORMAT_DEFINED
-// 枚举值与宿主标准库解耦，宿主与设备编译共享同一稳定表示。
+// The enumeration values are decoupled from the host standard library; host
+// and device compilations share the same stable representation.
 enum class chars_format {
     scientific = 0x1,
     fixed = 0x2,
@@ -103,7 +107,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr char __to_chars_value_to_char(
     return static_cast<char>(offset + value);
 }
 
-// 宽度预计算：按 4 位一批比较，供直接写入路径判定 value_too_large。
+// Width precomputation: compares in batches of 4 digits, used by the
+// direct-write path to decide value_too_large.
 template <class T>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr int __to_chars_int_width(T value, int base) noexcept
 {
@@ -133,7 +138,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr int __to_chars_int_width(T val
     }
 }
 
-// 自 last 起向前直接写入数字（调用方保证宽度已校验）。
+// Writes the digits backwards starting at last (the caller guarantees the
+// width has been validated).
 template <class T>
 CANN_ASC_STL_API constexpr void __to_chars_int_generic(char* last, T value, int base) noexcept
 {
@@ -188,9 +194,11 @@ CANN_ASC_STL_API constexpr to_chars_result to_chars(
 }
 to_chars_result to_chars(char*, char*, bool, int = 10) = delete;
 
-// 浮点格式化为占位实现（与源实现一致的 static_assert 桩）。裸浮点重载不引用
-// chars_format，恒定提供；带格式/精度的两个重载依赖 chars_format，仅在本头
-// 独立编译（门面不在场）时声明。
+// Floating-point formatting is a placeholder (a static_assert stub). The
+// bare floating-point overload does not reference chars_format and is always
+// provided; the two overloads with format/precision depend on chars_format
+// and are declared only when this header is compiled standalone (facade
+// absent).
 #if !defined(CANN_ASC_STL_ASC_STD_CHARCONV)
 template <class T, enable_if_t<is_floating_point_v<T>, int> = 0>
 CANN_ASC_STL_API constexpr to_chars_result to_chars(char* first, char* last, T value, chars_format fmt) noexcept

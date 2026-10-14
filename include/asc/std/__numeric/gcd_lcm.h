@@ -37,9 +37,11 @@
 #include <asc/std/__type_traits/remove_cv.h>
 #include <asc/std/limits>
 
-// 基座 __config 未提供 CANN_ASC_STL_DETAIL_ASSERT：内联其语义的最小等价，
-// #ifndef 守卫以免与未来基座定义冲突。设备侧无断言机制恒为 no-op；宿主侧
-// 仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查。
+// __config provides no CANN_ASC_STL_DETAIL_ASSERT: this is a minimal
+// equivalent of its semantics, guarded by #ifndef to avoid clashing with a
+// future definition. Device side has no assertion mechanism and stays a
+// no-op; host side checks only when ASC_ENABLE_HOST_ASSERTIONS is explicitly
+// enabled.
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)

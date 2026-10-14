@@ -30,9 +30,9 @@
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HOSTED() gate (the master
-// config does not provide it): AI-core kernel compilation has no host
-// standard library and counts as freestanding, as does an explicit opt-out.
+// Inline definition of the CANN_ASC_STL_DETAIL_HOSTED() gate (not provided
+// centrally): AI-core kernel compilation has no host standard library and
+// counts as freestanding, as does an explicit opt-out.
 #if !defined(CANN_ASC_STL_DETAIL_HOSTED)
 #if defined(CANN_ASC_STL_DETAIL_ENABLE_FREESTANDING) || defined(__CCE__)
 #define CANN_ASC_STL_DETAIL_HOSTED() 0

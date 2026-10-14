@@ -37,9 +37,9 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/promote.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -48,9 +48,11 @@
 #endif
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE
 
-// 纯 SIMT TU 的原生半精度融合乘加（承 dev 真机证据链）：9.3.0 谱系工具链经
-// simt_api/asc_fp16.h 提供 __hfma（950 真机数值验证）；头存在性经
-// __has_include 探测，9.2.0 谱系及宿主自动退回 float 精度中转。
+// Native half-precision fused multiply-add for pure SIMT TUs: the 9.3.0
+// toolchain lineage provides __hfma through simt_api/asc_fp16.h (numerically
+// validated on 950 real hardware); header presence is probed with
+// __has_include — the 9.2.0 lineage and the host fall back to the
+// float-precision transit.
 #if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
 #if defined(__has_include)
 #if __has_include(<simt_api/asc_fp16.h>)
@@ -62,14 +64,18 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// fma 三层分派（承 dev 语义、基座宏形状）：float 主名与后缀别名经 backend
-// 路由——纯 SIMT TU 走 simt_api 标量库（__aicore__ 可达，2026-09 真机酸测
-// 证实其 fmaf 为单次舍入），其余走编译器内建；double/long double 主名、
-// 后缀 l 别名与 mixed-type promote 仅宿主（向量核禁 double，设备禁
-// long double）；扩展浮点（half/bfloat16/fp8 族）经 float 精度中转并保持
-// 原格式往返，SIMT 且工具链提供 __hfma 时 half 走原生融合路径。
+// fma, three-layer dispatch: the float primary name and suffix aliases route
+// through the backend — pure SIMT TUs go to the simt_api scalar library
+// (reachable from __aicore__; real-machine testing confirmed its fmaf
+// performs a single rounding), everything else uses the compiler builtins;
+// double/long double primary names, the l-suffix alias, and mixed-type
+// promote are host-only (double is forbidden on the vector cores, long
+// double on device); extended floating point (half/bfloat16/fp8 family)
+// transits through float precision and round-trips in its original format,
+// and half takes the native fused path when SIMT and the toolchain provide
+// __hfma.
 
-//! @brief 融合乘加 x*y + z（单次舍入）。
+//! @brief Fused multiply-add x*y + z (single rounding).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float fma(
     float x, float y, float z) noexcept
 {
@@ -82,8 +88,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(fmaf, __builtin_fmaf, (x, y, z));
 }
 
-//! @brief 扩展浮点（half/bfloat16/fp8 族）fma：SIMT 硬件 __hfma 优先（原生
-//! 半精度融合），否则 float 精度中转，原格式返回。
+//! @brief Extended floating point (half/bfloat16/fp8 family) fma: SIMT
+//! hardware __hfma first (native half-precision fusion), otherwise
+//! float-precision transit, returned in the original format.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp fma(
     Tp x, Tp y, Tp z) noexcept
@@ -97,12 +104,16 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 宿主全类型面：double/long double 主名、后缀 l 别名、整型提升与
-// mixed-type promote。冻结合同断言 decltype(fma(1, 2.0F, 3.0F)) == float：
-// 整型与 float 的混合经非模板 float 重载的隐式转换解析（int→float 与
-// int→double 同秩，float 重载在浮点实参上精确匹配胜出），全整型组合由
-// 整型三元重载消歧并保持基座 float 精度；仅当含 double/long double 实参
-// 时 promote 模板才参与并归一到公共宽度（float+double 混型否则歧义）。
+// Full host type surface: double/long double primary names, the l-suffix
+// alias, integral promotion, and mixed-type promote. The pinned contract
+// asserts decltype(fma(1, 2.0F, 3.0F)) == float: integral/float mixes
+// resolve through implicit conversion to the non-template float overload
+// (int->float and int->double have the same conversion rank, and the float
+// overload wins the exact match on the floating arguments), all-integral
+// combinations are disambiguated by the integral ternary overload and keep
+// float precision; the promote template participates only when a
+// double/long double argument is present and normalizes to the common width
+// (a float+double mix would otherwise be ambiguous).
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double fma(double x, double y, double z) noexcept
 {
@@ -123,8 +134,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long double fmal(
 }
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
-//! @brief All-integral fma: the float-precision continuation of the
-//! float-only era (base observable contract), disambiguating the mixed
+//! @brief All-integral fma: computes at float precision, preserving the
+//! observable contract of the float-only era, and disambiguates the mixed
 //! int-to-floating conversion ranks.
 template <class Tp, class Up, class Vp,
     ::asc::std::enable_if_t<is_integral_v<Tp> && is_integral_v<Up> && is_integral_v<Vp>, int> = 0>

@@ -46,11 +46,15 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// [charconv.syn] chars_format：门面 <asc/std/charconv> 在场时由门面统一提供（门面守卫宏作为
-// 在场标志）；本头独立编译时经共享守卫内联同一份定义，两个 __charconv 子头共用，避免重定义。
+// [charconv.syn] chars_format: when the facade <asc/std/charconv> is present
+// it provides the definition uniformly (the facade guard macro serves as the
+// presence flag); when this header is compiled standalone, the same
+// definition is inlined behind a shared guard, shared by the two __charconv
+// sub-headers to avoid redefinition.
 #if !defined(CANN_ASC_STL_ASC_STD_CHARCONV) && !defined(CANN_ASC_STL_DETAIL_CHARCONV_CHARS_FORMAT_DEFINED)
 #define CANN_ASC_STL_DETAIL_CHARCONV_CHARS_FORMAT_DEFINED
-// 枚举值与宿主标准库解耦，宿主与设备编译共享同一稳定表示。
+// The enumeration values are decoupled from the host standard library; host
+// and device compilations share the same stable representation.
 enum class chars_format {
     scientific = 0x1,
     fixed = 0x2,
@@ -189,8 +193,10 @@ CANN_ASC_STL_API constexpr from_chars_result from_chars(
     return __charconv_detail::__from_chars_integer(first, last, value, base);
 }
 
-// 浮点解析为占位实现（与源实现一致的 static_assert 桩）：依赖上面的 chars_format，
-// 仅在本头独立编译（门面不在场）时声明；经 <asc/std/charconv> 使用时浮点重载暂不提供。
+// Floating-point parsing is a placeholder (a static_assert stub): it depends
+// on chars_format above and is declared only when this header is compiled
+// standalone (facade absent); the floating-point overloads are not yet
+// provided through <asc/std/charconv>.
 #if !defined(CANN_ASC_STL_ASC_STD_CHARCONV)
 template <class T, enable_if_t<is_floating_point_v<T>, int> = 0>
 CANN_ASC_STL_API constexpr from_chars_result from_chars(

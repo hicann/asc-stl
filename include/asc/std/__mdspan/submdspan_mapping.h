@@ -62,11 +62,12 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __mdspan_detail {
 
-// [mdspan.sub.extents]：切片序列到子 extents 的变参计算（合入源树位于
-// submdspan_extents.h 公开重载，基座该头仅有 rank-2 定式重载且不在本批合入
-// 范围，故内联等价实现于内部命名空间，不与基座公开重载产生交集）。
+// [mdspan.sub.extents]: variadic computation of the sub-extents from the slice
+// sequence; equivalent to the public overload in submdspan_extents.h, inlined into
+// this internal namespace so it does not collide with the public overloads.
 
-// 取出"不可转换为 index_type"（即会贡献结果 extent）的切片下标序列。
+// Extract the positions of slices not convertible to index_type (i.e. the ones that
+// contribute a resulting extent).
 template <class IndexType, class... Slices, size_t... FilteredIndices>
 CANN_ASC_STL_API constexpr auto __filter_slices_convertible_to_index(
     ::asc::std::index_sequence<FilteredIndices...>, ::asc::std::index_sequence<>) noexcept
@@ -88,7 +89,7 @@ CANN_ASC_STL_API constexpr auto __filter_slices_convertible_to_index(
     }
 }
 
-// [mdspan.sub.extents-4.2.2]：index-pair-like 且两端为整型常量。
+// [mdspan.sub.extents-4.2.2]: index-pair-like with both ends integral constants.
 template <class Extents, class SliceType, class = void>
 struct __subextents_is_index_pair_impl : false_type {};
 template <class Extents, class SliceType>
@@ -101,7 +102,7 @@ struct __subextents_is_index_pair_impl<Extents, SliceType,
 template <class Extents, class SliceType>
 inline constexpr bool __subextents_is_index_pair = __subextents_is_index_pair_impl<Extents, SliceType>::value;
 
-// [mdspan.sub.extents-4.2.3]：整型常量 extent 为 0 的 strided_slice。
+// [mdspan.sub.extents-4.2.3]: strided_slice whose integral-constant extent is 0.
 template <class Extents, class SliceType, class = void>
 struct __subextents_is_strided_slice_zero_extent_impl : false_type {};
 template <class Extents, class SliceType>
@@ -117,7 +118,7 @@ template <class Extents, class SliceType>
 inline constexpr bool __subextents_is_strided_slice_zero_extent =
     __subextents_is_strided_slice_zero_extent_impl<Extents, SliceType>::value;
 
-// [mdspan.sub.extents-4.2.4]：extent/stride 均为整型常量的 strided_slice。
+// [mdspan.sub.extents-4.2.4]: strided_slice with integral-constant extent and stride.
 template <class SliceType, class = void>
 struct __subextents_is_strided_slice_impl : false_type {};
 template <class SliceType>
@@ -188,7 +189,7 @@ struct __subextents_impl {
     }
 };
 
-// 变参子 extents 计算（等价于合入源树的 submdspan_extents 变参重载）。
+// Variadic sub-extents computation, equivalent to the variadic submdspan_extents overload.
 template <class Extents, class... Slices>
 CANN_ASC_STL_API constexpr auto __subextents_of(const Extents& source, Slices... slices) noexcept
 {
@@ -199,8 +200,8 @@ template <class Extents, class... Slices>
 using __get_subextents_t = decltype(::asc::std::__mdspan_detail::__subextents_of(
     ::asc::std::declval<Extents>(), ::asc::std::declval<Slices>()...));
 
-// [mdspan.submdspan.submdspan.mapping.result] 的 layout mapping 要求判定
-// （合入源树为 concept，此处为 SFINAE 安全的变量模板近似）。
+// Detection of the [mdspan.submdspan.submdspan.mapping.result] layout-mapping
+// requirements, as a SFINAE-safe variable template approximating the concept.
 template <class Mapping, class = void>
 struct __layout_mapping_req_impl : false_type {};
 template <class Mapping>
@@ -293,18 +294,18 @@ CANN_ASC_STL_API constexpr size_t __submdspan_offset(
 {
     using extents_type = typename LayoutMapping::extents_type;
     using index_type = typename extents_type::index_type;
-    // first_<index_type, k>(slices...) 的值
+    // The values of first_<index_type, k>(slices...)
     const array<index_type, extents_type::rank()> offsets = {
         ::asc::std::__first_extent_from_slice<index_type, SliceIndices>(slices...)...};
 
     for (size_t index = 0; index != extents_type::rank(); ++index) {
-        // 若任一 first_<index_type, k>(slices...) 等于 extents().extent(k)，
-        // 则 offset 为 (*this).required_span_size()
+        // If any first_<index_type, k>(slices...) equals extents().extent(k), the
+        // offset is (*this).required_span_size()
         if (offsets[index] == mapping.extents().extent(index)) {
             return static_cast<size_t>(mapping.required_span_size());
         }
     }
-    // 否则 offset 为 (*this)(first_<index_type, P>(slices...)...)
+    // Otherwise the offset is (*this)(first_<index_type, P>(slices...)...)
     return static_cast<size_t>(mapping(offsets[SliceIndices]...));
 }
 
@@ -390,7 +391,7 @@ CANN_ASC_STL_API constexpr auto __submdspan_mapping_impl(
             return submdspan_mapping_result<sub_mapping_t>{sub_mapping_t{sub_ext}, offset};
         } else {
             // [mdspan.sub.map.left-1.4]
-            // TODO: 实现填充布局（padded layouts）
+            // TODO: implement padded layouts
             // [mdspan.sub.map.left-1.5]
             using sub_mapping_t = layout_stride::template mapping<sub_extents>;
             const auto sub_strides = ::asc::std::__submdspan_strides(mapping, slices...);
@@ -444,7 +445,7 @@ CANN_ASC_STL_API constexpr auto __submdspan_mapping_impl(
             return submdspan_mapping_result<sub_mapping_t>{sub_mapping_t{sub_ext}, offset};
         } else {
             // [mdspan.sub.map.right-1.4]
-            // TODO: 实现填充布局（padded layouts）
+            // TODO: implement padded layouts
             // [mdspan.sub.map.right-1.5]
             using sub_mapping_t = layout_stride::template mapping<sub_extents>;
             const auto sub_strides = ::asc::std::__submdspan_strides(mapping, slices...);
@@ -497,8 +498,9 @@ template <class T, class Extents, class Layout, class Accessor, class... Slices,
 CANN_ASC_STL_API constexpr auto submdspan(const mdspan<T, Extents, Layout, Accessor>& source, Slices... slices)
 {
     auto sub_map_result = ::asc::std::submdspan_mapping(source.mapping(), slices...);
-    // 纯 SIMT 编译把未标注的推导指引按宿主函数处理，设备侧无法经 CTAD 命中，
-    // 故显式拼出指引本应推导出的类型。
+    // Pure SIMT compilation treats unannotated deduction guides as host functions, so
+    // CTAD cannot resolve them on the device side; spell out explicitly the type the
+    // guide would have deduced.
     using sub_mapping_t = ::asc::std::remove_cvref_t<decltype(sub_map_result.mapping)>;
     return mdspan<T, typename sub_mapping_t::extents_type, typename sub_mapping_t::layout_type,
         typename Accessor::offset_policy>(source.accessor().offset(source.data_handle(), sub_map_result.offset),

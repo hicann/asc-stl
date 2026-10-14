@@ -49,7 +49,8 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 
-// 设备编译与 C++17 下 concept 约束不可求值，回退到无约束版本，两分支公开接口一致。
+// Under device compilation and C++17, concept constraints are not evaluable, so fall
+// back to an unconstrained version; both branches expose the same public interface.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <view _View>
     requires(!common_range<_View> && copyable<iterator_t<_View>>)
@@ -88,7 +89,6 @@ public:
     }
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    // 随机访问且定尺寸的区间直接透传迭代器，避免 common_iterator 包装损失随机访问能力。
     CANN_ASC_STL_API constexpr auto begin()
     {
         return common_iterator<iterator_t<_View>, sentinel_t<_View>>{::asc::std::ranges::__begin_cpo{}(__base_)};
@@ -129,7 +129,10 @@ public:
         return ::asc::std::ranges::__size_cpo{}(__base_);
     }
 #else
-    // C++17 与设备侧形态：已是 common（迭代器与哨位同型）的区间直通，其余包 common_iterator。
+    // C++17 and device-side shape: ranges that are already common (iterator and
+    // sentinel of the same type) pass their iterators through directly, avoiding the
+    // random-access capability loss a common_iterator wrapper would cause; the rest
+    // wrap in common_iterator.
     CANN_ASC_STL_API constexpr auto begin()
     {
         using Iterator = decltype(::asc::std::ranges::__begin_cpo{}(__base_));
@@ -199,7 +202,8 @@ namespace __common {
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 struct __fn : __range_adaptor_closure<__fn> {
-    // 已是 common 的区间直接透传（all 包装），不套 common_view。
+    // Ranges that are already common pass through directly (an all wrapper), without
+    // an extra common_view.
     template <class _Range>
         requires common_range<_Range>
     CANN_ASC_STL_API constexpr all_t<_Range> operator()(_Range&& __range) const

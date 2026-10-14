@@ -64,11 +64,11 @@
 #endif  // !ASC_ENABLE_HOST_ASSERTIONS
 
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// ASC 设备侧无断言机制
+// ASC device side has no assertion mechanism
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #elif defined(ASC_ENABLE_HOST_ASSERTIONS)
 #ifdef NDEBUG
-// NDEBUG 下 <assert.h> 未必已包含，手工补声明
+// <assert.h> is not necessarily included under NDEBUG; declare the prototype manually
 extern "C" {
 void __assert_fail(const char* __assertion, const char* __file, unsigned int __line, const char* __function) noexcept
     __attribute__((__noreturn__));
@@ -87,7 +87,8 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 
-// 设备编译与 C++17 下 concept 约束不可求值，回退到无约束版本，两分支公开接口一致。
+// Under device compilation and C++17, concept constraints are not evaluable, so fall
+// back to an unconstrained version; both branches expose the same public interface.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <view _View, class _Pred>
     requires input_range<_View> && ::asc::std::is_object_v<_Pred> &&
@@ -102,14 +103,16 @@ private:
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     CANN_ASC_STL_NO_UNIQUE_ADDRESS __movable_box<_Pred> __pred_{};
 
-    // forward_range 下缓存首个不满足谓词的迭代器，提供摊还 O(1) 的 begin()；
-    // input_range 下 begin() 非相等保持，不可缓存（单遍也只会调用一次 begin()）。
+    // For a forward_range, cache the first iterator that fails the predicate, giving
+    // an amortized O(1) begin(); for an input_range, begin() is not equality-preserving
+    // and must not be cached (a single pass calls begin() only once anyway).
     static constexpr bool _use_cache = forward_range<_View>;
     using _cache_type =
         ::asc::std::conditional_t<_use_cache, __non_propagating_cache<iterator_t<_View>>, __empty_cache>;
     CANN_ASC_STL_NO_UNIQUE_ADDRESS _cache_type __cached_begin_{};
 #else
-    // C++17 与设备侧形态：__movable_box 仅在 C++20 分支有定义，此处按基座现状直接存值。
+    // C++17 and device-side shape: __movable_box is defined only in the C++20 branch,
+    // so the predicate is stored by value here.
     CANN_ASC_STL_NO_UNIQUE_ADDRESS _Pred __pred_ = _Pred();
 #endif
 

@@ -40,8 +40,10 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 策略化内部入口：供 sort_heap / ranges 等策略迁移头复用。
-// _AlgPolicy 需提供静态 iter_move/iter_swap（如 __classic_algorithm_iterator_operations）。
+// Policy-taking internal entry: reused by sort_heap / ranges and other
+// policy-based entries.
+// _AlgPolicy must provide static iter_move/iter_swap (e.g.
+// __classic_algorithm_iterator_operations).
 template <class _AlgPolicy, class _Compare, class _RandomAccessIterator>
 CANN_ASC_STL_API constexpr void __pop_heap(_RandomAccessIterator __first, _RandomAccessIterator __last,
     _Compare& __comp, typename iterator_traits<_RandomAccessIterator>::difference_type __len)

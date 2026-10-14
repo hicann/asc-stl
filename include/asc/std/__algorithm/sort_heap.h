@@ -39,7 +39,8 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 策略化内部入口：供 partial_sort / ranges 等策略迁移头复用（经 __pop_heap<_AlgPolicy>）。
+// Policy-taking internal entry: reused by partial_sort / ranges and other
+// policy-based entries (via __pop_heap<_AlgPolicy>).
 template <class _AlgPolicy, class _Compare, class _RandomAccessIterator>
 CANN_ASC_STL_API constexpr void __sort_heap(
     _RandomAccessIterator __first, _RandomAccessIterator __last, _Compare&& __comp)

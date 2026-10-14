@@ -34,9 +34,9 @@
 #include <asc/std/__type_traits/is_extended_floating_point.h>
 #include <asc/std/__type_traits/is_integral.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -47,13 +47,17 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 取整/最近整数族三层分派（承 dev 语义、基座宏形状）：主名 float 与后缀
-// 别名经 backend 路由——纯 SIMT TU 走 simt_api 标量库（__aicore__ 可达），
-// 其余走编译器内建；double/long double/整型提升与后缀 l 别名仅宿主（向量
-// 核无 double 精度，设备禁 long double）；扩展浮点（half/bfloat16/fp8 族）
-// 经 float 精度中转并保持原格式往返。
+// Rounding/nearest-integer family, three-layer dispatch: the primary float
+// name and the suffix aliases route through the backend — pure SIMT TUs go to
+// the simt_api scalar library (reachable from __aicore__), everything else
+// uses the compiler builtins; double/long double/integral promotion and the
+// l-suffix alias are host-only (the vector cores have no double-precision
+// arithmetic, and long double is forbidden on device); extended floating
+// point (half/bfloat16/fp8 family) transits through float precision and
+// round-trips in its original format.
 
-//! @brief 不小于 @p value 的最小整数值。零值直返保符号（-0.0 → -0.0）。
+//! @brief Smallest integer value not less than @p value. Zero returns
+//! directly with its sign preserved (-0.0 -> -0.0).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float ceil(
     float value) noexcept
 {
@@ -70,14 +74,16 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(ceilf, __builtin_ceilf, (value));
 }
 
-//! @brief 扩展浮点（half/bfloat16/fp8 族）ceil：float 精度中转，原格式返回。
+//! @brief Extended floating point (half/bfloat16/fp8 family) ceil: transits
+//! through float precision, returns in the original format.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp ceil(Tp value) noexcept
 {
     return static_cast<Tp>(::asc::std::ceil(static_cast<float>(value)));
 }
 
-//! @brief 不大于 @p value 的最大整数值。零值直返保符号（-0.0 → -0.0）。
+//! @brief Largest integer value not greater than @p value. Zero returns
+//! directly with its sign preserved (-0.0 -> -0.0).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float floor(
     float value) noexcept
 {
@@ -101,7 +107,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::floor(static_cast<float>(value)));
 }
 
-//! @brief 向零取整。零值直返保符号（-0.0 → -0.0）。
+//! @brief Rounds toward zero. Zero returns directly with its sign preserved
+//! (-0.0 -> -0.0).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float trunc(
     float value) noexcept
 {
@@ -125,7 +132,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::trunc(static_cast<float>(value)));
 }
 
-//! @brief 就近取整，半值远离零（round(2.5) = 3、round(-2.5) = -3）。
+//! @brief Rounds to nearest, halfway cases away from zero (round(2.5) = 3,
+//! round(-2.5) = -3).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float round(
     float value) noexcept
 {
@@ -149,7 +157,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::round(static_cast<float>(value)));
 }
 
-//! @brief 就近取整，按当前舍入模式（默认偶数）。
+//! @brief Rounds to nearest according to the current rounding mode (even by
+//! default).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float rint(
     float value) noexcept
 {
@@ -172,7 +181,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::rint(static_cast<float>(value)));
 }
 
-//! @brief 就近取整（同 rint），但不触发不精确浮点异常。
+//! @brief Rounds to nearest (same as rint) but does not raise the inexact
+//! floating-point exception.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float nearbyint(
     float value) noexcept
 {
@@ -196,7 +206,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::nearbyint(static_cast<float>(value)));
 }
 
-//! @brief 按当前舍入模式取整并转为 long。
+//! @brief Rounds according to the current rounding mode and converts to
+//! long.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR long lrint(
     float value) noexcept
 {
@@ -216,7 +227,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::lrint(static_cast<float>(value)));
 }
 
-//! @brief 就近取整（半值远离零）并转为 long。
+//! @brief Rounds to nearest (halfway cases away from zero) and converts to
+//! long.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR long lround(
     float value) noexcept
 {
@@ -236,7 +248,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::lround(static_cast<float>(value)));
 }
 
-//! @brief 按当前舍入模式取整并转为 long long。
+//! @brief Rounds according to the current rounding mode and converts to
+//! long long.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR long long llrint(
     float value) noexcept
 {
@@ -256,7 +269,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::llrint(static_cast<float>(value)));
 }
 
-//! @brief 就近取整（半值远离零）并转为 long long。
+//! @brief Rounds to nearest (halfway cases away from zero) and converts to
+//! long long.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR long long llround(
     float value) noexcept
 {
@@ -277,8 +291,10 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 宿主全类型面：double/long double 主名、后缀 l 别名与整型提升。整型提升
-// 整型提升对齐 <cmath> 标准：整型实参提升为 double 计算并返回 double。
+// Full host type surface: double/long double primary names, the l-suffix
+// alias, and integral promotion. Integral promotion aligns with the <cmath>
+// standard: integral arguments are promoted to double, computed and returned
+// as double.
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double ceil(double value) noexcept
 {
@@ -510,8 +526,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr long long llround(Tp valu
     return ::asc::std::llround(static_cast<double>(value));
 }
 
-// nexttoward：simt_api 无对应函数（SIMT-API 文档未载），仅宿主提供；
-// 第二参数按 C99 契约为 long double。
+// nexttoward: simt_api has no counterpart (absent from the SIMT API
+// documentation), so it is host-only; the second parameter is long double
+// per the C99 contract.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr float nexttoward(float value, long double toward) noexcept
 {
     return __builtin_nexttowardf(value, toward);

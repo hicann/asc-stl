@@ -36,9 +36,9 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/promote.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -49,16 +49,20 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// hypot 三层分派（承 dev 语义、基座宏形状）：float 主名与后缀别名经
-// backend 路由——纯 SIMT TU 走 simt_api 标量库（__aicore__ 可达），其余走
-// 编译器内建；double/long double 主名、后缀 l 别名与 mixed-type promote
-// 仅宿主（向量核禁 double，设备禁 long double）；扩展浮点（half/bfloat16/
-// fp8 族）经 float 精度中转并保持原格式往返。三参 hypot 由两层两参复合
-// （每次调用内部已做缩放，与 libstdc++ std::hypot 三参实现同构），修复
-// 基座 x*x+y*y+z*z 直和在大幅值输入下的中间溢出缺陷。
+// hypot, three-layer dispatch: the float primary name and suffix aliases
+// route through the backend — pure SIMT TUs go to the simt_api scalar
+// library (reachable from __aicore__), everything else uses the compiler
+// builtins; double/long double primary names, the l-suffix alias, and
+// mixed-type promote are host-only (double is forbidden on the vector cores,
+// long double on device); extended floating point (half/bfloat16/fp8 family)
+// transits through float precision and round-trips in its original format.
+// Three-argument hypot composes two two-argument layers (each call already
+// scales internally, isomorphic to the libstdc++ three-argument std::hypot
+// implementation), fixing the intermediate overflow that the direct
+// x*x+y*y+z*z sum suffers on large-magnitude inputs.
 
-//! @brief sqrt(x*x + y*y) 的无溢出实现（内部缩放，NaN/无穷契约由原生
-//! hypotf 承载）。
+//! @brief Overflow-free implementation of sqrt(x*x + y*y) (internal scaling;
+//! the NaN/infinity contract is carried by native hypotf).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float hypot(
     float x, float y) noexcept
 {
@@ -71,7 +75,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(hypotf, __builtin_hypotf, (x, y));
 }
 
-//! @brief 三维斜边 sqrt(x*x+y*y+z*z)：两层两参复合，无中间溢出/下溢。
+//! @brief Three-dimensional hypotenuse sqrt(x*x+y*y+z*z): two two-argument
+//! layers composed, no intermediate overflow/underflow.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float hypot(
     float x, float y, float z) noexcept
 {
@@ -85,7 +90,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return ::asc::std::hypot(x, y, z);
 }
 
-//! @brief 扩展浮点（half/bfloat16/fp8 族）hypot：float 精度中转，原格式返回。
+//! @brief Extended floating point (half/bfloat16/fp8 family) hypot: transits
+//! through float precision, returns in the original format.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp hypot(
     Tp x, Tp y) noexcept
@@ -101,8 +107,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 宿主全类型面：double/long double 主名、后缀 l 别名与 mixed-type promote
-// （int+float 混型经 __promote_t 归一到公共宽度，与 libstdc++ 同型）。
+// Full host type surface: double/long double primary names, the l-suffix
+// alias, and mixed-type promote (a mixed int+float call normalizes to the
+// common width through __promote_t, same shape as libstdc++).
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double hypot(double x, double y) noexcept
 {

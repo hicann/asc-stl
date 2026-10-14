@@ -42,8 +42,9 @@
 #include <asc/std/__utility/delegate_constructors.h>
 #include <asc/std/__utility/forward.h>
 
-// dev 方言宏的等价内联：C++20 起析构函数方可 constexpr。
-// 依赖 __config 提供的 CANN_ASC_STL_DETAIL_CPLUSPLUS（MSVC 下取 _MSVC_LANG，其余取 __cplusplus）。
+// Destructors can be constexpr only since C++20. This relies on
+// CANN_ASC_STL_DETAIL_CPLUSPLUS from __config (_MSVC_LANG under MSVC, __cplusplus
+// otherwise).
 #ifndef CANN_ASC_STL_DETAIL_STD_VER
 #if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
 #define CANN_ASC_STL_DETAIL_STD_VER 2003
@@ -98,10 +99,10 @@ struct __npc_destruct_base {
     };
     bool __engaged_ = false;
 
-    // 联合体成员默认不初始化（与源形态一致）。历史上（9.2.0 谱系）曾以
-    // 「初始化联合体成员/哑 char/普通成员存储」等中间形态绕 bisheng 设备
-    // 端误编译；2026-09-19 CANN 9.3.0 复验误编译不复现，且 filter 全链路
-    // 真机 16384/0——__emplace_from 的 constexpr CXX20 降级已按裁决撤销。
+    // The union member is left uninitialized by the default constructor. Workaround
+    // shapes (initialized union member / dummy char / plain member storage) once
+    // existed for a bisheng device-side miscompilation; it no longer reproduces, so
+    // the plain union form stands.
     CANN_ASC_STL_API constexpr __npc_destruct_base() noexcept
     {}
 

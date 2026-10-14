@@ -41,9 +41,9 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __minmax_element_detail {
 
-// dev 版在 <asc/std/__iterator/iterator_traits.h> 定义的遍历探针的最小等价内联
-// （基座 reverse_iterator.h 同款模式）：先探测 iterator_traits<Iter>::iterator_category，
-// 再探测 Iter::iterator_concept 成员，均 SFINAE 友好。
+// Minimal inline traversal probes: first probe
+// iterator_traits<Iter>::iterator_category, then the Iter::iterator_concept
+// member; both are SFINAE-friendly.
 template <class Iter, class Tag, class = void>
 inline constexpr bool __has_iterator_category_convertible_to = false;
 

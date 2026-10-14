@@ -33,7 +33,7 @@
 #include <asc/std/cstddef>
 #include <asc/std/limits>
 
-// Inline equivalent of the dev assertion gate for the two count_down
+// Inline equivalent of the assertion gate covering the two count_down
 // contracts: AI-core compilation has no assertion mechanism (device asserts
 // are no-ops), and host asserts are opt-in through ASC_ENABLE_HOST_ASSERTIONS.
 #if !defined(CANN_ASC_STL_DETAIL_LATCH_ASSERT)
@@ -63,7 +63,7 @@ public:
         CANN_ASC_STL_DETAIL_LATCH_ASSERT(update > 0, "latch count_down update must be positive");
         atomic_ref<ptrdiff_t> counter(counter_);
         const ptrdiff_t old = counter.fetch_sub(update, memory_order_release);
-        (void)old;  // 诊断占位，值仅用于原子语义验证
+        (void)old;  // feeds only the contract assertion below; cast silences unused warnings when asserts are off
         CANN_ASC_STL_DETAIL_LATCH_ASSERT(old >= update, "latch count_down exceeds remaining count");
     }
     CANN_ASC_STL_SIMT_API bool try_wait() const noexcept
@@ -73,9 +73,9 @@ public:
     }
     CANN_ASC_STL_SIMT_API void wait() const noexcept
     {
-        // The blocking count_.wait() of the dev implementation rides on the
-        // scoped-atomic notify/wait vocabulary, which this tree does not
-        // provide; polling try_wait() is the equivalent wait-until-zero loop.
+        // No scoped-atomic notify/wait vocabulary is available here for a
+        // blocking wait; polling try_wait() is the equivalent
+        // wait-until-zero loop.
         while (!try_wait()) {
         }
     }
@@ -105,8 +105,8 @@ public:
     }
     void wait() const noexcept
     {
-        // Polling form of the dev blocking wait (no notify/wait vocabulary
-        // on the host path of this tree): wait until the count reaches zero.
+        // Polling form of a blocking wait (no notify/wait vocabulary on the
+        // host path): wait until the count reaches zero.
         while (!try_wait()) {
         }
     }

@@ -60,9 +60,9 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __reverse_iterator_detail {
 
-// Minimal local equivalents of the traversal probes used by the migrated
-// implementation: a category probe against iterator_traits and a concept probe
-// against a member iterator_concept, both SFINAE-friendly in C++17 mode.
+// Minimal local traversal probes: a category probe against iterator_traits
+// and a concept probe against a member iterator_concept, both SFINAE-friendly
+// in C++17 mode.
 template <class Iter, class Tag, class = void>
 inline constexpr bool __has_iterator_category_convertible_to = false;
 
@@ -147,7 +147,7 @@ inline constexpr bool __has_const_arrow = is_pointer_v<Iter> || __has_const_arro
 
 }  // namespace __reverse_iterator_detail
 
-// Note: the upstream hidden friends iter_move/iter_swap cannot be declared
+// Note: hidden friends iter_move/iter_swap cannot be declared
 // here: asc::std::iter_move and asc::std::iter_swap are customization-point
 // objects (namespace-scope variables), and a same-named friend function in an
 // asc::std class is ill-formed ("redeclared as a different kind of entity").

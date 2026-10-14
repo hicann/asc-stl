@@ -59,7 +59,9 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 namespace ranges {
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 基座概念头冻结版不含 __simple_view，按其定义在文件内最小内联（私有命名避免与并行合入头冲突）。
+// concepts.h does not provide __simple_view, so its definition is minimally
+// inlined here under a private name (avoids clashing with other headers that
+// define it).
 template <class _View>
 concept __take_while_simple_view = view<_View> && range<const _View> &&
     same_as<iterator_t<_View>, iterator_t<const _View>> && same_as<sentinel_t<_View>, sentinel_t<const _View>>;
@@ -80,7 +82,8 @@ class take_while_view : public view_interface<take_while_view<_View, _Pred>> {
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     CANN_ASC_STL_NO_UNIQUE_ADDRESS __movable_box<_Pred> __pred_;
 #else
-    // C++17 与设备侧形态：__movable_box 仅在 C++20 分支有定义，此处按基座现状直接存值。
+    // C++17 and device-side shape: __movable_box is defined only in the C++20
+    // branch, so the predicate is stored by value here.
     CANN_ASC_STL_NO_UNIQUE_ADDRESS _Pred __pred_ = _Pred();
 #endif
     CANN_ASC_STL_NO_UNIQUE_ADDRESS _View __base_ = _View();
@@ -131,7 +134,8 @@ public:
         {
             return __x == __y.__end_ || !::asc::std::invoke(*__y.__pred_, *__x);
         }
-        // 惰性哨兵的差值按谓词断点计算（与急切扫描版取值一致，复杂度 O(n)）。
+        // The lazy sentinel's difference is computed by walking to the predicate
+        // breakpoint (same value as an eager scan, O(n) complexity).
         CANN_ASC_STL_API friend constexpr auto operator-(const __sentinel& __y, const iterator_t<_Base>& __x)
         {
             auto __it = __x;
@@ -146,7 +150,9 @@ public:
         {
             return -(__y - __x);
         }
-        // 源头仅 C++17 的反序 ==/!= 重载双侧保留：C++20 下显式候选与 ==/!= 的合成改写语义一致。
+        // Both reversed ==/!= overloads are kept for C++17 compatibility; under
+        // C++20 the explicit candidates agree with the synthesized rewriting
+        // semantics of == and !=.
         [[nodiscard]] CANN_ASC_STL_API friend constexpr bool operator==(
             const __sentinel& __x, const iterator_t<_Base>& __y)
         {
@@ -281,7 +287,8 @@ public:
         return __sentinel<true>(::asc::std::ranges::__end_cpo{}(__base_), ::asc::std::addressof(*__pred_));
     }
 #else
-    // C++17 与设备侧形态：约束不可求值（基座无概念回退），成员按基座现状为无约束版本。
+    // C++17 and device-side shape: constraints are not evaluable (no concept
+    // fallback), so the members are unconstrained.
     CANN_ASC_STL_API constexpr auto begin()
     {
         return ::asc::std::ranges::__begin_cpo{}(__base_);

@@ -35,7 +35,8 @@
 #include <asc/std/__type_traits/remove_cv.h>
 #include <asc/std/__type_traits/type_list.h>
 
-// Feature macro inlined from the dev dialect layer (not present in the base config).
+// <asc/__config> does not define CANN_ASC_STL_DETAIL_HAS_INT128; provide a
+// minimal equivalent here, #ifndef-guarded against a future definition.
 #ifndef CANN_ASC_STL_DETAIL_HAS_INT128
 #if !defined(ASC_DISABLE_INT128_SUPPORT) && defined(__linux__) && defined(__SIZEOF_INT128__)
 #define CANN_ASC_STL_DETAIL_HAS_INT128() 1
@@ -46,8 +47,9 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 统一走类型列表实现：编译器家族不提供稳定的 __make_signed 类型变换内建，
-// Host 与设备语义一致，含枚举与目标门控的 128 位扩展。
+// Always use the type-list implementation: the compiler family provides no
+// stable __make_signed builtin type transform, so host and device semantics
+// stay identical, covering enums and the target-gated 128-bit extension.
 using __signed_types = __type_list<signed char, signed short, signed int, signed long, signed long long
 #if CANN_ASC_STL_DETAIL_HAS_INT128()
     ,

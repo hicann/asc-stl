@@ -41,7 +41,8 @@ private:
     static_assert(__is_asc_std_duration_v<_Duration>, "template parameter of hh_mm_ss must be a std::chrono::duration");
     using __common_type = common_type_t<_Duration, chrono::seconds>;
 
-    // CCE 铁律二：fractional_width / precision 的初始化依赖这两个 impl 函数，写成裸 constexpr（无 API 标注）
+    // The fractional_width / precision initializers depend on these two
+    // helpers, so they must stay plain constexpr with no API annotation.
     CANN_ASC_STL_NODISCARD static constexpr uint64_t __pow10(unsigned __exp)
     {
         uint64_t __ret = 1;

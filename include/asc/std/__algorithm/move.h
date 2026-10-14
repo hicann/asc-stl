@@ -42,9 +42,10 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 通用逐元素移动，返回 (源尾, 目标尾)；经典路径下元素取出即
-// ::asc::std::move(*it)。首个模板参数为算法策略占位（默认 void），
-// 供按策略分派的内部算法以 __move<策略>(...) 形式复用。
+// General element-wise move returning (source end, result end); on the classic
+// path each element is taken out with ::asc::std::move(*it). The first template
+// parameter is a policy placeholder (defaults to void) so policy-dispatched
+// internal algorithms can reuse this template as __move<policy>(...).
 template <class _AlgPolicy = void, class _InputIterator, class _OutputIterator>
 CANN_ASC_STL_API constexpr pair<_InputIterator, _OutputIterator> __move(
     _InputIterator __first, _InputIterator __last, _OutputIterator __result)
@@ -55,8 +56,10 @@ CANN_ASC_STL_API constexpr pair<_InputIterator, _OutputIterator> __move(
     return {__last, __result};
 }
 
-// 平凡可拷贝指针特化：移动退化为 memmove 位搬移；常量求值期与设备 TU
-// 回退到逐元素移动循环（对平凡可拷贝类型即逐元素拷贝，语义等价）。
+// Trivially copyable pointer specialization: moving degenerates to a memmove
+// bit transfer; constant evaluation and device TUs fall back to the
+// element-wise move loop (a plain element-wise copy for trivially copyable
+// types, semantically equivalent).
 template <class _AlgPolicy = void, class _Tp, class _Up, enable_if_t<is_same_v<remove_const_t<_Tp>, _Up>, int> = 0,
     enable_if_t<is_trivially_copyable_v<_Up>, int> = 0>
 CANN_ASC_STL_API constexpr pair<_Tp*, _Up*> __move(_Tp* __first, _Tp* __last, _Up* __result)

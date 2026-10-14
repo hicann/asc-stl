@@ -69,7 +69,7 @@ CANN_ASC_STL_API int evaluate_common() noexcept
     const char text[] = {'a', 's', 'c', '\0'};
     failures += asc::std::char_traits<char>::length(text) != 3;
 #if CANN_ASC_STL_DETAIL_HOSTED() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    // char_traits<wchar_t>::int_type 与标准一致取 wint_t（WEOF 值域）。
+    // char_traits<wchar_t>::int_type is wint_t, matching the standard (WEOF value range).
     failures += !::asc::std::is_same_v<::asc::std::char_traits<wchar_t>::int_type, ::std::wint_t>;
 #endif
     int ignored = 0;

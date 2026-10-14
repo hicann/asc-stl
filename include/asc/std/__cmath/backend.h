@@ -34,8 +34,9 @@
 #define CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(function, builtin, arguments) builtin arguments
 #endif
 
-// 经 FLOAT_MATH_CALL 路由到 libm/simt_api 的函数在设备侧不可常量求值，
-// constexpr 标注仅宿主保留（基座原状无 constexpr，宿主为增强）。
+// Functions routed through FLOAT_MATH_CALL to libm/simt_api are not
+// constant-evaluable on the device side, so the constexpr marker is
+// host-only.
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #define CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR
 #else

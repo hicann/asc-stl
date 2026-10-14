@@ -42,9 +42,9 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/limits>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HOSTED() gate (the base
-// __config does not provide it): AI-core kernel compilation has no host
-// standard library and counts as freestanding, as does an explicit opt-out.
+// Inline definition of the CANN_ASC_STL_DETAIL_HOSTED() gate (the __config
+// does not provide it): AI-core kernel compilation has no host standard
+// library and counts as freestanding, as does an explicit opt-out.
 #if !defined(CANN_ASC_STL_DETAIL_HOSTED)
 #if defined(CANN_ASC_STL_DETAIL_ENABLE_FREESTANDING) || defined(__CCE__)
 #define CANN_ASC_STL_DETAIL_HOSTED() 0
@@ -83,8 +83,8 @@ CANN_ASC_STL_HOST_API __sincos_result<long double> __sincos(long double value) n
 
 template <class T>
 class alignas(__complex_alignment_v<T>) complex {
-    // 产品合同冻结 float 特化（complex<float> 交付面；负向合同要求
-    // complex<double> 以 static assertion 拒绝）。
+    // The delivered surface is the float specialization (complex<float>);
+    // complex<double> must be rejected by this static assertion.
     static_assert(is_same_v<T, float>, "ASC-STL complex supports float only");
 
 public:
@@ -109,7 +109,7 @@ public:
 
 #if CANN_ASC_STL_DETAIL_HOSTED()
     // Read through the public C++ API. Reinterpreting std::complex as an
-    // array (as in the upstream compatibility path) violates its aliasing.
+    // array would violate its aliasing.
     template <class U>
     CANN_ASC_STL_HOST_API complex(const ::std::complex<U>& other) noexcept
         : real_(static_cast<T>(other.real())), imag_(static_cast<T>(other.imag()))

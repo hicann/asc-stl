@@ -36,13 +36,16 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-//! @brief 把 URNG 抽取值安全转换为 float。
+//! @brief Safely convert a URNG draw value to float.
 //!
-//! dav-c310 AI Core 标量 uint32→float 转换在位 31 置位时按 int32 符号
-//! 扩展（编译期常量折叠不受影响，仅运行期值受影响）。这里把无符号
-//! 32 位值拆成 24 位高段与 8 位低段两次安全转换后重组；该分解与直接
-//! IEEE 转换逐位等价（2e6 样本含舍入边界暴力验证 0 差异），host 语义
-//! 不变，设备路径得到正确结果。
+//! On the dav-c310 AI Core, scalar uint32 -> float conversion sign-extends
+//! as if the value were int32 when bit 31 is set (compile-time constant
+//! folding is unaffected; only runtime values are). Split the unsigned
+//! 32-bit value into a 24-bit high part and an 8-bit low part, convert each
+//! safely, and recombine; the decomposition is bit-for-bit equivalent to the
+//! direct IEEE conversion (brute-force verified over 2e6 samples including
+//! rounding boundaries, zero differences), host semantics are unchanged, and
+//! the device path produces correct results.
 template <class Draw>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr float __asc_random_draw_to_float(Draw draw) noexcept
 {
@@ -50,8 +53,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr float __asc_random_draw_to_flo
     return static_cast<float>(static_cast<float>(value >> 8)) * 256.0f + static_cast<float>(value & 0xFFu);
 }
 
-//! @brief 按目标实数类型分派抽取值转换：float 且无符号 32 位以内走
-//! 安全分解，其余（host double、更宽引擎值）保持直接转换。
+//! @brief Dispatch the draw-value conversion on the target real type: float
+//! with unsigned draws of at most 32 bits takes the safe decomposition; the
+//! rest (host double, wider engine values) convert directly.
 template <class RealType, class Draw>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr RealType __asc_random_draw_to_real(Draw draw) noexcept
 {
@@ -62,9 +66,10 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr RealType __asc_random_draw_to_
     }
 }
 
-//! @brief 产品契约限定 generate_canonical 仅交付 float 结果（"float
-//! result with delivered URBGs"，负向用例 double_excluded.fail 固化该
-//! 边界）：主模板刻意不完整，RealType != float 时实例化即非良构。
+//! @brief The product contract restricts generate_canonical to float results
+//! ("float result with delivered URBGs"; the double_excluded.fail negative
+//! test pins this boundary): the primary template is deliberately
+//! incomplete, so instantiating it with RealType != float is ill-formed.
 template <class RealType>
 struct __generate_canonical_result;
 
@@ -73,10 +78,15 @@ struct __generate_canonical_result<float> {
     using type = float;
 };
 
-//! @brief 由均匀随机数发生器生成 [0, 1) 内给定精度的 canonical 浮点值。
+//! @brief Generate a canonical floating-point value of the requested
+//! precision in the half-open interval [0, 1) from a uniform random bit
+//! generator.
 //!
-//! 迭代次数由目标精度与引擎值域对数（__bit_log2，950 真机验证的位设施）
-//! 共同决定；纯算术路径无平台依赖，host 与 AI-core 统一。
+//! The draw count is determined by the target precision and the base-2
+//! logarithm of the engine range (via __bit_log2); the pure-arithmetic path
+//! has no platform dependency, so host and AI-core are unified. A result
+//! that rounds up to exactly 1 is clamped to 1 - epsilon/2, the largest
+//! representable value below 1, preserving the half-open [0, 1) contract.
 template <class RealType, size_t Bits, class UniformRandomBitGenerator>
 CANN_ASC_STL_API constexpr typename __generate_canonical_result<RealType>::type generate_canonical(
     UniformRandomBitGenerator& generator) noexcept

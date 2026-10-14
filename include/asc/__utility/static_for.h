@@ -32,9 +32,9 @@
 // lightweight integral_constant, so no kernel launch and no runtime loop
 // scheduling is involved. A Device-side callable must carry the
 // execution-space attributes of its calling domain: an ordinary AICore body
-// cannot call a Host-only function object. The index-sequence generation
-// follows the frozen compiler duality: CCE spells __make_integer_seq with
-// angle brackets and GCC provides __integer_pack; neither is emulated.
+// cannot call a Host-only function object. Index-sequence generation uses the
+// two compiler-provided spellings directly: CCE requires __make_integer_seq
+// with angle brackets and GCC provides __integer_pack; neither is emulated.
 namespace asc::detail {
 
 template <class IndexType, IndexType Value>

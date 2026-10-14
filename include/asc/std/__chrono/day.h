@@ -30,14 +30,14 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__chrono/duration.h>
 
-// Migrated from dev __asc/visibility.h: ASC-STL keeps only the inline
-// semantics for ABI hidden; base asc/__detail/visibility.h has no such macro.
+// asc/__detail/visibility.h provides no such macro, so define it here,
+// keeping only the inline semantics for hiding from the ABI.
 #ifndef CANN_ASC_STL_DETAIL_HIDE_FROM_ABI
 #define CANN_ASC_STL_DETAIL_HIDE_FROM_ABI inline
 #endif
 
-// Migrated from dev __asc/dialect.h: base asc/__config has no standard-version
-// number macro, so key it on CANN_ASC_STL_DETAIL_CPLUSPLUS instead.
+// asc/__config provides no standard-version number macro, so derive it from
+// CANN_ASC_STL_DETAIL_CPLUSPLUS instead.
 #ifndef CANN_ASC_STL_DETAIL_STD_VER
 #if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
 #define CANN_ASC_STL_DETAIL_STD_VER 2003

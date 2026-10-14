@@ -75,11 +75,11 @@
 #endif  // !ASC_ENABLE_HOST_ASSERTIONS
 
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// ASC 设备侧无断言机制
+// ASC device side has no assertion mechanism
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #elif defined(ASC_ENABLE_HOST_ASSERTIONS)
 #ifdef NDEBUG
-// NDEBUG 下 <assert.h> 未必已包含，手工补声明
+// <assert.h> is not necessarily included under NDEBUG; declare the prototype manually
 extern "C" {
 void __assert_fail(const char* __assertion, const char* __file, unsigned int __line, const char* __function) noexcept
     __attribute__((__noreturn__));
@@ -95,7 +95,9 @@ void __assert_fail(const char* __assertion, const char* __file, unsigned int __l
 #endif  // !CANN_ASC_STL_DETAIL_ASSERT
 
 namespace asc::std::ranges {
-// 设备编译下 concept 约束求值不可用（纯 SIMT 后端），回退到弱约束版本，两分支公开接口一致。
+// Under device compilation, concept constraint evaluation is unavailable (pure SIMT
+// backend), so fall back to a weakly constrained version; both branches expose the
+// same public interface.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 template <class _View>
@@ -104,15 +106,17 @@ concept __drop_simple_view = view<_View> && range<const _View> && same_as<iterat
 
 template <view _View>
 class drop_view : public view_interface<drop_view<_View>> {
-    // begin() 结果缓存：__next 非保证 O(1) 时缓存以提供摊还 O(1) 的 begin()；
-    // input_range 下 begin() 非相等保持，不可缓存（但单遍也只会调用一次 begin()）。
+    // begin() result cache: caches whenever __next is not guaranteed O(1), so begin()
+    // stays amortized O(1); for an input_range, begin() is not equality-preserving and
+    // must not be cached (a single-pass range calls begin() only once anyway).
     static constexpr bool _UseCache = forward_range<_View> && !(random_access_range<_View> && sized_range<_View>);
     using _Cache = conditional_t<_UseCache, __non_propagating_cache<iterator_t<_View>>, __empty_cache>;
     CANN_ASC_STL_NO_UNIQUE_ADDRESS _Cache __cached_begin_ = _Cache();
     _View __base_ = _View();
     range_difference_t<_View> __count_ = 0;
 
-    // 前进至多 count 步且不越过哨兵（三参数 next 的等价可移植实现）。
+    // Advance at most count steps without passing the sentinel (an equivalent
+    // portable implementation of the three-argument next).
     CANN_ASC_STL_API static constexpr iterator_t<_View> __next_at_most(
         iterator_t<_View> __iter, range_difference_t<_View> __count, sentinel_t<_View> __last)
     {
@@ -286,7 +290,8 @@ inline constexpr bool enable_borrowed_range<drop_view<_Tp>> = enable_borrowed_ra
 namespace views {
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 适配器分发内部符号（span/basic_string_view/iota_view/subrange/repeat_view 的直通与特化判定）。
+// Adaptor dispatch internals (passthrough and specialization detection for
+// span/basic_string_view/iota_view/subrange/repeat_view).
 namespace __drop_detail {
 
 template <class _Iter, ::asc::std::ranges::subrange_kind _Kind>
@@ -358,7 +363,7 @@ template <class _Tp, class _Bound>
 inline constexpr bool __is_repeat_specialization<repeat_view<_Tp, _Bound>, void> = true;
 
 struct __fn {
-    // empty_view 直通：结果即为原（空）范围。
+    // empty_view passthrough: the result is the original (empty) range.
     template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>>
         requires convertible_to<_Np, range_difference_t<_Range>> && __is_empty_view<_RawRange>
     CANN_ASC_STL_API constexpr auto operator()(_Range&& __range, _Np&&) const -> _RawRange
@@ -367,7 +372,8 @@ struct __fn {
             ::asc::std::forward<_Range>(__range));
     }
 
-    // span / basic_string_view / iota_view / subrange（不存尺寸）直通：重建同类型区间。
+    // span / basic_string_view / iota_view / subrange (without stored size) passthrough:
+    // rebuild a range of the same type.
     template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>,
         class _Dist = range_difference_t<_Range>>
         requires convertible_to<_Np, range_difference_t<_Range>> &&
@@ -375,14 +381,15 @@ struct __fn {
                      __is_passthrough_specialization<_RawRange>
     CANN_ASC_STL_API constexpr auto operator()(_Range&& __rng, _Np&& __n) const -> __passthrough_type_t<_RawRange>
     {
-        // 故意不转发 __rng，防双移动。
+        // Deliberately do not forward __rng, to avoid a double move.
         return __passthrough_type_t<_RawRange>(::asc::std::ranges::__begin_cpo{}(__rng) +
                 ::asc::std::min<_Dist>(
                     static_cast<_Dist>(::asc::std::ranges::size(__rng)), ::asc::std::forward<_Np>(__n)),
             ::asc::std::ranges::__end_cpo{}(__rng));
     }
 
-    // subrange（存尺寸）特化：重建并显式给出剩余尺寸。
+    // subrange (with stored size) specialization: rebuild and state the remaining size
+    // explicitly.
     template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>,
         class _Dist = range_difference_t<_Range>>
         requires convertible_to<_Np, range_difference_t<_Range>> &&
@@ -396,7 +403,8 @@ struct __fn {
             static_cast<::asc::std::make_unsigned_t<_Dist>>(__dist - __clamped));
     }
 
-    // repeat_view 且满足 sized_range：重复值不变、次数扣减。
+    // repeat_view satisfying sized_range: the repeated value is unchanged, the count
+    // is reduced.
     template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>,
         class _Dist = range_difference_t<_Range>>
         requires convertible_to<_Np, range_difference_t<_Range>> && __is_repeat_specialization<_RawRange> &&
@@ -410,7 +418,8 @@ struct __fn {
                 ::asc::std::min<_Dist>(__dist, ::asc::std::forward<_Np>(__n)));  // NOLINT(build/include_what_you_use)
     }
 
-    // repeat_view 其余情形：drop 不改变无界重复序列。
+    // repeat_view in the remaining case: drop does not change an unbounded repetition
+    // sequence.
     template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>>
         requires convertible_to<_Np, range_difference_t<_Range>> && __is_repeat_specialization<_RawRange> &&
                      (!sized_range<_RawRange>)
@@ -420,7 +429,7 @@ struct __fn {
             ::asc::std::forward<_Range>(__range));
     }
 
-    // 其余一般情形：包一层 drop_view。
+    // General case: wrap in a drop_view.
     template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>>
         requires(!__is_empty_view<_RawRange>) && (!__is_repeat_specialization<_RawRange>) &&
         (!(random_access_range<_RawRange> && sized_range<_RawRange> &&

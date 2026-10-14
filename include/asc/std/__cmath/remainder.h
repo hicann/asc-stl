@@ -36,9 +36,9 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/promote.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -49,18 +49,23 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// remainder/remquo/nextafter 三层分派（承 dev 语义、基座宏形状）：float 主名
-// 与后缀别名经 backend 路由——纯 SIMT TU 走 simt_api 标量库（__aicore__ 可
-// 达），其余走编译器内建；double/long double 主名、后缀 l 别名与
-// mixed-type promote 仅宿主（向量核禁 double，设备禁 long double）；扩展
-// 浮点（half/bfloat16/fp8 族）经 float 精度中转并保持原格式往返。
-// remquo 全族维持仅 float 精度：冻结合同断言 decltype(remquo(1.0L, 2.0L,
-// int*)) == float——加 double/long double 重载会使该调用歧义（两种浮点
-// 转换同秩）。nextafter 族为基座全树唯一定义点（dev 挪往 rounding 侧未随
-// 迁），此处按 dev 全家谱语义就地扩展。
+// remainder/remquo/nextafter, three-layer dispatch: the float primary name
+// and suffix aliases route through the backend — pure SIMT TUs go to the
+// simt_api scalar library (reachable from __aicore__), everything else uses
+// the compiler builtins; double/long double primary names, the l-suffix
+// alias, and mixed-type promote are host-only (double is forbidden on the
+// vector cores, long double on device); extended floating point
+// (half/bfloat16/fp8 family) transits through float precision and
+// round-trips in its original format. The whole remquo family stays
+// float-precision only: the pinned contract asserts
+// decltype(remquo(1.0L, 2.0L, int*)) == float — adding double/long double
+// overloads would make that call ambiguous (two floating-point conversions
+// of the same rank). The nextafter family has a single definition point
+// across the whole tree, here rather than on the rounding side, and the
+// full family is defined in place.
 
-//! @brief IEEE 余数 x - n*y（n 取最接近商，半值取偶）：|result| <= |y|/2，
-//! 符号随 x*y。
+//! @brief IEEE remainder x - n*y (n is the nearest quotient, ties to even):
+//! |result| <= |y|/2, sign follows x*y.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float remainder(
     float x, float y) noexcept
 {
@@ -73,7 +78,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(remainderf, __builtin_remainderf, (x, y));
 }
 
-//! @brief 扩展浮点（half/bfloat16/fp8 族）remainder：float 精度中转，原格式返回。
+//! @brief Extended floating point (half/bfloat16/fp8 family) remainder:
+//! transits through float precision, returns in the original format.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp remainder(
     Tp x, Tp y) noexcept
@@ -81,8 +87,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::remainder(static_cast<float>(x), static_cast<float>(y)));
 }
 
-//! @brief 同 remainder，另将 n 对 2^3 的余数（商的低 3 位，符号随 x/y）写入
-//! @p quotient。返回 IEEE 余数。
+//! @brief Same as remainder, additionally writing the remainder of n modulo
+//! 2^3 (the low 3 bits of the quotient, sign following x/y) into
+//! @p quotient. Returns the IEEE remainder.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float remquo(
     float x, float y, int* quotient) noexcept
 {
@@ -95,7 +102,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(remquof, __builtin_remquof, (x, y, quotient));
 }
 
-//! @brief 扩展浮点 remquo：float 精度中转，原格式返回。
+//! @brief Extended floating point remquo: transits through float precision,
+//! returns in the original format.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp remquo(
     Tp x, Tp y, int* quotient) noexcept
@@ -103,7 +111,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return static_cast<Tp>(::asc::std::remquo(static_cast<float>(x), static_cast<float>(y), quotient));
 }
 
-//! @brief 朝 @p y 方向的下一个可表示值（x == y 时返回 x）。
+//! @brief Next representable value in the direction of @p y (returns x when
+//! x == y).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float nextafter(
     float x, float y) noexcept
 {
@@ -116,7 +125,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(nextafterf, __builtin_nextafterf, (x, y));
 }
 
-//! @brief 扩展浮点 nextafter：float 精度中转，原格式返回。
+//! @brief Extended floating point nextafter: transits through float
+//! precision, returns in the original format.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp nextafter(
     Tp x, Tp y) noexcept
@@ -125,8 +135,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 宿主全类型面：double/long double 主名、后缀 l 别名与 mixed-type promote
-// （int+float 混型经 __promote_t 归一到公共宽度，与 libstdc++ 同型）。
+// Full host type surface: double/long double primary names, the l-suffix
+// alias, and mixed-type promote (a mixed int+float call normalizes to the
+// common width through __promote_t, same shape as libstdc++).
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double remainder(double x, double y) noexcept
 {

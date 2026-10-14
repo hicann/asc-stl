@@ -49,11 +49,14 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 经典迭代器操作集（算法族策略层）：算法模板以本结构为 _AlgPolicy 形参，
-// 经 _AlgPolicy:: 静态成员分派迭代器操作而非硬编码 asc::std:: 前置算法，
-// 便于后续按策略扩展。合入 dev 版经典策略的完整操作集：
-// 值类型/差值类型别名、advance/distance/next/prev/__advance_to、
-// iter_move 的引用/值双分派（含 reference 一致性诊断）与 iter_swap 的宿主/设备双路径。
+// Classic iterator operation set (policy layer for the algorithm family):
+// algorithm templates take this struct as their _AlgPolicy parameter and
+// dispatch iterator operations through its static members instead of hard-coding
+// prefixed asc::std:: algorithms, allowing later per-policy extensions. Provides
+// the full classic operation set: value/difference type aliases,
+// advance/distance/next/prev/__advance_to, iter_move's reference/value dual
+// dispatch (with reference-consistency diagnostics) and iter_swap's
+// host/device dual path.
 struct __classic_algorithm_iterator_operations {
     template <class _Iter>
     using __value_type = typename iterator_traits<_Iter>::value_type;
@@ -91,8 +94,10 @@ struct __classic_algorithm_iterator_operations {
             "[input.iterators] and can lead to dangling reference issues at runtime, so we are flagging this.");
     }
 
-    // iter_move：解引用结果为引用时按 move 语义返回；为值（代理迭代器）时按值返回，
-    // 避免返回悬挂引用；两分支均校验 iterator_traits::reference 与 *it 的一致性。
+    // iter_move: return with move semantics when dereferencing yields a
+    // reference; return by value (proxy iterators) otherwise to avoid returning
+    // a dangling reference; both branches validate that
+    // iterator_traits::reference agrees with *it.
     template <class Iterator, enable_if_t<is_reference_v<__deref_t<Iterator>>, int> = 0>
     CANN_ASC_STL_API static constexpr __move_t<Iterator> iter_move(Iterator&& iterator) noexcept(
         noexcept(::asc::std::move(*::asc::std::forward<Iterator>(iterator))))
@@ -110,9 +115,11 @@ struct __classic_algorithm_iterator_operations {
         return *::asc::std::forward<Iterator>(iterator);
     }
 
-    // iter_swap：宿主走 ranges 定制点（优先 ADL iter_swap，回退 swap(*a, *b)）；
-    // CCE 设备编译下 ranges CPO 的 ADL 分支无法实例化（实测报 no matching function for call to object），
-    // 回退经典 iter_swap（即 swap(*a, *b)，设备路径已验证）。
+    // iter_swap: the host uses the ranges customization point (prefer ADL
+    // iter_swap, fall back to swap(*a, *b)); under CCE device compilation the
+    // ADL branch of the ranges CPO fails to instantiate (observed error: no
+    // matching function for call to object), so it falls back to classic
+    // iter_swap (i.e. swap(*a, *b)).
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     template <class Iterator1, class Iterator2>
     CANN_ASC_STL_API static constexpr void iter_swap(Iterator1 left, Iterator2 right) noexcept(
@@ -129,7 +136,8 @@ struct __classic_algorithm_iterator_operations {
     }
 #endif
 
-    // next：已知边界直取尾迭代器；否则经 asc::std::next 前进 n 步
+    // next: with a known bound, take the end iterator directly; otherwise
+    // advance n steps via asc::std::next
     template <class _Iterator>
     CANN_ASC_STL_API static constexpr _Iterator next(_Iterator, _Iterator __last)
     {
@@ -151,7 +159,7 @@ struct __classic_algorithm_iterator_operations {
         return ::asc::std::prev(::asc::std::forward<_Iter>(__iter), __count);  // NOLINT(build/include_what_you_use)
     }
 
-    // __advance_to：直进到已知终点
+    // __advance_to: advance directly to a known end point
     template <class _Iter>
     CANN_ASC_STL_API static constexpr void __advance_to(_Iter& __first, _Iter __last)
     {

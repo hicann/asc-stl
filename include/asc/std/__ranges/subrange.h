@@ -68,7 +68,8 @@
 #include <asc/std/__utility/move.h>
 namespace asc::std::ranges {
 
-// 非切片转换判定：指针到指针的数组限定转换（Derived(*)[] -> Base(*)[]）不得静默进入区间。
+// Non-slicing conversion check: a pointer-to-pointer array qualification
+// conversion (Derived(*)[] -> Base(*)[]) must not silently enter the range.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 
 template <class From, class To>
@@ -83,7 +84,8 @@ template <class Pair, class Iter, class Sent>
 concept __pair_like_convertible_from = __pair_like<Pair> && !range<Pair> && constructible_from<Pair, Iter, Sent> &&
     __convertible_to_non_slicing<Iter, tuple_element_t<0, Pair>> && convertible_to<Sent, tuple_element_t<1, Pair>>;
 
-// 部分编译器无法在 SFINAE 上下文内可靠使用成员常量 _StoreSize，拆出为独立约束（与源实现一致）。
+// Some compilers cannot reliably use the member constant _StoreSize inside a SFINAE
+// context, so it is split out into standalone constraints.
 template <class Iter, class It, bool StoreSize>
 concept __subrange_from_iter_sent = !StoreSize && __convertible_to_non_slicing<It, Iter>;
 
@@ -102,8 +104,10 @@ concept __subrange_from_range_size = Kind == subrange_kind::sized && borrowed_ra
 #else
 
 namespace __subrange_detail {
-// C++17/设备编译回退的内部探测（公开概念名按产品冻结合同缺席，仅提供 __ 前缀等价物）：
-// 哨兵差值可换算到迭代器差型（等价 sized_sentinel_for 的可减部分）。
+// Internal probes for the C++17/device-compilation fallback (public concept names
+// are unavailable there, so only __-prefixed equivalents are provided): the
+// sentinel difference is convertible to the iterator's difference type (the
+// subtractible part of sized_sentinel_for).
 template <class Sent, class Iter, class = void>
 inline constexpr bool __sized_sentinel = false;
 
@@ -114,7 +118,8 @@ inline constexpr bool __sized_sentinel<Sent, Iter,
     is_convertible_v<decltype(::asc::std::declval<const Sent&>() - ::asc::std::declval<const Iter&>()),
         iter_difference_t<Iter>>;
 
-// ranges::size 定制点对 Range 可调用（等价 sized_range 的尺寸部分）。
+// The ranges::size customization point is invocable for Range (the size half of
+// the sized_range equivalent).
 template <class Range, class = void>
 inline constexpr bool __sized_range = false;
 
@@ -122,7 +127,9 @@ template <class Range>
 inline constexpr bool
     __sized_range<Range, void_t<decltype(::asc::std::ranges::__size_cpo{}(::asc::std::declval<Range&>()))>> = true;
 
-// 弱迭代器/哨兵探测（仅用于推导指引消歧：避免 (range, size) 二参形式被 (iter, sent) 指引误吞）。
+// Weak iterator/sentinel probes (used only to disambiguate the deduction guides:
+// keeps the two-argument (range, size) form from being swallowed by the
+// (iter, sent) guide).
 template <class Iter, class = void>
 inline constexpr bool __weak_iterator = false;
 
@@ -141,7 +148,8 @@ inline constexpr bool __weak_sentinel<Iter, Sent,
         decltype(::asc::std::declval<const Sent&>() != ::asc::std::declval<const Iter&>())>> = true;
 }  // namespace __subrange_detail
 
-// 是否需要在区间内显式存储尺寸：sized 且哨兵不可相减。
+// Whether the size must be stored explicitly in the range: sized, and the
+// sentinel is not subtractible.
 template <class Iter, class Sent, subrange_kind Kind>
 inline constexpr bool __subrange_store_size =
     Kind == subrange_kind::sized && !__subrange_detail::__sized_sentinel<Sent, Iter>;
@@ -156,7 +164,8 @@ public:
     using iterator = Iter;
     using sentinel = Sent;
     using size_type = make_unsigned_t<iter_difference_t<Iter>>;
-    // 内部实现细节，公开仅为内部使用（适配器直通/存尺寸判定）。
+    // Internal implementation detail, public only for internal use (adaptor
+    // passthrough / stored-size detection).
     static constexpr bool _StoreSize = (Kind == subrange_kind::sized && !sized_sentinel_for<Sent, Iter>);
 
 private:
@@ -218,7 +227,8 @@ public:
         : subrange(::asc::std::ranges::__begin_cpo{}(range), ::asc::std::ranges::__end_cpo{}(range), size)
     {}
 
-    // 右值 subrange 进入管道时旧版编译器常见 ICE，转换运算符仅在概念模式提供（与源实现一致）。
+    // Piping an rvalue subrange into a pipeline used to trigger ICE on older
+    // compilers, so the conversion operator is provided only in concepts mode.
     template <class Pair>
         requires __different_from<Pair, subrange<Iter, Sent, Kind>> &&
         __pair_like_convertible_from<Pair, const Iter&, const Sent&>
@@ -302,7 +312,8 @@ public:
     using iterator = Iter;
     using sentinel = Sent;
     using size_type = make_unsigned_t<iter_difference_t<Iter>>;
-    // 内部实现细节，公开仅为内部使用（适配器直通/存尺寸判定）。
+    // Internal implementation detail, public only for internal use (adaptor
+    // passthrough / stored-size detection).
     static constexpr bool _StoreSize = __subrange_store_size<Iter, Sent, Kind>;
 
 private:
@@ -320,7 +331,9 @@ private:
 public:
     CANN_ASC_STL_API constexpr subrange() = default;
 
-    // Enable 仅为保持约束表达式对成员模板参数的依赖性（类实例化时不提前求值）。
+    // 'Enable' exists only to keep the constraint expression dependent on the
+    // member template parameter (so it is not evaluated when the class is
+    // instantiated).
     template <class It = Iter, bool Enable = true,
         enable_if_t<Enable && !__subrange_store_size<Iter, Sent, Kind>, int> = 0>
     CANN_ASC_STL_API constexpr subrange(It first, Sent last)
@@ -462,7 +475,8 @@ subrange(Range&&,
     make_unsigned_t<range_difference_t<Range>>) -> subrange<iterator_t<Range>, sentinel_t<Range>, subrange_kind::sized>;
 #endif
 
-// 前向声明需要用到这些名字，这里用普通声明而非宏形式。
+// These names are needed by forward declarations, so they are plain declarations
+// here rather than macro form.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <size_t Index, class Iter, class Sent, subrange_kind Kind>
     requires((Index == 0) && copyable<Iter>) || (Index == 1)
@@ -511,7 +525,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 using ::asc::std::ranges::get;
 
-// 为 ranges::subrange 特化 tuple_size 与 tuple_element
+// tuple_size and tuple_element specializations for ranges::subrange
 template <class I, class S, ranges::subrange_kind K>
 struct tuple_size<ranges::subrange<I, S, K>> : integral_constant<size_t, 2> {};
 

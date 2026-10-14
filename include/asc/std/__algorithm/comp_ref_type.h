@@ -30,8 +30,9 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__utility/declval.h>
 
-// dev 版 <asc/std/__asc/assert.h> 断言链的最小等价内联（规则册条款5，#ifndef 守卫防重）：
-// debug 构建（_DEBUG/DEBUG）启用 ENABLE_DEBUG_MODE，进而启用宿主断言；设备侧无断言机制，恒为 no-op。
+// Minimal inline assertion macros, each guarded with #ifndef against redefinition:
+// debug builds (_DEBUG/DEBUG) enable ENABLE_DEBUG_MODE and thus host assertions;
+// the device side has no assertion mechanism and is always a no-op.
 #ifndef CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
 #if defined(_DEBUG) || defined(DEBUG)
 #define CANN_ASC_STL_DETAIL_ENABLE_DEBUG_MODE
@@ -52,11 +53,11 @@
 
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// ASC 设备侧无断言机制
+// The device side has no assertion mechanism.
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #elif defined(ASC_ENABLE_HOST_ASSERTIONS)
 #ifdef NDEBUG
-// NDEBUG 下 <assert.h> 未必已包含，按 dev 版做法手工补声明
+// Under NDEBUG <assert.h> may not have been included; declare __assert_fail manually.
 extern "C" {
 void __assert_fail(const char* __assertion, const char* __file, unsigned int __line, const char* __function) noexcept
     __attribute__((__noreturn__));

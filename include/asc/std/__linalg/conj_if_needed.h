@@ -37,7 +37,8 @@
 namespace asc::std::linalg {
 namespace __conj_if_needed {
 
-// 是否存在可用的限定 ::asc::std::conj（上游迁移形态：不搜 ADL conj）。
+// Whether a qualified ::asc::std::conj is viable for T (ADL conj is
+// deliberately not searched).
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <class T>
 inline constexpr bool _HasConj = requires(const T& value) { static_cast<void>(::asc::std::conj(value)); };
@@ -57,8 +58,10 @@ struct __conj_if_needed {
     template <class T>
     CANN_ASC_STL_API constexpr auto operator()(const T& value) const
     {
-        // 算术类型先短路，避免对算术 T 求 _HasConj 时实例化本库 float-only 的
-        // complex<T>（::asc::std::conj 的标量重载返回 complex<T>）导致硬错误。
+        // Arithmetic types are short-circuited first: evaluating _HasConj for an
+        // arithmetic T would instantiate this library's float-only complex<T>
+        // (the scalar overload of ::asc::std::conj returns complex<T>), causing
+        // a hard error.
         if constexpr (is_arithmetic_v<T>) {
             return value;
         } else if constexpr (!_HasConj<T>) {

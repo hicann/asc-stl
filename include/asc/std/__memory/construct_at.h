@@ -47,10 +47,12 @@
 #include <asc/std/__utility/forward.h>
 #include <asc/std/__utility/move.h>
 
-// 断言宏：基座无集中定义（方言层持有），按 __mdspan/empty_base.h 的同形内联，
-// #ifndef 守卫以免与未来集中定义冲突。
+// Assertion macro: no centralized definition is provided by the shared
+// configuration, so inline the minimal equivalent here, #ifndef-guarded
+// against a future centralized definition.
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
-// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查。
+// No-op on the device side (no assertion mechanism there); on the host side,
+// checked only when ASC_ENABLE_HOST_ASSERTIONS is explicitly enabled.
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
 #else
@@ -74,7 +76,8 @@ void* operator new(__SIZE_TYPE__, void* address) noexcept;
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __detail {
-// 仅用于未求值上下文的探测件（合入自迁移源语义；基座无对应独立头，就地内联）。
+// Probe helpers used only in unevaluated contexts (inlined here because no
+// dedicated header for them is available).
 template <class T>
 T&& __construct_at_declval(int);
 template <class T>
@@ -84,7 +87,9 @@ decltype(__detail::__construct_at_declval<T>(0)) __construct_at_declval_expr() n
 template <class T>
 void __construct_at_accepts_implicit_conversion(T) noexcept;
 
-// 非窄化隐式可转换探测：花括号初始化拒绝窄化，与隐式转换要求共同构成守卫。
+// Non-narrowing implicit-convertibility probe: brace initialization rejects
+// narrowing, which together with the implicit-conversion requirement forms the
+// guard.
 template <class Dest, class Source, class = void>
 struct __is_non_narrowing_convertible {
     static constexpr bool value = false;
@@ -97,7 +102,9 @@ struct __is_non_narrowing_convertible<Dest, Source,
     static constexpr bool value = true;
 };
 
-// 赋值优化路径守卫：算术类型间窄化会在赋值初始化处直接编译失败，必须先行排除。
+// Guard for the assignment optimization path: narrowing between arithmetic
+// types is a hard compile error at assignment initialization, so it must be
+// excluded up front.
 template <class T, class... Args>
 using __check_narrowing = conditional_t<sizeof...(Args) == 1, __is_non_narrowing_convertible<T, Args...>, true_type>;
 
@@ -110,8 +117,10 @@ template <class T, class... Args>
 CANN_ASC_STL_API constexpr T* construct_at(T* location, Args&&... args)
 {
     CANN_ASC_STL_DETAIL_ASSERT(location != nullptr, "null pointer given to construct_at");
-    // 平凡且非窄化类型走赋值快径（规避 placement new 的冗余空指针检查）；
-    // 常量求值期仍走 placement new（赋值到未开始生命期的存储不可常量求值）。
+    // Trivial, non-narrowing types take the assignment fast path (avoiding
+    // placement new's redundant null-pointer check); during constant
+    // evaluation, placement new is still used (assigning to storage whose
+    // lifetime has not begun is not constant-evaluable).
     if constexpr (__detail::__can_optimize_construct_at<T, Args...>) {
         if (!__default_is_constant_evaluated()) {
             *location = T{::asc::std::forward<Args>(args)...};

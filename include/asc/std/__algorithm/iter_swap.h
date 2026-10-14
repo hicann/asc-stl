@@ -49,9 +49,11 @@ CANN_ASC_STL_API constexpr void iter_swap(ForwardIterator1 left, ForwardIterator
 }
 #endif
 
-// 定制点形态（ranges CPO）：优先 ADL iter_swap(a, b)，否则回退 swap(*a, *b)。
-// 命名空间屏蔽使 CPO 本体与 asc::std::iter_swap 经典函数互不干扰
-// （经典函数保留，__iterator/iter_swap.h 的同守卫定义继续共存）。
+// Customization-point form (ranges CPO): prefer ADL iter_swap(a, b), otherwise
+// fall back to swap(*a, *b). The nested namespace keeps the CPO body from
+// clashing with the classic asc::std::iter_swap function (the classic function
+// stays; the definition under the same guard in __iterator/iter_swap.h keeps
+// coexisting).
 namespace ranges {
 namespace __iter_swap {
 

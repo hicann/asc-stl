@@ -48,7 +48,8 @@ public:
 
     CANN_ASC_STL_API constexpr scaled_accessor() = default;
 
-    // 嵌套访问器不可隐式转换：显式转换构造（标准要求按可转换性分档）。
+    // Non-implicitly-convertible nested accessor: explicit converting
+    // constructor (the standard requires tiering by convertibility).
     template <class OtherScalingFactor, class OtherNestedAccessor,
         enable_if_t<is_constructible_v<NestedAccessor, const OtherNestedAccessor&> &&
                 is_constructible_v<ScalingFactor, OtherScalingFactor> &&
@@ -59,7 +60,7 @@ public:
         : scaling_factor_(other.scaling_factor()), nested_accessor_(other.nested_accessor())
     {}
 
-    // 嵌套访问器可隐式转换：非显式转换构造。
+    // Implicitly convertible nested accessor: non-explicit converting constructor.
     template <class OtherScalingFactor, class OtherNestedAccessor,
         enable_if_t<is_constructible_v<NestedAccessor, const OtherNestedAccessor&> &&
                 is_constructible_v<ScalingFactor, OtherScalingFactor> &&
@@ -95,7 +96,8 @@ public:
     }
 
 private:
-    // 无默认初始化器（与上游一致）：默认构造后的成员值不确定，标准未规定该值。
+    // No default initializer: after default construction the members are
+    // indeterminate; the standard does not specify that value.
     ScalingFactor scaling_factor_;
     NestedAccessor nested_accessor_;
 };

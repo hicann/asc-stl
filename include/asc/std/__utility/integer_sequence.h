@@ -65,7 +65,8 @@ using __make_indices_imp = typename __integer_sequence<size_t,
 
 #else
 
-// 无编译器内建时的倍增展开回退（每次递归翻 8 倍）。
+// Doubling-expansion fallback when no compiler builtin is available (each
+// recursion multiplies the sequence length by 8).
 namespace __detail {
 template <class Tp, size_t... Extra>
 struct __repeat;

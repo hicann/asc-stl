@@ -39,8 +39,8 @@
 #include <asc/std/__type_traits/conditional.h>
 #include <asc/std/__utility/swap.h>
 
-// Migrated from dev __asc/dialect.h and __asc/diagnostic.h: base asc/__config
-// has no standard-version number macro and no MSVC diagnostic suppression.
+// The base <asc/__config> provides no standard-version number macro and no
+// MSVC diagnostic suppression, so minimal equivalents are defined here.
 #ifndef CANN_ASC_STL_DETAIL_STD_VER
 #if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
 #define CANN_ASC_STL_DETAIL_STD_VER 2003
@@ -69,8 +69,7 @@
 #endif
 #endif  // CANN_ASC_STL_DETAIL_DIAG_PUSH
 
-// GCC pre-9 constexpr workaround gate, mirroring dev
-// CANN_ASC_STL_DETAIL_COMPILER(GCC, <, 9): genuine GCC only (never CCE,
+// Gate for the GCC pre-9 constexpr workaround: genuine GCC only (never CCE,
 // pure-SIMT or clang, which may also define __GNUC__).
 #ifndef CANN_ASC_STL_DETAIL_BIT_REF_GCC_PRE9
 #if defined(__GNUC__) && !defined(__clang__) && !defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) && \

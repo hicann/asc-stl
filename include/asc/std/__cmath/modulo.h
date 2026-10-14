@@ -36,9 +36,9 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/promote.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -49,16 +49,21 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// fmod 三层分派（承 dev 语义、基座宏形状）：float 主名与后缀别名经 backend
-// 路由——纯 SIMT TU 走 simt_api 标量库（__aicore__ 可达），其余走编译器内
-// 建；double/long double 主名、后缀 l 别名与 mixed-type promote 仅宿主（向
-// 量核禁 double，设备禁 long double）；扩展浮点（half/bfloat16/fp8 族）经
-// float 精度中转并保持原格式往返。dev 同族的 modf/modff 在基座定义于
-// __cmath/exponential_functions.h（合同在列、H+D-SIMT），跨文件挪入会引发
-// 重定义，本文件维持 fmod 族。
+// fmod, three-layer dispatch: the float primary name and suffix aliases
+// route through the backend — pure SIMT TUs go to the simt_api scalar
+// library (reachable from __aicore__), everything else uses the compiler
+// builtins; double/long double primary names, the l-suffix alias, and
+// mixed-type promote are host-only (double is forbidden on the vector cores,
+// long double on device); extended floating point (half/bfloat16/fp8 family)
+// transits through float precision and round-trips in its original format.
+// The sibling modf/modff are defined in __cmath/exponential_functions.h
+// (host + device-SIMT surface); moving them into this file would cause
+// redefinitions, so this file keeps the fmod family only.
 
-//! @brief 浮点取余：结果与 @p x 同号且 |result| < |y|（向零截断商）。
-//! y 为 0 或 x 为无穷时定义域错误，契约由原生 fmodf 承载（NaN 返回）。
+//! @brief Floating-point remainder: the result has the same sign as @p x and
+//! satisfies |result| < |y| (quotient truncated toward zero). Domain error
+//! when y is 0 or x is infinite; the contract is carried by native fmodf
+//! (returns NaN).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float fmod(
     float x, float y) noexcept
 {
@@ -71,7 +76,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(fmodf, __builtin_fmodf, (x, y));
 }
 
-//! @brief 扩展浮点（half/bfloat16/fp8 族）fmod：float 精度中转，原格式返回。
+//! @brief Extended floating point (half/bfloat16/fp8 family) fmod: transits
+//! through float precision, returns in the original format.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp fmod(
     Tp x, Tp y) noexcept
@@ -80,8 +86,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 宿主全类型面：double/long double 主名、后缀 l 别名与 mixed-type promote
-// （int+float 混型经 __promote_t 归一到公共宽度，与 libstdc++ 同型）。
+// Full host type surface: double/long double primary names, the l-suffix
+// alias, and mixed-type promote (a mixed int+float call normalizes to the
+// common width through __promote_t, same shape as libstdc++).
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_API constexpr double fmod(double x, double y) noexcept
 {

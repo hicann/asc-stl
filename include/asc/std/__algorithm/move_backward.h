@@ -40,8 +40,10 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 通用逐元素反向移动，返回 (源首, 目标尾)。首个模板参数为算法策略占位
-// （默认 void），供按策略分派的内部算法以 __move_backward<策略>(...) 复用。
+// General element-wise backward move returning (source first, result end). The
+// first template parameter is a policy placeholder (defaults to void) so
+// policy-dispatched internal algorithms can reuse this template as
+// __move_backward<policy>(...).
 template <class _AlgPolicy = void, class _BidirectionalIterator, class _OutputIterator>
 CANN_ASC_STL_API constexpr pair<_BidirectionalIterator, _OutputIterator> __move_backward(
     _BidirectionalIterator __first, _BidirectionalIterator __last, _OutputIterator __result)
@@ -52,8 +54,10 @@ CANN_ASC_STL_API constexpr pair<_BidirectionalIterator, _OutputIterator> __move_
     return {__first, __result};
 }
 
-// 平凡可拷贝指针特化：反向移动退化为 memmove 位搬移（目标区整体前移）；
-// 常量求值期与设备 TU 回退到逐元素反向移动循环，语义等价。
+// Trivially copyable pointer specialization: backward moving degenerates to a
+// memmove bit transfer (the destination range shifts as a whole); constant
+// evaluation and device TUs fall back to the element-wise backward move loop,
+// semantically equivalent.
 template <class _AlgPolicy = void, class _Tp, class _Up, enable_if_t<is_same_v<remove_const_t<_Tp>, _Up>, int> = 0,
     enable_if_t<is_trivially_copyable_v<_Up>, int> = 0>
 CANN_ASC_STL_API constexpr pair<_Tp*, _Up*> __move_backward(_Tp* __first, _Tp* __last, _Up* __result)

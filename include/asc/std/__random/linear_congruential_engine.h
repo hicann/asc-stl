@@ -58,7 +58,7 @@ template <class _UIntType, _UIntType __A, _UIntType __C, _UIntType __M>
 class linear_congruential_engine {
     static_assert(
         __asc_random_is_valid_uinttype<_UIntType>, "linear_congruential_engine requires an unsigned integer type");
-    // [rand.eng.lcong] 前置条件：a == 0 || m == 0 || a < m，且 c == 0 || c < m。
+    // [rand.eng.lcong] preconditions: a == 0 || m == 0 || a < m, and c == 0 || c < m.
     static_assert(__M == 0 || __A < __M, "linear_congruential_engine invalid parameters");
     static_assert(__M == 0 || __C < __M, "linear_congruential_engine invalid parameters");
     static_assert((__C == 0u ? _UIntType(1u) : _UIntType(0u)) <

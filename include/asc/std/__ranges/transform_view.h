@@ -56,7 +56,9 @@
 #include <asc/std/__utility/move.h>
 
 namespace asc::std::ranges {
-// 设备编译下 concept 约束求值不可用（纯 SIMT 后端），回退到弱约束版本，两分支公开接口一致。
+// Under device compilation, concept constraint evaluation is unavailable (pure SIMT
+// backend), so fall back to a weakly constrained version; both branches expose the
+// same public interface.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 template <class _Fn, class _View>
@@ -69,7 +71,9 @@ concept __transform_view_constraints =
 
 template <class, class, class = void>
 struct __transform_view_iterator_category_base {
-    // 非 forward 底层无类别可算，按 input 迭代器呈现（本库 traits 抽取要求类别成员存在）。
+    // A non-forward underlying iterator has no computable category, so present as
+    // an input iterator (this library's traits extraction requires the category
+    // member to exist).
     using iterator_category = input_iterator_tag;
 };
 
@@ -131,8 +135,9 @@ public:
             : __parent_(::asc::std::addressof(__parent)), __current_(::asc::std::move(__current))
         {}
 
-        // 注：__i 恒为 __iterator<false>，但在 _Const 为 false 时直接写
-        // __iterator<false> 非法（class.copy.ctor#5），故经 _OtherConst 中转。
+        // Note: __i is always an __iterator<false>, but naming the type directly is
+        // ill-formed when _Const is false ([class.copy.ctor]/5), hence the
+        // _OtherConst indirection.
         template <bool _OtherConst = _Const>
             requires(_OtherConst && convertible_to<iterator_t<_View>, iterator_t<_Base>>)
         CANN_ASC_STL_API constexpr __iterator(__iterator<!_OtherConst> __i)
@@ -224,7 +229,8 @@ public:
         {
             return __x.__current_ == __y.__current_;
         }
-        // C++17 源头的 operator!= 双侧保留：C++20 下显式候选与改写语义一致。
+        // operator!= is kept on both sides for C++17 compatibility; under C++20 the
+        // explicit candidates agree with the rewritten semantics.
         template <class _Base2 = _Base>
             requires equality_comparable<iterator_t<_Base2>>
         CANN_ASC_STL_API friend constexpr bool operator!=(const __iterator& __x, const __iterator& __y)
@@ -308,8 +314,9 @@ public:
         CANN_ASC_STL_API constexpr explicit __sentinel(sentinel_t<_Base> __end) : __end_(__end)
         {}
 
-        // 注：__i 恒为 __sentinel<false>，但在 _Const 为 false 时直接写
-        // __sentinel<false> 非法（class.copy.ctor#5），故经 _OtherConst 中转。
+        // Note: __i is always a __sentinel<false>, but naming the type directly is
+        // ill-formed when _Const is false ([class.copy.ctor]/5), hence the
+        // _OtherConst indirection.
         template <bool _OtherConst = _Const>
             requires(_OtherConst && convertible_to<sentinel_t<_View>, sentinel_t<_Base>>)
         CANN_ASC_STL_API constexpr __sentinel(__sentinel<!_OtherConst> __i) : __end_(::asc::std::move(__i.__end_))
@@ -326,7 +333,8 @@ public:
         {
             return __x.__current_ == __y.__end_;
         }
-        // C++17 源头的反序 ==/!= 双侧保留：C++20 下显式候选与改写语义一致。
+        // Both reversed ==/!= overloads are kept for C++17 compatibility; under
+        // C++20 the explicit candidates agree with the rewritten operators.
         template <bool _OtherConst>
             requires sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>
         CANN_ASC_STL_API friend constexpr bool operator==(const __sentinel& __x, const __iterator<_OtherConst>& __y)

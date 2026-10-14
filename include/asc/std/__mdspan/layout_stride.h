@@ -53,8 +53,8 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __mdspan_detail {
 
-// 类 array 的最小容器：提供 operator[]，size 0 特化为空类型（合入源树位于
-// extents.h，基座 extents 未含，内联于此供 layout_stride 使用）。
+// Minimal array-like container providing operator[]; the size 0 specialization is an
+// empty type.
 template <class T, size_t Size>
 struct __possibly_empty_array {
     T values_[Size];
@@ -81,7 +81,7 @@ struct __possibly_empty_array<T, 0> {
     }
 };
 
-// [mdspan.layout.reqmts]：Layout::mapping<Extents> 是否恰为该映射类型。
+// [mdspan.layout.reqmts]: whether Layout::mapping<Extents> is exactly this mapping type.
 template <class Layout, class Mapping, class = void>
 struct __is_mapping_of_impl : false_type {};
 template <class Layout, class Mapping>
@@ -91,8 +91,8 @@ struct __is_mapping_of_impl<Layout, Mapping, void_t<typename Layout::template ma
 template <class Layout, class Mapping>
 inline constexpr bool __is_mapping_of = __is_mapping_of_impl<Layout, Mapping>::value;
 
-// [mdspan.layout.stride.expo]/4：mapping-alike 判定（合入源树为 concept，
-// 此处为 SFINAE 安全的变量模板形态）。
+// [mdspan.layout.stride.expo]/4: mapping-alike detection, written as a SFINAE-safe
+// variable template instead of a concept.
 template <class Mapping, class = void>
 struct __layout_mapping_alike_impl : false_type {};
 template <class Mapping>
@@ -131,7 +131,7 @@ struct __mapping_base<Extents, StrideArray, true> : __mdspan_ebco<Extents> {
     {}
 };
 
-// 可转换为 layout_stride::mapping 的 mapping-alike 判定。
+// Detection of mapping-alike types convertible to layout_stride::mapping.
 template <class StridedLayoutMapping, class Extents, class = void>
 struct __can_convert_impl : false_type {};
 template <class StridedLayoutMapping, class Extents>
@@ -146,7 +146,8 @@ template <class StridedLayoutMapping, class Extents>
 inline constexpr bool __can_convert = __can_convert_impl<StridedLayoutMapping, Extents>::value;
 
 struct __constraints {
-    // enable_if 替换路径上可能对任意实参类型求值，需 SFINAE 安全。
+    // The enable_if substitution path may be evaluated for arbitrary argument types,
+    // so this must be SFINAE-safe.
     template <class StridedLayoutMapping, class Extents, class = void>
     struct __converts_implicit_impl : false_type {};
     template <class StridedLayoutMapping, class Extents>
@@ -187,7 +188,7 @@ private:
 
     using stride_array = __mdspan_detail::__possibly_empty_array<index_type, extents_type::rank()>;
 
-    // 用于默认构造检查与 mandates 的加法溢出探测。
+    // Addition overflow detection, used by the default-construction checks and mandates.
     CANN_ASC_STL_API static constexpr bool __add_overflow(index_type x, index_type y, index_type* res) noexcept
     {
         *res = x + y;
@@ -214,7 +215,7 @@ private:
         if constexpr (extents_type::rank() != 0) {
             index_type size = 1;
             for (rank_type r = 0; r != extents_type::rank(); ++r) {
-                // 仅当 OtherIndexType 为整型时才能正确检查转换。
+                // The conversion can only be checked correctly when OtherIndexType is an integral type.
                 if (__conversion_may_overflow(strides[r])) {
                     result = false;
                     break;
@@ -238,7 +239,7 @@ private:
         return result;
     }
 
-    // 计算跨布局映射的基址偏移。
+    // Computes the base offset of a mapping from another layout.
     template <class StridedMapping, size_t... Position>
     CANN_ASC_STL_API static constexpr auto __offset(
         const StridedMapping& mapping_value, index_sequence<Position...>) noexcept
@@ -309,7 +310,7 @@ public:
         }
     }
 
-    // 按步长计算排序置换（实际不排序步长数组）。
+    // Computes the sort permutation by strides (the stride array itself is not sorted).
     CANN_ASC_STL_API constexpr void __bubble_sort_by_strides(
         array<rank_type, extents_type::rank()>& permute) const noexcept
     {
@@ -318,7 +319,7 @@ public:
                 if (strides_m()[permute[r]] > strides_m()[permute[r + 1]]) {
                     swap(permute[r], permute[r + 1]);  // NOLINT(build/include_what_you_use)
                 } else {
-                    // 两步长相等时，其关联 extent 之一必须为 1 或 0。
+                    // With two equal strides, one of the associated extents must be 1 or 0.
                     if ((strides_m()[permute[r]] == strides_m()[permute[r + 1]]) &&
                         (extents().extent(permute[r]) > index_type{1})) {
                         swap(permute[r], permute[r + 1]);  // NOLINT(build/include_what_you_use)
@@ -331,7 +332,7 @@ public:
     template <size_t... Position>
     CANN_ASC_STL_API constexpr bool __check_unique_mapping(index_sequence<Position...>) const noexcept
     {
-        // 基于步长与 extent 排序维度，排序结果记录于 permute 数组。
+        // Sort dimensions by strides and extents; the result is recorded in the permute array.
         array<rank_type, extents_type::rank()> permute{Position...};
         __bubble_sort_by_strides(permute);
 
@@ -373,7 +374,8 @@ public:
         return stride_array{static_cast<index_type>(::asc::std::as_const(strides[Position]))...};
     }
 
-    // 基座 span 无 const array 构造（C++17），array 路径不经 span 委托。
+    // span has no constructor from a const array in C++17, so the array path does not
+    // delegate through span.
     template <class OtherIndexType,
         enable_if_t<is_constructible_v<index_type, const OtherIndexType&> &&
                 is_convertible_v<const OtherIndexType&, index_type>,
@@ -397,7 +399,7 @@ public:
         return stride_array{static_cast<index_type>(other.stride(Position))...};
     }
 
-    // stride() 仅在 rank > 0 时可编译。
+    // stride() only compiles for rank > 0.
     template <class StridedLayoutMapping, size_t... Position>
     CANN_ASC_STL_API static constexpr auto __check_mapped_strides(
         const StridedLayoutMapping& other, index_sequence<Position...>) noexcept
@@ -506,7 +508,7 @@ public:
             int> = 0>
     CANN_ASC_STL_API constexpr index_type operator()(Indices... index) const noexcept
     {
-        // mdspan 自身会做越界检查，此处避免双重检查。
+        // mdspan performs its own bounds checking; keep this light to avoid double checking.
         if constexpr (extents_type::rank() == 0) {
             return index_type{0};
         } else {
@@ -532,7 +534,8 @@ public:
         return true;
     }
 
-    // 部分 extent 为零时结论较复杂：按标准定义无法给出简单的真/假。
+    // With some extents zero the answer is subtle: the standard's definition admits no
+    // simple true/false.
     template <size_t... Position>
     CANN_ASC_STL_API constexpr index_type __to_total_size(index_sequence<Position...>) const noexcept
     {
@@ -577,10 +580,11 @@ public:
         return true;
     }
 
-    // 标准对 rank > 0 的 stride(r) 无约束，但仍有前置条件。
+    // The standard imposes no Constraints on stride(r) for rank > 0, but it still states
+    // a precondition.
     CANN_ASC_STL_API constexpr index_type stride(rank_type r) const noexcept
     {
-        if constexpr (rank_value > 0) {  // 避免无符号数与零比较的无意义告警
+        if constexpr (rank_value > 0) {  // avoid a pointless unsigned-vs-zero comparison warning
             CANN_ASC_STL_DETAIL_ASSERT(r < rank_value, "layout_stride::mapping::stride(): invalid rank index");
             return strides_m()[r];
         } else {
@@ -592,7 +596,7 @@ public:
     CANN_ASC_STL_API static constexpr bool __op_eq(
         const mapping& left, const OtherMapping& right, index_sequence<Position...>) noexcept
     {
-        // 用公共类型比较，避免有符号/无符号比较告警。
+        // Compare in the common type to avoid signed/unsigned comparison warnings.
         using common_type = common_type_t<index_type, typename OtherMapping::index_type>;
         return ((static_cast<common_type>(left.stride(Position)) == static_cast<common_type>(right.stride(Position))) &&
             ... && true);

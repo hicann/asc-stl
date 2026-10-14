@@ -71,21 +71,25 @@
 #include <asc/std/__utility/move.h>
 #include <asc/std/__utility/swap.h>
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 就地列表构造/emplace 重载经宿主 initializer_list 提供（设备侧不参与）。
+// In-place list construction/emplace overloads go through the host initializer_list
+// (the device side does not participate).
 #include <initializer_list>
 #endif
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// [expected.object.general]：值类别为引用/函数/in_place_t/unexpect_t 或 unexpected
-// 特化，或错误类别不是 unexpected 的合法模板实参时，expected 实例化非法。
+// [expected.object.general]: instantiating expected is ill-formed when the
+// value type is a reference, a function type, in_place_t, unexpect_t, or a
+// specialization of unexpected, or when the error type is not a valid
+// template argument for unexpected.
 template <class T, class E>
 inline constexpr bool __expected_valid_v =
     !is_reference_v<T> && !is_function_v<T> && !is_same_v<remove_cv_t<T>, in_place_t> &&
     !is_same_v<remove_cv_t<T>, unexpect_t> && !__is_asc_std_unexpected<remove_cv_t<T>> && __valid_unexpected<E>;
 
-// 成员 swap 的强异常安全前提：两侧均可交换且可移动，且值或错误至少
-// 一侧可无抛移动（[__expected.object.swap] 约束）。
+// Strong exception-safety precondition of member swap: both sides swappable
+// and move constructible, with at least one of the value or error sides
+// nothrow move constructible ([expected.object.swap] constraints).
 template <class T, class E>
 inline constexpr bool __expected_can_swap_v = is_swappable_v<T> && is_swappable_v<E> && is_move_constructible_v<T> &&
     is_move_constructible_v<E> && (is_nothrow_move_constructible_v<T> || is_nothrow_move_constructible_v<E>);
@@ -117,14 +121,18 @@ public:
     {}
     CANN_ASC_STL_API constexpr expected(const expected& other) : base(static_cast<const base&>(other))
     {}
-    // 移动构造/移动赋值按分层（可用/删除分派）自动传播：值或错误不可移动时该
-    // 成员为删除状态，与 [expected.object] 特殊成员约束一致。
+    // Move construction/move assignment propagate automatically through the
+    // layered (available/deleted) dispatch: the member is deleted when either
+    // the value or the error is not movable, matching the [expected.object]
+    // special-member constraints.
     CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 expected(expected&&) = default;
     CANN_ASC_STL_API ~expected() = default;
 
 private:
-    // 跨类型转换构造的合法性：值/错误两侧均可从对方实参构造，且两个 expected
-    // 特化互相之间不存在任何构造/转换路径（[__expected.object.ctor] 约束）。
+    // Cross-type converting construction is legal when both the value and
+    // error sides are constructible from the other specialization's
+    // arguments, and no construction/conversion path exists between the two
+    // expected specializations ([expected.object.ctor] constraints).
     template <class Up, class OtherErr, class UpQual, class OtherErrQual>
     static constexpr bool __can_convert =
         is_constructible_v<Value, UpQual> && is_constructible_v<Error, OtherErrQual> &&
@@ -274,8 +282,11 @@ public:
     {}
 #endif
 
-    // 拷贝/移动赋值按分层（可用/删除分派）自动传播：显式 defaulted 拷贝赋值
-    // 用于抵消移动成员声明对隐式拷贝赋值的抑制，删除态与 [expected.object] 约束一致。
+    // Copy/move assignment propagates automatically through the layered
+    // (available/deleted) dispatch: the explicitly defaulted copy assignment
+    // counteracts the move-member declaration's suppression of the implicit
+    // copy assignment, with deleted states matching the [expected.object]
+    // constraints.
     CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 expected& operator=(const expected&) = default;
     CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 expected& operator=(expected&&) = default;
 
@@ -421,7 +432,7 @@ public:
         return ::asc::std::addressof(this->__value());
     }
 
-    // Throwing value() access stays outside the frozen product boundary.
+    // The throwing value() access stays outside the delivered product scope.
     Value& value() & = delete;
     const Value& value() const& = delete;
 
@@ -612,7 +623,8 @@ public:
                     ::asc::std::move(::asc::std::as_const(this->__error()))));  // NOLINT(build/include_what_you_use)
     }
 
-    // [expected.object.eq]：值态比值、错误态比错；混合值/错误比较仅在同类态下成立。
+    // [expected.object.eq]: value states compare values, error states compare
+    // errors; a mixed value/error comparison holds only between same-state operands.
     friend CANN_ASC_STL_API constexpr bool operator==(const expected& left, const expected& right) noexcept(
         noexcept(static_cast<bool>(left.__value() == right.__value())) &&
         noexcept(static_cast<bool>(left.__error() == right.__error())))

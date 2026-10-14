@@ -228,7 +228,8 @@ CANN_ASC_STL_API int evaluate_mdspan()
     accessor.access(aligned_values, 1) = 5;
     if (aligned_values[1] != 5)
         return 43;
-    // subrange::size 仅在 sized 类别参与（批次八确认项）：定尺寸构造后 size 可用。
+    // subrange::size participates only in the sized category: size() is
+    // available after sized construction.
     int storage_for_subrange[4]{0, 1, 2, 3};
     ::asc::std::ranges::subrange<int*> sized_subrange(storage_for_subrange, storage_for_subrange + 4, 4);
     if (sized_subrange.size() != 4)

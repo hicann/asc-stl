@@ -63,8 +63,9 @@ struct __all_fn : __range_adaptor_closure<__all_fn> {
         noexcept(static_cast<decay_t<decltype((::asc::std::forward<T>(value)))>>(::asc::std::forward<T>(value))))
         -> decltype(static_cast<decay_t<decltype((::asc::std::forward<T>(value)))>>(::asc::std::forward<T>(value)))
     {
-        // 对左值实参必须按值返回视图，不能透传引用——
-        // 否则 all_t<view&> 退化为 view&，下游 closure 的 view 约束全数失败。
+        // For lvalue arguments the view must be returned by value, not passed
+        // through as a reference — otherwise all_t<view&> degenerates to view&
+        // and the view constraints of downstream closures all fail.
         return static_cast<decay_t<decltype((::asc::std::forward<T>(value)))>>(::asc::std::forward<T>(value));
     }
 

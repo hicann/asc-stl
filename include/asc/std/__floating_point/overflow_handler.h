@@ -37,10 +37,13 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 溢出处置策略（纯编译期，host/device 同码）：__no_sat——有 Inf 取 Inf、
-// 有 NaN 取 NaN、无二者的 FP6/FP4 变体取正最大值；__sat_finite——上溢取
-// max、下溢取 lowest。源侧 nv 变体格式名（__fp6_nv_* / __fp4_nv_*）映射
-// 为本树无后缀拼写（同一格式族，properties/format 已按无后缀枚举承载）。
+// Overflow handling policies (pure compile time, identical on host and
+// device): __no_sat — Inf when the format has Inf, NaN when it has NaN, and
+// the FP6/FP4 variants with neither take the positive maximum; __sat_finite —
+// overflow takes max, underflow takes lowest. The source-side nv variant
+// format names (__fp6_nv_* / __fp4_nv_*) map to the unsuffixed spellings in
+// this tree (same format family; properties/format carry them as unsuffixed
+// enumerators).
 
 enum class __fp_overflow_handler_kind {
     __no_sat,
@@ -52,10 +55,11 @@ struct __fp_overflow_handler;
 
 // __fp_overflow_handler<__no_sat>
 
-//! @brief FP6/FP4 无 Inf/NaN 变体族探测（FP6 E2M3 / FP6 E3M2 / FP4 E2M1，
-//!        按指数-尾数位布局判定）。master 的 __fp_format 枚举尚未承载
-//!        __fp6_e2m3/__fp6_e3m2/__fp4_e2m1 枚举值，故按位布局内联等价
-//!        判定；对现存全部格式恒为 false，枚举值合入后判定结果不变。
+//! @brief Detects the FP6/FP4 no-Inf/NaN variant family (FP6 E2M3 / FP6 E3M2 /
+//!        FP4 E2M1, judged by exponent-mantissa bit layout). The __fp_format
+//!        enum carries no __fp6_e2m3/__fp6_e3m2/__fp4_e2m1 enumerators, so an
+//!        equivalent bit-layout test is inlined; it is false for every format
+//!        that currently exists.
 template <__fp_format Fmt>
 inline constexpr bool __fp_is_fp6_fp4_variant_v = (__fp_exp_nbits_v<Fmt> == 2 && __fp_mant_nbits_v<Fmt> == 3) ||
     (__fp_exp_nbits_v<Fmt> == 3 && __fp_mant_nbits_v<Fmt> == 2) ||
@@ -73,7 +77,8 @@ struct __fp_overflow_handler<__fp_overflow_handler_kind::__no_sat> {
         } else if constexpr (__fp_has_nan_v<fmt>) {
             return __fp_nan<T>();
         } else if constexpr (__fp_is_fp6_fp4_variant_v<fmt>) {
-            // 该变体族无 Inf/NaN：上溢折算正最大值
+            // This variant family has no Inf/NaN: overflow maps to the positive
+            // maximum
             return __fp_max<T>();
         } else {
             static_assert(__always_false_v<T>, "Unhandled floating-point format");
@@ -90,7 +95,8 @@ struct __fp_overflow_handler<__fp_overflow_handler_kind::__no_sat> {
         } else if constexpr (__fp_has_nan_v<fmt>) {
             return __fp_neg(__fp_nan<T>());
         } else if constexpr (__fp_is_fp6_fp4_variant_v<fmt>) {
-            // 该变体族无 Inf/NaN：下溢折算正最大值
+            // This variant family has no Inf/NaN: underflow maps to the
+            // positive maximum
             return __fp_max<T>();
         } else {
             static_assert(__always_false_v<T>, "Unhandled floating-point format");

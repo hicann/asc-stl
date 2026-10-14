@@ -41,8 +41,8 @@
 #include <asc/std/__utility/declval.h>
 #include <asc/std/cstddef>
 
-// 基座 __config 未提供 dev 的 CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20（dev 定义于
-// asc/std/__asc/dialect.h）：按其他已合入头的内联模式补最小等价，#ifndef 守卫防重。
+// Base asc/__config provides no CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 macro, so
+// define the minimal equivalent here, #ifndef-guarded against redefinition.
 #ifndef CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 #define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 constexpr

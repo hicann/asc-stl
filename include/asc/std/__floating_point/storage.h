@@ -34,8 +34,8 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/cstdint>
 
-// Feature macro inlined from the dev dialect layer (not present in the base
-// config), same inline copy as __type_traits/make_signed.h.
+// <asc/__config> does not provide CANN_ASC_STL_DETAIL_HAS_INT128: inline the
+// same copy as __type_traits/make_signed.h.
 #ifndef CANN_ASC_STL_DETAIL_HAS_INT128
 #if !defined(ASC_DISABLE_INT128_SUPPORT) && defined(__linux__) && defined(__SIZEOF_INT128__)
 #define CANN_ASC_STL_DETAIL_HAS_INT128() 1

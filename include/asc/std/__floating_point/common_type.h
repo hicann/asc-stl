@@ -35,14 +35,15 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-//! @brief 两个浮点类型的公共类型：取转换秩较高者（__greater 一侧）。
-//! 无序或含未知类型时该别名替换失败（SFINAE 友好）。
+//! @brief Common type of two floating-point types: the one with the higher
+//! conversion rank (the __greater side). Unordered pairs, or pairs containing
+//! an unknown type, make this alias substitution fail (SFINAE-friendly).
 template <class Lhs, class Rhs>
 using __fp_common_type_t = enable_if_t<__fp_conv_rank_order_v<Lhs, Rhs> != __fp_conv_rank_order::__unordered &&
         __fp_conv_rank_order_v<Lhs, Rhs> != __fp_conv_rank_order::__invalid,
     conditional_t<__fp_conv_rank_order_v<Lhs, Rhs> == __fp_conv_rank_order::__greater, Lhs, Rhs>>;
 
-//! @brief 同 __fp_common_type_t，积分类型按 double 处理。
+//! @brief Same as __fp_common_type_t, with integral types treated as double.
 template <class Lhs, class Rhs>
 using __fp_int_ext_common_type_t =
     __fp_common_type_t<conditional_t<is_integral_v<Lhs>, double, Lhs>, conditional_t<is_integral_v<Rhs>, double, Rhs>>;

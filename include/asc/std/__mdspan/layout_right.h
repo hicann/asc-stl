@@ -74,7 +74,7 @@ public:
 
     CANN_ASC_STL_API constexpr mapping(const extents_type& ext) noexcept : base(ext)
     {
-        // 不拦截该错误会在后续 mdspan 访问中越界，例如
+        // Without intercepting this error a later mdspan access goes out of bounds, e.g.
         // mapping<dextents<char, 2>> map(dextents<char, 2>(40, 40)); map(3, 10) == -126
         CANN_ASC_STL_DETAIL_ASSERT(__mdspan_detail::__required_span_size_is_representable(ext),
             "layout_right::mapping extents ctor: product of extents must be representable as index_type.");
@@ -85,7 +85,7 @@ public:
             int> = 0>
     CANN_ASC_STL_API constexpr mapping(const mapping<OtherExtents>& other) noexcept : base(other.extents())
     {
-        // 不拦截该错误会在后续 mdspan 访问中越界，例如
+        // Without intercepting this error a later mdspan access goes out of bounds, e.g.
         // mapping<dextents<char, 2>> map(mapping<dextents<int, 2>>(dextents<int, 2>(40, 40))); map(3, 10) == -126
         CANN_ASC_STL_DETAIL_ASSERT(__mdspan_detail::__is_representable_as<index_type>(other.required_span_size()),
             "layout_right::mapping converting ctor: other.required_span_size() must be representable as "
@@ -108,7 +108,8 @@ public:
             int> = 0>
     CANN_ASC_STL_API constexpr mapping(const layout_left::mapping<OtherExtents>& other) noexcept : base(other.extents())
     {
-        // 该构造被约束为 rank <= 1，extents 自身会先拦截非法转换，此处断言仅保持一致性。
+        // This constructor is constrained to rank <= 1 and extents itself already rejects
+        // invalid conversions; the assertion here only keeps the overloads consistent.
         CANN_ASC_STL_DETAIL_ASSERT(__mdspan_detail::__is_representable_as<index_type>(other.required_span_size()),
             "layout_right::mapping converting ctor: other.required_span_size() must be representable as "
             "index_type.");
@@ -129,7 +130,7 @@ public:
     template <class OtherMapping>
     CANN_ASC_STL_API constexpr bool __check_strides(const OtherMapping& other) const noexcept
     {
-        // 用公共类型比较，避免有符号/无符号比较告警。
+        // Compare in the common type to avoid signed/unsigned comparison warnings.
         using common_type = common_type_t<index_type, typename OtherMapping::index_type>;
         for (rank_type r = 0; r != extents_type::rank(); ++r) {
             if (static_cast<common_type>(stride(r)) != static_cast<common_type>(other.stride(r))) {
@@ -194,7 +195,7 @@ public:
             int> = 0>
     CANN_ASC_STL_API constexpr index_type operator()(Indices... index) const noexcept
     {
-        // mdspan 自身会做越界检查，此处避免双重检查。
+        // mdspan performs its own bounds checking; keep this light to avoid double checking.
         CANN_ASC_STL_DETAIL_ASSERT(__mdspan_detail::__is_multidimensional_index_in(extents(), index...),
             "layout_right::mapping: out of bounds indexing");
         return __op_index(make_index_sequence<sizeof...(Indices)>(), index...);
@@ -229,7 +230,7 @@ public:
     template <class Extents2 = Extents, enable_if_t<(Extents2::rank() > 0), int> = 0>
     CANN_ASC_STL_API constexpr index_type stride(rank_type r) const noexcept
     {
-        // 过大的 r 等价于对存储信息越界访问。
+        // An out-of-range r is equivalent to an out-of-bounds access on the stored information.
         CANN_ASC_STL_DETAIL_ASSERT(r < extents_type::rank(), "layout_right::mapping::stride(): invalid rank index");
         index_type s = 1;
         for (rank_type i = extents_type::rank() - 1; i > r; --i) {

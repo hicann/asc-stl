@@ -30,10 +30,9 @@
 #include <asc/__detail/execution_space.h>
 #include <asc/std/__type_traits/remove_cv.h>
 
-// Inline equivalents of the dev extended-data-type capability gates (dev
-// __asc/extended_data_types.h / __asc/asc_capabilities.h; the base __config
-// does not provide them). half and bfloat16_t are baseline CCE scalar types,
-// so they are available in every ASC device compilation mode.
+// <asc/__config> does not define the extended-data-type capability gates.
+// half and bfloat16_t are baseline CCE scalar types, so they are available in
+// every ASC device compilation mode.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_HALF)
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #define CANN_ASC_STL_DETAIL_HAS_HALF() 1
@@ -50,10 +49,9 @@
 #endif
 #endif  // CANN_ASC_STL_DETAIL_HAS_BFLOAT16
 
-// Inline AI-core family detection (dev __asc/asc_capabilities.h): the stable
-// family markers are the dedicated toolchain macros __DAV_C310__ /
-// __DAV_C310_VEC__; legacy __NPU_ARCH__ values are toolchain-version
-// dependent and kept only as a secondary fallback.
+// AI-core family detection: the stable family markers are the dedicated
+// toolchain macros __DAV_C310__ / __DAV_C310_VEC__; legacy __NPU_ARCH__ values
+// are toolchain-version dependent and kept only as a secondary fallback.
 #if !defined(CANN_ASC_STL_DETAIL_AICORE_ARCH_IS_950)
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() &&            \
     (defined(__DAV_C310__) || defined(__DAV_C310_VEC__) || \
@@ -103,13 +101,12 @@
 #endif
 #endif  // CANN_ASC_STL_DETAIL_HAS_FP8_E8M0
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_FLOAT128() gate
-// (dev __asc/extended_data_types.h; same inline copy as
-// __floating_point/native_type.h): __float128 needs __int128, a Linux
-// non-ARM64 target, a compiler that advertises the type, host compilation
-// only (CCE device compilation does not support __float128), and GCC must
-// not run strict-ANSI without extended numeric literals (no q/Q floating
-// point literals under __STRICT_ANSI__).
+// <asc/__config> does not define the CANN_ASC_STL_DETAIL_HAS_FLOAT128() gate
+// (same inline copy as __floating_point/native_type.h): __float128 needs
+// __int128, a Linux non-ARM64 target, a compiler that advertises the type,
+// host compilation only (CCE device compilation does not support __float128),
+// and GCC must not run strict-ANSI without extended numeric literals (no q/Q
+// floating point literals under __STRICT_ANSI__).
 #if !defined(CANN_ASC_STL_DETAIL_HAS_FLOAT128)
 #define CANN_ASC_STL_DETAIL_HAS_FLOAT128() 0
 #if (defined(__SIZEOF_FLOAT128__) || defined(__FLOAT128__)) && defined(__SIZEOF_INT128__) &&                         \

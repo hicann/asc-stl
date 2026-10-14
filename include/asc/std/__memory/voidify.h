@@ -30,9 +30,10 @@
 #include <asc/__detail/attributes.h>
 #include <asc/std/__memory/addressof.h>
 
-// 基座 __config 未提供 dev 的 CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20（dev 定义于
-// asc/std/__asc/dialect.h）：__voidify 含 cv 限定指针转换，pre-C++20 无条件标
-// constexpr 属 ill-formed NDR 风险，按 dev 门控；#ifndef 守卫防与未来基座定义冲突。
+// Base asc/__config provides no CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 macro.
+// __voidify performs a cv-qualified pointer conversion, which risks being
+// ill-formed NDR if marked constexpr unconditionally before C++20, so gate it
+// on the macro; #ifndef-guarded against a future shared definition.
 #ifndef CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
 #define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 constexpr

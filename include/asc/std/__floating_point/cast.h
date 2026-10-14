@@ -34,24 +34,31 @@
 #include <asc/std/__type_traits/is_extended_floating_point.h>
 #include <asc/std/__type_traits/is_same.h>
 
-// 浮点格式互转 __fp_cast（单一 constexpr 模板）：
-// - float/double/long double 之间：static_cast（舍入到最近偶数）；
-// - 同格式（含 __asc_fp 包装与 CCE 原生标量互转）：存储位直传；
-// - half/bfloat16_t（CCE 设备内建标量）：经 static_cast；
-// - fp8（e4m3/e5m2/e8m0）：软件位级编解码（__detail::__fp8_encode/__fp8_decode），
-//   host/device 同码、constexpr、位级精确：解码为纯位展开；编码为 RN-even
-//   （e4m3/e5m2 NOSAT 语义：e4m3 溢出→NaN、e5m2 溢出→Inf；e8m0 按截断编码）。
-//   double/long double 源先经 float 再编码（fp8 有效位不大于 4，双重舍入
-//   风险仅在理论边界，记录于批注）；
-// - fp6/fp4：无标量类型（仅打包拼写），实例化得到明确的 Unsupported 静态断言。
+// Floating-point format conversion via __fp_cast (a single constexpr template):
+// - Between float/double/long double: static_cast (round to nearest even);
+// - Same format (including __asc_fp wrappers vs CCE native scalars): storage
+//   bits passed through unchanged;
+// - half/bfloat16_t (CCE device built-in scalars): via static_cast;
+// - fp8 (e4m3/e5m2/e8m0): software bit-level codec (__detail::__fp8_encode/
+//   __fp8_decode), identical code on host and device, constexpr, bit-exact:
+//   decoding is a pure bit expansion; encoding is RN-even (e4m3/e5m2 NOSAT
+//   semantics: e4m3 overflow -> NaN, e5m2 overflow -> Inf; e8m0 encodes by
+//   truncation).
+//   double/long double sources are routed through float before encoding (fp8
+//   significands are at most 4 bits, so double rounding is only a risk on
+//   theoretical boundaries);
+// - fp6/fp4: no scalar types exist (packed spellings only); instantiation
+//   yields an explicit Unsupported static_assert.
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __detail {
 
-// fp8 位模式 → float（精确位展开；constexpr，host/device 同码）。
-// ebits/mbits 为目标格式位宽；fn_no_inf 为 e4m3 的无 Inf 变体（exp 全 1 且
-// 尾数最大 → NaN，否则为 448 尺度的最大有限值）。
+// fp8 bit pattern -> float (exact bit expansion; constexpr, identical code on
+// host and device).
+// ebits/mbits are the fp8 format's field widths; fn_no_inf selects the e4m3
+// no-Inf variant (exponent all ones with the largest mantissa -> NaN, otherwise
+// the largest finite value on the 448 scale).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr float __fp8_decode(
     unsigned char bits, int ebits, int mbits, bool fn_no_inf) noexcept
 {
@@ -65,28 +72,31 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr float __fp8_decode(
         if (mant == 0) {
             return ::asc::std::bit_cast<float>(out);  // ±0
         }
-        // 子正规：值 = m * 2^(1-bias-mbits)。把 m 归一到最高有效位 s，再按
-        // 1.f 形式组装（float 指数 = -s-bias+127，尾数对齐 23 位）。
+        // Subnormal: value = m * 2^(1-bias-mbits). Normalize m up to its most
+        // significant bit s, then assemble in 1.f form (float exponent =
+        // -s-bias+127, mantissa aligned to 23 bits).
         int s = 0;
         unsigned int m = mant;
         while ((m & (1u << (mbits - 1))) == 0) {
             m <<= 1;
-            ++s;  // 每左移一次，最高有效位下标减一
+            ++s;  // each left shift lowers the MSB index by one
         }
         const int float_exponent = static_cast<int>(mbits) - 1 - s + 1 - bias - mbits + 127;
         if (float_exponent <= 0) {
-            return ::asc::std::bit_cast<float>(out);  // 深度下溢按 0
+            return ::asc::std::bit_cast<float>(out);  // deep underflow flushes to 0
         }
         const unsigned int float_mantissa = (m & ((1u << (mbits - 1)) - 1u)) << (23 - (mbits - 1));
         return ::asc::std::bit_cast<float>(out | (static_cast<unsigned int>(float_exponent) << 23) | float_mantissa);
     }
     if (expf == (1u << ebits) - 1u) {
         if (fn_no_inf) {
-            // e4m3 变体：无 Inf；尾数最大为 NaN，其余为最大有限值
+            // e4m3 variant: no Inf; the largest mantissa is NaN, all others are
+            // the largest finite value
             if (mant == (1u << mbits) - 1u) {
                 return ::asc::std::bit_cast<float>(out | 0x7fc00000u);  // NaN
             }
-            // e4m3 变体最大有限 binade：E 字段全 1 的正规尺度 2^8
+            // Largest finite binade of the e4m3 variant: the normal scale 2^8
+            // with an all-ones E field
             const int float_exponent = (1 << ebits) - 1 - bias + 127;
             return ::asc::std::bit_cast<float>(
                 out | (static_cast<unsigned int>(float_exponent) << 23) | (mant << (23 - mbits)));
@@ -101,7 +111,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr float __fp8_decode(
         out | (static_cast<unsigned int>(float_exponent) << 23) | (mant << (23 - mbits)));
 }
 
-// float → fp8 位模式（RN-even；NOSAT 语义）。constexpr。
+// float -> fp8 bit pattern (RN-even; NOSAT semantics). constexpr.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned char __fp8_encode(
     float value, int ebits, int mbits, bool fn_no_inf) noexcept
 {
@@ -111,11 +121,11 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned char __fp8_encode(
     const int bias = (1 << (ebits - 1)) - 1;
 
     if (float_abs > 0x7f800000u) {
-        // NaN：静默化（尾数置非零最小）
+        // NaN: quieted (mantissa set to the smallest nonzero value)
         return static_cast<unsigned char>((sign << (ebits + mbits)) | (((1u << ebits) - 1u) << mbits) | 1u);
     }
     if (float_abs == 0x7f800000u) {
-        // Inf：e4m3 变体无 Inf → NaN；其余格式保留 Inf
+        // Inf: the e4m3 variant has no Inf -> NaN; other formats keep Inf
         if (fn_no_inf) {
             return static_cast<unsigned char>((sign << (ebits + mbits)) | (((1u << ebits) - 1u) << mbits) | 1u);
         }
@@ -127,10 +137,11 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned char __fp8_encode(
 
     const int float_exp = static_cast<int>((float_abs >> 23) & 0xffu);
     const unsigned int float_mant = float_abs & 0x7fffffu;
-    int etarget = float_exp - 127 + bias;  // 目标指数（未含尾数进位）
+    int etarget = float_exp - 127 + bias;  // target exponent (before any mantissa carry)
 
-    // 溢出上界：e4m3 变体 E=15 与 M<=6 仍是最大有限 binade（448 尺度），
-    // 仅 M==7 为 NaN；其余格式 E 全 1 为 Inf/NaN 保留。
+    // Overflow ceiling: in the e4m3 variant E=15 with M<=6 is still the largest
+    // finite binade (the 448 scale), only M==7 is NaN; in the other formats an
+    // all-ones E field is reserved for Inf/NaN.
     const int emax_field = (1 << ebits) - 1 - (fn_no_inf ? 0 : 1);
     if (etarget > emax_field) {
         if (fn_no_inf) {
@@ -140,17 +151,18 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned char __fp8_encode(
     }
 
     if (etarget >= 1) {
-        // 正规范围：有效数字（含隐含 1）RN-even 到 mbits+1 位，隐含位归
-        // exponent，尾数字段 = 低 mbits 位
-        const unsigned int full = (float_mant | 0x800000u) >> (23 - mbits);  // 含隐含 1 的截断
+        // Normal range: round the significand (with the implicit leading bit)
+        // RN-even to mbits+1 bits; the implicit bit goes to the exponent, and
+        // the mantissa field = the low mbits
+        const unsigned int full = (float_mant | 0x800000u) >> (23 - mbits);  // truncated, implicit leading 1 included
         const unsigned int rest = float_mant & ((1u << (23 - mbits)) - 1u);
         const unsigned int half = 1u << (23 - mbits - 1);
         unsigned int rounded = full;
         if (rest > half || (rest == half && (full & 1u))) {
-            ++rounded;  // 进位可能推到 mbits+2 位 → 指数 +1
+            ++rounded;  // the carry may push this to mbits+2 bits -> exponent +1
         }
         if (rounded >= (1u << (mbits + 1))) {
-            rounded = 1u << mbits;  // 舍入进位越过最高位：隐含位右移
+            rounded = 1u << mbits;  // rounding carry crossed the top bit: the implicit bit shifts right
             ++etarget;
             if (etarget > emax_field) {
                 if (fn_no_inf) {
@@ -159,7 +171,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned char __fp8_encode(
                 return static_cast<unsigned char>((sign << (ebits + mbits)) | (((1u << ebits) - 1u) << mbits));
             }
         }
-        // e4m3 变体 E=15 且 M==7 → NaN（大于 448 或经舍入落满）
+        // e4m3 variant with E=15 and M==7 -> NaN (above 448, or filled in by rounding)
         if (fn_no_inf && etarget == (1 << ebits) - 1 && rounded == (1u << mbits) - 1u) {
             return static_cast<unsigned char>((sign << (ebits + mbits)) | (((1u << ebits) - 1u) << mbits) | 1u);
         }
@@ -167,12 +179,13 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned char __fp8_encode(
             (rounded & ((1u << mbits) - 1u)));
     }
 
-    // 子正规/下溢区：指数字段 0，隐含位 0。目标步长 = 2^(1-bias-mbits)，
-    // |v| 折算步数 = (0x800000|mant) 对 2^(23-e_eff+1-bias-mbits) 的商。
-    const int e_eff = float_exp - 127;                    // 真实指数（< 1-bias）
-    const int shift_div = 23 - e_eff + 1 - bias - mbits;  // 除数移位（>0：右移）
+    // Subnormal/underflow region: exponent field 0, implicit bit 0. The target
+    // step size = 2^(1-bias-mbits), and |v| measured in steps = (0x800000|mant)
+    // divided by 2^(23-e_eff+1-bias-mbits).
+    const int e_eff = float_exp - 127;                    // true exponent (< 1-bias)
+    const int shift_div = 23 - e_eff + 1 - bias - mbits;  // divisor shift (>0: right shift)
     if (shift_div >= 24) {
-        return static_cast<unsigned char>(sign << (ebits + mbits));  // 深度下溢 → ±0
+        return static_cast<unsigned char>(sign << (ebits + mbits));  // deep underflow -> ±0
     }
     const unsigned int significand = 0x800000u | float_mant;
     unsigned int steps = significand >> shift_div;
@@ -186,31 +199,32 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned char __fp8_encode(
         ++steps;  // RN-even
     }
     if (steps >= (1u << mbits)) {
-        // 步数进位恰好落入最小正规
+        // the step-count carry lands exactly on the smallest normal
         return static_cast<unsigned char>((sign << (ebits + mbits)) | (1u << mbits));
     }
     return static_cast<unsigned char>((sign << (ebits + mbits)) | steps);
 }
 
-// e8m0 编码（纯指数格式，截断语义）：值 → 2^(floor(log2|v|))。
+// e8m0 encoding (exponent-only format, truncation semantics): value -> 2^(floor(log2|v|)).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned char __e8m0_encode(float value) noexcept
 {
     const unsigned int float_bits = ::asc::std::bit_cast<unsigned int>(value);
     const unsigned int float_abs = float_bits & 0x7fffffffu;
     if (float_abs >= 0x7f800000u) {
-        return 0xffu;  // NaN/Inf → NaN 模式
+        return 0xffu;  // NaN/Inf -> NaN pattern
     }
     if (float_abs == 0u) {
-        return 0x00u;  // 0 → 0
+        return 0x00u;  // 0 -> 0
     }
     const int float_exp = static_cast<int>((float_abs >> 23) & 0xffu) - 127;
-    // 截断：|v| ∈ [2^e, 2^(e+1))，正负号不影响量级区间，指数即 e。
+    // Truncation: |v| lies in [2^e, 2^(e+1)); the sign does not affect the
+    // magnitude interval, so the exponent is e.
     const int field = float_exp + 127;
     if (field <= 0) {
-        return 0x00u;  // 深度下溢按 0
+        return 0x00u;  // deep underflow flushes to 0
     }
     if (field >= 255) {
-        return 0xffu;  // NaN 模式（e8m0 无 Inf 编码）
+        return 0xffu;  // NaN pattern (e8m0 has no Inf encoding)
     }
     return static_cast<unsigned char>(field);
 }
@@ -225,7 +239,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr To __fp_cast(From value) noexc
     } else if constexpr (__is_std_fp_v<To> && __is_std_fp_v<From>) {
         return static_cast<To>(value);
     } else if constexpr (__is_fp_v<To> && __is_fp_v<From> && __fp_format_of_v<To> == __fp_format_of_v<From>) {
-        // 同格式位直传（__asc_fp 包装与 CCE 原生标量互转）
+        // same format: storage bits pass through (__asc_fp wrapper vs CCE native scalar)
         return __fp_from_storage<To>(__fp_get_storage(value));
     }
 #if CANN_ASC_STL_DETAIL_HAS_FP8_E4M3()
@@ -240,7 +254,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr To __fp_cast(From value) noexc
 #endif  // CANN_ASC_STL_DETAIL_HAS_FP8_E5M2()
 #if CANN_ASC_STL_DETAIL_HAS_FP8_E8M0()
     else if constexpr (__fp_format_of_v<From> == __fp_format::__fp8_e8m0) {
-        // e8m0 无符号位：0x00 → 0，0xff → NaN，其余值 = 2^(field-127)
+        // e8m0 has no sign bit: 0x00 -> 0, 0xff -> NaN, other values = 2^(field-127)
         const unsigned char field = __fp_get_storage(value);
         if (field == 0x00u) {
             return ::asc::std::__fp_cast<To>(0.0f);
@@ -269,10 +283,11 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr To __fp_cast(From value) noexc
     }
 #endif  // CANN_ASC_STL_DETAIL_HAS_FP8_E8M0()
     else if constexpr (is_same_v<From, float>) {
-        // float → half/bfloat16_t/long double：编译器原生转换（CCE 设备内建）
+        // float -> half/bfloat16_t/long double: compiler-native conversion (CCE device built-in)
         return static_cast<To>(value);
     } else if constexpr (__is_fp_v<From> && __is_fp_v<To>) {
-        // double/long double/half/bfloat16_t 的其余跨格式：经 float 轴心中转
+        // remaining cross-format conversions of double/long double/half/bfloat16_t:
+        // relayed through float as the pivot
         return ::asc::std::__fp_cast<To>(static_cast<float>(value));
     } else {
         static_assert(__always_false_v<To>, "Unsupported floating point conversion");

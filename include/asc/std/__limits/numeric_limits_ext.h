@@ -38,8 +38,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 // types (half, bfloat16_t and the fp8 spellings) are AI-core builtin types
 // gated by the capability macros inlined in
 // __type_traits/is_extended_floating_point.h; the facets materialize their
-// values from the raw bit patterns via bit_cast, which is the equivalent of
-// the source-tree __fp_from_storage builtin-type path.
+// values from the raw bit patterns via bit_cast.
 
 // ASC half
 

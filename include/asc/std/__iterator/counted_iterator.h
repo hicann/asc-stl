@@ -64,8 +64,8 @@ namespace __counted_iterator_detail {
 // Traversal probes built on the base _ITER_CONCEPT tag ladder (pointer ->
 // iterator_traits::iterator_concept -> iterator_traits::iterator_category),
 // usable in every compilation mode; probes live in their own partial
-// specializations so a missing tag stays SFINAE-friendly.（与 advance.h /
-// move_iterator.h 的探测同族）
+// specializations so a missing tag stays SFINAE-friendly. (Same family of
+// probes as in advance.h / move_iterator.h.)
 template <class Iter, class = void>
 inline constexpr bool __has_forward_traversal = false;
 
@@ -94,8 +94,9 @@ template <class Iter>
 inline constexpr bool __has_contiguous_traversal<Iter, void_t<_ITER_CONCEPT<Iter>>> =
     is_convertible_v<_ITER_CONCEPT<Iter>, contiguous_iterator_tag>;
 
-// 嵌套类型的条件可用性探测：纯输出迭代器没有 iter_value_t/iterator_category，
-// 这些成员必须条件呈现而不是无条件定义。
+// Probes for conditional availability of nested types: pure output iterators
+// have no iter_value_t/iterator_category, so these members must be presented
+// conditionally rather than defined unconditionally.
 template <class Iter, class = void>
 inline constexpr bool __has_iter_value = false;
 
@@ -110,9 +111,11 @@ inline constexpr bool __has_iter_reference<Iter, void_t<iter_reference_t<Iter>>>
 
 }  // namespace __counted_iterator_detail
 
-// 条件嵌套类型载体：iterator_concept 透传 Iter 的同名成员，iterator_category 沿用
-// 基座 iterator_traits<Iter>::iterator_category 语义（对指针等亦保持可见），
-// value_type/reference/pointer 仅在对应推导有效时呈现。
+// Conditional nested-type carriers: iterator_concept forwards Iter's member
+// of the same name, iterator_category follows the
+// iterator_traits<Iter>::iterator_category semantics (staying visible for
+// pointers as well), and value_type/reference/pointer appear only when the
+// corresponding deduction is valid.
 template <class Iter, class = void>
 struct __counted_iterator_concept {};
 
@@ -246,8 +249,11 @@ public:
         --count_;
         return *this;
     }
-    // 前向迭代器返回旧 counted_iterator 副本；非前向迭代器按标准返回底层旧迭代器，
-    // 宿主异常路径先回滚计数再重抛（C++17 下 try 块与 constexpr 互斥，函数降级为非常量表达式）。
+    // Forward iterators return a copy of the old counted_iterator; non-forward
+    // iterators return the old underlying iterator as the standard requires,
+    // and the host exception path rolls the count back before rethrowing
+    // (under C++17, a try block is incompatible with constexpr, so the
+    // function degrades to a non-constant expression).
 #if CANN_ASC_STL_DETAIL_HAS_EXCEPTIONS() && !CANN_ASC_STL_DETAIL_HAS_CXX20()
     template <class I2 = Iter>
     CANN_ASC_STL_API auto operator++(int)
@@ -423,7 +429,8 @@ CANN_ASC_STL_API constexpr bool operator!=(default_sentinel_t sentinel, const co
 {
     return !(sentinel == value);
 }
-// 底层语义修正（与标准/上游一致）：迭代器到哨牌的距离取负，哨牌到迭代器为正。
+// Sign convention (matching the standard): the distance from iterator
+// to sentinel is negative, and from sentinel to iterator positive.
 template <class Iter>
 CANN_ASC_STL_API constexpr iter_difference_t<Iter> operator-(
     default_sentinel_t, const counted_iterator<Iter>& value) noexcept
@@ -437,7 +444,8 @@ CANN_ASC_STL_API constexpr iter_difference_t<Iter> operator-(
     return -value.count();
 }
 
-// 关系比较按标准以剩余计数为序（与 operator== 同一基准，纯计数语义）。
+// Relational comparisons order by remaining count as the standard specifies
+// (same basis as operator==, pure count semantics).
 #define CANN_ASC_STL_DETAIL_COUNTED_ITERATOR_COMPARE(op)                              \
     template <class I1, class I2>                                                     \
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool operator op(               \
@@ -498,15 +506,17 @@ CANN_ASC_STL_API constexpr auto iter_swap(const counted_iterator<I1>& left, cons
 }
 #endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
-// Note: the upstream hidden-friend iter_move cannot be declared here:
+// Note: a hidden-friend iter_move cannot be declared here:
 // asc::std::iter_move is a customization-point object (a namespace-scope
 // variable), and a same-named function at asc::std scope would be redeclared
 // as a different kind of entity. The equivalent behavior is provided by the
 // customization point itself: iter_move(ci) dispatches to *ci, which already
 // yields the element-wise move of the underlying iterator.
 
-// iterator_traits 特化：底层 trait 可用（非空主模板）时透传，并对 contiguous
-// 底层迭代器校正 pointer 成员；纯输出迭代器交回成员探测主路径。
+// iterator_traits specialization: passes the underlying traits through when
+// the underlying trait is available (non-empty primary template) and corrects
+// the pointer member for contiguous underlying iterators; pure output
+// iterators fall back to the member-probing primary path.
 template <class Iter>
 struct iterator_traits<counted_iterator<Iter>, void_t<typename iterator_traits<Iter>::iterator_category>>
     : iterator_traits<Iter> {

@@ -44,7 +44,7 @@ CANN_ASC_STL_DETAIL_DIAGNOSTIC_IGNORE("-Wreserved-user-defined-literal")
 #else
 CANN_ASC_STL_DETAIL_DIAGNOSTIC_IGNORE("-Wliteral-suffix")
 #endif
-// duration 字面量 [time.duration.literals]
+// duration literals [time.duration.literals]
 CANN_ASC_STL_API constexpr chrono::hours operator"" h(unsigned long long value) noexcept
 {
     return chrono::hours(static_cast<chrono::hours::rep>(value));
@@ -107,7 +107,7 @@ CANN_ASC_STL_API constexpr chrono::duration<double, nano> operator"" ns(long dou
     return chrono::duration<double, nano>(value);
 }
 
-// 日历字面量 [time.calendar.literals]
+// calendar literals [time.calendar.literals]
 CANN_ASC_STL_API constexpr chrono::day operator"" d(unsigned long long value) noexcept
 {
     return chrono::day(static_cast<unsigned>(value));
@@ -121,7 +121,7 @@ CANN_ASC_STL_DETAIL_DIAGNOSTIC_POP()
 }  // namespace literals
 
 namespace chrono {
-// 将字面量 hoist 进 chrono 命名空间，与标准 std::chrono 的可见性形状一致
+// Hoist the literals into namespace chrono, matching the visibility shape of standard std::chrono
 using literals::chrono_literals::operator"" h;
 using literals::chrono_literals::operator"" min;
 using literals::chrono_literals::operator"" s;

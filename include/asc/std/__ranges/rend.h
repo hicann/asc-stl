@@ -122,9 +122,12 @@ public:
 
 #else  // ^^^ concepts ^^^ / vvv !concepts vvv
 
-// 非概念路径：按基座惯用的 void_t 探测 + enable_if_t 展开，语义与概念版对齐；
-// 返回类型上的哨位/迭代器概念约束（sentinel_for/bidirectional_iterator）在此路径降为
-// 表达式有效性级检查（与基座原实现同级），其余门控（can_borrow/类或枚举/rbegin 可调用/begin-end 同型）保持不变。
+// Non-concepts path: expanded with the conventional void_t detection +
+// enable_if_t, semantically aligned with the concepts version; the
+// sentinel/iterator concept constraints on the return type (sentinel_for /
+// bidirectional_iterator) degrade here to expression-validity-level checks,
+// while the remaining gates (can_borrow / class-or-enum / rbegin invocable /
+// same begin-end type) are unchanged.
 template <class T>
 inline constexpr bool __is_class_or_union_v = is_class_v<remove_cvref_t<T>> || is_union_v<remove_cvref_t<T>>;
 template <class T>
@@ -190,7 +193,8 @@ public:
 
 inline constexpr __rend_detail::__fn rend{};
 
-// 内部避免直接使用 CPO 对象（__tile__ 访问问题），统一走 __fn 类型。
+// Internal uses go through the __fn type rather than the CPO object directly
+// (avoids the __tile__ access problem).
 using __rend_cpo = __rend_detail::__fn;
 
 // [range.access.crend]
@@ -218,7 +222,8 @@ struct __fn {
 
 inline constexpr __crend_detail::__fn crend{};
 
-// 内部避免直接使用 CPO 对象（__tile__ 访问问题），统一走 __fn 类型。
+// Internal uses go through the __fn type rather than the CPO object directly
+// (avoids the __tile__ access problem).
 using __crend_cpo = __crend_detail::__fn;
 
 }  // namespace ranges

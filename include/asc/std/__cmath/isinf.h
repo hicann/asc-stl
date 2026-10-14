@@ -35,9 +35,9 @@
 #include <asc/std/__type_traits/is_floating_point.h>
 #include <asc/std/__type_traits/is_integral.h>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (the master config does not provide it): long double is host-only — AI-core
-// compilation does not support long double.
+// Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
+// config does not provide it): long double is host-only — AI-core compilation
+// does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -51,7 +51,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 //! @brief Infinity check through the storage representation: the exponent
 //! field is all ones and the significand keeps only the explicit integer bit
 //! (zero for implicit-bit formats, the top significand bit for the x87
-//! extended layout) — false for NaNs, bit-exact with the source semantics,
+//! extended layout) — false for NaNs, bit-exact with the reference semantics,
 //! constexpr and free of floating-point arithmetic on every compilation
 //! path, host and AI-core alike.
 template <class Tp>
@@ -80,8 +80,9 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool isinf(long double x) noex
 }
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE()
 
-//! @brief 扩展浮点（half/bfloat16/fp8 族）isinf：float 精度中转（扩展格式
-//! 全部为 float 的真子集，宽化无损），NaN 不误报。
+//! @brief Extended floating point (half/bfloat16/fp8 family) isinf:
+//! float-precision transit (every extended format is a proper subset of
+//! float, so the widening is lossless); NaN is never misreported.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool isinf(Tp x) noexcept
 {

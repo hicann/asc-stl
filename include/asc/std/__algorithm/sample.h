@@ -39,7 +39,8 @@
 #include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/move.h>
 
-// 设备侧无断言机制恒为 no-op；宿主侧仅在显式开启 ASC_ENABLE_HOST_ASSERTIONS 时检查
+// Always a no-op on the device side (no assertion mechanism there); checked on
+// the host side only when ASC_ENABLE_HOST_ASSERTIONS is explicitly enabled.
 #ifndef CANN_ASC_STL_DETAIL_ASSERT
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(ASC_ENABLE_HOST_ASSERTIONS)
 #define CANN_ASC_STL_DETAIL_ASSERT(expression, message) ((void)0)
@@ -53,8 +54,9 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __sample_detail {
 
-// 遍历类别探测的最小本地等价（与 __algorithm/partition.h 同款）：对 iterator_traits 的
-// category 探测与对成员 iterator_concept 的探测，二者 C++17 下均 SFINAE 友好。
+// Minimal local traversal-category probes: a category probe against
+// iterator_traits and a probe for the member iterator_concept, both
+// SFINAE-friendly under C++17.
 template <class Iter, class Tag, class = void>
 inline constexpr bool __has_iterator_category_convertible_to = false;
 
@@ -85,8 +87,9 @@ inline constexpr bool __has_member_iterator_concept = false;
 template <class Iter>
 inline constexpr bool __has_member_iterator_concept<Iter, void_t<typename Iter::iterator_concept>> = true;
 
-// C++20 迭代器常以 iterator_concept 声明强于 iterator_category 的遍历类别；
-// 按 iterator_concept 与 iterator_category 的较大者推导实际分派标签。
+// C++20 iterators often declare a stronger traversal category in
+// iterator_concept than in iterator_category; deduce the effective dispatch
+// tag from the stronger of the two.
 template <class Iter>
 CANN_ASC_STL_API constexpr auto __iterator_traits_category_or_concept() noexcept
 {

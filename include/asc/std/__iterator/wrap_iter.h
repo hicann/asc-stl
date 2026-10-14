@@ -36,8 +36,8 @@
 #include <asc/std/__type_traits/is_trivially_copy_assignable.h>
 #include <asc/std/__type_traits/void_t.h>
 
-// Migrated from dev __asc/dialect.h: base asc/__config has no standard-version
-// number macro, so key it on CANN_ASC_STL_DETAIL_CPLUSPLUS instead.
+// Base asc/__config has no standard-version number macro, so key the local
+// STD_VER ladder on CANN_ASC_STL_DETAIL_CPLUSPLUS instead.
 #ifndef CANN_ASC_STL_DETAIL_STD_VER
 #if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
 #define CANN_ASC_STL_DETAIL_STD_VER 2003
@@ -58,11 +58,9 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// Minimal local equivalent of the traversal probe used by the migrated
-// implementation: the shared probe of the dev tree lives in its iterator
-// traits header, which the base keeps protected, so keep a file-local copy
-// (same pattern as other base headers). Both sub-probes are SFINAE-friendly
-// in C++17 mode.
+// File-local equivalent of the traversal probe gating this wrapper, kept here
+// because the shared probe is not exposed by the iterator traits header. Both
+// sub-probes are SFINAE-friendly in C++17 mode.
 namespace __wrap_iter_detail {
 template <class Iter, class Tag, class = void>
 inline constexpr bool __has_iterator_category_convertible_to = false;

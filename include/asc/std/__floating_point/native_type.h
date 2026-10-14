@@ -34,9 +34,9 @@
 #include <asc/std/__type_traits/is_void.h>
 #include <asc/std/cfloat>
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate
-// (master __config does not provide it): long double is host-only — ASC device
-// compilation (AI Core) does not support long double (dev __asc/dialect.h).
+// <asc/__config> does not provide CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE():
+// inline the gate here — long double is host-only, ASC device compilation
+// (AI Core) does not support long double.
 #if !defined(CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE)
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && !defined(ASC_DISABLE_LONG_DOUBLE_SUPPORT)
 #define CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() 1
@@ -45,12 +45,12 @@
 #endif
 #endif  // CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE
 
-// Inline equivalent of the dev CANN_ASC_STL_DETAIL_HAS_FLOAT128() gate
-// (master __config does not provide it, dev __asc/extended_data_types.h):
-// __float128 needs __int128, a Linux non-ARM64 target, a compiler that
-// advertises the type, host compilation only (CCE device compilation does not
-// support __float128), and GCC must not run strict-ANSI without extended
-// numeric literals (no q/Q floating point literals under __STRICT_ANSI__).
+// <asc/__config> does not provide CANN_ASC_STL_DETAIL_HAS_FLOAT128(): inline
+// the gate here — __float128 needs __int128, a Linux non-ARM64 target, a
+// compiler that advertises the type, host compilation only (CCE device
+// compilation does not support __float128), and GCC must not run strict-ANSI
+// without extended numeric literals (no q/Q floating point literals under
+// __STRICT_ANSI__).
 #if !defined(CANN_ASC_STL_DETAIL_HAS_FLOAT128)
 #define CANN_ASC_STL_DETAIL_HAS_FLOAT128() 0
 #if (defined(__SIZEOF_FLOAT128__) || defined(__FLOAT128__)) && defined(__SIZEOF_INT128__) &&                         \
@@ -68,10 +68,8 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 // __is_ext_compiler_fp_v
 //
-// Inline minimal equivalent of the dev trait of the same name (dev
-// __floating_point/traits.h): the compiler-extension floating-point
-// vocabulary — __float128 when the detection gate above provides it. The
-// master traits.h does not carry this predicate yet.
+// Predicate for the compiler-extension floating-point vocabulary:
+// __float128 when the detection gate above provides it.
 
 template <class T>
 inline constexpr bool __is_ext_compiler_fp_v = false;
@@ -90,10 +88,12 @@ template <>
 inline constexpr bool __is_ext_compiler_fp_v<__float128> = true;
 #endif  // CANN_ASC_STL_DETAIL_HAS_FLOAT128()
 
-//! @brief 格式到本机 C++ 类型的映射：binary32/64 恒有；binary128 与 x86
-//! fp80 仅在宿主 long double 逐位满足对应格式（LDBL_* 特征宏）时提供，
-//! 否则映射为 void（无本机类型）。设备遍同样按特征宏判定（昇腾设备无
-//! 128b 浮点，binary128/fp80 恒 void）。
+//! @brief Maps a format to its native C++ type: binary32/64 always exist;
+//! binary128 and x86 fp80 are provided only when the host long double matches
+//! the format bit for bit (LDBL_* characteristic macros), otherwise the
+//! mapping is void (no native type). Device TUs are judged by the same
+//! characteristic macros (Ascend devices have no 128-bit floating point, so
+//! binary128/fp80 are always void there).
 template <__fp_format Fmt>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto __fp_native_type_impl() noexcept
 {
@@ -106,15 +106,15 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto __fp_native_type_impl() n
         return __float128{0.0};
 #elif CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() && LDBL_MIN_EXP == -16381 && LDBL_MAX_EXP == 16384 && LDBL_MANT_DIG == 113
         return static_cast<long double>(0);
-#else   // ^^^ 有本机 binary128 ^^^ / vvv 无本机 binary128 vvv
+#else   // ^^^ native binary128 ^^^ / vvv no native binary128 vvv
         return;
-#endif  // ^^^ 无本机 binary128 ^^^
+#endif  // ^^^ no native binary128 ^^^
     } else if constexpr (Fmt == __fp_format::__fp80_x86) {
 #if CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() && LDBL_MIN_EXP == -16381 && LDBL_MAX_EXP == 16384 && LDBL_MANT_DIG == 64
         return static_cast<long double>(0);
-#else   // ^^^ 有本机 x86 fp80 ^^^ / vvv 无本机 x86 fp80 vvv
+#else   // ^^^ native x86 fp80 ^^^ / vvv no native x86 fp80 vvv
         return;
-#endif  // ^^^ 无本机 x86 fp80 ^^^
+#endif  // ^^^ no native x86 fp80 ^^^
     } else {
         return;
     }
@@ -123,11 +123,12 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto __fp_native_type_impl() n
 template <__fp_format Fmt>
 using __fp_native_type_t = decltype(__fp_native_type_impl<Fmt>());
 
-//! @brief 该格式是否存在本机 C++ 类型（映射非 void）。
+//! @brief Whether the format has a native C++ type (the mapping is not void).
 template <__fp_format Fmt>
 inline constexpr bool __fp_has_native_type_v = !is_void_v<__fp_native_type_t<Fmt>>;
 
-//! @brief T 是否为本机浮点类型（标准 fp 或编译器扩展 fp）。
+//! @brief Whether T is a native floating-point type (standard fp or
+//!        compiler-extension fp).
 template <class T>
 inline constexpr bool __fp_is_native_type_v = __is_std_fp_v<T> || __is_ext_compiler_fp_v<T>;
 

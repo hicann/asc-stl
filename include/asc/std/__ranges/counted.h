@@ -68,8 +68,9 @@ struct __counted_fn {
             static_cast<make_unsigned_t<iter_difference_t<Iterator>>>(
                 count)))) -> subrange<counted_iterator<Iterator>, default_sentinel_t>
     {
-        // 依赖侧 default_sentinel 差值符号约定与源侧相反，这里显式传尺寸，
-        // 保证该路径 size() 恒为 count，不依赖符号约定。
+        // default_sentinel difference sign conventions are inconsistent across the
+        // dependencies, so the size is passed explicitly; this keeps size() equal to
+        // count on this path instead of relying on a sign convention.
         return subrange(counted_iterator(::asc::std::move(it), count), default_sentinel,
             static_cast<make_unsigned_t<iter_difference_t<Iterator>>>(count));
     }

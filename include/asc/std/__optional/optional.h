@@ -52,15 +52,19 @@
 #include <asc/std/__utility/move.h>
 #include <asc/std/__utility/swap.h>
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-// 就地列表构造/emplace 重载经宿主 initializer_list 提供（设备侧不参与）。
+// In-place list construction/emplace overloads go through the host initializer_list
+// (the device side does not participate).
 #include <initializer_list>
 #endif
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// 转换构造约束件：值形态与 optional<U> 形态各自的可构造/可隐转判别。
-// optional<U> 四种值形态中任一路径能构造/转换出 T，即视为“T 与 optional 互转”，
-// 此类组合从转换构造中排除，杜绝嵌套 optional 的意外包裹。
+// Converting-construction constraint pieces: separate constructibility and
+// implicit-conversion discriminants for the value form and the optional<U>
+// form. If any of the four value categories of optional<U> can construct or
+// convert to T, the pair counts as "T and optional interconvertible" and is
+// excluded from converting construction, preventing accidental wrapping into
+// a nested optional.
 template <class T, class U>
 struct __opt_check_constructible_from_opt
     : disjunction<is_constructible<T, optional<U>&>, is_constructible<T, const optional<U>&>,
@@ -109,7 +113,8 @@ public:
             this->construct(::asc::std::move(other.storage_.value_));
         }
     }
-    // 转换构造按可转换性分流：可隐转组合支持拷贝初始化，其余保持显式。
+    // Converting construction splits on convertibility: implicitly convertible
+    // combinations support copy initialization; the rest stay explicit.
     template <class U,
         enable_if_t<__opt_is_constructible_from_opt<T, U> && __opt_is_implicitly_constructible<T, const U&>, int> = 0>
     CANN_ASC_STL_API constexpr optional(const optional<U>& other)
@@ -291,10 +296,10 @@ private:
     }
 };
 
-// Restricted reference specialization: it borrows a
-// same-type lvalue and never binds a temporary or a cross-type value, so no
-// dangling path exists.  Rebinding assignment, monadic, value-result and
-// interoperability surfaces stay outside the frozen boundary.
+// Restricted reference specialization: it borrows a same-type lvalue and
+// never binds a temporary or a cross-type value, so no dangling path exists.
+// Rebinding assignment, monadic, value-result and interoperability surfaces
+// are deliberately not provided.
 template <class T>
 class optional<T&> {
 public:
@@ -488,8 +493,10 @@ CANN_ASC_STL_API constexpr bool operator>=(const T& left, const optional<U>& rig
     return !right || left >= *right;
 }
 
-// 自由函数 swap：ADL 与非限定 swap 调用点命中本重载并转发到成员 swap。
-// 受限 optional<T&> 特化无交换成员，刻意不参与（引用重绑定在冻结核之外）。
+// Free-function swap: ADL and unqualified swap call sites resolve to this
+// overload, which forwards to member swap. The restricted optional<T&>
+// specialization has no swap member and deliberately does not participate
+// (reference rebinding is out of scope).
 template <class T>
 CANN_ASC_STL_API constexpr enable_if_t<is_move_constructible_v<T> && is_swappable_v<T>, void> swap(
     optional<T>& left, optional<T>& right) noexcept(noexcept(left.swap(right)))

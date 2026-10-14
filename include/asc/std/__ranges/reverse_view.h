@@ -61,7 +61,8 @@ template <class _View>
 #endif
 class reverse_view : public view_interface<reverse_view<_View>> {
 private:
-    // 迭代器-哨位形态 next 的最小等价内联：推进至哨位并返回（保持 constexpr 与设备侧可用）。
+    // Minimal inline equivalent of the iterator-sentinel form of next: advance to
+    // the sentinel and return it (stays constexpr and usable on the device side).
     template <class _Iterator, class _Sentinel>
     static CANN_ASC_STL_API constexpr _Iterator __advance_to_sentinel(_Iterator __iterator, _Sentinel __last)
     {
@@ -164,8 +165,9 @@ public:
         return ::asc::std::ranges::__size_cpo{}(__base_);
     }
 #else
-    // C++17 与设备侧形态：约束不可求值（基座无概念回退），成员按基座现状为无约束版本，
-    // begin() 仅保留 common 形态（基座现状同级）。
+    // C++17 and device-side shape: constraints are not evaluable (no concept
+    // fallback), so the members are unconstrained and begin() keeps only the
+    // common-range form.
     CANN_ASC_STL_API constexpr _View base() const& noexcept(::asc::std::is_nothrow_copy_constructible_v<_View>)
     {
         return __base_;
