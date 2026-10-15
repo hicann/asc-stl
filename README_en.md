@@ -4,7 +4,7 @@ A C++ standard library for Ascend device programming — header-only, with a sin
 
 English | [简体中文](README.md)
 
-[📖 API Reference](docs/zh/api/README.md) | [📚 Roadmap](docs/zh/roadmap/roadmap.md) | [📄 LICENSE](LICENSE) | [🤝 Contributing](CONTRIBUTING.md)
+[📖 API Reference](docs/zh/api/README.md) | [📚 Roadmap](docs/zh/roadmap/roadmap.md) | [🧪 Quick Start](docs/zh/quick_start.md) | [📄 LICENSE](LICENSE) | [🤝 Contributing](CONTRIBUTING.md)
 
 ## 🔥 Latest News
 
@@ -91,6 +91,10 @@ The public headers under `include/asc/std/` provide the standard-library entry p
 
 ## ⚡️ Quick Start
 
+For a quick tour of using ASC-STL, see [Quick Start](docs/zh/quick_start.md) (in Chinese): environment setup, usage on the Host and in kernels, compiling and running, and local verification — with tested Host and Kernel examples.
+
+Usage in one line: ASC-STL is header-only — **just include the public headers; there is nothing to build or link**. Host-side use only needs a C++17 compiler; kernel compilation and on-device execution require CANN (see [Software/Hardware Compatibility](#-softwarehardware-compatibility)).
+
 ### Requirements
 
 | Dependency | Version / notes |
@@ -128,7 +132,7 @@ g++ -std=c++17 -Wall -Wextra -I asc-stl/include sample.cpp -o sample && ./sample
 ```cmake
 add_subdirectory(asc-stl)
 
-target_link_libraries(your_target PRIVATE asc-stl)   # INTERFACE target; propagates include paths only
+target_link_libraries(your_target PRIVATE asc_stl::asc_stl)   # INTERFACE target; propagates include paths only
 ```
 
 ### Building and Running Tests
@@ -149,6 +153,41 @@ cmake -B build -DBUILD_TESTING=ON && cmake --build build -j && cd build && ctest
 On-target regression uses `bash scripts/ci-hardware-check.sh`, which by default runs three rounds each in C++17 and C++20 modes. The test entry currently requires exactly one readable and writable `/dev/davinci[0-9]+` compute device node; in containers the node may carry a non-zero index such as `/dev/davinci4`, and the trailing digits of a physical node must not be treated as an ACL logical device ID. Tests use logical device 0, and actual initialization and execution results are still confirmed by the runtime tests. When no compute device is present, permissions are insufficient, or more than one compute device exists, the entry reports `BLOCKED_ENVIRONMENT` and exits with status code 2; `davinci_manager` is not counted as a compute device.
 
 The optional `ASC_STL_HARDWARE_DEVICE_NODE` validates the expected physical node; it neither changes the logical device ID nor selects among multiple devices. Builds honor `CMAKE_BUILD_PARALLEL_LEVEL` and default to two-way parallelism when it is unset; for example, `CMAKE_BUILD_PARALLEL_LEVEL=8 bash scripts/ci-hardware-check.sh`. The hardware cases are not triggered by the three cloud Host/Device/cannsim CI entries above.
+
+## 💻 Software/Hardware Compatibility
+
+ASC-STL requires the following software and hardware environment:
+
+- Ascend products: [Ascend 950PR&&DT processors](https://www.hiascend.com/hardware/processor)
+- CPU architecture: `aarch64` / `x86_64`
+- OS: a supported Linux (check [compatibility](https://www.hiascend.com/hardware/compatibility))
+- Software dependencies:
+  - CANN 9.2.0 or later (BiSheng CCE/clang 15.0.5 and the AscendCL Runtime ship with CANN)
+  - CMake ≥ 3.20
+
+The hardware platforms supported by each ASC-STL release and the required [CANN](https://www.hiascend.com/developer/download/community/result?module=cann) versions are listed below:
+
+<table style="width: 75%; margin: 0 auto;">
+  <colgroup>
+    <col style="width: 30%">
+    <col style="width: 30%">
+    <col style="width: 40%">
+  </colgroup>
+  <thead>
+      <tr>
+          <th>ASC-STL Version</th>
+          <th>Supported CANN Package</th>
+          <th>Supported Ascend Products</th>
+      </tr>
+  </thead>
+  <tbody style="text-align: center">
+      <tr>
+          <td>v1.0.0, v1.1.0, v1.1.1</td>
+          <td>Community 9.2.0 and later</td>
+          <td><a href="https://www.hiascend.com/hardware/processor">Ascend 950PR&&DT processors</a></td>
+      </tr>
+  </tbody>
+</table>
 
 ## 🧰 IDE Support
 
@@ -187,6 +226,7 @@ Current status: **v1.0.0 (full release) under development, planned for October 1
 
 | Document | Description |
 | --- | --- |
+| [Quick Start](docs/zh/quick_start.md) | Environment setup, Host/Kernel usage, and local verification, with tested examples (in Chinese) |
 | [Product roadmap](docs/zh/roadmap/roadmap.md) | Release plan and per-version capability scope |
 | [v1.0.0 detailed roadmap](docs/zh/roadmap/roadmap_v1_0_0.md) | Entry-level description of the full release: C++ standard library, Ascend extensions, and Runtime capabilities |
 | [Contributing guide](CONTRIBUTING.md) | Contribution workflow, contribution scenarios, and code/test requirements |
@@ -196,6 +236,11 @@ Current status: **v1.0.0 (full release) under development, planned for October 1
 
 - [ASC-STL roadmap](docs/zh/roadmap/roadmap.md): library features are updated weekly, and versions have been released on a biweekly cadence since the second week of October 2026; the full v1.0.0 release (C++ standard library interfaces, Ascend extension interfaces, and Runtime interfaces in their entirety) ships on October 16, followed by v1.1.0 on October 30 (refinement plan, batch 1: quality and performance); dates for later refinement batches are TBD;
 - [v1.0.0 detailed roadmap](docs/zh/roadmap/roadmap_v1_0_0.md): entry-level descriptions of the type system, algorithms, containers and views, strings and text, numerics and time, standard synchronization, memory management, and the Ascend extension and Runtime capabilities.
+
+## 👥 Collaborators
+
+- Prof. Xiong Shengwu's team, Wuhan University of Technology
+- Lu Xiongbo, Jiang Zhenyu, Wang Yike
 
 ## 📝 Additional Information
 

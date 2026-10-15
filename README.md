@@ -4,7 +4,7 @@
 
 简体中文 | [English](README_en.md)
 
-[📖 api文档](docs/zh/api/README.md) | [📚 路线图](docs/zh/roadmap/roadmap.md) | [📄 LICENSE](LICENSE) | [🤝 贡献指南](CONTRIBUTING.md)
+[📖 api文档](docs/zh/api/README.md) | [📚 路线图](docs/zh/roadmap/roadmap.md) | [🧪 快速入门](docs/zh/quick_start.md) | [📄 LICENSE](LICENSE) | [🤝 贡献指南](CONTRIBUTING.md)
 
 ## 🔥 最新动态
 
@@ -91,6 +91,10 @@ asc-stl/
 
 ## ⚡️ 快速入门
 
+若您希望快速体验 ASC-STL 的使用过程，请访问 [快速入门](docs/zh/quick_start.md)：介绍环境搭建、Host 侧与 Kernel 侧（核函数）的使用方式、编译执行与本地验证，含经测试验证的 Host / Kernel 示例。
+
+使用方式概览：ASC-STL 为纯头文件库，**包含公共头即可使用，无需构建与链接**。Host 侧仅需支持 C++17 的编译器；Kernel 侧编译与真机运行需安装 CANN，软硬件要求详见[软硬件配套说明](#-软硬件配套说明)。
+
 ### 环境要求
 
 | 依赖 | 版本 / 说明 |
@@ -136,7 +140,7 @@ g++ -std=c++17 -Wall -Wextra -I asc-stl/include sample.cpp -o sample && ./sample
 ```cmake
 add_subdirectory(asc-stl)
 
-target_link_libraries(your_target PRIVATE asc-stl)   # INTERFACE 目标，只传 include 路径
+target_link_libraries(your_target PRIVATE asc_stl::asc_stl)   # INTERFACE 目标，只传 include 路径
 ```
 
 ### 构建与运行测试
@@ -163,6 +167,41 @@ cmake -B build -DBUILD_TESTING=ON && cmake --build build -j && cd build && ctest
 也不从多设备中选择一个。构建遵循`CMAKE_BUILD_PARALLEL_LEVEL`，未设置时保持
 两路并行；例如`CMAKE_BUILD_PARALLEL_LEVEL=8 bash scripts/ci-hardware-check.sh`。
 硬件用例不由上面的三个云端Host/Device/cannsim CI入口触发。
+
+## 💻 软硬件配套说明
+
+ASC-STL 所需的软硬件环境依赖如下：
+
+- 昇腾产品：[昇腾950PR&&DT处理器](https://www.hiascend.com/hardware/processor)
+- CPU 架构：`aarch64` / `x86_64`
+- 系统：支持的 Linux（进行[兼容性查询](https://www.hiascend.com/hardware/compatibility)）
+- 软件依赖：
+  - CANN 9.2.0 及以上（毕昇CCE/clang 15.0.5 与 AscendCL Runtime 随 CANN 提供）
+  - CMake ≥ 3.20
+
+不同 ASC-STL 版本可支持的硬件平台及所需的 [CANN](https://www.hiascend.com/developer/download/community/result?module=cann) 版本如下表：
+
+<table style="width: 75%; margin: 0 auto;">
+  <colgroup>
+    <col style="width: 30%">
+    <col style="width: 30%">
+    <col style="width: 40%">
+  </colgroup>
+  <thead>
+      <tr>
+          <th>ASC-STL 版本</th>
+          <th>支持 CANN 包版本</th>
+          <th>支持昇腾产品</th>
+      </tr>
+  </thead>
+  <tbody style="text-align: center">
+      <tr>
+          <td>v1.0.0、v1.1.0、v1.1.1</td>
+          <td>社区版 9.2.0 及以上</td>
+          <td><a href="https://www.hiascend.com/hardware/processor">昇腾950PR&&DT处理器</a></td>
+      </tr>
+  </tbody>
+</table>
 
 ## 🧰 IDE支持
 
@@ -201,6 +240,7 @@ ln -sf build/compile_commands.json .
 
 | 文档 | 说明 |
 | --- | --- |
+| [快速入门](docs/zh/quick_start.md) | 环境搭建、Host/Kernel 使用方式与本地验证，含经测试验证的示例 |
 | [产品路线图](docs/zh/roadmap/roadmap.md) | 版本发布计划与各版本能力范围 |
 | [v1.0.0细分路线图](docs/zh/roadmap/roadmap_v1_0_0.md) | 完整版本的条目级说明：C++ 标准库、昇腾扩展与Runtime能力 |
 | [贡献指南](CONTRIBUTING.md) | 贡献流程、贡献场景与代码/测试要求 |
@@ -210,6 +250,11 @@ ln -sf build/compile_commands.json .
 
 - [ASC-STL总路线图](docs/zh/roadmap/roadmap.md)：库功能按周更新，版本自2026年10月第2周起以双周为节奏发布；10月16日发布v1.0.0完整版本（C++ 标准库接口、昇腾扩展接口与Runtime接口全量），10月30日发布v1.1.0（完善计划第一批：质量与性能完善），后续完善批次发布时间待定；
 - [v1.0.0细分路线图](docs/zh/roadmap/roadmap_v1_0_0.md)：类型系统、算法、容器视图、字符串文本、数值时间、标准同步、内存管理及昇腾扩展与Runtime能力的条目级说明。
+
+## 👥 合作贡献者
+
+- 武汉理工大学熊盛武老师团队
+- 路雄博、蒋振宇、王亦柯
 
 ## 📝 相关信息
 
