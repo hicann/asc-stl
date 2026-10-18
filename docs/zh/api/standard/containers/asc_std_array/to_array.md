@@ -59,7 +59,7 @@ template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, 
 | 参数名 | 描述 |
 | --- | --- |
 | `T` | 容器保存或处理的元素类型。 |
-| `Size` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Size` | 输入内建数组的元素数量，由数组类型推导；结果`asc::std::array`具有相同的元素数量。 |
 
 **函数参数**
 
@@ -74,7 +74,7 @@ template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, 
 | 参数名 | 描述 |
 | --- | --- |
 | `T` | 容器保存或处理的元素类型。 |
-| `Size` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Size` | 输入内建数组的元素数量，由数组类型推导；结果`asc::std::array`具有相同的元素数量。 |
 
 **函数参数**
 
@@ -91,20 +91,24 @@ template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, 
 
 ## 约束说明
 
+- 本接口从C++20开始提供；C++17可包含`<asc/std/array>`，但不能调用`to_array`。
+
 - 支持包括零在内的所有N。
 - 成员函数和自由函数均不抛出异常。
 
 ## 调用示例
 
-以下片段用具体对象展示本页调用。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
 #include <asc/std/array>
 
-decltype(auto) example()
+bool example()
 {
-    int values[2] = {1, 2};
-    return asc::std::to_array(values);
+    int source[2] = {2, 4};
+    const auto result = asc::std::to_array(source);
+    source[0] = 9;
+    return result.size() == 2 && result[0] == 2 && result[1] == 4;
 }
 ```
 

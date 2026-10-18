@@ -52,7 +52,7 @@ template<class T> [[nodiscard]] constexpr T bit_ceil(T value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待求下限二次幂的无符号整数值；返回不小于它的最小2的幂。 |
+| `value` | 输入 | 待向上取整到2的幂的无符号整数；返回不小于它的最小2的幂。 |
 
 ## 返回值说明
 
@@ -66,14 +66,15 @@ template<class T> [[nodiscard]] constexpr T bit_ceil(T value) noexcept;
 
 ## 调用示例
 
-以下片段用具体数值展示本页调用。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
 #include <asc/std/bit>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::bit_ceil(5u);
+    const auto result = asc::std::bit_ceil(5u);
+    return result == 8u;
 }
 ```
 

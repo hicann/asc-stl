@@ -58,6 +58,16 @@ class DocumentationChecks(unittest.TestCase):
         self.page.write_text("## 调用示例\n```cpp\n(void)sizeof(int);\nis_same_v<selected, selected>;\n```\n")
         self.assertEqual(len(DOCS.content_errors(self.page)), 2)
 
+    def test_corrupted_declaration_names_are_rejected(self):
+        names = ("Ascinternal::Isnonnarrowingconvertible", "Zvfunctors::Viewsize",
+                 "Detail::Scaledelementtype", "DECIMALDIG")
+        for name in names:
+            with self.subTest(name=name):
+                self.page.write_text("## 声明\n```cpp\n" + name + ";\n```\n")
+                self.assertTrue(DOCS.content_errors(self.page))
+        self.page.write_text("## 声明\n```cpp\nusing result = Value;\n```\n")
+        self.assertEqual(DOCS.content_errors(self.page), [])
+
     def test_runtime_failure_is_not_compile_success(self):
         compiler = shutil.which(os.environ.get("CXX") or "c++")
         if compiler is None:

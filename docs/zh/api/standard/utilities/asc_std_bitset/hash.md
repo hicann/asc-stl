@@ -68,8 +68,8 @@ template<size_t Size> struct hash<asc::std::bitset<Size>>;
 
 - 主模板对枚举类型按底层整型取哈希，其余类型按对象字节序列取哈希；对所选`T`是否存在可用特化以实际声明为准。
 - 提供算术类型、枚举类型、指针类型和nullptr_t的hash特化，各`operator()`均为非抛出并返回size_t。
-- variant<Types...> 特化要求各备选类型可哈希，将活跃备选值的哈希与其索引的哈希合成，valueless_by_exception时取固定哨兵值。
-- bitset<Size> 特化按位序列取哈希，`operator()`为constexpr、非抛出并返回size_t。
+- `variant<Types...>` 特化要求各备选类型可哈希，将活跃备选值的哈希与其索引的哈希合成，valueless_by_exception时取固定哨兵值。
+- `bitset<Size>` 特化按位序列取哈希，`operator()`为constexpr、非抛出并返回size_t。
 
 ## 调用示例
 

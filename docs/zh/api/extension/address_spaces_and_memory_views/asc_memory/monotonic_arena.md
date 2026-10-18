@@ -41,7 +41,7 @@ class monotonic_arena;
 ## 约束说明
 
 - 底层存储由调用方拥有并须在arena使用期间保持有效。
-- alignment必须是非零的2的幂。
+- `alignment`必须是2的非负整数次幂，即1、2、4、8等值。
 - 空间不足时allocate返回空指针。
 - reset后此前取得的分配不得继续使用。
 

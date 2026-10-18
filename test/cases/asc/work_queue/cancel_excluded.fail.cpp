@@ -19,7 +19,7 @@
 
 int main()
 {
-    asc::detail::work_cursor cursor{0, 20, 7};
+    asc::work_cursor cursor{0, 20, 7};
     auto queue = asc::make_work_queue<std::uint32_t>(cursor, 20u, 7u);
     queue.cancel();
 }

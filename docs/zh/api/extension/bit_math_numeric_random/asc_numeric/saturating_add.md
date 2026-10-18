@@ -66,14 +66,17 @@ template<class T> constexpr T saturating_add(T left, T right) noexcept;
 
 ## 调用示例
 
-以下片段选用具体整数实参展示接口调用。
+以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/numeric>
+#include <asc/std/limits>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::saturating_add(200, 100);
+    const int maximum = asc::std::numeric_limits<int>::max();
+    const auto result = asc::saturating_add(maximum - 2, 5);
+    return result == maximum && asc::saturating_add(200, 100) == 300;
 }
 ```
 

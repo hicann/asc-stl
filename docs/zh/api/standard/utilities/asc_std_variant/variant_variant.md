@@ -34,122 +34,96 @@
 
 ## 函数原型
 
-### 原型1
+所属类型：[`asc::std::variant<Types...>`](variant.md)。以下为类内声明；未命名约束形参和默认索引用于选择重载，调用方无需指定。
+
+### 默认构造
 
 ```cpp
-constexpr variant(const variant<Types...>& value);
+template <class First = variant_alternative_t<0, variant>, enable_if_t<is_default_constructible_v<First>, int> = 0>
+constexpr variant() noexcept(is_nothrow_default_constructible_v<First>);
 ```
 
-### 原型2
+### 复制构造
 
 ```cpp
-constexpr variant(variant<Types...>&& value);
+constexpr variant(const variant& other);
 ```
 
-### 原型3
+### 移动构造
 
 ```cpp
-template<bool Dummy, class> constexpr variant() noexcept(is_nothrow_default_constructible_v<Firsttype>);
+constexpr variant(variant&& other);
 ```
 
-### 原型4
+### 值转换构造
 
 ```cpp
-template<class Arg, class, class Constraints, class> constexpr variant(Arg&& value) noexcept(Constraints::Nothrowconstructible);
+template <class T, size_t Index = __variant_best_match<remove_cvref_t<T>, void, Types...>::value,
+    enable_if_t<Index != variant_npos && is_constructible_v<variant_alternative_t<Index, variant>, T>, int> = 0>
+constexpr variant(T&& value) noexcept(
+    is_nothrow_constructible_v<variant_alternative_t<Index, variant>, T>);
 ```
 
-### 原型5
+### 按索引原位构造
 
 ```cpp
-template<class T, class ...Args, size_t Index, class Constraints, class> constexpr variant(in_place_type_t<T> tag, Args&&... args) noexcept(Constraints::Nothrowconstructible);
+template <size_t Index, class... Args, enable_if_t<(Index < sizeof...(Types)), int> = 0>
+constexpr explicit variant(in_place_index_t<Index>, Args&&... args) noexcept(
+    is_nothrow_constructible_v<variant_alternative_t<Index, variant>, Args...>);
 ```
 
-### 原型6
+### 按类型原位构造
 
 ```cpp
-template<size_t Index, class ...Args, class Constraints, class> constexpr variant(in_place_index_t<Index> tag, Args&&... args) noexcept(Constraints::Nothrowconstructible);
+template <class T, class... Args, size_t Index = __variant_index_v<T, Types...>,
+    enable_if_t<Index != variant_npos && __variant_type_count_v<T, Types...> == 1, int> = 0>
+constexpr explicit variant(in_place_type_t<T>, Args&&... args) noexcept(
+    is_nothrow_constructible_v<T, Args...>);
+```
+
+### Host按索引使用初始化列表
+
+```cpp
+template <size_t Index, class Up, class... Args,
+    enable_if_t<(Index < sizeof...(Types)) &&
+            is_constructible_v<variant_alternative_t<Index, variant>, ::std::initializer_list<Up>&, Args...>,
+        int> = 0>
+constexpr explicit variant(in_place_index_t<Index>, ::std::initializer_list<Up> list,
+    Args&&... args) noexcept(is_nothrow_constructible_v<variant_alternative_t<Index, variant>,
+    ::std::initializer_list<Up>&, Args...>);
+```
+
+### Host按类型使用初始化列表
+
+```cpp
+template <class T, class Up, class... Args, size_t Index = __variant_index_v<T, Types...>,
+    enable_if_t<Index != variant_npos && __variant_type_count_v<T, Types...> == 1 &&
+            is_constructible_v<T, ::std::initializer_list<Up>&, Args...>,
+        int> = 0>
+constexpr explicit variant(in_place_type_t<T>, ::std::initializer_list<Up> list,
+    Args&&... args) noexcept(is_nothrow_constructible_v<T, ::std::initializer_list<Up>&, Args...>);
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 复制来源variant；其活动备选项的值被复制到新对象。 |
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入/输出 | 移动来源variant；其活动备选项的值被移动到新对象，移动后处于有效但未指定状态。 |
-
-### 原型3的参数
-
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Dummy` | 编译期占位布尔参数，用于启用默认构造重载；调用方无需显式指定。 |
-| `未命名参数2` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
-
-### 原型4的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Arg` | 转换构造来源实参的类型；据此选择被构造的备选项。 |
-| `未命名参数2` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
-| `Constraints` | 内部编译期约束聚合类型，用于重载筛选与异常说明；调用方无需显式指定。 |
-| `未命名参数4` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
+| `Types` | 所属`variant`的备选类型列表，不得包含数组、引用或`void`。 |
+| `T` | 按类型原位构造时选择的备选类型，须恰好出现一次。 |
+| `Index` | 按索引构造时的备选位置，从0起且小于备选类型数量；按类型或值选择的形式由实现推导。 |
+| `Args` | 转发给所选备选类型构造函数的参数类型。 |
+| `Up` | Host初始化列表的元素类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 转换构造来源值；按其类型匹配备选项并构造该备选项，左值复制、右值移动，右值移动后处于有效但未指定状态。 |
-
-### 原型5的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 原位构造的备选项类型；须在备选项列表中恰好出现一次。 |
-| `Args` | 原位构造所选备选项的实参类型列表。 |
-| `Index` | 备选项T在备选项列表中的下标，编译期推导得到；调用方无需显式指定。 |
-| `Constraints` | 内部编译期约束聚合类型，用于重载筛选与异常说明；调用方无需显式指定。 |
-| `未命名参数5` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `tag` | 输入 | in_place_type_t<T> 消歧标记；表示在类型参数T所指备选项上原位构造。 |
-| `args` | 输入/输出 | 原位构造所选备选项的实参；按序转发，右值被移动后处于有效但未指定状态。 |
-
-### 原型6的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Index` | 原位构造目标备选项的下标（从0起）；须小于备选项数量。 |
-| `Args` | 原位构造所选备选项的实参类型列表。 |
-| `Constraints` | 内部编译期约束聚合类型，用于重载筛选与异常说明；调用方无需显式指定。 |
-| `未命名参数4` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `tag` | 输入 | in_place_index_t<Index> 消歧标记；表示在下标Index所指备选项上原位构造。 |
-| `args` | 输入/输出 | 原位构造所选备选项的实参；按序转发，右值被移动后处于有效但未指定状态。 |
+| `other` | 输入；交换时为输入/输出 | 同类型来源对象；右值形式允许移动其活动备选值，交换会改变两个对象。 |
+| `value` | 输入（可能被移动） | 用于选择并构造或赋值活动备选项的值。 |
+| `args` | 输入（可能被移动） | 转发给所选类型构造函数的实参。 |
+| `list` | 输入 | 仅Host形式提供的初始化列表；与其余实参一起用于构造。 |
 
 ## 返回值说明
 
@@ -157,20 +131,26 @@ template<size_t Index, class ...Args, class Constraints, class> constexpr varian
 
 ## 约束说明
 
-- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
+- 对象一次保存一个活动备选值，读取前须通过`index()`确认所选备选项。
+- Device使用的备选类型及构造、赋值、析构和交换操作须在对应编程模式可用且不抛出异常。
+- 按索引形式要求索引在范围内；按类型形式要求该类型在备选列表中恰好出现一次。所选类型必须能由给定实参构造。
+- 带`::std::initializer_list`的重载仅可在Host调用。
+- 默认构造要求首个备选类型可默认构造，并激活索引0。值转换构造要求存在可选择且可构造的备选类型。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
 #include <asc/std/variant>
 
 bool example()
 {
-    asc::std::variant<int, float> value(7);
-    return value.index() == 0 && !value.valueless_by_exception() && asc::std::get<0>(value) == 7;
+    asc::std::variant<int, float> zero;
+    asc::std::variant<int, float> selected(asc::std::in_place_index<1>, 2.5F);
+    const auto copied = selected;
+    return zero.index() == 0 && asc::std::get<0>(zero) == 0 &&
+        copied.index() == 1 && asc::std::get<1>(copied) == 2.5F;
 }
 ```
 

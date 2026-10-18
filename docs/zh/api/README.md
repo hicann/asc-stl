@@ -2924,6 +2924,7 @@
       - [asc::acquire_work](extension/execution_hierarchy_and_collectives/asc_work_queue/acquire_work.md)
       - [asc::make_work_queue](extension/execution_hierarchy_and_collectives/asc_work_queue/make_work_queue.md)
       - [asc::work_chunk](extension/execution_hierarchy_and_collectives/asc_work_queue/work_chunk.md)
+      - [asc::work_cursor](extension/execution_hierarchy_and_collectives/asc_work_queue/work_cursor.md)
       - [asc::work_queue_ref](extension/execution_hierarchy_and_collectives/asc_work_queue/work_queue_ref.md)
   - [设备端并行算法与参数包装](extension/device_parallel_algorithms_and_arguments/device_parallel_algorithms_and_arguments.md)
     - [头文件asc/algorithm](extension/device_parallel_algorithms_and_arguments/asc_algorithm/asc_algorithm.md)

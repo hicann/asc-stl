@@ -47,23 +47,22 @@ asc::execution_status allocate(void** output, asc::std::size_t bytes, asc::std::
 | --- | --- | --- |
 | `output` | 输出 | 用于接收分配地址的可写指针槽；槽本身非空且调用前 *output为nullptr。成功时写入资源分配的地址，失败时按返回状态处理。 |
 | `bytes` | 输入 | 本次申请的非零字节数。 |
-| `alignment` | 输入 | 要求的对齐值，单位为字节。 |
+| `alignment` | 输入 | 字节对齐值，须为2的非负整数次幂且不超过32；默认值同上限。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::execution_status` | 返回本次同步分配／释放的状态；成功时本次操作已经完成。 |
+| `asc::execution_status` | 返回本次同步分配的状态；成功时本次操作已经完成。 |
 
 ## 约束说明
 
-- 仅可在Host调用。
-- 内存资源不抛出异常。
-- bytes须大于0，零大小请求按无效参数拒绝。
-- alignment须为2的幂且不超过32字节（默认32），否则按无效参数拒绝。
-- output须为非空指针，且调用前其指向为空指针；请求未通过校验时返回invalid_argument，此时不写入output；底层分配失败时返回错误状态，是否写入output以运行时行为为准。
-- 释放时须使用同一资源及原始大小和对齐。
-- 资源及其引用的生命周期由调用方管理。
+- 仅可在Host调用；运行时须已初始化。
+- 本接口不抛出异常，失败通过`asc::execution_status`报告。
+- `output`必须非空，且调用前`*output == nullptr`；`bytes`必须大于0。
+- `alignment`须为2的非负整数次幂且不超过32。有效资源在上述参数校验失败时返回`asc::execution_errc::invalid_argument`，不写入`*output`。
+- 底层分配失败通过返回状态报告；调用方仅在成功后使用输出地址。
+- 分配或释放非空地址时，当前Device必须与资源绑定的设备编号一致；不一致时返回`asc::execution_errc::invalid_argument`。
 
 ## 调用示例
 

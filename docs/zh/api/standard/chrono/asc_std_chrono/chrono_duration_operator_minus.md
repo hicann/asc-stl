@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::chrono::duration 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr common_type_t<duration<Re, Period>> operator-() const;
+constexpr common_type_t<duration<Rep, Period>> operator-() const;
 ```
 
 ## 参数说明
@@ -49,7 +49,7 @@ constexpr common_type_t<duration<Re, Period>> operator-() const;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `common_type_t<duration<Re, Period>>` | 返回按对应日历或时长算术规则产生的新值。 |
+| `common_type_t<duration<Rep, Period>>` | 返回按对应日历或时长算术规则产生的新值。 |
 
 ## 约束说明
 
@@ -57,14 +57,16 @@ constexpr common_type_t<duration<Re, Period>> operator-() const;
 
 ## 调用示例
 
-以下Host片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
 
-decltype(auto) example(const asc::std::chrono::duration<int>& value)
+bool example()
 {
-    return (-value);
+    const asc::std::chrono::duration<int> value{3};
+    const auto result = -value;
+    return result.count() == -3 && value.count() == 3;
 }
 ```
 

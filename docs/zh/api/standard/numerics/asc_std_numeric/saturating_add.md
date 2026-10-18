@@ -70,14 +70,17 @@ template<class T> constexpr T saturating_add(T left, T right) noexcept;
 
 ## 调用示例
 
-以下片段用具体整数范围展示数值调用；输出数组具有足够容量。
+以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/std/numeric>
+#include <asc/std/limits>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::saturating_add(200, 100);
+    const int maximum = asc::std::numeric_limits<int>::max();
+    const auto result = asc::std::saturating_add(maximum - 2, 5);
+    return result == maximum && asc::std::saturating_add(200, 100) == 300;
 }
 ```
 

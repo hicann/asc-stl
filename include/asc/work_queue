@@ -45,6 +45,9 @@
 
 namespace asc {
 
+// Public name for the caller-owned cursor; the existing implementation type remains compatible.
+using work_cursor = detail::work_cursor;
+
 namespace detail {
 
 template <class T>
@@ -104,16 +107,16 @@ class work_queue_ref {
 public:
     CANN_ASC_STL_API constexpr work_queue_ref() noexcept = default;
 
-    CANN_ASC_STL_API constexpr explicit work_queue_ref(detail::work_cursor& cursor) noexcept
+    CANN_ASC_STL_API constexpr explicit work_queue_ref(work_cursor& cursor) noexcept
         : cursor_(&cursor),
           end_(static_cast<Index>(cursor.end)),
           grain_(cursor.grain_size > 0 ? static_cast<Index>(cursor.grain_size) : Index(1))
     {}
-    CANN_ASC_STL_API constexpr work_queue_ref(detail::work_cursor& cursor, Index end, Index grain_size) noexcept
+    CANN_ASC_STL_API constexpr work_queue_ref(work_cursor& cursor, Index end, Index grain_size) noexcept
         : cursor_(&cursor), end_(end), grain_(grain_size > 0 ? grain_size : Index(1))
     {}
 
-    CANN_ASC_STL_API constexpr detail::work_cursor* cursor() const noexcept
+    CANN_ASC_STL_API constexpr work_cursor* cursor() const noexcept
     {
         return cursor_;
     }
@@ -127,14 +130,14 @@ public:
     }
 
 private:
-    detail::work_cursor* cursor_{};
+    work_cursor* cursor_{};
     Index end_{};
     Index grain_{1};
 };
 
 template <class Index>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr work_queue_ref<Index> make_work_queue(
-    detail::work_cursor& cursor, Index end, Index grain_size) noexcept
+    work_cursor& cursor, Index end, Index grain_size) noexcept
 {
     return work_queue_ref<Index>(cursor, end, grain_size);
 }
@@ -156,8 +159,7 @@ CANN_ASC_STL_API bool acquire_work(work_queue_ref<Index> queue, work_chunk<Index
 // write while the bound and grain travel as plain values, so no concurrent
 // claimer ever re-reads the fields sharing the cursor's cache line.
 template <class Index>
-CANN_ASC_STL_API bool acquire_work(
-    detail::work_cursor* cursor, Index end, Index grain_size, work_chunk<Index>& chunk) noexcept
+CANN_ASC_STL_API bool acquire_work(work_cursor* cursor, Index end, Index grain_size, work_chunk<Index>& chunk) noexcept
 {
     if (cursor == nullptr) {
         chunk = work_chunk<Index>();
@@ -187,7 +189,7 @@ CANN_ASC_STL_API bool acquire_work(
 // claim advances the __gm__-qualified cell through the CANN scalar atomic.
 template <class Index>
 CANN_ASC_STL_API bool acquire_work(
-    __gm__ detail::work_cursor* cursor, Index end, Index grain_size, work_chunk<Index>& chunk) noexcept
+    __gm__ work_cursor* cursor, Index end, Index grain_size, work_chunk<Index>& chunk) noexcept
 {
     if (cursor == nullptr) {
         chunk = work_chunk<Index>();

@@ -34,18 +34,23 @@
 
 ## 函数原型
 
+所属类型：[`asc::std::reference_wrapper<T>`](reference_wrapper.md)。以下为类内声明；`__accept`是类内的引用绑定检查，不是调用方需要提供的函数。
+
 ```cpp
-template<class U, class> constexpr reference_wrapper(U&& value) noexcept(noexcept(Fun(::asc::std::declval<U>())));
+template<class U, class = enable_if_t<!__is_same(remove_cvref_t<U>, reference_wrapper)>>
+constexpr reference_wrapper(U&& value)
+    noexcept(noexcept(reference_wrapper::__accept(::asc::std::forward<U>(value))));
 ```
 
 ## 参数说明
+
+声明中的未命名模板约束参数用于选择可用重载，调用方无需提供；接口的适用类型和调用条件见约束说明。
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
 | `U` | 被包装对象的来源类型；须能以左值引用绑定（U& 有效），且不能是reference_wrapper自身。 |
-| `未命名参数2` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
 
 **函数参数**
 
@@ -59,21 +64,23 @@ template<class U, class> constexpr reference_wrapper(U&& value) noexcept(noexcep
 
 ## 约束说明
 
-- 支持标准可调用对象和成员指针形式。
+- 来源值须能绑定为有效的`T&`；不能用临时对象建立随后悬空的引用。
+- 构造的包装器不拥有对象；被引用对象须在包装器访问期间保持有效。
+- 构造模板排除同类型包装器，普通复制仍可复制已有包装器的引用关系。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
 #include <asc/std/functional>
 
 bool example()
 {
-    int value = 7;
+    int value = 3;
     asc::std::reference_wrapper<int> reference(value);
-    reference.get() = 9;
-    return value == 9;
+    reference.get() = 7;
+    return value == 7 && &reference.get() == &value;
 }
 ```
 

@@ -44,17 +44,17 @@ template<unsigned Rank> constexpr asc::tensor_copy_descriptor<Rank> make_tensor_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rank` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Rank` | 张量的维度数，取值为1至5；每个输入数组均包含`Rank`个元素。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `extents` | 输入 | 各维的有效长度；维度数量和取值范围须满足本页约束。 |
-| `source_strides` | 输入 | 源数据或源对象。异步操作完成前，其存储须保持有效。 |
-| `destination_strides` | 输出 | 用于接收结果的目标存储。异步操作完成前，其存储须保持有效。 |
-| `left_padding` | 输入 | 提供“由各维范围、源/目标步长和填充数组构造Tensor Copy Descriptor”使用的对象引用；被引用对象须在调用期间有效。 |
-| `right_padding` | 输入 | 提供“由各维范围、源/目标步长和填充数组构造Tensor Copy Descriptor”使用的对象引用；被引用对象须在调用期间有效。 |
+| `source_strides` | 输入 | 各维在源布局中的步长，以元素为单位；数组中的数值在本次调用中复制到描述符。 |
+| `destination_strides` | 输入 | 各维在目标布局中的步长，以元素为单位；数组中的数值在本次调用中复制到描述符。 |
+| `left_padding` | 输入 | 各维前侧填充的元素个数；0表示该侧不填充。数组须在本次调用期间有效。 |
+| `right_padding` | 输入 | 各维后侧填充的元素个数；0表示该侧不填充。数组须在本次调用期间有效。 |
 
 ## 返回值说明
 
@@ -64,24 +64,25 @@ template<unsigned Rank> constexpr asc::tensor_copy_descriptor<Rank> make_tensor_
 
 ## 约束说明
 
-- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Rank为1至5。
-- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
+- `Rank`为1至5，最内层维度的索引为`Rank - 1`。
+- 五个输入数组须在调用期间有效；函数复制数组数值，不保存数组引用。
+- 本函数同步构造描述符，不提交数据搬运，也不自动调用`validate()`。实际搬运前须检查描述符及其数据范围是否满足相应接口要求。
+- 描述符可在Host、AI Core SIMD编程和AI Core SIMT编程中构造。
 
 ## 调用示例
 
-以下片段以二维无填充描述符展示查询或校验；实际存储须满足描述符范围。
+以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/tensor_copy>
 
-decltype(auto) example()
+bool example()
 {
-    unsigned int extents[2] = {2, 2};
-    unsigned int strides[2] = {2, 1};
-    unsigned int padding[2] = {0, 0};
-    auto descriptor = asc::make_tensor_copy_descriptor(extents, strides, strides, padding, padding);
-    return descriptor;
+    const unsigned extents[2] = {2, 3};
+    const unsigned strides[2] = {3, 1};
+    const unsigned padding[2] = {0, 0};
+    const auto descriptor = asc::make_tensor_copy_descriptor(extents, strides, strides, padding, padding);
+    return descriptor.extent(0) == 2 && descriptor.extent(1) == 3;
 }
 ```
 

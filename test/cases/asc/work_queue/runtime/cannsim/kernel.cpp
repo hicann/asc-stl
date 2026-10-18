@@ -15,20 +15,20 @@
  */
 #include "../semantics.h"
 
-__global__ void asc_stl_b026_work_queue_cannsim_kernel(std::uint32_t* visits, asc::detail::work_cursor* cursor)
+__global__ void asc_stl_b026_work_queue_cannsim_kernel(std::uint32_t* visits, asc::work_cursor* cursor)
 {
     asc_stl_work_queue_runtime::evaluate(visits, cursor, 257u, 11u);
 }
 
-__global__ void asc_stl_b026_work_queue_boundary_cannsim_kernel(std::uint32_t* result, asc::detail::work_cursor* cursor)
+__global__ void asc_stl_b026_work_queue_boundary_cannsim_kernel(std::uint32_t* result, asc::work_cursor* cursor)
 {
     if (threadIdx.x == 0) {
         asc_stl_work_queue_runtime::evaluate_uint64_boundary(result, cursor);
     }
 }
 
-void launch_asc_stl_b026_work_queue_cannsim(std::uint32_t* visits, asc::detail::work_cursor* cursor,
-    std::uint32_t* boundary_result, asc::detail::work_cursor* boundary_cursor, void* stream)
+void launch_asc_stl_b026_work_queue_cannsim(std::uint32_t* visits, asc::work_cursor* cursor,
+    std::uint32_t* boundary_result, asc::work_cursor* boundary_cursor, void* stream)
 {
     asc_stl_b026_work_queue_cannsim_kernel<<<8, 32, 0, stream>>>(visits, cursor);
     asc_stl_b026_work_queue_boundary_cannsim_kernel<<<1, 32, 0, stream>>>(boundary_result, boundary_cursor);

@@ -30,13 +30,32 @@
 
 `asc::acquire_work`从共享工作队列中原子领取一个互不重叠的索引区间，并将区间写入`chunk`。返回false表示没有剩余工作。
 
-该接口的可用位置为AI Core SIMD编程、AI Core SIMT编程。
+可在Host、AI Core SIMD编程和AI Core SIMT编程中使用各自适用的重载。
 
 ## 函数原型
 
+Host和AI Core SIMT编程可使用队列引用或普通游标指针形式。
+
 ```cpp
 namespace asc {
-template<class Index> bool acquire_work(asc::work_queue_ref<Index> queue, asc::work_chunk<Index>& chunk) noexcept;
+template<class Index>
+bool acquire_work(work_queue_ref<Index> queue, work_chunk<Index>& chunk) noexcept;
+} // namespace asc
+```
+
+```cpp
+namespace asc {
+template<class Index>
+bool acquire_work(work_cursor* cursor, Index end, Index grain_size, work_chunk<Index>& chunk) noexcept;
+} // namespace asc
+```
+
+AI Core SIMD编程须使用GM地址空间指针形式。
+
+```cpp
+namespace asc {
+template<class Index>
+bool acquire_work(__gm__ work_cursor* cursor, Index end, Index grain_size, work_chunk<Index>& chunk) noexcept;
 } // namespace asc
 ```
 
@@ -46,26 +65,30 @@ template<class Index> bool acquire_work(asc::work_queue_ref<Index> queue, asc::w
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Index` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Index` | 支持的32位或64位无符号索引类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `queue` | 输入 | 引用调用方管理的并发工作队列；游标须在任务领取期间有效。 |
-| `chunk` | 输入/输出 | 接收本次领取的非重叠工作区间。 |
+| `cursor` | 输入/输出 | 共享的工作游标；领取时以原子操作推进`next`。 |
+| `end` | 输入 | 可领取范围的结束索引，不包含该值。 |
+| `grain_size` | 输入 | 本次领取粒度；0按1处理。 |
+| `chunk` | 输出 | 成功时接收半开区间；失败时置为空区间。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回`true`，否则返回`false`。 |
+| `bool` | 领取到非空区间时返回`true`；游标为空或已到达结束位置时返回`false`。 |
 
 ## 约束说明
 
 - Index必须为受支持的32位或64位无符号整数。
 - 队列引用及其游标在并发领取期间必须保持有效。
-- 接口不保证领取顺序或公平性。
+- 正粒度与游标当前值相加须可由64位无符号整数表示；不能依赖溢出回绕继续领取。
+- 本接口不保证线程领取顺序、公平性或隐式同步；游标构造和生命周期见[`asc::work_cursor`](work_cursor.md)。
 
 ## 调用示例
 

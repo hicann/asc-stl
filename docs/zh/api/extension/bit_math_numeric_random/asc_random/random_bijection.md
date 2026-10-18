@@ -34,13 +34,15 @@
 
 ```cpp
 namespace asc {
-template<class Index = asc::std::uint64_t, class Bijection = asc::detail::feistel_bijection<Index>> class random_bijection;
+// 声明摘要：默认模板实参在下文说明。
+template<class Index, class Bijection> class random_bijection;
 } // namespace asc
 ```
 
+`Index`默认使用64位无符号整数类型。`Bijection`默认使用库提供的置换实现，调用方可直接构造`asc::random_bijection<>`而无需命名默认实现类型。自定义`Bijection`须支持以范围大小和随机数生成器构造，并以`Index`值调用；在其置换域中反复调用必须能够返回到`[0, size)`。
+
 ## 约束说明
 
-- 声明中的`asc::detail`类型是当前头文件实际使用的实现类型，未另行提供同名公共别名；请使用本页的公开构造入口，不把它改写成不存在的公共类型名。
 - 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
 - 不提供SeedSequence、流式输入输出或共享全局状态。
 

@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::chrono::duration 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr duration<Re, Period>& operator-=(const duration<Re, Period>& other);
+constexpr duration<Rep, Period>& operator-=(const duration<Rep, Period>& other);
 ```
 
 ## 参数说明
@@ -53,7 +53,7 @@ constexpr duration<Re, Period>& operator-=(const duration<Re, Period>& other);
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `duration<Re, Period> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| `duration<Rep, Period> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 
 ## 约束说明
 
@@ -61,14 +61,16 @@ constexpr duration<Re, Period>& operator-=(const duration<Re, Period>& other);
 
 ## 调用示例
 
-以下Host片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
 
-void example(asc::std::chrono::duration<int>& value)
+bool example()
 {
-    value -= asc::std::chrono::duration<int>{1};
+    asc::std::chrono::duration<int> value{6};
+    auto& updated = (value -= asc::std::chrono::duration<int>{2});
+    return &updated == &value && value.count() == 4;
 }
 ```
 

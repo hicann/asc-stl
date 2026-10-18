@@ -40,14 +40,14 @@
 
 ```cpp
 // asc::std::chrono::duration 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr duration<Re, Period>& operator%=(const duration<Re, Period>& divisor);
+constexpr duration<Rep, Period>& operator%=(const duration<Rep, Period>& divisor);
 ```
 
 ### 原型2
 
 ```cpp
 // asc::std::chrono::duration 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr duration<Re, Period>& operator%=(const rep& scalar);
+constexpr duration<Rep, Period>& operator%=(const rep& scalar);
 ```
 
 ## 参数说明
@@ -72,8 +72,8 @@ constexpr duration<Re, Period>& operator%=(const rep& scalar);
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `duration<Re, Period> &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
-| 原型2 | `duration<Re, Period> &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型1 | `duration<Rep, Period> &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型2 | `duration<Rep, Period> &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
 
 ## 约束说明
 
@@ -81,14 +81,16 @@ constexpr duration<Re, Period>& operator%=(const rep& scalar);
 
 ## 调用示例
 
-以下Host片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
 
-void example(asc::std::chrono::duration<int>& value)
+bool example()
 {
-    value %= asc::std::chrono::duration<int>{2};
+    asc::std::chrono::duration<int> value{7};
+    auto& updated = (value %= 3);
+    return &updated == &value && value.count() == 1;
 }
 ```
 

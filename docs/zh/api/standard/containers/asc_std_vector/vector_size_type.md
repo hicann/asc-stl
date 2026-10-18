@@ -38,45 +38,36 @@
 
 ```cpp
 // asc::std::vector 类内的声明节选；模板形参和其他成员由所属类提供。
-using size_type = unsigned long;
+using size_type = asc::std::size_t;
 ```
 
 ## 约束说明
+
+在泛型代码中可通过所属类型的`size_type`声明大小变量，无需硬编码底层整数类型；该别名与其他成员类型的关系见所属类型页面。
 
 - 此别名表示所属类型用于元素数量或大小的无符号整数类型；读取类型本身不分配内存，也不访问元素。
 - 构造、分配和访问的运行条件见所属类型[asc::std::vector](vector.md)。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
-#include <asc/std/vector>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/vector>
+#include <asc/std/cstddef>
+#include <asc/std/type_traits>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void use_type()
+bool example()
 {
-    using alias_type = typename asc::std::vector<int, example_allocator<int>>::size_type;
+    using Vector = asc::std::vector<int, ::std::allocator<int>>;
+    static_assert(asc::std::is_same_v<Vector::size_type, asc::std::size_t>);
+    Vector values(::std::allocator<int>{});
+    values.push_back(7);
+    const Vector::size_type count = values.size();
+    return count == 1;
 }
 ```
-
-对应完整工程使用`C++17`，并通过Host编译与运行验证。
-
-完整示例源码：[explicit_allocator_vector.cpp](../../../../examples/explicit_allocator_vector.cpp)。
 
 ## 关联API
 

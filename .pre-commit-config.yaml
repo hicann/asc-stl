@@ -20,6 +20,8 @@ repos:
         entry: python scripts/add_license_header.py
         language: system
         files: \.(asc|cpp|cc|cxx|h|hpp|cuh|py|sh|cmake|cmake\.in|cpp\.in)$|(^|/)CMakeLists\.txt$|(^|/)__config$
+        # Preserve the upstream CANN license on the GitCode-provided CI script.
+        exclude: ^\.gitcode/scripts/ut\.sh$
         stages: [pre-commit]
 
       - id: asc-stl-style-check

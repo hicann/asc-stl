@@ -60,6 +60,8 @@ template<class T> [[nodiscard]] constexpr enable_if_t<is_integral_v<T>&& !is_sam
 
 ## 参数说明
 
+声明中的未命名模板约束参数用于选择可用重载，调用方无需提供；接口的适用类型和调用条件见约束说明。
+
 ### 原型1的参数
 
 **模板参数**
@@ -82,7 +84,6 @@ template<class T> [[nodiscard]] constexpr enable_if_t<is_integral_v<T>&& !is_sam
 | 参数名 | 描述 |
 | --- | --- |
 | `T` | `left`与`right`所指对象的类型；须为非void的对象类型。 |
-| `未命名参数3` | 匿名非类型模板参数，类型为int，仅用于承载上一个参数的约束类型；调用方无需显式指定。 |
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
@@ -123,14 +124,16 @@ template<class T> [[nodiscard]] constexpr enable_if_t<is_integral_v<T>&& !is_sam
 
 ## 调用示例
 
-以下片段用具体整数范围展示数值调用；输出数组具有足够容量。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
 #include <asc/std/numeric>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::midpoint(2, 8);
+    int values[5] = {};
+    return asc::std::midpoint(-3, 3) == 0 &&
+        asc::std::midpoint(values, values + 4) == values + 2;
 }
 ```
 

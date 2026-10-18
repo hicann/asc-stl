@@ -34,9 +34,12 @@
 
 ```cpp
 namespace asc {
-template<asc::memory_scope Scope, class CompletionFunction = asc::detail::barrier_empty_completion> class barrier;
+// 声明摘要：CompletionFunction的默认模板实参在下文说明。
+template<asc::memory_scope Scope, class CompletionFunction> class barrier;
 } // namespace asc
 ```
+
+`CompletionFunction`默认使用库提供的空完成函数类型；因此可直接写`asc::barrier<asc::memory_scope::block>`。自定义完成函数须可无参调用且不抛出异常，每阶段由完成该阶段的线程调用。
 
 ## 约束说明
 

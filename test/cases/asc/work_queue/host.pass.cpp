@@ -18,9 +18,12 @@
 
 #include <cassert>
 #include <cstdint>
+#include <type_traits>
 
 int main()
 {
+    static_assert(std::is_same_v<asc::work_cursor, asc::detail::work_cursor>);
+    static_assert(std::is_same_v<decltype(std::declval<asc::work_queue_ref<unsigned>>().cursor()), asc::work_cursor*>);
     // work_chunk is a plain half-open interval value type.
     constexpr asc::work_chunk<std::uint32_t> empty_chunk{};
     static_assert(empty_chunk.empty());
@@ -37,7 +40,7 @@ int main()
 
     // The queue borrows a caller-owned cursor and carries the end bound and
     // grain size as values: only the cursor cell is touched while claiming.
-    asc::detail::work_cursor cursor{0, 20, 7};
+    asc::work_cursor cursor{0, 20, 7};
     auto queue = asc::make_work_queue<std::uint32_t>(cursor, 20u, 7u);
     assert(queue.cursor() == &cursor);
     assert(queue.end_value() == 20);
@@ -64,7 +67,7 @@ int main()
     assert(piece.empty());
 
     // A 64-bit index queue follows the same contract.
-    asc::detail::work_cursor wide_cursor{0, 257, 11};
+    asc::work_cursor wide_cursor{0, 257, 11};
     auto wide_queue = asc::make_work_queue<std::uint64_t>(wide_cursor, 257ull, 11ull);
     asc::work_chunk<std::uint64_t> wide_piece{};
     std::uint64_t covered = 0;
@@ -81,7 +84,7 @@ int main()
     // Exercise the frozen uint64_t index domain across the sign bit without
     // traversing the enormous prefix of the range.
     constexpr std::uint64_t high_bit = std::uint64_t{1} << 63;
-    asc::detail::work_cursor crossing_cursor{high_bit - 2, high_bit + 3, 2};
+    asc::work_cursor crossing_cursor{high_bit - 2, high_bit + 3, 2};
     auto crossing_queue = asc::make_work_queue<std::uint64_t>(crossing_cursor, high_bit + 3, std::uint64_t{2});
     assert(asc::acquire_work(crossing_queue, wide_piece));
     assert(wide_piece.begin == high_bit - 2 && wide_piece.end == high_bit);
@@ -91,13 +94,13 @@ int main()
     assert(wide_piece.begin == high_bit + 2 && wide_piece.end == high_bit + 3);
     assert(!asc::acquire_work(crossing_queue, wide_piece));
 
-    asc::detail::work_cursor zero_cursor{0, 1, 1};
+    asc::work_cursor zero_cursor{0, 1, 1};
     auto high_end_queue = asc::make_work_queue<std::uint64_t>(zero_cursor, high_bit, std::uint64_t{3});
     assert(asc::acquire_work(high_end_queue, wide_piece));
     assert(wide_piece.begin == 0 && wide_piece.end == 3);
 
     // A non-positive grain size is clamped to one by the cursor constructor.
-    asc::detail::work_cursor unit_cursor{0, 5, 0};
+    asc::work_cursor unit_cursor{0, 5, 0};
     assert(unit_cursor.grain_size == 1);
     return 0;
 }

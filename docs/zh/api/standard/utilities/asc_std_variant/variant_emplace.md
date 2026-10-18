@@ -34,79 +34,86 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::variant`](variant.md)。
+所属类型：[`asc::std::variant<Types...>`](variant.md)。以下为类内声明；未命名约束形参和默认索引用于选择重载，调用方无需指定。
 
-### 原型1
+### 按索引构造
 
 ```cpp
-// asc::std::variant 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class T, class ...Args, size_t Index, enable_if_t<is_constructible_v<T, Args...>, int>> T& emplace(Args&&... args);
+template <size_t Index, class... Args>
+constexpr variant_alternative_t<Index, variant>& emplace(Args&&... args);
 ```
 
-### 原型2
+### 按类型构造
 
 ```cpp
-// asc::std::variant 类内的声明节选；模板形参和其他成员由所属类提供。
-template<size_t Index, class ...Args, class Constraints, class> typename Constraints::T& emplace(Args&&... args);
+template <class T, class... Args, size_t Index = __variant_index_v<T, Types...>,
+    enable_if_t<Index != variant_npos && __variant_type_count_v<T, Types...> == 1, int> = 0>
+constexpr T& emplace(Args&&... args);
+```
+
+### Host按索引使用初始化列表
+
+```cpp
+template <size_t Index, class Up, class... Args,
+    enable_if_t<(Index < sizeof...(Types)) &&
+            is_constructible_v<variant_alternative_t<Index, variant>, ::std::initializer_list<Up>&, Args...>,
+        int> = 0>
+constexpr variant_alternative_t<Index, variant>& emplace(
+    ::std::initializer_list<Up> list, Args&&... args);
+```
+
+### Host按类型使用初始化列表
+
+```cpp
+template <class T, class Up, class... Args, size_t Index = __variant_index_v<T, Types...>,
+    enable_if_t<Index != variant_npos && __variant_type_count_v<T, Types...> == 1 &&
+            is_constructible_v<T, ::std::initializer_list<Up>&, Args...>,
+        int> = 0>
+constexpr T& emplace(::std::initializer_list<Up> list, Args&&... args);
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 按类型选择的备选类型；须在variant的备选类型列表中恰好出现一次。 |
-| `Args` | 传递给构造函数或可调用对象的实参类型列表。 |
-| `Index` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Types` | 所属`variant`的备选类型列表，不得包含数组、引用或`void`。 |
+| `T` | 按类型原位构造时选择的备选类型，须恰好出现一次。 |
+| `Index` | 按索引构造时的备选位置，从0起且小于备选类型数量；按类型或值选择的形式由实现推导。 |
+| `Args` | 转发给所选备选类型构造函数的参数类型。 |
+| `Up` | Host初始化列表的元素类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `args` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Index` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
-| `Args` | 传递给构造函数或可调用对象的实参类型列表。 |
-| `未命名参数4` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `args` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
+| `args` | 输入（可能被移动） | 转发给所选类型构造函数的实参。 |
+| `list` | 输入 | 仅Host形式提供的初始化列表；与其余实参一起用于构造。 |
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `T &` | 返回原位构造的元素引用或所选原型规定的插入结果。 |
-| 原型2 | `typename Constraints::T &` | 返回原位构造的元素引用或所选原型规定的插入结果。 |
+返回新构造的备选对象引用；按类型形式为`T&`，按索引形式为`variant_alternative_t<Index, variant>&`。引用有效期截至该备选对象被替换、销毁或所属`variant`被销毁；不要返回对局部`variant`元素的引用。
 
 ## 约束说明
 
-- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
+- 对象一次保存一个活动备选值，读取前须通过`index()`确认所选备选项。
+- Device使用的备选类型及构造、赋值、析构和交换操作须在对应编程模式可用且不抛出异常。
+- 按索引形式要求索引在范围内；按类型形式要求该类型在备选列表中恰好出现一次。所选类型必须能由给定实参构造。
+- 带`::std::initializer_list`的重载仅可在Host调用。
 
 ## 调用示例
 
-以下Host片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
 #include <asc/std/variant>
 
-decltype(auto) example()
+bool example()
 {
     asc::std::variant<int, float> value(7);
-    return value.emplace<int>(8);
+    auto& result = value.emplace<float>(2.5F);
+    return value.index() == 1 && &result == &asc::std::get<1>(value) && result == 2.5F;
 }
 ```
 

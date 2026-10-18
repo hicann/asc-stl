@@ -34,70 +34,49 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::ranges::zip_view`](ranges_zip_view.md)。
-
-### 原型1
+所属类型：[`asc::std::ranges::zip_view`](ranges_zip_view.md)。以下为类内声明，`first_`与`second_`表示两个底层视图。
 
 ```cpp
-// asc::std::ranges::zip_view 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class Packed> [[nodiscard]] constexpr auto size() const noexcept(noexcept(Zvfunctors::Viewsize(this->Views)));
+constexpr asc::std::size_t size()
+    noexcept(noexcept(asc::std::ranges::size(first_)) && noexcept(asc::std::ranges::size(second_)));
 ```
 
-### 原型2
-
 ```cpp
-// asc::std::ranges::zip_view 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class Packed> [[nodiscard]] constexpr auto size() noexcept(noexcept(Zvfunctors::Viewsize(this->Views)));
+constexpr asc::std::size_t size() const
+    noexcept(noexcept(asc::std::ranges::size(first_)) && noexcept(asc::std::ranges::size(second_)));
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Packed` | zip_view组合的底层视图类型元组；各视图决定迭代器、哨兵及共同大小。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Packed` | zip_view组合的底层视图类型元组；各视图决定迭代器、哨兵及共同大小。 |
+无参数。
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `auto` | 返回当前对象包含的元素数量。 |
-| 原型2 | `auto` | 返回当前对象包含的元素数量。 |
+| 返回值类型 | 含义 |
+| --- | --- |
+| `asc::std::size_t` | 两个底层视图大小的较小值，即可组成的元素对数量。 |
 
 ## 约束说明
 
-- 七个列出名称。
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 两个底层视图须支持`asc::std::ranges::size`；`const`重载还要求对常量底层视图求大小的表达式有效。
+- 当前`zip_view`组合两个支持随机访问和大小查询的视图；它借用的底层元素存储须保持有效。
+- 本成员不遍历元素；当两个底层大小查询均不抛出异常时，本成员也不抛出异常。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例给出具体输入，并检查结果。
 
 ```cpp
 #include <asc/std/ranges>
-#include <asc/std/array>
-#include <asc/std/iterator>
-#include <asc/std/tuple>
 
 bool example()
 {
-    int values[] = {1, 2, 3, 4};
+    int left[4] = {1, 2, 3, 4};
+    int right[2] = {5, 6};
     using Base = asc::std::ranges::subrange<int*>;
-    Base base(values, values + 4);
-    asc::std::ranges::zip_view<Base, Base> view(base, base);
-    return view.size() == 4;
+    asc::std::ranges::zip_view<Base, Base> view(Base(left, left + 4), Base(right, right + 2));
+    const auto& constant = view;
+    return view.size() == 2 && constant.size() == 2;
 }
 ```
 

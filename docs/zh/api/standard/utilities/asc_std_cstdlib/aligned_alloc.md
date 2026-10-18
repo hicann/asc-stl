@@ -46,8 +46,8 @@ namespace asc::std {
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `nbytes` | 输入 | 处理的数据量，单位为字节。 |
-| `alignment` | 输入 | 要求的对齐值，单位为字节。 |
+| `nbytes` | 输入 | 申请的字节数，须为`alignment`的整数倍。 |
+| `alignment` | 输入 | 以字节为单位的对齐值，须为2的非负整数次幂，并受宿主C库支持范围限制。 |
 
 ## 返回值说明
 
@@ -58,7 +58,7 @@ namespace asc::std {
 ## 约束说明
 
 - 仅用于Host，参数顺序是字节数在前、对齐在后。
-- alignment须为非零的2的幂，nbytes须为alignment的整数倍；不满足时返回nullptr。
+- `alignment`须为2的非负整数次幂，`nbytes`须为`alignment`的整数倍；不满足时返回`nullptr`。
 - 还须满足宿主C库支持的对齐要求；成功的分配需调用 ::std::free释放。
 
 ## 调用示例

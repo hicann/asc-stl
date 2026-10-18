@@ -52,9 +52,11 @@ constexpr reference access(data_handle_type pointer, size_t index) const;
 
 ## 返回值说明
 
+本页示例中`reference`实际为`float`，缩放结果按值返回；它不是对原数组元素的引用。
+
 | 返回值类型 | 含义 |
 | --- | --- |
-| `reference` | 按值返回缩放结果；`reference`是结果类型的别名，不表示必然返回C++ 引用。 |
+| `reference` | 返回缩放计算的结果；具体返回类型由`reference`确定，不能仅根据这个别名判断是否为C++引用。 |
 
 ## 约束说明
 

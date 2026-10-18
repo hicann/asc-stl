@@ -68,14 +68,15 @@ template<class T, class E> constexpr T integer_pow(T base, E exponent) noexcept;
 
 ## 调用示例
 
-以下片段选用具体整数实参展示接口调用。
+以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/cmath>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::integer_pow(2, 3);
+    const auto result = asc::integer_pow(2, 3);
+    return result == 8;
 }
 ```
 

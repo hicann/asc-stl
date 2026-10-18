@@ -52,29 +52,31 @@ template<class Function> constexpr auto proclaim_copyable_arguments(Function&& f
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入/输出 | 提供“包装函数对象并显式声明其参数可安全按值复制”使用的对象引用；被引用对象须在调用期间有效。 |
+| `function` | 输入（可能被移动） | 被包装的函数对象；包装器保存移除引用后的对象类型的值副本，函数对象自身借用的资源仍须保持有效。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::detail::copyable_arguments_wrapper<asc::std::decay_t<Function>>` | 返回携带实参可复制承诺的函数对象包装器。 |
+| 实现定义的可调用包装器类型 | 保存函数对象并转发调用并保留底层调用的结果类型。 |
 
 ## 约束说明
 
-- 整数或逻辑运算仅在数学性质成立时报告对应特性。
-- 浮点加法不满足结合律。
+- 函数对象须可复制到包装器中，并且可通过常量函数对象按给定参数调用。
+- 函数对象的复制、移动及包装构造不得抛出异常；返回包装器并不延长其捕获的外部引用的生命周期。
+- 调用方须自行保证参数的复制符合使用场景；包装动作不进行运行时检查，也不修改参数对象。
 
 ## 调用示例
 
-以下片段给出具体模板实参和调用对象。
+以下Host示例构造包装器并检查返回结果。
 
 ```cpp
 #include <asc/functional>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::proclaim_copyable_arguments([](int value) { return value + 1; });
+    const auto wrapped = asc::proclaim_copyable_arguments([](int value) { return value + 1; });
+    return wrapped(3) == 4;
 }
 ```
 

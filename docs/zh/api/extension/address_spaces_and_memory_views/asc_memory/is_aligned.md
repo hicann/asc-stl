@@ -89,7 +89,7 @@ template<class T> constexpr bool is_aligned(T* pointer, asc::std::size_t alignme
 
 ## 约束说明
 
-- `alignment == 0`明确返回`false`；正alignment不要求是2的幂。
+- `alignment == 0`明确返回`false`；正`alignment`不要求是2的幂；实际分配或访问对象仍须满足相应接口的对齐要求。
 - 整数重载要求value和alignment支持取模运算。
 - 指针重载按地址值检查字节对齐。
 

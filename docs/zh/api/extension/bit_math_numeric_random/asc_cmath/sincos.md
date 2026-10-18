@@ -72,7 +72,7 @@ template<class T> void sincos(T value, double* sin_out, double* cos_out) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待计算正弦和余弦的整数值；内部转换为double后计算。 |
+| `value` | 输入 | 以弧度表示的角度，类型为`float`；分别计算该角度的正弦和余弦。 |
 | `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写`float`）。 |
 | `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写`float`）。 |
 
@@ -82,7 +82,7 @@ template<class T> void sincos(T value, double* sin_out, double* cos_out) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待计算正弦和余弦的整数值；内部转换为double后计算。 |
+| `value` | 输入 | 以弧度表示的角度，类型为`double`；分别计算该角度的正弦和余弦。 |
 | `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写`double`）。 |
 | `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写`double`）。 |
 
@@ -92,7 +92,7 @@ template<class T> void sincos(T value, double* sin_out, double* cos_out) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待计算正弦和余弦的整数值；内部转换为double后计算。 |
+| `value` | 输入 | 以弧度表示的角度，类型为`long double`；分别计算该角度的正弦和余弦。 |
 | `sin_out` | 输出 | 输出参数，接收输入值的正弦计算结果；指针须有效（指向可写`long double`）。 |
 | `cos_out` | 输出 | 输出参数，接收输入值的余弦计算结果；指针须有效（指向可写`long double`）。 |
 
@@ -124,14 +124,20 @@ template<class T> void sincos(T value, double* sin_out, double* cos_out) noexcep
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
 #include <asc/cmath>
 
-void example(float value, float* sin_out, float* cos_out)
+bool example()
 {
-    asc::sincos(value, sin_out, cos_out);
+    float sf = 1.0F, cf = 0.0F;
+    double sd = 1.0, cd = 0.0;
+    long double sl = 1.0L, cl = 0.0L;
+    asc::sincos(0.0F, &sf, &cf);
+    asc::sincos(0.0, &sd, &cd);
+    asc::sincos(0.0L, &sl, &cl);
+    return sf == 0.0F && cf == 1.0F && sd == 0.0 && cd == 1.0 && sl == 0.0L && cl == 1.0L;
 }
 ```
 

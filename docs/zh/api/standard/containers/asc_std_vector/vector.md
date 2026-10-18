@@ -42,11 +42,11 @@ template<class T, class Allocator> class vector;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 构造时显式提供`Allocator`对象；分配器须能为`T`提供和释放连续存储。
+- `operator[]`的下标须小于`size()`；调用`front()`、`back()`或`pop_back()`前须非空。
+- 插入可能导致扩容；分配器和元素类型须支持相应分配、构造及移动操作。扩容会使指向原存储的指针、引用和迭代器失效。
+- 在Device侧使用时，所调用的分配器及元素操作须在相应编程模式可用，且不得抛出异常；使用前须保证分配能够成功，或已预留足够容量。
+- 当前移动赋值释放目标原存储、复制源分配器并接管源存储，使源容器变为空；它不按分配器传播特征选择逐元素移动路径。
 
 ## 调用示例
 

@@ -34,9 +34,7 @@
 
 ## 声明
 
-```cpp
-#define DECIMAL_DIG DECIMALDIG
-```
+`DECIMAL_DIG`是由`<asc/std/cfloat>`引入的平台`<float.h>`所提供的整型常量宏。具体值由目标平台的浮点格式决定，不应写成固定的替换标识符。
 
 ## 约束说明
 
@@ -44,14 +42,16 @@
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/std/cfloat>
 
 #ifndef DECIMAL_DIG
-#error "DECIMAL_DIG is required by this public Header"
+#error "DECIMAL_DIG must be provided by asc/std/cfloat"
 #endif
+
+static_assert(DECIMAL_DIG > 0);
 ```
 
 ## 关联API

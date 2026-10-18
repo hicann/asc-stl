@@ -34,11 +34,13 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::variant`](variant.md)。
+所属类型：[`asc::std::variant<Types...>`](variant.md)。以下为类内声明；未命名约束形参和默认索引用于选择重载，调用方无需指定。
+
+### 交换内容
 
 ```cpp
-// asc::std::variant 类内的声明节选；模板形参和其他成员由所属类提供。
-template<bool Dummy, class Constraint, class> void swap(variant<Types...>& other) noexcept(Constraint::Isnothrowswappablev);
+constexpr void swap(variant& other) noexcept(
+    __fold_and_v<(is_nothrow_move_constructible_v<Types> && is_nothrow_move_assignable_v<Types>)...>);
 ```
 
 ## 参数说明
@@ -47,14 +49,13 @@ template<bool Dummy, class Constraint, class> void swap(variant<Types...>& other
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Dummy` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
-| `未命名参数3` | 未命名的编译期参数；调用方通常由上下文推导或使用默认值。 |
+| `Types` | 所属`variant`的备选类型列表，不得包含数组、引用或`void`。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 与当前对象交换状态的另一对象；交换后双方保存对方原有状态。 |
+| `other` | 输入；交换时为输入/输出 | 同类型来源对象；右值形式允许移动其活动备选值，交换会改变两个对象。 |
 
 ## 返回值说明
 
@@ -62,20 +63,24 @@ template<bool Dummy, class Constraint, class> void swap(variant<Types...>& other
 
 ## 约束说明
 
-- Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
+- 对象一次保存一个活动备选值，读取前须通过`index()`确认所选备选项。
+- Device使用的备选类型及构造、赋值、析构和交换操作须在对应编程模式可用且不抛出异常。
+- 交换通过移动构造和移动赋值完成；所有备选类型须支持相应操作，全部操作不抛出异常时本成员为`noexcept`。
 
 ## 调用示例
 
-以下Host片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
 #include <asc/std/variant>
 
-void example()
+bool example()
 {
-    asc::std::variant<int, float> left(7), right(8.0f);
+    asc::std::variant<int, float> left(7);
+    asc::std::variant<int, float> right(2.5F);
     left.swap(right);
+    return left.index() == 1 && right.index() == 0 &&
+        asc::std::get<1>(left) == 2.5F && asc::std::get<0>(right) == 7;
 }
 ```
 

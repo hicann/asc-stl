@@ -18,8 +18,44 @@
 #define ASC_STL_TEST_FUNCTIONAL_PROPERTIES_H
 
 #include <asc/functional>
+#include <asc/std/type_traits>
 
 namespace asc_stl_functional_properties {
+struct value_operation {
+    CANN_ASC_STL_API constexpr unsigned operator()(unsigned value) const
+    {
+        return value + 1;
+    }
+};
+
+struct reference_operation {
+    CANN_ASC_STL_API constexpr unsigned& operator()(unsigned& value) const
+    {
+        return value;
+    }
+};
+
+struct void_operation {
+    CANN_ASC_STL_API constexpr void operator()(unsigned& value) const
+    {
+        ++value;
+    }
+};
+
+CANN_ASC_STL_API bool evaluate_copyable_wrapper(unsigned value)
+{
+    const auto by_value = asc::proclaim_copyable_arguments(value_operation{});
+    const auto by_reference = asc::proclaim_copyable_arguments(reference_operation{});
+    const auto no_result = asc::proclaim_copyable_arguments(void_operation{});
+    static_assert(asc::std::is_same_v<decltype(by_value(value)), unsigned>);
+    static_assert(asc::std::is_same_v<decltype(by_reference(value)), unsigned&>);
+    static_assert(asc::std::is_same_v<decltype(no_result(value)), void>);
+    const unsigned previous = value;
+    const bool reference_preserved = &by_reference(value) == &value;
+    no_result(value);
+    return reference_preserved && value == previous + 1 && by_value(previous) == value;
+}
+
 CANN_ASC_STL_API bool evaluate(unsigned value)
 {
     static_assert(asc::has_identity_element_v<asc::std::plus<int>, int>);
@@ -52,7 +88,7 @@ CANN_ASC_STL_API bool evaluate(unsigned value)
     const unsigned one = asc::identity_element<asc::std::multiplies<unsigned>, unsigned>();
     const unsigned absorbing = asc::absorbing_element<asc::std::multiplies<unsigned>, unsigned>();
     return asc::std::plus<unsigned>{}(value, zero) == value && asc::std::multiplies<unsigned>{}(value, one) == value &&
-        asc::std::multiplies<unsigned>{}(value, absorbing) == 0;
+        asc::std::multiplies<unsigned>{}(value, absorbing) == 0 && evaluate_copyable_wrapper(value);
 }
 }  // namespace asc_stl_functional_properties
 

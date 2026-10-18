@@ -30,13 +30,13 @@
 
 `asc::make_work_queue`将调用方管理的工作游标、结束索引和粒度组合为非拥有的`work_queue_ref<Index>`，供并发任务领取接口使用。
 
-该接口的可用位置为AI Core SIMD编程、AI Core SIMT编程。
+该接口可用于Host和Device上的队列描述；实际领取操作还须满足其编程模式和地址空间约束。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
-template<class Index> constexpr asc::work_queue_ref<Index> make_work_queue(asc::detail::work_cursor& cursor, Index end, Index grain_size) noexcept;
+template<class Index> constexpr asc::work_queue_ref<Index> make_work_queue(asc::work_cursor& cursor, Index end, Index grain_size) noexcept;
 } // namespace asc
 ```
 
@@ -64,21 +64,24 @@ template<class Index> constexpr asc::work_queue_ref<Index> make_work_queue(asc::
 
 ## 约束说明
 
-- 声明中的`asc::detail`类型是当前头文件实际使用的实现类型，未另行提供同名公共别名；请使用本页的公开构造入口，不把它改写成不存在的公共类型名。
+游标的构造和生命周期见[`asc::work_cursor`](work_cursor.md)。
+
 - Index必须为受支持的32位或64位无符号整数。
 - grain_size必须大于零。
 - cursor在队列引用使用期间必须保持有效。
 
 ## 调用示例
 
-以下片段借用调用方初始化并保持有效的全局内存游标，建立一次领取四项的工作队列引用。
+以下Host示例给出具体输入，并检查结果。
 
 ```cpp
 #include <asc/work_queue>
 
-__aicore__ decltype(auto) example(asc::detail::work_cursor& cursor)
+bool example()
 {
-    return asc::make_work_queue(cursor, 100u, 4u);
+    asc::work_cursor cursor{0, 20, 7};
+    const auto queue = asc::make_work_queue<unsigned>(cursor, 20u, 7u);
+    return queue.cursor() == &cursor && queue.end_value() == 20 && queue.grain_size() == 7;
 }
 ```
 

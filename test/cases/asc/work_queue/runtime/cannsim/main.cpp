@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 #include <acl/acl.h>
-#include <asc/__work_queue/cursor.h>
+#include <asc/work_queue>
 #include <cstdint>
 #include <iostream>
 
 void launch_asc_stl_b026_work_queue_cannsim(
-    std::uint32_t*, asc::detail::work_cursor*, std::uint32_t*, asc::detail::work_cursor*, void*);
+    std::uint32_t*, asc::work_cursor*, std::uint32_t*, asc::work_cursor*, void*);
 
 int main()
 {
     constexpr std::uint32_t kItems = 257;
     std::uint32_t* visits = nullptr;
-    asc::detail::work_cursor* cursor = nullptr;
+    asc::work_cursor* cursor = nullptr;
     std::uint32_t* boundary_result = nullptr;
-    asc::detail::work_cursor* boundary_cursor = nullptr;
+    asc::work_cursor* boundary_cursor = nullptr;
     aclrtStream stream = nullptr;
-    const asc::detail::work_cursor initial(0, 257, 11);
+    const asc::work_cursor initial(0, 257, 11);
     constexpr std::uint64_t high_bit = std::uint64_t{1} << 63;
-    const asc::detail::work_cursor boundary_initial(high_bit - 2, high_bit + 3, 2);
+    const asc::work_cursor boundary_initial(high_bit - 2, high_bit + 3, 2);
     std::uint32_t boundary_zero = 0;
     std::uint32_t zeros[kItems] = {};
     bool passed = aclInit(nullptr) == ACL_SUCCESS && aclrtSetDevice(0) == ACL_SUCCESS &&

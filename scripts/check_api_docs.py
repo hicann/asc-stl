@@ -41,6 +41,7 @@ PLACEHOLDERS = (
 )
 INVALID_IDENTIFIERS = (
     "Asccomplexvaluetype", "Builtinoffsetof", "PTRDIFFMAX", "Copycvreft<",
+    "Ascinternal::Isnonnarrowingconvertible", "Zvfunctors::Viewsize", "Detail::Scaledelementtype", "DECIMALDIG",
     "Makesignedimpl<", "Makeunsignedimpl<", "Makeintegersequence<", "Propagateoncontainerswa<",
 )
 LOGGER = logging.getLogger(__name__)

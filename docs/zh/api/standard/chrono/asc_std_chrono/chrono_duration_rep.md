@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::chrono::duration 类内的声明节选；模板形参和其他成员由所属类提供。
-using rep = Re;
+using rep = Rep;
 ```
 
 ## 约束说明
@@ -47,14 +47,17 @@ using rep = Re;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/type_traits>
 
-void use_type()
+bool example()
 {
-    using alias_type = typename asc::std::chrono::duration<int>::rep;
+    using Duration = asc::std::chrono::duration<int>;
+    static_assert(asc::std::is_same_v<Duration::rep, int>);
+    return Duration{3}.count() == 3;
 }
 ```
 

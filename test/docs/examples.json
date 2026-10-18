@@ -11479,5 +11479,413 @@
     ],
     "mode": "host",
     "expression": "example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/integer_pow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/saturating_add.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_work_queue/make_work_queue.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_work_queue/work_cursor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/make_tensor_copy_descriptor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_descriptor_extent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_day_operator_decrement.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_day_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_duration_operator_decrement.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_duration_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_time_point_operator_decrement.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_time_point_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_weekday_operator_decrement.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_weekday_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_operator_decrement.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cfloat/decimal_dig.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_linalg/linalg_scaled.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/saturating_add.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bit/bit_floor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/sincos.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_memory_resource/device_memory_resource_allocate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_memory_resource/device_memory_resource_deallocate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_memory_resource/device_memory_resource_ref_allocate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_memory_resource/device_memory_resource_ref_deallocate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_allocate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_deallocate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref_allocate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref_deallocate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_duration_operator_divide_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_duration_operator_minus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_duration_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_duration_operator_modulo_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_duration_operator_multiply_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_duration_operator_plus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_duration_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_duration_rep.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_array/to_array.md": {
+    "standards": [
+      20
+    ],
+    "header_standards": [
+      17
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/advance.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/align.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_linalg/linalg_conjugated_accessor_access.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_linalg/linalg_scaled_accessor_access.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/midpoint.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bit/bit_ceil.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_variant/variant_emplace.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_variant/variant_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_variant/variant_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/proclaim_return_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/proclaim_copyable_arguments.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_work_queue/acquire_work.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
   }
 }

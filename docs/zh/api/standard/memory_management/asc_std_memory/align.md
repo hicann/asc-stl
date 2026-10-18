@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-void* align(size_t alignment, size_t size, void*& pointer, size_t& space);
+void* align(size_t alignment, size_t size, void*& pointer, size_t& space) noexcept;
 } // namespace asc::std
 ```
 
@@ -46,10 +46,10 @@ void* align(size_t alignment, size_t size, void*& pointer, size_t& space);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `alignment` | 输入 | 要求的对齐值，单位为字节。 |
-| `size` | 输入 | 对象或范围的大小。 |
+| `alignment` | 输入 | 字节对齐值，须为2的非负整数次幂，例如1、2、4、8。 |
+| `size` | 输入 | 在对齐后地址处所需的连续字节数。 |
 | `pointer` | 输入/输出 | 输入为可用缓冲区的起点；成功时推进到满足alignment的地址，同时相应减少space，失败时保持两者不变。 |
-| `space` | 输入/输出 | 提供“在调用方提供的存储区中寻找满足大小与对齐要求的位置”使用的对象引用；被引用对象须在调用期间有效。 |
+| `space` | 输入/输出 | 输入为从`pointer`起可用的连续字节数；成功时只扣除起点对齐所消耗的填充字节，不扣除`size`。 |
 
 ## 返回值说明
 
@@ -59,25 +59,30 @@ void* align(size_t alignment, size_t size, void*& pointer, size_t& space);
 
 ## 约束说明
 
-- 支持原始指针和用户自定义fancy pointer，接口自身不分配内存。
+- 调用方须提供从`pointer`起至少`space`字节的有效连续存储；本接口不分配内存，也不构造对象。
+- `alignment`无效、`pointer`为空、地址取整溢出或剩余空间不足时返回`nullptr`，保持`pointer`和`space`不变。
+- 成功时返回对齐后的地址，同时更新`pointer`；`space`仅减去对齐填充字节。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例使用具体对象，并检查调用结果。
 
 ```cpp
 #include <asc/std/memory>
 #include <asc/std/cstddef>
 
-decltype(auto) example(asc::std::size_t alignment, asc::std::size_t size, void *& pointer, asc::std::size_t & space)
+bool example()
 {
-    return asc::std::align(alignment, size, pointer, space);
+    alignas(16) unsigned char storage[32]{};
+    void* pointer = storage + 1;
+    asc::std::size_t space = 31;
+    void* result = asc::std::align(16, 8, pointer, space);
+    if (result != storage + 16 || pointer != result || space != 16) return false;
+    // 对齐已满足，但17字节放不进剩余空间；失败不修改输入输出参数。
+    return asc::std::align(16, 17, pointer, space) == nullptr &&
+        pointer == result && space == 16;
 }
 ```
-
-对应完整工程使用`C++17`，并通过Host编译与运行验证。
-
-完整示例源码：[pointer_alignment.cpp](../../../../examples/pointer_alignment.cpp)。
 
 ## 关联API
 

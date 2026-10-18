@@ -251,6 +251,9 @@ private:
 
 template <class Function>
 class copyable_arguments_wrapper {
+private:
+    Function function_;
+
 public:
     CANN_ASC_STL_API constexpr explicit copyable_arguments_wrapper(Function function) noexcept : function_(function)
     {}
@@ -260,9 +263,6 @@ public:
     {
         return function_(static_cast<Args&&>(args)...);
     }
-
-private:
-    Function function_;
 };
 }  // namespace detail
 

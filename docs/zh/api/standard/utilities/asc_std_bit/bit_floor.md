@@ -52,7 +52,7 @@ template<class T> [[nodiscard]] constexpr T bit_floor(T value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待求上限二次幂的无符号整数值；返回不大于它的最大2的幂（值为0时返回0）。 |
+| `value` | 输入 | 待向下取整到2的幂的无符号整数；返回不大于它的最大2的幂，输入为0时返回0。 |
 
 ## 返回值说明
 
@@ -66,14 +66,15 @@ template<class T> [[nodiscard]] constexpr T bit_floor(T value) noexcept;
 
 ## 调用示例
 
-以下片段用具体数值展示本页调用。
+以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/std/bit>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::bit_floor(5u);
+    const auto result = asc::std::bit_floor(5u);
+    return result == 4u;
 }
 ```
 

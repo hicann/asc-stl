@@ -34,7 +34,7 @@
 
 ## 声明
 
-### 原型1
+### 主模板声明
 
 ```cpp
 namespace asc::std {
@@ -42,7 +42,7 @@ template<bool B, class T = void> struct enable_if;
 } // namespace asc::std
 ```
 
-### 原型2
+### 偏特化声明
 
 ```cpp
 namespace asc::std {
@@ -52,7 +52,8 @@ template<class T> struct enable_if<true, T>;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- `B`为编译期布尔条件；仅当`B == true`时提供成员类型`type`，其类型为`T`。
+- `T`默认为`void`；`B == false`时访问`type`不合法，可用于模板替换时排除不满足条件的重载。
 
 ## 调用示例
 

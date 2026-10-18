@@ -61,8 +61,8 @@ template<class Integer> constexpr Integer aligned_size(Integer size, Integer ali
 
 ## 约束说明
 
-- `size >= 0`、`alignment >= 0`；正alignment可以是7等非2的幂。
-- `size + alignment - 1`及最终结果须可由`Integer`表示；接口不检测算术溢出。
+- `size >= 0`、`alignment >= 0`；正`alignment`可以是7等非2的幂；这不代表内存分配接口也接受该对齐值。
+- 当`alignment > 0`时，`size + alignment - 1`及最终结果须可由`Integer`表示；接口不检测算术溢出。`alignment == 0`时不计算这些中间表达式。
 
 ## 调用示例
 

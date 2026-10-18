@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::chrono::duration_values 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr Re max() noexcept;
+[[nodiscard]] constexpr Rep max() noexcept;
 ```
 
 ## 参数说明
@@ -49,7 +49,7 @@
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `Re` | 返回该类型允许的最大值。 |
+| `Rep` | 返回该类型允许的最大值。 |
 
 ## 约束说明
 

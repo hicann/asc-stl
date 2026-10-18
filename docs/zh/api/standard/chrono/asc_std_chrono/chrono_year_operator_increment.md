@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::year::operator++`把当前迭代器或计数值推进一步。
+`asc::std::chrono::year::operator++`使年份增加1。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -62,14 +62,14 @@ constexpr year operator++(int unused) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `unused` | 输入 | 用于区分后置自增或后置自减形式的占位参数；调用时写作整数0。 |
+| `unused` | 输入 | 用于区分后置形式的占位参数；通常写作`value++`，由语言自动传入0。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
 | 原型1 | `year &` | 返回更新后的当前对象引用。 |
-| 原型2 | `year` | 返回更新后的迭代器或计数值。 |
+| 原型2 | `year` | 返回修改前对象的值副本。 |
 
 ## 约束说明
 
@@ -77,14 +77,17 @@ constexpr year operator++(int unused) noexcept;
 
 ## 调用示例
 
-以下Host片段以具体日期或时间类型演示调用；数值须满足本页约束。
+以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/std/chrono>
 
-void example(asc::std::chrono::year& value)
+bool example()
 {
-    ++value;
+    asc::std::chrono::year value{2};
+    const auto previous = value++;
+    auto& current = ++value;
+    return static_cast<int>(previous) == 2 && static_cast<int>(value) == 4 && &current == &value;
 }
 ```
 

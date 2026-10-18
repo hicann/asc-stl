@@ -34,7 +34,7 @@
 
 ## 声明
 
-### 原型1
+### 主模板声明
 
 ```cpp
 namespace asc::std {
@@ -42,7 +42,7 @@ template<bool B, class If, class Then> struct conditional;
 } // namespace asc::std
 ```
 
-### 原型2
+### 偏特化声明
 
 ```cpp
 namespace asc::std {
@@ -52,7 +52,8 @@ template<class If, class Then> struct conditional<false, If, Then>;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- `B`为编译期布尔条件；为`true`时成员类型`type`为`If`，为`false`时为`Then`。
+- 偏特化为主模板在`B == false`时提供另一种定义，不是第二个函数重载。
 
 ## 调用示例
 
