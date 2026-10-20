@@ -51,7 +51,7 @@ concept __boolean_testable = __boolean_testable_impl<T> && requires(T&& value) {
 };
 #else
 template <class T>
-inline constexpr bool __boolean_testable_impl = is_convertible_v<T, bool>;
+inline constexpr bool __boolean_testable_impl = convertible_to<T, bool>;
 
 template <class T, class = void>
 inline constexpr bool __boolean_testable_impl_2 = false;

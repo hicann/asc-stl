@@ -30,22 +30,25 @@
 #include <asc/std/__iterator/concepts.h>
 #include <asc/std/__iterator/iterator_traits.h>
 #include <asc/std/__type_traits/remove_cvref.h>
+#include <asc/std/__type_traits/void_t.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
-// Deduce the iterator tag through the concept chain
-// (contiguous -> random_access -> bidirectional -> forward -> input), matching
-// the upstream reference implementation, and constexpr. Under CCE device
-// compilation concept-constraint evaluation is disabled; the SFINAE-probing
-// version below is used instead.
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+template <class Iter, class = void>
+inline constexpr bool __has_explicit_iterator_concept = false;
+template <class Iter>
+inline constexpr bool __has_explicit_iterator_concept<Iter, void_t<typename iterator_traits<Iter>::iterator_concept>> =
+    true;
+
+// Prefer the explicit tag, otherwise classify through the shared iterator
+// predicates. Both language modes and Device use the same chain.
 template <class _IterMaybeQualified>
 CANN_ASC_STL_API constexpr auto __get_iterator_concept()
 {
     using _Iter = remove_cvref_t<_IterMaybeQualified>;
 
-    if constexpr (requires { typename iterator_traits<_Iter>::iterator_concept; }) {
+    if constexpr (__has_explicit_iterator_concept<_Iter>) {
         return typename iterator_traits<_Iter>::iterator_concept();
     } else if constexpr (contiguous_iterator<_Iter>) {
         return contiguous_iterator_tag();
@@ -64,23 +67,6 @@ CANN_ASC_STL_API constexpr auto __get_iterator_concept()
 
 template <class _Iter>
 using __iterator_concept = decltype(__get_iterator_concept<_Iter>());
-#else
-template <class Iter, class = void>
-struct __iterator_concept_impl {
-    using type = typename iterator_traits<Iter>::iterator_category;
-};
-template <class Iter>
-struct __iterator_concept_impl<Iter, decltype(void(sizeof(typename iterator_traits<Iter>::iterator_concept)))> {
-    using type = typename iterator_traits<Iter>::iterator_concept;
-};
-template <class Iter>
-using __iterator_concept = typename __iterator_concept_impl<Iter>::type;
-template <class Iter>
-CANN_ASC_STL_API auto __get_iterator_concept() -> __iterator_concept<Iter>
-{
-    return {};
-}
-#endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 }  // namespace ranges
 
 CANN_ASC_STL_END_NAMESPACE

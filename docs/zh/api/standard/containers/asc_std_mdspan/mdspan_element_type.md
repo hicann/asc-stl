@@ -43,7 +43,7 @@ using element_type = Element;
 
 ## 约束说明
 
-- C++20开放rank-one `operator[]`，C++2b条件开放标准多索引operator[]。
+- C++17起可使用一维`operator[]`；多参数`operator[]`按编译器的C++23多维下标特性开放。
 - Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例

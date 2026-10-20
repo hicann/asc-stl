@@ -31,8 +31,6 @@
 #include <asc/std/__format/formatters/str.h>
 #include <asc/std/__format/output_buffer.h>
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
-
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __format_detail {
@@ -43,7 +41,5 @@ CANN_ASC_STL_API constexpr void write_argument(output_buffer& buffer, bool value
 }  // namespace __format_detail
 
 CANN_ASC_STL_END_NAMESPACE
-
-#endif  // CANN_ASC_STL_DETAIL_HAS_CXX20()
 
 #endif  // CANN_ASC_STL_ASC_STD___FORMAT_FORMATTERS_BOOL_H

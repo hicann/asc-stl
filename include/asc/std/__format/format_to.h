@@ -35,8 +35,6 @@
 #include <asc/std/__format/formatters/str.h>
 #include <asc/std/__format/output_buffer.h>
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
-
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __format_detail {
@@ -104,19 +102,28 @@ CANN_ASC_STL_API constexpr void render_one(output_buffer& buffer, input_pointer 
 }
 
 template <class... Args>
-CANN_ASC_STL_API constexpr output_buffer render_all(
-    char* output, __SIZE_TYPE__ capacity, format_string<Args...> format, Args&&... args) noexcept
+CANN_ASC_STL_API constexpr output_buffer render_unchecked(
+    char* output, __SIZE_TYPE__ capacity, input_pointer text, __SIZE_TYPE__ size, Args&&... args) noexcept
 {
     output_buffer buffer{output, capacity, 0};
-    const input_pointer text = format.data();
-    const __SIZE_TYPE__ size = format.size();
     __SIZE_TYPE__ position = 0;
     ((render_one(buffer, text, size, position, static_cast<Args&&>(args))), ...);
     render_tail(buffer, text, size, position);
     return buffer;
 }
 
+#if CANN_ASC_STL_DETAIL_HAS_CONSTEVAL()
+template <class... Args>
+CANN_ASC_STL_API constexpr output_buffer render_all(
+    char* output, __SIZE_TYPE__ capacity, format_string<Args...> format, Args&&... args) noexcept
+{
+    return render_unchecked(output, capacity, format.data(), format.size(), static_cast<Args&&>(args)...);
+}
+#endif
+
 }  // namespace __format_detail
+
+#if CANN_ASC_STL_DETAIL_HAS_CONSTEVAL()
 
 // Writes the formatted arguments into the caller-owned buffer and returns one
 // past the last written character; the buffer is not bounded, the caller
@@ -129,8 +136,8 @@ CANN_ASC_STL_API constexpr char* format_to(char* output, format_string<Args...> 
     return output + result.total;
 }
 
-CANN_ASC_STL_END_NAMESPACE
+#endif  // CANN_ASC_STL_DETAIL_HAS_CONSTEVAL()
 
-#endif  // CANN_ASC_STL_DETAIL_HAS_CXX20()
+CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STD___FORMAT_FORMAT_TO_H

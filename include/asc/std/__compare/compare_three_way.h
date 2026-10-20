@@ -35,7 +35,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 // exposed only in C++20-or-newer modes, matching the conditional exposure
 // rule for language-only facilities. C++17 parses the header without the
 // callable surface.
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+#if CANN_ASC_STL_DETAIL_HAS_THREE_WAY_COMPARISON()
 struct compare_three_way {
     template <class T, class U>
     CANN_ASC_STL_API constexpr auto operator()(T&& left, U&& right) const

@@ -32,8 +32,6 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/type_identity.h>
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
-
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __format_detail {
@@ -55,6 +53,8 @@ template <class CharT, __SIZE_TYPE__ Size>
 using input_array = const CharT (&)[Size];
 #endif
 }  // namespace __format_detail
+
+#if CANN_ASC_STL_DETAIL_HAS_CONSTEVAL()
 
 // Registered subset: basic_format_string<char, Args...>. The assertion moves
 // wide-character instantiation failures to the class itself with a
@@ -144,8 +144,8 @@ private:
 template <class... Args>
 using format_string = basic_format_string<char, type_identity_t<Args>...>;
 
-CANN_ASC_STL_END_NAMESPACE
+#endif  // CANN_ASC_STL_DETAIL_HAS_CONSTEVAL()
 
-#endif  // CANN_ASC_STL_DETAIL_HAS_CXX20()
+CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STD___FORMAT_FORMAT_STRING_H

@@ -38,7 +38,7 @@
 
 ```cpp
 namespace asc::std {
-template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, Size> to_array(T (&&source)[Size]) noexcept(is_nothrow_move_constructible_v<T>);
+template<typename T, size_t Size> constexpr array<remove_cv_t<T>, Size> to_array(T (&&source)[Size]) noexcept(is_nothrow_move_constructible_v<T>);
 } // namespace asc::std
 ```
 
@@ -46,7 +46,7 @@ template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, 
 
 ```cpp
 namespace asc::std {
-template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, Size> to_array(T (&source)[Size]) noexcept(is_nothrow_constructible_v<T, T&>);
+template<typename T, size_t Size> constexpr array<remove_cv_t<T>, Size> to_array(T (&source)[Size]) noexcept(is_nothrow_constructible_v<T, T&>);
 } // namespace asc::std
 ```
 
@@ -91,10 +91,9 @@ template<typename T, size_t Size> [[nodiscard]] constexpr array<remove_cv_t<T>, 
 
 ## 约束说明
 
-- 本接口从C++20开始提供；C++17可包含`<asc/std/array>`，但不能调用`to_array`。
-
-- 支持包括零在内的所有N。
-- 成员函数和自由函数均不抛出异常。
+- 左值和右值数组重载均从C++17起提供，元素数量由一维内建数组类型确定。
+- 左值重载要求元素可从对应左值构造；右值重载要求元素可移动构造。元素无需可默认构造。
+- 不接受多维内建数组。异常约定由相应元素构造和声明中的`noexcept`条件决定；Device调用的元素构造须满足设备异常限制。
 
 ## 调用示例
 

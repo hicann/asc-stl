@@ -46,12 +46,12 @@ void* operator new(__SIZE_TYPE__, void* address) noexcept;
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 enum class align_val_t : __SIZE_TYPE__ {};
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+// The tag vocabulary is portable; compiler destroying-delete semantics remain
+// a separate language capability and are not provided by declaring this type.
 struct destroying_delete_t {
     explicit destroying_delete_t() = default;
 };
 inline constexpr destroying_delete_t destroying_delete{};
-#endif
 struct nothrow_t {
     explicit nothrow_t() = default;
 };

@@ -28,11 +28,15 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::regular_invocable`在C++20及以上模式约束满足`regular_invocable`语义的类型或表达式。
+`asc::std::regular_invocable`判定类型或表达式是否满足`regular_invocable`的要求。
+
+C++17中提供同名`inline constexpr bool`变量模板；C++20及以上提供concept。两种形式均可用于`static_assert`，C++17还可与`enable_if`配合使用。受约束模板参数、`requires`及约束偏序仍需要C++20语言支持。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 
 ## 声明
+
+以下为C++20及以上的concept声明摘要；C++17变量模板具有相同的模板参数和判定条件。
 
 ```cpp
 namespace asc::std {
@@ -42,7 +46,7 @@ template<class Fn, class ...Args> concept regular_invocable;
 
 ## 约束说明
 
-- 提供完整的公开C++20 concepts集合。
+- 谓词的判定条件由类型或表达式的有效性决定；C++17变量模板不参与concept约束偏序。
 
 ## 调用示例
 

@@ -31,12 +31,22 @@
 #include <asc/std/__type_traits/add_pointer.h>
 #include <asc/std/__type_traits/is_base_of.h>
 #include <asc/std/__type_traits/is_convertible.h>
+#include <asc/std/__type_traits/void_t.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class Derived, class Base>
 concept derived_from = is_base_of_v<Base, Derived> && is_convertible_v<const volatile Derived*, const volatile Base*>;
+#else
+template <class Derived, class Base, class = void>
+inline constexpr bool __derived_from_impl = false;
+template <class Derived, class Base>
+inline constexpr bool __derived_from_impl<Derived, Base, void_t<Derived*, Base*> > =
+    is_base_of_v<Base, Derived> && is_convertible_v<const volatile Derived*, const volatile Base*>;
+template <class Derived, class Base>
+inline constexpr bool derived_from = __derived_from_impl<Derived, Base>;
+
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

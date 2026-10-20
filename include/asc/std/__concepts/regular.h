@@ -34,10 +34,8 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class T>
-concept regular = semiregular<T> && equality_comparable<T>;
-#endif
+CANN_ASC_STL_DETAIL_CONCEPT regular = semiregular<T> && equality_comparable<T>;
 
 CANN_ASC_STL_END_NAMESPACE
 

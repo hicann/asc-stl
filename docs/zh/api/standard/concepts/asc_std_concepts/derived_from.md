@@ -28,11 +28,15 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::derived_from`在C++20及以上模式约束`Derived`（派生类型）公有且无歧义地派生自`Base`（基类型），具体判据为`is_base_of_v<Base, Derived>`与`is_convertible_v<const volatile Derived*, const volatile Base*>`同时成立。
+`asc::std::derived_from`判定`Derived`（派生类型）公有且无歧义地派生自`Base`（基类型），具体判据为`is_base_of_v<Base, Derived>`与`is_convertible_v<const volatile Derived*, const volatile Base*>`同时成立。
+
+C++17中提供同名`inline constexpr bool`变量模板；C++20及以上提供concept。两种形式均可用于`static_assert`，C++17还可与`enable_if`配合使用。受约束模板参数、`requires`及约束偏序仍需要C++20语言支持。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 
 ## 声明
+
+以下为C++20及以上的concept声明摘要；C++17变量模板具有相同的模板参数和判定条件。
 
 ```cpp
 namespace asc::std {

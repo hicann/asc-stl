@@ -28,6 +28,8 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__ranges/enable_borrowed_range.h>
 #include <asc/std/__ranges/view_interface.h>
 #include <asc/std/__type_traits/is_object.h>
@@ -35,11 +37,11 @@ namespace asc::std::ranges {
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <class T>
     requires is_object_v<T>
-class empty_view : public view_interface<empty_view<T>> {
 #else
 template <class T>
-class empty_view : public view_interface<empty_view<T>> {
 #endif
+class empty_view : public view_interface<empty_view<T>> {
+    static_assert((is_object_v<T>), "range view constraints are not satisfied");
 
 public:
     CANN_ASC_STL_API static constexpr T* begin() noexcept

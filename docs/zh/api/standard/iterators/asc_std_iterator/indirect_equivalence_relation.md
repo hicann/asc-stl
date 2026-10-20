@@ -28,11 +28,15 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::indirect_equivalence_relation`在C++20及以上模式约束满足`indirect_equivalence_relation`语义的类型或表达式。
+`asc::std::indirect_equivalence_relation`判定类型或表达式是否满足`indirect_equivalence_relation`的要求。
+
+C++17中提供同名`inline constexpr bool`变量模板；C++20及以上提供concept。两种形式均可用于`static_assert`，C++17还可与`enable_if`配合使用。受约束模板参数、`requires`及约束偏序仍需要C++20语言支持。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
+
+以下为C++20及以上的concept声明摘要；C++17变量模板具有相同的模板参数和判定条件。
 
 ```cpp
 namespace asc::std {
@@ -42,7 +46,7 @@ template<class Fp, class It1, class It2> concept indirect_equivalence_relation;
 
 ## 约束说明
 
-- 提供C++20公开迭代器概念和特征接口。
+- 迭代器判定在C++17中作为布尔常量使用；编译期可检查的表达式条件之外，还须满足该迭代器类别的语义要求。
 
 ## 调用示例
 

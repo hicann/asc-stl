@@ -28,6 +28,8 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__iterator/concepts.h>
 #include <asc/std/__memory/addressof.h>
 #include <asc/std/__ranges/access.h>
@@ -37,7 +39,6 @@
 #include <asc/std/__ranges/enable_borrowed_range.h>
 #include <asc/std/__ranges/size.h>
 #include <asc/std/__ranges/view_interface.h>
-#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/is_object.h>
@@ -93,6 +94,8 @@ template <range _Range>
 template <class _Range>
 #endif
 class ref_view : public view_interface<ref_view<_Range>> {
+    static_assert(range<_Range> && (is_object_v<_Range>), "range view constraints are not satisfied");
+
     _Range* __range_;
 
 public:
@@ -141,7 +144,7 @@ public:
 };
 
 template <class _Range>
-ref_view(_Range&) -> ref_view<_Range>;
+CANN_ASC_STL_HOST_DEVICE ref_view(_Range&) -> ref_view<_Range>;
 
 template <class _Tp>
 inline constexpr bool enable_borrowed_range<ref_view<_Tp>> = true;

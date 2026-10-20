@@ -224,7 +224,6 @@ private:
 
     CANN_ASC_STL_API static constexpr auto __mi_get_iter_concept()
     {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
         if constexpr (random_access_iterator<Iter>) {
             return random_access_iterator_tag{};
         } else if constexpr (bidirectional_iterator<Iter>) {
@@ -234,17 +233,6 @@ private:
         } else {
             return input_iterator_tag{};
         }
-#else
-        if constexpr (__move_iterator_detail::__has_random_access_traversal<Iter>) {
-            return random_access_iterator_tag{};
-        } else if constexpr (__move_iterator_detail::__has_bidirectional_traversal<Iter>) {
-            return bidirectional_iterator_tag{};
-        } else if constexpr (__move_iterator_detail::__has_forward_traversal<Iter>) {
-            return forward_iterator_tag{};
-        } else {
-            return input_iterator_tag{};
-        }
-#endif
     }
 
 public:
@@ -284,15 +272,18 @@ public:
         return *this;
     }
 #else
-    template <class It = Iter>
+    template <class It = Iter, enable_if_t<is_default_constructible_v<It>, int> = 0>
     CANN_ASC_STL_API constexpr move_iterator() noexcept(is_nothrow_default_constructible_v<It>) : current_()
     {}
-    template <class Other>
+    template <class Other, enable_if_t<!is_same_v<Other, Iter> && convertible_to<const Other&, Iter>, int> = 0>
     CANN_ASC_STL_API constexpr move_iterator(const move_iterator<Other>& other) noexcept(
         is_nothrow_convertible_v<const Other&, Iter>)
         : current_(other.base())
     {}
-    template <class Other>
+    template <class Other,
+        enable_if_t<!is_same_v<Other, Iter> && convertible_to<const Other&, Iter> &&
+                assignable_from<Iter&, const Other&>,
+            int> = 0>
     CANN_ASC_STL_API constexpr move_iterator& operator=(const move_iterator<Other>& other) noexcept(
         noexcept(current_ = other.base()))
     {
@@ -331,7 +322,7 @@ public:
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
         if constexpr (forward_iterator<Iter>) {
 #else
-        if constexpr (__move_iterator_detail::__has_forward_traversal<Iter>) {
+        if constexpr (forward_iterator<Iter>) {
 #endif
             move_iterator tmp(*this);
             ++current_;
@@ -438,26 +429,28 @@ CANN_ASC_STL_API constexpr iter_difference_t<Iter> operator-(
     return iterator.base() - sentinel.base();
 }
 #else
-template <class Iter, class Sentinel, enable_if_t<__move_iter_comparable<Iter, Sentinel>, int> = 0>
+template <class Iter, class Sentinel,
+    enable_if_t<sentinel_for<Sentinel, Iter> && __move_iter_comparable<Iter, Sentinel>, int> = 0>
 CANN_ASC_STL_API constexpr bool operator==(const move_sentinel<Sentinel>& sentinel, const move_iterator<Iter>& iterator)
 {
     return sentinel.base() == iterator.base();
 }
 
-template <class Iter, class Sentinel, enable_if_t<__move_iter_comparable<Iter, Sentinel>, int> = 0>
+template <class Iter, class Sentinel,
+    enable_if_t<sentinel_for<Sentinel, Iter> && __move_iter_comparable<Iter, Sentinel>, int> = 0>
 CANN_ASC_STL_API constexpr bool operator!=(const move_sentinel<Sentinel>& sentinel, const move_iterator<Iter>& iterator)
 {
     return !(sentinel == iterator);
 }
 
-template <class Iter, class Sentinel, enable_if_t<__move_iter_sized_sentinel<Iter, Sentinel>, int> = 0>
+template <class Iter, class Sentinel, enable_if_t<sized_sentinel_for<Sentinel, Iter>, int> = 0>
 CANN_ASC_STL_API constexpr auto operator-(const move_sentinel<Sentinel>& sentinel,
     const move_iterator<Iter>& iterator) -> decltype(sentinel.base() - iterator.base())
 {
     return sentinel.base() - iterator.base();
 }
 
-template <class Iter, class Sentinel, enable_if_t<__move_iter_sized_sentinel<Iter, Sentinel>, int> = 0>
+template <class Iter, class Sentinel, enable_if_t<sized_sentinel_for<Sentinel, Iter>, int> = 0>
 CANN_ASC_STL_API constexpr auto operator-(const move_iterator<Iter>& iterator,
     const move_sentinel<Sentinel>& sentinel) -> decltype(iterator.base() - sentinel.base())
 {
@@ -471,10 +464,11 @@ CANN_ASC_STL_API constexpr auto operator-(const move_iterator<Iter>& iterator,
 // move_iterator argument pairs and delegates to the base-level swap.
 template <class Iter, class Iter2>
 CANN_ASC_STL_API constexpr auto iter_swap(const move_iterator<Iter>& left, const move_iterator<Iter2>& right) noexcept(
-    noexcept(
-        ::asc::std::iter_swap(left.base(), right.base()))) -> decltype(::asc::std::iter_swap(left.base(), right.base()))
+    noexcept(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left.base(),
+        right.base()))) -> decltype(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left.base(), right.base()))
 {
-    return ::asc::std::iter_swap(left.base(), right.base());  // NOLINT(build/include_what_you_use)
+    return ::asc::std::ranges::__iter_swap::__iter_swap_fn{}(
+        left.base(), right.base());  // NOLINT(build/include_what_you_use)
 }
 
 template <class Iter>

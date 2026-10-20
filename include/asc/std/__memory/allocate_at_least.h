@@ -29,28 +29,11 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/std/__memory/allocator_traits.h>
+#include <asc/std/__type_traits/integral_constant.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/ctad_support.h>
+#include <asc/std/__utility/declval.h>
 #include <asc/std/cstddef>
-
-// Base asc/__config provides no standard-version number macro, so define the
-// minimal equivalent here, #ifndef-guarded against redefinition.
-#ifndef CANN_ASC_STL_DETAIL_STD_VER
-#if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
-#define CANN_ASC_STL_DETAIL_STD_VER 2003
-#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201103L
-#define CANN_ASC_STL_DETAIL_STD_VER 2011
-#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201402L
-#define CANN_ASC_STL_DETAIL_STD_VER 2014
-#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201703L
-#define CANN_ASC_STL_DETAIL_STD_VER 2017
-#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202002L
-#define CANN_ASC_STL_DETAIL_STD_VER 2020
-#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202302L
-#define CANN_ASC_STL_DETAIL_STD_VER 2023
-#else
-#define CANN_ASC_STL_DETAIL_STD_VER 2024
-#endif
-#endif  // CANN_ASC_STL_DETAIL_STD_VER
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -64,19 +47,25 @@ struct allocation_result {
 };
 CANN_ASC_STL_DETAIL_CTAD_SUPPORTED_FOR_TYPE(allocation_result);
 
+namespace __allocate_at_least_detail {
+template <class Alloc, class = void>
+struct has_member : false_type {};
+
+template <class Alloc>
+struct has_member<Alloc,
+    void_t<decltype(::asc::std::declval<Alloc&>().allocate_at_least(::asc::std::declval<::asc::std::size_t&>()))>>
+    : true_type {};
+}  // namespace __allocate_at_least_detail
+
 template <class Alloc>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr allocation_result<typename allocator_traits<Alloc>::pointer>
 allocate_at_least(Alloc& __alloc, ::asc::std::size_t __n)
 {
-#if CANN_ASC_STL_DETAIL_STD_VER >= 2020
-    if constexpr (requires { __alloc.allocate_at_least(__n); }) {
+    if constexpr (__allocate_at_least_detail::has_member<Alloc>::value) {
         return __alloc.allocate_at_least(__n);
     } else {
         return {__alloc.allocate(__n), __n};
     }
-#else
-    return {__alloc.allocate(__n), __n};
-#endif
 }
 
 template <class Alloc>

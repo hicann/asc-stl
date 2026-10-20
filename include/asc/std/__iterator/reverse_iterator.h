@@ -147,15 +147,10 @@ inline constexpr bool __has_const_arrow = is_pointer_v<Iter> || __has_const_arro
 
 }  // namespace __reverse_iterator_detail
 
-// Note: hidden friends iter_move/iter_swap cannot be declared
-// here: asc::std::iter_move and asc::std::iter_swap are customization-point
-// objects (namespace-scope variables), and a same-named friend function in an
-// asc::std class is ill-formed ("redeclared as a different kind of entity").
-// The equivalent behavior is provided by the customization points themselves:
-// iter_move(ri) dispatches to move(*ri) (the element at base-1) and
-// iter_swap(ri, rj) swaps the base-1 elements through the global iter_swap.
+// iter_move remains the element move customization point. The namespace-scope
+// iter_swap overload below preserves the underlying iterator's ADL customization
+// after decrementing copies of both bases.
 
-// MSVC historically has issues with is_nothrow_convertible_v here, so use the noexcept expression instead.
 template <class Iter, class Iter2, class = void>
 inline constexpr bool __noexcept_rev_iter_convertible = false;
 
@@ -166,23 +161,15 @@ inline constexpr bool __noexcept_rev_iter_convertible<Iter, Iter2, enable_if_t<i
 template <class Iter>
 class reverse_iterator {
 public:
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
     static_assert(__reverse_iterator_detail::__has_bidirectional_traversal<Iter> || bidirectional_iterator<Iter>,
         "reverse_iterator<It> requires It to be a bidirectional iterator.");
-#endif
 
     using iterator_type = Iter;
     using iterator_category = conditional_t<__reverse_iterator_detail::__has_random_access_traversal<Iter>,
         random_access_iterator_tag, __reverse_iterator_detail::__iterator_traits_category_or_concept_t<Iter>>;
     using pointer = typename iterator_traits<Iter>::pointer;
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
     using iterator_concept =
         conditional_t<random_access_iterator<Iter>, random_access_iterator_tag, bidirectional_iterator_tag>;
-#else
-    using iterator_concept =
-        conditional_t<is_convertible_v<typename iterator_traits<Iter>::iterator_category, random_access_iterator_tag>,
-            random_access_iterator_tag, bidirectional_iterator_tag>;
-#endif
     using value_type = iter_value_t<Iter>;
     using difference_type = iter_difference_t<Iter>;
     using reference = iter_reference_t<Iter>;
@@ -330,11 +317,32 @@ private:
     Iter current{};
 };
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class Iter1, class Iter2>
 inline constexpr bool disable_sized_sentinel_for<reverse_iterator<Iter1>, reverse_iterator<Iter2>> =
     !sized_sentinel_for<Iter1, Iter2>;
-#endif
+
+namespace __reverse_iterator_detail {
+template <class Iter1, class Iter2, class = void>
+inline constexpr bool __can_iter_swap = false;
+template <class Iter1, class Iter2>
+inline constexpr bool __can_iter_swap<Iter1, Iter2,
+    void_t<decltype(--::asc::std::declval<Iter1&>()), decltype(--::asc::std::declval<Iter2&>()),
+        decltype(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(
+            --::asc::std::declval<Iter1&>(), --::asc::std::declval<Iter2&>()))>> = indirectly_swappable<Iter1, Iter2>;
+}  // namespace __reverse_iterator_detail
+
+CANN_ASC_STL_DETAIL_TEMPLATE(class Iter1, class Iter2)
+CANN_ASC_STL_DETAIL_REQUIRES(__reverse_iterator_detail::__can_iter_swap<Iter1, Iter2>)
+CANN_ASC_STL_API constexpr void iter_swap(const reverse_iterator<Iter1>& left,
+    const reverse_iterator<Iter2>& right) noexcept(is_nothrow_copy_constructible_v<Iter1> &&
+    is_nothrow_copy_constructible_v<Iter2> &&
+    noexcept(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(
+        --::asc::std::declval<Iter1&>(), --::asc::std::declval<Iter2&>())))
+{
+    auto first = left.base();
+    auto second = right.base();
+    ::asc::std::ranges::__iter_swap::__iter_swap_fn{}(--first, --second);
+}
 
 template <class Iter>
 CANN_ASC_STL_API constexpr reverse_iterator<Iter> make_reverse_iterator(Iter value) noexcept(

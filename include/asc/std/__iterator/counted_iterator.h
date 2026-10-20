@@ -163,7 +163,9 @@ public:
         requires is_default_constructible_v<Iter>
     = default;
 #else   // !(CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION())
-    CANN_ASC_STL_API constexpr counted_iterator() = default;
+    template <class I2 = Iter, enable_if_t<is_default_constructible_v<I2>, int> = 0>
+    CANN_ASC_STL_API constexpr counted_iterator()
+    {}
 #endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
     CANN_ASC_STL_API constexpr counted_iterator(Iter value, difference_type count) noexcept(
@@ -194,7 +196,7 @@ public:
         is_nothrow_constructible_v<Iter, const I2&>)
         : current_(other.base()), count_(other.count())
     {}
-    template <class I2, enable_if_t<is_assignable_v<Iter&, const I2&>, int> = 0>
+    template <class I2, enable_if_t<assignable_from<Iter&, const I2&>, int> = 0>
     CANN_ASC_STL_API constexpr counted_iterator& operator=(const counted_iterator<I2>& other) noexcept(
         is_nothrow_assignable_v<Iter&, const I2&>)
     {
@@ -235,7 +237,7 @@ public:
         return ::asc::std::to_address(current_);
     }
 #else   // !(CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION())
-    template <class I2 = Iter, enable_if_t<__counted_iterator_detail::__has_contiguous_traversal<I2>, int> = 0>
+    template <class I2 = Iter, enable_if_t<contiguous_iterator<I2>, int> = 0>
     CANN_ASC_STL_API constexpr auto operator->() const noexcept
     {
         return ::asc::std::to_address(current_);
@@ -266,7 +268,7 @@ public:
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
         if constexpr (forward_iterator<I2>) {
 #else
-        if constexpr (__counted_iterator_detail::__has_forward_traversal<I2>) {
+        if constexpr (forward_iterator<I2>) {
 #endif
             counted_iterator old(*this);
             ++*this;
@@ -342,21 +344,21 @@ public:
         return current_[count];
     }
 #else   // !(CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION())
-    template <class I2 = Iter, enable_if_t<__counted_iterator_detail::__has_bidirectional_traversal<I2>, int> = 0>
+    template <class I2 = Iter, enable_if_t<bidirectional_iterator<I2>, int> = 0>
     CANN_ASC_STL_API constexpr counted_iterator& operator--()
     {
         --current_;
         ++count_;
         return *this;
     }
-    template <class I2 = Iter, enable_if_t<__counted_iterator_detail::__has_bidirectional_traversal<I2>, int> = 0>
+    template <class I2 = Iter, enable_if_t<bidirectional_iterator<I2>, int> = 0>
     CANN_ASC_STL_API constexpr counted_iterator operator--(int)
     {
         counted_iterator old(*this);
         --*this;
         return old;
     }
-    template <class I2 = Iter, enable_if_t<__counted_iterator_detail::__has_random_access_traversal<I2>, int> = 0>
+    template <class I2 = Iter, enable_if_t<random_access_iterator<I2>, int> = 0>
     CANN_ASC_STL_API constexpr counted_iterator& operator+=(iter_difference_t<I2> count)
     {
         CANN_ASC_STL_DETAIL_ASSERT(count <= count_, "Cannot advance iterator past end.");
@@ -364,7 +366,7 @@ public:
         count_ -= count;
         return *this;
     }
-    template <class I2 = Iter, enable_if_t<__counted_iterator_detail::__has_random_access_traversal<I2>, int> = 0>
+    template <class I2 = Iter, enable_if_t<random_access_iterator<I2>, int> = 0>
     CANN_ASC_STL_API constexpr counted_iterator& operator-=(iter_difference_t<I2> count)
     {
         CANN_ASC_STL_DETAIL_ASSERT(-count <= count_,
@@ -374,17 +376,17 @@ public:
         count_ += count;
         return *this;
     }
-    template <class I2 = Iter, enable_if_t<__counted_iterator_detail::__has_random_access_traversal<I2>, int> = 0>
+    template <class I2 = Iter, enable_if_t<random_access_iterator<I2>, int> = 0>
     CANN_ASC_STL_API constexpr counted_iterator operator+(iter_difference_t<I2> count) const
     {
         return counted_iterator(current_ + count, count_ - count);
     }
-    template <class I2 = Iter, enable_if_t<__counted_iterator_detail::__has_random_access_traversal<I2>, int> = 0>
+    template <class I2 = Iter, enable_if_t<random_access_iterator<I2>, int> = 0>
     CANN_ASC_STL_API constexpr counted_iterator operator-(iter_difference_t<I2> count) const
     {
         return counted_iterator(current_ - count, count_ + count);
     }
-    template <class I2 = Iter, enable_if_t<__counted_iterator_detail::__has_random_access_traversal<I2>, int> = 0>
+    template <class I2 = Iter, enable_if_t<random_access_iterator<I2>, int> = 0>
     CANN_ASC_STL_API constexpr decltype(auto) operator[](iter_difference_t<I2> count) const
     {
         CANN_ASC_STL_DETAIL_ASSERT(count < count_, "Subscript argument must be less than size.");
@@ -479,11 +481,11 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr iter_difference_t<I2> operator
 template <class I1, class I2>
     requires indirectly_swappable<I2, I1>
 CANN_ASC_STL_API constexpr auto iter_swap(const counted_iterator<I1>& left, const counted_iterator<I2>& right) noexcept(
-    noexcept(
-        ::asc::std::iter_swap(left.base(), right.base()))) -> decltype(::asc::std::iter_swap(left.base(), right.base()))
+    noexcept(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left.base(),
+        right.base()))) -> decltype(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left.base(), right.base()))
 {
     CANN_ASC_STL_DETAIL_ASSERT(left.count() > 0 && right.count() > 0, "Iterators must not be past end of range.");
-    return ::asc::std::iter_swap(left.base(), right.base());
+    return ::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left.base(), right.base());
 }
 #else   // !(CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION())
 namespace __counted_iterator_detail {
@@ -492,17 +494,19 @@ inline constexpr bool __iter_swappable_probe = false;
 
 template <class I1, class I2>
 inline constexpr bool __iter_swappable_probe<I1, I2,
-    void_t<decltype(::asc::std::iter_swap(::asc::std::declval<const I1&>(), ::asc::std::declval<const I2&>())),
-        decltype(::asc::std::iter_swap(::asc::std::declval<const I2&>(), ::asc::std::declval<const I1&>()))>> = true;
+    void_t<decltype(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(
+               ::asc::std::declval<const I1&>(), ::asc::std::declval<const I2&>())),
+        decltype(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(
+            ::asc::std::declval<const I2&>(), ::asc::std::declval<const I1&>()))>> = true;
 }  // namespace __counted_iterator_detail
 
-template <class I1, class I2, enable_if_t<__counted_iterator_detail::__iter_swappable_probe<I1, I2>, int> = 0>
+template <class I1, class I2, enable_if_t<indirectly_swappable<I2, I1>, int> = 0>
 CANN_ASC_STL_API constexpr auto iter_swap(const counted_iterator<I1>& left, const counted_iterator<I2>& right) noexcept(
-    noexcept(
-        ::asc::std::iter_swap(left.base(), right.base()))) -> decltype(::asc::std::iter_swap(left.base(), right.base()))
+    noexcept(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left.base(),
+        right.base()))) -> decltype(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left.base(), right.base()))
 {
     CANN_ASC_STL_DETAIL_ASSERT(left.count() > 0 && right.count() > 0, "Iterators must not be past end of range.");
-    return ::asc::std::iter_swap(left.base(), right.base());
+    return ::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left.base(), right.base());
 }
 #endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
@@ -523,8 +527,7 @@ struct iterator_traits<counted_iterator<Iter>, void_t<typename iterator_traits<I
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     using pointer = _If<contiguous_iterator<Iter>, add_pointer_t<iter_reference_t<Iter>>, void>;
 #else   // !(CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION())
-    using pointer =
-        _If<__counted_iterator_detail::__has_contiguous_traversal<Iter>, add_pointer_t<iter_reference_t<Iter>>, void>;
+    using pointer = _If<contiguous_iterator<Iter>, add_pointer_t<iter_reference_t<Iter>>, void>;
 #endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 };
 

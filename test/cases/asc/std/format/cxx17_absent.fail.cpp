@@ -15,4 +15,5 @@
  */
 
 #include <asc/std/format>
-asc::std::format_to_n_result<char*> rejected_cxx17_format_result;
+
+asc::std::format_string<int> unsupported = "{}";

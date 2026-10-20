@@ -349,7 +349,7 @@ public:
     //--------------------------------------------------------------------------------
     // [mdspan.mdspan.members], members
 
-#if defined(__cpp_multidimensional_subscript) && __cpp_multidimensional_subscript >= 202110L
+#if CANN_ASC_STL_DETAIL_HAS_MULTIDIMENSIONAL_SUBSCRIPT()
     template <class... OtherIndexTypes,
         enable_if_t<(sizeof...(OtherIndexTypes) == extents_type::rank()) &&
                 __mdspan_detail::__all_convertible_to_index_type<index_type, OtherIndexTypes...>,

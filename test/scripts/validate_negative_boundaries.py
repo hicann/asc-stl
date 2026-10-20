@@ -55,14 +55,22 @@ def validate_language_baseline(compiler: str, include: Path, temporary: Path) ->
 
 
 def validate_concept_absence(compiler: str, include: Path, temporary: Path) -> None:
-    source = temporary / "cxx20_concept_in_cxx17.cpp"
+    source = temporary / "cxx17_predicate.cpp"
     source.write_text(
         "#include <asc/std/__concepts/same_as.h>\nstatic_assert(asc::std::same_as<int, int>);\n",
         encoding="utf-8",
     )
     process = compile_source(compiler, include, source, source.with_suffix(".o"), "c++17")
-    if process.returncode == 0 or "same_as" not in process.stdout:
-        raise RuntimeError(f"the C++20 same_as concept was not explicitly absent in C++17 mode:\n{process.stdout}")
+    if process.returncode != 0:
+        raise RuntimeError(f"C++17 concept predicate backport failed:\n{process.stdout}")
+    source.write_text(
+        "#include <asc/std/__concepts/same_as.h>\n"
+        "template<class T> concept native_concept = asc::std::same_as<T, int>;\n",
+        encoding="utf-8",
+    )
+    process = compile_source(compiler, include, source, source.with_suffix(".o"), "c++17")
+    if process.returncode == 0 or "concept" not in process.stdout:
+        raise RuntimeError(f"native concept syntax unexpectedly compiled in C++17:\n{process.stdout}")
 
 
 def validate_empty_headers(compiler: str, include: Path, temporary: Path) -> None:
@@ -97,6 +105,8 @@ COMPILE_FAILURE_CASES = (
     ("cases/asc/numeric/floating.fail.cpp", "static assertion"),
     ("cases/asc/std/format/format_float_host.fail.cpp", "static assertion"),
     ("cases/asc/std/format/invalid_spec.fail.cpp", "__builtin_trap"),
+    ("cases/asc/std/format/runtime_format.fail.cpp", "constant expression"),
+    ("cases/asc/std/format/invalid_literal.fail.cpp", "constant expression"),
     ("cases/asc/std/ranges/repeat_unbounded.fail.cpp", "no match for call"),
     ("cases/asc/std/ranges/zip_three.fail.cpp", "no match for call"),
     ("cases/asc/std/__utility/as_const/rvalue.fail.cpp", "deleted"),
@@ -125,7 +135,7 @@ COMPILE_FAILURE_CASES = (
     ("cases/asc/std/array/get_out_of_bounds.fail.cpp", "static assertion"),
     ("cases/asc/std/array/at_excluded.fail.cpp", "no member named"),
     ("cases/asc/std/span/writable_const_span.fail.cpp", "no matching function"),
-    ("cases/asc/std/span/fixed_extent_mismatch.fail.cpp", "static assertion"),
+    ("cases/asc/std/span/fixed_extent_mismatch.fail.cpp", "no matching"),
     ("cases/asc/std/span/at_excluded.fail.cpp", "no member named"),
     ("cases/asc/std/span/fixed_default.fail.cpp", "no matching function"),
     ("cases/asc/std/optional/optional_reference.fail.cpp", "rvalue"),
@@ -264,6 +274,8 @@ def validate_compile_failures(compiler: str, include: Path, test_root: Path, tem
     cxx20_only = {
         "cases/asc/std/format/format_float_host.fail.cpp",
         "cases/asc/std/format/invalid_spec.fail.cpp",
+        "cases/asc/std/format/runtime_format.fail.cpp",
+        "cases/asc/std/format/invalid_literal.fail.cpp",
         "cases/asc/std/compare/strong_order.fail.cpp",
         "cases/asc/std/bitset/spaceship.fail.cpp",
         "cases/asc/std/chrono/spaceship.fail.cpp",
@@ -290,7 +302,7 @@ def validate_compile_failures(compiler: str, include: Path, test_root: Path, tem
 def validate_format_cxx17_absence(compiler: str, include: Path, test_root: Path, temporary: Path) -> None:
     negative = test_root / "cases/asc/std/format/cxx17_absent.fail.cpp"
     process = compile_source(compiler, include, negative, temporary / "format-cxx17.o", "c++17")
-    if process.returncode == 0 or "format_to_n_result" not in process.stdout:
+    if process.returncode == 0 or "format_string" not in process.stdout:
         raise RuntimeError(f"C++17 format surface was not absent: {negative}\n{process.stdout}")
 
     negative = test_root / "cases/asc/std/compare/compare_cxx17_absent.fail.cpp"
@@ -316,7 +328,7 @@ def main() -> int:
         validate_format_cxx17_absence(args.compiler, args.include, args.test_root, temporary)
 
     LOGGER.info(
-        "PASS: C++17 baseline, pre-C++17 rejection, C++20 concept gating, "
+        "PASS: C++17 baseline, pre-C++17 rejection, concept predicates and native-syntax gating, "
         "empty compatibility, and compile-failure boundaries"
     )
     return 0

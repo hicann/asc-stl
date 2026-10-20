@@ -51,8 +51,6 @@ CANN_ASC_STL_END_NAMESPACE
 
 // [range.iter.op.prev]
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
@@ -93,7 +91,5 @@ using __prev_cpo = __prev::__fn;
 }  // namespace ranges
 
 CANN_ASC_STL_END_NAMESPACE
-
-#endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 #endif  // CANN_ASC_STL_ASC_STD___ITERATOR_PREV_H

@@ -40,7 +40,9 @@ template <input_or_output_iterator Iter, sentinel_for<Iter> Sent>
     requires(!same_as<Iter, Sent> && copyable<Iter>)
 class common_iterator;
 #else
-template <class Iter, class Sent, class = enable_if_t<!is_same_v<Iter, Sent> > >
+template <class Iter, class Sent,
+    class = enable_if_t<input_or_output_iterator<Iter> && sentinel_for<Sent, Iter> && !same_as<Iter, Sent> &&
+        copyable<Iter> > >
 class common_iterator;
 #endif
 

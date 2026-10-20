@@ -69,10 +69,9 @@ struct __find_if_fn {
         return first;
     }
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class Iterator, class Sentinel, class Predicate, class Projection = identity>
-        requires input_iterator<Iterator> && sentinel_for<Sentinel, Iterator> &&
-        indirect_unary_predicate<Predicate, projected<Iterator, Projection>>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Iterator, class Sentinel, class Predicate, class Projection = identity)
+    CANN_ASC_STL_DETAIL_REQUIRES(input_iterator<Iterator>&& sentinel_for<Sentinel, Iterator>&&
+            indirect_unary_predicate<Predicate, projected<Iterator, Projection>>)
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr Iterator operator()(
         Iterator first, Sentinel last, Predicate predicate, Projection projection = {}) const
     {
@@ -80,33 +79,14 @@ struct __find_if_fn {
         return __find_if_impl(::asc::std::move(first), ::asc::std::move(last), predicate, projection);
     }
 
-    template <class Range, class Predicate, class Projection = identity>
-        requires input_range<Range> && indirect_unary_predicate<Predicate, projected<iterator_t<Range>, Projection>>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Range, class Predicate, class Projection = identity)
+    CANN_ASC_STL_DETAIL_REQUIRES(
+        input_range<Range>&& indirect_unary_predicate<Predicate, projected<iterator_t<Range>, Projection>>)
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr borrowed_iterator_t<Range> operator()(
         Range&& range, Predicate predicate, Projection projection = {}) const
     {
-        return __find_if_impl(ranges::begin(range), ranges::end(range), predicate, projection);
+        return __find_if_impl(ranges::__begin_cpo{}(range), ranges::__end_cpo{}(range), predicate, projection);
     }
-#else
-    template <class Iterator, class Sentinel, class Predicate, class Projection = identity,
-        class = decltype(::asc::std::declval<Iterator&>() != ::asc::std::declval<Sentinel&>()),
-        class = enable_if_t<is_invocable_v<Predicate&, invoke_result_t<Projection&, iter_reference_t<Iterator>>>>>
-    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr Iterator operator()(
-        Iterator first, Sentinel last, Predicate predicate, Projection projection = {}) const
-    {
-        // NOLINTNEXTLINE(build/include_what_you_use)
-        return __find_if_impl(::asc::std::move(first), ::asc::std::move(last), predicate, projection);
-    }
-
-    template <class Range, class Predicate, class Projection = identity,
-        class =
-            enable_if_t<is_invocable_v<Predicate&, invoke_result_t<Projection&, iter_reference_t<iterator_t<Range>>>>>>
-    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr borrowed_iterator_t<Range> operator()(
-        Range&& range, Predicate predicate, Projection projection = {}) const
-    {
-        return __find_if_impl(ranges::begin(range), ranges::end(range), predicate, projection);
-    }
-#endif
 };
 inline constexpr __find_if_fn find_if{};
 }  // namespace ranges

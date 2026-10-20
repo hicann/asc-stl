@@ -513,123 +513,99 @@
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_random_access_range.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_borrowed_range.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_input_range.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_output_range.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_sized_range.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_contiguous_range.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_bidirectional_range.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_forward_range.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_common_range.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_viewable_range.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_view.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_range.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/metaprogramming/asc_std_ratio/ratio_less_equal.md": {
     "standards": [
@@ -2129,313 +2105,251 @@
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/copy_constructible.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/signed_integral.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/default_initializable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/derived_from.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/assignable_from.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/same_as.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/unsigned_integral.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/predicate.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/semiregular.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/convertible_to.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/strict_weak_order.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/swappable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/regular_invocable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/floating_point.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/common_with.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/swappable_with.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/destructible.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/invocable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/regular.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/equality_comparable_with.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/relation.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/totally_ordered.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/movable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/move_constructible.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/equivalence_relation.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/constructible_from.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/integral.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/common_reference_with.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/copyable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/totally_ordered_with.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/equality_comparable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/containers/asc_std_span/ranges_enable_borrowed_range.md": {
     "standards": [
@@ -2479,13 +2393,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_swappable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_difference_type.md": {
     "standards": [
@@ -2529,13 +2441,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/random_access_iterator.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_iterator_category.md": {
     "standards": [
@@ -2571,13 +2481,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/weakly_incrementable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_iterator_concept.md": {
     "standards": [
@@ -2597,33 +2505,27 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirect_strict_weak_order.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_unary_invocable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_copyable_storable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/back_insert_iterator_iterator_category.md": {
     "standards": [
@@ -2635,13 +2537,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/contiguous_iterator.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_value_type.md": {
     "standards": [
@@ -2661,13 +2561,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/sentinel_for.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/front_insert_iterator_difference_type.md": {
     "standards": [
@@ -2687,43 +2585,35 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_copyable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_comparable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/forward_iterator.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_movable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/back_insert_iterator_difference_type.md": {
     "standards": [
@@ -2743,13 +2633,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirect_unary_predicate.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/front_insert_iterator_iterator_category.md": {
     "standards": [
@@ -2777,13 +2665,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirect_equivalence_relation.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_reference.md": {
     "standards": [
@@ -2803,13 +2689,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/mergeable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_pointer.md": {
     "standards": [
@@ -2821,13 +2705,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirect_binary_predicate.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_reference.md": {
     "standards": [
@@ -2839,13 +2721,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_regular_unary_invocable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_traits_difference_type.md": {
     "standards": [
@@ -2865,13 +2745,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/sized_sentinel_for.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_traits_reference.md": {
     "standards": [
@@ -2891,13 +2769,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/input_iterator.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/projected.md": {
     "standards": [
@@ -2981,13 +2857,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/permutable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/counted_iterator_difference_type.md": {
     "standards": [
@@ -3015,13 +2889,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_readable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/insert_iterator_reference.md": {
     "standards": [
@@ -3041,13 +2913,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/incrementable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_difference_type.md": {
     "standards": [
@@ -3059,13 +2929,11 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/bidirectional_iterator.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_pointer.md": {
     "standards": [
@@ -3077,33 +2945,27 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/input_or_output_iterator.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/output_iterator.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_movable_storable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iter_reference_t.md": {
     "standards": [
@@ -3115,23 +2977,19 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_writable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/sortable.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": null,
-    "header_standards": [
-      17
-    ]
+    "expression": null
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/incrementable_traits_difference_type.md": {
     "standards": [
@@ -3975,13 +3833,11 @@
   },
   "docs/zh/api/standard/text_processing/asc_std_format/format_to_n_result.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": "example()",
-    "header_standards": [
-      17
-    ]
+    "expression": "example()"
   },
   "docs/zh/api/standard/text_processing/asc_std_format/basic_format_string.md": {
     "standards": [
@@ -10758,13 +10614,11 @@
   },
   "docs/zh/api/standard/language_support/asc_std_new/destroying_delete_t.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": "example()",
-    "header_standards": [
-      17
-    ]
+    "expression": "example()"
   },
   "docs/zh/api/standard/text_processing/asc_std_cuchar/mbstate_t.md": {
     "standards": [
@@ -11777,10 +11631,8 @@
   },
   "docs/zh/api/standard/containers/asc_std_array/to_array.md": {
     "standards": [
+      17,
       20
-    ],
-    "header_standards": [
-      17
     ],
     "mode": "host",
     "expression": "example()"
@@ -11887,5 +11739,201 @@
       20
     ],
     "mode": "simt"
+  },
+  "docs/zh/api/standard/concepts/asc_std_concepts/different_from.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocate_at_least.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/pointer_traits_pointer_to.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstdalign/alignas_is_defined.md": {
+    "standards": [
+      17
+    ],
+    "mode": "host",
+    "expression": null,
+    "header_standards": [
+      20
+    ]
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstdbool/bool_true_false_are_defined.md": {
+    "standards": [
+      17
+    ],
+    "mode": "host",
+    "expression": null,
+    "header_standards": [
+      20
+    ]
+  },
+  "docs/zh/api/standard/language_support/asc_std_new/destroying_delete.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_source_location.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_unreachable.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_type_identity.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_endian.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_is_constant_evaluated.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_concept_predicates.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_native_concepts.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_span.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_to_array.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_mdspan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_submdspan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_expected.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_optional_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_inplace_vector.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_philox.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_allocate_at_least.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_format_to_n_result.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/has_format.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
   }
 }

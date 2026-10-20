@@ -47,6 +47,7 @@
 #include <asc/std/__type_traits/is_reference.h>
 #include <asc/std/__type_traits/remove_cvref.h>
 #include <asc/std/__type_traits/remove_reference.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/declval.h>
 
 // Device compilation does not include the host <initializer_list> (preserving the
@@ -145,6 +146,84 @@ template <class R>
 using range_common_reference_t = iter_common_reference_t<iterator_t<R>>;
 template <class R>
 using range_size_t = decltype(__size_cpo{}(::asc::std::declval<R&>()));
+
+template <class T, class = void>
+inline constexpr bool __range_impl = false;
+template <class T>
+inline constexpr bool __range_impl<T, void_t<iterator_t<T>, sentinel_t<T>>> = true;
+template <class T>
+inline constexpr bool range = __range_impl<T>;
+template <class T>
+inline constexpr bool borrowed_range =
+    range<T> && (is_lvalue_reference_v<T> || enable_borrowed_range<remove_cvref_t<T>>);
+template <class T, class = void>
+inline constexpr bool __sized_range_impl = false;
+template <class T>
+inline constexpr bool
+    __sized_range_impl<T, void_t<enable_if_t<range<T>>, decltype(__size_cpo{}(::asc::std::declval<T&>()))>> = true;
+template <class T>
+inline constexpr bool sized_range = __sized_range_impl<T>;
+template <class T, int Kind, class = void>
+inline constexpr bool __range_iterator_impl = false;
+template <class T, int Kind>
+inline constexpr bool __range_iterator_impl<T, Kind, void_t<iterator_t<T>>> = range<T> &&
+    (Kind == 0        ? input_iterator<iterator_t<T>> :
+            Kind == 1 ? forward_iterator<iterator_t<T>> :
+            Kind == 2 ? bidirectional_iterator<iterator_t<T>> :
+                        random_access_iterator<iterator_t<T>>);
+template <class T>
+inline constexpr bool input_range = __range_iterator_impl<T, 0>;
+template <class T, class U, class = void>
+inline constexpr bool __output_range_impl = false;
+template <class T, class U>
+inline constexpr bool __output_range_impl<T, U, void_t<iterator_t<T>>> = range<T> && output_iterator<iterator_t<T>, U>;
+template <class T, class U>
+inline constexpr bool output_range = __output_range_impl<T, U>;
+template <class T>
+inline constexpr bool forward_range = __range_iterator_impl<T, 1>;
+template <class T>
+inline constexpr bool bidirectional_range = __range_iterator_impl<T, 2>;
+template <class T>
+inline constexpr bool random_access_range = __range_iterator_impl<T, 3>;
+template <class T, class = void>
+inline constexpr bool __contiguous_range_impl = false;
+template <class T>
+inline constexpr bool __contiguous_range_impl<T,
+    void_t<enable_if_t<random_access_range<T>>, iterator_t<T>, range_reference_t<T>,
+        decltype(__data_cpo{}(::asc::std::declval<T&>()))>> = contiguous_iterator<iterator_t<T>> &&
+    same_as<decltype(__data_cpo{}(::asc::std::declval<T&>())), add_pointer_t<range_reference_t<T>>>;
+template <class T>
+inline constexpr bool contiguous_range = __contiguous_range_impl<T>;
+template <class T, class = void>
+inline constexpr bool __common_range_impl = false;
+template <class T>
+inline constexpr bool __common_range_impl<T, void_t<iterator_t<T>, sentinel_t<T>>> =
+    range<T> && same_as<iterator_t<T>, sentinel_t<T>>;
+template <class T>
+inline constexpr bool common_range = __common_range_impl<T>;
+template <class T>
+inline constexpr bool view = range<T> && movable<T> && enable_view<T>;
+template <class T, class = void>
+inline constexpr bool __simple_view_impl = false;
+template <class T>
+inline constexpr bool
+    __simple_view_impl<T, void_t<iterator_t<T>, iterator_t<const T>, sentinel_t<T>, sentinel_t<const T>>> = view<T> &&
+    range<const T> && same_as<iterator_t<T>, iterator_t<const T>> && same_as<sentinel_t<T>, sentinel_t<const T>>;
+template <class T>
+inline constexpr bool __simple_view = __simple_view_impl<T>;
+template <class T>
+inline constexpr bool viewable_range = range<T> &&
+    ((view<remove_cvref_t<T>> && constructible_from<remove_cvref_t<T>, T>) ||
+        (!view<remove_cvref_t<T>> &&
+            (is_lvalue_reference_v<T> ||
+                (movable<remove_reference_t<T>> && !__is_asc_std_initializer_list<remove_cvref_t<T>>))));
+template <class R, class T, class = void>
+inline constexpr bool __container_compatible_range_impl = false;
+template <class R, class T>
+inline constexpr bool __container_compatible_range_impl<R, T, void_t<range_reference_t<R>>> =
+    input_range<R> && convertible_to<range_reference_t<R>, T>;
+template <class R, class T>
+inline constexpr bool __container_compatible_range = __container_compatible_range_impl<R, T>;
 
 #endif
 }  // namespace ranges

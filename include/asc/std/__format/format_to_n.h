@@ -31,8 +31,6 @@
 #include <asc/std/__cstddef/types.h>
 #include <asc/std/__format/format_to.h>
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
-
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 // Aggregated result of format_to_n. Deliberately carries no deduction guide:
@@ -43,6 +41,8 @@ struct format_to_n_result {
     Out out;
     ptrdiff_t size;
 };
+
+#if CANN_ASC_STL_DETAIL_HAS_CONSTEVAL()
 
 // Bounded form of format_to: writes at most count characters and reports the
 // untruncated size a full-capacity buffer would have received.
@@ -56,8 +56,8 @@ CANN_ASC_STL_API constexpr format_to_n_result<char*> format_to_n(
     return {output + written, static_cast<ptrdiff_t>(result.total)};
 }
 
-CANN_ASC_STL_END_NAMESPACE
+#endif  // CANN_ASC_STL_DETAIL_HAS_CONSTEVAL()
 
-#endif  // CANN_ASC_STL_DETAIL_HAS_CXX20()
+CANN_ASC_STL_END_NAMESPACE
 
 #endif  // CANN_ASC_STL_ASC_STD___FORMAT_FORMAT_TO_N_H

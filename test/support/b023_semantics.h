@@ -215,12 +215,10 @@ CANN_ASC_STL_HOST_API int evaluate_host_only()
     asc::std::ranges::__non_propagating_cache<int> moved(static_cast<decltype(cache)&&>(cache));
     failures += cache.__has_value() || moved.__has_value();
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
     int input[] = {1, 2, 3};
     auto result = asc::std::ranges::for_each_n(input, 3, counter{});
     failures += result.in != input + 3 || result.fun.calls != 3;
     static_assert(asc::std::sortable<int*>);
-#endif
     static_assert(asc::std::is_fundamental_v<int> && !asc::std::is_fundamental_v<int*>);
     return failures;
 }

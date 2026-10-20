@@ -88,10 +88,14 @@ CANN_ASC_STL_API CANN_ASC_STL_DETAIL_NO_INLINE unsigned int evaluate_foundation(
     failures += !asc::add_overflow(2147483647, 1).overflow;
     failures += asc::saturating_sub(0U, 1U) != 0U || asc::saturating_mul(~0U, 2U) != ~0U;
     failures += asc::mul_overflow(0x80000000U, 1U).overflow || asc::div_overflow(0x80000000U, ~0U).overflow;
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+#if CANN_ASC_STL_DETAIL_HAS_CONSTEVAL()
     char text[16]{};
     auto* text_end = asc::std::format_to(text, "{:x}", 255);
     failures += text_end - text != 2 || text[0] != 'f' || text[1] != 'f';
+#else
+    char text[3]{};
+    const auto rendered = asc::std::__format_detail::render_unchecked(text, 3, "{:x}", 4, 255);
+    failures += rendered.total != 2 || text[0] != 'f' || text[1] != 'f';
 #endif
     char digits[8]{};
     const auto to_result = asc::std::to_chars(digits, digits + 8, 31, 16);

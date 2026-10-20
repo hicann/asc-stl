@@ -37,6 +37,7 @@
 #include <asc/std/__iterator/projected.h>
 #include <asc/std/__ranges/concepts.h>
 #include <asc/std/__utility/move.h>
+#include <asc/std/__type_traits/void_t.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -47,20 +48,22 @@ using for_each_n_result = in_fun_result<_Iter, _Func>;
 
 namespace __for_each_n {
 
+template <class Iter, class Function, class Projection, class = void>
+inline constexpr bool __can_for_each_n = false;
+template <class Iter, class Function, class Projection>
+inline constexpr bool __can_for_each_n<Iter, Function, Projection,
+    void_t<decltype(*::asc::std::declval<Iter&>()), decltype(++::asc::std::declval<Iter&>()),
+        decltype(::asc::std::invoke(::asc::std::declval<Function&>(),
+            ::asc::std::invoke(::asc::std::declval<Projection&>(), *::asc::std::declval<Iter&>())))>> = true;
+
 struct __fn {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     // Constraints stay expression-level (dereferenceable, incrementable,
     // predicate invocable through the projection): existing callers invoke this
     // customization point with classic bare iterators exposing only
     // operator*/operator++, which standard input_iterator-level validation
     // would reject.
-    template <class _Iter, class _Func, class _Proj = identity>
-        requires requires {
-            *::asc::std::declval<_Iter&>();
-            ++::asc::std::declval<_Iter&>();
-            ::asc::std::invoke(::asc::std::declval<_Func&>(),
-                ::asc::std::invoke(::asc::std::declval<_Proj&>(), *::asc::std::declval<_Iter&>()));
-        }
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _Iter, class _Func, class _Proj = identity)
+    CANN_ASC_STL_DETAIL_REQUIRES(__can_for_each_n<_Iter, _Func, _Proj>)
     CANN_ASC_STL_API constexpr for_each_n_result<_Iter, _Func> operator()(
         _Iter __first, iter_difference_t<_Iter> __count, _Func __func, _Proj __proj = {}) const
     {
@@ -70,18 +73,6 @@ struct __fn {
         }
         return {::asc::std::move(__first), ::asc::std::move(__func)};  // NOLINT(build/include_what_you_use)
     }
-#else
-    template <class _Iter, class _Func, class _Proj = identity>
-    CANN_ASC_STL_API constexpr for_each_n_result<_Iter, _Func> operator()(
-        _Iter __first, iter_difference_t<_Iter> __count, _Func __func, _Proj __proj = {}) const
-    {
-        while (__count-- > 0) {
-            ::asc::std::invoke(__func, ::asc::std::invoke(__proj, *__first));
-            ++__first;
-        }
-        return {::asc::std::move(__first), ::asc::std::move(__func)};  // NOLINT(build/include_what_you_use)
-    }
-#endif
 };
 }  // namespace __for_each_n
 

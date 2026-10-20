@@ -28,6 +28,8 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__concepts/arithmetic.h>
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__concepts/same_as.h>
@@ -41,7 +43,6 @@
 #include <asc/std/__ranges/view_interface.h>
 #include <asc/std/__type_traits/common_type.h>
 #include <asc/std/__type_traits/conditional.h>
-#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_integral.h>
 #include <asc/std/__type_traits/is_nothrow_copy_constructible.h>
 #include <asc/std/__type_traits/is_object.h>
@@ -93,32 +94,16 @@ namespace asc::std::ranges {
 
 // Integer-like constraints for iterators/sentinels, inlined here because
 // __iterator/concepts.h does not provide these internals.
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 template <class T>
-concept __integer_like = integral<T> && !same_as<T, bool>;
+CANN_ASC_STL_DETAIL_CONCEPT __integer_like = integral<T> && !same_as<T, bool>;
 
 template <class T>
-concept __signed_integer_like = signed_integral<T>;
+CANN_ASC_STL_DETAIL_CONCEPT __signed_integer_like = signed_integral<T>;
 
 template <class T>
-concept __integer_like_with_usable_difference_type =
+CANN_ASC_STL_DETAIL_CONCEPT __integer_like_with_usable_difference_type =
     __signed_integer_like<T> || (__integer_like<T> && weakly_incrementable<T>);
-
-#else  // ^^^ concepts ^^^ / vvv !concepts vvv
-
-// Non-concepts path: expressed as trait equivalents (the usable_difference_type
-// check degrades to an integral check).
-template <class T>
-inline constexpr bool __integer_like = is_integral_v<T> && !is_same_v<T, bool>;
-
-template <class T>
-inline constexpr bool __signed_integer_like = is_integral_v<T> && is_signed_v<T>;
-
-template <class T>
-inline constexpr bool __integer_like_with_usable_difference_type = __integer_like<T>;
-
-#endif  // !concepts
 
 // Equivalent of _IotaDiffT: a signed-integer-like type maps to itself; otherwise
 // take the common type of ptrdiff_t and T.
@@ -130,15 +115,15 @@ using __repeat_view_iterator_difference_t =
 template <move_constructible T, semiregular Bound = __PTRDIFF_TYPE__>
     requires(is_object_v<T> && is_same_v<T, remove_cv_t<T>> &&
         (__integer_like_with_usable_difference_type<Bound> || is_same_v<Bound, unreachable_sentinel_t>))
-#else   // ^^^ concepts ^^^ / vvv !concepts vvv
-// Under device compilation, concept constraint evaluation is unavailable (pure SIMT
-// backend), so the non-concepts path stays unconstrained. The Bound default and the
-// construction entry points preserve the existing public shape (bounded
-// __PTRDIFF_TYPE__; views::repeat provides only the two-argument form — the
-// single-argument unbounded form is deliberately excluded).
+#else
 template <class T, class Bound = __PTRDIFF_TYPE__>
-#endif  // !concepts
+#endif
 class repeat_view : public view_interface<repeat_view<T, Bound>> {
+    static_assert(move_constructible<T> && semiregular<Bound> &&
+            ((is_object_v<T> && is_same_v<T, remove_cv_t<T>> &&
+                (__integer_like_with_usable_difference_type<Bound> || is_same_v<Bound, unreachable_sentinel_t>))),
+        "range view constraints are not satisfied");
+
     class iterator {
     public:
         using iterator_concept = random_access_iterator_tag;
@@ -264,22 +249,16 @@ public:
     CANN_ASC_STL_API constexpr repeat_view()
         requires default_initializable<T>
     = default;
-#else   // ^^^ concepts ^^^ / vvv !concepts vvv
-    CANN_ASC_STL_API constexpr repeat_view() = default;
-#endif  // !concepts
-
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class T2 = T>
-        requires(!same_as<T2, repeat_view> && copy_constructible<T2>)
-    CANN_ASC_STL_API constexpr explicit repeat_view(const T2& value, Bound bound_sentinel)
-#else   // ^^^ concepts ^^^ / vvv !concepts vvv
-    CANN_ASC_STL_API constexpr explicit repeat_view(const T& value, Bound bound_sentinel)
-#endif  // !concepts
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-        : value_(in_place_t{}, value), bound_(bound_sentinel)
 #else
-        : value_(value), bound_(bound_sentinel)
+    template <bool __asc_enabled = true, enable_if_t<__asc_enabled && (default_initializable<T>), int> = 0>
+    CANN_ASC_STL_API constexpr repeat_view()
+    {}
 #endif
+
+    CANN_ASC_STL_DETAIL_TEMPLATE(class T2 = T)
+    CANN_ASC_STL_DETAIL_REQUIRES(((!same_as<T2, repeat_view> && copy_constructible<T2>)))
+    CANN_ASC_STL_API constexpr explicit repeat_view(const T2& value, Bound bound_sentinel)
+        : value_(in_place_t{}, value), bound_(bound_sentinel)
     {
         if constexpr (!is_same_v<Bound, unreachable_sentinel_t> && is_signed_v<Bound>) {
             CANN_ASC_STL_DETAIL_ASSERT(bound_ >= 0, "The value of bound must be greater than or equal to 0");
@@ -287,34 +266,19 @@ public:
     }
 
     CANN_ASC_STL_API constexpr explicit repeat_view(T&& value, Bound bound_sentinel)
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
         : value_(in_place_t{}, ::asc::std::move(value)), bound_(bound_sentinel)
-#else
-        : value_(::asc::std::move(value)), bound_(bound_sentinel)
-#endif
     {
         if constexpr (!is_same_v<Bound, unreachable_sentinel_t> && is_signed_v<Bound>) {
             CANN_ASC_STL_DETAIL_ASSERT(bound_ >= 0, "The value of bound must be greater than or equal to 0");
         }
     }
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class... TArgs, class... BoundArgs>
-        requires(constructible_from<T, TArgs...> && constructible_from<Bound, BoundArgs...>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(class... TArgs, class... BoundArgs)
+    CANN_ASC_STL_DETAIL_REQUIRES(((constructible_from<T, TArgs...> && constructible_from<Bound, BoundArgs...>)))
     CANN_ASC_STL_API constexpr explicit repeat_view(piecewise_construct_t, tuple<TArgs...> value_args,
         tuple<BoundArgs...> bound_args)  // NOLINT(build/include_what_you_use)
-#else                                    // ^^^ concepts ^^^ / vvv !concepts vvv
-    template <class... TArgs, class... BoundArgs>
-    CANN_ASC_STL_API constexpr explicit repeat_view(piecewise_construct_t, tuple<TArgs...> value_args,
-        tuple<BoundArgs...> bound_args)  // NOLINT(build/include_what_you_use)
-#endif                                   // !concepts
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
         : value_(in_place_t{}, ::asc::std::make_from_tuple<T>(::asc::std::move(value_args))),
           bound_(::asc::std::make_from_tuple<Bound>(::asc::std::move(bound_args)))
-#else
-        : value_(::asc::std::make_from_tuple<T>(::asc::std::move(value_args))),
-          bound_(::asc::std::make_from_tuple<Bound>(::asc::std::move(bound_args)))
-#endif
     {
         if constexpr (!is_same_v<Bound, unreachable_sentinel_t> && is_signed_v<Bound>) {
             CANN_ASC_STL_DETAIL_ASSERT(
@@ -324,59 +288,44 @@ public:
 
     CANN_ASC_STL_API constexpr iterator begin() const
     {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
         return iterator(::asc::std::addressof(*value_));
-#else
-        return iterator(::asc::std::addressof(value_));
-#endif
     }
     CANN_ASC_STL_API constexpr auto end() const noexcept(is_nothrow_copy_constructible_v<Bound>)
     {
         if constexpr (is_same_v<Bound, unreachable_sentinel_t>) {
             return unreachable_sentinel;
         } else {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
             return iterator(::asc::std::addressof(*value_), bound_);
-#else
-            return iterator(::asc::std::addressof(value_), bound_);
-#endif
         }
     }
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class Bound2 = Bound>
-        requires(!same_as<Bound2, unreachable_sentinel_t>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Bound2 = Bound)
+    CANN_ASC_STL_DETAIL_REQUIRES(((!same_as<Bound2, unreachable_sentinel_t>)))
     CANN_ASC_STL_API constexpr auto size() const
-#else   // ^^^ concepts ^^^ / vvv !concepts vvv
-    template <class Bound2 = Bound, enable_if_t<!is_same_v<Bound2, unreachable_sentinel_t>, int> = 0>
-    CANN_ASC_STL_API constexpr auto size() const
-#endif  // !concepts
     {
         return ::asc::std::__to_unsigned_like(bound_);
     }
 
 private:
-    // The concepts path uses __movable_box to support move-only elements; the
-    // non-concepts path (C++17 and device compilation) keeps a plain member, since
-    // __movable_box is provided only under C++20.
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    // The shared movable box reconstructs a non-assignable stored value.
     CANN_ASC_STL_NO_UNIQUE_ADDRESS __movable_box<T> value_;
-#else
-    T value_{};
-#endif
     CANN_ASC_STL_NO_UNIQUE_ADDRESS Bound bound_ = Bound();
 };
 
 template <class T, class Bound>
-repeat_view(T, Bound) -> repeat_view<T, Bound>;
+CANN_ASC_STL_HOST_DEVICE repeat_view(T, Bound) -> repeat_view<T, Bound>;
 
 namespace views {
 // Only the two-argument bounded form is provided; the single-argument unbounded
 // repeat is deliberately excluded and has no entry point.
 struct __repeat_fn {
-    template <class T, class Bound>
-    CANN_ASC_STL_API constexpr repeat_view<remove_cvref_t<T>, remove_cvref_t<Bound>> operator()(
-        T&& value, Bound&& bound_sentinel) const
+    CANN_ASC_STL_DETAIL_TEMPLATE(
+        class T, class Bound, class Stored = remove_cvref_t<T>, class Count = remove_cvref_t<Bound>)
+    CANN_ASC_STL_DETAIL_REQUIRES(
+        is_object_v<Stored>&& move_constructible<Stored>&& same_as<Stored, remove_cv_t<Stored>>&& semiregular<Count> &&
+        (__integer_like_with_usable_difference_type<Count> || same_as<Count, unreachable_sentinel_t>) &&
+        constructible_from<Stored, T> && constructible_from<Count, Bound>)
+    CANN_ASC_STL_API constexpr repeat_view<Stored, Count> operator()(T&& value, Bound&& bound_sentinel) const
     {
         return repeat_view<remove_cvref_t<T>, remove_cvref_t<Bound>>(::asc::std::forward<T>(value),
             ::asc::std::forward<Bound>(bound_sentinel));  // NOLINT(build/include_what_you_use)

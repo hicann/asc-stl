@@ -28,6 +28,10 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__utility/declval.h>
+#include <asc/std/__type_traits/void_t.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__algorithm/ranges_find_if.h>
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__concepts/copyable.h>
@@ -91,10 +95,8 @@ void __assert_fail(const char* __assertion, const char* __file, unsigned int __l
 #endif  // !CANN_ASC_STL_DETAIL_ASSERT
 
 namespace asc::std::ranges {
-// Under device compilation, concept constraint evaluation is unavailable (pure SIMT
-// backend), so fall back to a weakly constrained version; both branches expose the
-// same public interface.
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// Both language modes and execution spaces share this implementation.
+// Native constraints and SFINAE provide the same conditional members.
 
 template <class _View, bool = forward_range<_View>>
 struct __filter_iterator_category {
@@ -113,13 +115,26 @@ struct __filter_iterator_category<_View, true> {
                 /* else */ category>>;
 };
 
+template <class _Iter, class = void>
+inline constexpr bool __filter_member_has_arrow = false;
 template <class _Iter>
-concept __filter_iterator_has_arrow =
-    input_iterator<_Iter> && (is_pointer_v<_Iter> || requires(_Iter __i) { __i.operator->(); });
+inline constexpr bool __filter_member_has_arrow<_Iter, void_t<decltype(::asc::std::declval<_Iter&>().operator->())>> =
+    true;
+template <class _Iter>
+inline constexpr bool __filter_iterator_has_arrow =
+    input_iterator<_Iter> && (is_pointer_v<_Iter> || __filter_member_has_arrow<_Iter>);
 
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <input_range _View, indirect_unary_predicate<iterator_t<_View>> _Pred>
     requires view<_View> && is_object_v<_Pred>
+#else
+template <class _View, class _Pred>
+#endif
 class filter_view : public view_interface<filter_view<_View, _Pred>> {
+    static_assert(
+        input_range<_View> && indirect_unary_predicate<_Pred, iterator_t<_View>> && (view<_View> && is_object_v<_Pred>),
+        "range view constraints are not satisfied");
+
     _View __base_;
     __movable_box<_Pred> __pred_;
 
@@ -144,8 +159,8 @@ public:
         using pointer = void;
         using reference = range_reference_t<_View>;
 
-        template <class _View2 = _View>
-            requires default_initializable<iterator_t<_View2>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+        CANN_ASC_STL_DETAIL_REQUIRES((default_initializable<iterator_t<_View2>>))
         CANN_ASC_STL_API constexpr __iterator() noexcept(is_nothrow_default_constructible_v<iterator_t<_View2>>)
             : __current_()
         {}
@@ -172,9 +187,8 @@ public:
             return *__current_;
         }
 
-        template <class _View2 = _View>
-            requires __filter_iterator_has_arrow<iterator_t<_View2>> &&
-            copyable<iterator_t<_View2>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+        CANN_ASC_STL_DETAIL_REQUIRES((__filter_iterator_has_arrow<iterator_t<_View2>> && copyable<iterator_t<_View2>>))
         CANN_ASC_STL_API constexpr iterator_t<_View> operator->() const
             noexcept(is_nothrow_copy_constructible_v<iterator_t<_View2>>)
         {
@@ -188,15 +202,15 @@ public:
             return *this;
         }
 
-        template <class _View2 = _View>
-            requires(!forward_range<_View2>)
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+        CANN_ASC_STL_DETAIL_REQUIRES(((!forward_range<_View2>)))
         CANN_ASC_STL_API constexpr void operator++(int)
         {
             ++*this;
         }
 
-        template <class _View2 = _View>
-            requires forward_range<_View2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+        CANN_ASC_STL_DETAIL_REQUIRES((forward_range<_View2>))
         CANN_ASC_STL_API constexpr __iterator operator++(int)
         {
             auto __tmp = *this;
@@ -204,8 +218,8 @@ public:
             return __tmp;
         }
 
-        template <class _View2 = _View>
-            requires bidirectional_range<_View2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+        CANN_ASC_STL_DETAIL_REQUIRES((bidirectional_range<_View2>))
         CANN_ASC_STL_API constexpr __iterator& operator--()
         {
             do {
@@ -214,8 +228,8 @@ public:
             return *this;
         }
 
-        template <class _View2 = _View>
-            requires bidirectional_range<_View2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+        CANN_ASC_STL_DETAIL_REQUIRES((bidirectional_range<_View2>))
         CANN_ASC_STL_API constexpr __iterator operator--(int)
         {
             auto __tmp = *this;
@@ -223,13 +237,22 @@ public:
             return __tmp;
         }
 
-        template <class _View2 = _View>
-            requires equality_comparable<iterator_t<_View2>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+        CANN_ASC_STL_DETAIL_REQUIRES((equality_comparable<iterator_t<_View2>>))
         CANN_ASC_STL_API friend constexpr bool operator==(const __iterator& __x, const __iterator& __y) noexcept(
             __is_cpp17_nothrow_equality_comparable_v<iterator_t<_View>, iterator_t<_View>>)
         {
             return __x.__current_ == __y.__current_;
         }
+
+#if !CANN_ASC_STL_DETAIL_HAS_CXX20()
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+        CANN_ASC_STL_DETAIL_REQUIRES(equality_comparable<iterator_t<_View2>>)
+        CANN_ASC_STL_API friend constexpr bool operator!=(const __iterator& __x, const __iterator& __y)
+        {
+            return !(__x == __y);
+        }
+#endif
 
 #if defined(__cpp_impl_three_way_comparison) && __cpp_impl_three_way_comparison >= 201907L
         CANN_ASC_STL_API friend constexpr auto operator<=>(const __iterator& __x, const __iterator& __y) noexcept(
@@ -271,10 +294,25 @@ public:
         {
             return __x.__current_ == __y.__end_;
         }
+
+#if !CANN_ASC_STL_DETAIL_HAS_CXX20()
+        CANN_ASC_STL_API friend constexpr bool operator==(const __sentinel& __x, const __iterator& __y)
+        {
+            return __y == __x;
+        }
+        CANN_ASC_STL_API friend constexpr bool operator!=(const __iterator& __x, const __sentinel& __y)
+        {
+            return !(__x == __y);
+        }
+        CANN_ASC_STL_API friend constexpr bool operator!=(const __sentinel& __x, const __iterator& __y)
+        {
+            return !(__y == __x);
+        }
+#endif
     };
 
-    template <class _View2 = _View, class _Pred2 = _Pred>
-        requires default_initializable<_View2> && default_initializable<_Pred2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View, class _Pred2 = _Pred)
+    CANN_ASC_STL_DETAIL_REQUIRES((default_initializable<_View2> && default_initializable<_Pred2>))
     CANN_ASC_STL_API constexpr filter_view() noexcept(
         is_nothrow_default_constructible_v<_View2> && is_nothrow_default_constructible_v<_Pred2>)
         : view_interface<filter_view<_View, _Pred>>{}, __base_(), __pred_(), __cached_begin_()
@@ -286,8 +324,8 @@ public:
         : __base_{::asc::std::move(__base)}, __pred_{in_place_t{}, ::asc::std::move(__pred)}
     {}
 
-    template <class _View2 = _View>
-        requires copy_constructible<_View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((copy_constructible<_View2>))
     CANN_ASC_STL_API constexpr _View base() const& noexcept(is_nothrow_copy_constructible_v<_View2>)
     {
         return __base_;
@@ -328,128 +366,8 @@ public:
     }
 };
 
-#else
-
-template <class View, class Predicate>
-class filter_view : public view_interface<filter_view<View, Predicate>> {
-    using base_iterator = iterator_t<View>;
-    using base_sentinel = sentinel_t<View>;
-    class iterator {
-    public:
-        using difference_type = iter_difference_t<base_iterator>;
-        using value_type = iter_value_t<base_iterator>;
-        using pointer = void;
-        using reference = iter_reference_t<base_iterator>;
-        using iterator_category = input_iterator_tag;
-
-        CANN_ASC_STL_API constexpr iterator(base_iterator current, base_sentinel last, Predicate* predicate)
-            : current_(current), last_(last), predicate_(predicate)
-        {
-            satisfy();
-        }
-        CANN_ASC_STL_API constexpr decltype(auto) operator*() const
-        {
-            return *current_;
-        }
-        CANN_ASC_STL_API constexpr iterator& operator++()
-        {
-            ++current_;
-            satisfy();
-            return *this;
-        }
-        CANN_ASC_STL_API constexpr void operator++(int)
-        {
-            ++*this;
-        }
-        CANN_ASC_STL_API constexpr const base_iterator& base() const noexcept
-        {
-            return current_;
-        }
-        friend CANN_ASC_STL_API constexpr bool operator==(const iterator& left, const iterator& right)
-        {
-            return left.current_ == right.current_;
-        }
-        friend CANN_ASC_STL_API constexpr bool operator!=(const iterator& left, const iterator& right)
-        {
-            return !(left == right);
-        }
-
-    private:
-        CANN_ASC_STL_API constexpr void satisfy()
-        {
-            while (current_ != last_ && !(*predicate_)(*current_))
-                ++current_;
-        }
-        base_iterator current_;
-        base_sentinel last_;
-        Predicate* predicate_;
-    };
-    class sentinel {
-    public:
-        CANN_ASC_STL_API constexpr explicit sentinel(base_sentinel last) : last_(last)
-        {}
-        friend CANN_ASC_STL_API constexpr bool operator==(const iterator& value, const sentinel& last)
-        {
-            return value.base() == last.last_;
-        }
-        friend CANN_ASC_STL_API constexpr bool operator==(const sentinel& last, const iterator& value)
-        {
-            return value == last;
-        }
-        friend CANN_ASC_STL_API constexpr bool operator!=(const iterator& value, const sentinel& last)
-        {
-            return !(value == last);
-        }
-        friend CANN_ASC_STL_API constexpr bool operator!=(const sentinel& last, const iterator& value)
-        {
-            return !(last == value);
-        }
-
-    private:
-        base_sentinel last_;
-    };
-
-public:
-    template <class View2 = View, class Predicate2 = Predicate>
-    CANN_ASC_STL_API constexpr filter_view() noexcept(
-        is_nothrow_default_constructible_v<View2> && is_nothrow_default_constructible_v<Predicate2>)
-        : view_(), predicate_()
-    {}
-    CANN_ASC_STL_API constexpr explicit filter_view(View view, Predicate predicate) noexcept(
-        is_nothrow_move_constructible_v<View> && is_nothrow_move_constructible_v<Predicate>)
-        : view_(::asc::std::move(view)), predicate_(::asc::std::move(predicate))
-    {}
-    CANN_ASC_STL_API constexpr iterator begin()
-    {
-        return {ranges::begin(view_), ranges::end(view_), &predicate_};
-    }
-    CANN_ASC_STL_API constexpr sentinel end()
-    {
-        return sentinel(ranges::end(view_));
-    }
-    template <class View2 = View>
-    CANN_ASC_STL_API constexpr View base() const& noexcept(is_nothrow_copy_constructible_v<View2>)
-    {
-        return view_;
-    }
-    CANN_ASC_STL_API constexpr View base() && noexcept(is_nothrow_move_constructible_v<View>)
-    {
-        return ::asc::std::move(view_);
-    }
-    CANN_ASC_STL_API constexpr const Predicate& pred() const
-    {
-        return predicate_;
-    }
-
-private:
-    View view_{};
-    Predicate predicate_{};
-};
-
-#endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-
 template <class _Range, class _Pred>
-filter_view(_Range&&, _Pred) -> filter_view<ranges::views::all_t<_Range>, _Pred>;
+CANN_ASC_STL_HOST_DEVICE filter_view(_Range&&, _Pred) -> filter_view<ranges::views::all_t<_Range>, _Pred>;
 
 namespace views {
 
@@ -458,8 +376,10 @@ class __filter_closure : public range_adaptor_closure<__filter_closure<Predicate
 public:
     CANN_ASC_STL_API constexpr explicit __filter_closure(Predicate value) : predicate_(::asc::std::move(value))
     {}
-    template <class Range>
-    CANN_ASC_STL_API constexpr auto operator()(Range&& range) const
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Range, class View = all_t<Range>)
+    CANN_ASC_STL_DETAIL_REQUIRES(input_range<View>&& view<View>&& is_object_v<Predicate>&&
+            indirect_unary_predicate<Predicate, iterator_t<View>>&& constructible_from<Predicate, const Predicate&>)
+    CANN_ASC_STL_API constexpr auto operator()(Range&& range) const -> filter_view<View, Predicate>
     {
         auto view = views::all(::asc::std::forward<Range>(range));
         return filter_view<decltype(view), Predicate>(::asc::std::move(view), predicate_);
@@ -470,13 +390,16 @@ private:
 };
 
 struct __filter_fn {
-    template <class Range, class Predicate>
-    CANN_ASC_STL_API constexpr auto operator()(Range&& range, Predicate predicate) const
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Range, class Predicate, class View = all_t<Range>)
+    CANN_ASC_STL_DETAIL_REQUIRES(
+        input_range<View>&& view<View>&& is_object_v<Predicate>&& indirect_unary_predicate<Predicate, iterator_t<View>>)
+    CANN_ASC_STL_API constexpr auto operator()(Range&& range, Predicate predicate) const -> filter_view<View, Predicate>
     {
         auto view = views::all(::asc::std::forward<Range>(range));
         return filter_view<decltype(view), Predicate>(::asc::std::move(view), ::asc::std::move(predicate));
     }
-    template <class Predicate>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Predicate)
+    CANN_ASC_STL_DETAIL_REQUIRES(is_object_v<Predicate>&& move_constructible<Predicate>)
     CANN_ASC_STL_API constexpr auto operator()(Predicate predicate) const
     {
         return __filter_closure<Predicate>(::asc::std::move(predicate));  // NOLINT(build/include_what_you_use)

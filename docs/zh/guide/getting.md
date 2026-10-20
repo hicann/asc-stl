@@ -18,3 +18,5 @@ target_link_libraries(my_target PRIVATE asc_stl::asc_stl)
 ```
 
 ASC-STL不替换Host编译器的`std`命名空间。C++ 标准库接口使用`asc::std`，昇腾扩展和Runtime接口使用`asc`。
+
+接口的语言门控、能力宏、Host/Device和常量求值条件见[语言模式与兼容性](cpp_compatibility.md)。

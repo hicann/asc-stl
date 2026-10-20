@@ -28,10 +28,13 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__algorithm/min.h>
 #include <asc/std/__algorithm/ranges_min.h>
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__concepts/convertible_to.h>
+#include <asc/std/__functional/bind_back.h>
 #include <asc/std/__fwd/span.h>
 #include <asc/std/__fwd/string_view.h>
 #include <asc/std/__iterator/concepts.h>
@@ -42,6 +45,7 @@
 #include <asc/std/__ranges/access.h>
 #include <asc/std/__ranges/all.h>
 #include <asc/std/__ranges/concepts.h>
+#include <asc/std/__ranges/counted_adaptor.h>
 #include <asc/std/__ranges/empty_view.h>
 #include <asc/std/__ranges/enable_borrowed_range.h>
 #include <asc/std/__ranges/iota_view.h>
@@ -51,7 +55,6 @@
 #include <asc/std/__ranges/subrange.h>
 #include <asc/std/__ranges/view_interface.h>
 #include <asc/std/__type_traits/decay.h>
-#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/maybe_const.h>
 #include <asc/std/__type_traits/remove_cvref.h>
 #include <asc/std/__type_traits/void_t.h>
@@ -61,17 +64,20 @@
 #include <asc/std/__utility/move.h>
 
 namespace asc::std::ranges {
-// Under device compilation, concept constraint evaluation is unavailable (pure SIMT
-// backend), so fall back to a weakly constrained version; both branches expose the
-// same public interface.
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// Both language modes and execution spaces share this implementation.
+// Native constraints and SFINAE provide the same conditional members.
 
 template <class _View>
-concept __take_simple_view = view<_View> && range<const _View> && same_as<iterator_t<_View>, iterator_t<const _View>> &&
-    same_as<sentinel_t<_View>, sentinel_t<const _View>>;
+inline constexpr bool __take_simple_view = __simple_view<_View>;
 
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <view _View>
+#else
+template <class _View>
+#endif
 class take_view : public view_interface<take_view<_View>> {
+    static_assert(view<_View>, "range view constraints are not satisfied");
+
     CANN_ASC_STL_NO_UNIQUE_ADDRESS _View __base_ = _View();
     range_difference_t<_View> __count_ = 0;
 
@@ -92,8 +98,8 @@ public:
         CANN_ASC_STL_API constexpr explicit __sentinel(sentinel_t<_Base> __end) : __end_(::asc::std::move(__end))
         {}
 
-        template <bool _OtherConst = _Const>
-            requires(_OtherConst && convertible_to<sentinel_t<_View>, sentinel_t<_Base>>)
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst = _Const)
+        CANN_ASC_STL_DETAIL_REQUIRES(((_OtherConst && convertible_to<sentinel_t<_View>, sentinel_t<_Base>>)))
         CANN_ASC_STL_API constexpr __sentinel(__sentinel<!_OtherConst> __s) : __end_(::asc::std::move(__s.__end_))
         {}
 
@@ -121,42 +127,48 @@ public:
             return !(__lhs == __rhs);
         }
 
-        template <bool _OtherConst = !_Const>
-            requires sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst = !_Const)
+        CANN_ASC_STL_DETAIL_REQUIRES((sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>))
         CANN_ASC_STL_API friend constexpr bool operator==(const _Iter<_OtherConst>& __lhs, const __sentinel& __rhs)
         {
             return __lhs.count() == 0 || __lhs.base() == __rhs.__end_;
         }
-        template <bool _OtherConst = !_Const>
-            requires sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst = !_Const)
+        CANN_ASC_STL_DETAIL_REQUIRES((sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>))
         CANN_ASC_STL_API friend constexpr bool operator==(const __sentinel& __lhs, const _Iter<_OtherConst>& __rhs)
         {
             return __rhs.count() == 0 || __rhs.base() == __lhs.__end_;
         }
-        template <bool _OtherConst = !_Const>
-            requires sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst = !_Const)
+        CANN_ASC_STL_DETAIL_REQUIRES((sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>))
         CANN_ASC_STL_API friend constexpr bool operator!=(const _Iter<_OtherConst>& __lhs, const __sentinel& __rhs)
         {
             return !(__lhs == __rhs);
         }
-        template <bool _OtherConst = !_Const>
-            requires sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst = !_Const)
+        CANN_ASC_STL_DETAIL_REQUIRES((sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>))
         CANN_ASC_STL_API friend constexpr bool operator!=(const __sentinel& __lhs, const _Iter<_OtherConst>& __rhs)
         {
             return !(__lhs == __rhs);
         }
     };
 
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     take_view()
         requires default_initializable<_View>
     = default;
+#else
+    template <bool __asc_enabled = true, enable_if_t<__asc_enabled && (default_initializable<_View>), int> = 0>
+    CANN_ASC_STL_API constexpr take_view()
+    {}
+#endif
 
     CANN_ASC_STL_API constexpr take_view(_View __base, range_difference_t<_View> __count)
         : __base_(::asc::std::move(__base)), __count_(__count)
     {}
 
-    template <class _View2 = _View>
-        requires copy_constructible<_View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((copy_constructible<_View2>))
     CANN_ASC_STL_API constexpr _View base() const&
     {
         return __base_;
@@ -167,8 +179,8 @@ public:
         return ::asc::std::move(__base_);
     }
 
-    template <class _View2 = _View>
-        requires(!__take_simple_view<_View2>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES(((!__take_simple_view<_View2>)))
     CANN_ASC_STL_API constexpr auto begin()
     {
         if constexpr (sized_range<_View>) {
@@ -184,8 +196,8 @@ public:
         }
     }
 
-    template <class _View2 = _View>
-        requires range<const _View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((range<const _View2>))
     CANN_ASC_STL_API constexpr auto begin() const
     {
         if constexpr (sized_range<const _View>) {
@@ -201,8 +213,8 @@ public:
         }
     }
 
-    template <class _View2 = _View>
-        requires(!__take_simple_view<_View2>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES(((!__take_simple_view<_View2>)))
     CANN_ASC_STL_API constexpr auto end()
     {
         if constexpr (sized_range<_View>) {
@@ -216,8 +228,8 @@ public:
         }
     }
 
-    template <class _View2 = _View>
-        requires range<const _View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((range<const _View2>))
     CANN_ASC_STL_API constexpr auto end() const
     {
         if constexpr (sized_range<const _View>) {
@@ -231,16 +243,16 @@ public:
         }
     }
 
-    template <class _View2 = _View>
-        requires sized_range<_View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((sized_range<_View2>))
     CANN_ASC_STL_API constexpr auto size()
     {
         const auto __n = ::asc::std::ranges::__size_cpo{}(__base_);
         return (::asc::std::ranges::min)(__n, static_cast<decltype(__n)>(__count_));
     }
 
-    template <class _View2 = _View>
-        requires sized_range<const _View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((sized_range<const _View2>))
     CANN_ASC_STL_API constexpr auto size() const
     {
         auto __n = ::asc::std::ranges::__size_cpo{}(__base_);
@@ -248,79 +260,15 @@ public:
     }
 };
 
-#else
-
-template <class View>
-class take_view : public view_interface<take_view<View>> {
-public:
-    CANN_ASC_STL_API constexpr take_view() = default;
-    CANN_ASC_STL_API constexpr take_view(View view, range_difference_t<View> count)
-        : view_(::asc::std::move(view)), count_(count)
-    {}
-    CANN_ASC_STL_API constexpr auto begin()
-    {
-        return ranges::begin(view_);
-    }
-    template <class View2 = View>
-    CANN_ASC_STL_API constexpr auto begin() const
-    {
-        return ranges::begin(view_);
-    }
-    CANN_ASC_STL_API constexpr auto end()
-    {
-        auto value = begin();
-        auto last = ranges::end(view_);
-        for (auto n = count_; n > 0 && value != last; --n)
-            ++value;
-        return value;
-    }
-    template <class View2 = View>
-    CANN_ASC_STL_API constexpr auto end() const
-    {
-        auto value = begin();
-        auto last = ranges::end(view_);
-        for (auto n = count_; n > 0 && value != last; --n)
-            ++value;
-        return value;
-    }
-    template <class View2 = View>
-    CANN_ASC_STL_API constexpr auto size()
-    {
-        const auto value = ranges::size(view_);
-        return value < static_cast<decltype(value)>(count_) ? value : count_;
-    }
-    template <class View2 = View>
-    CANN_ASC_STL_API constexpr auto size() const
-    {
-        const auto value = ranges::size(view_);
-        return value < static_cast<decltype(value)>(count_) ? value : count_;
-    }
-    template <class View2 = View>
-    CANN_ASC_STL_API constexpr View base() const&
-    {
-        return view_;
-    }
-    CANN_ASC_STL_API constexpr View base() &&
-    {
-        return ::asc::std::move(view_);
-    }
-
-private:
-    View view_{};
-    range_difference_t<View> count_{};
-};
-
-#endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-
 template <class _Range>
-take_view(_Range&&, range_difference_t<_Range>) -> take_view<::asc::std::ranges::views::all_t<_Range>>;
+CANN_ASC_STL_HOST_DEVICE take_view(
+    _Range&&, range_difference_t<_Range>) -> take_view<::asc::std::ranges::views::all_t<_Range>>;
 
 template <class _Tp>
 inline constexpr bool enable_borrowed_range<take_view<_Tp>> = enable_borrowed_range<_Tp>;
 
 namespace views {
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 // Adaptor dispatch internals (passthrough and specialization detection for
 // span/basic_string_view/subrange/iota_view/repeat_view).
 namespace __take_detail {
@@ -379,8 +327,8 @@ inline constexpr bool __is_repeat_specialization<repeat_view<_Tp, _Bound>, void>
 
 struct __fn {
     // empty_view passthrough: the result is the original (empty) range.
-    template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>>
-        requires convertible_to<_Np, range_difference_t<_Range>> && __is_empty_view<_RawRange>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>)
+    CANN_ASC_STL_DETAIL_REQUIRES((convertible_to<_Np, range_difference_t<_Range>> && __is_empty_view<_RawRange>))
     CANN_ASC_STL_API constexpr auto operator()(_Range&& __range, _Np&&) const -> _RawRange
     {
         return static_cast<::asc::std::decay_t<decltype((::asc::std::forward<_Range>(__range)))>>(
@@ -389,25 +337,29 @@ struct __fn {
 
     // span / basic_string_view / subrange passthrough: rebuild a range of the same
     // type.
-    template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>,
-        class _Dist = range_difference_t<_Range>>
-        requires convertible_to<_Np, range_difference_t<_Range>> &&
-                     (!__is_empty_view<_RawRange>) && random_access_range<_RawRange> && sized_range<_RawRange> &&
-                     __is_passthrough_specialization<_RawRange>
+    CANN_ASC_STL_DETAIL_TEMPLATE(
+        class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>, class _Dist = range_difference_t<_Range>)
+    CANN_ASC_STL_DETAIL_REQUIRES((convertible_to<_Np, range_difference_t<_Range>> && (!__is_empty_view<_RawRange>) &&
+        random_access_range<_RawRange> && sized_range<_RawRange> && __is_passthrough_specialization<_RawRange>))
     CANN_ASC_STL_API constexpr auto operator()(_Range&& __rng, _Np&& __n) const -> __passthrough_type_t<_RawRange>
     {
-        return __passthrough_type_t<_RawRange>(::asc::std::ranges::__begin_cpo{}(__rng),
-            ::asc::std::ranges::__begin_cpo{}(__rng) +
-                ::asc::std::min<_Dist>(
-                    static_cast<_Dist>(::asc::std::ranges::size(__rng)), ::asc::std::forward<_Np>(__n)));
+        const auto count =
+            ::asc::std::min<_Dist>(static_cast<_Dist>(::asc::std::ranges::size(__rng)), ::asc::std::forward<_Np>(__n));
+        auto first = ::asc::std::ranges::__begin_cpo{}(__rng);
+        if constexpr (__is_asc_std_basic_string_view_v<_RawRange>) {
+            // ASC string_view exposes (pointer, count), not (first, last).
+            return __passthrough_type_t<_RawRange>(first, static_cast<typename _RawRange::size_type>(count));
+        } else {
+            return __passthrough_type_t<_RawRange>(first, first + count);
+        }
     }
 
     // repeat_view satisfying sized_range: the repeated value is unchanged,
     // truncated to min(count, n).
-    template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>,
-        class _Dist = range_difference_t<_Range>>
-        requires convertible_to<_Np, range_difference_t<_Range>> && __is_repeat_specialization<_RawRange> &&
-                     sized_range<_RawRange>
+    CANN_ASC_STL_DETAIL_TEMPLATE(
+        class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>, class _Dist = range_difference_t<_Range>)
+    CANN_ASC_STL_DETAIL_REQUIRES((convertible_to<_Np, range_difference_t<_Range>> &&
+        __is_repeat_specialization<_RawRange> && sized_range<_RawRange>))
     CANN_ASC_STL_API constexpr auto operator()(_Range&& __range, _Np&& __n) const -> _RawRange
     {
         auto __dist = static_cast<_Dist>(::asc::std::ranges::size(__range));
@@ -417,10 +369,10 @@ struct __fn {
     }
 
     // repeat_view in the remaining case: n becomes the new repetition count.
-    template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>,
-        class _Dist = range_difference_t<_Range>>
-        requires convertible_to<_Np, range_difference_t<_Range>> && __is_repeat_specialization<_RawRange> &&
-                     (!sized_range<_RawRange>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(
+        class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>, class _Dist = range_difference_t<_Range>)
+    CANN_ASC_STL_DETAIL_REQUIRES((convertible_to<_Np, range_difference_t<_Range>> &&
+        __is_repeat_specialization<_RawRange> && (!sized_range<_RawRange>)))
     CANN_ASC_STL_API constexpr auto operator()(
         _Range&& __range, _Np&& __n) const -> repeat_view<range_value_t<_RawRange>, _Dist>
     {
@@ -431,10 +383,10 @@ struct __fn {
 
     // iota_view specialization: the new sentinel is the first value plus
     // min(distance, n).
-    template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>,
-        class _Dist = range_difference_t<_Range>>
-        requires convertible_to<_Np, range_difference_t<_Range>> && (!__is_empty_view<_RawRange>) &&
-                     random_access_range<_RawRange> && sized_range<_RawRange> && __is_iota_specialization<_RawRange>
+    CANN_ASC_STL_DETAIL_TEMPLATE(
+        class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>, class _Dist = range_difference_t<_Range>)
+    CANN_ASC_STL_DETAIL_REQUIRES((convertible_to<_Np, range_difference_t<_Range>> && (!__is_empty_view<_RawRange>) &&
+        random_access_range<_RawRange> && sized_range<_RawRange> && __is_iota_specialization<_RawRange>))
     CANN_ASC_STL_API constexpr auto operator()(
         _Range&& __rng, _Np&& __n) const -> iota_view<range_value_t<_RawRange>, _Dist>
     {
@@ -445,57 +397,21 @@ struct __fn {
     }
 
     // General case: wrap in a take_view.
-    template <class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>>
-        requires(!__is_empty_view<_RawRange>) && (!__is_repeat_specialization<_RawRange>) &&
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _Range, class _Np, class _RawRange = remove_cvref_t<_Range>)
+    CANN_ASC_STL_DETAIL_REQUIRES(((!__is_empty_view<_RawRange>) && (!__is_repeat_specialization<_RawRange>) &&
         (!(random_access_range<_RawRange> && sized_range<_RawRange> &&
-            (__is_passthrough_specialization<_RawRange> || __is_iota_specialization<_RawRange>)))
+            (__is_passthrough_specialization<_RawRange> || __is_iota_specialization<_RawRange>)))))
     CANN_ASC_STL_API constexpr auto operator()(_Range&& __range, _Np&& __n) const
     {
         auto view = ::asc::std::ranges::views::all(::asc::std::forward<_Range>(__range));
+        // NOLINTNEXTLINE(build/include_what_you_use)
         return ::asc::std::ranges::take_view<decltype(view)>(::asc::std::move(view), ::asc::std::forward<_Np>(__n));
     }
 };
 
 }  // namespace __take_detail
-#endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
-template <class Difference>
-class __take_closure : public range_adaptor_closure<__take_closure<Difference>> {
-public:
-    CANN_ASC_STL_API constexpr explicit __take_closure(Difference count) : count_(count)
-    {}
-    template <class Range>
-    CANN_ASC_STL_API constexpr auto operator()(Range&& range) const
-    {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-        return __take_detail::__fn{}(::asc::std::forward<Range>(range), count_);
-#else
-        auto view = views::all(::asc::std::forward<Range>(range));
-        return take_view<decltype(view)>(::asc::std::move(view), count_);
-#endif
-    }
-
-private:
-    Difference count_;
-};
-
-struct __take_fn {
-    template <class Range, class Difference>
-    CANN_ASC_STL_API constexpr auto operator()(Range&& range, Difference count) const
-    {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-        return __take_detail::__fn{}(::asc::std::forward<Range>(range), ::asc::std::forward<Difference>(count));
-#else
-        auto view = views::all(::asc::std::forward<Range>(range));
-        return take_view<decltype(view)>(::asc::std::move(view), count);  // NOLINT(build/include_what_you_use)
-#endif
-    }
-    template <class Difference>
-    CANN_ASC_STL_API constexpr __take_closure<Difference> operator()(Difference count) const
-    {
-        return __take_closure<Difference>(count);
-    }
-};
+struct __take_fn : __counted_adaptor<__take_fn, __take_detail::__fn> {};
 inline constexpr __take_fn take{};
 }  // namespace views
 }  // namespace asc::std::ranges

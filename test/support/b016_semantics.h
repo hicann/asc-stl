@@ -44,6 +44,15 @@ CANN_ASC_STL_API bool operator==(sentinel other, int* value)
 {
     return value == other.end;
 }
+CANN_ASC_STL_API bool operator!=(int* value, sentinel other)
+{
+    return value != other.end;
+}
+CANN_ASC_STL_API bool operator!=(sentinel other, int* value)
+{
+    return value != other.end;
+}
+static_assert(asc::std::sentinel_for<sentinel, int*>, "B016 sentinel must model both equality directions in C++17");
 struct generator {
     using result_type = unsigned int;
     unsigned int state = 7;

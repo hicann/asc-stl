@@ -28,6 +28,10 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__utility/declval.h>
+#include <asc/std/__type_traits/void_t.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__concepts/convertible_to.h>
 #include <asc/std/__concepts/copyable.h>
@@ -56,16 +60,20 @@
 #include <asc/std/__utility/move.h>
 
 namespace asc::std::ranges {
-// Under device compilation, concept constraint evaluation is unavailable (pure SIMT
-// backend), so fall back to a weakly constrained version; both branches expose the
-// same public interface.
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// Both language modes and execution spaces share this implementation.
+// Native constraints and SFINAE provide the same conditional members.
 
+template <class _Fn, class _View, class = void>
+inline constexpr bool __regular_invocable_with_range_ref = false;
 template <class _Fn, class _View>
-concept __regular_invocable_with_range_ref = regular_invocable<_Fn, range_reference_t<_View>>;
+inline constexpr bool __regular_invocable_with_range_ref<_Fn, _View, void_t<range_reference_t<_View>>> =
+    regular_invocable<_Fn, range_reference_t<_View>>;
 
+template <class _View, class _Fn, class = void>
+inline constexpr bool __transform_view_constraints = false;
 template <class _View, class _Fn>
-concept __transform_view_constraints =
+inline constexpr bool __transform_view_constraints<_View, _Fn,
+    void_t<range_reference_t<_View>, invoke_result_t<_Fn&, range_reference_t<_View>>>> =
     view<_View> && is_object_v<_Fn> && regular_invocable<_Fn&, range_reference_t<_View>> &&
     __can_reference<invoke_result_t<_Fn&, range_reference_t<_View>>>;
 
@@ -93,9 +101,16 @@ template <class _Fn, class _View>
 inline constexpr bool __nothrow_subscript<_Fn, _View, enable_if_t<random_access_range<_View>>> =
     noexcept(::asc::std::invoke(::asc::std::declval<_Fn&>(), ::asc::std::declval<range_reference_t<_View>>()));
 
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <input_range _View, move_constructible _Fn>
     requires __transform_view_constraints<_View, _Fn>
+#else
+template <class _View, class _Fn>
+#endif
 class transform_view : public view_interface<transform_view<_View, _Fn>> {
+    static_assert(input_range<_View> && move_constructible<_Fn> && (__transform_view_constraints<_View, _Fn>),
+        "range view constraints are not satisfied");
+
     CANN_ASC_STL_NO_UNIQUE_ADDRESS _View __base_ = _View();
     CANN_ASC_STL_NO_UNIQUE_ADDRESS __movable_box<_Fn> __func_;
 
@@ -127,9 +142,16 @@ public:
         using pointer = void;
         using reference = invoke_result_t<__maybe_const<_Const, _Fn>&, range_reference_t<_Base>>;
 
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
         __iterator()
             requires default_initializable<iterator_t<_Base>>
         = default;
+#else
+        template <bool __asc_enabled = true,
+            enable_if_t<__asc_enabled && (default_initializable<iterator_t<_Base>>), int> = 0>
+        CANN_ASC_STL_API constexpr __iterator()
+        {}
+#endif
 
         CANN_ASC_STL_API constexpr __iterator(_Parent& __parent, iterator_t<_Base> __current)
             : __parent_(::asc::std::addressof(__parent)), __current_(::asc::std::move(__current))
@@ -138,8 +160,8 @@ public:
         // Note: __i is always an __iterator<false>, but naming the type directly is
         // ill-formed when _Const is false ([class.copy.ctor]/5), hence the
         // _OtherConst indirection.
-        template <bool _OtherConst = _Const>
-            requires(_OtherConst && convertible_to<iterator_t<_View>, iterator_t<_Base>>)
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst = _Const)
+        CANN_ASC_STL_DETAIL_REQUIRES(((_OtherConst && convertible_to<iterator_t<_View>, iterator_t<_Base>>)))
         CANN_ASC_STL_API constexpr __iterator(__iterator<!_OtherConst> __i)
             : __parent_(__i.__parent_), __current_(::asc::std::move(__i.__current_))
         {}
@@ -166,15 +188,15 @@ public:
             return *this;
         }
 
-        template <class _Base2 = _Base>
-            requires(!forward_range<_Base2>)
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES(((!forward_range<_Base2>)))
         CANN_ASC_STL_API constexpr void operator++(int)
         {
             ++__current_;
         }
 
-        template <class _Base2 = _Base>
-            requires forward_range<_Base2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((forward_range<_Base2>))
         CANN_ASC_STL_API constexpr __iterator operator++(int)
         {
             auto __tmp = *this;
@@ -182,16 +204,16 @@ public:
             return __tmp;
         }
 
-        template <class _Base2 = _Base>
-            requires bidirectional_range<_Base2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((bidirectional_range<_Base2>))
         CANN_ASC_STL_API constexpr __iterator& operator--()
         {
             --__current_;
             return *this;
         }
 
-        template <class _Base2 = _Base>
-            requires bidirectional_range<_Base2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((bidirectional_range<_Base2>))
         CANN_ASC_STL_API constexpr __iterator operator--(int)
         {
             auto __tmp = *this;
@@ -199,96 +221,96 @@ public:
             return __tmp;
         }
 
-        template <class _Base2 = _Base>
-            requires random_access_range<_Base2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((random_access_range<_Base2>))
         CANN_ASC_STL_API constexpr __iterator& operator+=(difference_type __n)
         {
             __current_ += __n;
             return *this;
         }
 
-        template <class _Base2 = _Base>
-            requires random_access_range<_Base2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((random_access_range<_Base2>))
         CANN_ASC_STL_API constexpr __iterator& operator-=(difference_type __n)
         {
             __current_ -= __n;
             return *this;
         }
 
-        template <class _Base2 = _Base>
-            requires random_access_range<_Base2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((random_access_range<_Base2>))
         CANN_ASC_STL_API constexpr decltype(auto) operator[](difference_type __n) const
             noexcept(__nothrow_subscript<_Fn, _Base2>)
         {
             return ::asc::std::invoke(*__parent_->__func_, __current_[__n]);
         }
 
-        template <class _Base2 = _Base>
-            requires equality_comparable<iterator_t<_Base2>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((equality_comparable<iterator_t<_Base2>>))
         CANN_ASC_STL_API friend constexpr bool operator==(const __iterator& __x, const __iterator& __y)
         {
             return __x.__current_ == __y.__current_;
         }
         // operator!= is kept on both sides for C++17 compatibility; under C++20 the
         // explicit candidates agree with the rewritten semantics.
-        template <class _Base2 = _Base>
-            requires equality_comparable<iterator_t<_Base2>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((equality_comparable<iterator_t<_Base2>>))
         CANN_ASC_STL_API friend constexpr bool operator!=(const __iterator& __x, const __iterator& __y)
         {
             return __x.__current_ != __y.__current_;
         }
 
-        template <class _Base2 = _Base>
-            requires random_access_range<_Base2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((random_access_range<_Base2>))
         CANN_ASC_STL_API friend constexpr bool operator<(const __iterator& __x, const __iterator& __y)
         {
             return __x.__current_ < __y.__current_;
         }
 
-        template <class _Base2 = _Base>
-            requires random_access_range<_Base2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((random_access_range<_Base2>))
         CANN_ASC_STL_API friend constexpr bool operator>(const __iterator& __x, const __iterator& __y)
         {
             return __x.__current_ > __y.__current_;
         }
 
-        template <class _Base2 = _Base>
-            requires random_access_range<_Base2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((random_access_range<_Base2>))
         CANN_ASC_STL_API friend constexpr bool operator<=(const __iterator& __x, const __iterator& __y)
         {
             return __x.__current_ <= __y.__current_;
         }
 
-        template <class _Base2 = _Base>
-            requires random_access_range<_Base2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((random_access_range<_Base2>))
         CANN_ASC_STL_API friend constexpr bool operator>=(const __iterator& __x, const __iterator& __y)
         {
             return __x.__current_ >= __y.__current_;
         }
 
-        template <class _Base2 = _Base>
-            requires random_access_range<_Base2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((random_access_range<_Base2>))
         CANN_ASC_STL_API friend constexpr __iterator operator+(__iterator __i, difference_type __n)
         {
             return __iterator{*__i.__parent_, __i.__current_ + __n};
         }
 
-        template <class _Base2 = _Base>
-            requires random_access_range<_Base2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((random_access_range<_Base2>))
         CANN_ASC_STL_API friend constexpr __iterator operator+(difference_type __n, __iterator __i)
         {
             return __iterator{*__i.__parent_, __i.__current_ + __n};
         }
 
-        template <class _Base2 = _Base>
-            requires random_access_range<_Base2>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((random_access_range<_Base2>))
         CANN_ASC_STL_API friend constexpr __iterator operator-(__iterator __i, difference_type __n)
         {
             return __iterator{*__i.__parent_, __i.__current_ - __n};
         }
 
-        template <class _Base2 = _Base>
-            requires sized_sentinel_for<iterator_t<_Base2>, iterator_t<_Base2>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(class _Base2 = _Base)
+        CANN_ASC_STL_DETAIL_REQUIRES((sized_sentinel_for<iterator_t<_Base2>, iterator_t<_Base2>>))
         CANN_ASC_STL_API friend constexpr difference_type operator-(const __iterator& __x, const __iterator& __y)
         {
             return __x.__current_ - __y.__current_;
@@ -317,8 +339,8 @@ public:
         // Note: __i is always a __sentinel<false>, but naming the type directly is
         // ill-formed when _Const is false ([class.copy.ctor]/5), hence the
         // _OtherConst indirection.
-        template <bool _OtherConst = _Const>
-            requires(_OtherConst && convertible_to<sentinel_t<_View>, sentinel_t<_Base>>)
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst = _Const)
+        CANN_ASC_STL_DETAIL_REQUIRES(((_OtherConst && convertible_to<sentinel_t<_View>, sentinel_t<_Base>>)))
         CANN_ASC_STL_API constexpr __sentinel(__sentinel<!_OtherConst> __i) : __end_(::asc::std::move(__i.__end_))
         {}
 
@@ -327,45 +349,47 @@ public:
             return __end_;
         }
 
-        template <bool _OtherConst>
-            requires sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst)
+        CANN_ASC_STL_DETAIL_REQUIRES((sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>))
         CANN_ASC_STL_API friend constexpr bool operator==(const __iterator<_OtherConst>& __x, const __sentinel& __y)
         {
             return __x.__current_ == __y.__end_;
         }
         // Both reversed ==/!= overloads are kept for C++17 compatibility; under
         // C++20 the explicit candidates agree with the rewritten operators.
-        template <bool _OtherConst>
-            requires sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst)
+        CANN_ASC_STL_DETAIL_REQUIRES((sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>))
         CANN_ASC_STL_API friend constexpr bool operator==(const __sentinel& __x, const __iterator<_OtherConst>& __y)
         {
             return __x.__end_ == __y.__current_;
         }
 
-        template <bool _OtherConst>
-            requires sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst)
+        CANN_ASC_STL_DETAIL_REQUIRES((sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>))
         CANN_ASC_STL_API friend constexpr bool operator!=(const __iterator<_OtherConst>& __x, const __sentinel& __y)
         {
             return __x.__current_ != __y.__end_;
         }
 
-        template <bool _OtherConst>
-            requires sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst)
+        CANN_ASC_STL_DETAIL_REQUIRES((sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>))
         CANN_ASC_STL_API friend constexpr bool operator!=(const __sentinel& __x, const __iterator<_OtherConst>& __y)
         {
             return __x.__end_ != __y.__current_;
         }
 
-        template <bool _OtherConst>
-            requires sized_sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst)
+        CANN_ASC_STL_DETAIL_REQUIRES(
+            (sized_sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>))
         CANN_ASC_STL_API friend constexpr range_difference_t<__maybe_const<_OtherConst, _View>> operator-(
             const __iterator<_OtherConst>& __x, const __sentinel& __y)
         {
             return __x.__current_ - __y.__end_;
         }
 
-        template <bool _OtherConst>
-            requires sized_sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst)
+        CANN_ASC_STL_DETAIL_REQUIRES(
+            (sized_sentinel_for<sentinel_t<_Base>, iterator_t<__maybe_const<_OtherConst, _View>>>))
         CANN_ASC_STL_API friend constexpr range_difference_t<__maybe_const<_OtherConst, _View>> operator-(
             const __sentinel& __x, const __iterator<_OtherConst>& __y)
         {
@@ -373,9 +397,16 @@ public:
         }
     };
 
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     transform_view()
         requires default_initializable<_View> && default_initializable<_Fn>
     = default;
+#else
+    template <bool __asc_enabled = true,
+        enable_if_t<__asc_enabled && (default_initializable<_View> && default_initializable<_Fn>), int> = 0>
+    CANN_ASC_STL_API constexpr transform_view()
+    {}
+#endif
 
     CANN_ASC_STL_API constexpr transform_view(_View __base, _Fn __func)
         : view_interface<transform_view<_View, _Fn>>(),
@@ -383,8 +414,8 @@ public:
           __func_(in_place_t{}, ::asc::std::move(__func))
     {}
 
-    template <class _View2 = _View>
-        requires copy_constructible<_View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((copy_constructible<_View2>))
     CANN_ASC_STL_API constexpr _View base() const&
     {
         return __base_;
@@ -398,8 +429,8 @@ public:
     {
         return __iterator<false>{*this, ::asc::std::ranges::__begin_cpo{}(__base_)};
     }
-    template <class _View2 = _View>
-        requires range<const _View2> && __regular_invocable_with_range_ref<const _Fn&, const _View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((range<const _View2> && __regular_invocable_with_range_ref<const _Fn&, const _View2>))
     CANN_ASC_STL_API constexpr __iterator<true> begin() const
     {
         return __iterator<true>(*this, ::asc::std::ranges::__begin_cpo{}(__base_));
@@ -414,8 +445,8 @@ public:
         }
     }
 
-    template <class _View2 = _View>
-        requires range<const _View2> && __regular_invocable_with_range_ref<const _Fn&, const _View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((range<const _View2> && __regular_invocable_with_range_ref<const _Fn&, const _View2>))
     CANN_ASC_STL_API constexpr auto end() const
     {
         if constexpr (common_range<const _View>) {
@@ -425,145 +456,22 @@ public:
         }
     }
 
-    template <class _View2 = _View>
-        requires sized_range<_View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((sized_range<_View2>))
     CANN_ASC_STL_API constexpr auto size()
     {
         return ::asc::std::ranges::__size_cpo{}(__base_);
     }
-    template <class _View2 = _View>
-        requires sized_range<const _View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((sized_range<const _View2>))
     CANN_ASC_STL_API constexpr auto size() const
     {
         return ::asc::std::ranges::__size_cpo{}(__base_);
     }
 };
-
-#else
-
-template <class View, class Function>
-class transform_view : public view_interface<transform_view<View, Function>> {
-    using base_iterator = iterator_t<View>;
-    using base_sentinel = sentinel_t<View>;
-    class iterator {
-    public:
-        using difference_type = iter_difference_t<base_iterator>;
-        using value_type =
-            remove_cvref_t<decltype(::asc::std::declval<const Function&>()(*::asc::std::declval<base_iterator&>()))>;
-        using pointer = void;
-        using reference = decltype(::asc::std::declval<const Function&>()(*::asc::std::declval<base_iterator&>()));
-        using iterator_category = input_iterator_tag;
-
-        CANN_ASC_STL_API constexpr iterator(base_iterator current, const Function* function)
-            : current_(current), function_(function)
-        {}
-        CANN_ASC_STL_API constexpr decltype(auto) operator*() const
-        {
-            return (*function_)(*current_);
-        }
-        CANN_ASC_STL_API constexpr iterator& operator++()
-        {
-            ++current_;
-            return *this;
-        }
-        CANN_ASC_STL_API constexpr void operator++(int)
-        {
-            ++*this;
-        }
-        CANN_ASC_STL_API constexpr const base_iterator& base() const noexcept
-        {
-            return current_;
-        }
-        friend CANN_ASC_STL_API constexpr bool operator==(const iterator& left, const iterator& right)
-        {
-            return left.current_ == right.current_;
-        }
-        friend CANN_ASC_STL_API constexpr bool operator!=(const iterator& left, const iterator& right)
-        {
-            return !(left == right);
-        }
-
-    private:
-        base_iterator current_;
-        const Function* function_;
-    };
-    class sentinel {
-    public:
-        CANN_ASC_STL_API constexpr explicit sentinel(base_sentinel last) : last_(last)
-        {}
-        friend CANN_ASC_STL_API constexpr bool operator==(const iterator& value, const sentinel& last)
-        {
-            return value.base() == last.last_;
-        }
-        friend CANN_ASC_STL_API constexpr bool operator==(const sentinel& last, const iterator& value)
-        {
-            return value == last;
-        }
-        friend CANN_ASC_STL_API constexpr bool operator!=(const iterator& value, const sentinel& last)
-        {
-            return !(value == last);
-        }
-        friend CANN_ASC_STL_API constexpr bool operator!=(const sentinel& last, const iterator& value)
-        {
-            return !(last == value);
-        }
-
-    private:
-        base_sentinel last_;
-    };
-
-public:
-    CANN_ASC_STL_API constexpr transform_view() = default;
-    CANN_ASC_STL_API constexpr transform_view(View view, Function function)
-        : view_(::asc::std::move(view)), function_(::asc::std::move(function))
-    {}
-    CANN_ASC_STL_API constexpr iterator begin()
-    {
-        return {ranges::begin(view_), &function_};
-    }
-    template <class View2 = View>
-    CANN_ASC_STL_API constexpr iterator begin() const
-    {
-        return {ranges::begin(view_), &function_};
-    }
-    CANN_ASC_STL_API constexpr sentinel end()
-    {
-        return sentinel(ranges::end(view_));
-    }
-    template <class View2 = View>
-    CANN_ASC_STL_API constexpr sentinel end() const
-    {
-        return sentinel(ranges::end(view_));
-    }
-    template <class View2 = View>
-    CANN_ASC_STL_API constexpr auto size()
-    {
-        return ranges::size(view_);
-    }
-    template <class View2 = View>
-    CANN_ASC_STL_API constexpr auto size() const
-    {
-        return ranges::size(view_);
-    }
-    template <class View2 = View>
-    CANN_ASC_STL_API constexpr View base() const&
-    {
-        return view_;
-    }
-    CANN_ASC_STL_API constexpr View base() &&
-    {
-        return ::asc::std::move(view_);
-    }
-
-private:
-    View view_{};
-    Function function_{};
-};
-
-#endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 template <class _Range, class _Fn>
-transform_view(_Range&&, _Fn) -> transform_view<::asc::std::ranges::views::all_t<_Range>, _Fn>;
+CANN_ASC_STL_HOST_DEVICE transform_view(_Range&&, _Fn) -> transform_view<::asc::std::ranges::views::all_t<_Range>, _Fn>;
 
 namespace views {
 
@@ -572,8 +480,10 @@ class __transform_closure : public range_adaptor_closure<__transform_closure<Fun
 public:
     CANN_ASC_STL_API constexpr explicit __transform_closure(Function value) : function_(::asc::std::move(value))
     {}
-    template <class Range>
-    CANN_ASC_STL_API constexpr auto operator()(Range&& range) const
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Range, class View = all_t<Range>)
+    CANN_ASC_STL_DETAIL_REQUIRES(input_range<View>&& move_constructible<Function>&&
+            __transform_view_constraints<View, Function>&& convertible_to<const Function&, Function>)
+    CANN_ASC_STL_API constexpr auto operator()(Range&& range) const -> transform_view<View, Function>
     {
         auto view = views::all(::asc::std::forward<Range>(range));
         return transform_view<decltype(view), Function>(::asc::std::move(view), function_);
@@ -584,13 +494,16 @@ private:
 };
 
 struct __transform_fn {
-    template <class Range, class Function>
-    CANN_ASC_STL_API constexpr auto operator()(Range&& range, Function function) const
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Range, class Function, class View = all_t<Range>)
+    CANN_ASC_STL_DETAIL_REQUIRES(
+        input_range<View>&& move_constructible<Function>&& __transform_view_constraints<View, Function>)
+    CANN_ASC_STL_API constexpr auto operator()(Range&& range, Function function) const -> transform_view<View, Function>
     {
         auto view = views::all(::asc::std::forward<Range>(range));
         return transform_view<decltype(view), Function>(::asc::std::move(view), ::asc::std::move(function));
     }
-    template <class Function>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Function)
+    CANN_ASC_STL_DETAIL_REQUIRES(is_object_v<Function>&& move_constructible<Function>)
     CANN_ASC_STL_API constexpr auto operator()(Function function) const
     {
         return __transform_closure<Function>(::asc::std::move(function));  // NOLINT(build/include_what_you_use)

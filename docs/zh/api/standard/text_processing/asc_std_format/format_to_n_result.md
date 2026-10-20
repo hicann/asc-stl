@@ -30,7 +30,7 @@
 
 `asc::std::format_to_n_result`保存有界格式化的输出位置和完整结果大小。
 
-该接口自C++20+ 模式起提供。
+该结果类型从C++17起提供；创建结果对象不执行格式化或格式串校验。
 
 标准语义参考：[cppreference `format`](https://en.cppreference.com/w/cpp/header/format)。
 
@@ -38,16 +38,19 @@
 
 ```cpp
 namespace asc::std {
-template<class Out> struct format_to_n_result;
+template<class Out>
+struct format_to_n_result {
+    Out out;
+    ptrdiff_t size;
+};
 } // namespace asc::std
 ```
 
 ## 约束说明
 
-- basic_format_string<char,Args...>的编译期char数组构造与format_string别名。
-- format_to_n_result<char*>及其out/size成员。
-- 格式串内部仅接受已验证的{}、转义花括号和非bool/char标准整数d/x/X/o/b语法。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- `Out`表示输出位置类型；`out`记录写入结束位置，`size`记录未截断的结果长度。
+- 该聚合本身不拥有输出缓冲区。指针形式的`out`仅在相应缓冲区仍有效时可用。
+- `format_to_n`等带类型格式化调用仍要求C++20及编译器支持`consteval`，保留格式串立即校验。结果类型在C++17可用不表示这些调用同时开放。
 
 ## 调用示例
 

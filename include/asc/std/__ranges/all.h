@@ -28,6 +28,10 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__type_traits/remove_reference.h>
+#include <asc/std/__type_traits/void_t.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__iterator/concepts.h>
 #include <asc/std/__iterator/iterator_traits.h>
 #include <asc/std/__ranges/access.h>
@@ -40,25 +44,25 @@
 #include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/forward.h>
 namespace asc::std::ranges::views {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+template <class T, class = void>
+inline constexpr bool __to_ref_view = false;
 template <class T>
-concept __to_ref_view = requires(T&& value) {
-    requires !::asc::std::ranges::view<decay_t<T>>;
-    ::asc::std::ranges::ref_view{::asc::std::forward<T>(value)};
-};
+inline constexpr bool __to_ref_view<T,
+    void_t<enable_if_t<!::asc::std::ranges::view<decay_t<T>> && ::asc::std::ranges::range<remove_reference_t<T>>>,
+        decltype(::asc::std::ranges::ref_view{::asc::std::declval<T>()})>> = true;
 
+template <class T, class = void>
+inline constexpr bool __to_owning_view = false;
 template <class T>
-concept __to_owning_view = requires(T&& value) {
-    requires !::asc::std::ranges::view<decay_t<T>>;
-    requires !__to_ref_view<T>;
-    ::asc::std::ranges::owning_view{::asc::std::forward<T>(value)};
-};
-#endif
+inline constexpr bool __to_owning_view<T,
+    void_t<enable_if_t<!::asc::std::ranges::view<decay_t<T>> && !__to_ref_view<T> &&
+               ::asc::std::ranges::range<decay_t<T>> && ::asc::std::movable<decay_t<T>> &&
+               !::asc::std::ranges::__is_asc_std_initializer_list<decay_t<T>>>,
+        decltype(::asc::std::ranges::owning_view{::asc::std::declval<T>()})>> = true;
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 struct __all_fn : __range_adaptor_closure<__all_fn> {
-    template <class T>
-        requires ::asc::std::ranges::view<decay_t<T>>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class T)
+    CANN_ASC_STL_DETAIL_REQUIRES((::asc::std::ranges::view<decay_t<T>>))
     CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(
         noexcept(static_cast<decay_t<decltype((::asc::std::forward<T>(value)))>>(::asc::std::forward<T>(value))))
         -> decltype(static_cast<decay_t<decltype((::asc::std::forward<T>(value)))>>(::asc::std::forward<T>(value)))
@@ -69,61 +73,26 @@ struct __all_fn : __range_adaptor_closure<__all_fn> {
         return static_cast<decay_t<decltype((::asc::std::forward<T>(value)))>>(::asc::std::forward<T>(value));
     }
 
-    template <class T>
-        requires __to_ref_view<T>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class T)
+    CANN_ASC_STL_DETAIL_REQUIRES((__to_ref_view<T>))
     CANN_ASC_STL_API constexpr auto operator()(T&& value) const
         noexcept(noexcept(::asc::std::ranges::ref_view{::asc::std::forward<T>(value)}))
     {
         return ::asc::std::ranges::ref_view{::asc::std::forward<T>(value)};
     }
 
-    template <class T>
-        requires __to_owning_view<T>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class T)
+    CANN_ASC_STL_DETAIL_REQUIRES((__to_owning_view<T>))
     CANN_ASC_STL_API constexpr auto operator()(T&& value) const
         noexcept(noexcept(::asc::std::ranges::owning_view{::asc::std::forward<T>(value)}))
     {
-        return ::asc::std::ranges::owning_view{::asc::std::forward<T>(value)};
+        return ::asc::std::ranges::owning_view{::asc::std::forward<T>(value)};  // NOLINT(build/include_what_you_use)
     }
 };
-#else
-template <class Range, bool = enable_view<decay_t<Range>>>
-struct __all_lvalue_nothrow {
-    static constexpr bool value = true;
-};
-template <class Range>
-struct __all_lvalue_nothrow<Range, true> {
-    static constexpr bool value = noexcept(decay_t<Range>(::asc::std::declval<Range&>()));
-};
-struct __all_fn : __range_adaptor_closure<__all_fn> {
-    template <class Range>
-    CANN_ASC_STL_API constexpr auto operator()(Range& range) const noexcept(__all_lvalue_nothrow<Range>::value)
-    {
-        if constexpr (enable_view<decay_t<Range>>) {
-            return decay_t<Range>(range);
-        } else {
-            return ref_view<Range>(range);
-        }
-    }
-    template <class Range>
-    CANN_ASC_STL_API constexpr auto operator()(Range&& range) const
-    {
-        if constexpr (enable_view<decay_t<Range>>) {
-            return decay_t<Range>(::asc::std::forward<Range>(range));  // NOLINT(build/include_what_you_use)
-        } else {
-            return owning_view<decay_t<Range>>(
-                ::asc::std::forward<Range>(range));  // NOLINT(build/include_what_you_use)
-        }
-    }
-};
-#endif
 inline constexpr __all_fn all{};
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-template <::asc::std::ranges::viewable_range Range>
+CANN_ASC_STL_DETAIL_TEMPLATE(class Range)
+CANN_ASC_STL_DETAIL_REQUIRES(::asc::std::ranges::viewable_range<Range>)
 using all_t = decltype(all(::asc::std::declval<Range>()));
-#else
-template <class Range>
-using all_t = decltype(all(::asc::std::declval<Range>()));
-#endif
 }  // namespace asc::std::ranges::views
 
 #endif  // CANN_ASC_STL_ASC_STD___RANGES_ALL_H

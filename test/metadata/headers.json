@@ -2006,7 +2006,10 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__concepts/class_or_enum.h",
         "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/swappable.h",
+        "asc/std/__iterator/concepts.h",
         "asc/std/__iterator/iter_move.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/void_t.h",
@@ -2659,6 +2662,7 @@
         "asc/std/__iterator/iterator_traits.h",
         "asc/std/__iterator/projected.h",
         "asc/std/__ranges/concepts.h",
+        "asc/std/__type_traits/void_t.h",
         "asc/std/__utility/move.h"
       ],
       "semantic_case": "asc/algorithm",
@@ -2678,7 +2682,8 @@
         "asc/__config",
         "asc/std/__iterator/concepts.h",
         "asc/std/__iterator/iterator_traits.h",
-        "asc/std/__type_traits/remove_cvref.h"
+        "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/void_t.h"
       ],
       "applicability": {
         "host_header": true,
@@ -5396,7 +5401,8 @@
       "visibility": "private",
       "dependencies": [
         "asc/__config",
-        "asc/__detail/attributes.h"
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/enable_if.h"
       ],
       "applicability": {
         "host_header": true,
@@ -5463,7 +5469,8 @@
         "asc/std/__concepts/assignable.h",
         "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
-        "asc/std/__concepts/movable.h"
+        "asc/std/__concepts/movable.h",
+        "asc/std/__type_traits/void_t.h"
       ],
       "applicability": {
         "host_header": true,
@@ -5483,7 +5490,8 @@
         "asc/std/__concepts/concept_macros.h",
         "asc/std/__type_traits/add_pointer.h",
         "asc/std/__type_traits/is_base_of.h",
-        "asc/std/__type_traits/is_convertible.h"
+        "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/void_t.h"
       ],
       "applicability": {
         "host_header": true,
@@ -5592,7 +5600,8 @@
         "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__concepts/swappable.h",
-        "asc/std/__type_traits/is_object.h"
+        "asc/std/__type_traits/is_object.h",
+        "asc/std/__type_traits/void_t.h"
       ],
       "applicability": {
         "host_header": true,
@@ -7647,6 +7656,7 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__algorithm/iter_swap.h",
         "asc/std/__concepts/class_or_enum.h",
         "asc/std/__concepts/swappable.h",
         "asc/std/__iterator/concepts.h",
@@ -7799,6 +7809,7 @@
         "asc/std/__concepts/assignable.h",
         "asc/std/__concepts/convertible_to.h",
         "asc/std/__concepts/semiregular.h",
+        "asc/std/__type_traits/enable_if.h",
         "asc/std/__utility/move.h"
       ],
       "semantic_case": "asc/std/array",
@@ -8188,7 +8199,10 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/std/__memory/allocator_traits.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/void_t.h",
         "asc/std/__utility/ctad_support.h",
+        "asc/std/__utility/declval.h",
         "asc/std/cstddef"
       ],
       "applicability": {
@@ -9041,6 +9055,7 @@
         "asc/std/__type_traits/is_reference.h",
         "asc/std/__type_traits/remove_cvref.h",
         "asc/std/__type_traits/remove_reference.h",
+        "asc/std/__type_traits/void_t.h",
         "asc/std/__utility/declval.h"
       ],
       "semantic_case": "asc/hierarchy",
@@ -9112,6 +9127,7 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/std/__concepts/class_or_enum.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__iterator/concepts.h",
         "asc/std/__ranges/access.h",
         "asc/std/__ranges/size.h",
@@ -9179,12 +9195,14 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__concepts/copyable.h",
         "asc/std/__concepts/movable.h",
         "asc/std/__memory/addressof.h",
         "asc/std/__memory/construct_at.h",
         "asc/std/__tuple/sfinae_helpers.h",
+        "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_constructible.h",
         "asc/std/__type_traits/is_nothrow_constructible.h",
         "asc/std/__type_traits/is_nothrow_copy_constructible.h",
@@ -9326,6 +9344,7 @@
         "asc/std/__type_traits/make_signed.h",
         "asc/std/__type_traits/make_unsigned.h",
         "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/void_t.h",
         "asc/std/__utility/declval.h",
         "asc/std/cstddef"
       ],
@@ -9361,6 +9380,7 @@
         "asc/std/__type_traits/is_same.h",
         "asc/std/__type_traits/make_unsigned.h",
         "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/void_t.h",
         "asc/std/__utility/declval.h"
       ],
       "semantic_case": "asc/std/array",
@@ -13280,7 +13300,15 @@
         "device_compile": true,
         "cannsim_runtime": false,
         "hardware_runtime": false
-      }
+      },
+      "additional_cases": [
+        "cxx17_backports.pass.cpp",
+        "cxx17_backports_iterator_first.pass.cpp"
+      ],
+      "device_compile_cases": [
+        "device.compile.asc",
+        "cxx17_backports.compile.asc"
+      ]
     },
     {
       "target": "asc/std/cstdalign",
@@ -13649,18 +13677,22 @@
         "asc/std/__ranges/enable_borrowed_range.h",
         "asc/std/__ranges/enable_view.h",
         "asc/std/__ranges/size.h",
+        "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/integral_constant.h",
         "asc/std/__type_traits/integral_constant_like.h",
         "asc/std/__type_traits/is_array.h",
         "asc/std/__type_traits/is_const.h",
         "asc/std/__type_traits/is_convertible.h",
         "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/is_pointer.h",
         "asc/std/__type_traits/is_same.h",
         "asc/std/__type_traits/remove_const.h",
         "asc/std/__type_traits/remove_cv.h",
         "asc/std/__type_traits/remove_cvref.h",
         "asc/std/__type_traits/remove_reference.h",
         "asc/std/__type_traits/type_identity.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
         "asc/std/array",
         "asc/std/cstddef",
         "asc/std/version"
@@ -13670,7 +13702,8 @@
         "writable_const_span.fail.cpp",
         "fixed_extent_mismatch.fail.cpp",
         "at_excluded.fail.cpp",
-        "fixed_default.fail.cpp"
+        "fixed_default.fail.cpp",
+        "cxx17_backports.pass.cpp"
       ],
       "applicability": {
         "host_header": true,
@@ -13679,7 +13712,11 @@
         "device_compile": true,
         "cannsim_runtime": false,
         "hardware_runtime": false
-      }
+      },
+      "device_compile_cases": [
+        "device.compile.asc",
+        "cxx17_backports.compile.asc"
+      ]
     },
     {
       "target": "asc/std/string_view",
@@ -13782,7 +13819,11 @@
         "device_compile": false,
         "cannsim_runtime": false,
         "hardware_runtime": false
-      }
+      },
+      "additional_cases": [
+        "legacy_feature_macros.pass.cpp",
+        "host_coexistence.pass.cpp"
+      ]
     },
     {
       "target": "asc/stream",
@@ -16473,6 +16514,37 @@
       "runtime_case": "asc/tensor_copy"
     },
     {
+      "target": "asc/std/__ranges/counted_adaptor.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__concepts/movable.h",
+        "asc/std/__functional/bind_back.h",
+        "asc/std/__ranges/all.h",
+        "asc/std/__ranges/concepts.h",
+        "asc/std/__ranges/range_adaptor.h",
+        "asc/std/__type_traits/decay.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
+        "asc/std/__utility/forward.h"
+      ],
+      "semantic_case": "asc/std/ranges",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      },
+      "runtime_case": "asc/tensor_copy"
+    },
+    {
       "target": "asc/numeric",
       "visibility": "public",
       "dependencies": [
@@ -16764,16 +16836,28 @@
       },
       "negative_cases": [
         "format_float.fail.asc",
-        "cxx17_absent.fail.cpp"
+        "cxx17_absent.fail.cpp",
+        "runtime_format.fail.cpp",
+        "invalid_literal.fail.cpp"
       ],
       "negative_case_languages": {
         "format_float.fail.asc": [
+          "c++20"
+        ],
+        "cxx17_absent.fail.cpp": [
+          "c++17"
+        ],
+        "runtime_format.fail.cpp": [
+          "c++20"
+        ],
+        "invalid_literal.fail.cpp": [
           "c++20"
         ]
       },
       "additional_cases": [
         "format_float_host.fail.cpp",
-        "invalid_spec.fail.cpp"
+        "invalid_spec.fail.cpp",
+        "portable_renderer.pass.cpp"
       ],
       "runtime_case": "asc/tensor_copy"
     },
@@ -16882,8 +16966,10 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__ranges/enable_borrowed_range.h",
         "asc/std/__ranges/view_interface.h",
+        "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_object.h"
       ],
       "semantic_case": "asc/std/ranges",
@@ -16903,6 +16989,7 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__concepts/copyable.h",
         "asc/std/__concepts/equality_comparable.h",
@@ -16925,6 +17012,7 @@
         "asc/std/__type_traits/make_unsigned.h",
         "asc/std/__type_traits/remove_cvref.h",
         "asc/std/__type_traits/type_identity.h",
+        "asc/std/__utility/cmp.h",
         "asc/std/__utility/forward.h",
         "asc/std/__utility/move.h"
       ],
@@ -16945,6 +17033,7 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__concepts/invocable.h",
         "asc/std/__concepts/movable.h",
@@ -16979,6 +17068,7 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__iterator/concepts.h",
         "asc/std/__memory/addressof.h",
         "asc/std/__ranges/access.h",
@@ -17015,6 +17105,7 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__concepts/convertible_to.h",
         "asc/std/__concepts/copyable.h",
@@ -17071,6 +17162,7 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__iterator/concepts.h",
         "asc/std/__iterator/iterator_traits.h",
         "asc/std/__ranges/access.h",
@@ -17079,6 +17171,9 @@
         "asc/std/__ranges/range_adaptor.h",
         "asc/std/__ranges/ref_view.h",
         "asc/std/__type_traits/decay.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/remove_reference.h",
+        "asc/std/__type_traits/void_t.h",
         "asc/std/__utility/auto_cast.h",
         "asc/std/__utility/declval.h",
         "asc/std/__utility/forward.h"
@@ -17100,6 +17195,7 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__concepts/movable.h",
         "asc/std/__memory/addressof.h",
@@ -17178,6 +17274,7 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/convertible_to.h",
         "asc/std/__iterator/concepts.h",
         "asc/std/__iterator/counted_iterator.h",
@@ -17187,6 +17284,7 @@
         "asc/std/__memory/pointer_traits.h",
         "asc/std/__ranges/subrange.h",
         "asc/std/__type_traits/decay.h",
+        "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/make_unsigned.h",
         "asc/std/__utility/forward.h",
         "asc/std/__utility/move.h",
@@ -17210,6 +17308,7 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/std/__concepts/arithmetic.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__concepts/same_as.h",
         "asc/std/__concepts/semiregular.h",
@@ -17255,6 +17354,7 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__concepts/copyable.h",
         "asc/std/__iterator/common_iterator.h",
@@ -17265,6 +17365,7 @@
         "asc/std/__ranges/range_adaptor.h",
         "asc/std/__ranges/size.h",
         "asc/std/__ranges/view_interface.h",
+        "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_nothrow_copy_constructible.h",
         "asc/std/__type_traits/is_nothrow_move_constructible.h",
         "asc/std/__type_traits/is_same.h",
@@ -17289,8 +17390,10 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/std/__algorithm/min.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__concepts/convertible_to.h",
+        "asc/std/__functional/bind_back.h",
         "asc/std/__fwd/span.h",
         "asc/std/__fwd/string_view.h",
         "asc/std/__iterator/concepts.h",
@@ -17300,6 +17403,7 @@
         "asc/std/__ranges/access.h",
         "asc/std/__ranges/all.h",
         "asc/std/__ranges/concepts.h",
+        "asc/std/__ranges/counted_adaptor.h",
         "asc/std/__ranges/empty_view.h",
         "asc/std/__ranges/enable_borrowed_range.h",
         "asc/std/__ranges/iota_view.h",
@@ -17340,6 +17444,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__algorithm/ranges_find_if_not.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__functional/bind_back.h",
         "asc/std/__functional/reference_wrapper.h",
@@ -17378,6 +17483,7 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/std/__algorithm/ranges_find_if.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__concepts/copyable.h",
         "asc/std/__concepts/derived_from.h",
@@ -17397,11 +17503,14 @@
         "asc/std/__ranges/range_adaptor.h",
         "asc/std/__ranges/view_interface.h",
         "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_comparable.h",
         "asc/std/__type_traits/is_nothrow_constructible.h",
         "asc/std/__type_traits/is_nothrow_default_constructible.h",
         "asc/std/__type_traits/is_object.h",
         "asc/std/__type_traits/is_pointer.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
         "asc/std/__utility/forward.h",
         "asc/std/__utility/in_place.h",
         "asc/std/__utility/move.h"
@@ -17424,6 +17533,7 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__iterator/concepts.h",
         "asc/std/__iterator/reverse_iterator.h",
@@ -17463,8 +17573,10 @@
         "asc/__detail/attributes.h",
         "asc/std/__algorithm/min.h",
         "asc/std/__algorithm/ranges_min.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__concepts/convertible_to.h",
+        "asc/std/__functional/bind_back.h",
         "asc/std/__fwd/span.h",
         "asc/std/__fwd/string_view.h",
         "asc/std/__iterator/concepts.h",
@@ -17475,6 +17587,7 @@
         "asc/std/__ranges/access.h",
         "asc/std/__ranges/all.h",
         "asc/std/__ranges/concepts.h",
+        "asc/std/__ranges/counted_adaptor.h",
         "asc/std/__ranges/empty_view.h",
         "asc/std/__ranges/enable_borrowed_range.h",
         "asc/std/__ranges/iota_view.h",
@@ -17511,6 +17624,7 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__concepts/convertible_to.h",
         "asc/std/__concepts/same_as.h",
@@ -17532,6 +17646,8 @@
         "asc/std/__type_traits/is_object.h",
         "asc/std/__type_traits/maybe_const.h",
         "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
         "asc/std/__utility/forward.h",
         "asc/std/__utility/in_place.h",
         "asc/std/__utility/move.h"
@@ -17553,6 +17669,7 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__concepts/concept_macros.h",
         "asc/std/__concepts/constructible.h",
         "asc/std/__concepts/convertible_to.h",
         "asc/std/__concepts/copyable.h",
@@ -17572,10 +17689,13 @@
         "asc/std/__ranges/size.h",
         "asc/std/__ranges/view_interface.h",
         "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_object.h",
         "asc/std/__type_traits/is_reference.h",
         "asc/std/__type_traits/maybe_const.h",
         "asc/std/__type_traits/remove_cvref.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/declval.h",
         "asc/std/__utility/forward.h",
         "asc/std/__utility/in_place.h",
         "asc/std/__utility/move.h"
@@ -17678,7 +17798,15 @@
         "repeat_unbounded.fail.cpp",
         "zip_three.fail.cpp"
       ],
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "cxx17_backports.pass.cpp",
+        "access_constraints.pass.cpp"
+      ],
+      "device_compile_cases": [
+        "device.compile.asc",
+        "cxx17_backports.compile.asc"
+      ]
     },
     {
       "target": "asc/std/cwctype",

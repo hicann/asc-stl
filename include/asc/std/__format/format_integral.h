@@ -31,8 +31,6 @@
 #include <asc/std/__type_traits/is_signed.h>
 #include <asc/std/__type_traits/make_unsigned.h>
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
-
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __format_detail {
@@ -67,7 +65,5 @@ CANN_ASC_STL_API constexpr __SIZE_TYPE__ integral_digits(char* output, T value, 
 }  // namespace __format_detail
 
 CANN_ASC_STL_END_NAMESPACE
-
-#endif  // CANN_ASC_STL_DETAIL_HAS_CXX20()
 
 #endif  // CANN_ASC_STL_ASC_STD___FORMAT_FORMAT_INTEGRAL_H

@@ -15,10 +15,25 @@
  */
 
 #include <asc/std/version>
+#include <asc/std/source_location>
+#include <asc/std/type_traits>
+#include <asc/std/bit>
+#include <asc/std/utility>
 
 int main()
 {
-    static_assert(__cpp_lib_source_location == 201907L);
-    static_assert(__cpp_lib_unreachable == 202202L);
+    static_assert(CANN_ASC_STL_HAS_SOURCE_LOCATION && CANN_ASC_STL_HAS_UNREACHABLE);
+    static_assert(CANN_ASC_STL_HAS_TYPE_IDENTITY && CANN_ASC_STL_HAS_ENDIAN);
+    static_assert(CANN_ASC_STL_DETAIL_LIB_type_identity == 201806L);
+    static_assert(CANN_ASC_STL_DETAIL_LIB_endian == 201907L);
+    static_assert(CANN_ASC_STL_DETAIL_LIB_unreachable == 202202L);
+    static_assert(asc::std::is_same_v<asc::std::type_identity_t<int>, int>);
+    static_assert(asc::std::source_location::current().line() != 0);
+    static_assert(asc::std::endian::little != asc::std::endian::big);
+#if CANN_ASC_STL_HAS_IS_CONSTANT_EVALUATED
+    static_assert(asc::std::is_constant_evaluated());
+#endif
+    const auto unavailable = &asc::std::unreachable;
+    (void)unavailable;
     return 0;
 }

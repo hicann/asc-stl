@@ -28,11 +28,15 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::forward_range`在C++20及以上模式约束满足`forward_range`语义的类型或表达式。
+`asc::std::ranges::forward_range`判定类型或表达式是否满足`forward_range`的要求。
+
+C++17中提供同名`inline constexpr bool`变量模板；C++20及以上提供concept。两种形式均可用于`static_assert`，C++17还可与`enable_if`配合使用。受约束模板参数、`requires`及约束偏序仍需要C++20语言支持。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
+
+以下为C++20及以上的concept声明摘要；C++17变量模板具有相同的模板参数和判定条件。
 
 ```cpp
 namespace asc::std::ranges {
@@ -42,7 +46,7 @@ template<class T> concept forward_range;
 
 ## 约束说明
 
-- 提供完整的C++20 range concepts集合。
+- 范围判定在C++17中作为布尔常量使用；借用、连续性和迭代器类别仍须满足各谓词的语义要求。
 
 ## 调用示例
 

@@ -30,7 +30,7 @@
 
 `asc::std::inplace_vector::try_push_back`尝试在容器末尾追加`value`。容量充足时构造新元素并返回其引用；容器已满时返回空结果，容器内容保持不变。
 
-该接口的可用位置为Host（完整接口）、Device（非抛出子集）。
+该接口支持Host和Device，均限于本页列出的非抛出操作。
 
 标准语义参考：[cppreference `inplace_vector`](https://en.cppreference.com/w/cpp/header/inplace_vector)。
 

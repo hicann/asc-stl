@@ -32,10 +32,8 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class T, class U>
 CANN_ASC_STL_DETAIL_CONCEPT same_as = is_same_v<T, U> && is_same_v<U, T>;
-#endif
 
 CANN_ASC_STL_END_NAMESPACE
 

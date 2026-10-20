@@ -67,127 +67,57 @@ CANN_ASC_STL_API constexpr auto __adl_rend(T&& value) noexcept(noexcept(rend(val
     return rend(value);
 }
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-
-template <class T>
-concept __member_rend = __access_detail::__can_borrow<T> && __workaround_52970<T> && requires(T&& __t) {
-    ::asc::std::ranges::__rbegin_cpo{}(__t);
-    {
-        __t.rend()
-    } -> sentinel_for<decltype(::asc::std::ranges::__rbegin_cpo{}(__t))>;  // the return-type requirement is expanded
-                                                                           // at the use site
-};
-
-template <class T>
-concept __unqualified_rend =
-    !__member_rend<T> && __access_detail::__can_borrow<T> && __class_or_enum<remove_cvref_t<T>> && requires(T&& __t) {
-        ::asc::std::ranges::__rbegin_cpo{}(__t);
-        { __adl_rend(__t) } -> sentinel_for<decltype(::asc::std::ranges::__rbegin_cpo{}(__t))>;
-    };
-
-template <class T>
-concept __can_reverse =
-    __access_detail::__can_borrow<T> && !__member_rend<T> && !__unqualified_rend<T> && requires(T&& __t) {
-        { ::asc::std::ranges::__begin_cpo{}(__t) } -> same_as<decltype(::asc::std::ranges::__end_cpo{}(__t))>;
-        { ::asc::std::ranges::__begin_cpo{}(__t) } -> bidirectional_iterator;
-    };
-
-class __fn {
-public:
-    template <class T>
-        requires __member_rend<T>
-    CANN_ASC_STL_API constexpr auto operator()(T&& __t) const noexcept(noexcept(__t.rend()))
-    {
-        return __t.rend();
-    }
-
-    template <class T>
-        requires __unqualified_rend<T>
-    CANN_ASC_STL_API constexpr auto operator()(T&& __t) const noexcept(noexcept(__adl_rend(__t)))
-    {
-        return __adl_rend(__t);
-    }
-
-    template <class T>
-        requires __can_reverse<T>
-    CANN_ASC_STL_API constexpr auto operator()(T&& __t) const noexcept(noexcept(::asc::std::ranges::__begin_cpo{}(__t)))
-    {
-        return ::asc::std::make_reverse_iterator(::asc::std::ranges::__begin_cpo{}(__t));
-    }
-
-    template <class T>
-        requires(!__member_rend<T> && !__unqualified_rend<T> && !__can_reverse<T>)
-    void operator()(T&&) const = delete;
-};
-
-#else  // ^^^ concepts ^^^ / vvv !concepts vvv
-
-// Non-concepts path: expanded with the conventional void_t detection +
-// enable_if_t, semantically aligned with the concepts version; the
-// sentinel/iterator concept constraints on the return type (sentinel_for /
-// bidirectional_iterator) degrade here to expression-validity-level checks,
-// while the remaining gates (can_borrow / class-or-enum / rbegin invocable /
-// same begin-end type) are unchanged.
-template <class T>
-inline constexpr bool __is_class_or_union_v = is_class_v<remove_cvref_t<T>> || is_union_v<remove_cvref_t<T>>;
-template <class T>
-inline constexpr bool __is_class_or_enum_v = __is_class_or_union_v<T> || is_enum_v<remove_cvref_t<T>>;
-
 template <class T, class = void>
 struct __has_member_rend : false_type {};
 template <class T>
 struct __has_member_rend<T,
-    void_t<decltype(::asc::std::ranges::__rbegin_cpo{}(::asc::std::declval<T>())),
-        decltype(::asc::std::declval<T>().rend())>>
-    : bool_constant<__access_detail::__can_borrow<T> && __is_class_or_union_v<T>> {};
+    void_t<decltype(__rbegin_cpo{}(::asc::std::declval<remove_reference_t<T>&>())),
+        decltype(static_cast<decay_t<decltype(::asc::std::declval<remove_reference_t<T>&>().rend())>>(
+            ::asc::std::declval<remove_reference_t<T>&>().rend()))>>
+    : bool_constant<__access_detail::__can_borrow<T> && __workaround_52970<T> &&
+          sentinel_for<decay_t<decltype(::asc::std::declval<remove_reference_t<T>&>().rend())>,
+              decltype(__rbegin_cpo{}(::asc::std::declval<remove_reference_t<T>&>()))>> {};
 
 template <class T, class = void>
 struct __has_adl_rend : false_type {};
 template <class T>
 struct __has_adl_rend<T,
-    void_t<decltype(::asc::std::ranges::__rbegin_cpo{}(::asc::std::declval<T>())),
-        decltype(__adl_rend(::asc::std::declval<T>()))>>
-    : bool_constant<__access_detail::__can_borrow<T> && __is_class_or_enum_v<T>> {};
+    void_t<decltype(__rbegin_cpo{}(::asc::std::declval<remove_reference_t<T>&>())),
+        decltype(static_cast<decay_t<decltype(__adl_rend(::asc::std::declval<remove_reference_t<T>&>()))>>(
+            __adl_rend(::asc::std::declval<remove_reference_t<T>&>())))>>
+    : bool_constant<__access_detail::__can_borrow<T> && __class_or_enum<remove_cvref_t<T>> &&
+          sentinel_for<decay_t<decltype(__adl_rend(::asc::std::declval<remove_reference_t<T>&>()))>,
+              decltype(__rbegin_cpo{}(::asc::std::declval<remove_reference_t<T>&>()))>> {};
 
 template <class T, class = void>
 struct __same_begin_end : false_type {};
 template <class T>
-struct __same_begin_end<T,
-    void_t<decltype(::asc::std::ranges::__begin_cpo{}(::asc::std::declval<T>())),
-        decltype(::asc::std::ranges::__end_cpo{}(::asc::std::declval<T>()))>>
-    : bool_constant<is_same_v<decltype(::asc::std::ranges::__begin_cpo{}(::asc::std::declval<T>())),
-          decltype(::asc::std::ranges::__end_cpo{}(::asc::std::declval<T>()))>> {};
+struct __same_begin_end<T, void_t<iterator_t<T>, decltype(__end_cpo{}(::asc::std::declval<T&>()))>>
+    : bool_constant<__access_detail::__can_borrow<T> &&
+          is_same_v<iterator_t<T>, decltype(__end_cpo{}(::asc::std::declval<T&>()))> &&
+          bidirectional_iterator<iterator_t<T>>> {};
 
-class __fn {
-public:
+struct __fn {
     template <class T, enable_if_t<__has_member_rend<T>::value, int> = 0>
-    CANN_ASC_STL_API constexpr auto operator()(T&& __t) const noexcept(noexcept(__t.rend()))
+    CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(
+        noexcept(static_cast<decay_t<decltype(value.rend())>>(value.rend()))) -> decay_t<decltype(value.rend())>
     {
-        return __t.rend();
+        return static_cast<decay_t<decltype(value.rend())>>(value.rend());
     }
-
     template <class T, enable_if_t<!__has_member_rend<T>::value && __has_adl_rend<T>::value, int> = 0>
-    CANN_ASC_STL_API constexpr auto operator()(T&& __t) const noexcept(noexcept(__adl_rend(__t)))
+    CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(noexcept(
+        static_cast<decay_t<decltype(__adl_rend(value))>>(__adl_rend(value)))) -> decay_t<decltype(__adl_rend(value))>
     {
-        return __adl_rend(__t);
+        return static_cast<decay_t<decltype(__adl_rend(value))>>(__adl_rend(value));
     }
-
     template <class T,
-        enable_if_t<!__has_member_rend<T>::value && !__has_adl_rend<T>::value && __access_detail::__can_borrow<T> &&
-                __same_begin_end<T>::value,
-            int> = 0>
-    CANN_ASC_STL_API constexpr auto operator()(T&& __t) const
-        noexcept(noexcept(::asc::std::make_reverse_iterator(::asc::std::ranges::__begin_cpo{}(__t))))
+        enable_if_t<!__has_member_rend<T>::value && !__has_adl_rend<T>::value && __same_begin_end<T>::value, int> = 0>
+    CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(noexcept(::asc::std::make_reverse_iterator(
+        __begin_cpo{}(value)))) -> decltype(::asc::std::make_reverse_iterator(__begin_cpo{}(value)))
     {
-        return ::asc::std::make_reverse_iterator(::asc::std::ranges::__begin_cpo{}(__t));
+        return ::asc::std::make_reverse_iterator(__begin_cpo{}(value));
     }
-
-    template <class T,
-        enable_if_t<!__has_member_rend<T>::value && !__has_adl_rend<T>::value && !__same_begin_end<T>::value, int> = 0>
-    void operator()(T&&) const = delete;
 };
-
-#endif  // !concepts
 
 }  // namespace __rend_detail
 

@@ -30,7 +30,7 @@
 
 `asc::std::inplace_vector::size`返回当前对象包含的元素数量。
 
-该接口的可用位置为Host（完整接口）、Device（非抛出子集）。
+该接口支持Host和Device，均限于本页列出的非抛出操作。
 
 标准语义参考：[cppreference `inplace_vector`](https://en.cppreference.com/w/cpp/header/inplace_vector)。
 

@@ -34,11 +34,16 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::pointer_traits`](pointer_traits.md)。
+所属类型：[`asc::std::pointer_traits`](pointer_traits.md)。以下声明摘要仅展示`element_type`不是`void`时可调用的形式，省略不可调用的占位参数类型。
 
 ```cpp
-// asc::std::pointer_traits 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr pointer pointer_to(conditional_t<is_void_v<element_type>, Nat, element_type>& value) noexcept;
+// pointer_traits<P>的类内声明摘要。
+static constexpr pointer pointer_to(element_type& value);
+```
+
+```cpp
+// pointer_traits<T*>的类内声明摘要。
+static constexpr pointer pointer_to(element_type& value) noexcept;
 ```
 
 ## 参数说明
@@ -57,23 +62,33 @@ constexpr pointer pointer_to(conditional_t<is_void_v<element_type>, Nat, element
 
 ## 约束说明
 
-- 支持原始指针和用户自定义fancy pointer，接口自身不分配内存。
+- 支持原始指针和用户自定义fancy pointer，接口自身不分配内存，返回指针的有效期受被引用对象的生命周期限制。
+- C++17和C++20中包装函数均可用于常量求值；自定义指针的`pointer_to`、构造及返回类型也须满足相应的常量表达式要求。
+- 自定义指针形式委托给该指针类型的静态`pointer_to`，其异常行为由具体实现决定；原始指针特化为`noexcept`。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例通过公开特征调用自定义指针，并在C++17和C++20中检查常量表达式结果。
 
 ```cpp
 #include <asc/std/memory>
 
-template <class Object, class... Args>
-decltype(auto) example(Object& object, Args&&... args)
-{
-    return object.pointer_to(static_cast<Args&&>(args)...);
-}
-```
+template<class T>
+struct example_pointer {
+    using element_type = T;
+    T* value;
+    static constexpr example_pointer pointer_to(T& object) noexcept { return {&object}; }
+};
 
-对应完整工程使用`C++17`，并通过Host编译与运行验证。
+constexpr bool example()
+{
+    int object = 7;
+    const auto pointer = asc::std::pointer_traits<example_pointer<int>>::pointer_to(object);
+    return pointer.value == &object;
+}
+
+static_assert(example());
+```
 
 完整示例源码：[pointer_alignment.cpp](../../../../examples/pointer_alignment.cpp)。
 

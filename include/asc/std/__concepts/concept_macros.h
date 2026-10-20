@@ -28,11 +28,26 @@
 #endif
 
 #include <asc/__detail/attributes.h>
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
+#include <asc/std/__type_traits/enable_if.h>
+
+// Keep library constraints expressible in C++17. These two macros are paired:
+// TEMPLATE(class T) REQUIRES(predicate<T>) declares one constrained template.
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #define CANN_ASC_STL_DETAIL_TEMPLATE(...) template <__VA_ARGS__>
 #define CANN_ASC_STL_DETAIL_REQUIRES(...) requires(__VA_ARGS__)
 #define CANN_ASC_STL_DETAIL_TRAILING_REQUIRES(...) requires(__VA_ARGS__)
+#else
+#define CANN_ASC_STL_DETAIL_TEMPLATE(...) template <__VA_ARGS__
+#define CANN_ASC_STL_DETAIL_REQUIRES(...) \
+    , bool __asc_constraint = true, ::asc::std::enable_if_t < (__VA_ARGS__) && __asc_constraint, int > = 0 >
+// A trailing clause cannot constrain an ordinary member in C++17. Use a
+// dependent member template and the paired macros above on that path.
+#endif
+
+#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 #define CANN_ASC_STL_DETAIL_CONCEPT concept
+#else
+#define CANN_ASC_STL_DETAIL_CONCEPT inline constexpr bool
 #endif
 
 #endif  // CANN_ASC_STL_STD_DETAIL_CONCEPT_MACROS_H

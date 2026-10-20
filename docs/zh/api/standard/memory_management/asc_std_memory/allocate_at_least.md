@@ -36,7 +36,8 @@
 
 ```cpp
 namespace asc::std {
-template<class Alloc> asc::std::allocation_result<typename asc::std::allocator_traits<Alloc>::pointer> allocate_at_least(Alloc& a, size_t n);
+template<class Alloc> [[nodiscard]] constexpr allocation_result<typename allocator_traits<Alloc>::pointer>
+allocate_at_least(Alloc& __alloc, size_t __n);
 } // namespace asc::std
 ```
 
@@ -52,8 +53,8 @@ template<class Alloc> asc::std::allocation_result<typename asc::std::allocator_t
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `a` | 输入/输出 | 参与操作的对象引用；调用期间被引用对象须保持有效。 |
-| `n` | 输入 | 控制本次操作的标量值；有效取值由声明和约束说明共同确定。 |
+| `__alloc` | 输入/输出 | 分配器对象；调用期间须保持有效，其分配结果按该分配器的释放规则管理。 |
+| `__n` | 输入 | 请求的元素数量，单位为对象个数；须在分配器可处理的范围内。 |
 
 ## 返回值说明
 
@@ -63,19 +64,37 @@ template<class Alloc> asc::std::allocation_result<typename asc::std::allocator_t
 
 ## 约束说明
 
-- 分配器须满足分配器约定；返回容量不小于请求的对象数。
+- C++17和C++20均优先调用可用的`allocate_at_least`成员，并保留其返回的实际容量；没有匹配成员时调用`allocate`并返回请求数量作为容量。
+- 分配器须满足分配与释放约定，成员返回的容量不得小于请求数量。调用方负责按分配器要求释放所得存储。
+- 是否能够在Device执行、是否分配设备内存以及错误行为，由具体分配器决定。此模板不提供隐式的设备动态分配。
+- `constexpr`不保证任意分配器都能在常量求值期间分配存储。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+示例分配器使用调用方预留的存储。成员额外提供一个元素的容量，结果由指针和容量共同检查。
 
 ```cpp
 #include <asc/std/memory>
 
-template <class Alloc>
-decltype(auto) example(Alloc& a, size_t n)
+struct example_allocator {
+    using value_type = int;
+    int* storage;
+    int* allocate(asc::std::size_t) { return storage; }
+    asc::std::allocation_result<int*> allocate_at_least(asc::std::size_t count)
+    {
+        return {storage, count + 1};
+    }
+    void deallocate(int*, asc::std::size_t) noexcept {}
+};
+
+bool example()
 {
-    return asc::std::allocate_at_least(a, n);
+    int storage[4] = {};
+    example_allocator allocator{storage};
+    const auto result = asc::std::allocate_at_least(allocator, 2);
+    const bool valid = result.ptr == storage && result.count == 3;
+    allocator.deallocate(result.ptr, result.count);
+    return valid;
 }
 ```
 

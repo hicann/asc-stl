@@ -17,11 +17,6 @@
 #ifndef CANN_ASC_STL_ASC_STD_CSTDBOOL
 #define CANN_ASC_STL_ASC_STD_CSTDBOOL
 
-// Deliberate empty tombstone: <cstdbool> is deprecated by [depr.c.headers]
-// (bool/true/false are core language in C++). C++17 [cstdbool.syn] still
-// defines __bool_true_false_are_defined for C portability probes, but that
-// macro is intentionally NOT provided here: the registry records zero names
-// for this header and adding the macro would be unregistered public surface.
 #include <asc/__config>
 
 #if defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_GCC)
@@ -30,6 +25,11 @@
 #pragma clang system_header
 #elif defined(CANN_ASC_STL_DETAIL_IMPLICIT_SYSTEM_HEADER_MSVC)
 #pragma system_header
+#endif
+
+// C++17 retains the C-compatibility feature macro; C++20 removed it.
+#if !CANN_ASC_STL_DETAIL_HAS_CXX20() && !defined(__bool_true_false_are_defined)
+#define __bool_true_false_are_defined 1
 #endif
 
 #endif  // CANN_ASC_STL_ASC_STD_CSTDBOOL

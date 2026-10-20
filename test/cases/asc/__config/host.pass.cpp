@@ -21,8 +21,10 @@ int main()
     static_assert(CANN_ASC_STL_DETAIL_HAS_CXX17());
 #if CANN_ASC_STL_DETAIL_CPLUSPLUS >= 202002L
     static_assert(CANN_ASC_STL_DETAIL_HAS_CXX20());
+    static_assert(CANN_ASC_STL_DETAIL_HAS_CONSTEVAL());
 #else
     static_assert(!CANN_ASC_STL_DETAIL_HAS_CXX20());
+    static_assert(!CANN_ASC_STL_DETAIL_HAS_CONSTEVAL());
 #endif
     static_assert(!CANN_ASC_STL_DETAIL_DEVICE_COMPILATION());
     return 0;

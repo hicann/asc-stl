@@ -19,10 +19,13 @@
 #include <asc/std/cinttypes>
 #include <asc/std/cuchar>
 #include <asc/std/format>
+#include <asc/std/version>
 
 int main()
 {
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
+    static_assert(CANN_ASC_STL_DETAIL_HAS_CONSTEVAL());
+    static_assert(CANN_ASC_STL_HAS_FORMAT);
     char output[32] = {};
     auto result = asc::std::format_to_n(output, 8, "{} {:x} {}", -42, 255U, true);
     if (result.size != 11 || result.out != output + 8)
@@ -49,6 +52,9 @@ int main()
     const auto zero = asc::std::format_to_n(untouched, 0, "{}", "text");
     if (zero.out != untouched || zero.size != 4 || untouched[0] != 'x')
         return 15;
+#else
+    static_assert(!CANN_ASC_STL_DETAIL_HAS_CONSTEVAL());
+    static_assert(!CANN_ASC_STL_HAS_FORMAT);
 #endif
     int sum = 0;
     if (!asc::add_overflow(2147483647, 1, sum) || sum != static_cast<int>(0x80000000U))

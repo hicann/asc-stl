@@ -232,11 +232,6 @@ CANN_ASC_STL_API int evaluate_ranges_for_each()
     int values[5] = {1, 2, 3, 4, 5};
     int visits = 0;
     int projected_sum = 0;
-#if !CANN_ASC_STL_DETAIL_HAS_CXX20()
-    (void)values;
-    (void)visits;
-    (void)projected_sum;
-#else
     const auto result = asc::std::ranges::for_each(values, values + 5, [&](int v) {
         ++visits;
         projected_sum += v;
@@ -253,7 +248,6 @@ CANN_ASC_STL_API int evaluate_ranges_for_each()
     if (visits != 5 || doubled_visits != 30) {
         return 2;
     }
-#endif
     return 0;
 }
 

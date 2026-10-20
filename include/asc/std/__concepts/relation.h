@@ -33,14 +33,13 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class R, class T, class U>
-concept relation = predicate<R, T, T> && predicate<R, U, U> && predicate<R, T, U> && predicate<R, U, T>;
+CANN_ASC_STL_DETAIL_CONCEPT relation =
+    predicate<R, T, T> && predicate<R, U, U> && predicate<R, T, U> && predicate<R, U, T>;
 template <class R, class T, class U>
-concept equivalence_relation = relation<R, T, U>;
+CANN_ASC_STL_DETAIL_CONCEPT equivalence_relation = relation<R, T, U>;
 template <class R, class T, class U>
-concept strict_weak_order = relation<R, T, U>;
-#endif
+CANN_ASC_STL_DETAIL_CONCEPT strict_weak_order = relation<R, T, U>;
 
 CANN_ASC_STL_END_NAMESPACE
 

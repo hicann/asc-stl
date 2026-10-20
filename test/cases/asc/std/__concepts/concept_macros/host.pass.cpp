@@ -15,22 +15,26 @@
  */
 
 #include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__concepts/same_as.h>
+#include <asc/std/type_traits>
 
-CANN_ASC_STL_DETAIL_TEMPLATE(class Type)
-CANN_ASC_STL_DETAIL_CONCEPT has_size = CANN_ASC_STL_DETAIL_REQUIRES(Type value)
-{
-    value.size();
-};
+template <class T>
+CANN_ASC_STL_DETAIL_CONCEPT integer_type = asc::std::same_as<T, int>;
 
-struct sized_type {
-    constexpr int size() const
+struct constrained_function {
+    CANN_ASC_STL_DETAIL_TEMPLATE(class T)
+    CANN_ASC_STL_DETAIL_REQUIRES(integer_type<T>)
+    constexpr int operator()(T value) const
     {
-        return 4;
+        return value + 1;
     }
 };
 
 int main()
 {
-    static_assert(has_size<sized_type>);
+    static_assert(integer_type<int> && !integer_type<long>);
+    static_assert(asc::std::is_invocable_v<constrained_function, int>);
+    static_assert(!asc::std::is_invocable_v<constrained_function, long>);
+    static_assert(constrained_function{}(3) == 4);
     return 0;
 }

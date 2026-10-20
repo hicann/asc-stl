@@ -63,7 +63,7 @@ using fallback_remove_ref_t = typename fallback_remove_ref<T>::type;
 template <class T, class U, class = void>
 struct has_three_way : fallback_bool<false> {};
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+#if CANN_ASC_STL_DETAIL_HAS_THREE_WAY_COMPARISON()
 // The probe strips references first: static_cast<T*> is ill-formed when T is
 // a reference type.
 template <class T, class U>
@@ -173,7 +173,7 @@ CANN_ASC_STL_API constexpr partial_ordering partial_synthesize(T& left, U& right
 template <class T, class U>
 CANN_ASC_STL_API constexpr strong_ordering strong_fallback(T&& left, U& right)
 {
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+#if CANN_ASC_STL_DETAIL_HAS_THREE_WAY_COMPARISON()
     if constexpr (has_three_way<fallback_remove_ref_t<T>, fallback_remove_ref_t<U>>::value) {
         return translate_strong(static_cast<T&&>(left) <=> right);
     } else {
@@ -187,7 +187,7 @@ CANN_ASC_STL_API constexpr strong_ordering strong_fallback(T&& left, U& right)
 template <class T, class U>
 CANN_ASC_STL_API constexpr weak_ordering weak_fallback(T&& left, U& right)
 {
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+#if CANN_ASC_STL_DETAIL_HAS_THREE_WAY_COMPARISON()
     if constexpr (has_three_way<fallback_remove_ref_t<T>, fallback_remove_ref_t<U>>::value) {
         return translate_weak(static_cast<T&&>(left) <=> right);
     } else {
@@ -201,7 +201,7 @@ CANN_ASC_STL_API constexpr weak_ordering weak_fallback(T&& left, U& right)
 template <class T, class U>
 CANN_ASC_STL_API constexpr partial_ordering partial_fallback(T&& left, U& right)
 {
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+#if CANN_ASC_STL_DETAIL_HAS_THREE_WAY_COMPARISON()
     if constexpr (has_three_way<fallback_remove_ref_t<T>, fallback_remove_ref_t<U>>::value) {
         return translate_partial(static_cast<T&&>(left) <=> right);
     } else {

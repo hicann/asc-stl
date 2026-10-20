@@ -58,6 +58,8 @@ inline constexpr bool __assignable_from_impl<Lhs, Rhs,
     is_same_v<Lhs, decltype(::asc::std::declval<Lhs>() = ::asc::std::declval<Rhs>())> &&
     is_same_v<decltype(::asc::std::declval<Lhs>() = ::asc::std::declval<Rhs>()), Lhs>;
 
+template <class Lhs, class Rhs>
+inline constexpr bool assignable_from = __assignable_from_impl<Lhs, Rhs>;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

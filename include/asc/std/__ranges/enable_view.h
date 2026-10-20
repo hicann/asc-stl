@@ -53,19 +53,23 @@ class view_interface;
 template <class Op, class Yp, enable_if_t<is_convertible_v<Op*, view_interface<Yp>*>, int> = 0>
 CANN_ASC_STL_API void __is_derived_from_view_interface(const Op*, const view_interface<Yp>*);
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-template <class T>
-inline constexpr bool enable_view = derived_from<T, view_base> ||
-    requires { __is_derived_from_view_interface(static_cast<T*>(nullptr), static_cast<T*>(nullptr)); };
-#else
 template <class T, class = void>
-inline constexpr bool enable_view =
-    is_base_of_v<view_base, T> && is_convertible_v<const volatile T*, const volatile view_base*>;
+struct __enable_view : false_type {};
 
 template <class T>
-inline constexpr bool enable_view<T,
-    void_t<decltype(__is_derived_from_view_interface(static_cast<T*>(nullptr), static_cast<T*>(nullptr)))>> = true;
-#endif
+struct __enable_view<T, void_t<T*>>
+    : bool_constant<is_base_of_v<view_base, T> && is_convertible_v<const volatile T*, const volatile view_base*>> {};
+
+template <class T, class = void>
+struct __has_view_interface : false_type {};
+
+template <class T>
+struct __has_view_interface<T,
+    void_t<decltype(__is_derived_from_view_interface(static_cast<T*>(nullptr), static_cast<T*>(nullptr)))>>
+    : true_type {};
+
+template <class T>
+inline constexpr bool enable_view = __enable_view<T>::value || __has_view_interface<T>::value;
 
 }  // namespace asc::std::ranges
 

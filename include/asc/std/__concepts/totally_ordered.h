@@ -114,6 +114,10 @@ inline constexpr bool __totally_ordered_with_impl<T, U,
         common_reference_t<__make_const_lvalue_ref<T>, __make_const_lvalue_ref<U>>> &&
     __partially_ordered_with<T, U>;
 
+template <class T>
+inline constexpr bool totally_ordered = __weakly_equality_comparable_with<T, T> && __partially_ordered_with<T, T>;
+template <class T, class U>
+inline constexpr bool totally_ordered_with = __totally_ordered_with_impl<T, U>;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

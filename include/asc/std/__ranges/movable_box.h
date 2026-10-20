@@ -28,12 +28,14 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__concepts/concept_macros.h>
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__concepts/copyable.h>
 #include <asc/std/__concepts/movable.h>
 #include <asc/std/__memory/addressof.h>
 #include <asc/std/__memory/construct_at.h>
 #include <asc/std/__tuple/sfinae_helpers.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_constructible.h>
 #include <asc/std/__type_traits/is_nothrow_constructible.h>
 #include <asc/std/__type_traits/is_nothrow_copy_constructible.h>
@@ -47,8 +49,6 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
-
 // __movable_box allows turning a type that is move-constructible (but maybe not move-assignable) into
 // a type that is both move-constructible and move-assignable. It does that by introducing an empty state
 // and basically doing destroy-then-copy-construct in the assignment operator. The empty state is necessary
@@ -60,7 +60,7 @@ namespace ranges {
 // until C++23, `__movable_box` was named `__copyable_box` and required the stored type to be copy-constructible, not
 // just move-constructible; we always use the C++23 behavior
 template <class _Tp>
-concept __movable_box_object = move_constructible<_Tp> && is_object_v<_Tp>;
+CANN_ASC_STL_DETAIL_CONCEPT __movable_box_object = move_constructible<_Tp> && is_object_v<_Tp>;
 
 // The partial specialization implements an optimization for when we know we don't need to store
 // an empty state to represent failure to perform an assignment. For copy-assignment, this happens:
@@ -75,7 +75,7 @@ concept __movable_box_object = move_constructible<_Tp> && is_object_v<_Tp>;
 // whenever we can apply any of these optimizations for both the copy assignment and the move assignment
 // operator.
 template <class _Tp>
-[[nodiscard]] CANN_ASC_STL_API consteval bool __doesnt_need_empty_state() noexcept
+[[nodiscard]] CANN_ASC_STL_API constexpr bool __doesnt_need_empty_state() noexcept
 {
     if constexpr (copy_constructible<_Tp>) {
         // 1. If copy_constructible<T> is true, movable-box<T> should store only a T if either T models
@@ -99,7 +99,7 @@ template <class _Tp>
 // Hence, when the _Tp doesn't have an assignment operator, we can't risk making it a potentially-overlapping
 // subobject because of the above, and we don't use [[no_unique_address]] in that case.
 template <class _Tp>
-[[nodiscard]] CANN_ASC_STL_API consteval bool __can_use_no_unique_address() noexcept
+[[nodiscard]] CANN_ASC_STL_API constexpr bool __can_use_no_unique_address() noexcept
 {
     if constexpr (copy_constructible<_Tp>) {
         return copyable<_Tp>;
@@ -114,8 +114,7 @@ template <class _Tp, bool = default_initializable<_Tp>>
 struct __mb_optional_destruct_base {
     CANN_ASC_STL_NO_UNIQUE_ADDRESS optional<_Tp> __val_;
 
-    template <class... _Args>
-        requires(is_constructible_v<_Tp, _Args...>)
+    template <class... _Args, enable_if_t<is_constructible_v<_Tp, _Args...>, int> = 0>
     CANN_ASC_STL_API constexpr explicit __mb_optional_destruct_base(in_place_t, _Args&&... __args) noexcept(
         is_nothrow_constructible_v<_Tp, _Args...>)
         : __val_(in_place_t{}, ::asc::std::forward<_Args>(__args)...)
@@ -130,8 +129,7 @@ struct __mb_optional_destruct_base<_Tp, true> {
         : __val_(in_place_t{})
     {}
 
-    template <class... _Args>
-        requires(is_constructible_v<_Tp, _Args...>)
+    template <class... _Args, enable_if_t<is_constructible_v<_Tp, _Args...>, int> = 0>
     CANN_ASC_STL_API constexpr explicit __mb_optional_destruct_base(in_place_t, _Args&&... __args) noexcept(
         is_nothrow_constructible_v<_Tp, _Args...>)
         : __val_(in_place_t{}, ::asc::std::forward<_Args>(__args)...)
@@ -253,8 +251,7 @@ template <class _Tp, bool = default_initializable<_Tp>>
 struct __mb_holder_base {
     CANN_ASC_STL_NO_UNIQUE_ADDRESS __mb_holder<_Tp> __holder_;
 
-    template <class... _Args>
-        requires(is_constructible_v<_Tp, _Args...>)
+    template <class... _Args, enable_if_t<is_constructible_v<_Tp, _Args...>, int> = 0>
     CANN_ASC_STL_API constexpr explicit __mb_holder_base(in_place_t, _Args&&... __args) noexcept(
         is_nothrow_constructible_v<_Tp, _Args...>)
         : __holder_(in_place_t{}, ::asc::std::forward<_Args>(__args)...)
@@ -269,8 +266,7 @@ struct __mb_holder_base<_Tp, true> {
         : __holder_(in_place_t{})
     {}
 
-    template <class... _Args>
-        requires(is_constructible_v<_Tp, _Args...>)
+    template <class... _Args, enable_if_t<is_constructible_v<_Tp, _Args...>, int> = 0>
     CANN_ASC_STL_API constexpr explicit __mb_holder_base(in_place_t, _Args&&... __args) noexcept(
         is_nothrow_constructible_v<_Tp, _Args...>)
         : __holder_(in_place_t{}, ::asc::std::forward<_Args>(__args)...)
@@ -379,8 +375,7 @@ template <class _Tp>
 struct __movable_box<_Tp, true> : __movable_box_base<_Tp> {
     using __base = __movable_box_base<_Tp>;
 
-    template <class... _Args>
-        requires(is_constructible_v<_Tp, _Args...>)
+    template <class... _Args, enable_if_t<is_constructible_v<_Tp, _Args...>, int> = 0>
     CANN_ASC_STL_API constexpr explicit __movable_box(in_place_t, _Args&&... __args) noexcept(
         is_nothrow_constructible_v<_Tp, _Args...>)
         : __base(in_place_t{}, ::asc::std::forward<_Args>(__args)...)  // NOLINT(build/include_what_you_use)
@@ -388,13 +383,6 @@ struct __movable_box<_Tp, true> : __movable_box_base<_Tp> {
 
     CANN_ASC_STL_API constexpr __movable_box() noexcept(is_nothrow_default_constructible_v<_Tp>) = default;
 };
-
-#else
-
-template <class T, bool = false>
-struct __movable_box;
-
-#endif
 
 }  // namespace ranges
 

@@ -50,9 +50,11 @@ inline constexpr bool __common_reference_with_impl = false;
 template <class T, class U>
 inline constexpr bool __common_reference_with_impl<T, U, void_t<common_reference_t<T, U>, common_reference_t<U, T>>> =
     is_same_v<common_reference_t<T, U>, common_reference_t<U, T>> &&
-    is_same_v<common_reference_t<U, T>, common_reference_t<T, U>> && is_convertible_v<T, common_reference_t<T, U>> &&
-    is_convertible_v<U, common_reference_t<T, U>>;
+    is_same_v<common_reference_t<U, T>, common_reference_t<T, U>> && convertible_to<T, common_reference_t<T, U>> &&
+    convertible_to<U, common_reference_t<T, U>>;
 
+template <class T, class U>
+inline constexpr bool common_reference_with = __common_reference_with_impl<T, U>;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

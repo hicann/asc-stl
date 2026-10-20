@@ -28,11 +28,15 @@
 
 头文件路径为：`<asc/std/concepts>`。
 
-`asc::std::equivalence_relation`在C++20及以上模式约束构成等价关系的二元关系：在满足`relation`的四种调用组合均有效的基础上，语义上还要求`r(a, a)`为真、关系对称（`r(a, b)`蕴含`r(b, a)`）且传递（`r(a, b)`与`r(b, c)`蕴含`r(a, c)`）。
+`asc::std::equivalence_relation`判定构成等价关系的二元关系：在满足`relation`的四种调用组合均有效的基础上，语义上还要求`r(a, a)`为真、关系对称（`r(a, b)`蕴含`r(b, a)`）且传递（`r(a, b)`与`r(b, c)`蕴含`r(a, c)`）。
+
+C++17中提供同名`inline constexpr bool`变量模板；C++20及以上提供concept。两种形式均可用于`static_assert`，C++17还可与`enable_if`配合使用。受约束模板参数、`requires`及约束偏序仍需要C++20语言支持。
 
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 
 ## 声明
+
+以下为C++20及以上的concept声明摘要；C++17变量模板具有相同的模板参数和判定条件。
 
 ```cpp
 namespace asc::std {
@@ -42,7 +46,7 @@ template<class Rp, class T, class U> concept equivalence_relation;
 
 ## 约束说明
 
-- 提供完整的公开C++20 concepts集合。
+- 谓词的判定条件由类型或表达式的有效性决定；C++17变量模板不参与concept约束偏序。
 
 ## 调用示例
 

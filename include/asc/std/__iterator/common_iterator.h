@@ -187,7 +187,7 @@ struct __ci_use_postfix_proxy_impl : false_type {};
 
 template <class Iter>
 struct __ci_use_postfix_proxy_impl<Iter,
-    enable_if_t<!__postfix_can_reference<Iter> && __common_iterator_detail::__ci_readable_value_ref<Iter>::value &&
+    enable_if_t<!__postfix_can_reference<Iter> && indirectly_readable<Iter> &&
         is_constructible_v<iter_value_t<Iter>, iter_reference_t<Iter>> && is_move_constructible_v<iter_value_t<Iter>>>>
     : true_type {};
 
@@ -195,20 +195,13 @@ template <class Iter>
 inline constexpr bool __use_postfix_proxy = __ci_use_postfix_proxy_impl<Iter>::value;
 
 template <class Iter>
-inline constexpr bool __ci_forward_iterator =
-    __common_iterator_detail::__ci_fwd_probe<Iter> || __common_iterator_detail::__ci_fwd_concept_probe<Iter>;
+inline constexpr bool __ci_forward_iterator = forward_iterator<Iter>;
 
 template <class Iter>
-inline constexpr bool __ci_is_input_iterator =
-    __common_iterator_detail::__ci_input_probe<Iter> || __common_iterator_detail::__ci_input_concept_probe<Iter>;
-
-template <class A, class B, class = void>
-inline constexpr bool __ci_eq_comparable = false;
+inline constexpr bool __ci_is_input_iterator = input_iterator<Iter>;
 
 template <class A, class B>
-inline constexpr bool
-    __ci_eq_comparable<A, B, void_t<decltype(::asc::std::declval<const A&>() == ::asc::std::declval<const B&>())>> =
-        is_convertible_v<decltype(::asc::std::declval<const A&>() == ::asc::std::declval<const B&>()), bool>;
+inline constexpr bool __ci_eq_comparable = equality_comparable_with<A, B>;
 
 #endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
@@ -245,7 +238,9 @@ public:
         requires default_initializable<Iter>
     = default;
 #else
-    CANN_ASC_STL_API constexpr common_iterator() noexcept(is_nothrow_default_constructible_v<Iter>) = default;
+    template <class I2 = Iter, enable_if_t<default_initializable<I2>, int> = 0>
+    CANN_ASC_STL_API constexpr common_iterator() noexcept(is_nothrow_default_constructible_v<Iter>)
+    {}
 #endif
 
     CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 common_iterator(const common_iterator&) = default;
@@ -267,7 +262,8 @@ public:
         : hold_(other.__get_hold())
     {}
 #else
-    template <class I2, class S2>
+    template <class I2, class S2,
+        enable_if_t<convertible_to<const I2&, Iter> && convertible_to<const S2&, Sent>, int> = 0>
     CANN_ASC_STL_API constexpr common_iterator(const common_iterator<I2, S2>& other) noexcept(
         is_nothrow_constructible_v<Iter, const I2&> && is_nothrow_constructible_v<Sent, const S2&>)
         : hold_(other.__get_hold())
@@ -283,7 +279,10 @@ public:
         return *this;
     }
 #else
-    template <class I2, class S2>
+    template <class I2, class S2,
+        enable_if_t<convertible_to<const I2&, Iter> && convertible_to<const S2&, Sent> &&
+                assignable_from<Iter&, const I2&> && assignable_from<Sent&, const S2&>,
+            int> = 0>
     CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 common_iterator& operator=(
         const common_iterator<I2, S2>& other)
     {
@@ -304,7 +303,7 @@ public:
         return *hold_.__first_;
     }
 #else
-    template <class I2 = Iter>
+    template <class I2 = Iter, class = decltype(*::asc::std::declval<const I2&>())>
     CANN_ASC_STL_API constexpr decltype(auto) operator*() const
     {
         return *hold_.__first_;
@@ -317,7 +316,11 @@ public:
                 constructible_from<iter_value_t<I2>, iter_reference_t<I2>>))
     CANN_ASC_STL_API constexpr decltype(auto) operator->() const
 #else
-    template <class I2 = Iter>
+    template <class I2 = Iter,
+        enable_if_t<indirectly_readable<const I2> &&
+                (__common_iterator_detail::__ci_has_const_arrow<I2> || is_reference_v<iter_reference_t<I2>> ||
+                    constructible_from<iter_value_t<I2>, iter_reference_t<I2>>),
+            int> = 0>
     CANN_ASC_STL_API constexpr decltype(auto) operator->() const
 #endif
     {
@@ -416,10 +419,7 @@ CANN_ASC_STL_API constexpr iter_difference_t<I2> operator-(
 }
 #else
 template <class I1, class S1, class I2, class S2,
-    enable_if_t<__common_iterator_detail::__ci_diff_convertible<I1, I2, ::asc::std::iter_difference_t<I1>> &&
-            __common_iterator_detail::__ci_diff_convertible<I1, S2, ::asc::std::iter_difference_t<I1>> &&
-            __common_iterator_detail::__ci_diff_convertible<S1, I2, ::asc::std::iter_difference_t<I2>>,
-        int> = 0>
+    enable_if_t<sized_sentinel_for<I2, I1> && sized_sentinel_for<S2, I1> && sized_sentinel_for<S1, I2>, int> = 0>
 CANN_ASC_STL_API constexpr auto operator-(
     const common_iterator<I1, S1>& left, const common_iterator<I2, S2>& right) -> ::asc::std::iter_difference_t<I2>
 {
@@ -451,19 +451,21 @@ CANN_ASC_STL_API constexpr auto operator-(
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <class Iter, class Sent, class I2, class S2>
     requires indirectly_swappable<I2, Iter>
-CANN_ASC_STL_API constexpr void iter_swap(const common_iterator<Iter, Sent>& left,
-    const common_iterator<I2, S2>& right) noexcept(noexcept(::asc::std::iter_swap(::asc::std::declval<const Iter&>(),
-    ::asc::std::declval<const I2&>())))
+CANN_ASC_STL_API constexpr void
+iter_swap(const common_iterator<Iter, Sent>& left, const common_iterator<I2, S2>& right) noexcept(
+    noexcept(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(
+        ::asc::std::declval<const Iter&>(), ::asc::std::declval<const I2&>())))
 {
-    return ::asc::std::iter_swap(left.__get_hold().__first_, right.__get_hold().__first_);
+    return ::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left.__get_hold().__first_, right.__get_hold().__first_);
 }
 #else
-template <class Iter, class Sent, class I2, class S2>
-CANN_ASC_STL_API constexpr void iter_swap(const common_iterator<Iter, Sent>& left,
-    const common_iterator<I2, S2>& right) noexcept(noexcept(::asc::std::iter_swap(::asc::std::declval<const Iter&>(),
-    ::asc::std::declval<const I2&>())))
+template <class Iter, class Sent, class I2, class S2, enable_if_t<indirectly_swappable<I2, Iter>, int> = 0>
+CANN_ASC_STL_API constexpr void
+iter_swap(const common_iterator<Iter, Sent>& left, const common_iterator<I2, S2>& right) noexcept(
+    noexcept(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(
+        ::asc::std::declval<const Iter&>(), ::asc::std::declval<const I2&>())))
 {
-    return ::asc::std::iter_swap(left.__get_hold().__first_, right.__get_hold().__first_);
+    return ::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left.__get_hold().__first_, right.__get_hold().__first_);
 }
 #endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 

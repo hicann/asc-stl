@@ -51,16 +51,45 @@
 #endif
 #endif  // CANN_ASC_STL_DETAIL_STD_VER
 
-#if defined(__cpp_concepts) && __cpp_concepts >= 201907L
+#if CANN_ASC_STL_DETAIL_HAS_CXX20() && defined(__cpp_concepts) && __cpp_concepts >= 201907L
 #define CANN_ASC_STL_DETAIL_HAS_CONCEPTS() 1
 #else
 #define CANN_ASC_STL_DETAIL_HAS_CONCEPTS() 0
 #endif
 
-#if defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
+#if CANN_ASC_STL_DETAIL_HAS_CXX20() && defined(__cpp_char8_t) && __cpp_char8_t >= 201811L
 #define CANN_ASC_STL_DETAIL_HAS_CHAR8_T() 1
 #else
 #define CANN_ASC_STL_DETAIL_HAS_CHAR8_T() 0
+#endif
+
+#if CANN_ASC_STL_DETAIL_HAS_CXX20() && defined(__cpp_impl_three_way_comparison) && \
+    __cpp_impl_three_way_comparison >= 201907L
+#define CANN_ASC_STL_DETAIL_HAS_THREE_WAY_COMPARISON() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_THREE_WAY_COMPARISON() 0
+#endif
+
+#if CANN_ASC_STL_DETAIL_HAS_CXX20() && defined(__cpp_consteval) && __cpp_consteval >= 201811L
+#define CANN_ASC_STL_DETAIL_HAS_CONSTEVAL() 1
+#elif CANN_ASC_STL_DETAIL_HAS_CXX20() && defined(__BISHENG_CCEC__) && defined(__is_identifier)
+// BiSheng CCE 15 enforces immediate-function semantics but omits the standard
+// feature macro. Its keyword probe covers that verified compiler path without
+// enabling consteval for ordinary Clang or inventing a standard feature macro.
+#if !__is_identifier(consteval)
+#define CANN_ASC_STL_DETAIL_HAS_CONSTEVAL() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_CONSTEVAL() 0
+#endif
+#else
+#define CANN_ASC_STL_DETAIL_HAS_CONSTEVAL() 0
+#endif
+
+#if CANN_ASC_STL_DETAIL_CPLUSPLUS > 202002L && defined(__cpp_multidimensional_subscript) && \
+    __cpp_multidimensional_subscript >= 202110L
+#define CANN_ASC_STL_DETAIL_HAS_MULTIDIMENSIONAL_SUBSCRIPT() 1
+#else
+#define CANN_ASC_STL_DETAIL_HAS_MULTIDIMENSIONAL_SUBSCRIPT() 0
 #endif
 
 #endif  // CANN_ASC_STL_DETAIL_FEATURE_DETECTION_H

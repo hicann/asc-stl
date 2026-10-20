@@ -42,36 +42,10 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-// Dual-mode predicates backing __integral_constant_like: the concept forms are
-// used when concepts are available, SFINAE-equivalent forms otherwise.
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
-template <class _Tp, class _Up>
-inline constexpr bool __integral_constant_like_convertible = convertible_to<_Tp, _Up>;
-
-template <class _Tp, class _Up>
-inline constexpr bool __integral_constant_like_eq_comparable = equality_comparable_with<_Tp, _Up>;
-#else
-template <class _Tp, class _Up>
-inline constexpr bool __integral_constant_like_convertible = is_convertible_v<_Tp, _Up>;
-
-template <class _Tp, class _Up, class = void>
-inline constexpr bool __integral_constant_weakly_eq_with = false;
-
-template <class _Tp, class _Up>
-inline constexpr bool __integral_constant_weakly_eq_with<_Tp, _Up,
-    void_t<decltype(::asc::std::declval<const remove_reference_t<_Tp>&>() ==
-               ::asc::std::declval<const remove_reference_t<_Up>&>()),
-        decltype(::asc::std::declval<const remove_reference_t<_Up>&>() ==
-            ::asc::std::declval<const remove_reference_t<_Tp>&>()),
-        decltype(::asc::std::declval<const remove_reference_t<_Tp>&>() !=
-            ::asc::std::declval<const remove_reference_t<_Up>&>()),
-        decltype(::asc::std::declval<const remove_reference_t<_Up>&>() !=
-            ::asc::std::declval<const remove_reference_t<_Tp>&>())>> = true;
-
-template <class _Tp, class _Up>
-inline constexpr bool __integral_constant_like_eq_comparable = __integral_constant_weakly_eq_with<_Tp, _Up> &&
-    __integral_constant_weakly_eq_with<_Tp, _Tp> && __integral_constant_weakly_eq_with<_Up, _Up>;
-#endif
+template <class T, class U>
+inline constexpr bool __integral_constant_like_convertible = convertible_to<T, U>;
+template <class T, class U>
+inline constexpr bool __integral_constant_like_eq_comparable = equality_comparable_with<T, U>;
 
 template <class _Tp, class = void>
 inline constexpr bool __integral_constant_like_impl = false;
@@ -84,10 +58,8 @@ inline constexpr bool __integral_constant_like_impl<_Tp,
     __integral_constant_like_convertible<_Tp, decltype(_Tp::value)> &&
     __integral_constant_like_eq_comparable<_Tp, decltype(_Tp::value)>;
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class _Tp>
-concept __integral_constant_like = __integral_constant_like_impl<_Tp>;
-#endif
+CANN_ASC_STL_DETAIL_CONCEPT __integral_constant_like = __integral_constant_like_impl<_Tp>;
 
 CANN_ASC_STL_END_NAMESPACE
 

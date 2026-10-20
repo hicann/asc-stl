@@ -44,6 +44,7 @@
 #include <asc/std/__type_traits/is_reference.h>
 #include <asc/std/__type_traits/make_unsigned.h>
 #include <asc/std/__type_traits/remove_cv.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/declval.h>
 
 // Minimal equivalent inlining of the assertion chain (#ifndef guards prevent
@@ -93,49 +94,55 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 
-// This file can be pulled in at the tail of enable_view.h, i.e. parsed during a
-// window in the include chain where concepts.h has not yet defined its ranges
-// concept bodies; the compiler checks for undeclared names already at
-// template-definition time, so the ranges concepts here are expressed as private
-// equivalents depending only on already-complete headers (each expansion is
-// clause-for-clause equivalent to concepts.h). Iterator-level concepts and
-// iterator_t are already complete in __iterator/concepts.h and access.h, so they
-// can be used directly.
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-template <class _Tp>
-concept __vi_range = requires(_Tp& __t) {
-    ::asc::std::ranges::begin(__t);
-    ::asc::std::ranges::end(__t);
+// Keep CRTP capability queries valid even while the derived type is incomplete.
+// The include chain can reach this definition before ranges::concepts finishes,
+// so use local, lazy equivalents of the same iterator/sentinel predicates.
+template <class T, class = void>
+struct __vi_traits {
+    static constexpr bool range = false;
+    static constexpr bool forward = false;
+    static constexpr bool bidirectional = false;
+    static constexpr bool random_access = false;
+    static constexpr bool contiguous = false;
+    static constexpr bool common = false;
+    static constexpr bool sized = false;
 };
 
-template <class _Tp>
-concept __vi_input_range = __vi_range<_Tp> && input_iterator<iterator_t<_Tp>>;
+template <class T>
+struct __vi_traits<T, void_t<iterator_t<T>, decltype(__end_cpo{}(::asc::std::declval<T&>()))>> {
+    using iterator = iterator_t<T>;
+    using sentinel = decltype(__end_cpo{}(::asc::std::declval<T&>()));
+    static constexpr bool range = true;
+    static constexpr bool forward = forward_iterator<iterator>;
+    static constexpr bool bidirectional = bidirectional_iterator<iterator>;
+    static constexpr bool random_access = random_access_iterator<iterator>;
+    static constexpr bool contiguous = contiguous_iterator<iterator>;
+    static constexpr bool common = is_same_v<iterator, sentinel>;
+    static constexpr bool sized = forward && sized_sentinel_for<sentinel, iterator>;
+};
 
-template <class _Tp>
-concept __vi_forward_range = __vi_input_range<_Tp> && forward_iterator<iterator_t<_Tp>>;
+template <class T>
+inline constexpr bool __vi_range = __vi_traits<T>::range;
+template <class T>
+inline constexpr bool __vi_forward_range = __vi_traits<T>::forward;
+template <class T>
+inline constexpr bool __vi_bidirectional_range = __vi_traits<T>::bidirectional;
+template <class T>
+inline constexpr bool __vi_random_access_range = __vi_traits<T>::random_access;
+template <class T>
+inline constexpr bool __vi_common_range = __vi_traits<T>::common;
+template <class T>
+inline constexpr bool __vi_view = __vi_range<T> && movable<T> && enable_view<T>;
 
-template <class _Tp>
-concept __vi_bidirectional_range = __vi_forward_range<_Tp> && bidirectional_iterator<iterator_t<_Tp>>;
+template <class T, class = void>
+struct __vi_can_empty : false_type {};
+template <class T>
+struct __vi_can_empty<T, void_t<decltype(__empty_cpo{}(::asc::std::declval<T&>()))>> : true_type {};
+template <class T>
+inline constexpr bool __can_empty = __vi_can_empty<T>::value;
 
-template <class _Tp>
-concept __vi_random_access_range = __vi_bidirectional_range<_Tp> && random_access_iterator<iterator_t<_Tp>>;
-
-template <class _Tp>
-concept __vi_common_range =
-    __vi_range<_Tp> && same_as<iterator_t<_Tp>, decltype(::asc::std::ranges::end(::asc::std::declval<_Tp&>()))>;
-
-template <class _Tp>
-concept __vi_view = __vi_range<_Tp> && movable<_Tp> && enable_view<_Tp>;
-
-template <class _Tp>
-concept __can_empty = requires(_Tp& __t) { ::asc::std::ranges::__empty_cpo{}(__t); };
-
-template <class _Tp>
-using __vi_sentinel_t = decltype(::asc::std::ranges::end(::asc::std::declval<_Tp&>()));
-
-template <class _Tp>
-using __vi_difference_t = iter_difference_t<iterator_t<_Tp>>;
-#endif
+template <class T>
+using __vi_difference_t = iter_difference_t<iterator_t<T>>;
 
 // The default template argument of the C++17 form is already provided by the forward declaration
 // in <asc/std/__ranges/enable_view.h>; it is not repeated at the definition.
@@ -166,67 +173,66 @@ private:
     }
 
 public:
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class _D2 = _Derived>
-        requires __vi_forward_range<_D2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _D2 = _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__vi_forward_range<_D2>)
     CANN_ASC_STL_API constexpr bool empty()
     {
         return ::asc::std::ranges::__begin_cpo{}(__derived()) == ::asc::std::ranges::__end_cpo{}(__derived());
     }
 
-    template <class _D2 = _Derived>
-        requires __vi_forward_range<const _D2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _D2 = _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__vi_forward_range<const _D2>)
     CANN_ASC_STL_API constexpr bool empty() const
     {
         return ::asc::std::ranges::__begin_cpo{}(__derived()) == ::asc::std::ranges::__end_cpo{}(__derived());
     }
 
-    template <class _D2 = _Derived>
-        requires __can_empty<_D2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _D2 = _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__can_empty<_D2>)
     CANN_ASC_STL_API constexpr explicit operator bool()
     {
         return !::asc::std::ranges::__empty_cpo{}(__derived());
     }
 
-    template <class _D2 = _Derived>
-        requires __can_empty<const _D2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _D2 = _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__can_empty<const _D2>)
     CANN_ASC_STL_API constexpr explicit operator bool() const
     {
         return !::asc::std::ranges::__empty_cpo{}(__derived());
     }
 
-    template <class _D2 = _Derived>
-        requires contiguous_iterator<iterator_t<_D2>>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _D2 = _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__vi_traits<_D2>::contiguous)
     CANN_ASC_STL_API constexpr auto data()
     {
         return ::asc::std::to_address(::asc::std::ranges::__begin_cpo{}(__derived()));
     }
 
-    template <class _D2 = _Derived>
-        requires __vi_range<const _D2> && contiguous_iterator<iterator_t<const _D2>>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _D2 = _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__vi_traits<const _D2>::contiguous)
     CANN_ASC_STL_API constexpr auto data() const
     {
         return ::asc::std::to_address(::asc::std::ranges::__begin_cpo{}(__derived()));
     }
 
-    template <class _D2 = _Derived>
-        requires __vi_forward_range<_D2> && sized_sentinel_for<__vi_sentinel_t<_D2>, iterator_t<_D2>>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _D2 = _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__vi_traits<_D2>::sized)
     CANN_ASC_STL_API constexpr auto size()
     {
         return ::asc::std::__to_unsigned_like(
             ::asc::std::ranges::__end_cpo{}(__derived()) - ::asc::std::ranges::__begin_cpo{}(__derived()));
     }
 
-    template <class _D2 = _Derived>
-        requires __vi_forward_range<const _D2> && sized_sentinel_for<__vi_sentinel_t<const _D2>, iterator_t<const _D2>>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _D2 = _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__vi_traits<const _D2>::sized)
     CANN_ASC_STL_API constexpr auto size() const
     {
         return ::asc::std::__to_unsigned_like(
             ::asc::std::ranges::__end_cpo{}(__derived()) - ::asc::std::ranges::__begin_cpo{}(__derived()));
     }
 
-    template <class _D2 = _Derived>
-        requires __vi_forward_range<_D2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _D2 = _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__vi_forward_range<_D2>)
     CANN_ASC_STL_API constexpr decltype(auto) front()
     {
         CANN_ASC_STL_DETAIL_ASSERT(
@@ -234,8 +240,8 @@ public:
         return *::asc::std::ranges::__begin_cpo{}(__derived());
     }
 
-    template <class _D2 = _Derived>
-        requires __vi_forward_range<const _D2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _D2 = _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__vi_forward_range<const _D2>)
     CANN_ASC_STL_API constexpr decltype(auto) front() const
     {
         CANN_ASC_STL_DETAIL_ASSERT(
@@ -243,8 +249,8 @@ public:
         return *::asc::std::ranges::__begin_cpo{}(__derived());
     }
 
-    template <class _D2 = _Derived>
-        requires __vi_bidirectional_range<_D2> && __vi_common_range<_D2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _D2 = _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__vi_bidirectional_range<_D2>&& __vi_common_range<_D2>)
     CANN_ASC_STL_API constexpr decltype(auto) back()
     {
         CANN_ASC_STL_DETAIL_ASSERT(
@@ -253,8 +259,8 @@ public:
         return *--__end;
     }
 
-    template <class _D2 = _Derived>
-        requires __vi_bidirectional_range<const _D2> && __vi_common_range<const _D2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _D2 = _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__vi_bidirectional_range<const _D2>&& __vi_common_range<const _D2>)
     CANN_ASC_STL_API constexpr decltype(auto) back() const
     {
         CANN_ASC_STL_DETAIL_ASSERT(
@@ -263,106 +269,19 @@ public:
         return *--__end;
     }
 
-    template <class _RARange = _Derived>
-        requires __vi_random_access_range<_RARange>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _RARange = _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__vi_random_access_range<_RARange>)
     CANN_ASC_STL_API constexpr decltype(auto) operator[](__vi_difference_t<_RARange> __index)
     {
         return ::asc::std::ranges::__begin_cpo{}(__derived())[__index];
     }
 
-    template <class _RARange = const _Derived>
-        requires __vi_random_access_range<_RARange>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _RARange = const _Derived)
+    CANN_ASC_STL_DETAIL_REQUIRES(__vi_random_access_range<_RARange>)
     CANN_ASC_STL_API constexpr decltype(auto) operator[](__vi_difference_t<_RARange> __index) const
     {
         return ::asc::std::ranges::__begin_cpo{}(__derived())[__index];
     }
-#else
-    // C++17 and device-side shape: constraints are not evaluable (no concept
-    // fallback), so the members are unconstrained.
-    CANN_ASC_STL_API constexpr bool empty()
-    {
-        return ::asc::std::ranges::__begin_cpo{}(__derived()) == ::asc::std::ranges::__end_cpo{}(__derived());
-    }
-
-    CANN_ASC_STL_API constexpr bool empty() const
-    {
-        return ::asc::std::ranges::__begin_cpo{}(__derived()) == ::asc::std::ranges::__end_cpo{}(__derived());
-    }
-
-    CANN_ASC_STL_API constexpr explicit operator bool()
-    {
-        return !::asc::std::ranges::__empty_cpo{}(__derived());
-    }
-
-    CANN_ASC_STL_API constexpr explicit operator bool() const
-    {
-        return !::asc::std::ranges::__empty_cpo{}(__derived());
-    }
-
-    CANN_ASC_STL_API constexpr auto data()
-    {
-        return ::asc::std::to_address(::asc::std::ranges::__begin_cpo{}(__derived()));
-    }
-
-    CANN_ASC_STL_API constexpr auto data() const
-    {
-        return ::asc::std::to_address(::asc::std::ranges::__begin_cpo{}(__derived()));
-    }
-
-    CANN_ASC_STL_API constexpr auto size()
-    {
-        return ::asc::std::__to_unsigned_like(
-            ::asc::std::ranges::__end_cpo{}(__derived()) - ::asc::std::ranges::__begin_cpo{}(__derived()));
-    }
-
-    CANN_ASC_STL_API constexpr auto size() const
-    {
-        return ::asc::std::__to_unsigned_like(
-            ::asc::std::ranges::__end_cpo{}(__derived()) - ::asc::std::ranges::__begin_cpo{}(__derived()));
-    }
-
-    CANN_ASC_STL_API constexpr decltype(auto) front()
-    {
-        CANN_ASC_STL_DETAIL_ASSERT(
-            !empty(), "Precondition `!empty()` not satisfied. `.front()` called on an empty view.");
-        return *::asc::std::ranges::__begin_cpo{}(__derived());
-    }
-
-    CANN_ASC_STL_API constexpr decltype(auto) front() const
-    {
-        CANN_ASC_STL_DETAIL_ASSERT(
-            !empty(), "Precondition `!empty()` not satisfied. `.front()` called on an empty view.");
-        return *::asc::std::ranges::__begin_cpo{}(__derived());
-    }
-
-    CANN_ASC_STL_API constexpr decltype(auto) back()
-    {
-        CANN_ASC_STL_DETAIL_ASSERT(
-            !empty(), "Precondition `!empty()` not satisfied. `.back()` called on an empty view.");
-        auto __end = ::asc::std::ranges::__end_cpo{}(__derived());
-        return *--__end;
-    }
-
-    CANN_ASC_STL_API constexpr decltype(auto) back() const
-    {
-        CANN_ASC_STL_DETAIL_ASSERT(
-            !empty(), "Precondition `!empty()` not satisfied. `.back()` called on an empty view.");
-        auto __end = ::asc::std::ranges::__end_cpo{}(__derived());
-        return *--__end;
-    }
-
-    template <class _Difference>
-    CANN_ASC_STL_API constexpr decltype(auto) operator[](_Difference __index)
-    {
-        return ::asc::std::ranges::__begin_cpo{}(__derived())[__index];
-    }
-
-    template <class _Difference>
-    CANN_ASC_STL_API constexpr decltype(auto) operator[](_Difference __index) const
-    {
-        return ::asc::std::ranges::__begin_cpo{}(__derived())[__index];
-    }
-#endif
 };
 
 }  // namespace ranges

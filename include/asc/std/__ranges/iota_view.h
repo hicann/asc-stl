@@ -28,6 +28,8 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__concepts/copyable.h>
 #include <asc/std/__concepts/equality_comparable.h>
@@ -42,7 +44,6 @@
 #include <asc/std/__ranges/enable_borrowed_range.h>
 #include <asc/std/__ranges/view_interface.h>
 #include <asc/std/__type_traits/conditional.h>
-#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_integral.h>
 #include <asc/std/__type_traits/is_nothrow_move_constructible.h>
 #include <asc/std/__type_traits/is_same.h>
@@ -51,6 +52,7 @@
 #include <asc/std/__type_traits/remove_cvref.h>
 #include <asc/std/__type_traits/type_identity.h>
 #include <asc/std/__utility/forward.h>
+#include <asc/std/__utility/cmp.h>
 #include <asc/std/__utility/move.h>
 
 namespace asc::std::ranges {
@@ -175,6 +177,19 @@ public:
     private:
         Bound bound_sentinel_ = Bound();
 
+        template <class Left, class Right>
+        CANN_ASC_STL_API static constexpr typename __iterator::difference_type __integer_difference(
+            Left left, Right right) noexcept
+        {
+            using Difference = typename __iterator::difference_type;
+            using Unsigned = make_unsigned_t<Difference>;
+            if (::asc::std::cmp_less(+left, +right)) {
+                const auto magnitude = static_cast<Unsigned>(right) - static_cast<Unsigned>(left);
+                return -static_cast<Difference>(magnitude - 1) - 1;
+            }
+            return static_cast<Difference>(static_cast<Unsigned>(left) - static_cast<Unsigned>(right));
+        }
+
     public:
         __sentinel() = default;
         CANN_ASC_STL_API constexpr explicit __sentinel(Bound bound_sentinel) noexcept(
@@ -187,43 +202,47 @@ public:
         {
             return *x == y.bound_sentinel_;
         }
-#if !CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
-        [[nodiscard]] CANN_ASC_STL_API friend constexpr bool operator==(
-            const __sentinel& x, const __iterator& y) noexcept
-        {
-            return x.bound_sentinel_ == *y;
-        }
 
-        [[nodiscard]] CANN_ASC_STL_API friend constexpr bool operator!=(
+#if !CANN_ASC_STL_DETAIL_HAS_CXX20()
+        CANN_ASC_STL_API friend constexpr bool operator==(const __sentinel& x, const __iterator& y) noexcept
+        {
+            return y == x;
+        }
+        CANN_ASC_STL_API friend constexpr bool operator!=(const __iterator& x, const __sentinel& y) noexcept
+        {
+            return !(x == y);
+        }
+        CANN_ASC_STL_API friend constexpr bool operator!=(const __sentinel& x, const __iterator& y) noexcept
+        {
+            return !(y == x);
+        }
+#endif
+
+        CANN_ASC_STL_DETAIL_TEMPLATE(class Bound2 = Bound)
+        CANN_ASC_STL_DETAIL_REQUIRES(
+            (is_integral_v<Value> && is_integral_v<Bound2>) || sized_sentinel_for<Bound2, Value>)
+        [[nodiscard]] CANN_ASC_STL_API friend constexpr typename __iterator::difference_type operator-(
             const __iterator& x, const __sentinel& y) noexcept
         {
-            return !(*x == y.bound_sentinel_);
+            if constexpr (is_integral_v<Value> && is_integral_v<Bound>) {
+                return __integer_difference(*x, y.bound_sentinel_);
+            } else {
+                return static_cast<typename __iterator::difference_type>(*x - y.bound_sentinel_);
+            }
         }
 
-        [[nodiscard]] CANN_ASC_STL_API friend constexpr bool operator!=(
+        CANN_ASC_STL_DETAIL_TEMPLATE(class Bound2 = Bound)
+        CANN_ASC_STL_DETAIL_REQUIRES(
+            (is_integral_v<Value> && is_integral_v<Bound2>) || sized_sentinel_for<Bound2, Value>)
+        [[nodiscard]] CANN_ASC_STL_API friend constexpr typename __iterator::difference_type operator-(
             const __sentinel& x, const __iterator& y) noexcept
         {
-            return !(x.bound_sentinel_ == *y);
+            if constexpr (is_integral_v<Value> && is_integral_v<Bound>) {
+                return __integer_difference(x.bound_sentinel_, *y);
+            } else {
+                return static_cast<typename __iterator::difference_type>(x.bound_sentinel_ - *y);
+            }
         }
-#endif  // !CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
-
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
-        template <class Bound2 = Bound>
-            requires sized_sentinel_for<Bound2, Value>
-        [[nodiscard]] CANN_ASC_STL_API friend constexpr iter_difference_t<Value> operator-(
-            const __iterator& x, const __sentinel& y) noexcept
-        {
-            return static_cast<iter_difference_t<Value>>(*x - y.bound_sentinel_);
-        }
-
-        template <class Bound2 = Bound>
-            requires sized_sentinel_for<Bound2, Value>
-        [[nodiscard]] CANN_ASC_STL_API friend constexpr iter_difference_t<Value> operator-(
-            const __sentinel& x, const __iterator& y) noexcept
-        {
-            return -(y - x);
-        }
-#endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
     };
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
@@ -231,7 +250,8 @@ public:
         requires default_initializable<Value>
     = default;
 #else
-    CANN_ASC_STL_API constexpr iota_view() noexcept : value_{}, bound_sentinel_{}
+    template <bool __asc_enabled = true, enable_if_t<__asc_enabled && (default_initializable<Value>), int> = 0>
+    CANN_ASC_STL_API constexpr iota_view()
     {}
 #endif
     CANN_ASC_STL_API constexpr explicit iota_view(Value value) noexcept
@@ -241,28 +261,22 @@ public:
         : value_(::asc::std::move(value)), bound_sentinel_(::asc::std::move(bound_sentinel))
     {}
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class Bound2 = Bound>
-        requires same_as<Value, Bound2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Bound2 = Bound)
+    CANN_ASC_STL_DETAIL_REQUIRES((same_as<Value, Bound2>))
     CANN_ASC_STL_API constexpr iota_view(__iterator first, __iterator last) noexcept : iota_view(*first, *last)
     {}
 
-    template <class Bound2 = Bound>
-        requires same_as<Bound2, unreachable_sentinel_t>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Bound2 = Bound)
+    CANN_ASC_STL_DETAIL_REQUIRES((same_as<Bound2, unreachable_sentinel_t>))
     CANN_ASC_STL_API constexpr iota_view(__iterator first, Bound2 last) noexcept
         : iota_view(*first, ::asc::std::move(last))
     {}
 
-    template <class Bound2 = Bound>
-        requires(!same_as<Value, Bound2> && !same_as<Value, unreachable_sentinel_t>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Bound2 = Bound)
+    CANN_ASC_STL_DETAIL_REQUIRES(((!same_as<Value, Bound2> && !same_as<Value, unreachable_sentinel_t>)))
     CANN_ASC_STL_API constexpr iota_view(__iterator first, __sentinel last) noexcept
         : iota_view(*first, ::asc::std::move(last.bound_sentinel_))
     {}
-#else
-    template <class Bound2 = Bound, enable_if_t<is_same_v<Value, Bound2>, int> = 0>
-    CANN_ASC_STL_API constexpr iota_view(__iterator first, __iterator last) noexcept : iota_view(*first, *last)
-    {}
-#endif
 
     [[nodiscard]] CANN_ASC_STL_API constexpr __iterator begin() const noexcept
     {
@@ -280,27 +294,16 @@ public:
         }
     }
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class Bound2 = Bound>
-        requires(same_as<Value, Bound2> || (is_integral_v<Value> && is_integral_v<Bound2>) ||
-            sized_sentinel_for<Bound2, Value>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Bound2 = Bound)
+    CANN_ASC_STL_DETAIL_REQUIRES(((same_as<Value, Bound2> || (is_integral_v<Value> && is_integral_v<Bound2>) ||
+        sized_sentinel_for<Bound2, Value>)))
     [[nodiscard]] CANN_ASC_STL_API constexpr auto size() const noexcept
-#else
-    template <class Bound2 = Bound,
-        enable_if_t<is_same_v<Value, Bound2> || (is_integral_v<Value> && is_integral_v<Bound2>), int> = 0>
-    [[nodiscard]] CANN_ASC_STL_API constexpr auto size() const noexcept
-#endif
     {
         if constexpr (is_integral_v<Value> && is_integral_v<Bound>) {
-            // Compute the span with unsigned modular arithmetic, avoiding the
-            // undefined behavior of a signed subtraction.
-            if (value_ < 0) {
-                if (bound_sentinel_ < 0) {
-                    return ::asc::std::__to_unsigned_like(-value_) - ::asc::std::__to_unsigned_like(-bound_sentinel_);
-                }
-                return ::asc::std::__to_unsigned_like(bound_sentinel_) + ::asc::std::__to_unsigned_like(-value_);
-            }
-            return ::asc::std::__to_unsigned_like(bound_sentinel_) - ::asc::std::__to_unsigned_like(value_);
+            // Promote narrow integer endpoints once, then subtract in the
+            // corresponding unsigned type. Never negate a signed minimum.
+            using Size = make_unsigned_t<decltype(bound_sentinel_ - value_)>;
+            return static_cast<Size>(bound_sentinel_) - static_cast<Size>(value_);
         } else {
             return bound_sentinel_ - value_;
         }
@@ -315,7 +318,7 @@ private:
 // shape, so it is excluded.
 template <class Value, class Bound,
     enable_if_t<!is_integral_v<Value> || !is_integral_v<Bound> || (is_signed_v<Value> == is_signed_v<Bound>), int> = 0>
-iota_view(Value, Bound) -> iota_view<Value, Bound>;
+CANN_ASC_STL_HOST_DEVICE iota_view(Value, Bound) -> iota_view<Value, Bound>;
 
 template <class V, class B>
 inline constexpr bool enable_borrowed_range<iota_view<V, B>> = true;

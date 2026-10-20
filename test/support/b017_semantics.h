@@ -81,11 +81,9 @@ CANN_ASC_STL_API int evaluate_common() noexcept
     int expected = 0;
     failures += !reference.compare_exchange_weak(expected, 1, asc::std::memory_order_relaxed);
 #endif
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
     failures += asc::std::ranges::find_if_not(source, source + 4, greater_than_two{}) != source;
     failures += asc::std::ranges::min(4, 2) != 2;
     failures += asc::std::ranges::min_element(source, source + 4) != source;
-#endif
     return failures;
 }
 }  // namespace asc_stl_b017_test

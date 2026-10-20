@@ -28,6 +28,8 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/__detail/execution_space.h>
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__iterator/concepts.h>
@@ -42,7 +44,6 @@
 #include <asc/std/__ranges/subrange.h>
 #include <asc/std/__ranges/view_interface.h>
 #include <asc/std/__type_traits/conditional.h>
-#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_nothrow_copy_constructible.h>
 #include <asc/std/__type_traits/is_nothrow_move_constructible.h>
 #include <asc/std/__type_traits/remove_cvref.h>
@@ -60,26 +61,31 @@ template <view _View>
 template <class _View>
 #endif
 class reverse_view : public view_interface<reverse_view<_View>> {
+    static_assert(view<_View> && (bidirectional_range<_View>), "range view constraints are not satisfied");
+
 private:
     // Minimal inline equivalent of the iterator-sentinel form of next: advance to
     // the sentinel and return it (stays constexpr and usable on the device side).
     template <class _Iterator, class _Sentinel>
     static CANN_ASC_STL_API constexpr _Iterator __advance_to_sentinel(_Iterator __iterator, _Sentinel __last)
     {
-        while (__iterator != __last) {
-            ++__iterator;
+        if constexpr (random_access_iterator<_Iterator> && sized_sentinel_for<_Sentinel, _Iterator>) {
+            return __iterator + (__last - __iterator);
+        } else {
+            while (__iterator != __last) {
+                ++__iterator;
+            }
+            return __iterator;
         }
-        return __iterator;
     }
 
     // We cache begin() whenever advancing to the end is not guaranteed O(1) to provide an
     // amortized O(1) begin() method.
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    static constexpr bool _UseCache = !random_access_range<_View> && !common_range<_View>;
+    static constexpr bool _UseCache = !common_range<_View> &&
+        !(random_access_range<_View> && sized_sentinel_for<sentinel_t<_View>, iterator_t<_View>>);
     using _Cache =
         conditional_t<_UseCache, __non_propagating_cache<reverse_iterator<iterator_t<_View>>>, __empty_cache>;
     CANN_ASC_STL_NO_UNIQUE_ADDRESS _Cache __cached_begin_ = _Cache();
-#endif
     CANN_ASC_STL_NO_UNIQUE_ADDRESS _View __base_ = _View();
 
 public:
@@ -88,15 +94,17 @@ public:
         requires ::asc::std::default_initializable<_View>
     = default;
 #else
-    CANN_ASC_STL_API constexpr reverse_view() = default;
+    template <bool __asc_enabled = true,
+        enable_if_t<__asc_enabled && (::asc::std::default_initializable<_View>), int> = 0>
+    CANN_ASC_STL_API constexpr reverse_view()
+    {}
 #endif
 
     CANN_ASC_STL_API constexpr explicit reverse_view(_View __view) : __base_(::asc::std::move(__view))
     {}
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class _View2 = _View>
-        requires ::asc::std::copy_constructible<_View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((::asc::std::copy_constructible<_View2>))
     CANN_ASC_STL_API constexpr _View base() const& noexcept(::asc::std::is_nothrow_copy_constructible_v<_View>)
     {
         return __base_;
@@ -107,8 +115,8 @@ public:
         return ::asc::std::move(__base_);
     }
 
-    template <class _View2 = _View>
-        requires(!common_range<_View2>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES(((!common_range<_View2>)))
     CANN_ASC_STL_API constexpr reverse_iterator<iterator_t<_View2>> begin()
     {
         if constexpr (_UseCache) {
@@ -125,15 +133,15 @@ public:
         return __tmp;
     }
 
-    template <class _View2 = _View>
-        requires common_range<_View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((common_range<_View2>))
     CANN_ASC_STL_API constexpr reverse_iterator<iterator_t<_View2>> begin()
     {
         return ::asc::std::make_reverse_iterator(::asc::std::ranges::__end_cpo{}(__base_));
     }
 
-    template <class _View2 = _View>
-        requires common_range<const _View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((common_range<const _View2>))
     CANN_ASC_STL_API constexpr auto begin() const
     {
         return ::asc::std::make_reverse_iterator(::asc::std::ranges::__end_cpo{}(__base_));
@@ -144,74 +152,30 @@ public:
         return ::asc::std::make_reverse_iterator(::asc::std::ranges::__begin_cpo{}(__base_));
     }
 
-    template <class _View2 = _View>
-        requires common_range<const _View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((common_range<const _View2>))
     CANN_ASC_STL_API constexpr auto end() const
     {
         return ::asc::std::make_reverse_iterator(::asc::std::ranges::__begin_cpo{}(__base_));
     }
 
-    template <class _View2 = _View>
-        requires sized_range<_View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((sized_range<_View2>))
     CANN_ASC_STL_API constexpr auto size()
     {
         return ::asc::std::ranges::__size_cpo{}(__base_);
     }
 
-    template <class _View2 = _View>
-        requires sized_range<const _View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((sized_range<const _View2>))
     CANN_ASC_STL_API constexpr auto size() const
     {
         return ::asc::std::ranges::__size_cpo{}(__base_);
     }
-#else
-    // C++17 and device-side shape: constraints are not evaluable (no concept
-    // fallback), so the members are unconstrained and begin() keeps only the
-    // common-range form.
-    CANN_ASC_STL_API constexpr _View base() const& noexcept(::asc::std::is_nothrow_copy_constructible_v<_View>)
-    {
-        return __base_;
-    }
-
-    CANN_ASC_STL_API constexpr _View base() && noexcept(::asc::std::is_nothrow_move_constructible_v<_View>)
-    {
-        return ::asc::std::move(__base_);
-    }
-
-    CANN_ASC_STL_API constexpr auto begin()
-    {
-        return ::asc::std::make_reverse_iterator(::asc::std::ranges::__end_cpo{}(__base_));
-    }
-
-    CANN_ASC_STL_API constexpr auto begin() const
-    {
-        return ::asc::std::make_reverse_iterator(::asc::std::ranges::__end_cpo{}(__base_));
-    }
-
-    CANN_ASC_STL_API constexpr auto end()
-    {
-        return ::asc::std::make_reverse_iterator(::asc::std::ranges::__begin_cpo{}(__base_));
-    }
-
-    CANN_ASC_STL_API constexpr auto end() const
-    {
-        return ::asc::std::make_reverse_iterator(::asc::std::ranges::__begin_cpo{}(__base_));
-    }
-
-    CANN_ASC_STL_API constexpr auto size()
-    {
-        return ::asc::std::ranges::__size_cpo{}(__base_);
-    }
-
-    CANN_ASC_STL_API constexpr auto size() const
-    {
-        return ::asc::std::ranges::__size_cpo{}(__base_);
-    }
-#endif
 };
 
 template <class _Range>
-reverse_view(_Range&&) -> reverse_view<::asc::std::ranges::views::all_t<_Range>>;
+CANN_ASC_STL_HOST_DEVICE reverse_view(_Range&&) -> reverse_view<::asc::std::ranges::views::all_t<_Range>>;
 
 template <class _Tp>
 inline constexpr bool enable_borrowed_range<reverse_view<_Tp>> = enable_borrowed_range<_Tp>;
@@ -259,75 +223,41 @@ template <class _Tp>
 using __unwrapped_reverse_subrange_t = typename __unwrapped_reverse_subrange<_Tp>::type;
 
 struct __fn : __range_adaptor_closure<__fn> {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class _Range>
-        requires __is_reverse_view<remove_cvref_t<_Range>>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _Range)
+    CANN_ASC_STL_DETAIL_REQUIRES((__is_reverse_view<remove_cvref_t<_Range>>))
     [[nodiscard]] CANN_ASC_STL_API constexpr auto operator()(_Range&& __range) const noexcept(
         noexcept(::asc::std::forward<_Range>(__range).base())) -> decltype(::asc::std::forward<_Range>(__range).base())
     {
         return ::asc::std::forward<_Range>(__range).base();
     }
 
-    template <class _Range, class _UnwrappedSubrange = __unwrapped_reverse_subrange_t<remove_cvref_t<_Range>>>
-        requires __is_sized_reverse_subrange<remove_cvref_t<_Range>>
+    CANN_ASC_STL_DETAIL_TEMPLATE(
+        class _Range, class _UnwrappedSubrange = __unwrapped_reverse_subrange_t<remove_cvref_t<_Range>>)
+    CANN_ASC_STL_DETAIL_REQUIRES((__is_sized_reverse_subrange<remove_cvref_t<_Range>>))
     [[nodiscard]] CANN_ASC_STL_API constexpr auto operator()(_Range&& __range) const noexcept(noexcept(
         _UnwrappedSubrange(__range.end().base(), __range.begin().base(), __range.size()))) -> _UnwrappedSubrange
     {
         return _UnwrappedSubrange(__range.end().base(), __range.begin().base(), __range.size());
     }
 
-    template <class _Range, class _UnwrappedSubrange = __unwrapped_reverse_subrange_t<remove_cvref_t<_Range>>>
-        requires __is_unsized_reverse_subrange<remove_cvref_t<_Range>>
+    CANN_ASC_STL_DETAIL_TEMPLATE(
+        class _Range, class _UnwrappedSubrange = __unwrapped_reverse_subrange_t<remove_cvref_t<_Range>>)
+    CANN_ASC_STL_DETAIL_REQUIRES((__is_unsized_reverse_subrange<remove_cvref_t<_Range>>))
     [[nodiscard]] CANN_ASC_STL_API constexpr auto operator()(_Range&& __range) const
         noexcept(noexcept(_UnwrappedSubrange(__range.end().base(), __range.begin().base()))) -> _UnwrappedSubrange
     {
         return _UnwrappedSubrange(__range.end().base(), __range.begin().base());
     }
 
-    template <class _Range>
-        requires(!__is_reverse_view<remove_cvref_t<_Range>>) &&
-                    (!__is_sized_reverse_subrange<remove_cvref_t<_Range>>) &&
-                    (!__is_unsized_reverse_subrange<remove_cvref_t<_Range>>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _Range, class _View = all_t<_Range>)
+    CANN_ASC_STL_DETAIL_REQUIRES((bidirectional_range<_View> && (!__is_reverse_view<remove_cvref_t<_Range>>) &&
+        (!__is_sized_reverse_subrange<remove_cvref_t<_Range>>) &&
+        (!__is_unsized_reverse_subrange<remove_cvref_t<_Range>>)))
     CANN_ASC_STL_API constexpr auto operator()(_Range&& __range) const
-        noexcept(noexcept(reverse_view{::asc::std::forward<_Range>(__range)})) -> reverse_view<all_t<_Range>>
-    {
-        return reverse_view{::asc::std::forward<_Range>(__range)};
-    }
-#else
-    template <class _Range, enable_if_t<__is_reverse_view<remove_cvref_t<_Range>>, int> = 0>
-    [[nodiscard]] CANN_ASC_STL_API constexpr auto operator()(_Range&& __range) const noexcept(
-        noexcept(::asc::std::forward<_Range>(__range).base())) -> decltype(::asc::std::forward<_Range>(__range).base())
-    {
-        return ::asc::std::forward<_Range>(__range).base();
-    }
-
-    template <class _Range, class _UnwrappedSubrange = __unwrapped_reverse_subrange_t<remove_cvref_t<_Range>>,
-        enable_if_t<__is_sized_reverse_subrange<remove_cvref_t<_Range>>, int> = 0>
-    [[nodiscard]] CANN_ASC_STL_API constexpr auto operator()(_Range&& __range) const noexcept(noexcept(
-        _UnwrappedSubrange(__range.end().base(), __range.begin().base(), __range.size()))) -> _UnwrappedSubrange
-    {
-        return _UnwrappedSubrange(__range.end().base(), __range.begin().base(), __range.size());
-    }
-
-    template <class _Range, class _UnwrappedSubrange = __unwrapped_reverse_subrange_t<remove_cvref_t<_Range>>,
-        enable_if_t<__is_unsized_reverse_subrange<remove_cvref_t<_Range>>, int> = 0>
-    [[nodiscard]] CANN_ASC_STL_API constexpr auto operator()(_Range&& __range) const
-        noexcept(noexcept(_UnwrappedSubrange(__range.end().base(), __range.begin().base()))) -> _UnwrappedSubrange
-    {
-        return _UnwrappedSubrange(__range.end().base(), __range.begin().base());
-    }
-
-    template <class _Range,
-        enable_if_t<!__is_reverse_view<remove_cvref_t<_Range>> &&
-                !__is_sized_reverse_subrange<remove_cvref_t<_Range>> &&
-                !__is_unsized_reverse_subrange<remove_cvref_t<_Range>>,
-            int> = 0>
-    CANN_ASC_STL_API constexpr auto operator()(_Range&& __range) const
-        noexcept(noexcept(reverse_view{::asc::std::forward<_Range>(__range)})) -> reverse_view<all_t<_Range>>
+        noexcept(noexcept(reverse_view{::asc::std::forward<_Range>(__range)})) -> reverse_view<_View>
     {
         return reverse_view{::asc::std::forward<_Range>(__range)};  // NOLINT(build/include_what_you_use)
     }
-#endif
 };
 
 }  // namespace __reverse

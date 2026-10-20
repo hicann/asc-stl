@@ -42,80 +42,61 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 // __unwrap_iter and __rewrap_iter don't work for this, because they assume that the iterator and sentinel have
 // the same type. __unwrap_range tries to get two iterators and then forward to __unwrap_iter.
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
-template <class _Iter, class _Sent>
+template <class Iter, class Sent, bool Unwrap = random_access_iterator<Iter> && sized_sentinel_for<Sent, Iter>>
 struct __unwrap_range_impl {
-    CANN_ASC_STL_API static constexpr auto __unwrap(_Iter __first, _Sent __last)
+    CANN_ASC_STL_API static constexpr auto __unwrap(Iter first, Sent last)
     {
-        if constexpr (random_access_iterator<_Iter> && sized_sentinel_for<_Sent, _Iter>) {
-            auto __iter_last = ::asc::std::next(__first, __last - __first);
-            auto __unwrapped_first = ::asc::std::__unwrap_iter(::asc::std::move(__first));
-            auto __unwrapped_last = ::asc::std::__unwrap_iter(::asc::std::move(__iter_last));
-            return pair<decltype(__unwrapped_first), decltype(__unwrapped_last)>(
-                ::asc::std::move(__unwrapped_first), ::asc::std::move(__unwrapped_last));
+        if constexpr (Unwrap) {
+            auto iter_last = ::asc::std::next(first, last - first);
+            auto unwrapped_first = ::asc::std::__unwrap_iter(::asc::std::move(first));
+            auto unwrapped_last = ::asc::std::__unwrap_iter(::asc::std::move(iter_last));
+            return pair<decltype(unwrapped_first), decltype(unwrapped_last)>(
+                ::asc::std::move(unwrapped_first), ::asc::std::move(unwrapped_last));
         } else {
-            return pair<_Iter, _Sent>(::asc::std::move(__first), ::asc::std::move(__last));
+            return pair<Iter, Sent>(::asc::std::move(first), ::asc::std::move(last));
         }
     }
 
-    CANN_ASC_STL_API static constexpr auto __rewrap(
-        _Iter __orig_iter, decltype(::asc::std::__unwrap_iter(::asc::std::move(__orig_iter))) __iter)
-        requires random_access_iterator<_Iter> && sized_sentinel_for<_Sent, _Iter>
+    template <class Unwrapped>
+    CANN_ASC_STL_API static constexpr Iter __rewrap(Iter original, Unwrapped current)
     {
-        return ::asc::std::__rewrap_iter(::asc::std::move(__orig_iter), ::asc::std::move(__iter));
-    }
-
-    CANN_ASC_STL_API static constexpr auto __rewrap(const _Iter&, _Iter __iter)
-        requires(!(random_access_iterator<_Iter> && sized_sentinel_for<_Sent, _Iter>))
-    {
-        return __iter;
+        if constexpr (Unwrap) {
+            return ::asc::std::__rewrap_iter(::asc::std::move(original), ::asc::std::move(current));
+        } else {
+            return current;
+        }
     }
 };
 
-template <class _Iter>
-struct __unwrap_range_impl<_Iter, _Iter> {
-    CANN_ASC_STL_API static constexpr auto __unwrap(_Iter __first, _Iter __last)
+template <class Iter, bool Unwrap>
+struct __unwrap_range_impl<Iter, Iter, Unwrap> {
+    CANN_ASC_STL_API static constexpr auto __unwrap(Iter first, Iter last)
     {
-        auto __unwrapped_first = ::asc::std::__unwrap_iter(::asc::std::move(__first));
-        auto __unwrapped_last = ::asc::std::__unwrap_iter(::asc::std::move(__last));
-        return pair<decltype(__unwrapped_first), decltype(__unwrapped_last)>(
-            ::asc::std::move(__unwrapped_first), ::asc::std::move(__unwrapped_last));
+        auto unwrapped_first = ::asc::std::__unwrap_iter(::asc::std::move(first));
+        auto unwrapped_last = ::asc::std::__unwrap_iter(::asc::std::move(last));
+        return pair<decltype(unwrapped_first), decltype(unwrapped_last)>(
+            ::asc::std::move(unwrapped_first), ::asc::std::move(unwrapped_last));
     }
 
-    CANN_ASC_STL_API static constexpr auto __rewrap(
-        _Iter __orig_iter, decltype(::asc::std::__unwrap_iter(__orig_iter)) __iter)
+    template <class Unwrapped>
+    CANN_ASC_STL_API static constexpr Iter __rewrap(Iter original, Unwrapped current)
     {
-        return ::asc::std::__rewrap_iter(::asc::std::move(__orig_iter), ::asc::std::move(__iter));
+        return ::asc::std::__rewrap_iter(::asc::std::move(original), ::asc::std::move(current));
     }
 };
 
-template <class _Iter, class _Sent>
-CANN_ASC_STL_API constexpr auto __unwrap_range(_Iter __first, _Sent __last)
+template <class Iter, class Sent>
+CANN_ASC_STL_API constexpr auto __unwrap_range(Iter first, Sent last)
 {
-    return __unwrap_range_impl<_Iter, _Sent>::__unwrap(::asc::std::move(__first), ::asc::std::move(__last));
+    return __unwrap_range_impl<Iter, Sent>::__unwrap(::asc::std::move(first), ::asc::std::move(last));
 }
 
-template <class _Sent, class _Iter, class _Unwrapped>
-CANN_ASC_STL_API constexpr _Iter __rewrap_range(_Iter __orig_iter, _Unwrapped __iter)
+template <class Sent, class Iter, class Unwrapped>
+CANN_ASC_STL_API constexpr Iter __rewrap_range(Iter original, Unwrapped current)
 {
-    return __unwrap_range_impl<_Iter, _Sent>::__rewrap(::asc::std::move(__orig_iter), ::asc::std::move(__iter));
+    return __unwrap_range_impl<Iter, Sent>::__rewrap(
+        ::asc::std::move(original), ::asc::std::move(current));  // NOLINT(build/include_what_you_use)
 }
-#else   // ^^^ C++20 ^^^ / vvv C++17 vvv
-
-template <class _Iter, class _Unwrapped = decltype(::asc::std::__unwrap_iter(::asc::std::declval<_Iter>()))>
-CANN_ASC_STL_API constexpr pair<_Unwrapped, _Unwrapped> __unwrap_range(_Iter __first, _Iter __last)
-{
-    return ::asc::std::make_pair(
-        ::asc::std::__unwrap_iter(::asc::std::move(__first)), ::asc::std::__unwrap_iter(::asc::std::move(__last)));
-}
-
-template <class _Iter, class _Unwrapped>
-CANN_ASC_STL_API constexpr _Iter __rewrap_range(_Iter __orig_iter, _Unwrapped __iter)
-{
-    // NOLINTNEXTLINE(build/include_what_you_use)
-    return ::asc::std::__rewrap_iter(::asc::std::move(__orig_iter), ::asc::std::move(__iter));
-}
-#endif  // CANN_ASC_STL_STD_VER <= 2017
 
 CANN_ASC_STL_END_NAMESPACE
 

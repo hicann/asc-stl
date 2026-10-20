@@ -28,6 +28,10 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__utility/declval.h>
+#include <asc/std/__type_traits/void_t.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/__detail/execution_space.h>
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__concepts/convertible_to.h>
@@ -43,7 +47,6 @@
 #include <asc/std/__ranges/range_adaptor.h>
 #include <asc/std/__ranges/view_interface.h>
 #include <asc/std/__type_traits/decay.h>
-#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_constructible.h>
 #include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/is_nothrow_constructible.h>
@@ -58,18 +61,17 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 // concepts.h does not provide __simple_view, so its definition is minimally
 // inlined here under a private name (avoids clashing with other headers that
 // define it).
 template <class _View>
-concept __take_while_simple_view = view<_View> && range<const _View> &&
-    same_as<iterator_t<_View>, iterator_t<const _View>> && same_as<sentinel_t<_View>, sentinel_t<const _View>>;
+inline constexpr bool __take_while_simple_view = __simple_view<_View>;
 
+template <class _View, class _Pred, class = void>
+inline constexpr bool __take_while_const_is_range = false;
 template <class _View, class _Pred>
-concept __take_while_const_is_range =
+inline constexpr bool __take_while_const_is_range<_View, _Pred, void_t<iterator_t<const _View>>> =
     range<const _View> && indirect_unary_predicate<const _Pred, iterator_t<const _View>>;
-#endif
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <view _View, class _Pred>
@@ -79,13 +81,12 @@ template <view _View, class _Pred>
 template <class _View, class _Pred>
 #endif
 class take_while_view : public view_interface<take_while_view<_View, _Pred>> {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    static_assert(view<_View> &&
+            (input_range<_View> && ::asc::std::is_object_v<_Pred> &&
+                ::asc::std::indirect_unary_predicate<const _Pred, iterator_t<_View>>),
+        "range view constraints are not satisfied");
+
     CANN_ASC_STL_NO_UNIQUE_ADDRESS __movable_box<_Pred> __pred_;
-#else
-    // C++17 and device-side shape: __movable_box is defined only in the C++20
-    // branch, so the predicate is stored by value here.
-    CANN_ASC_STL_NO_UNIQUE_ADDRESS _Pred __pred_ = _Pred();
-#endif
     CANN_ASC_STL_NO_UNIQUE_ADDRESS _View __base_ = _View();
 
 public:
@@ -110,19 +111,12 @@ public:
             : __end_(::asc::std::move(__end)), __pred_(__pred)
         {}
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-        template <bool _OtherConst = _Const>
-            requires _OtherConst && convertible_to<sentinel_t<_View>, sentinel_t<_Base2<_OtherConst>>>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst = _Const)
+        CANN_ASC_STL_DETAIL_REQUIRES(
+            (_OtherConst && convertible_to<sentinel_t<_View>, sentinel_t<_Base2<_OtherConst>>>))
         CANN_ASC_STL_API constexpr __sentinel(__sentinel<!_OtherConst> __s)
             : __end_(::asc::std::move(__s.__end_)), __pred_(__s.__pred_)
         {}
-#else
-        template <bool _OtherConst = _Const,
-            enable_if_t<_OtherConst && is_convertible_v<sentinel_t<_View>, sentinel_t<_Base2<_OtherConst>>>, int> = 0>
-        CANN_ASC_STL_API constexpr __sentinel(__sentinel<!_OtherConst> __s)
-            : __end_(::asc::std::move(__s.__end_)), __pred_(__s.__pred_)
-        {}
-#endif
 
         [[nodiscard]] CANN_ASC_STL_API constexpr sentinel_t<_Base> base() const
         {
@@ -169,36 +163,34 @@ public:
             return __y != __x.__end_ && ::asc::std::invoke(*__x.__pred_, *__y);
         }
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-        template <bool _OtherConst = !_Const>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst = !_Const)
+        CANN_ASC_STL_DETAIL_REQUIRES(sentinel_for<sentinel_t<_Base>, iterator_t<_Base2<_OtherConst>>>)
         [[nodiscard]] CANN_ASC_STL_API friend constexpr auto operator==(
             const iterator_t<_Base2<_OtherConst>>& __x, const __sentinel& __y)
-            requires sentinel_for<sentinel_t<_Base>, iterator_t<_Base2<_OtherConst>>>
         {
             return __x == __y.__end_ || !::asc::std::invoke(*__y.__pred_, *__x);
         }
-        template <bool _OtherConst = !_Const>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst = !_Const)
+        CANN_ASC_STL_DETAIL_REQUIRES(sentinel_for<sentinel_t<_Base>, iterator_t<_Base2<_OtherConst>>>)
         [[nodiscard]] CANN_ASC_STL_API friend constexpr auto operator==(
             const __sentinel& __x, const iterator_t<_Base2<_OtherConst>>& __y)
-            requires sentinel_for<sentinel_t<_Base>, iterator_t<_Base2<_OtherConst>>>
         {
             return __y == __x.__end_ || !::asc::std::invoke(*__x.__pred_, *__y);
         }
-        template <bool _OtherConst = !_Const>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst = !_Const)
+        CANN_ASC_STL_DETAIL_REQUIRES(sentinel_for<sentinel_t<_Base>, iterator_t<_Base2<_OtherConst>>>)
         [[nodiscard]] CANN_ASC_STL_API friend constexpr auto operator!=(
             const iterator_t<_Base2<_OtherConst>>& __x, const __sentinel& __y)
-            requires sentinel_for<sentinel_t<_Base>, iterator_t<_Base2<_OtherConst>>>
         {
             return __x != __y.__end_ && ::asc::std::invoke(*__y.__pred_, *__x);
         }
-        template <bool _OtherConst = !_Const>
+        CANN_ASC_STL_DETAIL_TEMPLATE(bool _OtherConst = !_Const)
+        CANN_ASC_STL_DETAIL_REQUIRES(sentinel_for<sentinel_t<_Base>, iterator_t<_Base2<_OtherConst>>>)
         [[nodiscard]] CANN_ASC_STL_API friend constexpr auto operator!=(
             const __sentinel& __x, const iterator_t<_Base2<_OtherConst>>& __y)
-            requires sentinel_for<sentinel_t<_Base>, iterator_t<_Base2<_OtherConst>>>
         {
             return __y != __x.__end_ && ::asc::std::invoke(*__x.__pred_, *__y);
         }
-#endif
     };
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
@@ -206,25 +198,22 @@ public:
         requires ::asc::std::default_initializable<_View> && ::asc::std::default_initializable<_Pred>
     = default;
 #else
-    CANN_ASC_STL_API constexpr take_while_view() = default;
+    template <bool __asc_enabled = true,
+        enable_if_t<__asc_enabled &&
+                (::asc::std::default_initializable<_View> && ::asc::std::default_initializable<_Pred>),
+            int> = 0>
+    CANN_ASC_STL_API constexpr take_while_view()
+    {}
 #endif
 
     CANN_ASC_STL_API constexpr take_while_view(_View __base, _Pred __pred)
-        : view_interface<take_while_view<_View, _Pred>>()
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-          ,
-          __pred_(in_place_t{}, ::asc::std::move(__pred))
-#else
-          ,
-          __pred_(::asc::std::move(__pred))
-#endif
-          ,
+        : view_interface<take_while_view<_View, _Pred>>(),
+          __pred_(in_place_t{}, ::asc::std::move(__pred)),
           __base_(::asc::std::move(__base))
     {}
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class _View2 = _View>
-        requires ::asc::std::copy_constructible<_View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((::asc::std::copy_constructible<_View2>))
     CANN_ASC_STL_API constexpr _View base() const&
     {
         return __base_;
@@ -234,85 +223,44 @@ public:
     {
         return ::asc::std::move(__base_);
     }
-#else
-    CANN_ASC_STL_API constexpr _View base() const&
-    {
-        return __base_;
-    }
 
-    CANN_ASC_STL_API constexpr _View base() &&
-    {
-        return ::asc::std::move(__base_);
-    }
-#endif
-
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     CANN_ASC_STL_API constexpr const _Pred& pred() const
     {
         return *__pred_;
     }
-#else
-    CANN_ASC_STL_API constexpr const _Pred& pred() const
-    {
-        return __pred_;
-    }
-#endif
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class _View2 = _View>
-        requires(!__take_while_simple_view<_View2>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES(((!__take_while_simple_view<_View2>)))
     CANN_ASC_STL_API constexpr auto begin()
     {
         return ::asc::std::ranges::__begin_cpo{}(__base_);
     }
 
-    template <class _View2 = _View>
-        requires __take_while_const_is_range<_View2, _Pred>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((__take_while_const_is_range<_View2, _Pred>))
     CANN_ASC_STL_API constexpr auto begin() const
     {
         return ::asc::std::ranges::__begin_cpo{}(__base_);
     }
 
-    template <class _View2 = _View>
-        requires(!__take_while_simple_view<_View2>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES(((!__take_while_simple_view<_View2>)))
     CANN_ASC_STL_API constexpr auto end()
     {
         return __sentinel<false>(::asc::std::ranges::__end_cpo{}(__base_), ::asc::std::addressof(*__pred_));
     }
 
-    template <class _View2 = _View>
-        requires __take_while_const_is_range<_View2, _Pred>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((__take_while_const_is_range<_View2, _Pred>))
     CANN_ASC_STL_API constexpr auto end() const
     {
         return __sentinel<true>(::asc::std::ranges::__end_cpo{}(__base_), ::asc::std::addressof(*__pred_));
     }
-#else
-    // C++17 and device-side shape: constraints are not evaluable (no concept
-    // fallback), so the members are unconstrained.
-    CANN_ASC_STL_API constexpr auto begin()
-    {
-        return ::asc::std::ranges::__begin_cpo{}(__base_);
-    }
-
-    CANN_ASC_STL_API constexpr auto begin() const
-    {
-        return ::asc::std::ranges::__begin_cpo{}(__base_);
-    }
-
-    CANN_ASC_STL_API constexpr auto end()
-    {
-        return __sentinel<false>(::asc::std::ranges::__end_cpo{}(__base_), ::asc::std::addressof(__pred_));
-    }
-
-    CANN_ASC_STL_API constexpr auto end() const
-    {
-        return __sentinel<true>(::asc::std::ranges::__end_cpo{}(__base_), ::asc::std::addressof(__pred_));
-    }
-#endif
 };
 
 template <class _Range, class _Pred>
-take_while_view(_Range&&, _Pred) -> take_while_view<::asc::std::ranges::views::all_t<_Range>, _Pred>;
+CANN_ASC_STL_HOST_DEVICE take_while_view(
+    _Range&&, _Pred) -> take_while_view<::asc::std::ranges::views::all_t<_Range>, _Pred>;
 
 }  // namespace ranges
 
@@ -321,7 +269,10 @@ namespace ranges::views {
 namespace __take_while {
 
 struct __fn {
-    template <class _Range, class _Pred>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _Range, class _Pred, class _View = all_t<_Range>)
+    CANN_ASC_STL_DETAIL_REQUIRES(
+        input_range<_View>&& is_object_v<decay_t<_Pred>>&& indirect_unary_predicate<const decay_t<_Pred>,
+            iterator_t<_View>>&& constructible_from<decay_t<_Pred>, _Pred>)
     CANN_ASC_STL_API constexpr auto operator()(_Range&& __range, _Pred&& __pred) const
         noexcept(noexcept(take_while_view(::asc::std::forward<_Range>(__range), ::asc::std::forward<_Pred>(__pred))))
             -> take_while_view<::asc::std::ranges::views::all_t<_Range>, ::asc::std::remove_cvref_t<_Pred>>
@@ -329,23 +280,14 @@ struct __fn {
         return take_while_view(::asc::std::forward<_Range>(__range), ::asc::std::forward<_Pred>(__pred));
     }
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class _Pred>
-        requires ::asc::std::constructible_from<::asc::std::decay_t<_Pred>, _Pred>
-    CANN_ASC_STL_API constexpr auto operator()(_Pred&& __pred) const
-        noexcept(::asc::std::is_nothrow_constructible_v<::asc::std::decay_t<_Pred>, _Pred>)
-    {
-        return ::asc::std::ranges::__pipeable(::asc::std::__bind_back(*this, ::asc::std::forward<_Pred>(__pred)));
-    }
-#else
-    template <class _Pred, enable_if_t<::asc::std::is_constructible_v<::asc::std::decay_t<_Pred>, _Pred>, int> = 0>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _Pred)
+    CANN_ASC_STL_DETAIL_REQUIRES((::asc::std::constructible_from<::asc::std::decay_t<_Pred>, _Pred>))
     CANN_ASC_STL_API constexpr auto operator()(_Pred&& __pred) const
         noexcept(::asc::std::is_nothrow_constructible_v<::asc::std::decay_t<_Pred>, _Pred>)
     {
         return ::asc::std::ranges::__pipeable(
             ::asc::std::__bind_back(*this, ::asc::std::forward<_Pred>(__pred)));  // NOLINT(build/include_what_you_use)
     }
-#endif
 };
 
 }  // namespace __take_while

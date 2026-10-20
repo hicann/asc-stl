@@ -170,10 +170,8 @@ CANN_ASC_STL_API int evaluate_common() noexcept
     tiny_view view{values.data(), values.data() + values.size()};
     failures += view.empty() || view.front() != 1 || view.back() != 4 || view.size() != 4;
     failures += *asc::std::ranges::rbegin(values) != 4;
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
     asc::std::span<int> range_span(view);
     failures += range_span.size() != 4 || range_span.data() != values.data();
-#endif
     tiny_container container{};
     *asc::std::back_inserter(container) = 2;
     *asc::std::front_inserter(container) = 1;

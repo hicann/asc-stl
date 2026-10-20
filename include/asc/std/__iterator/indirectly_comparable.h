@@ -53,6 +53,21 @@ concept indirectly_comparable = indirectly_readable<_Iter1> && indirectly_readab
 
 CANN_ASC_STL_END_NAMESPACE
 
+#else
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+template <class Iter1, class Iter2, class BinaryPred, class Proj1, class Proj2, class = void>
+inline constexpr bool __indirectly_comparable_impl = false;
+template <class Iter1, class Iter2, class BinaryPred, class Proj1, class Proj2>
+inline constexpr bool __indirectly_comparable_impl<Iter1, Iter2, BinaryPred, Proj1, Proj2,
+    void_t<indirect_result_t<Proj1&, Iter1>, indirect_result_t<Proj2&, Iter2>>> =
+    indirect_binary_predicate<BinaryPred, projected<Iter1, Proj1>, projected<Iter2, Proj2>>;
+template <class Iter1, class Iter2, class BinaryPred, class Proj1 = identity, class Proj2 = identity>
+inline constexpr bool indirectly_comparable = __indirectly_comparable_impl<Iter1, Iter2, BinaryPred, Proj1, Proj2>;
+
+CANN_ASC_STL_END_NAMESPACE
+
 #endif
 
 #endif  // CANN_ASC_STL_ASC_STD___ITERATOR_INDIRECTLY_COMPARABLE_H

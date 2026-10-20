@@ -55,6 +55,24 @@ concept mergeable = input_iterator<_Input1> && input_iterator<_Input2> && weakly
 
 CANN_ASC_STL_END_NAMESPACE
 
+#else
+
+CANN_ASC_STL_BEGIN_NAMESPACE
+
+template <class Input1, class Input2, class Output, class Comp, class Proj1, class Proj2, class = void>
+inline constexpr bool __mergeable_impl = false;
+template <class Input1, class Input2, class Output, class Comp, class Proj1, class Proj2>
+inline constexpr bool __mergeable_impl<Input1, Input2, Output, Comp, Proj1, Proj2,
+    void_t<indirect_result_t<Proj1&, Input1>, indirect_result_t<Proj2&, Input2>>> =
+    input_iterator<Input1> && input_iterator<Input2> && weakly_incrementable<Output> &&
+    indirectly_copyable<Input1, Output> && indirectly_copyable<Input2, Output> &&
+    indirect_strict_weak_order<Comp, projected<Input1, Proj1>, projected<Input2, Proj2>>;
+template <class Input1, class Input2, class Output, class Comp = ::asc::std::ranges::less, class Proj1 = identity,
+    class Proj2 = identity>
+inline constexpr bool mergeable = __mergeable_impl<Input1, Input2, Output, Comp, Proj1, Proj2>;
+
+CANN_ASC_STL_END_NAMESPACE
+
 #endif
 
 #endif  // CANN_ASC_STL_ASC_STD___ITERATOR_MERGEABLE_H

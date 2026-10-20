@@ -34,15 +34,10 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class T, class U>
 CANN_ASC_STL_DETAIL_CONCEPT different_from = !same_as<remove_cvref_t<T>, remove_cvref_t<U>>;
 template <class T, class U>
-concept __different_from = different_from<T, U>;
-#else
-template <class T, class U>
-inline constexpr bool __different_from = !is_same_v<remove_cvref_t<T>, remove_cvref_t<U>>;
-#endif
+CANN_ASC_STL_DETAIL_CONCEPT __different_from = different_from<T, U>;
 
 CANN_ASC_STL_END_NAMESPACE
 

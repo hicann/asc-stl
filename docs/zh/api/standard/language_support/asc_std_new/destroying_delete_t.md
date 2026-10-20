@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/new>`。
 
-`asc::std::destroying_delete_t`标记删除表达式采用销毁型删除规则。
+`asc::std::destroying_delete_t`提供可用于普通重载选择的空标签类型。从C++17起，标签类型与对应对象`asc::std::destroying_delete`均可使用。
 
 标准语义参考：[cppreference `new`](https://en.cppreference.com/w/cpp/header/new)。
 
@@ -42,11 +42,12 @@ struct destroying_delete_t;
 
 ## 约束说明
 
-- 提供placement对象生命周期和无动态分配的接口。
+- 标签的声明不执行对象销毁或内存释放。
+- 编译器销毁型delete机制受语言及Host标准类型规则约束；本库标签不为C++17增加该语言机制，也不承诺替代编译器要求的Host标准类型。
 
 ## 调用示例
 
-C++20销毁删除使用该标记区分删除重载；标记本身不销毁对象。以下检查公开标记的类型。
+以下示例检查公开标签的类型和对应对象，可在C++17和C++20使用。
 
 ```cpp
 #include <asc/std/new>

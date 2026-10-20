@@ -17,10 +17,6 @@
 
 int main()
 {
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
     asc::std::ranges::__movable_box<int> box(asc::std::in_place, 7);
     return *box != 7 || !box.__has_value();
-#else
-    return 0;
-#endif
 }

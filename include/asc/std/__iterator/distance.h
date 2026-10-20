@@ -76,13 +76,9 @@ CANN_ASC_STL_API constexpr typename iterator_traits<_InputIter>::difference_type
     // To support pointers to incomplete types
     if constexpr (__distance_detail::__has_random_access_traversal<_InputIter>) {
         return __last - __first;
-    }
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    else if constexpr (sized_sentinel_for<_InputIter, _InputIter>) {
+    } else if constexpr (sized_sentinel_for<_InputIter, _InputIter>) {
         return __last - __first;
-    }
-#endif      // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    else {  // NOLINT(readability/braces)
+    } else {  // NOLINT(readability/braces)
         typename iterator_traits<_InputIter>::difference_type __r(0);
         for (; __first != __last; ++__first) {
             ++__r;
@@ -94,8 +90,6 @@ CANN_ASC_STL_API constexpr typename iterator_traits<_InputIter>::difference_type
 CANN_ASC_STL_END_NAMESPACE
 
 // [range.iter.op.distance]
-
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -146,7 +140,5 @@ using __distance_cpo = __distance::__fn;
 }  // namespace ranges
 
 CANN_ASC_STL_END_NAMESPACE
-
-#endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 #endif  // CANN_ASC_STL_ASC_STD___ITERATOR_DISTANCE_H

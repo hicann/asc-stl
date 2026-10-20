@@ -42,7 +42,8 @@ template<class Element, class Extents, class Layout, class Accessor> class mdspa
 
 ## 约束说明
 
-- C++20开放rank-one `operator[]`，C++2b条件开放标准多索引operator[]。
+- C++17起提供一维`operator[]`及以array/span保存索引的访问形式；多参数`operator[]`要求编译器支持C++23多维下标语法。
+- C++17和C++20可使用`operator()`扩展按逐维下标访问；该形式的下标数量须等于维数。
 - Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例

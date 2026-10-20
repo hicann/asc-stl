@@ -41,6 +41,15 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 template <class _Iter, class _Comp = ::asc::std::ranges::less, class _Proj = identity>
 concept sortable = permutable<_Iter> && indirect_strict_weak_order<_Comp, projected<_Iter, _Proj>>;
 
+#else
+template <class Iter, class Comp, class Proj, class = void>
+inline constexpr bool __sortable_impl = false;
+template <class Iter, class Comp, class Proj>
+inline constexpr bool __sortable_impl<Iter, Comp, Proj, void_t<indirect_result_t<Proj&, Iter>>> =
+    permutable<Iter> && indirect_strict_weak_order<Comp, projected<Iter, Proj>>;
+template <class Iter, class Comp = ::asc::std::ranges::less, class Proj = identity>
+inline constexpr bool sortable = __sortable_impl<Iter, Comp, Proj>;
+
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

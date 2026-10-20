@@ -32,11 +32,16 @@
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/remove_cvref.h>
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
-
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __format_detail {
+template <class T>
+struct __is_format_char8 : false_type {};
+#if CANN_ASC_STL_DETAIL_HAS_CHAR8_T()
+template <>
+struct __is_format_char8<char8_t> : true_type {};
+#endif
+
 // Value-domain predicate of the registered format subset, composed from the
 // project type traits instead of local replicas. The integer presentations
 // (d/x/X/o/b) accept the standard integer types up to 64 bits: bool and
@@ -45,14 +50,13 @@ namespace __format_detail {
 // char32_t) are outside the registered domain, and 128-bit integers are
 // rejected because the digit buffers are sized for 64-bit magnitudes.
 template <class T>
-struct is_format_integer : bool_constant<is_integral_v<remove_cvref_t<T>> && !is_same_v<remove_cvref_t<T>, bool> &&
-                               !is_same_v<remove_cvref_t<T>, char> && !is_same_v<remove_cvref_t<T>, wchar_t> &&
-                               !is_same_v<remove_cvref_t<T>, char8_t> && !is_same_v<remove_cvref_t<T>, char16_t> &&
-                               !is_same_v<remove_cvref_t<T>, char32_t> && sizeof(remove_cvref_t<T>) <= 8> {};
+struct is_format_integer
+    : bool_constant<is_integral_v<remove_cvref_t<T>> && !is_same_v<remove_cvref_t<T>, bool> &&
+          !is_same_v<remove_cvref_t<T>, char> && !is_same_v<remove_cvref_t<T>, wchar_t> &&
+          !__is_format_char8<remove_cvref_t<T>>::value && !is_same_v<remove_cvref_t<T>, char16_t> &&
+          !is_same_v<remove_cvref_t<T>, char32_t> && sizeof(remove_cvref_t<T>) <= 8> {};
 }  // namespace __format_detail
 
 CANN_ASC_STL_END_NAMESPACE
-
-#endif  // CANN_ASC_STL_DETAIL_HAS_CXX20()
 
 #endif  // CANN_ASC_STL_ASC_STD___FORMAT_VALIDATION_H

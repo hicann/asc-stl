@@ -30,9 +30,13 @@
 
 `asc::std::equality_comparable`用于在编译期判断类型是否支持符合要求的相等和不等比较，自C++20起提供。泛型接口可用该概念限制模板参数，使不满足比较要求的类型在重载选择阶段被拒绝。
 
+C++17中提供同名`inline constexpr bool`变量模板；C++20及以上提供concept。两种形式均可用于`static_assert`，C++17还可与`enable_if`配合使用。受约束模板参数、`requires`及约束偏序仍需要C++20语言支持。
+
 标准语义参考：[cppreference `concepts`](https://en.cppreference.com/w/cpp/header/concepts)。
 
 ## 声明
+
+以下为C++20及以上的concept声明摘要；C++17变量模板具有相同的模板参数和判定条件。
 
 ```cpp
 namespace asc::std {

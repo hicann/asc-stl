@@ -28,6 +28,8 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/__detail/execution_space.h>
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__concepts/copyable.h>
@@ -49,8 +51,8 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 
-// Under device compilation and C++17, concept constraints are not evaluable, so fall
-// back to an unconstrained version; both branches expose the same public interface.
+// Both language modes and execution spaces share the same view semantics.
+// The shared constraints select native concepts or SFINAE as appropriate.
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <view _View>
     requires(!common_range<_View> && copyable<iterator_t<_View>>)
@@ -58,6 +60,9 @@ template <view _View>
 template <class _View>
 #endif
 class common_view : public view_interface<common_view<_View>> {
+    static_assert(view<_View> && ((!common_range<_View> && copyable<iterator_t<_View>>)),
+        "range view constraints are not satisfied");
+
 private:
     _View __base_ = _View();
 
@@ -67,17 +72,18 @@ public:
         requires ::asc::std::default_initializable<_View>
     = default;
 #else
-    CANN_ASC_STL_API constexpr common_view() = default;
+    template <bool __asc_enabled = true,
+        enable_if_t<__asc_enabled && (::asc::std::default_initializable<_View>), int> = 0>
+    CANN_ASC_STL_API constexpr common_view()
+    {}
 #endif
 
     CANN_ASC_STL_API constexpr explicit common_view(_View __v) noexcept(is_nothrow_move_constructible_v<_View>)
         : __base_(::asc::std::move(__v))
     {}
 
-    template <class _View2 = _View>
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-        requires ::asc::std::copy_constructible<_View2>
-#endif
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((::asc::std::copy_constructible<_View2>))
     CANN_ASC_STL_API constexpr _View base() const& noexcept(::asc::std::is_nothrow_copy_constructible_v<_View2>)
     {
         return __base_;
@@ -88,14 +94,13 @@ public:
         return ::asc::std::move(__base_);  // NOLINT(build/include_what_you_use)
     }
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     CANN_ASC_STL_API constexpr auto begin()
     {
         return common_iterator<iterator_t<_View>, sentinel_t<_View>>{::asc::std::ranges::__begin_cpo{}(__base_)};
     }
 
-    template <class _View2 = _View>
-        requires range<const _View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((range<const _View2>))
     CANN_ASC_STL_API constexpr auto begin() const
     {
         return common_iterator<iterator_t<const _View>, sentinel_t<const _View>>{
@@ -107,89 +112,31 @@ public:
         return common_iterator<iterator_t<_View>, sentinel_t<_View>>{::asc::std::ranges::__end_cpo{}(__base_)};
     }
 
-    template <class _View2 = _View>
-        requires range<const _View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((range<const _View2>))
     CANN_ASC_STL_API constexpr auto end() const
     {
         return common_iterator<iterator_t<const _View>, sentinel_t<const _View>>{
             ::asc::std::ranges::__end_cpo{}(__base_)};
     }
 
-    template <class _View2 = _View>
-        requires sized_range<_View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((sized_range<_View2>))
     CANN_ASC_STL_API constexpr auto size()
     {
         return ::asc::std::ranges::__size_cpo{}(__base_);
     }
 
-    template <class _View2 = _View>
-        requires sized_range<const _View2>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _View2 = _View)
+    CANN_ASC_STL_DETAIL_REQUIRES((sized_range<const _View2>))
     CANN_ASC_STL_API constexpr auto size() const
     {
         return ::asc::std::ranges::__size_cpo{}(__base_);
     }
-#else
-    // C++17 and device-side shape: ranges that are already common (iterator and
-    // sentinel of the same type) pass their iterators through directly, avoiding the
-    // random-access capability loss a common_iterator wrapper would cause; the rest
-    // wrap in common_iterator.
-    CANN_ASC_STL_API constexpr auto begin()
-    {
-        using Iterator = decltype(::asc::std::ranges::__begin_cpo{}(__base_));
-        using Sentinel = decltype(::asc::std::ranges::__end_cpo{}(__base_));
-        if constexpr (is_same_v<Iterator, Sentinel>) {
-            return ::asc::std::ranges::__begin_cpo{}(__base_);
-        } else {
-            return common_iterator<Iterator, Sentinel>(::asc::std::ranges::__begin_cpo{}(__base_));
-        }
-    }
-    template <class _View2 = _View>
-    CANN_ASC_STL_API constexpr auto begin() const
-    {
-        using Iterator = decltype(::asc::std::ranges::__begin_cpo{}(__base_));
-        using Sentinel = decltype(::asc::std::ranges::__end_cpo{}(__base_));
-        if constexpr (is_same_v<Iterator, Sentinel>) {
-            return ::asc::std::ranges::__begin_cpo{}(__base_);
-        } else {
-            return common_iterator<Iterator, Sentinel>(::asc::std::ranges::__begin_cpo{}(__base_));
-        }
-    }
-    CANN_ASC_STL_API constexpr auto end()
-    {
-        using Iterator = decltype(::asc::std::ranges::__begin_cpo{}(__base_));
-        using Sentinel = decltype(::asc::std::ranges::__end_cpo{}(__base_));
-        if constexpr (is_same_v<Iterator, Sentinel>) {
-            return ::asc::std::ranges::__end_cpo{}(__base_);
-        } else {
-            return common_iterator<Iterator, Sentinel>(::asc::std::ranges::__end_cpo{}(__base_));
-        }
-    }
-    template <class _View2 = _View>
-    CANN_ASC_STL_API constexpr auto end() const
-    {
-        using Iterator = decltype(::asc::std::ranges::__begin_cpo{}(__base_));
-        using Sentinel = decltype(::asc::std::ranges::__end_cpo{}(__base_));
-        if constexpr (is_same_v<Iterator, Sentinel>) {
-            return ::asc::std::ranges::__end_cpo{}(__base_);
-        } else {
-            return common_iterator<Iterator, Sentinel>(::asc::std::ranges::__end_cpo{}(__base_));
-        }
-    }
-    template <class _View2 = _View>
-    CANN_ASC_STL_API constexpr auto size()
-    {
-        return ::asc::std::ranges::__size_cpo{}(__base_);
-    }
-    template <class _View2 = _View>
-    CANN_ASC_STL_API constexpr auto size() const
-    {
-        return ::asc::std::ranges::__size_cpo{}(__base_);
-    }
-#endif
 };
 
 template <class _Range>
-common_view(_Range&&) -> common_view<::asc::std::ranges::views::all_t<_Range>>;
+CANN_ASC_STL_HOST_DEVICE common_view(_Range&&) -> common_view<::asc::std::ranges::views::all_t<_Range>>;
 
 template <class _View>
 inline constexpr bool enable_borrowed_range<common_view<_View>> = enable_borrowed_range<_View>;
@@ -200,36 +147,25 @@ namespace ranges::views {
 
 namespace __common {
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 struct __fn : __range_adaptor_closure<__fn> {
     // Ranges that are already common pass through directly (an all wrapper), without
     // an extra common_view.
-    template <class _Range>
-        requires common_range<_Range>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _Range)
+    CANN_ASC_STL_DETAIL_REQUIRES((common_range<_Range>))
     CANN_ASC_STL_API constexpr all_t<_Range> operator()(_Range&& __range) const
         noexcept(noexcept(::asc::std::ranges::views::all(::asc::std::forward<_Range>(__range))))
     {
         return ::asc::std::ranges::views::all(::asc::std::forward<_Range>(__range));
     }
 
-    template <class _Range>
-        requires(!common_range<_Range>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(class _Range)
+    CANN_ASC_STL_DETAIL_REQUIRES(((!common_range<_Range>)))
     CANN_ASC_STL_API constexpr common_view<all_t<_Range>> operator()(_Range&& __range) const
     {
-        return common_view<all_t<_Range>>(::asc::std::ranges::views::all(::asc::std::forward<_Range>(__range)));
+        return common_view<all_t<_Range>>(::asc::std::ranges::views::all(
+            ::asc::std::forward<_Range>(__range)));  // NOLINT(build/include_what_you_use)
     }
 };
-#else
-struct __fn : __range_adaptor_closure<__fn> {
-    template <class _Range>
-    CANN_ASC_STL_API constexpr auto operator()(_Range&& __range) const
-    {
-        auto view = ::asc::std::ranges::views::all(::asc::std::forward<_Range>(__range));
-        return ::asc::std::ranges::common_view<decltype(view)>(
-            ::asc::std::move(view));  // NOLINT(build/include_what_you_use)
-    }
-};
-#endif
 
 }  // namespace __common
 

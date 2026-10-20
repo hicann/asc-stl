@@ -28,6 +28,7 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__algorithm/iter_swap.h>
 #include <asc/std/__concepts/class_or_enum.h>
 #include <asc/std/__concepts/swappable.h>
 #include <asc/std/__iterator/concepts.h>
@@ -41,27 +42,32 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#ifndef CANN_ASC_STL_DETAIL_ITER_SWAP_DEFINED
-#define CANN_ASC_STL_DETAIL_ITER_SWAP_DEFINED
-template <class I1, class I2>
-CANN_ASC_STL_API constexpr void iter_swap(I1 left, I2 right) noexcept(
-    noexcept(*left = ::asc::std::iter_move(right)) && noexcept(*right = ::asc::std::iter_move(left)))
-{
-    auto temporary = ::asc::std::iter_move(left);
-    *left = ::asc::std::iter_move(right);
-    *right = ::asc::std::move(temporary);  // NOLINT(build/include_what_you_use)
-}
-#endif
-
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class I1, class I2 = I1>
 concept indirectly_swappable =
     indirectly_readable<I1> && indirectly_readable<I2> && requires(const I1 left, const I2 right) {
-        ::asc::std::iter_swap(left, left);
-        ::asc::std::iter_swap(right, right);
-        ::asc::std::iter_swap(left, right);
-        ::asc::std::iter_swap(right, left);
+        ::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left, left);
+        ::asc::std::ranges::__iter_swap::__iter_swap_fn{}(right, right);
+        ::asc::std::ranges::__iter_swap::__iter_swap_fn{}(left, right);
+        ::asc::std::ranges::__iter_swap::__iter_swap_fn{}(right, left);
     };
+#else
+template <class I1, class I2, class = void>
+inline constexpr bool __indirectly_swappable_impl = false;
+template <class I1, class I2>
+inline constexpr bool __indirectly_swappable_impl<I1, I2,
+    void_t<enable_if_t<indirectly_readable<I1> && indirectly_readable<I2> >,
+        decltype(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(
+            ::asc::std::declval<const I1&>(), ::asc::std::declval<const I1&>())),
+        decltype(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(
+            ::asc::std::declval<const I2&>(), ::asc::std::declval<const I2&>())),
+        decltype(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(
+            ::asc::std::declval<const I1&>(), ::asc::std::declval<const I2&>())),
+        decltype(::asc::std::ranges::__iter_swap::__iter_swap_fn{}(
+            ::asc::std::declval<const I2&>(), ::asc::std::declval<const I1&>()))> > = true;
+template <class I1, class I2 = I1>
+inline constexpr bool indirectly_swappable = __indirectly_swappable_impl<I1, I2>;
+
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

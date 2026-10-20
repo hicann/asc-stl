@@ -34,10 +34,8 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class T>
-concept semiregular = copyable<T> && default_initializable<T>;
-#endif
+CANN_ASC_STL_DETAIL_CONCEPT semiregular = copyable<T> && default_initializable<T>;
 
 CANN_ASC_STL_END_NAMESPACE
 

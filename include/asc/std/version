@@ -27,58 +27,54 @@
 #pragma system_header
 #endif
 
-// ASC-STL 自有 feature-test 宏：仅描述本库自行交付的设施，不镜像宿主 <version>
-// ——宿主设施在 CCE/独立实现翻译单元下可能不可用，前向声明不构成实现。
-// 标准名 __cpp_lib_* 宏保持原有 #ifndef 守卫追加；ASC 改名宏按方言与内建支持门控。
+// These capabilities describe ASC-STL's selected interface subsets in the
+// current supported configuration. They do not describe the Host std library
+// or claim full conformance to an entire ISO library revision.
+#define CANN_ASC_STL_HAS_SOURCE_LOCATION 1
+#define CANN_ASC_STL_HAS_UNREACHABLE 1
+#define CANN_ASC_STL_HAS_TYPE_IDENTITY 1
+#define CANN_ASC_STL_HAS_ENDIAN 1
+#define CANN_ASC_STL_HAS_CONCEPT_PREDICATES 1
+#define CANN_ASC_STL_HAS_NATIVE_CONCEPTS CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
+#define CANN_ASC_STL_HAS_SPAN 1
+#define CANN_ASC_STL_HAS_TO_ARRAY 1
+#define CANN_ASC_STL_HAS_MDSPAN 1
+#define CANN_ASC_STL_HAS_SUBMDSPAN 1
+#define CANN_ASC_STL_HAS_EXPECTED 1
+#define CANN_ASC_STL_HAS_OPTIONAL_REFERENCE 1
+#define CANN_ASC_STL_HAS_INPLACE_VECTOR 1
+#define CANN_ASC_STL_HAS_PHILOX 1
+#define CANN_ASC_STL_HAS_ALLOCATE_AT_LEAST 1
+#define CANN_ASC_STL_HAS_FORMAT_TO_N_RESULT 1
+#define CANN_ASC_STL_HAS_FORMAT CANN_ASC_STL_DETAIL_HAS_CONSTEVAL()
 
+#if defined(CANN_ASC_STL_DETAIL_BUILTIN_IS_CONSTANT_EVALUATED) ||       \
+    CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_is_constant_evaluated) || \
+    (defined(__GNUC__) && !defined(__clang__) && __GNUC__ >= 9)
+#define CANN_ASC_STL_HAS_IS_CONSTANT_EVALUATED 1
+#define CANN_ASC_STL_DETAIL_LIB_is_constant_evaluated 201811L
+#else
+#define CANN_ASC_STL_HAS_IS_CONSTANT_EVALUATED 0
+#endif
+
+// Preserve the existing internal date vocabulary for its real backports.
+#define CANN_ASC_STL_DETAIL_LIB_bool_constant 201505L
+#define CANN_ASC_STL_DETAIL_LIB_integral_constant_callable 201304L
+#define CANN_ASC_STL_DETAIL_LIB_void_t 201411L
+#define CANN_ASC_STL_DETAIL_LIB_endian 201907L
+#define CANN_ASC_STL_DETAIL_LIB_type_identity 201806L
+#define CANN_ASC_STL_DETAIL_LIB_unreachable 202202L
+
+// Transitional opt-in for consumers of the old ASC feature names. These names
+// describe ASC facilities only in this mode; they must not be used as evidence
+// for the Host std namespace. The default leaves Host library macros untouched.
+#if defined(CANN_ASC_STL_ENABLE_LEGACY_STD_FEATURE_MACROS) && CANN_ASC_STL_ENABLE_LEGACY_STD_FEATURE_MACROS
 #ifndef __cpp_lib_source_location
 #define __cpp_lib_source_location 201907L
 #endif
-
 #ifndef __cpp_lib_unreachable
 #define __cpp_lib_unreachable 202202L
 #endif
-
-// 基座 __config 未提供 CANN_ASC_STL_DETAIL_STD_VER（定义于开发树
-// asc/std/__asc/dialect.h）：基于基座 CANN_ASC_STL_DETAIL_CPLUSPLUS 内联其
-// 语义的最小等价，#ifndef 守卫以免与树内其他文件的同名内联或未来基座定义冲突。
-#ifndef CANN_ASC_STL_DETAIL_STD_VER
-#if CANN_ASC_STL_DETAIL_CPLUSPLUS <= 199711L
-#define CANN_ASC_STL_DETAIL_STD_VER 2003
-#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201103L
-#define CANN_ASC_STL_DETAIL_STD_VER 2011
-#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201402L
-#define CANN_ASC_STL_DETAIL_STD_VER 2014
-#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 201703L
-#define CANN_ASC_STL_DETAIL_STD_VER 2017
-#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202002L
-#define CANN_ASC_STL_DETAIL_STD_VER 2020
-#elif CANN_ASC_STL_DETAIL_CPLUSPLUS <= 202302L
-#define CANN_ASC_STL_DETAIL_STD_VER 2023
-#else
-#define CANN_ASC_STL_DETAIL_STD_VER 2024
-#endif
-#endif  // CANN_ASC_STL_DETAIL_STD_VER
-
-#define CANN_ASC_STL_DETAIL_LIB_bool_constant 201505L
-#define CANN_ASC_STL_DETAIL_LIB_integral_constant_callable 201304L
-
-#if CANN_ASC_STL_DETAIL_STD_VER >= 2017
-#define CANN_ASC_STL_DETAIL_LIB_void_t 201411L
-#endif
-
-#if CANN_ASC_STL_DETAIL_STD_VER >= 2020
-#define CANN_ASC_STL_DETAIL_LIB_endian 201907L
-#define CANN_ASC_STL_DETAIL_LIB_type_identity 201806L
-#if defined(CANN_ASC_STL_DETAIL_BUILTIN_IS_CONSTANT_EVALUATED) ||       \
-    CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_is_constant_evaluated) || \
-    (defined(__GNUC__) && !defined(__clang__) && (__GNUC__ >= 9))
-#define CANN_ASC_STL_DETAIL_LIB_is_constant_evaluated 201811L
-#endif
-#endif
-
-#if CANN_ASC_STL_DETAIL_STD_VER >= 2023
-#define CANN_ASC_STL_DETAIL_LIB_unreachable 202202L
 #endif
 
 #endif  // CANN_ASC_STL_STD_VERSION

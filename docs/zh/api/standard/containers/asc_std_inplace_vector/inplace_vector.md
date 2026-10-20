@@ -30,7 +30,7 @@
 
 `asc::std::inplace_vector`在对象内的固定容量存储中保存元素。
 
-该接口的可用位置为Host（完整接口）、Device（非抛出子集）。
+Host和Device均提供已列出的非抛出接口子集，基本值操作从C++17起可用。
 
 标准语义参考：[cppreference `inplace_vector`](https://en.cppreference.com/w/cpp/header/inplace_vector)。
 
@@ -44,9 +44,10 @@ template<class T, asc::std::size_t Capacity> class inplace_vector;
 
 ## 约束说明
 
-- 最终C++26标准inplace_vector/erase/erase_if合同：Host交付除P4022R0已删除try_append_range外的完整构造、赋值、迭代、访问、修改（含投抛成员 at/push_back/emplace_back/resize，越界抛 out_of_range、容量已满抛 bad_alloc）、try/unchecked、六个比较运算符与三路比较、swap、容量、零容量empty/trivial与constexpr/约束合同。
-- Device交付固定容量内联存储的非抛子合同，包括观察/迭代/operator[]/front/back、不抛出异常拷移赋值析构、try/unchecked后插、pop_back/clear、不抛出异常 erase/erase_if/swap、相等与不抛出异常三路比较、完整零容量核心。
-- Host 提供完整接口，设备端仅提供不抛出异常的接口。
+- 支持固定容量内联存储、观察和迭代、`operator[]`、`front`、`back`、`try`/`unchecked`后插、`pop_back`、`clear`，以及API列表中已列出的其他操作。
+- Host和Device均不提供投抛成员`at`、`push_back`、`emplace_back`和`resize`，也不提供`try_append_range`。
+- `try_push_back`和`try_emplace_back`返回`optional<T&>`；容量不足时返回空对象。`unchecked`插入要求调用方事先保证有剩余容量。
+- 元素的构造、赋值和析构须满足对应成员及执行位置的限制。编译期可用性还受语言对象生命周期规则和具体元素操作影响，不能由`constexpr`声明推断所有状态切换都能常量求值。
 
 ## 调用示例
 

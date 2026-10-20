@@ -95,6 +95,10 @@ inline constexpr bool __equality_comparable_with_impl<T, U,
         common_reference_t<__make_const_lvalue_ref<T>, __make_const_lvalue_ref<U>>> &&
     __weakly_equality_comparable_with<T, U>;
 
+template <class T>
+inline constexpr bool equality_comparable = __weakly_equality_comparable_with<T, T>;
+template <class T, class U>
+inline constexpr bool equality_comparable_with = __equality_comparable_with_impl<T, U>;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

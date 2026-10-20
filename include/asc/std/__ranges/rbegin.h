@@ -66,120 +66,55 @@ CANN_ASC_STL_API constexpr auto __adl_rbegin(T&& value) noexcept(noexcept(rbegin
     return rbegin(value);
 }
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-
-template <class T>
-concept __member_rbegin = __access_detail::__can_borrow<T> && __workaround_52970<T> && requires(T&& __t) {
-    {
-        __t.rbegin()
-    } -> input_or_output_iterator;  // the return-type requirement is expanded at the use site (returns the iterator by
-                                    // value)
-};
-
-template <class T>
-concept __unqualified_rbegin =
-    !__member_rbegin<T> && __access_detail::__can_borrow<T> && __class_or_enum<remove_cvref_t<T>> && requires(T&& __t) {
-        { __adl_rbegin(__t) } -> input_or_output_iterator;
-    };
-
-template <class T>
-concept __can_reverse =
-    __access_detail::__can_borrow<T> && !__member_rbegin<T> && !__unqualified_rbegin<T> && requires(T&& __t) {
-        { ::asc::std::ranges::__begin_cpo{}(__t) } -> same_as<decltype(::asc::std::ranges::__end_cpo{}(__t))>;
-        { ::asc::std::ranges::__begin_cpo{}(__t) } -> bidirectional_iterator;
-    };
-
-struct __fn {
-    template <class T>
-        requires __member_rbegin<T>
-    CANN_ASC_STL_API constexpr auto operator()(T&& __t) const noexcept(noexcept(__t.rbegin()))
-    {
-        return __t.rbegin();
-    }
-
-    template <class T>
-        requires __unqualified_rbegin<T>
-    CANN_ASC_STL_API constexpr auto operator()(T&& __t) const noexcept(noexcept(__adl_rbegin(__t)))
-    {
-        return __adl_rbegin(__t);
-    }
-
-    template <class T>
-        requires __can_reverse<T>
-    CANN_ASC_STL_API constexpr auto operator()(T&& __t) const noexcept(noexcept(::asc::std::ranges::__end_cpo{}(__t)))
-    {
-        return ::asc::std::make_reverse_iterator(::asc::std::ranges::__end_cpo{}(__t));
-    }
-
-    template <class T>
-        requires(!__member_rbegin<T> && !__unqualified_rbegin<T> && !__can_reverse<T>)
-    void operator()(T&&) const = delete;
-};
-
-#else  // ^^^ concepts ^^^ / vvv !concepts vvv
-
-// Non-concepts path: expanded with the conventional void_t detection +
-// enable_if_t, semantically aligned with the concepts version; the iterator
-// concept constraints on the return type (input_or_output_iterator /
-// bidirectional_iterator) degrade here to expression-validity-level checks,
-// while the remaining gates (can_borrow / class-or-enum / same begin-end type)
-// are unchanged.
-template <class T>
-inline constexpr bool __is_class_or_union_v = is_class_v<remove_cvref_t<T>> || is_union_v<remove_cvref_t<T>>;
-template <class T>
-inline constexpr bool __is_class_or_enum_v = __is_class_or_union_v<T> || is_enum_v<remove_cvref_t<T>>;
-
 template <class T, class = void>
 struct __has_member_rbegin : false_type {};
 template <class T>
-struct __has_member_rbegin<T, void_t<decltype(::asc::std::declval<T>().rbegin())>>
-    : bool_constant<__access_detail::__can_borrow<T> && __is_class_or_union_v<T>> {};
+struct __has_member_rbegin<T,
+    void_t<decltype(static_cast<decay_t<decltype(::asc::std::declval<remove_reference_t<T>&>().rbegin())>>(
+        ::asc::std::declval<remove_reference_t<T>&>().rbegin()))>>
+    : bool_constant<__access_detail::__can_borrow<T> && __workaround_52970<T> &&
+          input_or_output_iterator<decay_t<decltype(::asc::std::declval<remove_reference_t<T>&>().rbegin())>>> {};
 
 template <class T, class = void>
 struct __has_adl_rbegin : false_type {};
 template <class T>
-struct __has_adl_rbegin<T, void_t<decltype(__adl_rbegin(::asc::std::declval<T>()))>>
-    : bool_constant<__access_detail::__can_borrow<T> && __is_class_or_enum_v<T>> {};
+struct __has_adl_rbegin<T,
+    void_t<decltype(static_cast<decay_t<decltype(__adl_rbegin(::asc::std::declval<remove_reference_t<T>&>()))>>(
+        __adl_rbegin(::asc::std::declval<remove_reference_t<T>&>())))>>
+    : bool_constant<__access_detail::__can_borrow<T> && __class_or_enum<remove_cvref_t<T>> &&
+          input_or_output_iterator<decay_t<decltype(__adl_rbegin(::asc::std::declval<remove_reference_t<T>&>()))>>> {};
 
 template <class T, class = void>
 struct __same_begin_end : false_type {};
 template <class T>
-struct __same_begin_end<T,
-    void_t<decltype(::asc::std::ranges::__begin_cpo{}(::asc::std::declval<T>())),
-        decltype(::asc::std::ranges::__end_cpo{}(::asc::std::declval<T>()))>>
-    : bool_constant<is_same_v<decltype(::asc::std::ranges::__begin_cpo{}(::asc::std::declval<T>())),
-          decltype(::asc::std::ranges::__end_cpo{}(::asc::std::declval<T>()))>> {};
+struct __same_begin_end<T, void_t<iterator_t<T>, decltype(__end_cpo{}(::asc::std::declval<T&>()))>>
+    : bool_constant<__access_detail::__can_borrow<T> &&
+          is_same_v<iterator_t<T>, decltype(__end_cpo{}(::asc::std::declval<T&>()))> &&
+          bidirectional_iterator<iterator_t<T>>> {};
 
 struct __fn {
     template <class T, enable_if_t<__has_member_rbegin<T>::value, int> = 0>
-    CANN_ASC_STL_API constexpr auto operator()(T&& __t) const noexcept(noexcept(__t.rbegin()))
+    CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(
+        noexcept(static_cast<decay_t<decltype(value.rbegin())>>(value.rbegin()))) -> decay_t<decltype(value.rbegin())>
     {
-        return __t.rbegin();
+        return static_cast<decay_t<decltype(value.rbegin())>>(value.rbegin());
     }
-
     template <class T, enable_if_t<!__has_member_rbegin<T>::value && __has_adl_rbegin<T>::value, int> = 0>
-    CANN_ASC_STL_API constexpr auto operator()(T&& __t) const noexcept(noexcept(__adl_rbegin(__t)))
+    CANN_ASC_STL_API constexpr auto operator()(T&& value) const
+        noexcept(noexcept(static_cast<decay_t<decltype(__adl_rbegin(value))>>(
+            __adl_rbegin(value)))) -> decay_t<decltype(__adl_rbegin(value))>
     {
-        return __adl_rbegin(__t);
+        return static_cast<decay_t<decltype(__adl_rbegin(value))>>(__adl_rbegin(value));
     }
-
     template <class T,
-        enable_if_t<!__has_member_rbegin<T>::value && !__has_adl_rbegin<T>::value && __access_detail::__can_borrow<T> &&
-                __same_begin_end<T>::value,
-            int> = 0>
-    CANN_ASC_STL_API constexpr auto operator()(T&& __t) const
-        noexcept(noexcept(::asc::std::make_reverse_iterator(::asc::std::ranges::__end_cpo{}(__t))))
-    {
-        return ::asc::std::make_reverse_iterator(::asc::std::ranges::__end_cpo{}(__t));
-    }
-
-    template <class T,
-        enable_if_t<!__has_member_rbegin<T>::value && !__has_adl_rbegin<T>::value && !__same_begin_end<T>::value, int> =
+        enable_if_t<!__has_member_rbegin<T>::value && !__has_adl_rbegin<T>::value && __same_begin_end<T>::value, int> =
             0>
-    void operator()(T&&) const = delete;
+    CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(noexcept(::asc::std::make_reverse_iterator(
+        __end_cpo{}(value)))) -> decltype(::asc::std::make_reverse_iterator(__end_cpo{}(value)))
+    {
+        return ::asc::std::make_reverse_iterator(__end_cpo{}(value));
+    }
 };
-
-#endif  // !concepts
 
 }  // namespace __rbegin_detail
 

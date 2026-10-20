@@ -35,6 +35,10 @@
 #include <asc/std/system_error>
 #include <asc/std/type_traits>
 
+#include "cxx17_foundation_semantics.h"
+#include "cxx17_container_semantics.h"
+#include "cxx17_views_semantics.h"
+
 namespace asc_stl_w13_w14_test {
 
 struct add_index {
@@ -211,6 +215,9 @@ CANN_ASC_STL_API CANN_ASC_STL_DETAIL_NO_INLINE unsigned int evaluate_numeric()
     failures += asc::std::gcd(42, 30) != 6 || asc::std::lcm(6, 15) != 30;
     failures += asc::std::midpoint(2, 8) != 5;
     failures += asc::std::saturating_add(2147483647, 1) != 2147483647;
+    failures += asc_stl_cxx17_foundation::evaluate() != 0;
+    failures += asc_stl_cxx17_container_test::evaluate() != 0;
+    failures += asc_stl_cxx17_views_test::evaluate() != 0;
     return failures;
 }
 

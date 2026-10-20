@@ -25,11 +25,24 @@
 #include <asc/std/__type_traits/is_comparable.h>
 #include <asc/std/__type_traits/is_swappable.h>
 
-#ifdef CANN_ASC_STL_DETAIL_CONCEPT
-#error "C++20 concept syntax macros must not be exposed in C++17"
+#if !defined(CANN_ASC_STL_DETAIL_CONCEPT) || !defined(CANN_ASC_STL_DETAIL_TEMPLATE) || \
+    !defined(CANN_ASC_STL_DETAIL_REQUIRES)
+#error "C++17 library constraints require the portable bool and SFINAE bridge"
 #endif
 
 namespace {
+
+template <class T>
+CANN_ASC_STL_DETAIL_CONCEPT integer_type = asc::std::integral<T>;
+
+struct constrained_callable {
+    CANN_ASC_STL_DETAIL_TEMPLATE(class T)
+    CANN_ASC_STL_DETAIL_REQUIRES(integer_type<T>)
+    constexpr int operator()(T value) const noexcept
+    {
+        return value + 1;
+    }
+};
 
 struct readable {
     using value_type = const int;
@@ -50,6 +63,14 @@ int main()
     static_assert(!CANN_ASC_STL_DETAIL_HAS_CXX20());
     static_assert(!CANN_ASC_STL_DETAIL_HAS_CONCEPTS());
     static_assert(!CANN_ASC_STL_DETAIL_HAS_CHAR8_T());
+    static_assert(!CANN_ASC_STL_DETAIL_HAS_CONSTEVAL());
+    // The bridge exposes bool predicates and constrained ordinary templates;
+    // it does not enable native concept / requires syntax in this mode.
+    static_assert(asc::std::is_same_v<decltype(integer_type<int>), const bool>);
+    static_assert(integer_type<int> && !integer_type<double>);
+    static_assert(asc::std::is_invocable_v<constrained_callable, int>);
+    static_assert(!asc::std::is_invocable_v<constrained_callable, double>);
+    static_assert(constrained_callable{}(3) == 4);
     static_assert(asc::std::is_invocable_v<callable, int>);
     static_assert(asc::std::is_same_v<asc::std::incrementable_traits<int*>::difference_type, asc::std::ptrdiff_t>);
     static_assert(asc::std::is_same_v<asc::std::indirectly_readable_traits<readable>::value_type, int>);

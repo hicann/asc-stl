@@ -31,16 +31,12 @@
 #include <asc/std/__iterator/concepts.h>
 #include <asc/std/__iterator/iter_swap.h>
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
-
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class _Iterator>
-concept permutable = forward_iterator<_Iterator> && indirectly_movable_storable<_Iterator, _Iterator> &&
-    indirectly_swappable<_Iterator, _Iterator>;
+CANN_ASC_STL_DETAIL_CONCEPT permutable = forward_iterator<_Iterator> &&
+    indirectly_movable_storable<_Iterator, _Iterator> && indirectly_swappable<_Iterator, _Iterator>;
 
 CANN_ASC_STL_END_NAMESPACE
-
-#endif
 
 #endif  // CANN_ASC_STL_ASC_STD___ITERATOR_PERMUTABLE_H

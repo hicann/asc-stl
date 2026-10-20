@@ -70,6 +70,22 @@ inline constexpr bool __brace_default_initializable = false;
 template <class T>
 inline constexpr bool __brace_default_initializable<T, void_t<decltype(T{})>> = true;
 
+template <class T, class... Args>
+inline constexpr bool constructible_from = destructible<T> && is_constructible_v<T, Args...>;
+template <class T>
+inline constexpr bool default_initializable =
+    constructible_from<T> && __brace_default_initializable<T> && __default_initializable<T>;
+template <class T>
+inline constexpr bool move_constructible = constructible_from<T, T> && convertible_to<T, T>;
+template <class T, class = void>
+inline constexpr bool __copy_constructible_impl = false;
+template <class T>
+inline constexpr bool __copy_constructible_impl<T, void_t<T&>> =
+    move_constructible<T> && constructible_from<T, T&> && convertible_to<T&, T> && constructible_from<T, const T&> &&
+    convertible_to<const T&, T> && constructible_from<T, const T> && convertible_to<const T, T>;
+template <class T>
+inline constexpr bool copy_constructible = __copy_constructible_impl<T>;
+
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

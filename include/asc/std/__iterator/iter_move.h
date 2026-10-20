@@ -76,8 +76,8 @@ struct __deref_move<T, false> {
     }
 };
 
-template <class T, bool = __has_adl_iter_move<T&&>::value>
-struct __dispatch;
+template <class T, bool = __has_adl_iter_move<T&&>::value, class = void>
+struct __dispatch {};
 
 template <class T>
 struct __dispatch<T, true> {
@@ -89,7 +89,7 @@ struct __dispatch<T, true> {
 };
 
 template <class T>
-struct __dispatch<T, false> {
+struct __dispatch<T, false, void_t<decltype(*::asc::std::declval<T&&>())>> {
     CANN_ASC_STL_API static constexpr auto call(T&& value) noexcept(noexcept(__deref_move<T&&>::call(
         ::asc::std::forward<T>(value)))) -> decltype(__deref_move<T&&>::call(::asc::std::forward<T>(value)))
     {

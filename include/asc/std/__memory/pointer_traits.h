@@ -41,16 +41,6 @@
 #include <asc/std/__utility/declval.h>
 #include <asc/std/cstddef>
 
-// Base asc/__config provides no CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 macro, so
-// define the minimal equivalent here, #ifndef-guarded against redefinition.
-#ifndef CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
-#define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 constexpr
-#else
-#define CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
-#endif
-#endif  // CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20
-
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class P, class = void>
@@ -130,7 +120,7 @@ private:
     struct __nat {};
 
 public:
-    CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 static pointer pointer_to(
+    CANN_ASC_STL_API static constexpr pointer pointer_to(
         conditional_t<is_void_v<element_type>, __nat, element_type>& value)
     {
         return pointer::pointer_to(value);

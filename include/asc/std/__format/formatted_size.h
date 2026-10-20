@@ -31,7 +31,7 @@
 #include <asc/std/__cstddef/types.h>
 #include <asc/std/__format/format_to.h>
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
+#if CANN_ASC_STL_DETAIL_HAS_CONSTEVAL()
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -45,6 +45,6 @@ CANN_ASC_STL_API constexpr size_t formatted_size(format_string<Args...> format, 
 
 CANN_ASC_STL_END_NAMESPACE
 
-#endif  // CANN_ASC_STL_DETAIL_HAS_CXX20()
+#endif  // CANN_ASC_STL_DETAIL_HAS_CONSTEVAL()
 
 #endif  // CANN_ASC_STL_ASC_STD___FORMAT_FORMATTED_SIZE_H

@@ -63,6 +63,8 @@ inline constexpr bool __common_with_impl<T, U,
     __common_reference_with_impl<add_lvalue_reference_t<common_type_t<T, U>>,
         common_reference_t<add_lvalue_reference_t<const T>, add_lvalue_reference_t<const U>>>;
 
+template <class T, class U>
+inline constexpr bool common_with = __common_with_impl<T, U>;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

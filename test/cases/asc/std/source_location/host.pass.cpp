@@ -15,6 +15,7 @@
  */
 
 #include <asc/std/source_location>
+#include <asc/std/version>
 
 #include <type_traits>
 
@@ -36,7 +37,7 @@ constexpr bool strings_equal(const char* left, const char* right)
 
 int main()
 {
-    static_assert(__cpp_lib_source_location == 201907L);
+    static_assert(CANN_ASC_STL_HAS_SOURCE_LOCATION == 1);
     constexpr auto explicit_location = asc::std::source_location::current("manual.cpp", "manual", 123, 17);
     static_assert(explicit_location.line() == 123);
     static_assert(explicit_location.column() == 17);

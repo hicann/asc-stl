@@ -38,21 +38,16 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class T>
-concept integral = is_integral_v<T>;
+CANN_ASC_STL_DETAIL_CONCEPT integral = is_integral_v<T>;
 template <class T>
-concept signed_integral = integral<T> && is_signed_v<T>;
+CANN_ASC_STL_DETAIL_CONCEPT signed_integral = integral<T> && is_signed_v<T>;
 template <class T>
-concept unsigned_integral = integral<T> && !signed_integral<T>;
+CANN_ASC_STL_DETAIL_CONCEPT unsigned_integral = integral<T> && !signed_integral<T>;
 template <class T>
-concept floating_point = is_floating_point_v<T>;
+CANN_ASC_STL_DETAIL_CONCEPT floating_point = is_floating_point_v<T>;
 template <class T>
-concept __asc_signed_integer = __is_signed_integer_v<remove_cv_t<T>>;
-#else
-template <class T>
-inline constexpr bool __asc_signed_integer = __is_signed_integer_v<remove_cv_t<T>>;
-#endif
+CANN_ASC_STL_DETAIL_CONCEPT __asc_signed_integer = __is_signed_integer_v<remove_cv_t<T>>;
 
 CANN_ASC_STL_END_NAMESPACE
 

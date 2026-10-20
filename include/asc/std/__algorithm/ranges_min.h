@@ -56,9 +56,8 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace ranges {
 struct __min_fn {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class T, class Projection = identity, class Compare = ranges::less>
-        requires indirect_strict_weak_order<Compare, projected<const T*, Projection>>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class T, class Projection = identity, class Compare = ranges::less)
+    CANN_ASC_STL_DETAIL_REQUIRES(indirect_strict_weak_order<Compare, projected<const T*, Projection>>)
     CANN_ASC_STL_API constexpr const T& operator()(
         const T& left, const T& right, Compare compare = {}, Projection projection = {}) const
     {
@@ -67,14 +66,15 @@ struct __min_fn {
             right :
             left;
     }
-    template <class Range, class Compare = ranges::less, class Projection = identity>
-        requires input_range<Range> && indirect_strict_weak_order<Compare, projected<iterator_t<Range>, Projection>> &&
-        indirectly_copyable_storable<iterator_t<Range>, range_value_t<Range>*>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Range, class Compare = ranges::less, class Projection = identity)
+    CANN_ASC_STL_DETAIL_REQUIRES(
+        input_range<Range>&& indirect_strict_weak_order<Compare, projected<iterator_t<Range>, Projection>>&&
+            indirectly_copyable_storable<iterator_t<Range>, range_value_t<Range>*>)
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr range_value_t<Range> operator()(
         Range&& range, Compare compare = {}, Projection projection = {}) const
     {
-        auto first = ranges::begin(range);
-        const auto last = ranges::end(range);
+        auto first = ranges::__begin_cpo{}(range);
+        const auto last = ranges::__end_cpo{}(range);
         CANN_ASC_STL_DETAIL_ASSERT(first != last, "range passed to ranges::min must be non-empty");
         range_value_t<Range> result = *first;
         while (++first != last) {
@@ -85,35 +85,6 @@ struct __min_fn {
         }
         return result;
     }
-#else
-    template <class T, class Projection = identity, class Compare = ranges::less>
-    CANN_ASC_STL_API constexpr const T& operator()(
-        const T& left, const T& right, Compare compare = {}, Projection projection = {}) const
-    {
-        return ::asc::std::invoke(
-                   compare, ::asc::std::invoke(projection, right), ::asc::std::invoke(projection, left)) ?
-            right :
-            left;
-    }
-    template <class Range, class Compare = ranges::less, class Projection = identity,
-        class = enable_if_t<is_invocable_v<Compare&, invoke_result_t<Projection&, iter_reference_t<iterator_t<Range>>>,
-            invoke_result_t<Projection&, iter_reference_t<iterator_t<Range>>>>>>
-    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr range_value_t<Range> operator()(
-        Range&& range, Compare compare = {}, Projection projection = {}) const
-    {
-        auto first = ranges::begin(range);
-        const auto last = ranges::end(range);
-        CANN_ASC_STL_DETAIL_ASSERT(first != last, "range passed to ranges::min must be non-empty");
-        range_value_t<Range> result = *first;
-        while (++first != last) {
-            if (::asc::std::invoke(
-                    compare, ::asc::std::invoke(projection, *first), ::asc::std::invoke(projection, result))) {
-                result = *first;
-            }
-        }
-        return result;
-    }
-#endif
 };
 inline constexpr __min_fn min{};
 }  // namespace ranges

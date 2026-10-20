@@ -16,5 +16,5 @@
 | [asc::std::format_string](format_string.md) | 别名模板 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::format_to](format_to.md) | 函数模板 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::format_to_n](format_to_n.md) | 函数模板 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::format_to_n_result](format_to_n_result.md) | 类模板 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::format_to_n_result](format_to_n_result.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::formatted_size](formatted_size.md) | 函数模板 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |

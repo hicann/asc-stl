@@ -60,6 +60,8 @@ inline constexpr bool __destructible<T&&> = true;
 template <class T, size_t N>
 inline constexpr bool __destructible<T[N]> = __destructible<T>;
 
+template <class T>
+inline constexpr bool destructible = is_nothrow_destructible_v<T>;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

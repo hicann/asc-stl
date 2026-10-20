@@ -33,12 +33,23 @@
 #include <asc/std/__concepts/constructible.h>
 #include <asc/std/__concepts/movable.h>
 
+#include <asc/std/__type_traits/void_t.h>
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class T>
 concept copyable = copy_constructible<T> && movable<T> && assignable_from<T&, T&> && assignable_from<T&, const T&> &&
     assignable_from<T&, const T>;
+#else
+template <class T, class = void>
+inline constexpr bool __copyable_impl = false;
+template <class T>
+inline constexpr bool __copyable_impl<T, void_t<T&> > = copy_constructible<T> && movable<T> &&
+    assignable_from<T&, T&> && assignable_from<T&, const T&> && assignable_from<T&, const T>;
+template <class T>
+inline constexpr bool copyable = __copyable_impl<T>;
+
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

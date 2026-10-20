@@ -29,8 +29,6 @@
 
 #include <asc/__detail/attributes.h>
 
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
-
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __format_detail {
@@ -49,7 +47,5 @@ struct output_buffer {
 }  // namespace __format_detail
 
 CANN_ASC_STL_END_NAMESPACE
-
-#endif  // CANN_ASC_STL_DETAIL_HAS_CXX20()
 
 #endif  // CANN_ASC_STL_ASC_STD___FORMAT_OUTPUT_BUFFER_H

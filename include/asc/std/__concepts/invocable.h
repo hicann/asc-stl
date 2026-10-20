@@ -59,6 +59,10 @@ using __invoke_constructible_result_t = decltype(static_cast<remove_cvref_t<invo
 
 template <class Fun, class... Args>
 inline constexpr bool __invoke_constructible = _IsValidExpansion<__invoke_constructible_result_t, Fun, Args...>::value;
+template <class Fn, class... Args>
+inline constexpr bool invocable = is_invocable_v<Fn, Args...>;
+template <class Fn, class... Args>
+inline constexpr bool regular_invocable = invocable<Fn, Args...>;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

@@ -45,6 +45,8 @@ template <class From, class To>
 inline constexpr bool __convertible_to_impl<From, To, void_t<decltype(static_cast<To>(::asc::std::declval<From>()))> > =
     is_convertible_v<From, To>;
 
+template <class From, class To>
+inline constexpr bool convertible_to = __convertible_to_impl<From, To>;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

@@ -83,6 +83,7 @@ template <class Iter>
 struct iterator_traits<Iter,
     void_t<typename Iter::difference_type, typename Iter::value_type, typename Iter::pointer, typename Iter::reference,
         typename Iter::iterator_category>> {
+    using __asc_primary_template = iterator_traits;
     using difference_type = typename Iter::difference_type;
     using value_type = typename Iter::value_type;
     using pointer = typename Iter::pointer;
@@ -101,7 +102,7 @@ struct iterator_traits<T*, enable_if_t<is_convertible_v<T (*)[], const volatile 
 };
 
 // Internal deduction mechanism for iterator concept tags: _ITER_TRAITS caches
-// the trait selection result after stripping cv/reference qualifiers;
+// the iterator-versus-explicit-traits selection after stripping cv/reference qualifiers;
 // _ITER_CONCEPT deduces an iterator's concept tag via a priority ladder
 // (raw pointer -> iterator_traits::iterator_concept ->
 // iterator_traits::iterator_category) for the tag-derivation checks of the
@@ -111,7 +112,11 @@ struct iterator_traits<T*, enable_if_t<is_convertible_v<T (*)[], const volatile 
 // the concept side's `requires { typename _ITER_CONCEPT<It>; }`).
 template <class Iter>
 struct __iter_traits_cache {
-    using type = iterator_traits<remove_cvref_t<Iter>>;
+    // For the generated primary traits, the iterator itself supplies its
+    // iterator_concept before its legacy category. An explicit user traits
+    // specialization remains authoritative instead.
+    using _RawIter = remove_cvref_t<Iter>;
+    using type = conditional_t<__is_primary_asc_template<_RawIter>::value, _RawIter, iterator_traits<_RawIter>>;
 };
 
 template <class Iter>

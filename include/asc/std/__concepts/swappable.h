@@ -92,7 +92,7 @@ inline constexpr bool __unqualified_swappable_with = __unqualified_swappable_wit
 
 template <class T>
 inline constexpr bool __exchangeable =
-    !__unqualified_swappable_with<T&, T&> && is_move_constructible_v<T> && is_assignable_v<T&, T>;
+    !__unqualified_swappable_with<T&, T&> && move_constructible<T> && assignable_from<T&, T>;
 
 template <class T, class U, size_t N, class = void>
 inline constexpr bool __swappable_arrays = false;
@@ -212,6 +212,11 @@ inline constexpr bool __swappable_with_impl<T, U,
         decltype(::asc::std::ranges::__swap_cpo{}(::asc::std::declval<T>(), ::asc::std::declval<U>())),
         decltype(::asc::std::ranges::__swap_cpo{}(::asc::std::declval<U>(), ::asc::std::declval<T>()))>> =
     __common_reference_with_impl<T, U>;
+
+template <class T>
+inline constexpr bool swappable = __swappable_impl<T>;
+template <class T, class U>
+inline constexpr bool swappable_with = __swappable_with_impl<T, U>;
 
 #endif
 

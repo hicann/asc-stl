@@ -125,6 +125,8 @@ NEGATIVE_DIAGNOSTIC_MARKERS = {
     "bool.fail.cpp": "static assertion",
     "floating.fail.cpp": "static assertion",
     "format_float.fail.asc": "static assertion",
+    "runtime_format.fail.cpp": "constant expression",
+    "invalid_literal.fail.cpp": "constant expression",
     "cxx17_absent.fail.cpp": "no template named",
     "invalid_spec.fail.cpp": "__builtin_trap",
     "repeat_unbounded.fail.cpp": "no matching function",
@@ -314,7 +316,7 @@ def append_semantic_case(
 ) -> None:
     tasks, standards, build_root, test_root = context
     source = case_root(test_root, target) / name
-    applicable = ["c++20"] if row["target"].startswith("asc/std/__concepts/") else standards
+    applicable = standards
     for standard in applicable:
         for mode, simt in (("simd", False), ("simt", True)):
             suffix = standard.replace("+", "x")

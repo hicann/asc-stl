@@ -34,11 +34,22 @@
 #include <asc/std/__concepts/swappable.h>
 #include <asc/std/__type_traits/is_object.h>
 
+#include <asc/std/__type_traits/void_t.h>
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
 template <class T>
 concept movable = is_object_v<T> && move_constructible<T> && assignable_from<T&, T> && swappable<T>;
+#else
+template <class T, class = void>
+inline constexpr bool __movable_impl = false;
+template <class T>
+inline constexpr bool __movable_impl<T, void_t<T&> > =
+    is_object_v<T> && move_constructible<T> && assignable_from<T&, T> && swappable<T>;
+template <class T>
+inline constexpr bool movable = __movable_impl<T>;
+
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

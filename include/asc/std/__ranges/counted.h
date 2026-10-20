@@ -28,6 +28,8 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__concepts/convertible_to.h>
 #include <asc/std/__iterator/concepts.h>
 #include <asc/std/__iterator/counted_iterator.h>
@@ -43,9 +45,8 @@
 #include <asc/std/span>
 namespace asc::std::ranges::views {
 struct __counted_fn {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class Iterator>
-        requires contiguous_iterator<Iterator>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Iterator)
+    CANN_ASC_STL_DETAIL_REQUIRES((contiguous_iterator<Iterator>))
     CANN_ASC_STL_API static constexpr auto __go(Iterator it, iter_difference_t<Iterator> count) noexcept(
         noexcept(span(::asc::std::to_address(it), static_cast<size_t>(count))))
     // Deliberately omit return-type SFINAE, because to_address is not SFINAE-friendly
@@ -53,16 +54,16 @@ struct __counted_fn {
         return span(::asc::std::to_address(it), static_cast<size_t>(count));
     }
 
-    template <class Iterator>
-        requires(!contiguous_iterator<Iterator> && random_access_iterator<Iterator>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Iterator)
+    CANN_ASC_STL_DETAIL_REQUIRES(((!contiguous_iterator<Iterator> && random_access_iterator<Iterator>)))
     CANN_ASC_STL_API static constexpr auto __go(Iterator it, iter_difference_t<Iterator> count) noexcept(
         noexcept(subrange(it, it + count))) -> subrange<Iterator>
     {
         return subrange(it, it + count);
     }
 
-    template <class Iterator>
-        requires(!contiguous_iterator<Iterator> && !random_access_iterator<Iterator>)
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Iterator)
+    CANN_ASC_STL_DETAIL_REQUIRES(((!contiguous_iterator<Iterator> && !random_access_iterator<Iterator>)))
     CANN_ASC_STL_API static constexpr auto __go(Iterator it, iter_difference_t<Iterator> count) noexcept(
         noexcept(subrange(counted_iterator(::asc::std::move(it), count), default_sentinel,
             static_cast<make_unsigned_t<iter_difference_t<Iterator>>>(
@@ -75,9 +76,9 @@ struct __counted_fn {
             static_cast<make_unsigned_t<iter_difference_t<Iterator>>>(count));
     }
 
-    template <class Iterator, class Difference>
-        requires convertible_to<Difference, iter_difference_t<decay_t<Iterator>>> &&
-                     input_or_output_iterator<decay_t<Iterator>>
+    CANN_ASC_STL_DETAIL_TEMPLATE(class Iterator, class Difference)
+    CANN_ASC_STL_DETAIL_REQUIRES((convertible_to<Difference, iter_difference_t<decay_t<Iterator>>> &&
+        input_or_output_iterator<decay_t<Iterator>>))
     CANN_ASC_STL_API constexpr auto operator()(Iterator&& it, Difference&& count) const
         noexcept(noexcept(__go(::asc::std::forward<Iterator>(it), ::asc::std::forward<Difference>(count))))
             -> decltype(__go(::asc::std::forward<Iterator>(it), ::asc::std::forward<Difference>(count)))
@@ -85,14 +86,6 @@ struct __counted_fn {
         return __go(::asc::std::forward<Iterator>(it),
             ::asc::std::forward<Difference>(count));  // NOLINT(build/include_what_you_use)
     }
-#else
-    template <class Iterator>
-    CANN_ASC_STL_API constexpr auto operator()(
-        Iterator first, iter_difference_t<Iterator> count) const -> subrange<Iterator, Iterator, subrange_kind::sized>
-    {
-        return {first, first + count, static_cast<__SIZE_TYPE__>(count)};
-    }
-#endif
 };
 inline constexpr __counted_fn counted{};
 }  // namespace asc::std::ranges::views

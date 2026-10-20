@@ -375,7 +375,6 @@ struct tuple_element<Index, array<T, Size>> {
     static_assert(Index < Size, "array tuple_element index out of bounds");
     using type = T;
 };
-#if CANN_ASC_STL_DETAIL_HAS_CXX20()
 // 直接花括号构造（经索引序列），不要求元素可默认构造。
 template <class T, size_t Size, size_t... Index>
 CANN_ASC_STL_API constexpr array<remove_cv_t<T>, Size> __to_array_lvalue_impl(
@@ -405,7 +404,6 @@ CANN_ASC_STL_API constexpr array<remove_cv_t<T>, Size> to_array(T (&&source)[Siz
     static_assert(is_move_constructible_v<T>, "to_array requires move constructible elements");
     return ::asc::std::__to_array_rvalue_impl(::asc::std::move(source), make_index_sequence<Size>());
 }
-#endif
 
 CANN_ASC_STL_END_NAMESPACE
 

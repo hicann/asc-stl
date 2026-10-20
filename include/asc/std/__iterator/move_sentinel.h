@@ -32,6 +32,7 @@
 #include <asc/std/__concepts/convertible_to.h>
 #include <asc/std/__concepts/semiregular.h>
 #include <asc/std/__utility/move.h>
+#include <asc/std/__type_traits/enable_if.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -41,6 +42,8 @@ template <semiregular _Sent>
 template <class _Sent>
 #endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 class move_sentinel {
+    static_assert(semiregular<_Sent>, "move_sentinel requires a semiregular sentinel");
+
 public:
     CANN_ASC_STL_API constexpr move_sentinel() = default;
 
@@ -52,16 +55,16 @@ public:
     template <class _S2>
         requires convertible_to<const _S2&, _Sent>
 #else   // !(CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION())
-    template <class _S2>
+    template <class _S2, enable_if_t<convertible_to<const _S2&, _Sent>, int> = 0>
 #endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     CANN_ASC_STL_API constexpr move_sentinel(const move_sentinel<_S2>& __s) : __last_(__s.base())
     {}
 
 #if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     template <class _S2>
-        requires assignable_from<const _S2&, _Sent>
+        requires assignable_from<_Sent&, const _S2&>
 #else   // !(CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION())
-    template <class _S2>
+    template <class _S2, enable_if_t<assignable_from<_Sent&, const _S2&>, int> = 0>
 #endif  // CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     CANN_ASC_STL_API constexpr move_sentinel& operator=(const move_sentinel<_S2>& __s)
     {

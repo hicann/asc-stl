@@ -64,9 +64,10 @@ using ::std::mbrtoc32;
 #define CANN_ASC_STL_DETAIL_MBSTATE_T_DEFINED
 using ::std::mbstate_t;
 #endif
-#if CANN_ASC_STL_DETAIL_HAS_CHAR8_T() && (!defined(_GLIBCXX_RELEASE) || _GLIBCXX_RELEASE >= 14)
-// char8_t the type and the char8 conversion functions are separate library
-// milestones: libstdc++ gained the functions only in release 14.
+#if CANN_ASC_STL_DETAIL_HAS_CHAR8_T()
+// Host conversion requires the actual system declarations and implementation.
+// A library major version cannot describe vendor backports or the configured C
+// library. The Host environment preflight verifies compilation, linking and use.
 using ::std::c8rtomb;
 using ::std::mbrtoc8;
 #endif

@@ -20,7 +20,6 @@
 
 int main()
 {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
     static_assert(asc::std::different_from<int, long>);
     static_assert(!asc::std::different_from<int, const int&>);
     static_assert(!asc::std::different_from<int, int>);
@@ -30,10 +29,4 @@ int main()
     constexpr bool reachable = asc::std::different_from<int, double>;
     static_assert(reachable);
     return 0;
-#else
-    // In C++17 the concept vocabulary is explicitly absent; only the Header
-    // parse is guaranteed. The mandatory absence check lives in the negative
-    // boundary gate.
-    return 0;
-#endif
 }

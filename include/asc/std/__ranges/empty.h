@@ -28,11 +28,12 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__concepts/concept_macros.h>
+#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__concepts/class_or_enum.h>
 #include <asc/std/__iterator/concepts.h>
 #include <asc/std/__ranges/access.h>
 #include <asc/std/__ranges/size.h>
-#include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/remove_cvref.h>
 #include <asc/std/__type_traits/void_t.h>
@@ -61,30 +62,12 @@ struct __has_member_empty<T, void_t<decltype(static_cast<bool>(::asc::std::declv
 // rebuilds its internal dispatch equivalently (member size / ADL size / begin-end
 // difference). The probe is SFINAE-safe throughout and matches the semantics of
 // "__size_cpo{}(t) is callable".
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 
 template <class T, class = void>
 struct __can_invoke_size : false_type {};
 template <class T>
 struct __can_invoke_size<T, void_t<decltype((void)::asc::std::ranges::__size_cpo{}(::asc::std::declval<T>()))>>
     : true_type {};
-
-#else
-
-template <class T, class = void>
-struct __begin_end_subtractable : false_type {};
-template <class T>
-struct __begin_end_subtractable<T,
-    void_t<decltype((void)(::asc::std::ranges::__end_cpo{}(::asc::std::declval<T>()) -
-        ::asc::std::ranges::__begin_cpo{}(::asc::std::declval<T>())))>> : true_type {};
-
-template <class T>
-struct __can_invoke_size
-    : bool_constant<(__size::__has_member_size<T>::value && !disable_sized_range<remove_cvref_t<T>>) ||
-          (__size::__has_adl_size<T>::value && !disable_sized_range<remove_cvref_t<T>>) ||
-          __begin_end_subtractable<T>::value> {};
-
-#endif
 
 template <class T, class = void>
 struct __can_compare_begin_end : false_type {};

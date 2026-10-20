@@ -39,8 +39,10 @@
 ### 原型1
 
 ```cpp
-// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class ...Indices> constexpr reference operator[](Indices... indices) const noexcept requires (Extents::rank() == 1&& sizeof...(Indices) == 1);
+// 一维调用的类内声明摘要，省略内部SFINAE。
+// rank()==1，OtherIndexType须可转换且可不抛出异常地构造index_type。
+template<class OtherIndexType>
+constexpr reference operator[](OtherIndexType index) const;
 ```
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
@@ -48,8 +50,10 @@ template<class ...Indices> constexpr reference operator[](Indices... indices) co
 ### 原型2
 
 ```cpp
-// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class ...Indices> constexpr reference operator[](Indices... indices) const noexcept requires (Extents::rank() > 1&& sizeof...(Indices) == Extents::rank());
+// 多维调用的类内声明摘要，省略内部SFINAE。
+// 下标数量须等于rank()，各下标须可转换为index_type。
+template<class... OtherIndexTypes>
+constexpr reference operator[](OtherIndexTypes... indices) const;
 ```
 
 该原型适用于`C++23+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
@@ -58,7 +62,7 @@ template<class ...Indices> constexpr reference operator[](Indices... indices) co
 
 ```cpp
 // asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class OtherIndexType> constexpr reference operator[](const array<OtherIndexType, Extents::rank()>& indices) const noexcept;
+template<class OtherIndexType> constexpr reference operator[](const array<OtherIndexType, Extents::rank()>& indices) const;
 ```
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
@@ -67,7 +71,7 @@ template<class OtherIndexType> constexpr reference operator[](const array<OtherI
 
 ```cpp
 // asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class OtherIndexType> constexpr reference operator[](span<OtherIndexType, Extents::rank()> indices) const noexcept;
+template<class OtherIndexType> constexpr reference operator[](span<OtherIndexType, Extents::rank()> indices) const;
 ```
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
@@ -80,13 +84,13 @@ template<class OtherIndexType> constexpr reference operator[](span<OtherIndexTyp
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Indices` | 下标实参的类型包；仅含一个成员，须可转换为index_type。 |
+| `OtherIndexType` | 一维下标实参的类型，须可转换为index_type且可不抛出异常地构造该类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `indices` | 输入 | 元素下标；适用于秩为1的视图，须满足0 <= 下标 < extent(0)，本接口不检查越界。 |
+| `index` | 输入 | 元素下标；适用于秩为1的视图，须满足0 <= 下标 < extent(0)，本接口不检查越界。 |
 
 ### 原型2的参数
 
@@ -94,7 +98,7 @@ template<class OtherIndexType> constexpr reference operator[](span<OtherIndexTyp
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Indices` | 按维度顺序排列的下标类型包；个数须等于秩，各类型须可转换为index_type。 |
+| `OtherIndexTypes` | 按维度顺序排列的下标类型包；个数须等于秩，各类型须可转换为index_type。 |
 
 **函数参数**
 

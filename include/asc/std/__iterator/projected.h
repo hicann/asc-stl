@@ -41,7 +41,9 @@ struct projected;
 template <class It, class Proj>
 struct projected<It, Proj, void_t<indirect_result_t<Proj&, It>>> {
     using value_type = remove_cvref_t<indirect_result_t<Proj&, It>>;
-    indirect_result_t<Proj&, It> operator*() const;
+    // This declaration participates in Device unevaluated expressions too.
+    // Pure SIMT still requires the execution-space annotation during lookup.
+    CANN_ASC_STL_API indirect_result_t<Proj&, It> operator*() const;
 };
 
 template <class It, class Proj>

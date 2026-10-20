@@ -30,7 +30,7 @@
 
 `asc::std::inplace_vector::try_emplace_back`尝试在固定容量容器尾部原位构造元素，成功时返回其引用。
 
-该接口的可用位置为Host（完整接口）、Device（非抛出子集）。
+该接口支持Host和Device，均限于本页列出的非抛出操作。
 
 标准语义参考：[cppreference `inplace_vector`](https://en.cppreference.com/w/cpp/header/inplace_vector)。
 

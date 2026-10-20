@@ -43,6 +43,7 @@
 #include <asc/std/__type_traits/make_signed.h>
 #include <asc/std/__type_traits/make_unsigned.h>
 #include <asc/std/__type_traits/remove_cvref.h>
+#include <asc/std/__type_traits/void_t.h>
 #include <asc/std/__utility/declval.h>
 #include <asc/std/cstddef>
 
@@ -62,150 +63,72 @@ void size(_Tp&) = delete;
 template <class _Tp>
 void size(const _Tp&) = delete;
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-template <class _Tp>
-concept __size_enabled = !disable_sized_range<remove_cvref_t<_Tp>>;
-
-template <class _Tp>
-concept __integer_like = integral<_Tp> && !same_as<_Tp, bool>;
-
-template <class _Tp>
-concept __member_size = __size_enabled<_Tp> && __workaround_52970<_Tp> && requires(_Tp&& __t) {
-    { static_cast<::asc::std::decay_t<decltype((__t.size()))>>(__t.size()) } -> __integer_like;
-};
-
-template <class _Tp>
-concept __unqualified_size =
-    __size_enabled<_Tp> && !__member_size<_Tp> && __class_or_enum<remove_cvref_t<_Tp>> && requires(_Tp&& __t) {
-        { static_cast<::asc::std::decay_t<decltype((size(__t)))>>(size(__t)) } -> __integer_like;
-    };
-
-template <class _Tp>
-concept __difference =
-    !__member_size<_Tp> && !__unqualified_size<_Tp> && __class_or_enum<remove_cvref_t<_Tp>> && requires(_Tp&& __t) {
-        { ::asc::std::ranges::__begin_cpo{}(__t) } -> forward_iterator;
-        {
-            ::asc::std::ranges::__end_cpo{}(__t)
-        } -> sized_sentinel_for<decltype(::asc::std::ranges::__begin_cpo{}(::asc::std::declval<_Tp>()))>;
-    };
-
-struct __fn {
-    // `[range.prim.size]`: the array case (for rvalues).
-    template <class _Tp, size_t _Sz>
-    CANN_ASC_STL_API constexpr size_t operator()(_Tp (&&)[_Sz]) const noexcept
-    {
-        return _Sz;
-    }
-
-    // `[range.prim.size]`: the array case (for lvalues).
-    template <class _Tp, size_t _Sz>
-    CANN_ASC_STL_API constexpr size_t operator()(_Tp (&)[_Sz]) const noexcept
-    {
-        return _Sz;
-    }
-
-    // `[range.prim.size]`: `auto(t.size())` is a valid expression.
-    template <class _Tp>
-        requires __member_size<_Tp>
-    CANN_ASC_STL_API constexpr auto operator()(_Tp&& __t) const
-        noexcept(noexcept(static_cast<::asc::std::decay_t<decltype((__t.size()))>>(__t.size())))
-    {
-        return static_cast<::asc::std::decay_t<decltype((__t.size()))>>(__t.size());
-    }
-
-    // `[range.prim.size]`: `auto(size(t))` is a valid expression.
-    template <class _Tp>
-        requires __unqualified_size<_Tp>
-    CANN_ASC_STL_API constexpr auto operator()(_Tp&& __t) const
-        noexcept(noexcept(static_cast<::asc::std::decay_t<decltype((size(__t)))>>(size(__t))))
-    {
-        return static_cast<::asc::std::decay_t<decltype((size(__t)))>>(size(__t));
-    }
-
-    // [range.prim.size]: the `to-unsigned-like` case.
-    template <class _Tp>
-        requires __difference<_Tp>
-    CANN_ASC_STL_API constexpr auto operator()(_Tp&& __t) const noexcept(noexcept(
-        ::asc::std::__to_unsigned_like(::asc::std::ranges::__end_cpo{}(__t) - ::asc::std::ranges::__begin_cpo{}(__t))))
-        -> decltype(::asc::std::__to_unsigned_like(
-            ::asc::std::ranges::__end_cpo{}(__t) - ::asc::std::ranges::__begin_cpo{}(__t)))
-    {
-        return ::asc::std::__to_unsigned_like(
-            ::asc::std::ranges::__end_cpo{}(__t) - ::asc::std::ranges::__begin_cpo{}(__t));
-    }
-};
-#else   // ^^^ concepts ^^^ / vvv !concepts vvv
-template <class _Tp>
-CANN_ASC_STL_API constexpr auto __adl_size(_Tp&& __value) noexcept(
-    noexcept(size(static_cast<_Tp&&>(__value)))) -> decltype(size(static_cast<_Tp&&>(__value)))
+template <class T>
+CANN_ASC_STL_API constexpr auto __adl_size(T& value) noexcept(noexcept(size(value))) -> decltype(size(value))
 {
-    return size(static_cast<_Tp&&>(__value));
+    return size(value);
 }
 
-template <class _Tp, class = void>
+template <class T>
+inline constexpr bool __integer_like = integral<T> && !same_as<T, bool>;
+
+template <class T, class = void>
 struct __has_member_size : false_type {};
-template <class _Tp>
-struct __has_member_size<_Tp, void_t<decltype(::asc::std::declval<_Tp>().size())>> : true_type {};
-template <class _Tp, class = void>
+template <class T>
+struct __has_member_size<T,
+    void_t<decltype(static_cast<decay_t<decltype(::asc::std::declval<remove_reference_t<T>&>().size())>>(
+        ::asc::std::declval<remove_reference_t<T>&>().size()))>>
+    : bool_constant<!disable_sized_range<remove_cvref_t<T>> && __workaround_52970<T> &&
+          __integer_like<decay_t<decltype(::asc::std::declval<remove_reference_t<T>&>().size())>>> {};
+
+template <class T, class = void>
 struct __has_adl_size : false_type {};
-template <class _Tp>
-struct __has_adl_size<_Tp, void_t<decltype(__adl_size(::asc::std::declval<_Tp>()))>> : true_type {};
+template <class T>
+struct __has_adl_size<T,
+    void_t<decltype(static_cast<decay_t<decltype(__adl_size(::asc::std::declval<remove_reference_t<T>&>()))>>(
+        __adl_size(::asc::std::declval<remove_reference_t<T>&>())))>>
+    : bool_constant<!disable_sized_range<remove_cvref_t<T>> && __class_or_enum<remove_cvref_t<T>> &&
+          __integer_like<decay_t<decltype(__adl_size(::asc::std::declval<remove_reference_t<T>&>()))>>> {};
 
-struct __member_tag {};
-struct __adl_tag {};
-struct __difference_tag {};
-
-template <class _Tp>
-using __tag = conditional_t<__has_member_size<_Tp>::value && !disable_sized_range<remove_cvref_t<_Tp>>, __member_tag,
-    conditional_t<__has_adl_size<_Tp>::value && !disable_sized_range<remove_cvref_t<_Tp>>, __adl_tag,
-        __difference_tag>>;
+template <class T, class = void>
+struct __has_difference : false_type {};
+template <class T>
+struct __has_difference<T, void_t<iterator_t<T>, decltype(__end_cpo{}(::asc::std::declval<T&>()))>>
+    : bool_constant<__class_or_enum<remove_cvref_t<T>> && forward_iterator<iterator_t<T>> &&
+          sized_sentinel_for<decltype(__end_cpo{}(::asc::std::declval<T&>())), iterator_t<T>>> {};
 
 struct __fn {
-private:
-    template <class _Tp>
-    CANN_ASC_STL_API static constexpr auto __call(_Tp&& __value, __member_tag) noexcept(
-        noexcept(__value.size())) -> decltype(__value.size())
+    template <class T, size_t N>
+    CANN_ASC_STL_API constexpr size_t operator()(T (&&)[N]) const noexcept
     {
-        return __value.size();
+        return N;
     }
-    template <class _Tp>
-    CANN_ASC_STL_API static constexpr auto __call(_Tp&& __value, __adl_tag) noexcept(
-        noexcept(__adl_size(static_cast<_Tp&&>(__value)))) -> decltype(__adl_size(static_cast<_Tp&&>(__value)))
+    template <class T, size_t N>
+    CANN_ASC_STL_API constexpr size_t operator()(T (&)[N]) const noexcept
     {
-        return __adl_size(static_cast<_Tp&&>(__value));
+        return N;
     }
-    template <class _Tp>
-    CANN_ASC_STL_API static constexpr auto __call(_Tp&& __value, __difference_tag) noexcept(
-        noexcept(ranges::end(__value) -
-            ranges::begin(__value))) -> make_unsigned_t<decltype(ranges::end(__value) - ranges::begin(__value))>
+    template <class T, enable_if_t<__has_member_size<T>::value, int> = 0>
+    CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(
+        noexcept(static_cast<decay_t<decltype(value.size())>>(value.size()))) -> decay_t<decltype(value.size())>
     {
-        using __result_type = make_unsigned_t<decltype(ranges::end(__value) - ranges::begin(__value))>;
-        return static_cast<__result_type>(ranges::end(__value) - ranges::begin(__value));
+        return static_cast<decay_t<decltype(value.size())>>(value.size());
     }
-
-public:
-    // `[range.prim.size]`: the array case (for rvalues).
-    template <class _Tp, size_t _Sz>
-    CANN_ASC_STL_API constexpr size_t operator()(_Tp (&&)[_Sz]) const noexcept
+    template <class T, enable_if_t<!__has_member_size<T>::value && __has_adl_size<T>::value, int> = 0>
+    CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(noexcept(
+        static_cast<decay_t<decltype(__adl_size(value))>>(__adl_size(value)))) -> decay_t<decltype(__adl_size(value))>
     {
-        return _Sz;
+        return static_cast<decay_t<decltype(__adl_size(value))>>(__adl_size(value));
     }
-
-    // `[range.prim.size]`: the array case (for lvalues).
-    template <class _Tp, size_t _Sz>
-    CANN_ASC_STL_API constexpr size_t operator()(_Tp (&)[_Sz]) const noexcept
+    template <class T,
+        enable_if_t<!__has_member_size<T>::value && !__has_adl_size<T>::value && __has_difference<T>::value, int> = 0>
+    CANN_ASC_STL_API constexpr auto operator()(T&& value) const
+        noexcept(noexcept(::asc::std::__to_unsigned_like(__end_cpo{}(value)-__begin_cpo{}(
+            value)))) -> decltype(::asc::std::__to_unsigned_like(__end_cpo{}(value)-__begin_cpo{}(value)))
     {
-        return _Sz;
-    }
-
-    template <class _Tp>
-    CANN_ASC_STL_API constexpr auto operator()(_Tp&& __value) const
-        noexcept(noexcept(__call(static_cast<_Tp&&>(__value), __tag<_Tp&&>{})))
-    {
-        return __call(static_cast<_Tp&&>(__value), __tag<_Tp&&>{});
+        return ::asc::std::__to_unsigned_like(__end_cpo{}(value)-__begin_cpo{}(value));
     }
 };
-#endif  // !concepts
 
 }  // namespace __size
 
@@ -219,17 +142,6 @@ using __size_cpo = __size::__fn;
 namespace __ssize {
 
 struct __fn {
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    template <class _Tp>
-        requires requires(_Tp&& __t) { ::asc::std::ranges::__size_cpo{}(__t); }
-    CANN_ASC_STL_API constexpr auto operator()(_Tp&& __t) const
-        noexcept(noexcept(::asc::std::ranges::__size_cpo{}(__t)))
-    {
-        using _Signed = make_signed_t<decltype(::asc::std::ranges::__size_cpo{}(__t))>;
-        using _Result = conditional_t<(sizeof(ptrdiff_t) > sizeof(_Signed)), ptrdiff_t, _Signed>;
-        return static_cast<_Result>(::asc::std::ranges::__size_cpo{}(__t));
-    }
-#else
     // Requires-expression equivalent: `ranges::size(__t)` must be a valid call. Unbounded arrays
     // are rejected because no array-bound overload exists for them.
     template <class _Tp>
@@ -242,7 +154,6 @@ struct __fn {
         using _Result = conditional_t<(sizeof(ptrdiff_t) > sizeof(_Signed)), ptrdiff_t, _Signed>;
         return static_cast<_Result>(::asc::std::ranges::__size_cpo{}(__t));
     }
-#endif
 };
 
 }  // namespace __ssize

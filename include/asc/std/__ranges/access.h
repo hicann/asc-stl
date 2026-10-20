@@ -66,92 +66,52 @@ CANN_ASC_STL_API constexpr auto __adl_begin(T& value) noexcept(noexcept(begin(va
 template <class T>
 inline constexpr bool __can_borrow = is_lvalue_reference_v<T> || enable_borrowed_range<remove_cvref_t<T>>;
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-
-// Validation of the begin result stays at expression-validity level (including the
-// decay conversion): classic proxy iterators exposing only operator-> must route
-// through begin (the ranges::data fallback depends on this shape); a check stricter
-// than input_or_output_iterator would break existing accepted uses.
+// Result conversion and overload participation are shared by both dialects.
+// begin deliberately retains the established expression-validity contract;
+// end separately validates the sentinel relationship.
+template <class T, class = void>
+struct __has_member_begin : false_type {};
 template <class T>
-concept __member_begin = __can_borrow<T> && __workaround_52970<T> &&
-    requires(T&& value) { static_cast<decay_t<decltype((value.begin()))>>(value.begin()); };
+struct __has_member_begin<T,
+    void_t<decltype(static_cast<decay_t<decltype(::asc::std::declval<remove_reference_t<T>&>().begin())>>(
+        ::asc::std::declval<remove_reference_t<T>&>().begin()))>>
+    : bool_constant<__can_borrow<T> && __workaround_52970<T>> {};
 
+template <class T, class = void>
+struct __has_adl_begin : false_type {};
 template <class T>
-concept __unqualified_begin = !__member_begin<T> && __can_borrow<T> && __class_or_enum<remove_cvref_t<T>> &&
-    requires(T&& value) { static_cast<decay_t<decltype((begin(value)))>>(begin(value)); };
+struct __has_adl_begin<T,
+    void_t<decltype(static_cast<decay_t<decltype(__adl_begin(::asc::std::declval<remove_reference_t<T>&>()))>>(
+        __adl_begin(::asc::std::declval<remove_reference_t<T>&>())))>>
+    : bool_constant<__can_borrow<T> && __class_or_enum<remove_cvref_t<T>>> {};
 
 struct __begin_fn {
-    // begin for arrays of unknown bound was adopted as a defect report since C++17;
-    // gcc below 11 does not implement it, so gate on the compiler version.
 #if !defined(__GNUC__) || defined(__clang__) || __GNUC__ >= 11
-    template <class T>
-        requires(sizeof(T) >= 0)  // Disallow incomplete element types
+    template <class T, size_t = sizeof(T)>
     CANN_ASC_STL_API constexpr T* operator()(T (&array)[]) const noexcept
     {
         return array;
     }
 #endif
-
-    template <class T, size_t N>
-        requires(sizeof(T) >= 0)  // Disallow incomplete element types
+    template <class T, size_t N, size_t = sizeof(T)>
     CANN_ASC_STL_API constexpr T* operator()(T (&array)[N]) const noexcept
     {
         return array;
     }
-
-    template <class T>
-        requires __member_begin<T>
+    template <class T, enable_if_t<__has_member_begin<T>::value, int> = 0>
     CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(
-        noexcept(static_cast<decay_t<decltype((value.begin()))>>(value.begin()))) -> decay_t<decltype((value.begin()))>
+        noexcept(static_cast<decay_t<decltype(value.begin())>>(value.begin()))) -> decay_t<decltype(value.begin())>
     {
-        return static_cast<decay_t<decltype((value.begin()))>>(value.begin());
+        return static_cast<decay_t<decltype(value.begin())>>(value.begin());
     }
-
-    template <class T>
-        requires __unqualified_begin<T>
-    CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(
-        noexcept(static_cast<decay_t<decltype((begin(value)))>>(begin(value)))) -> decay_t<decltype((begin(value)))>
-    {
-        return static_cast<decay_t<decltype((begin(value)))>>(begin(value));
-    }
-
-    template <class T>
-        requires(!__member_begin<T> && !__unqualified_begin<T>)
-    void operator()(T&&) const = delete;
-};
-
-#else  // ^^^ concepts ^^^ / vvv !concepts vvv
-
-// The non-concepts path keeps the conventional shape (void_t detection + enable_if_t
-// dispatch); the input_or_output_iterator concept check and the decay conversion on
-// the begin result degrade to expression-validity-level checks on this path.
-template <class T, class = void>
-struct __has_member_begin : false_type {};
-template <class T>
-struct __has_member_begin<T, void_t<decltype(::asc::std::declval<remove_reference_t<T>&>().begin())>> : true_type {};
-
-struct __begin_fn {
-    template <class T, size_t N>
-    CANN_ASC_STL_API constexpr T* operator()(T (&array)[N]) const noexcept
-    {
-        return array;
-    }
-    template <class T, enable_if_t<__can_borrow<T&&> && __has_member_begin<T&&>::value, int> = 0>
-    CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(
-        noexcept(remove_cvref_t<decltype(value.begin())>(value.begin()))) -> remove_cvref_t<decltype(value.begin())>
-    {
-        return value.begin();
-    }
-    template <class T, enable_if_t<__can_borrow<T&&> && !__has_member_begin<T&&>::value, int> = 0>
+    template <class T, enable_if_t<!__has_member_begin<T>::value && __has_adl_begin<T>::value, int> = 0>
     CANN_ASC_STL_API constexpr auto operator()(T&& value) const
-        noexcept(noexcept(remove_cvref_t<decltype(__adl_begin(value))>(
-            __adl_begin(value)))) -> remove_cvref_t<decltype(__adl_begin(value))>
+        noexcept(noexcept(static_cast<decay_t<decltype(__adl_begin(value))>>(
+            __adl_begin(value)))) -> decay_t<decltype(__adl_begin(value))>
     {
-        return __adl_begin(value);
+        return static_cast<decay_t<decltype(__adl_begin(value))>>(__adl_begin(value));
     }
 };
-
-#endif  // !concepts
 
 }  // namespace __access_detail
 
@@ -180,81 +140,45 @@ CANN_ASC_STL_API constexpr auto __adl_end(T& value) noexcept(noexcept(end(value)
     return end(value);
 }
 
-#if CANN_ASC_STL_DETAIL_HAS_CONCEPTS() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-
-template <class T>
-concept __member_end = __access_detail::__can_borrow<T> && __workaround_52970<T> && requires(T&& value) {
-    typename iterator_t<T>;
-    { static_cast<decay_t<decltype((value.end()))>>(value.end()) } -> sentinel_for<iterator_t<T>>;
-};
-
-template <class T>
-concept __unqualified_end =
-    !__member_end<T> && __access_detail::__can_borrow<T> && __class_or_enum<remove_cvref_t<T>> && requires(T&& value) {
-        typename iterator_t<T>;
-        { static_cast<decay_t<decltype((end(value)))>>(end(value)) } -> sentinel_for<iterator_t<T>>;
-    };
-
-struct __end_fn {
-    template <class T, size_t N>
-        requires(sizeof(T) >= 0)  // Disallow incomplete element types
-    CANN_ASC_STL_API constexpr T* operator()(T (&array)[N]) const noexcept
-    {
-        return array + N;
-    }
-
-    template <class T>
-        requires __member_end<T>
-    CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(
-        noexcept(static_cast<decay_t<decltype((value.end()))>>(value.end()))) -> decay_t<decltype((value.end()))>
-    {
-        return static_cast<decay_t<decltype((value.end()))>>(value.end());
-    }
-
-    template <class T>
-        requires __unqualified_end<T>
-    CANN_ASC_STL_API constexpr auto operator()(T&& value) const
-        noexcept(noexcept(static_cast<decay_t<decltype((end(value)))>>(end(value)))) -> decay_t<decltype((end(value)))>
-    {
-        return static_cast<decay_t<decltype((end(value)))>>(end(value));
-    }
-
-    template <class T>
-        requires(!__member_end<T> && !__unqualified_end<T>)
-    void operator()(T&&) const = delete;
-};
-
-#else  // ^^^ concepts ^^^ / vvv !concepts vvv
-
-// The non-concepts path keeps the conventional shape (void_t detection + enable_if_t
-// dispatch); the sentinel_for concept check and the decay conversion on the end
-// result degrade to expression-validity-level checks on this path.
 template <class T, class = void>
 struct __has_member_end : false_type {};
 template <class T>
-struct __has_member_end<T, void_t<decltype(::asc::std::declval<remove_reference_t<T>&>().end())>> : true_type {};
+struct __has_member_end<T,
+    void_t<iterator_t<T>,
+        decltype(static_cast<decay_t<decltype(::asc::std::declval<remove_reference_t<T>&>().end())>>(
+            ::asc::std::declval<remove_reference_t<T>&>().end()))>>
+    : bool_constant<__access_detail::__can_borrow<T> && __workaround_52970<T> &&
+          sentinel_for<decay_t<decltype(::asc::std::declval<remove_reference_t<T>&>().end())>, iterator_t<T>>> {};
+
+template <class T, class = void>
+struct __has_adl_end : false_type {};
+template <class T>
+struct __has_adl_end<T,
+    void_t<iterator_t<T>,
+        decltype(static_cast<decay_t<decltype(__adl_end(::asc::std::declval<remove_reference_t<T>&>()))>>(
+            __adl_end(::asc::std::declval<remove_reference_t<T>&>())))>>
+    : bool_constant<__access_detail::__can_borrow<T> && __class_or_enum<remove_cvref_t<T>> &&
+          sentinel_for<decay_t<decltype(__adl_end(::asc::std::declval<remove_reference_t<T>&>()))>, iterator_t<T>>> {};
 
 struct __end_fn {
-    template <class T, size_t N>
+    template <class T, size_t N, size_t = sizeof(T)>
     CANN_ASC_STL_API constexpr T* operator()(T (&array)[N]) const noexcept
     {
         return array + N;
     }
-    template <class T, enable_if_t<__access_detail::__can_borrow<T&&> && __has_member_end<T&&>::value, int> = 0>
+    template <class T, enable_if_t<__has_member_end<T>::value, int> = 0>
     CANN_ASC_STL_API constexpr auto operator()(T&& value) const
-        noexcept(noexcept(remove_cvref_t<decltype(value.end())>(value.end()))) -> remove_cvref_t<decltype(value.end())>
+        noexcept(noexcept(static_cast<decay_t<decltype(value.end())>>(value.end()))) -> decay_t<decltype(value.end())>
     {
-        return value.end();
+        return static_cast<decay_t<decltype(value.end())>>(value.end());
     }
-    template <class T, enable_if_t<__access_detail::__can_borrow<T&&> && !__has_member_end<T&&>::value, int> = 0>
+    template <class T, enable_if_t<!__has_member_end<T>::value && __has_adl_end<T>::value, int> = 0>
     CANN_ASC_STL_API constexpr auto operator()(T&& value) const noexcept(noexcept(
-        remove_cvref_t<decltype(__adl_end(value))>(__adl_end(value)))) -> remove_cvref_t<decltype(__adl_end(value))>
+        static_cast<decay_t<decltype(__adl_end(value))>>(__adl_end(value)))) -> decay_t<decltype(__adl_end(value))>
     {
-        return __adl_end(value);
+        return static_cast<decay_t<decltype(__adl_end(value))>>(__adl_end(value));
     }
 };
-
-#endif  // !concepts
 
 }  // namespace __end_detail
 

@@ -45,8 +45,10 @@ inline constexpr bool __predicate_impl = false;
 
 template <class Fn, class... Args>
 inline constexpr bool __predicate_impl<Fn, void_t<invoke_result_t<Fn, Args...>>, Args...> =
-    __is_callable_v<Fn, Args...> && __boolean_testable<invoke_result_t<Fn, Args...>>;
+    regular_invocable<Fn, Args...> && __boolean_testable<invoke_result_t<Fn, Args...>>;
 
+template <class Fn, class... Args>
+inline constexpr bool predicate = __predicate_impl<Fn, void, Args...>;
 #endif
 
 CANN_ASC_STL_END_NAMESPACE

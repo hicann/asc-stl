@@ -40,7 +40,8 @@ template <input_or_output_iterator Iter, sentinel_for<Iter> Sent = Iter,
     requires(Kind == subrange_kind::sized || !sized_sentinel_for<Sent, Iter>)
 class subrange;
 #else
-template <class Iter, class Sent = Iter, subrange_kind Kind = subrange_kind::unsized>
+template <class Iter, class Sent = Iter,
+    subrange_kind Kind = sized_sentinel_for<Sent, Iter> ? subrange_kind::sized : subrange_kind::unsized>
 class subrange;
 #endif
 

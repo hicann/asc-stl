@@ -7,7 +7,7 @@
 | 能力分类 | 说明 |
 | --- | --- |
 | [语言支持库](language_support/language_support.md) | 基础类型、特性宏、源码位置与语言设施。 |
-| [概念库](concepts/concepts.md) | 用于表达模板参数要求的标准概念。 |
+| [概念库](concepts/concepts.md) | 提供C++17布尔判定与C++20 concept约束。 |
 | [诊断库](diagnostics/diagnostics.md) | 断言、错误码与诊断相关接口。 |
 | [内存管理库](memory_management/memory_management.md) | 对象生命周期、分配器与内存操作。 |
 | [元编程库](metaprogramming/metaprogramming.md) | 类型特征、编译期计算与模板辅助设施。 |
@@ -742,37 +742,38 @@
 | [asc::std::polar](numerics/asc_std_complex/polar.md) | asc/std/complex | 函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::proj](numerics/asc_std_complex/proj.md) | asc/std/complex | 函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::real](numerics/asc_std_complex/real.md) | asc/std/complex | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::assignable_from](concepts/asc_std_concepts/assignable_from.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::common_reference_with](concepts/asc_std_concepts/common_reference_with.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::common_with](concepts/asc_std_concepts/common_with.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::constructible_from](concepts/asc_std_concepts/constructible_from.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::convertible_to](concepts/asc_std_concepts/convertible_to.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::copy_constructible](concepts/asc_std_concepts/copy_constructible.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::copyable](concepts/asc_std_concepts/copyable.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::default_initializable](concepts/asc_std_concepts/default_initializable.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::derived_from](concepts/asc_std_concepts/derived_from.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::destructible](concepts/asc_std_concepts/destructible.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::equality_comparable](concepts/asc_std_concepts/equality_comparable.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::equality_comparable_with](concepts/asc_std_concepts/equality_comparable_with.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::equivalence_relation](concepts/asc_std_concepts/equivalence_relation.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::floating_point](concepts/asc_std_concepts/floating_point.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::integral](concepts/asc_std_concepts/integral.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::invocable](concepts/asc_std_concepts/invocable.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::movable](concepts/asc_std_concepts/movable.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::move_constructible](concepts/asc_std_concepts/move_constructible.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::predicate](concepts/asc_std_concepts/predicate.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::regular](concepts/asc_std_concepts/regular.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::regular_invocable](concepts/asc_std_concepts/regular_invocable.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::relation](concepts/asc_std_concepts/relation.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::same_as](concepts/asc_std_concepts/same_as.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::semiregular](concepts/asc_std_concepts/semiregular.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::signed_integral](concepts/asc_std_concepts/signed_integral.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::strict_weak_order](concepts/asc_std_concepts/strict_weak_order.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::swappable](concepts/asc_std_concepts/swappable.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::swappable_with](concepts/asc_std_concepts/swappable_with.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::totally_ordered](concepts/asc_std_concepts/totally_ordered.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::totally_ordered_with](concepts/asc_std_concepts/totally_ordered_with.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::unsigned_integral](concepts/asc_std_concepts/unsigned_integral.md) | asc/std/concepts | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::assignable_from](concepts/asc_std_concepts/assignable_from.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::common_reference_with](concepts/asc_std_concepts/common_reference_with.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::common_with](concepts/asc_std_concepts/common_with.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::constructible_from](concepts/asc_std_concepts/constructible_from.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::convertible_to](concepts/asc_std_concepts/convertible_to.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::copy_constructible](concepts/asc_std_concepts/copy_constructible.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::copyable](concepts/asc_std_concepts/copyable.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::default_initializable](concepts/asc_std_concepts/default_initializable.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::derived_from](concepts/asc_std_concepts/derived_from.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::destructible](concepts/asc_std_concepts/destructible.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::different_from](concepts/asc_std_concepts/different_from.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::equality_comparable](concepts/asc_std_concepts/equality_comparable.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::equality_comparable_with](concepts/asc_std_concepts/equality_comparable_with.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::equivalence_relation](concepts/asc_std_concepts/equivalence_relation.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::floating_point](concepts/asc_std_concepts/floating_point.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::integral](concepts/asc_std_concepts/integral.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::invocable](concepts/asc_std_concepts/invocable.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::movable](concepts/asc_std_concepts/movable.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::move_constructible](concepts/asc_std_concepts/move_constructible.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::predicate](concepts/asc_std_concepts/predicate.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::regular](concepts/asc_std_concepts/regular.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::regular_invocable](concepts/asc_std_concepts/regular_invocable.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::relation](concepts/asc_std_concepts/relation.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::same_as](concepts/asc_std_concepts/same_as.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::semiregular](concepts/asc_std_concepts/semiregular.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::signed_integral](concepts/asc_std_concepts/signed_integral.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::strict_weak_order](concepts/asc_std_concepts/strict_weak_order.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::swappable](concepts/asc_std_concepts/swappable.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::swappable_with](concepts/asc_std_concepts/swappable_with.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::totally_ordered](concepts/asc_std_concepts/totally_ordered.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::totally_ordered_with](concepts/asc_std_concepts/totally_ordered_with.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::unsigned_integral](concepts/asc_std_concepts/unsigned_integral.md) | asc/std/concepts | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::byte](language_support/asc_std_cstddef/byte.md) | asc/std/cstddef | 枚举 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::max_align_t](language_support/asc_std_cstddef/max_align_t.md) | asc/std/cstddef | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::nullptr_t](language_support/asc_std_cstddef/nullptr_t.md) | asc/std/cstddef | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -964,7 +965,7 @@
 | [asc::std::format_string](text_processing/asc_std_format/format_string.md) | asc/std/format | 别名模板 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::format_to](text_processing/asc_std_format/format_to.md) | asc/std/format | 函数模板 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::format_to_n](text_processing/asc_std_format/format_to_n.md) | asc/std/format | 函数模板 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::format_to_n_result](text_processing/asc_std_format/format_to_n_result.md) | asc/std/format | 类模板 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::format_to_n_result](text_processing/asc_std_format/format_to_n_result.md) | asc/std/format | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::formatted_size](text_processing/asc_std_format/formatted_size.md) | asc/std/format | 函数模板 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::forward_list](containers/asc_std_forward_list/forward_list.md) | asc/std/forward_list | 类模板 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::forward_list::allocator_type](containers/asc_std_forward_list/forward_list_allocator_type.md) | asc/std/forward_list | 类型别名 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
@@ -1097,42 +1098,42 @@
 | [asc::std::unwrap_reference](utilities/asc_std_functional/unwrap_reference.md) | asc/std/functional | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::unwrap_reference::type](utilities/asc_std_functional/unwrap_reference_type.md) | asc/std/functional | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::unwrap_reference_t](utilities/asc_std_functional/unwrap_reference_t.md) | asc/std/functional | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::erase](containers/asc_std_inplace_vector/erase.md) | asc/std/inplace_vector | 函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::erase_if](containers/asc_std_inplace_vector/erase_if.md) | asc/std/inplace_vector | 函数模板 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector](containers/asc_std_inplace_vector/inplace_vector.md) | asc/std/inplace_vector | 类模板 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::back](containers/asc_std_inplace_vector/inplace_vector_back.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::begin](containers/asc_std_inplace_vector/inplace_vector_begin.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::capacity](containers/asc_std_inplace_vector/inplace_vector_capacity.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::cbegin](containers/asc_std_inplace_vector/inplace_vector_cbegin.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::cend](containers/asc_std_inplace_vector/inplace_vector_cend.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::clear](containers/asc_std_inplace_vector/inplace_vector_clear.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::const_iterator](containers/asc_std_inplace_vector/inplace_vector_const_iterator.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::const_pointer](containers/asc_std_inplace_vector/inplace_vector_const_pointer.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::const_reference](containers/asc_std_inplace_vector/inplace_vector_const_reference.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::data](containers/asc_std_inplace_vector/inplace_vector_data.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::difference_type](containers/asc_std_inplace_vector/inplace_vector_difference_type.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::empty](containers/asc_std_inplace_vector/inplace_vector_empty.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::end](containers/asc_std_inplace_vector/inplace_vector_end.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::erase](containers/asc_std_inplace_vector/inplace_vector_erase.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::erase_if](containers/asc_std_inplace_vector/inplace_vector_erase_if.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::front](containers/asc_std_inplace_vector/inplace_vector_front.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::inplace_vector](containers/asc_std_inplace_vector/inplace_vector_inplace_vector.md) | asc/std/inplace_vector | 构造函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::iterator](containers/asc_std_inplace_vector/inplace_vector_iterator.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::max_size](containers/asc_std_inplace_vector/inplace_vector_max_size.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::`operator=`](containers/asc_std_inplace_vector/inplace_vector_operator_assign.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::operator\[\]](containers/asc_std_inplace_vector/inplace_vector_operator_subscript.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::pointer](containers/asc_std_inplace_vector/inplace_vector_pointer.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::pop_back](containers/asc_std_inplace_vector/inplace_vector_pop_back.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::reference](containers/asc_std_inplace_vector/inplace_vector_reference.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::size](containers/asc_std_inplace_vector/inplace_vector_size.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::size_type](containers/asc_std_inplace_vector/inplace_vector_size_type.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::swap](containers/asc_std_inplace_vector/inplace_vector_swap.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::try_emplace_back](containers/asc_std_inplace_vector/inplace_vector_try_emplace_back.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::try_push_back](containers/asc_std_inplace_vector/inplace_vector_try_push_back.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::unchecked_emplace_back](containers/asc_std_inplace_vector/inplace_vector_unchecked_emplace_back.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::unchecked_push_back](containers/asc_std_inplace_vector/inplace_vector_unchecked_push_back.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::value_type](containers/asc_std_inplace_vector/inplace_vector_value_type.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
-| [asc::std::inplace_vector::~inplace_vector](containers/asc_std_inplace_vector/inplace_vector_destructor_inplace_vector.md) | asc/std/inplace_vector | 析构函数 | C++17+ | Host（完整接口）、Device（非抛出子集） | Ascend 950 |
+| [asc::std::erase](containers/asc_std_inplace_vector/erase.md) | asc/std/inplace_vector | 函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::erase_if](containers/asc_std_inplace_vector/erase_if.md) | asc/std/inplace_vector | 函数模板 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector](containers/asc_std_inplace_vector/inplace_vector.md) | asc/std/inplace_vector | 类模板 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::back](containers/asc_std_inplace_vector/inplace_vector_back.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::begin](containers/asc_std_inplace_vector/inplace_vector_begin.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::capacity](containers/asc_std_inplace_vector/inplace_vector_capacity.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::cbegin](containers/asc_std_inplace_vector/inplace_vector_cbegin.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::cend](containers/asc_std_inplace_vector/inplace_vector_cend.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::clear](containers/asc_std_inplace_vector/inplace_vector_clear.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::const_iterator](containers/asc_std_inplace_vector/inplace_vector_const_iterator.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::const_pointer](containers/asc_std_inplace_vector/inplace_vector_const_pointer.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::const_reference](containers/asc_std_inplace_vector/inplace_vector_const_reference.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::data](containers/asc_std_inplace_vector/inplace_vector_data.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::difference_type](containers/asc_std_inplace_vector/inplace_vector_difference_type.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::empty](containers/asc_std_inplace_vector/inplace_vector_empty.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::end](containers/asc_std_inplace_vector/inplace_vector_end.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::erase](containers/asc_std_inplace_vector/inplace_vector_erase.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::erase_if](containers/asc_std_inplace_vector/inplace_vector_erase_if.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::front](containers/asc_std_inplace_vector/inplace_vector_front.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::inplace_vector](containers/asc_std_inplace_vector/inplace_vector_inplace_vector.md) | asc/std/inplace_vector | 构造函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::iterator](containers/asc_std_inplace_vector/inplace_vector_iterator.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::max_size](containers/asc_std_inplace_vector/inplace_vector_max_size.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::`operator=`](containers/asc_std_inplace_vector/inplace_vector_operator_assign.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::operator\[\]](containers/asc_std_inplace_vector/inplace_vector_operator_subscript.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::pointer](containers/asc_std_inplace_vector/inplace_vector_pointer.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::pop_back](containers/asc_std_inplace_vector/inplace_vector_pop_back.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::reference](containers/asc_std_inplace_vector/inplace_vector_reference.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::size](containers/asc_std_inplace_vector/inplace_vector_size.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::size_type](containers/asc_std_inplace_vector/inplace_vector_size_type.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::swap](containers/asc_std_inplace_vector/inplace_vector_swap.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::try_emplace_back](containers/asc_std_inplace_vector/inplace_vector_try_emplace_back.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::try_push_back](containers/asc_std_inplace_vector/inplace_vector_try_push_back.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::unchecked_emplace_back](containers/asc_std_inplace_vector/inplace_vector_unchecked_emplace_back.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::unchecked_push_back](containers/asc_std_inplace_vector/inplace_vector_unchecked_push_back.md) | asc/std/inplace_vector | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::value_type](containers/asc_std_inplace_vector/inplace_vector_value_type.md) | asc/std/inplace_vector | 类型别名 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::inplace_vector::~inplace_vector](containers/asc_std_inplace_vector/inplace_vector_destructor_inplace_vector.md) | asc/std/inplace_vector | 析构函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
 | [asc::std::advance](iterators/asc_std_iterator/advance.md) | asc/std/iterator | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::back_insert_iterator](iterators/asc_std_iterator/back_insert_iterator.md) | asc/std/iterator | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::back_insert_iterator::back_insert_iterator](iterators/asc_std_iterator/back_insert_iterator_back_insert_iterator.md) | asc/std/iterator | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -1147,7 +1148,7 @@
 | [asc::std::back_insert_iterator::value_type](iterators/asc_std_iterator/back_insert_iterator_value_type.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::back_inserter](iterators/asc_std_iterator/back_inserter.md) | asc/std/iterator | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::begin](iterators/asc_std_iterator/begin.md) | asc/std/iterator | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::bidirectional_iterator](iterators/asc_std_iterator/bidirectional_iterator.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::bidirectional_iterator](iterators/asc_std_iterator/bidirectional_iterator.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::bidirectional_iterator_tag](iterators/asc_std_iterator/bidirectional_iterator_tag.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::cbegin](iterators/asc_std_iterator/cbegin.md) | asc/std/iterator | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::cend](iterators/asc_std_iterator/cend.md) | asc/std/iterator | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -1157,7 +1158,7 @@
 | [asc::std::common_iterator::`operator++`](iterators/asc_std_iterator/common_iterator_operator_increment.md) | asc/std/iterator | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::common_iterator::`operator-`>](iterators/asc_std_iterator/common_iterator_operator_arrow.md) | asc/std/iterator | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::common_iterator::`operator=`](iterators/asc_std_iterator/common_iterator_operator_assign.md) | asc/std/iterator | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::contiguous_iterator](iterators/asc_std_iterator/contiguous_iterator.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::contiguous_iterator](iterators/asc_std_iterator/contiguous_iterator.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::contiguous_iterator_tag](iterators/asc_std_iterator/contiguous_iterator_tag.md) | asc/std/iterator | 类 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::counted_iterator](iterators/asc_std_iterator/counted_iterator.md) | asc/std/iterator | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::counted_iterator::base](iterators/asc_std_iterator/counted_iterator_base.md) | asc/std/iterator | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -1184,7 +1185,7 @@
 | [asc::std::distance](iterators/asc_std_iterator/distance.md) | asc/std/iterator | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::empty](iterators/asc_std_iterator/empty.md) | asc/std/iterator | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::end](iterators/asc_std_iterator/end.md) | asc/std/iterator | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::forward_iterator](iterators/asc_std_iterator/forward_iterator.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::forward_iterator](iterators/asc_std_iterator/forward_iterator.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::forward_iterator_tag](iterators/asc_std_iterator/forward_iterator_tag.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::front_insert_iterator](iterators/asc_std_iterator/front_insert_iterator.md) | asc/std/iterator | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::front_insert_iterator::container_type](iterators/asc_std_iterator/front_insert_iterator_container_type.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -1198,29 +1199,29 @@
 | [asc::std::front_insert_iterator::reference](iterators/asc_std_iterator/front_insert_iterator_reference.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::front_insert_iterator::value_type](iterators/asc_std_iterator/front_insert_iterator_value_type.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::front_inserter](iterators/asc_std_iterator/front_inserter.md) | asc/std/iterator | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::incrementable](iterators/asc_std_iterator/incrementable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::incrementable](iterators/asc_std_iterator/incrementable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::incrementable_traits](iterators/asc_std_iterator/incrementable_traits.md) | asc/std/iterator | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::incrementable_traits::difference_type](iterators/asc_std_iterator/incrementable_traits_difference_type.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirect_binary_predicate](iterators/asc_std_iterator/indirect_binary_predicate.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirect_equivalence_relation](iterators/asc_std_iterator/indirect_equivalence_relation.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirect_binary_predicate](iterators/asc_std_iterator/indirect_binary_predicate.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirect_equivalence_relation](iterators/asc_std_iterator/indirect_equivalence_relation.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::indirect_result_t](iterators/asc_std_iterator/indirect_result_t.md) | asc/std/iterator | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirect_strict_weak_order](iterators/asc_std_iterator/indirect_strict_weak_order.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirect_unary_predicate](iterators/asc_std_iterator/indirect_unary_predicate.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirectly_comparable](iterators/asc_std_iterator/indirectly_comparable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirectly_copyable](iterators/asc_std_iterator/indirectly_copyable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirectly_copyable_storable](iterators/asc_std_iterator/indirectly_copyable_storable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirectly_movable](iterators/asc_std_iterator/indirectly_movable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirectly_movable_storable](iterators/asc_std_iterator/indirectly_movable_storable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirectly_readable](iterators/asc_std_iterator/indirectly_readable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirect_strict_weak_order](iterators/asc_std_iterator/indirect_strict_weak_order.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirect_unary_predicate](iterators/asc_std_iterator/indirect_unary_predicate.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirectly_comparable](iterators/asc_std_iterator/indirectly_comparable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirectly_copyable](iterators/asc_std_iterator/indirectly_copyable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirectly_copyable_storable](iterators/asc_std_iterator/indirectly_copyable_storable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirectly_movable](iterators/asc_std_iterator/indirectly_movable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirectly_movable_storable](iterators/asc_std_iterator/indirectly_movable_storable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirectly_readable](iterators/asc_std_iterator/indirectly_readable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::indirectly_readable_traits](iterators/asc_std_iterator/indirectly_readable_traits.md) | asc/std/iterator | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::indirectly_readable_traits::value_type](iterators/asc_std_iterator/indirectly_readable_traits_value_type.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirectly_regular_unary_invocable](iterators/asc_std_iterator/indirectly_regular_unary_invocable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirectly_swappable](iterators/asc_std_iterator/indirectly_swappable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirectly_unary_invocable](iterators/asc_std_iterator/indirectly_unary_invocable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::indirectly_writable](iterators/asc_std_iterator/indirectly_writable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::input_iterator](iterators/asc_std_iterator/input_iterator.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirectly_regular_unary_invocable](iterators/asc_std_iterator/indirectly_regular_unary_invocable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirectly_swappable](iterators/asc_std_iterator/indirectly_swappable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirectly_unary_invocable](iterators/asc_std_iterator/indirectly_unary_invocable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::indirectly_writable](iterators/asc_std_iterator/indirectly_writable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::input_iterator](iterators/asc_std_iterator/input_iterator.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::input_iterator_tag](iterators/asc_std_iterator/input_iterator_tag.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::input_or_output_iterator](iterators/asc_std_iterator/input_or_output_iterator.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::input_or_output_iterator](iterators/asc_std_iterator/input_or_output_iterator.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::insert_iterator](iterators/asc_std_iterator/insert_iterator.md) | asc/std/iterator | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::insert_iterator::container_type](iterators/asc_std_iterator/insert_iterator_container_type.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::insert_iterator::difference_type](iterators/asc_std_iterator/insert_iterator_difference_type.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -1254,7 +1255,7 @@
 | [asc::std::iterator_traits::value_type](iterators/asc_std_iterator/iterator_traits_value_type.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::make_move_iterator](iterators/asc_std_iterator/make_move_iterator.md) | asc/std/iterator | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::make_reverse_iterator](iterators/asc_std_iterator/make_reverse_iterator.md) | asc/std/iterator | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::mergeable](iterators/asc_std_iterator/mergeable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::mergeable](iterators/asc_std_iterator/mergeable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::move_iterator](iterators/asc_std_iterator/move_iterator.md) | asc/std/iterator | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::move_iterator::base](iterators/asc_std_iterator/move_iterator_base.md) | asc/std/iterator | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::move_iterator::difference_type](iterators/asc_std_iterator/move_iterator_difference_type.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -1279,12 +1280,12 @@
 | [asc::std::move_sentinel::move_sentinel](iterators/asc_std_iterator/move_sentinel_move_sentinel.md) | asc/std/iterator | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::move_sentinel::`operator=`](iterators/asc_std_iterator/move_sentinel_operator_assign.md) | asc/std/iterator | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::next](iterators/asc_std_iterator/next.md) | asc/std/iterator | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::output_iterator](iterators/asc_std_iterator/output_iterator.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::output_iterator](iterators/asc_std_iterator/output_iterator.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::output_iterator_tag](iterators/asc_std_iterator/output_iterator_tag.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::permutable](iterators/asc_std_iterator/permutable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::permutable](iterators/asc_std_iterator/permutable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::prev](iterators/asc_std_iterator/prev.md) | asc/std/iterator | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::projected](iterators/asc_std_iterator/projected.md) | asc/std/iterator | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::random_access_iterator](iterators/asc_std_iterator/random_access_iterator.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::random_access_iterator](iterators/asc_std_iterator/random_access_iterator.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::random_access_iterator_tag](iterators/asc_std_iterator/random_access_iterator_tag.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::rbegin](iterators/asc_std_iterator/rbegin.md) | asc/std/iterator | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::rend](iterators/asc_std_iterator/rend.md) | asc/std/iterator | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -1308,14 +1309,14 @@
 | [asc::std::reverse_iterator::reference](iterators/asc_std_iterator/reverse_iterator_reference.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::reverse_iterator::reverse_iterator](iterators/asc_std_iterator/reverse_iterator_reverse_iterator.md) | asc/std/iterator | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::reverse_iterator::value_type](iterators/asc_std_iterator/reverse_iterator_value_type.md) | asc/std/iterator | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::sentinel_for](iterators/asc_std_iterator/sentinel_for.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::sentinel_for](iterators/asc_std_iterator/sentinel_for.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::size](iterators/asc_std_iterator/size.md) | asc/std/iterator | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::sized_sentinel_for](iterators/asc_std_iterator/sized_sentinel_for.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::sortable](iterators/asc_std_iterator/sortable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::sized_sentinel_for](iterators/asc_std_iterator/sized_sentinel_for.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::sortable](iterators/asc_std_iterator/sortable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ssize](iterators/asc_std_iterator/ssize.md) | asc/std/iterator | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::unreachable_sentinel](iterators/asc_std_iterator/unreachable_sentinel.md) | asc/std/iterator | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::unreachable_sentinel_t](iterators/asc_std_iterator/unreachable_sentinel_t.md) | asc/std/iterator | 类 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::weakly_incrementable](iterators/asc_std_iterator/weakly_incrementable.md) | asc/std/iterator | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::weakly_incrementable](iterators/asc_std_iterator/weakly_incrementable.md) | asc/std/iterator | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::latch](concurrency/asc_std_latch/latch.md) | asc/std/latch | 类 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::latch::arrive_and_wait](concurrency/asc_std_latch/latch_arrive_and_wait.md) | asc/std/latch | 成员函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::latch::count_down](concurrency/asc_std_latch/latch_count_down.md) | asc/std/latch | 成员函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
@@ -1550,6 +1551,7 @@
 | [::operator new\[\]](language_support/asc_std_new/operator_new_array.md) | asc/std/new | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::align_val_t](language_support/asc_std_new/align_val_t.md) | asc/std/new | 枚举 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::destroying_delete_t](language_support/asc_std_new/destroying_delete_t.md) | asc/std/new | 类 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::destroying_delete](language_support/asc_std_new/destroying_delete.md) | asc/std/new | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::nothrow](language_support/asc_std_new/nothrow.md) | asc/std/new | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::nothrow_t](language_support/asc_std_new/nothrow_t.md) | asc/std/new | 类 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::e_v](numerics/asc_std_numbers/e_v.md) | asc/std/numbers | 变量模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -1712,21 +1714,21 @@
 | [asc::std::from_range](ranges/asc_std_ranges/from_range.md) | asc/std/ranges | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::from_range_t](ranges/asc_std_ranges/from_range_t.md) | asc/std/ranges | 类 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::begin](ranges/asc_std_ranges/ranges_begin.md) | asc/std/ranges | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::ranges::bidirectional_range](ranges/asc_std_ranges/ranges_bidirectional_range.md) | asc/std/ranges | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::bidirectional_range](ranges/asc_std_ranges/ranges_bidirectional_range.md) | asc/std/ranges | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::borrowed_iterator_t](ranges/asc_std_ranges/ranges_borrowed_iterator_t.md) | asc/std/ranges | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::ranges::borrowed_range](ranges/asc_std_ranges/ranges_borrowed_range.md) | asc/std/ranges | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::borrowed_range](ranges/asc_std_ranges/ranges_borrowed_range.md) | asc/std/ranges | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::borrowed_subrange_t](ranges/asc_std_ranges/ranges_borrowed_subrange_t.md) | asc/std/ranges | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::cbegin](ranges/asc_std_ranges/ranges_cbegin.md) | asc/std/ranges | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::cdata](ranges/asc_std_ranges/ranges_cdata.md) | asc/std/ranges | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::cend](ranges/asc_std_ranges/ranges_cend.md) | asc/std/ranges | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::ranges::common_range](ranges/asc_std_ranges/ranges_common_range.md) | asc/std/ranges | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::common_range](ranges/asc_std_ranges/ranges_common_range.md) | asc/std/ranges | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::common_view](ranges/asc_std_ranges/ranges_common_view.md) | asc/std/ranges | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::common_view::base](ranges/asc_std_ranges/ranges_common_view_base.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::common_view::begin](ranges/asc_std_ranges/ranges_common_view_begin.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::common_view::common_view](ranges/asc_std_ranges/ranges_common_view_common_view.md) | asc/std/ranges | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::common_view::end](ranges/asc_std_ranges/ranges_common_view_end.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::common_view::size](ranges/asc_std_ranges/ranges_common_view_size.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::ranges::contiguous_range](ranges/asc_std_ranges/ranges_contiguous_range.md) | asc/std/ranges | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::contiguous_range](ranges/asc_std_ranges/ranges_contiguous_range.md) | asc/std/ranges | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::crbegin](ranges/asc_std_ranges/ranges_crbegin.md) | asc/std/ranges | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::crend](ranges/asc_std_ranges/ranges_crend.md) | asc/std/ranges | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::dangling](ranges/asc_std_ranges/ranges_dangling.md) | asc/std/ranges | 类 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -1761,15 +1763,15 @@
 | [asc::std::ranges::filter_view::end](ranges/asc_std_ranges/ranges_filter_view_end.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::filter_view::filter_view](ranges/asc_std_ranges/ranges_filter_view_filter_view.md) | asc/std/ranges | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::filter_view::pred](ranges/asc_std_ranges/ranges_filter_view_pred.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::ranges::forward_range](ranges/asc_std_ranges/ranges_forward_range.md) | asc/std/ranges | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::ranges::input_range](ranges/asc_std_ranges/ranges_input_range.md) | asc/std/ranges | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::forward_range](ranges/asc_std_ranges/ranges_forward_range.md) | asc/std/ranges | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::input_range](ranges/asc_std_ranges/ranges_input_range.md) | asc/std/ranges | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::iota_view](ranges/asc_std_ranges/ranges_iota_view.md) | asc/std/ranges | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::iota_view::begin](ranges/asc_std_ranges/ranges_iota_view_begin.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::iota_view::end](ranges/asc_std_ranges/ranges_iota_view_end.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::iota_view::iota_view](ranges/asc_std_ranges/ranges_iota_view_iota_view.md) | asc/std/ranges | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::iota_view::size](ranges/asc_std_ranges/ranges_iota_view_size.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::iterator_t](ranges/asc_std_ranges/ranges_iterator_t.md) | asc/std/ranges | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::ranges::output_range](ranges/asc_std_ranges/ranges_output_range.md) | asc/std/ranges | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::output_range](ranges/asc_std_ranges/ranges_output_range.md) | asc/std/ranges | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::owning_view](ranges/asc_std_ranges/ranges_owning_view.md) | asc/std/ranges | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::owning_view::base](ranges/asc_std_ranges/ranges_owning_view_base.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::owning_view::begin](ranges/asc_std_ranges/ranges_owning_view_begin.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -1779,8 +1781,8 @@
 | [asc::std::ranges::owning_view::`operator=`](ranges/asc_std_ranges/ranges_owning_view_operator_assign.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::owning_view::owning_view](ranges/asc_std_ranges/ranges_owning_view_owning_view.md) | asc/std/ranges | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::owning_view::size](ranges/asc_std_ranges/ranges_owning_view_size.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::ranges::random_access_range](ranges/asc_std_ranges/ranges_random_access_range.md) | asc/std/ranges | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::ranges::range](ranges/asc_std_ranges/ranges_range.md) | asc/std/ranges | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::random_access_range](ranges/asc_std_ranges/ranges_random_access_range.md) | asc/std/ranges | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::range](ranges/asc_std_ranges/ranges_range.md) | asc/std/ranges | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::range_adaptor_closure](ranges/asc_std_ranges/ranges_range_adaptor_closure.md) | asc/std/ranges | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::range_common_reference_t](ranges/asc_std_ranges/ranges_range_common_reference_t.md) | asc/std/ranges | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::range_difference_t](ranges/asc_std_ranges/ranges_range_difference_t.md) | asc/std/ranges | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -1817,7 +1819,7 @@
 | [asc::std::ranges::single_view::single_view](ranges/asc_std_ranges/ranges_single_view_single_view.md) | asc/std/ranges | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::single_view::size](ranges/asc_std_ranges/ranges_single_view_size.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::size](ranges/asc_std_ranges/ranges_size.md) | asc/std/ranges | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::ranges::sized_range](ranges/asc_std_ranges/ranges_sized_range.md) | asc/std/ranges | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::sized_range](ranges/asc_std_ranges/ranges_sized_range.md) | asc/std/ranges | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::ssize](ranges/asc_std_ranges/ranges_ssize.md) | asc/std/ranges | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::subrange](ranges/asc_std_ranges/ranges_subrange.md) | asc/std/ranges | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::subrange::advance](ranges/asc_std_ranges/ranges_subrange_advance.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -1847,7 +1849,7 @@
 | [asc::std::ranges::transform_view::end](ranges/asc_std_ranges/ranges_transform_view_end.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::transform_view::size](ranges/asc_std_ranges/ranges_transform_view_size.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::transform_view::transform_view](ranges/asc_std_ranges/ranges_transform_view_transform_view.md) | asc/std/ranges | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::ranges::view](ranges/asc_std_ranges/ranges_view.md) | asc/std/ranges | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::view](ranges/asc_std_ranges/ranges_view.md) | asc/std/ranges | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::view_base](ranges/asc_std_ranges/ranges_view_base.md) | asc/std/ranges | 类 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::view_interface](ranges/asc_std_ranges/ranges_view_interface.md) | asc/std/ranges | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::view_interface::back](ranges/asc_std_ranges/ranges_view_interface_back.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -1856,7 +1858,7 @@
 | [asc::std::ranges::view_interface::front](ranges/asc_std_ranges/ranges_view_interface_front.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::view_interface::operator\[\]](ranges/asc_std_ranges/ranges_view_interface_operator_subscript.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::view_interface::size](ranges/asc_std_ranges/ranges_view_interface_size.md) | asc/std/ranges | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::ranges::viewable_range](ranges/asc_std_ranges/ranges_viewable_range.md) | asc/std/ranges | 概念 | C++20+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::ranges::viewable_range](ranges/asc_std_ranges/ranges_viewable_range.md) | asc/std/ranges | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::views::all](ranges/asc_std_ranges/ranges_views_all.md) | asc/std/ranges | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::views::all_t](ranges/asc_std_ranges/ranges_views_all_t.md) | asc/std/ranges | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::ranges::views::common](ranges/asc_std_ranges/ranges_views_common.md) | asc/std/ranges | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -2451,3 +2453,23 @@
 | [`asc::std::operator!=`（philox_engine）](numerics/asc_std_random/philox_engine_operator_not_equal.md) | asc/std/random | 友元函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [`asc::std::operator!=`（uniform_real_distribution）](numerics/asc_std_random/uniform_real_distribution_operator_not_equal.md) | asc/std/random | 友元函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [`asc::std::operator!=`（uniform_real_distribution_param_type）](numerics/asc_std_random/uniform_real_distribution_param_type_operator_not_equal.md) | asc/std/random | 友元函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [__alignas_is_defined](language_support/asc_std_cstdalign/alignas_is_defined.md) | asc/std/cstdalign | 宏 | 仅C++17 | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [__bool_true_false_are_defined](language_support/asc_std_cstdbool/bool_true_false_are_defined.md) | asc/std/cstdbool | 宏 | 仅C++17 | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_ALLOCATE_AT_LEAST](language_support/asc_std_version/has_allocate_at_least.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_CONCEPT_PREDICATES](language_support/asc_std_version/has_concept_predicates.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_ENDIAN](language_support/asc_std_version/has_endian.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_EXPECTED](language_support/asc_std_version/has_expected.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_FORMAT](language_support/asc_std_version/has_format.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_FORMAT_TO_N_RESULT](language_support/asc_std_version/has_format_to_n_result.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_INPLACE_VECTOR](language_support/asc_std_version/has_inplace_vector.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_IS_CONSTANT_EVALUATED](language_support/asc_std_version/has_is_constant_evaluated.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_MDSPAN](language_support/asc_std_version/has_mdspan.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_NATIVE_CONCEPTS](language_support/asc_std_version/has_native_concepts.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_OPTIONAL_REFERENCE](language_support/asc_std_version/has_optional_reference.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_PHILOX](language_support/asc_std_version/has_philox.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_SOURCE_LOCATION](language_support/asc_std_version/has_source_location.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_SPAN](language_support/asc_std_version/has_span.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_SUBMDSPAN](language_support/asc_std_version/has_submdspan.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_TO_ARRAY](language_support/asc_std_version/has_to_array.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_TYPE_IDENTITY](language_support/asc_std_version/has_type_identity.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL_HAS_UNREACHABLE](language_support/asc_std_version/has_unreachable.md) | asc/std/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
