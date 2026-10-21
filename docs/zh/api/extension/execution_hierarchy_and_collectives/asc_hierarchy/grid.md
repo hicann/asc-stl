@@ -34,8 +34,8 @@
 
 ```cpp
 namespace asc {
-inline constexpr grid_level grid{}
-} // namespace asc
+inline constexpr grid_level grid{};
+}  // namespace asc
 ```
 
 ## 约束说明

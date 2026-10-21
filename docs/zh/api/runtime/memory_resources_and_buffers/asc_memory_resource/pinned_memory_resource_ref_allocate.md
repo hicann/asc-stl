@@ -36,7 +36,8 @@
 
 ```cpp
 // asc::pinned_memory_resource_ref 类内的声明节选；模板形参和其他成员由所属类提供。
-asc::execution_status allocate(void** output, asc::std::size_t bytes, asc::std::size_t alignment = alignof(asc::std::max_align_t)) const noexcept;
+asc::execution_status allocate(
+    void** output, asc::std::size_t bytes, asc::std::size_t alignment = alignof(asc::std::max_align_t)) const noexcept;
 ```
 
 ## 参数说明
@@ -67,18 +68,23 @@ asc::execution_status allocate(void** output, asc::std::size_t bytes, asc::std::
 
 ## 调用示例
 
-以下Host片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+调用方提供有效资源并完成Runtime初始化；返回status表示清理结果，失败时pointer保留64字节分配的所有权，须由调用方使用同一资源重试释放。
 
 ```cpp
 #include <asc/memory_resource>
-
-asc::execution_status example(const asc::pinned_memory_resource_ref& resource)
+struct allocation_result {
+    void* pointer;
+    asc::execution_status status;
+};
+allocation_result example(const asc::pinned_memory_resource_ref& resource)
 {
-    // 调用前完成 CANN 初始化；device 资源还要求当前 Device 与绑定值一致。
     void* pointer = nullptr;
-    const auto status = resource.allocate(&pointer, 64);
-    if (!status.success()) return status;
-    return resource.deallocate(pointer, 64);
+    const auto allocated = resource.allocate(&pointer, 64);
+    if (!allocated.success())
+        return {nullptr, allocated};
+    const auto released = resource.deallocate(pointer, 64);
+    // 失败时把仍拥有的地址交还调用方，保留原资源以便重试。
+    return {released.success() ? nullptr : pointer, released};
 }
 ```
 

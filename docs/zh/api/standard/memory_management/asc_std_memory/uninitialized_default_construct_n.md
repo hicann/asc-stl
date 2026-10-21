@@ -69,17 +69,21 @@ template<class ForwardIterator, class Size> ForwardIterator uninitialized_defaul
 
 ## 调用示例
 
-以下Host片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/memory>
 
-decltype(auto) example()
+struct example_value { int value = 5; };
+
+bool example()
 {
-    alignas(int) unsigned char storage[sizeof(int) * 4];
-    int* output = reinterpret_cast<int*>(storage);
-    return asc::std::uninitialized_default_construct_n(output, 4);
+    alignas(example_value) unsigned char storage[sizeof(example_value) * 4];
+    auto* output = reinterpret_cast<example_value*>(storage);
+    const auto end = asc::std::uninitialized_default_construct_n(output, 4);
+    const bool valid = end == output + 4 && output[0].value == 5 && output[3].value == 5;
     asc::std::destroy_n(output, 4);
+    return valid;
 }
 ```
 

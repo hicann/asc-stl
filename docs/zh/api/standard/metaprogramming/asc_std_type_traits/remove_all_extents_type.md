@@ -34,16 +34,15 @@
 
 ## 声明
 
-所属类型：[`asc::std::remove_all_extents`](remove_all_extents.md)。
+通过所属特征类查询结果类型：
 
 ```cpp
-// asc::std::remove_all_extents 类内的声明节选；模板形参和其他成员由所属类提供。
-using type = Removeallextents(T);
+using result_type = typename asc::std::remove_all_extents<int[2][3]>::type;
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- `type`是移除全部数组维度后的类型；cv限定和非数组类型保持对应类型变换规则。
 
 ## 调用示例
 

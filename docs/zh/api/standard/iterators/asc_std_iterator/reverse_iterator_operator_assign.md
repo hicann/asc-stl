@@ -34,12 +34,15 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::reverse_iterator`](reverse_iterator.md)。
+所属类型：[`reverse_iterator`](reverse_iterator.md)。以下保留转换赋值的真实参与条件；此SFINAE形式在两种语言模式均适用。
 
 ```cpp
-// asc::std::reverse_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class U> constexpr reverse_iterator<Iter>& operator=(const reverse_iterator<U>& other) noexcept(is_nothrow_assignable_v<Iter&, const U&>);
+template<class U, enable_if_t<!is_same_v<U, Iter> && is_convertible_v<const U&, Iter>
+    && is_assignable_v<Iter&, const U&>, int> = 0>
+constexpr reverse_iterator& operator=(const reverse_iterator<U>& other) noexcept(is_nothrow_assignable_v<Iter&, const U&>);
 ```
+
+同类型特殊成员赋值按C++隐式声明规则处理。
 
 ## 参数说明
 
@@ -53,29 +56,34 @@ template<class U> constexpr reverse_iterator<Iter>& operator=(const reverse_iter
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
+| `other` | 输入 | 转换赋值来源，形参为const引用；保存的底层状态须满足原型给出的转换和赋值条件。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `reverse_iterator<Iter> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| `reverse_iterator&` | 从来源保存的反向基础位置更新目标，返回*this；来源保持有效。 |
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 底层迭代器须支持双向遍历；随机访问成员还要求底层支持对应位移或下标运算。
+- 反向迭代器访问`base()`之前的元素，解引用或箭头访问要求该前一位置有效。
+- 适配器不拥有底层范围；返回引用或指针的寿命受底层对象约束。
 
 ## 调用示例
 
-以下Host片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void example(asc::std::reverse_iterator<const int*>& destination, const asc::std::reverse_iterator<int*>& source)
+bool example()
 {
-    destination = source;
+    int values[] = {2, 4, 6, 8};
+    asc::std::reverse_iterator<int*> iterator(values + 4);
+    asc::std::reverse_iterator<const int*> target;
+    target = iterator;
+    return *target == 8;
 }
 ```
 

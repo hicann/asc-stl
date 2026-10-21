@@ -56,7 +56,7 @@ constexpr unsigned long long count(asc::grid_level) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 级别标签：传入asc::block（block_level值）选择Block级，返回该级三维尺寸的元素总数x*y*z。 |
+| 级别标签（未命名参数） | 输入 | 级别标签：传入asc::block（block_level值）选择Block级，返回该级三维尺寸的元素总数x*y*z。 |
 
 ### 原型2的参数
 
@@ -64,16 +64,18 @@ constexpr unsigned long long count(asc::grid_level) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 级别标签：传入asc::grid（grid_level值）选择Grid级，返回该级三维尺寸的元素总数x*y*z。 |
+| 级别标签（未命名参数） | 输入 | 级别标签：传入asc::grid（grid_level值）选择Grid级，返回该级三维尺寸的元素总数x*y*z。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `unsigned long long` | 返回由当前网格和线程块尺寸构成的执行层次或启动尺寸。 |
-| 原型2 | `unsigned long long` | 返回由当前网格和线程块尺寸构成的执行层次或启动尺寸。 |
+| 原型1 | `unsigned long long` | 返回所选三维范围x*y*z的无符号64位数量，不返回尺寸对象。 |
+| 原型2 | `unsigned long long` | 返回所选三维范围x*y*z的无符号64位数量，不返回尺寸对象。 |
 
 ## 约束说明
+
+- 逐轴尺寸须满足当前设备的合法启动上限，x*y*z必须在unsigned long long中可表示；仅非零不足以保证这一条件。这里的值操作不校验实际硬件限制。
 
 - 提供C++17 constexpr Host/Device层次结构接口。
 - 带extent的值要求每一维均非零。

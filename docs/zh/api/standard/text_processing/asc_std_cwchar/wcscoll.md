@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::wcscoll`在固定C locale下比较两个宽字符串。
+`asc::std::wcscoll`在Host当前C语言区域设置下（Device固定C语言区域设置）比较两个宽字符串。
 
 该接口的可用位置为Host（完整接口）、Device（C locale相关接口）。
 

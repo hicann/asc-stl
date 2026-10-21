@@ -66,8 +66,8 @@ ASC-STL采用纯头文件库结构。公共Header集中在`include/asc/`；测�
 asc-stl/
 ├── include/
 │   └── asc/                         # ASC-STL 公共 Header 根目录
+│       ├── __config                 # 统一配置入口
 │       ├── std/                     # C++ 标准库接口：<asc/std/...>（v1.0.0）
-│       │   ├── detail/              # 统一配置入口
 │       │   └── ...                  # 其余内部实现目录（__ 前缀）
 │       ├── algorithm                # Device 并行算法（v1.0.0）
 │       ├── atomic                   # 设备原子操作（v1.0.0）
@@ -93,7 +93,7 @@ asc-stl/
 
 若您希望快速体验 ASC-STL 的使用过程，请访问 [快速入门](docs/zh/quick_start.md)：介绍环境搭建、Host 侧与 Kernel 侧（核函数）的使用方式、编译执行与本地验证，含经测试验证的 Host / Kernel 示例。
 
-使用方式概览：ASC-STL 为纯头文件库，**包含公共头即可使用，无需构建与链接**。Host 侧仅需支持 C++17 的编译器；Kernel 侧编译与真机运行需安装 CANN，软硬件要求详见[软硬件配套说明](#-软硬件配套说明)。
+使用方式概览：ASC-STL 自身采用纯头文件形式，不单独构建库文件。普通Host算法与类型设施可直接包含公共头使用；调用依赖AscendCL的Runtime接口还须安装相应CANN运行时并链接`ascendcl`，按接口要求初始化设备与资源。Host侧需要支持C++17的编译器及相应系统库，Kernel编译与真机运行需要CANN，详见[软硬件配套说明](#-软硬件配套说明)。
 
 ### 环境要求
 
@@ -173,6 +173,19 @@ cmake -B build -DBUILD_TESTING=ON && cmake --build build -j && cd build && ctest
 也不从多设备中选择一个。构建遵循`CMAKE_BUILD_PARALLEL_LEVEL`，未设置时保持
 两路并行；例如`CMAKE_BUILD_PARALLEL_LEVEL=8 bash scripts/ci-hardware-check.sh`。
 硬件用例不由上面的三个云端Host/Device/cannsim CI入口触发。
+
+纯SIMT测试中，视图连续逆向遍历的已知编译器缺陷与B022常量局部数组组合回归的
+独立异常，分别记录于[共享语义回归说明](test/support/README.md)。B022夹具通过
+Host上传相同原值构造运行期输入，保留Host/SIMD常量路径、算法调用顺序、断言和
+`-O3`；原始常量形态仍需复验。验证该夹具时须完整执行C++17/C++20模拟与真机回归，
+算法独立对照不能替代完整B022结果。
+
+B027的纯SIMT运行期测试采用[分阶段夹具](test/support/README.md)：每个阶段在独立ASC
+翻译单元和共享模块中编译，长字符串对象及arena位于同一上下文的GM，短字符串保持
+局部对象和局部arena。Host与SIMD保留原完整语义路径。该夹具保留core与字符串的
+全部行为断言及`-O3`，用于验证当前工具链下的内存域和模块隔离；原单kernel、局部
+长arena形态仍作为独立回归保留在诊断记录中，不能据此声称SDK问题已经修复。
+C++17/C++20的完整模拟、硬件构建和有保护的真机执行均属于持续验证要求。
 
 ## 💻 软硬件配套说明
 

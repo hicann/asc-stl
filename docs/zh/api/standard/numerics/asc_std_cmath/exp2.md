@@ -36,40 +36,98 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-float exp2(float x) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float exp2(
+    float value) noexcept;
+}
 ```
 
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
+
+### 原型2
+
+```cpp
+namespace asc::std {
+template <class Tp, ::asc::std::enable_if_t<__expo_supported_extended_v<Tp>, int> = 0>
+[[nodiscard]] constexpr Tp exp2(Tp value) noexcept;
+}
+```
+
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
+
+### 原型3
+
+```cpp
+namespace asc::std {
+[[nodiscard]] constexpr double exp2(double value) noexcept;
+}
+```
+
+可用位置：Host。
+
+### 原型4
+
+```cpp
+namespace asc::std {
+[[nodiscard]] constexpr long double exp2(long double value) noexcept;
+}
+```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
+
+### 原型5
+
+```cpp
+namespace asc::std {
+template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
+[[nodiscard]] constexpr double exp2(Tp value) noexcept;
+}
+```
+
+可用位置：Host。
+
 ## 参数说明
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Tp` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。指数与缩放族的扩展浮点选择仅接受可用的half和bfloat16，不接受FP8。 |
+
+未命名的默认int模板形参用于重载选择，调用方无需提供。
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 2的指数（幂次，无量纲）；上溢返回 +inf，下溢返回0。 |
+| `value` | 输入 | 2的指数（幂次，无量纲）；上溢返回 +inf，Host下溢可能产生次正规数；SIMT可能刷新次正规输入和输出为零。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float` | 返回以2为底的指数；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+返回类型按各原型确定（`float`、`Tp`、`double`、`long double`）。返回以2为底的指数值。
 
 ## 约束说明
 
-- 提供float重载、标准 *f别名以及float lerp回移接口。
+- 指数和缩放族的扩展浮点模板仅接受half和bfloat16；FP8未提供该族扩展重载。
+
+- Host遵循系统数学库的次正规数行为；AI Core SIMT编程后端可能将次正规结果刷新为零，不能把Host的下溢边界直接用于Device结果。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float x)
+bool example()
 {
-    return asc::std::exp2(x);
+    const auto result = asc::std::exp2(3.0F);
+    return result == 8.0F;
 }
 ```
 

@@ -53,8 +53,10 @@ constexpr size_type size() const noexcept;
 
 ## 约束说明
 
-- C++17起可使用一维`operator[]`；多参数`operator[]`按编译器的C++23多维下标特性开放。
-- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
+- 本查询从C++17起提供；元素访问形式及语言条件见[`mdspan`](mdspan.md#约束说明)。
+
+- 返回各维长度的乘积，即逻辑元素数；它可小于含步长间隙的required_span_size()。
+- 长度乘积须可由`size_type`表示；查询不读取元素。
 
 ## 调用示例
 

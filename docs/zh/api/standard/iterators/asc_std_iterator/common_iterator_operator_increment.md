@@ -66,27 +66,29 @@ constexpr decltype(auto) operator++(int unused);
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `common_iterator<Iter, Sent> &` | 返回更新后的当前对象引用。 |
-| 原型2 | `decltype(auto)` | 返回更新后的迭代器或计数值。 |
+前置形式返回递增后当前适配器的引用。后置形式在底层满足前向迭代器要求时返回递增前的适配器副本；其他情况下可能返回保存旧值的代理或底层后置递增结果。
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- `Iter`与`Sent`是不同类型，须满足输入/输出迭代器与哨兵的配合要求；适配器保存其中一种状态。
+- 解引用、箭头访问及自增只能作用于当前持有迭代器且操作有效的对象，不能作用于哨兵状态。
+- 适配器不拥有底层范围；所指对象须在访问期间保持有效。
 
 ## 调用示例
 
-以下Host片段使用具体指针与哨兵演示调用；解引用前须保证指针有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void example(int* data)
+bool example()
 {
-    asc::std::common_iterator<int*, asc::std::unreachable_sentinel_t> iterator(data);
-    ++iterator;
+    int values[] = {2, 4, 6};
+    using It = asc::std::counted_iterator<int*>;
+    using Common = asc::std::common_iterator<It, asc::std::default_sentinel_t>;
+    Common iterator(It(values, 3));
+    auto old = iterator++;
+    return *old == 2 && *iterator == 4;
 }
 ```
 

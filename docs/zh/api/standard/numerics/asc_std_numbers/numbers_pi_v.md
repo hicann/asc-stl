@@ -34,23 +34,11 @@
 
 ## 声明
 
-### 原型1
-
 ```cpp
 namespace asc::std::numbers {
-pi_v :;
-} // namespace asc::std::numbers
+template<class Tp> inline constexpr Tp pi_v = __numbers<Tp>::__pi();
+}
 ```
-
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
-
-### 原型2
-
-```cpp
-template <class Tp> constexpr Tp pi_v = __numbers<Tp>::__pi();
-```
-
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 约束说明
 

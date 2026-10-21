@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::chrono::time_point 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr time_point<Clock, Duration> max() noexcept;
+[[nodiscard]] static constexpr time_point<Clock, Duration> max() noexcept;
 ```
 
 ## 参数说明

@@ -72,18 +72,21 @@ constexpr const T* operator->() const noexcept;
 - T必须是普通的非引用对象类型。
 - Host遵循有效的C++17操作。
 - Device侧构造、赋值、调用和交换所依赖的操作必须不抛出异常。
+- 返回的引用、指针或非拥有包装器不延长被引用对象的生命周期。使用时须保证该对象仍存活；对象销毁或其值存储生命周期结束后不得继续访问。
 
 ## 调用示例
 
-以下Host片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
+以下Host示例在被引用对象仍存活时检查结果。
 
 ```cpp
 #include <asc/std/optional>
 
-decltype(auto) example()
+bool example()
 {
     asc::std::optional<int> value(7);
-    return value.operator->();
+    int* selected = value.operator->();
+    *selected = 9;
+    return value.has_value() && *value == 9;
 }
 ```
 

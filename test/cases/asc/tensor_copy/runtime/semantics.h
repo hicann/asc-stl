@@ -47,6 +47,7 @@
 #include "../../../../support/tensor_descriptor_boundaries.h"
 #include "../../../../support/w09_w10_semantics.h"
 #include "../../../../support/functional_properties.h"
+#include "../../../../support/runtime_review_regression.h"
 #include "../../../../support/pair_piecewise_regression.h"
 #include "../../../../support/w11_w12_semantics.h"
 #include "../../../../support/v1_algorithm_semantics.h"
@@ -92,6 +93,21 @@ CANN_ASC_STL_DEVICE_API void evaluate_simd(ResultPointer result, InputPointer in
     failures +=
         asc::tensor_load_async(pipeline, 0, asc::ub_span<unsigned int>(stage, 24),
             asc::gm_span<const unsigned int>(input, 1), descriptor, 0u) != asc::tensor_copy_status::insufficient_source;
+    // Noncontiguous UB: left padding is one logical element of stride two.
+    __ubuf__ unsigned int strided[6];
+    for (unsigned index = 0; index < 6; ++index)
+        strided[index] = 100u + index;
+    const unsigned int store_extents[1] = {2};
+    const unsigned int gm_steps[1] = {1};
+    const unsigned int ub_steps[1] = {2};
+    const unsigned int store_left[1] = {1};
+    const unsigned int store_right[1] = {0};
+    const auto store_descriptor =
+        asc::make_tensor_copy_descriptor(store_extents, gm_steps, ub_steps, store_left, store_right);
+    failures += asc::tensor_store_async(pipeline, 0, asc::gm_span<unsigned int>(result + 496, 2),
+                    asc::ub_span<const unsigned int>(strided, 6), store_descriptor) != asc::tensor_copy_status::success;
+    pipeline.wait();
+    failures += result[496] != 102u || result[497] != 104u;
     unsigned char storage[1024]{};
     asc::monotonic_arena arena(storage, sizeof(storage));
     failures += evaluate_single_thread(arena, result);
@@ -232,6 +248,7 @@ template <class ResultPointer>
 CANN_ASC_STL_API unsigned int evaluate_single_thread(asc::monotonic_arena& arena, ResultPointer result)
 {
     unsigned int failures = 0;
+    failures += !asc_stl_runtime_review::checked_narrow_product();
     failures += asc::std::plus<int>{}(2, 3) != 5;
     mutex_probe first;
     mutex_probe second;

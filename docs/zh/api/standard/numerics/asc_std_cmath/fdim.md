@@ -36,13 +36,72 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-float fdim(float x, float y) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float fdim(
+    float x, float y) noexcept;
+}
 ```
 
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
+
+### 原型2
+
+```cpp
+namespace asc::std {
+template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
+[[nodiscard]] constexpr Tp fdim(
+    Tp x, Tp y) noexcept;
+}
+```
+
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。扩展浮点模板仅在对应类型可用时参与；half、bfloat16及所支持FP8的数值调用用于AI Core SIMT编程。
+
+### 原型3
+
+```cpp
+namespace asc::std {
+[[nodiscard]] constexpr double fdim(double x, double y) noexcept;
+}
+```
+
+可用位置：Host。
+
+### 原型4
+
+```cpp
+namespace asc::std {
+[[nodiscard]] constexpr long double fdim(long double x, long double y) noexcept;
+}
+```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
+
+### 原型5
+
+```cpp
+namespace asc::std {
+template <class Tp, class Up, ::asc::std::enable_if_t<is_arithmetic_v<Tp> && is_arithmetic_v<Up>, int> = 0>
+[[nodiscard]] constexpr __promote_t<Tp, Up> fdim(Tp x, Up y) noexcept;
+}
+```
+
+可用位置：Host。
+
 ## 参数说明
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Tp` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。 |
+| `Up` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。 |
+
+未命名的默认int模板形参用于重载选择，调用方无需提供。
 
 **函数参数**
 
@@ -53,24 +112,23 @@ float fdim(float x, float y) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float` | 返回两个参数的正差值。 |
+返回类型按各原型确定（`float`、`Tp`、`double`、`long double`、`__promote_t<Tp, Up>`）。x大于y时返回x-y，否则返回正零。
 
 ## 约束说明
 
-- 提供float重载、标准 *f别名以及float lerp回移接口。
+- 扩展类型是否可实例化取决于目标类型支持；普通超越函数以float计算再转换回原格式，整数舍入和相邻数的规则见本页专门说明。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float x, float y)
+bool example()
 {
-    return asc::std::fdim(x, y);
+    const auto result = asc::std::fdim(5.0F, 2.0F);
+    return result == 3.0F;
 }
 ```
 

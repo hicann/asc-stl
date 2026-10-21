@@ -29,6 +29,7 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
+#include <asc/std/__floating_point/cast.h>
 #include <asc/std/__cmath/backend.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_extended_floating_point.h>
@@ -53,8 +54,9 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 // uses the compiler builtins; double/long double/integral promotion and the
 // l-suffix alias are host-only (the vector cores have no double-precision
 // arithmetic, and long double is forbidden on device); extended floating
-// point (half/bfloat16/fp8 family) transits through float precision and
-// round-trips in its original format.
+// point (half/bfloat16/fp8 family) transits through float precision. Floating
+// rounding returns the input format; lrint/lround and llrint/llround retain
+// their long and long-long integer result types.
 
 //! @brief Smallest integer value not less than @p value. Zero returns
 //! directly with its sign preserved (-0.0 -> -0.0).
@@ -79,7 +81,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp ceil(Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::ceil(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::ceil(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Largest integer value not greater than @p value. Zero returns
@@ -104,7 +106,7 @@ template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp floor(
     Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::floor(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::floor(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Rounds toward zero. Zero returns directly with its sign preserved
@@ -129,7 +131,7 @@ template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp trunc(
     Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::trunc(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::trunc(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Rounds to nearest, halfway cases away from zero (round(2.5) = 3,
@@ -154,7 +156,7 @@ template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp round(
     Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::round(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::round(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Rounds to nearest according to the current rounding mode (even by
@@ -178,7 +180,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp rint(Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::rint(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::rint(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Rounds to nearest (same as rint) but does not raise the inexact
@@ -203,7 +205,7 @@ template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp nearbyint(
     Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::nearbyint(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::nearbyint(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Rounds according to the current rounding mode and converts to
@@ -221,10 +223,10 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp lrint(
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR long lrint(
     Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::lrint(static_cast<float>(value)));
+    return ::asc::std::lrint(::asc::std::__fp_cast<float>(value));
 }
 
 //! @brief Rounds to nearest (halfway cases away from zero) and converts to
@@ -242,10 +244,10 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp lround(
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR long lround(
     Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::lround(static_cast<float>(value)));
+    return ::asc::std::lround(::asc::std::__fp_cast<float>(value));
 }
 
 //! @brief Rounds according to the current rounding mode and converts to
@@ -263,10 +265,10 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp llrint(
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR long long llrint(
     Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::llrint(static_cast<float>(value)));
+    return ::asc::std::llrint(::asc::std::__fp_cast<float>(value));
 }
 
 //! @brief Rounds to nearest (halfway cases away from zero) and converts to
@@ -284,10 +286,10 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp llround(
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR long long llround(
     Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::llround(static_cast<float>(value)));
+    return ::asc::std::llround(::asc::std::__fp_cast<float>(value));
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()

@@ -32,12 +32,15 @@
 
 描述符按往返方式复用：`source_stride` 仍描述 GM 布局，`destination_stride` 描述 load 写入的带填充 UB 布局；store 逐行读取越过左填充的有效数据，填充区被跳过而不搬运。GM 侧不存在填充，因此本接口无填充值参数。
 
-提交成功后内嵌执行该流水轮次的消费者侧 retire 步（`consumer_release`），本接口等价于 plain pipeline 词汇中 `copy_async(..., gm, ub)` 加 `consumer_release` 的组合；调用前须已完成对该级缓冲的全部标量读取。
+检查通过后先发布consumer_release，并等待对应S→MTE3事件，再执行UB→GM存储；与plain pipeline的consumer_release后接copy_async顺序一致。调用前须完成对该级缓冲的全部标量读写。
 
 ## 函数原型
 
 ```cpp
-template<class T, unsigned Rank> asc::tensor_copy_status asc::tensor_store_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<T> destination, asc::ub_span<const T> source, const asc::tensor_copy_descriptor<Rank>& descriptor) noexcept;
+template <class T, unsigned Rank>
+asc::tensor_copy_status asc::tensor_store_async(const asc::pipeline_ref& pipeline, unsigned int stage,
+    asc::gm_span<T> destination, asc::ub_span<const T> source,
+    const asc::tensor_copy_descriptor<Rank>& descriptor) noexcept;
 ```
 
 ## 参数说明
@@ -46,7 +49,7 @@ template<class T, unsigned Rank> asc::tensor_copy_status asc::tensor_store_async
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 搬运的元素类型；须属于多维搬运后端支持的元素集合。 |
+| `T` | 搬运的元素类型；仅支持int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t或float，两个视图的元素类型须匹配。 |
 | `Rank` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
 
 **函数参数**
@@ -70,12 +73,12 @@ template<class T, unsigned Rank> asc::tensor_copy_status asc::tensor_store_async
 - 仅可在 AI Core SIMD 编程中调用
 - 提交前依次校验描述符合法性、stage 范围（越界返回 `invalid_stage`）、最内维运行字节长度与两端所需元素数（溢出返回 `size_overflow`、视图不足分别返回 `insufficient_destination`/`insufficient_source`）
 - 对齐搬运路径的两端地址对齐为调用方前置条件，与 `asc::tensor_copy_required_alignment` 对 load 方向的说明一致
-- 调用前须完成对该流水级 UB 缓冲的全部标量读取（接口内嵌消费者侧 retire 步）
+- 调用前须完成对该流水级 UB 缓冲的全部标量读取（接口内嵌consumer_release及其S→MTE3等待）
 - 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明
 
 ## 调用示例
 
-以下设备函数片段展示 UB 到 GM 的异步存储；流水级与源、目标存储须在完成前有效，且调用前已完成对该级缓冲的读取。
+以下设备函数片段展示 UB 到 GM 的异步存储；流水级与源、目标存储须在完成前有效，且调用前已完成对该级缓冲的标量读写。
 
 ```cpp
 #include <asc/tensor_copy>

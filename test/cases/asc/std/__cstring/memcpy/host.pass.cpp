@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef ASC_ENABLE_HOST_ASSERTIONS
+#define ASC_ENABLE_HOST_ASSERTIONS 1
+#endif
+
 #include <asc/std/__cstring/memcpy.h>
 #include "support/foundation_semantics.h"
 int main()

@@ -27,7 +27,9 @@
 #include <ranges>
 #endif
 
+#include "counted_order_semantics.h"
 #include "cxx17_views_fixtures.h"
+#include "repeat_piecewise_semantics.h"
 
 namespace asc_stl_cxx17_views_test {
 
@@ -423,7 +425,8 @@ CANN_ASC_STL_API int evaluate()
         evaluate_reverse_cache<asc::std::random_access_iterator_tag>(), evaluate_subrange_advance(),
         evaluate_move_only_subrange(), evaluate_factory_dispatch(), evaluate_counted_and_common(),
         evaluate_reconstructible_values(), evaluate_reconstructible_callables(), evaluate_iota_boundaries(),
-        evaluate_factory_constraints(), evaluate_count_captures(), evaluate_explicit_copy_boundaries()};
+        evaluate_factory_constraints(), evaluate_count_captures(), evaluate_explicit_copy_boundaries(),
+        asc_stl_repeat_piecewise_test::evaluate(), asc_stl_counted_order_test::evaluate()};
     for (int result : results) {
         if (result != 0)
             return result;

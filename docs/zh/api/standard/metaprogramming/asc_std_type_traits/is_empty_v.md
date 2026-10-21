@@ -34,9 +34,12 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const bool is_empty_v;
+template<class T>
+inline constexpr bool is_empty_v = is_empty<T>::value;
 } // namespace asc::std
 ```
 
@@ -51,7 +54,7 @@ template<class T> inline constexpr const bool is_empty_v;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::is_empty_v<int>;
+static_assert((asc::std::is_empty_v<int>) == false);
 ```
 
 ## 关联API

@@ -40,9 +40,9 @@ template<unsigned Rank> class tensor_copy_descriptor;
 
 ## 约束说明
 
-- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Rank为1至5。
-- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
+- `Rank`须为1至5的编译期无符号整数；各维度按从外到内的顺序编号，最内维为`Rank - 1`。
+- 范围、源/目标步长及左右填充以32位无符号元素数保存；描述符拥有这些数值，不拥有或引用源/目标数据存储。
+- 构造和查询可在Host、AI Core SIMD编程和AI Core SIMT编程中进行，不启动数据搬运；实际搬运前须调用[validate](tensor_copy_descriptor_validate.md)并满足搬运接口的存储、地址空间与同步要求。
 
 ## 调用示例
 

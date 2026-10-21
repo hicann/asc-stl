@@ -39,9 +39,9 @@ struct no_bounds;
 
 ## 约束说明
 
+- no_bounds只表示未携带边界信息，不校验实际值或数据指针；使用数据时仍须满足被调用接口前提。
+
 - 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 

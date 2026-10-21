@@ -36,24 +36,27 @@
 
 ```cpp
 namespace asc {
-asc::std::int32_t block_broadcast(asc::block_collective_workspace<asc::std::int32_t> workspace, asc::std::int32_t value, asc::std::uint32_t source_thread) noexcept;
-} // namespace asc
+asc::std::int32_t block_broadcast(asc::block_collective_workspace<asc::std::int32_t> workspace, asc::std::int32_t value,
+    asc::std::uint32_t source_thread) noexcept;
+}  // namespace asc
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc {
-asc::std::uint32_t block_broadcast(asc::block_collective_workspace<asc::std::uint32_t> workspace, asc::std::uint32_t value, asc::std::uint32_t source_thread) noexcept;
-} // namespace asc
+asc::std::uint32_t block_broadcast(asc::block_collective_workspace<asc::std::uint32_t> workspace,
+    asc::std::uint32_t value, asc::std::uint32_t source_thread) noexcept;
+}  // namespace asc
 ```
 
 ### 原型3
 
 ```cpp
 namespace asc {
-float block_broadcast(asc::block_collective_workspace<float> workspace, float value, asc::std::uint32_t source_thread) noexcept;
-} // namespace asc
+float block_broadcast(
+    asc::block_collective_workspace<float> workspace, float value, asc::std::uint32_t source_thread) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -64,7 +67,7 @@ float block_broadcast(asc::block_collective_workspace<float> workspace, float va
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
+| `workspace` | 输入/输出 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
 | `value` | 输入 | 待广播的值：仅source_thread线程提供的值被使用，其余线程传入的该值被忽略。 |
 | `source_thread` | 输入 | 广播源线程在当前线程块内的线程索引；该参数为标量索引，不涉及存储生命周期。 |
 
@@ -74,7 +77,7 @@ float block_broadcast(asc::block_collective_workspace<float> workspace, float va
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
+| `workspace` | 输入/输出 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
 | `value` | 输入 | 待广播的值：仅source_thread线程提供的值被使用，其余线程传入的该值被忽略。 |
 | `source_thread` | 输入 | 广播源线程在当前线程块内的线程索引；该参数为标量索引，不涉及存储生命周期。 |
 
@@ -84,7 +87,7 @@ float block_broadcast(asc::block_collective_workspace<float> workspace, float va
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
+| `workspace` | 输入/输出 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
 | `value` | 输入 | 待广播的值：仅source_thread线程提供的值被使用，其余线程传入的该值被忽略。 |
 | `source_thread` | 输入 | 广播源线程在当前线程块内的线程索引；该参数为标量索引，不涉及存储生命周期。 |
 

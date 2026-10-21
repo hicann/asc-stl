@@ -34,15 +34,15 @@
 
 ```cpp
 namespace asc {
-template<class Accessor> class gm_accessor;
-} // namespace asc
+template <class Accessor>
+class gm_accessor;
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供Host和GM视图以及AI Core SIMD编程UB视图。
-- 允许有符号步长。
-- 可选的Host DLPack桥接不抛出异常。
+- 视图和访问器不拥有存储；SIMD句柄保留GM地址空间，Host表示不代表设备地址可在Host解引用，存储须覆盖全部访问。
+
 
 ## 调用示例
 

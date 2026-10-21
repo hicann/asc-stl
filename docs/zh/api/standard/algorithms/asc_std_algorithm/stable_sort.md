@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::stable_sort`排序范围并保持等价元素的原有相对顺序；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::stable_sort`排序范围并保持等价元素的原有相对顺序；在调用者所在执行主体内顺序执行。
 
 该接口的可用位置为Host、AI Core SIMD编程。
 
@@ -40,16 +40,18 @@
 
 ```cpp
 namespace asc::std {
-template<class RandomAccessIterator, class Compare> void stable_sort(RandomAccessIterator first, RandomAccessIterator last, Compare compare);
-} // namespace asc::std
+template <class RandomAccessIterator, class Compare>
+constexpr void stable_sort(RandomAccessIterator first, RandomAccessIterator last, Compare compare);
+}  // namespace asc::std
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class RandomAccessIterator> void stable_sort(RandomAccessIterator first, RandomAccessIterator last);
-} // namespace asc::std
+template <class RandomAccessIterator>
+constexpr void stable_sort(RandomAccessIterator first, RandomAccessIterator last);
+}  // namespace asc::std
 ```
 
 ## 参数说明

@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<class T> struct plus;
+template<class T = void> struct plus;
 } // namespace asc::std
 ```
 

@@ -34,49 +34,66 @@
 
 ## 函数原型
 
+### 无参数重载
+
 ```cpp
 namespace asc::std {
-template<class Tuple0, class ...Tuples> constexpr typename Tuplecatreturn<Tuple0, Tuples...>::type tuple_cat(Tuple0&& first, Tuples&&... right);
+constexpr tuple<> tuple_cat() noexcept;
+} // namespace asc::std
+```
+
+### 拼接重载的调用形式摘要
+
+以下为省略内部返回类型计算的声明摘要；`auto`用于说明推导结果，不是头文件中返回类型拼写的逐字转录。实际返回类型是按输入顺序拼接元素类型得到的`asc::std::tuple`。
+
+```cpp
+namespace asc::std {
+template<class... Tuples> constexpr auto tuple_cat(Tuples&&... tuples);
 } // namespace asc::std
 ```
 
 ## 参数说明
 
+无参数重载不接受实参，返回`tuple<>`。
+
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Tuple0` | 第一个待拼接的tuple类型；须为tuple类模板实例。 |
-| `Tuples` | 其余各待拼接tuple的类型；结果按实参顺序拼接全部元素。 |
+| `Tuples` | 待拼接的各输入类型；须满足当前实现支持的tuple-like协议。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `first` | 输入/输出 | 第一个待拼接的tuple；其元素置于结果开头，右值时元素被移动，移动后处于有效但未指定状态 |
-| `right` | 输入/输出 | 其余待拼接的各tuple；元素依次接在first的元素之后，右值时元素被移动，移动后处于有效但未指定状态 |
+| `tuples` | 输入/输出 | 待拼接对象，元素按实参顺序组成结果；左值元素按对应类型复制，右值元素可被移动。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `typename Tuplecatreturn<Tuple0, Tuples...>::type` | 返回按给定元素或tuple组合得到的新tuple。 |
+| 适用重载 | 返回值类型 | 含义 |
+| --- | --- | --- |
+| 无参数重载 | `tuple<>` | 返回空tuple。 |
+| 拼接重载 | `asc::std::tuple<结果元素类型...>`（类型说明） | 按顺序拼接各输入对象的元素类型；输入tuple自身的引用及cv限定不附加到元素上，元素类型本身是引用时仍保留引用。 |
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
+- 输入须通过当前实现的tuple-like类型检查，且对应的`tuple_size`、元素类型及`get`访问均可用；仅有相似成员名称不足以满足该协议。
+- 结果元素须能从对应输入元素构造。结果含引用元素时，被引用存储须在使用结果期间保持有效。
+- 拼接逻辑本身不申请动态存储；元素构造是否分配内存由元素类型决定。无参数重载具有`noexcept`，拼接重载没有`noexcept`声明。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并在对象仍有效时检查结果。
 
 ```cpp
 #include <asc/std/tuple>
 
-template <class Tuple0, class ...Tuples>
-decltype(auto) example(Tuple0 && first, Tuples &&... right)
+bool example()
 {
-    return asc::std::tuple_cat(first, right...);
+    const auto left = asc::std::make_tuple(1, 2);
+    const auto right = asc::std::make_tuple(3);
+    const auto joined = asc::std::tuple_cat(left, right);
+    return asc::std::get<0>(joined) == 1 && asc::std::get<2>(joined) == 3;
 }
 ```
 

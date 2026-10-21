@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::shared_lock 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr bool owns_lock() const noexcept;
+bool owns_lock() const noexcept;
 ```
 
 ## 参数说明

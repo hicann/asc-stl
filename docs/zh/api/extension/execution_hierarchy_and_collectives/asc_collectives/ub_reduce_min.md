@@ -37,7 +37,7 @@
 ```cpp
 namespace asc {
 asc::std::int32_t ub_reduce_min(asc::ub_span<const asc::std::int32_t> input) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ### 原型2
@@ -45,7 +45,7 @@ asc::std::int32_t ub_reduce_min(asc::ub_span<const asc::std::int32_t> input) noe
 ```cpp
 namespace asc {
 asc::std::uint32_t ub_reduce_min(asc::ub_span<const asc::std::uint32_t> input) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ### 原型3
@@ -53,7 +53,7 @@ asc::std::uint32_t ub_reduce_min(asc::ub_span<const asc::std::uint32_t> input) n
 ```cpp
 namespace asc {
 float ub_reduce_min(asc::ub_span<const float> input) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -91,6 +91,8 @@ float ub_reduce_min(asc::ub_span<const float> input) noexcept;
 | 原型3 | `float` | 返回参与线程或连续范围按接口名称归约后的结果。 |
 
 ## 约束说明
+
+- 输入/输出为调用方管理的UB范围；有符号求和或扫描的所有中间值和最终值须可表示。 min/max要求非空输入；空输入的防御返回零不代表空集合存在极值。
 
 - 仅可在AI Core SIMD编程中调用。
 - 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明。

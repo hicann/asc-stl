@@ -39,7 +39,7 @@
 ### 原型1
 
 ```cpp
-set(const Allocator& allocator);
+explicit set(const Allocator& allocator);
 ```
 
 ### 原型2

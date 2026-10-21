@@ -36,11 +36,18 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-float asinhf(float value) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float asinhf(
+    float value) noexcept;
+}
 ```
+
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
 
 ## 参数说明
 
@@ -52,24 +59,25 @@ float asinhf(float value) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float` | 返回反双曲正弦值；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+返回类型按各原型确定（`float`）。返回反双曲正弦。
 
 ## 约束说明
+
+- AI Core SIMT编程的当前后端有限输入范围为|x| <= 65504；超出范围的精度和异常行为不作保证。Host不受此Device后端限制。
 
 - 提供float重载和标准 *f别名。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float value)
+bool example()
 {
-    return asc::std::asinhf(value);
+    const auto result = asc::std::asinhf(0.0F);
+    return result == 0.0F;
 }
 ```
 

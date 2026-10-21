@@ -36,11 +36,12 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::inplace_vector`](inplace_vector.md)。
+所属类型：[`inplace_vector<T, Capacity>`](inplace_vector.md)。以下为类内声明，类型别名及模板形参由所属类提供。
+
+### 原型1
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr size_type capacity() noexcept;
+static constexpr size_type capacity() noexcept;
 ```
 
 ## 参数说明
@@ -49,15 +50,13 @@ constexpr size_type capacity() noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `size_type` | 返回无需重新分配即可容纳的元素数量。 |
+| 适用原型 | 返回值类型 | 含义 |
+| --- | --- | --- |
+| 原型1 | `size_type` | 返回编译期固定容量Capacity。 |
 
 ## 约束说明
 
-- 元素保存在固定容量的对象内存中，不进行动态分配。
-- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
-- Host提供完整接口，设备端仅提供不抛出异常的接口。
+- 静态查询返回Capacity，无需构造对象；不分配或构造元素。
 
 ## 调用示例
 

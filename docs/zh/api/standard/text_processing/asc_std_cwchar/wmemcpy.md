@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::wmemcpy`在非重叠内存区之间复制指定字节数。
+`asc::std::wmemcpy`在非重叠内存区之间复制指定wchar_t元素数。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 
@@ -48,7 +48,7 @@ wchar_t* wmemcpy(wchar_t* destination, const wchar_t* source, size_t count) noex
 | --- | --- | --- |
 | `destination` | 输出 | 用于接收结果的目标存储。本调用为同步执行，返回时写入已完成；目标存储在调用期间保持有效即可，且须为待写入内容预留足够空间。 |
 | `source` | 输入 | 源数据或源对象。本调用为同步执行，返回时读取已完成；源存储在调用期间保持有效即可。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `count` | 输入 | 复制的wchar_t元素数；源与目标范围不得重叠。 |
 
 ## 返回值说明
 

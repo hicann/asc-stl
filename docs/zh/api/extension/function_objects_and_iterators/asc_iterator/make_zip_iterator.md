@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class... Iterators> constexpr asc::zip_iterator<Iterators...> make_zip_iterator(Iterators... iterators);
-} // namespace asc
+template <class... Iterators>
+constexpr asc::zip_iterator<Iterators...> make_zip_iterator(Iterators... iterators);
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -65,16 +66,17 @@ template<class... Iterators> constexpr asc::zip_iterator<Iterators...> make_zip_
 
 ## 调用示例
 
-以下片段使用具体数组和可调用对象构造迭代器。实际使用时底层范围须保持有效。
+以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
 
-decltype(auto) example()
+bool example()
 {
     int values[4] = {1, 2, 3, 4};
     int indices[4] = {3, 2, 1, 0};
-    return asc::make_zip_iterator(values, indices);
+    auto iterator = asc::make_zip_iterator(values, indices);
+    return (*iterator).get<0>() == 1 && (*iterator).get<1>() == 3;
 }
 ```
 

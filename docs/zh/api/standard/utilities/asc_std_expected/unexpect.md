@@ -42,9 +42,7 @@ inline constexpr const unexpect_t unexpect;
 
 ## 约束说明
 
-- T必须为非void类型，E必须为对象类型。
-- 适用操作必须不抛出异常。
-- 提供构造、赋值、emplace和swap。
+- 该标记选择expected的错误原位构造，不包含值或错误存储，也没有Value/Error模板参数。
 
 ## 调用示例
 

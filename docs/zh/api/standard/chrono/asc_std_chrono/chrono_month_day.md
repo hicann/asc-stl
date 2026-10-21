@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::month_day`表示日期、时间点或时长计算中的`month_day`值类型。
+`asc::std::chrono::month_day`组合月与日，不含年份；2月29日可以有效，因为没有年份可用于闰年判断。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

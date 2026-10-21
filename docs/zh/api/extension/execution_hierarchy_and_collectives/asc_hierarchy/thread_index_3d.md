@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::thread_index_3d`返回当前线程在整个Grid中的三维索引。
+`asc::thread_index_3d`返回线程在当前Block内的threadIdx三维坐标。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
 asc::extent3d thread_index_3d() noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明

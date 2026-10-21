@@ -34,34 +34,39 @@
 
 ## 声明
 
-所属类型：[`asc::std::pointer_traits`](pointer_traits.md)。
+以下用公开特征查询实际类型；queried_type是示例名称，不是额外的公开成员。
+
+重绑定优先使用`Ptr::rebind<U>`，否则将`SomePointer<T, Args...>`的首个类型实参替换为`U`；原始指针结果为`U*`。
 
 ```cpp
-// asc::std::pointer_traits 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class U> using rebind = U*;
+template<class Ptr, class U>
+using queried_type = typename asc::std::pointer_traits<Ptr>::template rebind<U>;
 ```
 
 ## 约束说明
 
-- 支持原始指针和用户自定义fancy pointer，接口自身不分配内存。
+- 重绑定优先使用`Ptr::rebind<U>`，否则将`SomePointer<T, Args...>`的首个类型实参替换为`U`；原始指针结果为`U*`。
+- 指针类型必须可提取元素类型，并满足所查询成员的要求；类型查询不访问对象或分配存储。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/memory>
+#include <asc/std/type_traits>
 
-template <class Ptr, class U>
-void use_type()
-{
-    using alias_type = typename asc::std::pointer_traits<Ptr>::rebind<U>;
-}
+template<class T>
+struct example_pointer {
+    using element_type = T;
+    using difference_type = long;
+    template<class U> using rebind = example_pointer<U>;
+};
+
+using traits = asc::std::pointer_traits<example_pointer<int>>;
+static_assert(asc::std::is_same_v<typename traits::template rebind<double>, example_pointer<double>>);
+static_assert(asc::std::is_same_v<asc::std::pointer_traits<int*>::rebind<double>, double*>);
 ```
-
-对应完整工程使用`C++17`，并通过Host编译与运行验证。
-
-完整示例源码：[pointer_alignment.cpp](../../../../examples/pointer_alignment.cpp)。
 
 ## 关联API
 

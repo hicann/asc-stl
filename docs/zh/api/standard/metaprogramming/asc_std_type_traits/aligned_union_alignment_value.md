@@ -34,16 +34,18 @@
 
 ## 声明
 
-所属类型：[`asc::std::aligned_union`](aligned_union.md)。
+`alignment_value`是`aligned_union<Len, First, Types...>`的静态`const size_t`整型常量，可在常量表达式中使用，其值为所有候选类型对齐值的最大值。
 
 ```cpp
-// asc::std::aligned_union 类内的声明节选；模板形参和其他成员由所属类提供。
-const size_t alignment_value;
+using storage = asc::std::aligned_union<16, int, float>;
+static_assert(storage::alignment_value == (alignof(int) > alignof(float) ? alignof(int) : alignof(float)));
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 类型参数列表必须非空，各候选类型须能用于`sizeof`和`alignof`。
+- `alignment_value`取各候选类型对齐值的最大值；存储大小至少为`Len`与各候选类型大小的最大值，并按对齐要求取整。
+- 结果是原始存储类型；使用其中存储对象前须正确建立该对象的生命周期，结束后须按其类型销毁。
 
 ## 调用示例
 
@@ -52,7 +54,7 @@ const size_t alignment_value;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::aligned_union<16, int, float>::alignment_value;
+static_assert((asc::std::aligned_union<16, int, float>::alignment_value) == (alignof(int) > alignof(float) ? alignof(int) : alignof(float)));
 ```
 
 ## 关联API

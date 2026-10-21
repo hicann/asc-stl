@@ -34,8 +34,10 @@
 
 ```cpp
 namespace asc {
-template<class Element, asc::std::size_t Rank, class Layout = asc::layout_stride_relaxed> bool to_host_mdspan(const DLTensor& tensor, asc::host_mdspan<Element, asc::std::dextents<asc::std::size_t, Rank>, Layout>& output) noexcept;
-} // namespace asc
+template <class Element, asc::std::size_t Rank, class Layout = asc::layout_stride_relaxed>
+bool to_host_mdspan(const DLTensor& tensor,
+    asc::host_mdspan<Element, asc::std::dextents<asc::std::size_t, Rank>, Layout>& output) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -63,9 +65,16 @@ template<class Element, asc::std::size_t Rank, class Layout = asc::layout_stride
 
 ## 约束说明
 
-- 提供Host和GM视图以及AI Core SIMD编程UB视图。
-- 允许有符号步长。
-- 可选的Host DLPack桥接不抛出异常。
+- DLPack桥接仅在可包含真实`<dlpack/dlpack.h>`时提供，且仅在Host调用；转换不分配或接管数据。
+
+- Host导入仅接受kDLCPU，GM导入仅接受kDLExtDev；ndim必须等于Rank，非零Rank需要shape。
+- 支持float/double及标准有符号、无符号整数的对应DLPack dtype；code、bits和lanes必须匹配（lanes为1），不支持组合返回false。
+- data须非空、shape各维非负、byte_offset满足元素自然对齐，偏移与有符号跨度须可表示；所有检查失败均不改output。
+- 转换只借用原数据，成功后底层有效存储须覆盖视图访问；负步长要求原张量数据指向正确逻辑原点。
+
+- 默认及Host/GM/UB访问器使用非负元素偏移；手动使用负步长时须通过mapping origin保证所有有效坐标的偏移非负且仍在存储内。
+- DLPack导入保留有符号步长，通过重定位句柄并设置非负origin表达反向视图；无法表示的步长跨度返回false且输出不变。
+
 
 ## 调用示例
 
@@ -82,7 +91,8 @@ DLPack桥接接口仅在提供DLPack头文件时可用；以下Host片段借用�
 #include <asc/std/utility>
 
 #if __has_include(<dlpack/dlpack.h>)
-decltype(auto) example(const DLTensor& tensor, asc::host_mdspan<int, asc::std::dextents<asc::std::size_t, 2>, asc::layout_stride_relaxed>& output)
+decltype(auto) example(const DLTensor& tensor,
+    asc::host_mdspan<int, asc::std::dextents<asc::std::size_t, 2>, asc::layout_stride_relaxed>& output)
 {
     return asc::to_host_mdspan<int, 2>(tensor, output);
 }

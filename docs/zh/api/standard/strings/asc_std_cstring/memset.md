@@ -48,7 +48,7 @@ void* memset(void* destination, int value, size_t count) noexcept;
 | --- | --- | --- |
 | `destination` | 输出 | 用于接收结果的目标存储。本调用为同步执行，返回时写入已完成；目标存储在调用期间保持有效即可，且须为待写入内容预留足够空间。 |
 | `value` | 输入 | 写入每个字节的字节值；转换为unsigned char后写入。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `count` | 输入 | 操作的字节数；不随源对象或目标对象的类型大小自动换算。 |
 
 ## 返回值说明
 
@@ -60,19 +60,20 @@ void* memset(void* destination, int value, size_t count) noexcept;
 
 - 在Host侧和AI Core SIMT编程中使用普通指针。
 - AI Core SIMD编程中使用local或generic地址空间的普通指针。
-- 仅memmove允许源和目标重叠。
+- 目标范围须可写且容纳count字节；value先转换为unsigned char后逐字节写入。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/cstring>
-#include <asc/std/cstddef>
 
-decltype(auto) example(void * destination, int value, asc::std::size_t count)
+bool example()
 {
-    return asc::std::memset(destination, value, count);
+    unsigned char bytes[4]{};
+    void* result = asc::std::memset(bytes, 0x41, 4);
+    return result == bytes && bytes[0] == 0x41 && bytes[3] == 0x41;
 }
 ```
 

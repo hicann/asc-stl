@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<class IntType> class uniform_int_distribution;
+template<class IntType = int> class uniform_int_distribution;
 } // namespace asc::std
 ```
 

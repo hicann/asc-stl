@@ -28,9 +28,7 @@
 
 头文件路径为：`<asc/std/scoped_allocator>`。
 
-`asc::std::scoped_allocator_adaptor::construct`在已分配存储中按给定参数构造对象。
-
-标准语义参考：[cppreference `scoped_allocator`](https://en.cppreference.com/w/cpp/header/scoped_allocator)。
+`construct`在`pointer`处直接执行以`args...`为实参的原位构造。当前不根据`uses_allocator`添加分配器参数，也不调用外层分配器的`construct`钩子。
 
 ## 函数原型
 
@@ -63,37 +61,43 @@ template<class Type, class ...Args> void construct(Type* pointer, Args&&... args
 
 ## 约束说明
 
-- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
-- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
+- `pointer`必须是满足`Type`大小和对齐的未初始化存储，且`Type`可由转发后的`args...`构造。
+- 本接口不注入内层分配器。需要分配器的构造函数，其全部参数必须由调用方显式提供。
+- 对象成功构造后须销毁再释放存储；Device构造必须可调用且不抛出异常。
 
 ## 调用示例
 
-以下Host片段使用显式提供的分配器并完整释放存储；设备端须改用目标位置可调用的分配器。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
+#include <asc/std/memory>
 #include <asc/std/scoped_allocator>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
+#include <limits>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
+template<class T>
+struct example_allocator {
     using value_type = T;
     using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    using size_type = std::size_t;
+    using difference_type = std::ptrdiff_t;
+    template<class U> struct rebind { using other = example_allocator<U>; };
+    int identity = 0;
+    T* allocate(size_type count) { return std::allocator<T>{}.allocate(count); }
+    void deallocate(T* address, size_type count) { std::allocator<T>{}.deallocate(address, count); }
+    size_type max_size() const noexcept { return std::numeric_limits<size_type>::max() / sizeof(T); }
 };
 
-void example(asc::std::scoped_allocator_adaptor<example_allocator<int>>& allocator)
+bool example()
 {
+    using adaptor = asc::std::scoped_allocator_adaptor<example_allocator<int>>;
+    adaptor allocator(example_allocator<int>{7});
     int* pointer = allocator.allocate(1);
-    allocator.construct(pointer, 7);
+    allocator.construct(pointer, 9);
+    const bool valid = allocator.outer_allocator().identity == 7 && *pointer == 9;
     allocator.destroy(pointer);
     allocator.deallocate(pointer, 1);
+    return valid;
 }
 ```
 

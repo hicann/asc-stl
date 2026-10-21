@@ -51,11 +51,8 @@ void pop_back();
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 调用前容器须非空；本接口销毁最后一个元素并将`size()`减`1`，不释放已分配容量。
+- 指向被删除元素的指针、引用及迭代器失效。Device侧的元素析构须可用于相应编程模式且不抛出异常。
 
 ## 调用示例
 

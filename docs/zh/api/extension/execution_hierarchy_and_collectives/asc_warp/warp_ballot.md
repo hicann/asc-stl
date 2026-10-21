@@ -35,7 +35,7 @@
 ```cpp
 namespace asc {
 asc::lane_mask warp_ballot(bool predicate) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -44,7 +44,7 @@ asc::lane_mask warp_ballot(bool predicate) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `predicate` | 输入 | 本Lane或线程已经求得的bool投票值；接口直接集体处理此值，不调用谓词函数。 |
 
 ## 返回值说明
 

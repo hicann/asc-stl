@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::wmemcmp`按字节比较两个内存区。
+`asc::std::wmemcmp`按wchar_t元素比较两个内存区。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 

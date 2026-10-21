@@ -36,11 +36,18 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-int ilogbf(float x) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr int ilogbf(
+    float value) noexcept;
+}
 ```
+
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
 
 ## 参数说明
 
@@ -48,13 +55,11 @@ int ilogbf(float x) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 待提取以2为底的规范化指数的输入值（无量纲）；±0、±inf、NaN等特殊值返回约定常量（如FP_ILOGB0、FP_ILOGBNAN）。 |
+| `value` | 输入 | 待提取以2为底的规范化指数的输入值（无量纲）；±0、±inf、NaN等特殊值返回约定常量（如FP_ILOGB0、FP_ILOGBNAN）。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `int` | 返回浮点值二进制指数的整数表示。 |
+返回类型按各原型确定（`int`）。返回以int表示的指数；零与NaN分别使用FP_ILOGB0和FP_ILOGBNAN。
 
 ## 约束说明
 
@@ -62,14 +67,15 @@ int ilogbf(float x) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float x)
+bool example()
 {
-    return asc::std::ilogbf(x);
+    const auto result = asc::std::ilogbf(8.0F);
+    return result == 3;
 }
 ```
 

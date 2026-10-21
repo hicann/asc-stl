@@ -34,33 +34,16 @@
 
 ## 声明
 
-### 原型1
-
 ```cpp
 namespace asc::std {
-template<...c...l...a...s...s...> struct conjunction;
-} // namespace asc::std
-```
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<class Arg, class ...Args> struct conjunction;
-} // namespace asc::std
-```
-
-### 原型3
-
-```cpp
-namespace asc::std {
-template<class Arg> struct conjunction;
-} // namespace asc::std
+template <class... Args>
+struct conjunction;
+}  // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 求值到的实参须提供可转换为`bool`的`value`。继承第一个为false的实参，全部为true时继承最后一个实参；空参数包为true，后续实参按短路规则处理。
 
 ## 调用示例
 
@@ -76,6 +59,9 @@ void use_trait()
     static_assert(asc::std::conjunction_v<asc::std::is_integral<int>, asc::std::true_type>);
     // 反例：任一谓词为假则整体为假
     static_assert(!asc::std::conjunction_v<asc::std::true_type, asc::std::is_integral<double>>);
+    struct no_value {};
+    // 首个实参已为false，不实例化后续实参的value。
+    static_assert(!asc::std::conjunction_v<asc::std::false_type, no_value>);
 }
 ```
 

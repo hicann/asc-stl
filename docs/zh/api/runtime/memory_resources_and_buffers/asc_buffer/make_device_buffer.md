@@ -36,32 +36,40 @@
 
 ```cpp
 namespace asc {
-template<class T> asc::execution_status make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource, asc::stream_ref stream, asc::std::size_t element_count) noexcept;
-} // namespace asc
+template <class T>
+asc::execution_status make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource,
+    asc::stream_ref stream, asc::std::size_t element_count) noexcept;
+}  // namespace asc
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc {
-template<class T> asc::execution_status make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource, asc::stream_ref stream, asc::std::size_t element_count, const T& value) noexcept;
-} // namespace asc
+template <class T>
+asc::execution_status make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource,
+    asc::stream_ref stream, asc::std::size_t element_count, const T& value) noexcept;
+}  // namespace asc
 ```
 
 ### 原型3
 
 ```cpp
 namespace asc {
-template<class T> asc::execution_status make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource, asc::stream_ref stream, const T* first, const T* last) noexcept;
-} // namespace asc
+template <class T>
+asc::execution_status make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource,
+    asc::stream_ref stream, const T* first, const T* last) noexcept;
+}  // namespace asc
 ```
 
 ### 原型4
 
 ```cpp
 namespace asc {
-template<class T> asc::execution_status make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource, asc::stream_ref stream, const T* first, asc::std::size_t element_count) noexcept;
-} // namespace asc
+template <class T>
+asc::execution_status make_device_buffer(asc::device_buffer<T>& output, const asc::device_memory_resource_ref& resource,
+    asc::stream_ref stream, const T* first, asc::std::size_t element_count) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -78,7 +86,7 @@ template<class T> asc::execution_status make_device_buffer(asc::device_buffer<T>
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 接收结果的device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
+| `output` | 输出 | 接收结果的device_buffer<T> 对象引用：进入替换阶段时先关闭旧缓冲；关闭失败保留原所有权并返回错误，成功分配后持有新缓冲。 |
 | `resource` | 输入 | Device内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
 | `stream` | 输入 | 与缓冲关联的Stream引用：初始化复制等异步操作按该Stream提交；须保持有效直至相关异步工作完成。 |
 | `element_count` | 输入 | 元素个数（以元素计）：原型1/2为待分配的元素数（为0时返回参数无效），原型4为从first复制的元素数。 |
@@ -95,7 +103,7 @@ template<class T> asc::execution_status make_device_buffer(asc::device_buffer<T>
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 接收结果的device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
+| `output` | 输出 | 接收结果的device_buffer<T> 对象引用：进入替换阶段时先关闭旧缓冲；关闭失败保留原所有权并返回错误，成功分配后持有新缓冲。 |
 | `resource` | 输入 | Device内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
 | `stream` | 输入 | 与缓冲关联的Stream引用：初始化复制等异步操作按该Stream提交；须保持有效直至相关异步工作完成。 |
 | `element_count` | 输入 | 元素个数（以元素计）：原型1/2为待分配的元素数（为0时返回参数无效），原型4为从first复制的元素数。 |
@@ -113,7 +121,7 @@ template<class T> asc::execution_status make_device_buffer(asc::device_buffer<T>
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 接收结果的device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
+| `output` | 输出 | 接收结果的device_buffer<T> 对象引用：进入替换阶段时先关闭旧缓冲；关闭失败保留原所有权并返回错误，成功分配后持有新缓冲。 |
 | `resource` | 输入 | Device内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
 | `stream` | 输入 | 与缓冲关联的Stream引用：初始化复制等异步操作按该Stream提交；须保持有效直至相关异步工作完成。 |
 | `first` | 输入 | 待复制的Host连续元素范围首指针：原型3与last界定范围，原型4与element_count界定长度。 |
@@ -131,7 +139,7 @@ template<class T> asc::execution_status make_device_buffer(asc::device_buffer<T>
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `output` | 输出 | 接收结果的device_buffer<T> 对象引用：调用前持有的旧缓冲会被关闭，成功后持有新分配缓冲的所有权。 |
+| `output` | 输出 | 接收结果的device_buffer<T> 对象引用：进入替换阶段时先关闭旧缓冲；关闭失败保留原所有权并返回错误，成功分配后持有新缓冲。 |
 | `resource` | 输入 | Device内存资源引用（device_memory_resource_ref）：缓冲存储由该资源分配，须在缓冲关闭前保持有效。 |
 | `stream` | 输入 | 与缓冲关联的Stream引用：初始化复制等异步操作按该Stream提交；须保持有效直至相关异步工作完成。 |
 | `first` | 输入 | 待复制的Host连续元素范围首指针：原型3与last界定范围，原型4与element_count界定长度。 |
@@ -147,6 +155,11 @@ template<class T> asc::execution_status make_device_buffer(asc::device_buffer<T>
 | 原型4 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
 
 ## 约束说明
+
+- 单值Device填充也借用value的地址用于异步Host→Device复制。value（包括临时量）的存储须保持到该Stream复制完成；不得传入在返回后立即销毁的临时量后忽略等待。
+
+- 关闭失败时原有分配和资源引用仍由当前对象持有，调用方可显式close重试。移动赋值仅在目标关闭成功后转移源对象；失败时两个对象均保留原所有权。
+- 工厂进入替换阶段时先关闭旧缓冲；关闭失败直接返回该状态，不分配新缓冲。销毁或关闭前须保证使用存储的异步工作已完成。
 
 - T必须为可平凡复制类型。
 - output、resource和stream必须有效。

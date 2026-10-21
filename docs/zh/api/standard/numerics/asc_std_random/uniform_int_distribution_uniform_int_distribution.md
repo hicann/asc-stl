@@ -43,13 +43,13 @@ constexpr uniform_int_distribution() noexcept;
 ### 原型2
 
 ```cpp
-constexpr uniform_int_distribution(const param_type& parameters) noexcept;
+explicit constexpr uniform_int_distribution(const param_type& parameters) noexcept;
 ```
 
 ### 原型3
 
 ```cpp
-constexpr uniform_int_distribution(result_type minimum, result_type maximum) noexcept;
+explicit constexpr uniform_int_distribution(result_type minimum, result_type maximum = numeric_limits<result_type>::max()) noexcept;
 ```
 
 ## 参数说明

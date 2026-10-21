@@ -34,14 +34,16 @@
 
 ```cpp
 namespace asc {
-template<class T = void> struct minimum;
-} // namespace asc
+template <class T = void>
+struct minimum;
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 整数或逻辑运算仅在数学性质成立时报告对应特性。
-- 浮点加法不满足结合律。
+- 本页对象只执行所述谓词、比较或编译期属性查询，不进行Runtime提交。
+- 比较操作数须支持相应运算；透明min/max可能返回引用，选中对象须在使用期间有效。
+- 复制参数声明只表明调用方的复制承诺，不延长捕获引用的生命周期，也不代替可调用性检查。
 
 ## 调用示例
 

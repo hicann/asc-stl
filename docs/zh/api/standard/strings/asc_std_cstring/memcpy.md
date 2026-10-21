@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<int T> void* memcpy(void* destination, const void* source, size_t count) noexcept;
+template<int = 0> void* memcpy(void* destination, const void* source, size_t count) noexcept;
 } // namespace asc::std
 ```
 
@@ -46,7 +46,7 @@ template<int T> void* memcpy(void* destination, const void* source, size_t count
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 待复制内存中对象的类型；按字节复制时须满足对象生命周期及可平凡复制要求。 |
+| 未命名int参数 | 默认0，仅参与模板重载排序，不表示待复制对象类型；调用方通常无需提供。 |
 
 **函数参数**
 
@@ -54,7 +54,7 @@ template<int T> void* memcpy(void* destination, const void* source, size_t count
 | --- | --- | --- |
 | `destination` | 输出 | 用于接收结果的目标存储。本调用为同步执行，返回时写入已完成；目标存储在调用期间保持有效即可，且须为待写入内容预留足够空间。 |
 | `source` | 输入 | 源数据或源对象。本调用为同步执行，返回时读取已完成；源存储在调用期间保持有效即可。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `count` | 输入 | 操作的字节数；不随源对象或目标对象的类型大小自动换算。 |
 
 ## 返回值说明
 
@@ -66,20 +66,21 @@ template<int T> void* memcpy(void* destination, const void* source, size_t count
 
 - 在Host侧和AI Core SIMT编程中使用普通指针。
 - AI Core SIMD编程中使用local或generic地址空间的普通指针。
-- 仅memmove允许源和目标重叠。
+- 源与目标范围不得重叠；调用方按参数说明提供可读输入、可写容量及必要终止空字符。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/cstring>
-#include <asc/std/cstddef>
 
-template <int T>
-decltype(auto) example(void * destination, const void * source, asc::std::size_t count)
+bool example()
 {
-    return asc::std::memcpy<T>(destination, source, count);
+    const char source[] = "abc";
+    char target[4]{};
+    void* result = asc::std::memcpy(target, source, 4);
+    return result == target && target[0] == 'a' && target[2] == 'c' && target[3] == '\0';
 }
 ```
 

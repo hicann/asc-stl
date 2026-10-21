@@ -34,13 +34,11 @@
 
 ## 声明
 
-`asc::std::iter_value_t<I>`是迭代器`I`所指元素的值类型。去除`I`的cv/ref后，按迭代器特征与`indirectly_readable_traits`的选择规则取得`value_type`。以下是使用形式：
+`asc::std::iter_value_t<I>`的选择规则为：先去除I的cv/ref，显式iterator_traits特化优先，否则按indirectly_readable_traits取得value_type。以下查询实际公开别名的结果；queried_type是示例名称。
 
 ```cpp
-namespace asc::std {
 template<class I>
-using value_type = iter_value_t<I>;
-} // namespace asc::std
+using queried_type = asc::std::iter_value_t<I>;
 ```
 
 ## 约束说明
@@ -49,17 +47,17 @@ using value_type = iter_value_t<I>;
 
 ## 调用示例
 
-以下Host片段用具体迭代器或容器类型实例化本页接口。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
-
 #include <asc/std/type_traits>
 
-void example()
+bool example()
 {
-    using selected = asc::std::iter_value_t<int*>;
+    using selected = asc::std::iter_value_t<const int*>;
     static_assert(asc::std::is_same_v<selected, int>);
+    return true;
 }
 ```
 

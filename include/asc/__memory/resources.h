@@ -29,7 +29,9 @@
 
 #include <asc/std/__cstddef/types.h>
 
-#if !defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) && defined(__has_include)
+#if defined(INC_EXTERNAL_ACL_ACL_RT_H_)
+#define CANN_ASC_STL_DETAIL_HAS_ACL_MEMORY_RUNTIME 1
+#elif defined(__has_include)
 #if __has_include(<acl/acl_rt.h>)
 #include <acl/acl_rt.h>
 #define CANN_ASC_STL_DETAIL_HAS_ACL_MEMORY_RUNTIME 1

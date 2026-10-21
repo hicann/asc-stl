@@ -34,75 +34,51 @@
 
 ## 函数原型
 
-以下为`asc::std::pair<T1, T2>`的类内构造声明；`T1`、`T2`来自所属类模板。
-
-### 原型1
+以下为`pair<T1, T2>`类内的**调用形态摘要**，省略实现选择器。各形态只在对应元素可构造或可赋值时参与；默认/值构造是否explicit按元素的隐式转换能力分层，不能把摘要合并为无条件重载定义。
 
 ```cpp
-template<class U1 = T1, class U2 = T2, enable_if_t<is_default_constructible_v<U1> && is_default_constructible_v<U2> && __is_implicitly_default_constructible<U1>::value && __is_implicitly_default_constructible<U2>::value, int> = 0> constexpr pair() noexcept(is_nothrow_default_constructible_v<T1>&& is_nothrow_default_constructible_v<T2>);
+template<class U1 = T1, class U2 = T2> constexpr pair() noexcept(is_nothrow_default_constructible_v<T1>&& is_nothrow_default_constructible_v<T2>);
 ```
-
-### 原型2
 
 ```cpp
-template<class U1 = T1, class U2 = T2, enable_if_t<is_default_constructible_v<U1> && is_default_constructible_v<U2> && !(__is_implicitly_default_constructible<U1>::value && __is_implicitly_default_constructible<U2>::value), long> = 0> explicit constexpr pair() noexcept(is_nothrow_default_constructible_v<T1>&& is_nothrow_default_constructible_v<T2>);
+template<class U1 = T1, class U2 = T2> explicit constexpr pair() noexcept(is_nothrow_default_constructible_v<T1>&& is_nothrow_default_constructible_v<T2>);
 ```
-
-### 原型3
 
 ```cpp
 pair(const pair& other) = default;
 ```
 
-### 原型4
-
 ```cpp
 pair(pair&& other) = default;
 ```
 
-### 原型5
-
 ```cpp
-template<class U1 = T1, class U2 = T2, enable_if_t<is_constructible_v<T1, U1&&> && is_constructible_v<T2, U2&&> && is_convertible_v<U1&&, T1> && is_convertible_v<U2&&, T2>, int> = 0> constexpr pair(U1&& left, U2&& right) noexcept(is_nothrow_constructible_v<T1, U1&&>&& is_nothrow_constructible_v<T2, U2&&>);
+template<class U1 = T1, class U2 = T2> constexpr pair(U1&& left, U2&& right) noexcept(is_nothrow_constructible_v<T1, U1&&>&& is_nothrow_constructible_v<T2, U2&&>);
 ```
 
-### 原型6
-
 ```cpp
-template<class U1, class U2, enable_if_t<is_constructible_v<T1, U1&&> && is_constructible_v<T2, U2&&> && !(is_convertible_v<U1&&, T1> && is_convertible_v<U2&&, T2>), long> = 0> explicit constexpr pair(U1&& left, U2&& right) noexcept(is_nothrow_constructible_v<T1, U1&&>&& is_nothrow_constructible_v<T2, U2&&>);
+template<class U1, class U2> explicit constexpr pair(U1&& left, U2&& right) noexcept(is_nothrow_constructible_v<T1, U1&&>&& is_nothrow_constructible_v<T2, U2&&>);
 ```
 
-### 原型7
-
 ```cpp
-template<class U1, class U2, enable_if_t<is_constructible_v<T1, U1&> && is_constructible_v<T2, U2&>, int> = 0> constexpr pair(pair<U1, U2>& other) noexcept(is_nothrow_constructible_v<T1, U1&>&& is_nothrow_constructible_v<T2, U2&>);
+template<class U1, class U2> constexpr pair(pair<U1, U2>& other) noexcept(is_nothrow_constructible_v<T1, U1&>&& is_nothrow_constructible_v<T2, U2&>);
 ```
 
-### 原型8
-
 ```cpp
-template<class U1, class U2, enable_if_t<is_constructible_v<T1, const U1&&> && is_constructible_v<T2, const U2&&>, int> = 0> constexpr pair(const pair<U1, U2>&& other) noexcept(is_nothrow_constructible_v<T1, const U1&&>&& is_nothrow_constructible_v<T2, const U2&&>);
+template<class U1, class U2> constexpr pair(const pair<U1, U2>&& other) noexcept(is_nothrow_constructible_v<T1, const U1&&>&& is_nothrow_constructible_v<T2, const U2&&>);
 ```
 
-### 原型9
-
 ```cpp
-template<class PairLike, enable_if_t<__tuple_like_ext<remove_cvref_t<PairLike>> && !__is_pair<remove_cvref_t<PairLike>>::value && is_constructible_v<T1, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))> && is_constructible_v<T2, decltype(::asc::std::__adl_get<1>(::asc::std::declval<PairLike>()))>, int> = 0> constexpr pair(PairLike&& other) noexcept(is_nothrow_constructible_v<T1, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))>&& is_nothrow_constructible_v<T2, decltype(::asc::std::__adl_get<1>(::asc::std::declval<PairLike>()))>);
+template<class PairLike> constexpr pair(PairLike&& other);
 ```
 
-### 原型10
-
 ```cpp
-template<class U1, class U2, enable_if_t<is_constructible_v<T1, const U1&> && is_constructible_v<T2, const U2&>, int> = 0> constexpr pair(const pair<U1, U2>& other) noexcept(is_nothrow_constructible_v<T1, const U1&>&& is_nothrow_constructible_v<T2, const U2&>);
+template<class U1, class U2> constexpr pair(const pair<U1, U2>& other) noexcept(is_nothrow_constructible_v<T1, const U1&>&& is_nothrow_constructible_v<T2, const U2&>);
 ```
 
-### 原型11
-
 ```cpp
-template<class U1, class U2, enable_if_t<is_constructible_v<T1, U1&&> && is_constructible_v<T2, U2&&>, int> = 0> constexpr pair(pair<U1, U2>&& other) noexcept(is_nothrow_constructible_v<T1, U1&&>&& is_nothrow_constructible_v<T2, U2&&>);
+template<class U1, class U2> constexpr pair(pair<U1, U2>&& other) noexcept(is_nothrow_constructible_v<T1, U1&&>&& is_nothrow_constructible_v<T2, U2&&>);
 ```
-
-### 原型12
 
 ```cpp
 template<class... Args1, class... Args2> constexpr pair(piecewise_construct_t, tuple<Args1...> left, tuple<Args2...> right) noexcept(is_nothrow_constructible_v<T1, Args1...>&& is_nothrow_constructible_v<T2, Args2...>);
@@ -110,7 +86,7 @@ template<class... Args1, class... Args2> constexpr pair(piecewise_construct_t, t
 
 ## 参数说明
 
-未命名的`enable_if_t`模板参数具有默认值0，用于约束重载参与条件，调用方不显式传入。
+摘要省略的选择参数已转为本页公开参与条件，调用方按普通实参调用。
 
 ### 原型1的参数
 
@@ -273,6 +249,10 @@ template<class... Args1, class... Args2> constexpr pair(piecewise_construct_t, t
 无返回值。
 
 ## 约束说明
+
+- pair-like形态省略了计算出的noexcept表达式：相应元素的获取与构造均不抛出时，构造不抛出；其余形态的异常说明见摘要原型。
+
+- 默认构造要求两个元素可默认构造；两者均可隐式默认构造时采用隐式形式，否则显式。双值构造要求逐元素可构造，两个来源均可隐式转换时不带explicit。pair-like形态要求有两个可通过get访问的元素、且来源不是pair特化；piecewise_construct将两组tuple实参分别用于first和second。
 
 - 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
 - pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。

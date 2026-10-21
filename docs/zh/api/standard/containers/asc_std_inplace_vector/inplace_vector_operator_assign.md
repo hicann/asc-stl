@@ -36,52 +36,45 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::inplace_vector`](inplace_vector.md)。
+所属类型：[`inplace_vector<T, Capacity>`](inplace_vector.md)。以下为类内声明，类型别名及模板形参由所属类提供。
 
 ### 原型1
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-inplace_vector<T, Capacity>& operator=(const inplace_vector<T, Capacity>& other);
+constexpr inplace_vector& operator=(const inplace_vector& other);
 ```
 
 ### 原型2
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-inplace_vector<T, Capacity>& operator=(inplace_vector<T, Capacity>&& other);
+constexpr inplace_vector& operator=(inplace_vector&& other);
 ```
 
 ## 参数说明
 
 ### 原型1的参数
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
+| `other` | 输入 | 复制赋值来源；按公共前缀赋值，并构造或销毁数量差额。 |
 
 ### 原型2的参数
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
+| `other` | 输入 | 移动赋值来源；来源size不变，元素可能被移动。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `inplace_vector<T, Capacity> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型2 | `inplace_vector<T, Capacity> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 原型1 | `inplace_vector&` | 返回*this引用；接收对象须覆盖该引用使用期。 |
+| 原型2 | `inplace_vector&` | 返回*this引用；接收对象须覆盖该引用使用期。 |
 
 ## 约束说明
 
-- 元素保存在固定容量的对象内存中，不进行动态分配。
-- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
-- Host提供完整接口，设备端仅提供不抛出异常的接口。
+- 对应的元素复制/移动构造和赋值须有效；移动后来源保留元素数量，元素状态由T决定。
+- 元素的对应构造、赋值和析构须满足非抛出使用域；constexpr声明不保证任意T和语言模式都能常量求值。
 
 ## 调用示例
 

@@ -40,7 +40,7 @@
 
 ```cpp
 // asc::std::barrier 类内的声明节选；模板形参和其他成员由所属类提供。
-arrival_token arrive(long long update);
+arrival_token arrive(long long update = 1);
 ```
 
 ## 参数说明
@@ -59,21 +59,28 @@ arrival_token arrive(long long update);
 
 ## 约束说明
 
-- Host侧对象管理Ascend 950的GM状态。
+- Host对象使用本机普通内存及CPU原子操作，不管理NPU的GM状态。AI Core SIMT共享对象须位于GM，且在并发访问前完成初始化；不支持AI Core SIMD调用。
 - 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下Host片段使用一个可独立完成的参与者演示调用；多参与者场景须保证并发推进。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/barrier>
 
-void example()
+struct completion {
+    int* phases;
+    void operator()() noexcept { ++*phases; }
+};
+
+bool example()
 {
-    asc::std::barrier<> barrier(1);
-    auto token = barrier.arrive(1);
-    barrier.wait(static_cast<asc::std::barrier<>::arrival_token&&>(token));
+    int phases = 0;
+    asc::std::barrier<completion> barrier(1, completion{&phases});
+    auto token = barrier.arrive();
+    barrier.wait(static_cast<decltype(token)&&>(token));
+    return phases == 1;
 }
 ```
 

@@ -102,14 +102,16 @@ struct __is_non_narrowing_convertible<Dest, Source,
     static constexpr bool value = true;
 };
 
-// Guard for the assignment optimization path: narrowing between arithmetic
-// types is a hard compile error at assignment initialization, so it must be
-// excluded up front.
+// Only a single source argument needs this conversion probe. Specializing by
+// pack cardinality keeps zero- and multi-argument calls from forming an invalid
+// __is_non_narrowing_convertible template-id in an unselected branch.
 template <class T, class... Args>
-using __check_narrowing = conditional_t<sizeof...(Args) == 1, __is_non_narrowing_convertible<T, Args...>, true_type>;
+struct __check_narrowing : true_type {};
+template <class T, class Arg>
+struct __check_narrowing<T, Arg> : __is_non_narrowing_convertible<T, Arg> {};
 
 template <class T, class... Args>
-inline constexpr bool __can_optimize_construct_at = is_trivially_constructible_v<T, Args...> &&
+inline constexpr bool __can_optimize_construct_at = sizeof...(Args) == 1 && is_trivially_constructible_v<T, Args...> &&
     is_trivially_move_assignable_v<T> && __check_narrowing<T, Args...>::value;
 }  // namespace __detail
 
@@ -117,10 +119,10 @@ template <class T, class... Args>
 CANN_ASC_STL_API constexpr T* construct_at(T* location, Args&&... args)
 {
     CANN_ASC_STL_DETAIL_ASSERT(location != nullptr, "null pointer given to construct_at");
-    // Trivial, non-narrowing types take the assignment fast path (avoiding
-    // placement new's redundant null-pointer check); during constant
-    // evaluation, placement new is still used (assigning to storage whose
-    // lifetime has not begun is not constant-evaluable).
+    // Keep the assignment optimization for trivial, non-narrowing single-source
+    // construction. Zero/multiple arguments use the exact placement-new form:
+    // in particular, C++20 aggregate T(args...) can permit narrowing that the
+    // fast path's T{args...} rejects. Constant evaluation also uses placement new.
     if constexpr (__detail::__can_optimize_construct_at<T, Args...>) {
         if (!__default_is_constant_evaluated()) {
             *location = T{::asc::std::forward<Args>(args)...};

@@ -47,6 +47,11 @@ CANN_ASC_STL_API bool evaluate_copyable_wrapper(unsigned value)
     const auto by_value = asc::proclaim_copyable_arguments(value_operation{});
     const auto by_reference = asc::proclaim_copyable_arguments(reference_operation{});
     const auto no_result = asc::proclaim_copyable_arguments(void_operation{});
+    using wrapped_type = asc::std::remove_cv_t<decltype(by_value)>;
+    static_assert(asc::proclaims_copyable_arguments_v<wrapped_type, unsigned>);
+    static_assert(asc::proclaims_copyable_arguments_v<asc::always_true, unsigned, unsigned>);
+    static_assert(asc::proclaims_copyable_arguments_v<asc::always_false, unsigned>);
+    static_assert(!asc::proclaims_copyable_arguments_v<value_operation, unsigned>);
     static_assert(asc::std::is_same_v<decltype(by_value(value)), unsigned>);
     static_assert(asc::std::is_same_v<decltype(by_reference(value)), unsigned&>);
     static_assert(asc::std::is_same_v<decltype(no_result(value)), void>);

@@ -34,61 +34,72 @@
 
 ## 函数原型
 
+所属类型：[`repeat_view`](ranges_repeat_view.md)。以下按当前实现列声明摘要；省略仅供SFINAE的选择参数，保留供调用使用的类型默认值。默认构造形式均有逐项参与条件，不能据此假定所有特化都可默认构造。
+
 ### 原型1
 
 ```cpp
-repeat_view();
+constexpr repeat_view();
 ```
+
+仅当T满足default_initializable时参与；保存值默认构造，Bound默认值初始化。默认Bound=ptrdiff_t时次数为0。
 
 ### 原型2
 
 ```cpp
-constexpr repeat_view(T&& value, Bound bound);
+template<class T2 = T>
+constexpr explicit repeat_view(const T2& value, Bound bound_sentinel);
 ```
+
+T2须满足copy_constructible，且不能为本repeat_view特化。
 
 ### 原型3
 
 ```cpp
-template<class ...TpArgs, class ...BoundArgs> constexpr repeat_view(piecewise_construct_t tag, tuple<TpArgs...> value_args, tuple<BoundArgs...> bound_args);
+constexpr explicit repeat_view(T&& value, Bound bound_sentinel);
 ```
+
+移动保存值；不会在每次解引用时复制T。
 
 ### 原型4
 
 ```cpp
-template<class Tp2> constexpr repeat_view(const Tp2& value, Bound bound);
+template<class... TArgs, class... BoundArgs>
+constexpr explicit repeat_view(piecewise_construct_t tag, tuple<TArgs...> value_args,
+    tuple<BoundArgs...> bound_args);
 ```
+
+T和Bound须分别可由对应参数包构造。
 
 ## 参数说明
 
 ### 原型1的参数
 
-无参数。
+无函数参数。
 
 ### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入/输出 | 待重复的值，被移动构造到视图中保存；每次解引用返回该值的副本。 |
-| `bound` | 输入 | 重复次数上界；默认构造（表示无界）时视图无限重复。 |
-
-### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `TpArgs` | value_args元组中的实参类型包。 |
-| `BoundArgs` | bound_args元组中的实参类型包。 |
+| `T2` | 复制构造来源值类型，默认为T。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `tag` | 输入 | piecewise_construct标记，指示以元组形式逐元素转发构造成员。 |
-| `value_args` | 输入 | 转发给所存值构造的实参元组。 |
-| `bound_args` | 输入 | 转发给重复次数上界构造的实参元组。 |
+| `value` | 输入 | 复制保存的被重复值；所有迭代器解引用同一个保存值，结果为const T&。 |
+| `bound_sentinel` | 输入 | 非负重复次数，或该特化所用的unreachable_sentinel_t对象；无默认实参。 |
+
+### 原型3的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 移动保存的被重复值。 |
+| `bound_sentinel` | 输入 | 有界特化的非负重复次数，或无界特化的unreachable_sentinel_t。 |
 
 ### 原型4的参数
 
@@ -96,14 +107,16 @@ template<class Tp2> constexpr repeat_view(const Tp2& value, Bound bound);
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Tp2` | 可转换为视图所存值类型的实参类型。 |
+| `TArgs` | 构造被重复值T的参数类型包。 |
+| `BoundArgs` | 构造边界Bound的参数类型包。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待重复的值，从该值构造视图所存元素。 |
-| `bound` | 输入 | 重复次数上界；默认构造（表示无界）时视图无限重复。 |
+| `tag` | 输入 | 分段构造标记。 |
+| `value_args` | 输入 | 用于构造保存值T的参数tuple。 |
+| `bound_args` | 输入 | 用于构造边界Bound的参数tuple。 |
 
 ## 返回值说明
 
@@ -111,9 +124,9 @@ template<class Tp2> constexpr repeat_view(const Tp2& value, Bound bound);
 
 ## 约束说明
 
-- 七个列出名称。
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 每种形式须满足其原型所列参与条件；实际保存的范围或值还须满足所属视图的类型要求。
+- 构造视图不会复制它所借用的元素；底层存储和被借用对象须覆盖相应迭代器与元素访问期。
+- 以noexcept标注的形式须遵守实际成员操作不抛出异常的要求；具体异常规格见各原型。
 
 ## 调用示例
 

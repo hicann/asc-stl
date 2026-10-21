@@ -35,15 +35,19 @@
 ### 原型1
 
 ```cpp
-// asc::args 类内的声明节选；模板形参和其他成员由所属类提供。
-template<auto Lower, auto Upper> constexpr asc::args::static_bounds<Lower, Upper> bounds() noexcept;
+namespace asc::args {
+template <auto Lower, auto Upper>
+constexpr asc::args::static_bounds<Lower, Upper> bounds() noexcept;
+}  // namespace asc::args
 ```
 
 ### 原型2
 
 ```cpp
-// asc::args 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class T> constexpr asc::args::runtime_bounds<T> bounds(T lower, T upper) noexcept;
+namespace asc::args {
+template <class T>
+constexpr asc::args::runtime_bounds<T> bounds(T lower, T upper) noexcept;
+}  // namespace asc::args
 ```
 
 ## 参数说明
@@ -81,9 +85,9 @@ template<class T> constexpr asc::args::runtime_bounds<T> bounds(T lower, T upper
 
 ## 约束说明
 
+- 运行期边界按值保存，调用方须保证lower不大于upper；构造或查询不执行参数范围检查。编译期bounds的Lower必须不大于Upper。
+
 - 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 

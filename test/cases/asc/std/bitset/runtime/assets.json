@@ -1,0 +1,30 @@
+{
+  "common": [
+    "semantics.h",
+    "staged/assignsuffix.cpp",
+    "staged/balance.cpp",
+    "staged/core.cpp",
+    "staged/ctor.cpp",
+    "staged/destroy.cpp",
+    "staged/emptyassign.cpp",
+    "staged/main.cpp",
+    "staged/modules.cmake",
+    "staged/reserve.cpp",
+    "staged/selfappend.cpp",
+    "staged/selfassign.cpp",
+    "staged/sso.cpp",
+    "staged/stage_api.h",
+    "staged/stage_table.def",
+    "staged/suffixappend.cpp",
+    "staged/types.h"
+  ],
+  "cannsim": [
+    "cannsim/CMakeLists.txt"
+  ],
+  "hardware": [
+    "hardware/CMakeLists.txt",
+    "hardware/kernel_simd.asc",
+    "hardware/main.cpp",
+    "hardware/launch.h"
+  ]
+}

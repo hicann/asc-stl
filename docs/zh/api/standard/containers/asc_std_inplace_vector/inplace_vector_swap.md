@@ -36,20 +36,19 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::inplace_vector`](inplace_vector.md)。
+所属类型：[`inplace_vector<T, Capacity>`](inplace_vector.md)。以下为类内声明，类型别名及模板形参由所属类提供。
+
+### 原型1
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-void swap(inplace_vector<T, Capacity>& other);
+constexpr void swap(inplace_vector& other);
 ```
 
 ## 参数说明
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 与当前对象交换状态的另一对象；交换后双方保存对方原有状态。 |
+| `other` | 输入/输出 | 同容量的另一容器；交换后双方保存对方原有序列。 |
 
 ## 返回值说明
 
@@ -57,9 +56,8 @@ void swap(inplace_vector<T, Capacity>& other);
 
 ## 约束说明
 
-- 元素保存在固定容量的对象内存中，不进行动态分配。
-- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
-- Host提供完整接口，设备端仅提供不抛出异常的接口。
+- 两对象容量相同；交换共有元素，并移动构造或销毁两侧数量差额对应的元素。
+- 元素的对应构造、赋值和析构须满足非抛出使用域；constexpr声明不保证任意T和语言模式都能常量求值。
 
 ## 调用示例
 

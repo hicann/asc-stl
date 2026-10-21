@@ -43,11 +43,8 @@ using iterator = T*;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 该别名为`T*`；迭代器运算须限定在同一有效元素序列及其尾后位置。
+- 尾后迭代器不可解引用；重新分配或释放存储后，原迭代器失效。
 
 ## 调用示例
 

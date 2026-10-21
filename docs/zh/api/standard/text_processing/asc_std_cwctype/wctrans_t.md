@@ -36,10 +36,20 @@
 
 ## 声明
 
+Host保留系统类型身份：
+
 ```cpp
 namespace asc::std {
 using wctrans_t = ::std::wctrans_t;
-} // namespace asc::std
+}
+```
+
+Device使用无符号整数表示：
+
+```cpp
+namespace asc::std {
+using wctrans_t = unsigned int;
+}
 ```
 
 ## 约束说明

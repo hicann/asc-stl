@@ -67,15 +67,16 @@ template<class Integer> constexpr byte& operator>>=(byte& lhs, Integer shift) no
 
 ## 调用示例
 
-以下片段用具体对象展示本页调用。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/cstddef>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::byte value{4};
-    return asc::std::operator>>=(value, 1);
+    asc::std::byte value{6};
+    auto& result = (value >>= 1);
+    return &result == &value && asc::std::to_integer<unsigned>(value) == 3;
 }
 ```
 

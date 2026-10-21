@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class T> constexpr T saturating_sub(T left, T right) noexcept;
-} // namespace asc
+template <class T>
+constexpr T saturating_sub(T left, T right) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -61,8 +62,8 @@ template<class T> constexpr T saturating_sub(T left, T right) noexcept;
 
 ## 约束说明
 
-- T、From和To必须是不超过64位的标准非bool整数类型。
-- 所有溢出检查均不得触发有符号整数溢出的未定义行为。
+- 可在Host、AI Core SIMD和AI Core SIMT调用；结果按本页声明的整数类型返回。
+- `T`须为不超过64位的标准非bool整数；算术按相应检查或饱和规则处理。
 
 ## 调用示例
 

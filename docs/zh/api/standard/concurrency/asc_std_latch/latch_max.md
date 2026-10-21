@@ -40,7 +40,7 @@
 
 ```cpp
 // asc::std::latch 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr long long max() noexcept;
+static constexpr ptrdiff_t max() noexcept;
 ```
 
 ## 参数说明
@@ -51,16 +51,16 @@ constexpr long long max() noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `long long` | 返回该类型允许的最大值。 |
+| `ptrdiff_t` | 返回该类型允许的最大值。 |
 
 ## 约束说明
 
-- Host侧对象管理Ascend 950的GM状态。
+- Host对象使用本机普通内存及CPU原子操作，不管理NPU的GM状态。AI Core SIMT共享对象须位于GM，且在并发访问前完成初始化；不支持AI Core SIMD调用。
 - 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/latch>
@@ -68,11 +68,7 @@ constexpr long long max() noexcept;
 bool example()
 {
     static_assert(asc::std::latch::max() >= 1);
-    asc::std::latch done(1);
-    if (done.try_wait()) return false;
-    done.count_down();
-    done.wait();
-    return done.try_wait();
+    return true;
 }
 ```
 

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::months`表示日期、时间点或时长计算中的`months`值类型。
+`asc::std::chrono::months`是每tick为2629746秒（平均年长的十二分之一）的整数计数时长，可与其它`duration`换算。作为日历运算的偏移量时，其`count`表示年数或月数，不按固定秒数修正日期。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

@@ -58,7 +58,7 @@ constexpr year_month& operator-=(const years& offset) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `offset` | 输入 | 提供“按给定距离或操作数反向更新当前值”使用的对象引用；被引用对象须在调用期间有效。 |
+| `offset` | 输入 | 待减去的有符号月数；负值等价于向后加月。 |
 
 ### 原型2的参数
 
@@ -66,7 +66,7 @@ constexpr year_month& operator-=(const years& offset) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `offset` | 输入 | 提供“按给定距离或操作数反向更新当前值”使用的对象引用；被引用对象须在调用期间有效。 |
+| `offset` | 输入 | 待减去的有符号年数，单位为年；月份不变。 |
 
 ## 返回值说明
 
@@ -77,7 +77,8 @@ constexpr year_month& operator-=(const years& offset) noexcept;
 
 ## 约束说明
 
-- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
+- 月份偏移按12个月进位到年份；年份与结果字段须在各自可表示范围内。
+- 运算及中间值必须可表示。
 
 ## 调用示例
 

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::rotate`把范围围绕指定中间位置旋转；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::rotate`把范围围绕指定中间位置旋转；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,18 +38,9 @@
 
 ```cpp
 namespace asc::std {
-template<class Forward> Forward rotate(asc::device_policy policy, Forward first, Forward middle, Forward last);
-} // namespace asc::std
-```
-
-该原型适用于`C++17+`，可用位置为Host。
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<class ForwardIterator> constexpr ForwardIterator rotate(ForwardIterator first, ForwardIterator middle, ForwardIterator last);
-} // namespace asc::std
+template <class ForwardIterator>
+constexpr ForwardIterator rotate(ForwardIterator first, ForwardIterator middle, ForwardIterator last);
+}  // namespace asc::std
 ```
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
@@ -62,23 +53,6 @@ template<class ForwardIterator> constexpr ForwardIterator rotate(ForwardIterator
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Forward` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `middle` | 输入 | 旋转分界迭代器，须位于[first, last)内；旋转后middle成为新范围起始，原[first, middle)段移到末尾。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
 | `ForwardIterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
 
 **函数参数**
@@ -86,40 +60,35 @@ template<class ForwardIterator> constexpr ForwardIterator rotate(ForwardIterator
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `middle` | 输入 | 旋转分界迭代器，须位于[first, last)内；旋转后middle成为新范围起始，原[first, middle)段移到末尾。 |
+| `middle` | 输入 | 旋转分界迭代器，须位于[first, last]内（允许等于last）；旋转后middle成为新范围起始，原[first, middle)段移到末尾。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `Forward` | 返回原首元素旋转后的新位置。 |
-| 原型2 | `ForwardIterator` | 返回原首元素旋转后的新位置。 |
+| 原型1 | `ForwardIterator` | 返回原首元素旋转后的新位置。 |
 
 ## 约束说明
 
 - 使用C++17。
-- 该Host同步适配接口调用对应的asc::parallel前端。
-- policy必须包含有效Stream和足够的调用方临时存储。
-- 接口只等待该Stream。
-- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用asc::std::terminate。
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    return asc::std::rotate(values, values + 3, values + 8);
+    auto result = asc::std::rotate(values, values + 3, values + 8);
+    return result == values + 5 && values[0] == 4 && values[4] == 8 && values[5] == 1;
 }
 ```
 
 ## 关联API
 
-- [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。
+- [`asc::parallel::rotate`](../../../extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_rotate.md)：使用执行策略提交异步设备操作。

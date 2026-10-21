@@ -35,15 +35,12 @@
 ```cpp
 namespace asc {
 struct aicore_launch_config;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 仅可在Host调用。
-- Kernel必须是编译期确定的目标，参数按值传递且可平凡复制。
-- Stream、启动维度及参数生命周期必须有效。
-- 成功仅表示任务已按Stream顺序提交。
+- 本类型或成员只描述Host侧启动配置，不提交核函数；实际启动要求见`launch`。
 
 ## 调用示例
 

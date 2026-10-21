@@ -18,6 +18,8 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
+#include "../../../../../../../support/hardware_runtime.h"
+#include "launch.h"
 namespace {
 constexpr int kDeviceId = 0;
 constexpr std::array<std::uint32_t, 44> kExpected = {0x13579BDFU, 0x1001U, 0U, 0x1002U, 17U, 0x1003U, 365U, 0x1004U,
@@ -38,26 +40,28 @@ bool check(aclError result, const char* operation)
 }
 }  // namespace
 #if defined(ASC_STL_FOUNDATION_SIMD)
-void launch_asc_stl_foundation_simd(std::uint32_t*, aclrtStream);
+
 #else
-void launch_asc_stl_foundation_simt(std::uint32_t*, aclrtStream);
+
 #endif
 int main()
 {
+    asc_stl_test::hardware_runtime runtime;
     std::array<std::uint32_t, kExpected.size()> actual{};
     std::uint32_t* device_output = nullptr;
     aclrtStream stream = nullptr;
-    bool passed = check(aclInit(nullptr), "aclInit") && check(aclrtSetDevice(kDeviceId), "aclrtSetDevice") &&
+    bool passed = check(runtime.initialize(nullptr), "aclInit") &&
+        check(runtime.set_device(kDeviceId), "aclrtSetDevice") &&
         check(aclrtCreateStream(&stream), "aclrtCreateStream") &&
         check(aclrtMalloc(reinterpret_cast<void**>(&device_output), sizeof(actual), ACL_MEM_MALLOC_HUGE_FIRST),
             "aclrtMalloc");
-    if (passed) {
+    if (passed && runtime.ready()) {
 #if defined(ASC_STL_FOUNDATION_SIMD)
         launch_asc_stl_foundation_simd(device_output, stream);
 #else
         launch_asc_stl_foundation_simt(device_output, stream);
 #endif
-        passed = check(aclrtSynchronizeStream(stream), "aclrtSynchronizeStream") &&
+        passed = check(runtime.synchronize(stream), "aclrtSynchronizeStream") &&
             check(aclrtMemcpy(actual.data(), sizeof(actual), device_output, sizeof(actual), ACL_MEMCPY_DEVICE_TO_HOST),
                 "aclrtMemcpy") &&
             actual == kExpected;
@@ -67,11 +71,12 @@ int main()
             std::cerr << "result[" << i << "]=" << actual[i] << " expected=" << kExpected[i] << '\n';
     }
     if (device_output != nullptr)
-        passed = check(aclrtFree(device_output), "aclrtFree") && passed;
+        passed = check(runtime.free_device(device_output), "aclrtFree") && passed;
     if (stream != nullptr)
-        passed = check(aclrtDestroyStream(stream), "aclrtDestroyStream") && passed;
-    passed = check(aclrtResetDevice(kDeviceId), "aclrtResetDevice") && passed;
-    passed = check(aclFinalize(), "aclFinalize") && passed;
+        passed = check(runtime.destroy_stream(stream), "aclrtDestroyStream") && passed;
+    passed = check(runtime.reset_device(kDeviceId), "aclrtResetDevice") && passed;
+    passed = check(runtime.finalize(), "aclFinalize") && passed;
+    passed = runtime.finish(passed) == 0;
     std::cout << (passed ? "PASS" : "FAIL") << ": foundation runtime hardware semantics\n";
     return passed ? 0 : 1;
 }

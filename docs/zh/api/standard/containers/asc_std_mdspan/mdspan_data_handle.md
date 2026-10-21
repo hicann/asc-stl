@@ -53,8 +53,9 @@ constexpr data_handle_type data_handle() const noexcept;
 
 ## 约束说明
 
-- C++17起可使用一维`operator[]`；多参数`operator[]`按编译器的C++23多维下标特性开放。
-- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
+- 本查询从C++17起提供；元素访问形式及语言条件见[`mdspan`](mdspan.md#约束说明)。
+
+- 返回保存的数据句柄，不转移底层存储所有权；通过句柄访问时原存储须仍有效。
 
 ## 调用示例
 

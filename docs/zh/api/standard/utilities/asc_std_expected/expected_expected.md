@@ -34,64 +34,149 @@
 
 ## 函数原型
 
-### 原型1
+以下为所属类内的**调用形态摘要**。省略实现使用的SFINAE选择参数；同形的隐式与explicit形式分别受下面的可构造性、可转换性条件选择，不能将摘要复制为一组无条件重载定义。
+
+```cpp
+template <class Value2 = Value>
+constexpr expected() noexcept(is_nothrow_default_constructible_v<Value2>);
+```
 
 ```cpp
 constexpr expected(const Value& value);
 ```
 
-### 原型2
-
 ```cpp
-constexpr expected(const expected<Value, Error>& value);
+constexpr expected(const unexpected<Error>& error);
 ```
 
-### 原型3
-
 ```cpp
-constexpr expected(const unexpected<Error>& value);
+constexpr expected(unexpect_t, const Error& error);
 ```
 
-### 原型4
+```cpp
+constexpr expected(const expected& other);
+```
 
 ```cpp
-constexpr expected(unexpect_t tag, const Error& error);
+expected(expected&&) = default;
 ```
+
+该形态的constexpr限定仅在C++20加入。
+
+```cpp
+~expected() = default;
+```
+
+```cpp
+template <class Up, class OtherErr>
+expected(const expected<Up, OtherErr>& other) noexcept(
+        is_nothrow_constructible_v<Value, const Up&> && is_nothrow_constructible_v<Error, const OtherErr&>);
+```
+
+该形态的constexpr限定仅在C++20加入。
+
+```cpp
+template <class Up, class OtherErr>
+explicit expected(
+        const expected<Up, OtherErr>& other) noexcept(is_nothrow_constructible_v<Value, const Up&> &&
+        is_nothrow_constructible_v<Error, const OtherErr&>);
+```
+
+该形态的constexpr限定仅在C++20加入。
+
+```cpp
+template <class Up, class OtherErr>
+expected(expected<Up, OtherErr>&& other) noexcept(
+        is_nothrow_constructible_v<Value, Up> && is_nothrow_constructible_v<Error, OtherErr>);
+```
+
+该形态的constexpr限定仅在C++20加入。
+
+```cpp
+template <class Up, class OtherErr>
+explicit expected(expected<Up, OtherErr>&& other) noexcept(
+        is_nothrow_constructible_v<Value, Up> && is_nothrow_constructible_v<Error, OtherErr>);
+```
+
+该形态的constexpr限定仅在C++20加入。
+
+```cpp
+template <class Up = Value>
+constexpr expected(Up&& value) noexcept(is_nothrow_constructible_v<Value, Up>);
+```
+
+```cpp
+template <class Up = Value>
+constexpr explicit expected(Up&& value) noexcept(is_nothrow_constructible_v<Value, Up>);
+```
+
+```cpp
+template <class OtherErr>
+constexpr expected(const unexpected<OtherErr>& error) noexcept(
+        is_nothrow_constructible_v<Error, const OtherErr&>);
+```
+
+```cpp
+template <class OtherErr>
+constexpr explicit expected(const unexpected<OtherErr>& error) noexcept(
+        is_nothrow_constructible_v<Error, const OtherErr&>);
+```
+
+```cpp
+template <class OtherErr>
+constexpr expected(unexpected<OtherErr>&& error) noexcept(
+        is_nothrow_constructible_v<Error, OtherErr>);
+```
+
+```cpp
+template <class OtherErr>
+constexpr explicit expected(unexpected<OtherErr>&& error) noexcept(
+        is_nothrow_constructible_v<Error, OtherErr>);
+```
+
+```cpp
+template <class... Args>
+constexpr explicit expected(in_place_t, Args&&... args) noexcept(
+        is_nothrow_constructible_v<Value, Args...>);
+```
+
+```cpp
+template <class Up, class... Args>
+constexpr explicit expected(in_place_t, ::std::initializer_list<Up> list, Args&&... args) noexcept(
+        is_nothrow_constructible_v<Value, ::std::initializer_list<Up>&, Args...>);
+```
+
+此形态仅用于Host。
+
+```cpp
+template <class... Args>
+constexpr explicit expected(unexpect_t, Args&&... args) noexcept(
+        is_nothrow_constructible_v<Error, Args...>);
+```
+
+```cpp
+template <class Up, class... Args>
+constexpr explicit expected(unexpect_t, ::std::initializer_list<Up> list, Args&&... args) noexcept(
+        is_nothrow_constructible_v<Error, ::std::initializer_list<Up>&, Args...>);
+```
+
+此形态仅用于Host。
 
 ## 参数说明
 
-### 原型1的参数
+**模板参数**
+
+Value和Error是所属expected的值/错误类型；默认构造的Value2默认等于Value。Up和OtherErr表示转换来源成分类型，Args...表示原位构造实参类型。
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 构造期望值所用的源值；被复制为新对象的期望值。 |
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 复制来源expected；其期望值或错误值连同状态被复制到新对象。 |
-
-### 原型3的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 错误值来源（unexpected包装）；新对象以意外状态保存其错误值的副本。 |
-
-### 原型4的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `tag` | 输入 | unexpect_t消歧标记；本身不携带数据，表示按意外状态构造对象。 |
-| `error` | 输入 | 构造错误值所用的源错误值；被复制为新对象意外状态中的错误值。 |
+| `value` | 输入/输出（可移动来源） | 成功值的构造来源。 |
+| `error` | 输入/输出（可移动来源） | unexpected或错误原位构造的来源。 |
+| `other` | 输入/输出（可移动来源） | 来源expected；按其当前活动状态构造对应值或错误。 |
+| `args...` | 输入/输出 | 转发给Value或Error的原位构造实参。 |
+| `list` | 输入 | 仅Host的初始化列表形态使用，元素在构造完成前有效。 |
 
 ## 返回值说明
 
@@ -99,9 +184,8 @@ constexpr expected(unexpect_t tag, const Error& error);
 
 ## 约束说明
 
-- T必须为非void类型，E必须为对象类型。
-- 适用操作必须不抛出异常。
-- 提供构造、赋值、emplace和swap。
+- Value为非void值类型，Error为有效错误对象类型。默认构造要求Value可默认构造；值、unexpected和原位形式分别要求对应成分可构造。跨expected转换要求值和错误两侧均可构造，并排除可直接从整个expected转换的冲突形态；两侧都可隐式转换时不带explicit，否则显式。移动特殊成员的可用性随Value和Error的移动能力决定。
+- 用户提供的构造、分配及可调用操作须在所选执行位置有效；Device实例须适用于目标的非抛出环境。
 
 ## 调用示例
 
@@ -112,8 +196,10 @@ constexpr expected(unexpect_t tag, const Error& error);
 
 bool example()
 {
-    asc::std::expected<int, int> value(7);
-    return value.has_value() && *value == 7;
+    asc::std::expected<int, int> zero;
+    asc::std::expected<int, int> value(asc::std::in_place, 7);
+    asc::std::expected<int, int> error(asc::std::unexpect, 5);
+    return zero && *zero == 0 && value && *value == 7 && !error && error.error() == 5;
 }
 ```
 

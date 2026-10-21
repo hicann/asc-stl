@@ -37,28 +37,34 @@
 所属类型：[`asc::std::reverse_iterator`](reverse_iterator.md)。
 
 ```cpp
-// asc::std::reverse_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-using iterator_category = If<Hasrandomaccesstraversal<Iter>, random_access_iterator_tag, Iteratortraitscategoryorconceptt<Iter>>;
+// reverse_iterator 类内声明节选；类模板参数和其余成员由所属类提供。
+using iterator_category = conditional_t<
+    __reverse_iterator_detail::__has_random_access_traversal<Iter>,
+    random_access_iterator_tag,
+    __reverse_iterator_detail::__iterator_traits_category_or_concept_t<Iter>>;
 ```
+
+这是定义节选，辅助类型由头文件提供：底层有效遍历标签达到随机访问时映射为随机访问标签；否则沿用底层类别或概念标签。
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 底层迭代器须支持双向遍历；随机访问成员还要求底层支持对应位移或下标运算。
+- 反向迭代器访问`base()`之前的元素，解引用或箭头访问要求该前一位置有效。
+- 适配器不拥有底层范围；返回引用或指针的寿命受底层对象约束。
 
 ## 调用示例
 
-以下Host片段用具体迭代器或容器类型实例化本页接口。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
-
 #include <asc/std/type_traits>
 
-void example()
+bool example()
 {
     using selected = typename asc::std::reverse_iterator<int*>::iterator_category;
     static_assert(asc::std::is_same_v<selected, asc::std::random_access_iterator_tag>);
+    return true;
 }
 ```
 

@@ -34,8 +34,10 @@
 
 ```cpp
 namespace asc {
-template<class Function, class... Iterators> constexpr asc::zip_transform_iterator<Function, Iterators...> make_zip_transform_iterator(Function function, Iterators... iterators);
-} // namespace asc
+template <class Function, class... Iterators>
+constexpr asc::zip_transform_iterator<Function, Iterators...> make_zip_transform_iterator(
+    Function function, Iterators... iterators);
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -51,7 +53,7 @@ template<class Function, class... Iterators> constexpr asc::zip_transform_iterat
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入 | 合并函数对象：解引用时把打包的多元组引用交给function求值得到结果。 |
+| `function` | 输入 | 合并函数对象：解引用时展开各底层迭代器的引用，并按function(*it0, *it1, ...)求值。 |
 | `iterators` | 输入 | 被打包的各底层迭代器（零个或多个）：以zip迭代器方式同步前进。 |
 
 ## 返回值说明
@@ -67,16 +69,17 @@ template<class Function, class... Iterators> constexpr asc::zip_transform_iterat
 
 ## 调用示例
 
-以下片段使用具体数组和可调用对象构造迭代器。实际使用时底层范围须保持有效。
+以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
 
-decltype(auto) example()
+bool example()
 {
     int values[4] = {1, 2, 3, 4};
     int indices[4] = {3, 2, 1, 0};
-    return asc::make_zip_transform_iterator([](int left, int right) { return left + right; }, values, indices);
+    auto iterator = asc::make_zip_transform_iterator([](int left, int right) { return left + right; }, values, indices);
+    return *iterator == 4;
 }
 ```
 

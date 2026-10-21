@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/numeric>`。
 
-`asc::std::saturating_cast`按名称指定的算术或转换规则执行整数饱和运算。
+`asc::std::saturating_cast`将整数转换为目标整数类型；超出目标类型表示范围时，返回对应的最小值或最大值。
 
 标准语义参考：[cppreference `numeric`](https://en.cppreference.com/w/cpp/header/numeric)。
 
@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<class U, class T> [[nodiscard]] constexpr U saturating_cast(T value) noexcept;
+template<class U, class T> constexpr U saturating_cast(T value) noexcept;
 } // namespace asc::std
 ```
 
@@ -63,14 +63,13 @@ template<class U, class T> [[nodiscard]] constexpr U saturating_cast(T value) no
 
 ## 约束说明
 
-- 五个列出函数。
-- 十种标准signed/unsigned整数类型。
-- constexpr/noexcept。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 标准整数类型可使用`signed char`、`unsigned char`、`short`、`unsigned short`、`int`、`unsigned int`、`long`、`unsigned long`、`long long`和`unsigned long long`；不接受`bool`、普通`char`、`wchar_t`、`char8_t`、`char16_t`、`char32_t`及浮点类型。
+- 源类型和目标类型均须满足上述整数类型要求；转换在目标类型范围内保留原值。
+- 可在Host、AI Core SIMD编程和AI Core SIMT编程中调用；接口为`constexpr`且不抛出异常。
 
 ## 调用示例
 
-以下片段用具体整数范围展示数值调用；输出数组具有足够容量。
+以下示例将300转换为`unsigned char`；当前目标的该类型最大值为255，结果饱和为255。
 
 ```cpp
 #include <asc/std/numeric>

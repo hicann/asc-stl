@@ -51,6 +51,8 @@ static asc::lane_mask all_less() noexcept;
 
 ## 约束说明
 
+- 相对位置集合与本次调用的活动Lane集合相交；分歧控制流中的非活动Lane不会仅因编号关系而被加入。全Warp收敛时才等于全部32位编号的相对掩码。
+
 - 仅可在AI Core SIMT编程中调用。
 - 每一位对应Warp中编号0—31的一个Lane；1表示该Lane被选择。
 - 仅在D-SIMT中查询当前Warp；活跃位集合以本次调用位置为准。

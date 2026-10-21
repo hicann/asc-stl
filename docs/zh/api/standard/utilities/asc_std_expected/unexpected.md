@@ -42,9 +42,7 @@ template<class Error> class unexpected;
 
 ## 约束说明
 
-- T必须为非void类型，E必须为对象类型。
-- 适用操作必须不抛出异常。
-- 提供构造、赋值、emplace和swap。
+- Error须为无cv的非数组对象类型且不是unexpected特化；每个构造、访问或交换操作还须满足本页原型的要求。
 
 ## 调用示例
 

@@ -34,10 +34,11 @@
 
 ## 声明
 
+dextents是每一维均为`dynamic_extent`的`extents`别名。以下用公开模板查询结果类型；dynamic_shape_type只是示例名称，不是另一公开接口。
+
 ```cpp
-namespace asc::std {
-template<class IndexType, size_t Rank> using dextents = decltype(Mdspandetail::make_dextents<IndexType>(typename Mdspandetail::make_index_sequence_impl<Rank>::type{}));
-} // namespace asc::std
+template<class IndexType, asc::std::size_t Rank>
+using dynamic_shape_type = asc::std::dextents<IndexType, Rank>;
 ```
 
 ## 约束说明
@@ -46,14 +47,18 @@ template<class IndexType, size_t Rank> using dextents = decltype(Mdspandetail::m
 
 ## 调用示例
 
-以下片段选用具体模板实参展示别名类型。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/mdspan>
 
-void use_type()
+using shape_type = asc::std::dextents<int, 3>;
+static_assert(shape_type::rank() == 3 && shape_type::rank_dynamic() == 3);
+
+bool example()
 {
-    using selected = asc::std::dextents<int, 2>;
+    const shape_type shape(2, 3, 4);
+    return shape.extent(0) == 2 && shape.extent(1) == 3 && shape.extent(2) == 4;
 }
 ```
 

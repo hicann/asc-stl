@@ -38,7 +38,7 @@
 
 ```cpp
 namespace asc::std {
-template<class C> constexpr auto rend(C& c) -> decltype(c.rend());
+template<class C> constexpr auto rend(C& c) noexcept(noexcept(c.rend())) -> decltype(c.rend());
 } // namespace asc::std
 ```
 
@@ -46,7 +46,7 @@ template<class C> constexpr auto rend(C& c) -> decltype(c.rend());
 
 ```cpp
 namespace asc::std {
-template<class C> constexpr auto rend(const C& c) -> decltype(c.rend());
+template<class C> constexpr auto rend(const C& c) noexcept(noexcept(c.rend())) -> decltype(c.rend());
 } // namespace asc::std
 ```
 
@@ -54,7 +54,7 @@ template<class C> constexpr auto rend(const C& c) -> decltype(c.rend());
 
 ```cpp
 namespace asc::std {
-template<class T, asc::std::size_t N> constexpr asc::std::reverse_iterator<T*> rend(T (&array)[N]);
+template<class T, asc::std::size_t N> constexpr asc::std::reverse_iterator<T*> rend(T (&array)[N]) noexcept;
 } // namespace asc::std
 ```
 
@@ -117,15 +117,16 @@ template<class T, asc::std::size_t N> constexpr asc::std::reverse_iterator<T*> r
 
 ## 调用示例
 
-以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    return asc::std::rend(values);
+    int values[] = {1, 2, 3, 4};
+    auto last = asc::std::rend(values);
+    return last.base() == values && last - asc::std::rbegin(values) == 4;
 }
 ```
 

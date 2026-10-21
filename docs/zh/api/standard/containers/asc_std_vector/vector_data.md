@@ -69,11 +69,8 @@ pointer data() noexcept;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 返回值不拥有存储，也不延长容器或元素生命周期；仅可访问`[data(), data() + size())`内的存活元素。
+- 空容器没有可解引用的元素；重新分配或释放存储后，原指针失效。
 
 ## 调用示例
 

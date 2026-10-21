@@ -49,7 +49,7 @@ constexpr year_month_weekday(const chrono::year& year_value, const chrono::month
 ### 原型3
 
 ```cpp
-constexpr year_month_weekday(const local_days& value) noexcept;
+explicit constexpr year_month_weekday(const local_days& value) noexcept;
 ```
 
 ### 原型4
@@ -92,7 +92,7 @@ constexpr year_month_weekday(year_month_weekday&& other) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 以本地时区天数表示的日期（local_days），换算为年、月与第几个星期几。 |
+| `value` | 输入 | 以local_t标签保存的日精度本地时间点；仅按纪元计数换算，不查询或应用时区（local_days），换算为年、月与第几个星期几。 |
 
 ### 原型4的参数
 
@@ -116,7 +116,7 @@ constexpr year_month_weekday(year_month_weekday&& other) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 用于移动构造的year_month_weekday对象；移动后源对象处于有效但未指定状态。 |
+| `other` | 输入 | 用于移动构造的year_month_weekday对象；这些标量字段的隐式移动保持来源字段值。 |
 
 ## 返回值说明
 

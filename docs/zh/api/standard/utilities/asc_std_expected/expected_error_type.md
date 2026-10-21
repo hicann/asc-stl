@@ -43,20 +43,20 @@ using error_type = Error;
 
 ## 约束说明
 
-- T必须为非void类型，E必须为对象类型。
-- 适用操作必须不抛出异常。
-- 提供构造、赋值、emplace和swap。
+- 所属expected<Value, Error>要求有效的非void值类型和错误对象类型；当前操作还须满足本页原型、参数和状态要求。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例用具体类型和独立预期检查别名或标记结果。
 
 ```cpp
 #include <asc/std/expected>
+#include <asc/std/type_traits>
 
 void use_type()
 {
     using alias_type = typename asc::std::expected<int, int>::error_type;
+    static_assert(asc::std::is_same_v<alias_type, int>);
 }
 ```
 

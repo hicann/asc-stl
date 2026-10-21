@@ -34,11 +34,10 @@
 
 ## 声明
 
-该名称是公开的常量函数对象；对象的实现类型不构成接口承诺。以下为调用形式，省略的可选参数以各原型约束为准。
+该公开名称为常量可调用对象，不是自由函数；其实现类不属于公开契约。以下仅查询对象类型，object_type是示例名称。调用形式见参数说明及示例。
 
 ```cpp
-// asc::std::ranges::views 类内的声明节选；模板形参和其他成员由所属类提供。
-reverse(range);
+using object_type = decltype(asc::std::ranges::views::reverse);
 ```
 
 ## 参数说明
@@ -49,31 +48,32 @@ reverse(range);
 
 ## 返回值说明
 
-返回按相反顺序遍历输入范围的视图。
+输入是reverse_view时返回其base()，不再增加一层反向视图；反向迭代器组成的subrange可解包为普通迭代器subrange；其它适用输入返回reverse_view<views::all_t<Range>>。
 
-| 调用形式 | 返回类型 |
-| --- | --- |
-| 范围调用 | `reverse_view<decltype(views::all(range))>` |
+精确结果类型可用`decltype(asc::std::ranges::views::reverse(输入))`在对应输入类型上查询；不能统一写成一个包装view类型。
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- 输入及返回对象须满足所选择分支的范围、迭代器和构造条件；返回类型按上述条件选择。
+- 视图沿用原范围的持有方式，借用的元素存储须覆盖实际访问期。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/ranges>
-#include <asc/std/array>
-#include <asc/std/iterator>
-#include <asc/std/tuple>
+#include <asc/std/span>
+#include <asc/std/type_traits>
 
 bool example()
 {
-    int values[] = {1, 2, 3, 4};
-    auto view = asc::std::ranges::views::reverse(values);
-    return *view.begin() == 4;
+    int values[4] = {1, 2, 3, 4};
+    asc::std::span<int> base(values);
+    auto reversed = asc::std::ranges::views::reverse(base);
+    auto result = asc::std::ranges::views::reverse(reversed);
+    static_assert(asc::std::is_same_v<decltype(result), decltype(base)>);
+    return *reversed.begin() == 4 && result.data() == values;
 }
 ```
 

@@ -41,9 +41,9 @@ success = 0;
 
 ## 约束说明
 
-- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Rank为1至5。
-- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
+- 这是[tensor_copy_status](tensor_copy_status.md)的枚举常量；可在Host、AI Core SIMD编程和AI Core SIMT编程中保存和比较，读取常量不执行校验或搬运。
+- 对描述符校验而言，表示该次校验通过；它不检查实际存储或端点地址。
+- 对[tensor_load_async](tensor_load_async.md)或[tensor_store_async](tensor_store_async.md)而言，表示检查通过并已提交异步搬运；数据完成和缓冲复用仍须按流水线接口等待。
 
 ## 调用示例
 

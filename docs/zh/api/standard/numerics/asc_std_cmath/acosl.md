@@ -36,11 +36,17 @@ cmath 的 `l` 后缀宿主别名族（如 `sinl`、`fabsl`、`sqrtl` 等）当�
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-long double acosl(long double value) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr long double acosl(long double value) noexcept;
+}
 ```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
 ## 参数说明
 
@@ -52,9 +58,7 @@ long double acosl(long double value) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `long double` | 返回long double反余弦弧度值；定义域外输入按Host数学实现处理。 |
+返回类型按各原型确定（`long double`）。返回反余弦；实数结果位于[0, π]，单位为弧度。
 
 ## 约束说明
 
@@ -64,14 +68,15 @@ long double acosl(long double value) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-long double example()
+bool example()
 {
-    return asc::std::acosl(0.5L);
+    const auto result = asc::std::acosl(1.0L);
+    return result == 0.0L;
 }
 ```
 

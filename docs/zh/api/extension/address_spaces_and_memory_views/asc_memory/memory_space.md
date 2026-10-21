@@ -34,8 +34,8 @@
 
 ```cpp
 namespace asc {
-enum class memory_space { host, global, unified_buffer, local }
-} // namespace asc
+enum class memory_space { host, global, unified_buffer, local };
+}  // namespace asc
 ```
 
 ## 约束说明

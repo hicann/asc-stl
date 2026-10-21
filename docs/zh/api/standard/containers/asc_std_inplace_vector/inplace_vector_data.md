@@ -36,29 +36,21 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::inplace_vector`](inplace_vector.md)。
+所属类型：[`inplace_vector<T, Capacity>`](inplace_vector.md)。以下为类内声明，类型别名及模板形参由所属类提供。
 
 ### 原型1
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-const_pointer data() const noexcept;
+constexpr pointer data() noexcept;
 ```
 
 ### 原型2
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-pointer data() noexcept;
+constexpr const_pointer data() const noexcept;
 ```
 
 ## 参数说明
-
-### 原型1的参数
-
-无参数。
-
-### 原型2的参数
 
 无参数。
 
@@ -66,14 +58,12 @@ pointer data() noexcept;
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `const_pointer` | 返回所管理或所观察连续存储的首地址。 |
-| 原型2 | `pointer` | 返回所管理或所观察连续存储的首地址。 |
+| 原型1 | `pointer` | 指向对象内元素存储的可写指针；只访问已构造的前size()个元素。 |
+| 原型2 | `const_pointer` | 指向同一存储的只读指针；对象须覆盖指针的使用期。 |
 
 ## 约束说明
 
-- 元素保存在固定容量的对象内存中，不进行动态分配。
-- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
-- Host提供完整接口，设备端仅提供不抛出异常的接口。
+- 返回位置借用对象内存储；尾后迭代器不可解引用，容器析构后位置失效。
 
 ## 调用示例
 

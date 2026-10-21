@@ -62,6 +62,8 @@ template<class T> [[nodiscard]] constexpr T bit_ceil(T value) noexcept;
 
 ## 约束说明
 
+- 向上取整所得2的幂必须能由T表示；输入0和1返回1。最高可表示2的幂本身是合法输入，更大的值不满足结果可表示前提。
+
 - 遵循标准无符号整数类型约束。
 
 ## 调用示例

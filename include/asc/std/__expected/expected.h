@@ -518,8 +518,7 @@ public:
     CANN_ASC_STL_API constexpr auto or_else(_Fun&& function) &
     {
         using _Result = decltype(::asc::std::forward<_Fun>(function)(this->__error()));
-        return this->__has_val_ ? _Result(::asc::std::move(this->__value())) :  // NOLINT(build/include_what_you_use)
-                                  ::asc::std::forward<_Fun>(function)(this->__error());
+        return this->__has_val_ ? _Result(this->__value()) : ::asc::std::forward<_Fun>(function)(this->__error());
     }
     template <class _Fun>
     CANN_ASC_STL_API constexpr auto or_else(_Fun&& function) const&
@@ -587,7 +586,7 @@ public:
     CANN_ASC_STL_API constexpr auto transform_error(_Fun&& function) &
     {
         using _Result = expected<Value, decltype(::asc::std::forward<_Fun>(function)(this->__error()))>;
-        return this->__has_val_ ? _Result(::asc::std::move(this->__value())) :  // NOLINT(build/include_what_you_use)
+        return this->__has_val_ ? _Result(this->__value()) :
                                   _Result(unexpect, ::asc::std::forward<_Fun>(function)(this->__error()));
     }
     template <class _Fun>

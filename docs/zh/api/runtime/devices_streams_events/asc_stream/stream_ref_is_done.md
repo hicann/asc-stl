@@ -51,7 +51,7 @@ bool is_done(bool& output) const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回`true`，否则返回`false`。 |
+| `bool` | 返回true表示Runtime查询成功，此时output表示操作是否完成（可为false）；返回false表示查询失败，output保持原值。 |
 
 ## 约束说明
 

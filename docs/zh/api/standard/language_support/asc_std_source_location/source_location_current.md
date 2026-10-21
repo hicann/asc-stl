@@ -34,11 +34,22 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::source_location`](source_location.md)。
+所属类型：[`source_location`](source_location.md)。以下展示提供文件、函数和行号内建函数的配置；可零实参按类调用。没有这些内建函数时，文件/行号退回声明处的__FILE__/__LINE__，函数名退回空字符串。
 
 ```cpp
-// asc::std::source_location 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr source_location current(const char* file_name, const char* function_name, uint_least32_t line, uint_least32_t column) noexcept;
+#if __has_builtin(__builtin_COLUMN)
+[[nodiscard]] static constexpr source_location current(
+    const char* file_name = __builtin_FILE(),
+    const char* function_name = __builtin_FUNCTION(),
+    uint_least32_t line = __builtin_LINE(),
+    uint_least32_t column = __builtin_COLUMN()) noexcept;
+#else
+[[nodiscard]] static constexpr source_location current(
+    const char* file_name = __builtin_FILE(),
+    const char* function_name = __builtin_FUNCTION(),
+    uint_least32_t line = __builtin_LINE(),
+    uint_least32_t column = 0) noexcept;
+#endif
 ```
 
 ## 参数说明
@@ -49,8 +60,8 @@
 | --- | --- | --- |
 | `file_name` | 输入 | 源文件名，以空字符结尾的字符串首地址；缺省实参由编译器内建信息填充。 |
 | `function_name` | 输入 | 函数名，以空字符结尾的字符串首地址；缺省实参由编译器内建信息填充。 |
-| `line` | 输入 | 行号（uint_least32_t，从1起）；缺省实参由编译器内建信息填充。 |
-| `column` | 输入 | 列号（uint_least32_t，从1起）；缺省实参由编译器内建信息填充。 |
+| `line` | 输入 | 行号，按值保存；缺省由编译器提供，0可用于表示未知位置。 |
+| `column` | 输入 | 列号，按值保存；有列号内建函数时缺省由其提供，否则为0。 |
 
 ## 返回值说明
 
@@ -60,20 +71,22 @@
 
 ## 约束说明
 
-- 提供标准source_location接口。
-- 当编译器不能直接提供列号时，column()使用标准允许的回退值。
+- 同步捕获位置，不分配或复制文件名、函数名字符串。
+- 缺省字符串来自编译器；显式传入字符串时，其存储须覆盖source_location及其字符串指针的使用期。
+- 不支持列号内建函数时，缺省column为0；0表示没有可用列号。
 
 ## 调用示例
 
-以下Host片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/source_location>
 
-decltype(auto) example()
+bool example()
 {
-    auto source = asc::std::source_location::current("example.cpp", "example", 1, 0);
-    return source.line();
+    const auto implicit = asc::std::source_location::current();
+    const auto selected = asc::std::source_location::current("example.cpp", "example", 7, 0);
+    return implicit.line() > 0 && selected.line() == 7 && selected.file_name()[0] == 'e';
 }
 ```
 

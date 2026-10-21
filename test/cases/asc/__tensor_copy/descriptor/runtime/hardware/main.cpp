@@ -16,15 +16,12 @@
 #include <acl/acl.h>
 #include <cstdint>
 #include <iostream>
-
-#if defined(ASC_STL_B026_SIMD)
-void launch_asc_stl_b026_tensor_copy_simd(std::uint32_t*, const std::uint32_t*, void*);
-#else
-void launch_asc_stl_b026_tensor_copy_simt(std::uint32_t*, void*);
-#endif
+#include "../../../../../../support/hardware_runtime.h"
+#include "launch.h"
 
 int main()
 {
+    asc_stl_test::hardware_runtime runtime;
     constexpr std::uint32_t kRows = 3;
     constexpr std::uint32_t kSourceColumns = 8;
     constexpr std::uint32_t kPaddedColumns = 8;
@@ -38,17 +35,17 @@ int main()
             host_input[row * kSourceColumns + column] = row * 100u + column;
         }
     }
-    bool passed = aclInit(nullptr) == ACL_SUCCESS && aclrtSetDevice(0) == ACL_SUCCESS &&
+    bool passed = runtime.initialize(nullptr) == ACL_SUCCESS && runtime.set_device(0) == ACL_SUCCESS &&
         aclrtCreateStream(&stream) == ACL_SUCCESS &&
         aclrtMalloc(reinterpret_cast<void**>(&input), sizeof(host_input), ACL_MEM_MALLOC_HUGE_FIRST) == ACL_SUCCESS &&
         aclrtMalloc(reinterpret_cast<void**>(&output), sizeof(host_input), ACL_MEM_MALLOC_HUGE_FIRST) == ACL_SUCCESS &&
         aclrtMemcpy(input, sizeof(host_input), host_input, sizeof(host_input), ACL_MEMCPY_HOST_TO_DEVICE) ==
             ACL_SUCCESS;
-    if (passed) {
+    if (passed && runtime.ready()) {
 #if defined(ASC_STL_B026_SIMD)
         launch_asc_stl_b026_tensor_copy_simd(output, input, stream);
         std::uint32_t host_output[kOutputElements] = {};
-        passed = aclrtSynchronizeStream(stream) == ACL_SUCCESS &&
+        passed = runtime.synchronize(stream) == ACL_SUCCESS &&
             aclrtMemcpy(host_output, sizeof(host_output), output, sizeof(host_output), ACL_MEMCPY_DEVICE_TO_HOST) ==
                 ACL_SUCCESS;
         std::uint32_t mismatches = 0;
@@ -70,20 +67,21 @@ int main()
 #else
         launch_asc_stl_b026_tensor_copy_simt(output, stream);
         std::uint32_t failures = 1;
-        passed = aclrtSynchronizeStream(stream) == ACL_SUCCESS &&
+        passed = runtime.synchronize(stream) == ACL_SUCCESS &&
             aclrtMemcpy(&failures, 4, output, 4, ACL_MEMCPY_DEVICE_TO_HOST) == ACL_SUCCESS;
         std::cout << "b026_tensor_copy_simt_failures=" << failures << '\n';
         passed = passed && failures == 0;
 #endif
     }
     if (input)
-        passed = aclrtFree(input) == ACL_SUCCESS && passed;
+        passed = runtime.free_device(input) == ACL_SUCCESS && passed;
     if (output)
-        passed = aclrtFree(output) == ACL_SUCCESS && passed;
+        passed = runtime.free_device(output) == ACL_SUCCESS && passed;
     if (stream)
-        passed = aclrtDestroyStream(stream) == ACL_SUCCESS && passed;
-    passed = aclrtResetDevice(0) == ACL_SUCCESS && passed;
-    passed = aclFinalize() == ACL_SUCCESS && passed;
+        passed = runtime.destroy_stream(stream) == ACL_SUCCESS && passed;
+    passed = runtime.reset_device(0) == ACL_SUCCESS && passed;
+    passed = runtime.finalize() == ACL_SUCCESS && passed;
+    passed = runtime.finish(passed) == 0;
     if (passed)
         std::cout << "ASC_STL_B026_TENSOR_COPY_HARDWARE_PASS\n";
     return passed ? 0 : 1;

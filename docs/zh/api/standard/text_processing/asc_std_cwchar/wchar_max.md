@@ -36,8 +36,12 @@
 
 ## 声明
 
+Host的宏定义由系统`<cwchar>`提供。Device仅在工具链未预先定义对应宏时采用以下回退。
+
 ```cpp
-#define WCHAR_MAX WCHARMAX
+#ifndef WCHAR_MAX
+#define WCHAR_MAX __WCHAR_MAX__
+#endif
 ```
 
 ## 约束说明

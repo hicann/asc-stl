@@ -34,8 +34,12 @@
 
 ## 函数原型
 
+以下入口仅在Host提供。
+
 ```cpp
-time_t time(time_t* timer) noexcept;
+namespace asc::std {
+[[nodiscard]] time_t time(time_t* timer) noexcept;
+}
 ```
 
 ## 参数说明
@@ -44,7 +48,7 @@ time_t time(time_t* timer) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `timer` | 输入 | 指向参与操作的数据；指针可访问范围和生命周期须满足约束说明。 |
+| `timer` | 输出 | 可为空；非空时写入与返回值相同的日历时间。 |
 
 ## 返回值说明
 

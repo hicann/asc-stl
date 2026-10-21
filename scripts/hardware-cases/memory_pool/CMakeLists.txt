@@ -30,5 +30,5 @@ find_library(
 add_executable(asc_stl_b025_memory_pool main.cpp)
 target_compile_features(asc_stl_b025_memory_pool PRIVATE cxx_std_${ASC_STL_CXX_STANDARD})
 target_compile_options(asc_stl_b025_memory_pool PRIVATE -Werror)
-target_include_directories(asc_stl_b025_memory_pool PRIVATE "${ASC_STL_INCLUDE_DIR}")
+target_include_directories(asc_stl_b025_memory_pool PRIVATE "${ASC_STL_INCLUDE_DIR}" "$ENV{ASCEND_HOME_PATH}/include")
 target_link_libraries(asc_stl_b025_memory_pool PRIVATE "${ASCENDCL_LIBRARY}")

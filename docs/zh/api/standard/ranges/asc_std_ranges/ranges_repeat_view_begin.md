@@ -34,28 +34,32 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::ranges::repeat_view`](ranges_repeat_view.md)。
+所属类型：[`repeat_view`](ranges_repeat_view.md)。以下是按参与条件列出的声明摘要；保留供调用使用的模板默认值，省略仅供SFINAE的实现选择参数。涉及私有返回类型时用auto摘要表示，不承诺可直接命名该类型。
+
+### 原型1
 
 ```cpp
-// asc::std::ranges::repeat_view 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr Iterator begin() const;
+constexpr auto begin() const;
 ```
+
+此形式没有额外的成员模板参与条件；仍须满足所属类型的要求。
 
 ## 参数说明
 
-无参数。
+### 原型1的参数
+
+无函数参数。
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `Iterator` | 返回指向首元素的迭代器。 |
+| 适用原型 | 返回值类型 | 含义 |
+| --- | --- | --- |
+| 原型1 | `auto` | 返回位置0的迭代器；解引用为保存值的const T&，迭代器不能超过该保存值的有效期。 |
 
 ## 约束说明
 
-- 七个列出名称。
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 每种形式的参与条件见原型；无实参查询一般直接调用，不需要指定模板选择类型。
+- 返回的迭代器、指针或引用以及借用范围不得超过其实际依赖的视图对象和元素存储的有效期。
 
 ## 调用示例
 

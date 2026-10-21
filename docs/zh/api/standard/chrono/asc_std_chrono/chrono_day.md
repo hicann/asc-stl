@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::day`表示日期、时间点或时长计算中的`day`值类型。
+`asc::std::chrono::day`保存月内日字段，1到31为有效值；它不记录月份或年份，因此单独的29日不判断闰年。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

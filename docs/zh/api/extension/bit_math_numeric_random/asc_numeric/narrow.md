@@ -28,14 +28,15 @@
 
 头文件路径为：`<asc/numeric>`。
 
-`asc::narrow`执行窄化转换，并在结果不能无损往返时按接口约定报告失败。
+`asc::narrow`执行窄化转换，并在结果不能无损往返时调用`__builtin_trap()`终止，不返回状态或抛出异常。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
-template<class To, class From> constexpr To narrow(From value);
-} // namespace asc
+template <class To, class From>
+constexpr To narrow(From value);
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -51,7 +52,7 @@ template<class To, class From> constexpr To narrow(From value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待窄化转换的整数值；结果不能无损往返时按接口约定报告失败。 |
+| `value` | 输入 | 待窄化转换的整数值；结果不能无损往返时调用`__builtin_trap()`终止，不返回状态或抛出异常。 |
 
 ## 返回值说明
 
@@ -61,8 +62,8 @@ template<class To, class From> constexpr To narrow(From value);
 
 ## 约束说明
 
-- T、From和To必须是不超过64位的标准非bool整数类型。
-- 所有溢出检查均不得触发有符号整数溢出的未定义行为。
+- 可在Host、AI Core SIMD和AI Core SIMT调用；结果按本页声明的整数类型返回。
+- `To`和`From`须为不超过64位的标准非bool整数；检查或饱和语义见本页返回值。
 
 ## 调用示例
 

@@ -41,57 +41,18 @@
 #include <asc/std/unordered_set>
 #include <asc/std/vector>
 
+#include "b027_core_semantics.h"
+#include "string_aliasing_semantics.h"
+
 namespace asc_stl_b027_test {
 
 CANN_ASC_STL_API int evaluate_core()
 {
-    asc::std::bitset<16> bits(0x1234u);
-    if (bits.count() != 5 || !bits.any() || bits.none() || bits.all())
-        return 1;
-    bits <<= 4;
-    if (bits.to_ulong() != 0x2340u)
-        return 2;
-    bits >>= 8;
-    if (bits.to_ullong() != 0x23u)
-        return 3;
-    bits.flip();
-    if (bits.count() != 13)
-        return 4;
-    const asc::std::bitset<16> mask(0x00ffu);
-    if ((bits & mask).to_ulong() != 0xdcu)
-        return 5;
-    if ((bits | mask).count() != 16)
-        return 6;
-    if ((bits ^ mask).count() != 11)
-        return 7;
-    bits.reset();
-    if (!bits.none())
-        return 8;
-    bits.set();
-    if (!bits.all() || bits.size() != 16)
-        return 9;
-
-    asc::std::inplace_vector<int, 4> values;
-    values.unchecked_push_back(3);
-    values.unchecked_push_back(5);
-    if (values.size() != 2 || values.front() != 3 || values.back() != 5)
-        return 10;
-    const int pattern[] = {5};
-    asc::std::default_searcher<const int*> searcher(pattern, pattern + 1);
-    const auto found = searcher(values.begin(), values.end());
-    if (found.first != values.begin() + 1 || found.second != values.end())
-        return 11;
-    if (asc::std::gcd(84, -30) != 6 || asc::std::lcm(21, 6) != 42)
-        return 12;
-    if (asc::std::midpoint(-5, 4) != -1)
-        return 13;
-    int pointer_values[6]{};
-    if (asc::std::midpoint(pointer_values, pointer_values + 5) != pointer_values + 2)
-        return 14;
-    if (asc::std::midpoint(2.0f, 4.0f) != 3.0f)
-        return 15;
-    if (asc::std::hash<asc::std::bitset<16>>{}(mask) == asc::std::hash<asc::std::bitset<16>>{}(bits))
-        return 16;
+    const int core = asc_stl_b027_core_test::evaluate();
+    if (core != 0)
+        return core;
+    if (asc_stl_string_aliasing_test::evaluate() != 0)
+        return 18;
     return 0;
 }
 

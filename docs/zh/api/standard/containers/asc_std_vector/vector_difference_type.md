@@ -43,11 +43,8 @@ using difference_type = long;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 该别名为有符号整数类型，用于表示迭代器差值。
+- 计算迭代器差值时，两迭代器须属于同一有效元素序列或其尾后位置，且差值须能由该类型表示。
 
 ## 调用示例
 

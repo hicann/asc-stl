@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<class Iter> [[nodiscard]] constexpr move_iterator<Iter> make_move_iterator(Iter iterator) noexcept(is_nothrow_move_constructible_v<Iter>);
+template<class Iter> constexpr move_iterator<Iter> make_move_iterator(Iter iterator) noexcept(is_nothrow_move_constructible_v<Iter>);
 } // namespace asc::std
 ```
 
@@ -62,20 +62,22 @@ template<class Iter> [[nodiscard]] constexpr move_iterator<Iter> make_move_itera
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 底层迭代器须支持本页操作；自减要求双向遍历，位移和下标要求相应随机访问操作。
+- 适配器不拥有底层元素；解引用通过`asc::std::iter_move`访问元素，移动后的值遵守元素类型的约定。
+- 解引用、箭头及下标访问须指向有效元素；返回引用或指针的寿命受底层对象约束。
 
 ## 调用示例
 
-以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    return asc::std::make_move_iterator(values);
+    int values[] = {1, 2, 3, 4};
+    auto result = asc::std::make_move_iterator(values);
+    return result.base() == values && *result == 1;
 }
 ```
 

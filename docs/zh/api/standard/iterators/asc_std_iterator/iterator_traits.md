@@ -34,28 +34,27 @@
 
 ## 声明
 
-### 原型1
-
 ```cpp
 namespace asc::std {
-template<class Iter, class> struct iterator_traits;
-} // namespace asc::std
+template<class Iter, class = void>
+struct iterator_traits;
+}
 ```
 
-### 原型2
+主模板允许省略第二个模板参数。对提供五个传统关联类型的迭代器，特征复制其嵌套类型；不满足选择条件时主模板可为空。对象指针具有以下偏特化：
 
 ```cpp
 namespace asc::std {
-template<class T> struct iterator_traits;
-} // namespace asc::std
-```
-
-### 原型3
-
-```cpp
-namespace asc::std {
-template<class, class> class iterator_traits;
-} // namespace asc::std
+template<class T>
+struct iterator_traits<T*, enable_if_t<is_convertible_v<T(*)[], const volatile void*>>> {
+    using difference_type = ptrdiff_t;
+    using value_type = remove_cv_t<T>;
+    using pointer = T*;
+    using reference = T&;
+    using iterator_category = random_access_iterator_tag;
+    using iterator_concept = contiguous_iterator_tag;
+};
+}
 ```
 
 ## 约束说明
@@ -64,18 +63,27 @@ template<class, class> class iterator_traits;
 
 ## 调用示例
 
-以下Host示例展示具体输入、接口调用和可检查的结果。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 #include <asc/std/type_traits>
-#include <asc/std/vector>
-#include <asc/std/forward_list>
 
 bool example()
 {
-    static_assert(asc::std::is_same_v<asc::std::iterator_traits<int*>::value_type, int>);
-    static_assert(asc::std::is_same_v<asc::std::iterator_traits<int*>::reference, int&>);
+    struct custom_iterator {
+        using difference_type = short;
+        using value_type = long;
+        using pointer = long*;
+        using reference = long&;
+        using iterator_category = asc::std::input_iterator_tag;
+    };
+    using generic_traits = asc::std::iterator_traits<custom_iterator>;
+    using pointer_traits = asc::std::iterator_traits<const int*>;
+    static_assert(asc::std::is_same_v<generic_traits::difference_type, short>);
+    static_assert(asc::std::is_same_v<generic_traits::iterator_category, asc::std::input_iterator_tag>);
+    static_assert(asc::std::is_same_v<pointer_traits::value_type, int>);
+    static_assert(asc::std::is_same_v<pointer_traits::iterator_concept, asc::std::contiguous_iterator_tag>);
     return true;
 }
 ```

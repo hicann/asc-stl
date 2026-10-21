@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::duration_values`表示日期、时间点或时长计算中的`duration_values`值类型。
+`asc::std::chrono::duration_values`为`Rep`提供零、最小值和最大值计数，供`duration`的zero/min/max使用；min取lowest而非最小正数。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -39,6 +39,14 @@ namespace asc::std::chrono {
 template<class Rep> struct duration_values;
 } // namespace asc::std::chrono
 ```
+
+## 参数说明
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Rep` | duration计数类型；zero/min/max须能由该类型表示。 |
 
 ## 约束说明
 

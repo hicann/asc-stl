@@ -42,8 +42,10 @@ template<class ...Types> class variant;
 
 ## 约束说明
 
+- Host切换备选项或调用`emplace`时先销毁旧值；若新备选项构造抛出异常，对象没有活动备选项，`index()`为`variant_npos`且`valueless_by_exception()`为`true`。对象仍可安全析构，并可通过成功的`emplace`或赋值恢复。
+- 同一活动备选项的赋值抛出异常时，活动索引保持不变，值的状态由该备选类型的赋值操作决定。
+
 - Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 

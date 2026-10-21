@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/atomic>`。
 
-`asc::std::atomic_flag::clear`移除全部元素并使容器变为空。
+`asc::std::atomic_flag::clear`原子地将标志清除为false。
 
 该接口的可用位置为Host、AI Core SIMT编程。
 
@@ -40,7 +40,7 @@
 
 ```cpp
 // asc::std::atomic_flag 类内的声明节选；模板形参和其他成员由所属类提供。
-void clear(memory_order order) noexcept;
+void clear(memory_order order = memory_order_seq_cst) noexcept;
 ```
 
 ## 参数说明
@@ -57,8 +57,8 @@ void clear(memory_order order) noexcept;
 
 ## 约束说明
 
-- atomic_flag的test/test_and_set/clear成员与非volatile自由函数。
-- Host和AI Core SIMT编程GM。
+- 可在Host或AI Core SIMT编程中调用；SIMT线程共享的标志对象须位于GM，并在并发访问前完成初始化。
+- 内存序须为`memory_order_relaxed`、`memory_order_release`或`memory_order_seq_cst`；不允许`memory_order_consume`、`memory_order_acquire`或`memory_order_acq_rel`。
 
 ## 调用示例
 

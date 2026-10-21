@@ -28,9 +28,7 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::from_range_t`标记临时范围的不可借用结果或提供视图适配辅助能力。
-
-标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
+`asc::std::from_range_t`是标识“从范围构造”重载的空标签类型；对应常量是`asc::std::from_range`。它不表示悬垂结果，也不保存或取得范围所有权。
 
 ## 声明
 
@@ -42,9 +40,8 @@ struct from_range_t;
 
 ## 约束说明
 
-- 七个列出名称。
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 仅作为构造函数或函数重载的标签；具体类型是否有接收此标签的构造函数须查看该类型接口。
+- 构造标签不开始遍历，不保存元素地址，也不延长范围的生命周期。
 
 ## 调用示例
 

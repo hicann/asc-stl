@@ -36,8 +36,8 @@
 
 ```cpp
 namespace asc::std {
-struct adopt_lock_t;
-} // namespace asc::std
+using adopt_lock_t = __lock_detail::__lock_tag<2>;
+}
 ```
 
 ## 约束说明

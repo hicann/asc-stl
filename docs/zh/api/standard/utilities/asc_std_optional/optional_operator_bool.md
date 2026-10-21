@@ -34,8 +34,10 @@
 
 ## 函数原型
 
+以下位于对应expected或optional类内。
+
 ```cpp
-constexpr explicit asc::std::optional::operator bool() const noexcept;
+constexpr explicit operator bool() const noexcept;
 ```
 
 ## 参数说明
@@ -46,7 +48,7 @@ constexpr explicit asc::std::optional::operator bool() const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `explicit` | 当前对象处于有效或有值状态时返回`true`，否则返回`false`。 |
+| `bool` | 当前对象处于有效或有值状态时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 

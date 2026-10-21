@@ -38,7 +38,7 @@
 
 ```cpp
 namespace asc::std {
-template<class T> complex<T> polar(const T& radius, const T& angle = T()) noexcept;
+template<class T> [[nodiscard]] complex<T> polar(const T& radius, const T& angle = T()) noexcept;
 } // namespace asc::std
 ```
 

@@ -40,14 +40,14 @@
 
 ```cpp
 // asc::std::move_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr Iter base()&&;
+constexpr Iter base()&&;
 ```
 
 ### 原型2
 
 ```cpp
 // asc::std::move_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr const Iter& base() const& noexcept;
+constexpr const Iter& base() const& noexcept;
 ```
 
 ## 参数说明
@@ -69,19 +69,20 @@
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 底层迭代器须支持本页操作；自减要求双向遍历，位移和下标要求相应随机访问操作。
+- 适配器不拥有底层元素；解引用通过`asc::std::iter_move`访问元素，移动后的值遵守元素类型的约定。
+- 解引用、箭头及下标访问须指向有效元素；返回引用或指针的寿命受底层对象约束。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
 bool example()
 {
-    int values[] = {2, 4};
+    int values[] = {2, 4, 6, 8};
     asc::std::move_iterator<int*> iterator(values);
     return iterator.base() == values;
 }

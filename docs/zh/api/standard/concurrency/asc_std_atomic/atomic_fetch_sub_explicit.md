@@ -54,7 +54,7 @@ template<class T> T atomic_fetch_sub_explicit(atomic<T>* object, T value, memory
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `object` | 输入 | 指向被读改写的原子对象的指针。 |
+| `object` | 输入/输出 | 指向被读改写的原子对象的指针。 |
 | `value` | 输入 | 从原子对象当前值中减去的操作数；返回修改前的值。 |
 | `order` | 输入 | 读改写所用内存序，决定本次操作的可见性顺序；可取memory_order各枚举值。 |
 
@@ -66,10 +66,9 @@ template<class T> T atomic_fetch_sub_explicit(atomic<T>* object, T value, memory
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数。
-- bool/8/16位用32位内部存储。
-- 32/64位按有符号位模式分派。
-- Host和AI Core SIMT编程GM。
+- 原子操作可在Host和AI Core SIMT编程中调用；SIMT线程共享的原子对象须位于GM，并在并发访问前完成初始化。
+- `object`须指向有效的[atomic](atomic.md)对象，其值类型须与模板参数`T`一致。
+- 读改写返回操作前的值；不带内存序参数的形式使用`memory_order_seq_cst`。
 
 ## 调用示例
 

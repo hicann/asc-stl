@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::system_clock::period`表示日期、时间点或时长计算中的`period`值类型。
+`asc::std::chrono::system_clock::period`是`system_clock`每tick的秒比例，当前为`nano`，即1/1000000000秒。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -48,15 +48,15 @@ using period = duration::period;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/type_traits>
 
-void use_type()
-{
-    using alias_type = asc::std::chrono::system_clock::period;
-}
+using actual_type = asc::std::chrono::system_clock::period;
+using expected_type = asc::std::nano;
+static_assert(asc::std::is_same_v<actual_type, expected_type>);
 ```
 
 ## 关联API

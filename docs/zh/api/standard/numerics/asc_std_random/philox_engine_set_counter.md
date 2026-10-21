@@ -47,7 +47,7 @@ constexpr void set_counter(const asc::std::array<UIntType, WordCount>& counter) 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `counter` | 输入 | 参与操作的元素数量。 |
+| `counter` | 输入 | 完整计数器字数组，长度为WordCount；按高位字到低位字传入，各字限制在WordSize位内，并重置块内输出位置。 |
 
 ## 返回值说明
 

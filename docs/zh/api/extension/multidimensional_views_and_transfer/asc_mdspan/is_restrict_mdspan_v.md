@@ -34,15 +34,17 @@
 
 ```cpp
 namespace asc {
-template<class T> inline constexpr bool is_restrict_mdspan_v;
-} // namespace asc
+template <class T>
+inline constexpr bool is_restrict_mdspan_v = false;
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供Host和GM视图以及AI Core SIMD编程UB视图。
-- 允许有符号步长。
-- 可选的Host DLPack桥接不抛出异常。
+- 这是编译期类型查询，不读写元素、查询Runtime或建立设备同步；可用类型仍受相应执行位置门控。
+
+- 声明代码展示主模板；对应包装器或mdspan类型由头文件的特化识别。类型匹配不自动移除cv/ref限定，查询不访问实际数据或设备。
+
 
 ## 调用示例
 
@@ -58,7 +60,8 @@ template<class T> inline constexpr bool is_restrict_mdspan_v;
 #include <asc/std/type_traits>
 #include <asc/std/utility>
 
-inline constexpr auto example = asc::is_restrict_mdspan_v<asc::restrict_mdspan<int, asc::std::extents<asc::std::size_t, 4>>>;
+inline constexpr auto example =
+    asc::is_restrict_mdspan_v<asc::restrict_mdspan<int, asc::std::extents<asc::std::size_t, 4>>>;
 ```
 
 ## 关联API

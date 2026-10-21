@@ -55,11 +55,10 @@ void reserve(size_type requested);
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- `T`须能由`T&&`构造并可析构，以满足当前实现迁移元素的编译要求；即使本次不扩容，也须满足该类型要求。
+- `requested <= capacity()`时不分配；否则分配新存储并逐元素迁移原元素。
+- 成功扩容不改变`size()`，但会使原存储上的指针、引用及迭代器失效。
+- Host侧分配器返回空指针时抛出`std::bad_alloc`；分配器或元素移动构造抛出的异常可传播。Device侧须保证相关操作可调用且不抛出异常，并保证分配成功，分配失败会终止执行。
 
 ## 调用示例
 

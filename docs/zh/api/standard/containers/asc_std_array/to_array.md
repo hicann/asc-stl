@@ -58,14 +58,14 @@ template<typename T, size_t Size> constexpr array<remove_cv_t<T>, Size> to_array
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 容器保存或处理的元素类型。 |
+| `T` | 源内建数组的元素类型；结果元素类型为`remove_cv_t<T>`。 |
 | `Size` | 输入内建数组的元素数量，由数组类型推导；结果`asc::std::array`具有相同的元素数量。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入/输出 | 源内建数组。返回的`array`对象拥有各元素的副本（左值源）或被移动的元素（右值源），不引用源数据；调用返回后源数组即可释放或复用。 |
+| `source` | 输入/输出 | 右值内建数组；逐元素移动构造返回的`array`，源元素的后续状态由`T`的移动构造语义决定。 |
 
 ### 原型2的参数
 
@@ -73,14 +73,14 @@ template<typename T, size_t Size> constexpr array<remove_cv_t<T>, Size> to_array
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 容器保存或处理的元素类型。 |
+| `T` | 源内建数组的元素类型；结果元素类型为`remove_cv_t<T>`。 |
 | `Size` | 输入内建数组的元素数量，由数组类型推导；结果`asc::std::array`具有相同的元素数量。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `source` | 输入/输出 | 源内建数组。返回的`array`对象拥有各元素的副本（左值源）或被移动的元素（右值源），不引用源数据；调用返回后源数组即可释放或复用。 |
+| `source` | 输入 | 左值内建数组；从各源元素构造返回的`array`元素。 |
 
 ## 返回值说明
 
@@ -91,9 +91,11 @@ template<typename T, size_t Size> constexpr array<remove_cv_t<T>, Size> to_array
 
 ## 约束说明
 
-- 左值和右值数组重载均从C++17起提供，元素数量由一维内建数组类型确定。
-- 左值重载要求元素可从对应左值构造；右值重载要求元素可移动构造。元素无需可默认构造。
-- 不接受多维内建数组。异常约定由相应元素构造和声明中的`noexcept`条件决定；Device调用的元素构造须满足设备异常限制。
+- 左值和右值数组重载均从C++17起提供。
+- `Size`由源内建数组的长度推导。标准C++的内建数组长度须大于0；不接受多维数组，即`T`不能仍为数组类型。
+- 原型1要求`is_move_constructible_v<T>`为`true`；原型2要求`is_constructible_v<T, T&>`为`true`。不要求元素可默认构造。
+- 原型1仅在`is_nothrow_move_constructible_v<T>`为`true`时为`noexcept`；原型2仅在`is_nothrow_constructible_v<T, T&>`为`true`时为`noexcept`。Device侧使用的元素构造须不抛出异常。
+- 返回的`array`具有独立的元素存储；元素自身持有的指针、引用或其他资源的有效期仍由`T`的语义决定。
 
 ## 调用示例
 

@@ -30,17 +30,20 @@
 
 `asc::work_chunk<Index>`表示一次成功领取得到的半开任务区间`[begin, end)`，可查询区间是否为空及包含的索引数量。
 
-该接口的可用位置为AI Core SIMD编程、AI Core SIMT编程。
+该接口的可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 声明
 
 ```cpp
 namespace asc {
-template<class Index> class work_chunk;
-} // namespace asc
+template <class Index>
+class work_chunk;
+}  // namespace asc
 ```
 
 ## 约束说明
+
+- Index支持uint32_t、uint64_t以及64位unsigned long long；只有位宽相同不代表其他类型自动被接受。Host可进行值操作和领取，Device参与者仍须使用共享GM cursor，SIMD使用对应的GM限定入口。
 
 - Index必须为受支持的32位或64位无符号整数。
 - 区间按[begin, end)解释，begin不小于end时empty为true且size为0。

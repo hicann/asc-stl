@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/argument>`。
 
-`asc::args::immediate::value`返回对象按值保存的立即参数。
+`asc::args::immediate::value`返回包装器内部立即值的引用；引用的存活期不超过包装器，原始输入对象存活不能延长此引用。
 
 ## 函数原型
 
@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::args::immediate 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr T& value()& noexcept;
+constexpr T& value() & noexcept;
 ```
 
 ### 原型2
@@ -62,14 +62,14 @@ constexpr const T& value() const& noexcept;
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `T&` | 返回对象按值保存的立即参数。 |
-| 原型2 | `const T&` | 返回对象按值保存的立即参数。 |
+| 原型1 | `T&` | 返回包装器内部立即值的引用；引用的存活期不超过包装器，原始输入对象存活不能延长此引用。 |
+| 原型2 | `const T&` | 返回包装器内部立即值的引用；引用的存活期不超过包装器，原始输入对象存活不能延长此引用。 |
 
 ## 约束说明
 
+- 立即值和Bounds按值保存在包装器内；可保存no_bounds、static_bounds或runtime_bounds，读取值不会自动校验边界。
+
 - 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 

@@ -69,9 +69,9 @@ constexpr reference top();
 
 ## 约束说明
 
-- stack<T,Container>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/back/push_back/emplace_back/pop_back/比较/swap及allocator操作必须在当前执行空间有效。
-- 交付container_type/value_type/size_type/reference/const_reference和protected c，default/container/copy/move/allocator构造及copy/move赋值，empty/size/top、lvalue/rvalue push、decltype(auto) emplace、pop，条件noexcept的member/non-member swap，六个经典关系与C++20 <=>，uses_allocator特化，Container及Container+Alloc的C++17 CTAD。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 调用前容器必须非空。
+- 返回引用借用底层元素；原容器及元素须覆盖引用使用期，修改失效规则遵循Container。
+- Device使用的Container、元素操作及Compare须可在对应执行位置调用并满足其非抛出要求；Host的异常行为遵循所调用对象，未额外声明noexcept时不承诺不抛出。
 
 ## 调用示例
 

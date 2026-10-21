@@ -34,8 +34,10 @@
 
 ## 函数原型
 
+所属类为[`hh_mm_ss<Duration>`](chrono_hh_mm_ss.md)，Duration由该类提供。
+
 ```cpp
-explicit constexpr asc::std::chrono::hh_mm_ss::operator precision() const noexcept;
+[[nodiscard]] explicit constexpr operator precision() const noexcept;
 ```
 
 ## 参数说明
@@ -50,7 +52,7 @@ explicit constexpr asc::std::chrono::hh_mm_ss::operator precision() const noexce
 
 ## 约束说明
 
-- 转换结果等价于to_duration()，即为构造时传入的原始时长。
+- 转换结果等价于to_duration()，按precision精度组合符号、小时、分钟、秒与小数秒；若原始周期不能由precision精确表示，结果可能丢失小数精度。
 
 ## 调用示例
 

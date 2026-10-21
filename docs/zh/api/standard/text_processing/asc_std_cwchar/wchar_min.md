@@ -36,8 +36,16 @@
 
 ## 声明
 
+Host的宏定义由系统`<cwchar>`提供。Device仅在工具链未预先定义对应宏时采用以下回退。
+
 ```cpp
-#define WCHAR_MIN (-WCHARMAX - 1)
+#ifndef WCHAR_MIN
+#if defined(__WCHAR_UNSIGNED__)
+#define WCHAR_MIN 0
+#else
+#define WCHAR_MIN (-__WCHAR_MAX__ - 1)
+#endif
+#endif
 ```
 
 ## 约束说明

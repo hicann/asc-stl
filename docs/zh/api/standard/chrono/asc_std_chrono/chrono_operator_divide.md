@@ -28,333 +28,731 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::operator/`由`<asc/std/chrono>`提供，执行时长维度的时长除以标量运算。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
+`asc::std::chrono::operator/`对时长做除法，或用日历字段组装月日、年月、完整日期及第n个/最后一个星期描述。
 
-标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
+时长语义见[`duration`](chrono_duration.md)。日历有效性由相应类型的`ok()`判断。
 
 ## 函数原型
 
+通过`left / right`调用；隐藏友元通过实参相关查找参与，不能依赖限定命名空间查找。
+
 ### 原型1
 
-```cpp
-namespace asc::std::chrono {
-template <class Rep2, enable_if_t<!__is_asc_std_duration_v<Rep2> && is_convertible_v<const Rep2&, common_type_t<Rep, Rep2>>, int> = 0> constexpr duration<common_type_t<Rep, Rep2>, Period> operator/(const duration& lhs, const Rep2& rhs);
-} // namespace asc::std::chrono
-```
+所属类型：[`duration<Rep, Period>`](chrono_duration.md)。以下为类内隐藏友元声明，类模板参数（如有）由所属类型提供。声明摘要省略仅供重载选择的实现参数：`Rep2`不得为`duration`，且`const Rep2&`须能转换到`common_type_t<Rep, Rep2>`。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+template <class Rep2>
+[[nodiscard]] friend constexpr duration<common_type_t<Rep, Rep2>, Period> operator/(const duration& left, const Rep2& right);
+```
 
 ### 原型2
 
-```cpp
-namespace asc::std::chrono {
-template <class Rep2, class Period2> constexpr common_type_t<Rep, Rep2> operator/(const duration& lhs, const duration<Rep2, Period2>& rhs);
-} // namespace asc::std::chrono
-```
+所属类型：[`duration<Rep, Period>`](chrono_duration.md)。以下为类内隐藏友元声明，类模板参数（如有）由所属类型提供。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+template <class Rep2, class Period2>
+[[nodiscard]] friend constexpr common_type_t<Rep, Rep2> operator/(const duration& left, const duration<Rep2, Period2>& right);
+```
 
 ### 原型3
 
-```cpp
-namespace asc::std::chrono {
-constexpr month_day operator/(const chrono::day& lhs, int rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_day operator/(const chrono::month& left, const chrono::day& right) noexcept;
+```
 
 ### 原型4
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month operator/(const chrono::year& lhs, const chrono::month& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_day operator/(const chrono::day& left, const chrono::month& right) noexcept;
+```
 
 ### 原型5
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month operator/(const chrono::year& lhs, int rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_day operator/(const chrono::month& left, int right) noexcept;
+```
 
 ### 原型6
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_day operator/(const year_month& lhs, const day& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_day operator/(int left, const chrono::day& right) noexcept;
+```
 
 ### 原型7
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_day operator/(const year_month& lhs, int rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_day operator/(const chrono::day& left, int right) noexcept;
+```
 
 ### 原型8
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_day operator/(const year& lhs, const month_day& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_day_last operator/(const chrono::month& left, last_spec right) noexcept;
+```
 
 ### 原型9
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_day operator/(int lhs, const month_day& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_day_last operator/(last_spec left, const chrono::month& right) noexcept;
+```
 
 ### 原型10
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_day operator/(const month_day& lhs, const year& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_day_last operator/(int left, last_spec right) noexcept;
+```
 
 ### 原型11
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_day operator/(const month_day& lhs, int rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_day_last operator/(last_spec left, int right) noexcept;
+```
 
 ### 原型12
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_day_last operator/(const year_month& lhs, last_spec rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_weekday operator/(const chrono::month& left, const chrono::weekday_indexed& right) noexcept;
+```
 
 ### 原型13
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_day_last operator/(const year& lhs, const month_day_last& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_weekday operator/(int left, const chrono::weekday_indexed& right) noexcept;
+```
 
 ### 原型14
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_day_last operator/(int lhs, const month_day_last& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_weekday operator/(const chrono::weekday_indexed& left, const chrono::month& right) noexcept;
+```
 
 ### 原型15
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_day_last operator/(const month_day_last& lhs, const year& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_weekday operator/(const chrono::weekday_indexed& left, int right) noexcept;
+```
 
 ### 原型16
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_day_last operator/(const month_day_last& lhs, int rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_weekday_last operator/(const chrono::month& left, const chrono::weekday_last& right) noexcept;
+```
 
 ### 原型17
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_weekday operator/(const year_month& lhs, const weekday_indexed& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_weekday_last operator/(int left, const chrono::weekday_last& right) noexcept;
+```
 
 ### 原型18
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_weekday operator/(const year& lhs, const chrono::month_weekday_indexed& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_weekday_last operator/(const chrono::weekday_last& left, const chrono::month& right) noexcept;
+```
 
 ### 原型19
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_weekday operator/(int lhs, const chrono::month_weekday_indexed& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr month_weekday_last operator/(const chrono::weekday_last& left, int right) noexcept;
+```
 
 ### 原型20
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_weekday operator/(const chrono::month_weekday_indexed& lhs, const year& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr year_month operator/(const chrono::year& left, const chrono::month& right) noexcept;
+```
 
 ### 原型21
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_weekday operator/(const chrono::month_weekday_indexed& lhs, int rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr year_month operator/(const chrono::year& left, int right) noexcept;
+```
 
 ### 原型22
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_weekday_last operator/(const year_month& lhs, const weekday_last& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr year_month_day operator/(const year_month& left, const day& right) noexcept;
+```
 
 ### 原型23
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_weekday_last operator/(const year& lhs, const chrono::month_weekday_last& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr year_month_day operator/(const year_month& left, int right) noexcept;
+```
 
 ### 原型24
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_weekday_last operator/(int lhs, const chrono::month_weekday_last& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr year_month_day operator/(const year& left, const month_day& right) noexcept;
+```
 
 ### 原型25
 
-```cpp
-namespace asc::std::chrono {
-constexpr year_month_weekday_last operator/(const chrono::month_weekday_last& lhs, const year& rhs) noexcept;
-} // namespace asc::std::chrono
-```
+位于`asc::std::chrono`命名空间。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+[[nodiscard]] constexpr year_month_day operator/(int left, const month_day& right) noexcept;
+```
 
 ### 原型26
 
+位于`asc::std::chrono`命名空间。
+
 ```cpp
-namespace asc::std::chrono {
-constexpr year_month_weekday_last operator/(const chrono::month_weekday_last& lhs, int rhs) noexcept;
-} // namespace asc::std::chrono
+[[nodiscard]] constexpr year_month_day operator/(const month_day& left, const year& right) noexcept;
 ```
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+### 原型27
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_day operator/(const month_day& left, int right) noexcept;
+```
+
+### 原型28
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_day_last operator/(const year_month& left, last_spec right) noexcept;
+```
+
+### 原型29
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_day_last operator/(const year& left, const month_day_last& right) noexcept;
+```
+
+### 原型30
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_day_last operator/(int left, const month_day_last& right) noexcept;
+```
+
+### 原型31
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_day_last operator/(const month_day_last& left, const year& right) noexcept;
+```
+
+### 原型32
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_day_last operator/(const month_day_last& left, int right) noexcept;
+```
+
+### 原型33
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_weekday operator/(const year_month& left, const weekday_indexed& right) noexcept;
+```
+
+### 原型34
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_weekday operator/(const year& left, const month_weekday& right) noexcept;
+```
+
+### 原型35
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+constexpr year_month_weekday operator/(int left, const month_weekday& right) noexcept;
+```
+
+### 原型36
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_weekday operator/(const month_weekday& left, const year& right) noexcept;
+```
+
+### 原型37
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_weekday operator/(const month_weekday& left, int right) noexcept;
+```
+
+### 原型38
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_weekday_last operator/(const year_month& left, const weekday_last& right) noexcept;
+```
+
+### 原型39
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_weekday_last operator/(const year& left, const month_weekday_last& right) noexcept;
+```
+
+### 原型40
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_weekday_last operator/(int left, const month_weekday_last& right) noexcept;
+```
+
+### 原型41
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_weekday_last operator/(const month_weekday_last& left, const year& right) noexcept;
+```
+
+### 原型42
+
+位于`asc::std::chrono`命名空间。
+
+```cpp
+[[nodiscard]] constexpr year_month_weekday_last operator/(const month_weekday_last& left, int right) noexcept;
+```
 
 ## 参数说明
+
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rep2` | 另一时长或标量的计数类型；运算时与Rep形成公共类型。 |
-| `Period2` | 另一时长的计时周期，是表示秒比例的ratio类型。 |
+| `Rep2` | 另一操作数的计数或标量表示类型；与Rep形成公共计数类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 参与操作的对象引用；调用期间被引用对象须保持有效。 |
-| `rhs` | 输入 | 参与操作的对象引用；调用期间被引用对象须保持有效。 |
+| `left` | 输入 | 时长值；计数单位由其period决定，与另一时长运算时先形成公共计时周期。 |
+| `right` | 输入 | 除数；须能转换到公共计数类型，取模时还须支持余数运算。 |
+
+### 原型2的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Rep2` | 另一操作数的计数或标量表示类型；与Rep形成公共计数类型。 |
+| `Period2` | 另一时长的tick周期，是以秒为基准的ratio类型。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 时长值；计数单位由其period决定，与另一时长运算时先形成公共计时周期。 |
+| `right` | 输入 | 时长值；计数单位由其period决定，与另一时长运算时先形成公共计时周期。 |
+
+### 原型3的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 月字段，1到12分别表示一月至十二月。 |
+| `right` | 输入 | 日字段，通常为1到31；不携带月份或年份。 |
+
+### 原型4的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 日字段，通常为1到31；不携带月份或年份。 |
+| `right` | 输入 | 月字段，1到12分别表示一月至十二月。 |
+
+### 原型5的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 月字段，1到12分别表示一月至十二月。 |
+| `right` | 输入 | 按日字段构造的整数值；有效域与对应日历字段相同。 |
+
+### 原型6的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 按月份字段构造的整数值；有效域与对应日历字段相同。 |
+| `right` | 输入 | 日字段，通常为1到31；不携带月份或年份。 |
+
+### 原型7的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 日字段，通常为1到31；不携带月份或年份。 |
+| `right` | 输入 | 按月份字段构造的整数值；有效域与对应日历字段相同。 |
+
+### 原型8的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 月字段，1到12分别表示一月至十二月。 |
+| `right` | 输入 | 月末标签，不保存具体日数或星期。 |
+
+### 原型9的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 月末标签，不保存具体日数或星期。 |
+| `right` | 输入 | 月字段，1到12分别表示一月至十二月。 |
+
+### 原型10的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 按月份字段构造的整数值；有效域与对应日历字段相同。 |
+| `right` | 输入 | 月末标签，不保存具体日数或星期。 |
+
+### 原型11的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 月末标签，不保存具体日数或星期。 |
+| `right` | 输入 | 按月份字段构造的整数值；有效域与对应日历字段相同。 |
+
+### 原型12的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 月字段，1到12分别表示一月至十二月。 |
+| `right` | 输入 | 星期与该月内序号的组合；序号1到5表示第几个该星期。 |
+
+### 原型13的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 按月份字段构造的整数值；有效域与对应日历字段相同。 |
+| `right` | 输入 | 星期与该月内序号的组合；序号1到5表示第几个该星期。 |
+
+### 原型14的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 星期与该月内序号的组合；序号1到5表示第几个该星期。 |
+| `right` | 输入 | 月字段，1到12分别表示一月至十二月。 |
+
+### 原型15的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 星期与该月内序号的组合；序号1到5表示第几个该星期。 |
+| `right` | 输入 | 按月份字段构造的整数值；有效域与对应日历字段相同。 |
+
+### 原型16的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 月字段，1到12分别表示一月至十二月。 |
+| `right` | 输入 | 该月最后一次出现的指定星期。 |
+
+### 原型17的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 按月份字段构造的整数值；有效域与对应日历字段相同。 |
+| `right` | 输入 | 该月最后一次出现的指定星期。 |
+
+### 原型18的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 该月最后一次出现的指定星期。 |
+| `right` | 输入 | 月字段，1到12分别表示一月至十二月。 |
+
+### 原型19的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 该月最后一次出现的指定星期。 |
+| `right` | 输入 | 按月份字段构造的整数值；有效域与对应日历字段相同。 |
+
+### 原型20的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 年字段，有效范围为-32767到32767。 |
+| `right` | 输入 | 月字段，1到12分别表示一月至十二月。 |
+
+### 原型21的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 年字段，有效范围为-32767到32767。 |
+| `right` | 输入 | 按月份字段构造的整数值；有效域与对应日历字段相同。 |
+
+### 原型22的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 年份与月份的组合。 |
+| `right` | 输入 | 日字段，通常为1到31；不携带月份或年份。 |
+
+### 原型23的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 年份与月份的组合。 |
+| `right` | 输入 | 按日字段构造的整数值；有效域与对应日历字段相同。 |
+
+### 原型24的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 年字段，有效范围为-32767到32767。 |
+| `right` | 输入 | 月与日字段的组合，不含年份。 |
+
+### 原型25的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 按年份字段构造的整数值；有效域与对应日历字段相同。 |
+| `right` | 输入 | 月与日字段的组合，不含年份。 |
+
+### 原型26的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 月与日字段的组合，不含年份。 |
+| `right` | 输入 | 年字段，有效范围为-32767到32767。 |
+
+### 原型27的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 月与日字段的组合，不含年份。 |
+| `right` | 输入 | 按年份字段构造的整数值；有效域与对应日历字段相同。 |
+
+### 原型28的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 年份与月份的组合。 |
+| `right` | 输入 | 月末标签，不保存具体日数或星期。 |
+
+### 原型29的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 年字段，有效范围为-32767到32767。 |
+| `right` | 输入 | 某月最后一天的标签组合。 |
+
+### 原型30的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 按年份字段构造的整数值；有效域与对应日历字段相同。 |
+| `right` | 输入 | 某月最后一天的标签组合。 |
+
+### 原型31的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 某月最后一天的标签组合。 |
+| `right` | 输入 | 年字段，有效范围为-32767到32767。 |
+
+### 原型32的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 某月最后一天的标签组合。 |
+| `right` | 输入 | 按年份字段构造的整数值；有效域与对应日历字段相同。 |
+
+### 原型33的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 年份与月份的组合。 |
+| `right` | 输入 | 星期与该月内序号的组合；序号1到5表示第几个该星期。 |
+
+### 原型34的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 年字段，有效范围为-32767到32767。 |
+| `right` | 输入 | 月份与第n个星期的组合。 |
+
+### 原型35的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 按年份字段构造的整数值；有效域与对应日历字段相同。 |
+| `right` | 输入 | 月份与第n个星期的组合。 |
+
+### 原型36的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 月份与第n个星期的组合。 |
+| `right` | 输入 | 年字段，有效范围为-32767到32767。 |
+
+### 原型37的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 月份与第n个星期的组合。 |
+| `right` | 输入 | 按年份字段构造的整数值；有效域与对应日历字段相同。 |
+
+### 原型38的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 年份与月份的组合。 |
+| `right` | 输入 | 该月最后一次出现的指定星期。 |
+
+### 原型39的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 年字段，有效范围为-32767到32767。 |
+| `right` | 输入 | 月份与最后一个指定星期的组合。 |
+
+### 原型40的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 按年份字段构造的整数值；有效域与对应日历字段相同。 |
+| `right` | 输入 | 月份与最后一个指定星期的组合。 |
+
+### 原型41的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 月份与最后一个指定星期的组合。 |
+| `right` | 输入 | 年字段，有效范围为-32767到32767。 |
+
+### 原型42的参数
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 月份与最后一个指定星期的组合。 |
+| `right` | 输入 | 按年份字段构造的整数值；有效域与对应日历字段相同。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `duration<common_type_t<Rep, Rep2>, Period>` | duration除标量时返回缩放后的duration，两个duration相除时返回标量商；日历的 / 形式组合相应的年、月、日或星期字段。 |
-| `common_type_t<Rep, Rep2>` | duration除标量时返回缩放后的duration，两个duration相除时返回标量商；日历的 / 形式组合相应的年、月、日或星期字段。 |
-| `month_day` | duration除标量时返回缩放后的duration，两个duration相除时返回标量商；日历的 / 形式组合相应的年、月、日或星期字段。 |
-| `year_month` | duration除标量时返回缩放后的duration，两个duration相除时返回标量商；日历的 / 形式组合相应的年、月、日或星期字段。 |
-| `year_month_day` | duration除标量时返回缩放后的duration，两个duration相除时返回标量商；日历的 / 形式组合相应的年、月、日或星期字段。 |
-| `year_month_day_last` | duration除标量时返回缩放后的duration，两个duration相除时返回标量商；日历的 / 形式组合相应的年、月、日或星期字段。 |
-| `year_month_weekday` | duration除标量时返回缩放后的duration，两个duration相除时返回标量商；日历的 / 形式组合相应的年、月、日或星期字段。 |
-| `year_month_weekday_last` | duration除标量时返回缩放后的duration，两个duration相除时返回标量商；日历的 / 形式组合相应的年、月、日或星期字段。 |
+| 适用原型 | 返回类型 | 含义 |
+| --- | --- | --- |
+| 原型1 | `duration<common_type_t<Rep, Rep2>, Period>` | 时长计数除以标量，返回保持原period的duration。 |
+| 原型2 | `common_type_t<Rep, Rep2>` | 两时长换成公共周期后相除，返回公共计数类型的无量纲商。 |
+| 原型3 | `month_day` | 将两侧日历字段或标签组装为month_day；不执行数值除法。 |
+| 原型4 | `month_day` | 将两侧日历字段或标签组装为month_day；不执行数值除法。 |
+| 原型5 | `month_day` | 将两侧日历字段或标签组装为month_day；不执行数值除法。 |
+| 原型6 | `month_day` | 将两侧日历字段或标签组装为month_day；不执行数值除法。 |
+| 原型7 | `month_day` | 将两侧日历字段或标签组装为month_day；不执行数值除法。 |
+| 原型8 | `month_day_last` | 将两侧日历字段或标签组装为month_day_last；不执行数值除法。 |
+| 原型9 | `month_day_last` | 将两侧日历字段或标签组装为month_day_last；不执行数值除法。 |
+| 原型10 | `month_day_last` | 将两侧日历字段或标签组装为month_day_last；不执行数值除法。 |
+| 原型11 | `month_day_last` | 将两侧日历字段或标签组装为month_day_last；不执行数值除法。 |
+| 原型12 | `month_weekday` | 将两侧日历字段或标签组装为month_weekday；不执行数值除法。 |
+| 原型13 | `month_weekday` | 将两侧日历字段或标签组装为month_weekday；不执行数值除法。 |
+| 原型14 | `month_weekday` | 将两侧日历字段或标签组装为month_weekday；不执行数值除法。 |
+| 原型15 | `month_weekday` | 将两侧日历字段或标签组装为month_weekday；不执行数值除法。 |
+| 原型16 | `month_weekday_last` | 将两侧日历字段或标签组装为month_weekday_last；不执行数值除法。 |
+| 原型17 | `month_weekday_last` | 将两侧日历字段或标签组装为month_weekday_last；不执行数值除法。 |
+| 原型18 | `month_weekday_last` | 将两侧日历字段或标签组装为month_weekday_last；不执行数值除法。 |
+| 原型19 | `month_weekday_last` | 将两侧日历字段或标签组装为month_weekday_last；不执行数值除法。 |
+| 原型20 | `year_month` | 将两侧日历字段或标签组装为year_month；不执行数值除法。 |
+| 原型21 | `year_month` | 将两侧日历字段或标签组装为year_month；不执行数值除法。 |
+| 原型22 | `year_month_day` | 将两侧日历字段或标签组装为year_month_day；不执行数值除法。 |
+| 原型23 | `year_month_day` | 将两侧日历字段或标签组装为year_month_day；不执行数值除法。 |
+| 原型24 | `year_month_day` | 将两侧日历字段或标签组装为year_month_day；不执行数值除法。 |
+| 原型25 | `year_month_day` | 将两侧日历字段或标签组装为year_month_day；不执行数值除法。 |
+| 原型26 | `year_month_day` | 将两侧日历字段或标签组装为year_month_day；不执行数值除法。 |
+| 原型27 | `year_month_day` | 将两侧日历字段或标签组装为year_month_day；不执行数值除法。 |
+| 原型28 | `year_month_day_last` | 将两侧日历字段或标签组装为year_month_day_last；不执行数值除法。 |
+| 原型29 | `year_month_day_last` | 将两侧日历字段或标签组装为year_month_day_last；不执行数值除法。 |
+| 原型30 | `year_month_day_last` | 将两侧日历字段或标签组装为year_month_day_last；不执行数值除法。 |
+| 原型31 | `year_month_day_last` | 将两侧日历字段或标签组装为year_month_day_last；不执行数值除法。 |
+| 原型32 | `year_month_day_last` | 将两侧日历字段或标签组装为year_month_day_last；不执行数值除法。 |
+| 原型33 | `year_month_weekday` | 将两侧日历字段或标签组装为year_month_weekday；不执行数值除法。 |
+| 原型34 | `year_month_weekday` | 将两侧日历字段或标签组装为year_month_weekday；不执行数值除法。 |
+| 原型35 | `year_month_weekday` | 将两侧日历字段或标签组装为year_month_weekday；不执行数值除法。 |
+| 原型36 | `year_month_weekday` | 将两侧日历字段或标签组装为year_month_weekday；不执行数值除法。 |
+| 原型37 | `year_month_weekday` | 将两侧日历字段或标签组装为year_month_weekday；不执行数值除法。 |
+| 原型38 | `year_month_weekday_last` | 将两侧日历字段或标签组装为year_month_weekday_last；不执行数值除法。 |
+| 原型39 | `year_month_weekday_last` | 将两侧日历字段或标签组装为year_month_weekday_last；不执行数值除法。 |
+| 原型40 | `year_month_weekday_last` | 将两侧日历字段或标签组装为year_month_weekday_last；不执行数值除法。 |
+| 原型41 | `year_month_weekday_last` | 将两侧日历字段或标签组装为year_month_weekday_last；不执行数值除法。 |
+| 原型42 | `year_month_weekday_last` | 将两侧日历字段或标签组装为year_month_weekday_last；不执行数值除法。 |
 
 ## 约束说明
 
-- 右操作数须为可转换到公共计数类型的标量且不得为时长类型。
-- 两个时长先转换为公共时长类型，商为公共计数类型的计数值。
-- 右操作数为月份取值，语义等价于先以该整数构造月份再组装month_day。
-- 两个操作数分别提供年份与月份。
-- 右操作数先按月份取值构造月份。
-- 左操作数提供年份与月份，右操作数提供日期。
-- 右操作数先按日期取值构造日期。
-- 左操作数提供年份，右操作数提供月份与日期。
-- 左操作数先按年份取值构造年份。
-- 交换方向的组装语义，结果与年份在前时一致。
-- 右操作数先按年份取值构造年份。
-- 右操作数为月末标记，组装结果表示该年该月的最后一天。
-- 左操作数提供年份，右操作数提供月份与月末标记。
-- 左操作数提供年份与月份，右操作数提供星期与序号。
-- 左操作数提供年份，右操作数提供月份与带序号星期。
-- 左操作数提供年份与月份，右操作数提供星期与月末标记。
-- 左操作数提供年份，右操作数提供月份与月末星期。
+- 计数及中间运算须可表示。
+- 日历运算不隐式校正无效日期；结果是否有效由相应类型的`ok()`判断。
+- 对整型计数，当前实现把转换后为0的除数按1处理；这不是标准chrono的零除数保证。需要标准可移植语义时使用非零除数；有符号最小值除以-1不可表示时不得调用。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/chrono>
-#include <asc/std/limits>
 
 bool example()
 {
-    asc::std::chrono::seconds left{2}, right{3};
-    return right / left == 1;
+    const auto last_day = asc::std::chrono::year{2024} / asc::std::chrono::month{2}
+        / asc::std::chrono::last;
+    const auto ratio = asc::std::chrono::seconds{7} / asc::std::chrono::seconds{2};
+    return ratio == 3 && static_cast<unsigned>(last_day.day()) == 29;
 }
 ```
 

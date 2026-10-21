@@ -65,8 +65,8 @@ ASC-STL is organized as a header-only library. Public headers live under `includ
 asc-stl/
 ├── include/
 │   └── asc/                         # Root of the ASC-STL public headers
+│       ├── __config                 # Unified configuration entry
 │       ├── std/                     # C++ standard library interfaces: <asc/std/...> (v1.0.0)
-│       │   ├── detail/              # Unified configuration entry
 │       │   └── ...                  # Other internal implementation directories (__ prefix)
 │       ├── algorithm                # Device parallel algorithms (v1.0.0)
 │       ├── atomic                   # Device atomic operations (v1.0.0)
@@ -93,7 +93,7 @@ The public headers under `include/asc/std/` provide the standard-library entry p
 
 For a quick tour of using ASC-STL, see [Quick Start](docs/zh/quick_start.md) (in Chinese): environment setup, usage on the Host and in kernels, compiling and running, and local verification — with tested Host and Kernel examples.
 
-Usage in one line: ASC-STL is header-only — **just include the public headers; there is nothing to build or link**. Host-side use only needs a C++17 compiler; kernel compilation and on-device execution require CANN (see [Software/Hardware Compatibility](#-softwarehardware-compatibility)).
+ASC-STL itself is header-only and has no separate library to build. Ordinary Host algorithms and type facilities can be used by including their public headers. Runtime APIs backed by AscendCL additionally require the corresponding CANN runtime, linking against `ascendcl`, and the required device/resource initialization. Host use needs a C++17 compiler and the required system libraries; kernel compilation and execution require CANN (see [Software/Hardware Compatibility](#-softwarehardware-compatibility)).
 
 ### Requirements
 

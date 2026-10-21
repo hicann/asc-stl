@@ -16,6 +16,7 @@
 
 #include <acl/acl.h>
 #include <iostream>
+#include "../../../../../../support/hardware_runtime.h"
 
 #include "../semantics.h"
 
@@ -45,6 +46,7 @@ bool verify(const int* input, const int* output, int callback_count)
 
 int main()
 {
+    asc_stl_test::hardware_runtime runtime;
     int host_input[16] = {1, 2, 3, 4, 4, 1, 3, 2, 1, 3, 2, 4, 1, 1, 2, 2};
     int host_output[64]{};
     int* device_input = nullptr;
@@ -56,7 +58,7 @@ int main()
     int synchronization_status = -1;
     int input_copy_status = -1;
     int output_copy_status = -1;
-    bool passed = aclInit(nullptr) == ACL_SUCCESS && aclrtSetDevice(0) == ACL_SUCCESS &&
+    bool passed = runtime.initialize(nullptr) == ACL_SUCCESS && runtime.set_device(0) == ACL_SUCCESS &&
         aclrtCreateStream(&stream) == ACL_SUCCESS &&
         aclrtMalloc(reinterpret_cast<void**>(&device_input), sizeof(host_input), ACL_MEM_MALLOC_HUGE_FIRST) ==
             ACL_SUCCESS &&
@@ -65,7 +67,7 @@ int main()
         aclrtMalloc(&workspace, 256, ACL_MEM_MALLOC_HUGE_FIRST) == ACL_SUCCESS &&
         aclrtMemcpy(device_input, sizeof(host_input), host_input, sizeof(host_input), ACL_MEMCPY_HOST_TO_DEVICE) ==
             ACL_SUCCESS;
-    if (passed) {
+    if (passed && runtime.ready()) {
 #if ASC_STL_B019_simt
         submission_status = launch_asc_stl_b019_simt(device_input, device_output, workspace, stream, &callback_count);
 #else
@@ -73,7 +75,7 @@ int main()
 #endif
         passed = submission_status == 0;
         if (passed) {
-            synchronization_status = aclrtSynchronizeStream(stream);
+            synchronization_status = runtime.synchronize(stream);
             passed = synchronization_status == ACL_SUCCESS;
         }
         if (passed) {
@@ -89,15 +91,16 @@ int main()
         passed = passed && verify(host_input, host_output, callback_count);
     }
     if (workspace)
-        passed = aclrtFree(workspace) == ACL_SUCCESS && passed;
+        passed = runtime.free_device(workspace) == ACL_SUCCESS && passed;
     if (device_output)
-        passed = aclrtFree(device_output) == ACL_SUCCESS && passed;
+        passed = runtime.free_device(device_output) == ACL_SUCCESS && passed;
     if (device_input)
-        passed = aclrtFree(device_input) == ACL_SUCCESS && passed;
+        passed = runtime.free_device(device_input) == ACL_SUCCESS && passed;
     if (stream)
-        passed = aclrtDestroyStream(stream) == ACL_SUCCESS && passed;
-    passed = aclrtResetDevice(0) == ACL_SUCCESS && passed;
-    passed = aclFinalize() == ACL_SUCCESS && passed;
+        passed = runtime.destroy_stream(stream) == ACL_SUCCESS && passed;
+    passed = runtime.reset_device(0) == ACL_SUCCESS && passed;
+    passed = runtime.finalize() == ACL_SUCCESS && passed;
+    passed = runtime.finish(passed) == 0;
     if (passed) {
         std::cout << "ASC_STL_HARDWARE_B019_PASS\n";
     } else {

@@ -97,7 +97,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr __unsigned_integer_result_t<T,
 {
     using _Up = _If<(sizeof(T) <= 4), uint32_t, T>;
     CANN_ASC_STL_DETAIL_ASSERT(
-        value <= numeric_limits<T>::max() / 2, "bit_ceil overflow");  // NOLINT(build/include_what_you_use)
+        value <= numeric_limits<T>::max() / 2 + 1, "bit_ceil overflow");  // NOLINT(build/include_what_you_use)
     // For value == 0, value - 1 is all ones, bit_width yields the width, and
     // the constant branch returns 1
     const auto __width = static_cast<uint32_t>(::asc::std::bit_width(static_cast<_Up>(value) - 1));

@@ -43,7 +43,7 @@ constexpr hh_mm_ss() noexcept;
 ### 原型2
 
 ```cpp
-constexpr hh_mm_ss(Duration duration) noexcept;
+explicit constexpr hh_mm_ss(Duration duration) noexcept;
 ```
 
 ## 参数说明
@@ -66,7 +66,9 @@ constexpr hh_mm_ss(Duration duration) noexcept;
 
 ## 约束说明
 
-- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
+- Duration须为duration，其计数须满足chrono::abs的有符号条件；当前实现不接受无符号计数。
+- 原始时长的绝对值及拆分后的字段必须可表示；有符号最小负值不能取绝对值时不得传入。
+- 负号单独保存，时、分、秒与小数秒字段保存绝对值的各部分。
 
 ## 调用示例
 

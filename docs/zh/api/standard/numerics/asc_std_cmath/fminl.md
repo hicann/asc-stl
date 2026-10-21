@@ -34,11 +34,17 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-long double fminl(long double value1, long double value2) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr long double fminl(long double x, long double y) noexcept;
+}
 ```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
 ## 参数说明
 
@@ -46,29 +52,30 @@ long double fminl(long double value1, long double value2) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value1` | 输入 | 参与求较小值的第一个操作数（无量纲）；任一操作数为NaN时返回另一个操作数。 |
-| `value2` | 输入 | 参与求较小值的第二个操作数（无量纲）；任一操作数为NaN时返回另一个操作数。 |
+| `x` | 输入 | 参与求较小值的第一个操作数（无量纲）；任一操作数为NaN时返回另一个操作数。 |
+| `y` | 输入 | 参与求较小值的第一个操作数（无量纲）；任一操作数为NaN时返回另一个操作数。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `long double` | 两个实参中较小的值；恰有一个NaN时返回另一实参。 |
+返回类型按各原型确定（`long double`）。返回两个输入中的较小值；仅一个输入为NaN时返回另一个非NaN值。
 
 ## 约束说明
+
+- Host标准整型输入提升为double；Device整型提升分支被静态断言拒绝。float、double、long double及扩展类型的实例还须由目标编译模式支持。
 
 - NaN感知：仅当两实参均为NaN时返回NaN，恒不抛出。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(long double value1, long double value2)
+bool example()
 {
-    return asc::std::fminl(value1, value2);
+    const auto result = asc::std::fminl(2.0L, 5.0L);
+    return result == 2.0L;
 }
 ```
 

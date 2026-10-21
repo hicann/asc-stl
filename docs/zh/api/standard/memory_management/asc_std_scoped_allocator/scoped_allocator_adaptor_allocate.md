@@ -34,79 +34,64 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。
-
-### 原型1
+所属类型：[`scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。仅提供此单参数形式，不提供带hint的重载。
 
 ```cpp
-// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
 pointer allocate(size_type count);
-```
-
-### 原型2
-
-```cpp
-// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
-pointer allocate(size_type count, const_void_pointer hint);
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `count` | 输入 | 待申请存储可容纳的元素个数，按count个value_type对象申请。 |
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `count` | 输入 | 待申请存储可容纳的元素个数，按count个value_type对象申请。 |
-| `hint` | 输入 | 局部性提示地址，通常取自同一适配器先前返回的指针；可为空，底层分配器可忽略。 |
+| `count` | 输入 | 向外层分配器申请的value_type对象数量；不在所得存储中构造对象。 |
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `pointer` | 返回分配器取得的存储地址；须按对应分配器规则释放。 |
-| 原型2 | `pointer` | 返回分配器取得的存储地址；须按对应分配器规则释放。 |
+| 返回值类型 | 含义 |
+| --- | --- |
+| `pointer` | 外层分配器allocate返回的存储地址；按同一分配器的约定释放。 |
 
 ## 约束说明
 
-- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
-- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
+- 直接调用外层分配器`allocate(count)`，没有提示地址重载；数量及失败行为由外层分配器决定。
+- 所得存储尚未构造元素；使用后按对应分配器的规则释放。
 
 ## 调用示例
 
-以下Host片段使用显式提供的分配器并完整释放存储；设备端须改用目标位置可调用的分配器。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
+#include <asc/std/memory>
 #include <asc/std/scoped_allocator>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
+#include <limits>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
+template<class T>
+struct example_allocator {
     using value_type = T;
     using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    using size_type = std::size_t;
+    using difference_type = std::ptrdiff_t;
+    template<class U> struct rebind { using other = example_allocator<U>; };
+    int identity = 0;
+    T* allocate(size_type count) { return std::allocator<T>{}.allocate(count); }
+    void deallocate(T* address, size_type count) { std::allocator<T>{}.deallocate(address, count); }
+    size_type max_size() const noexcept { return std::numeric_limits<size_type>::max() / sizeof(T); }
 };
 
-void example(asc::std::scoped_allocator_adaptor<example_allocator<int>>& allocator)
+bool example()
 {
+    using adaptor = asc::std::scoped_allocator_adaptor<example_allocator<int>>;
+    adaptor allocator(example_allocator<int>{7});
     int* pointer = allocator.allocate(1);
+    allocator.construct(pointer, 9);
+    const bool valid = allocator.outer_allocator().identity == 7 && *pointer == 9;
+    allocator.destroy(pointer);
     allocator.deallocate(pointer, 1);
+    return valid;
 }
 ```
 

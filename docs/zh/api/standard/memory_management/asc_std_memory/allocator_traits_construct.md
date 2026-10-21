@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::allocator_traits 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class T, class ...Args> constexpr void construct(allocator_type& allocator, T* pointer, Args&&... args);
+template<class T, class ...Args> static constexpr void construct(allocator_type& allocator, T* pointer, Args&&... args);
 ```
 
 ## 参数说明
@@ -56,7 +56,7 @@ template<class T, class ...Args> constexpr void construct(allocator_type& alloca
 | --- | --- | --- |
 | `allocator` | 输入/输出 | 负责对象存储分配与释放的分配器。 |
 | `pointer` | 输出 | 满足目标对象大小与对齐的未初始化存储地址；调用在该处开始对象生命周期，构造实参决定其初值。 |
-| `args` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
+| `args` | 输入 | 转发给对象构造或函数调用的实参列表。 |
 
 ## 返回值说明
 
@@ -64,12 +64,9 @@ template<class T, class ...Args> constexpr void construct(allocator_type& alloca
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- `pointer`须提供足够且正确对齐的未初始化存储。实参按原值类别转发。
+- 优先调用分配器可用的`construct`成员，否则直接在该地址构造`T`；不会自行执行uses-allocator参数注入。
+- Device使用须保证对应构造和分配器操作可在该位置调用且不抛出异常。
 
 ## 调用示例
 

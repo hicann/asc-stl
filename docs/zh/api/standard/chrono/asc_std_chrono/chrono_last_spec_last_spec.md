@@ -34,45 +34,15 @@
 
 ## 函数原型
 
-### 原型1
+last_spec是空标记类型；默认构造为显式，复制及移动由编译器隐式生成。
 
 ```cpp
-constexpr last_spec() noexcept;
-```
-
-### 原型2
-
-```cpp
-constexpr last_spec(const last_spec& value);
-```
-
-### 原型3
-
-```cpp
-constexpr last_spec(last_spec&& value);
+explicit last_spec() = default;
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
-无参数。
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 用于复制构造的last_spec标记对象。 |
-
-### 原型3的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入/输出 | 用于移动构造的last_spec标记对象。 |
+默认构造无参数。编译器生成的复制和移动构造接受另一个last_spec对象，仅复制空标签，不转移资源。
 
 ## 返回值说明
 

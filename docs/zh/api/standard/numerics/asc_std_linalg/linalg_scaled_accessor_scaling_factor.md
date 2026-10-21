@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::linalg::scaled_accessor 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr ScalingFactor scaling_factor() const noexcept;
+constexpr ScalingFactor scaling_factor() const noexcept;
 ```
 
 ## 参数说明

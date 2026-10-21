@@ -39,13 +39,13 @@
 ```cpp
 namespace asc::std::ranges {
 for_each(first, last, function, projection);
-} // namespace asc::std::ranges
+}  // namespace asc::std::ranges
 ```
 
 ```cpp
 namespace asc::std::ranges {
 for_each(range, function, projection);
-} // namespace asc::std::ranges
+}  // namespace asc::std::ranges
 ```
 
 ## 参数说明
@@ -57,7 +57,7 @@ for_each(range, function, projection);
 | `first` | 输入 | 输入范围的起始迭代器。 |
 | `last` | 输入 | 输入范围的结束哨兵。 |
 | `function` | 输入 | 对输入元素执行操作的可调用对象。 |
-| `projection` | 输入 | 在比较或判断前作用于元素的投影函数。 |
+| `projection` | 输入 | 在比较或判断前作用于元素的投影函数；省略时使用`asc::std::identity`。 |
 
 ### 调用形式2的参数
 
@@ -65,7 +65,7 @@ for_each(range, function, projection);
 | --- | --- | --- |
 | `range` | 输入 | 待访问或变换的输入范围；借用结果受其生命周期约束。 |
 | `function` | 输入 | 对输入元素执行操作的可调用对象。 |
-| `projection` | 输入 | 在比较或判断前作用于元素的投影函数。 |
+| `projection` | 输入 | 在比较或判断前作用于元素的投影函数；省略时使用`asc::std::identity`。 |
 
 ## 返回值说明
 

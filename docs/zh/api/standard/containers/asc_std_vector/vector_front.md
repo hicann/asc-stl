@@ -69,11 +69,8 @@ reference front() noexcept;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 调用前容器须非空；本接口不执行边界检查。
+- 返回引用不延长元素生命周期；释放或重新分配存储、销毁对应元素后，原引用失效。
 
 ## 调用示例
 

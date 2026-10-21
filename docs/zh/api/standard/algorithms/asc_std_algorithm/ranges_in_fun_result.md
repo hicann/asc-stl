@@ -38,16 +38,9 @@
 
 ```cpp
 namespace asc::std::ranges {
-template<class Iter, class Func> struct in_fun_result;
-} // namespace asc::std::ranges
-```
-
-### 原型2
-
-```cpp
-namespace asc::std::ranges {
-template<class InIter1, class Func1> struct in_fun_result;
-} // namespace asc::std::ranges
+template <class Iter, class Func>
+struct in_fun_result;
+}  // namespace asc::std::ranges
 ```
 
 ## 约束说明

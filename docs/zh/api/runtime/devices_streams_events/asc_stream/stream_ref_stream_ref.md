@@ -60,7 +60,7 @@ constexpr explicit stream_ref(asc::stream_ref::native_handle_type handle) noexce
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `handle` | 输入 | 提交或等待异步任务的Stream引用；任务完成前须保持有效。 |
+| `handle` | 输入 | Runtime原生句柄（native_handle_type，不透明void指针），不是包装器对象；adopt接管所有权，ref构造仅借用。 |
 
 ## 返回值说明
 

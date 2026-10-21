@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::args::immediate 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr immediate(T value, Bounds bounds) noexcept;
+constexpr explicit immediate(T value, Bounds bounds) noexcept;
 ```
 
 ### 原型2
@@ -73,9 +73,9 @@ constexpr explicit immediate(T value) noexcept;
 
 ## 约束说明
 
+- 立即值和Bounds按值保存在包装器内；可保存no_bounds、static_bounds或runtime_bounds，读取值不会自动校验边界。
+
 - 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 

@@ -56,22 +56,21 @@
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下示例只在显式管理的对齐原始存储中手动析构。普通自动变量应通过作用域退出析构；需要检查资源清理状态时先调用close。
 
 ```cpp
 #include <asc/stream>
-
-using example_object = asc::stream;
-void example(example_object* object)
+#include <asc/std/new>
+bool example()
 {
-    // object 指向已构造对象；析构后不得再访问该对象。
-    object->~example_object();
+    alignas(asc::stream) unsigned char storage[sizeof(asc::stream)];
+    auto* object = ::new (static_cast<void*>(storage)) asc::stream;
+    const bool initially_empty = !static_cast<bool>(*object);
+    object->~stream();
+    // storage是原始字节存储，不会再次隐式析构同一对象。
+    return initially_empty;
 }
 ```
-
-对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
-
-完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
 
 ## 关联API
 

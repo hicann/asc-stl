@@ -34,8 +34,12 @@
 
 ## 函数原型
 
+以下入口仅在Host提供。
+
 ```cpp
-int timespec_get(timespec* ts, int base) noexcept;
+namespace asc::std {
+[[nodiscard]] int timespec_get(timespec* ts, int base) noexcept;
+}
 ```
 
 ## 参数说明
@@ -44,8 +48,8 @@ int timespec_get(timespec* ts, int base) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `ts` | 输入 | 指向参与操作的数据；指针可访问范围和生命周期须满足约束说明。 |
-| `base` | 输入 | 控制本次操作的标量值；有效取值由声明和约束说明共同确定。 |
+| `ts` | 输出 | 输出时间结构；须指向有效可写timespec对象。 |
+| `base` | 输入 | 时间基准；使用TIME_UTC请求当前日历时间。不支持的基准返回0。 |
 
 ## 返回值说明
 

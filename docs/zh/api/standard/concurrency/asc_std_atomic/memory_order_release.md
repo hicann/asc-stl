@@ -34,10 +34,15 @@
 
 ## 声明
 
+以下给出枚举值所属的完整枚举声明；各名称均为`asc::std`命名空间中的枚举值。
+
 ```cpp
 namespace asc::std {
-memory_order_release;
-} // namespace asc::std
+enum memory_order {
+    memory_order_relaxed, memory_order_consume, memory_order_acquire,
+    memory_order_release, memory_order_acq_rel, memory_order_seq_cst
+};
+}
 ```
 
 ## 约束说明

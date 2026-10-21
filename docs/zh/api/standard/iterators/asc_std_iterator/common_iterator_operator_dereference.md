@@ -39,16 +39,19 @@
 ### 原型1
 
 ```cpp
-// asc::std::common_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr decltype(auto) operator*();
+// common_iterator 类内声明节选。
+constexpr decltype(auto) operator*();
 ```
 
 ### 原型2
 
 ```cpp
-// asc::std::common_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class I2> [[nodiscard]] constexpr decltype(auto) operator*() const;
+// common_iterator 类内声明节选。
+template<class I2 = Iter, class = decltype(*declval<const I2&>())>
+constexpr decltype(auto) operator*() const;
 ```
+
+const形式展示C++17及Device选择形式；Host C++20用`requires`检查相同的const解引用表达式。
 
 ## 参数说明
 
@@ -62,7 +65,7 @@ template<class I2> [[nodiscard]] constexpr decltype(auto) operator*() const;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `I2` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
+| `I2` | 成员选择类型，默认为所属类的`Iter`；须满足本原型的表达式或遍历要求。 |
 
 ## 返回值说明
 
@@ -73,20 +76,25 @@ template<class I2> [[nodiscard]] constexpr decltype(auto) operator*() const;
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- `Iter`与`Sent`是不同类型，须满足输入/输出迭代器与哨兵的配合要求；适配器保存其中一种状态。
+- 解引用、箭头访问及自增只能作用于当前持有迭代器且操作有效的对象，不能作用于哨兵状态。
+- 适配器不拥有底层范围；所指对象须在访问期间保持有效。
 
 ## 调用示例
 
-以下Host片段使用具体指针与哨兵演示调用；解引用前须保证指针有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-decltype(auto) example(int* data)
+bool example()
 {
-    asc::std::common_iterator<int*, asc::std::unreachable_sentinel_t> iterator(data);
-    return *iterator;
+    int values[] = {2, 4, 6};
+    using It = asc::std::counted_iterator<int*>;
+    using Common = asc::std::common_iterator<It, asc::std::default_sentinel_t>;
+    Common iterator(It(values, 3));
+    const Common copy(iterator);
+    return *iterator == 2 && *copy == 2;
 }
 ```
 

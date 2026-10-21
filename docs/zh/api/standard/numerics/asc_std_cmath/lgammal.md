@@ -34,11 +34,17 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-constexpr long double lgammal(long double value) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr long double lgammal(long double value) noexcept;
+}
 ```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
 ## 参数说明
 
@@ -46,13 +52,11 @@ constexpr long double lgammal(long double value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待计算Gamma函数绝对值自然对数的输入值（无量纲）；非正整数为极点，返回 ±inf。 |
+| `value` | 输入 | 待计算Gamma函数绝对值自然对数的输入值（无量纲）；非正整数为极点，返回 +inf。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `long double` | Gamma函数绝对值的自然对数。 |
+返回类型按各原型确定（`long double`）。返回Gamma函数绝对值的自然对数；非正整数极点返回正无穷。
 
 ## 约束说明
 
@@ -60,14 +64,15 @@ constexpr long double lgammal(long double value) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(long double value)
+bool example()
 {
-    return asc::std::lgammal(value);
+    const auto result = asc::std::lgammal(1.0L);
+    return result == 0.0L;
 }
 ```
 

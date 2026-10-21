@@ -36,18 +36,15 @@
 
 ## 声明
 
-所属类型：[`asc::std::inplace_vector`](inplace_vector.md)。
+所属类型：[`inplace_vector<T, Capacity>`](inplace_vector.md)。
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-using difference_type = cann_asc_stl_difference_type;
+using difference_type = ptrdiff_t;
 ```
 
 ## 约束说明
 
-- 元素保存在固定容量的对象内存中，不进行动态分配。
-- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
-- Host提供完整接口，设备端仅提供不抛出异常的接口。
+- 该别名用于元素值、容量计数或迭代器差值；类型查询本身不构造元素。
 
 ## 调用示例
 

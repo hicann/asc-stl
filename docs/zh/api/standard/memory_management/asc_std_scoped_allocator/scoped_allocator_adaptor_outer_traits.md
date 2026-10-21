@@ -3,7 +3,7 @@
 ## 产品支持情况
 
 <!-- npu="950" id1 -->
-- Ascend 950PR&950DT系列产品：支持
+- Ascend 950PR&950DT系列产品：本页为兼容性说明，所述接口未提供
 <!-- end id1 -->
 <!-- npu="A3" id2 -->
 - Atlas A3系列产品：不支持
@@ -26,57 +26,31 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/std/scoped_allocator>`。
+本页保留原入口用于兼容性说明。适配器自身未定义`outer_traits`，不能通过该不存在的别名读取外层特征。
 
-`asc::std::scoped_allocator_adaptor::outer_traits`标识外层分配器对应的allocator_traits类型。
-
-标准语义参考：[cppreference `scoped_allocator`](https://en.cppreference.com/w/cpp/header/scoped_allocator)。
+若要查询外层分配器的特征，请显式使用`asc::std::allocator_traits<OuterAllocator>`；其结果仅描述外层分配器。
 
 ## 声明
 
-所属类型：[`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。
-
-```cpp
-// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
-using outer_traits = allocator_traits<OuterAlloc>;
-```
+当前产品不声明本页标题所示的接口。请使用下述已提供的接口。
 
 ## 约束说明
 
-- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
-- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
+- 适配器自身未定义`outer_traits`，不能通过该不存在的别名读取外层特征。
+- 若要查询外层分配器的特征，请显式使用`asc::std::allocator_traits<OuterAllocator>`；其结果仅描述外层分配器。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
-#include <asc/std/scoped_allocator>
-#include <functional>
+#include <asc/std/memory>
+#include <asc/std/type_traits>
 #include <memory>
-#include <string>
-#include <utility>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void use_type()
-{
-    using alias_type = typename asc::std::scoped_allocator_adaptor<example_allocator<int>>::outer_traits;
-}
+using outer_traits = asc::std::allocator_traits<std::allocator<int>>;
+static_assert(asc::std::is_same_v<outer_traits::value_type, int>);
 ```
-
-对应完整工程使用`C++17`，并通过Host编译与运行验证。
-
-完整示例源码：[allocator_traits.cpp](../../../../examples/allocator_traits.cpp)。
 
 ## 关联API
 

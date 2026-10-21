@@ -37,7 +37,7 @@
 ```cpp
 namespace asc {
 void ub_inclusive_scan(asc::ub_span<asc::std::int32_t> output, asc::ub_span<const asc::std::int32_t> input) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ### 原型2
@@ -45,7 +45,7 @@ void ub_inclusive_scan(asc::ub_span<asc::std::int32_t> output, asc::ub_span<cons
 ```cpp
 namespace asc {
 void ub_inclusive_scan(asc::ub_span<asc::std::uint32_t> output, asc::ub_span<const asc::std::uint32_t> input) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ### 原型3
@@ -53,7 +53,7 @@ void ub_inclusive_scan(asc::ub_span<asc::std::uint32_t> output, asc::ub_span<con
 ```cpp
 namespace asc {
 void ub_inclusive_scan(asc::ub_span<float> output, asc::ub_span<const float> input) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -90,6 +90,8 @@ void ub_inclusive_scan(asc::ub_span<float> output, asc::ub_span<const float> inp
 无返回值。
 
 ## 约束说明
+
+- 输入/输出为调用方管理的UB范围；有符号求和或扫描的所有中间值和最终值须可表示。 扫描输入和输出大小须相同，允许完全原地或完全不重叠，不允许部分偏移重叠。
 
 - 仅可在AI Core SIMD编程中调用。
 - 实际计算与写入长度裁剪为 min(input.size(), output.size())：输出短于输入时按较短一端截断，不越界写出。

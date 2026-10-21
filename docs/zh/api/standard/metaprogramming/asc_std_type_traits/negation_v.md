@@ -34,15 +34,18 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const bool negation_v;
+template<class T>
+inline constexpr bool negation_v = negation<T>::value;
 } // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 本辅助形式与[`asc::std::negation`](negation.md)使用相同的类型前提和判定规则；结果对应特征类的`value`。
 
 ## 调用示例
 
@@ -51,7 +54,7 @@ template<class T> inline constexpr const bool negation_v;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::negation_v<asc::std::true_type>;
+static_assert((asc::std::negation_v<asc::std::true_type>) == false);
 ```
 
 ## 关联API

@@ -40,15 +40,13 @@
 
 ```cpp
 // asc::std::atomic 类内的声明节选；模板形参和其他成员由所属类提供。
-inline constexpr const bool is_always_lock_free;
+static constexpr bool is_always_lock_free = true;
 ```
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数。
-- bool/8/16位用32位内部存储。
-- 32/64位按有符号位模式分派。
-- Host和AI Core SIMT编程GM。
+- 对于[atomic](atomic.md)支持的`T`，此静态常量的值为`true`，查询它不需要创建原子对象。
+- 该常量只报告无锁属性；原子操作的调用位置及对象存储条件见所属类型。
 
 ## 调用示例
 

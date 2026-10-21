@@ -69,15 +69,18 @@ template<class ForwardIterator, class Size> constexpr ForwardIterator destroy_n(
 
 ## 调用示例
 
-以下Host片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/memory>
 
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    return asc::std::destroy_n(values, 4);
+    alignas(int) unsigned char storage[sizeof(int) * 2];
+    int* output = reinterpret_cast<int*>(storage);
+    asc::std::uninitialized_fill_n(output, 2, 7);
+    const auto end = asc::std::destroy_n(output, 2);
+    return end == output + 2;
 }
 ```
 

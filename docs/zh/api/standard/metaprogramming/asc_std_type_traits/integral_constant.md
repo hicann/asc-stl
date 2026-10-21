@@ -36,13 +36,14 @@
 
 ```cpp
 namespace asc::std {
-template<class T, T V> struct integral_constant;
-} // namespace asc::std
+template <class T, T V>
+struct integral_constant;
+}  // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类及其对应的 _v辅助形式。
+- `T`和`V`须构成当前语言模式允许的非类型模板实参；`value`为`V`，`value_type`为`T`，`type`为当前特化自身。
 
 ## 调用示例
 
@@ -57,7 +58,7 @@ void use_trait()
     // ::value 携带编译期常量
     static_assert(two::value == 2);
     static_assert(asc::std::is_same_v<two::value_type, int>);
-    static_assert(asc::std::is_same_v<two::type, two>); // type 即自身
+    static_assert(asc::std::is_same_v<two::type, two>);  // type 即自身
     // bool_constant 即 integral_constant<bool, B>
     static_assert(asc::std::bool_constant<true>::value);
     // 反例：false_type 取值为假

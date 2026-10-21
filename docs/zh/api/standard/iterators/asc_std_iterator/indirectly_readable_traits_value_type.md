@@ -34,12 +34,24 @@
 
 ## 声明
 
-所属类型：[`asc::std::indirectly_readable_traits`](indirectly_readable_traits.md)。
+`value_type`只在可确定可读取对象类型时出现。实际选择规则如下：
+
+| 输入类型 | `value_type` |
+| --- | --- |
+| 对象指针`T*` | `remove_cv_t<T>` |
+| 数组`T[N]`或`T[]` | 去除一层数组及元素cv后的类型 |
+| 只有成员`value_type`的类 | 该成员去除cv后的对象类型 |
+| 只有成员`element_type`的类 | 该成员去除cv后的对象类型 |
+| 两个成员都有的类 | 二者去除cv后相同才提供该对象类型；不同则没有`value_type` |
+
+可通过公开类型查询选定结果：
 
 ```cpp
-// asc::std::indirectly_readable_traits 类内的声明节选；模板形参和其他成员由所属类提供。
-using value_type = remove_cv_t<remove_extent_t<Index>>;
+using pointer_value = asc::std::indirectly_readable_traits<int*>::value_type;
+using array_value = asc::std::indirectly_readable_traits<const int[3]>::value_type;
 ```
+
+其他类型或不能确定对象类型的分支不提供该成员。
 
 ## 约束说明
 
@@ -47,17 +59,22 @@ using value_type = remove_cv_t<remove_extent_t<Index>>;
 
 ## 调用示例
 
-以下Host片段用具体迭代器或容器类型实例化本页接口。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
-
 #include <asc/std/type_traits>
 
-void example()
+bool example()
 {
-    using selected = typename asc::std::indirectly_readable_traits<int*>::value_type;
-    static_assert(asc::std::is_same_v<selected, int>);
+    struct element_holder { using element_type = const long; };
+    using pointer_value = asc::std::indirectly_readable_traits<int*>::value_type;
+    using array_value = asc::std::indirectly_readable_traits<const int[3]>::value_type;
+    using member_value = asc::std::indirectly_readable_traits<element_holder>::value_type;
+    static_assert(asc::std::is_same_v<pointer_value, int>);
+    static_assert(asc::std::is_same_v<array_value, int>);
+    static_assert(asc::std::is_same_v<member_value, long>);
+    return true;
 }
 ```
 

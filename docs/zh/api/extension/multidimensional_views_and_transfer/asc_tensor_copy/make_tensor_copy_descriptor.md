@@ -34,8 +34,12 @@
 
 ```cpp
 namespace asc {
-template<unsigned Rank> constexpr asc::tensor_copy_descriptor<Rank> make_tensor_copy_descriptor(const unsigned int (&extents)[Rank], const unsigned int (&source_strides)[Rank], const unsigned int (&destination_strides)[Rank], const unsigned int (&left_padding)[Rank], const unsigned int (&right_padding)[Rank]) noexcept;
-} // namespace asc
+template <unsigned Rank>
+constexpr asc::tensor_copy_descriptor<Rank> [[nodiscard]] make_tensor_copy_descriptor(
+    const unsigned int (&extents)[Rank], const unsigned int (&source_strides)[Rank],
+    const unsigned int (&destination_strides)[Rank], const unsigned int (&left_padding)[Rank],
+    const unsigned int (&right_padding)[Rank]) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明

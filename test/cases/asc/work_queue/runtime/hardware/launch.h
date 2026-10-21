@@ -14,4 +14,16 @@
  * limitations under the License.
  */
 
-// The cannsim launch is emitted from kernel.cpp.
+#ifndef ASC_STL_TEST_HARDWARE_LAUNCH_B9AC16278086_H
+#define ASC_STL_TEST_HARDWARE_LAUNCH_B9AC16278086_H
+
+#include <acl/acl.h>
+#include <asc/__work_queue/cursor.h>
+#include <cstdint>
+
+void launch_asc_stl_b026_work_queue_simd(std::uint32_t*, asc::detail::work_cursor*, void*);
+void launch_asc_stl_b026_work_queue_boundary_simd(std::uint32_t*, asc::detail::work_cursor*, void*);
+void launch_asc_stl_b026_work_queue_simt(std::uint32_t*, asc::detail::work_cursor*, void*);
+void launch_asc_stl_b026_work_queue_boundary_simt(std::uint32_t*, asc::detail::work_cursor*, void*);
+
+#endif  // ASC_STL_TEST_HARDWARE_LAUNCH_B9AC16278086_H

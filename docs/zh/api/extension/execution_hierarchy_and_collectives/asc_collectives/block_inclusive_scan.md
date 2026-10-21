@@ -36,16 +36,18 @@
 
 ```cpp
 namespace asc {
-asc::std::int32_t block_inclusive_scan(asc::block_collective_workspace<asc::std::int32_t> workspace, asc::std::int32_t value) noexcept;
-} // namespace asc
+asc::std::int32_t block_inclusive_scan(
+    asc::block_collective_workspace<asc::std::int32_t> workspace, asc::std::int32_t value) noexcept;
+}  // namespace asc
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc {
-asc::std::uint32_t block_inclusive_scan(asc::block_collective_workspace<asc::std::uint32_t> workspace, asc::std::uint32_t value) noexcept;
-} // namespace asc
+asc::std::uint32_t block_inclusive_scan(
+    asc::block_collective_workspace<asc::std::uint32_t> workspace, asc::std::uint32_t value) noexcept;
+}  // namespace asc
 ```
 
 ### 原型3
@@ -53,7 +55,7 @@ asc::std::uint32_t block_inclusive_scan(asc::block_collective_workspace<asc::std
 ```cpp
 namespace asc {
 float block_inclusive_scan(asc::block_collective_workspace<float> workspace, float value) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -64,7 +66,7 @@ float block_inclusive_scan(asc::block_collective_workspace<float> workspace, flo
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前Block的集体操作工作区：存放各warp的部分结果，元素数不少于Block内warp数；参与线程会合期间不得复用。 |
+| `workspace` | 输入/输出 | 当前Block的集体操作工作区：存放各warp的部分结果，元素数不少于Block内warp数；参与线程会合期间不得复用。 |
 | `value` | 输入 | 当前线程参与前缀和的输入值：返回包含本线程在内之前所有线程输入的前缀和。 |
 
 ### 原型2的参数
@@ -73,7 +75,7 @@ float block_inclusive_scan(asc::block_collective_workspace<float> workspace, flo
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前Block的集体操作工作区：存放各warp的部分结果，元素数不少于Block内warp数；参与线程会合期间不得复用。 |
+| `workspace` | 输入/输出 | 当前Block的集体操作工作区：存放各warp的部分结果，元素数不少于Block内warp数；参与线程会合期间不得复用。 |
 | `value` | 输入 | 当前线程参与前缀和的输入值：返回包含本线程在内之前所有线程输入的前缀和。 |
 
 ### 原型3的参数
@@ -82,7 +84,7 @@ float block_inclusive_scan(asc::block_collective_workspace<float> workspace, flo
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前Block的集体操作工作区：存放各warp的部分结果，元素数不少于Block内warp数；参与线程会合期间不得复用。 |
+| `workspace` | 输入/输出 | 当前Block的集体操作工作区：存放各warp的部分结果，元素数不少于Block内warp数；参与线程会合期间不得复用。 |
 | `value` | 输入 | 当前线程参与前缀和的输入值：返回包含本线程在内之前所有线程输入的前缀和。 |
 
 ## 返回值说明

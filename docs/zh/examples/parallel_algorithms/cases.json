@@ -1,0 +1,1389 @@
+[
+  {
+    "index": 0,
+    "name": "adjacent_difference",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_adjacent_difference.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "entrypoint": "run_parallel_adjacent_difference"
+  },
+  {
+    "index": 1,
+    "name": "adjacent_find",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_adjacent_find.md",
+    "input": [
+      1,
+      2,
+      2,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "size_sink": 1
+    },
+    "entrypoint": "run_parallel_adjacent_find"
+  },
+  {
+    "index": 2,
+    "name": "all_of",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_all_of.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "flag_sink": 0
+    },
+    "entrypoint": "run_parallel_all_of"
+  },
+  {
+    "index": 3,
+    "name": "any_of",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_any_of.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "flag_sink": 1
+    },
+    "entrypoint": "run_parallel_any_of"
+  },
+  {
+    "index": 4,
+    "name": "copy",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_copy.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "entrypoint": "run_parallel_copy"
+  },
+  {
+    "index": 5,
+    "name": "copy_if",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_copy_if.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        2,
+        4
+      ],
+      "size_sink": 2
+    },
+    "entrypoint": "run_parallel_copy_if"
+  },
+  {
+    "index": 6,
+    "name": "copy_n",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_copy_n.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "entrypoint": "run_parallel_copy_n"
+  },
+  {
+    "index": 7,
+    "name": "count",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_count.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "size_sink": 1
+    },
+    "entrypoint": "run_parallel_count"
+  },
+  {
+    "index": 8,
+    "name": "count_if",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_count_if.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "size_sink": 2
+    },
+    "entrypoint": "run_parallel_count_if"
+  },
+  {
+    "index": 9,
+    "name": "equal",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_equal.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "flag_sink": 1
+    },
+    "entrypoint": "run_parallel_equal"
+  },
+  {
+    "index": 10,
+    "name": "exclusive_scan",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_exclusive_scan.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        0,
+        1,
+        3,
+        6
+      ]
+    },
+    "entrypoint": "run_parallel_exclusive_scan"
+  },
+  {
+    "index": 11,
+    "name": "fill",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_fill.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "input": [
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    "entrypoint": "run_parallel_fill"
+  },
+  {
+    "index": 12,
+    "name": "fill_n",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_fill_n.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    "entrypoint": "run_parallel_fill_n"
+  },
+  {
+    "index": 13,
+    "name": "find",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_find.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "size_sink": 2
+    },
+    "entrypoint": "run_parallel_find"
+  },
+  {
+    "index": 14,
+    "name": "find_if",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_find_if.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "size_sink": 1
+    },
+    "entrypoint": "run_parallel_find_if"
+  },
+  {
+    "index": 15,
+    "name": "find_if_not",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_find_if_not.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "size_sink": 0
+    },
+    "entrypoint": "run_parallel_find_if_not"
+  },
+  {
+    "index": 16,
+    "name": "for_each",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_for_each.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "input": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "entrypoint": "run_parallel_for_each"
+  },
+  {
+    "index": 17,
+    "name": "for_each_n",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_for_each_n.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "input": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "entrypoint": "run_parallel_for_each_n"
+  },
+  {
+    "index": 18,
+    "name": "generate",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_generate.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "input": [
+        7,
+        7,
+        7,
+        7
+      ]
+    },
+    "entrypoint": "run_parallel_generate"
+  },
+  {
+    "index": 19,
+    "name": "generate_n",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_generate_n.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        7,
+        7,
+        7,
+        7
+      ]
+    },
+    "entrypoint": "run_parallel_generate_n"
+  },
+  {
+    "index": 20,
+    "name": "inclusive_scan",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_inclusive_scan.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        1,
+        3,
+        6,
+        10
+      ]
+    },
+    "entrypoint": "run_parallel_inclusive_scan"
+  },
+  {
+    "index": 21,
+    "name": "is_heap",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_heap.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "flag_sink": 0
+    },
+    "entrypoint": "run_parallel_is_heap"
+  },
+  {
+    "index": 22,
+    "name": "is_heap_until",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_heap_until.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "size_sink": 1
+    },
+    "entrypoint": "run_parallel_is_heap_until"
+  },
+  {
+    "index": 23,
+    "name": "is_partitioned",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_partitioned.md",
+    "input": [
+      2,
+      4,
+      1,
+      3
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "flag_sink": 1
+    },
+    "entrypoint": "run_parallel_is_partitioned"
+  },
+  {
+    "index": 24,
+    "name": "is_sorted",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_sorted.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "flag_sink": 1
+    },
+    "entrypoint": "run_parallel_is_sorted"
+  },
+  {
+    "index": 25,
+    "name": "is_sorted_until",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_sorted_until.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "size_sink": 4
+    },
+    "entrypoint": "run_parallel_is_sorted_until"
+  },
+  {
+    "index": 26,
+    "name": "max_element",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_max_element.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "size_sink": 3
+    },
+    "entrypoint": "run_parallel_max_element"
+  },
+  {
+    "index": 27,
+    "name": "merge",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_merge.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      2,
+      4,
+      6,
+      8
+    ],
+    "expected": {
+      "output": [
+        1,
+        2,
+        2,
+        3,
+        4,
+        4,
+        6,
+        8
+      ]
+    },
+    "entrypoint": "run_parallel_merge"
+  },
+  {
+    "index": 28,
+    "name": "min_element",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_min_element.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "size_sink": 0
+    },
+    "entrypoint": "run_parallel_min_element"
+  },
+  {
+    "index": 29,
+    "name": "mismatch",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_mismatch.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      9,
+      4
+    ],
+    "expected": {
+      "size_sink": 2
+    },
+    "entrypoint": "run_parallel_mismatch"
+  },
+  {
+    "index": 30,
+    "name": "none_of",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_none_of.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "flag_sink": 0
+    },
+    "entrypoint": "run_parallel_none_of"
+  },
+  {
+    "index": 31,
+    "name": "partition",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_partition.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "size_sink": 2,
+      "input": "permutation1..4, first2even,last2odd"
+    },
+    "entrypoint": "run_parallel_partition"
+  },
+  {
+    "index": 32,
+    "name": "partition_copy",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_partition_copy.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "size_sink": 2,
+      "output_defined_positions": {
+        "0": 2,
+        "1": 4,
+        "4": 1,
+        "5": 3
+      }
+    },
+    "entrypoint": "run_parallel_partition_copy"
+  },
+  {
+    "index": 33,
+    "name": "reduce",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_reduce.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        10
+      ]
+    },
+    "entrypoint": "run_parallel_reduce"
+  },
+  {
+    "index": 34,
+    "name": "remove",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_remove.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "input": [
+        1,
+        2,
+        4
+      ],
+      "size_sink": 3
+    },
+    "entrypoint": "run_parallel_remove"
+  },
+  {
+    "index": 35,
+    "name": "remove_copy",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_remove_copy.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        1,
+        2,
+        4
+      ],
+      "size_sink": 3
+    },
+    "entrypoint": "run_parallel_remove_copy"
+  },
+  {
+    "index": 36,
+    "name": "remove_copy_if",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_remove_copy_if.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        1,
+        3
+      ],
+      "size_sink": 2
+    },
+    "entrypoint": "run_parallel_remove_copy_if"
+  },
+  {
+    "index": 37,
+    "name": "remove_if",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_remove_if.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "input": [
+        1,
+        3
+      ],
+      "size_sink": 2
+    },
+    "entrypoint": "run_parallel_remove_if"
+  },
+  {
+    "index": 38,
+    "name": "replace",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_replace.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "input": [
+        1,
+        2,
+        9,
+        4
+      ]
+    },
+    "entrypoint": "run_parallel_replace"
+  },
+  {
+    "index": 39,
+    "name": "replace_copy",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_replace_copy.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        1,
+        2,
+        9,
+        4
+      ]
+    },
+    "entrypoint": "run_parallel_replace_copy"
+  },
+  {
+    "index": 40,
+    "name": "replace_copy_if",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_replace_copy_if.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        1,
+        9,
+        3,
+        9
+      ]
+    },
+    "entrypoint": "run_parallel_replace_copy_if"
+  },
+  {
+    "index": 41,
+    "name": "replace_if",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_replace_if.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "input": [
+        1,
+        9,
+        3,
+        9
+      ]
+    },
+    "entrypoint": "run_parallel_replace_if"
+  },
+  {
+    "index": 42,
+    "name": "reverse",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_reverse.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "input": [
+        4,
+        3,
+        2,
+        1
+      ]
+    },
+    "entrypoint": "run_parallel_reverse"
+  },
+  {
+    "index": 43,
+    "name": "reverse_copy",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_reverse_copy.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        4,
+        3,
+        2,
+        1
+      ]
+    },
+    "entrypoint": "run_parallel_reverse_copy"
+  },
+  {
+    "index": 44,
+    "name": "rotate",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_rotate.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "input": [
+        3,
+        4,
+        1,
+        2
+      ]
+    },
+    "entrypoint": "run_parallel_rotate"
+  },
+  {
+    "index": 45,
+    "name": "rotate_copy",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_rotate_copy.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        3,
+        4,
+        1,
+        2
+      ]
+    },
+    "entrypoint": "run_parallel_rotate_copy"
+  },
+  {
+    "index": 46,
+    "name": "shift_left",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_shift_left.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "defined_elements": {
+        "0": 3,
+        "1": 4
+      }
+    },
+    "entrypoint": "run_parallel_shift_left"
+  },
+  {
+    "index": 47,
+    "name": "shift_right",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_shift_right.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "defined_elements": {
+        "2": 1,
+        "3": 2
+      }
+    },
+    "entrypoint": "run_parallel_shift_right"
+  },
+  {
+    "index": 48,
+    "name": "sort",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_sort.md",
+    "input": [
+      4,
+      1,
+      3,
+      2
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "input": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "entrypoint": "run_parallel_sort"
+  },
+  {
+    "index": 49,
+    "name": "stable_partition",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_stable_partition.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "input": [
+        2,
+        4,
+        1,
+        3
+      ],
+      "size_sink": 2
+    },
+    "entrypoint": "run_parallel_stable_partition"
+  },
+  {
+    "index": 50,
+    "name": "swap_ranges",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_swap_ranges.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "expected": {
+      "input": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "other": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "entrypoint": "run_parallel_swap_ranges"
+  },
+  {
+    "index": 51,
+    "name": "transform",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        2,
+        4,
+        6,
+        8
+      ]
+    },
+    "entrypoint": "run_parallel_transform"
+  },
+  {
+    "index": 52,
+    "name": "transform_exclusive_scan",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform_exclusive_scan.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        0,
+        2,
+        6,
+        12
+      ]
+    },
+    "entrypoint": "run_parallel_transform_exclusive_scan"
+  },
+  {
+    "index": 53,
+    "name": "transform_inclusive_scan",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform_inclusive_scan.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        2,
+        6,
+        12,
+        20
+      ]
+    },
+    "entrypoint": "run_parallel_transform_inclusive_scan"
+  },
+  {
+    "index": 54,
+    "name": "transform_reduce",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform_reduce.md",
+    "input": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        20
+      ]
+    },
+    "entrypoint": "run_parallel_transform_reduce"
+  },
+  {
+    "index": 55,
+    "name": "unique",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_unique.md",
+    "input": [
+      1,
+      2,
+      2,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "input": [
+        1,
+        2,
+        4
+      ],
+      "size_sink": 3
+    },
+    "entrypoint": "run_parallel_unique"
+  },
+  {
+    "index": 56,
+    "name": "unique_copy",
+    "page": "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_unique_copy.md",
+    "input": [
+      1,
+      2,
+      2,
+      4
+    ],
+    "other": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "expected": {
+      "output": [
+        1,
+        2,
+        4
+      ],
+      "size_sink": 3
+    },
+    "entrypoint": "run_parallel_unique_copy"
+  }
+]

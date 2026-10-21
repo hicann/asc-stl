@@ -34,10 +34,13 @@
 
 ## 函数原型
 
+以下是调用形态摘要；返回可调用成员指针包装器，具体实现类型由头文件决定。
+
 ```cpp
 namespace asc::std {
-template<class Rp, class T> constexpr Memfn<Rp T::*> mem_fn(Rp T::* member) noexcept;
-} // namespace asc::std
+template<class R, class T>
+constexpr auto mem_fn(R T::*member) noexcept;
+}
 ```
 
 ## 参数说明
@@ -46,7 +49,7 @@ template<class Rp, class T> constexpr Memfn<Rp T::*> mem_fn(Rp T::* member) noex
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rp` | 成员指针的成员类型；函数成员时包含其函数类型。 |
+| `R` | 成员指针的成员类型；函数成员时包含其函数类型。 |
 | `T` | 成员指针所属的类类型。 |
 
 **函数参数**
@@ -57,9 +60,7 @@ template<class Rp, class T> constexpr Memfn<Rp T::*> mem_fn(Rp T::* member) noex
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `Memfn<Rp T::*>` | 返回可调用的成员指针包装器。 |
+返回可调用对象，具体实现类型由头文件决定。对象保存成员指针，调用时按invoke规则对提供的对象及参数执行成员访问或调用。
 
 ## 约束说明
 
@@ -67,17 +68,18 @@ template<class Rp, class T> constexpr Memfn<Rp T::*> mem_fn(Rp T::* member) noex
 
 ## 调用示例
 
-以下Host片段使用具体对象展示接口调用。
+以下Host示例用具体输入和可判断结果展示本接口。
 
 ```cpp
 #include <asc/std/functional>
 
-decltype(auto) example()
+struct widget { int read() const { return 3; } };
+
+bool example()
 {
-    struct widget { int read() const { return 3; } };
     widget value;
     auto call = asc::std::mem_fn(&widget::read);
-    return call(value);
+    return call(value) == 3;
 }
 ```
 

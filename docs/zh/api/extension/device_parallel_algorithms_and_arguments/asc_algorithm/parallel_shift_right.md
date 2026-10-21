@@ -33,8 +33,11 @@
 ## 函数原型
 
 ```cpp
-// asc::parallel 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class Forward> asc::execution_status shift_right(asc::device_policy policy, Forward first, Forward last, asc::std::size_t count) noexcept;
+namespace asc::parallel {
+template <class Forward>
+asc::execution_status shift_right(
+    asc::device_policy policy, Forward first, Forward last, asc::std::size_t count) noexcept;
+}  // namespace asc::parallel
 ```
 
 ## 参数说明
@@ -52,7 +55,7 @@ template<class Forward> asc::execution_status shift_right(asc::device_policy pol
 | `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `count` | 输入 | 移动距离，以元素个数计；不小于范围长度时没有保留元素。 |
 
 ## 返回值说明
 
@@ -62,24 +65,47 @@ template<class Forward> asc::execution_status shift_right(asc::device_policy pol
 
 ## 约束说明
 
+- 公开前端要求Clang兼容的ASC翻译单元，并显式定义`CANN_ASC_STL_USE_SIMT_LAUNCH`；值1选择SIMT、值0选择SIMD。未定义时不提供这些parallel名字。
+
+- 输入和输出的全部GM范围、标量结果以及实际消费的临时区须从提交前持续有效到该Stream任务完成。函数对象按值复制，但其捕获的Device指针也受相同存活期约束。
+- 在同步或正确建立依赖之前，Host或其他Stream不得读写或释放这些存储；返回execution_status成功只代表已提交，不代表结果可读。
+
+- 当前本页路径不使用policy临时区；传入空临时区不会仅因此拒绝提交。若调用方复用同一策略执行需要工作区的其他操作，应分别遵守对应操作的容量与对齐要求。
+
 - 使用C++17，并从毕昇ASC翻译单元的Host侧提交。
 - 输入范围必须连续、支持随机访问且可由Device访问。
 - 可调用对象和传输值必须可平凡复制并可在AI Core调用。
-- policy必须包含有效Stream和足够的调用方临时存储。
+- policy须绑定有效Stream；当前多数逐元素或顺序路径不消费临时存储，不应为这些路径额外分配scratch。
 - 标量、数量或索引输出位于GM，并在Stream完成前保持有效。
-- 参数或能力不满足要求时不会提交任务。
+- 仅检查实现可判定的Stream和部分输出空指针等条件；范围有效性、Device可访问性、地址空间和生存期是调用方前提，不保证任意无效地址都会在提交前返回错误。
 
 ## 调用示例
 
-以下片段在毕昇ASC翻译单元的Host提交侧调用；Stream、临时存储和GM参数须在异步任务完成前有效。
+以下片段使用完整工程的Host资源上下文：initial为[1, 2, 3, 4]，第二范围为[1, 2, 3, 4]；prepare同步上传到GM，complete检查提交状态并有界等待Stream，read只在完成后读回。代码逐项检查独立预期结果。
+
+完整工程、任务/流/进程时限和逐case记录见[并行算法示例](../../../../examples/parallel_algorithms/README.md)。
 
 ```cpp
 #include <asc/algorithm>
+#include "parallel_example.h"
 
-decltype(auto) example(asc::device_policy policy, int* input)
+bool example(parallel_example_context& context)
 {
-    // policy 绑定有效 Stream 和足够临时存储；所有指针指向有效 GM 且保持到任务完成。
-    return asc::parallel::shift_right(policy, input, input + 4, 4);
+    const int initial[] = {1, 2, 3, 4};
+    const int second[] = {1, 2, 3, 4};
+    if (!context.prepare(initial, second))
+        return false;
+    auto policy = context.policy();
+    auto* input = context.input;
+    const auto status = asc::parallel::shift_right(policy, input, input + 4, 2);
+    if (!context.complete(status))
+        return false;
+    int actual[4]{};
+    if (!context.read(context.input, actual))
+        return false;
+    if (actual[2] != 1 || actual[3] != 2)
+        return false;
+    return true;
 }
 ```
 

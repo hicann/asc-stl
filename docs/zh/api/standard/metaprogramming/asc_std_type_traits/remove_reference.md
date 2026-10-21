@@ -42,7 +42,7 @@ template<class T> struct remove_reference;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 移除`T`的左值或右值引用，非引用类型保持原类型；保留被引用类型自身的cv限定。
 
 ## 调用示例
 

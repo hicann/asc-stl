@@ -42,7 +42,7 @@ template<class T> struct remove_volatile;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 只移除`T`的顶层`volatile`，不移除指针所指对象或引用目标的`volatile`。
 
 ## 调用示例
 

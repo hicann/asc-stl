@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::integral_constant::type`提供该类型特征、映射或适配器计算出的成员类型。
+`asc::std::integral_constant::type`是当前`integral_constant<T, V>`特化自身的类型别名。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
@@ -43,7 +43,7 @@ using type = integral_constant<T, V>;
 
 ## 约束说明
 
-- 提供特征类及其对应的 _v辅助形式。
+- `type`等于当前`integral_constant<T, V>`特化；查询此别名不构造对象。
 
 ## 调用示例
 

@@ -55,10 +55,8 @@ bool is_lock_free() const noexcept;
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数。
-- bool/8/16位用32位内部存储。
-- 32/64位按有符号位模式分派。
-- Host和AI Core SIMT编程GM。
+- 原子操作可在Host和AI Core SIMT编程中调用；SIMT线程共享的原子对象须位于GM，并在并发访问前完成初始化。
+- 对当前支持的原子类型返回`true`；查询无锁属性不会为其他线程建立同步。
 
 ## 调用示例
 

@@ -66,26 +66,27 @@ constexpr reverse_iterator<Iter> operator++(int unused);
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `reverse_iterator<Iter> &` | 返回更新后的当前对象引用。 |
-| 原型2 | `reverse_iterator<Iter>` | 返回更新后的迭代器或计数值。 |
+前置形式返回操作完成后当前适配器的引用；后置形式按值返回操作之前的适配器副本。反向迭代器的自增使底层位置后退，自减使底层位置前进。
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 底层迭代器须支持双向遍历；随机访问成员还要求底层支持对应位移或下标运算。
+- 反向迭代器访问`base()`之前的元素，解引用或箭头访问要求该前一位置有效。
+- 适配器不拥有底层范围；返回引用或指针的寿命受底层对象约束。
 
 ## 调用示例
 
-以下Host片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void example(asc::std::reverse_iterator<int*>& iterator)
+bool example()
 {
-    ++iterator;
+    int values[] = {2, 4, 6, 8};
+    asc::std::reverse_iterator<int*> iterator(values + 4);
+    auto old = iterator++;
+    return *old == 8 && *iterator == 6;
 }
 ```
 

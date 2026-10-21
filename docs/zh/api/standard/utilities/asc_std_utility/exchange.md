@@ -36,8 +36,10 @@
 
 ```cpp
 namespace asc::std {
-template<class T1, class T2> constexpr T1 exchange(T1& object, T2&& new_value) noexcept(is_nothrow_move_constructible_v<T1>&& is_nothrow_assignable_v<T1&, T2>);
-} // namespace asc::std
+template<class T, class U = T>
+constexpr T exchange(T& object, U&& new_value)
+    noexcept(is_nothrow_move_constructible_v<T> && is_nothrow_assignable_v<T&, U>);
+}
 ```
 
 ## 参数说明

@@ -42,12 +42,9 @@ template<class Allocator> struct allocator_traits;
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- `Allocator`须提供`value_type`；其它关联类型和特征按对应成员的检测与缺省规则获得。
+- 静态分配、构造、销毁与释放操作使用显式传入的分配器；执行位置、可分配地址空间及异常要求由具体操作决定。
+- 当前没有`allocator_traits::allocate_at_least`成员；至少容量分配使用独立的[`allocate_at_least`](allocate_at_least.md)。
 
 ## 调用示例
 

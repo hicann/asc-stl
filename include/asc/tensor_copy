@@ -129,11 +129,10 @@ CANN_ASC_STL_DEVICE_API tensor_copy_status tensor_load_async(const pipeline_ref&
 // store; the innermost run must additionally fit the 32-bit byte length of
 // the copy engine, and both endpoints of every run meet the C API alignment
 // requirement by the same caller precondition tensor_copy_required_alignment
-// documents for the load.  The trailing consumer_release is the canonical
-// round's consumer-side retire step: this entry replaces the
-// copy_async(..., gm, ub) + consumer_release pair of the plain pipeline
-// vocabulary, so callers must have finished their scalar reads of the stage
-// buffer before invoking it.
+// documents for the load. This entry publishes consumer_release, consumes
+// its S->MTE3 event, then issues the store. It replaces the balanced
+// consumer_release + copy_async(..., gm, ub) sequence. Callers must have
+// finished scalar accesses to the stage buffer before invoking it.
 template <class T, unsigned Rank>
 CANN_ASC_STL_DEVICE_API tensor_copy_status tensor_store_async(const pipeline_ref& pipeline, unsigned int stage,
     gm_span<T> destination, ub_span<const T> source, const tensor_copy_descriptor<Rank>& descriptor) noexcept
@@ -160,8 +159,11 @@ CANN_ASC_STL_DEVICE_API tensor_copy_status tensor_store_async(const pipeline_ref
     if (source.size() < source_elements) {
         return tensor_copy_status::insufficient_source;
     }
-    detail::tensor_copy_store_ndim(destination.data(), source.data(), descriptor);
+    // Publish scalar accesses before MTE3 reads the stage, then consume the
+    // same S->MTE3 event exactly once, as the plain pipeline store does.
     pipeline.consumer_release(stage);
+    detail::pipeline_store_wait(pipeline.store_event(stage));
+    detail::tensor_copy_store_ndim(destination.data(), source.data(), descriptor);
     return tensor_copy_status::success;
 }
 

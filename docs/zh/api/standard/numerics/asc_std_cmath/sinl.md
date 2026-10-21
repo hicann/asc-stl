@@ -28,17 +28,23 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::sinl`由`<asc/std/cmath>`提供，宿主long double正弦，后缀l别名（清单外新增）
+`asc::std::sinl`由`<asc/std/cmath>`提供，宿主long double正弦，后缀l别名
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-constexpr long double sinl(long double value) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr long double sinl(long double value) noexcept;
+}
 ```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
 ## 参数说明
 
@@ -50,24 +56,23 @@ constexpr long double sinl(long double value) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `long double` | 输入弧度角的正弦值。 |
+返回类型按各原型确定（`long double`）。返回正弦值；实数输入单位为弧度。
 
 ## 约束说明
 
-- 宿主long double正弦，后缀l别名（清单外新增）。
+- 保持参数说明中的数学定义域及指针有效性要求；可用位置和语言条件按各原型分别确定。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(long double value)
+bool example()
 {
-    return asc::std::sinl(value);
+    const auto result = asc::std::sinl(0.0L);
+    return result == 0.0L;
 }
 ```
 

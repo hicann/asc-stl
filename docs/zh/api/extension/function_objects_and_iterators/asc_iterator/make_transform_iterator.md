@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class Iterator, class Function> constexpr asc::transform_iterator<Function, Iterator> make_transform_iterator(Iterator iterator, Function function);
-} // namespace asc
+template <class Iterator, class Function>
+constexpr asc::transform_iterator<Function, Iterator> make_transform_iterator(Iterator iterator, Function function);
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -67,16 +68,17 @@ template<class Iterator, class Function> constexpr asc::transform_iterator<Funct
 
 ## 调用示例
 
-以下片段使用具体数组和可调用对象构造迭代器。实际使用时底层范围须保持有效。
+以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
 
-decltype(auto) example()
+bool example()
 {
     int values[4] = {1, 2, 3, 4};
     int indices[4] = {3, 2, 1, 0};
-    return asc::make_transform_iterator(values, [](int value) { return value + 1; });
+    auto iterator = asc::make_transform_iterator(values, [](int value) { return value + 1; });
+    return *iterator == 2;
 }
 ```
 

@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::front_insert_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr front_insert_iterator<Container>& operator*() noexcept;
+constexpr front_insert_iterator<Container>& operator*() noexcept;
 ```
 
 ## 参数说明
@@ -53,26 +53,26 @@
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 目标容器须支持对应的`push_front(value)`操作；插入迭代器保存容器地址，不拥有容器。
+- 容器须在适配器使用期间有效；插入操作还须遵守目标容器自身的迭代器失效规则。
+- 解引用与自增用于满足输出迭代器调用形式，本身不插入元素；通过赋值执行插入。
 
 ## 调用示例
 
-以下Host片段使用调用方提供的标准容器演示迭代器操作；目标容器须保持有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 #include <deque>
-#include <functional>
-#include <vector>
 
-#include <deque>
-
-decltype(auto) example()
+bool example()
 {
-    ::std::deque<int> values{};
+    ::std::deque<int> values;
     asc::std::front_insert_iterator<::std::deque<int>> output(values);
-    return *output;
+    auto& same = *output;
+    bool same_object = &same == &output;
+    *output = 7;
+    return same_object && values.size() == 1 && values.front() == 7;
 }
 ```
 

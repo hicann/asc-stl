@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::move_backward`从尾部向前移动范围中的元素；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::move_backward`从尾部向前移动范围中的元素；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -36,8 +36,10 @@
 
 ```cpp
 namespace asc::std {
-template<class BidirectionalIterator1, class BidirectionalIterator2> constexpr BidirectionalIterator2 move_backward(BidirectionalIterator1 first, BidirectionalIterator1 last, BidirectionalIterator2 result);
-} // namespace asc::std
+template <class BidirectionalIterator1, class BidirectionalIterator2>
+constexpr BidirectionalIterator2 move_backward(
+    BidirectionalIterator1 first, BidirectionalIterator1 last, BidirectionalIterator2 result);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -55,7 +57,7 @@ template<class BidirectionalIterator1, class BidirectionalIterator2> constexpr B
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `result` | 输出 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
+| `result` | 输出 | 输出范围的末端（排他）；向其之前依次写入输入元素，前方须有足够容量。 |
 
 ## 返回值说明
 
@@ -66,20 +68,20 @@ template<class BidirectionalIterator1, class BidirectionalIterator2> constexpr B
 ## 约束说明
 
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     int output[16] = {};
-    return asc::std::move_backward(values, values + 8, output + 8);
+    auto result = asc::std::move_backward(values, values + 8, output + 8);
+    return result == output && output[0] == 1 && output[7] == 8;
 }
 ```
 

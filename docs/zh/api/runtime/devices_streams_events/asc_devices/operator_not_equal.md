@@ -95,29 +95,23 @@ constexpr bool asc::operator!=(asc::stream_ref lhs, asc::stream_ref rhs) noexcep
 
 ## 约束说明
 
-- 仅可在Host查询或选择Device。
-- 引用只保存设备序号且不拥有Runtime状态。
-- 查询失败时输出参数保持原值，属性仅限当前接口列出的AI Core、Vector Core、Warp、UB、GM、L2与架构字段。
-- 提供可为空的非拥有Host引用。
-- 原生句柄为不透明void指针。
-- 仅当CANN Runtime调用成功时才更新查询结果和输出参数。
+- 本页描述已保存的设备属性值、架构枚举或ordinal比较；观察这些值不查询Runtime。
+- 获取实际设备属性时的初始化和设备可用要求见`device_ref::properties`；比较ordinal不证明对应设备实际存在。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例按保存的ordinal比较引用；使用运算符语法使隐藏友元通过实参相关查找参与解析。
 
 ```cpp
 #include <asc/devices>
-
-decltype(auto) example(asc::device_ref lhs, asc::device_ref rhs)
+bool example()
 {
-    return asc::operator!=(lhs, rhs);
+    asc::device_ref left(0);
+    asc::device_ref same(0);
+    asc::device_ref other(1);
+    return left == same && left != other;
 }
 ```
-
-对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
-
-完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
 
 ## 关联API
 

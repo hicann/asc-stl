@@ -36,12 +36,30 @@ C++17中提供同名`inline constexpr bool`变量模板；C++20及以上提供co
 
 ## 声明
 
-以下为C++20及以上的concept声明摘要；C++17变量模板具有相同的模板参数和判定条件。
+以下为定义节选；所引用的辅助约束由头文件提供。C++17变量模板与C++20 concept均可直接用于`static_assert`。
+
+### C++20及以上
 
 ```cpp
 namespace asc::std {
-template<class Index> concept weakly_incrementable;
-} // namespace asc::std
+template <class It>
+concept weakly_incrementable = !same_as<It, bool> &&
+    movable<It> && requires(It value) {
+        typename iter_difference_t<It>;
+        requires signed_integral<iter_difference_t<It>>;
+        { ++value } -> same_as<It&>;
+        value++;
+    };
+}
+```
+
+### C++17
+
+```cpp
+namespace asc::std {
+template <class It>
+inline constexpr bool weakly_incrementable = __weakly_incrementable_impl<It>;
+}
 ```
 
 ## 约束说明
@@ -50,12 +68,17 @@ template<class Index> concept weakly_incrementable;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
+#include <asc/std/functional>
 
-static_assert(asc::std::weakly_incrementable<int*>);
+bool example()
+{
+    static_assert(asc::std::weakly_incrementable<int*>);
+    return true;
+}
 ```
 
 ## 关联API

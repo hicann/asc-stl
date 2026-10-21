@@ -72,9 +72,7 @@ using type = volatile tuple_element_t<Index, T>;
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
-- 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 这是编译期类型或大小查询；类型须满足对应tuple-like特征，索引须在元素范围内。
 
 ## 调用示例
 

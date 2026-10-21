@@ -50,7 +50,7 @@ struct accepts_popcount<T, decltype(void(asc::std::popcount(asc::std::declval<T>
 
 static_assert(accepts_popcount<unsigned>::value && !accepts_popcount<int>::value);
 
-CANN_ASC_STL_API int evaluate_common() noexcept
+CANN_ASC_STL_API int evaluate_bit_algorithms() noexcept
 {
     int failures = 0;
     unsigned int values[] = {0U, 1U, 8U, 15U};
@@ -64,6 +64,14 @@ CANN_ASC_STL_API int evaluate_common() noexcept
     failures += asc::std::bit_width(8U) != 4;
     failures += asc::std::bit_floor(11U) != 8U;
     failures += asc::std::bit_ceil(11U) != 16U;
+    failures += asc::std::bit_ceil(0x80000000U) != 0x80000000U;
+    failures += asc::std::bit_ceil(1ULL << 63) != (1ULL << 63);
+    return failures;
+}
+
+CANN_ASC_STL_API int evaluate_functional_strings() noexcept
+{
+    int failures = 0;
     failures += asc::std::plus<int>{}(2, 3) != 5;
     failures += !asc::std::ranges::less{}(2, 3);
     const char text[] = {'a', 's', 'c', '\0'};
@@ -75,7 +83,13 @@ CANN_ASC_STL_API int evaluate_common() noexcept
     int ignored = 0;
     asc::std::ignore = ignored;
     failures += asc::detail::hierarchy_zero() != 0;
+    return failures;
+}
+
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+CANN_ASC_STL_HOST_API int evaluate_execution_policy() noexcept
+{
+    int failures = 0;
     const auto requirements =
         asc::require(asc::require(asc::determinism::run_to_run), asc::output_ordering::stable_sorted);
     failures += requirements.determinism_value() != asc::determinism::run_to_run;
@@ -87,8 +101,14 @@ CANN_ASC_STL_API int evaluate_common() noexcept
             .require(requirements);
     failures += policy.temporary_storage().data() != &storage;
     failures += policy.requirements().determinism_value() != asc::determinism::run_to_run;
+    return failures;
+}
 #endif
+
 #if !CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+CANN_ASC_STL_HOST_SIMT_API int evaluate_complex_math() noexcept
+{
+    int failures = 0;
     const asc::std::complex<float> value(1.0F, 0.5F);
     const auto round_trip = asc::std::exp(asc::std::log(value));
     failures += __builtin_fabsf(round_trip.real() - value.real()) > 0.001F;
@@ -99,6 +119,19 @@ CANN_ASC_STL_API int evaluate_common() noexcept
     failures += trigonometric.real() != trigonometric.real();
     const auto inverse = asc::std::asinh(value);
     failures += inverse.real() != inverse.real();
+    return failures;
+}
+#endif
+
+CANN_ASC_STL_API int evaluate_common() noexcept
+{
+    int failures = evaluate_bit_algorithms();
+    failures += evaluate_functional_strings();
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    failures += evaluate_execution_policy();
+#endif
+#if !CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+    failures += evaluate_complex_math();
 #endif
     return failures;
 }

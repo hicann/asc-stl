@@ -28,17 +28,23 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::remainderl`由`<asc/std/cmath>`提供，宿主long double IEEE余数，后缀l别名（清单外新增）
+`asc::std::remainderl`由`<asc/std/cmath>`提供，宿主long double IEEE余数，后缀l别名
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-constexpr long double remainderl(long double x, long double y) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr long double remainderl(long double x, long double y) noexcept;
+}
 ```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
 ## 参数说明
 
@@ -51,24 +57,23 @@ constexpr long double remainderl(long double x, long double y) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `long double` | x-n*y的余数，其中n是最接近x/y的整数，中点取偶数。 |
+返回类型按各原型确定（`long double`）。返回x-n*y，n为最接近x/y的整数，半整数取偶；实数结果绝对值不超过|y|/2。
 
 ## 约束说明
 
-- 宿主long double IEEE余数，后缀l别名（清单外新增）。
+- 保持参数说明中的数学定义域及指针有效性要求；可用位置和语言条件按各原型分别确定。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(long double x, long double y)
+bool example()
 {
-    return asc::std::remainderl(x, y);
+    const auto result = asc::std::remainderl(5.0L, 2.0L);
+    return result == 1.0L;
 }
 ```
 

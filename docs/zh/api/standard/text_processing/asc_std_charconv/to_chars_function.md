@@ -34,28 +34,36 @@
 
 ## 函数原型
 
+各重载位于`asc::std`命名空间；整数模板的选择条件排除bool和字符编码类型。
+
 ```cpp
 namespace asc::std {
-[[nodiscard]] constexpr to_chars_result to_chars(char* first, char* last, char value, int base) noexcept;
-} // namespace asc::std
+constexpr to_chars_result to_chars(char* first, char* last, char value, int base = 10) noexcept;
+}
 ```
 
 ## 参数说明
+
+**模板参数（仅整数模板）**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `T` | 标准有符号或无符号整数类型；不含bool、char、wchar_t、char8_t、char16_t和char32_t。char及signed/unsigned char另有固定重载。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `first` | 输入 | 指向输出缓冲区起始位置的指针；转换结果从该位置开始写入。 |
-| `last` | 输入 | 指向输出缓冲区末尾后一位置的指针；写出不得越过该位置。 |
-| `value` | 输入 | 待转换为字符表示的整数值。 |
-| `base` | 输入 | 写出使用的进制，取值范围为2到36。 |
+| `first` | 输出 | 有效字符范围的起点，须与last属于同一缓冲区。 |
+| `last` | 输入 | 字符范围的末尾后一位置。 |
+| `value` | 输入 | 待写出的整数值。 |
+| `base` | 输入 | 进制，2至36；省略时为10。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `to_chars_result` | 返回写入停止位置和错误状态；字符写入调用方缓冲区。 |
+| `to_chars_result` | ptr指向输出末尾，ec为空错误码时成功；容量不足时报告value_too_large，base非法时报告invalid_argument；不会自动写入终止空字符。 |
 
 ## 约束说明
 
@@ -64,14 +72,16 @@ namespace asc::std {
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并在对象与底层存储仍有效时检查结果。
 
 ```cpp
 #include <asc/std/charconv>
 
-decltype(auto) example(char * first, char * last, char value, int base)
+bool example()
 {
-    return asc::std::to_chars(first, last, value, base);
+    char output[4]{};
+    const auto result = asc::std::to_chars(output, output + 4, char(42));
+    return result.ptr == output + 2 && result.ec == asc::std::errc{} && output[0] == '4' && output[1] == '2';
 }
 ```
 

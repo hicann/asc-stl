@@ -37,7 +37,7 @@
 ```cpp
 namespace asc::std {
 [[nodiscard]] constexpr int strcmp(const char* left, const char* right);
-} // namespace asc::std
+}
 ```
 
 ## 参数说明
@@ -59,18 +59,18 @@ namespace asc::std {
 
 - 在Host侧和AI Core SIMT编程中使用普通指针。
 - AI Core SIMD编程中使用local或generic地址空间的普通指针。
-- 仅memmove允许源和目标重叠。
+- 本接口只读访问输入，不限制只读输入彼此相同或重叠；返回的借用指针须在原字符存储仍有效时使用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/cstring>
 
-decltype(auto) example(const char * left, const char * right)
+bool example()
 {
-    return asc::std::strcmp(left, right);
+    return asc::std::strcmp("abc", "abd") < 0 && asc::std::strcmp("abc", "abc") == 0;
 }
 ```
 

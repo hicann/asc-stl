@@ -40,6 +40,7 @@ template<size_t Size> bitset<Size> operator^(const bitset<Size>& lhs, const bits
 } // namespace asc::std
 ```
 
+
 ## 参数说明
 
 **模板参数**
@@ -63,9 +64,7 @@ template<size_t Size> bitset<Size> operator^(const bitset<Size>& lhs, const bits
 
 ## 约束说明
 
-- 支持默认构造和unsigned long long构造。
-- `operator[]`不进行边界检查。
-- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
+- 所属bitset的位数Size在编译期固定，操作不进行动态分配。两个操作数须具有相同Size；二元按位操作逐位组合，不涉及构造来源状态。
 
 ## 调用示例
 

@@ -34,23 +34,29 @@
 
 ## 函数原型
 
+所属类型：[`zip_view`](ranges_zip_view.md)。以下按当前实现列声明摘要；省略仅供SFINAE的选择参数，保留供调用使用的类型默认值。默认构造形式均有逐项参与条件，不能据此假定所有特化都可默认构造。
+
 ### 原型1
 
 ```cpp
-zip_view();
+constexpr zip_view() = default;
 ```
+
+默认构造是否可用取决于两个底层视图的默认构造。
 
 ### 原型2
 
 ```cpp
-constexpr zip_view(Views... base);
+constexpr zip_view(FirstView first, SecondView second);
 ```
+
+按值接收并移动保存两个底层视图，不是变参构造。
 
 ## 参数说明
 
 ### 原型1的参数
 
-无参数。
+无函数参数。
 
 ### 原型2的参数
 
@@ -58,7 +64,8 @@ constexpr zip_view(Views... base);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `base` | 输入 | 参与打包的底层视图包，每个实参为一个视图；视图按位置将各视图元素组合为元组。 |
+| `first` | 输入 | 第一路随机访问且有大小的视图。 |
+| `second` | 输入 | 第二路随机访问且有大小的视图。 |
 
 ## 返回值说明
 
@@ -66,27 +73,26 @@ constexpr zip_view(Views... base);
 
 ## 约束说明
 
-- 七个列出名称。
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 每种形式须满足其原型所列参与条件；实际保存的范围或值还须满足所属视图的类型要求。
+- 构造视图不会复制它所借用的元素；底层存储和被借用对象须覆盖相应迭代器与元素访问期。
+- 以noexcept标注的形式须遵守实际成员操作不抛出异常的要求；具体异常规格见各原型。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/ranges>
-#include <asc/std/array>
-#include <asc/std/iterator>
 #include <asc/std/tuple>
 
 bool example()
 {
-    int values[] = {1, 2, 3, 4};
-    using Base = asc::std::ranges::subrange<int*>;
-    Base base(values, values + 4);
-    asc::std::ranges::zip_view<Base, Base> view(base, base);
-    return asc::std::get<0>(*view.begin()) == 1;
+    int first[3] = {1, 2, 3};
+    int second[2] = {4, 5};
+    auto view = asc::std::ranges::views::zip(first, second);
+    auto item = *view.begin();
+    asc::std::get<0>(item) = 7;
+    return view.size() == 2 && first[0] == 7 && asc::std::get<1>(item) == 4;
 }
 ```
 

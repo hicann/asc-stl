@@ -36,8 +36,9 @@
 
 ```cpp
 namespace asc::std {
-template<class, class> inline constexpr const bool disable_sized_sentinel_for;
-} // namespace asc::std
+template<class Sentinel, class Iter>
+inline constexpr bool disable_sized_sentinel_for = false;
+}
 ```
 
 ## 约束说明
@@ -46,14 +47,17 @@ template<class, class> inline constexpr const bool disable_sized_sentinel_for;
 
 ## 调用示例
 
-以下Host片段用具体迭代器或容器类型实例化本页接口。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-#include <asc/std/type_traits>
-
-inline constexpr auto example = asc::std::disable_sized_sentinel_for<int*, int*>;
+bool example()
+{
+    static_assert(!asc::std::disable_sized_sentinel_for<int*, int*>);
+    static_assert(asc::std::sized_sentinel_for<int*, int*>);
+    return true;
+}
 ```
 
 ## 关联API

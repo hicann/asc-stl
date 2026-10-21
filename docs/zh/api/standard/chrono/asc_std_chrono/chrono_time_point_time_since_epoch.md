@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::chrono::time_point 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr duration time_since_epoch() const;
+[[nodiscard]] constexpr duration time_since_epoch() const;
 ```
 
 ## 参数说明

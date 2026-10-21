@@ -6,7 +6,7 @@
 
 ASC-STL 是**纯头文件 C++ 库**，使用方式可归纳为一句话：**把仓库 `include/` 目录加入编译包含路径，包含公共头即可使用**。
 
-- **无库文件**：不产出任何静态库/动态库，没有链接步骤；
+- **无独立库文件**：ASC-STL自身不产出静态库或动态库；依赖AscendCL的Runtime调用仍需链接外部运行库；
 - **一套公共头，两侧共用**：Host 代码与 Kernel 代码包含同一套公共 Header，无需分别配置；
 - **三类公共入口**：
 
@@ -62,7 +62,7 @@ int main() {
 g++ -std=c++17 -Wall -Wextra -I asc-stl/include host_sample.cpp -o host_sample && ./host_sample
 ```
 
-命令无需链接任何库即可成功。Host 侧可使用全部 C++ 标准库接口与 Runtime 接口。
+本例只使用不依赖Runtime的标准库设施，因此不需要额外链接AscendCL。Host调用依赖CANN的Runtime接口时，还须链接`ascendcl`并完成对应的设备和资源初始化；不同接口的调用位置和可用范围见各API页面。
 
 ### 方式二：CMake 集成
 

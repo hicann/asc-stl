@@ -34,8 +34,10 @@
 
 ```cpp
 namespace asc {
-template<unsigned Rank> constexpr asc::tensor_copy_status validate_tensor_copy_descriptor(const asc::tensor_copy_descriptor<Rank>& descriptor) noexcept;
-} // namespace asc
+template <unsigned Rank>
+[[nodiscard]] constexpr asc::tensor_copy_status validate_tensor_copy_descriptor(
+    const asc::tensor_copy_descriptor<Rank>& descriptor) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -44,25 +46,28 @@ template<unsigned Rank> constexpr asc::tensor_copy_status validate_tensor_copy_d
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rank` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Rank` | 描述符的张量秩（维度数量），为1至5的编译期无符号整数。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `descriptor` | 输入 | 描述张量形状、步长与搬运方向的对象；提交前须通过校验。 |
+| `descriptor` | 输入 | 待检查的描述符；调用期间须有效，可包含尚未通过校验的数值。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::tensor_copy_status` | 返回描述符参数校验或维度设置的状态。 |
+| `asc::tensor_copy_status` | 返回描述符数值校验状态；本调用不修改描述符，也不提交搬运。 |
 
 ## 约束说明
 
-- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Rank为1至5。
-- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
+- 可在Host、AI Core SIMD编程和AI Core SIMT编程中调用；本操作同步处理描述符，不启动数据搬运。
+- `Rank`须为1至5的编译期无符号整数；各维度按从外到内的顺序编号，最内维为`Rank - 1`。
+- `descriptor`须在调用期间有效；本函数返回其[validate](tensor_copy_descriptor_validate.md)成员的校验结果。
+- 按维度检查非零有效长度和非零源/目标步长；发现问题分别返回`zero_extent`或`zero_stride`。
+- 任一侧填充超过255、填充后元素总量溢出或源/目标步长跨度累计溢出时，返回`size_overflow`；其余情况返回`success`。
+- 校验不访问源/目标存储，不检查实际视图容量、流水级或端点地址；搬运接口还会执行各自检查。
 
 ## 调用示例
 

@@ -49,7 +49,7 @@ void wait(arrival_token&& token) const;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `token` | 输入/输出 | 提供“等待对应同步阶段、计数或许可满足完成条件”使用的对象引用；被引用对象须在调用期间有效。 |
+| `token` | 输入 | 同一屏障的有效到达令牌，以右值传入；等待该令牌关联的阶段完成。 |
 
 ## 返回值说明
 
@@ -57,21 +57,30 @@ void wait(arrival_token&& token) const;
 
 ## 约束说明
 
-- Host侧对象管理Ascend 950的GM状态。
+- 令牌必须由同一个barrier的arrive操作取得，并关联当前或紧前一个有效阶段；不得使用其他屏障的令牌或跨越有效阶段的旧令牌。barrier对象在等待返回前须保持有效。
+
+- Host对象使用本机普通内存及CPU原子操作，不管理NPU的GM状态。AI Core SIMT共享对象须位于GM，且在并发访问前完成初始化；不支持AI Core SIMD调用。
 - 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下Host片段使用一个可独立完成的参与者演示调用；多参与者场景须保证并发推进。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/barrier>
 
-void example()
+struct completion {
+    int* phases;
+    void operator()() noexcept { ++*phases; }
+};
+
+bool example()
 {
-    asc::std::barrier<> barrier(1);
-    auto token = barrier.arrive(1);
-    barrier.wait(static_cast<asc::std::barrier<>::arrival_token&&>(token));
+    int phases = 0;
+    asc::std::barrier<completion> barrier(1, completion{&phases});
+    auto token = barrier.arrive();
+    barrier.wait(static_cast<decltype(token)&&>(token));
+    return phases == 1;
 }
 ```
 

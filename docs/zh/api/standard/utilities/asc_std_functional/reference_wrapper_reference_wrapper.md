@@ -34,12 +34,11 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::reference_wrapper<T>`](reference_wrapper.md)。以下为类内声明；`__accept`是类内的引用绑定检查，不是调用方需要提供的函数。
+以下为类内的**等价调用形态摘要**，以公开类型特征表达引用绑定的异常条件，并省略实现的选择参数。
 
 ```cpp
-template<class U, class = enable_if_t<!__is_same(remove_cvref_t<U>, reference_wrapper)>>
-constexpr reference_wrapper(U&& value)
-    noexcept(noexcept(reference_wrapper::__accept(::asc::std::forward<U>(value))));
+template<class U>
+constexpr reference_wrapper(U&& value) noexcept(is_nothrow_convertible_v<U, T&>);
 ```
 
 ## 参数说明
@@ -63,6 +62,8 @@ constexpr reference_wrapper(U&& value)
 无返回值。
 
 ## 约束说明
+
+- U须能隐式绑定或转换为T&；构造模板排除同类型reference_wrapper，普通复制使用其隐式特殊成员。异常说明由该引用转换是否抛出决定，而非复制被引用对象。
 
 - 来源值须能绑定为有效的`T&`；不能用临时对象建立随后悬空的引用。
 - 构造的包装器不拥有对象；被引用对象须在包装器访问期间保持有效。

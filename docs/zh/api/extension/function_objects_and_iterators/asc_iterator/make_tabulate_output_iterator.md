@@ -34,8 +34,10 @@
 
 ```cpp
 namespace asc {
-template<class Function, class Integer = asc::std::ptrdiff_t> constexpr asc::tabulate_output_iterator<Function, Integer> make_tabulate_output_iterator(Function function, Integer index = 0);
-} // namespace asc
+template <class Function, class Integer = asc::std::ptrdiff_t>
+constexpr asc::tabulate_output_iterator<Function, Integer> make_tabulate_output_iterator(
+    Function function, Integer index = 0);
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -58,7 +60,7 @@ template<class Function, class Integer = asc::std::ptrdiff_t> constexpr asc::tab
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::tabulate_output_iterator<Function, Integer>` | 返回保存调用方参数的迭代器适配器；底层范围须在使用期间保持有效。 |
+| `asc::tabulate_output_iterator<Function, Integer>` | 返回保存调用方参数的迭代器适配器；所保存函数对象若捕获外部引用，该引用须在使用期间有效。 |
 
 ## 约束说明
 
@@ -67,16 +69,16 @@ template<class Function, class Integer = asc::std::ptrdiff_t> constexpr asc::tab
 
 ## 调用示例
 
-以下片段使用具体数组和可调用对象构造迭代器。实际使用时底层范围须保持有效。
+以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
-
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    return asc::make_tabulate_output_iterator([](int, int) {}, 0);
+    int values[2] = {};
+    auto iterator = asc::make_tabulate_output_iterator([&values](int i, int value) { values[i] = value; }, 0);
+    *iterator = 7;
+    return values[0] == 7;
 }
 ```
 

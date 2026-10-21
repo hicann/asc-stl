@@ -42,7 +42,7 @@ template<class T> struct negation;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 实参须提供可转换为`bool`的`value`；结果继承表示其逻辑非的`bool_constant`。
 
 ## 调用示例
 

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::year_month_weekday_last`表示日期、时间点或时长计算中的`year_month_weekday_last`值类型。
+`asc::std::chrono::year_month_weekday_last`表示某年某月最后一次出现的指定星期，可换算为系统或本地时间线上的日精度时间点。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

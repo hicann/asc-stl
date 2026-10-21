@@ -97,7 +97,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr Tp __fp_from_storage(__fp_stor
         return ret;
     } else if constexpr (__is_ext_asc_fp_v<Tp>) {
         union __storage_access {
-            __storage_access() noexcept
+            CANN_ASC_STL_HOST_DEVICE __storage_access() noexcept
             {}
             __fp_storage_of_t<Tp> __storage;
             Tp __value;
@@ -126,7 +126,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr __fp_storage_of_t<Tp> __fp_get
         return v.__storage_;
     } else if constexpr (__is_ext_asc_fp_v<Tp>) {
         union __storage_access {
-            __storage_access() noexcept
+            CANN_ASC_STL_HOST_DEVICE __storage_access() noexcept
             {}
             Tp __value;
             __fp_storage_of_t<Tp> __storage;

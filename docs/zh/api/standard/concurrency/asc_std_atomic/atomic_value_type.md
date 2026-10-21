@@ -45,10 +45,8 @@ using value_type = T;
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数。
-- bool/8/16位用32位内部存储。
-- 32/64位按有符号位模式分派。
-- Host和AI Core SIMT编程GM。
+- 该别名就是原子模板参数`T`；`T`须为[atomic](atomic.md)支持的整数或字符类型，包括`bool`。
+- 读取该别名不访问原子对象，也不要求提供GM存储。
 
 ## 调用示例
 

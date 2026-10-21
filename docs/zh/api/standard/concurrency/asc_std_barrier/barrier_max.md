@@ -40,7 +40,7 @@
 
 ```cpp
 // asc::std::barrier 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr long long max() noexcept;
+static constexpr long long max() noexcept;
 ```
 
 ## 参数说明
@@ -55,23 +55,20 @@ constexpr long long max() noexcept;
 
 ## 约束说明
 
-- Host侧对象管理Ascend 950的GM状态。
+- Host对象使用本机普通内存及CPU原子操作，不管理NPU的GM状态。AI Core SIMT共享对象须位于GM，且在并发访问前完成初始化；不支持AI Core SIMD调用。
 - 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/barrier>
 
 bool example()
 {
-    int completed = 0;
-    auto completion = [&]() noexcept { ++completed; };
-    asc::std::barrier<decltype(completion)> barrier(1, completion);
-    barrier.arrive_and_wait();
-    return completed == 1 && barrier.max() >= 1;
+    static_assert(asc::std::barrier<>::max() >= 1);
+    return true;
 }
 ```
 

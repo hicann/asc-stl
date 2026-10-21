@@ -34,90 +34,123 @@
 
 ## 函数原型
 
-以下为`asc::std::tuple<Types...>`的类内构造声明；`Types...`来自所属类模板。
-
-### 原型1
+以下为所属类内的**调用形态摘要**。省略实现使用的SFINAE选择参数；同形的隐式与explicit形式分别受下面的可构造性、可转换性条件选择，不能将摘要复制为一组无条件重载定义。
 
 ```cpp
-constexpr tuple();
+constexpr tuple() = default;
 ```
 
-### 原型2
-
 ```cpp
-tuple(const tuple<Types...>& other);
+tuple(const tuple&) = default;
 ```
 
-### 原型3
-
 ```cpp
-tuple(tuple<Types...>&& other);
+tuple(tuple&&) = default;
 ```
 
-### 原型4
+```cpp
+constexpr tuple(const Types&... values);
+```
 
 ```cpp
-template<class... Values, enable_if_t<sizeof...(Values) == sizeof...(Types), int> = 0> constexpr explicit tuple(Values&&... values);
+constexpr explicit tuple(const Types&... values);
+```
+
+```cpp
+template <class... Values>
+constexpr tuple(Values&&... values);
+```
+
+```cpp
+template <class... Values>
+constexpr explicit tuple(Values&&... values);
+```
+
+```cpp
+template <class... UTypes>
+constexpr tuple(const tuple<UTypes...>& other);
+```
+
+```cpp
+template <class... UTypes>
+constexpr explicit tuple(const tuple<UTypes...>& other);
+```
+
+```cpp
+template <class... UTypes>
+constexpr tuple(tuple<UTypes...>&& other);
+```
+
+```cpp
+template <class... UTypes>
+constexpr explicit tuple(tuple<UTypes...>&& other);
+```
+
+```cpp
+template <class Alloc>
+constexpr tuple(allocator_arg_t, const Alloc& alloc);
+```
+
+```cpp
+template <class Alloc>
+constexpr tuple(allocator_arg_t, const Alloc& alloc, const Types&... values);
+```
+
+```cpp
+template <class Alloc>
+constexpr tuple(allocator_arg_t, const Alloc& alloc, const tuple& other);
+```
+
+```cpp
+template <class Alloc>
+constexpr tuple(allocator_arg_t, const Alloc& alloc, tuple&& other);
+```
+
+```cpp
+template <class Alloc, class... UTypes>
+constexpr tuple(allocator_arg_t, const Alloc& alloc, const tuple<UTypes...>& other);
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
-无参数。
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
-
-### 原型3的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
-
-### 原型4的参数
-
 **模板参数**
 
-| 参数名 | 描述 |
-| --- | --- |
-| `Values` | 传递给构造函数或可调用对象的实参类型列表。 |
+`Types...`是所属tuple元素类型；Values...和UTypes...分别表示逐元素实参与来源tuple元素类型，Alloc是分配器类型。
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `values` | 输入/输出 | 逐元素构造的转发实参包；第i个实参经转发（左值复制、右值移动）初始化新tuple的第i个元素，被移动的右值实参随后处于有效但未指定状态。 |
+| `values...` | 输入/输出（可移动来源） | 按相应值类别构造每个元素；const引用形式只读。 |
+| `other` | 输入/输出（可移动来源） | 来源tuple；const引用复制，右值形式可移动。 |
+| `alloc` | 输入 | allocator_arg形态使用的分配器，按各元素uses_allocator规则参与构造。 |
+
 ## 返回值说明
 
 无返回值。
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
+- const Types&...元素构造仅用于非空tuple。同形的implicit和explicit摘要分别受逐元素可隐式转换与至少一个显式转换条件选择。
+
+- 参数个数须与Types...个数一致且各元素可从对应来源构造；全部对应转换可隐式进行时采用不带explicit的形式，否则采用explicit形式。异类型tuple转换还排除应由单元素构造或复制/移动形态处理的情况。allocator_arg形式按各元素的uses_allocator规则传递分配器，构造、复制或用户元素操作是否分配由这些操作决定。
+- 用户提供的构造、分配及可调用操作须在所选执行位置有效；Device实例须适用于目标的非抛出环境。
 
 ## 调用示例
 
-以下Host示例展示具体输入、接口调用和可检查的结果。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
+#include <memory>
 #include <asc/std/tuple>
-#include <asc/std/utility>
 
 bool example()
 {
-    asc::std::tuple<int, int> zero;
-    asc::std::tuple<int, int> values(2, 4);
-    auto copy = values;
-    auto moved = asc::std::move(copy);
-    return asc::std::get<0>(zero) == 0 && asc::std::get<0>(moved) == 2 && asc::std::get<1>(moved) == 4;
+    asc::std::tuple<int, int> values(2, 3);
+    asc::std::tuple<long, long> converted = values;
+    ::std::allocator<int> allocator;
+    asc::std::tuple<int, int> allocated(asc::std::allocator_arg, allocator, 4, 5);
+    return asc::std::get<0>(converted) == 2 && asc::std::get<1>(allocated) == 5;
 }
 ```
 

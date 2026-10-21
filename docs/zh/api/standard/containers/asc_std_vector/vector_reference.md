@@ -43,11 +43,8 @@ using reference = T&;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 该别名为`T&`，不拥有被引用的元素，也不延长元素生命周期。
+- 引用仅在对应元素仍存活且其存储未被释放或重新分配时有效。
 
 ## 调用示例
 

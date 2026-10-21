@@ -35,7 +35,7 @@
 ```cpp
 namespace asc {
 bool block_any(asc::block_collective_workspace<asc::std::uint32_t> workspace, bool predicate) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -44,8 +44,8 @@ bool block_any(asc::block_collective_workspace<asc::std::uint32_t> workspace, bo
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `workspace` | 输入 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
-| `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `workspace` | 输入/输出 | 当前线程块的集体操作工作区；参与线程会合期间不得复用。 |
+| `predicate` | 输入 | 本Lane或线程已经求得的bool投票值；接口直接集体处理此值，不调用谓词函数。 |
 
 ## 返回值说明
 

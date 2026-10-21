@@ -43,7 +43,7 @@ using type = remove_volatile_t<remove_const_t<T>>;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 成员`type`为所属特征类计算的结果。只移除`T`的顶层`const`和`volatile`；引用及指针所指对象的限定不受影响。
 
 ## 调用示例
 

@@ -36,11 +36,13 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::inplace_vector`](inplace_vector.md)。
+所属类型：[`inplace_vector<T, Capacity>`](inplace_vector.md)。以下为类内声明，类型别名及模板形参由所属类提供。
+
+### 原型1
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class ...Args> optional<reference> try_emplace_back(Args&&... args);
+template<class... Args>
+constexpr optional<reference> try_emplace_back(Args&&... args);
 ```
 
 ## 参数说明
@@ -49,25 +51,23 @@ template<class ...Args> optional<reference> try_emplace_back(Args&&... args);
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Args` | 传递给构造函数或可调用对象的实参类型列表。 |
-
-**函数参数**
+| `Args` | 新元素构造实参类型包；须能以对应值类别构造T。 |
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `args` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
+| `args` | 输入 | 转发给T构造函数的实参；构造期间须有效，T保存的借用关系另须满足其生存期。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `optional<reference>` | 返回其引用。 |
+| 适用原型 | 返回值类型 | 含义 |
+| --- | --- | --- |
+| 原型1 | `optional<reference>` | 有容量时借用新元素；容量已满时为空，不构造或消耗来源。 |
 
 ## 约束说明
 
-- 元素保存在固定容量的对象内存中，不进行动态分配。
-- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
-- Host提供完整接口，设备端仅提供不抛出异常的接口。
+- 容量不足时返回空optional，不构造新元素；有容量时返回借用新元素的optional<T&>。
+- 非空结果借用的元素必须继续存活；元素构造要求仍须满足。
+- 元素的对应构造、赋值和析构须满足非抛出使用域；constexpr声明不保证任意T和语言模式都能常量求值。
 
 ## 调用示例
 

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::uniform_real_distribution::min`返回该类型允许的最小值。
+`asc::std::uniform_real_distribution::min`返回当前分布参数的下界a()。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
@@ -46,7 +46,7 @@ constexpr float asc::std::uniform_real_distribution<float>::min() const noexcept
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `float` | 返回该类型允许的最小值。 |
+| `float` | 返回当前分布参数的下界a()。 |
 
 ## 约束说明
 

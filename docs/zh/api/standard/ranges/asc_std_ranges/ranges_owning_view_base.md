@@ -34,67 +34,71 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::ranges::owning_view`](ranges_owning_view.md)。
+所属类型：[`owning_view`](ranges_owning_view.md)。以下是按参与条件列出的声明摘要；保留供调用使用的模板默认值，省略仅供SFINAE的实现选择参数。涉及私有返回类型时用auto摘要表示，不承诺可直接命名该类型。
 
 ### 原型1
 
 ```cpp
-// asc::std::ranges::owning_view 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr Rp&& base()&& noexcept;
+constexpr Range& base() & noexcept;
 ```
+
+此形式没有额外的成员模板参与条件；仍须满足所属类型的要求。
 
 ### 原型2
 
 ```cpp
-// asc::std::ranges::owning_view 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr Rp& base()& noexcept;
+constexpr const Range& base() const& noexcept;
 ```
+
+此形式没有额外的成员模板参与条件；仍须满足所属类型的要求。
 
 ### 原型3
 
 ```cpp
-// asc::std::ranges::owning_view 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr const Rp&& base() const&& noexcept;
+constexpr Range&& base() && noexcept;
 ```
+
+此形式没有额外的成员模板参与条件；仍须满足所属类型的要求。
 
 ### 原型4
 
 ```cpp
-// asc::std::ranges::owning_view 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr const Rp& base() const& noexcept;
+constexpr const Range&& base() const&& noexcept;
 ```
+
+此形式没有额外的成员模板参与条件；仍须满足所属类型的要求。
 
 ## 参数说明
 
 ### 原型1的参数
 
-无参数。
+无函数参数。
 
 ### 原型2的参数
 
-无参数。
+无函数参数。
 
 ### 原型3的参数
 
-无参数。
+无函数参数。
 
 ### 原型4的参数
 
-无参数。
+无函数参数。
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `Rp &&` | 返回适配器保存的底层迭代器或对象。 |
-| 原型2 | `Rp &` | 返回适配器保存的底层迭代器或对象。 |
-| 原型3 | `const Rp &&` | 返回适配器保存的底层迭代器或对象。 |
-| 原型4 | `const Rp &` | 返回适配器保存的底层迭代器或对象。 |
+| 原型1 | `Range&` | 返回保存的底层范围；const左值形式复制，右值形式移动，owning_view的各形式按声明返回相应引用。返回引用或借用范围时须遵守原存储生命周期。 |
+| 原型2 | `const Range&` | 返回保存的底层范围；const左值形式复制，右值形式移动，owning_view的各形式按声明返回相应引用。返回引用或借用范围时须遵守原存储生命周期。 |
+| 原型3 | `Range&&` | 返回保存的底层范围；const左值形式复制，右值形式移动，owning_view的各形式按声明返回相应引用。返回引用或借用范围时须遵守原存储生命周期。 |
+| 原型4 | `const Range&&` | 返回保存的底层范围；const左值形式复制，右值形式移动，owning_view的各形式按声明返回相应引用。返回引用或借用范围时须遵守原存储生命周期。 |
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
-- owning_view仅拥有调用方传入的范围对象，不产生额外分配。
+- 每种形式的参与条件见原型；无实参查询一般直接调用，不需要指定模板选择类型。
+- 返回的迭代器、指针或引用以及借用范围不得超过其实际依赖的视图对象和元素存储的有效期。
 
 ## 调用示例
 

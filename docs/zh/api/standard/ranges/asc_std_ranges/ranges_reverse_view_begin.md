@@ -34,21 +34,34 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::ranges::reverse_view`](ranges_reverse_view.md)。
+所属类型：[`reverse_view`](ranges_reverse_view.md)。以下是按参与条件列出的声明摘要；保留供调用使用的模板默认值，省略仅供SFINAE的实现选择参数。涉及私有返回类型时用auto摘要表示，不承诺可直接命名该类型。两个非const模板具有互斥的common_range条件。
 
 ### 原型1
 
 ```cpp
-// asc::std::ranges::reverse_view 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class View2> constexpr auto begin() const;
+template<class View2 = View>
+constexpr reverse_iterator<iterator_t<View2>> begin();
 ```
+
+参与条件：`((!common_range<View2>))`。
 
 ### 原型2
 
 ```cpp
-// asc::std::ranges::reverse_view 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class View2> constexpr reverse_iterator<iterator_t<View2>> begin();
+template<class View2 = View>
+constexpr reverse_iterator<iterator_t<View2>> begin();
 ```
+
+参与条件：`(common_range<View2>)`。
+
+### 原型3
+
+```cpp
+template<class View2 = View>
+constexpr auto begin() const;
+```
+
+参与条件：`(common_range<const View2>)`。
 
 ## 参数说明
 
@@ -58,7 +71,9 @@ template<class View2> constexpr reverse_iterator<iterator_t<View2>> begin();
 
 | 参数名 | 描述 |
 | --- | --- |
-| `View2` | 输入范围或视图的类型；须满足所选原型的遍历要求。 |
+| `View2` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
+
+无函数参数。
 
 ### 原型2的参数
 
@@ -66,18 +81,32 @@ template<class View2> constexpr reverse_iterator<iterator_t<View2>> begin();
 
 | 参数名 | 描述 |
 | --- | --- |
-| `View2` | 输入范围或视图的类型；须满足所选原型的遍历要求。 |
+| `View2` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
+
+无函数参数。
+
+### 原型3的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `View2` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
+
+无函数参数。
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `auto` | 返回指向首元素的迭代器。 |
-| 原型2 | `reverse_iterator<iterator_t<View2>>` | 返回指向首元素的迭代器。 |
+| 原型1 | `reverse_iterator<iterator_t<View2>>` | 返回起始迭代器；私有迭代器类型以auto表示，由所属视图定义其解引用和移动行为。 |
+| 原型2 | `reverse_iterator<iterator_t<View2>>` | 返回起始迭代器；私有迭代器类型以auto表示，由所属视图定义其解引用和移动行为。 |
+| 原型3 | `auto` | 返回起始迭代器；私有迭代器类型以auto表示，由所属视图定义其解引用和移动行为。 |
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- 每种形式的参与条件见原型；无实参查询一般直接调用，不需要指定模板选择类型。
+- 返回的迭代器、指针或引用以及借用范围不得超过其实际依赖的视图对象和元素存储的有效期。
 
 ## 调用示例
 

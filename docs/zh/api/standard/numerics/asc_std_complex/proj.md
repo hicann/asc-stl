@@ -40,7 +40,7 @@
 
 ```cpp
 namespace asc::std {
-template<class T> complex<T> proj(T value) noexcept;
+template<class T> [[nodiscard]] complex<T> proj(T value) noexcept;
 } // namespace asc::std
 ```
 
@@ -48,7 +48,7 @@ template<class T> complex<T> proj(T value) noexcept;
 
 ```cpp
 namespace asc::std {
-template<class T> complex<T> proj(const complex<T>& value) noexcept;
+template<class T> [[nodiscard]] complex<T> proj(const complex<T>& value) noexcept;
 } // namespace asc::std
 ```
 

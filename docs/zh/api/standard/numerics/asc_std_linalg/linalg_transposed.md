@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std::linalg {
-template<class ElementType, class Extents, class Layout, class Accessor> [[nodiscard]] constexpr auto transposed(mdspan<ElementType, Extents, Layout, Accessor> input);
+template<class ElementType, class Extents, class Layout, class Accessor> constexpr auto transposed(mdspan<ElementType, Extents, Layout, Accessor> input);
 } // namespace asc::std::linalg
 ```
 
@@ -65,22 +65,25 @@ template<class ElementType, class Extents, class Layout, class Accessor> [[nodis
 
 ## 约束说明
 
+- 转置仅适用于rank为2的矩阵视图或映射；两个维度和对应步长互换，不提供任意阶轴重排。
+
 - 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下Host片段展示固定缓冲或多维视图的具体调用；底层存储须保持有效。
+以下Host示例给出具体输入，并在对象与底层存储仍有效时检查结果。
 
 ```cpp
 #include <asc/std/linalg>
-#include <asc/std/cstddef>
 
-decltype(auto) example()
+bool example()
 {
     int values[6] = {1, 2, 3, 4, 5, 6};
-    using extents = asc::std::extents<asc::std::size_t, 2, 3>;
-    asc::std::mdspan<int, extents> view(values);
-    return asc::std::linalg::transposed(view);
+    using E = asc::std::extents<int, 2, 3>;
+    asc::std::mdspan<int, E> view(values);
+    const auto result = asc::std::linalg::transposed(view);
+    return result.extent(0) == 3 && result.extent(1) == 2 &&
+        result.accessor().access(result.data_handle(), result.mapping()(2, 1)) == 6;
 }
 ```
 

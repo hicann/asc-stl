@@ -67,9 +67,10 @@ struct __fn {
     CANN_ASC_STL_API constexpr for_each_n_result<_Iter, _Func> operator()(
         _Iter __first, iter_difference_t<_Iter> __count, _Func __func, _Proj __proj = {}) const
     {
-        while (__count-- > 0) {
+        while (__count > 0) {
             ::asc::std::invoke(__func, ::asc::std::invoke(__proj, *__first));
             ++__first;
+            --__count;
         }
         return {::asc::std::move(__first), ::asc::std::move(__func)};  // NOLINT(build/include_what_you_use)
     }

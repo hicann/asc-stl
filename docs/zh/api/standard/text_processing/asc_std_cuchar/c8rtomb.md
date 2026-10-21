@@ -58,6 +58,8 @@ size_t c8rtomb(char* output, char8_t value, mbstate_t* state) noexcept;
 
 ## 约束说明
 
+- 该接口需要C++20的char8_t。Host还要求所用系统C/C++库实际提供该转换的声明和实现；库的主版本号本身不能保证可用性。
+
 - Device不执行UTF多单元续接，不更新state。Host在连续转换中保持同一状态对象，转换不同序列时重新初始化状态。
 - 输入和输出存储在调用期间保持有效；输入范围与输出容量符合参数说明。
 

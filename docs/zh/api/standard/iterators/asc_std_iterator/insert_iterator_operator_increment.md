@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::insert_iterator::operator++`把当前迭代器或计数值推进一步。
+`asc::std::insert_iterator::operator++`提供输出迭代器的自增形式，操作本身不改变容器或插入位置。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
@@ -47,7 +47,7 @@ constexpr insert_iterator<Container>& operator++() noexcept;
 
 ```cpp
 // asc::std::insert_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr insert_iterator<Container>& operator++(int unused) noexcept;
+constexpr insert_iterator<Container> operator++(int unused) noexcept;
 ```
 
 ## 参数说明
@@ -66,33 +66,31 @@ constexpr insert_iterator<Container>& operator++(int unused) noexcept;
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `insert_iterator<Container> &` | 返回更新后的当前对象引用。 |
-| 原型2 | `insert_iterator<Container> &` | 返回更新后的当前对象引用。 |
+前置形式返回当前适配器的引用；后置形式按值返回适配器副本。两种形式都不插入元素，也不改变保存的插入位置。
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 目标容器须支持对应的`insert(position, value)`操作；插入迭代器保存容器地址，不拥有容器。
+- 容器须在适配器使用期间有效；插入操作还须遵守目标容器自身的迭代器失效规则。
+- 解引用与自增用于满足输出迭代器调用形式，本身不插入元素；通过赋值执行插入。
 
 ## 调用示例
 
-以下Host片段使用调用方提供的标准容器演示迭代器操作；目标容器须保持有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
-#include <deque>
-#include <functional>
 #include <vector>
 
-#include <vector>
-
-void example()
+bool example()
 {
-    ::std::vector<int> values{};
+    ::std::vector<int> values;
     asc::std::insert_iterator<::std::vector<int>> output(values, values.begin());
-    ++output;
+    auto& prefix = ++output;
+    auto postfix = output++;
+    bool unchanged = &prefix == &output && values.empty();
+    *postfix = 7;
+    return unchanged && values.size() == 1 && values.front() == 7;
 }
 ```
 

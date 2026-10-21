@@ -46,7 +46,7 @@ template<class T> constexpr asc::std::conditional_t<asc::std::is_nothrow_move_co
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 对象类型；须可复制构造或可按noexcept移动构造。 |
+| `T` | 对象类型；本调用只选择返回引用，不复制或移动构造对象。后续构造由调用方另行满足其类型要求。 |
 
 **函数参数**
 

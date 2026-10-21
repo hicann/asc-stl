@@ -34,9 +34,12 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const bool is_void_v;
+template<class T>
+inline constexpr bool is_void_v = is_void<T>::value;
 } // namespace asc::std
 ```
 
@@ -51,7 +54,8 @@ template<class T> inline constexpr const bool is_void_v;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::is_void_v<int>;
+static_assert((asc::std::is_void_v<int>) == false);
+static_assert(asc::std::is_void_v<void>);
 ```
 
 ## 关联API

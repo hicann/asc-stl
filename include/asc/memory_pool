@@ -199,15 +199,16 @@ public:
             // A cache entry that no longer matches the block table is consumed
             // (marked unavailable) and reported as a miss; the table is truth.
         }
+        // Reserve an ownership slot before requesting backend storage. A full
+        // metadata table must never create an unregistered allocation.
+        pool_block_entry* slot = find_empty();
+        if (slot == nullptr) {
+            return execution_status{execution_errc::insufficient_storage};
+        }
         void* fresh = nullptr;
         const execution_status allocated = pool_allocate(domain_, &fresh, bytes, alignment, device_ordinal_);
         if (!allocated.success()) {
             return allocated;
-        }
-        pool_block_entry* slot = find_empty();
-        if (slot == nullptr) {
-            (void)pool_deallocate(domain_, fresh, bytes, alignment, device_ordinal_);
-            return execution_status{execution_errc::insufficient_storage};
         }
         slot->pointer = fresh;
         slot->bytes = bytes;

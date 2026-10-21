@@ -38,8 +38,9 @@
 
 ```cpp
 // asc::std::bitset 类内的声明节选；模板形参和其他成员由所属类提供。
-bitset<Size>& operator<<=(size_t shift) noexcept;
+constexpr bitset<Size>& operator<<=(size_t shift) noexcept;
 ```
+
 
 ## 参数说明
 
@@ -57,9 +58,7 @@ bitset<Size>& operator<<=(size_t shift) noexcept;
 
 ## 约束说明
 
-- 支持默认构造和unsigned long long构造。
-- `operator[]`不进行边界检查。
-- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
+- 所属bitset的位数Size在编译期固定，操作不进行动态分配。移位计数为size_t；计数大于等于Size时，结果全部位为0。
 
 ## 调用示例
 

@@ -34,14 +34,15 @@
 
 ```cpp
 // asc::args 类内的声明节选；模板形参和其他成员由所属类提供。
-template<auto Value> class constant;
+template <auto Value>
+class constant;
 ```
 
 ## 约束说明
 
+- Value是编译期非类型模板实参；value返回该常量，不保存或读取延迟指针。
+
 - 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 

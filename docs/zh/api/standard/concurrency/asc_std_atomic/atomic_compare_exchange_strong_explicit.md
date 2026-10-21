@@ -67,10 +67,10 @@ template<class T> bool atomic_compare_exchange_strong_explicit(atomic<T>* object
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数。
-- bool/8/16位用32位内部存储。
-- 32/64位按有符号位模式分派。
-- Host和AI Core SIMT编程GM。
+- 原子操作可在Host和AI Core SIMT编程中调用；SIMT线程共享的原子对象须位于GM，并在并发访问前完成初始化。
+- `object`须指向有效的[atomic](atomic.md)对象，其值类型须与模板参数`T`一致。
+- 比较失败时将观察到的当前值写回`expected`；调用方须提供可写且在调用期间有效的预期值对象。
+- 两内存序参数形式的`failure`不得为`memory_order_release`或`memory_order_acq_rel`，且不得强于成功内存序。
 
 ## 调用示例
 

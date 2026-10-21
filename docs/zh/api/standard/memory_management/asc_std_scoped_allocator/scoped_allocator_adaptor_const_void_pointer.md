@@ -3,7 +3,7 @@
 ## 产品支持情况
 
 <!-- npu="950" id1 -->
-- Ascend 950PR&950DT系列产品：支持
+- Ascend 950PR&950DT系列产品：本页为兼容性说明，所述接口未提供
 <!-- end id1 -->
 <!-- npu="A3" id2 -->
 - Atlas A3系列产品：不支持
@@ -26,52 +26,30 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/std/scoped_allocator>`。
+本页保留原入口用于兼容性说明。适配器自身未定义`const_void_pointer`；外层分配器若有同名公开成员，可能通过继承可见，但没有按内层分配器聚合或补缺的保证。
 
-`asc::std::scoped_allocator_adaptor::const_void_pointer`标识分配器可表示的只读void指针类型。
-
-标准语义参考：[cppreference `scoped_allocator`](https://en.cppreference.com/w/cpp/header/scoped_allocator)。
+若要查询外层分配器的特征，请显式使用`asc::std::allocator_traits<OuterAllocator>`；其结果仅描述外层分配器。
 
 ## 声明
 
-所属类型：[`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。
-
-```cpp
-// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
-using const_void_pointer = typename outer_traits::const_void_pointer;
-```
+当前产品不声明本页标题所示的接口。请使用下述已提供的接口。
 
 ## 约束说明
 
-- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
-- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
+- 适配器自身未定义`const_void_pointer`；外层分配器若有同名公开成员，可能通过继承可见，但没有按内层分配器聚合或补缺的保证。
+- 若要查询外层分配器的特征，请显式使用`asc::std::allocator_traits<OuterAllocator>`；其结果仅描述外层分配器。
 
 ## 调用示例
 
-以下Host片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
-#include <asc/std/scoped_allocator>
-#include <functional>
+#include <asc/std/memory>
+#include <asc/std/type_traits>
 #include <memory>
-#include <string>
-#include <utility>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void use_type()
-{
-    using alias_type = typename asc::std::scoped_allocator_adaptor<example_allocator<int>>::const_void_pointer;
-}
+using outer_traits = asc::std::allocator_traits<std::allocator<int>>;
+static_assert(asc::std::is_same_v<outer_traits::const_void_pointer, const void*>);
 ```
 
 ## 关联API

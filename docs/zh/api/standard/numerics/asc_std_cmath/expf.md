@@ -36,11 +36,18 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-float expf(float x) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float expf(
+    float value) noexcept;
+}
 ```
+
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
 
 ## 参数说明
 
@@ -48,28 +55,27 @@ float expf(float x) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 自然指数e的指数值（无量纲）；上溢返回 +inf，下溢返回0。 |
+| `value` | 输入 | 自然指数e的指数值（无量纲）；上溢返回 +inf，Host下溢可能产生次正规数；SIMT可能刷新次正规输入和输出为零。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float` | 返回自然指数；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+返回类型按各原型确定（`float`）。返回以e为底的指数值。
 
 ## 约束说明
 
-- 提供float重载、标准 *f别名以及float lerp回移接口。
+- Host遵循系统数学库的次正规数行为；AI Core SIMT编程后端可能将次正规结果刷新为零，不能把Host的下溢边界直接用于Device结果。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float x)
+bool example()
 {
-    return asc::std::expf(x);
+    const auto result = asc::std::expf(0.0F);
+    return result == 1.0F;
 }
 ```
 

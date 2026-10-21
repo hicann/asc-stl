@@ -34,25 +34,35 @@
 
 ## 声明
 
+Host沿用`<assert.h>`的宏定义。以下为Device分支：
+
 ```cpp
-#define assert(expression) ((expression) ? void(0) : implementation-defined diagnostic followed by termination)
+#if defined(NDEBUG)
+#define assert(expression) ((void)0)
+#else
+#define assert(expression) ((expression) ? (void)0 : __builtin_trap())
+#endif
 ```
 
 ## 约束说明
 
-- 宏值取决于NDEBUG。
-- 展开结果为可用于条件判断的true或false表达式。
+- 展开结果为void表达式，不能作为if等条件使用。
+- 未定义NDEBUG时检查条件；失败时Host执行平台诊断并终止，Device触发trap。
+- 定义NDEBUG时不求值expression；不得依靠断言中的副作用实现正常逻辑。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/cassert>
 
-#ifndef assert
-#error "assert is required by this public Header"
-#endif
+bool example()
+{
+    const int value = 2 + 3;
+    assert(value == 5);
+    return value == 5;
+}
 ```
 
 ## 关联API

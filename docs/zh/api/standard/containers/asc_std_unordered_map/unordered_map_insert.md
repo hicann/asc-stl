@@ -60,7 +60,7 @@ pair<iterator, bool> insert(value_type&& value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待插入的键值对（value_type为pair<const Key, T>）；按键的哈希值定位目标桶，键不存在时复制构造新元素，键已存在时不插入。 |
+| `value` | 输入 | 待插入的键值对（使用容器自己的value_type，具有first键与second值成员）；按键的哈希值定位目标桶，键不存在时复制构造新元素，键已存在时不插入。 |
 
 ### 原型2的参数
 
@@ -85,6 +85,7 @@ pair<iterator, bool> insert(value_type&& value);
 - 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构。
 - 仅容量充足和不抛出异常域。
 - Host和AI Core SIMT编程。
+- 本操作使用容器选定的`Hash`及`Equal`定位键；等价键必须产生相同哈希，且键相关状态须保持有效。自定义键、忽略字段和对象字节回退的要求见[unordered_map约束](unordered_map.md)。
 
 ## 调用示例
 

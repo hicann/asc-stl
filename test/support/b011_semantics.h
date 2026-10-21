@@ -42,6 +42,8 @@
 #include <asc/std/__ranges/enable_view.h>
 #include <asc/std/__type_traits/is_same.h>
 
+#include "numeric_math_review_semantics.h"
+
 namespace asc_stl_b011_test {
 
 struct compare {
@@ -187,6 +189,9 @@ CANN_ASC_STL_API unsigned evaluate_runtime_failures() noexcept
     const bool lifecycle_ok = true;
 #endif
     unsigned failures = 0;
+#if !CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+    failures |= asc_stl_numeric_math_review::evaluate() == 0 ? 0U : 65536U;
+#endif
     failures |= evaluate_constexpr() == 0 ? 0U : 1U;
     failures |= arena_ok ? 0U : 2U;
     failures |= alias_ok ? 0U : 4U;

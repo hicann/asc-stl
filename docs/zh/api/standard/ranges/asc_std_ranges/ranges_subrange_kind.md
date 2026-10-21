@@ -36,8 +36,8 @@
 
 ```cpp
 namespace asc::std::ranges {
-enum subrange_kind;
-} // namespace asc::std::ranges
+enum class subrange_kind : bool { unsized, sized };
+}
 ```
 
 ## 约束说明

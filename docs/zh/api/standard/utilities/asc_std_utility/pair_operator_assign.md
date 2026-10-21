@@ -34,58 +34,39 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::pair`](pair.md)。
-
-### 原型1
+以下为`pair<T1, T2>`类内的**调用形态摘要**，省略实现选择器。各形态只在对应元素可构造或可赋值时参与；默认/值构造是否explicit按元素的隐式转换能力分层，不能把摘要合并为无条件重载定义。
 
 ```cpp
-// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
-pair<T1, T2>& operator=(const pair<T1, T2>& other);
+pair<T1, T2>& operator=(const pair<T1, T2>& other) = default;
 ```
 
-### 原型2
-
 ```cpp
-// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
-pair<T1, T2>& operator=(pair<T1, T2>&& other);
+pair<T1, T2>& operator=(pair<T1, T2>&& other) = default;
 ```
 
-### 原型3
-
 ```cpp
-// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class U1, class U2, enable_if_t<is_assignable_v<T1&, U1>, int>, enable_if_t<is_assignable_v<T2&, U2>, int>> constexpr pair<T1, T2>& operator=(pair<U1, U2>&& other) noexcept(is_nothrow_assignable_v<T1&, U1>&& is_nothrow_assignable_v<T2&, U2>);
+template<class U1, class U2> constexpr pair<T1, T2>& operator=(pair<U1, U2>&& other) noexcept(is_nothrow_assignable_v<T1&, U1>&& is_nothrow_assignable_v<T2&, U2>);
 ```
 
-### 原型4
-
 ```cpp
-// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class U1, class U2, enable_if_t<is_assignable_v<T1&, const U1&>, int>, enable_if_t<is_assignable_v<T2&, const U2&>, int>> constexpr pair<T1, T2>& operator=(const pair<U1, U2>& other) noexcept(is_nothrow_assignable_v<T1&, const U1&>&& is_nothrow_assignable_v<T2&, const U2&>);
+template<class U1, class U2> constexpr pair<T1, T2>& operator=(const pair<U1, U2>& other) noexcept(is_nothrow_assignable_v<T1&, const U1&>&& is_nothrow_assignable_v<T2&, const U2&>);
 ```
 
-### 原型5
-
 ```cpp
-// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class U1, class U2, enable_if_t<is_assignable_v<const T1&, U1>, int>, enable_if_t<is_assignable_v<const T2&, U2>, int>> constexpr const pair<T1, T2>& operator=(pair<U1, U2>&& other) const noexcept(is_nothrow_assignable_v<const T1&, U1>&& is_nothrow_assignable_v<const T2&, U2>);
+template<class U1, class U2> constexpr const pair<T1, T2>& operator=(pair<U1, U2>&& other) const noexcept(is_nothrow_assignable_v<const T1&, U1>&& is_nothrow_assignable_v<const T2&, U2>);
 ```
 
-### 原型6
-
 ```cpp
-// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class U1, class U2, enable_if_t<is_assignable_v<const T1&, const U1&>, int>, enable_if_t<is_assignable_v<const T2&, const U2&>, int>> constexpr const pair<T1, T2>& operator=(const pair<U1, U2>& other) const noexcept(is_nothrow_assignable_v<const T1&, const U1&>&& is_nothrow_assignable_v<const T2&, const U2&>);
+template<class U1, class U2> constexpr const pair<T1, T2>& operator=(const pair<U1, U2>& other) const noexcept(is_nothrow_assignable_v<const T1&, const U1&>&& is_nothrow_assignable_v<const T2&, const U2&>);
 ```
 
-### 原型7
-
 ```cpp
-// asc::std::pair 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class PairLike, enable_if_t<__tuple_like_ext<remove_cvref_t<PairLike>> && !__is_pair<remove_cvref_t<PairLike>>::value && is_assignable_v<T1&, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))> && is_assignable_v<T2&, decltype(::asc::std::__adl_get<1>(::asc::std::declval<PairLike>()))>, int>> constexpr pair<T1, T2>& operator=(PairLike&& other);
+template<class PairLike> constexpr pair<T1, T2>& operator=(PairLike&& other);
 ```
 
 ## 参数说明
+
+摘要省略的选择参数已转为本页公开参与条件，调用方按普通实参调用。
 
 ### 原型1的参数
 
@@ -190,6 +171,8 @@ template<class PairLike, enable_if_t<__tuple_like_ext<remove_cvref_t<PairLike>> 
 | 原型7 | `pair<T1, T2> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
 
 ## 约束说明
+
+- 跨类型赋值要求两个目标元素分别可从对应来源赋值；const成员形式还要求const元素表达式可赋值。泛型pair-like来源须具有两个可通过get访问的元素，且不是pair特化；引用元素赋值作用于所引用对象。
 
 - 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
 - pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。

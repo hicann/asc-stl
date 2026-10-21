@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/variant>`。
 
-`asc::std::variant::index`返回当前字段的索引值。
+`asc::std::variant::index`返回活动备选项的索引；没有活动备选项时返回`variant_npos`。
 
 标准语义参考：[cppreference `variant`](https://en.cppreference.com/w/cpp/header/variant)。
 
@@ -49,12 +49,13 @@
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `size_t` | 返回当前字段的索引值。 |
+| `size_t` | 返回活动备选项的索引；没有活动备选项时返回`variant_npos`。 |
 
 ## 约束说明
 
+- 没有活动备选项时返回`variant_npos`，否则返回从0开始的活动备选索引。
+
 - Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 

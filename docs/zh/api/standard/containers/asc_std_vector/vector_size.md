@@ -53,11 +53,7 @@ size_type size() const noexcept;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 返回当前存活元素的数量，不分配存储；空容器返回`0`。
 
 ## 调用示例
 

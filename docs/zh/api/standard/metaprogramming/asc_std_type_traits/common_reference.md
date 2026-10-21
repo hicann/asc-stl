@@ -34,49 +34,16 @@
 
 ## 声明
 
-### 原型1
-
 ```cpp
 namespace asc::std {
-template<...c...l...a...s...s...> class common_reference;
-} // namespace asc::std
-```
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<...c...l...a...s...s...> struct common_reference;
-} // namespace asc::std
-```
-
-### 原型3
-
-```cpp
-namespace asc::std {
-template<class T, class U, class V, class ...Rest> struct common_reference;
-} // namespace asc::std
-```
-
-### 原型4
-
-```cpp
-namespace asc::std {
-template<class T, class U> struct common_reference;
-} // namespace asc::std
-```
-
-### 原型5
-
-```cpp
-namespace asc::std {
-template<class T> struct common_reference;
+template<class... Types>
+struct common_reference;
 } // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 按公共引用规则依次尝试引用公共类型、自定义`basic_common_reference`、条件表达式和`common_type`。多参数形式递归合并；没有合适结果时不提供`type`。
 
 ## 调用示例
 

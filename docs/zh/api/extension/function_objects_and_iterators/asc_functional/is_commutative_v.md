@@ -34,11 +34,14 @@
 
 ```cpp
 namespace asc {
-template<class Operator, class T> inline constexpr bool is_commutative_v;
-} // namespace asc
+template <class Operator, class T>
+inline constexpr bool is_commutative_v = asc::is_associative_v<Operator, T>;
+}  // namespace asc
 ```
 
 ## 约束说明
+
+- 声明代码展示主模板；bool逻辑组合与满足全序值域的minimum<T>/maximum<T>另有为true的特化。
 
 - 标准运算仅登记匹配的`Operator<T>`／`T`组合或透明`Operator<void>`；不匹配的值类型返回false。
 - 整数加法单位元为0，乘法单位元为1、吸收元为0；逻辑运算只登记bool；位运算只登记无符号整数。

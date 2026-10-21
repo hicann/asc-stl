@@ -34,20 +34,20 @@
 
 ## 函数原型
 
-### 原型1
+以下是调用形态摘要；返回对象的具体实现类型不作为调用方需要命名的公开类型。
 
 ```cpp
 namespace asc::std {
-template<class Fp, class ...BoundArgs> constexpr Bind<Fp, BoundArgs...> bind(Fp&& f, BoundArgs&&... bound_args);
-} // namespace asc::std
+template<class Fp, class... BoundArgs>
+constexpr auto bind(Fp&& f, BoundArgs&&... bound_args);
+}
 ```
 
-### 原型2
-
 ```cpp
 namespace asc::std {
-template<class Rp, class Fp, class ...BoundArgs> constexpr Bindr<Rp, Fp, BoundArgs...> bind(Fp&& f, BoundArgs&&... bound_args);
-} // namespace asc::std
+template<class Rp, class Fp, class... BoundArgs>
+constexpr auto bind(Fp&& f, BoundArgs&&... bound_args);
+}
 ```
 
 ## 参数说明
@@ -87,10 +87,7 @@ template<class Rp, class Fp, class ...BoundArgs> constexpr Bindr<Rp, Fp, BoundAr
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `Bind<Fp, BoundArgs...>` | 返回保存调用目标及所选参数的可调用对象或引用包装器。 |
-| 原型2 | `Bindr<Rp, Fp, BoundArgs...>` | 返回保存调用目标及所选参数的可调用对象或引用包装器。 |
+返回可调用对象，具体实现类型由头文件决定。默认形式推导目标调用结果；指定Rp的形式把调用结果转换为Rp。绑定对象保存衰减后的可调用目标与绑定参数，reference_wrapper参数仍借用原对象。
 
 ## 约束说明
 
@@ -98,15 +95,15 @@ template<class Rp, class Fp, class ...BoundArgs> constexpr Bindr<Rp, Fp, BoundAr
 
 ## 调用示例
 
-以下Host片段使用具体对象展示接口调用。
+以下Host示例用具体输入和可判断结果展示本接口。
 
 ```cpp
 #include <asc/std/functional>
 
-decltype(auto) example()
+bool example()
 {
-    auto bound = asc::std::bind([](int left, int right) { return left + right; }, asc::std::placeholders::_1, 2);
-    return bound(3);
+    auto bound = asc::std::bind(asc::std::plus<int>{}, asc::std::placeholders::_1, 2);
+    return bound(3) == 5;
 }
 ```
 

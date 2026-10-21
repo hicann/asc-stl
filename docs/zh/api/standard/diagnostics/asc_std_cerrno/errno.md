@@ -28,34 +28,37 @@
 
 头文件路径为：`<asc/std/cerrno>`。
 
-`errno`保存最近一次C兼容接口调用产生的错误码。
-
-该接口的可用位置为Host（完整接口）、Device（常量接口）。
-
-标准语义参考：[cppreference `cerrno`](https://en.cppreference.com/w/cpp/header/cerrno)。
+`errno`是Host上可修改的int左值宏，用于读取C兼容接口规定的错误码；应按具体接口约定判断何时读取，成功调用不保证清零。Device不提供errno状态。
 
 ## 声明
 
+Host通过公共头文件取得平台`<cerrno>`的errno宏；具体展开式由平台决定，ASC-STL不定义额外的errno地址获取函数。
+
 ```cpp
-#define errno (*asc_stl_host_errno_location())
+#include <asc/std/cerrno>
 ```
 
 ## 约束说明
 
-- Host完整交付标准errno可修改状态与EDOM/EILSEQ/ERANGE。
-- Device交付EDOM/EILSEQ/ERANGE三个正int常量表达式，固定产品ABI值33/84/34。
-- Host提供完整接口，设备端仅提供所列常量。
+- 仅可在Host使用errno状态；它由平台C库管理，通常为线程局部状态。
+- Device仅提供EDOM、EILSEQ、ERANGE三个错误码常量，不提供errno对象。
+- 只在具体C接口约定的失败条件成立时解释该错误码；需要区分旧错误时由调用方先清零。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/cerrno>
 
-#ifndef errno
-#error "errno is required by this public Header"
-#endif
+bool example()
+{
+    const int saved = errno;
+    errno = 0;
+    const bool cleared = errno == 0;
+    errno = saved;
+    return cleared;
+}
 ```
 
 ## 关联API

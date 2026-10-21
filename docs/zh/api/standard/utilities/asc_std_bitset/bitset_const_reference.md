@@ -43,20 +43,20 @@ using const_reference = typename base::const_reference;
 
 ## 约束说明
 
-- 支持默认构造和unsigned long long构造。
-- `operator[]`不进行边界检查。
-- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
+- 所属bitset的位数Size在编译期固定，操作不进行动态分配。reference是可写位代理而非bool&，依赖原对象；const_reference是按值返回的bool。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例用具体类型和独立预期检查别名或标记结果。
 
 ```cpp
 #include <asc/std/bitset>
+#include <asc/std/type_traits>
 
 void use_type()
 {
     using alias_type = typename asc::std::bitset<8>::const_reference;
+    static_assert(asc::std::is_same_v<alias_type, bool>);
 }
 ```
 

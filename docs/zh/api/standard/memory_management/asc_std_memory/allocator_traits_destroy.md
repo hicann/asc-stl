@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::allocator_traits 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class T> constexpr void destroy(allocator_type& allocator, T* pointer) noexcept;
+template<class T> static constexpr void destroy(allocator_type& allocator, T* pointer);
 ```
 
 ## 参数说明
@@ -62,12 +62,9 @@ template<class T> constexpr void destroy(allocator_type& allocator, T* pointer) 
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- `pointer`须指向单个仍存活的`T`对象；销毁后不再访问该对象，不释放存储。
+- 优先调用分配器可用的`destroy`成员，否则直接析构；包装函数没有`noexcept`声明。
+- Device使用须确保实际销毁路径不抛出异常。
 
 ## 调用示例
 

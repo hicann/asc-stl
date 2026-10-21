@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::weekday_indexed`表示日期、时间点或时长计算中的`weekday_indexed`值类型。
+`asc::std::chrono::weekday_indexed`组合星期与1到5的月内序号，例如星期二配合序号2表示某月第2个星期二。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

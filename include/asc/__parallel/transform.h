@@ -74,12 +74,16 @@ struct reverse_operation {
     Bidirectional last;
     CANN_ASC_STL_DEVICE_API void operator()()
     {
-        while (first != last) {
-            --last;
-            if (first == last)
+        // Keep traversal in local cursors. Mutating the captured end pointer
+        // directly is mis-lowered by the optimized pure-SIMT compiler.
+        Bidirectional left = first;
+        Bidirectional right = last;
+        while (left != right) {
+            --right;
+            if (left == right)
                 break;
-            parallel_swap(*first, *last);
-            ++first;
+            parallel_swap(*left, *right);
+            ++left;
         }
     }
 };
@@ -90,10 +94,12 @@ struct reverse_copy_operation {
     Output result;
     CANN_ASC_STL_DEVICE_API void operator()()
     {
-        while (first != last) {
-            --last;
-            *result = *last;
-            ++result;
+        Bidirectional current = last;
+        Output output = result;
+        while (first != current) {
+            --current;
+            *output = *current;
+            ++output;
         }
     }
 };
@@ -130,10 +136,11 @@ struct rotate_copy_operation {
     Output result;
     CANN_ASC_STL_DEVICE_API void operator()()
     {
-        for (Forward current = middle; current != last; ++current, ++result)
-            *result = *current;
-        for (Forward current = first; current != middle; ++current, ++result)
-            *result = *current;
+        Output output = result;
+        for (Forward current = middle; current != last; ++current, ++output)
+            *output = *current;
+        for (Forward current = first; current != middle; ++current, ++output)
+            *output = *current;
     }
 };
 template <class Forward>

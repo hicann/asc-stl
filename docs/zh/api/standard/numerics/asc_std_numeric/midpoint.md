@@ -38,7 +38,7 @@
 
 ```cpp
 namespace asc::std {
-template<class Fp> [[nodiscard]] constexpr enable_if_t<is_floating_point_v<Fp>, Fp> midpoint(Fp left, Fp right) noexcept;
+template<class Fp> constexpr enable_if_t<is_floating_point_v<Fp>, Fp> midpoint(Fp left, Fp right) noexcept;
 } // namespace asc::std
 ```
 
@@ -46,7 +46,7 @@ template<class Fp> [[nodiscard]] constexpr enable_if_t<is_floating_point_v<Fp>, 
 
 ```cpp
 namespace asc::std {
-template<class T, enable_if_t<is_object_v<T>&& !is_void_v<T>&& (sizeof(T) > 0), int>> [[nodiscard]] constexpr T* midpoint(T* left, T* right) noexcept;
+template<class T, enable_if_t<is_object_v<T>&& !is_void_v<T>&& (sizeof(T) > 0), int> = 0> constexpr T* midpoint(T* left, T* right) noexcept;
 } // namespace asc::std
 ```
 
@@ -54,7 +54,7 @@ template<class T, enable_if_t<is_object_v<T>&& !is_void_v<T>&& (sizeof(T) > 0), 
 
 ```cpp
 namespace asc::std {
-template<class T> [[nodiscard]] constexpr enable_if_t<is_integral_v<T>&& !is_same_v<bool, T>&& !is_null_pointer_v<T>, T> midpoint(T left, T right) noexcept;
+template<class T> constexpr enable_if_t<is_integral_v<T>&& !is_same_v<bool, T>&& !is_null_pointer_v<T>, T> midpoint(T left, T right) noexcept;
 } // namespace asc::std
 ```
 
@@ -116,8 +116,7 @@ template<class T> [[nodiscard]] constexpr enable_if_t<is_integral_v<T>&& !is_sam
 
 ## 约束说明
 
-- 提供顺序迭代器/值重载。
-- 本族中标准定义的执行策略重载采用顺序执行语义。
+- 提供整数、浮点数及对象指针重载，不提供执行策略重载。
 - 整数重载的两实参可同号或异号。
 - 整数重载经无符号差值计算中点，结果不因`left + right`中间量溢出而失真。
 - 指针重载的两实参须指向同一数组对象内的元素或其尾后位置，否则行为无定义。

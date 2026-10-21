@@ -40,33 +40,32 @@
 
 ```cpp
 // asc::std::uniform_int_distribution 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class URng> [[nodiscard]] constexpr result_type operator()(URng& generator) noexcept;
+template<class URng> constexpr result_type operator()(URng& generator) noexcept;
 ```
 
 ### 原型2
 
 ```cpp
 // asc::std::uniform_int_distribution 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class URng> [[nodiscard]] constexpr result_type operator()(URng& generator, const param_type& parameters) noexcept;
+template<class URng> constexpr result_type operator()(URng& generator, const param_type& parameters) noexcept;
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `URng` | 均匀随机位生成器类型，提供无参调用、min和max。 |
+| `URng` | 无符号均匀随机位生成器，提供result_type、min()、max()和无参调用。 |
 
-### 原型2的参数
+**函数参数**
 
-**模板参数**
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `generator` | 输入/输出 | 产生随机位；调用会推进其状态。 |
+| `parameters` | 输入 | 原型2使用的分布区间参数，覆盖本次取样所用参数；不改变分布对象保存的参数。 |
 
-| 参数名 | 描述 |
-| --- | --- |
-| `URng` | 均匀随机位生成器类型，提供无参调用、min和max。 |
+原型1使用对象当前保存的参数。
 
 ## 返回值说明
 

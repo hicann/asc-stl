@@ -60,7 +60,9 @@ CANN_ASC_STL_API constexpr __fp_storage_t<Fmt> __fp_nan() noexcept
 {
     static_assert(__fp_has_nan_v<Fmt>, "The format does not support nan");
     using Storage = __fp_storage_t<Fmt>;
-    if constexpr (Fmt == __fp_format::__fp8_e8m0) {
+    if constexpr (Fmt == __fp_format::__fp8_e4m3) {
+        return Storage(0x7fu);
+    } else if constexpr (Fmt == __fp_format::__fp8_e8m0) {
         // E8M0 has no mantissa field; the all-ones exponent is the NaN encoding.
         return Storage(0xffu);
     } else {
@@ -96,7 +98,11 @@ CANN_ASC_STL_API constexpr T __fp_nans() noexcept
 template <__fp_format Fmt>
 CANN_ASC_STL_API constexpr __fp_storage_t<Fmt> __fp_max() noexcept
 {
-    return __fp_set_exp<Fmt>(__fp_mant_mask_v<Fmt>, __fp_exp_max_v<Fmt>);
+    if constexpr (Fmt == __fp_format::__fp8_e4m3) {
+        return __fp_storage_t<Fmt>{0x7eu};
+    } else {
+        return __fp_set_exp<Fmt>(__fp_mant_mask_v<Fmt>, __fp_exp_max_v<Fmt>);
+    }
 }
 template <class T>
 CANN_ASC_STL_API constexpr T __fp_max() noexcept
@@ -137,12 +143,20 @@ CANN_ASC_STL_API constexpr T __fp_denorm_min() noexcept
 template <__fp_format Fmt>
 CANN_ASC_STL_API constexpr __fp_storage_t<Fmt> __fp_lowest() noexcept
 {
-    return __fp_neg<Fmt>(__fp_max<Fmt>());
+    if constexpr (Fmt == __fp_format::__fp8_e8m0) {
+        return __fp_min<Fmt>();
+    } else {
+        return __fp_neg<Fmt>(__fp_max<Fmt>());
+    }
 }
 template <class T>
 CANN_ASC_STL_API constexpr T __fp_lowest() noexcept
 {
-    return __fp_neg(__fp_max<T>());
+    if constexpr (__fp_format_of_v<T> == __fp_format::__fp8_e8m0) {
+        return __fp_from_storage<T>(__fp_lowest<__fp_format_of_v<T>>());
+    } else {
+        return __fp_neg(__fp_max<T>());
+    }
 }
 template <__fp_format Fmt>
 CANN_ASC_STL_API constexpr __fp_storage_t<Fmt> __fp_zero() noexcept
@@ -162,7 +176,12 @@ CANN_ASC_STL_API constexpr __fp_storage_t<Fmt> __fp_one() noexcept
 template <class T>
 CANN_ASC_STL_API constexpr T __fp_one() noexcept
 {
-    return T{1};
+    if constexpr (__fp_format_of_v<T> == __fp_format::__fp8_e4m3 || __fp_format_of_v<T> == __fp_format::__fp8_e5m2 ||
+        __fp_format_of_v<T> == __fp_format::__fp8_e8m0) {
+        return __fp_from_storage<T>(__fp_one<__fp_format_of_v<T>>());
+    } else {
+        return T{1};
+    }
 }
 
 CANN_ASC_STL_END_NAMESPACE

@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class Operator, class T> inline constexpr bool has_absorbing_element_v;
-} // namespace asc
+template <class Operator, class T>
+inline constexpr bool has_absorbing_element_v = detail::metadata_elements<Operator, T>::has_absorbing;
+}  // namespace asc
 ```
 
 ## 约束说明

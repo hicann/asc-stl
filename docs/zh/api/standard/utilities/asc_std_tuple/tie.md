@@ -62,20 +62,22 @@ template<class ...T> [[nodiscard]] constexpr tuple<T&...> tie(T&... values) noex
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
+- 工具本身不额外分配容器存储；元素构造、赋值、交换或传入可调用体仍可按其自身语义分配或抛出，不能据此保证整个调用不分配。返回tuple借用原对象；这些对象须覆盖引用的全部使用期，不能返回借用局部对象的结果。
 
 ## 调用示例
 
-以下片段用具体对象展示本页调用。
+以下Host示例在被引用对象仍存活时检查结果。
 
 ```cpp
 #include <asc/std/tuple>
 
-decltype(auto) example()
+bool example()
 {
-    int left = 1;
-    int right = 2;
-    return asc::std::tie(left, right);
+    int left = 3;
+    int right = 5;
+    auto selected = asc::std::tie(left, right);
+    asc::std::get<0>(selected) = 7;
+    return left == 7 && asc::std::get<1>(selected) == 5;
 }
 ```
 

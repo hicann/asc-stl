@@ -8,6 +8,8 @@
 #include <asc/std/string>
 ```
 
+纯SIMT下组合长字符串、局部arena和别名操作时，须遵循[basic_string的工具链验证边界](basic_string.md#simt工具链验证边界)。
+
 ## API列表
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |

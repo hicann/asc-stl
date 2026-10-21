@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-enum errc;
+enum class errc;
 } // namespace asc::std
 ```
 

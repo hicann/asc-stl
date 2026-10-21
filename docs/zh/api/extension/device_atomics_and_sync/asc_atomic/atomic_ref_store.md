@@ -57,7 +57,7 @@ void store(T desired, asc::std::memory_order order = asc::std::memory_order_seq_
 ## 约束说明
 
 - 原子对象的类型、地址空间、作用域和内存序必须匹配。
-- Device作用域的64位对象位于GM，UB原子操作仅使用memory_order_relaxed。
+- 所有Device原子单元必须位于GM；UB、栈或每核私有存储不属于当前支持域。
 
 ## 调用示例
 

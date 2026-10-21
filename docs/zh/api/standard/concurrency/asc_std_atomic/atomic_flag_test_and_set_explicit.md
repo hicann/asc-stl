@@ -48,7 +48,7 @@ bool atomic_flag_test_and_set_explicit(atomic_flag* object, memory_order order) 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `object` | 输入 | 指向被置位或清除的原子标志对象的指针。 |
+| `object` | 输入/输出 | 指向被置位或清除的原子标志对象的指针。 |
 | `order` | 输入 | 置位并读取原值所用内存序，决定本次操作的可见性顺序；可取memory_order各枚举值。 |
 
 ## 返回值说明
@@ -59,8 +59,9 @@ bool atomic_flag_test_and_set_explicit(atomic_flag* object, memory_order order) 
 
 ## 约束说明
 
-- atomic_flag的test/test_and_set/clear成员与非volatile自由函数。
-- Host和AI Core SIMT编程GM。
+- 可在Host或AI Core SIMT编程中调用；SIMT线程共享的标志对象须位于GM，并在并发访问前完成初始化。
+- `object`须指向有效的非volatile[atomic_flag](atomic_flag.md)对象。
+- 该操作原子地将标志置为`true`并返回旧值；不带内存序参数的形式使用`memory_order_seq_cst`。
 
 ## 调用示例
 

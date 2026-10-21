@@ -28,39 +28,45 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::range_adaptor_closure`标记临时范围的不可借用结果或提供视图适配辅助能力。
-
-标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
+`asc::std::ranges::range_adaptor_closure<Derived>`是自定义范围适配闭包的CRTP基类，使可调用对象参与范围管道及闭包组合。它不表示悬垂结果。
 
 ## 声明
 
+公开CRTP基类只有一个模板参数Derived；用于把自定义可调用对象声明为范围适配闭包。
+
 ```cpp
 namespace asc::std::ranges {
-template<class T, enable_if_t<is_class_v<T>, int>, enable_if_t<same_as<T, remove_cv_t<T>>, int>> class range_adaptor_closure;
-} // namespace asc::std::ranges
+template<class Derived>
+class range_adaptor_closure;
+}
 ```
 
 ## 约束说明
 
-- 七个列出名称。
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- Derived须为不带cv限定的类类型，并以自身类型公开派生自本基类；本基类在C++17和C++20均可使用。
+- 只有相应闭包调用表达式有效时，范围与闭包的管道以及闭包之间的组合才参与重载。
 
 ## 调用示例
 
-以下Host示例展示具体输入、接口调用和可检查的结果。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/ranges>
-#include <asc/std/array>
-#include <asc/std/iterator>
-#include <asc/std/tuple>
+#include <asc/std/utility>
+
+struct first_two : asc::std::ranges::range_adaptor_closure<first_two> {
+    template<class R>
+    auto operator()(R&& range) const
+    {
+        return asc::std::ranges::views::take(asc::std::forward<R>(range), 2);
+    }
+};
 
 bool example()
 {
-    int values[] = {1, 2, 3, 4};
-    auto view = values | asc::std::ranges::views::drop(1) | asc::std::ranges::views::take(2);
-    return *view.begin() == 2 && view.size() == 2;
+    int values[3] = {1, 2, 3};
+    auto result = values | first_two{};
+    return result.size() == 2 && *result.begin() == 1;
 }
 ```
 

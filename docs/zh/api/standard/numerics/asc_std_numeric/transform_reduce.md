@@ -30,21 +30,13 @@
 
 `asc::std::transform_reduce`先逐项变换再归约结果。
 
+本页说明顺序执行的重载。Device并行提交入口为[`asc::parallel::transform_reduce`](../../../extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform_reduce.md)，其参数、状态返回和完成条件见对应页面。
+
 标准语义参考：[cppreference `numeric`](https://en.cppreference.com/w/cpp/header/numeric)。
 
 ## 函数原型
 
 ### 原型1
-
-```cpp
-namespace asc::std {
-template<class Input, class T, class BinaryOperation, class UnaryOperation> T transform_reduce(asc::device_policy policy, Input first, Input last, T init, BinaryOperation binary_operation, UnaryOperation unary_operation);
-} // namespace asc::std
-```
-
-该原型适用于`C++17+`，可用位置为Host。
-
-### 原型2
 
 ```cpp
 namespace asc::std {
@@ -54,7 +46,7 @@ template<class InputIterator, class T, class BinaryO, class UnaryO> [[nodiscard]
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型3
+### 原型2
 
 ```cpp
 namespace asc::std {
@@ -64,7 +56,7 @@ template<class InputIterator1, class InputIterator2, class T, class BinaryOp1, c
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型4
+### 原型3
 
 ```cpp
 namespace asc::std {
@@ -77,28 +69,6 @@ template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] cons
 ## 参数说明
 
 ### 原型1的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Input` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `T` | 归约初值、中间累加值与返回结果的类型。 |
-| `BinaryOperation` | 把逐项变换结果并入累加值的二元归约运算可调用对象类型。 |
-| `UnaryOperation` | 作用于单个输入元素的一元变换可调用对象类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `init` | 输入 | 归约初值，作为逐元素合并的起始累加值；范围为空时原样返回该值。 |
-| `binary_operation` | 输入 | 二元归约运算对象，把unary_operation作用于当前元素后的结果并入当前累加值。 |
-| `unary_operation` | 输入 | 一元变换运算对象，先作用于每个输入元素，再参与归约。 |
-
-### 原型2的参数
 
 **模板参数**
 
@@ -119,7 +89,7 @@ template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] cons
 | `reduce_operation` | 输入 | 二元归约运算对象，把逐项变换或组合的结果并入当前累加值。 |
 | `transform_operation` | 输入 | 一元变换运算对象，先作用于第一个范围的每个元素，再参与归约。 |
 
-### 原型3的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -142,7 +112,7 @@ template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] cons
 | `reduce_operation` | 输入 | 二元归约运算对象，把逐项变换或组合的结果并入当前累加值。 |
 | `transform_op` | 输入 | 二元组合运算对象，作用于两个范围中对应位置的元素。 |
 
-### 原型4的参数
+### 原型3的参数
 
 **模板参数**
 
@@ -168,21 +138,16 @@ template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] cons
 | 原型1 | `T` | 返回输入值按接口规定运算后的数值结果。 |
 | 原型2 | `T` | 返回输入值按接口规定运算后的数值结果。 |
 | 原型3 | `T` | 返回输入值按接口规定运算后的数值结果。 |
-| 原型4 | `T` | 返回输入值按接口规定运算后的数值结果。 |
 
 ## 约束说明
 
-- 使用C++17。
-- 该Host同步适配接口调用对应的asc::parallel前端。
-- policy必须包含有效Stream和足够的调用方临时存储。
-- 接口只等待该Stream。
-- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用asc::std::terminate。
-- 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
+- 单输入范围须为有效的可读范围；双输入范围形式要求`first2`起至少具有`[first1, last1)`中元素数量的可读元素。
+- 先对单个输入或两个对应输入执行变换，再将结果与初值归约；运算结果须可赋回`T`。
+- 当前实现按输入顺序处理；变换和归约操作不得修改输入范围或使迭代器失效。
 
 ## 调用示例
 
-以下片段用具体整数范围展示数值调用；输出数组具有足够容量。
+以下示例先将1、2、3、4各乘以2，再从0开始归约，返回20。
 
 ```cpp
 #include <asc/std/numeric>
@@ -190,7 +155,6 @@ template<class InputIterator1, class InputIterator2, class T> [[nodiscard]] cons
 decltype(auto) example()
 {
     int input[4] = {1, 2, 3, 4};
-    int output[4] = {};
     return asc::std::transform_reduce(input, input + 4, 0, [](int a, int b) { return a + b; }, [](int a) { return a * 2; });
 }
 ```

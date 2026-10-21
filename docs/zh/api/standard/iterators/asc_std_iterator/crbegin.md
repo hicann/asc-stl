@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<class C> constexpr auto crbegin(const C& c) -> decltype(asc::std::rbegin(c));
+template<class C> constexpr auto crbegin(const C& c) noexcept(noexcept(::asc::std::rbegin(c))) -> decltype(asc::std::rbegin(c));
 } // namespace asc::std
 ```
 
@@ -66,15 +66,16 @@ template<class C> constexpr auto crbegin(const C& c) -> decltype(asc::std::rbegi
 
 ## 调用示例
 
-以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    return asc::std::crbegin(values);
+    int values[] = {1, 2, 3, 4};
+    auto first = asc::std::crbegin(values);
+    return first.base() == values + 4 && *first == 4;
 }
 ```
 

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::transform`对输入元素调用变换函数并依次写入输出；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::transform`对输入元素调用变换函数并依次写入输出；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,28 +38,22 @@
 
 ```cpp
 namespace asc::std {
-template<class Input, class Output, class UnaryOperation> Output transform(asc::device_policy policy, Input first, Input last, Output result, UnaryOperation operation);
-} // namespace asc::std
+template <class InputIterator, class OutputIterator, class UnaryOperation>
+constexpr OutputIterator transform(
+    InputIterator first, InputIterator last, OutputIterator result, UnaryOperation operation);
+}  // namespace asc::std
 ```
 
-该原型适用于`C++17+`，可用位置为Host。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class InputIterator, class OutputIterator, class UnaryOperation> constexpr OutputIterator transform(InputIterator first, InputIterator last, OutputIterator result, UnaryOperation operation);
-} // namespace asc::std
-```
-
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
-
-### 原型3
-
-```cpp
-namespace asc::std {
-template<class InputIterator1, class InputIterator2, class OutputIterator, class BinaryOperation> constexpr OutputIterator transform(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, OutputIterator result, BinaryOperation binary_op);
-} // namespace asc::std
+template <class InputIterator1, class InputIterator2, class OutputIterator, class BinaryOperation>
+constexpr OutputIterator transform(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2,
+    OutputIterator result, BinaryOperation binary_op);
+}  // namespace asc::std
 ```
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
@@ -67,26 +61,6 @@ template<class InputIterator1, class InputIterator2, class OutputIterator, class
 ## 参数说明
 
 ### 原型1的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Input` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `Output` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
-| `UnaryOperation` | 对输入值执行本页操作的可调用对象类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `result` | 输出 | 写入结果的输出迭代器；目标范围容量须足以容纳全部变换结果。 |
-| `operation` | 输入 | 一元变换操作，按顺序对每个输入元素以调用形式operation(elem)调用一次，返回值写入输出范围对应位置。 |
-
-### 原型2的参数
 
 **模板参数**
 
@@ -105,7 +79,7 @@ template<class InputIterator1, class InputIterator2, class OutputIterator, class
 | `result` | 输出 | 写入结果的输出迭代器；目标范围须有足够容量。 |
 | `operation` | 输入 | 一元变换操作，按顺序对每个输入元素以调用形式operation(elem)调用一次，返回值写入输出范围对应位置。 |
 
-### 原型3的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -130,36 +104,31 @@ template<class InputIterator1, class InputIterator2, class OutputIterator, class
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `Output` | 返回输出范围中最后一个写入元素之后的位置。 |
+| 原型1 | `OutputIterator` | 返回输出范围中最后一个写入元素之后的位置。 |
 | 原型2 | `OutputIterator` | 返回输出范围中最后一个写入元素之后的位置。 |
-| 原型3 | `OutputIterator` | 返回输出范围中最后一个写入元素之后的位置。 |
 
 ## 约束说明
 
 - 使用C++17。
-- 该Host同步适配接口调用对应的asc::parallel前端。
-- policy必须包含有效Stream和足够的调用方临时存储。
-- 接口只等待该Stream。
-- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用asc::std::terminate。
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     int output[16] = {};
     auto operation = [](int value) { return value * 2; };
-    return asc::std::transform(values, values + 8, output, operation);
+    auto result = asc::std::transform(values, values + 8, output, operation);
+    return result == output + 8 && output[0] == 2 && output[7] == 16;
 }
 ```
 
 ## 关联API
 
-- [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。
+- [`asc::parallel::transform`](../../../extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform.md)：使用执行策略提交异步设备操作。

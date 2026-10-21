@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::partial_sort_copy`把输入中的最小元素有序复制到有界输出范围；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::partial_sort_copy`把输入中的最小元素有序复制到有界输出范围；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,16 +38,20 @@
 
 ```cpp
 namespace asc::std {
-template<class InputIterator, class RandomAccessIterator, class Compare> constexpr RandomAccessIterator partial_sort_copy(InputIterator first, InputIterator last, RandomAccessIterator result_first, RandomAccessIterator result_last, Compare compare);
-} // namespace asc::std
+template <class InputIterator, class RandomAccessIterator, class Compare>
+constexpr RandomAccessIterator partial_sort_copy(InputIterator first, InputIterator last,
+    RandomAccessIterator result_first, RandomAccessIterator result_last, Compare compare);
+}  // namespace asc::std
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class InputIterator, class RandomAccessIterator> constexpr RandomAccessIterator partial_sort_copy(InputIterator first, InputIterator last, RandomAccessIterator result_first, RandomAccessIterator result_last);
-} // namespace asc::std
+template <class InputIterator, class RandomAccessIterator>
+constexpr RandomAccessIterator partial_sort_copy(
+    InputIterator first, InputIterator last, RandomAccessIterator result_first, RandomAccessIterator result_last);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -68,8 +72,8 @@ template<class InputIterator, class RandomAccessIterator> constexpr RandomAccess
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `result_first` | 输出 | 输入范围的起始迭代器或指针。 |
-| `result_last` | 输出 | 输入范围的结束位置，不包含该位置。 |
+| `result_first` | 输出 | 输出范围的起始迭代器；结果写入该位置起的范围。 |
+| `result_last` | 输出 | 输出范围的结束位置（排他）；与result_first共同限定容量。 |
 | `compare` | 输入 | 用于确定元素顺序的比较对象。 |
 
 ### 原型2的参数
@@ -87,8 +91,8 @@ template<class InputIterator, class RandomAccessIterator> constexpr RandomAccess
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `result_first` | 输出 | 输入范围的起始迭代器或指针。 |
-| `result_last` | 输出 | 输入范围的结束位置，不包含该位置。 |
+| `result_first` | 输出 | 输出范围的起始迭代器；结果写入该位置起的范围。 |
+| `result_last` | 输出 | 输出范围的结束位置（排他）；与result_first共同限定容量。 |
 
 ## 返回值说明
 
@@ -100,20 +104,20 @@ template<class InputIterator, class RandomAccessIterator> constexpr RandomAccess
 ## 约束说明
 
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     int output[16] = {};
-    return asc::std::partial_sort_copy(values, values + 8, output, output + 8);
+    auto result = asc::std::partial_sort_copy(values, values + 8, output, output + 8);
+    return result == output + 8 && output[0] == 1 && output[7] == 8;
 }
 ```
 

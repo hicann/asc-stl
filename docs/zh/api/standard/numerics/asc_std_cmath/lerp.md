@@ -36,11 +36,17 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-float lerp(float a, float b, float t) noexcept;
-} // namespace asc::std
+[[nodiscard]] float lerp(float a, float b, float t) noexcept;
+}
 ```
+
+可用位置：Host、AI Core SIMT编程。
 
 ## 参数说明
 
@@ -50,28 +56,26 @@ float lerp(float a, float b, float t) noexcept;
 | --- | --- | --- |
 | `a` | 输入 | 线性插值的起点值（无量纲）。 |
 | `b` | 输入 | 线性插值的终点值（无量纲）。 |
-| `t` | 输入 | 插值权重（无量纲）；按a + t * (b - a)计算，t = 1时直接返回b，允许取[0, 1] 之外的值做外推。 |
+| `t` | 输入 | 插值权重（无量纲）；数学上为a + t * (b - a)，实现避免有限区间内异号大数差值溢出；t = 1时返回b，允许取[0, 1] 之外的值做外推。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float` | 返回两个值之间的线性插值；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+返回类型按各原型确定（`float`）。返回线性插值；有限端点及[0, 1]权重产生有限结果，并保持端点与单调性。
 
 ## 约束说明
 
-- 提供float重载、标准 *f别名以及float lerp回移接口。
+- a、b有限且t在[0, 1]内时返回有限结果，并保持端点与单调性；外推结果仍可能溢出。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float a, float b, float t)
+bool example()
 {
-    return asc::std::lerp(a, b, t);
+    return asc::std::lerp(-3.0e38F, 3.0e38F, 0.5F) == 0.0F;
 }
 ```
 

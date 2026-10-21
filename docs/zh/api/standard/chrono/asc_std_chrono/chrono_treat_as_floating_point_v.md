@@ -34,24 +34,52 @@
 
 ## 声明
 
+位于asc::std::chrono命名空间；变量模板读取trait值，包含对用户自定义Rep的显式特化。
+
 ```cpp
-namespace asc::std::chrono {
-template<class Rep> inline constexpr const bool treat_as_floating_point_v;
-} // namespace asc::std::chrono
+template<class Rep>
+inline constexpr bool treat_as_floating_point_v = treat_as_floating_point<Rep>::value;
 ```
+
+## 参数说明
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Rep` | 读取对应treat_as_floating_point特化的计数类型。 |
 
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符。
+- Rep是时长的计数表示类型；默认依据is_floating_point判断。
+- 自定义计数类型可在首次使用前显式特化treat_as_floating_point；_v读取该特化的value。
+- duration构造使用该值决定是否允许从浮点计数初始化；其它可转换性及可表示性要求仍须满足。
 
 ## 调用示例
 
-以下片段用具体模板实参读取接口值。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::chrono::treat_as_floating_point_v<float>;
+struct custom_rep {
+    float value;
+    constexpr custom_rep(float input) : value(input) {}
+};
+
+namespace asc::std::chrono {
+template <> struct treat_as_floating_point<custom_rep> : true_type {};
+}
+
+static_assert(!asc::std::is_floating_point_v<custom_rep>);
+static_assert(asc::std::chrono::treat_as_floating_point_v<custom_rep>);
+
+bool example()
+{
+    const asc::std::chrono::duration<custom_rep> value(1.5F);
+    return value.count().value == 1.5F;
+}
 ```
 
 ## 关联API

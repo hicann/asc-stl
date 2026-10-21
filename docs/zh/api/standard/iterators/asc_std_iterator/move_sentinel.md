@@ -42,24 +42,22 @@ template<class Sent> class move_sentinel;
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 哨兵类型须支持对应构造、转换或赋值操作，并可与配套底层迭代器比较。
+- 哨兵不拥有底层范围，也不能解引用；其结束标记须在比较期间有效。
 
 ## 调用示例
 
-以下Host示例展示具体输入、接口调用和可检查的结果。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/vector>
-#include <asc/std/forward_list>
 
 bool example()
 {
-    int values[2] = {};
+    int values[] = {2, 4};
     asc::std::move_sentinel<int*> sentinel(values + 2);
-    return sentinel.base() == values + 2;
+    asc::std::move_iterator<int*> iterator(values);
+    return sentinel.base() == values + 2 && iterator != sentinel;
 }
 ```
 

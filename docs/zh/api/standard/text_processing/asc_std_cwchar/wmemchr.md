@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::wmemchr`在指定字节范围中查找目标字节。
+`asc::std::wmemchr`在指定wchar_t元素范围中查找目标wchar_t元素。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 

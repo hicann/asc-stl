@@ -62,18 +62,19 @@ template<class ...T> [[nodiscard]] constexpr tuple<unwrap_ref_decay_t<T>...> mak
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
+- 工具本身不额外分配容器存储；元素构造、赋值、交换或传入可调用体仍可按其自身语义分配或抛出，不能据此保证整个调用不分配。
 
 ## 调用示例
 
-以下片段用具体对象展示本页调用。
+以下Host示例用具体输入和可判断结果展示本接口。
 
 ```cpp
 #include <asc/std/tuple>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::make_tuple(1, 2);
+    const auto left = asc::std::make_tuple(2, 3);
+    return asc::std::get<0>(left) == 2 && asc::std::get<1>(left) == 3;
 }
 ```
 

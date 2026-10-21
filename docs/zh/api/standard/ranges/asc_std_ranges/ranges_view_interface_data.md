@@ -34,21 +34,25 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::ranges::view_interface`](ranges_view_interface.md)。
+所属类型：[`view_interface`](ranges_view_interface.md)。以下是按参与条件列出的声明摘要；保留供调用使用的模板默认值，省略仅供SFINAE的实现选择参数。涉及私有返回类型时用auto摘要表示，不承诺可直接命名该类型。
 
 ### 原型1
 
 ```cpp
-// asc::std::ranges::view_interface 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class D2> constexpr auto data();
+template<class Derived2 = Derived>
+constexpr auto data();
 ```
+
+`Derived2`的迭代器须满足`contiguous_iterator`；通过起始迭代器取得元素地址。
 
 ### 原型2
 
 ```cpp
-// asc::std::ranges::view_interface 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class D2> constexpr auto data() const;
+template<class Derived2 = Derived>
+constexpr auto data() const;
 ```
+
+`const Derived2`的迭代器须满足`contiguous_iterator`；通过起始迭代器取得元素地址。
 
 ## 参数说明
 
@@ -58,7 +62,9 @@ template<class D2> constexpr auto data() const;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `D2` | view_interface的派生视图类型，用于检查该成员所需的范围能力。 |
+| `Derived2` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
+
+无函数参数。
 
 ### 原型2的参数
 
@@ -66,31 +72,35 @@ template<class D2> constexpr auto data() const;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `D2` | view_interface的派生视图类型，用于检查该成员所需的范围能力。 |
+| `Derived2` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
+
+无函数参数。
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `auto` | 返回所管理或所观察连续存储的首地址。 |
-| 原型2 | `auto` | 返回所管理或所观察连续存储的首地址。 |
+| 原型1 | `auto` | 返回首元素对应的连续存储地址；空范围可以返回其有效的空指针或尾后位置，不能据此解引用。 |
+| 原型2 | `auto` | 返回首元素对应的连续存储地址；空范围可以返回其有效的空指针或尾后位置，不能据此解引用。 |
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- 每种形式的参与条件见原型；无实参查询一般直接调用，不需要指定模板选择类型。
+- 返回的迭代器、指针或引用以及借用范围不得超过其实际依赖的视图对象和元素存储的有效期。
 
 ## 调用示例
 
-以下Host片段使用具体范围或访问器演示调用；底层存储在调用期间须保持有效。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/ranges>
 
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    asc::std::ranges::ref_view<int[4]> view(values);
-    return view.data();
+    int values[3] = {1, 2, 3};
+    asc::std::ranges::ref_view<int[3]> view(values);
+    const auto pointer = view.data();
+    return pointer == values && pointer[1] == 2;
 }
 ```
 

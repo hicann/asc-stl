@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::allocator_traits 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr size_type max_size(const allocator_type& allocator) noexcept;
+static constexpr size_type max_size(const allocator_type& allocator) noexcept;
 ```
 
 ## 参数说明
@@ -57,12 +57,8 @@ constexpr size_type max_size(const allocator_type& allocator) noexcept;
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- 优先使用分配器可用的`max_size()`，否则返回`numeric_limits<size_type>::max() / sizeof(value_type)`。
+- 结果是元素数量的理论上限，不保证当前可分配这么多对象；此函数不分配存储。
 
 ## 调用示例
 

@@ -26,65 +26,15 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
+头文件路径为：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`、`<asc/std/complex>`、`<asc/std/ranges>`；须按目标对象类型包含对应头文件。
 
-`asc::std::tuple_size<T>`在编译期取得受支持类tuple对象包含的元素数量。
+`asc::std::tuple_size<T>`在编译期取得受支持类tuple类型的元素数量，通过静态成员`value`提供结果。主模板只作声明，具体类型由偏特化支持。
 
 标准语义参考：[cppreference `array`](https://en.cppreference.com/w/cpp/header/array)。
 
 ## 声明
 
-### 原型1
-
-```cpp
-namespace asc::std {
-template<class ...T> struct tuple_size;
-} // namespace asc::std
-```
-
-此原型对应头文件：`<asc/std/array>`。
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<class T, T ...Indices> struct tuple_size;
-} // namespace asc::std
-```
-
-此原型对应头文件：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
-
-### 原型3
-
-```cpp
-namespace asc::std {
-template<class T, class U> struct tuple_size;
-} // namespace asc::std
-```
-
-此原型对应头文件：`<asc/std/array>`。
-
-### 原型4
-
-```cpp
-namespace asc::std {
-template<class T, size_t N> struct tuple_size;
-} // namespace asc::std
-```
-
-此原型对应头文件：`<asc/std/array>`。
-
-### 原型5
-
-```cpp
-namespace asc::std {
-template<class T> class tuple_size;
-} // namespace asc::std
-```
-
-此原型对应头文件：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
-
-### 原型6
+### 主模板
 
 ```cpp
 namespace asc::std {
@@ -92,15 +42,88 @@ template<class T> struct tuple_size;
 } // namespace asc::std
 ```
 
-此原型对应头文件：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
+### cv限定类型的偏特化
+
+以下是公开匹配形式的声明摘要。实际实现仅在未加cv限定的`tuple_size<T>`完整且具有`value`时提供对应结果，省略内部条件分派名称。
+
+```cpp
+namespace asc::std {
+template<class T> struct tuple_size<const T>;
+template<class T> struct tuple_size<volatile T>;
+template<class T> struct tuple_size<const volatile T>;
+} // namespace asc::std
+```
+
+这些偏特化保持未加cv限定类型的元素数量，不去除引用限定。
+
+### array的偏特化
+
+须包含`<asc/std/array>`；`value`等于`Size`。
+
+```cpp
+namespace asc::std {
+template<class T, size_t Size> struct tuple_size<array<T, Size>>;
+} // namespace asc::std
+```
+
+### tuple的偏特化
+
+须包含`<asc/std/tuple>`；`value`等于`sizeof...(Types)`。
+
+```cpp
+namespace asc::std {
+template<class... Types> struct tuple_size<tuple<Types...>>;
+} // namespace asc::std
+```
+
+### pair的偏特化
+
+须包含`<asc/std/utility>`；`value`等于2。
+
+```cpp
+namespace asc::std {
+template<class T1, class T2> struct tuple_size<pair<T1, T2>>;
+} // namespace asc::std
+```
+
+### integer_sequence的偏特化
+
+须包含`<asc/std/utility>`；`value`等于`sizeof...(Values)`。
+
+```cpp
+namespace asc::std {
+template<class T, T... Values> struct tuple_size<integer_sequence<T, Values...>>;
+} // namespace asc::std
+```
+
+### complex的偏特化
+
+须包含`<asc/std/complex>`；`value`等于2。该特征不扩大`complex`对象本身支持的成分类型范围。
+
+```cpp
+namespace asc::std {
+template<class T> struct tuple_size<complex<T>>;
+} // namespace asc::std
+```
+
+### subrange的偏特化
+
+须包含`<asc/std/ranges>`；`value`等于2，分别对应起始迭代器和终止哨兵。
+
+```cpp
+namespace asc::std {
+template<class Iter, class Sent, ranges::subrange_kind Kind>
+struct tuple_size<ranges::subrange<Iter, Sent, Kind>>;
+} // namespace asc::std
+```
 
 ## 约束说明
 
-- 支持包括零在内的所有N。
-- 成员函数和自由函数均不抛出异常。
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
-- 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- `T`须是具有相应`tuple_size`偏特化的类型；主模板本身不提供`value`。
+- `array<T, 0>`、空`tuple<>`和空`integer_sequence`的元素数量为0；它们没有可访问的第0个元素。
+- cv限定类型沿用对应未限定类型的数量；引用类型不会自动转为其所引用类型。
+- 应包含对应对象类型的公共头文件；不能仅因本页位于array目录就假定`<asc/std/array>`提供所有其他对象类型。
+- 本特征只在编译期提供元素数量，不执行对象构造、元素访问、内存分配或比较。
 
 ## 调用示例
 

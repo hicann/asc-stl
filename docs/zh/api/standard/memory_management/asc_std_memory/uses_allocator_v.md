@@ -36,45 +36,27 @@
 
 ```cpp
 namespace asc::std {
-template<class T, class Allocator> inline constexpr const bool uses_allocator_v;
-} // namespace asc::std
+template<class T, class Alloc>
+inline constexpr bool uses_allocator_v = uses_allocator<T, Alloc>::value;
+}
 ```
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- 普通类型在有`allocator_type`且`Alloc`可转换为该类型时为`true`，否则为`false`；`tuple`使用其公开特化规则。
+- 读取该变量模板不构造对象、不传递分配器，也不保证具体构造函数能调用。
 
 ## 调用示例
 
-以下片段用具体模板实参读取接口值。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/memory>
-#include <functional>
-#include <memory>
-#include <string>
-#include <utility>
-#include <deque>
-#include <functional>
-#include <vector>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-inline constexpr auto example = asc::std::uses_allocator_v<::std::vector<int, example_allocator<int>>, example_allocator<int>>;
+struct example_allocator {};
+struct allocated_value { using allocator_type = example_allocator; };
+static_assert(asc::std::uses_allocator_v<allocated_value, example_allocator>);
+static_assert(!asc::std::uses_allocator_v<int, example_allocator>);
 ```
 
 ## 关联API

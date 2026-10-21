@@ -29,6 +29,7 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
+#include <asc/std/__cmath/fpclassify.h>
 #include <asc/std/__floating_point/fp.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_extended_floating_point.h>
@@ -62,7 +63,10 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool __isnormal_impl(Tp x) noe
 {
     static_assert(
         is_floating_point_v<Tp> || __is_extended_floating_point_v<Tp>, "Only floating-point types are supported");
-    if constexpr (__fp_format_of_v<Tp> == __fp_format::__binary16 ||  // NOLINT(readability/braces)
+    if constexpr (__fp_format_of_v<Tp> == __fp_format::__fp8_e4m3 || __fp_format_of_v<Tp> == __fp_format::__fp8_e5m2 ||
+        __fp_format_of_v<Tp> == __fp_format::__fp8_e8m0) {
+        return ::asc::std::__fpclassify_impl(x) == 4;
+    } else if constexpr (__fp_format_of_v<Tp> == __fp_format::__binary16 ||  // NOLINT(readability/braces)
         __fp_format_of_v<Tp> == __fp_format::__bfloat16 || __fp_format_of_v<Tp> == __fp_format::__binary32 ||
         __fp_format_of_v<Tp> == __fp_format::__binary64) {
         const auto exponent = ::asc::std::__fp_get_storage(x) & __fp_exp_mask_of_v<Tp>;

@@ -34,58 +34,33 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::expected`](expected.md)。
-
-### 原型1
+以下为`expected<Value, Error>`类内声明；Value和Error是所属类模板参数。
 
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class G> E error_or(G&& default_value)&&;
+template<class G> constexpr Error error_or(G&& default_error) const&;
 ```
 
-### 原型2
-
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class G> E error_or(G&& default_value) const&;
+template<class G> constexpr Error error_or(G&& default_error) &&;
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
-**模板参数**
+**模板参数（模板重载）**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `G` | 替代错误值的类型；须能转换为E。 |
+| `G` | 替代值的来源类型；须能转换为Error。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `default_value` | 输入/输出 | 替代错误值；本对象不含错误时返回由它转换得到的E，含错误时返回所存错误值。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `G` | 替代错误值的类型；须能转换为E。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `default_value` | 输入/输出 | 替代错误值；本对象不含错误时返回由它转换得到的E，含错误时返回所存错误值。 |
+| `default_error` | 输入/输出（转发形式） | 在相应状态下作为替代值使用；右值来源可被移动。 |
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `E` | 返回错误值，否则返回调用方给出的替代值。 |
-| 原型2 | `E` | 返回错误值，否则返回调用方给出的替代值。 |
+返回Error。有值时把default_error转换为Error，否则复制或移动保存的错误。
 
 ## 约束说明
 

@@ -34,88 +34,63 @@
 
 ## 函数原型
 
-### 原型1
-
 ```cpp
 namespace asc::std {
-template<class FirstMutex, class SecondMutex, class ThirdMutex, class ...RestMutexes> int try_lock(FirstMutex& mutexes, SecondMutex& mutex, ThirdMutex& mutex, RestMutexes&... mutex);
-} // namespace asc::std
-```
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<class FirstMutex, class SecondMutex> int try_lock(FirstMutex& mutexes, SecondMutex& mutex);
-} // namespace asc::std
+template<class... Mutexes> int try_lock(Mutexes&... mutexes);
+}
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `FirstMutex` | 第一把待尝试锁定的Lockable类型。 |
-| `SecondMutex` | 第二把待尝试锁定的Lockable类型。 |
-| `ThirdMutex` | 第三把待尝试锁定的Lockable类型。 |
-| `RestMutexes` | 其余待尝试锁定的Lockable类型列表。 |
+| `Mutexes...` | 两个或更多满足当前执行位置Lockable要求且操作不抛出的互斥体类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `mutexes` | 输入/输出 | 提供“依次尝试获取多把调用方提供的锁，并返回失败位置”使用的对象引用；被引用对象须在调用期间有效。 |
-| `mutex` | 输入/输出 | 提供“依次尝试获取多把调用方提供的锁，并返回失败位置”使用的对象引用；被引用对象须在调用期间有效。 |
-| `mutex` | 输入/输出 | 提供“依次尝试获取多把调用方提供的锁，并返回失败位置”使用的对象引用；被引用对象须在调用期间有效。 |
-| `mutex` | 输入/输出 | 提供“依次尝试获取多把调用方提供的锁，并返回失败位置”使用的对象引用；被引用对象须在调用期间有效。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `FirstMutex` | 第一把待尝试锁定的Lockable类型。 |
-| `SecondMutex` | 第二把待尝试锁定的Lockable类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `mutexes` | 输入/输出 | 提供“依次尝试获取多把调用方提供的锁，并返回失败位置”使用的对象引用；被引用对象须在调用期间有效。 |
-| `mutex` | 输入/输出 | 提供“依次尝试获取多把调用方提供的锁，并返回失败位置”使用的对象引用；被引用对象须在调用期间有效。 |
+| `mutexes...` | 输入/输出 | 按尝试顺序给出的有效互斥体对象；失败时回滚本次调用已取得的锁，原先由其他参与者持有的锁不受影响。 |
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `int` | 返回失败位置。 |
-| 原型2 | `int` | 返回失败位置。 |
+返回int。全部获取成功时为-1；失败时返回首个获取失败互斥体的零基索引，并释放本次调用此前已取得的全部锁。
 
 ## 约束说明
+
+- 参数包至少包含两个Mutex对象，每个对象须支持适用执行位置上的try_lock()和unlock()，且这些操作不抛出异常；失败时释放本次调用已取得的锁。
 
 - 两个及以上显式非抛Device Lockable的asc::std::try_lock：按参数顺序尝试，成功返回-1，失败返回零基索引并回滚此前已获得的全部锁。
 - Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例
 
-以下Host片段用满足Lockable操作的示例对象展示调用。
+以下Host示例给出具体锁状态，并检查操作结果。
 
 ```cpp
 #include <asc/std/mutex>
 
-void example()
+struct simple_mutex {
+    bool locked = false;
+    void lock() { locked = true; }
+    bool try_lock() { if (locked) return false; locked = true; return true; }
+    void unlock() { locked = false; }
+};
+
+bool example()
 {
-    struct simple_mutex { void lock() {} bool try_lock() { return true; } void unlock() {} };
-    simple_mutex first;
-    simple_mutex second;
-    if (asc::std::try_lock(first, second) == -1) {
-        first.unlock();
-        second.unlock();
-    }
+    simple_mutex first, second;
+    second.lock();
+    const int failed = asc::std::try_lock(first, second);
+    if (failed != 1 || first.locked || !second.locked) return false;
+    second.unlock();
+    const int acquired = asc::std::try_lock(first, second);
+    const bool both = acquired == -1 && first.locked && second.locked;
+    if (first.locked) first.unlock();
+    if (second.locked) second.unlock();
+    return both;
 }
 ```
 

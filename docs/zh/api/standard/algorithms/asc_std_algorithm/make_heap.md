@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::make_heap`把范围重排为堆；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::make_heap`把范围重排为堆；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,16 +38,18 @@
 
 ```cpp
 namespace asc::std {
-template<class RandomAccessIterator, class Compare> constexpr void make_heap(RandomAccessIterator first, RandomAccessIterator last, Compare compare);
-} // namespace asc::std
+template <class RandomAccessIterator, class Compare>
+constexpr void make_heap(RandomAccessIterator first, RandomAccessIterator last, Compare compare);
+}  // namespace asc::std
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class RandomAccessIterator> constexpr void make_heap(RandomAccessIterator first, RandomAccessIterator last);
-} // namespace asc::std
+template <class RandomAccessIterator>
+constexpr void make_heap(RandomAccessIterator first, RandomAccessIterator last);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -91,7 +93,6 @@ template<class RandomAccessIterator> constexpr void make_heap(RandomAccessIterat
 ## 约束说明
 
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 

@@ -36,65 +36,50 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::inplace_vector`](inplace_vector.md)。
+所属类型：[`inplace_vector<T, Capacity>`](inplace_vector.md)。以下为类内声明，类型别名及模板形参由所属类提供。
 
 ### 原型1
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-const_reference operator[](size_type index) const noexcept;
+constexpr reference operator[](size_type index) noexcept;
 ```
 
 ### 原型2
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-reference operator[](size_type index) noexcept;
+constexpr const_reference operator[](size_type index) const noexcept;
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 待访问元素的下标，从0起；本接口不检查越界，调用方须保证index < size()。 |
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `index` | 输入 | 待访问元素的下标，从0起；本接口不检查越界，调用方须保证index < size()。 |
+| `index` | 输入 | 从0开始的元素位置，必须小于size()。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `const_reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
-| 原型2 | `reference` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型1 | `reference` | 借用index位置的可写元素引用，不执行边界检查。 |
+| 原型2 | `const_reference` | 借用index位置的只读元素引用，不执行边界检查。 |
 
 ## 约束说明
 
-- 元素保存在固定容量的对象内存中，不进行动态分配。
-- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
-- 前置条件：`index < size()`；`operator[]`不执行边界检查，越界访问后果未定义。
-- Host提供完整接口，设备端仅提供不抛出异常的接口。
+- index须小于size()，不执行边界检查；返回引用仅在对应元素存活期间有效。
 
 ## 调用示例
 
-以下Host片段以具体容量或维度演示调用；对象和索引须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/inplace_vector>
 
-decltype(auto) example(const asc::std::inplace_vector<int, 8>& values)
+bool example()
 {
-    if (!values.empty())
-        return values[0];
+    asc::std::inplace_vector<int, 4> values;
+    if (!values.try_push_back(2) || !values.try_push_back(3)) return false;
+    values[1] = 7;
+    return values[0] == 2 && values[1] == 7;
 }
 ```
 

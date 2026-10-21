@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::linear_congruential_engine::min`返回该类型允许的最小值。
+`asc::std::linear_congruential_engine::min`返回该引擎输出区间的下界：C为0时为1，否则为0。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::linear_congruential_engine 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr result_type min() noexcept;
+static constexpr result_type min() noexcept;
 ```
 
 ## 参数说明
@@ -49,7 +49,7 @@
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `result_type` | 返回该类型允许的最小值。 |
+| `result_type` | 返回该引擎输出区间的下界：C为0时为1，否则为0。 |
 
 ## 约束说明
 

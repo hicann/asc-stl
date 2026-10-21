@@ -53,18 +53,20 @@ namespace asc::std {
 ## 约束说明
 
 - 优先使用编译器内建能力。
-- 不可用时采用语义等价的公开回退实现。
+- 编译器没有对应内建能力时，本实现保守返回`false`，不能识别常量求值；该回退不具备完整的标准检测语义。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例要求工具链提供常量求值检测能力，分别检查常量求值与普通运行期调用。
 
 ```cpp
 #include <asc/std/type_traits>
 
-decltype(auto) example()
+static_assert(asc::std::is_constant_evaluated());
+
+bool example()
 {
-    return asc::std::is_constant_evaluated();
+    return !asc::std::is_constant_evaluated();
 }
 ```
 

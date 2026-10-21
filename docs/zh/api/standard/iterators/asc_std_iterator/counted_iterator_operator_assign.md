@@ -34,12 +34,14 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::counted_iterator`](counted_iterator.md)。
+所属类型：[`counted_iterator`](counted_iterator.md)。以下保留转换赋值的真实参与条件；C++17及Device以SFINAE选择，Host C++20以相同的requires条件选择。
 
 ```cpp
-// asc::std::counted_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class I2> constexpr counted_iterator<Iter>& operator=(const counted_iterator<I2>& other) noexcept(is_nothrow_assignable_v<Iter&, const I2&>);
+template<class I2, enable_if_t<assignable_from<Iter&, const I2&>, int> = 0>
+constexpr counted_iterator& operator=(const counted_iterator<I2>& other) noexcept(is_nothrow_assignable_v<Iter&, const I2&>);
 ```
+
+同类型特殊成员赋值按C++隐式声明规则处理。
 
 ## 参数说明
 
@@ -53,29 +55,34 @@ template<class I2> constexpr counted_iterator<Iter>& operator=(const counted_ite
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
+| `other` | 输入 | 转换赋值来源，形参为const引用；保存的底层状态须满足原型给出的转换和赋值条件。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `counted_iterator<Iter> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| `counted_iterator&` | 从来源复制当前底层位置及剩余计数，返回*this；来源保持有效。 |
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- `Iter`须满足本操作要求的遍历能力；适配器不拥有底层范围。
+- `count()`表示从当前位置开始剩余的元素数量；解引用及自增要求剩余数量大于0。
+- 位移后的底层位置及对应计数须有效，不得越过实际有效范围。
 
 ## 调用示例
 
-以下Host片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void example(asc::std::counted_iterator<const int*>& destination, const asc::std::counted_iterator<int*>& source)
+bool example()
 {
-    destination = source;
+    int values[] = {2, 4, 6, 8};
+    asc::std::counted_iterator<int*> iterator(values, 4);
+    asc::std::counted_iterator<const int*> target;
+    target = iterator;
+    return *target == 2;
 }
 ```
 

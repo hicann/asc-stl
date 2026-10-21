@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::thread_index`返回当前线程在整个Grid中的线性索引。
+`asc::thread_index`返回线程在当前Block内按x最快次序展平的索引。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
 unsigned long long thread_index() noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明

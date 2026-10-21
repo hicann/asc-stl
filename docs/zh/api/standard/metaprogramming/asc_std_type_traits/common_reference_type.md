@@ -34,16 +34,15 @@
 
 ## 声明
 
-所属类型：[`asc::std::common_reference`](common_reference.md)。
+当`common_reference<Types...>`能按公共引用规则求得类型时，提供成员`type`。通过所属特征类查询：
 
 ```cpp
-// asc::std::common_reference 类内的声明节选；模板形参和其他成员由所属类提供。
-using type = T;
+using reference_type = typename asc::std::common_reference<int&, const int&>::type;
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 没有可用公共引用类型时不提供`type`，不能无条件写为某一个输入类型。具体判定顺序见[common_reference](common_reference.md)。
 
 ## 调用示例
 

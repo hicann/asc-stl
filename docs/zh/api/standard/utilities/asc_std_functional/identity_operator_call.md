@@ -58,17 +58,24 @@ template<class T> [[nodiscard]] constexpr T&& operator()(T&& value) const noexce
 ## 约束说明
 
 - 同时提供指定类型形式和透明调用形式。
+- 返回的引用、指针或非拥有包装器不延长被引用对象的生命周期。使用时须保证该对象仍存活；对象销毁或其值存储生命周期结束后不得继续访问。
 
 ## 调用示例
 
-以下Host片段以具体整数实参演示函数对象调用。
+以下Host示例在被引用对象仍存活时检查结果。
 
 ```cpp
 #include <asc/std/functional>
+#include <asc/std/type_traits>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::identity{}(7);
+    int value = 7;
+    auto&& selected = asc::std::identity{}(value);
+    static_assert(asc::std::is_same_v<decltype(selected), int&>);
+    selected = 9;
+    const int copied = asc::std::identity{}(7);
+    return value == 9 && copied == 7;
 }
 ```
 

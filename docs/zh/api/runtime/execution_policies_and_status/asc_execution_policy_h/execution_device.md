@@ -35,8 +35,9 @@
 ## 声明
 
 ```cpp
-// asc::execution 类内的声明节选；模板形参和其他成员由所属类提供。
+namespace asc::execution {
 inline constexpr asc::device_policy device;
+}  // namespace asc::execution
 ```
 
 ## 约束说明

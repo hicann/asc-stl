@@ -51,11 +51,8 @@ void clear() noexcept;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 逐个销毁当前元素并将`size()`置为`0`，不释放存储，也不改变`capacity()`。
+- 元素析构须不抛出异常；指向原元素的指针、引用及迭代器不得再用于元素访问。Device侧的元素析构须可用于相应编程模式。
 
 ## 调用示例
 

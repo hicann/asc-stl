@@ -16,42 +16,46 @@
 
 #include <acl/acl.h>
 #include <iostream>
+#include "../../../../../../support/hardware_runtime.h"
+#include "launch.h"
 
 #if defined(ASC_STL_B028_SIMD)
-void launch_asc_stl_b028_simd(unsigned int*, void*);
+
 #else
-void launch_asc_stl_b028_simt(unsigned int*, unsigned char*, void*);
+
 #endif
 int main()
 {
+    asc_stl_test::hardware_runtime runtime;
     unsigned int* result_device = nullptr;
     unsigned char* storage_device = nullptr;
     aclrtStream stream = nullptr;
-    bool passed = aclInit(nullptr) == ACL_SUCCESS && aclrtSetDevice(0) == ACL_SUCCESS &&
+    bool passed = runtime.initialize(nullptr) == ACL_SUCCESS && runtime.set_device(0) == ACL_SUCCESS &&
         aclrtCreateStream(&stream) == ACL_SUCCESS &&
         aclrtMalloc(reinterpret_cast<void**>(&result_device), sizeof(unsigned int), ACL_MEM_MALLOC_HUGE_FIRST) ==
             ACL_SUCCESS &&
         aclrtMalloc(reinterpret_cast<void**>(&storage_device), 8192, ACL_MEM_MALLOC_HUGE_FIRST) == ACL_SUCCESS;
     unsigned int result = 99;
-    if (passed) {
+    if (passed && runtime.ready()) {
 #if defined(ASC_STL_B028_SIMD)
         launch_asc_stl_b028_simd(result_device, stream);
 #else
         launch_asc_stl_b028_simt(result_device, storage_device, stream);
 #endif
-        passed = aclrtSynchronizeStream(stream) == ACL_SUCCESS &&
+        passed = runtime.synchronize(stream) == ACL_SUCCESS &&
             aclrtMemcpy(&result, sizeof(result), result_device, sizeof(result), ACL_MEMCPY_DEVICE_TO_HOST) ==
                 ACL_SUCCESS &&
             result == 0;
     }
     if (storage_device)
-        passed = aclrtFree(storage_device) == ACL_SUCCESS && passed;
+        passed = runtime.free_device(storage_device) == ACL_SUCCESS && passed;
     if (result_device)
-        passed = aclrtFree(result_device) == ACL_SUCCESS && passed;
+        passed = runtime.free_device(result_device) == ACL_SUCCESS && passed;
     if (stream)
-        passed = aclrtDestroyStream(stream) == ACL_SUCCESS && passed;
-    passed = aclrtResetDevice(0) == ACL_SUCCESS && passed;
-    passed = aclFinalize() == ACL_SUCCESS && passed;
+        passed = runtime.destroy_stream(stream) == ACL_SUCCESS && passed;
+    passed = runtime.reset_device(0) == ACL_SUCCESS && passed;
+    passed = runtime.finalize() == ACL_SUCCESS && passed;
+    passed = runtime.finish(passed) == 0;
     std::cout << "b028_failures=" << result << '\n';
     if (passed)
         std::cout << "ASC_STL_B028_HARDWARE_PASS\n";

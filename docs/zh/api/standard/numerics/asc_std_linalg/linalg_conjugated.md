@@ -38,7 +38,7 @@
 
 ```cpp
 namespace asc::std::linalg {
-template<class ElementType, class Extents, class Layout, class Accessor> [[nodiscard]] constexpr auto conjugated(mdspan<ElementType, Extents, Layout, Accessor> input);
+template<class ElementType, class Extents, class Layout, class Accessor> constexpr auto conjugated(mdspan<ElementType, Extents, Layout, Accessor> input);
 } // namespace asc::std::linalg
 ```
 
@@ -46,7 +46,7 @@ template<class ElementType, class Extents, class Layout, class Accessor> [[nodis
 
 ```cpp
 namespace asc::std::linalg {
-template<class ElementType, class Extents, class Layout, class NestedAccessor> [[nodiscard]] constexpr auto conjugated(mdspan<ElementType, Extents, Layout, conjugated_accessor<NestedAccessor>> input);
+template<class ElementType, class Extents, class Layout, class NestedAccessor> constexpr auto conjugated(mdspan<ElementType, Extents, Layout, conjugated_accessor<NestedAccessor>> input);
 } // namespace asc::std::linalg
 ```
 
@@ -99,18 +99,20 @@ template<class ElementType, class Extents, class Layout, class NestedAccessor> [
 
 ## 调用示例
 
-以下Host片段展示固定缓冲或多维视图的具体调用；底层存储须保持有效。
+以下Host示例给出具体输入，并在对象与底层存储仍有效时检查结果。
 
 ```cpp
 #include <asc/std/linalg>
-#include <asc/std/cstddef>
+#include <asc/std/complex>
 
-decltype(auto) example()
+bool example()
 {
-    int values[6] = {1, 2, 3, 4, 5, 6};
-    using extents = asc::std::extents<asc::std::size_t, 2, 3>;
-    asc::std::mdspan<int, extents> view(values);
-    return asc::std::linalg::conjugated(view);
+    asc::std::complex<float> values[1] = {{2.0F, 3.0F}};
+    using E = asc::std::extents<int, 1, 1>;
+    asc::std::mdspan<asc::std::complex<float>, E> view(values);
+    const auto result = asc::std::linalg::conjugated(view);
+    const auto value = result.accessor().access(result.data_handle(), result.mapping()(0, 0));
+    return value.real() == 2.0F && value.imag() == -3.0F && values[0].imag() == 3.0F;
 }
 ```
 

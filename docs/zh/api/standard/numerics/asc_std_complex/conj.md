@@ -38,7 +38,7 @@
 
 ```cpp
 namespace asc::std {
-template<class T> [[nodiscard]] constexpr Asccomplexcomplextype<T> conj(T value);
+template<class T> [[nodiscard]] constexpr complex<T> conj(T value) noexcept;
 } // namespace asc::std
 ```
 
@@ -46,7 +46,7 @@ template<class T> [[nodiscard]] constexpr Asccomplexcomplextype<T> conj(T value)
 
 ```cpp
 namespace asc::std {
-template<class T> [[nodiscard]] constexpr complex<T> conj(const complex<T>& value);
+template<class T> constexpr complex<T> conj(const complex<T>& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -58,7 +58,7 @@ template<class T> [[nodiscard]] constexpr complex<T> conj(const complex<T>& valu
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 实数输入的值类型，也是返回复数的成分类型。 |
+| `T` | 实数输入及返回复数的成分类型，当前须为`float`。 |
 
 **函数参数**
 
@@ -72,7 +72,7 @@ template<class T> [[nodiscard]] constexpr complex<T> conj(const complex<T>& valu
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 复数操作数的成分（实部与虚部）值类型，须为浮点类型。 |
+| `T` | 复数操作数的成分类型，当前须为`float`。 |
 
 **函数参数**
 
@@ -84,7 +84,7 @@ template<class T> [[nodiscard]] constexpr complex<T> conj(const complex<T>& valu
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `Asccomplexcomplextype<T>` | 返回复数的共轭值。 |
+| 原型1 | `complex<T>` | 返回复数的共轭值。 |
 | 原型2 | `complex<T>` | 返回复数的共轭值。 |
 
 ## 约束说明

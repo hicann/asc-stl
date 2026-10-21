@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::thread_count`返回当前Kernel启动的线程总数。
+`asc::thread_count`返回当前Block内的线程总数blockDim.x*blockDim.y*blockDim.z。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
 unsigned long long thread_count() noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明

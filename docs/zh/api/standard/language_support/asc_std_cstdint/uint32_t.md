@@ -34,10 +34,12 @@
 
 ## 声明
 
+该类型由平台stdint.h导入，保持其宽度和符号属性。
+
 ```cpp
 namespace asc::std {
-using uint32_t = Uint32t;
-} // namespace asc::std
+using ::uint32_t;
+}
 ```
 
 ## 约束说明

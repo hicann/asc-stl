@@ -16,8 +16,9 @@
 
 #include <asc/std/__floating_point/cast.h>
 #include "support/b011_semantics.h"
+#include "support/bf16_cast_semantics.h"
 
 int main()
 {
-    return asc_stl_b011_test::evaluate_runtime();
+    return asc_stl_b011_test::evaluate_runtime() + static_cast<int>(asc_stl_bf16_cast_test::evaluate());
 }

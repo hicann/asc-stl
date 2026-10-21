@@ -50,23 +50,58 @@ template<class Key, class Hash, class Equal, class Allocator> class unordered_se
 - 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构。
 - 仅容量充足和不抛出异常域。
 - Host和AI Core SIMT编程。
+- `Hash`和`Equal`须可默认构造、复制，并能在调用位置处理相应键；本容器要求这些调用不抛出异常。`Equal`须构成键的等价关系，且`Equal(a, b)`成立时`Hash(a)`与`Hash(b)`必须相同。
+- 只对参与相等判断的键值计算哈希；若键含填充、被相等判断忽略的缓存字段或非平凡状态，须显式提供合适的`Hash`。泛型对象字节回退的条件见[hash说明](../../utilities/asc_std_bitset/hash.md)。
+- 键位于容器期间，不得修改所选`Hash`或`Equal`依赖的内容；哈希值相同的不同键由`Equal`进一步区分。
 
 ## 调用示例
 
-以下Host示例展示具体输入、接口调用和可检查的结果。
+以下Host示例使用两个`id`相同、`cache`不同的相等键；自定义哈希只处理参与相等判断的`id`。
 
 ```cpp
 #include <asc/memory>
-#include <functional>
+#include <asc/std/functional>
 #include <asc/std/unordered_set>
+
+struct example_key {
+    int id;
+    int cache;
+    friend bool operator==(const example_key& left, const example_key& right) noexcept
+    {
+        return left.id == right.id;
+    }
+};
+
+struct example_hash {
+    asc::std::size_t operator()(const example_key& value) const noexcept
+    {
+        return asc::std::hash<int>{}(value.id);
+    }
+};
+
+struct example_equal {
+    bool operator()(const example_key& left, const example_key& right) const noexcept
+    {
+        return left == right;
+    }
+};
 
 bool example()
 {
     alignas(64) unsigned char storage[16384] = {};
     asc::monotonic_arena arena(storage, sizeof(storage));
-    asc::std::unordered_set<int, ::std::hash<int>, ::std::equal_to<int>, asc::arena_allocator<int>> values(asc::arena_allocator<int>{arena});
-    values.insert(7);
-    return values.size() == 1 && values.find(7) != values.end();
+    const example_key first{7, 1};
+    const example_key second{7, 99};
+    const example_hash key_hash;
+    using allocator = asc::arena_allocator<example_key>;
+    using set_type = asc::std::unordered_set<example_key, example_hash, example_equal, allocator>;
+    set_type values(allocator{arena});
+    const auto inserted = values.insert(first);
+    const auto duplicate = values.insert(second);
+    const auto found = values.find(second);
+    return first == second && first.cache != second.cache && key_hash(first) == key_hash(second)
+        && inserted.second && !duplicate.second && values.size() == 1 && found != values.end()
+        && found->id == 7 && found->cache == first.cache;
 }
 ```
 

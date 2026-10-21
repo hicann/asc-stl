@@ -122,7 +122,7 @@ template <class _Rep>
 struct treat_as_floating_point : is_floating_point<_Rep> {};
 
 template <class _Rep>
-inline constexpr bool treat_as_floating_point_v = is_floating_point_v<_Rep>;
+inline constexpr bool treat_as_floating_point_v = treat_as_floating_point<_Rep>::value;
 
 template <class _Rep>
 struct duration_values {

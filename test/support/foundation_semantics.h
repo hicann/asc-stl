@@ -95,6 +95,10 @@ CANN_ASC_STL_API int evaluate() noexcept
         return 3;
     unsigned char source[6] = {11, 22, 33, 44, 55, 66};
     unsigned char target[8] = {0xA5, 0, 0, 0, 0, 0, 0, 0x5A};
+    if (asc::std::memcpy(target + 1, source, 0) != target + 1 || target[1] != 0 || source[0] != 11)
+        return 9;
+    if (asc::std::memset(target + 1, 0xFF, 0) != target + 1 || target[1] != 0 || target[0] != 0xA5)
+        return 10;
     if (asc::std::memcpy(target + 1, source, 6) != target + 1)
         return 4;
     if (target[0] != 0xA5 || target[7] != 0x5A || target[3] != 33)

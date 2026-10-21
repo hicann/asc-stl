@@ -19,6 +19,8 @@
 #include <asc/std/tuple>
 #include <asc/std/__type_traits/is_same.h>
 
+#include "support/repeat_piecewise_semantics.h"
+
 struct movable_range {
     int* first;
     int* last;
@@ -101,6 +103,8 @@ constexpr bool same_type(T, T)
 
 int main()
 {
+    if (asc_stl_repeat_piecewise_test::evaluate() != 0)
+        return 101;
     int values[] = {1, 2, 3, 4, 5, 6};
     auto reference = asc::std::ranges::views::all(values);
     if (reference.size() != 6 || reference.data() != values)

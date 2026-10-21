@@ -40,28 +40,28 @@
 
 ```cpp
 // asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] value_type imag() const volatile;
+value_type imag() const volatile noexcept;
 ```
 
 ### 原型2
 
 ```cpp
 // asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr value_type imag() const;
+constexpr value_type imag() const noexcept;
 ```
 
 ### 原型3
 
 ```cpp
 // asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
-void imag(value_type value) volatile;
+void imag(value_type value) volatile noexcept;
 ```
 
 ### 原型4
 
 ```cpp
 // asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr void imag(value_type value);
+constexpr void imag(value_type value) noexcept;
 ```
 
 ## 参数说明

@@ -34,106 +34,49 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::expected`](expected.md)。
-
-### 原型1
+以下为`expected<Value, Error>`类内声明；Value和Error是所属类模板参数。
 
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr Value& operator*()& noexcept;
+constexpr Value& operator*() & noexcept;
 ```
 
-### 原型2
-
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr T&& operator*()&& noexcept;
-```
-
-### 原型3
-
-```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr T& operator*()& noexcept;
-```
-
-### 原型4
-
-```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
 constexpr const Value& operator*() const& noexcept;
 ```
 
-### 原型5
-
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr const T&& operator*() const&& noexcept;
+constexpr Value&& operator*() && noexcept;
 ```
 
-### 原型6
-
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr const T& operator*() const& noexcept;
+constexpr const Value&& operator*() const&& noexcept;
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
-无参数。
-
-### 原型2的参数
-
-无参数。
-
-### 原型3的参数
-
-无参数。
-
-### 原型4的参数
-
-无参数。
-
-### 原型5的参数
-
-无参数。
-
-### 原型6的参数
-
-无参数。
+无函数参数。Value与Error是所属expected类模板的参数。
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `Value &` | 返回当前迭代器或包装器所引用的对象。 |
-| 原型2 | `T &&` | 返回当前迭代器或包装器所引用的对象。 |
-| 原型3 | `T &` | 返回当前迭代器或包装器所引用的对象。 |
-| 原型4 | `const Value &` | 返回当前迭代器或包装器所引用的对象。 |
-| 原型5 | `const T &&` | 返回当前迭代器或包装器所引用的对象。 |
-| 原型6 | `const T &` | 返回当前迭代器或包装器所引用的对象。 |
+返回Value&、const Value&、Value&&或const Value&&。返回活动成功值的引用，cv/ref由本对象决定；访问要求has_value()。
 
 ## 约束说明
 
-- T必须为非void类型，E必须为对象类型。
-- 适用操作必须不抛出异常。
-- 提供构造、赋值、emplace和swap。
-- 支持所有cv/ref限定形式。
-- Device侧可调用对象及结果构造必须不抛出异常。
+- 所属expected<Value, Error>要求有效的非void值类型和错误对象类型；当前操作还须满足本页原型、参数和状态要求。解引用要求has_value()；所得引用依赖对象及当前活动值的生存期。
 
 ## 调用示例
 
-以下Host片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
+以下Host示例在被引用对象仍存活时检查结果。
 
 ```cpp
 #include <asc/std/expected>
 
-decltype(auto) example()
+bool example()
 {
     asc::std::expected<int, int> value(7);
-    return *value;
+    int* selected = &*value;
+    *selected = 9;
+    return value.has_value() && *value == 9;
 }
 ```
 

@@ -64,7 +64,7 @@ template<class T, size_t Sz> constexpr size_t size(const T (&value)[Sz]) noexcep
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 被测量元素数量的容器；返回其size()的无符号形式。 |
+| `value` | 输入 | 被测量元素数量的容器；保留其`size()`成员的返回类型和值，不进行无符号转换。 |
 
 ### 原型2的参数
 
@@ -94,15 +94,20 @@ template<class T, size_t Sz> constexpr size_t size(const T (&value)[Sz]) noexcep
 
 ## 调用示例
 
-以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
+#include <asc/std/type_traits>
 
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    return asc::std::size(values);
+    struct signed_size_container {
+        constexpr int size() const noexcept { return 3; }
+    };
+    signed_size_container container;
+    static_assert(asc::std::is_same_v<decltype(asc::std::size(container)), int>);
+    return asc::std::size(container) == 3;
 }
 ```
 

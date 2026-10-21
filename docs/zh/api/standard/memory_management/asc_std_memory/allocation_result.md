@@ -42,12 +42,8 @@ template<class Pointer, class SizeType = asc::std::size_t> struct allocation_res
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- 聚合保存分配地址与实际元素容量；本类型不取得所有权，也不自动构造、销毁或释放元素。
+- `count`的单位是`Pointer`所指元素的个数，释放时遵守对应分配器的规则。
 
 ## 调用示例
 

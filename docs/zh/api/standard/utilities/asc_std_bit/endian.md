@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-enum endian;
+enum class endian;
 } // namespace asc::std
 ```
 

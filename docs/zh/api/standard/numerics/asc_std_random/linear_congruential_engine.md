@@ -42,6 +42,8 @@ template<class UIntType, UIntType A, UIntType C, UIntType M> class linear_congru
 
 ## 约束说明
 
+- UIntType须为无cv限定的无符号整数。M非零时A < M且C < M；引擎有效取值区间须至少包含两个值。
+
 - 提供不接收seed_seq的标准seed、discard、生成和相等比较成员。
 
 ## 调用示例

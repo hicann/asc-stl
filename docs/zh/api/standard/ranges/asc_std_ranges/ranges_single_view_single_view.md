@@ -34,58 +34,70 @@
 
 ## 函数原型
 
+所属类型：[`single_view`](ranges_single_view.md)。以下按当前实现列声明摘要；省略仅供SFINAE的选择参数，保留供调用使用的类型默认值。默认构造形式均有逐项参与条件，不能据此假定所有特化都可默认构造。
+
 ### 原型1
 
 ```cpp
-single_view();
+constexpr single_view();
 ```
+
+仅当T满足default_initializable时参与。
 
 ### 原型2
 
 ```cpp
-constexpr single_view(T&& value) noexcept(is_nothrow_move_constructible_v<T>);
+template<class T2 = T>
+constexpr explicit single_view(const T2& value) noexcept(is_nothrow_copy_constructible_v<T2>);
 ```
+
+T2须可复制构造，且其remove_cvref_t不能为本single_view特化。
 
 ### 原型3
 
 ```cpp
-template<class ...Args> constexpr single_view(in_place_t tag, Args&&... args) noexcept(is_nothrow_constructible_v<T, Args...>);
+constexpr explicit single_view(T&& value) noexcept(is_nothrow_move_constructible_v<T>);
 ```
+
+显式移动保存单个值。
 
 ### 原型4
 
 ```cpp
-template<class Tp2> constexpr single_view(const Tp2& value) noexcept(is_nothrow_copy_constructible_v<Tp2>);
+template<class... Args>
+constexpr explicit single_view(in_place_t tag, Args&&... args)
+    noexcept(is_nothrow_constructible_v<T, Args...>);
 ```
+
+仅当T可由Args...构造时参与。
 
 ## 参数说明
 
 ### 原型1的参数
 
-无参数。
+无函数参数。
 
 ### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入/输出 | 视图唯一元素的值，被移动构造到视图中保存。 |
-
-### 原型3的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Args` | 转发给所存元素构造的实参类型包。 |
+| `T2` | 复制构造来源值类型，默认为T。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `tag` | 输入 | in_place_t标记，指示以args原位构造视图所存元素。 |
-| `args` | 输入/输出 | 转发给所存元素构造的实参包。 |
+| `value` | 输入 | 复制保存的单个值；不会借用此实参。 |
+
+### 原型3的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 移动保存的单个值；来源对象状态依T的移动规则。 |
 
 ### 原型4的参数
 
@@ -93,13 +105,14 @@ template<class Tp2> constexpr single_view(const Tp2& value) noexcept(is_nothrow_
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Tp2` | 可转换为视图所存元素类型的实参类型。 |
+| `Args` | 原位构造所保存值的转发实参类型包。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 视图唯一元素的值，从该值构造所存元素。 |
+| `tag` | 输入 | 原位构造标记in_place。 |
+| `args` | 输入 | 按原值类别转发给所保存T的构造实参。 |
 
 ## 返回值说明
 
@@ -107,7 +120,9 @@ template<class Tp2> constexpr single_view(const Tp2& value) noexcept(is_nothrow_
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- 每种形式须满足其原型所列参与条件；实际保存的范围或值还须满足所属视图的类型要求。
+- 构造视图不会复制它所借用的元素；底层存储和被借用对象须覆盖相应迭代器与元素访问期。
+- 以noexcept标注的形式须遵守实际成员操作不抛出异常的要求；具体异常规格见各原型。
 
 ## 调用示例
 

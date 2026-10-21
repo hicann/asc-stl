@@ -36,11 +36,13 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::inplace_vector`](inplace_vector.md)。
+所属类型：[`inplace_vector<T, Capacity>`](inplace_vector.md)。以下为类内声明，类型别名及模板形参由所属类提供。
+
+### 原型1
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class Predicate> size_type erase_if(Predicate predicate);
+template<class Predicate>
+constexpr size_type erase_if(Predicate predicate);
 ```
 
 ## 参数说明
@@ -49,25 +51,23 @@ template<class Predicate> size_type erase_if(Predicate predicate);
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Predicate` | 判断元素是否满足条件的可调用对象类型。 |
-
-**函数参数**
+| `Predicate` | 可用元素调用且结果可作布尔判定的谓词类型。 |
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `predicate` | 输入 | 按值保存的谓词，对要移除的元素返回true；遍历期间不得改变容器结构。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `size_type` | 返回删除数量。 |
+| 适用原型 | 返回值类型 | 含义 |
+| --- | --- | --- |
+| 原型1 | `size_type` | 返回实际移除数量；未匹配任何元素时为0。 |
 
 ## 约束说明
 
-- 元素保存在固定容量的对象内存中，不进行动态分配。
-- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
-- Host提供完整接口，设备端仅提供不抛出异常的接口。
+- predicate逐个判断元素；为true的元素被移除，其余元素保持相对次序。
+- 谓词不得在遍历期间改变容器结构；元素移动赋值与析构须有效。
+- 元素的对应构造、赋值和析构须满足非抛出使用域；constexpr声明不保证任意T和语言模式都能常量求值。
 
 ## 调用示例
 

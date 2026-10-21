@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class T, class U> constexpr auto round_up(T a, U b) noexcept;
-} // namespace asc
+template <class T, class U>
+[[nodiscard]] constexpr auto round_up(T a, U b) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -61,6 +62,8 @@ template<class T, class U> constexpr auto round_up(T a, U b) noexcept;
 | `auto` | 返回输入值按接口规定运算后的数值结果。 |
 
 ## 约束说明
+
+- 有符号输入须满足`a >= 0`且`b > 0`；中间乘法及结果须可表示。本接口不承诺负被除数的数学向上取整。
 
 - T和U必须为非bool的整数或枚举类型。
 - b必须为正数。

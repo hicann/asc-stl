@@ -34,9 +34,12 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const bool is_scoped_enum_v;
+template<class T>
+inline constexpr bool is_scoped_enum_v = is_scoped_enum<T>::value;
 } // namespace asc::std
 ```
 
@@ -52,7 +55,7 @@ template<class T> inline constexpr const bool is_scoped_enum_v;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::is_scoped_enum_v<int>;
+static_assert((asc::std::is_scoped_enum_v<int>) == false);
 ```
 
 ## 关联API

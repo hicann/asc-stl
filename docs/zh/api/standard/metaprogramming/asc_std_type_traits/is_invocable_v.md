@@ -34,9 +34,12 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class Fn, class ...Args> inline constexpr const bool is_invocable_v;
+template<class Fn, class ...Args>
+inline constexpr bool is_invocable_v = is_invocable<Fn, Args...>::value;
 } // namespace asc::std
 ```
 
@@ -51,7 +54,7 @@ template<class Fn, class ...Args> inline constexpr const bool is_invocable_v;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::is_invocable_v<int(*)(int), int>;
+static_assert((asc::std::is_invocable_v<int(*)(int), int>) == true);
 ```
 
 ## 关联API

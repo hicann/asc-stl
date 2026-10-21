@@ -67,17 +67,29 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 template <class Tp>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr int __fpclassify_impl(Tp x) noexcept
 {
-    static_assert(__fp_has_denorm_v<__fp_format_of_v<Tp>>, "The type must have denorm support");
     const auto storage = ::asc::std::__fp_get_storage(x);
-    const auto exponent = static_cast<decltype(storage)>(storage & __fp_exp_mask_of_v<Tp>);
-    const auto significand = static_cast<decltype(storage)>(storage & __fp_mant_mask_of_v<Tp>);
-    if (exponent == __fp_exp_mask_of_v<Tp>) {
-        return significand == __fp_explicit_bit_mask_of_v<Tp> ? 1 : 0;  // FP_INFINITE : FP_NAN
+    if constexpr (__fp_format_of_v<Tp> == __fp_format::__fp8_e8m0) {
+        // Every non-NaN encoding is normal in E8M0, including 2^-127.
+        return storage == 0xffu ? 0 : 4;
+    } else if constexpr (__fp_format_of_v<Tp> == __fp_format::__fp8_e4m3) {
+        const auto magnitude = storage & __fp_exp_mant_mask_of_v<Tp>;
+        if (magnitude == 0x7fu)
+            return 0;
+        if ((storage & __fp_exp_mask_of_v<Tp>) == 0)
+            return (storage & __fp_mant_mask_of_v<Tp>) == 0 ? 2 : 3;
+        return 4;
+    } else {
+        static_assert(__fp_has_denorm_v<__fp_format_of_v<Tp>>, "The type must have denorm support");
+        const auto exponent = static_cast<decltype(storage)>(storage & __fp_exp_mask_of_v<Tp>);
+        const auto significand = static_cast<decltype(storage)>(storage & __fp_mant_mask_of_v<Tp>);
+        if (exponent == __fp_exp_mask_of_v<Tp>) {
+            return significand == __fp_explicit_bit_mask_of_v<Tp> ? 1 : 0;  // FP_INFINITE : FP_NAN
+        }
+        if (exponent == 0) {
+            return significand != 0 ? 3 : 2;  // FP_SUBNORMAL : FP_ZERO
+        }
+        return 4;  // FP_NORMAL
     }
-    if (exponent == 0) {
-        return significand != 0 ? 3 : 2;  // FP_SUBNORMAL : FP_ZERO
-    }
-    return 4;  // FP_NORMAL
 }
 
 //! @brief Classifies @p x as FP_NAN, FP_INFINITE, FP_NORMAL, FP_SUBNORMAL or

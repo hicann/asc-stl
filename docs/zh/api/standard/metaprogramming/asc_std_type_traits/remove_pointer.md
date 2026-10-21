@@ -42,7 +42,7 @@ template<class T> struct remove_pointer;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 移除指针及其顶层cv限定，保留所指类型的限定；非指针类型保持原类型。
 
 ## 调用示例
 

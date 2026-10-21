@@ -53,6 +53,8 @@ constexpr explicit counting_semaphore(asc::std::ptrdiff_t desired = 0) noexcept;
 
 ## 约束说明
 
+- 初始desired须在`[0, max()]`内；release的update须非负，且增加后许可数不得超过max()。构造保存计数，调用方须先满足这些边界。
+
 - 使用C++17。
 - 在AI Core SIMT编程 中操作调用方管理的GM状态。
 - Scope必须为asc::memory_scope::block或asc::memory_scope::device。

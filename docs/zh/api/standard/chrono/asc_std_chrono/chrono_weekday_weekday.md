@@ -43,7 +43,7 @@ constexpr weekday();
 ### 原型2
 
 ```cpp
-constexpr weekday(const local_days& value) noexcept;
+explicit constexpr weekday(const local_days& value) noexcept;
 ```
 
 ### 原型3
@@ -55,7 +55,7 @@ constexpr weekday(const sys_days& value) noexcept;
 ### 原型4
 
 ```cpp
-constexpr weekday(const unsigned int value) noexcept;
+explicit constexpr weekday(const unsigned int value) noexcept;
 ```
 
 ### 原型5
@@ -98,7 +98,7 @@ constexpr weekday(weekday&& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 星期几值，0到6有效且0表示星期日；7到255亦可保存，但ok()判为false。 |
+| `value` | 输入 | 星期几值，0到6有效且0表示星期日；整数7规范化为0（星期日），因此ok()为true；其余不在0到6的存储值无效。 |
 
 ### 原型5的参数
 
@@ -114,7 +114,7 @@ constexpr weekday(weekday&& value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入/输出 | 用于移动构造的weekday对象；移动后源对象处于有效但未指定状态。 |
+| `value` | 输入 | 用于移动构造的weekday对象；这些标量字段的隐式移动保持来源字段值。 |
 
 ## 返回值说明
 

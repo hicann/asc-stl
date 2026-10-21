@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::years`表示日期、时间点或时长计算中的`years`值类型。
+`asc::std::chrono::years`是每tick为31556952秒（400年公历周期的平均年长）的整数计数时长，可与其它`duration`换算。作为日历运算的偏移量时，其`count`表示年数或月数，不按固定秒数修正日期。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

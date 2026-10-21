@@ -34,28 +34,34 @@
 
 ## 函数原型
 
-### 原型1
+以下为公开**调用形态摘要**；三参数以上的推导结果由各活动项组合调用结果的公共类型计算得到，省略其实现辅助类型。
 
 ```cpp
 namespace asc::std {
-template<class Visitor, class Variant> constexpr decltype(auto) visit(Visitor&& visitor, Variant&& value);
-} // namespace asc::std
+template<class Visitor, class Variant>
+constexpr decltype(auto) visit(Visitor&& visitor, Variant&& value);
+}
 ```
 
-### 原型2
-
 ```cpp
 namespace asc::std {
-template<class Visitor, class Left, class Right> constexpr decltype(auto) visit(Visitor&& visitor, Left&& left, Right&& right);
-} // namespace asc::std
+template<class Visitor, class Left, class Right>
+constexpr decltype(auto) visit(Visitor&& visitor, Left&& left, Right&& right);
+}
 ```
 
-### 原型3
+```cpp
+namespace asc::std {
+template<class Visitor, class First, class Second, class... Rest, enable_if_t<(sizeof...(Rest) >= 1), int> = 0>
+constexpr auto visit(Visitor&& visitor, First&& first, Second&& second, Rest&&... rest);
+}
+```
 
 ```cpp
 namespace asc::std {
-template<class Visitor, class First, class Second, class... Rest, enable_if_t<sizeof...(Rest) >= 1, int> = 0> constexpr auto visit(Visitor&& visitor, First&& first, Second&& second, Rest&&... rest) -> decltype(asc::std::__visit_common_step<remove_cvref_t<Visitor>, remove_cvref_t<First>&, remove_cvref_t<Second>&, remove_cvref_t<Rest>&...>(asc::std::__make_indices_imp<variant_size_v<remove_cvref_t<First>>, 0>{}));
-} // namespace asc::std
+template<class Result, class Visitor, class... Variants>
+constexpr Result visit(Visitor&& visitor, Variants&&... variants);
+}
 ```
 
 ## 参数说明
@@ -110,29 +116,35 @@ template<class Visitor, class First, class Second, class... Rest, enable_if_t<si
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1、2 | `decltype(auto)` | 访问器以活动备选项（组合）调用的结果，保持其值类别与类型。 |
-| 原型3 | 尾置推导类型 | 各备选类型组合调用结果的公共类型。 |
+默认入口对所有可能活动项组合的调用结果求公共类型，并把实际结果转换为该类型；即使声明使用decltype(auto)，也不保证保留访问器返回的引用或值类别。显式Result入口将默认visit结果再转换为Result，要求该转换有效。
 
 ## 约束说明
 
+- 调用前所有被访问的`variant`都须有活动备选项；先检查`valueless_by_exception()`，不得访问无活动项的对象。
+
+- 至少提供一个variant，访问前所有输入都须持有有效活动项。访问器对所需备选项组合须可调用且结果具备公共类型；显式Result形式仍依赖默认入口的结果计算。
+
 - Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下Host示例展示具体输入、接口调用和可检查的结果。
+以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/std/variant>
+#include <asc/std/type_traits>
+
+struct value_reference {
+    int& operator()(int& value) const { return value; }
+};
 
 bool example()
 {
-    asc::std::variant<int, long> first(1), second(2), third(3);
-    auto sum = [](auto... values) { return (0L + ... + values); };
-    return asc::std::visit(sum, first) == 1 && asc::std::visit(sum, first, second) == 3 &&
-        asc::std::visit(sum, first, second, third) == 6;
+    asc::std::variant<int> value(7);
+    static_assert(asc::std::is_same_v<decltype(asc::std::visit(value_reference{}, value)), int>);
+    const auto result = asc::std::visit(value_reference{}, value);
+    const long converted = asc::std::visit<long>(value_reference{}, value);
+    return result == 7 && converted == 7L;
 }
 ```
 

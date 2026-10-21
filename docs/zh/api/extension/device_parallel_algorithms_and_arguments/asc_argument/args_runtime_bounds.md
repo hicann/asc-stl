@@ -34,14 +34,15 @@
 
 ```cpp
 // asc::args 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class T> class runtime_bounds;
+template <class T>
+class runtime_bounds;
 ```
 
 ## 约束说明
 
+- 运行期边界按值保存，调用方须保证lower不大于upper；构造或查询不执行参数范围检查。编译期bounds的Lower必须不大于Upper。
+
 - 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 

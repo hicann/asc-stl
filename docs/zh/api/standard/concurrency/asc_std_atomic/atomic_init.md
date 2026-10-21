@@ -54,7 +54,7 @@ template<class T> void atomic_init(atomic<T>* object, T value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `object` | 输入 | 待初始化的原子对象的指针。 |
+| `object` | 输入/输出 | 待初始化的原子对象的指针。 |
 | `value` | 输入 | 写入原子对象的初始值。 |
 
 ## 返回值说明
@@ -63,10 +63,9 @@ template<class T> void atomic_init(atomic<T>* object, T value) noexcept;
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数。
-- bool/8/16位用32位内部存储。
-- 32/64位按有符号位模式分派。
-- Host和AI Core SIMT编程GM。
+- 原子操作可在Host和AI Core SIMT编程中调用；SIMT线程共享的原子对象须位于GM，并在并发访问前完成初始化。
+- `object`须指向有效的[atomic](atomic.md)对象，其值类型须与模板参数`T`一致。
+- 当前实现以`memory_order_relaxed`存入初值；调用须在其他线程并发访问开始前完成。
 
 ## 调用示例
 

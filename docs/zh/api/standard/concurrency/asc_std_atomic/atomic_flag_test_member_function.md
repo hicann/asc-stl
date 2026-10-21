@@ -40,7 +40,7 @@
 
 ```cpp
 // asc::std::atomic_flag 类内的声明节选；模板形参和其他成员由所属类提供。
-bool test(memory_order order) const noexcept;
+bool test(memory_order order = memory_order_seq_cst) const noexcept;
 ```
 
 ## 参数说明
@@ -59,8 +59,8 @@ bool test(memory_order order) const noexcept;
 
 ## 约束说明
 
-- atomic_flag的test/test_and_set/clear成员与非volatile自由函数。
-- Host和AI Core SIMT编程GM。
+- 可在Host或AI Core SIMT编程中调用；SIMT线程共享的标志对象须位于GM，并在并发访问前完成初始化。
+- 内存序须为`memory_order_relaxed`、`memory_order_consume`、`memory_order_acquire`或`memory_order_seq_cst`；不允许`memory_order_release`或`memory_order_acq_rel`。
 
 ## 调用示例
 

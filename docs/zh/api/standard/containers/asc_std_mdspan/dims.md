@@ -36,8 +36,9 @@
 
 ```cpp
 namespace asc::std {
-template<size_t Rank, class IndexType> using dims = dextents<IndexType, Rank>;
-} // namespace asc::std
+template<size_t Rank, class IndexType = size_t>
+using dims = dextents<IndexType, Rank>;
+}
 ```
 
 ## 约束说明
@@ -46,14 +47,20 @@ template<size_t Rank, class IndexType> using dims = dextents<IndexType, Rank>;
 
 ## 调用示例
 
-以下片段选用具体模板实参展示别名类型。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/mdspan>
+#include <asc/std/type_traits>
 
-void use_type()
+using shape_type = asc::std::dims<2>;
+static_assert(asc::std::is_same_v<shape_type::index_type, asc::std::size_t>);
+static_assert(shape_type::rank_dynamic() == 2);
+
+bool example()
 {
-    using selected = asc::std::dims<2, int>;
+    const shape_type shape(2, 3);
+    return shape.extent(0) == 2 && shape.extent(1) == 3;
 }
 ```
 

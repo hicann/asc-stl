@@ -34,10 +34,12 @@
 
 ## 声明
 
+以下为占位符对象声明；`__ph`是实现类型，调用方直接使用`placeholders::_10`，无需命名其类型。
+
 ```cpp
 namespace asc::std::placeholders {
-inline constexpr const Ph<10> _10;
-} // namespace asc::std::placeholders
+inline constexpr __ph<10> _10{};
+}
 ```
 
 ## 约束说明
@@ -46,12 +48,16 @@ inline constexpr const Ph<10> _10;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例用具体输入和可判断结果展示本接口。
 
 ```cpp
 #include <asc/std/functional>
 
-auto value = asc::std::placeholders::_10;
+bool example()
+{
+    static_assert(asc::std::is_placeholder_v<decltype(asc::std::placeholders::_10)> == 10);
+    return true;
+}
 ```
 
 ## 关联API

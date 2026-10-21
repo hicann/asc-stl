@@ -28,6 +28,7 @@ CANN_PACKAGE_PATH="${ASC_STL_CANN_PACKAGE_PATH:-${ASCEND_HOME_PATH:-}}"
 TARGET_SOC="${ASC_STL_TARGET_SOC:-Ascend950PR_9599}"
 SIMULATOR_SOC="${ASC_STL_CANNSIM_SOC:-Ascend950}"
 CANNSIM_EXECUTABLE="${ASC_STL_CANNSIM_EXECUTABLE:-$(command -v cannsim || true)}"
+CASE_TIMEOUT_SECONDS="${ASC_STL_CANNSIM_CASE_TIMEOUT_SECONDS:-600}"
 
 if [ -z "$CANNSIM_EXECUTABLE" ] || [ ! -x "$CANNSIM_EXECUTABLE" ]; then
     echo "BLOCKED_ENVIRONMENT: cannsim is unavailable in the loaded CANN environment." >&2
@@ -50,7 +51,8 @@ for standard in 17 20; do
         -DASC_STL_CANN_PACKAGE_PATH="$CANN_PACKAGE_PATH" \
         -DASC_STL_TARGET_SOC="$TARGET_SOC" \
         -DASC_STL_CANNSIM_EXECUTABLE="$CANNSIM_EXECUTABLE" \
-        -DASC_STL_CANNSIM_SOC="$SIMULATOR_SOC"
+        -DASC_STL_CANNSIM_SOC="$SIMULATOR_SOC" \
+        -DASC_STL_CANNSIM_CASE_TIMEOUT_SECONDS="$CASE_TIMEOUT_SECONDS"
 
     cmake --build "$BUILD_DIR" --target asc_stl_cannsim_tests
     ctest --test-dir "$BUILD_DIR" -L "cannsim-smoke|cannsim-runtime" --output-on-failure

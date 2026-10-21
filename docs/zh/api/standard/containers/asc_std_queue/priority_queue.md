@@ -42,9 +42,10 @@ template<class T, class Container, class Compare> class priority_queue;
 
 ## 约束说明
 
-- priority_queue<T,Container,Compare=less<typename Container::value_type>>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/front/`operator[]`/push_back/emplace_back/pop_back/size/empty/swap及allocator操作必须在当前执行空间有效，Compare必须定义Device可调的strict-weak-order且可在已验证移动交换域使用。
-- 交付container_type/value_compare/value_type/size_type/reference/const_reference及protected c/comp，default/Compare/Container/copy/move/allocator构造及赋值，N4861两类InputIterator构造，empty/size/top、lvalue/rvalue push、void emplace、pop，member/non-member swap、uses_allocator特化，以及Compare+Container、InputIterator+Compare+Container、Compare+Container+Alloc三类显式Container CTAD。
-- 堆序语义为Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 显式指定T与Container，且T与Container::value_type一致。
+- 第三个模板实参Compare可省略，默认比较等价于元素的小于比较，堆顶为最大元素；其准确类型通过value_compare查询，不假定等同于asc::std::less。
+- 不提供独立allocator构造、uses_allocator特化、比较运算符或显式推导指引。
+- Device使用的Container、元素操作及Compare须可在对应执行位置调用并满足其非抛出要求；Host的异常行为遵循所调用对象，未额外声明noexcept时不承诺不抛出。
 
 ## 调用示例
 

@@ -12,7 +12,7 @@
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |
-| [asc::std::abs](../asc_std_cmath/abs.md) | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::abs](../asc_std_cmath/abs.md) | 函数 | C++17+ | Host、AI Core SIMT编程（复数重载） | Ascend 950 |
 | [asc::std::acos（函数）](../asc_std_cmath/acos.md) | 函数 | C++17+ | 见各成员或重载说明 | Ascend 950 |
 | [asc::std::acosh](../asc_std_cmath/acosh.md) | 函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::asin](../asc_std_cmath/asin.md) | 函数 | C++17+ | Host、AI Core SIMT编程 | Ascend 950 |

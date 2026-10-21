@@ -34,8 +34,11 @@
 
 ```cpp
 namespace asc {
-template<class T, unsigned Rank> asc::tensor_copy_status tensor_load_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<T> destination, asc::gm_span<const T> source, const asc::tensor_copy_descriptor<Rank>& descriptor, T fill_value) noexcept;
-} // namespace asc
+template <class T, unsigned Rank>
+asc::tensor_copy_status tensor_load_async(const asc::pipeline_ref& pipeline, unsigned int stage,
+    asc::ub_span<T> destination, asc::gm_span<const T> source, const asc::tensor_copy_descriptor<Rank>& descriptor,
+    T fill_value) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -44,7 +47,7 @@ template<class T, unsigned Rank> asc::tensor_copy_status tensor_load_async(const
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 搬运的元素类型；须属于多维搬运后端支持的元素集合。 |
+| `T` | 搬运的元素类型；仅支持int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t或float，两个视图的元素类型须匹配。 |
 | `Rank` | 描述符的张量秩（维度数量），为1至5的编译期无符号整数。 |
 
 **函数参数**
@@ -65,6 +68,9 @@ template<class T, unsigned Rank> asc::tensor_copy_status tensor_load_async(const
 | `asc::tensor_copy_status` | 返回异步加载任务的提交状态；提交成功不表示搬运已经完成。 |
 
 ## 约束说明
+
+- 重用流水级前由调用方执行producer_acquire(stage)；成功提交后再consumer_wait(stage)，失败状态不能继续等待未提交的加载事件。
+- 完成该级计算后使用tensor_store_async或按plain pipeline协议consumer_release并提交存储，最后wait完成后再观察结果或释放存储。
 
 - 仅可在AI Core SIMD编程中调用。
 - 源与目标两端地址须落在搬运引擎的 32 字节数据块边界上；任一端未对齐分别返回 insufficient_source/insufficient_destination（该硬件边界检查独立于 tensor_copy_required_alignment 的行距结果）。

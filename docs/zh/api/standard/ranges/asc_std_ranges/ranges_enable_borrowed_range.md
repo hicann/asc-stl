@@ -34,24 +34,29 @@
 
 ## 声明
 
+这是主模板的缺省值；库及用户允许的特化可改变特定类型的值。
+
 ```cpp
 namespace asc::std::ranges {
-template<class T> inline constexpr const bool enable_borrowed_range;
-} // namespace asc::std::ranges
+template<class T>
+inline constexpr bool enable_borrowed_range = false;
+}
 ```
 
 ## 约束说明
 
-- 提供完整的C++20 range concepts集合。
+- 主模板缺省为false；只有满足对应语义的类型才应特化。
+- 启用借用要求销毁范围对象后，其有效迭代器不因此失效；这不延长外部元素存储的生命。
 
 ## 调用示例
 
-以下片段用具体模板实参读取接口值。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/ranges>
 
-inline constexpr auto example = asc::std::ranges::enable_borrowed_range<int[4]>;
+static_assert(asc::std::ranges::enable_borrowed_range<asc::std::ranges::ref_view<int[3]>>);
+static_assert(!asc::std::ranges::enable_borrowed_range<int[3]>);
 ```
 
 ## 关联API

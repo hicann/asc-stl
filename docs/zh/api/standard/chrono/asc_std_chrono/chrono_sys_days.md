@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::sys_days`表示日期、时间点或时长计算中的`sys_days`值类型。
+`asc::std::chrono::sys_days`是按24小时计数的系统时间点，可与年月日字段互相转换；它不是每月天数可变的日历字段。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

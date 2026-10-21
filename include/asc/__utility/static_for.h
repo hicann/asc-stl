@@ -88,12 +88,12 @@ CANN_ASC_STL_API constexpr void static_for_strided(
 // Zero-based count form: [0, Size).
 template <class IndexType, IndexType Size, class Callable, class... Args>
 CANN_ASC_STL_API constexpr void static_for_count(Callable&& callable, Args&&... args) noexcept(
-    noexcept(static_for_invoke(
-        static_cast<Callable&&>(callable), static_for_make<IndexType, Size>{}, static_cast<Args&&>(args)...)))
+    noexcept(static_for_invoke(static_cast<Callable&&>(callable),
+        static_for_make<IndexType, (Size > 0 ? Size : IndexType{0})>{}, static_cast<Args&&>(args)...)))
 {
     if constexpr (Size > 0) {
-        static_for_invoke(
-            static_cast<Callable&&>(callable), static_for_make<IndexType, Size>{}, static_cast<Args&&>(args)...);
+        static_for_invoke(static_cast<Callable&&>(callable),
+            static_for_make<IndexType, (Size > 0 ? Size : IndexType{0})>{}, static_cast<Args&&>(args)...);
     }
 }
 

@@ -16,8 +16,12 @@
 
 #include <asc/std/__memory/construct_at.h>
 #include "support/b010_semantics.h"
+#include "support/construct_at_cardinality_semantics.h"
 
 int main()
 {
+    const int cardinality_result = asc_stl_construct_at_cardinality_test::evaluate();
+    if (cardinality_result != 0)
+        return cardinality_result;
     return asc_stl_b010_test::evaluate_runtime();
 }

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::reverse_copy`按相反顺序复制范围；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::reverse_copy`按相反顺序复制范围；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,18 +38,10 @@
 
 ```cpp
 namespace asc::std {
-template<class Bidirectional, class Output> Output reverse_copy(asc::device_policy policy, Bidirectional first, Bidirectional last, Output result);
-} // namespace asc::std
-```
-
-该原型适用于`C++17+`，可用位置为Host。
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<class BidirectionalIterator, class OutputIterator> constexpr OutputIterator reverse_copy(BidirectionalIterator first, BidirectionalIterator last, OutputIterator result);
-} // namespace asc::std
+template <class BidirectionalIterator, class OutputIterator>
+[[nodiscard]] constexpr OutputIterator reverse_copy(
+    BidirectionalIterator first, BidirectionalIterator last, OutputIterator result);
+}  // namespace asc::std
 ```
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
@@ -57,24 +49,6 @@ template<class BidirectionalIterator, class OutputIterator> constexpr OutputIter
 ## 参数说明
 
 ### 原型1的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Bidirectional` | 读取输入范围元素的迭代器类型；须支持双向遍历，以便按相反顺序读取。 |
-| `Output` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `result` | 输出 | 写入结果的输出迭代器；目标范围容量须足以容纳全部复制元素，结果为输入元素的逆序。 |
-
-### 原型2的参数
 
 **模板参数**
 
@@ -95,34 +69,29 @@ template<class BidirectionalIterator, class OutputIterator> constexpr OutputIter
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `Output` | 返回输出范围中最后一个写入元素之后的位置。 |
-| 原型2 | `OutputIterator` | 返回输出范围中最后一个写入元素之后的位置。 |
+| 原型1 | `OutputIterator` | 返回输出范围中最后一个写入元素之后的位置。 |
 
 ## 约束说明
 
 - 使用C++17。
-- 该Host同步适配接口调用对应的asc::parallel前端。
-- policy必须包含有效Stream和足够的调用方临时存储。
-- 接口只等待该Stream。
-- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用asc::std::terminate。
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     int output[16] = {};
-    return asc::std::reverse_copy(values, values + 8, output);
+    auto result = asc::std::reverse_copy(values, values + 8, output);
+    return result == output + 8 && output[0] == 8 && output[7] == 1;
 }
 ```
 
 ## 关联API
 
-- [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。
+- [`asc::parallel::reverse_copy`](../../../extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_reverse_copy.md)：使用执行策略提交异步设备操作。

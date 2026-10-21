@@ -34,22 +34,25 @@
 
 ## 函数原型
 
+所属类型：[`move_sentinel<Sent>`](move_sentinel.md)。以下为C++17及Device的选择形式；Host C++20对转换构造使用相同的convertible_to条件。
+
 ### 原型1
 
 ```cpp
-constexpr move_sentinel();
+constexpr move_sentinel() = default;
 ```
 
 ### 原型2
 
 ```cpp
-constexpr move_sentinel(Sent sentinel);
+constexpr explicit move_sentinel(Sent sentinel);
 ```
 
 ### 原型3
 
 ```cpp
-template<class S2> constexpr move_sentinel(const move_sentinel<S2>& other);
+template<class S2, enable_if_t<convertible_to<const S2&, Sent>, int> = 0>
+constexpr move_sentinel(const move_sentinel<S2>& other);
 ```
 
 ## 参数说明
@@ -72,7 +75,7 @@ template<class S2> constexpr move_sentinel(const move_sentinel<S2>& other);
 
 | 参数名 | 描述 |
 | --- | --- |
-| `S2` | 来源move_sentinel的哨兵类型；其哨兵须能转换构造为本类型的哨兵。 |
+| `S2` | 来源move_sentinel的哨兵类型；const S2&须满足convertible_to<const S2&, Sent>，包括隐式转换要求。 |
 
 **函数参数**
 
@@ -86,21 +89,25 @@ template<class S2> constexpr move_sentinel(const move_sentinel<S2>& other);
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 哨兵类型须支持对应构造、转换或赋值操作，并可与配套底层迭代器比较。
+- 哨兵不拥有底层范围，也不能解引用；其结束标记须在比较期间有效。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
+#include <asc/std/type_traits>
 
 bool example()
 {
     int values[] = {2, 4};
-    asc::std::move_sentinel<int*> iterator(values + 2);
-    return iterator.base() == values + 2;
+    asc::std::move_sentinel<int*> empty;
+    asc::std::move_sentinel<int*> direct(values + 2);
+    asc::std::move_sentinel<const int*> converted(direct);
+    static_assert(!asc::std::is_convertible_v<int*, asc::std::move_sentinel<int*>>);
+    return empty.base() == nullptr && converted.base() == values + 2;
 }
 ```
 

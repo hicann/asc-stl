@@ -34,11 +34,16 @@
 
 ## 函数原型
 
-所属类型：[`asc::atomic`](atomic.md)。
+以下为`asc::atomic<T, Scope>`类内声明：
 
 ```cpp
-// asc::atomic 类内的声明节选；模板形参和其他成员由所属类提供。
-bool compare_exchange_strong(T& expected, T desired, asc::std::memory_order success, asc::std::memory_order failure) noexcept;
+bool compare_exchange_strong(
+    T& expected, T desired, asc::std::memory_order success, asc::std::memory_order failure) noexcept;
+```
+
+```cpp
+bool compare_exchange_strong(
+    T& expected, T desired, asc::std::memory_order order = asc::std::memory_order_seq_cst) noexcept;
 ```
 
 ## 参数说明
@@ -49,7 +54,7 @@ bool compare_exchange_strong(T& expected, T desired, asc::std::memory_order succ
 | --- | --- | --- |
 | `expected` | 输入/输出 | 提供预期值或目标值；比较失败时函数把观察到的当前原子值写入`expected`；strong形式不允许伪失败，仅在实际比较失败时返回`false`。 |
 | `desired` | 输入 | 比较相等时写入原子对象的目标值。 |
-| `success` | 输入 | 比较成功后采用的读改写内存序。UB对象仅使用`memory_order_relaxed`。 |
+| `success` | 输入 | 比较成功后采用的读改写内存序。单元须位于GM；relaxed不建立其他对象的发布/获取关系。 |
 | `failure` | 输入 | 比较失败后采用的读取内存序；不得使用`memory_order_release`或`memory_order_acq_rel`，且不应强于success。 |
 
 ## 返回值说明
@@ -60,8 +65,10 @@ bool compare_exchange_strong(T& expected, T desired, asc::std::memory_order succ
 
 ## 约束说明
 
+- 单内存序形式的失败序从order推导：release降为relaxed，acq_rel降为acquire，其余保持不变；默认seq_cst。双内存序形式的failure不得为release/acq_rel，且不得强于success。
+
 - 原子对象的类型、地址空间、作用域和内存序必须匹配。
-- Device作用域的64位对象位于GM，UB原子操作仅使用memory_order_relaxed。
+- 所有Device原子单元必须位于GM；UB、栈或每核私有存储不属于当前支持域。
 
 ## 调用示例
 
@@ -78,7 +85,8 @@ __global__ void example(int* storage, unsigned int* output)
     auto& cell = *object;
     cell.store(7, asc::std::memory_order_relaxed);
     int expected = 7;
-    const bool exchanged = cell.compare_exchange_strong(expected, 11, asc::std::memory_order_relaxed, asc::std::memory_order_relaxed);
+    const bool exchanged =
+        cell.compare_exchange_strong(expected, 11, asc::std::memory_order_relaxed, asc::std::memory_order_relaxed);
     output[0] = (exchanged && expected == 7 && cell.load(asc::std::memory_order_relaxed) == 11) ? 1U : 0U;
 }
 ```

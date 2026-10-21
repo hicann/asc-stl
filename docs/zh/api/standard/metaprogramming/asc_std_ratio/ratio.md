@@ -43,6 +43,7 @@ template<intmax_t Numerator, intmax_t Denominator = 1> class ratio;
 ## 约束说明
 
 - 分母不得为零；规范化后的分子和分母必须可由`intmax_t`表示。
+- 原始模板实参的分子和分母均不得为`INTMAX_MIN`；分母必须非零，约分和符号规范化的中间结果及最终结果须能由`intmax_t`表示。
 
 ## 调用示例
 

@@ -77,8 +77,14 @@ public:
     basic_string& operator=(basic_string&&) = delete;
     CANN_ASC_STL_API basic_string& operator=(const CharT* text)
     {
-        clear();
-        return append(text);
+        // Measure before modifying the old contents: text can designate this
+        // string or one of its suffixes. Such a suffix already fits capacity_.
+        const size_type count = traits_type::length(text);
+        ensure(count);
+        traits_type::move(data_, text, count);
+        size_ = count;
+        traits_type::assign(data_[size_], CharT{});
+        return *this;
     }
     CANN_ASC_STL_API ~basic_string()
     {
@@ -162,6 +168,8 @@ public:
 
     CANN_ASC_STL_API void reserve(size_type requested)
     {
+        if (requested == static_cast<size_type>(-1))
+            terminate();
         if (requested <= capacity_)
             return;
         pointer replacement = allocator_.allocate(requested + 1);
@@ -190,7 +198,27 @@ public:
     CANN_ASC_STL_API basic_string& append(const CharT* text)
     {
         const size_type count = traits_type::length(text);
-        ensure(size_ + count);
+        const size_type limit = static_cast<size_type>(-1) - 1;
+        if (count > limit - size_)
+            terminate();
+        const size_type requested = size_ + count;
+        size_type source_offset = 0;
+        bool source_is_owned = false;
+        if (requested > capacity_) {
+            // Equality is defined for unrelated pointers; ordering/subtraction
+            // would not be. Scan only when reallocating, which already copies
+            // size_ characters, so capacity-sufficient appends keep their cost.
+            for (size_type index = 0; index <= size_; ++index) {
+                if (text == data_ + index) {
+                    source_offset = index;
+                    source_is_owned = true;
+                    break;
+                }
+            }
+        }
+        ensure(requested);
+        if (source_is_owned)
+            text = data_ + source_offset;
         traits_type::copy(data_ + size_, text, count);
         size_ += count;
         traits_type::assign(data_[size_], CharT{});

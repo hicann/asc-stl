@@ -36,13 +36,21 @@
 
 ## 声明
 
+Host保留系统类型身份：
+
 ```cpp
 namespace asc::std {
 using wint_t = ::std::wint_t;
-} // namespace asc::std
+}
 ```
 
-此原型对应头文件：`<asc/std/cwchar>`、`<asc/std/cwctype>`。
+Device使用无符号整数表示：
+
+```cpp
+namespace asc::std {
+using wint_t = unsigned int;
+}
+```
 
 ## 约束说明
 

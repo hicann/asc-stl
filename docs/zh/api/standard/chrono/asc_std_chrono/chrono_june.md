@@ -34,10 +34,12 @@
 
 ## 声明
 
+下列形式表达公开常量的类型和值；调用方直接使用已有常量，无需定义它。
+
 ```cpp
 namespace asc::std::chrono {
-inline constexpr const month June;
-} // namespace asc::std::chrono
+inline constexpr month June{6};
+}
 ```
 
 ## 约束说明
@@ -46,12 +48,12 @@ inline constexpr const month June;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/chrono>
 
-auto value = asc::std::chrono::June;
+static_assert(static_cast<unsigned>(asc::std::chrono::June) == 6);
 ```
 
 ## 关联API

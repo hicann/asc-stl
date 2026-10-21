@@ -48,7 +48,7 @@ T fetch_xor(T operand, asc::std::memory_order order = asc::std::memory_order_seq
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `operand` | 输入 | 参与按位异或的操作数：原子对象当前值与该值按位异或后写回，返回修改前的旧值。 |
-| `order` | 输入 | 本次原子读改写使用的内存序；可取`asc::std::memory_order`的六种标准值。UB对象仅使用`memory_order_relaxed`。 |
+| `order` | 输入 | 本次原子读改写使用的内存序；可取`asc::std::memory_order`的六种标准值。单元须位于GM；relaxed不建立其他对象的发布/获取关系。 |
 
 ## 返回值说明
 
@@ -59,7 +59,7 @@ T fetch_xor(T operand, asc::std::memory_order order = asc::std::memory_order_seq
 ## 约束说明
 
 - 原子对象的类型、地址空间、作用域和内存序必须匹配。
-- Device作用域的64位对象位于GM，UB原子操作仅使用memory_order_relaxed。
+- 所有Device原子单元必须位于GM；UB、栈或每核私有存储不属于当前支持域。
 
 ## 调用示例
 

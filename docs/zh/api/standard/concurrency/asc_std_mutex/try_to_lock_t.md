@@ -36,8 +36,8 @@
 
 ```cpp
 namespace asc::std {
-struct try_to_lock_t;
-} // namespace asc::std
+using try_to_lock_t = __lock_detail::__lock_tag<1>;
+}
 ```
 
 ## 约束说明
@@ -59,8 +59,8 @@ bool example()
     ::std::mutex mutex;
     asc::std::unique_lock<::std::mutex> guard(mutex, asc::std::try_to_lock);
     const bool owned = guard.owns_lock();
-    guard.unlock();
-    return owned && !guard.owns_lock();
+    if (owned) guard.unlock();
+    return guard.mutex() == &mutex && !guard.owns_lock();
 }
 ```
 

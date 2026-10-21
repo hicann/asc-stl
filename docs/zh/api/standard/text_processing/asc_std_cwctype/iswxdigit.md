@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cwctype>`。
 
-`asc::std::iswxdigit`按当前支持的C区域设置规则分类输入字符。
+`asc::std::iswxdigit`判断输入是否为十六进制数字0至9、a至f、A至F；符合时返回非零，不符合时返回0。
 
 该接口的可用位置为Host（完整接口）、Device（C locale相关接口）。
 
@@ -64,14 +64,14 @@ int iswxdigit(wint_t value) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/std/cwctype>
 
-decltype(auto) example(asc::std::wint_t value)
+bool example()
 {
-    return asc::std::iswxdigit(value);
+    return asc::std::iswxdigit(L'F') != 0;
 }
 ```
 

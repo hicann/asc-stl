@@ -29,6 +29,7 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
+#include <asc/std/__floating_point/cast.h>
 #include <asc/std/__cmath/backend.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_arithmetic.h>
@@ -93,7 +94,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 template <class Tp, ::asc::std::enable_if_t<__expo_supported_extended_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp exp(Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::exp(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::exp(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief 2 raised to the power @p value.
@@ -112,7 +113,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 template <class Tp, ::asc::std::enable_if_t<__expo_supported_extended_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp exp2(Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::exp2(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::exp2(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief e^@p value - 1; preserves precision when @p value is close to 0.
@@ -132,7 +133,7 @@ template <class Tp, ::asc::std::enable_if_t<__expo_supported_extended_v<Tp>, int
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp expm1(
     Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::expm1(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::expm1(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Decomposes into a mantissa ([0.5, 1) or 0) and a base-2 exponent
@@ -153,7 +154,7 @@ template <class Tp, ::asc::std::enable_if_t<__expo_supported_extended_v<Tp>, int
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp frexp(
     Tp value, int* exponent) noexcept
 {
-    return static_cast<Tp>(::asc::std::frexp(static_cast<float>(value), exponent));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::frexp(::asc::std::__fp_cast<float>(value), exponent));
 }
 
 //! @brief @p value * 2^@p exponent (inverse of frexp).
@@ -173,7 +174,7 @@ template <class Tp, ::asc::std::enable_if_t<__expo_supported_extended_v<Tp>, int
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp ldexp(
     Tp value, int exponent) noexcept
 {
-    return static_cast<Tp>(::asc::std::ldexp(static_cast<float>(value), exponent));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::ldexp(::asc::std::__fp_cast<float>(value), exponent));
 }
 
 //! @brief Splits into integral and fractional parts (integral part delivered
@@ -207,7 +208,7 @@ template <class Tp, ::asc::std::enable_if_t<__expo_supported_extended_v<Tp>, int
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp scalbn(
     Tp value, int exponent) noexcept
 {
-    return static_cast<Tp>(::asc::std::scalbn(static_cast<float>(value), exponent));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::scalbn(::asc::std::__fp_cast<float>(value), exponent));
 }
 
 //! @brief Same as scalbn, with a long exponent.
@@ -227,7 +228,7 @@ template <class Tp, ::asc::std::enable_if_t<__expo_supported_extended_v<Tp>, int
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp scalbln(
     Tp value, long exponent) noexcept
 {
-    return static_cast<Tp>(::asc::std::scalbln(static_cast<float>(value), exponent));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::scalbln(::asc::std::__fp_cast<float>(value), exponent));
 }
 
 //! @brief @p base raised to the power @p exponent.
@@ -247,7 +248,8 @@ template <class Tp, ::asc::std::enable_if_t<__expo_supported_extended_v<Tp>, int
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp pow(
     Tp base, Tp exponent) noexcept
 {
-    return static_cast<Tp>(::asc::std::pow(static_cast<float>(base), static_cast<float>(exponent)));
+    return ::asc::std::__fp_cast<Tp>(
+        ::asc::std::pow(::asc::std::__fp_cast<float>(base), ::asc::std::__fp_cast<float>(exponent)));
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()

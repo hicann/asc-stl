@@ -43,25 +43,23 @@ using pointer = void;
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 目标容器须支持对应的`insert(position, value)`操作；插入迭代器保存容器地址，不拥有容器。
+- 容器须在适配器使用期间有效；插入操作还须遵守目标容器自身的迭代器失效规则。
 
 ## 调用示例
 
-以下Host片段用具体迭代器或容器类型实例化本页接口。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
-#include <deque>
-#include <functional>
 #include <vector>
-
 #include <asc/std/type_traits>
 
-void example()
+bool example()
 {
     using selected = typename asc::std::insert_iterator<::std::vector<int>>::pointer;
     static_assert(asc::std::is_same_v<selected, void>);
+    return true;
 }
 ```
 

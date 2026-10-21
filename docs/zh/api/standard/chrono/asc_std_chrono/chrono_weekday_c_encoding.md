@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::weekday::c_encoding`返回与C时间接口对应的星期编码。
+`asc::std::chrono::weekday::c_encoding`返回与C时间接口对应的星期编码。星期日为0，星期一至星期六依次为1至6。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -49,7 +49,7 @@
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `unsigned int` | 返回与C时间接口对应的星期编码。 |
+| `unsigned int` | 返回与C时间接口对应的星期编码。星期日为0，星期一至星期六依次为1至6。 |
 
 ## 约束说明
 

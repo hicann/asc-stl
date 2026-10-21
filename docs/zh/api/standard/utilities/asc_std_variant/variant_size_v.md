@@ -36,23 +36,26 @@
 
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const ::std::size_t variant_size_v;
-} // namespace asc::std
+template<class T> inline constexpr size_t variant_size_v = variant_size<T>::value;
+}
 ```
 
 ## 约束说明
 
 - Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下片段用具体模板实参读取接口值。
+以下Host示例用具体输入和可判断结果展示本接口。
 
 ```cpp
 #include <asc/std/variant>
 
-inline constexpr auto example = asc::std::variant_size_v<asc::std::variant<int, float>>;
+bool example()
+{
+    static_assert(asc::std::variant_size_v<asc::std::variant<int, float>> == 2);
+    return true;
+}
 ```
 
 ## 关联API

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::weekday`表示日期、时间点或时长计算中的`weekday`值类型。
+`asc::std::chrono::weekday`保存星期字段，C编码0为星期日，1到6为星期一至星期六；从整数7构造时规范化为0。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

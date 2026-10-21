@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::equal_range`在已排序范围中返回与目标等价的半开子区间；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::equal_range`在已排序范围中返回与目标等价的半开子区间；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,16 +38,20 @@
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator, class T, class Compare> [[nodiscard]] constexpr pair<ForwardIterator, ForwardIterator> equal_range(ForwardIterator first, ForwardIterator last, const T& value, Compare compare);
-} // namespace asc::std
+template <class ForwardIterator, class T, class Compare>
+[[nodiscard]] constexpr pair<ForwardIterator, ForwardIterator> equal_range(
+    ForwardIterator first, ForwardIterator last, const T& value, Compare compare);
+}  // namespace asc::std
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator, class T> [[nodiscard]] constexpr pair<ForwardIterator, ForwardIterator> equal_range(ForwardIterator first, ForwardIterator last, const T& value);
-} // namespace asc::std
+template <class ForwardIterator, class T>
+[[nodiscard]] constexpr pair<ForwardIterator, ForwardIterator> equal_range(
+    ForwardIterator first, ForwardIterator last, const T& value);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -98,19 +102,19 @@ template<class ForwardIterator, class T> [[nodiscard]] constexpr pair<ForwardIte
 ## 约束说明
 
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    return asc::std::equal_range(values, values + 8, 5);
+    auto result = asc::std::equal_range(values, values + 8, 5);
+    return result.first == values + 4 && result.second == values + 5;
 }
 ```
 

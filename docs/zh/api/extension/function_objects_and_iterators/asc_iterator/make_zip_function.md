@@ -28,14 +28,15 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::make_zip_function`创建把tuple参数展开后调用目标函数的适配器。
+`asc::make_zip_function`创建把asc::zip_iterator解引用产生的引用代理展开后调用目标函数的适配器。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
-template<class Function> constexpr asc::zip_function<Function> make_zip_function(Function function);
-} // namespace asc
+template <class Function>
+constexpr asc::zip_function<Function> make_zip_function(Function function);
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -50,13 +51,13 @@ template<class Function> constexpr asc::zip_function<Function> make_zip_function
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入 | 被适配的目标函数对象：收到tuple型引用时展开其全部元素并按function(元素…)调用。 |
+| `function` | 输入 | 被适配的目标函数对象：收到asc::zip_iterator的引用代理时展开其全部元素并按function(元素…)调用。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::zip_function<Function>` | 返回把tuple参数展开后调用目标函数的适配器。 |
+| `asc::zip_function<Function>` | 返回把asc::zip_iterator解引用产生的引用代理展开后调用目标函数的适配器。 |
 
 ## 约束说明
 
@@ -65,16 +66,17 @@ template<class Function> constexpr asc::zip_function<Function> make_zip_function
 
 ## 调用示例
 
-以下片段使用具体数组和可调用对象构造迭代器。实际使用时底层范围须保持有效。
+以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
-
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    return asc::make_zip_function([](int left, int right) { return left + right; });
+    int left = 2;
+    int right = 3;
+    const auto callable = asc::make_zip_function([](int a, int b) { return a + b; });
+    const auto iterator = asc::make_zip_iterator(&left, &right);
+    return callable(*iterator) == 5;
 }
 ```
 

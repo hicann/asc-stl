@@ -26,9 +26,9 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`。
+头文件路径为：`<asc/std/array>`、`<asc/std/tuple>`、`<asc/std/utility>`、`<asc/std/variant>`。
 
-`asc::std::get`按编译期索引访问`array`、`tuple`、`pair`的元素，以及`<asc/std/tuple>`导出的`complex<float>`实部或虚部；`tuple`和`pair`还可按唯一类型访问。返回的是原对象中元素的引用，cv限定和值类别随实参传播；被引用对象必须继续存活。`variant`的抛异常`get`重载不在本期交付范围，访问活动备选项请使用`get_if`。
+`asc::std::get`按编译期索引访问`array`、`tuple`、`pair`的元素，以及`<asc/std/tuple>`导出的`complex<float>`实部或虚部；`tuple`和`pair`还可按类型访问。返回的是原对象中元素的引用，cv限定和值类别随实参传播；被引用对象必须继续存活。`variant`另提供本页列出的8个`get`重载，访问当前活跃候选项；其不匹配失败路径直接触发trap。需要先检查是否匹配时可使用`get_if`。
 
 标准语义参考：[cppreference `array`](https://en.cppreference.com/w/cpp/header/array)。
 
@@ -38,7 +38,7 @@
 
 ```cpp
 namespace asc::std {
-template<class T1, class ...Args> [[nodiscard]] constexpr T1&& get(tuple<Args...>&& value) noexcept;
+template<class T1, class ...Args> constexpr T1&& get(tuple<Args...>&& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -48,7 +48,7 @@ template<class T1, class ...Args> [[nodiscard]] constexpr T1&& get(tuple<Args...
 
 ```cpp
 namespace asc::std {
-template<class T1, class ...Args> [[nodiscard]] constexpr T1& get(tuple<Args...>& value) noexcept;
+template<class T1, class ...Args> constexpr T1& get(tuple<Args...>& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -58,7 +58,7 @@ template<class T1, class ...Args> [[nodiscard]] constexpr T1& get(tuple<Args...>
 
 ```cpp
 namespace asc::std {
-template<class T1, class ...Args> [[nodiscard]] constexpr const T1&& get(const tuple<Args...>&& value) noexcept;
+template<class T1, class ...Args> constexpr const T1&& get(const tuple<Args...>&& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -68,7 +68,7 @@ template<class T1, class ...Args> [[nodiscard]] constexpr const T1&& get(const t
 
 ```cpp
 namespace asc::std {
-template<class T1, class ...Args> [[nodiscard]] constexpr const T1& get(const tuple<Args...>& value) noexcept;
+template<class T1, class ...Args> constexpr const T1& get(const tuple<Args...>& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -78,7 +78,7 @@ template<class T1, class ...Args> [[nodiscard]] constexpr const T1& get(const tu
 
 ```cpp
 namespace asc::std {
-template<class T1, class T2> [[nodiscard]] constexpr T1&& get(pair<T1, T2>&& value) noexcept;
+template<class T1, class T2> constexpr T1&& get(pair<T1, T2>&& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -88,7 +88,7 @@ template<class T1, class T2> [[nodiscard]] constexpr T1&& get(pair<T1, T2>&& val
 
 ```cpp
 namespace asc::std {
-template<class T1, class T2> [[nodiscard]] constexpr T1&& get(pair<T2, T1>&& value) noexcept;
+template<class T1, class T2> constexpr T1&& get(pair<T2, T1>&& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -98,7 +98,7 @@ template<class T1, class T2> [[nodiscard]] constexpr T1&& get(pair<T2, T1>&& val
 
 ```cpp
 namespace asc::std {
-template<class T1, class T2> [[nodiscard]] constexpr T1& get(pair<T1, T2>& value) noexcept;
+template<class T1, class T2> constexpr T1& get(pair<T1, T2>& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -108,7 +108,7 @@ template<class T1, class T2> [[nodiscard]] constexpr T1& get(pair<T1, T2>& value
 
 ```cpp
 namespace asc::std {
-template<class T1, class T2> [[nodiscard]] constexpr T1& get(pair<T2, T1>& value) noexcept;
+template<class T1, class T2> constexpr T1& get(pair<T2, T1>& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -118,7 +118,7 @@ template<class T1, class T2> [[nodiscard]] constexpr T1& get(pair<T2, T1>& value
 
 ```cpp
 namespace asc::std {
-template<class T1, class T2> [[nodiscard]] constexpr const T1&& get(const pair<T1, T2>&& value) noexcept;
+template<class T1, class T2> constexpr const T1&& get(const pair<T1, T2>&& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -128,7 +128,7 @@ template<class T1, class T2> [[nodiscard]] constexpr const T1&& get(const pair<T
 
 ```cpp
 namespace asc::std {
-template<class T1, class T2> [[nodiscard]] constexpr const T1&& get(const pair<T2, T1>&& value) noexcept;
+template<class T1, class T2> constexpr const T1&& get(const pair<T2, T1>&& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -138,7 +138,7 @@ template<class T1, class T2> [[nodiscard]] constexpr const T1&& get(const pair<T
 
 ```cpp
 namespace asc::std {
-template<class T1, class T2> [[nodiscard]] constexpr const T1& get(const pair<T1, T2>& value) noexcept;
+template<class T1, class T2> constexpr const T1& get(const pair<T1, T2>& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -148,7 +148,7 @@ template<class T1, class T2> [[nodiscard]] constexpr const T1& get(const pair<T1
 
 ```cpp
 namespace asc::std {
-template<class T1, class T2> [[nodiscard]] constexpr const T1& get(const pair<T2, T1>& value) noexcept;
+template<class T1, class T2> constexpr const T1& get(const pair<T2, T1>& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -198,7 +198,7 @@ template<size_t Index, class T> [[nodiscard]] constexpr const T& get(const compl
 
 ```cpp
 namespace asc::std {
-template<size_t Index, class ...T> [[nodiscard]] constexpr const tuple_element_t<Index, tuple<T...>>&& get(const tuple<T...>&& value) noexcept;
+template<size_t Index, class ...T> constexpr const tuple_element_t<Index, tuple<T...>>&& get(const tuple<T...>&& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -208,7 +208,7 @@ template<size_t Index, class ...T> [[nodiscard]] constexpr const tuple_element_t
 
 ```cpp
 namespace asc::std {
-template<size_t Index, class ...T> [[nodiscard]] constexpr const tuple_element_t<Index, tuple<T...>>& get(const tuple<T...>& value) noexcept;
+template<size_t Index, class ...T> constexpr const tuple_element_t<Index, tuple<T...>>& get(const tuple<T...>& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -218,7 +218,7 @@ template<size_t Index, class ...T> [[nodiscard]] constexpr const tuple_element_t
 
 ```cpp
 namespace asc::std {
-template<size_t Index, class ...T> [[nodiscard]] constexpr tuple_element_t<Index, tuple<T...>>&& get(tuple<T...>&& value) noexcept;
+template<size_t Index, class ...T> constexpr tuple_element_t<Index, tuple<T...>>&& get(tuple<T...>&& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -228,7 +228,7 @@ template<size_t Index, class ...T> [[nodiscard]] constexpr tuple_element_t<Index
 
 ```cpp
 namespace asc::std {
-template<size_t Index, class ...T> [[nodiscard]] constexpr tuple_element_t<Index, tuple<T...>>& get(tuple<T...>& value) noexcept;
+template<size_t Index, class ...T> constexpr tuple_element_t<Index, tuple<T...>>& get(tuple<T...>& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -238,7 +238,7 @@ template<size_t Index, class ...T> [[nodiscard]] constexpr tuple_element_t<Index
 
 ```cpp
 namespace asc::std {
-template<size_t Index, class T1, class T2> [[nodiscard]] constexpr const tuple_element_t<Index, pair<T1, T2>>&& get(const pair<T1, T2>&& value) noexcept;
+template<size_t Index, class T1, class T2> constexpr const tuple_element_t<Index, pair<T1, T2>>&& get(const pair<T1, T2>&& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -248,7 +248,7 @@ template<size_t Index, class T1, class T2> [[nodiscard]] constexpr const tuple_e
 
 ```cpp
 namespace asc::std {
-template<size_t Index, class T1, class T2> [[nodiscard]] constexpr const tuple_element_t<Index, pair<T1, T2>>& get(const pair<T1, T2>& value) noexcept;
+template<size_t Index, class T1, class T2> constexpr const tuple_element_t<Index, pair<T1, T2>>& get(const pair<T1, T2>& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -258,7 +258,7 @@ template<size_t Index, class T1, class T2> [[nodiscard]] constexpr const tuple_e
 
 ```cpp
 namespace asc::std {
-template<size_t Index, class T1, class T2> [[nodiscard]] constexpr tuple_element_t<Index, pair<T1, T2>>&& get(pair<T1, T2>&& value) noexcept;
+template<size_t Index, class T1, class T2> constexpr tuple_element_t<Index, pair<T1, T2>>&& get(pair<T1, T2>&& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -268,7 +268,7 @@ template<size_t Index, class T1, class T2> [[nodiscard]] constexpr tuple_element
 
 ```cpp
 namespace asc::std {
-template<size_t Index, class T1, class T2> [[nodiscard]] constexpr tuple_element_t<Index, pair<T1, T2>>& get(pair<T1, T2>& value) noexcept;
+template<size_t Index, class T1, class T2> constexpr tuple_element_t<Index, pair<T1, T2>>& get(pair<T1, T2>& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -278,7 +278,7 @@ template<size_t Index, class T1, class T2> [[nodiscard]] constexpr tuple_element
 
 ```cpp
 namespace asc::std {
-template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr T&& get(array<T, Size>&& value) noexcept;
+template<size_t Index, class T, size_t Size> constexpr T&& get(array<T, Size>&& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -288,7 +288,7 @@ template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr T&& get(arr
 
 ```cpp
 namespace asc::std {
-template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr T& get(array<T, Size>& value) noexcept;
+template<size_t Index, class T, size_t Size> constexpr T& get(array<T, Size>& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -298,7 +298,7 @@ template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr T& get(arra
 
 ```cpp
 namespace asc::std {
-template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr const T&& get(const array<T, Size>&& value) noexcept;
+template<size_t Index, class T, size_t Size> constexpr const T&& get(const array<T, Size>&& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -308,11 +308,99 @@ template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr const T&& g
 
 ```cpp
 namespace asc::std {
-template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr const T& get(const array<T, Size>& value) noexcept;
+template<size_t Index, class T, size_t Size> constexpr const T& get(const array<T, Size>& value) noexcept;
 } // namespace asc::std
 ```
 
 此原型对应头文件：`<asc/std/array>`。
+
+### 原型29
+
+```cpp
+namespace asc::std {
+template<size_t Index, class... Types>
+constexpr decltype(auto) get(variant<Types...>& value);
+}
+```
+
+此原型对应公共头文件：`<asc/std/variant>`。
+
+### 原型30
+
+```cpp
+namespace asc::std {
+template<size_t Index, class... Types>
+constexpr decltype(auto) get(const variant<Types...>& value);
+}
+```
+
+此原型对应公共头文件：`<asc/std/variant>`。
+
+### 原型31
+
+```cpp
+namespace asc::std {
+template<size_t Index, class... Types>
+constexpr decltype(auto) get(variant<Types...>&& value);
+}
+```
+
+此原型对应公共头文件：`<asc/std/variant>`。
+
+### 原型32
+
+```cpp
+namespace asc::std {
+template<size_t Index, class... Types>
+constexpr decltype(auto) get(const variant<Types...>&& value);
+}
+```
+
+此原型对应公共头文件：`<asc/std/variant>`。
+
+### 原型33
+
+```cpp
+namespace asc::std {
+template<class T, class... Types>
+constexpr decltype(auto) get(variant<Types...>& value);
+}
+```
+
+此原型对应公共头文件：`<asc/std/variant>`。
+
+### 原型34
+
+```cpp
+namespace asc::std {
+template<class T, class... Types>
+constexpr decltype(auto) get(const variant<Types...>& value);
+}
+```
+
+此原型对应公共头文件：`<asc/std/variant>`。
+
+### 原型35
+
+```cpp
+namespace asc::std {
+template<class T, class... Types>
+constexpr decltype(auto) get(variant<Types...>&& value);
+}
+```
+
+此原型对应公共头文件：`<asc/std/variant>`。
+
+### 原型36
+
+```cpp
+namespace asc::std {
+template<class T, class... Types>
+constexpr decltype(auto) get(const variant<Types...>&& value);
+}
+```
+
+此原型对应公共头文件：`<asc/std/variant>`。
 
 ## 参数说明
 
@@ -744,6 +832,126 @@ template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr const T& ge
 | --- | --- | --- |
 | `value` | 输入 | 待按下标访问的只读数组对象；返回第Index个元素的常量引用。 |
 
+### 原型29的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Index` | 目标alternative的编译期索引，须小于Types的数量。 |
+| `Types` | variant所有候选类型，按声明顺序排列。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 当前必须持有所选alternative的variant对象；返回引用依赖其存储的有效期。 |
+
+### 原型30的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Index` | 目标alternative的编译期索引，须小于Types的数量。 |
+| `Types` | variant所有候选类型，按声明顺序排列。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 当前必须持有所选alternative的只读variant对象；返回引用依赖其存储的有效期。 |
+
+### 原型31的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Index` | 目标alternative的编译期索引，须小于Types的数量。 |
+| `Types` | variant所有候选类型，按声明顺序排列。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 当前必须持有所选alternative的variant对象；返回引用依赖其存储的有效期。 |
+
+### 原型32的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Index` | 目标alternative的编译期索引，须小于Types的数量。 |
+| `Types` | variant所有候选类型，按声明顺序排列。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 当前必须持有所选alternative的只读variant对象；返回引用依赖其存储的有效期。 |
+
+### 原型33的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `T` | 须在Types中恰好出现一次的目标alternative类型。 |
+| `Types` | variant所有候选类型，按声明顺序排列。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 当前必须持有所选alternative的variant对象；返回引用依赖其存储的有效期。 |
+
+### 原型34的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `T` | 须在Types中恰好出现一次的目标alternative类型。 |
+| `Types` | variant所有候选类型，按声明顺序排列。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 当前必须持有所选alternative的只读variant对象；返回引用依赖其存储的有效期。 |
+
+### 原型35的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `T` | 须在Types中恰好出现一次的目标alternative类型。 |
+| `Types` | variant所有候选类型，按声明顺序排列。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 当前必须持有所选alternative的variant对象；返回引用依赖其存储的有效期。 |
+
+### 原型36的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `T` | 须在Types中恰好出现一次的目标alternative类型。 |
+| `Types` | variant所有候选类型，按声明顺序排列。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 当前必须持有所选alternative的只读variant对象；返回引用依赖其存储的有效期。 |
+
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
@@ -776,30 +984,48 @@ template<size_t Index, class T, size_t Size> [[nodiscard]] constexpr const T& ge
 | 原型26 | `T &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
 | 原型27 | `const T &&` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
 | 原型28 | `const T &` | 返回对象引用；被引用对象须在引用使用期间保持有效。 |
+| 原型29 | `variant_alternative_t<Index, variant<Types...>>&`（由decltype(auto)推导） | 返回当前活跃候选的对应引用；活动索引不匹配时触发trap，不抛出bad_variant_access。 |
+| 原型30 | `const variant_alternative_t<Index, variant<Types...>>&`（由decltype(auto)推导） | 返回当前活跃候选的对应引用；活动索引不匹配时触发trap，不抛出bad_variant_access。 |
+| 原型31 | `variant_alternative_t<Index, variant<Types...>>&&`（由decltype(auto)推导） | 返回当前活跃候选的对应引用；活动索引不匹配时触发trap，不抛出bad_variant_access。 |
+| 原型32 | `const variant_alternative_t<Index, variant<Types...>>&&`（由decltype(auto)推导） | 返回当前活跃候选的对应引用；活动索引不匹配时触发trap，不抛出bad_variant_access。 |
+| 原型33 | `T&`（由decltype(auto)推导） | 返回当前活跃候选的对应引用；活动索引不匹配时触发trap，不抛出bad_variant_access。 |
+| 原型34 | `const T&`（由decltype(auto)推导） | 返回当前活跃候选的对应引用；活动索引不匹配时触发trap，不抛出bad_variant_access。 |
+| 原型35 | `T&&`（由decltype(auto)推导） | 返回当前活跃候选的对应引用；活动索引不匹配时触发trap，不抛出bad_variant_access。 |
+| 原型36 | `const T&&`（由decltype(auto)推导） | 返回当前活跃候选的对应引用；活动索引不匹配时触发trap，不抛出bad_variant_access。 |
 
 ## 约束说明
 
-- 索引必须落在对象元素范围内。
-- 按类型访问时该类型必须唯一。
-- 返回引用不延长原对象生命周期。
-- 各对象类型需包含页面所列的对应公共头。
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
-- 异常规格以对应声明为准；Device侧使用的元素操作须不抛出异常。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
-- 支持包括零在内的所有N。
-- 成员函数和自由函数均不抛出异常。
+- 按索引访问时，`Index`须小于对应对象的元素数量；空array和空tuple没有可访问的元素。pair和complex的有效索引为0、1。
+- 按类型访问tuple时，目标类型须至少出现一次；当前实现遇到重复类型时选择第一次出现的位置，这与标准库要求类型唯一的规则不同。按类型访问pair时，目标类型须恰好出现一次，以避免重载歧义。
+- 返回引用保留对应原型的const限定和值类别；元素类型本身为引用时，最终类型还遵循引用折叠规则。
+- 返回右值引用本身不移动元素；是否移动由调用方对返回引用的后续使用决定。
+- 返回引用不延长源对象的生命周期；必须在源对象仍有效时使用，不能返回指向局部对象元素的引用。
+- 须包含各原型标注的公共头文件；complex对象自身仍受当前`complex<float>`支持范围限制。
+- 原型1—28声明`noexcept`；variant的8个重载没有`noexcept`声明。元素访问不执行元素构造、赋值或比较。
+
+- variant按索引访问要求Index有效且所选类型非void；按类型访问要求目标类型恰好出现一次。当前持有的索引必须匹配，否则实现直接trap；这与标准库抛出bad_variant_access的失败路径不同。需要处理不匹配时可先用holds_alternative或get_if检查。
 
 ## 调用示例
 
-以下片段用具体对象展示本页调用。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/array>
+#include <asc/std/variant>
+#include <asc/std/type_traits>
 
-decltype(auto) example()
+bool example()
 {
     asc::std::array<int, 2> values{{1, 2}};
-    return asc::std::get<0>(values);
+    auto& first = asc::std::get<0>(values);
+    static_assert(asc::std::is_same_v<decltype(first), int&>);
+    first = 7;
+    asc::std::variant<int, float> selected(3);
+    if (!asc::std::holds_alternative<int>(selected)) return false;
+    auto& active = asc::std::get<int>(selected);
+    static_assert(asc::std::is_same_v<decltype(active), int&>);
+    active = 9;
+    return &first == &values[0] && values[0] == 7 && asc::std::get<0>(selected) == 9;
 }
 ```
 

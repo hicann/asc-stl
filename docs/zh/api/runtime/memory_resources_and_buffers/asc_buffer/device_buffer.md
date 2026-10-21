@@ -34,11 +34,15 @@
 
 ```cpp
 namespace asc {
-template<class T> class device_buffer;
-} // namespace asc
+template <class T>
+class device_buffer;
+}  // namespace asc
 ```
 
 ## 约束说明
+
+- 关闭失败时原有分配和资源引用仍由当前对象持有，调用方可显式close重试。移动赋值仅在目标关闭成功后转移源对象；失败时两个对象均保留原所有权。
+- 工厂进入替换阶段时先关闭旧缓冲；关闭失败直接返回该状态，不分配新缓冲。销毁或关闭前须保证使用存储的异步工作已完成。
 
 - T必须为可平凡复制类型。
 - 对象不可复制但可移动。

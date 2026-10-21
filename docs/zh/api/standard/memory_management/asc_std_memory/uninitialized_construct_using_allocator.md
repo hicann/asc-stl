@@ -3,7 +3,7 @@
 ## 产品支持情况
 
 <!-- npu="950" id1 -->
-- Ascend 950PR&950DT系列产品：支持
+- Ascend 950PR&950DT系列产品：本页为兼容性说明，所述接口未提供
 <!-- end id1 -->
 <!-- npu="A3" id2 -->
 - Atlas A3系列产品：不支持
@@ -26,82 +26,44 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/std/memory>`。
+本页保留原入口用于兼容性说明。`<asc/std/memory>`当前未提供`asc::std::uninitialized_construct_using_allocator`。
 
-`asc::std::uninitialized_construct_using_allocator`在给定存储中按uses-allocator规则构造对象。
-
-标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
+普通对象可用[`construct_at`](construct_at.md)构造，并用[`destroy_at`](destroy_at.md)销毁；这不会自动注入分配器。需要分配器构造的类型须由调用方显式传入其构造函数要求的参数。
 
 ## 函数原型
 
-```cpp
-namespace asc::std {
-template<class T, class Alloc, class... Args> constexpr T* uninitialized_construct_using_allocator(T* ptr, const Alloc& alloc, Args&&... args);
-} // namespace asc::std
-```
+当前产品不声明本页标题所示的接口。请使用下述已提供的接口。
 
 ## 参数说明
 
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 被构造、销毁或管理的对象类型。 |
-| `Alloc` | 为对象或元素分配和释放存储的分配器类型。 |
-| `Args` | 传递给构造函数或可调用对象的实参类型列表。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `ptr` | 输出 | 满足目标对象大小与对齐的未初始化存储地址；调用在该处开始对象生命周期，构造实参决定其初值。 |
-| `alloc` | 输入 | 提供“在给定存储中按uses-allocator规则构造对象”使用的对象引用；被引用对象须在调用期间有效。 |
-| `args` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
+本页不声明可调用的接口参数。
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `T*` | 返回最后一个完成构造的对象之后的位置；构造失败时按本页异常约束处理。 |
+本页不声明接口返回值；替代调用的结果见调用示例。
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- `<asc/std/memory>`当前未提供`asc::std::uninitialized_construct_using_allocator`。
+- 普通对象可用[`construct_at`](construct_at.md)构造，并用[`destroy_at`](destroy_at.md)销毁；这不会自动注入分配器。需要分配器构造的类型须由调用方显式传入其构造函数要求的参数。
 
 ## 调用示例
 
-以下Host片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/memory>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-decltype(auto) example()
+bool example()
 {
-    alignas(int) unsigned char storage[sizeof(int) * 4];
-    int* output = reinterpret_cast<int*>(storage);
-    example_allocator<int> allocator;
-    return asc::std::uninitialized_construct_using_allocator(output, allocator, 7);
-    asc::std::destroy_n(output, 1);
+    std::allocator<int> allocator;
+    int* storage = allocator.allocate(1);
+    int* object = asc::std::construct_at(storage, 7);
+    const bool valid = object == storage && *object == 7;
+    asc::std::destroy_at(object);
+    allocator.deallocate(storage, 1);
+    return valid;
 }
 ```
 

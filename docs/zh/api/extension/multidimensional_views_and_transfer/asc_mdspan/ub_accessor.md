@@ -34,15 +34,15 @@
 
 ```cpp
 namespace asc {
-template<class Accessor> class ub_accessor;
-} // namespace asc
+template <class Accessor>
+class ub_accessor;
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供Host和GM视图以及AI Core SIMD编程UB视图。
-- 允许有符号步长。
-- 可选的Host DLPack桥接不抛出异常。
+- SIMD使用真实UB地址空间；Host只提供普通指针表示，不能直接访问设备物理UB。SIMT不提供UB访问器/别名；存储须覆盖全部访问。
+
 
 ## 调用示例
 

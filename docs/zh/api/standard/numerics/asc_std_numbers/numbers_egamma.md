@@ -38,8 +38,8 @@
 
 ```cpp
 namespace asc::std::numbers {
-inline constexpr const double egamma;
-} // namespace asc::std::numbers
+inline constexpr double egamma = 0x1.2788cfc6fb618f49a37c7f0202a6p-1;
+}
 ```
 
 ## 约束说明

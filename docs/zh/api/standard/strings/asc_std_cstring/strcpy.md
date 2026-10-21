@@ -37,7 +37,7 @@
 ```cpp
 namespace asc::std {
 constexpr char* strcpy(char* destination, const char* source);
-} // namespace asc::std
+}
 ```
 
 ## 参数说明
@@ -46,7 +46,7 @@ constexpr char* strcpy(char* destination, const char* source);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `destination` | 输出 | 用于接收结果的目标存储。本调用为同步执行，返回时写入已完成；目标存储在调用期间保持有效即可，且须为待写入内容预留足够空间。 |
+| `destination` | 输出 | destination须可写且至少容纳strlen(source)+1字节，包括终止空字符。 |
 | `source` | 输入 | 源数据或源对象。本调用为同步执行，返回时读取已完成；源存储在调用期间保持有效即可。 |
 
 ## 返回值说明
@@ -59,18 +59,20 @@ constexpr char* strcpy(char* destination, const char* source);
 
 - 在Host侧和AI Core SIMT编程中使用普通指针。
 - AI Core SIMD编程中使用local或generic地址空间的普通指针。
-- 仅memmove允许源和目标重叠。
+- 源与目标范围不得重叠；调用方按参数说明提供可读输入、可写容量及必要终止空字符。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/cstring>
 
-decltype(auto) example(char * destination, const char * source)
+bool example()
 {
-    return asc::std::strcpy(destination, source);
+    char target[4]{};
+    char* result = asc::std::strcpy(target, "abc");
+    return result == target && target[0] == 'a' && target[2] == 'c' && target[3] == '\0';
 }
 ```
 

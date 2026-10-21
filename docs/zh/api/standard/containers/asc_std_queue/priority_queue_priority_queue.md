@@ -34,76 +34,24 @@
 
 ## 函数原型
 
+所属类型：[`priority_queue`](priority_queue.md)。编译器生成的复制/移动特殊成员是否可用取决于Container及比较器；没有allocator或迭代器范围构造入口。
+
 ### 原型1
 
 ```cpp
-constexpr priority_queue();
+constexpr priority_queue() = default;
 ```
 
 ### 原型2
 
 ```cpp
-constexpr priority_queue(const Compare& compare);
+constexpr explicit priority_queue(const Compare& compare);
 ```
 
 ### 原型3
 
 ```cpp
-constexpr priority_queue(const Compare& compare, Container&& container);
-```
-
-### 原型4
-
-```cpp
 constexpr priority_queue(const Compare& compare, const Container& container);
-```
-
-### 原型5
-
-```cpp
-template<class Alloc> constexpr priority_queue(const Alloc& allocator);
-```
-
-### 原型6
-
-```cpp
-template<class Alloc> constexpr priority_queue(const Compare& compare, Container&& container, const Alloc& allocator);
-```
-
-### 原型7
-
-```cpp
-template<class Alloc> constexpr priority_queue(const Compare& compare, const Alloc& allocator);
-```
-
-### 原型8
-
-```cpp
-template<class Alloc> constexpr priority_queue(const Compare& compare, const Container& container, const Alloc& allocator);
-```
-
-### 原型9
-
-```cpp
-template<class Alloc> constexpr priority_queue(const priority_queue<T, Container, Compare>& compare, const Alloc& allocator);
-```
-
-### 原型10
-
-```cpp
-template<class Alloc> constexpr priority_queue(priority_queue<T, Container, Compare>&& compare, const Alloc& allocator);
-```
-
-### 原型11
-
-```cpp
-template<class InputIterator> constexpr priority_queue(InputIterator first, InputIterator last, const Compare& compare, Container&& container);
-```
-
-### 原型12
-
-```cpp
-template<class InputIterator> constexpr priority_queue(InputIterator first, InputIterator last, const Compare& compare, const Container& container);
 ```
 
 ## 参数说明
@@ -114,154 +62,16 @@ template<class InputIterator> constexpr priority_queue(InputIterator first, Inpu
 
 ### 原型2的参数
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `compare` | 输入 | 用于确定元素顺序的比较对象。 |
+| `compare` | 输入 | 保存的严格弱序比较器；此形式默认构造底层Container。 |
 
 ### 原型3的参数
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `compare` | 输入 | 用于确定元素顺序的比较对象。 |
-| `container` | 输入/输出 | 提供“按本页所列构造形态初始化`priority_queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
-
-### 原型4的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `compare` | 输入 | 用于确定元素顺序的比较对象。 |
-| `container` | 输入 | 提供“按本页所列构造形态初始化`priority_queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
-
-### 原型5的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Alloc` | 为对象或元素分配和释放存储的分配器类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-
-### 原型6的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Alloc` | 为对象或元素分配和释放存储的分配器类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `compare` | 输入 | 用于确定元素顺序的比较对象。 |
-| `container` | 输入/输出 | 提供“按本页所列构造形态初始化`priority_queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
-| `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-
-### 原型7的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Alloc` | 为对象或元素分配和释放存储的分配器类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `compare` | 输入 | 用于确定元素顺序的比较对象。 |
-| `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-
-### 原型8的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Alloc` | 为对象或元素分配和释放存储的分配器类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `compare` | 输入 | 用于确定元素顺序的比较对象。 |
-| `container` | 输入 | 提供“按本页所列构造形态初始化`priority_queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
-| `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-
-### 原型9的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Alloc` | 为对象或元素分配和释放存储的分配器类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `compare` | 输入 | 用于确定元素顺序的比较对象。 |
-| `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-
-### 原型10的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Alloc` | 为对象或元素分配和释放存储的分配器类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `compare` | 输入/输出 | 用于确定元素顺序的比较对象。 |
-| `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-
-### 原型11的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `compare` | 输入 | 用于确定元素顺序的比较对象。 |
-| `container` | 输入/输出 | 提供“按本页所列构造形态初始化`priority_queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
-
-### 原型12的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `compare` | 输入 | 用于确定元素顺序的比较对象。 |
-| `container` | 输入 | 提供“按本页所列构造形态初始化`priority_queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `compare` | 输入 | 保存的严格弱序比较器。 |
+| `container` | 输入 | 复制为底层存储的容器；构造时按compare重新建立堆序。 |
 
 ## 返回值说明
 
@@ -269,9 +79,9 @@ template<class InputIterator> constexpr priority_queue(InputIterator first, Inpu
 
 ## 约束说明
 
-- priority_queue<T,Container,Compare=less<typename Container::value_type>>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/front/`operator[]`/push_back/emplace_back/pop_back/size/empty/swap及allocator操作必须在当前执行空间有效，Compare必须定义Device可调的strict-weak-order且可在已验证移动交换域使用。
-- 交付container_type/value_compare/value_type/size_type/reference/const_reference及protected c/comp，default/Compare/Container/copy/move/allocator构造及赋值，N4861两类InputIterator构造，empty/size/top、lvalue/rvalue push、void emplace、pop，member/non-member swap、uses_allocator特化，以及Compare+Container、InputIterator+Compare+Container、Compare+Container+Alloc三类显式Container CTAD。
-- 堆序语义为Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 默认形式要求Container和Compare可默认构造；Compare形式要求Container可默认构造。
+- Compare与Container形式复制两者并重建堆；比较器须满足严格弱序。
+- Device使用的Container、元素操作及Compare须可在对应执行位置调用并满足其非抛出要求；Host的异常行为遵循所调用对象，未额外声明noexcept时不承诺不抛出。
 
 ## 调用示例
 

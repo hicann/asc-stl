@@ -34,94 +34,35 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::expected`](expected.md)。
-
-### 原型1
+以下为`expected<Value, Error>`类内声明；Value和Error是所属类模板参数。
 
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr Error& error()& noexcept;
+constexpr Error& error() & noexcept;
 ```
 
-### 原型2
-
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr Err&& error()&& noexcept;
-```
-
-### 原型3
-
-```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr Err& error()& noexcept;
-```
-
-### 原型4
-
-```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
 constexpr const Error& error() const& noexcept;
 ```
 
-### 原型5
-
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr const Err&& error() const&& noexcept;
+constexpr Error&& error() && noexcept;
 ```
 
-### 原型6
-
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr const Err& error() const& noexcept;
+constexpr const Error&& error() const&& noexcept;
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
-无参数。
-
-### 原型2的参数
-
-无参数。
-
-### 原型3的参数
-
-无参数。
-
-### 原型4的参数
-
-无参数。
-
-### 原型5的参数
-
-无参数。
-
-### 原型6的参数
-
-无参数。
+无函数参数。Value与Error是所属expected类模板的参数。
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `Error &` | 返回错误状态中保存的错误对象引用。 |
-| 原型2 | `Err &&` | 返回错误状态中保存的错误对象引用。 |
-| 原型3 | `Err &` | 返回错误状态中保存的错误对象引用。 |
-| 原型4 | `const Error &` | 返回错误状态中保存的错误对象引用。 |
-| 原型5 | `const Err &&` | 返回错误状态中保存的错误对象引用。 |
-| 原型6 | `const Err &` | 返回错误状态中保存的错误对象引用。 |
+返回Error&、const Error&、Error&&或const Error&&。返回错误对象的引用，cv/ref由本对象决定。只允许错误态访问。
 
 ## 约束说明
 
-- T必须为非void类型，E必须为对象类型。
-- 适用操作必须不抛出异常。
-- 提供构造、赋值、emplace和swap。
-- 支持所有cv/ref限定形式。
-- Device侧可调用对象及结果构造必须不抛出异常。
+- 所属expected<Value, Error>要求有效的非void值类型和错误对象类型；当前操作还须满足本页原型、参数和状态要求。error()访问要求!has_value()，不能在成功态读取错误存储。
 
 ## 调用示例
 

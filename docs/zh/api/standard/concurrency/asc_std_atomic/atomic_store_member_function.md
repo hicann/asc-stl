@@ -40,7 +40,7 @@
 
 ```cpp
 // asc::std::atomic 类内的声明节选；模板形参和其他成员由所属类提供。
-void store(T value, memory_order order) noexcept;
+void store(T value, memory_order order = memory_order_seq_cst) noexcept;
 ```
 
 ## 参数说明
@@ -58,10 +58,8 @@ void store(T value, memory_order order) noexcept;
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数。
-- bool/8/16位用32位内部存储。
-- 32/64位按有符号位模式分派。
-- Host和AI Core SIMT编程GM。
+- 原子操作可在Host和AI Core SIMT编程中调用；SIMT线程共享的原子对象须位于GM，并在并发访问前完成初始化。
+- 显式内存序须为`memory_order_relaxed`、`memory_order_release`或`memory_order_seq_cst`；不允许`memory_order_consume`、`memory_order_acquire`或`memory_order_acq_rel`。
 
 ## 调用示例
 

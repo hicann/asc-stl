@@ -34,11 +34,10 @@
 
 ## 声明
 
-所属类型：[`asc::std::aligned_accessor`](aligned_accessor.md)。
+所属类型：[`aligned_accessor<Element, ByteAlignment>`](aligned_accessor.md)。
 
 ```cpp
-// asc::std::aligned_accessor 类内的声明节选；模板形参和其他成员由所属类提供。
-inline constexpr const size_t byte_alignment;
+static constexpr size_t byte_alignment = ByteAlignment;
 ```
 
 ## 约束说明

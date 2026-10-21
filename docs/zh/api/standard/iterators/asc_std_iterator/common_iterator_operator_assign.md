@@ -39,56 +39,37 @@
 ### 原型1
 
 ```cpp
-// asc::std::common_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr common_iterator<Iter, Sent>& operator=(common_iterator<Iter, Sent>&& other);
+// common_iterator 类内声明节选。
+CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 common_iterator& operator=(common_iterator&&) = default;
 ```
 
 ### 原型2
 
 ```cpp
-// asc::std::common_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr common_iterator<Iter, Sent>& operator=(const common_iterator<Iter, Sent>& other);
+// common_iterator 类内声明节选。
+CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 common_iterator& operator=(const common_iterator&) = default;
 ```
 
 ### 原型3
 
 ```cpp
-// asc::std::common_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class I2, class S2> constexpr common_iterator<Iter, Sent>& operator=(const common_iterator<I2, S2>& other);
+// common_iterator 类内声明节选。
+template<class I2, class S2,
+    enable_if_t<convertible_to<const I2&, Iter> && convertible_to<const S2&, Sent> &&
+        assignable_from<Iter&, const I2&> && assignable_from<Sent&, const S2&>, int> = 0>
+CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 common_iterator& operator=(const common_iterator<I2, S2>& other);
 ```
+
+转换赋值展示C++17及Device形式；Host C++20以`requires`表达相同条件并声明`constexpr`。宏`CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20`在C++20及以上为`constexpr`，在C++17为空。
 
 ## 参数说明
 
-### 原型1的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
-
-### 原型3的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
+| 模板参数 | 描述 |
 | --- | --- |
-| `I2` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `S2` | 来源哨兵的类型；须满足到当前哨兵类型的转换条件。 |
+| `I2` | 转换来源的迭代器类型，须能转换构造及赋值为`Iter`。 |
+| `S2` | 转换来源的哨兵类型，须能转换构造及赋值为`Sent`。 |
 
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
+转换赋值的`other`是输入来源对象。前两个特殊赋值成员的来源形参在声明中不具名，分别执行移动或复制赋值。
 
 ## 返回值说明
 
@@ -100,21 +81,26 @@ template<class I2, class S2> constexpr common_iterator<Iter, Sent>& operator=(co
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- `Iter`与`Sent`是不同类型，须满足输入/输出迭代器与哨兵的配合要求；适配器保存其中一种状态。
+- 解引用、箭头访问及自增只能作用于当前持有迭代器且操作有效的对象，不能作用于哨兵状态。
+- 适配器不拥有底层范围；所指对象须在访问期间保持有效。
 
 ## 调用示例
 
-以下Host片段使用具体指针与哨兵演示调用；解引用前须保证指针有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void example(int* data)
+bool example()
 {
-    asc::std::common_iterator<int*, asc::std::unreachable_sentinel_t> iterator(data);
-    asc::std::common_iterator<int*, asc::std::unreachable_sentinel_t> other(data);
-    iterator = static_cast<asc::std::common_iterator<int*, asc::std::unreachable_sentinel_t>&&>(other);
+    int values[] = {2, 4, 6};
+    using It = asc::std::counted_iterator<int*>;
+    using Common = asc::std::common_iterator<It, asc::std::default_sentinel_t>;
+    Common iterator(It(values, 3));
+    Common target(asc::std::default_sentinel);
+    target = iterator;
+    return *target == 2;
 }
 ```
 

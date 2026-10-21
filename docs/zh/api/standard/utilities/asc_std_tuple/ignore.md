@@ -34,24 +34,31 @@
 
 ## 声明
 
+以下为类定义后的对象声明。具体类型是实现细节，调用方直接将`ignore`用作赋值接收器。
+
 ```cpp
 namespace asc::std {
-inline constexpr const Ignoret ignore;
-} // namespace asc::std
+inline constexpr __ignore_t ignore{};
+}
 ```
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
+- ignore仅作为赋值接收器，忽略赋入的值；不承诺替代任意构造占位符或持有被赋值对象。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例用具体输入和可判断结果展示本接口。
 
 ```cpp
 #include <asc/std/tuple>
 
-auto value = asc::std::ignore;
+bool example()
+{
+    int first = 0;
+    asc::std::tie(first, asc::std::ignore) = asc::std::make_tuple(3, 4);
+    return first == 3;
+}
 ```
 
 ## 关联API

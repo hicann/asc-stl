@@ -54,6 +54,7 @@ using Result = asc::std::ratio_add<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>
 void use_type()
 {
     using selected = asc::std::ratio_add<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>;
+    static_assert(selected::num == 5 && selected::den == 6);
 }
 ```
 

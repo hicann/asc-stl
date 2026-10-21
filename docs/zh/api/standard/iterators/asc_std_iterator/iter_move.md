@@ -34,28 +34,35 @@
 
 ## 声明
 
-`asc::std::iter_move`是可调用对象，其具体对象类型属于实现细节。调用形式如下；`iterator`为可解引用的迭代器表达式：
+`asc::std::iter_move`是已初始化的常量可调用对象，以`asc::std::iter_move(iterator)`调用。实现类不作为公开类型；下列object_type只是查询示例别名。
 
 ```cpp
-namespace asc::std {
-iter_move(iterator);
-} // namespace asc::std
+using object_type = decltype(asc::std::iter_move);
 ```
 
-优先调用可通过参数相关查找找到的定制`iter_move`；否则，解引用产生左值时返回其移动引用，其他情况下返回解引用结果。
+优先调用ADL发现的定制iter_move；否则，解引用为左值时取得其移动引用，其他情况下返回相应的解引用结果。
 
 ## 约束说明
 
-- 支持非I/O范围、数组和用户容器。
+- 迭代器须可解引用，定制或回退表达式须有效；定制可以返回与普通解引用不同的可移动结果类型。
+- 返回引用时仍借用原元素存储；本操作不延长存储寿命，也不单独保证后续移动构造已发生。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例在底层对象存活期内检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
+#include <asc/std/type_traits>
 
-auto value = asc::std::iter_move;
+bool example()
+{
+    int values[2] = {2, 4};
+    int&& reference = asc::std::iter_move(values);
+    static_assert(asc::std::is_same_v<decltype(reference), int&&>);
+    reference = 7;
+    return &reference == values && values[0] == 7 && values[1] == 4;
+}
 ```
 
 ## 关联API

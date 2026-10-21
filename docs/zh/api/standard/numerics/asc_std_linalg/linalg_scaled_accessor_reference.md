@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/linalg>`。
 
-`asc::std::linalg::scaled_accessor::reference`标识可写元素引用类型。
+`asc::std::linalg::scaled_accessor::reference`标识元素计算结果的返回类型；在本页实例中按值返回，不支持写回底层元素。
 
 标准语义参考：[cppreference `linalg`](https://en.cppreference.com/w/cpp/header/linalg)。
 

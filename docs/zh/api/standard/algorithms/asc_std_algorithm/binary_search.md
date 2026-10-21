@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::binary_search`在已排序范围中判断是否存在与目标等价的元素；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::binary_search`在已排序范围中判断是否存在与目标等价的元素；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,16 +38,19 @@
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator, class T, class Compare> [[nodiscard]] constexpr bool binary_search(ForwardIterator first, ForwardIterator last, const T& value, Compare compare);
-} // namespace asc::std
+template <class ForwardIterator, class T, class Compare>
+[[nodiscard]] constexpr bool binary_search(
+    ForwardIterator first, ForwardIterator last, const T& value, Compare compare);
+}  // namespace asc::std
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator, class T> [[nodiscard]] constexpr bool binary_search(ForwardIterator first, ForwardIterator last, const T& value);
-} // namespace asc::std
+template <class ForwardIterator, class T>
+[[nodiscard]] constexpr bool binary_search(ForwardIterator first, ForwardIterator last, const T& value);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -98,7 +101,6 @@ template<class ForwardIterator, class T> [[nodiscard]] constexpr bool binary_sea
 ## 约束说明
 
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 

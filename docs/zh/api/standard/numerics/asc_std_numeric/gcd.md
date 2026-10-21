@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<class T, class U> [[nodiscard]] constexpr common_type_t<T, U> gcd(T left, U right);
+template<class T, class U> constexpr common_type_t<T, U> gcd(T left, U right);
 } // namespace asc::std
 ```
 
@@ -69,7 +69,7 @@ template<class T, class U> [[nodiscard]] constexpr common_type_t<T, U> gcd(T lef
 
 ## 调用示例
 
-以下片段用具体整数范围展示数值调用；输出数组具有足够容量。
+以下示例计算12与18的最大公约数，返回6。
 
 ```cpp
 #include <asc/std/numeric>

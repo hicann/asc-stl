@@ -30,21 +30,13 @@
 
 `asc::std::transform_inclusive_scan`先变换输入，再写出包含当前项的前缀归约。
 
+本页说明顺序执行的重载。Device并行提交入口为[`asc::parallel::transform_inclusive_scan`](../../../extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform_inclusive_scan.md)，其参数、状态返回和完成条件见对应页面。
+
 标准语义参考：[cppreference `numeric`](https://en.cppreference.com/w/cpp/header/numeric)。
 
 ## 函数原型
 
 ### 原型1
-
-```cpp
-namespace asc::std {
-template<class Input, class Output, class T, class BinaryOperation, class UnaryOperation> Output transform_inclusive_scan(asc::device_policy policy, Input first, Input last, Output result, BinaryOperation binary_operation, UnaryOperation unary_operation, T init);
-} // namespace asc::std
-```
-
-该原型适用于`C++17+`，可用位置为Host。
-
-### 原型2
 
 ```cpp
 namespace asc::std {
@@ -54,7 +46,7 @@ template<class InputIterator, class OutputIterator, class BinaryO, class UnaryO>
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
-### 原型3
+### 原型2
 
 ```cpp
 namespace asc::std {
@@ -67,30 +59,6 @@ template<class InputIterator, class OutputIterator, class T, class BinaryO, clas
 ## 参数说明
 
 ### 原型1的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Input` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `Output` | 写入结果范围的迭代器类型；目标存储须有足够容量。 |
-| `T` | 归约初值与前缀结果的类型。 |
-| `BinaryOperation` | 前缀归约的二元运算可调用对象类型：接受当前累加值与变换后的元素。 |
-| `UnaryOperation` | 一元变换可调用对象类型：对每个输入元素先变换再归约。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `result` | 输出 | 写入前缀结果的输出迭代器；目标范围须有足够容量。 |
-| `binary_operation` | 输入 | 二元归约运算对象，把unary_operation变换后的当前元素并入累加值。 |
-| `unary_operation` | 输入 | 一元变换运算对象，先作用于每个输入元素，再参与归约。 |
-| `init` | 输入 | 归约初值，作为首个输出之前的起始累加值，会计入每个输出元素。 |
-
-### 原型2的参数
 
 **模板参数**
 
@@ -111,7 +79,7 @@ template<class InputIterator, class OutputIterator, class T, class BinaryO, clas
 | `binary_op` | 输入 | 二元归约运算对象，把unary_op变换后的当前元素并入累加值。 |
 | `unary_op` | 输入 | 一元变换运算对象，先作用于每个输入元素，再参与归约。 |
 
-### 原型3的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -138,32 +106,33 @@ template<class InputIterator, class OutputIterator, class T, class BinaryO, clas
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `Output` | 返回输出范围中最后一个写入结果之后的位置。 |
+| 原型1 | `OutputIterator` | 返回输出范围中最后一个写入结果之后的位置。 |
 | 原型2 | `OutputIterator` | 返回输出范围中最后一个写入结果之后的位置。 |
-| 原型3 | `OutputIterator` | 返回输出范围中最后一个写入结果之后的位置。 |
 
 ## 约束说明
 
-- 使用C++17。
-- 该Host同步适配接口调用对应的asc::parallel前端。
-- policy必须包含有效Stream和足够的调用方临时存储。
-- 接口只等待该Stream。
-- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用asc::std::terminate。
-- 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
+- `[first, last)`须为有效的可读输入范围；从`result`起须能写入相同数量的结果。
+- 先调用`unary_op`变换输入，再调用`binary_op`归约；每个输出都包含当前位置的变换结果。
+- 有初值时先合并`init`，无初值时以首个变换结果开始；归约结果须可赋回累加类型。
+- 运算不得修改输入范围或使迭代器失效；允许`result == first`的原地计算。
 
 ## 调用示例
 
-以下片段用具体整数范围展示数值调用；输出数组具有足够容量。
+以下示例先将各输入乘以2，再将包含当前项的前缀和2、6、12、20写入输出。
 
 ```cpp
 #include <asc/std/numeric>
 
-decltype(auto) example()
+bool example()
 {
     int input[4] = {1, 2, 3, 4};
     int output[4] = {};
-    return asc::std::transform_inclusive_scan(input, input + 4, output, [](int a, int b) { return a + b; }, [](int a) { return a * 2; });
+    const auto end = asc::std::transform_inclusive_scan(input, input + 4, output, [](int a, int b) { return a + b; }, [](int a) { return a * 2; });
+    return end == output + 4 &&
+        output[0] == 2 &&
+        output[1] == 6 &&
+        output[2] == 12 &&
+        output[3] == 20;
 }
 ```
 

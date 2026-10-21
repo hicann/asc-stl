@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/optional>`。
 
-`asc::std::hash<asc::std::optional<T>>`由`<asc/std/optional>`提供，optional的哈希特化：空值哈希0，有值时hash<remove_const_t<T>>{}(*value)；使unordered容器可直接容纳optional。CSV hash行target_headers不含optional，故记新增。
+`asc::std::hash<asc::std::optional<T>>`由`<asc/std/optional>`提供，optional的哈希特化：空值哈希0，有值时hash<remove_const_t<T>>{}(*value)；可作为无序容器所选择的哈希器，前提是所含值的哈希与相等关系一致。
 
 标准语义参考：[cppreference `optional`](https://en.cppreference.com/w/cpp/header/optional)。
 
@@ -44,7 +44,7 @@ template <class T> struct hash<optional<T>> { size_t operator()(const optional<T
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | optional所含值的类型；须存在对应的hash特化。 |
+| `T` | optional所含值的类型；其hash<remove_const_t<T>>须可调用并与相等关系一致。 |
 
 **函数参数**
 
@@ -60,21 +60,25 @@ template <class T> struct hash<optional<T>> { size_t operator()(const optional<T
 
 ## 约束说明
 
-- T须使hash<remove_const_t<T>> 可调用，即remove_const_t<T> 为可哈希类型。
+- 内层`hash<remove_const_t<T>>`须可调用，且对相等的T值返回相同结果；可调用性只是必要条件。
 - 空optional的哈希值为0；含值时返回hash<remove_const_t<T>>{}(*value)。
-- `operator()`接受const optional<T>& 并返回size_t，使unordered容器可直接容纳optional<T>。
+- `operator()`接受const optional<T>& 并返回size_t，可供选择本哈希器且采用相容键相等关系的无序容器使用。
+- 若元素类型落入[对象字节回退](../asc_std_bitset/hash.md)，同样要求确定字节及等价对象表示一致；含填充、被相等判断忽略的字段或非平凡状态的用户类型须提供合适的自定义哈希。包装为optional不会修复内层哈希与相等关系的失配。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例检查空值和有值时的哈希规则。
 
 ```cpp
 #include <asc/std/optional>
+#include <asc/std/functional>
 
-template <class T>
-decltype(auto) example(const asc::std::optional<T>& value)
+bool example()
 {
-    return asc::std::hash(value);
+    asc::std::optional<int> empty;
+    asc::std::optional<int> value(7);
+    asc::std::hash<asc::std::optional<int>> hasher;
+    return hasher(empty) == 0 && hasher(value) == asc::std::hash<int>{}(7);
 }
 ```
 

@@ -36,11 +36,15 @@
 
 ```cpp
 namespace asc {
-template<class T> class arena_allocator;
-} // namespace asc
+template <class T>
+class arena_allocator;
+}  // namespace asc
 ```
 
 ## 约束说明
+
+- 这是绑定arena的轻量分配器，不完整实现标准命名Allocator要求；不能仅凭同名allocate/deallocate就用于任意标准容器。
+- arena及其存储须覆盖分配器和全部借用分配；reset会使此前分配失效，deallocate不逐项回收。
 
 - allocator非拥有地引用monotonic_arena，arena必须在allocator及其分配结果使用期间保持有效。
 - 元素数量乘以sizeof(T)不得溢出。

@@ -12,8 +12,8 @@
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |
-| [asc::std::erase](erase.md) | 函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
-| [asc::std::erase_if](erase_if.md) | 函数模板 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
+| [asc::std::erase](erase.md) | 兼容性说明 | — | 未提供inplace_vector自由重载 | — |
+| [asc::std::erase_if](erase_if.md) | 兼容性说明 | — | 未提供inplace_vector自由重载 | — |
 | [asc::std::inplace_vector](inplace_vector.md) | 类模板 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
 | [asc::std::inplace_vector::back](inplace_vector_back.md) | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |
 | [asc::std::inplace_vector::begin](inplace_vector_begin.md) | 成员函数 | C++17+ | Host、Device（非抛出接口） | Ascend 950 |

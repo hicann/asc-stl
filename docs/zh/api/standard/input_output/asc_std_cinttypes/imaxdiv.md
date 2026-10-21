@@ -37,7 +37,7 @@
 ```cpp
 namespace asc::std {
 constexpr imaxdiv_t imaxdiv(intmax_t numerator, intmax_t denominator) noexcept;
-} // namespace asc::std
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -56,6 +56,8 @@ constexpr imaxdiv_t imaxdiv(intmax_t numerator, intmax_t denominator) noexcept;
 | `imaxdiv_t` | 返回包含最大宽度整数商与余数的结构体。 |
 
 ## 约束说明
+
+- 当分子为`intmax_t`最小值时，分母不得为`-1`；否则商无法表示。该接口不对这一组合返回溢出状态。
 
 - 提供纯整数类型运算和格式宏。
 

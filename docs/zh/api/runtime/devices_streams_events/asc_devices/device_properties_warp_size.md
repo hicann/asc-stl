@@ -41,9 +41,8 @@ asc::std::uint32_t warp_size;
 
 ## 约束说明
 
-- 仅可在Host查询或选择Device。
-- 引用只保存设备序号且不拥有Runtime状态。
-- 查询失败时输出参数保持原值，属性仅限当前接口列出的AI Core、Vector Core、Warp、UB、GM、L2与架构字段。
+- 本页描述已保存的设备属性值、架构枚举或ordinal比较；观察这些值不查询Runtime。
+- 获取实际设备属性时的初始化和设备可用要求见`device_ref::properties`；比较ordinal不证明对应设备实际存在。
 
 ## 调用示例
 

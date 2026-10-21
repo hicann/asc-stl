@@ -36,45 +36,43 @@
 
 ## 函数原型
 
+所属类型：[`inplace_vector<T, Capacity>`](inplace_vector.md)。以下为类内声明，类型别名及模板形参由所属类提供。
+
 ### 原型1
 
 ```cpp
-inplace_vector(const inplace_vector<T, Capacity>& other);
+constexpr inplace_vector() noexcept;
 ```
 
 ### 原型2
 
 ```cpp
-inplace_vector(inplace_vector<T, Capacity>&& other);
+constexpr inplace_vector(const inplace_vector& other);
 ```
 
 ### 原型3
 
 ```cpp
-constexpr inplace_vector() noexcept;
+constexpr inplace_vector(inplace_vector&& other);
 ```
 
 ## 参数说明
 
 ### 原型1的参数
 
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
+无参数。
 
 ### 原型2的参数
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
+| `other` | 输入 | 逐元素复制构造的来源；来源元素保持不变。 |
 
 ### 原型3的参数
 
-无参数。
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `other` | 输入 | 逐元素移动构造的来源；来源size不变，元素状态由T的移动构造决定。 |
 
 ## 返回值说明
 
@@ -82,9 +80,9 @@ constexpr inplace_vector() noexcept;
 
 ## 约束说明
 
-- 元素保存在固定容量的对象内存中，不进行动态分配。
-- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
-- Host提供完整接口，设备端仅提供不抛出异常的接口。
+- 元素存储位于容器对象内，不动态分配；Capacity是编译期固定容量。
+- Host和Device均提供所列非抛出子集，不提供at、push_back、emplace_back或resize。
+- 元素的对应构造、赋值和析构须满足非抛出使用域；constexpr声明不保证任意T和语言模式都能常量求值。
 
 ## 调用示例
 

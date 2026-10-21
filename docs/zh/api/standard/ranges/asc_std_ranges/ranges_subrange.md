@@ -34,15 +34,23 @@
 
 ## 声明
 
+声明摘要保留公开默认实参；类型及成员操作仍须满足下述条件。
+
 ```cpp
 namespace asc::std::ranges {
-template<class Iter, class Sent, subrange_kind Kind> class subrange;
-} // namespace asc::std::ranges
+template<class Iter, class Sent = Iter,
+    subrange_kind Kind = sized_sentinel_for<Sent, Iter>
+        ? subrange_kind::sized : subrange_kind::unsized>
+class subrange;
+}
 ```
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- Iter须满足input_or_output_iterator，Sent须满足sentinel_for<Sent, Iter>。
+- 当Sent和Iter满足sized_sentinel_for时，Kind必须为sized；否则可选择有保存数量的sized形式或unsized形式。
+- 默认Sent=Iter，默认Kind根据sized_sentinel_for计算；C++17和C++20当前共享此选择。
+- subrange保存迭代器、哨兵及必要的数量，不取得底层元素所有权；有效期受实际元素存储限制。
 
 ## 调用示例
 

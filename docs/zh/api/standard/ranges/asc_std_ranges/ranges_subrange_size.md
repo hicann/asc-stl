@@ -34,30 +34,38 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::ranges::subrange`](ranges_subrange.md)。
+所属类型：[`subrange`](ranges_subrange.md)。以下是按参与条件列出的声明摘要；保留供调用使用的模板默认值，省略仅供SFINAE的实现选择参数。涉及私有返回类型时用auto摘要表示，不承诺可直接命名该类型。
+
+### 原型1
 
 ```cpp
-// asc::std::ranges::subrange 类内的声明节选；模板形参和其他成员由所属类提供。
-template<subrange_kind Kind> constexpr make_unsigned_t<iter_difference_t<Iter>> size() const;
+template<subrange_kind Kind_ = Kind>
+constexpr make_unsigned_t<iter_difference_t<Iter>> size() const;
 ```
 
+参与条件：`((Kind_ == subrange_kind::sized))`。
+
 ## 参数说明
+
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Kind` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
+| `Kind_` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
+
+无函数参数。
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `make_unsigned_t<iter_difference_t<Iter>>` | 返回当前对象包含的元素数量。 |
+| 适用原型 | 返回值类型 | 含义 |
+| --- | --- | --- |
+| 原型1 | `make_unsigned_t<iter_difference_t<Iter>>` | 返回当前范围的元素数量；auto的精确整数类型由对应大小计算决定，可通过decltype(object.size())查询。 |
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- 每种形式的参与条件见原型；无实参查询一般直接调用，不需要指定模板选择类型。
 
 ## 调用示例
 

@@ -26,6 +26,7 @@ set(ASC_STL_DEVICE_CHANGED_TARGETS_FILE "" CACHE FILEPATH "Changed target list f
 set(ASC_STL_DEVICE_REPORT "${CMAKE_CURRENT_BINARY_DIR}/device-compile-report.json" CACHE FILEPATH "Device gate JSON report")
 set(ASC_STL_CANNSIM_EXECUTABLE "" CACHE FILEPATH "cannsim executable")
 set(ASC_STL_CANNSIM_SOC "Ascend950" CACHE STRING "cannsim target SoC")
+set(ASC_STL_CANNSIM_CASE_TIMEOUT_SECONDS "600" CACHE STRING "Per-cannsim runtime case timeout")
 set(ASC_STL_TEST_CXX_STANDARD "17" CACHE STRING "C++ standard used by Device runtime test builds")
 
 set(ASC_STL_TEST_ROOT "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -47,6 +48,11 @@ add_test(NAME gate.api-docs
 add_test(NAME gate.api-docs-regressions
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/test_api_docs.py)
 set_tests_properties(gate.api-docs gate.api-docs-regressions
+    PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 120)
+
+add_test(NAME compatibility.parallel-example-runner
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/test_parallel_example_runner.py)
+set_tests_properties(compatibility.parallel-example-runner
     PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 120)
 
 add_test(
@@ -72,6 +78,14 @@ set_tests_properties(
 
 if(ASC_STL_ENABLE_HOST_TESTS)
     add_test(
+        NAME compatibility.hardware-timeout-safety
+        COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/check_hardware_safety.py
+                --compiler ${CMAKE_CXX_COMPILER})
+    set_tests_properties(
+        compatibility.hardware-timeout-safety
+        PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 120)
+
+    add_test(
         NAME compatibility.cann-sdk-layout
         COMMAND
             ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/check_cann_sdk_paths.py
@@ -79,6 +93,14 @@ if(ASC_STL_ENABLE_HOST_TESTS)
             --compiler ${CMAKE_CXX_COMPILER})
     set_tests_properties(
         compatibility.cann-sdk-layout
+        PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 120)
+
+    add_test(
+        NAME compatibility.cann-runtime-bindings
+        COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/check_runtime_sdk_bindings.py
+                --compiler ${CMAKE_CXX_COMPILER})
+    set_tests_properties(
+        compatibility.cann-runtime-bindings
         PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 120)
 
     add_test(
@@ -135,6 +157,7 @@ if(ASC_STL_ENABLE_HOST_TESTS)
         endforeach()
     endfunction()
 
+    asc_stl_add_host_case("asc.std.expected.monads" "asc/std/expected/host.pass.cpp")
     asc_stl_add_host_case("asc.__config" "asc/__config/host.pass.cpp")
     add_executable(asc_stl_host_cxx17_baseline ${ASC_STL_CASES_ROOT}/asc/__config/cxx17.pass.cpp)
     target_link_libraries(asc_stl_host_cxx17_baseline PRIVATE asc_stl::asc_stl)
@@ -527,6 +550,7 @@ if(ASC_STL_ENABLE_HOST_TESTS)
     asc_stl_add_host_case("asc.std.span.backports" "asc/std/span/cxx17_backports.pass.cpp")
     asc_stl_add_host_case("asc.std.ranges.backports" "asc/std/ranges/cxx17_backports.pass.cpp")
     asc_stl_add_host_case("asc.std.ranges.access-constraints" "asc/std/ranges/access_constraints.pass.cpp")
+    asc_stl_add_host_case("asc.std.ranges.repeat-piecewise-assertions" "asc/std/ranges/repeat_piecewise_assertions.pass.cpp")
     asc_stl_add_host_case("asc.std.version.legacy" "asc/std/version/legacy_feature_macros.pass.cpp")
     asc_stl_add_host_case("asc.std.version.host-coexistence" "asc/std/version/host_coexistence.pass.cpp")
     asc_stl_add_host_case("asc.std.format.portable-renderer" "asc/std/format/portable_renderer.pass.cpp")
@@ -580,6 +604,22 @@ if(ASC_STL_ENABLE_HOST_TESTS)
         set_tests_properties(
             semantic.host.cxx${standard}.asc.std.cassert.failure
             PROPERTIES LABELS "semantic-host;cxx${standard};negative-boundary;affected-regression;nightly")
+        add_executable(
+            asc_stl_host_repeat_piecewise_negative_cxx${standard}
+            ${ASC_STL_CASES_ROOT}/asc/std/ranges/repeat_piecewise_negative.assert.cpp)
+        target_link_libraries(asc_stl_host_repeat_piecewise_negative_cxx${standard} PRIVATE asc_stl::asc_stl)
+        set_target_properties(
+            asc_stl_host_repeat_piecewise_negative_cxx${standard}
+            PROPERTIES CXX_STANDARD "${standard}" CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+        target_compile_options(
+            asc_stl_host_repeat_piecewise_negative_cxx${standard} PRIVATE -Wall -Wextra -Werror -pedantic)
+        add_test(
+            NAME semantic.host.cxx${standard}.asc.std.ranges.repeat-piecewise-negative
+            COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/run_trap_failure.py
+                    $<TARGET_FILE:asc_stl_host_repeat_piecewise_negative_cxx${standard}>)
+        set_tests_properties(
+            semantic.host.cxx${standard}.asc.std.ranges.repeat-piecewise-negative
+            PROPERTIES LABELS "semantic-host;cxx${standard};negative-boundary;affected-regression;nightly" TIMEOUT 15)
     endforeach()
 endif()
 
@@ -1017,4 +1057,17 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
         semantic.cannsim.w13_w14.simt
         PROPERTIES LABELS "cannsim-runtime;affected-regression;nightly"
                    FIXTURES_REQUIRED asc_stl_cannsim_ready RUN_SERIAL TRUE)
+
+    if(NOT ASC_STL_CANNSIM_CASE_TIMEOUT_SECONDS MATCHES "^[1-9][0-9]*$")
+        message(FATAL_ERROR "ASC_STL_CANNSIM_CASE_TIMEOUT_SECONDS must be a positive integer")
+    endif()
+    # Bound a stalled model independently of the complete dual-language gate.
+    # Timeout is a failed case; it never changes applicability or golden checks.
+    get_property(asc_stl_registered_tests DIRECTORY PROPERTY TESTS)
+    foreach(asc_stl_test_name IN LISTS asc_stl_registered_tests)
+        if(asc_stl_test_name MATCHES "^semantic[.]cannsim[.]")
+            set_tests_properties(${asc_stl_test_name}
+                PROPERTIES TIMEOUT ${ASC_STL_CANNSIM_CASE_TIMEOUT_SECONDS})
+        endif()
+    endforeach()
 endif()

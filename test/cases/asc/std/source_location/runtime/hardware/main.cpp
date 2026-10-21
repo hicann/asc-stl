@@ -19,6 +19,8 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
+#include "../../../../../../support/hardware_runtime.h"
+#include "launch.h"
 
 namespace {
 
@@ -37,30 +39,32 @@ bool check(aclError result, const char* operation)
 }  // namespace
 
 #if defined(ASC_STL_SOURCE_LOCATION_SIMD)
-void launch_asc_stl_source_location_simd(std::uint32_t*, aclrtStream);
+
 #else
-void launch_asc_stl_source_location_simt(std::uint32_t*, aclrtStream);
+
 #endif
 
 int main()
 {
+    asc_stl_test::hardware_runtime runtime;
     const std::array<std::uint32_t, kResultCount> expected = {
         0x13579BDFU, 321U, 27U, 654U, 23U, 24U, 0x2468ACE0U, 0x55AA55AAU};
     std::array<std::uint32_t, kResultCount> actual{};
     std::uint32_t* device_output = nullptr;
     aclrtStream stream = nullptr;
 
-    bool passed = check(aclInit(nullptr), "aclInit") && check(aclrtSetDevice(kDeviceId), "aclrtSetDevice") &&
+    bool passed = check(runtime.initialize(nullptr), "aclInit") &&
+        check(runtime.set_device(kDeviceId), "aclrtSetDevice") &&
         check(aclrtCreateStream(&stream), "aclrtCreateStream") &&
         check(aclrtMalloc(reinterpret_cast<void**>(&device_output), sizeof(actual), ACL_MEM_MALLOC_HUGE_FIRST),
             "aclrtMalloc");
-    if (passed) {
+    if (passed && runtime.ready()) {
 #if defined(ASC_STL_SOURCE_LOCATION_SIMD)
         launch_asc_stl_source_location_simd(device_output, stream);
 #else
         launch_asc_stl_source_location_simt(device_output, stream);
 #endif
-        passed = check(aclrtSynchronizeStream(stream), "aclrtSynchronizeStream") &&
+        passed = check(runtime.synchronize(stream), "aclrtSynchronizeStream") &&
             check(aclrtMemcpy(actual.data(), sizeof(actual), device_output, sizeof(actual), ACL_MEMCPY_DEVICE_TO_HOST),
                 "aclrtMemcpy") &&
             actual == expected;
@@ -72,14 +76,15 @@ int main()
         }
     }
     if (device_output != nullptr) {
-        passed = check(aclrtFree(device_output), "aclrtFree") && passed;
+        passed = check(runtime.free_device(device_output), "aclrtFree") && passed;
     }
     if (stream != nullptr) {
-        passed = check(aclrtDestroyStream(stream), "aclrtDestroyStream") && passed;
+        passed = check(runtime.destroy_stream(stream), "aclrtDestroyStream") && passed;
     }
-    passed = check(aclrtResetDevice(kDeviceId), "aclrtResetDevice") && passed;
-    passed = check(aclFinalize(), "aclFinalize") && passed;
+    passed = check(runtime.reset_device(kDeviceId), "aclrtResetDevice") && passed;
+    passed = check(runtime.finalize(), "aclFinalize") && passed;
 
+    passed = runtime.finish(passed) == 0;
     std::cout << (passed ? "PASS" : "FAIL") << ": source_location "
 #if defined(ASC_STL_SOURCE_LOCATION_SIMD)
               << "D-SIMD"

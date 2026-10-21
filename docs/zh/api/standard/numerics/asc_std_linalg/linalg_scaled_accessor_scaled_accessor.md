@@ -46,10 +46,25 @@ constexpr scaled_accessor();
 constexpr scaled_accessor(const ScalingFactor& scale, const NestedAccessor& accessor);
 ```
 
-### 原型3
+### 原型3：转换构造
 
 ```cpp
-template<class OtherScalingFactor, class OtherNestedAccessor> constexpr scaled_accessor(const scaled_accessor<OtherScalingFactor, OtherNestedAccessor>& other);
+template <class OtherScalingFactor, class OtherNestedAccessor,
+    enable_if_t<is_constructible_v<NestedAccessor, const OtherNestedAccessor&> &&
+            is_constructible_v<ScalingFactor, OtherScalingFactor> &&
+            !is_convertible_v<OtherNestedAccessor, NestedAccessor>,
+        int> = 0>
+explicit constexpr scaled_accessor(
+    const scaled_accessor<OtherScalingFactor, OtherNestedAccessor>& other);
+```
+
+```cpp
+template <class OtherScalingFactor, class OtherNestedAccessor,
+    enable_if_t<is_constructible_v<NestedAccessor, const OtherNestedAccessor&> &&
+            is_constructible_v<ScalingFactor, OtherScalingFactor> &&
+            is_convertible_v<OtherNestedAccessor, NestedAccessor>,
+        int> = 0>
+constexpr scaled_accessor(const scaled_accessor<OtherScalingFactor, OtherNestedAccessor>& other);
 ```
 
 ## 参数说明
@@ -87,6 +102,8 @@ template<class OtherScalingFactor, class OtherNestedAccessor> constexpr scaled_a
 无返回值。
 
 ## 约束说明
+
+- 转换构造仅在嵌套访问器可从const来源构造时参与；scaled_accessor还要求缩放因子可构造。嵌套访问器可隐式转换时构造不带explicit，否则必须显式构造。
 
 - 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD编程 和AI Core SIMT编程。
 

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::duration`表示日期、时间点或时长计算中的`duration`值类型。
+`asc::std::chrono::duration`把计数`Rep`与每个tick对应的秒比例`Period`组合为时长；跨周期运算先形成公共计时单位。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -36,13 +36,24 @@
 
 ```cpp
 namespace asc::std::chrono {
-template<class Rep, class Period> class duration;
+template<class Rep, class Period = ratio<1>> class duration;
 } // namespace asc::std::chrono
 ```
 
+## 参数说明
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Rep` | 保存tick数量的计数类型；不能为duration。 |
+| `Period` | 每tick对应秒数的正ratio类型，默认为ratio<1>。 |
+
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符。
+- Rep不得为duration；Period须为ratio特化，且Period::num须为正。
+- 算术及中间值须可表示；取模还要求计数支持余数运算。
+- 内建计数的默认初始化不保证为0；读取count()前应使用明确计数初始化，例如seconds{0}。
 
 ## 调用示例
 

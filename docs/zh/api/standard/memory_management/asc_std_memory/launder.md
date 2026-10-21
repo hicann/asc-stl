@@ -26,91 +26,75 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/std/memory>`、`<asc/std/new>`。
+头文件路径为：`<asc/std/new>`。单独包含`<asc/std/memory>`不提供此函数。
 
 `asc::std::launder`在对象生命周期转换后取得可用于访问新对象的指针。
 
-标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
+标准语义参考：[cppreference `launder`](https://en.cppreference.com/w/cpp/utility/launder)。
 
 ## 函数原型
-
-### 原型1
 
 ```cpp
 namespace asc::std {
 template<class T> constexpr T* launder(T* pointer) noexcept;
-} // namespace asc::std
+}
 ```
 
-此原型对应头文件：`<asc/std/new>`。
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<class T> [[nodiscard]] constexpr T* launder(T* pointer) noexcept;
-} // namespace asc::std
-```
-
-此原型对应头文件：`<asc/std/memory>`。
+从C++17起提供此单一模板，可用于Host、AI Core SIMD编程和AI Core SIMT编程的相应指针域。
 
 ## 参数说明
 
-### 原型1的参数
-
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 被构造、销毁或管理的对象类型。 |
+| `T` | 当前存活对象的类型，须满足对象类型及可达存储要求。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `pointer` | 输入 | 指向实际存活的相应类型对象所在地址，须满足对象类型及存储可达性条件；不创建对象或延长生命周期。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 被构造、销毁或管理的对象类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `pointer` | 输入 | 指向实际存活的相应类型对象所在地址，须满足对象类型及存储可达性条件；不创建对象或延长生命周期。 |
+| `pointer` | 输入 | 指向相应类型存活对象所在地址，须满足对象类型及存储可达性条件；不创建对象或延长生命周期。 |
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `T *` | 返回指向相同存储地址中当前活动对象的指针。 |
-| 原型2 | `T *` | 返回指向相同存储地址中当前活动对象的指针。 |
+| 返回值类型 | 含义 |
+| --- | --- |
+| `T*` | 指向相同存储地址中当前存活对象的指针。 |
 
 ## 约束说明
 
-- 提供placement对象生命周期和无动态分配的接口。
-- 存储由调用方提供并满足对齐要求。
-- 当回滚会引发异常时，Device侧相关操作必须不抛出异常。
+- 调用前须在给定地址已存在类型相容的存活对象，并满足存储可达性条件；本函数不分配存储、不开始对象生命周期。
+- 返回指针的使用期受当前对象和底层存储的生命周期限制；销毁对象后不得再用它访问。
+- 头文件及指针的执行位置和地址空间须匹配；此调用不进行GM/UB地址空间转换。
 
 ## 调用示例
 
-以下Host片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
+#include <asc/std/memory>
 #include <asc/std/new>
 
-decltype(auto) example()
+struct example_value {
+    int value;
+    explicit example_value(int initial) : value(initial) {}
+};
+
+bool example()
 {
-    int value = 3;
-    return asc::std::launder(&value);
+    alignas(example_value) unsigned char storage[sizeof(example_value)];
+    auto* pointer = reinterpret_cast<example_value*>(storage);
+    asc::std::construct_at(pointer, 3);
+    asc::std::destroy_at(pointer);
+    asc::std::construct_at(pointer, 7);
+    const bool valid = asc::std::launder(pointer)->value == 7;
+    asc::std::destroy_at(pointer);
+    return valid;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_std_memory.md)
+- [本接口所属的new头文件列表](../../language_support/asc_std_new/asc_std_new.md)
+- [对象构造与销毁接口](asc_std_memory.md)

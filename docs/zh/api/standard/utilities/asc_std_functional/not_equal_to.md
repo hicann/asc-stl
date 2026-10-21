@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<class T> struct not_equal_to;
+template<class T = void> struct not_equal_to;
 } // namespace asc::std
 ```
 

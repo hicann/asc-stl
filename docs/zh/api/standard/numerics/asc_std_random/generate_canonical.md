@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<class RealType, size_t Bits, class URng> [[nodiscard]] constexpr RealType generate_canonical(URng& generator) noexcept;
+template<class RealType, size_t Bits, class URng> constexpr RealType generate_canonical(URng& generator) noexcept;
 } // namespace asc::std
 ```
 
@@ -47,7 +47,7 @@ template<class RealType, size_t Bits, class URng> [[nodiscard]] constexpr RealTy
 | 参数名 | 描述 |
 | --- | --- |
 | `RealType` | 随机引擎或分布产生的数值类型；须符合当前引擎或分布的整数／浮点要求。 |
-| `Bits` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
+| `Bits` | 请求的随机精度位数；实际精度不超过float的有效位数，可能需要多次调用generator。 |
 | `URng` | 均匀随机位生成器类型，提供无参调用、min和max。 |
 
 **函数参数**
@@ -60,7 +60,7 @@ template<class RealType, size_t Bits, class URng> [[nodiscard]] constexpr RealTy
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `RealType` | 返回推进随机引擎后产生的下一个随机值。 |
+| `RealType` | 返回[0, 1)区间的归一化float值，可能消耗多个引擎输出。 |
 
 ## 约束说明
 

@@ -34,30 +34,27 @@
 
 ## 声明
 
-所属类型：[`asc::std::chrono::hh_mm_ss`](chrono_hh_mm_ss.md)。
+fractional_width是hh_mm_ss的静态constexpr成员。下例为查询该公开成员的表达式，不新增成员。
 
 ```cpp
-// asc::std::chrono::hh_mm_ss 类内的声明节选；模板形参和其他成员由所属类提供。
-inline constexpr const unsigned int fractional_width;
+template<class Duration>
+inline constexpr unsigned fractional_width_of =
+    asc::std::chrono::hh_mm_ss<Duration>::fractional_width;
 ```
 
 ## 约束说明
 
-- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
+- 设D为common_type_t<Duration, seconds>::period::den。若1/D能用不超过18位十进制小数精确表示，值为所需的最小位数；否则为6。整秒精度对应0。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/chrono>
-#include <asc/std/limits>
 
-bool example()
-{
-    asc::std::chrono::hh_mm_ss<asc::std::chrono::seconds> value{asc::std::chrono::seconds{3661}};
-    return value.fractional_width == 0;
-}
+static_assert(asc::std::chrono::hh_mm_ss<asc::std::chrono::milliseconds>::fractional_width == 3);
+static_assert(asc::std::chrono::hh_mm_ss<asc::std::chrono::seconds>::fractional_width == 0);
 ```
 
 ## 关联API

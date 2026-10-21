@@ -69,6 +69,8 @@ iterator end() noexcept;
 
 ## 约束说明
 
+- 返回的指针、引用或迭代器借用当前字符串的字符存储；字符串析构或导致重分配的操作使其失效。使用前须确认对象及相应元素仍存活，不能跨扩容保存该借用结果。
+
 - basic_string<char,Traits,A>显式allocator构造。
 - plain/local字符来源的append/push_back/clear。
 - size/capacity/data/c_str/迭代/索引与析构。

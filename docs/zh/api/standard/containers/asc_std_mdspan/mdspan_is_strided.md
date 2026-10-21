@@ -34,11 +34,11 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::mdspan`](mdspan.md)。
+所属类型：[`mdspan`](mdspan.md)。异常规格跟随保存的映射查询。
 
 ```cpp
-// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr bool is_strided() const noexcept;
+constexpr bool is_strided() const
+    noexcept(noexcept(::asc::std::declval<const mapping_type&>().is_strided()));
 ```
 
 ## 参数说明
@@ -53,8 +53,9 @@ constexpr bool is_strided() const noexcept;
 
 ## 约束说明
 
-- C++17起可使用一维`operator[]`；多参数`operator[]`按编译器的C++23多维下标特性开放。
-- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
+- 本查询从C++17起提供；元素访问形式及语言条件见[`mdspan`](mdspan.md#约束说明)。
+
+- 查询当前`mapping`的唯一性、穷尽性或步长性质；相应属性由`mapping`类型定义，不访问元素。
 
 ## 调用示例
 

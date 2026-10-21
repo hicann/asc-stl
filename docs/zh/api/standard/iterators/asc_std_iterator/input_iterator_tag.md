@@ -34,10 +34,22 @@
 
 ## 声明
 
+Host使用标准库标签别名；Device定义ASC自身标签结构。
+
+### Host
+
 ```cpp
 namespace asc::std {
 using input_iterator_tag = ::std::input_iterator_tag;
-} // namespace asc::std
+}
+```
+
+### Device
+
+```cpp
+namespace asc::std {
+struct input_iterator_tag {};
+}
 ```
 
 ## 约束说明
@@ -46,7 +58,7 @@ using input_iterator_tag = ::std::input_iterator_tag;
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
@@ -54,7 +66,7 @@ using input_iterator_tag = ::std::input_iterator_tag;
 
 bool example()
 {
-    static_assert(asc::std::is_base_of_v<asc::std::input_iterator_tag, asc::std::forward_iterator_tag>);
+    static_assert(asc::std::is_empty_v<asc::std::input_iterator_tag>);
     return true;
 }
 ```

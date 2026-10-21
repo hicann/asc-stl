@@ -34,10 +34,13 @@
 
 ## 函数原型
 
+以下是调用形态摘要；返回引用的cv限定和值类别以T&&为模型应用到U，实际类型通过实现中的类型计算取得。
+
 ```cpp
 namespace asc::std {
-template<class T, class U> [[nodiscard]] constexpr auto forward_like(U&& ux) noexcept -> ForwardLike<T, U>;
-} // namespace asc::std
+template<class T, class U>
+[[nodiscard]] constexpr decltype(auto) forward_like(U&& value) noexcept;
+}
 ```
 
 ## 参数说明
@@ -46,20 +49,20 @@ template<class T, class U> [[nodiscard]] constexpr auto forward_like(U&& ux) noe
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 提供目标const限定和左／右值引用类别的参考类型。 |
-| `U` | 被转发实参的推导类型；返回表达式采用T指定的const限定和引用类别。 |
+| `T` | 提供目标const/volatile限定和左／右值引用类别的参考类型。 |
+| `U` | 被转发实参的推导类型；返回表达式合并T指定的const/volatile限定并保持U的已有限定和引用类别。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `ux` | 输入/输出 | 提供“按示范类型复制const/volatile限定和值类别”使用的对象引用；被引用对象须在调用期间有效。 |
+| `value` | 输入/输出 | 提供“按示范类型复制const/volatile限定和值类别”使用的对象引用；被引用对象须在调用期间有效。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `auto` | 返回按示范类型保留限定和值类别的引用。 |
+| `decltype(auto)` | 返回按示范类型保留限定和值类别的引用，不构造新对象。 |
 
 ## 约束说明
 

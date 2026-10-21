@@ -37,7 +37,7 @@
 ## 声明
 
 ```cpp
-#define NAN (Builtinnanf(""))
+#define NAN (__builtin_nanf(""))
 ```
 
 ## 约束说明

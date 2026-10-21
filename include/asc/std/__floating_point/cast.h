@@ -33,12 +33,14 @@
 #include <asc/std/__type_traits/always_false.h>
 #include <asc/std/__type_traits/is_extended_floating_point.h>
 #include <asc/std/__type_traits/is_same.h>
+#include <asc/std/cstdint>
 
 // Floating-point format conversion via __fp_cast (a single constexpr template):
 // - Between float/double/long double: static_cast (round to nearest even);
 // - Same format (including __asc_fp wrappers vs CCE native scalars): storage
 //   bits passed through unchanged;
-// - half/bfloat16_t (CCE device built-in scalars): via static_cast;
+// - half/bfloat16_t: native conversion where supported; ordinary AICore BF16
+//   conversions use a storage codec because that backend has no scalar cast;
 // - fp8 (e4m3/e5m2/e8m0): software bit-level codec (__detail::__fp8_encode/
 //   __fp8_decode), identical code on host and device, constexpr, bit-exact:
 //   decoding is a pure bit expansion; encoding is RN-even (e4m3/e5m2 NOSAT
@@ -53,6 +55,28 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace __detail {
+
+// Exact BF16 expansion and round-to-nearest-even binary32 narrowing. These
+// helpers use no BF16 scalar conversion instructions. Narrowing quiets NaNs,
+// preserves their sign and retained payload bits, and never maps a NaN to Inf.
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr float __bf16_decode(uint16_t bits) noexcept
+{
+    return ::asc::std::bit_cast<float>(static_cast<uint32_t>(bits) << 16);
+}
+
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr uint16_t __bf16_encode(float value) noexcept
+{
+    const uint32_t bits = ::asc::std::bit_cast<uint32_t>(value);
+    const uint32_t magnitude = bits & 0x7fffffffu;
+    if (magnitude > 0x7f800000u) {
+        return static_cast<uint16_t>((bits >> 16) | 0x0040u);
+    }
+    if (magnitude == 0x7f800000u) {
+        return static_cast<uint16_t>(bits >> 16);
+    }
+    const uint32_t tie_to_even = (bits >> 16) & 1u;
+    return static_cast<uint16_t>((bits + 0x7fffu + tie_to_even) >> 16);
+}
 
 // fp8 bit pattern -> float (exact bit expansion; constexpr, identical code on
 // host and device).
@@ -214,19 +238,28 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned char __e8m0_encode(fl
         return 0xffu;  // NaN/Inf -> NaN pattern
     }
     if (float_abs == 0u) {
-        return 0x00u;  // 0 -> 0
+        return 0x00u;  // no zero encoding: clamp to the minimum positive value
     }
     const int float_exp = static_cast<int>((float_abs >> 23) & 0xffu) - 127;
     // Truncation: |v| lies in [2^e, 2^(e+1)); the sign does not affect the
     // magnitude interval, so the exponent is e.
     const int field = float_exp + 127;
     if (field <= 0) {
-        return 0x00u;  // deep underflow flushes to 0
+        return 0x00u;  // no zero encoding: clamp to the minimum positive value
     }
     if (field >= 255) {
         return 0xffu;  // NaN pattern (e8m0 has no Inf encoding)
     }
     return static_cast<unsigned char>(field);
+}
+
+// Exponent-only E8M0 has finite values 2^(field-127), including field zero.
+// Its minimum 2^-127 is a binary32 subnormal, not a numerical zero.
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr float __e8m0_decode(unsigned char field) noexcept
+{
+    const unsigned int bits =
+        field == 0xffu ? 0x7fc00000u : (field == 0u ? 0x00400000u : static_cast<unsigned int>(field) << 23);
+    return ::asc::std::bit_cast<float>(bits);
 }
 
 }  // namespace __detail
@@ -242,6 +275,13 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr To __fp_cast(From value) noexc
         // same format: storage bits pass through (__asc_fp wrapper vs CCE native scalar)
         return __fp_from_storage<To>(__fp_get_storage(value));
     }
+#if CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+    else if constexpr (__fp_format_of_v<From> == __fp_format::__bfloat16) {
+        return ::asc::std::__fp_cast<To>(::asc::std::__detail::__bf16_decode(__fp_get_storage(value)));
+    } else if constexpr (__fp_format_of_v<To> == __fp_format::__bfloat16) {
+        return __fp_from_storage<To>(::asc::std::__detail::__bf16_encode(::asc::std::__fp_cast<float>(value)));
+    }
+#endif  // CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
 #if CANN_ASC_STL_DETAIL_HAS_FP8_E4M3()
     else if constexpr (__fp_format_of_v<From> == __fp_format::__fp8_e4m3) {
         return ::asc::std::__fp_cast<To>(::asc::std::__detail::__fp8_decode(__fp_get_storage(value), 4, 3, true));
@@ -254,15 +294,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr To __fp_cast(From value) noexc
 #endif  // CANN_ASC_STL_DETAIL_HAS_FP8_E5M2()
 #if CANN_ASC_STL_DETAIL_HAS_FP8_E8M0()
     else if constexpr (__fp_format_of_v<From> == __fp_format::__fp8_e8m0) {
-        // e8m0 has no sign bit: 0x00 -> 0, 0xff -> NaN, other values = 2^(field-127)
-        const unsigned char field = __fp_get_storage(value);
-        if (field == 0x00u) {
-            return ::asc::std::__fp_cast<To>(0.0f);
-        }
-        if (field == 0xffu) {
-            return ::asc::std::__fp_cast<To>(__builtin_nanf(""));
-        }
-        return ::asc::std::__fp_cast<To>(::asc::std::__detail::__fp8_decode(field, 8, 0, false));
+        return ::asc::std::__fp_cast<To>(::asc::std::__detail::__e8m0_decode(__fp_get_storage(value)));
     }
 #endif  // CANN_ASC_STL_DETAIL_HAS_FP8_E8M0()
 #if CANN_ASC_STL_DETAIL_HAS_FP8_E4M3()
@@ -283,7 +315,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr To __fp_cast(From value) noexc
     }
 #endif  // CANN_ASC_STL_DETAIL_HAS_FP8_E8M0()
     else if constexpr (is_same_v<From, float>) {
-        // float -> half/bfloat16_t/long double: compiler-native conversion (CCE device built-in)
+        // float -> half/bfloat16_t/long double: native conversion in the remaining supported modes
         return static_cast<To>(value);
     } else if constexpr (__is_fp_v<From> && __is_fp_v<To>) {
         // remaining cross-format conversions of double/long double/half/bfloat16_t:

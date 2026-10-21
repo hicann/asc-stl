@@ -42,20 +42,20 @@ template<class CharT> class char_traits;
 
 ## 约束说明
 
-- 提供构造、迭代和除at外的访问接口，以及remove_prefix、remove_suffix、swap、data、size、starts_with、ends_with和非抛出的比较/查找接口。
+- 提供字符类型及整数表示类型，以及assign、eq、lt、compare、length、find、move、copy等静态字符操作；它本身不保存字符串视图或拥有字符存储。
 - AI Core SIMD编程 仅支持local或generic地址空间的普通字符指针。
 
 ## 调用示例
 
-以下Host示例展示具体输入、接口调用和可检查的结果。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/string_view>
 
 bool example()
 {
-    const char text[] = "hello";
-    return asc::std::char_traits<char>::length(text) == 5 && asc::std::char_traits<char>::eq(text[0], 'h');
+    using T = asc::std::char_traits<char>;
+    return T::length("abc") == 3 && T::eq('a', 'a') && T::lt('a', 'b');
 }
 ```
 

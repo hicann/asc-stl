@@ -34,15 +34,16 @@
 
 ```cpp
 namespace asc {
-template<class Element, class Extents, class Layout = asc::std::layout_right, class Accessor = asc::std::default_accessor<Element>> using host_mdspan = asc::std::mdspan<Element, Extents, Layout, asc::host_accessor<Accessor>>;
-} // namespace asc
+template <class Element, class Extents, class Layout = asc::std::layout_right,
+    class Accessor = asc::std::default_accessor<Element>>
+using host_mdspan = asc::std::mdspan<Element, Extents, Layout, asc::host_accessor<Accessor>>;
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供Host和GM视图以及AI Core SIMD编程UB视图。
-- 允许有符号步长。
-- 可选的Host DLPack桥接不抛出异常。
+- Host访问器只解引用Host可访问的有效存储；不把设备指针转换成可在Host直接访问的存储。视图或访问器不拥有底层对象。
+
 
 ## 调用示例
 

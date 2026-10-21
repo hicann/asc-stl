@@ -39,7 +39,7 @@
 ```cpp
 namespace asc {
 constexpr asc::execution_requirements require(asc::determinism value) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ### 原型2
@@ -47,7 +47,7 @@ constexpr asc::execution_requirements require(asc::determinism value) noexcept;
 ```cpp
 namespace asc {
 constexpr asc::execution_requirements require(asc::execution_requirements base, asc::determinism value) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ### 原型3
@@ -55,7 +55,7 @@ constexpr asc::execution_requirements require(asc::execution_requirements base, 
 ```cpp
 namespace asc {
 constexpr asc::execution_requirements require(asc::execution_requirements base, asc::output_ordering value) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ### 原型4
@@ -63,7 +63,7 @@ constexpr asc::execution_requirements require(asc::execution_requirements base, 
 ```cpp
 namespace asc {
 constexpr asc::execution_requirements require(asc::execution_requirements base, asc::tie_break value) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ### 原型5
@@ -71,7 +71,7 @@ constexpr asc::execution_requirements require(asc::execution_requirements base, 
 ```cpp
 namespace asc {
 constexpr asc::execution_requirements require(asc::output_ordering value) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ### 原型6
@@ -79,7 +79,7 @@ constexpr asc::execution_requirements require(asc::output_ordering value) noexce
 ```cpp
 namespace asc {
 constexpr asc::execution_requirements require(asc::tie_break value) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -148,10 +148,9 @@ constexpr asc::execution_requirements require(asc::tie_break value) noexcept;
 
 ## 约束说明
 
-- sets determinism on default要求ments。
-- 仅替换函数名称所指明的执行要求、Stream或临时存储绑定，其余策略属性保持不变。
-- sets output ordering on default要求ments。
-- sets tie break on default要求ments。
+- Host同步构造或更新执行要求值，不提交任务。
+- 带`base`的重载仅替换本次传入的确定性、输出顺序或索引偏好，保留其他两项。
+- 不带`base`的重载从默认执行要求构造；不绑定或改变Stream和临时存储。
 
 ## 调用示例
 

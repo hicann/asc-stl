@@ -49,7 +49,7 @@ constexpr year_month_day(const chrono::year& year_value, const chrono::month& mo
 ### 原型3
 
 ```cpp
-constexpr year_month_day(const local_days& value) noexcept;
+explicit constexpr year_month_day(const local_days& value) noexcept;
 ```
 
 ### 原型4
@@ -98,7 +98,7 @@ constexpr year_month_day(year_month_day&& other) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 以本地时区天数表示的日期（local_days），换算为年、月、日。 |
+| `value` | 输入 | 以local_t标签保存的日精度本地时间点；仅按纪元计数换算，不查询或应用时区（local_days），换算为年、月、日。 |
 
 ### 原型4的参数
 
@@ -130,7 +130,7 @@ constexpr year_month_day(year_month_day&& other) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 用于移动构造的year_month_day对象；移动后源对象处于有效但未指定状态。 |
+| `other` | 输入 | 用于移动构造的year_month_day对象；这些标量字段的隐式移动保持来源字段值。 |
 
 ## 返回值说明
 
@@ -139,6 +139,7 @@ constexpr year_month_day(year_month_day&& other) noexcept;
 ## 约束说明
 
 - 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
+- 调用月末日查询或依赖该查询的转换前，月字段必须在1到12之间；完整有效性可由来源对象的ok()检查。无效月份不得用于月长表查询。
 
 ## 调用示例
 

@@ -34,8 +34,10 @@
 
 ## 函数原型
 
+所属类型为[`year_month_day`](chrono_year_month_day.md)。
+
 ```cpp
-explicit constexpr asc::std::chrono::year_month_day::operator local_days() const noexcept;
+[[nodiscard]] explicit constexpr operator local_days() const noexcept;
 ```
 
 ## 参数说明

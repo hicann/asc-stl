@@ -29,6 +29,7 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
+#include <asc/std/__floating_point/cast.h>
 #include <asc/std/__cmath/backend.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_arithmetic.h>
@@ -97,10 +98,11 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 {
 #if defined(CANN_ASC_STL_DETAIL_FMA_HW_HALF)
     if constexpr (is_same_v<Tp, half>) {
-        return static_cast<Tp>(::__hfma(x, y, z));
+        return ::asc::std::__fp_cast<Tp>(::__hfma(x, y, z));
     } else  // NOLINT(readability/braces)
 #endif
-        return static_cast<Tp>(::asc::std::fma(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)));
+        return ::asc::std::__fp_cast<Tp>(::asc::std::fma(
+            ::asc::std::__fp_cast<float>(x), ::asc::std::__fp_cast<float>(y), ::asc::std::__fp_cast<float>(z)));
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()

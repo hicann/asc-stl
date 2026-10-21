@@ -34,24 +34,28 @@
 
 ## 声明
 
+这是主模板的缺省值；库及用户允许的特化可改变特定类型的值。
+
 ```cpp
 namespace asc::std::ranges {
-template<class T> inline constexpr const bool disable_sized_range;
-} // namespace asc::std::ranges
+template<class T>
+inline constexpr bool disable_sized_range = false;
+}
 ```
 
 ## 约束说明
 
-- 支持数组和用户范围，不支持仅由花括号构成的initializer_list表达式。
+- 主模板缺省为false；只有满足对应语义的类型才应特化。
+- 为true时屏蔽ranges::size的成员及ADL size分支；合法的迭代器差值分支仍可能可用。
 
 ## 调用示例
 
-以下片段用具体模板实参读取接口值。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/ranges>
 
-inline constexpr auto example = asc::std::ranges::disable_sized_range<int[4]>;
+static_assert(!asc::std::ranges::disable_sized_range<int[3]>);
 ```
 
 ## 关联API

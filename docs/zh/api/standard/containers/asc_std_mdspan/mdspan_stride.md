@@ -34,11 +34,10 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::mdspan`](mdspan.md)。
+所属类型：[`mdspan`](mdspan.md)。本查询未声明`noexcept`。
 
 ```cpp
-// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr index_type stride(rank_type rank_index) const noexcept;
+constexpr index_type stride(rank_type rank_index) const;
 ```
 
 ## 参数说明
@@ -47,7 +46,7 @@ constexpr index_type stride(rank_type rank_index) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `rank_index` | 输入 | 待查询步长的维度编号，从0起；须满足rank_index < rank()，返回该维相邻元素相隔的元素个数。 |
+| `rank_index` | 输入 | 待查询步长的维度编号，从0起；须满足`rank_index` < `rank()`，返回该维相邻元素相隔的元素个数。 |
 
 ## 返回值说明
 
@@ -57,8 +56,9 @@ constexpr index_type stride(rank_type rank_index) const noexcept;
 
 ## 约束说明
 
-- C++17起可使用一维`operator[]`；多参数`operator[]`按编译器的C++23多维下标特性开放。
-- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
+- 本查询从C++17起提供；元素访问形式及语言条件见[`mdspan`](mdspan.md#约束说明)。
+
+- `rank_index`须小于`rank()`；映射须支持stride查询，结果须能由`index_type`表示。
 
 ## 调用示例
 

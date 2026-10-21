@@ -34,83 +34,31 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。
-
-### 原型1
+所属类型：[`scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。以下仅说明隐式声明的赋值形式；是否定义为删除、是否为constexpr及其异常规格均按外层和内层分配器的C++特殊成员规则确定。
 
 ```cpp
-// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>& operator=(const scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>& other);
-```
-
-### 原型2
-
-```cpp
-// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>& operator=(scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>&& other);
-```
-
-### 原型3
-
-```cpp
-// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr scoped_allocator_adaptor<OuterAllocator>& operator=(const scoped_allocator_adaptor<OuterAllocator>& other);
-```
-
-### 原型4
-
-```cpp
-// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr scoped_allocator_adaptor<OuterAllocator>& operator=(scoped_allocator_adaptor<OuterAllocator>&& other);
+scoped_allocator_adaptor& operator=(const scoped_allocator_adaptor& other);
+scoped_allocator_adaptor& operator=(scoped_allocator_adaptor&& other);
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
-
-### 原型3的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
-
-### 原型4的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
+| `other` | 输入 | 来源适配器；复制或移动其外层和内层分配器状态，元素存储本身不在本次操作中搬移。 |
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型2 | `scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型3 | `scoped_allocator_adaptor<OuterAllocator> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
-| 原型4 | `scoped_allocator_adaptor<OuterAllocator> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| 返回值类型 | 含义 |
+| --- | --- |
+| `scoped_allocator_adaptor&` | 返回`*this`。 |
 
 ## 约束说明
 
-- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
-- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
+- 赋值特殊成员按C++隐式声明规则由外层基类和内层分配器逐项赋值；可用性、常量求值和异常规格取决于这些成员。
+- 本操作不读取传播特征来选择容器元素分配器，也不移动或复制任何已分配元素。
 
 ## 调用示例
 

@@ -36,8 +36,8 @@
 
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const T ln10_v;
-} // namespace asc::std
+template<class Tp> inline constexpr Tp ln10_v = __numbers<Tp>::__ln10();
+}
 ```
 
 ## 约束说明

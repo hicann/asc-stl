@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class T> constexpr bool in_range(T value, T first, T last) noexcept;
-} // namespace asc
+template <class T>
+constexpr bool in_range(T value, T first, T last) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -62,8 +63,7 @@ template<class T> constexpr bool in_range(T value, T first, T last) noexcept;
 
 ## 约束说明
 
-- in_range的操作数必须为同一算术类型且满足first <= last。
-- static_for对半开编译期区间内的每个索引恰好调用一次可调用对象。
+- `value`、`first`和`last`使用同一类型，须支持`>=`与`<=`比较；当`first > last`时没有值满足闭区间条件。
 
 ## 调用示例
 

@@ -77,6 +77,8 @@ reference operator[](size_type index) noexcept;
 
 ## 约束说明
 
+- 返回的指针、引用或迭代器借用当前字符串的字符存储；字符串析构或导致重分配的操作使其失效。使用前须确认对象及相应元素仍存活，不能跨扩容保存该借用结果。
+
 - basic_string<char,Traits,A>显式allocator构造。
 - plain/local字符来源的append/push_back/clear。
 - size/capacity/data/c_str/迭代/索引与析构。
@@ -84,30 +86,19 @@ reference operator[](size_type index) noexcept;
 
 ## 调用示例
 
-以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
-#include <asc/std/string>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/string>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-decltype(auto) example(asc::std::basic_string<char, ::std::char_traits<char>, example_allocator<char>>& value)
+bool example()
 {
-    if (!value.empty())
-        return value[0];
+    ::std::allocator<char> allocator;
+    asc::std::basic_string<char, asc::std::char_traits<char>, ::std::allocator<char>> value("abc", allocator);
+    char& first = value[0];
+    first = 'A';
+    return value.size() == 3 && value[0] == 'A';
 }
 ```
 

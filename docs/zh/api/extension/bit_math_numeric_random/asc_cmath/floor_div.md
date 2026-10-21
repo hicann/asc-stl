@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class T, class U> constexpr auto floor_div(T a, U b) noexcept;
-} // namespace asc
+template <class T, class U>
+[[nodiscard]] constexpr auto floor_div(T a, U b) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明

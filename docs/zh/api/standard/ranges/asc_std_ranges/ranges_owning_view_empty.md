@@ -34,21 +34,25 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::ranges::owning_view`](ranges_owning_view.md)。
+所属类型：[`owning_view`](ranges_owning_view.md)。以下是按参与条件列出的声明摘要；保留供调用使用的模板默认值，省略仅供SFINAE的实现选择参数。涉及私有返回类型时用auto摘要表示，不承诺可直接命名该类型。
 
 ### 原型1
 
 ```cpp
-// asc::std::ranges::owning_view 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class Range> [[nodiscard]] constexpr bool empty();
+template<class Range2 = Range>
+constexpr bool empty();
 ```
+
+`ranges::empty`对相应范围引用可调用。
 
 ### 原型2
 
 ```cpp
-// asc::std::ranges::owning_view 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class Range> [[nodiscard]] constexpr bool empty() const;
+template<class Range2 = Range>
+constexpr bool empty() const;
 ```
+
+`ranges::empty`对相应const范围引用可调用。
 
 ## 参数说明
 
@@ -58,7 +62,9 @@ template<class Range> [[nodiscard]] constexpr bool empty() const;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Range` | 输入范围或视图的类型；须满足所选原型的遍历要求。 |
+| `Range2` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
+
+无函数参数。
 
 ### 原型2的参数
 
@@ -66,19 +72,20 @@ template<class Range> [[nodiscard]] constexpr bool empty() const;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Range` | 输入范围或视图的类型；须满足所选原型的遍历要求。 |
+| `Range2` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
+
+无函数参数。
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `bool` | 对象不含元素时返回`true`，否则返回`false`。 |
-| 原型2 | `bool` | 对象不含元素时返回`true`，否则返回`false`。 |
+| 原型1 | `bool` | 没有元素时为true，否则为false；不延长底层存储的生命周期。 |
+| 原型2 | `bool` | 没有元素时为true，否则为false；不延长底层存储的生命周期。 |
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
-- owning_view仅拥有调用方传入的范围对象，不产生额外分配。
+- 每种形式的参与条件见原型；无实参查询一般直接调用，不需要指定模板选择类型。
 
 ## 调用示例
 

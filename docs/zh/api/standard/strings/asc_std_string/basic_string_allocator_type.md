@@ -43,6 +43,8 @@ using allocator_type = Allocator;
 
 ## 约束说明
 
+- 纯SIMT使用还须遵循所属类型的[工具链验证边界](basic_string.md#simt工具链验证边界)。
+
 - basic_string<char,Traits,A>显式allocator构造。
 - plain/local字符来源的append/push_back/clear。
 - size/capacity/data/c_str/迭代/索引与析构。
@@ -50,29 +52,19 @@ using allocator_type = Allocator;
 
 ## 调用示例
 
-以下Host片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
-#include <asc/std/string>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/string>
+#include <asc/std/cstddef>
+#include <asc/std/type_traits>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void use_type()
+bool example()
 {
-    using alias_type = typename asc::std::basic_string<char, ::std::char_traits<char>, example_allocator<char>>::allocator_type;
+    using S = asc::std::basic_string<char, asc::std::char_traits<char>, ::std::allocator<char>>;
+    static_assert(asc::std::is_same_v<S::allocator_type, ::std::allocator<char>>);
+    return true;
 }
 ```
 

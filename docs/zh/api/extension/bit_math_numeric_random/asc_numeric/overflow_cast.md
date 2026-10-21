@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class To, class From> constexpr asc::overflow_result<To> overflow_cast(From value) noexcept;
-} // namespace asc
+template <class To, class From>
+constexpr asc::overflow_result<To> overflow_cast(From value) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -61,8 +62,10 @@ template<class To, class From> constexpr asc::overflow_result<To> overflow_cast(
 
 ## 约束说明
 
-- T、From和To必须是不超过64位的标准非bool整数类型。
-- 所有溢出检查均不得触发有符号整数溢出的未定义行为。
+- `overflow == true`时，整数加减乘的value保存转换到目标位宽的结果；除零保存0，有符号最小值除以-1保存该最小值。`overflow_cast`保存转换后的值；不能在忽略标志的情况下把它当作精确数学结果。
+
+- 可在Host、AI Core SIMD和AI Core SIMT调用；结果按本页声明的整数类型返回。
+- `To`和`From`须为不超过64位的标准非bool整数；检查或饱和语义见本页返回值。
 
 ## 调用示例
 

@@ -74,11 +74,9 @@ void push_back(const T& value);
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 左值重载要求`T`可由`const T&`构造，右值重载要求`T`可由`T&&`构造；当前两种重载还均要求`T`可由`T&&`构造，以满足扩容路径的编译要求，事先预留容量不免除此要求。
+- 容量不足时会扩容并移动原元素；扩容后原指针、引用及迭代器失效。成功插入后`size()`增加`1`。
+- 在Device侧调用时，分配器及相关元素操作须可用于相应编程模式且不抛出异常，并须保证分配成功或事先预留足够容量。
 
 ## 调用示例
 

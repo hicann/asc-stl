@@ -34,25 +34,19 @@
 
 ## 声明
 
-所属类型：[`asc::std::conditional`](conditional.md)。
-
-### 原型1
-
 ```cpp
-// asc::std::conditional 类内的声明节选；模板形参和其他成员由所属类提供。
-using type = If;
+// conditional<true, Then, Else> 的成员声明。
+using type = Then;
 ```
 
-### 原型2
-
 ```cpp
-// asc::std::conditional 类内的声明节选；模板形参和其他成员由所属类提供。
-using type = Then;
+// conditional<false, Then, Else> 的成员声明。
+using type = Else;
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 布尔模板实参决定选择`Then`或`Else`；查询别名本身不构造任一类型的对象。
 
 ## 调用示例
 

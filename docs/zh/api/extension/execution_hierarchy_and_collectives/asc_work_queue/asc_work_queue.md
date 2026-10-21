@@ -12,8 +12,8 @@
 
 | API | 类型 | C++ 模式 | 可用位置 | 产品支持 |
 | --- | --- | --- | --- | --- |
-| [asc::acquire_work](acquire_work.md) | 函数模板 | C++17+ | AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::make_work_queue](make_work_queue.md) | 函数模板 | C++17+ | AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::work_chunk](work_chunk.md) | 类模板 | C++17+ | AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::acquire_work](acquire_work.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::make_work_queue](make_work_queue.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::work_chunk](work_chunk.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::work_cursor](work_cursor.md) | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::work_queue_ref](work_queue_ref.md) | 类模板 | C++17+ | AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::work_queue_ref](work_queue_ref.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |

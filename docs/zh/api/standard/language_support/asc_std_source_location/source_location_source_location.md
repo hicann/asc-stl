@@ -34,22 +34,10 @@
 
 ## 函数原型
 
-### 原型1
+所属类型：[`source_location`](source_location.md)。
 
 ```cpp
-constexpr source_location();
-```
-
-### 原型2
-
-```cpp
-constexpr source_location(const source_location& file_name);
-```
-
-### 原型3
-
-```cpp
-constexpr source_location(source_location&& file_name);
+constexpr source_location() noexcept = default;
 ```
 
 ## 参数说明

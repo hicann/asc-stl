@@ -34,11 +34,10 @@
 
 ## 声明
 
-所属类型：[`asc::std::linear_congruential_engine`](linear_congruential_engine.md)。
+以下位于`linear_congruential_engine<UIntType, A, C, M>`类内。
 
 ```cpp
-// asc::std::linear_congruential_engine 类内的声明节选；模板形参和其他成员由所属类提供。
-inline constexpr const result_type increment;
+static constexpr result_type increment = C;
 ```
 
 ## 约束说明

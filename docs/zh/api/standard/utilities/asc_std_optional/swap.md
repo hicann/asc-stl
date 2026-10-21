@@ -65,15 +65,16 @@ template <class T> constexpr enable_if_t<is_move_constructible_v<T> && is_swappa
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并在对象仍有效时检查结果。
 
 ```cpp
 #include <asc/std/optional>
 
-template <class T>
-decltype(auto) example(asc::std::optional<T>& left, asc::std::optional<T>& right)
+bool example()
 {
-    return asc::std::swap(left, right);
+    asc::std::optional<int> left(3), right;
+    asc::std::swap(left, right);
+    return !left && right && *right == 3;
 }
 ```
 

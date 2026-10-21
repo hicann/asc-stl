@@ -34,64 +34,49 @@
 
 ## 函数原型
 
-### 原型1
+各重载位于`asc::std`命名空间；整数模板的选择条件排除bool和字符编码类型。
 
 ```cpp
 namespace asc::std {
-template<class T> [[nodiscard]] constexpr from_chars_result from_chars(const char* first, const char* last, T& value, int base) noexcept;
-} // namespace asc::std
+template<class T, enable_if_t<__is_integer_v<T>, int> = 0>
+constexpr from_chars_result from_chars(const char* first, const char* last, T& value, int base = 10) noexcept;
+}
 ```
 
-### 原型2
+```cpp
+namespace asc::std {
+constexpr from_chars_result from_chars(const char* first, const char* last, signed char& value, int base = 10) noexcept;
+}
+```
 
 ```cpp
 namespace asc::std {
-template<class T> [[nodiscard]] constexpr from_chars_result from_chars(const char* first, const char* last, signed char& value, int base) noexcept;
-} // namespace asc::std
+constexpr from_chars_result from_chars(const char* first, const char* last, unsigned char& value, int base = 10) noexcept;
+}
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
-**模板参数**
+**模板参数（仅整数模板）**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 接收解析结果的整数类型；解析结果须能被该类型表示，否则按溢出处理。 |
+| `T` | 标准有符号或无符号整数类型；不含bool、char、wchar_t、char8_t、char16_t和char32_t。char及signed/unsigned char另有固定重载。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `first` | 输入 | 指向待解析字符范围起始位置的指针；解析从该字符开始。 |
-| `last` | 输入 | 指向待解析字符范围末尾后一位置的指针；解析在该位置前停止。 |
-| `value` | 输入/输出 | 接收解析所得整数值的对象；解析成功时被写入，失败时保持原值不变。 |
-| `base` | 输入 | 解析使用的进制，取值范围为2到36。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 接收解析结果的整数类型；解析结果须能被该类型表示，否则按溢出处理。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `first` | 输入 | 指向待解析字符范围起始位置的指针；解析从该字符开始。 |
-| `last` | 输入 | 指向待解析字符范围末尾后一位置的指针；解析在该位置前停止。 |
-| `value` | 输入/输出 | 接收解析所得整数值的对象；解析成功时被写入，失败时保持原值不变。 |
-| `base` | 输入 | 解析使用的进制，取值范围为2到36。 |
+| `first` | 输入 | 有效字符范围的起点，须与last属于同一缓冲区。 |
+| `last` | 输入 | 字符范围的末尾后一位置。 |
+| `value` | 输入/输出 | 接收解析值；失败时保持原值。 |
+| `base` | 输入 | 进制，2至36；省略时为10。 |
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `from_chars_result` | 返回解析停止位置和错误状态；解析出的整数写入输出参数。 |
-| 原型2 | `from_chars_result` | 返回解析停止位置和错误状态；解析出的整数写入输出参数。 |
+| 返回值类型 | 含义 |
+| --- | --- |
+| `from_chars_result` | ptr指向解析停止位置，ec为空错误码时成功并写入value；无匹配字符或超出可表示范围时报告对应错误，value保持原值。 |
 
 ## 约束说明
 
@@ -100,15 +85,17 @@ template<class T> [[nodiscard]] constexpr from_chars_result from_chars(const cha
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并在对象与底层存储仍有效时检查结果。
 
 ```cpp
 #include <asc/std/charconv>
 
-template <class T>
-decltype(auto) example(const char * first, const char * last, T & value, int base)
+bool example()
 {
-    return asc::std::from_chars(first, last, value, base);
+    const char input[] = "42";
+    int value = 0;
+    const auto result = asc::std::from_chars(input, input + 2, value);
+    return result.ptr == input + 2 && result.ec == asc::std::errc{} && value == 42;
 }
 ```
 

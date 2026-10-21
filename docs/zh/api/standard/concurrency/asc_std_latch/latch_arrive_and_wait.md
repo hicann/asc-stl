@@ -40,7 +40,7 @@
 
 ```cpp
 // asc::std::latch 类内的声明节选；模板形参和其他成员由所属类提供。
-void arrive_and_wait(long long update) noexcept;
+void arrive_and_wait(ptrdiff_t update = 1) noexcept;
 ```
 
 ## 参数说明
@@ -57,20 +57,22 @@ void arrive_and_wait(long long update) noexcept;
 
 ## 约束说明
 
-- Host侧对象管理Ascend 950的GM状态。
+- Host对象使用本机普通内存及CPU原子操作，不管理NPU的GM状态。AI Core SIMT共享对象须位于GM，且在并发访问前完成初始化；不支持AI Core SIMD调用。
 - 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下Host片段使用一个可独立完成的参与者演示调用；多参与者场景须保证并发推进。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/latch>
 
-void example()
+bool example()
 {
-    asc::std::latch latch(1);
-    latch.arrive_and_wait(1);
+    asc::std::latch gate(1);
+    if (gate.try_wait()) return false;
+    gate.arrive_and_wait();
+    return gate.try_wait();
 }
 ```
 

@@ -36,52 +36,46 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::inplace_vector`](inplace_vector.md)。
+所属类型：[`inplace_vector<T, Capacity>`](inplace_vector.md)。以下为类内声明，类型别名及模板形参由所属类提供。
 
 ### 原型1
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-reference unchecked_push_back(T&& value);
+constexpr reference unchecked_push_back(const T& value);
 ```
 
 ### 原型2
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-reference unchecked_push_back(const T& value);
+constexpr reference unchecked_push_back(T&& value);
 ```
 
 ## 参数说明
 
 ### 原型1的参数
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入（可能被移动） | 提供插入到容器末尾的元素；函数可能移动该实参，移动后其处于有效但未指定状态。 |
+| `value` | 输入 | 用于复制构造末尾新元素的值。 |
 
 ### 原型2的参数
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待尾部插入的元素值；以复制方式构造，本接口不检查容量，调用方须保证size() < capacity()，否则行为未定义。 |
+| `value` | 输入 | 用于移动构造末尾新元素的值；构造时可能消耗来源。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `reference` | 返回新构造元素的引用或所选原型规定的插入结果。 |
-| 原型2 | `reference` | 返回新构造元素的引用或所选原型规定的插入结果。 |
+| 原型1 | `reference` | 借用新构造的末尾元素，容器及该元素须继续存活。 |
+| 原型2 | `reference` | 借用新构造的末尾元素，容器及该元素须继续存活。 |
 
 ## 约束说明
 
-- 元素保存在固定容量的对象内存中，不进行动态分配。
-- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
-- Host提供完整接口，设备端仅提供不抛出异常的接口。
+- 调用前size()必须小于Capacity；不检查容量不足。
+- 返回新元素引用；元素须在引用使用期间继续存活。
+- 元素的对应构造、赋值和析构须满足非抛出使用域；constexpr声明不保证任意T和语言模式都能常量求值。
 
 ## 调用示例
 

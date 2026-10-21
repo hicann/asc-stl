@@ -134,13 +134,13 @@ def prepared_spec(spec: dict) -> dict:
     sdk = Path(os.environ.get("ASCEND_HOME_PATH", "/usr/local/Ascend/ascend-toolkit/latest"))
     driver = Path(os.environ.get("ASCEND_DRIVER_PATH", "/usr/local/Ascend/driver"))
     directories = [sdk / "lib64", driver / "lib64/driver", driver / "lib64/common"]
-    spec["include_flags"] = ["-I", str(sdk / "include")]
+    spec["include_flags"] = [*spec.get("include_flags", []), "-I", str(sdk / "include")]
     flags = ["-Wl,--disable-new-dtags"]
     for directory in directories:
         if directory.is_dir():
             flags += ["-L", str(directory), "-Wl,-rpath," + str(directory), "-Wl,-rpath-link," + str(directory)]
-    spec["link_flags"] = flags + ["-lascendcl"]
-    spec["required_headers"] = ["acl/acl.h"]
+    spec["link_flags"] = [*spec.get("link_flags", []), *flags, "-lascendcl"]
+    spec["required_headers"] = list(dict.fromkeys([*spec.get("required_headers", []), "acl/acl.h"]))
     return spec
 
 
@@ -152,7 +152,8 @@ def example_command(root: Path, spec: dict, standard: int, compiler: str, source
         if spec.get("mode") == "simt":
             command += ["--enable-simt", "-Wno-error=ignored-attributes"]
     command += [str(source_path), "-o", str(source_path.with_suffix(""))]
-    command += spec.get("link_flags", [])
+    if spec.get("mode", "host") in ("host", "runtime"):
+        command += spec.get("link_flags", [])
     return command
 
 
@@ -227,6 +228,20 @@ def missing_headers(spec: dict, compiler: str) -> list[str]:
     return missing
 
 
+def check_runtime_examples(tasks: list[tuple]) -> list[dict]:
+    records = []
+    stopped = False
+    for task in tasks:
+        if stopped:
+            records.append({"page": task[1], "standard": task[3], "mode": "runtime",
+                            "status": "NOT_RUN", "diagnostic": "Stopped after first Runtime failure"})
+            continue
+        record = compile_example(task)
+        records.append(record)
+        stopped = record["status"] == "FAIL"
+    return records
+
+
 def check_examples(args: argparse.Namespace) -> list[dict]:
     registry = json.loads((args.root / "test/docs/examples.json").read_text(encoding="utf-8"))
     records = []
@@ -238,11 +253,17 @@ def check_examples(args: argparse.Namespace) -> list[dict]:
                 continue
             if args.standard not in spec["standards"] and not include_only:
                 continue
-            flags = [flag for path in args.extra_include for flag in ("-I", str(path))]
-            spec = dict(spec, task_index=index, include_only=include_only, npu_arch=args.npu_arch, include_flags=flags)
+            include_paths = [args.root / path for path in spec.get("include_dirs", [])]
+            include_paths.extend(args.extra_include)
+            flags = [flag for path in include_paths for flag in ("-I", str(path))]
+            spec = dict(spec, task_index=index, include_only=include_only, npu_arch=args.npu_arch,
+                        include_flags=[*spec.get("include_flags", []), *flags])
             tasks.append((args.root, path, spec, args.standard, args.compiler, Path(temporary)))
-        with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as executor:
-            records.extend(executor.map(compile_example, tasks))
+        if args.mode == "runtime":
+            records.extend(check_runtime_examples(tasks))
+        else:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as executor:
+                records.extend(executor.map(compile_example, tasks))
     return records
 
 
@@ -267,11 +288,13 @@ def main() -> int:
         failed = [record for record in records if record["status"] == "FAIL"]
         passed = sum(record["status"] == "PASS" for record in records)
         skipped = sum(record["status"] == "NOT_APPLICABLE" for record in records)
-        report = {"examples": records, "passed": passed, "failed": len(failed), "not_applicable": skipped}
+        not_run = sum(record["status"] == "NOT_RUN" for record in records)
+        report = {"examples": records, "passed": passed, "failed": len(failed),
+                  "not_applicable": skipped, "not_run": not_run}
         for record in failed[:20]:
             LOGGER.error("%s %s", record["page"], record.get("diagnostic", "")[:1200])
-        LOGGER.info("API examples C++%s %s: %s/%s passed, %s not applicable",
-                    args.standard, args.mode, passed, len(records), skipped)
+        LOGGER.info("API examples C++%s %s: %s/%s passed, %s not applicable, %s not run",
+                    args.standard, args.mode, passed, len(records), skipped, not_run)
         errors = failed
     else:
         errors = check_structure(args.root)

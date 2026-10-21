@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::launch_dimensions::grid`提供Grid层级的全局常量标签。
+`asc::launch_dimensions::grid`保存该启动配置对象的三维Grid Block数量。
 
 ## 声明
 

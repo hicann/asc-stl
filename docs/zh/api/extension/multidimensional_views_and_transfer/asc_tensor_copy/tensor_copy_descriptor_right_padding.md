@@ -32,8 +32,10 @@
 
 ## 函数原型
 
+以下为`asc::tensor_copy_descriptor<Rank>`类内声明，Rank由所属类模板提供。
+
 ```cpp
-constexpr unsigned int asc::tensor_copy_descriptor<Rank>::right_padding(unsigned int dimension) const noexcept;
+constexpr unsigned int right_padding(unsigned int dimension) const noexcept;
 ```
 
 ## 参数说明
@@ -58,9 +60,9 @@ constexpr unsigned int asc::tensor_copy_descriptor<Rank>::right_padding(unsigned
 
 ## 约束说明
 
-- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Rank为1至5。
-- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
+- 可在Host、AI Core SIMD编程和AI Core SIMT编程中调用；本操作同步处理描述符，不启动数据搬运。
+- `dimension < Rank`时返回该维度的目标端右侧填充的元素个数；索引越界时返回`0`。
+- 只读取所保存的数值，不检查描述符是否满足搬运条件；未设置的字段为`0`。
 
 ## 调用示例
 

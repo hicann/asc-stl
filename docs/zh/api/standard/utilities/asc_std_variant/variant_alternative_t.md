@@ -43,18 +43,19 @@ template<::std::size_t Index, class T> using variant_alternative_t = typename va
 ## 约束说明
 
 - Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下片段选用具体模板实参展示别名类型。
+以下Host示例用具体类型和独立预期检查别名或标记结果。
 
 ```cpp
 #include <asc/std/variant>
+#include <asc/std/type_traits>
 
 void use_type()
 {
     using selected = asc::std::variant_alternative_t<0, asc::std::variant<int, float>>;
+    static_assert(asc::std::is_same_v<selected, int>);
 }
 ```
 

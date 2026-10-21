@@ -70,18 +70,20 @@ template<class InputIterator, class ForwardIterator> ForwardIterator uninitializ
 
 ## 调用示例
 
-以下Host片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/memory>
 
-decltype(auto) example()
+bool example()
 {
     alignas(int) unsigned char storage[sizeof(int) * 4];
     int* output = reinterpret_cast<int*>(storage);
     int input[4] = {1, 2, 3, 4};
-    return asc::std::uninitialized_move(input, input + 4, output);
+    const auto end = asc::std::uninitialized_move(input, input + 4, output);
+    const bool valid = end == output + 4 && output[0] == 1 && output[3] == 4;
     asc::std::destroy_n(output, 4);
+    return valid;
 }
 ```
 

@@ -28,59 +28,51 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`operator""s`以字面量数值构造`chrono::seconds`，整型与浮点字面量均受支持。
+`operator"" s`以秒为单位构造时长；整数形式返回对应整数duration，浮点形式返回double计数的duration。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
 ## 函数原型
 
-### 原型1
+位于asc::std::literals::chrono_literals命名空间。
 
 ```cpp
-// asc::std::literals::chrono_literals 类内的声明节选；模板形参和其他成员由所属类提供。
-asc::std::chrono::seconds operator""s(unsigned long long arg);
+constexpr chrono::seconds operator"" s(unsigned long long value) noexcept;
 ```
-
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
-
-### 原型2
 
 ```cpp
-// asc::std::literals::chrono_literals 类内的声明节选；模板形参和其他成员由所属类提供。
-asc::std::chrono::seconds operator""s(long double arg);
+constexpr chrono::duration<double, ratio<1>> operator"" s(long double value) noexcept;
 ```
-
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 参数说明
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `arg` | 输入 | 控制本次操作的标量值；有效取值由声明和约束说明共同确定。 |
+| `value` | 输入 | 字面量的计数值，单位由后缀确定。整数形式须可由对应整数时长的rep表示；浮点形式转换为double计数，不先取整。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
+| 形式 | 返回值 |
 | --- | --- |
-| `asc::std::chrono::seconds` | 以秒为单位的duration；整数形式使用对应标准整数时长类型，浮点形式使用long double表示计数。 |
+| 整数 | 对应整数duration，计数取自value。 |
+| 浮点 | duration<double, ratio<1>>，保留double可表示的分数计数。 |
 
 ## 约束说明
 
-- 整数字面量按目标表示精确转换。
-- 浮点字面量截断到目标表示的tick数。
+- 不同后缀分别表示小时、分钟、秒、毫秒、微秒和纳秒。
+- 浮点输入转换到double时可能舍入；不保证保留long double的全部精度或范围。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/chrono>
 
-decltype(auto) example(unsigned long long arg)
+bool example()
 {
-    return asc::std::literals::chrono_literals::operator""s(arg);
+    constexpr auto value = asc::std::literals::chrono_literals::operator"" s(1.5L);
+    return value.count() == 1.5;
 }
 ```
 

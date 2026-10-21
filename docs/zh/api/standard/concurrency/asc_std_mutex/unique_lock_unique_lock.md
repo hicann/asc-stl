@@ -37,7 +37,7 @@
 ### 原型1
 
 ```cpp
-unique_lock(Mutex& mutex);
+explicit unique_lock(Mutex& mutex);
 ```
 
 ### 原型2

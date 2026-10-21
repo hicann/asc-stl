@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
-void deallocate(pointer pointer, size_type count) noexcept;
+void deallocate(pointer pointer, size_type count);
 ```
 
 ## 参数说明
@@ -56,35 +56,42 @@ void deallocate(pointer pointer, size_type count) noexcept;
 
 ## 约束说明
 
-- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
-- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
+- 直接调用外层分配器`deallocate`；地址和数量必须符合该分配器的释放规则。
+- 释放前须先销毁仍存活的对象；本包装没有`noexcept`声明。
 
 ## 调用示例
 
-以下Host片段使用显式提供的分配器并完整释放存储；设备端须改用目标位置可调用的分配器。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
+#include <asc/std/memory>
 #include <asc/std/scoped_allocator>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
+#include <limits>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
+template<class T>
+struct example_allocator {
     using value_type = T;
     using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    using size_type = std::size_t;
+    using difference_type = std::ptrdiff_t;
+    template<class U> struct rebind { using other = example_allocator<U>; };
+    int identity = 0;
+    T* allocate(size_type count) { return std::allocator<T>{}.allocate(count); }
+    void deallocate(T* address, size_type count) { std::allocator<T>{}.deallocate(address, count); }
+    size_type max_size() const noexcept { return std::numeric_limits<size_type>::max() / sizeof(T); }
 };
 
-void example(asc::std::scoped_allocator_adaptor<example_allocator<int>>& allocator)
+bool example()
 {
+    using adaptor = asc::std::scoped_allocator_adaptor<example_allocator<int>>;
+    adaptor allocator(example_allocator<int>{7});
     int* pointer = allocator.allocate(1);
+    allocator.construct(pointer, 9);
+    const bool valid = allocator.outer_allocator().identity == 7 && *pointer == 9;
+    allocator.destroy(pointer);
     allocator.deallocate(pointer, 1);
+    return valid;
 }
 ```
 

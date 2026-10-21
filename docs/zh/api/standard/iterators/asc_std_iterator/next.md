@@ -53,7 +53,7 @@ template<class InputIterator> constexpr InputIterator next(InputIterator x, asc:
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `x` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
-| `n` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
+| `n` | 输入 | 要移动的距离，默认值为1；负值要求底层迭代器支持有效的双向后退。 |
 
 ## 返回值说明
 
@@ -63,19 +63,21 @@ template<class InputIterator> constexpr InputIterator next(InputIterator x, asc:
 
 ## 约束说明
 
-- 支持非I/O范围、数组和用户容器。
+- `n`是有符号移动距离；负值要求双向迭代器，移动经过的位置必须有效。
+- 返回的迭代器不拥有范围，所指对象须在使用期间保持有效。
 
 ## 调用示例
 
-以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    return asc::std::next(values, 1);
+    int values[] = {1, 2, 3, 4};
+    auto result = asc::std::next(values, 2);
+    return result == values + 2 && *result == 3;
 }
 ```
 

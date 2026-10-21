@@ -42,7 +42,7 @@ template<class Fp, class ...Args> struct invoke_result;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 仅当按`asc::std::invoke`规则以`Args...`调用`Fn`的表达式有效时提供结果成员`type`，并保留该表达式的返回引用类别。
 
 ## 调用示例
 

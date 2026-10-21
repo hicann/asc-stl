@@ -55,32 +55,25 @@ constexpr asc::lane_mask operator>>(int shift) const noexcept;
 
 ## 约束说明
 
+- shift须在[0, 31]内；负值或不小于32的移位不属于有效调用。
+
 - 掩码值的构造、观察和位运算可用于Host、D-SIMD与D-SIMT。
 - 每一位对应Warp中编号0—31的一个Lane；1表示该Lane被选择。
 - shift必须在[0, 31] 内；本值运算不执行Warp会合或内存同步。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例使用具体掩码检查位运算及返回对象；掩码值操作本身不执行Warp同步。
 
 ```cpp
 #include <asc/warp>
-
-template <class Object, class... Args>
-__aicore__ decltype(auto) example(Object& object, Args&&... args)
+bool example()
 {
-    return object.operator>>(static_cast<Args&&>(args)...);
+    asc::lane_mask left(3u);
+    const auto result = left >> 1;
+    return result.value() == 1u && left.value() == 3u;
 }
 ```
-
-对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
-
-完整示例源码：
-
-- [CMakeLists.txt](../../../../examples/warp_collectives/CMakeLists.txt)
-- [warp_example.h](../../../../examples/warp_collectives/warp_example.h)
-- [kernel.asc](../../../../examples/warp_collectives/kernel.asc)
-- [main.cpp](../../../../examples/warp_collectives/main.cpp)
 
 ## 关联API
 

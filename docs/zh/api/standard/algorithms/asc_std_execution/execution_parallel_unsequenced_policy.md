@@ -35,8 +35,9 @@
 ## 声明
 
 ```cpp
-// asc::std::execution 类内的声明节选；模板形参和其他成员由所属类提供。
+namespace asc::std::execution {
 class parallel_unsequenced_policy;
+}  // namespace asc::std::execution
 ```
 
 ## 约束说明

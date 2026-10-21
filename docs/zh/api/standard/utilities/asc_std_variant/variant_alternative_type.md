@@ -44,22 +44,18 @@ using Alternative = asc::std::variant_alternative<1, Variant>::type; // const fl
 ## 约束说明
 
 - Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下Host示例展示具体输入、接口调用和可检查的结果。
+以下Host示例独立定义所需别名，并检查第0个备选类型。
 
 ```cpp
 #include <asc/std/variant>
 #include <asc/std/type_traits>
 
-bool example()
-{
-    using Variant = const asc::std::variant<int, float>;
-    static_assert(asc::std::is_same_v<asc::std::variant_alternative<0, Variant>::type, const int>);
-    return true;
-}
+using Variant = asc::std::variant<int, float>;
+using First = typename asc::std::variant_alternative<0, Variant>::type;
+static_assert(asc::std::is_same_v<First, int>);
 ```
 
 ## 关联API

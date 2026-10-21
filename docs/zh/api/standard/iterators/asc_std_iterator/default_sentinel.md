@@ -42,17 +42,24 @@ inline constexpr const default_sentinel_t default_sentinel;
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 默认哨兵仅作为结束标记；须与定义了该哨兵比较操作的迭代器配合使用，例如`counted_iterator`。
+- 哨兵不持有范围，也不能解引用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-auto value = asc::std::default_sentinel;
+bool example()
+{
+    int values[] = {2, 4};
+    asc::std::counted_iterator<int*> iterator(values, 2);
+    int sum = 0;
+    for (; iterator != asc::std::default_sentinel; ++iterator) sum += *iterator;
+    return sum == 6 && iterator.count() == 0;
+}
 ```
 
 ## 关联API

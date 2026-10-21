@@ -60,7 +60,7 @@ constexpr explicit event_ref(asc::event_ref::native_handle_type handle) noexcept
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `handle` | 输入 | 用于记录或等待执行进度的Event引用。 |
+| `handle` | 输入 | Runtime原生句柄（native_handle_type，不透明void指针），不是包装器对象；adopt接管所有权，ref构造仅借用。 |
 
 ## 返回值说明
 

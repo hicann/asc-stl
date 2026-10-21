@@ -47,13 +47,17 @@ void reserve(size_type requested);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `requested` | 输入 | 请求的最低存储容量，单位为字符；调用后capacity()不小于该值，须不大于max_size()。 |
+| `requested` | 输入 | 请求的最低字符容量；requested + 1须能由size_type表示，并能由分配器分配。成功返回后capacity()不小于requested。 |
 
 ## 返回值说明
 
 无返回值。
 
 ## 约束说明
+
+- 纯SIMT使用还须遵循所属类型的[工具链验证边界](basic_string.md#simt工具链验证边界)。
+
+- 分配器须提供至少requested + 1个字符的存储，额外1个位置用于终止空字符；分配返回空指针时调用terminate，不保证以异常返回。requested + 1无法表示时也调用terminate。
 
 - basic_string<char,Traits,A>显式allocator构造。
 - plain/local字符来源的append/push_back/clear。
@@ -62,29 +66,18 @@ void reserve(size_type requested);
 
 ## 调用示例
 
-以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
-#include <asc/std/string>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/string>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void example(asc::std::basic_string<char, ::std::char_traits<char>, example_allocator<char>>& value)
+bool example()
 {
-    value.reserve(8);
+    ::std::allocator<char> allocator;
+    asc::std::basic_string<char, asc::std::char_traits<char>, ::std::allocator<char>> value("abc", allocator);
+    value.reserve(32);
+    return value.capacity() >= 32 && value.size() == 3 && value[0] == 'a' && value.c_str()[3] == '\0';
 }
 ```
 

@@ -53,9 +53,8 @@ constexpr bool empty() const;
 
 ## 约束说明
 
-- queue<T,Container>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/front/back/push_back/emplace_back/pop_front/比较/swap及allocator操作必须在当前执行空间有效。
-- 交付container_type/value_type/size_type/reference/const_reference和protected c，default/container/copy/move/allocator构造及copy/move赋值，empty/size/front/back、lvalue/rvalue push、decltype(auto) emplace、pop，条件noexcept的member/non-member swap，六个经典关系与C++20 <=>，uses_allocator特化，Container及Container+Alloc的C++17 CTAD。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 对初始化过的底层Container执行对应查询；不访问或弹出元素。
+- Device使用的Container、元素操作及Compare须可在对应执行位置调用并满足其非抛出要求；Host的异常行为遵循所调用对象，未额外声明noexcept时不承诺不抛出。
 
 ## 调用示例
 

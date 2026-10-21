@@ -35,16 +35,19 @@
 ```cpp
 namespace asc {
 // 声明摘要：默认模板实参在下文说明。
-template<class Index, class Bijection> class random_bijection;
-} // namespace asc
+template <class Index, class Bijection>
+class random_bijection;
+}  // namespace asc
 ```
 
 `Index`默认使用64位无符号整数类型。`Bijection`默认使用库提供的置换实现，调用方可直接构造`asc::random_bijection<>`而无需命名默认实现类型。自定义`Bijection`须支持以范围大小和随机数生成器构造，并以`Index`值调用；在其置换域中反复调用必须能够返回到`[0, size)`。
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
-- 不提供SeedSequence、流式输入输出或共享全局状态。
+- 构造置换时从生成器每次结果的高32位提取轮密钥；只有低32位提供熵的发生器会得到全零轮密钥。需要随机轮密钥时应提供高位也具有熵的64位发生器。
+
+- 本页类型、别名或字段只描述所保存的随机状态或置换信息；观察它不调用Runtime、不访问共享全局状态。
+- 映射调用须使用非空有限域和域内索引；生成器调用的种子、计数器要求见其成员页。
 
 ## 调用示例
 
@@ -60,7 +63,8 @@ bool example()
     bool seen[4] = {};
     for (unsigned long long i = 0; i < 4; ++i) {
         const auto value = permutation(i);
-        if (value >= 4 || seen[value]) return false;
+        if (value >= 4 || seen[value])
+            return false;
         seen[value] = true;
     }
     return seen[0] && seen[1] && seen[2] && seen[3];

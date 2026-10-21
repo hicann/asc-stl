@@ -50,8 +50,8 @@ constexpr atomic_flag() noexcept;
 
 ## 约束说明
 
-- atomic_flag的test/test_and_set/clear成员与非volatile自由函数。
-- Host和AI Core SIMT编程GM。
+- 构造可在Host或AI Core SIMT编程中进行；SIMT线程共享的对象须位于GM。
+- 默认构造将标志初始化为`false`；构造须在并发访问开始前完成，构造本身不提供线程间同步。
 
 ## 调用示例
 

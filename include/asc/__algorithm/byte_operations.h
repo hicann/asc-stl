@@ -36,7 +36,9 @@
 // <asc/__runtime/stream.h> and <asc/__runtime/devices.h>: the official header
 // makes signature drift visible at compile time, the fallback keeps Host-only
 // translation units without an AscendCL installation parsable.
-#if !defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__) && defined(__has_include)
+#if defined(INC_EXTERNAL_ACL_ACL_RT_H_)
+#define CANN_ASC_STL_DETAIL_HAS_ACL_COPY_RUNTIME 1
+#elif defined(__has_include)
 #if __has_include(<acl/acl_rt.h>)
 #include <acl/acl_rt.h>
 #define CANN_ASC_STL_DETAIL_HAS_ACL_COPY_RUNTIME 1
@@ -75,8 +77,12 @@ CANN_ASC_STL_HOST_API execution_status copy_bytes_runtime(stream_ref stream, voi
     if (bytes == 0) {
         return execution_status{};
     }
-    return backend_status(
-        ::aclrtMemcpyAsync(destination, bytes, source, bytes, static_cast<int>(direction), stream.native_handle()));
+#if defined(CANN_ASC_STL_DETAIL_HAS_ACL_COPY_RUNTIME)
+    const auto kind = static_cast<aclrtMemcpyKind>(static_cast<int>(direction));
+#else
+    const int kind = static_cast<int>(direction);
+#endif
+    return backend_status(::aclrtMemcpyAsync(destination, bytes, source, bytes, kind, stream.native_handle()));
 }
 }  // namespace detail
 
@@ -107,5 +113,9 @@ CANN_ASC_STL_HOST_API execution_status fill_bytes(
 }
 
 }  // namespace asc
+
+#if defined(CANN_ASC_STL_DETAIL_HAS_ACL_COPY_RUNTIME)
+#undef CANN_ASC_STL_DETAIL_HAS_ACL_COPY_RUNTIME
+#endif
 
 #endif  // CANN_ASC_STL_ASC___ALGORITHM_BYTE_OPERATIONS_H

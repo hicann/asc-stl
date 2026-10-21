@@ -36,8 +36,8 @@
 
 ```cpp
 namespace asc {
-enum class memory_scope { block, device }
-} // namespace asc
+enum class memory_scope { block, device };
+}  // namespace asc
 ```
 
 ## 约束说明

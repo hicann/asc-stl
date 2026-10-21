@@ -49,7 +49,7 @@ template<class Rep2, class Period2> constexpr duration(const duration<Rep2, Peri
 ### 原型3
 
 ```cpp
-template<class Rep2> constexpr duration(const Rep2& count);
+template<class Rep2> explicit constexpr duration(const Rep2& count);
 ```
 
 ## 参数说明
@@ -71,7 +71,7 @@ template<class Rep2> constexpr duration(const Rep2& count);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `count` | 输入 | 来源时长；计数单位由其Period2决定，按目标Period换算后初始化。 |
 
 ### 原型3的参数
 
@@ -85,7 +85,7 @@ template<class Rep2> constexpr duration(const Rep2& count);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `count` | 输入 | 初始化计数值；一个tick表示Period::num / Period::den秒。 |
 
 ## 返回值说明
 

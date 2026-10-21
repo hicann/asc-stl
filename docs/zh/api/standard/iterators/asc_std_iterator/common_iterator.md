@@ -42,29 +42,27 @@ template<class Iter, class Sent> class common_iterator;
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- `Iter`与`Sent`是不同类型，须满足输入/输出迭代器与哨兵的配合要求；适配器保存其中一种状态。
+- 解引用、箭头访问及自增只能作用于当前持有迭代器且操作有效的对象，不能作用于哨兵状态。
+- 适配器不拥有底层范围；所指对象须在访问期间保持有效。
 
 ## 调用示例
 
-以下Host示例展示具体输入、接口调用和可检查的结果。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/vector>
-#include <asc/std/forward_list>
 
 bool example()
 {
-    int values[] = {2, 4};
+    int values[] = {2, 4, 6};
     using It = asc::std::counted_iterator<int*>;
     using Common = asc::std::common_iterator<It, asc::std::default_sentinel_t>;
-    Common it(It(values, 2));
-    Common end(asc::std::default_sentinel);
+    Common iterator(It(values, 3));
+    Common last(asc::std::default_sentinel);
     int sum = 0;
-    for (; it != end; ++it) sum += *it;
-    return sum == 6;
+    for (; iterator != last; ++iterator) sum += *iterator;
+    return sum == 12;
 }
 ```
 

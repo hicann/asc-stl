@@ -24,7 +24,7 @@
 | [asc::std::allocator_arg_t::~allocator_arg_t](allocator_arg_t_destructor_allocator_arg_t.md) | 析构函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::allocator_traits](allocator_traits.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::allocator_traits::allocate](allocator_traits_allocate.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::allocator_traits::allocate_at_least](allocator_traits_allocate_at_least.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::allocator_traits::allocate_at_least](allocator_traits_allocate_at_least.md) | 兼容性说明 | 当前未独立提供 | 见页面中的可用替代 | Ascend 950 |
 | [asc::std::allocator_traits::allocator_type](allocator_traits_allocator_type.md) | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::allocator_traits::const_pointer](allocator_traits_const_pointer.md) | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::allocator_traits::const_void_pointer](allocator_traits_const_void_pointer.md) | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -50,8 +50,7 @@
 | [asc::std::destroy_at](destroy_at.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::destroy_n](destroy_n.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::is_sufficiently_aligned](is_sufficiently_aligned.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::launder](launder.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::make_obj_using_allocator](make_obj_using_allocator.md) | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::make_obj_using_allocator](make_obj_using_allocator.md) | 兼容性说明 | 当前未独立提供 | 见页面中的可用替代 | Ascend 950 |
 | [asc::std::pointer_traits](pointer_traits.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::pointer_traits::difference_type](pointer_traits_difference_type.md) | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::pointer_traits::element_type](pointer_traits_element_type.md) | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -59,7 +58,7 @@
 | [asc::std::pointer_traits::pointer_to](pointer_traits_pointer_to.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::pointer_traits::rebind](pointer_traits_rebind.md) | 别名模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::to_address](to_address.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::uninitialized_construct_using_allocator](uninitialized_construct_using_allocator.md) | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::uninitialized_construct_using_allocator](uninitialized_construct_using_allocator.md) | 兼容性说明 | 当前未独立提供 | 见页面中的可用替代 | Ascend 950 |
 | [asc::std::uninitialized_copy](uninitialized_copy.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::uninitialized_copy_n](uninitialized_copy_n.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::uninitialized_default_construct](uninitialized_default_construct.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -71,5 +70,9 @@
 | [asc::std::uninitialized_value_construct](uninitialized_value_construct.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::uninitialized_value_construct_n](uninitialized_value_construct_n.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::uses_allocator](uses_allocator.md) | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::uses_allocator_construction_args](uses_allocator_construction_args.md) | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::uses_allocator_construction_args](uses_allocator_construction_args.md) | 兼容性说明 | 当前未独立提供 | 见页面中的可用替代 | Ascend 950 |
 | [asc::std::uses_allocator_v](uses_allocator_v.md) | 变量模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+
+## 关联接口
+
+[`asc::std::launder`](launder.md)由`<asc/std/new>`提供，使用时须显式包含该头文件。

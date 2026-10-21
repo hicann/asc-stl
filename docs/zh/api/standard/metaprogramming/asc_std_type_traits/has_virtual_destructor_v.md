@@ -34,9 +34,12 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const bool has_virtual_destructor_v;
+template<class T>
+inline constexpr bool has_virtual_destructor_v = has_virtual_destructor<T>::value;
 } // namespace asc::std
 ```
 
@@ -51,7 +54,7 @@ template<class T> inline constexpr const bool has_virtual_destructor_v;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::has_virtual_destructor_v<int>;
+static_assert((asc::std::has_virtual_destructor_v<int>) == false);
 ```
 
 ## 关联API

@@ -43,9 +43,7 @@ using container_type = Container;
 
 ## 约束说明
 
-- queue<T,Container>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/front/back/push_back/emplace_back/pop_front/比较/swap及allocator操作必须在当前执行空间有效。
-- 交付container_type/value_type/size_type/reference/const_reference和protected c，default/container/copy/move/allocator构造及copy/move赋值，empty/size/front/back、lvalue/rvalue push、decltype(auto) emplace、pop，条件noexcept的member/non-member swap，六个经典关系与C++20 <=>，uses_allocator特化，Container及Container+Alloc的C++17 CTAD。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 该别名取自选定的Container或Compare；别名查询本身不构造容器或调用比较器。
 
 ## 调用示例
 

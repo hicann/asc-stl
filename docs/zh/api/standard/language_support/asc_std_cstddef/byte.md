@@ -36,8 +36,8 @@
 
 ```cpp
 namespace asc::std {
-enum byte;
-} // namespace asc::std
+enum class byte : unsigned char {};
+}
 ```
 
 ## 约束说明

@@ -34,8 +34,10 @@
 
 ## 声明
 
+以下位于`uniform_real_distribution<float>`类内。
+
 ```cpp
-using asc::std::uniform_real_distribution<float>::result_type = float;
+using result_type = float;
 ```
 
 ## 约束说明

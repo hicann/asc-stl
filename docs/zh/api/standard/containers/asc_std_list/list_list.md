@@ -39,7 +39,7 @@
 ### 原型1
 
 ```cpp
-list(const Allocator& allocator) noexcept;
+explicit list(const Allocator& allocator) noexcept;
 ```
 
 ### 原型2

@@ -34,14 +34,15 @@
 
 ```cpp
 // asc::args 类内的声明节选；模板形参和其他成员由所属类提供。
-template<auto Lower, auto Upper> class static_bounds;
+template <auto Lower, auto Upper>
+class static_bounds;
 ```
 
 ## 约束说明
 
+- Lower和Upper是编译期边界，须满足Lower <= Upper；查询只返回所保存常量，不读取延迟指针。
+
 - 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 

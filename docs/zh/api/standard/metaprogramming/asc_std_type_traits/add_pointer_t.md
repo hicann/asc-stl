@@ -45,7 +45,7 @@ using add_pointer_t = typename add_pointer<T>::type;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 本辅助形式与[`asc::std::add_pointer`](add_pointer.md)使用相同的类型前提和判定规则；结果对应特征类的`type`。
 
 ## 调用示例
 

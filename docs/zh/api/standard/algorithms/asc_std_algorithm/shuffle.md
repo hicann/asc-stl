@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::shuffle`使用调用方提供的随机引擎重排范围；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::shuffle`使用调用方提供的随机引擎重排范围；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -36,8 +36,9 @@
 
 ```cpp
 namespace asc::std {
-template<class RandomAccessIterator, class UniformRandomNumberGenerator> void shuffle(RandomAccessIterator first, RandomAccessIterator last, UniformRandomNumberGenerator&& g);
-} // namespace asc::std
+template <class RandomAccessIterator, class UniformRandomNumberGenerator>
+void shuffle(RandomAccessIterator first, RandomAccessIterator last, UniformRandomNumberGenerator&& g);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -64,7 +65,7 @@ template<class RandomAccessIterator, class UniformRandomNumberGenerator> void sh
 ## 约束说明
 
 - 随机数引擎由调用方提供，并且必须满足URBG要求。
-- 结果类型为float。
+- 本函数原地重排元素，无返回值。
 
 ## 调用示例
 
@@ -72,7 +73,6 @@ template<class RandomAccessIterator, class UniformRandomNumberGenerator> void sh
 
 ```cpp
 #include <asc/std/algorithm>
-
 
 #include <asc/std/random>
 void example()

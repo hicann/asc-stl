@@ -34,52 +34,24 @@
 
 ## 函数原型
 
+所属类型：[`queue`](queue.md)。编译器生成的复制/移动特殊成员是否可用取决于Container及比较器；没有allocator或迭代器范围构造入口。
+
 ### 原型1
 
 ```cpp
-constexpr queue();
+constexpr queue() = default;
 ```
 
 ### 原型2
 
 ```cpp
-constexpr queue(Container&& container);
+constexpr explicit queue(const Container& container);
 ```
 
 ### 原型3
 
 ```cpp
-constexpr queue(const Container& container);
-```
-
-### 原型4
-
-```cpp
-template<class Alloc> constexpr queue(Container&& container, const Alloc& allocator);
-```
-
-### 原型5
-
-```cpp
-template<class Alloc> constexpr queue(const Alloc& allocator);
-```
-
-### 原型6
-
-```cpp
-template<class Alloc> constexpr queue(const Container& container, const Alloc& allocator);
-```
-
-### 原型7
-
-```cpp
-template<class Alloc> constexpr queue(const queue<T, Container>& container, const Alloc& allocator);
-```
-
-### 原型8
-
-```cpp
-template<class Alloc> constexpr queue(queue<T, Container>&& container, const Alloc& allocator);
+constexpr explicit queue(Container&& container);
 ```
 
 ## 参数说明
@@ -90,93 +62,15 @@ template<class Alloc> constexpr queue(queue<T, Container>&& container, const All
 
 ### 原型2的参数
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `container` | 输入/输出 | 提供“按本页所列构造形态初始化`queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `container` | 输入 | 复制为底层存储的Container对象。 |
 
 ### 原型3的参数
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `container` | 输入 | 提供“按本页所列构造形态初始化`queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
-
-### 原型4的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Alloc` | 为对象或元素分配和释放存储的分配器类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `container` | 输入/输出 | 提供“按本页所列构造形态初始化`queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
-| `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-
-### 原型5的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Alloc` | 为对象或元素分配和释放存储的分配器类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-
-### 原型6的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Alloc` | 为对象或元素分配和释放存储的分配器类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `container` | 输入 | 提供“按本页所列构造形态初始化`queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
-| `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-
-### 原型7的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Alloc` | 为对象或元素分配和释放存储的分配器类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `container` | 输入 | 提供“按本页所列构造形态初始化`queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
-| `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-
-### 原型8的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Alloc` | 为对象或元素分配和释放存储的分配器类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `container` | 输入/输出 | 提供“按本页所列构造形态初始化`queue`对象”使用的对象引用；被引用对象须在调用期间有效。 |
-| `allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
+| `container` | 输入 | 移动为底层存储的Container对象；来源状态由其移动构造规则决定。 |
 
 ## 返回值说明
 
@@ -184,9 +78,8 @@ template<class Alloc> constexpr queue(queue<T, Container>&& container, const All
 
 ## 约束说明
 
-- queue<T,Container>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/front/back/push_back/emplace_back/pop_front/比较/swap及allocator操作必须在当前执行空间有效。
-- 交付container_type/value_type/size_type/reference/const_reference和protected c，default/container/copy/move/allocator构造及copy/move赋值，empty/size/front/back、lvalue/rvalue push、decltype(auto) emplace、pop，条件noexcept的member/non-member swap，六个经典关系与C++20 <=>，uses_allocator特化，Container及Container+Alloc的C++17 CTAD。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 默认形式要求Container可默认构造；Container来源形式要求对应复制或移动构造有效。
+- Device使用的Container、元素操作及Compare须可在对应执行位置调用并满足其非抛出要求；Host的异常行为遵循所调用对象，未额外声明noexcept时不承诺不抛出。
 
 ## 调用示例
 

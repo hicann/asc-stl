@@ -42,7 +42,9 @@ template<size_t Len, class Type0, class ...Types> struct aligned_union;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 类型参数列表必须非空，各候选类型须能用于`sizeof`和`alignof`。
+- `alignment_value`取各候选类型对齐值的最大值；存储大小至少为`Len`与各候选类型大小的最大值，并按对齐要求取整。
+- 结果是原始存储类型；使用其中存储对象前须正确建立该对象的生命周期，结束后须按其类型销毁。
 
 ## 调用示例
 

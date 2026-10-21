@@ -38,8 +38,8 @@
 
 ```cpp
 namespace asc::std::numbers {
-inline constexpr const double inv_sqrtpi;
-} // namespace asc::std::numbers
+inline constexpr double inv_sqrtpi = 0x1.20dd750429b6d11ae3a914fed7fep-1;
+}
 ```
 
 ## 约束说明

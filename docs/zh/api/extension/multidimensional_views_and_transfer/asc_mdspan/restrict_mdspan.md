@@ -34,15 +34,16 @@
 
 ```cpp
 namespace asc {
-template<class Element, class Extents, class Layout = asc::std::layout_right, class Accessor = asc::std::default_accessor<Element>> using restrict_mdspan = asc::std::mdspan<Element, Extents, Layout, asc::restrict_accessor<Accessor>>;
-} // namespace asc
+template <class Element, class Extents, class Layout = asc::std::layout_right,
+    class Accessor = asc::std::default_accessor<Element>>
+using restrict_mdspan = asc::std::mdspan<Element, Extents, Layout, asc::restrict_accessor<Accessor>>;
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供Host和GM视图以及AI Core SIMD编程UB视图。
-- 允许有符号步长。
-- 可选的Host DLPack桥接不抛出异常。
+- 底层访问器须使用指针句柄；调用方承担无别名访问承诺，包装器不在Runtime检查别名，也不延长存储寿命。
+
 
 ## 调用示例
 

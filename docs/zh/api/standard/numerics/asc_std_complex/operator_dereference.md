@@ -34,58 +34,56 @@
 
 ## 函数原型
 
-### 原型1
+以下函数模板可用于Host、AI Core SIMD编程和AI Core SIMT编程；T当前只能为float。
 
 ```cpp
 namespace asc::std {
-constexpr asc::std::complex<float> operator*(const asc::std::complex<float>& lhs, const asc::std::complex<float>& rhs) noexcept;
-} // namespace asc::std
+template<class T> constexpr complex<T> operator*(const complex<T>& left, const complex<T>& right) noexcept;
+}
 ```
 
-### 原型2
-
 ```cpp
 namespace asc::std {
-constexpr asc::std::complex<float> operator*(const asc::std::complex<float>& lhs, float rhs) noexcept;
-} // namespace asc::std
+template<class T> constexpr complex<T> operator*(const complex<T>& left, const T& right) noexcept;
+}
 ```
 
-### 原型3
+```cpp
+namespace asc::std {
+template<class T> constexpr complex<T> operator*(const T& left, const complex<T>& right) noexcept;
+}
+```
+
+Host另外提供两个按值接收float的非模板重载：
 
 ```cpp
 namespace asc::std {
-constexpr asc::std::complex<float> operator*(float lhs, const asc::std::complex<float>& rhs) noexcept;
-} // namespace asc::std
+constexpr complex<float> operator*(const complex<float>& left, float right) noexcept;
+}
+```
+
+```cpp
+namespace asc::std {
+constexpr complex<float> operator*(float left, const complex<float>& right) noexcept;
+}
 ```
 
 ## 参数说明
 
-### 原型1的参数
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `T` | ASC复数成分类型，当前仅float。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 复数乘法的左操作数（`complex<float>`）。 |
-| `rhs` | 输入 | 复数乘法的右操作数（`complex<float>`）。 |
+| `left` | 输入 | 乘法左操作数，复数或标量float。 |
+| `right` | 输入 | 乘法右操作数，复数或标量float。 |
 
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `lhs` | 输入 | 复数乘法的左操作数（`complex<float>`）。 |
-| `rhs` | 输入 | 复数乘法的右操作数（标量float，实部与虚部同乘该值）。 |
-
-### 原型3的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `lhs` | 输入 | 复数乘法的左操作数（标量float，实部与虚部同乘该值）。 |
-| `rhs` | 输入 | 复数乘法的右操作数（`complex<float>`）。 |
+两个复数按复数乘法计算；标量重载对实部、虚部同乘标量，不修改输入。
 
 ## 返回值说明
 

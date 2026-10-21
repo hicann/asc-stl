@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/numeric>`。
 
-`asc::std::saturating_add`按名称指定的算术或转换规则执行整数饱和运算。
+`asc::std::saturating_add`计算两个同类型整数的和，超出`T`的表示范围时返回相应边界值。
 
 标准语义参考：[cppreference `numeric`](https://en.cppreference.com/w/cpp/header/numeric)。
 
@@ -63,10 +63,9 @@ template<class T> constexpr T saturating_add(T left, T right) noexcept;
 
 ## 约束说明
 
-- 五个列出函数。
-- 十种标准signed/unsigned整数类型。
-- constexpr/noexcept。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 标准整数类型可使用`signed char`、`unsigned char`、`short`、`unsigned short`、`int`、`unsigned int`、`long`、`unsigned long`、`long long`和`unsigned long long`；不接受`bool`、普通`char`、`wchar_t`、`char8_t`、`char16_t`、`char32_t`及浮点类型。
+- 未显式指定模板实参时，两个输入必须推导出相同的`T`，不进行算术运算通常采用的整型提升。
+- 可在Host、AI Core SIMD编程和AI Core SIMT编程中调用；接口为`constexpr`且不抛出异常。
 
 ## 调用示例
 

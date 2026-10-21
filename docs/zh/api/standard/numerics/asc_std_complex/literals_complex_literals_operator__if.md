@@ -37,7 +37,7 @@
 ### 原型1
 
 ```cpp
-// asc::std::literals::complex_literals 类内的声明节选；模板形参和其他成员由所属类提供。
+// 位于asc::std::literals::complex_literals内联命名空间。
 [[nodiscard]] constexpr asc::std::complex<float> operator""if(long double arg) noexcept;
 ```
 
@@ -46,7 +46,7 @@
 ### 原型2
 
 ```cpp
-// asc::std::literals::complex_literals 类内的声明节选；模板形参和其他成员由所属类提供。
+// 位于asc::std::literals::complex_literals内联命名空间。
 [[nodiscard]] constexpr asc::std::complex<float> operator""if(unsigned long long arg) noexcept;
 ```
 

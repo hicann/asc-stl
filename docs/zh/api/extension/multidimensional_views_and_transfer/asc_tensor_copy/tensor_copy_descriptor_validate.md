@@ -32,8 +32,10 @@
 
 ## 函数原型
 
+以下为`asc::tensor_copy_descriptor<Rank>`类内声明，Rank由所属类模板提供。
+
 ```cpp
-constexpr asc::tensor_copy_status asc::tensor_copy_descriptor<Rank>::validate() const noexcept;
+constexpr asc::tensor_copy_status validate() const noexcept;
 ```
 
 ## 参数说明
@@ -42,19 +44,21 @@ constexpr asc::tensor_copy_status asc::tensor_copy_descriptor<Rank>::validate() 
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rank` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Rank` | 描述符的张量秩（维度数量），为1至5的编译期无符号整数。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::tensor_copy_status` | 返回描述符参数校验或维度设置的状态。 |
+| `asc::tensor_copy_status` | 返回描述符数值校验状态；本调用不修改描述符，也不提交搬运。 |
 
 ## 约束说明
 
-- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Rank为1至5。
-- 维度和步长采用uint32_t，校验零维（zero_extent）、零步长（zero_stride）、填充超过255、元素总量溢出与源/目标步长跨度累计溢出（溢出类统一按size_overflow返回），校验本身不启动异步搬运。
+- 可在Host、AI Core SIMD编程和AI Core SIMT编程中调用；本操作同步处理描述符，不启动数据搬运。
+- `Rank`须为1至5的编译期无符号整数；各维度按从外到内的顺序编号，最内维为`Rank - 1`。
+- 按维度检查非零有效长度和非零源/目标步长；发现问题分别返回`zero_extent`或`zero_stride`。
+- 任一侧填充超过255、填充后元素总量溢出或源/目标步长跨度累计溢出时，返回`size_overflow`；其余情况返回`success`。
+- 校验不访问源/目标存储，不检查实际视图容量、流水级或端点地址；搬运接口还会执行各自检查。
 
 ## 调用示例
 

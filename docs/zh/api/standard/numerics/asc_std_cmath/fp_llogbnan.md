@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`FP_LLOGBNAN`是`asc::std::llogb`接收NaN时返回的标准失败值。
+`FP_LLOGBNAN`是兼容数值宏；当前头文件不提供llogb函数。
 
 该接口的可用位置为Host、AI Core SIMT编程。
 
@@ -45,6 +45,8 @@ constexpr auto nan_exponent = FP_LLOGBNAN;
 ```
 
 ## 约束说明
+
+- 该宏作为兼容数值常量提供；不能据此推断头文件还声明了llogb函数。
 
 - 包含`<asc/std/cmath>`后始终定义。
 - 宏值为LONG_MIN或LONG_MAX，由当前数学实现决定。

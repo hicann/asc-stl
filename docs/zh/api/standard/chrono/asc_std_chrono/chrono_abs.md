@@ -63,7 +63,9 @@ template<class Rep, class Period> [[nodiscard]] constexpr duration<Rep, Period> 
 
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符。
+- 仅当Rep的numeric_limits::is_signed为true时参与重载；无符号计数不参与。
+- 结果必须能由Rep表示。有符号最小负值的正值不能表示时，不得调用。
+- 不改变计时周期，返回与输入相同的duration类型。
 
 ## 调用示例
 

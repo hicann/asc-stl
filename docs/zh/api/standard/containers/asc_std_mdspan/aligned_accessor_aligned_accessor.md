@@ -34,22 +34,29 @@
 
 ## 函数原型
 
+所属类型：[`aligned_accessor<Element, ByteAlignment>`](aligned_accessor.md)。以公开类型特征表达相同的数组指针可转换性条件。
+
 ### 原型1
 
 ```cpp
-constexpr aligned_accessor() noexcept;
+constexpr aligned_accessor() noexcept = default;
 ```
 
 ### 原型2
 
 ```cpp
-template<class OtherElement, size_t OtherByteAlignment> constexpr aligned_accessor(aligned_accessor<OtherElement, OtherByteAlignment> other) noexcept;
+template<class OtherElement, size_t OtherByteAlignment,
+    enable_if_t<is_convertible_v<OtherElement (*)[], Element (*)[]>
+        && (OtherByteAlignment >= ByteAlignment), int> = 0>
+constexpr aligned_accessor(aligned_accessor<OtherElement, OtherByteAlignment> other) noexcept;
 ```
 
 ### 原型3
 
 ```cpp
-template<class OtherElement> constexpr aligned_accessor(default_accessor<OtherElement> accessor) noexcept;
+template<class OtherElement,
+    enable_if_t<is_convertible_v<OtherElement (*)[], Element (*)[]>, int> = 0>
+constexpr explicit aligned_accessor(default_accessor<OtherElement> accessor) noexcept;
 ```
 
 ## 参数说明
@@ -65,13 +72,13 @@ template<class OtherElement> constexpr aligned_accessor(default_accessor<OtherEl
 | 参数名 | 描述 |
 | --- | --- |
 | `OtherElement` | 源对齐访问器的元素类型，须与本访问器的元素类型兼容。 |
-| `OtherByteAlignment` | 源对齐访问器的字节对齐值，编译期常量；须不小于本访问器的ByteAlignment。 |
+| `OtherByteAlignment` | 源对齐访问器的字节对齐值，编译期常量；须不小于本访问器的`ByteAlignment`。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 待转换的另一对齐访问器；其字节对齐不低于本访问器的byte_alignment，本对象取得与其等价的访问策略。 |
+| `other` | 输入 | 待转换的另一对齐访问器；其字节对齐不低于本访问器的`byte_alignment`，本对象取得与其等价的访问策略。 |
 
 ### 原型3的参数
 
@@ -79,13 +86,13 @@ template<class OtherElement> constexpr aligned_accessor(default_accessor<OtherEl
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherElement` | 源default_accessor的元素类型，须与本访问器的元素类型兼容。 |
+| `OtherElement` | 源`default_accessor`的元素类型，须与本访问器的元素类型兼容。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `accessor` | 输入 | 被转换的default_accessor对象；本对象改为按该元素类型的默认对齐执行访问。 |
+| `accessor` | 输入 | 被转换的`default_accessor`对象；显式增加`ByteAlignment`对齐假设；调用方必须保证随后交给本访问器的基地址满足该对齐。 |
 
 ## 返回值说明
 
@@ -93,22 +100,24 @@ template<class OtherElement> constexpr aligned_accessor(default_accessor<OtherEl
 
 ## 约束说明
 
-- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
+- `ByteAlignment`须为2的非负整数次幂，并且不小于`alignof(Element)`。
+- 从`aligned_accessor`转换时，元素数组指针须可转换，且来源对齐不得小于目标`ByteAlignment`。
+- 从`default_accessor`转换不检查或修复地址；后续access/offset的输入基地址须满足`ByteAlignment`。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/mdspan>
-#include <asc/std/type_traits>
 
 bool example()
 {
     alignas(16) int values[4] = {1, 2, 3, 4};
-    asc::std::aligned_accessor<int, 16> accessor;
-    static_assert(decltype(accessor)::byte_alignment == 16);
-    return accessor.access(values, 1) == 2;
+    const asc::std::default_accessor<int> original;
+    const asc::std::aligned_accessor<int, 16> accessor(original);
+    int& result = accessor.access(values, 1);
+    return &result == values + 1 && result == 2;
 }
 ```
 

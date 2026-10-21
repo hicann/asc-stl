@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class Bijection, class Index = asc::std::size_t> constexpr asc::shuffle_iterator<Index, Bijection> make_shuffle_iterator(Bijection bijection, Index start = 0);
-} // namespace asc
+template <class Bijection, class Index = asc::std::size_t>
+constexpr asc::shuffle_iterator<Index, Bijection> make_shuffle_iterator(Bijection bijection, Index start = 0);
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -58,7 +59,7 @@ template<class Bijection, class Index = asc::std::size_t> constexpr asc::shuffle
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::shuffle_iterator<Index, Bijection>` | 返回保存调用方参数的迭代器适配器；底层范围须在使用期间保持有效。 |
+| `asc::shuffle_iterator<Index, Bijection>` | 返回保存调用方参数的迭代器适配器；所保存函数对象若捕获外部引用，该引用须在使用期间有效。 |
 
 ## 约束说明
 
@@ -67,23 +68,15 @@ template<class Bijection, class Index = asc::std::size_t> constexpr asc::shuffle
 
 ## 调用示例
 
-以下片段使用具体数组和可调用对象构造迭代器。实际使用时底层范围须保持有效。
+以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
-#include <asc/std/cstddef>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
-
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    return asc::make_shuffle_iterator([](asc::std::size_t index) { return index; }, asc::std::size_t{0});
+    auto iterator = asc::make_shuffle_iterator([](unsigned index) { return index + 1; }, 0u);
+    ++iterator;
+    return *iterator == 2u;
 }
 ```
 

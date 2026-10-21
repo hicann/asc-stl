@@ -43,12 +43,8 @@ using allocator_type = Allocator;
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- 本页是分配器特征的编译期类型查询，不分配存储或构造对象。
+- 对应成员的提取及缺省规则见[`allocator_traits`](allocator_traits.md)；具体分配器须满足所查询的成员或重绑定形式要求。
 
 ## 调用示例
 

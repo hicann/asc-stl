@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::extents 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr size_t static_extent(rank_type index) noexcept;
+static constexpr size_t static_extent(rank_type index) noexcept;
 ```
 
 ## 参数说明
@@ -47,7 +47,7 @@ constexpr size_t static_extent(rank_type index) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 待查询静态长度的维度编号，从0起；须小于维度总数（rank()），该维为动态维时返回dynamic_extent。 |
+| `index` | 输入 | 待查询静态长度的维度编号，从0起；须小于维度总数（`rank()`），该维为动态维时返回`dynamic_extent`。 |
 
 ## 返回值说明
 

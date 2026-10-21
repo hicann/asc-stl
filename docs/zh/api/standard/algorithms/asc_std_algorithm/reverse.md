@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::reverse`原地反转范围内元素顺序；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::reverse`原地反转范围内元素顺序；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,18 +38,9 @@
 
 ```cpp
 namespace asc::std {
-template<class Bidirectional> void reverse(asc::device_policy policy, Bidirectional first, Bidirectional last);
-} // namespace asc::std
-```
-
-该原型适用于`C++17+`，可用位置为Host。
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<class BidirectionalIterator> constexpr void reverse(BidirectionalIterator first, BidirectionalIterator last);
-} // namespace asc::std
+template <class BidirectionalIterator>
+constexpr void reverse(BidirectionalIterator first, BidirectionalIterator last);
+}  // namespace asc::std
 ```
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
@@ -57,22 +48,6 @@ template<class BidirectionalIterator> constexpr void reverse(BidirectionalIterat
 ## 参数说明
 
 ### 原型1的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Bidirectional` | 输入范围的双向迭代器类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-
-### 原型2的参数
 
 **模板参数**
 
@@ -94,12 +69,7 @@ template<class BidirectionalIterator> constexpr void reverse(BidirectionalIterat
 ## 约束说明
 
 - 使用C++17。
-- 该Host同步适配接口调用对应的asc::parallel前端。
-- policy必须包含有效Stream和足够的调用方临时存储。
-- 接口只等待该Stream。
-- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用asc::std::terminate。
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
@@ -117,4 +87,4 @@ void example()
 
 ## 关联API
 
-- [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。
+- [`asc::parallel::reverse`](../../../extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_reverse.md)：使用执行策略提交异步设备操作。

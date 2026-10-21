@@ -48,11 +48,9 @@
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 析构销毁全部存活元素，再使用保存的分配器释放存储；元素析构和分配器释放操作须不抛出异常。
+- 析构完成后，指向原元素的指针、引用及迭代器失效。
+- 在Device侧析构时，元素析构和分配器释放操作须可用于相应编程模式。
 
 ## 调用示例
 

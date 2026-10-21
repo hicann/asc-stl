@@ -36,13 +36,31 @@ C++17中提供同名`inline constexpr bool`变量模板；C++20及以上提供co
 
 ## 声明
 
-以下为C++20及以上的concept声明摘要；C++17变量模板具有相同的模板参数和判定条件。
+以下为定义节选；所引用的辅助约束由头文件提供。C++17变量模板与C++20 concept均可直接用于`static_assert`。
+
+### C++20及以上
 
 ```cpp
 namespace asc::std {
-template<class Input1, class Input2, class Output, class Com, class Proj1, class Proj2> concept mergeable;
-} // namespace asc::std
+template <class _Input1, class _Input2, class _Output, class _Comp = ::asc::std::ranges::less, class _Proj1 = identity,
+    class _Proj2 = identity>
+concept mergeable = input_iterator<_Input1> && input_iterator<_Input2> && weakly_incrementable<_Output> &&
+    indirectly_copyable<_Input1, _Output> && indirectly_copyable<_Input2, _Output> &&
+    indirect_strict_weak_order<_Comp, projected<_Input1, _Proj1>, projected<_Input2, _Proj2>>;
+}
 ```
+
+### C++17
+
+```cpp
+namespace asc::std {
+template <class Input1, class Input2, class Output, class Comp = ::asc::std::ranges::less, class Proj1 = identity,
+    class Proj2 = identity>
+inline constexpr bool mergeable = __mergeable_impl<Input1, Input2, Output, Comp, Proj1, Proj2>;
+}
+```
+
+C++20代码块展示Host定义；Device通过相应投影调用结果与谓词条件进行判定。默认比较与投影参数在相应调用位置同样适用。
 
 ## 约束说明
 
@@ -50,12 +68,17 @@ template<class Input1, class Input2, class Output, class Com, class Proj1, class
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
+#include <asc/std/functional>
 
-static_assert(asc::std::mergeable<int*, int*, int*, bool (*)(int, int), int (*)(int), int (*)(int)>);
+bool example()
+{
+    static_assert(asc::std::mergeable<int*, int*, int*>);
+    return true;
+}
 ```
 
 ## 关联API

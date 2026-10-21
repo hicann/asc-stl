@@ -15,6 +15,8 @@
 
 """Regressions for API Markdown and independently executed examples."""
 import importlib.util
+import argparse
+import json
 import os
 from pathlib import Path
 import shutil
@@ -135,6 +137,51 @@ class DocumentationChecks(unittest.TestCase):
                 self.assertEqual(len(calls), 1)
                 self.assertIn("-c", calls[0].args[0])
                 self.assertEqual("--enable-simt" in calls[0].args[0], mode == "simt")
+
+    def test_registered_sdk_example_keeps_project_and_external_dependency_flags(self):
+        registry = self.root / "test/docs/examples.json"
+        registry.parent.mkdir(parents=True)
+        registry.write_text(json.dumps({"page.md": {"standards": [17, 20], "mode": "simt", "sdk": "cann",
+                                                   "include_flags": ["-I", "/project/include", "-DPROJECT_SIMT=1"],
+                                                   "include_dirs": ["docs/examples/parallel"],
+                                                   "required_headers": ["dlpack/dlpack.h"]}}))
+        args = argparse.Namespace(root=self.root, standard=17, mode="simt", extra_include=[Path("/external")],
+                                  npu_arch="dav-3510", compiler="bisheng", jobs=1)
+        with patch.object(DOCS, "compile_example", side_effect=lambda task: task[2]):
+            selected = DOCS.check_examples(args)[0]
+        with patch.dict(os.environ, {"ASCEND_HOME_PATH": "/sdk"}):
+            prepared = DOCS.prepared_spec(selected)
+        self.assertEqual(prepared["include_flags"],
+                         ["-I", "/project/include", "-DPROJECT_SIMT=1", "-I",
+                          str(self.root / "docs/examples/parallel"), "-I", "/external", "-I", "/sdk/include"])
+        self.assertEqual(prepared["required_headers"], ["dlpack/dlpack.h", "acl/acl.h"])
+        command = DOCS.example_command(self.root, prepared, 17, "bisheng", self.root / "example.asc")
+        self.assertIn("-DPROJECT_SIMT=1", command)
+        self.assertIn("-c", command)
+        self.assertNotIn("-lascendcl", command)
+        self.assertFalse(any(flag.startswith("-Wl,") for flag in command))
+
+    def test_runtime_sdk_example_retains_required_host_link_flags(self):
+        with patch.dict(os.environ, {"ASCEND_HOME_PATH": "/sdk"}):
+            prepared = DOCS.prepared_spec({"mode": "runtime", "sdk": "cann", "link_flags": ["-pthread"]})
+        command = DOCS.example_command(self.root, prepared, 20, "c++", self.root / "example.cpp")
+        self.assertIn("-pthread", command)
+        self.assertIn("-lascendcl", command)
+        self.assertNotIn("-c", command)
+
+    def test_runtime_examples_stop_before_executing_later_cases(self):
+        registry = self.root / "test/docs/examples.json"
+        registry.parent.mkdir(parents=True)
+        registry.write_text(json.dumps({name: {"standards": [17, 20], "mode": "runtime"}
+                                        for name in ("a.md", "b.md", "c.md")}))
+        args = argparse.Namespace(root=self.root, standard=17, mode="runtime", extra_include=[],
+                                  npu_arch="dav-3510", compiler="c++", jobs=8)
+        results = [{"page": "a.md", "status": "PASS"}, {"page": "b.md", "status": "FAIL"}]
+        with patch.object(DOCS, "compile_example", side_effect=results) as execute:
+            records = DOCS.check_examples(args)
+        self.assertEqual(execute.call_count, 2)
+        self.assertEqual([record["status"] for record in records], ["PASS", "FAIL", "NOT_RUN"])
+        self.assertEqual(records[-1]["page"], "c.md")
 
     def test_host_and_runtime_preserve_execution_failure(self):
         success = subprocess.CompletedProcess([], 0, stderr="")

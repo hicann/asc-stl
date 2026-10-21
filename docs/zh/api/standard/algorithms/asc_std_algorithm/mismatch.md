@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::mismatch`返回两个范围中第一对不相等元素的位置；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::mismatch`返回两个范围中第一对不相等元素的位置；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,18 +38,22 @@
 
 ```cpp
 namespace asc::std {
-template<class Input1, class Input2, class BinaryPredicate> asc::std::pair<Input1, Input2> mismatch(asc::device_policy policy, Input1 first1, Input1 last1, Input2 first2, Input2 last2, BinaryPredicate predicate);
-} // namespace asc::std
+template <class InputIterator1, class InputIterator2, class BinaryPredicate>
+[[nodiscard]] constexpr pair<InputIterator1, InputIterator2> mismatch(
+    InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, BinaryPredicate predicate);
+}  // namespace asc::std
 ```
 
-该原型适用于`C++17+`，可用位置为Host。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class InputIterator1, class InputIterator2, class BinaryPredicate> [[nodiscard]] constexpr pair<InputIterator1, InputIterator2> mismatch(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, BinaryPredicate predicate);
-} // namespace asc::std
+template <class InputIterator1, class InputIterator2, class BinaryPredicate>
+[[nodiscard]] constexpr pair<InputIterator1, InputIterator2> mismatch(
+    InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, BinaryPredicate pred);
+}  // namespace asc::std
 ```
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
@@ -58,8 +62,10 @@ template<class InputIterator1, class InputIterator2, class BinaryPredicate> [[no
 
 ```cpp
 namespace asc::std {
-template<class InputIterator1, class InputIterator2, class BinaryPredicate> [[nodiscard]] constexpr pair<InputIterator1, InputIterator2> mismatch(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, BinaryPredicate pred);
-} // namespace asc::std
+template <class InputIterator1, class InputIterator2>
+[[nodiscard]] constexpr pair<InputIterator1, InputIterator2> mismatch(
+    InputIterator1 first1, InputIterator1 last1, InputIterator2 first2);
+}  // namespace asc::std
 ```
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
@@ -68,18 +74,10 @@ template<class InputIterator1, class InputIterator2, class BinaryPredicate> [[no
 
 ```cpp
 namespace asc::std {
-template<class InputIterator1, class InputIterator2> [[nodiscard]] constexpr pair<InputIterator1, InputIterator2> mismatch(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2);
-} // namespace asc::std
-```
-
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
-
-### 原型5
-
-```cpp
-namespace asc::std {
-template<class InputIterator1, class InputIterator2> [[nodiscard]] constexpr pair<InputIterator1, InputIterator2> mismatch(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2);
-} // namespace asc::std
+template <class InputIterator1, class InputIterator2>
+[[nodiscard]] constexpr pair<InputIterator1, InputIterator2> mismatch(
+    InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2);
+}  // namespace asc::std
 ```
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
@@ -92,19 +90,17 @@ template<class InputIterator1, class InputIterator2> [[nodiscard]] constexpr pai
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Input1` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `Input2` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
+| `InputIterator1` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
+| `InputIterator2` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
 | `BinaryPredicate` | 判断元素是否满足条件的可调用对象类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
 | `first1` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last1` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `first2` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last2` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
 
 ### 原型2的参数
@@ -124,7 +120,8 @@ template<class InputIterator1, class InputIterator2> [[nodiscard]] constexpr pai
 | `first1` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last1` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `first2` | 输入 | 输入范围的起始迭代器或指针。 |
-| `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
+| `last2` | 输入 | 输入范围的结束位置，不包含该位置。 |
+| `pred` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
 
 ### 原型3的参数
 
@@ -134,7 +131,6 @@ template<class InputIterator1, class InputIterator2> [[nodiscard]] constexpr pai
 | --- | --- |
 | `InputIterator1` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
 | `InputIterator2` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `BinaryPredicate` | 判断元素是否满足条件的可调用对象类型。 |
 
 **函数参数**
 
@@ -143,27 +139,8 @@ template<class InputIterator1, class InputIterator2> [[nodiscard]] constexpr pai
 | `first1` | 输入 | 输入范围的起始迭代器或指针。 |
 | `last1` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `first2` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last2` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `pred` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
 
 ### 原型4的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `InputIterator1` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-| `InputIterator2` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `first1` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last1` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `first2` | 输入 | 输入范围的起始迭代器或指针。 |
-
-### 原型5的参数
 
 **模板参数**
 
@@ -185,37 +162,35 @@ template<class InputIterator1, class InputIterator2> [[nodiscard]] constexpr pai
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `asc::std::pair<Input1, Input2>` | 返回两个范围中第一对不相等元素的位置。 |
+| 原型1 | `pair<InputIterator1, InputIterator2>` | 返回两个范围中第一对不相等元素的位置。 |
 | 原型2 | `pair<InputIterator1, InputIterator2>` | 返回两个范围中第一对不相等元素的位置。 |
 | 原型3 | `pair<InputIterator1, InputIterator2>` | 返回两个范围中第一对不相等元素的位置。 |
 | 原型4 | `pair<InputIterator1, InputIterator2>` | 返回两个范围中第一对不相等元素的位置。 |
-| 原型5 | `pair<InputIterator1, InputIterator2>` | 返回两个范围中第一对不相等元素的位置。 |
 
 ## 约束说明
 
+- 对未提供`last2`的重载，从`first2`起须有至少`last1 - first1`个有效可读元素；两个范围在比较期间均须保持有效。
+
 - 使用C++17。
-- 该Host同步适配接口调用对应的asc::parallel前端。
-- policy必须包含有效Stream和足够的调用方临时存储。
-- 接口只等待该Stream。
-- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用asc::std::terminate。
 - 支持当前版本列出的迭代器、哨兵和可调用对象重载。
 - 标准执行策略重载采用顺序执行。
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     int other[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    return asc::std::mismatch(values, values + 8, other);
+    auto result = asc::std::mismatch(values, values + 8, other);
+    return result.first == values + 8 && result.second == other + 8;
 }
 ```
 
 ## 关联API
 
-- [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。
+- [`asc::parallel::mismatch`](../../../extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_mismatch.md)：使用执行策略提交异步设备操作。

@@ -154,7 +154,10 @@ CANN_ASC_STL_API constexpr overflow_result<T> mul_overflow_impl(T left, T right)
 #else
     using Unsigned = checked_unsigned_t<T>;
     if constexpr (!(static_cast<T>(-1) < T{0})) {
-        const Unsigned product = static_cast<Unsigned>(left) * static_cast<Unsigned>(right);
+        // Use at least unsigned-int arithmetic so narrow factors never
+        // promote to signed int before multiplication.
+        using Product = decltype(Unsigned{} * 1U);
+        const Unsigned product = static_cast<Unsigned>(static_cast<Product>(left) * static_cast<Product>(right));
         return overflow_result<T>{static_cast<T>(product), product / static_cast<Unsigned>(right) != left};
     }
     const bool negative = (left < 0) != (right < 0);

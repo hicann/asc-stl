@@ -34,11 +34,18 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-template<class Integer, enable_if_t<is_integral<Integer>::value, int> = 0> double acos(Integer value) noexcept;
-} // namespace asc::std
+template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
+[[nodiscard]] constexpr double acos(Tp value) noexcept;
+}
 ```
+
+可用位置：Host。
 
 ## 参数说明
 
@@ -46,7 +53,9 @@ template<class Integer, enable_if_t<is_integral<Integer>::value, int> = 0> doubl
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Integer` | 整型参数类型，包含bool；不接受浮点类型。 |
+| `Tp` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。 |
+
+未命名的默认int模板形参用于重载选择，调用方无需提供。
 
 **函数参数**
 
@@ -56,9 +65,7 @@ template<class Integer, enable_if_t<is_integral<Integer>::value, int> = 0> doubl
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `double` | 返回整型实参提升为double后计算的反余弦弧度值，结果区间为[0, π]。 |
+返回类型按各原型确定（`double`）。返回反余弦；实数结果位于[0, π]，单位为弧度。
 
 ## 约束说明
 

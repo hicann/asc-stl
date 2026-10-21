@@ -46,7 +46,7 @@ template<typename T> [[nodiscard]] constexpr add_const_t<T>& as_const(T& value) 
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 被观察对象的类型（不能是const限定的对象类型）。 |
+| `T` | 被观察左值对象的类型，可以已带const限定。 |
 
 **函数参数**
 

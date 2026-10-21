@@ -45,7 +45,8 @@ constexpr random_bijection() noexcept;
 
 ```cpp
 // asc::random_bijection 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class RNG> constexpr random_bijection(Index size, RNG&& generator) noexcept;
+template <class RNG>
+constexpr random_bijection(Index size, RNG&& generator) noexcept;
 ```
 
 ## 参数说明
@@ -75,8 +76,10 @@ template<class RNG> constexpr random_bijection(Index size, RNG&& generator) noex
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
-- 不提供SeedSequence、流式输入输出或共享全局状态。
+- 构造置换时从生成器每次结果的高32位提取轮密钥；只有低32位提供熵的发生器会得到全零轮密钥。需要随机轮密钥时应提供高位也具有熵的64位发生器。
+
+- 本页类型、别名或字段只描述所保存的随机状态或置换信息；观察它不调用Runtime、不访问共享全局状态。
+- 映射调用须使用非空有限域和域内索引；生成器调用的种子、计数器要求见其成员页。
 
 ## 调用示例
 

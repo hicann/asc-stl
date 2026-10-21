@@ -36,8 +36,8 @@
 
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const T egamma_v;
-} // namespace asc::std
+template<class Tp> inline constexpr Tp egamma_v = __numbers<Tp>::__egamma();
+}
 ```
 
 ## 约束说明

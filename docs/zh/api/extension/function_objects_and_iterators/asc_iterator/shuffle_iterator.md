@@ -28,14 +28,15 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::shuffle_iterator`按确定性映射重排索引后访问底层随机访问迭代器。
+`asc::shuffle_iterator`保存映射对象和索引，解引用时返回bijection(当前索引)；需要按结果读取数据时再与permutation_iterator组合。
 
 ## 声明
 
 ```cpp
 namespace asc {
-template<class Index, class Bijection> class shuffle_iterator;
-} // namespace asc
+template <class Index, class Bijection>
+class shuffle_iterator;
+}  // namespace asc
 ```
 
 ## 约束说明
@@ -50,11 +51,14 @@ template<class Index, class Bijection> class shuffle_iterator;
 ```cpp
 #include <asc/iterator>
 
-int reverse_three(int index) { return 2 - index; }
+int reverse_three(int index)
+{
+    return 2 - index;
+}
 
 bool example()
 {
-    asc::shuffle_iterator<int, int(*)(int)> iterator(reverse_three, 0);
+    asc::shuffle_iterator<int, int (*)(int)> iterator(reverse_three, 0);
     const bool first = *iterator == 2;
     ++iterator;
     return first && *iterator == 1;

@@ -39,7 +39,7 @@
 ```cpp
 namespace asc::std::ranges {
 for_each_n(first, count, function, projection);
-} // namespace asc::std::ranges
+}  // namespace asc::std::ranges
 ```
 
 ## 参数说明
@@ -47,9 +47,9 @@ for_each_n(first, count, function, projection);
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `first` | 输入 | 输入范围的起始迭代器。 |
-| `count` | 输入 | 要处理、保留或跳过的元素数量。 |
+| `count` | 输入 | 要处理的元素数量；非正值不调用函数并保留起始迭代器。 |
 | `function` | 输入 | 对输入元素执行操作的可调用对象。 |
-| `projection` | 输入 | 在比较或判断前作用于元素的投影函数。 |
+| `projection` | 输入 | 在比较或判断前作用于元素的投影函数；省略时使用`asc::std::identity`。 |
 
 ## 返回值说明
 
@@ -61,7 +61,7 @@ for_each_n(first, count, function, projection);
 
 ## 约束说明
 
-- 起始位置之后必须至少有指定数量的有效元素。
+- `count`为正时，起始位置之后必须至少有`count`个有效元素；`count`非正时不访问范围。
 - 函数对象须能接收投影后的元素。
 
 ## 调用示例
@@ -76,7 +76,8 @@ bool example()
     int values[] = {1, 2, 3, 4};
     auto action = [](int& value) { ++value; };
     auto result = asc::std::ranges::for_each_n(values, 4, action);
-    return result.in == values + 4 && values[0] == 2 && values[3] == 5;
+    auto empty_result = asc::std::ranges::for_each_n(values, -4, action);
+    return result.in == values + 4 && empty_result.in == values && values[0] == 2 && values[3] == 5;
 }
 ```
 

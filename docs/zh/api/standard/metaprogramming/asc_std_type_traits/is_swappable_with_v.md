@@ -34,9 +34,12 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class T, class U> inline constexpr const bool is_swappable_with_v;
+template<class T, class U>
+inline constexpr bool is_swappable_with_v = is_swappable_with<T, U>::value;
 } // namespace asc::std
 ```
 
@@ -51,7 +54,7 @@ template<class T, class U> inline constexpr const bool is_swappable_with_v;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::is_swappable_with_v<int&, int&>;
+static_assert((asc::std::is_swappable_with_v<int&, int&>) == true);
 ```
 
 ## 关联API

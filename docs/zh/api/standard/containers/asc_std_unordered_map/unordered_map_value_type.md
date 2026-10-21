@@ -36,31 +36,28 @@
 
 ## 声明
 
-所属类型：[`asc::std::unordered_map`](unordered_map.md)。
+value_type是容器公开的键值条目类型。下面展示公开类型查询；entry_type只是示例别名。
 
 ```cpp
-// asc::std::unordered_map 类内的声明节选；模板形参和其他成员由所属类提供。
-using value_type = pair<const Key, T>;
+template<class Key, class T, class Hash, class Equal, class Allocator>
+using entry_type =
+    typename asc::std::unordered_map<Key, T, Hash, Equal, Allocator>::value_type;
 ```
 
 ## 约束说明
 
-- Host及AI Core SIMT编程下unordered_map<Key,T,Hash,Equal,A>显式GM arena。
-- empty/size/bucket_count/begin/end/insert/find/count/`operator[]`/clear。
-- allocator回绑桶数组并在默认负载阈值上自动rehash。
-- 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构。
-- 仅容量充足和不抛出异常域。
-- Host和AI Core SIMT编程。
+- 条目具有`const Key first`与`T second`成员。
+- 应使用容器的value_type构造条目；不能假定它与asc::std::pair<const Key, T>为同一类型。
 
 ## 调用示例
 
-以下Host片段显式提供带重绑定能力的分配器；设备端须改用在目标执行位置可调用的分配器。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/unordered_map>
+#include <asc/std/type_traits>
 #include <functional>
 #include <memory>
-#include <string>
 #include <utility>
 
 template <class T>
@@ -74,9 +71,14 @@ struct example_allocator : ::std::allocator<T> {
     template <class U> example_allocator(const example_allocator<U>&) noexcept {}
 };
 
-void use_type()
+using entry_type = typename asc::std::unordered_map<int, int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<::std::pair<const int, int>>>::value_type;
+static_assert(asc::std::is_same_v<decltype(::std::declval<entry_type>().first), const int>);
+static_assert(asc::std::is_same_v<decltype(::std::declval<entry_type>().second), int>);
+
+bool example()
 {
-    using alias_type = typename asc::std::unordered_map<int, int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<::std::pair<const int, int>>>::value_type;
+    const entry_type entry(7, 9);
+    return entry.first == 7 && entry.second == 9;
 }
 ```
 

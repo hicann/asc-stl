@@ -35,7 +35,7 @@
 ```cpp
 namespace asc {
 bool devices(asc::device_ref* output, asc::std::uint32_t capacity, asc::std::uint32_t& count) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -46,7 +46,7 @@ bool devices(asc::device_ref* output, asc::std::uint32_t capacity, asc::std::uin
 | --- | --- | --- |
 | `output` | 输出 | 接收device_ref的调用方数组首地址：写入min(capacity, Device总数)个按序号递增的引用；capacity非0时不得为空。 |
 | `capacity` | 输入 | 数组可容纳的device_ref个数：仅限制实际写入数量，不影响count报告的总数。 |
-| `count` | 输入/输出 | Runtime报告的Device总数经该引用写入：可能大于capacity（此时仅写入前capacity个引用）。 |
+| `count` | 输出 | Runtime报告的Device总数经该引用写入：可能大于capacity（此时仅写入前capacity个引用）。 |
 
 ## 返回值说明
 

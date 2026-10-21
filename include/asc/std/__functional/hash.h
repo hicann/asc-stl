@@ -556,10 +556,14 @@ struct hash<long double> : public __scalar_hash<long double> {
     }
 };
 
-// Byte-wise FNV-1a hash kept as the fallback path of the primary template for
-// non-enum types: internal paths such as variant hash synthesis use the
-// primary template for arbitrary trivially-copyable types, so it must remain
-// usable as the specialization surface grows.
+// This byte-wise fallback for non-enum types is an ASC extension kept callable
+// for existing users and internal consumers such as variant hash synthesis.
+// It reads every object byte without consulting operator== or a key predicate.
+// As a key hasher it requires determinate bytes and identical representations
+// for equivalent keys; being trivially copyable alone does not establish this.
+// For padding, equality-ignored fields, or non-trivial object state, supply an
+// equality-aware value hasher instead of relying on this fallback. The hash
+// enablement probes below check invocation, not these semantic requirements.
 template <class T>
 struct __byte_hash : public __unary_function<T, size_t> {
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API size_t operator()(const T& value) const noexcept

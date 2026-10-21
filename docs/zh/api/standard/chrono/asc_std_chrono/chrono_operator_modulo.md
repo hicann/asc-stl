@@ -28,72 +28,89 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::operator%`由`<asc/std/chrono>`提供，执行时长维度的时长对标量取模运算。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
+`asc::std::chrono::operator%`对时长计数求余，返回公共计时精度下的余数时长。
 
-标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
+时长语义见[`duration`](chrono_duration.md)。
 
 ## 函数原型
 
+通过`left % right`调用；隐藏友元通过实参相关查找参与，不能依赖限定命名空间查找。
+
 ### 原型1
 
-```cpp
-namespace asc::std::chrono {
-template <class Rep2, enable_if_t<!__is_asc_std_duration_v<Rep2> && is_convertible_v<const Rep2&, common_type_t<Rep, Rep2>>, int> = 0> constexpr duration<common_type_t<Rep, Rep2>, Period> operator%(const duration& lhs, const Rep2& rhs);
-} // namespace asc::std::chrono
-```
+所属类型：[`duration<Rep, Period>`](chrono_duration.md)。以下为类内隐藏友元声明，类模板参数（如有）由所属类型提供。声明摘要省略仅供重载选择的实现参数：`Rep2`不得为`duration`，且`const Rep2&`须能转换到`common_type_t<Rep, Rep2>`。
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
+```cpp
+template <class Rep2>
+[[nodiscard]] friend constexpr duration<common_type_t<Rep, Rep2>, Period> operator%(const duration& left, const Rep2& right);
+```
 
 ### 原型2
 
+所属类型：[`duration<Rep, Period>`](chrono_duration.md)。以下为类内隐藏友元声明，类模板参数（如有）由所属类型提供。
+
 ```cpp
-namespace asc::std::chrono {
-template <class Rep2, class Period2> constexpr common_type_t<duration, duration<Rep2, Period2>> operator%(const duration& lhs, const duration<Rep2, Period2>& rhs);
-} // namespace asc::std::chrono
+template <class Rep2, class Period2>
+[[nodiscard]] friend constexpr common_type_t<duration, duration<Rep2, Period2>> operator%(const duration& left, const duration<Rep2, Period2>& right);
 ```
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
-
 ## 参数说明
+
+### 原型1的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rep2` | 另一时长或标量的计数类型；运算时与Rep形成公共类型。 |
-| `Period2` | 另一时长的计时周期，是表示秒比例的ratio类型。 |
+| `Rep2` | 另一操作数的计数或标量表示类型；与Rep形成公共计数类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `lhs` | 输入 | 参与操作的对象引用；调用期间被引用对象须保持有效。 |
-| `rhs` | 输入 | 参与操作的对象引用；调用期间被引用对象须保持有效。 |
+| `left` | 输入 | 时长值；计数单位由其period决定，与另一时长运算时先形成公共计时周期。 |
+| `right` | 输入 | 除数；须能转换到公共计数类型，取模时还须支持余数运算。 |
+
+### 原型2的参数
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Rep2` | 另一操作数的计数或标量表示类型；与Rep形成公共计数类型。 |
+| `Period2` | 另一时长的tick周期，是以秒为基准的ratio类型。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `left` | 输入 | 时长值；计数单位由其period决定，与另一时长运算时先形成公共计时周期。 |
+| `right` | 输入 | 时长值；计数单位由其period决定，与另一时长运算时先形成公共计时周期。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `duration<common_type_t<Rep, Rep2>, Period>` | 计数除标量的余数duration，或两duration转成公共duration后取余的结果。 |
-| `common_type_t<duration, duration<Rep2, Period2>>` | 计数除标量的余数duration，或两duration转成公共duration后取余的结果。 |
+| 适用原型 | 返回类型 | 含义 |
+| --- | --- | --- |
+| 原型1 | `duration<common_type_t<Rep, Rep2>, Period>` | 对公共计数做余数运算并返回duration；两个时长形式先换成公共周期。 |
+| 原型2 | `common_type_t<duration, duration<Rep2, Period2>>` | 对公共计数做余数运算并返回duration；两个时长形式先换成公共周期。 |
 
 ## 约束说明
 
-- 右操作数须为可转换到公共计数类型的标量且不得为时长类型。
-- 两个时长先转换为公共时长类型后取模。
+- 计数及中间运算须可表示。
+- 对整型计数，当前实现把转换后为0的除数按1处理；这不是标准chrono的零除数保证。需要标准可移植语义时使用非零除数；有符号最小值除以-1不可表示时不得调用。
+- 计数或公共计数类型须支持`%`；内建浮点计数不支持取模。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/chrono>
-#include <asc/std/limits>
 
 bool example()
 {
-    asc::std::chrono::seconds left{2}, right{3};
-    return (right % left).count() == 1;
+    const asc::std::chrono::seconds value{7};
+    return (value % 3).count() == 1 && (value % asc::std::chrono::seconds{3}).count() == 1;
 }
 ```
 

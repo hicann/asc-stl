@@ -55,6 +55,8 @@ asc::barrier_arrival_token arrive(asc::std::ptrdiff_t update = 1) noexcept;
 
 ## 约束说明
 
+- 初始expected须在`[0, max()]`内；arrive的update须非负且不超过当前阶段剩余计数。expected为0时不能用正update到达；arrive_and_drop还要求后续期望计数当前为正。
+
 - 使用C++17。
 - 在AI Core SIMT编程 中操作调用方管理的GM状态。
 - Scope必须为asc::memory_scope::block或asc::memory_scope::device。

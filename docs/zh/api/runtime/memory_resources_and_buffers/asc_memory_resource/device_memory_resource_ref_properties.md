@@ -51,10 +51,8 @@ constexpr asc::memory_resource_properties properties() const noexcept;
 
 ## 约束说明
 
-- 仅可在Host调用。
-- 内存资源不抛出异常。
-- 分配大小、对齐和输出指针必须有效，释放时须使用同一资源及原始大小和对齐。
-- 资源及其引用的生命周期由调用方管理。
+- 本操作在Host同步观察或保存资源属性，不提交分配和释放。
+- 资源引用不拥有被引用对象，使用分配/释放成员时资源对象须仍有效；比较只判断引用是否关联同一对象。
 
 ## 调用示例
 
@@ -67,9 +65,11 @@ bool example()
 {
     asc::device_memory_resource resource(0);
     asc::device_memory_resource_ref reference(resource);
-    if (!reference.valid()) return false;
+    if (!reference.valid())
+        return false;
     auto properties = reference.properties();
-    return reference.device_ordinal() == 0 && !properties.host_accessible() && properties.device_accessible() && properties.maximum_alignment() == 32;
+    return reference.device_ordinal() == 0 && !properties.host_accessible() && properties.device_accessible() &&
+        properties.maximum_alignment() == 32;
 }
 ```
 

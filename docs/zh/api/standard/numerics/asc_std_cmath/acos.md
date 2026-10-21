@@ -34,87 +34,82 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
 ### 原型1
 
 ```cpp
 namespace asc::std {
-float acos(float value) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float acos(
+    float value) noexcept;
+}
 ```
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMT编程。
-
-此原型对应头文件：`<asc/std/cmath>`。
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-double acos(double value) noexcept;
-} // namespace asc::std
+template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
+[[nodiscard]] constexpr Tp acos(Tp value) noexcept;
+}
 ```
 
-该原型适用于`C++17+`，可用位置为Host。
-
-此原型对应头文件：`<asc/std/cmath>`。
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。扩展浮点模板仅在对应类型可用时参与；half、bfloat16及所支持FP8的数值调用用于AI Core SIMT编程。
 
 ### 原型3
 
 ```cpp
 namespace asc::std {
-long double acos(long double value) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr double acos(double value) noexcept;
+}
 ```
 
-该原型适用于`C++17+`，可用位置为Host。
-
-此原型对应头文件：`<asc/std/cmath>`。
+可用位置：Host。
 
 ### 原型4
 
 ```cpp
 namespace asc::std {
-template<class T> complex<T> acos(const complex<T>& value) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr long double acos(long double value) noexcept;
+}
 ```
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMT编程。
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
-此原型对应头文件：`<asc/std/complex>`。
+### 原型5
+
+```cpp
+namespace asc::std {
+template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
+[[nodiscard]] constexpr double acos(Tp value) noexcept;
+}
+```
+
+可用位置：Host。
+
+### 原型6
+
+```cpp
+namespace asc::std {
+template <class T>
+[[nodiscard]] complex<T> acos(const complex<T>& value) noexcept;
+}
+```
+
+可用位置：Host、AI Core SIMT编程。此复数重载需要包含`<asc/std/complex>`，ASC复数成分当前仅支持float。
 
 ## 参数说明
-
-### 原型1的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 待计算的实数或复数值；实数有效定义域为[-1, 1]。 |
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 待计算的实数或复数值；实数有效定义域为[-1, 1]。 |
-
-### 原型3的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 待计算的实数或复数值；实数有效定义域为[-1, 1]。 |
-
-### 原型4的参数
 
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 复数重载的实部与虚部浮点表示类型。 |
+| `Tp` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。 |
+| `T` | 复数成分类型；ASC复数当前只支持float。 |
+
+未命名的默认int模板形参用于重载选择，调用方无需提供。
 
 **函数参数**
 
@@ -124,14 +119,11 @@ template<class T> complex<T> acos(const complex<T>& value) noexcept;
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `float` | 以float精度返回反余弦弧度值。 |
-| 原型2 | `double` | 以double精度返回反余弦弧度值。 |
-| 原型3 | `long double` | 以平台long double精度返回反余弦弧度值。 |
-| 原型4 | `complex<T>` | 返回复数反余弦的主值，T仅支持float。 |
+返回类型按各原型确定（`float`、`Tp`、`double`、`long double`、`complex<T>`）。返回反余弦；实数结果位于[0, π]，单位为弧度。
 
 ## 约束说明
+
+- 扩展类型是否可实例化取决于目标类型支持；普通超越函数以float计算再转换回原格式，整数舍入和相邻数的规则见本页专门说明。
 
 - float和`complex<float>`重载可在Host与AI Core SIMT编程中调用。
 - double与long double重载限Host调用。
@@ -141,14 +133,15 @@ template<class T> complex<T> acos(const complex<T>& value) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-double example()
+bool example()
 {
-    return asc::std::acos(0.5);
+    const auto result = asc::std::acos(1.0F);
+    return result == 0.0F;
 }
 ```
 

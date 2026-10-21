@@ -29,6 +29,7 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
+#include <asc/std/__floating_point/cast.h>
 #include <asc/std/__cmath/backend.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_arithmetic.h>
@@ -78,7 +79,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp acos(Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::acos(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::acos(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Inverse sine, domain [-1, 1], range [-π/2, π/2].
@@ -97,7 +98,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp asin(Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::asin(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::asin(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Inverse tangent, range (-π/2, π/2).
@@ -116,7 +117,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp atan(Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::atan(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::atan(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Inverse tangent of @p y / @p x, quadrant determined by the signs of
@@ -138,7 +139,8 @@ template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp atan2(
     Tp y, Tp x) noexcept
 {
-    return static_cast<Tp>(::asc::std::atan2(static_cast<float>(y), static_cast<float>(x)));
+    return ::asc::std::__fp_cast<Tp>(
+        ::asc::std::atan2(::asc::std::__fp_cast<float>(y), ::asc::std::__fp_cast<float>(x)));
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()

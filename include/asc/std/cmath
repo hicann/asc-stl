@@ -62,7 +62,13 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API float nanf(const char* tag) no
 }
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API float lerp(float a, float b, float t) noexcept
 {
-    return t == 1.0F ? b : a + t * (b - a);
+    if ((a <= 0.0F && b >= 0.0F) || (a >= 0.0F && b <= 0.0F))
+        return t * b + (1.0F - t) * a;
+    if (t == 1.0F)
+        return b;
+    const float result = a + t * (b - a);
+    // Preserve monotonicity when extrapolation or rounding passes b.
+    return (t > 1.0F) == (b > a) ? (b < result ? result : b) : (result < b ? result : b);
 }
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API bool isgreater(float x, float y) noexcept
 {

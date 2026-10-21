@@ -36,54 +36,46 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::inplace_vector`](inplace_vector.md)。
+所属类型：[`inplace_vector<T, Capacity>`](inplace_vector.md)。以下为类内声明，类型别名及模板形参由所属类提供。
 
 ### 原型1
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-optional<reference> try_push_back(T&& value);
+constexpr optional<reference> try_push_back(const T& value);
 ```
 
 ### 原型2
 
 ```cpp
-// asc::std::inplace_vector 类内的声明节选；模板形参和其他成员由所属类提供。
-optional<reference> try_push_back(const T& value);
+constexpr optional<reference> try_push_back(T&& value);
 ```
 
 ## 参数说明
 
 ### 原型1的参数
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待复制或移动到容器末尾的元素。 |
+| `value` | 输入 | 用于复制构造末尾新元素的值。 |
 
 ### 原型2的参数
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待复制或移动到容器末尾的元素。 |
+| `value` | 输入 | 用于移动构造末尾新元素的值；构造时可能消耗来源。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `optional<reference>` | 插入成功时返回包含新元素引用的optional；容量不足时返回空optional。 |
-| 原型2 | `optional<reference>` | 插入成功时返回包含新元素引用的optional；容量不足时返回空optional。 |
+| 原型1 | `optional<reference>` | 有容量时借用新元素；容量已满时为空，不构造或消耗来源。 |
+| 原型2 | `optional<reference>` | 有容量时借用新元素；容量已满时为空，不构造或消耗来源。 |
 
 ## 约束说明
 
-- 元素保存在固定容量的对象内存中，不进行动态分配。
-- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
-- value必须能够复制或移动构造为T。
-- Device侧所选构造操作必须不抛出异常。
-- 插入成功后返回的引用只在对应元素未被移除且容器仍然存活时有效。
+- 容量不足时返回空optional，不构造新元素；有容量时返回借用新元素的optional<T&>。
+- 非空结果借用的元素必须继续存活；元素构造要求仍须满足。
+- 元素的对应构造、赋值和析构须满足非抛出使用域；constexpr声明不保证任意T和语言模式都能常量求值。
 
 ## 调用示例
 

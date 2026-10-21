@@ -36,16 +36,18 @@
 
 ```cpp
 namespace asc {
-template<class Iterator, class Stride> constexpr asc::strided_iterator<Iterator, Stride> make_strided_iterator(Iterator iterator, Stride stride);
-} // namespace asc
+template <class Iterator, class Stride>
+constexpr asc::strided_iterator<Iterator, Stride> make_strided_iterator(Iterator iterator, Stride stride);
+}  // namespace asc
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc {
-template<class Iterator> constexpr asc::strided_iterator<Iterator> make_strided_iterator(Iterator iterator);
-} // namespace asc
+template <class Iterator>
+constexpr asc::strided_iterator<Iterator> make_strided_iterator(Iterator iterator);
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -96,16 +98,17 @@ template<class Iterator> constexpr asc::strided_iterator<Iterator> make_strided_
 
 ## 调用示例
 
-以下片段使用具体数组和可调用对象构造迭代器。实际使用时底层范围须保持有效。
+以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
 
-decltype(auto) example()
+bool example()
 {
     int values[4] = {1, 2, 3, 4};
     int indices[4] = {3, 2, 1, 0};
-    return asc::make_strided_iterator(values, 2);
+    auto iterator = asc::make_strided_iterator(values, 2);
+    return *iterator == 1 && iterator[1] == 3;
 }
 ```
 

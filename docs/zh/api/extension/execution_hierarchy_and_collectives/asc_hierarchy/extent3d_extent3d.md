@@ -55,6 +55,8 @@ constexpr extent3d(unsigned int x = 1, unsigned int y = 1, unsigned int z = 1) n
 
 ## 约束说明
 
+- 逐轴尺寸须满足当前设备的合法启动上限，x*y*z必须在unsigned long long中可表示；仅非零不足以保证这一条件。这里的值操作不校验实际硬件限制。
+
 - 提供C++17 constexpr Host/Device层次结构接口。
 - 带extent的值要求每一维均非零。
 - extent总数按无符号64位的x*y*z计算。

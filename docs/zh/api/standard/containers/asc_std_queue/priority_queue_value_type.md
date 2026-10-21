@@ -43,9 +43,7 @@ using value_type = typename Container::value_type;
 
 ## 约束说明
 
-- priority_queue<T,Container,Compare=less<typename Container::value_type>>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/front/`operator[]`/push_back/emplace_back/pop_back/size/empty/swap及allocator操作必须在当前执行空间有效，Compare必须定义Device可调的strict-weak-order且可在已验证移动交换域使用。
-- 交付container_type/value_compare/value_type/size_type/reference/const_reference及protected c/comp，default/Compare/Container/copy/move/allocator构造及赋值，N4861两类InputIterator构造，empty/size/top、lvalue/rvalue push、void emplace、pop，member/non-member swap、uses_allocator特化，以及Compare+Container、InputIterator+Compare+Container、Compare+Container+Alloc三类显式Container CTAD。
-- 堆序语义为Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 该别名取自选定的Container或Compare；别名查询本身不构造容器或调用比较器。
 
 ## 调用示例
 

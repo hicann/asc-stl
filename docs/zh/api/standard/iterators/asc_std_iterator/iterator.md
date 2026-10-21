@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<class Category, class T, class Distance, class Pointer, class Reference> struct iterator;
+template<class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&> struct iterator;
 } // namespace asc::std
 ```
 
@@ -46,19 +46,18 @@ template<class Category, class T, class Distance, class Pointer, class Reference
 
 ## 调用示例
 
-以下Host示例展示具体输入、接口调用和可检查的结果。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 #include <asc/std/type_traits>
-#include <asc/std/vector>
-#include <asc/std/forward_list>
 
 bool example()
 {
-    using Base = asc::std::iterator<asc::std::input_iterator_tag, int>;
-    static_assert(asc::std::is_same_v<Base::value_type, int>);
-    static_assert(asc::std::is_same_v<Base::reference, int&>);
+    using legacy = asc::std::iterator<asc::std::input_iterator_tag, int>;
+    static_assert(asc::std::is_same_v<legacy::difference_type, asc::std::ptrdiff_t>);
+    static_assert(asc::std::is_same_v<legacy::pointer, int*>);
+    static_assert(asc::std::is_same_v<legacy::reference, int&>);
     return true;
 }
 ```

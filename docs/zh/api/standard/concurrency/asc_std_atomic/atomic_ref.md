@@ -44,6 +44,8 @@ template<class T> class atomic_ref;
 
 ## 约束说明
 
+- T仅支持32位或64位的有符号、无符号整数，且不带cv限定；不接受bool、浮点或任意可平凡复制类型。
+
 - 原子对象的类型、地址空间、作用域和内存序必须匹配。
 - Device作用域的64位对象位于GM，UB原子操作仅使用memory_order_relaxed。
 

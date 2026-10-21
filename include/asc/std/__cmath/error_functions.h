@@ -29,6 +29,7 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
+#include <asc/std/__floating_point/cast.h>
 #include <asc/std/__cmath/backend.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_extended_floating_point.h>
@@ -75,7 +76,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp erf(Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::erf(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::erf(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Complementary error function erfc(@p value) = 1 - erf(@p value),
@@ -95,7 +96,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp erfc(Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::erfc(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::erfc(::asc::std::__fp_cast<float>(value)));
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()

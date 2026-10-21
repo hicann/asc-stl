@@ -34,16 +34,22 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::bitset`](bitset.md)。
+以下为`bitset<Size>`类内声明。
 
 ```cpp
-// asc::std::bitset 类内的声明节选；模板形参和其他成员由所属类提供。
-unsigned long long to_ullong() const requires (Size <= numeric_limits<unsigned long long>::digits);
+template<size_t Width = Size, enable_if_t<(Width <= sizeof(unsigned long long) * CHAR_BIT), int> = 0>
+constexpr unsigned long long to_ullong() const noexcept;
 ```
 
 ## 参数说明
 
-无参数。
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Width` | 默认值为所属bitset的Size，用于编译期检查目标整数位宽；正常调用无需显式指定。 |
+
+无函数参数。
 
 ## 返回值说明
 
@@ -53,7 +59,7 @@ unsigned long long to_ullong() const requires (Size <= numeric_limits<unsigned l
 
 ## 约束说明
 
-- _Size的值必须能由声明中的无符号整数类型表示。
+- 默认Width等于Size，Size须不超过目标无符号整数类型的二进制位数；范围按位数限定，不是只看当前置位值。该子集不提供运行期overflow_error转换。
 
 ## 调用示例
 

@@ -139,20 +139,23 @@ template<size_t Index, class ...Types> [[nodiscard]] constexpr add_pointer_t<var
 
 ## 约束说明
 
+- 对象没有活动备选项时返回空指针；可据此避免访问不存在的值。
+
 - Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
+- 返回的引用、指针或非拥有包装器不延长被引用对象的生命周期。使用时须保证该对象仍存活；对象销毁或其值存储生命周期结束后不得继续访问。
 
 ## 调用示例
 
-以下Host片段使用具体对象展示接口调用。
+以下Host示例在被引用对象仍存活时检查结果。
 
 ```cpp
 #include <asc/std/variant>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::variant<int, float> value{7};
-    return asc::std::get_if<0>(&value);
+    asc::std::variant<int, long> value(asc::std::in_place_index<0>, 7);
+    int* selected = asc::std::get_if<0>(&value);
+    return selected != nullptr && *selected == 7 && asc::std::get_if<1>(&value) == nullptr;
 }
 ```
 

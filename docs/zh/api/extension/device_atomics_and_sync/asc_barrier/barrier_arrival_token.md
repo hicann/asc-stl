@@ -35,16 +35,13 @@
 ```cpp
 namespace asc {
 class barrier_arrival_token;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 使用C++17。
-- 在AI Core SIMT编程 中操作调用方管理的GM状态。
-- Scope必须为asc::memory_scope::block或asc::memory_scope::device。
-- 所有阻塞参与者必须能够并发推进。
-- 复制构造和复制赋值已删除。
+- 令牌须来自同一barrier的一次到达，并在对应阶段等待；它只保存阶段信息，不拥有共享GM状态。
+- 令牌可按值复制，wait接受右值引用；共享barrier对象及参与者的前进要求见所属barrier页面。
 
 ## 调用示例
 

@@ -34,52 +34,44 @@
 
 ## 函数原型
 
+所属类型：[`asc::std::counted_iterator`](counted_iterator.md)。
+
 ### 原型1
 
 ```cpp
-counted_iterator();
+// counted_iterator 类内声明节选。
+template<class I2 = Iter, enable_if_t<is_default_constructible_v<I2>, int> = 0>
+constexpr counted_iterator();
 ```
 
 ### 原型2
 
 ```cpp
-constexpr counted_iterator(Iter first, iter_difference_t<Iter> last) noexcept(is_nothrow_move_constructible_v<Iter>);
+// counted_iterator 类内声明节选。
+constexpr counted_iterator(Iter value, difference_type count) noexcept(is_nothrow_move_constructible_v<Iter>);
 ```
 
 ### 原型3
 
 ```cpp
-template<class I2> constexpr counted_iterator(const counted_iterator<I2>& other) noexcept(is_nothrow_constructible_v<Iter, const I2&>);
+// counted_iterator 类内声明节选。
+template<class I2, enable_if_t<is_convertible_v<const I2&, Iter>, int> = 0>
+constexpr counted_iterator(const counted_iterator<I2>& other) noexcept(is_nothrow_constructible_v<Iter, const I2&>);
 ```
+
+以上为C++17及Device选择形式；Host C++20用`requires`表达对应条件，默认构造为defaulted。
 
 ## 参数说明
 
-### 原型1的参数
-
-无参数。
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-
-### 原型3的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
+| 模板参数 | 描述 |
 | --- | --- |
-| `I2` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
+| `I2` | 默认构造的选择参数默认为`Iter`；转换构造时为来源底层迭代器类型。 |
 
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
+| 函数参数 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
+| `value` | 输入 | 当前底层迭代器；从该位置开始须有`count`个有效元素。 |
+| `count` | 输入 | 剩余元素数量，须为非负值；0表示空计数范围。 |
+| `other` | 输入 | 转换来源的计数迭代器，同时复制其当前位置和剩余计数。 |
 
 ## 返回值说明
 
@@ -87,12 +79,13 @@ template<class I2> constexpr counted_iterator(const counted_iterator<I2>& other)
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- `Iter`须满足本操作要求的遍历能力；适配器不拥有底层范围。
+- `count()`表示从当前位置开始剩余的元素数量；解引用及自增要求剩余数量大于0。
+- 位移后的底层位置及对应计数须有效，不得越过实际有效范围。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
@@ -100,8 +93,11 @@ template<class I2> constexpr counted_iterator(const counted_iterator<I2>& other)
 bool example()
 {
     int values[] = {2, 4};
-    asc::std::counted_iterator<int*> iterator(values, 2);
-    return *iterator == 2;
+    asc::std::counted_iterator<int*> empty;
+    asc::std::counted_iterator<int*> direct(values, 2);
+    asc::std::counted_iterator<const int*> converted(direct);
+    return empty.count() == 0 && converted.count() == 2 &&
+           converted.base() == values && *converted == 2;
 }
 ```
 

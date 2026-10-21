@@ -34,30 +34,29 @@
 
 ## 声明
 
-所属类型：[`asc::std::mdspan`](mdspan.md)。
+所属类型：[`mdspan`](mdspan.md)。`value_type`移除元素类型的const与volatile限定。
 
 ```cpp
-// asc::std::mdspan 类内的声明节选；模板形参和其他成员由所属类提供。
-using value_type = Element;
+using value_type = remove_cv_t<element_type>;
 ```
 
 ## 约束说明
 
-- C++17起可使用一维`operator[]`；多参数`operator[]`按编译器的C++23多维下标特性开放。
-- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
+- 该类型别名从C++17起提供；所属类型的访问形式及语言条件见[`mdspan`](mdspan.md#约束说明)。
+
+- 该公开别名由所选`Element`、`Extents`、`Layout`或`Accessor`决定；类型查询不访问底层元素。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/mdspan>
-#include <asc/std/cstddef>
+#include <asc/std/type_traits>
 
-void use_type()
-{
-    using alias_type = typename asc::std::mdspan<int, asc::std::extents<asc::std::size_t, 2, 3>, asc::std::layout_right, asc::std::default_accessor<int>>::value_type;
-}
+using view_type = asc::std::mdspan<const int, asc::std::extents<int, 2, 3>>;
+static_assert(asc::std::is_same_v<view_type::element_type, const int>);
+static_assert(asc::std::is_same_v<view_type::value_type, int>);
 ```
 
 ## 关联API

@@ -58,7 +58,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool signbit(Tp x) noexcept
         }
     } else if constexpr (__fp_format_of_v<Tp> == __fp_format::__binary16 ||  // NOLINT(readability/braces)
         __fp_format_of_v<Tp> == __fp_format::__bfloat16 || __fp_format_of_v<Tp> == __fp_format::__binary32 ||
-        __fp_format_of_v<Tp> == __fp_format::__binary64) {
+        __fp_format_of_v<Tp> == __fp_format::__binary64 || __fp_format_of_v<Tp> == __fp_format::__fp8_e4m3 ||
+        __fp_format_of_v<Tp> == __fp_format::__fp8_e5m2 || __fp_format_of_v<Tp> == __fp_format::__fp8_e8m0) {
         return (::asc::std::__fp_get_storage(x) & __fp_sign_mask_of_v<Tp>) != 0;
     } else {
         return __builtin_signbit(x);

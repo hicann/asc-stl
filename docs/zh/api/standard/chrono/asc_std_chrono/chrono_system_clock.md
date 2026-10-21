@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::system_clock`表示日期、时间点或时长计算中的`system_clock`值类型。
+`asc::std::chrono::system_clock`提供系统时间点的类型标签、纳秒精度及`is_steady=false`；当前类型不提供now、`to_time_t`或`from_time_t`。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

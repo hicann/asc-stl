@@ -34,8 +34,10 @@
 
 ## 函数原型
 
+所属类型为[`year_month_day_last`](chrono_year_month_day_last.md)。
+
 ```cpp
-explicit constexpr asc::std::chrono::year_month_day_last::operator local_days() const noexcept;
+[[nodiscard]] explicit constexpr operator local_days() const noexcept;
 ```
 
 ## 参数说明
@@ -51,6 +53,7 @@ explicit constexpr asc::std::chrono::year_month_day_last::operator local_days() 
 ## 约束说明
 
 - 换算数值与系统纪元天数一致，仅类型面向本地纪元。
+- 调用月末日查询或依赖该查询的转换前，月字段必须在1到12之间；完整有效性可由来源对象的ok()检查。无效月份不得用于月长表查询。
 
 ## 调用示例
 

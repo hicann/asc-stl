@@ -34,8 +34,10 @@
 
 ```cpp
 namespace asc {
-template<class Iterator, class InputFunction, class OutputFunction> constexpr asc::transform_input_output_iterator<InputFunction, OutputFunction, Iterator> make_transform_input_output_iterator(Iterator iterator, InputFunction input_function, OutputFunction output_function);
-} // namespace asc
+template <class Iterator, class InputFunction, class OutputFunction>
+constexpr asc::transform_input_output_iterator<InputFunction, OutputFunction, Iterator>
+make_transform_input_output_iterator(Iterator iterator, InputFunction input_function, OutputFunction output_function);
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -69,16 +71,19 @@ template<class Iterator, class InputFunction, class OutputFunction> constexpr as
 
 ## 调用示例
 
-以下片段使用具体数组和可调用对象构造迭代器。实际使用时底层范围须保持有效。
+以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
 
-decltype(auto) example()
+bool example()
 {
     int values[4] = {1, 2, 3, 4};
     int indices[4] = {3, 2, 1, 0};
-    return asc::make_transform_input_output_iterator(values, [](int value) { return value; }, [](int value) { return value; });
+    auto iterator = asc::make_transform_input_output_iterator(
+        values, [](int value) { return value; }, [](int value) { return value; });
+    *iterator = 9;
+    return (*iterator).read() == 9 && values[0] == 9;
 }
 ```
 

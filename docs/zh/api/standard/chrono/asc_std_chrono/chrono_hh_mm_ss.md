@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::hh_mm_ss`表示日期、时间点或时长计算中的`hh_mm_ss`值类型。
+`asc::std::chrono::hh_mm_ss`将一个时长分解为符号、绝对值的小时、分钟、秒和小数秒，便于逐字段观察，再按`precision`组合回时长。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -40,9 +40,19 @@ template<class Duration> class hh_mm_ss;
 } // namespace asc::std::chrono
 ```
 
+## 参数说明
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Duration` | 待拆分的时长类型；计数须满足chrono::abs的有符号条件并支持相应转换。 |
+
 ## 约束说明
 
-- 日历字段和计时值的运算可在Host与支持的AI Core编程模式使用；日期有效性由相应`ok()`成员判断。
+- Duration须为duration，其计数须满足chrono::abs的有符号条件；当前实现不接受无符号计数。
+- 原始时长的绝对值及拆分后的字段必须可表示；有符号最小负值不能取绝对值时不得传入。
+- 负号单独保存，时、分、秒与小数秒字段保存绝对值的各部分。
 
 ## 调用示例
 

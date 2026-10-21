@@ -45,7 +45,7 @@ constexpr explicit barrier(asc::std::ptrdiff_t expected, CompletionFunction comp
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `expected` | 输入 | 每阶段期望到达的参与者数量：全部到达后触发完成函数并进入下一阶段；须为正。 |
+| `expected` | 输入 | 每阶段期望到达的参与者数量：全部到达后触发完成函数并进入下一阶段；须在[0, max()]内。 |
 | `completion` | 输入 | 阶段完成函数：本阶段全部参与者到达后、进入下一阶段前调用；默认为空实现。 |
 
 ## 返回值说明
@@ -53,6 +53,8 @@ constexpr explicit barrier(asc::std::ptrdiff_t expected, CompletionFunction comp
 无返回值。
 
 ## 约束说明
+
+- 初始expected须在`[0, max()]`内；arrive的update须非负且不超过当前阶段剩余计数。expected为0时不能用正update到达；arrive_and_drop还要求后续期望计数当前为正。
 
 - 使用C++17。
 - 在AI Core SIMT编程 中操作调用方管理的GM状态。

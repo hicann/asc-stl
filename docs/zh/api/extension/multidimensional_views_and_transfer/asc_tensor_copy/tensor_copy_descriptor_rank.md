@@ -32,8 +32,10 @@
 
 ## 函数原型
 
+以下为`asc::tensor_copy_descriptor<Rank>`类内声明，Rank由所属类模板提供。
+
 ```cpp
-constexpr unsigned int asc::tensor_copy_descriptor<Rank>::rank() const noexcept;
+constexpr unsigned int rank() const noexcept;
 ```
 
 ## 参数说明
@@ -42,7 +44,7 @@ constexpr unsigned int asc::tensor_copy_descriptor<Rank>::rank() const noexcept;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rank` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Rank` | 描述符的张量秩（维度数量），为1至5的编译期无符号整数。 |
 
 ## 返回值说明
 
@@ -52,9 +54,8 @@ constexpr unsigned int asc::tensor_copy_descriptor<Rank>::rank() const noexcept;
 
 ## 约束说明
 
-- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Rank为1至5。
-- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
+- 可在Host、AI Core SIMD编程和AI Core SIMT编程中调用；本操作同步处理描述符，不启动数据搬运。
+- 返回编译期模板参数`Rank`，其取值为1至5；不要求描述符已通过校验。
 
 ## 调用示例
 

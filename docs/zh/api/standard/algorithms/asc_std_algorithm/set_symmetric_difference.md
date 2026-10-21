@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::set_symmetric_difference`把两个已排序范围中只出现于一侧的元素写入输出；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::set_symmetric_difference`把两个已排序范围中只出现于一侧的元素写入输出；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,16 +38,20 @@
 
 ```cpp
 namespace asc::std {
-template<class InputIterator1, class InputIterator2, class OutputIterator, class Compare> constexpr OutputIterator set_symmetric_difference(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, OutputIterator result, Compare compare);
-} // namespace asc::std
+template <class InputIterator1, class InputIterator2, class OutputIterator, class Compare>
+constexpr OutputIterator set_symmetric_difference(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2,
+    InputIterator2 last2, OutputIterator result, Compare compare);
+}  // namespace asc::std
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class InputIterator1, class InputIterator2, class OutputIterator> constexpr OutputIterator set_symmetric_difference(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, OutputIterator result);
-} // namespace asc::std
+template <class InputIterator1, class InputIterator2, class OutputIterator>
+constexpr OutputIterator set_symmetric_difference(
+    InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, OutputIterator result);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -104,21 +108,21 @@ template<class InputIterator1, class InputIterator2, class OutputIterator> const
 ## 约束说明
 
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     int other[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     int output[16] = {};
-    return asc::std::set_symmetric_difference(values, values + 8, other, other + 8, output);
+    auto result = asc::std::set_symmetric_difference(values, values + 8, other, other + 8, output);
+    return result == output;
 }
 ```
 

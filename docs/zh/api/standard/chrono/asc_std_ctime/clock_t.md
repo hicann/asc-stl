@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/ctime>`。
 
-`asc::std::clock_t`标识当前ABI对应的时间、字符转换或宽字符类型。
+`asc::std::clock_t`是clock()返回的处理器时钟计数类型；Host沿用平台time.h，Device使用long long。
 
 标准语义参考：[cppreference `ctime`](https://en.cppreference.com/w/cpp/header/ctime)。
 

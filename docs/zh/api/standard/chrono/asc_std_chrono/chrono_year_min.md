@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::chrono::year 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr year min() noexcept;
+[[nodiscard]] static constexpr year min() noexcept;
 ```
 
 ## 参数说明

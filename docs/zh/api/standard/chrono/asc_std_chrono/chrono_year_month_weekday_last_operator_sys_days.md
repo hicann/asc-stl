@@ -34,8 +34,10 @@
 
 ## 函数原型
 
+所属类型为[`year_month_weekday_last`](chrono_year_month_weekday_last.md)。
+
 ```cpp
-constexpr asc::std::chrono::year_month_weekday_last::operator sys_days() const noexcept;
+[[nodiscard]] constexpr operator sys_days() const noexcept;
 ```
 
 ## 参数说明
@@ -51,6 +53,7 @@ constexpr asc::std::chrono::year_month_weekday_last::operator sys_days() const n
 ## 约束说明
 
 - 换算定位到该月最后一个同星期日期，结果面向系统纪元。
+- 调用月末日查询或依赖该查询的转换前，月字段必须在1到12之间；完整有效性可由来源对象的ok()检查。无效月份不得用于月长表查询。
 
 ## 调用示例
 

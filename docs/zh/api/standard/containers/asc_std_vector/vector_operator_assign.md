@@ -57,11 +57,9 @@ vector<T, Allocator>& operator=(vector<T, Allocator>&& other) noexcept;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 仅提供移动赋值，复制赋值已删除；自移动赋值不改变对象。
+- 非自移动赋值先销毁目标元素并释放目标存储，再复制源分配器并接管源存储，使源容器变为空；不按分配器传播特征选择逐元素移动路径。
+- 分配器赋值、元素销毁及存储释放操作须不抛出异常；目标原元素的指针、引用和迭代器失效。
 
 ## 调用示例
 

@@ -34,21 +34,25 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::ranges::view_interface`](ranges_view_interface.md)。
+所属类型：[`view_interface`](ranges_view_interface.md)。以下是按参与条件列出的声明摘要；保留供调用使用的模板默认值，省略仅供SFINAE的实现选择参数。涉及私有返回类型时用auto摘要表示，不承诺可直接命名该类型。
 
 ### 原型1
 
 ```cpp
-// asc::std::ranges::view_interface 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class D2> constexpr decltype(auto) back();
+template<class Derived2 = Derived>
+constexpr decltype(auto) back();
 ```
+
+`Derived2`须有双向迭代器，且起止迭代器类型相同。
 
 ### 原型2
 
 ```cpp
-// asc::std::ranges::view_interface 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class D2> constexpr decltype(auto) back() const;
+template<class Derived2 = Derived>
+constexpr decltype(auto) back() const;
 ```
+
+`const Derived2`须有双向迭代器，且起止迭代器类型相同。
 
 ## 参数说明
 
@@ -58,7 +62,9 @@ template<class D2> constexpr decltype(auto) back() const;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `D2` | view_interface的派生视图类型，用于检查该成员所需的范围能力。 |
+| `Derived2` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
+
+无函数参数。
 
 ### 原型2的参数
 
@@ -66,18 +72,22 @@ template<class D2> constexpr decltype(auto) back() const;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `D2` | view_interface的派生视图类型，用于检查该成员所需的范围能力。 |
+| `Derived2` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
+
+无函数参数。
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `decltype(auto)` | 返回末元素的引用。 |
-| 原型2 | `decltype(auto)` | 返回末元素的引用。 |
+| 原型1 | `decltype(auto)` | 返回末元素的引用或其迭代器解引用结果，保留该表达式的值类别。 |
+| 原型2 | `decltype(auto)` | 返回末元素的引用或其迭代器解引用结果，保留该表达式的值类别。 |
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- 每种形式的参与条件见原型；无实参查询一般直接调用，不需要指定模板选择类型。
+- 范围须非空，且相应迭代器可解引用。
+- 返回的迭代器、指针或引用以及借用范围不得超过其实际依赖的视图对象和元素存储的有效期。
 
 ## 调用示例
 

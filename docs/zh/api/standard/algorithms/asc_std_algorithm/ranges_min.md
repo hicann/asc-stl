@@ -39,13 +39,13 @@
 ```cpp
 namespace asc::std::ranges {
 min(left, right, compare, projection);
-} // namespace asc::std::ranges
+}  // namespace asc::std::ranges
 ```
 
 ```cpp
 namespace asc::std::ranges {
 min(range, compare, projection);
-} // namespace asc::std::ranges
+}  // namespace asc::std::ranges
 ```
 
 ## 参数说明
@@ -57,7 +57,7 @@ min(range, compare, projection);
 | `left` | 输入 | 参与比较的第一个值。 |
 | `right` | 输入 | 参与比较的第二个值。 |
 | `compare` | 输入 | 确定元素先后关系的比较对象。 |
-| `projection` | 输入 | 在比较或判断前作用于元素的投影函数。 |
+| `projection` | 输入 | 在比较或判断前作用于元素的投影函数；省略时使用`asc::std::identity`。 |
 
 ### 调用形式2的参数
 
@@ -65,7 +65,7 @@ min(range, compare, projection);
 | --- | --- | --- |
 | `range` | 输入 | 待访问或变换的输入范围；借用结果受其生命周期约束。 |
 | `compare` | 输入 | 确定元素先后关系的比较对象。 |
-| `projection` | 输入 | 在比较或判断前作用于元素的投影函数。 |
+| `projection` | 输入 | 在比较或判断前作用于元素的投影函数；省略时使用`asc::std::identity`。 |
 
 ## 返回值说明
 
@@ -77,6 +77,8 @@ min(range, compare, projection);
 | 范围 | `range_value_t<Range>` |
 
 ## 约束说明
+
+- 省略compare时使用`asc::std::ranges::less`；省略projection时使用`asc::std::identity`。
 
 - 范围调用要求非空范围及可复制的元素。
 - 本期不提供initializer-list重载。

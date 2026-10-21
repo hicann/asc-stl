@@ -82,6 +82,20 @@ union __variant_storage<Index, Head, Tail...> {
     {}
 };
 
+// Keep the enclosing storage object alive if construction of the selected member throws.
+template <__SIZE_TYPE__ Target, __SIZE_TYPE__ Index, class Head, class... Tail, class... Args>
+CANN_ASC_STL_API constexpr void __variant_storage_construct(
+    __variant_storage<Index, Head, Tail...>& storage, Args&&... args)
+{
+    if constexpr (Target == Index) {
+        ::asc::std::__construct_at(
+            ::asc::std::addressof(storage.head), in_place_index<Target>, ::asc::std::forward<Args>(args)...);
+    } else {
+        ::asc::std::__construct_at(
+            ::asc::std::addressof(storage.tail), in_place_index<Target>, ::asc::std::forward<Args>(args)...);
+    }
+}
+
 template <__SIZE_TYPE__ Target, __SIZE_TYPE__ Index, class Head, class... Tail>
 CANN_ASC_STL_API constexpr decltype(auto) __variant_storage_get(__variant_storage<Index, Head, Tail...>& storage)
 {
@@ -107,6 +121,9 @@ template <__SIZE_TYPE__ Index, class Head, class... Tail>
 CANN_ASC_STL_API constexpr void __variant_storage_destroy(
     __SIZE_TYPE__ active, __variant_storage<Index, Head, Tail...>& storage) noexcept
 {
+    if (active == variant_npos) {
+        return;
+    }
     if (active == Index) {
         ::asc::std::__destroy_at(::asc::std::addressof(storage.head.value));
     } else {
@@ -121,9 +138,14 @@ template <__SIZE_TYPE__ Index, class Head, class... Tail>
 CANN_ASC_STL_API constexpr void __variant_storage_copy_construct(__SIZE_TYPE__ active,
     __variant_storage<Index, Head, Tail...>& destination, const __variant_storage<Index, Head, Tail...>& source)
 {
+    if (active == variant_npos) {
+        return;
+    }
     if (active == Index) {
         ::asc::std::__construct_at(::asc::std::addressof(destination.head), in_place_index<Index>, source.head.value);
     } else {
+        // A different active member may have ended this nested union's lifetime.
+        ::asc::std::__construct_at(::asc::std::addressof(destination.tail));
         __variant_storage_copy_construct(active, destination.tail, source.tail);
     }
 }
@@ -135,10 +157,14 @@ template <__SIZE_TYPE__ Index, class Head, class... Tail>
 CANN_ASC_STL_API constexpr void __variant_storage_move_construct(__SIZE_TYPE__ active,
     __variant_storage<Index, Head, Tail...>& destination, __variant_storage<Index, Head, Tail...>& source)
 {
+    if (active == variant_npos) {
+        return;
+    }
     if (active == Index) {
         ::asc::std::__construct_at(
             ::asc::std::addressof(destination.head), in_place_index<Index>, ::asc::std::move(source.head.value));
     } else {
+        ::asc::std::__construct_at(::asc::std::addressof(destination.tail));
         __variant_storage_move_construct(active, destination.tail, source.tail);
     }
 }
@@ -150,6 +176,9 @@ template <__SIZE_TYPE__ Index, class Head, class... Tail>
 CANN_ASC_STL_API constexpr void __variant_storage_copy_assign(__SIZE_TYPE__ active,
     __variant_storage<Index, Head, Tail...>& destination, const __variant_storage<Index, Head, Tail...>& source)
 {
+    if (active == variant_npos) {
+        return;
+    }
     if (active == Index) {
         destination.head.value = source.head.value;
     } else {
@@ -164,6 +193,9 @@ template <__SIZE_TYPE__ Index, class Head, class... Tail>
 CANN_ASC_STL_API constexpr void __variant_storage_move_assign(__SIZE_TYPE__ active,
     __variant_storage<Index, Head, Tail...>& destination, __variant_storage<Index, Head, Tail...>& source)
 {
+    if (active == variant_npos) {
+        return;
+    }
     if (active == Index) {
         destination.head.value = ::asc::std::move(source.head.value);  // NOLINT(build/include_what_you_use)
     } else {

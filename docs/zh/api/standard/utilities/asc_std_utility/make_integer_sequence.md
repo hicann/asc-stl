@@ -47,14 +47,16 @@ using Equivalent = asc::std::integer_sequence<int, 0, 1, 2>;
 
 ## 调用示例
 
-以下片段选用具体模板实参展示别名类型。
+以下Host示例用具体类型和独立预期检查别名或标记结果。
 
 ```cpp
 #include <asc/std/utility>
+#include <asc/std/type_traits>
 
 void use_type()
 {
     using selected = asc::std::make_integer_sequence<int, 3>;
+    static_assert(asc::std::is_same_v<selected, asc::std::integer_sequence<int, 0, 1, 2>>);
 }
 ```
 

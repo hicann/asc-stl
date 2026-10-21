@@ -40,9 +40,9 @@
 
 ## 约束说明
 
-- 11个CANN_ASC_STL_ATOMIC_*_LOCK_FREE产品宏。
-- 已交付整数/字符为2，未交付pointer为0。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 本宏固定为`2`，表示对应整数或字符原子类型始终采用无锁实现。
+- 本宏是编译期常量；对应原子类型的语言条件、操作调用位置与GM存储要求见[atomic](atomic.md)。
+- 宏在C++17中也有定义；对应的[atomic_char8_t](atomic_char8_t.md)类型别名从C++20开始提供。
 
 ## 调用示例
 

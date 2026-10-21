@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::philox_engine::max`返回该类型允许的最大值。
+`asc::std::philox_engine::max`返回WordSize位字的最大输出值2^WordSize-1。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
@@ -49,7 +49,7 @@ static constexpr UIntType max() noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `UIntType` | 返回该类型允许的最大值。 |
+| `UIntType` | 返回WordSize位字的最大输出值2^WordSize-1。 |
 
 ## 约束说明
 

@@ -34,11 +34,10 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::priority_queue`](priority_queue.md)。
+所属类型：[`priority_queue<T, Container, Compare>`](priority_queue.md)。本成员没有noexcept规格。
 
 ```cpp
-// asc::std::priority_queue 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr void swap(priority_queue<T, Container, Compare>& other) noexcept(noexcept(this->c.swap(other.c))&& noexcept(Compare(static_cast<Compare&&>(this->comp)))&& noexcept(this->comp = static_cast<Compare&&>(other.comp))&& noexcept(other.comp = static_cast<Compare&&>(this->comp)));
+constexpr void swap(priority_queue& other);
 ```
 
 ## 参数说明
@@ -55,23 +54,28 @@ constexpr void swap(priority_queue<T, Container, Compare>& other) noexcept(noexc
 
 ## 约束说明
 
-- priority_queue<T,Container,Compare=less<typename Container::value_type>>的显式兼容Container合同：T必须等于Container::value_type，Container的构造/front/`operator[]`/push_back/emplace_back/pop_back/size/empty/swap及allocator操作必须在当前执行空间有效，Compare必须定义Device可调的strict-weak-order且可在已验证移动交换域使用。
-- 交付container_type/value_compare/value_type/size_type/reference/const_reference及protected c/comp，default/Compare/Container/copy/move/allocator构造及赋值，N4861两类InputIterator构造，empty/size/top、lvalue/rvalue push、void emplace、pop，member/non-member swap、uses_allocator特化，以及Compare+Container、InputIterator+Compare+Container、Compare+Container+Alloc三类显式Container CTAD。
-- 堆序语义为Host、AI Core SIMD编程 和AI Core SIMT编程。
+- Container须支持swap；priority_queue还移动交换Compare。
+- Device使用的Container、元素操作及Compare须可在对应执行位置调用并满足其非抛出要求；Host的异常行为遵循所调用对象，未额外声明noexcept时不承诺不抛出。
 
 ## 调用示例
 
-以下Host片段显式提供标准容器作为底层存储；设备端须提供可在目标位置调用的容器。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/queue>
-#include <deque>
 #include <functional>
 #include <vector>
 
-void example(asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>& object, asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>& other)
+bool example()
 {
-    object.swap(other);
+    using queue_type = asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>;
+    queue_type first;
+    queue_type second;
+    first.push(3);
+    second.push(1);
+    static_assert(!noexcept(first.swap(second)));
+    first.swap(second);
+    return first.top() == 1 && second.top() == 3;
 }
 ```
 

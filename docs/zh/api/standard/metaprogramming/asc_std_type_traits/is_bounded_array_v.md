@@ -34,9 +34,12 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const bool is_bounded_array_v;
+template<class T>
+inline constexpr bool is_bounded_array_v = is_bounded_array<T>::value;
 } // namespace asc::std
 ```
 
@@ -51,7 +54,8 @@ template<class T> inline constexpr const bool is_bounded_array_v;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::is_bounded_array_v<int>;
+static_assert((asc::std::is_bounded_array_v<int>) == false);
+static_assert(asc::std::is_bounded_array_v<int[3]>);
 ```
 
 ## 关联API

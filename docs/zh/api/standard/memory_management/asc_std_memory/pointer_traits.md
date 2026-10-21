@@ -34,25 +34,21 @@
 
 ## 声明
 
-### 原型1
+第一行是主模板，第二行是原始指针偏特化；第二模板参数是默认选择参数，调用通常只写pointer_traits<Ptr>。
 
 ```cpp
 namespace asc::std {
-template<class Ptr, class> struct pointer_traits;
-} // namespace asc::std
-```
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<class T> struct pointer_traits;
-} // namespace asc::std
+template<class Ptr, class = void> struct pointer_traits;
+template<class T> struct pointer_traits<T*>;
+}
 ```
 
 ## 约束说明
 
-- 支持原始指针和用户自定义fancy pointer，接口自身不分配内存。
+- 原始指针`T*`直接提供`pointer=T*`、`element_type=T`、`difference_type=ptrdiff_t`以及`rebind<U>=U*`。
+- 泛型指针优先使用其`element_type`；若没有，则可从`SomePointer<T, Args...>`形式的首个类型实参推导。无法得到元素类型时不提供这些成员。
+- 泛型`difference_type`优先使用指针类型自带成员，否则为`ptrdiff_t`；`rebind`优先使用指针的同名别名，否则替换上述模板形式的首个类型实参。
+- 不分配存储；`pointer_to`返回指针的有效期受原对象生命周期限制。
 
 ## 调用示例
 

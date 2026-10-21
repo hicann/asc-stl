@@ -36,8 +36,8 @@
 
 ```cpp
 namespace asc::std {
-struct defer_lock_t;
-} // namespace asc::std
+using defer_lock_t = __lock_detail::__lock_tag<0>;
+}
 ```
 
 ## 约束说明

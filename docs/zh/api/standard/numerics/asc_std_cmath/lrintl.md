@@ -34,11 +34,17 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-constexpr long lrintl(long double value) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr long lrintl(long double value) noexcept;
+}
 ```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
 ## 参数说明
 
@@ -50,24 +56,25 @@ constexpr long lrintl(long double value) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `long` | 按当前舍入模式转换所得的long整数。 |
+返回类型按各原型确定（`long`）。按当前舍入方向转换为long。
 
 ## 约束说明
+
+- 输入为NaN、无穷或舍入结果超出返回整数类型可表示范围时，没有可移植的数值结果；具体值及浮点异常由Host或Device后端决定，不应依赖固定整数哨兵。
 
 - 宿主long double按舍入模式取整转long，后缀l别名。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(long double value)
+bool example()
 {
-    return asc::std::lrintl(value);
+    const auto result = asc::std::lrintl(2.0L);
+    return result == 2L;
 }
 ```
 

@@ -28,21 +28,24 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::iota_view`惰性地观察、筛选、组合或变换输入范围；底层存储仍由调用方管理。
-
-标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
+`iota_view<Value, Bound>`按值保存起点和边界，以递增当前计数值生成序列；不借用用于构造起点的局部标量。默认边界为unreachable_sentinel_t，不自动生成有限长度。
 
 ## 声明
 
+声明摘要保留公开默认实参；类型及成员操作仍须满足下述条件。
+
 ```cpp
 namespace asc::std::ranges {
-template<class Start, class BoundSentinel> class iota_view;
-} // namespace asc::std::ranges
+template<class Value, class Bound = unreachable_sentinel_t>
+class iota_view;
+}
 ```
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- Value必须支持所用的递增、比较和迭代运算；整数Value提供随机访问计数。
+- 有界遍历须能安全到达结束条件，不得令计数运算溢出。
+- 默认Bound不可达；对这种无界范围不能执行要求有限长度的完整遍历或size查询。
 
 ## 调用示例
 

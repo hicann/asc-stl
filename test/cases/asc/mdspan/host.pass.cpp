@@ -15,6 +15,7 @@
  */
 
 #include "../../../support/w09_w10_semantics.h"
+#include "../../../support/dlpack_review_regression.h"
 
 int main()
 {
@@ -22,7 +23,7 @@ int main()
     if (core != 0)
         return core;
 #if defined(CANN_ASC_STL_HAS_DLPACK)
-    return asc_stl_w09_w10_test::evaluate_dlpack();
+    return asc_stl_dlpack_review::evaluate() ? asc_stl_w09_w10_test::evaluate_dlpack() : 91;
 #else
     return 0;
 #endif

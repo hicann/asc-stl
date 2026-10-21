@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::thread_extents_3d`返回整个Grid的三维线程范围。
+`asc::thread_extents_3d`返回当前Block内的三维线程范围blockDim。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
 asc::extent3d thread_extents_3d() noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明

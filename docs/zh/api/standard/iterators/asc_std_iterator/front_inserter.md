@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<class Container> [[nodiscard]] constexpr front_insert_iterator<Container> front_inserter(Container& container) noexcept;
+template<class Container> constexpr front_insert_iterator<Container> front_inserter(Container& container) noexcept;
 } // namespace asc::std
 ```
 
@@ -62,24 +62,24 @@ template<class Container> [[nodiscard]] constexpr front_insert_iterator<Containe
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 目标容器须支持对应的`push_front(value)`操作；插入迭代器保存容器地址，不拥有容器。
+- 容器须在适配器使用期间有效；插入操作还须遵守目标容器自身的迭代器失效规则。
 
 ## 调用示例
 
-以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 #include <deque>
-#include <functional>
-#include <vector>
 
-void example()
+bool example()
 {
     ::std::deque<int> values;
     auto output = asc::std::front_inserter(values);
     *output = 7;
+    *output = 9;
+    return values.size() == 2 && values[0] == 9 && values[1] == 7;
 }
 ```
 

@@ -38,8 +38,8 @@
 
 ```cpp
 namespace asc::std::numbers {
-inline constexpr const double ln2;
-} // namespace asc::std::numbers
+inline constexpr double ln2 = 0x1.62e42fefa39ef35793c7673007e6p-1;
+}
 ```
 
 ## 约束说明

@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::allocator_traits 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr allocator_type select_on_container_copy_construction(const allocator_type& allocator);
+static constexpr allocator_type select_on_container_copy_construction(const allocator_type& allocator);
 ```
 
 ## 参数说明
@@ -57,12 +57,8 @@ constexpr allocator_type select_on_container_copy_construction(const allocator_t
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- 分配器提供可调用的同名选择成员时使用其返回值，否则按值复制传入的分配器。
+- 查询不复制或构造容器元素；返回分配器对象的所有权及资源共享规则由其类型决定。
 
 ## 调用示例
 

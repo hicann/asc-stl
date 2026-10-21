@@ -24,6 +24,9 @@ alignas(64) unsigned char pinned_storage[4096];
 int active_device = 0;
 int device_live = 0;
 int pinned_live = 0;
+int device_allocations = 0;
+bool fail_device_free = false;
+bool fail_pinned_free = false;
 bool event_done = true;
 }  // namespace
 
@@ -43,11 +46,14 @@ int aclrtMalloc(void** pointer, __SIZE_TYPE__ bytes, int)
     *pointer = cursor;
     cursor += bytes;
     ++device_live;
+    ++device_allocations;
     return 0;
 }
 int aclrtFree(void* pointer)
 {
     (void)pointer;
+    if (fail_device_free)
+        return 19;
     --device_live;
     return 0;
 }
@@ -66,6 +72,8 @@ int aclrtMallocHost(void** pointer, __SIZE_TYPE__ bytes)
 int aclrtFreeHost(void* pointer)
 {
     (void)pointer;
+    if (fail_pinned_free)
+        return 23;
     --pinned_live;
     return 0;
 }
@@ -168,6 +176,54 @@ int main()
     assert(staging.data()[2] == 3);
     assert(staging.close().success());
     assert(staging.close().success());
+    // Failed replacement must retain both owners and report factory cleanup
+    // errors before allocating a replacement.
+    asc::device_buffer<int> old_device;
+    asc::device_buffer<int> new_device;
+    assert(asc::make_device_buffer(old_device, resource, stream, 2).success());
+    assert(asc::make_device_buffer(new_device, resource, stream, 3).success());
+    int* old_pointer = old_device.data();
+    int* new_pointer = new_device.data();
+    fail_device_free = true;
+    old_device = static_cast<asc::device_buffer<int>&&>(new_device);
+    assert(old_device.data() == old_pointer && new_device.data() == new_pointer);
+    const int allocations_before = device_allocations;
+    assert(!asc::make_device_buffer(old_device, resource, stream, 4).success());
+    assert(old_device.data() == old_pointer && device_allocations == allocations_before);
+    fail_device_free = false;
+    assert(old_device.close().success() && new_device.close().success());
+
+    asc::pinned_buffer<int> old_pinned;
+    asc::pinned_buffer<int> new_pinned;
+    assert(asc::make_pinned_buffer(old_pinned, presource, stream, 2).success());
+    assert(asc::make_pinned_buffer(new_pinned, presource, stream, 3).success());
+    old_pointer = old_pinned.data();
+    new_pointer = new_pinned.data();
+    fail_pinned_free = true;
+    old_pinned = static_cast<asc::pinned_buffer<int>&&>(new_pinned);
+    assert(old_pinned.data() == old_pointer && new_pinned.data() == new_pointer);
+    assert(!asc::make_pinned_buffer(old_pinned, presource, stream, 4).success());
+    assert(old_pinned.data() == old_pointer);
+    fail_pinned_free = false;
+    assert(old_pinned.close().success() && new_pinned.close().success());
+
+    // Exhaust metadata while backend storage remains available. A failed
+    // extra request must never allocate an unregistered 65th block.
+    asc::device_memory_pool pool;
+    asc::device_memory_pool_config configuration{};
+    assert(asc::device_memory_pool::create(pool, configuration).success());
+    void* blocks[64]{};
+    for (unsigned index = 0; index < 64; ++index)
+        assert(pool.allocate_async(&blocks[index], 1, 1, stream).success());
+    const int full_allocations = device_allocations;
+    void* rejected = nullptr;
+    fail_device_free = true;
+    assert(pool.allocate_async(&rejected, 1, 1, stream).code() == asc::execution_errc::insufficient_storage);
+    assert(rejected == nullptr && device_allocations == full_allocations);
+    fail_device_free = false;
+    for (void* block : blocks)
+        assert(pool.deallocate_async(block, stream).success());
+    assert(pool.close().success());
     assert(device_live == 0 && pinned_live == 0);
     return 0;
 }

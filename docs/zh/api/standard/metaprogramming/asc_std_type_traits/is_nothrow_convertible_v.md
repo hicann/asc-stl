@@ -34,9 +34,12 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<typename Fm, typename To> inline constexpr const bool is_nothrow_convertible_v;
+template<typename Fm, typename To>
+inline constexpr bool is_nothrow_convertible_v = is_nothrow_convertible<Fm, To>::value;
 } // namespace asc::std
 ```
 
@@ -51,7 +54,7 @@ template<typename Fm, typename To> inline constexpr const bool is_nothrow_conver
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::is_nothrow_convertible_v<int, long>;
+static_assert((asc::std::is_nothrow_convertible_v<int, long>) == true);
 ```
 
 ## 关联API

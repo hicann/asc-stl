@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::is_permutation`判断两个范围是否含有相同元素且各元素出现次数相同；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::is_permutation`判断两个范围是否含有相同元素且各元素出现次数相同；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,32 +38,39 @@
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator1, class ForwardIterator2, class BinaryPredicate> [[nodiscard]] constexpr bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2, BinaryPredicate predicate);
-} // namespace asc::std
+template <class ForwardIterator1, class ForwardIterator2, class BinaryPredicate>
+[[nodiscard]] constexpr bool is_permutation(
+    ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2, BinaryPredicate predicate);
+}  // namespace asc::std
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator1, class ForwardIterator2, class BinaryPredicate> [[nodiscard]] constexpr bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2, ForwardIterator2 last2, BinaryPredicate pred);
-} // namespace asc::std
+template <class ForwardIterator1, class ForwardIterator2, class BinaryPredicate>
+[[nodiscard]] constexpr bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2,
+    ForwardIterator2 last2, BinaryPredicate pred);
+}  // namespace asc::std
 ```
 
 ### 原型3
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator1, class ForwardIterator2> [[nodiscard]] constexpr bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2);
-} // namespace asc::std
+template <class ForwardIterator1, class ForwardIterator2>
+[[nodiscard]] constexpr bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2);
+}  // namespace asc::std
 ```
 
 ### 原型4
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator1, class ForwardIterator2> [[nodiscard]] constexpr bool is_permutation(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2, ForwardIterator2 last2);
-} // namespace asc::std
+template <class ForwardIterator1, class ForwardIterator2>
+[[nodiscard]] constexpr bool is_permutation(
+    ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2, ForwardIterator2 last2);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -153,8 +160,9 @@ template<class ForwardIterator1, class ForwardIterator2> [[nodiscard]] constexpr
 
 ## 约束说明
 
+- 对未提供`last2`的重载，从`first2`起须有至少`last1 - first1`个有效可读元素；两个范围在比较期间均须保持有效。
+
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/linalg>`。
 
-`asc::std::linalg::conjugated_accessor`定义多维视图读取或写入元素的访问策略。
+`asc::std::linalg::conjugated_accessor`定义按值读取计算结果的访问策略；不通过返回值写回底层元素。
 
 标准语义参考：[cppreference `linalg`](https://en.cppreference.com/w/cpp/header/linalg)。
 

@@ -36,23 +36,28 @@
 
 ```cpp
 namespace asc::std {
-inline constexpr const ::std::size_t variant_npos;
-} // namespace asc::std
+inline constexpr size_t variant_npos = static_cast<size_t>(-1);
+}
 ```
 
 ## 约束说明
 
+- `index()`在对象没有活动备选项时返回该哨兵值，例如Host切换备选项的构造抛出异常之后。
+
 - Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例用具体输入和可判断结果展示本接口。
 
 ```cpp
 #include <asc/std/variant>
 
-auto value = asc::std::variant_npos;
+bool example()
+{
+    static_assert(asc::std::variant_npos == static_cast<asc::std::size_t>(-1));
+    return true;
+}
 ```
 
 ## 关联API

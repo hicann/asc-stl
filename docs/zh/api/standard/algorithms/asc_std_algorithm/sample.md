@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::sample`从输入范围随机选取指定数量的元素；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::sample`从输入范围随机选取指定数量的元素；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -36,8 +36,10 @@
 
 ```cpp
 namespace asc::std {
-template<class PopulationIterator, class SampleIterator, class Distance, class UniformRandomNumberGenerator> SampleIterator sample(PopulationIterator first, PopulationIterator last, SampleIterator output_iter, Distance n, UniformRandomNumberGenerator&& g);
-} // namespace asc::std
+template <class PopulationIterator, class SampleIterator, class Distance, class UniformRandomNumberGenerator>
+SampleIterator sample(PopulationIterator first, PopulationIterator last, SampleIterator output_iter, Distance n,
+    UniformRandomNumberGenerator&& g);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -69,24 +71,35 @@ template<class PopulationIterator, class SampleIterator, class Distance, class U
 
 ## 约束说明
 
+- `n >= 0`；输出范围可容纳`min(n, 输入长度)`个元素。
+- 若总体仅满足输入迭代器要求，输出迭代器须支持随机访问；总体为前向迭代器时可使用普通输出迭代器，并保持选中元素的相对顺序。
+
 - 随机数引擎由调用方提供，并且必须满足URBG要求。
-- 结果类型为float。
+- 返回采样输出范围的末端迭代器。
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-
 #include <asc/std/random>
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     int output[16] = {};
     asc::std::minstd_rand random_engine(9);
-    return asc::std::sample(values, values + 8, output, 4, random_engine);
+    auto result = asc::std::sample(values, values + 8, output, 4, random_engine);
+    for (int* current = output; current != result; ++current) {
+        if (*current < 1 || *current > 8)
+            return false;
+        for (int* earlier = output; earlier != current; ++earlier) {
+            if (*earlier == *current)
+                return false;
+        }
+    }
+    return result == output + 4;
 }
 ```
 

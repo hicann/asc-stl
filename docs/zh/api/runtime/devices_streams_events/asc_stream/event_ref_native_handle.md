@@ -47,7 +47,7 @@ constexpr native_handle_type native_handle() const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `constexpr` | 返回所包装的Runtime Event原生句柄，空引用返回空指针。 |
+| `native_handle_type` | 返回所包装的Runtime Event原生句柄，空引用返回空指针。 |
 
 ## 约束说明
 
@@ -66,7 +66,8 @@ constexpr native_handle_type native_handle() const noexcept;
 bool resource_example()
 {
     asc::event owner;
-    if (!asc::make_event(owner)) return false;
+    if (!asc::make_event(owner))
+        return false;
     asc::event_ref view(owner.native_handle());
     const bool observed = static_cast<bool>(view) && view.native_handle() == owner.native_handle();
     const bool closed = owner.close();
@@ -75,7 +76,8 @@ bool resource_example()
 
 bool example()
 {
-    if (aclInit(nullptr) != ACL_SUCCESS) return false;
+    if (aclInit(nullptr) != ACL_SUCCESS)
+        return false;
     if (aclrtSetDevice(0) != ACL_SUCCESS) {
         const bool finalized = aclFinalize() == ACL_SUCCESS;
         return finalized && false;

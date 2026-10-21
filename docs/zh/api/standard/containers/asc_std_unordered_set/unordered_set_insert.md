@@ -36,46 +36,40 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::unordered_set`](unordered_set.md)。
+所属类型：[`unordered_set`](unordered_set.md)。返回类型以auto作签名摘要：实际结果对象具有iterator类型的first与bool类型的second，不是asc::std::pair。
 
 ### 原型1
 
 ```cpp
-// asc::std::unordered_set 类内的声明节选；模板形参和其他成员由所属类提供。
-pair<iterator, bool> insert(Key&& key);
+auto insert(const Key& key);
 ```
 
 ### 原型2
 
 ```cpp
-// asc::std::unordered_set 类内的声明节选；模板形参和其他成员由所属类提供。
-pair<iterator, bool> insert(const Key& key);
+auto insert(Key&& key);
 ```
 
 ## 参数说明
 
 ### 原型1的参数
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `key` | 输入/输出 | 提供“在指定位置插入元素并按容器规则更新迭代器”使用的对象引用；被引用对象须在调用期间有效。 |
+| `key` | 输入 | 待插入键；键不存在时复制构造新元素，已存在时不插入。 |
 
 ### 原型2的参数
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `key` | 输入 | 提供“在指定位置插入元素并按容器规则更新迭代器”使用的对象引用；被引用对象须在调用期间有效。 |
+| `key` | 输入 | 待插入键；键不存在时移动构造新元素，源对象可能被移动；已存在时不消耗来源。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `pair<iterator, bool>` | 返回指向该键元素的迭代器及是否新插入的bool；键已存在时bool为false。 |
-| 原型2 | `pair<iterator, bool>` | 返回指向该键元素的迭代器及是否新插入的bool；键已存在时bool为false。 |
+| 原型1 | `含first/second的结果对象` | first指向该键元素、second表示是否新插入；重复键时second为false。first借用容器，容器或元素销毁后不可继续使用。 |
+| 原型2 | `含first/second的结果对象` | first指向该键元素、second表示是否新插入；重复键时second为false。first借用容器，容器或元素销毁后不可继续使用。 |
 
 ## 约束说明
 
@@ -85,16 +79,16 @@ pair<iterator, bool> insert(const Key& key);
 - 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构。
 - 仅容量充足和不抛出异常域。
 - Host和AI Core SIMT编程。
+- 本操作使用容器选定的`Hash`及`Equal`定位键；等价键必须产生相同哈希，且键相关状态须保持有效。自定义键、忽略字段和对象字节回退的要求见[unordered_set约束](unordered_set.md)。
 
 ## 调用示例
 
-以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/unordered_set>
 #include <functional>
 #include <memory>
-#include <string>
 #include <utility>
 
 template <class T>
@@ -108,9 +102,13 @@ struct example_allocator : ::std::allocator<T> {
     template <class U> example_allocator(const example_allocator<U>&) noexcept {}
 };
 
-decltype(auto) example(asc::std::unordered_set<int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<int>>& values)
+bool example()
 {
-    return values.insert(7);
+    using set_type = asc::std::unordered_set<int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<int>>;
+    set_type values{example_allocator<int>{}};
+    const auto inserted = values.insert(7);
+    const auto duplicate = values.insert(7);
+    return inserted.second && !duplicate.second && *inserted.first == 7 && values.size() == 1;
 }
 ```
 

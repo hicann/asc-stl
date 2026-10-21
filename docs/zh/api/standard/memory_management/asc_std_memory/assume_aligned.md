@@ -46,7 +46,7 @@ template<size_t Align, class T> [[nodiscard]] constexpr T* assume_aligned(T* poi
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Align` | 所选原型使用的编译期值；允许范围由声明和约束说明限定。 |
+| `Align` | 所要求的字节对齐，须满足下述编译期有效性条件。 |
 | `T` | 被构造、销毁或管理的对象类型。 |
 
 **函数参数**
@@ -63,25 +63,24 @@ template<size_t Align, class T> [[nodiscard]] constexpr T* assume_aligned(T* poi
 
 ## 约束说明
 
-- 支持原始指针和用户自定义fancy pointer，接口自身不分配内存。
+- 本重载只接受原始对象指针`T*`，不接受fancy pointer对象。
+- `Align`须为2的非负整数次幂；当元素类型非void时还须不小于`alignof(T)`。
+- 输入地址必须已满足指定字节对齐；本函数表达对齐假设，不检查、修复或分配地址。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/memory>
 
-template <size_t Align, class T>
-decltype(auto) example(T * pointer)
+bool example()
 {
-    return asc::std::assume_aligned<Align, T>(pointer);
+    alignas(16) int values[4] = {1, 2, 3, 4};
+    int* pointer = asc::std::assume_aligned<16>(values);
+    return pointer == values && pointer[2] == 3;
 }
 ```
-
-对应完整工程使用`C++17`，并通过Host编译与运行验证。
-
-完整示例源码：[pointer_alignment.cpp](../../../../examples/pointer_alignment.cpp)。
 
 ## 关联API
 

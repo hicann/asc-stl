@@ -34,15 +34,15 @@
 
 ```cpp
 namespace asc {
-template<class OffsetType, asc::std::ptrdiff_t... StaticStrides> class strides;
-} // namespace asc
+template <class OffsetType, asc::std::ptrdiff_t... StaticStrides>
+class strides;
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供Host和GM视图以及AI Core SIMD编程UB视图。
-- 允许有符号步长。
-- 可选的Host DLPack桥接不抛出异常。
+- 步长以元素计；构造参数数量须等于总维数或动态槽数，查询维度索引须小于rank。步长及后续索引乘加须在offset_type中可表示。
+
 
 ## 调用示例
 

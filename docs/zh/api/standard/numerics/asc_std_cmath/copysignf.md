@@ -36,11 +36,17 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-float copysignf(float x, float y) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float copysignf(float x, float y) noexcept;
+}
 ```
+
+可用位置：Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 参数说明
 
@@ -53,24 +59,23 @@ float copysignf(float x, float y) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float` | 返回第一个参数的幅值与第二个参数的符号组成的浮点值。 |
+返回类型按各原型确定（`float`）。返回x的绝对值与y的符号组合后的数值；标准浮点保留原类型，Host整型输入返回double。
 
 ## 约束说明
 
-- 提供float重载、标准 *f别名以及float lerp回移接口。
+- Host标准整型输入提升为double；Device整型提升分支被静态断言拒绝。float、double、long double及扩展类型的实例还须由目标编译模式支持。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float x, float y)
+bool example()
 {
-    return asc::std::copysignf(x, y);
+    const auto result = asc::std::copysignf(2.0F, -1.0F);
+    return result == -2.0F;
 }
 ```
 

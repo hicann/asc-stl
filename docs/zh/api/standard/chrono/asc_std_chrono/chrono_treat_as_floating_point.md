@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::treat_as_floating_point`表示日期、时间点或时长计算中的`treat_as_floating_point`值类型。
+`asc::std::chrono::treat_as_floating_point`判断`Rep`是否按浮点计数处理，默认继承`is_floating_point`；自定义计数类型可在首次使用前显式特化。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -39,6 +39,14 @@ namespace asc::std::chrono {
 template<class Rep> struct treat_as_floating_point;
 } // namespace asc::std::chrono
 ```
+
+## 参数说明
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Rep` | 待分类的时长计数类型；可为自定义类型。 |
 
 ## 约束说明
 

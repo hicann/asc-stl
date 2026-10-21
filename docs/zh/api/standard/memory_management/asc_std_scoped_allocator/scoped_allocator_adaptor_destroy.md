@@ -61,8 +61,8 @@ template<class Type> void destroy(Type* pointer);
 
 ## 约束说明
 
-- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
-- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
+- 直接结束`pointer`处单个存活对象的生命周期，不释放存储，也不调用外层分配器的销毁钩子。
+- 指针须指向仍存活的对象；Device析构必须可调用且不抛出异常。
 
 ## 调用示例
 

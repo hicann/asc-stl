@@ -28,12 +28,14 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::tensor_copy_descriptor::tensor_copy_descriptor`使用调用方提供的参数初始化`asc::tensor_copy_descriptor`对象。
+`asc::tensor_copy_descriptor::tensor_copy_descriptor`默认构造`asc::tensor_copy_descriptor`对象，将描述各维的数值初始化为零。
 
 ## 函数原型
 
+以下为`asc::tensor_copy_descriptor<Rank>`类内声明，Rank由所属类模板提供。
+
 ```cpp
-constexpr asc::tensor_copy_descriptor<Rank>::tensor_copy_descriptor() noexcept;
+constexpr tensor_copy_descriptor() noexcept;
 ```
 
 ## 参数说明
@@ -42,7 +44,7 @@ constexpr asc::tensor_copy_descriptor<Rank>::tensor_copy_descriptor() noexcept;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rank` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Rank` | 描述符的张量秩（维度数量），为1至5的编译期无符号整数。 |
 
 ## 返回值说明
 
@@ -50,9 +52,9 @@ constexpr asc::tensor_copy_descriptor<Rank>::tensor_copy_descriptor() noexcept;
 
 ## 约束说明
 
-- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Rank为1至5。
-- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
+- `Rank`须为1至5的编译期无符号整数；各维度按从外到内的顺序编号，最内维为`Rank - 1`。
+- 默认构造把所有维度的有效长度、源/目标步长及两侧填充初始化为零；此时[validate](tensor_copy_descriptor_validate.md)返回`zero_extent`。
+- 可在Host、AI Core SIMD编程和AI Core SIMT编程中构造；构造不启动数据搬运。
 
 ## 调用示例
 

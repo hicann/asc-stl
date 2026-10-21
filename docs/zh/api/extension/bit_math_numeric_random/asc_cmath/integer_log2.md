@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class T> constexpr int integer_log2(T value) noexcept;
-} // namespace asc
+template <class T>
+[[nodiscard]] constexpr int integer_log2(T value) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明

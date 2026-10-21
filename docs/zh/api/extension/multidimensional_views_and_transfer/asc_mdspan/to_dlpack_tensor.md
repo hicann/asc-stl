@@ -34,8 +34,10 @@
 
 ```cpp
 namespace asc {
-template<class Element, class Extents, class Layout, class Accessor> bool to_dlpack_tensor(const asc::std::mdspan<Element, Extents, Layout, Accessor>& view, DLDeviceType device_type, int device_id, asc::dlpack_tensor<Extents::rank()>& output) noexcept;
-} // namespace asc
+template <class Element, class Extents, class Layout, class Accessor>
+bool to_dlpack_tensor(const asc::std::mdspan<Element, Extents, Layout, Accessor>& view, DLDeviceType device_type,
+    int device_id, asc::dlpack_tensor<Extents::rank()>& output) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -66,9 +68,11 @@ template<class Element, class Extents, class Layout, class Accessor> bool to_dlp
 
 ## 约束说明
 
-- 提供Host和GM视图以及AI Core SIMD编程UB视图。
-- 允许有符号步长。
-- 可选的Host DLPack桥接不抛出异常。
+- DLPack桥接仅在可包含真实`<dlpack/dlpack.h>`时提供，且仅在Host调用；转换不分配或接管数据。
+
+- 输出data指向视图逻辑零坐标对应的地址，包含宽松布局的origin偏移；byte_offset为0，形状和步长由output保存。
+- 导出张量只借用数据；output及原数据均须覆盖使用期。设备类型须由调用方按实际存储指定，逐维大小与步长须能由DLPack的int64_t表示。
+
 
 ## 调用示例
 
@@ -85,7 +89,9 @@ DLPack桥接接口仅在提供DLPack头文件时可用；以下Host片段借用�
 #include <asc/std/utility>
 
 #if __has_include(<dlpack/dlpack.h>)
-decltype(auto) example(const asc::host_mdspan<int, asc::std::dextents<asc::std::size_t, 2>, asc::layout_stride_relaxed>& view, asc::dlpack_tensor<2>& output)
+decltype(auto) example(
+    const asc::host_mdspan<int, asc::std::dextents<asc::std::size_t, 2>, asc::layout_stride_relaxed>& view,
+    asc::dlpack_tensor<2>& output)
 {
     return asc::to_dlpack_tensor(view, kDLCPU, 0, output);
 }

@@ -42,8 +42,8 @@
 
 ## 约束说明
 
-- C++20兼容附录语义的CANN_ASC_STL_ATOMIC_VAR_INIT与CANN_ASC_STL_ATOMIC_FLAG_INIT。
-- Host和AI Core SIMT编程。
+- 本宏展开为标志对象的初始化列表，使[atomic_flag](atomic_flag.md)初始值为`false`。
+- 初始化仅可用于Host或AI Core SIMT编程中，须在其他线程并发访问前完成；SIMT共享对象须位于GM。
 
 ## 调用示例
 

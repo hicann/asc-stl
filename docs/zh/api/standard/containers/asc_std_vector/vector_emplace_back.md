@@ -63,11 +63,9 @@ template<class ...Args> reference emplace_back(Args&&... args);
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- `T`须能由转发后的`Args...`构造；当前实现还要求`T`能由`T&&`构造，以满足扩容路径的编译要求，事先预留容量不免除此要求。
+- 成功构造后`size()`增加`1`并返回新元素的引用；扩容会使原指针、引用及迭代器失效。
+- 在Device侧调用时，分配器及相关元素操作须可用于相应编程模式且不抛出异常，并须保证分配成功或事先预留足够容量。
 
 ## 调用示例
 

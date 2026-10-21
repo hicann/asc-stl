@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::time_point`表示日期、时间点或时长计算中的`time_point`值类型。
+`asc::std::chrono::time_point`保存某`Clock`的纪元以来的`Duration`，区分不同时间线并以所选精度执行时间点偏移或求差。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -36,9 +36,18 @@
 
 ```cpp
 namespace asc::std::chrono {
-template<class Clock, class Duration> class time_point;
+template<class Clock, class Duration = typename Clock::duration> class time_point;
 } // namespace asc::std::chrono
 ```
+
+## 参数说明
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Clock` | 时间线标签；跨时间点运算要求Clock相同。 |
+| `Duration` | 保存纪元偏移的时长类型，默认为Clock::duration。 |
 
 ## 约束说明
 

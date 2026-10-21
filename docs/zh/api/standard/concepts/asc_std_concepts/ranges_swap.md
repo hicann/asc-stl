@@ -34,29 +34,34 @@
 
 ## 声明
 
+swap是inline constexpr的定制点对象，实际实现类不作为公开接口。下列仅查询该对象的类型；swap_object_type是示例别名。调用形式为asc::std::ranges::swap(left, right)。
+
 ```cpp
-namespace asc::std::ranges {
-constexpr swap_fn swap;
-} // namespace asc::std::ranges
+using swap_object_type = decltype(asc::std::ranges::swap);
 ```
 
 ## 约束说明
 
-- 两实参为可交换的左值，或两个等长的元素可交换数组。
+- 优先使用ADL可找到的swap；参数是否可用及异常规格按该自定义调用判断。
+- 其次支持等长数组逐元素交换；最后对可移动构造、可从右值赋值的同类型左值使用移动交换。
+- 参与的对象须在整个调用期间有效；交换不会延长其生命周期，异常规格取决于被选中的实际操作。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/concepts>
-#include <asc/std/ranges>
 
-void example()
+bool example()
 {
-    int lhs = 1;
-    int rhs = 2;
-    asc::std::ranges::swap(lhs, rhs);
+    int left = 1;
+    int right = 2;
+    asc::std::ranges::swap(left, right);
+    int first[2] = {3, 4};
+    int second[2] = {5, 6};
+    asc::std::ranges::swap(first, second);
+    return left == 2 && right == 1 && first[0] == 5 && second[1] == 4;
 }
 ```
 

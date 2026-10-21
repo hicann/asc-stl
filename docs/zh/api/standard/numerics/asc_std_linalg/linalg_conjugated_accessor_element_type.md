@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::linalg::conjugated_accessor 类内的声明节选；模板形参和其他成员由所属类提供。
-using element_type = add_const_t<Ncresulttype>;
+using element_type = add_const_t<decltype(conj_if_needed(asc::std::declval<typename NestedAccessor::element_type>()))>;
 ```
 
 ## 约束说明

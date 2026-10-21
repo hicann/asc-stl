@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::allocator_traits 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr void deallocate(allocator_type& allocator, pointer pointer, size_type count) noexcept;
+static constexpr void deallocate(allocator_type& allocator, pointer pointer, size_type count) noexcept;
 ```
 
 ## 参数说明
@@ -57,12 +57,9 @@ constexpr void deallocate(allocator_type& allocator, pointer pointer, size_type 
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- 存储必须来自与当前分配器可互相释放的分配，并且尚未释放；数量须满足该分配器的释放约定。
+- 此函数不销毁对象；释放前须先结束需要析构的对象生命周期。
+- 包装函数为`noexcept`，底层释放不得抛出异常。
 
 ## 调用示例
 

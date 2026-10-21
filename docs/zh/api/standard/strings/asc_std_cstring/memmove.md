@@ -37,7 +37,7 @@
 ```cpp
 namespace asc::std {
 void* memmove(void* destination, const void* source, size_t count) noexcept;
-} // namespace asc::std
+}
 ```
 
 ## 参数说明
@@ -48,7 +48,7 @@ void* memmove(void* destination, const void* source, size_t count) noexcept;
 | --- | --- | --- |
 | `destination` | 输出 | 用于接收结果的目标存储。本调用为同步执行，返回时写入已完成；目标存储在调用期间保持有效即可，且须为待写入内容预留足够空间。 |
 | `source` | 输入 | 源数据或源对象。本调用为同步执行，返回时读取已完成；源存储在调用期间保持有效即可。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `count` | 输入 | 操作的字节数；不随源对象或目标对象的类型大小自动换算。 |
 
 ## 返回值说明
 
@@ -60,19 +60,20 @@ void* memmove(void* destination, const void* source, size_t count) noexcept;
 
 - 在Host侧和AI Core SIMT编程中使用普通指针。
 - AI Core SIMD编程中使用local或generic地址空间的普通指针。
-- 仅memmove允许源和目标重叠。
+- 允许源与目标范围重叠，两个范围均须容纳count字节。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/cstring>
-#include <asc/std/cstddef>
 
-decltype(auto) example(void * destination, const void * source, asc::std::size_t count)
+bool example()
 {
-    return asc::std::memmove(destination, source, count);
+    char text[] = "abcd";
+    void* result = asc::std::memmove(text + 1, text, 3);
+    return result == text + 1 && text[0] == 'a' && text[1] == 'a' && text[3] == 'c';
 }
 ```
 

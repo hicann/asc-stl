@@ -34,6 +34,10 @@
 
 ## 声明
 
+Host直接使用`<time.h>`给出的平台定义，其值不得假定为1 GHz。
+
+Device未预先定义该宏时，ASC-STL提供以下缺省定义：
+
 ```cpp
 #define CLOCKS_PER_SEC 1000000000L
 ```

@@ -36,7 +36,8 @@
 
 ```cpp
 namespace asc::std {
-template<class T, size_t Index> struct extent;
+template<class T, size_t Index = 0>
+struct extent;
 } // namespace asc::std
 ```
 

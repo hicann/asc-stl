@@ -29,6 +29,7 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
+#include <asc/std/__floating_point/cast.h>
 #include <asc/std/__cmath/backend.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_extended_floating_point.h>
@@ -75,7 +76,7 @@ template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp acosh(
     Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::acosh(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::acosh(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Inverse hyperbolic sine, domain (-inf, +inf), range (-inf, +inf).
@@ -95,7 +96,7 @@ template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp asinh(
     Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::asinh(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::asinh(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Inverse hyperbolic tangent, domain (-1, 1), range (-inf, +inf).
@@ -115,7 +116,7 @@ template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp atanh(
     Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::atanh(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::atanh(::asc::std::__fp_cast<float>(value)));
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()

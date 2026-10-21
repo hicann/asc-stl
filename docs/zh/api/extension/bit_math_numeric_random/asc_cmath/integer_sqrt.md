@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class T> constexpr auto integer_sqrt(T value) noexcept;
-} // namespace asc
+template <class T>
+[[nodiscard]] constexpr auto integer_sqrt(T value) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -44,7 +45,7 @@ template<class T> constexpr auto integer_sqrt(T value) noexcept;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 输入与结果的整数或枚举类型（不含bool）。 |
+| `T` | 输入的整数或枚举类型（不含bool）；枚举按底层整数运算，返回该底层整数类型。 |
 
 **函数参数**
 

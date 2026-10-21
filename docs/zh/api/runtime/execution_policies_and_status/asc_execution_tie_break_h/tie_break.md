@@ -37,10 +37,12 @@
 ```cpp
 namespace asc {
 enum class tie_break;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 约束说明
+
+- 当前并行极值前端尚未应用非默认索引偏好；保存该属性不保证相等极值按较小或较大索引选择。需要此规则时，调用方须显式处理相等元素。
 
 - 仅提供三个取值。
 

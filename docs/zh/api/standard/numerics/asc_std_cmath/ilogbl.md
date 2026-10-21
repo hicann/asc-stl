@@ -34,11 +34,17 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-constexpr int ilogbl(long double value) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr int ilogbl(long double value) noexcept;
+}
 ```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
 ## 参数说明
 
@@ -50,9 +56,7 @@ constexpr int ilogbl(long double value) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `int` | 输入绝对值的浮点指数，以int返回；零和NaN使用相应FP_ILOGB宏规定的结果。 |
+返回类型按各原型确定（`int`）。返回以int表示的指数；零与NaN分别使用FP_ILOGB0和FP_ILOGBNAN。
 
 ## 约束说明
 
@@ -60,14 +64,15 @@ constexpr int ilogbl(long double value) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(long double value)
+bool example()
 {
-    return asc::std::ilogbl(value);
+    const auto result = asc::std::ilogbl(8.0L);
+    return result == 3;
 }
 ```
 

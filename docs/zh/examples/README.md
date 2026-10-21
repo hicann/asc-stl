@@ -9,3 +9,4 @@
 - [Warp集体操作](warp_collectives/CMakeLists.txt)
 - [GM原子操作与屏障](atomic_operations/README.md)
 - [GM与UB流水拷贝](pipeline_copy/README.md)
+- [57个并行算法的输入、同步与结果检查](parallel_algorithms/README.md)

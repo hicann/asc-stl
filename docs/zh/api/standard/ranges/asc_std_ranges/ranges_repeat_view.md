@@ -28,23 +28,25 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::repeat_view`惰性地观察、筛选、组合或变换输入范围；底层存储仍由调用方管理。
-
-标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
+`repeat_view<T, Bound>`保存一个T值，迭代器的每次解引用返回该值的const T&，次数由Bound决定。默认Bound为ptrdiff_t，默认次数为0。
 
 ## 声明
 
+声明摘要保留公开默认实参；类型及成员操作仍须满足下述条件。
+
 ```cpp
 namespace asc::std::ranges {
-template<class T, class Bound> class repeat_view;
-} // namespace asc::std::ranges
+template<class T, class Bound = ptrdiff_t>
+class repeat_view;
+}
 ```
 
 ## 约束说明
 
-- 七个列出名称。
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- T须为无cv限定的对象类型且可移动构造；Bound须满足semiregular，并为有可用差值类型的整数类型或unreachable_sentinel_t。
+- 有界次数须非负；显式值构造必须提供边界实参。
+- views::repeat只提供接收值与边界的两个实参形式；单实参无界工厂未提供。
+- 每次解引用借用视图内部保存的同一个值；视图须覆盖引用与迭代器使用期。
 
 ## 调用示例
 

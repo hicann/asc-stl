@@ -37,7 +37,7 @@
 ```cpp
 namespace asc {
 bool adopt_stream(asc::stream_ref::native_handle_type handle, asc::stream& output) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -46,7 +46,7 @@ bool adopt_stream(asc::stream_ref::native_handle_type handle, asc::stream& outpu
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `handle` | 输入 | 提交或等待异步任务的Stream引用；任务完成前须保持有效。 |
+| `handle` | 输入 | Runtime原生句柄（native_handle_type，不透明void指针），不是包装器对象；adopt接管所有权，ref构造仅借用。 |
 | `output` | 输出 | 提供“把非空的Runtime Stream原生句柄所有权交给空的`stream`对象，不创建新的Runtime资源”使用的对象引用；被引用对象须在调用期间有效。 |
 
 ## 返回值说明

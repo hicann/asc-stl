@@ -34,8 +34,10 @@
 
 ## 声明
 
+本宏由平台头文件提供，公共头文件保留其拼写和值，不另造替代宏名。
+
 ```cpp
-#define ULONG_MAX (LONGMAX* 2UL + 1UL)
+#include <asc/std/climits>
 ```
 
 ## 约束说明
@@ -44,14 +46,12 @@
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/climits>
 
-#ifndef ULONG_MAX
-#error "ULONG_MAX is required by this public Header"
-#endif
+static_assert(ULONG_MAX >= 4294967295UL);
 ```
 
 ## 关联API

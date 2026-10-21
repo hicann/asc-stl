@@ -34,13 +34,13 @@
 
 ## 声明
 
+该常量由<asc/std/`span`>及<asc/std/`mdspan`>公开，用作动态长度的模板标记。
+
 ```cpp
 namespace asc::std {
-inline constexpr const size_t dynamic_extent;
-} // namespace asc::std
+inline constexpr size_t dynamic_extent = static_cast<size_t>(-1);
+}
 ```
-
-此原型对应头文件：`<asc/std/mdspan>`、`<asc/std/span>`。
 
 ## 约束说明
 

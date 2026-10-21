@@ -60,7 +60,7 @@ pair<iterator, bool> insert(value_type&& value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待插入的键值对（value_type为pair<const Key, T>）；键不存在时复制构造新元素，键已存在时不插入。 |
+| `value` | 输入 | 待插入的键值对（使用容器自己的value_type，具有first键与second值成员）；键不存在时复制构造新元素，键已存在时不插入。 |
 
 ### 原型2的参数
 

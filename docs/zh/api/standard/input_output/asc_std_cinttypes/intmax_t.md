@@ -38,7 +38,7 @@
 
 ```cpp
 namespace asc::std {
-using ::intmax_t;
+using intmax_t = __INTMAX_TYPE__;
 }
 ```
 

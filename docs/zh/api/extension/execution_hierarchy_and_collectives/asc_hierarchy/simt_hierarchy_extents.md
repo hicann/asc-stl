@@ -56,7 +56,7 @@ constexpr asc::extent3d extents(asc::grid_level) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 级别标签：传入asc::block（block_level值）选择Block级，返回该级的extent3d三维尺寸。 |
+| 级别标签（未命名参数） | 输入 | 级别标签：传入asc::block（block_level值）选择Block级，返回该级的extent3d三维尺寸。 |
 
 ### 原型2的参数
 
@@ -64,7 +64,7 @@ constexpr asc::extent3d extents(asc::grid_level) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `asc` | 输入 | 级别标签：传入asc::grid（grid_level值）选择Grid级，返回该级的extent3d三维尺寸。 |
+| 级别标签（未命名参数） | 输入 | 级别标签：传入asc::grid（grid_level值）选择Grid级，返回该级的extent3d三维尺寸。 |
 
 ## 返回值说明
 

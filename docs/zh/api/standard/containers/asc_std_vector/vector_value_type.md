@@ -43,11 +43,8 @@ using value_type = T;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 该别名为容器的元素类型`T`；读取类型本身不访问或构造元素。
+- 构造、分配及元素访问条件见所属类型[vector](vector.md)。
 
 ## 调用示例
 

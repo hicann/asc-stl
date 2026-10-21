@@ -36,16 +36,18 @@
 
 ```cpp
 namespace asc {
-template<auto Kernel, class... Args> asc::execution_status launch(asc::stream_ref stream, asc::aicore_launch_config config, Args... args) noexcept;
-} // namespace asc
+template <auto Kernel, class... Args>
+asc::execution_status launch(asc::stream_ref stream, asc::aicore_launch_config config, Args... args) noexcept;
+}  // namespace asc
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc {
-template<auto Kernel, class... Args> asc::execution_status launch(asc::stream_ref stream, asc::simt_launch_config config, Args... args) noexcept;
-} // namespace asc
+template <auto Kernel, class... Args>
+asc::execution_status launch(asc::stream_ref stream, asc::simt_launch_config config, Args... args) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -92,6 +94,9 @@ template<auto Kernel, class... Args> asc::execution_status launch(asc::stream_re
 | 原型2 | `asc::execution_status` | 返回参数校验或任务提交状态；提交成功不表示异步工作已经完成。 |
 
 ## 约束说明
+
+- 这些核函数提交重载要求Clang兼容的毕昇ASC翻译单元，并显式定义`CANN_ASC_STL_USE_SIMT_LAUNCH`。
+- 宏值为非零时只提供`simt_launch_config`重载；为零时只提供`aicore_launch_config`重载；未定义时两者均不提供。按实际编译模式选择对应配置。
 
 - 仅可在毕昇ASC翻译单元的Host提交阶段调用。
 - 调用时必须显式指定编译期Kernel模板实参，Stream和启动维度必须有效，按值传递的参数必须可平凡复制。

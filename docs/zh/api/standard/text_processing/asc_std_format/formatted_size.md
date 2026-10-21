@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/format>`。
 
-`asc::std::formatted_size`校验格式串并在调用方容量或结果大小约束内完成定长格式化。
+`asc::std::formatted_size`计算格式化结果所需的字符数，不写入输出缓冲区。
 
 该接口自C++20+ 模式起提供。
 
@@ -38,7 +38,7 @@
 
 ```cpp
 namespace asc::std {
-template<class ...Args> size_t formatted_size(format_string<Args...> format, Args&&... args);
+template<class... Args> constexpr size_t formatted_size(format_string<Args...> format, Args&&... args) noexcept;
 } // namespace asc::std
 ```
 
@@ -48,14 +48,14 @@ template<class ...Args> size_t formatted_size(format_string<Args...> format, Arg
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Args` | 传递给构造函数或可调用对象的实参类型列表。 |
+| `Args` | 格式化实参的类型列表，由args推导。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `format` | 输入 | 转发给对象构造或函数调用的实参列表。 |
-| `args` | 输入/输出 | 转发给对象构造或函数调用的实参列表。 |
+| `format` | 输入 | 编译期校验的格式串；替换字段、格式说明与args中的对应实参匹配。 |
+| `args` | 输入 | 与格式串替换字段对应的值；按其实际类型格式化。 |
 
 ## 返回值说明
 
@@ -65,22 +65,21 @@ template<class ...Args> size_t formatted_size(format_string<Args...> format, Arg
 
 ## 约束说明
 
-- format_to、format_to_n、formatted_size的调用方固定char*输出子集。
-- bool/char/C字符串默认{}，非bool/char标准整数的{}及d/x/X/o/b。
-- 转义花括号、截断、负n、总长度和允许未使用尾部参数。
-- 不分配。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 自C++20起提供。支持bool、char、C字符串的默认格式，以及非bool/char标准整数的默认格式和d/x/X/o/b进制格式。
+- 支持转义花括号，不进行动态分配；格式串与实参须满足类型及字段要求。
+- 只计算字符数，返回值不包含结尾空字符。
+- 可在Host、AI Core SIMD编程和AI Core SIMT编程使用。
 
 ## 调用示例
 
-以下Host片段展示固定缓冲或多维视图的具体调用；底层存储须保持有效。
+以下Host示例给出具体输入，并在对象与底层存储仍有效时检查结果。
 
 ```cpp
 #include <asc/std/format>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::formatted_size("{}", 7);
+    return asc::std::formatted_size("{}", 123) == 3;
 }
 ```
 

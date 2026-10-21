@@ -231,7 +231,8 @@ CANN_ASC_STL_DEVICE_API void tensor_copy_store_ndim(
     const unsigned int run_bytes = static_cast<unsigned int>(static_cast<unsigned long long>(run_length) * sizeof(T));
     __UINT32_TYPE__ indices[5]{};
     for (;;) {
-        unsigned long long source_offset = descriptor.left_padding(rank - 1);
+        unsigned long long source_offset = static_cast<unsigned long long>(descriptor.left_padding(rank - 1)) *
+            descriptor.destination_stride(rank - 1);
         unsigned long long destination_offset = 0;
         for (unsigned dimension = 0; dimension < outer; ++dimension) {
             source_offset +=

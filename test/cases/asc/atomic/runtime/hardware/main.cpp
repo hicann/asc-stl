@@ -20,38 +20,43 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
+#include "../../../../../support/hardware_runtime.h"
+#include "launch.h"
 #if defined(ASC_STL_ATOMIC_SIMD)
 int main()
 {
+    asc_stl_test::hardware_runtime runtime;
     std::cout << "NOT_APPLICABLE: scoped atomic runtime is D-SIMT-only\n";
     return 0;
 }
 #else
-void launch_asc_stl_atomic_simt(std::int32_t*, aclrtStream);
+
 int main()
 {
+    asc_stl_test::hardware_runtime runtime;
     constexpr std::array<std::int32_t, 16> expected = {11, 10, 15, 12, 1, 12, 8, 13, 14, 4, 9, 9, 11, 10, 1, 11};
     std::array<std::int32_t, 21> actual{};
     std::int32_t* device = nullptr;
     aclrtStream stream = nullptr;
-    bool passed = aclInit(nullptr) == ACL_SUCCESS && aclrtSetDevice(0) == ACL_SUCCESS &&
+    bool passed = runtime.initialize(nullptr) == ACL_SUCCESS && runtime.set_device(0) == ACL_SUCCESS &&
         aclrtCreateStream(&stream) == ACL_SUCCESS &&
         aclrtMalloc(reinterpret_cast<void**>(&device), sizeof(actual), ACL_MEM_MALLOC_HUGE_FIRST) == ACL_SUCCESS &&
         aclrtMemcpy(device, sizeof(actual), actual.data(), sizeof(actual), ACL_MEMCPY_HOST_TO_DEVICE) == ACL_SUCCESS;
-    if (passed) {
+    if (passed && runtime.ready()) {
         launch_asc_stl_atomic_simt(device, stream);
-        passed = aclrtSynchronizeStream(stream) == ACL_SUCCESS &&
+        passed = runtime.synchronize(stream) == ACL_SUCCESS &&
             aclrtMemcpy(actual.data(), sizeof(actual), device, sizeof(actual), ACL_MEMCPY_DEVICE_TO_HOST) ==
                 ACL_SUCCESS &&
             std::equal(expected.begin(), expected.end(), actual.begin()) && actual[17] == 20000 &&
             actual[18] == 20000 && actual[19] == 0 && actual[20] == 0;
     }
     if (device != nullptr)
-        passed = aclrtFree(device) == ACL_SUCCESS && passed;
+        passed = runtime.free_device(device) == ACL_SUCCESS && passed;
     if (stream != nullptr)
-        passed = aclrtDestroyStream(stream) == ACL_SUCCESS && passed;
-    passed = aclrtResetDevice(0) == ACL_SUCCESS && passed;
-    passed = aclFinalize() == ACL_SUCCESS && passed;
+        passed = runtime.destroy_stream(stream) == ACL_SUCCESS && passed;
+    passed = runtime.reset_device(0) == ACL_SUCCESS && passed;
+    passed = runtime.finalize() == ACL_SUCCESS && passed;
+    passed = runtime.finish(passed) == 0;
     std::cout << "scoped_atomic_published=" << actual[17] << " acknowledged=" << actual[18]
               << " visibility_failures=" << actual[19] << " timeouts=" << actual[20] << '\n';
     std::cout << (passed ? "PASS" : "FAIL") << ": D-SIMT scoped atomic hardware semantics\n";

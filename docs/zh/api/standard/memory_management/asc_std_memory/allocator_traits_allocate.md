@@ -40,14 +40,14 @@
 
 ```cpp
 // asc::std::allocator_traits 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr pointer allocate(allocator_type& allocator, size_type count);
+static constexpr pointer allocate(allocator_type& allocator, size_type count);
 ```
 
 ### 原型2
 
 ```cpp
 // asc::std::allocator_traits 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr pointer allocate(allocator_type& allocator, size_type count, const_void_pointer hint);
+static constexpr pointer allocate(allocator_type& allocator, size_type count, const_void_pointer hint);
 ```
 
 ## 参数说明
@@ -80,12 +80,9 @@
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- 向给定分配器申请`count`个`value_type`的未初始化存储，不构造元素。
+- 提示形式在分配器接受`hint`时传递它，否则忽略提示并调用单参数`allocate`。
+- 数量、执行位置、分配失败行为和后续释放规则由分配器约定。
 
 ## 调用示例
 

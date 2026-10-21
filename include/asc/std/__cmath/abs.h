@@ -33,6 +33,7 @@
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_extended_arithmetic.h>
 #include <asc/std/__type_traits/is_integral.h>
+#include <asc/std/__type_traits/is_same.h>
 #include <asc/std/limits>
 #include <limits>
 
@@ -75,11 +76,16 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto fabs(Tp x) noexcept
 #endif
     } else if constexpr (__fp_format_of_v<Tp> == __fp_format::__binary16 ||  // NOLINT(readability/braces)
         __fp_format_of_v<Tp> == __fp_format::__bfloat16 || __fp_format_of_v<Tp> == __fp_format::__binary32 ||
-        __fp_format_of_v<Tp> == __fp_format::__binary64) {
+        __fp_format_of_v<Tp> == __fp_format::__binary64 || __fp_format_of_v<Tp> == __fp_format::__fp8_e4m3 ||
+        __fp_format_of_v<Tp> == __fp_format::__fp8_e5m2 || __fp_format_of_v<Tp> == __fp_format::__fp8_e8m0) {
         const auto val = ::asc::std::__fp_get_storage(x) & __fp_exp_mant_mask_of_v<Tp>;
         return ::asc::std::__fp_from_storage<Tp>(static_cast<__fp_storage_of_t<Tp>>(val));
     } else {
-        return __builtin_fabs(x);
+        if constexpr (is_same_v<Tp, long double>) {
+            return __builtin_fabsl(x);
+        } else {
+            return __builtin_fabs(x);
+        }
     }
 }
 

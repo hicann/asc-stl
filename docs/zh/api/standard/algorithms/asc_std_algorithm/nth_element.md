@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::nth_element`重排范围，使指定位置放入排序后应有的元素；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::nth_element`重排范围，使指定位置放入排序后应有的元素；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,16 +38,19 @@
 
 ```cpp
 namespace asc::std {
-template<class RandomAccessIterator, class Compare> constexpr void nth_element(RandomAccessIterator first, RandomAccessIterator nth, RandomAccessIterator last, Compare compare);
-} // namespace asc::std
+template <class RandomAccessIterator, class Compare>
+constexpr void nth_element(
+    RandomAccessIterator first, RandomAccessIterator nth, RandomAccessIterator last, Compare compare);
+}  // namespace asc::std
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class RandomAccessIterator> constexpr void nth_element(RandomAccessIterator first, RandomAccessIterator nth, RandomAccessIterator last);
-} // namespace asc::std
+template <class RandomAccessIterator>
+constexpr void nth_element(RandomAccessIterator first, RandomAccessIterator nth, RandomAccessIterator last);
+}  // namespace asc::std
 ```
 
 ## 参数说明

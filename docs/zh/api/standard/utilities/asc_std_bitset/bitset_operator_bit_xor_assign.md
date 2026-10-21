@@ -38,8 +38,9 @@
 
 ```cpp
 // asc::std::bitset 类内的声明节选；模板形参和其他成员由所属类提供。
-bitset<Size>& operator^=(const bitset<Size>& other) noexcept;
+constexpr bitset<Size>& operator^=(const bitset<Size>& other) noexcept;
 ```
+
 
 ## 参数说明
 
@@ -47,7 +48,7 @@ bitset<Size>& operator^=(const bitset<Size>& other) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
+| `other` | 输入 | 按位运算的另一侧bitset；对应位分别参与与、或或异或，本操作不修改other。 |
 
 ## 返回值说明
 
@@ -57,9 +58,7 @@ bitset<Size>& operator^=(const bitset<Size>& other) noexcept;
 
 ## 约束说明
 
-- 支持默认构造和unsigned long long构造。
-- `operator[]`不进行边界检查。
-- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
+- 所属bitset的位数Size在编译期固定，操作不进行动态分配。两个操作数须具有相同Size；二元按位操作逐位组合，不涉及构造来源状态。
 
 ## 调用示例
 

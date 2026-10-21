@@ -36,11 +36,18 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-float powf(float base, float exponent) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float powf(
+    float base, float exponent) noexcept;
+}
 ```
+
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
 
 ## 参数说明
 
@@ -53,24 +60,23 @@ float powf(float base, float exponent) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float` | 返回幂；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+返回类型按各原型确定（`float`）。返回底数的指数次幂。
 
 ## 约束说明
 
-- 提供float重载、标准 *f别名以及float lerp回移接口。
+- 保持参数说明中的数学定义域及指针有效性要求；可用位置和语言条件按各原型分别确定。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float base, float exponent)
+bool example()
 {
-    return asc::std::powf(base, exponent);
+    const auto result = asc::std::powf(2.0F, 3.0F);
+    return result == 8.0F;
 }
 ```
 

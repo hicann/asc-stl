@@ -34,37 +34,48 @@
 
 ## 函数原型
 
+所属类型：[`filter_view`](ranges_filter_view.md)。以下按当前实现列声明摘要；省略仅供SFINAE的选择参数，保留供调用使用的类型默认值。默认构造形式均有逐项参与条件，不能据此假定所有特化都可默认构造。
+
 ### 原型1
 
 ```cpp
-constexpr filter_view(View base, Pred predicate) noexcept(is_nothrow_move_constructible_v<View>&& is_nothrow_constructible_v<Movablebox<Pred>, in_place_t, add_rvalue_reference_t<Pred>>);
+template<class View2 = View, class Pred2 = Pred>
+constexpr filter_view() noexcept(is_nothrow_default_constructible_v<View2>
+    && is_nothrow_default_constructible_v<Pred2>);
 ```
+
+View2和Pred2均须满足default_initializable；默认值分别为所属视图的View和Pred。
 
 ### 原型2
 
 ```cpp
-template<class View2, class Pred2> constexpr filter_view() noexcept(is_nothrow_default_constructible_v<View2>&& is_nothrow_default_constructible_v<Pred2>);
+constexpr explicit filter_view(View base, Pred predicate) noexcept(
+    is_nothrow_move_constructible_v<View> && is_nothrow_move_constructible_v<Pred>);
 ```
+
+显式保存移动后的范围与谓词。异常规格使用公开类型特征表达与内部谓词盒构造相同的条件。
 
 ## 参数说明
 
 ### 原型1的参数
 
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `base` | 输入 | 被过滤的底层视图；视图遍历时跳过不满足谓词的元素。 |
-| `predicate` | 输入 | 一元谓词，按调用形式predicate(elem)返回bool；仅保留返回true的元素。 |
-
-### 原型2的参数
-
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `View2` | 输入范围或视图的类型；须满足所选原型的遍历要求。 |
-| `Pred2` | 谓词类型；调用形式为pred(elem)，返回bool。 |
+| `View2` | 底层视图的延迟检查类型，默认为View。 |
+| `Pred2` | 谓词的延迟检查类型，默认为Pred。 |
+
+无函数参数。
+
+### 原型2的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `base` | 输入 | 接受筛选的底层视图。 |
+| `predicate` | 输入 | 对底层元素判定是否保留的谓词；按值接收并移动保存。 |
 
 ## 返回值说明
 
@@ -72,7 +83,9 @@ template<class View2, class Pred2> constexpr filter_view() noexcept(is_nothrow_d
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- 每种形式须满足其原型所列参与条件；实际保存的范围或值还须满足所属视图的类型要求。
+- 构造视图不会复制它所借用的元素；底层存储和被借用对象须覆盖相应迭代器与元素访问期。
+- 以noexcept标注的形式须遵守实际成员操作不抛出异常的要求；具体异常规格见各原型。
 
 ## 调用示例
 

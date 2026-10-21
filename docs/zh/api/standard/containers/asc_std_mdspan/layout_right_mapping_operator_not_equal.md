@@ -34,8 +34,13 @@
 
 ## 函数原型
 
+所属类型为`layout_right`::`mapping`<`Extents`>。以下为隐藏友元的声明摘要，省略仅用于参与选择的实现参数；以运算符语法调用。
+
+### 原型1
+
 ```cpp
-template<class OtherExtents> friend bool asc::std::layout_right::mapping<Extents>::operator!=(const mapping<OtherExtents>&, const mapping<Extents>&) noexcept;
+template<class OtherExtents>
+friend constexpr bool operator!=(const mapping& left, const mapping<OtherExtents>& right) noexcept;
 ```
 
 ## 参数说明
@@ -44,36 +49,42 @@ template<class OtherExtents> friend bool asc::std::layout_right::mapping<Extents
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherExtents` | 另一映射的维度类型，其秩及静态维度须满足比较约束。 |
+| `OtherExtents` | 另一映射的维度类型；秩须相同。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `OtherExtents` | 输入 | 参与操作的对象引用；调用期间被引用对象须保持有效。 |
-| `Extents` | 输入 | 参与操作的对象引用；调用期间被引用对象须保持有效。 |
+| `left` | 输入 | 左侧布局映射；比较其维度及适用的步长信息。 |
+| `right` | 输入 | 右侧布局映射；不读取底层元素。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `按声明确定` | 对应的相等／顺序比较表达式成立时为true，否则为false。 |
+| `bool` | 两映射不等时返回`true`。 |
 
 ## 约束说明
 
-- 两侧映射维数须相同；比较逐维extent与偏移。
+- 两侧`mapping`的秩须相同。
+- 上述显式不等函数仅在C++17提供；C++20由相等运算符重写不等调用。
+- 比较维度及对应的布局信息，不访问或比较底层元素。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/mdspan>
+#include <asc/std/array>
 
-template <class Object, class... Args>
-decltype(auto) example(Object& object, Args&&... args)
+bool example()
 {
-    return object.operator!=(static_cast<Args&&>(args)...);
+    using shape_type = asc::std::extents<asc::std::size_t, 2, 3>;
+    using mapping_type = asc::std::layout_right::mapping<shape_type>;
+    const mapping_type first(shape_type{});
+    const mapping_type second(shape_type{});
+    return !(first != second);
 }
 ```
 

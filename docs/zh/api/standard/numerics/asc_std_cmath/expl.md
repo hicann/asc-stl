@@ -28,17 +28,23 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::expl`由`<asc/std/cmath>`提供，宿主long double自然指数，后缀l别名（清单外新增）
+`asc::std::expl`由`<asc/std/cmath>`提供，宿主long double自然指数，后缀l别名
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-constexpr long double expl(long double value) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr long double expl(long double value) noexcept;
+}
 ```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
 ## 参数说明
 
@@ -46,28 +52,27 @@ constexpr long double expl(long double value) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 自然指数e的指数值（无量纲）；上溢返回 +inf，下溢返回0。 |
+| `value` | 输入 | 自然指数e的指数值（无量纲）；上溢返回 +inf，Host下溢可能产生次正规数；SIMT可能刷新次正规输入和输出为零。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `long double` | 自然常数e的输入值次幂。 |
+返回类型按各原型确定（`long double`）。返回以e为底的指数值。
 
 ## 约束说明
 
-- 宿主long double自然指数，后缀l别名（清单外新增）。
+- Host遵循系统数学库的次正规数行为；AI Core SIMT编程后端可能将次正规结果刷新为零，不能把Host的下溢边界直接用于Device结果。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(long double value)
+bool example()
 {
-    return asc::std::expl(value);
+    const auto result = asc::std::expl(0.0L);
+    return result == 1.0L;
 }
 ```
 

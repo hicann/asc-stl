@@ -34,15 +34,19 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const size_t alignment_of_v;
+template<class T>
+inline constexpr size_t alignment_of_v = alignment_of<T>::value;
 } // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类和 _v辅助形式。
+- `T`必须使`alignof(T)`合法，例如完整对象类型、引用到合法对象类型或元素类型完整的数组。不能使用`void`、函数或不完整类。
+- 结果单位为字节，表示该类型对象的对齐要求；查询不分配内存。
 
 ## 调用示例
 
@@ -51,7 +55,7 @@ template<class T> inline constexpr const size_t alignment_of_v;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::alignment_of_v<int>;
+static_assert((asc::std::alignment_of_v<int>) == alignof(int));
 ```
 
 ## 关联API

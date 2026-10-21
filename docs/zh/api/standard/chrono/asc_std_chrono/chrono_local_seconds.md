@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::local_seconds`表示日期、时间点或时长计算中的`local_seconds`值类型。
+`asc::std::chrono::local_seconds`是以秒为计数单位的本地时间点；其`Clock`为`local_t`，不执行时区偏移。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

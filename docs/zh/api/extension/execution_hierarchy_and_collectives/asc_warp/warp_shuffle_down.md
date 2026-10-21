@@ -36,40 +36,50 @@
 
 ```cpp
 namespace asc {
-template<int Width = 32> asc::warp_shuffle_result<float> warp_shuffle_down(float value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
-} // namespace asc
+template <int Width = 32>
+asc::warp_shuffle_result<float> warp_shuffle_down(
+    float value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+}  // namespace asc
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc {
-template<int Width = 32> asc::warp_shuffle_result<int> warp_shuffle_down(int value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
-} // namespace asc
+template <int Width = 32>
+asc::warp_shuffle_result<int> warp_shuffle_down(
+    int value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+}  // namespace asc
 ```
 
 ### 原型3
 
 ```cpp
 namespace asc {
-template<int Width = 32> asc::warp_shuffle_result<long long> warp_shuffle_down(long long value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
-} // namespace asc
+template <int Width = 32>
+asc::warp_shuffle_result<long long> warp_shuffle_down(
+    long long value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+}  // namespace asc
 ```
 
 ### 原型4
 
 ```cpp
 namespace asc {
-template<int Width = 32> asc::warp_shuffle_result<unsigned int> warp_shuffle_down(unsigned int value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
-} // namespace asc
+template <int Width = 32>
+asc::warp_shuffle_result<unsigned int> warp_shuffle_down(
+    unsigned int value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+}  // namespace asc
 ```
 
 ### 原型5
 
 ```cpp
 namespace asc {
-template<int Width = 32> asc::warp_shuffle_result<unsigned long long> warp_shuffle_down(unsigned long long value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
-} // namespace asc
+template <int Width = 32>
+asc::warp_shuffle_result<unsigned long long> warp_shuffle_down(
+    unsigned long long value, int delta, asc::lane_mask participants = asc::lane_mask::all()) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -166,32 +176,29 @@ template<int Width = 32> asc::warp_shuffle_result<unsigned long long> warp_shuff
 
 ## 约束说明
 
+- 必须先检查返回的valid，再使用data；来源不属于同一Width分组、不是活动参与者或不在有效Lane范围时，data不作为有效结果使用。
+- source_lane是组内索引；delta须非负且目标仍在当前组内；xor_mask须使目标位于同组。参与者掩码和调用位置须在参与Lane间收敛一致。
+
 - 仅可在AI Core SIMT编程中调用。
 - 所有参与的活动线程必须以收敛控制流调用。
 - Width只能取1、2、4、8、16或32。
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以1个Block、32个线程收敛启动，output是至少32项的GM数组。每Lane输入为lane+1，Host同步后32项均应为1；无效来源不读取data。完整启动和读回工程见[Warp集体操作示例](../../../../examples/warp_collectives/README.md)。
 
 ```cpp
 #include <asc/warp>
-
-template <int Width>
-__aicore__ decltype(auto) example(float value, int delta, asc::lane_mask participants = asc::lane_mask::all())
+__global__ void example(unsigned int* output)
 {
-    return asc::warp_shuffle_down<Width>(value, delta, participants);
+    const unsigned lane = asc::lane_id();
+    const float value = static_cast<float>(lane + 1u);
+    const auto result = asc::warp_shuffle_down<32>(value, 1, asc::lane_mask::all());
+    const bool expected_valid = lane < 31;
+    output[lane] =
+        result.valid == expected_valid && (!result.valid || result.data == static_cast<float>(lane + 2u)) ? 1u : 0u;
 }
 ```
-
-对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
-
-完整示例源码：
-
-- [CMakeLists.txt](../../../../examples/warp_collectives/CMakeLists.txt)
-- [warp_example.h](../../../../examples/warp_collectives/warp_example.h)
-- [kernel.asc](../../../../examples/warp_collectives/kernel.asc)
-- [main.cpp](../../../../examples/warp_collectives/main.cpp)
 
 ## 关联API
 

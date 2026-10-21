@@ -36,22 +36,26 @@
 
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const size_t tuple_size_v;
-} // namespace asc::std
+template<class T> inline constexpr size_t tuple_size_v = tuple_size<T>::value;
+}
 ```
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
+- 这是编译期类型或大小查询；类型须满足对应tuple-like特征，索引须在元素范围内。
 
 ## 调用示例
 
-以下片段用具体模板实参读取接口值。
+以下Host示例用具体输入和可判断结果展示本接口。
 
 ```cpp
 #include <asc/std/tuple>
 
-inline constexpr auto example = asc::std::tuple_size_v<asc::std::tuple<int, float>>;
+bool example()
+{
+    static_assert(asc::std::tuple_size_v<asc::std::tuple<int, char>> == 2);
+    return true;
+}
 ```
 
 ## 关联API

@@ -28,17 +28,23 @@
 
 头文件路径为：`<asc/std/cmath>`。
 
-`asc::std::nextafterl`由`<asc/std/cmath>`提供，宿主long double朝y方向下一可表示值，后缀l别名（清单外新增）
+`asc::std::nextafterl`由`<asc/std/cmath>`提供，宿主long double朝y方向下一可表示值，后缀l别名
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-constexpr long double nextafterl(long double x, long double y) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr long double nextafterl(long double x, long double y) noexcept;
+}
 ```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
 ## 参数说明
 
@@ -51,24 +57,23 @@ constexpr long double nextafterl(long double x, long double y) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `long double` | 从第一个值沿第二个值方向相邻的可表示值；两者相等时返回第二个值。 |
+返回类型按各原型确定（`long double`）。返回朝目标方向的原结果格式相邻值；输入相等时返回目标值，保留目标零的符号。
 
 ## 约束说明
 
-- 宿主long double朝y方向下一可表示值，后缀l别名（清单外新增）。
+- 保持参数说明中的数学定义域及指针有效性要求；可用位置和语言条件按各原型分别确定。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(long double x, long double y)
+bool example()
 {
-    return asc::std::nextafterl(x, y);
+    const auto value = asc::std::nextafterl(1.0L, 2.0L);
+    return value > 1.0L && value < 2.0L;
 }
 ```
 

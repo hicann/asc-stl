@@ -47,7 +47,7 @@ constexpr void discard(unsigned long long count) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `count` | 输入 | 跳过的引擎输出步数；后续输出与丢弃count次生成结果一致。 |
 
 ## 返回值说明
 

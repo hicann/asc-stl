@@ -34,9 +34,12 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class T, class Arg> inline constexpr const bool is_nothrow_assignable_v;
+template<class T, class Arg>
+inline constexpr bool is_nothrow_assignable_v = is_nothrow_assignable<T, Arg>::value;
 } // namespace asc::std
 ```
 
@@ -51,7 +54,7 @@ template<class T, class Arg> inline constexpr const bool is_nothrow_assignable_v
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::is_nothrow_assignable_v<int&, int>;
+static_assert((asc::std::is_nothrow_assignable_v<int&, int>) == true);
 ```
 
 ## 关联API

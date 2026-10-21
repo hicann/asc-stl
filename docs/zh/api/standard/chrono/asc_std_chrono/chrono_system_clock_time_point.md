@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::system_clock::time_point`表示日期、时间点或时长计算中的`time_point`值类型。
+`asc::std::chrono::system_clock::time_point`是`Clock`为`system_clock`、`Duration`为`nanoseconds`的时间点类型。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -48,15 +48,15 @@ using time_point = ::asc::std::chrono::time_point<system_clock>;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/type_traits>
 
-void use_type()
-{
-    using alias_type = asc::std::chrono::system_clock::time_point;
-}
+using actual_type = asc::std::chrono::system_clock::time_point;
+using expected_type = asc::std::chrono::time_point<asc::std::chrono::system_clock, asc::std::chrono::nanoseconds>;
+static_assert(asc::std::is_same_v<actual_type, expected_type>);
 ```
 
 ## 关联API

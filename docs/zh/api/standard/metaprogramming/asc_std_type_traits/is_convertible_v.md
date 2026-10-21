@@ -34,9 +34,12 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class T1, class T2> inline constexpr const bool is_convertible_v;
+template<class T1, class T2>
+inline constexpr bool is_convertible_v = is_convertible<T1, T2>::value;
 } // namespace asc::std
 ```
 
@@ -51,7 +54,8 @@ template<class T1, class T2> inline constexpr const bool is_convertible_v;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::is_convertible_v<int, long>;
+static_assert((asc::std::is_convertible_v<int, long>) == true);
+static_assert(!asc::std::is_convertible_v<int*, int>);
 ```
 
 ## 关联API

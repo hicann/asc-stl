@@ -36,8 +36,8 @@
 
 ```cpp
 namespace asc::std {
-size_t strcspn(const char* value, const char* rejected) noexcept(true);
-} // namespace asc::std
+[[nodiscard]] constexpr size_t strcspn(const char* value, const char* rejected) noexcept;
+}
 ```
 
 ## 参数说明
@@ -59,18 +59,18 @@ size_t strcspn(const char* value, const char* rejected) noexcept(true);
 
 - 在Host侧和AI Core SIMT编程中使用普通指针。
 - AI Core SIMD编程中使用local或generic地址空间的普通指针。
-- 仅memmove允许源和目标重叠。
+- 本接口只读访问输入，不限制只读输入彼此相同或重叠；返回的借用指针须在原字符存储仍有效时使用。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/cstring>
 
-decltype(auto) example(const char * value, const char * rejected)
+bool example()
 {
-    return asc::std::strcspn(value, rejected);
+    return asc::std::strcspn("abc123", "0123456789") == 3;
 }
 ```
 

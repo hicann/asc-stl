@@ -34,11 +34,38 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-constexpr float/double/long double nexttoward(T value, long double toward) noexcept（三精度重载）;
-} // namespace asc::std
+[[nodiscard]] constexpr float nexttoward(float value, long double toward) noexcept;
+}
 ```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
+
+### 原型2
+
+```cpp
+namespace asc::std {
+[[nodiscard]] constexpr double nexttoward(double value, long double toward) noexcept;
+}
+```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
+
+### 原型3
+
+```cpp
+namespace asc::std {
+[[nodiscard]] constexpr long double nexttoward(
+    long double value, long double toward) noexcept;
+}
+```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
 ## 参数说明
 
@@ -47,29 +74,29 @@ constexpr float/double/long double nexttoward(T value, long double toward) noexc
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `value` | 输入 | 求相邻可表示值的起点浮点值（无量纲）。 |
-| `toward` | 输入 | 指示移动方向的目标值（long double精度，无量纲）；value等于toward时返回value。 |
+| `toward` | 输入 | 指示移动方向的目标值（long double精度，无量纲）；value等于toward时返回toward转换到返回类型的值，保留目标零的符号。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float/double/long double` | 从double输入沿long double目标方向相邻的double；判断方向时保留目标精度。 |
+返回类型按各原型确定（`float`、`double`、`long double`）。返回朝long double目标方向的结果格式相邻值；数值相等时返回目标转换后的值，保留目标零的符号。
 
 ## 约束说明
+
+- 两个数值相等时返回目标方向参数转换到结果类型的值；+0与-0比较相等，此时保留目标零的符号。
 
 - 朝toward方向的下一个可表示值（C99契约，第二参数long double）；仅宿主，设备不提供。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-template <class T>
-decltype(auto) example(T value, long double toward)
+bool example()
 {
-    return asc::std::nexttoward(value, toward);
+    const auto value = asc::std::nexttoward(1.0F, 2.0L);
+    return value > 1.0F && value < 2.0F;
 }
 ```
 

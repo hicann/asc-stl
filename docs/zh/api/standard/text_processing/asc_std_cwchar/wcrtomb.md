@@ -56,7 +56,7 @@ size_t wcrtomb(char* output, wchar_t input, mbstate_t* state) noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `size_t` | 返回转换处理的字符或字节数量，或标准规定的错误、未完成状态编码。 |
+| `size_t` | 返回写入的多字节序列字节数，包含空字符所需字节；编码错误返回size_t(-1)。 |
 
 ## 约束说明
 

@@ -41,9 +41,9 @@ insufficient_source = 4;
 
 ## 约束说明
 
-- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Rank为1至5。
-- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
+- 这是[tensor_copy_status](tensor_copy_status.md)的枚举常量；可在Host、AI Core SIMD编程和AI Core SIMT编程中保存和比较，读取常量不执行校验或搬运。
+- 表示搬运所需的源元素跨度超出源视图容量。
+- [tensor_load_async](tensor_load_async.md)还会在源端地址未满足32字节边界时返回此值；本状态不由单独的描述符校验产生。
 
 ## 调用示例
 

@@ -34,28 +34,39 @@
 
 ## 函数原型
 
-### 原型1
+`asc::std::end`是可调用对象，使用`asc::std::end(range)`调用。以下通过公开对象查询类型，并列出调用运算符摘要。
 
 ```cpp
 namespace asc::std {
-template<class C> constexpr auto end(C& c) -> decltype(c.end());
-} // namespace asc::std
+// 查询公开对象的类型；对象及其调用运算符由头文件提供。
+using end_object_type = decltype(::asc::std::end);
+}
+```
+
+### 原型1
+
+```cpp
+// 可调用对象类型的类内声明节选。
+template<class C>
+constexpr auto operator()(C& c) const
+    noexcept(noexcept(c.end())) -> decltype(c.end());
 ```
 
 ### 原型2
 
 ```cpp
-namespace asc::std {
-template<class C> constexpr auto end(const C& c) -> decltype(c.end());
-} // namespace asc::std
+// 可调用对象类型的类内声明节选。
+template<class C>
+constexpr auto operator()(const C& c) const
+    noexcept(noexcept(c.end())) -> decltype(c.end());
 ```
 
 ### 原型3
 
 ```cpp
-namespace asc::std {
-template<class T, asc::std::size_t N> constexpr T* end(T (&array)[N]) noexcept;
-} // namespace asc::std
+// 可调用对象类型的类内声明节选。
+template<class T, size_t N>
+constexpr T* operator()(T (&array)[N]) const noexcept;
 ```
 
 ## 参数说明
@@ -113,19 +124,21 @@ template<class T, asc::std::size_t N> constexpr T* end(T (&array)[N]) noexcept;
 
 ## 约束说明
 
-- 支持非I/O范围、数组和用户容器。
+- 容器形式要求对应const或非const成员访问表达式有效；内建数组形式保留元素类型和const限定。
+- 对象返回的迭代器不拥有范围，使用期间底层容器或数组须保持有效。
 
 ## 调用示例
 
-以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    return asc::std::end(values);
+    int values[] = {1, 2, 3, 4};
+    auto last = asc::std::end(values);
+    return last == values + 4 && last - values == 4;
 }
 ```
 

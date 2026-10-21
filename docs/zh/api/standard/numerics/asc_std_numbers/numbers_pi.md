@@ -38,8 +38,8 @@
 
 ```cpp
 namespace asc::std::numbers {
-inline constexpr const double pi;
-} // namespace asc::std::numbers
+inline constexpr double pi = 0x1.921fb54442d18469898cc51701b8p+1;
+}
 ```
 
 ## 约束说明

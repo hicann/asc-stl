@@ -125,7 +125,9 @@ public:
     CANN_ASC_STL_HOST device_buffer& operator=(device_buffer&& other) noexcept
     {
         if (this != &other) {
-            (void)close();
+            if (!close().success()) {
+                return *this;
+            }
             state_ = other.state_;
             stream_ = other.stream_;
             resource_ = other.resource_;
@@ -222,7 +224,9 @@ public:
     CANN_ASC_STL_HOST pinned_buffer& operator=(pinned_buffer&& other) noexcept
     {
         if (this != &other) {
-            (void)close();
+            if (!close().success()) {
+                return *this;
+            }
             state_ = other.state_;
             stream_ = other.stream_;
             resource_ = other.resource_;
@@ -306,7 +310,10 @@ template <class T>
 CANN_ASC_STL_HOST execution_status make_device_buffer(device_buffer<T>& output,
     const device_memory_resource_ref& resource, stream_ref stream, ::asc::std::size_t element_count) noexcept
 {
-    (void)output.close();
+    const execution_status closed = output.close();
+    if (!closed.success()) {
+        return closed;
+    }
     if (element_count == 0 || !resource.valid() || !stream) {
         return execution_status{execution_errc::invalid_argument};
     }
@@ -392,7 +399,10 @@ template <class T>
 CANN_ASC_STL_HOST execution_status make_pinned_buffer(pinned_buffer<T>& output,
     const pinned_memory_resource_ref& resource, stream_ref stream, ::asc::std::size_t element_count) noexcept
 {
-    (void)output.close();
+    const execution_status closed = output.close();
+    if (!closed.success()) {
+        return closed;
+    }
     if (element_count == 0 || !resource.valid() || !stream) {
         return execution_status{execution_errc::invalid_argument};
     }

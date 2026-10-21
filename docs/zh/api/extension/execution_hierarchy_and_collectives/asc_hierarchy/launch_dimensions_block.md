@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::launch_dimensions::block`提供Block层级的全局常量标签。
+`asc::launch_dimensions::block`保存该启动配置对象的三维Block线程尺寸。
 
 ## 声明
 

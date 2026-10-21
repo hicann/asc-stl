@@ -34,52 +34,46 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::ranges::zip_view`](ranges_zip_view.md)。
+所属类型：[`zip_view`](ranges_zip_view.md)。以下是按参与条件列出的声明摘要；保留供调用使用的模板默认值，省略仅供SFINAE的实现选择参数。涉及私有返回类型时用auto摘要表示，不承诺可直接命名该类型。
 
 ### 原型1
 
 ```cpp
-// asc::std::ranges::zip_view 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class Packed> [[nodiscard]] constexpr auto end();
+constexpr auto end();
 ```
+
+此形式没有额外的成员模板参与条件；仍须满足所属类型的要求。
 
 ### 原型2
 
 ```cpp
-// asc::std::ranges::zip_view 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class Packed> [[nodiscard]] constexpr auto end() const;
+constexpr auto end() const;
 ```
+
+此形式没有额外的成员模板参与条件；仍须满足所属类型的要求。
 
 ## 参数说明
 
 ### 原型1的参数
 
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Packed` | zip_view组合的底层视图类型元组；各视图决定迭代器、哨兵及共同大小。 |
+无函数参数。
 
 ### 原型2的参数
 
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Packed` | zip_view组合的底层视图类型元组；各视图决定迭代器、哨兵及共同大小。 |
+无函数参数。
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `auto` | 返回指向尾后位置的迭代器。 |
-| 原型2 | `auto` | 返回指向尾后位置的迭代器。 |
+| 原型1 | `auto` | 返回尾后迭代器或哨兵，不可解引用；是否与begin同类型由所属视图和底层范围决定。 |
+| 原型2 | `auto` | 返回尾后迭代器或哨兵，不可解引用；是否与begin同类型由所属视图和底层范围决定。 |
 
 ## 约束说明
 
-- 七个列出名称。
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 每种形式的参与条件见原型；无实参查询一般直接调用，不需要指定模板选择类型。
+- 返回的迭代器、指针或引用以及借用范围不得超过其实际依赖的视图对象和元素存储的有效期。
+- 当前zip固定保存两个范围；其迭代器须支持随机访问，范围须有大小。const形式还要求两侧const迭代器类型分别与非const形式相同，这些条件在实例化时检查。
 
 ## 调用示例
 

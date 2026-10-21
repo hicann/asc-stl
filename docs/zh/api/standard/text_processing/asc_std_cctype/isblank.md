@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cctype>`。
 
-`asc::std::isblank`按当前支持的C区域设置规则分类输入字符。
+`asc::std::isblank`判断输入是否为水平空白字符（C语言区域设置下为空格和制表符）；符合时返回非零，不符合时返回0。
 
 标准语义参考：[cppreference `cctype`](https://en.cppreference.com/w/cpp/header/cctype)。
 
@@ -64,14 +64,14 @@ int isblank(int value) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/std/cctype>
 
-decltype(auto) example(int value)
+bool example()
 {
-    return asc::std::isblank(value);
+    return asc::std::isblank(' ') != 0;
 }
 ```
 

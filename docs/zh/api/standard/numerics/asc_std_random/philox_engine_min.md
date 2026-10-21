@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::philox_engine::min`返回该类型允许的最小值。
+`asc::std::philox_engine::min`返回引擎输出下界0。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
@@ -49,7 +49,7 @@ static constexpr UIntType min() noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `UIntType` | 返回该类型允许的最小值。 |
+| `UIntType` | 返回引擎输出下界0。 |
 
 ## 约束说明
 

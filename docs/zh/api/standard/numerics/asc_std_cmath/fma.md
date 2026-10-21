@@ -36,13 +36,90 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-float fma(float x, float y, float z) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float fma(
+    float x, float y, float z) noexcept;
+}
 ```
 
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
+
+### 原型2
+
+```cpp
+namespace asc::std {
+template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
+[[nodiscard]] constexpr Tp fma(
+    Tp x, Tp y, Tp z) noexcept;
+}
+```
+
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。扩展浮点模板仅在对应类型可用时参与；half、bfloat16及所支持FP8的数值调用用于AI Core SIMT编程。
+
+### 原型3
+
+```cpp
+namespace asc::std {
+[[nodiscard]] constexpr double fma(double x, double y, double z) noexcept;
+}
+```
+
+可用位置：Host。
+
+### 原型4
+
+```cpp
+namespace asc::std {
+[[nodiscard]] constexpr long double fma(
+    long double x, long double y, long double z) noexcept;
+}
+```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
+
+### 原型5
+
+```cpp
+namespace asc::std {
+template <class Tp, class Up, class Vp,
+    ::asc::std::enable_if_t<is_integral_v<Tp> && is_integral_v<Up> && is_integral_v<Vp>, int> = 0>
+[[nodiscard]] constexpr float fma(Tp x, Up y, Vp z) noexcept;
+}
+```
+
+可用位置：Host。
+
+### 原型6
+
+```cpp
+namespace asc::std {
+template <class Tp, class Up, class Vp,
+    ::asc::std::enable_if_t<is_arithmetic_v<Tp> && is_arithmetic_v<Up> && is_arithmetic_v<Vp> &&
+            (is_same_v<Tp, double> || is_same_v<Up, double> || is_same_v<Vp, double> || is_same_v<Tp, long double> ||
+                is_same_v<Up, long double> || is_same_v<Vp, long double>),
+        int> = 0>
+[[nodiscard]] constexpr __promote_t<Tp, Up, Vp> fma(Tp x, Up y, Vp z) noexcept;
+}
+```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
+
 ## 参数说明
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Tp` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。 |
+| `Up` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。 |
+| `Vp` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。 |
+
+未命名的默认int模板形参用于重载选择，调用方无需提供。
 
 **函数参数**
 
@@ -54,24 +131,24 @@ float fma(float x, float y, float z) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float` | 返回一次舍入的乘加结果；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+返回类型按各原型确定（`float`、`Tp`、`double`、`long double`、`__promote_t<Tp, Up, Vp>`）。返回乘积加第三参数的结果，仅进行一次舍入。
 
 ## 约束说明
 
-- 提供float重载、标准 *f别名以及float lerp回移接口。
+- Host全整数模板按既有接口返回float；含double或long double的混合模板按原型的提升类型返回，不应假设所有整数数学函数都返回double。
+
+- 扩展类型是否可实例化取决于目标类型支持；普通超越函数以float计算再转换回原格式，整数舍入和相邻数的规则见本页专门说明。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float x, float y, float z)
+bool example()
 {
-    return asc::std::fma(x, y, z);
+    return asc::std::fma(2.0F, 3.0F, 1.0F) == 7.0F;
 }
 ```
 

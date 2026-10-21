@@ -34,15 +34,18 @@
 
 ## 声明
 
+声明摘要。默认`Align`采用实现选择的对齐值，可通过`alignof(typename aligned_storage<Len>::type)`查询。
+
 ```cpp
 namespace asc::std {
-template<size_t Len, size_t Align> using aligned_storage_t = typename aligned_storage<Len, Align>::type;
+template<size_t Len, size_t Align = alignof(typename aligned_storage<Len>::type)>
+using aligned_storage_t = typename aligned_storage<Len, Align>::type;
 } // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 本辅助形式与[`asc::std::aligned_storage`](aligned_storage.md)使用相同的类型前提和判定规则；结果对应特征类的`type`。
 
 ## 调用示例
 

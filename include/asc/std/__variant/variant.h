@@ -136,8 +136,10 @@ public:
             __variant_storage_copy_assign(index_, storage_, other.storage_);
         } else {
             __variant_storage_destroy(index_, storage_);
+            // Construction may throw on Host; publish an active index only after it succeeds.
+            index_ = variant_npos;
+            __variant_storage_copy_construct(other.index_, storage_, other.storage_);
             index_ = other.index_;
-            __variant_storage_copy_construct(index_, storage_, other.storage_);
         }
         return *this;
     }
@@ -150,8 +152,9 @@ public:
             __variant_storage_move_assign(index_, storage_, other.storage_);
         } else {
             __variant_storage_destroy(index_, storage_);
+            index_ = variant_npos;
+            __variant_storage_move_construct(other.index_, storage_, other.storage_);
             index_ = other.index_;
-            __variant_storage_move_construct(index_, storage_, other.storage_);
         }
         return *this;
     }
@@ -174,8 +177,8 @@ public:
     {
         static_assert(Index < sizeof...(Types), "variant index out of range");
         __variant_storage_destroy(index_, storage_);
-        ::asc::std::__construct_at(
-            ::asc::std::addressof(storage_), in_place_index<Index>, ::asc::std::forward<Args>(args)...);
+        index_ = variant_npos;
+        __variant_storage_construct<Index>(storage_, ::asc::std::forward<Args>(args)...);
         index_ = Index;
         return __variant_storage_get<Index>(storage_);
     }
@@ -189,8 +192,8 @@ public:
     {
         static_assert(Index < sizeof...(Types), "variant index out of range");
         __variant_storage_destroy(index_, storage_);
-        ::asc::std::__construct_at(
-            ::asc::std::addressof(storage_), in_place_index<Index>, list, ::asc::std::forward<Args>(args)...);
+        index_ = variant_npos;
+        __variant_storage_construct<Index>(storage_, list, ::asc::std::forward<Args>(args)...);
         index_ = Index;
         return __variant_storage_get<Index>(storage_);
     }
@@ -210,8 +213,8 @@ public:
     {
         static_assert(Index < sizeof...(Types), "variant index out of range");
         __variant_storage_destroy(index_, storage_);
-        ::asc::std::__construct_at(
-            ::asc::std::addressof(storage_), in_place_index<Index>, list, ::asc::std::forward<Args>(args)...);
+        index_ = variant_npos;
+        __variant_storage_construct<Index>(storage_, list, ::asc::std::forward<Args>(args)...);
         index_ = Index;
         return __variant_storage_get<Index>(storage_);
     }

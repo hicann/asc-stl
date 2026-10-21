@@ -34,142 +34,109 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
 ### 原型1
 
 ```cpp
 namespace asc::std {
-[[nodiscard]] constexpr int abs(int x) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float abs(float x) noexcept;
+}
 ```
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
-
-此原型对应头文件：`<asc/std/cstdlib>`。
+可用位置：Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-[[nodiscard]] constexpr long abs(long x) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr double abs(double x) noexcept;
+}
 ```
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
-
-此原型对应头文件：`<asc/std/cstdlib>`。
+可用位置：Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ### 原型3
 
 ```cpp
 namespace asc::std {
-[[nodiscard]] constexpr long long abs(long long x) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr long double abs(long double x) noexcept;
+}
 ```
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
-
-此原型对应头文件：`<asc/std/cstdlib>`。
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
 ### 原型4
 
 ```cpp
 namespace asc::std {
-float abs(float x) noexcept;
-} // namespace asc::std
+template <class T>
+[[nodiscard]] T abs(const complex<T>& value) noexcept;
+}
 ```
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMT编程。
+可用位置：Host、AI Core SIMT编程。此复数重载需要包含`<asc/std/complex>`，ASC复数成分当前仅支持float。
 
-此原型对应头文件：`<asc/std/cmath>`。
+### 标准整数重载
 
-### 原型5
+以下形式需包含`<asc/std/cstdlib>`，可用于Host及适用Device模式。
 
 ```cpp
 namespace asc::std {
-template<class T> T abs(const complex<T>& value) noexcept;
-} // namespace asc::std
+constexpr int abs(int value) noexcept;
+}
 ```
 
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMT编程。
+```cpp
+namespace asc::std {
+constexpr long abs(long value) noexcept;
+}
+```
 
-此原型对应头文件：`<asc/std/complex>`。
+```cpp
+namespace asc::std {
+constexpr long long abs(long long value) noexcept;
+}
+```
 
 ## 参数说明
 
-### 原型1的参数
+**模板参数**
 
-**函数参数**
+| 参数名 | 描述 |
+| --- | --- |
+| `T` | 复数成分类型；ASC复数当前只支持float。 |
 
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `x` | 输入 | 待求绝对值的整数输入（int）。 |
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `x` | 输入 | 待求绝对值的整数输入（long）。 |
-
-### 原型3的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `x` | 输入 | 待求绝对值的整数输入（long long）。 |
-
-### 原型4的参数
+未命名的默认int模板形参用于重载选择，调用方无需提供。
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `x` | 输入 | 待求浮点绝对值的输入值（无量纲）。 |
-
-### 原型5的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 复数操作数的成分（实部与虚部）值类型，须为浮点类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
 | `value` | 输入 | 待求模（绝对值）的复数操作数，模为实部与虚部构成向量的长度。 |
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `int` | 返回参数的绝对值。 |
-| 原型2 | `long` | 返回参数的绝对值。 |
-| 原型3 | `long long` | 返回参数的绝对值。 |
-| 原型4 | `float` | 返回参数的绝对值。 |
-| 原型5 | `T` | 返回参数的绝对值。 |
+返回类型按各原型确定（`float`、`double`、`long double`、`T`）。返回实数的绝对值或复数的模。
 
 ## 约束说明
 
 - 提供整数重载及相应结果类型。
-- 整数重载（原型1、原型2、原型3）要求参数的绝对值可由返回类型表示，例如`abs(INT_MIN)`不满足该要求，行为无定义。
-- 提供float重载、标准 *f别名以及float lerp回移接口。
-- 仅提供页面声明的float或`complex<float>`运算。
+- 标准整数重载要求参数的绝对值可由返回类型表示，例如`abs(INT_MIN)`不满足该要求，行为无定义。
+- 标量精度与执行位置按各原型确定；复数输入仅支持complex<float>。
 - 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float x)
+bool example()
 {
-    return asc::std::abs(x);
+    return asc::std::abs(-2.0F) == 2.0F;
 }
 ```
 

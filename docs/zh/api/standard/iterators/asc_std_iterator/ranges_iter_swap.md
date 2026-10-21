@@ -34,29 +34,32 @@
 
 ## 声明
 
+`asc::std::ranges::iter_swap`是可调用对象。对象及其调用运算符由头文件提供，可通过公开名称查询其类型。
+
 ```cpp
 namespace asc::std::ranges {
-constexpr iter_swap_fn iter_swap;
-} // namespace asc::std::ranges
+using iter_swap_object_type = decltype(::asc::std::ranges::iter_swap);
+}
 ```
 
 ## 约束说明
 
-- 两迭代器均可解引用且指向可交换元素。
+- 接口可用于C++17及C++20；Device调用仍须满足所用迭代器和元素操作的调用位置要求。
+- `iter_swap(i, j)`交换两迭代器所指元素；支持适用的自定义交换、解引用后交换及移动交换路径。
+- 两个迭代器须可解引用，且对应元素满足实际选择交换路径的要求。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
-#include <asc/std/ranges>
 
-void example()
+bool example()
 {
-    int lhs = 1;
-    int rhs = 2;
-    asc::std::ranges::iter_swap(&lhs, &rhs);
+    int values[] = {2, 4};
+    asc::std::ranges::iter_swap(values, values + 1);
+    return values[0] == 4 && values[1] == 2;
 }
 ```
 

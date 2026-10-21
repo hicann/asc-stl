@@ -35,22 +35,31 @@
 ## 声明
 
 ```cpp
-namespace asc::std::literals::string_view_literals
+namespace asc::std {
+inline namespace literals {
+inline namespace string_view_literals {}
+}
+}
 ```
 
 ## 约束说明
 
-- 提供构造、迭代和除at外的访问接口，以及remove_prefix、remove_suffix、swap、data、size、starts_with、ends_with和非抛出的比较/查找接口。
+- 组织sv字面量运算符；各字符类型的字面量生成对应basic_string_view，不提供视图成员函数。视图借用字符串字面量的静态存储。
 - AI Core SIMD编程 仅支持local或generic地址空间的普通字符指针。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/string_view>
 
-namespace example_namespace = asc::std::literals::string_view_literals;
+bool example()
+{
+    constexpr auto value = asc::std::literals::string_view_literals::operator""sv("abc", 3);
+    static_assert(value.size() == 3 && value[1] == 'b');
+    return true;
+}
 ```
 
 ## 关联API

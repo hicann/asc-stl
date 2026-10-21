@@ -34,10 +34,12 @@
 
 ## 声明
 
+头文件提供已经初始化的inline constexpr对象`nullopt`。初始化标签属于实现细节，调用方直接使用该对象。以下为该对象在类定义后的实际初始化形式。
+
 ```cpp
 namespace asc::std {
-inline constexpr nullopt_t nullopt;
-} // namespace asc::std
+inline constexpr nullopt_t nullopt{nullopt_t::__secret_tag{}, nullopt_t::__secret_tag{}};
+}
 ```
 
 ## 约束说明
@@ -48,12 +50,17 @@ inline constexpr nullopt_t nullopt;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例用具体输入和可判断结果展示本接口。
 
 ```cpp
 #include <asc/std/optional>
 
-auto value = asc::std::nullopt;
+bool example()
+{
+    asc::std::optional<int> value(7);
+    value = asc::std::nullopt;
+    return !value.has_value();
+}
 ```
 
 ## 关联API

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::weekday::iso_encoding`返回ISO星期编码。
+`asc::std::chrono::weekday::iso_encoding`返回ISO星期编码。星期一至星期六依次为1至6，星期日为7。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 
@@ -49,7 +49,7 @@
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `unsigned int` | 返回ISO星期编码。 |
+| `unsigned int` | 返回ISO星期编码。星期一至星期六依次为1至6，星期日为7。 |
 
 ## 约束说明
 

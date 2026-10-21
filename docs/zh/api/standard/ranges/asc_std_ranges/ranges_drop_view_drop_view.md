@@ -34,23 +34,30 @@
 
 ## 函数原型
 
+所属类型：[`drop_view`](ranges_drop_view.md)。以下按当前实现列声明摘要；省略仅供SFINAE的选择参数，保留供调用使用的类型默认值。默认构造形式均有逐项参与条件，不能据此假定所有特化都可默认构造。
+
 ### 原型1
 
 ```cpp
-drop_view();
+constexpr drop_view();
 ```
+
+仅当View满足default_initializable时参与；C++20 Host为受约束默认化构造，C++17/Device为SFINAE选择形式。
 
 ### 原型2
 
 ```cpp
-constexpr drop_view(View base, range_difference_t<View> base) noexcept(is_nothrow_move_constructible_v<View>);
+constexpr drop_view(View base, range_difference_t<View> count)
+    noexcept(is_nothrow_move_constructible_v<View>);
 ```
+
+保存移动后的base及非负count；count须能由range_difference_t<View>表示。
 
 ## 参数说明
 
 ### 原型1的参数
 
-无参数。
+无函数参数。
 
 ### 原型2的参数
 
@@ -58,8 +65,8 @@ constexpr drop_view(View base, range_difference_t<View> base) noexcept(is_nothro
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `base` | 输入 | 被适配的底层视图。 |
-| `base` | 输入 | 跳过的元素个数（原型第二参数）；超过底层范围长度时结果为空。 |
+| `base` | 输入 | 保存的底层视图，按值接收后移动。 |
+| `count` | 输入 | 跳过或保留的元素个数；须非负，不是另一base对象。 |
 
 ## 返回值说明
 
@@ -67,7 +74,9 @@ constexpr drop_view(View base, range_difference_t<View> base) noexcept(is_nothro
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- 每种形式须满足其原型所列参与条件；实际保存的范围或值还须满足所属视图的类型要求。
+- 构造视图不会复制它所借用的元素；底层存储和被借用对象须覆盖相应迭代器与元素访问期。
+- 以noexcept标注的形式须遵守实际成员操作不抛出异常的要求；具体异常规格见各原型。
 
 ## 调用示例
 

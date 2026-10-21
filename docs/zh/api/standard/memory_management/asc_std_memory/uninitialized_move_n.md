@@ -28,9 +28,7 @@
 
 头文件路径为：`<asc/std/memory>`。
 
-`asc::std::uninitialized_move_n`在未构造存储中对指定数量对象执行名称所指的构造、复制或移动操作。
-
-标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
+`asc::std::uninitialized_move_n`从`first`起移动最多`count`个对象，在`result`起始的未初始化存储逐个构造对象，并返回输入和输出各自的末尾。非正计数不构造对象。
 
 ## 函数原型
 
@@ -62,7 +60,7 @@ template<class InputIterator, class Size, class ForwardIterator> pair<InputItera
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `pair<InputIterator, ForwardIterator>` | 返回最后一个完成构造的对象之后的位置；构造失败时按本页异常约束处理。 |
+| `pair<InputIterator, ForwardIterator>` | `first`成员是完成移动后的输入迭代器，`second`成员是已构造输出范围的尾后迭代器；两者分别属于输入与输出范围。 |
 
 ## 约束说明
 
@@ -71,18 +69,21 @@ template<class InputIterator, class Size, class ForwardIterator> pair<InputItera
 
 ## 调用示例
 
-以下Host片段使用有效对象或对齐存储；构造后的对象在示例末尾销毁。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/memory>
 
-decltype(auto) example()
+bool example()
 {
     alignas(int) unsigned char storage[sizeof(int) * 4];
     int* output = reinterpret_cast<int*>(storage);
     int input[4] = {1, 2, 3, 4};
-    return asc::std::uninitialized_move_n(input, 4, output);
+    const auto ends = asc::std::uninitialized_move_n(input, 4, output);
+    const bool valid = ends.first == input + 4 && ends.second == output + 4
+        && output[0] == 1 && output[3] == 4;
     asc::std::destroy_n(output, 4);
+    return valid;
 }
 ```
 

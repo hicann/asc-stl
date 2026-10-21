@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::local_days`表示日期、时间点或时长计算中的`local_days`值类型。
+`asc::std::chrono::local_days`是以24小时为计数单位的本地时间点；其`Clock`为`local_t`，不查询时区或夏令时。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

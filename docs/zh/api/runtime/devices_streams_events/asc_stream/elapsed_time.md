@@ -37,7 +37,7 @@
 ```cpp
 namespace asc {
 bool elapsed_time(asc::event_ref start, asc::event_ref end, float& milliseconds) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -48,7 +48,7 @@ bool elapsed_time(asc::event_ref start, asc::event_ref end, float& milliseconds)
 | --- | --- | --- |
 | `start` | 输入 | 用于记录或等待执行进度的Event引用。 |
 | `end` | 输入 | 用于记录或等待执行进度的Event引用。 |
-| `milliseconds` | 输入/输出 | 接收两个Event之间的运行时间，单位为毫秒。 |
+| `milliseconds` | 输出 | 接收两个Event之间的运行时间，单位为毫秒。 |
 
 ## 返回值说明
 

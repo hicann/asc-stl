@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::integer_sequence 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr size_t size() noexcept;
+static constexpr size_t size() noexcept;
 ```
 
 ## 参数说明

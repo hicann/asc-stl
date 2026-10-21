@@ -34,12 +34,15 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::move_iterator`](move_iterator.md)。
+所属类型：[`move_iterator`](move_iterator.md)。以下保留转换赋值的真实参与条件；C++17及Device以SFINAE选择，Host C++20以相同的requires条件选择。
 
 ```cpp
-// asc::std::move_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class U> constexpr move_iterator<Iter>& operator=(const move_iterator<U>& other) noexcept(is_nothrow_assignable_v<Iter&, const U&>);
+template<class U, enable_if_t<!is_same_v<U, Iter> && convertible_to<const U&, Iter>
+    && assignable_from<Iter&, const U&>, int> = 0>
+constexpr move_iterator& operator=(const move_iterator<U>& other) noexcept(is_nothrow_assignable_v<Iter&, const U&>);
 ```
+
+同类型特殊成员赋值按C++隐式声明规则处理。
 
 ## 参数说明
 
@@ -53,29 +56,34 @@ template<class U> constexpr move_iterator<Iter>& operator=(const move_iterator<U
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 赋值来源对象；左值形式复制其状态，右值形式按对应成员的移动操作转移状态。 |
+| `other` | 输入 | 转换赋值来源，形参为const引用；保存的底层状态须满足原型给出的转换和赋值条件。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `move_iterator<Iter> &` | 返回更新后的当前对象引用，可继续进行赋值或复合操作。 |
+| `move_iterator&` | 从来源保存的底层位置更新目标，返回*this；来源不因本转换赋值而改变。 |
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 底层迭代器须支持本页操作；自减要求双向遍历，位移和下标要求相应随机访问操作。
+- 适配器不拥有底层元素；解引用通过`asc::std::iter_move`访问元素，移动后的值遵守元素类型的约定。
+- 解引用、箭头及下标访问须指向有效元素；返回引用或指针的寿命受底层对象约束。
 
 ## 调用示例
 
-以下Host片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void example(asc::std::move_iterator<const int*>& destination, const asc::std::move_iterator<int*>& source)
+bool example()
 {
-    destination = source;
+    int values[] = {2, 4, 6, 8};
+    asc::std::move_iterator<int*> iterator(values);
+    asc::std::move_iterator<const int*> target;
+    target = iterator;
+    return *target == 2;
 }
 ```
 

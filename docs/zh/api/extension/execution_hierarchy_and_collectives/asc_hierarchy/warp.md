@@ -34,8 +34,8 @@
 
 ```cpp
 namespace asc {
-inline constexpr warp_level warp{}
-} // namespace asc
+inline constexpr warp_level warp{};
+}  // namespace asc
 ```
 
 ## 约束说明

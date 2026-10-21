@@ -77,26 +77,24 @@ constexpr back_insert_iterator<Container>& operator=(typename Container::value_t
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 目标容器须支持对应的`push_back(value)`操作；插入迭代器保存容器地址，不拥有容器。
+- 容器须在适配器使用期间有效；插入操作还须遵守目标容器自身的迭代器失效规则。
 
 ## 调用示例
 
-以下Host片段使用调用方提供的标准容器演示迭代器操作；目标容器须保持有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
-#include <deque>
-#include <functional>
 #include <vector>
 
-#include <vector>
-
-void example()
+bool example()
 {
-    ::std::vector<int> values{};
+    ::std::vector<int> values;
     asc::std::back_insert_iterator<::std::vector<int>> output(values);
-    output = 7;
+    *output = 7;
+    *output = 9;
+    return values.size() == 2 && values[0] == 7 && values[1] == 9;
 }
 ```
 

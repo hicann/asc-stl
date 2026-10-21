@@ -37,9 +37,24 @@
 所属类型：[`asc::std::counted_iterator`](counted_iterator.md)。
 
 ```cpp
-// asc::std::counted_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class I2> [[nodiscard]] constexpr counted_iterator<Iter> operator+(iter_difference_t<I2> count) const;
+// counted_iterator 类内声明节选；类模板参数和其余成员由所属类提供。
+template<class I2 = Iter, enable_if_t<random_access_iterator<I2>, int> = 0>
+constexpr counted_iterator operator+(iter_difference_t<I2> count) const;
 ```
+
+以上为C++17及Device选择形式；Host C++20以`requires random_access_iterator<I2>`表达相同参与条件。
+
+### 对称非成员形式
+
+```cpp
+namespace asc::std {
+template<class Iter>
+[[nodiscard]] constexpr counted_iterator<Iter> operator+(typename counted_iterator<Iter>::difference_type count,
+    const counted_iterator<Iter>& value);
+}
+```
+
+这是与成员加法对应的命名空间非成员模板，以count+value调用。
 
 ## 参数说明
 
@@ -47,13 +62,15 @@ template<class I2> [[nodiscard]] constexpr counted_iterator<Iter> operator+(iter
 
 | 参数名 | 描述 |
 | --- | --- |
-| `I2` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
+| `I2` | 成员选择类型，默认为所属类的`Iter`；须满足本原型的表达式或遍历要求。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `count` | 输入 | 参与操作的元素数量。 |
+
+对称形式的count为有符号距离，value为源适配器的const引用；返回与value+count相同的新适配器，不改变value。底层须支持对应随机访问位移。
 
 ## 返回值说明
 
@@ -63,19 +80,25 @@ template<class I2> [[nodiscard]] constexpr counted_iterator<Iter> operator+(iter
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- `Iter`须满足本操作要求的遍历能力；适配器不拥有底层范围。
+- `count()`表示从当前位置开始剩余的元素数量；解引用及自增要求剩余数量大于0。
+- 位移后的底层位置及对应计数须有效，不得越过实际有效范围。
+- 本页的位移或下标成员要求底层迭代器满足随机访问迭代器要求。
 
 ## 调用示例
 
-以下Host片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-decltype(auto) example(asc::std::counted_iterator<int*>& iterator)
+bool example()
 {
-    return (iterator + 1);
+    int values[] = {2, 4, 6, 8};
+    asc::std::counted_iterator<int*> iterator(values, 4);
+    auto result = iterator + 1;
+    auto symmetric = 1 + iterator;
+    return *result == 4 && *iterator == 2 && symmetric.base() == result.base();
 }
 ```
 

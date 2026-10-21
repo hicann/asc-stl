@@ -34,27 +34,31 @@
 
 ## 声明
 
+以下用公开CPO与类型特征表达类型结果的声明摘要；R须满足range，range_size_t还须满足sized_range。
+
 ```cpp
 namespace asc::std::ranges {
-template<class Rp> using borrowed_subrange_t = enable_if_t<range<Rp>, If<borrowed_range<Rp>, subrange<iterator_t<Rp>>, dangling>>;
-} // namespace asc::std::ranges
+template<class R>
+using borrowed_subrange_t = enable_if_t<range<R>,
+    conditional_t<borrowed_range<R>, subrange<iterator_t<R>>, dangling>>;
+}
 ```
 
 ## 约束说明
 
-- 支持数组和用户范围，不支持仅由花括号构成的initializer_list表达式。
+- `R`须满足`range`；`range_size_t`只对可查询大小的范围有效。
+- 借用结果类型取决于`borrowed_range<R>`，不延长元素存储的生命周期；非借用的临时范围结果使用`dangling`。
 
 ## 调用示例
 
-以下片段选用具体模板实参展示别名类型。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/type_traits>
 
-void use_type()
-{
-    using selected = asc::std::ranges::borrowed_subrange_t<int (&)[4]>;
-}
+using result = asc::std::ranges::borrowed_subrange_t<int (&)[3]>;
+static_assert(asc::std::is_same_v<result, asc::std::ranges::subrange<int*>>);
 ```
 
 ## 关联API

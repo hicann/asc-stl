@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::year_month_day_last`表示日期、时间点或时长计算中的`year_month_day_last`值类型。
+`asc::std::chrono::year_month_day_last`表示某年某月的最后一天；day()按该月月长及闰年规则计算，月份须有效。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

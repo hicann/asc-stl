@@ -34,15 +34,15 @@
 
 ```cpp
 namespace asc {
-template<asc::std::size_t Rank> class dlpack_tensor;
-} // namespace asc
+template <asc::std::size_t Rank>
+class dlpack_tensor;
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供Host和GM视图以及AI Core SIMD编程UB视图。
-- 允许有符号步长。
-- 可选的Host DLPack桥接不抛出异常。
+- 仅在提供真实DLPack头文件的Host环境使用；对象拥有形状与步长数组，但不拥有数据。get返回值中的元数据指针须在holder存活期内使用。
+
 
 ## 调用示例
 
@@ -58,7 +58,8 @@ bool example()
     using Extents = asc::std::extents<int, 3>;
     asc::std::mdspan<int, Extents> view(values);
     asc::dlpack_tensor<1> holder;
-    if (!asc::to_dlpack_tensor(view, kDLCPU, 0, holder)) return false;
+    if (!asc::to_dlpack_tensor(view, kDLCPU, 0, holder))
+        return false;
     const DLTensor tensor = holder.get();
     return tensor.data == values && tensor.ndim == 1 && tensor.shape[0] == 3;
 }

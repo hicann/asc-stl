@@ -45,6 +45,8 @@
 #include <asc/std/__algorithm/transform.h>
 #include <asc/std/__semaphore/counting_semaphore.h>
 
+#include "narrow_atomic_cas_semantics.h"
+
 namespace asc_stl_b022_test {
 
 struct greater_than {
@@ -281,6 +283,7 @@ CANN_ASC_STL_API int evaluate_atomic()
     failures += asc::std::kill_dependency(3) != 3;
     asc::std::atomic_int initialized CANN_ASC_STL_ATOMIC_VAR_INIT(5);
     failures += initialized.load() != 5;
+    failures += static_cast<int>(asc_stl_narrow_atomic_cas_test::evaluate_host());
     return failures;
 #else
     // Device atomic objects must live in GlobalMemory; see evaluate_device_atomic.
@@ -379,6 +382,7 @@ CANN_ASC_STL_SIMT_API void evaluate_device_atomic(OutputPointer output)
     semaphore.acquire();
     failures += semaphore.try_acquire();
     failures += asc::std::counting_semaphore<1>::max() != 1;
+    failures |= asc_stl_narrow_atomic_cas_test::evaluate_device(output + 48) != 0 ? 65536 : 0;
     output[31] = failures;
 }
 #endif

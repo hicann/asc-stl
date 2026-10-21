@@ -54,7 +54,7 @@ int wctob(wint_t value) noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `int` | 返回转换处理的字符或字节数量，或标准规定的错误、未完成状态编码。 |
+| `int` | 可表示为单字节字符时返回对应unsigned char提升为int的值，否则返回EOF。 |
 
 ## 约束说明
 

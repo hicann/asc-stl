@@ -36,8 +36,9 @@
 
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const bool is_execution_policy_v;
-} // namespace asc::std
+template <class T>
+inline constexpr const bool is_execution_policy_v = asc::std::is_execution_policy<T>::value;
+}  // namespace asc::std
 ```
 
 ## 约束说明

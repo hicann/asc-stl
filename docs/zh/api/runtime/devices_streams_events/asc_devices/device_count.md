@@ -35,7 +35,7 @@
 ```cpp
 namespace asc {
 bool device_count(asc::std::uint32_t& count) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -44,7 +44,7 @@ bool device_count(asc::std::uint32_t& count) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `count` | 输入/输出 | 参与操作的元素数量。 |
+| `count` | 输出 | 参与操作的元素数量。 |
 
 ## 返回值说明
 

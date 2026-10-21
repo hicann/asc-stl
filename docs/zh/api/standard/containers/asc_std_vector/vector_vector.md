@@ -37,7 +37,7 @@
 ### 原型1
 
 ```cpp
-vector(const Allocator& allocator) noexcept;
+explicit vector(const Allocator& allocator) noexcept;
 ```
 
 ### 原型2
@@ -70,11 +70,9 @@ vector(vector<T, Allocator>&& other) noexcept;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 普通构造须显式传入`Allocator`对象，分配器须能为`T`提供和释放连续存储；初始容器为空。
+- 移动构造复制源分配器并接管源存储，使源容器变为空；复制构造已删除。分配器复制操作须不抛出异常。
+- 在Device侧构造时，所调用的分配器操作须可用于相应编程模式。
 
 ## 调用示例
 

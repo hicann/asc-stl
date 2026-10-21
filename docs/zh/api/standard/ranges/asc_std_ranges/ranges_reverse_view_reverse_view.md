@@ -34,23 +34,29 @@
 
 ## 函数原型
 
+所属类型：[`reverse_view`](ranges_reverse_view.md)。以下按当前实现列声明摘要；省略仅供SFINAE的选择参数，保留供调用使用的类型默认值。默认构造形式均有逐项参与条件，不能据此假定所有特化都可默认构造。
+
 ### 原型1
 
 ```cpp
-reverse_view();
+constexpr reverse_view();
 ```
+
+仅当View满足default_initializable时参与；不同语言路径分别使用默认化构造或SFINAE选择。
 
 ### 原型2
 
 ```cpp
-constexpr reverse_view(View base);
+constexpr explicit reverse_view(View base);
 ```
+
+显式地移动保存底层视图；不复制元素。
 
 ## 参数说明
 
 ### 原型1的参数
 
-无参数。
+无函数参数。
 
 ### 原型2的参数
 
@@ -58,7 +64,7 @@ constexpr reverse_view(View base);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `base` | 输入 | 被反转呈现的底层视图；须为双向范围，视图按相反顺序呈现其元素。 |
+| `base` | 输入 | 用于初始化底层范围的视图。 |
 
 ## 返回值说明
 
@@ -66,7 +72,9 @@ constexpr reverse_view(View base);
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- 每种形式须满足其原型所列参与条件；实际保存的范围或值还须满足所属视图的类型要求。
+- 构造视图不会复制它所借用的元素；底层存储和被借用对象须覆盖相应迭代器与元素访问期。
+- 以noexcept标注的形式须遵守实际成员操作不抛出异常的要求；具体异常规格见各原型。
 
 ## 调用示例
 

@@ -34,29 +34,33 @@
 
 ## 声明
 
+`asc::std::ranges::next`是可调用对象。对象及其调用运算符由头文件提供，可通过公开名称查询其类型。
+
 ```cpp
 namespace asc::std::ranges {
-constexpr next_fn next;
-} // namespace asc::std::ranges
+using next_object_type = decltype(::asc::std::ranges::next);
+}
 ```
 
 ## 约束说明
 
-- 该范围迭代器操作要求C++20，且仅在Host可调用。
-
-- 步数推进不越过哨兵；负步数要求迭代器双向。
+- 接口可用于C++17及C++20；Device调用仍须满足所用迭代器和元素操作的调用位置要求。
+- 支持`next(i)`、`next(i, n)`、`next(i, bound)`及`next(i, n, bound)`；返回移动后的迭代器副本。
+- 负距离要求双向迭代器；带边界的负距离还要求边界与迭代器为同一类型，且所经过位置有效。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
 bool example()
 {
-    int values[] = {1, 2, 3};
-    return *asc::std::ranges::next(values) == 2;
+    int values[] = {2, 4, 6, 8};
+    auto result = asc::std::ranges::next(values, 2, values + 4);
+    auto bounded = asc::std::ranges::next(result, 3, values + 4);
+    return result == values + 2 && *result == 6 && bounded == values + 4;
 }
 ```
 

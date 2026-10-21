@@ -34,34 +34,24 @@
 
 ## 声明
 
-### 原型1
-
-```cpp
-namespace asc::std {
-template<::std::size_t Index, class T> class variant_alternative;
-} // namespace asc::std
-```
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<size_t Index, class ...Types> struct variant_alternative;
-} // namespace asc::std
-```
-
-### 原型3
-
 ```cpp
 namespace asc::std {
 template<size_t Index, class T> struct variant_alternative;
-} // namespace asc::std
+
+template<size_t Index, class... Types>
+struct variant_alternative<Index, variant<Types...>>;
+
+template<size_t Index, class T> struct variant_alternative<Index, const T>;
+template<size_t Index, class T> struct variant_alternative<Index, volatile T>;
+template<size_t Index, class T> struct variant_alternative<Index, const volatile T>;
+}
 ```
 
 ## 约束说明
 
+- 主模板作用于一个variant类型；const、volatile和const volatile形式是该主模板的偏特化，不是另一个可变参数主模板。
+
 - Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 

@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-#include "../semantics.h"
-extern "C" __global__ void asc_stl_b027_simt_kernel(unsigned int* result)
-{
-    asc_stl_b027_runtime::evaluate(result);
-}
-void launch_asc_stl_b027_simt(unsigned int* result, void* stream)
-{
-    asc_stl_b027_simt_kernel<<<1, 1, 0, stream>>>(result);
-}
+#ifndef ASC_STL_TEST_HARDWARE_LAUNCH_08986A78E90B_H
+#define ASC_STL_TEST_HARDWARE_LAUNCH_08986A78E90B_H
+
+#include <acl/acl.h>
+#include <asc/__work_queue/cursor.h>
+#include <cstdint>
+
+void launch_asc_stl_b024_simd(std::uint32_t*, const std::uint32_t*, void*);
+void launch_asc_stl_b024_simt(__INT32_TYPE__*, asc::detail::work_cursor*, void*);
+
+#endif  // ASC_STL_TEST_HARDWARE_LAUNCH_08986A78E90B_H

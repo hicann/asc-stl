@@ -17,15 +17,18 @@
 #include <acl/acl.h>
 #include <cstdint>
 #include <iostream>
+#include "../../../../../support/hardware_runtime.h"
+#include "launch.h"
 
 #if defined(ASC_STL_W08_SIMT)
-void launch_asc_stl_w08_simt(unsigned int*, const unsigned int*, void*);
+
 #else
-void launch_asc_stl_w08_simd(unsigned int*, const unsigned int*, void*);
+
 #endif
 
 int main()
 {
+    asc_stl_test::hardware_runtime runtime;
     constexpr unsigned int kWords = 512;
     unsigned int input[kWords]{};
     unsigned int initial[kWords]{};
@@ -38,7 +41,7 @@ int main()
     unsigned int* device_result = nullptr;
     unsigned int* device_input = nullptr;
     aclrtStream stream = nullptr;
-    bool passed = aclInit(nullptr) == ACL_SUCCESS && aclrtSetDevice(0) == ACL_SUCCESS &&
+    bool passed = runtime.initialize(nullptr) == ACL_SUCCESS && runtime.set_device(0) == ACL_SUCCESS &&
         aclrtCreateStream(&stream) == ACL_SUCCESS &&
         aclrtMalloc(reinterpret_cast<void**>(&device_result), sizeof(initial), ACL_MEM_MALLOC_HUGE_FIRST) ==
             ACL_SUCCESS &&
@@ -47,13 +50,13 @@ int main()
             ACL_SUCCESS &&
         aclrtMemcpy(device_input, sizeof(input), input, sizeof(input), ACL_MEMCPY_HOST_TO_DEVICE) == ACL_SUCCESS;
     unsigned int result[kWords]{};
-    if (passed) {
+    if (passed && runtime.ready()) {
 #if defined(ASC_STL_W08_SIMT)
         launch_asc_stl_w08_simt(device_result, device_input, stream);
 #else
         launch_asc_stl_w08_simd(device_result, device_input, stream);
 #endif
-        passed = aclrtSynchronizeStream(stream) == ACL_SUCCESS &&
+        passed = runtime.synchronize(stream) == ACL_SUCCESS &&
             aclrtMemcpy(result, sizeof(result), device_result, sizeof(result), ACL_MEMCPY_DEVICE_TO_HOST) ==
                 ACL_SUCCESS;
     }
@@ -72,13 +75,14 @@ int main()
     passed = passed && load_mismatches == 0 && result[31] == 0 && result[60] == 0 && result[61] == 0;
 #endif
     if (device_input)
-        passed = aclrtFree(device_input) == ACL_SUCCESS && passed;
+        passed = runtime.free_device(device_input) == ACL_SUCCESS && passed;
     if (device_result)
-        passed = aclrtFree(device_result) == ACL_SUCCESS && passed;
+        passed = runtime.free_device(device_result) == ACL_SUCCESS && passed;
     if (stream)
-        passed = aclrtDestroyStream(stream) == ACL_SUCCESS && passed;
-    passed = aclrtResetDevice(0) == ACL_SUCCESS && passed;
-    passed = aclFinalize() == ACL_SUCCESS && passed;
+        passed = runtime.destroy_stream(stream) == ACL_SUCCESS && passed;
+    passed = runtime.reset_device(0) == ACL_SUCCESS && passed;
+    passed = runtime.finalize() == ACL_SUCCESS && passed;
+    passed = runtime.finish(passed) == 0;
     std::cout << "w08_failures=" << (passed ? 0 : 1) << '\n';
     std::cout << "w09_w10_failures=" << (passed ? 0 : 1) << '\n';
     std::cout << "w11_w12_failures=" << result[61] << '\n';

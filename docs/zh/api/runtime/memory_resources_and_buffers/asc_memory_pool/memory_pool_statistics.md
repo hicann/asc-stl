@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/memory_pool>`。
 
-`asc::memory_pool_statistics`是内存池状态快照，分别记录已向底层资源保留、正由调用方使用和已缓存待复用的字节数。
+`asc::memory_pool_statistics`是内存池状态快照，分别记录已向底层资源保留、正由调用方使用和未由调用方持有的保留字节数（包含Event尚未完成的pending块，不能据此认定立即可复用）。
 
 该接口的可用位置为Host。
 
@@ -37,7 +37,7 @@
 ```cpp
 namespace asc {
 class memory_pool_statistics;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 约束说明

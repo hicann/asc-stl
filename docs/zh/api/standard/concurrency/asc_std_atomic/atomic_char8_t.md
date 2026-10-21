@@ -46,10 +46,9 @@ using atomic_char8_t = atomic<char8_t>;
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数。
-- bool/8/16位用32位内部存储。
-- 32/64位按有符号位模式分派。
-- Host和AI Core SIMT编程GM。
+- 该别名从C++20开始提供，依赖语言内建类型`char8_t`。
+- 该别名表示对应整数或字符类型的[atomic](atomic.md)对象；对象的构造和原子操作可在Host或AI Core SIMT编程中进行。
+- SIMT线程共享的原子对象须放在GM中，并在并发访问前完成初始化；仅声明别名不访问存储。
 
 ## 调用示例
 

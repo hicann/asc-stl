@@ -33,6 +33,8 @@
 #include <asc/std/format>
 #include <asc/std/ranges>
 
+#include "expected_monad_regression.h"
+
 namespace asc_stl_w11_w12_test {
 
 struct even {
@@ -84,6 +86,7 @@ CANN_ASC_STL_API CANN_ASC_STL_DETAIL_NO_INLINE unsigned int evaluate_foundation(
 #endif
     asc::std::expected<int, int> expected(7);
     failures += !expected || *expected != 7;
+    failures += asc_stl_expected_monad_test::evaluate();
     failures += asc::saturating_add(2147483647, 1) != 2147483647;
     failures += !asc::add_overflow(2147483647, 1).overflow;
     failures += asc::saturating_sub(0U, 1U) != 0U || asc::saturating_mul(~0U, 2U) != ~0U;

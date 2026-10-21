@@ -35,15 +35,12 @@
 ```cpp
 namespace asc {
 using host_callback_t = void (*)(void*);
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 仅可在Host调用。
-- Kernel必须是编译期确定的目标，参数按值传递且可平凡复制。
-- Stream、启动维度及参数生命周期必须有效。
-- 成功仅表示任务已按Stream顺序提交。
+- 回调签名为`void(void*)`，用户数据由调用方管理；异步提交后的存活期及不抛出要求见`host_callback`。
 
 ## 调用示例
 

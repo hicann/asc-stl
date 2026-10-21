@@ -49,24 +49,43 @@
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `bool` | 条件成立时返回`true`，否则返回`false`。 |
+| `bool` | 没有活动备选项时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
+- Host切换备选项或`emplace`的新构造失败后返回`true`；此时`index()`为`variant_npos`，`get_if`返回空指针。
+- 无活动备选项的对象可析构，并可通过成功构造或赋值恢复；读取值或调用`visit`前须先确认存在相应活动值。
+
 - Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例故意触发构造异常，检查无值状态并恢复为整数备选项。
 
 ```cpp
 #include <asc/std/variant>
 
+struct construction_failure {};
+
+struct throwing_value {
+    explicit throwing_value(int)
+    {
+        throw construction_failure{};
+    }
+};
+
 bool example()
 {
-    asc::std::variant<int, float> value(7);
-    return value.index() == 0 && !value.valueless_by_exception() && asc::std::get<0>(value) == 7;
+    asc::std::variant<int, throwing_value> value(7);
+    try {
+        value.emplace<1>(3);
+        return false;
+    } catch (const construction_failure&) {
+        const bool empty = value.valueless_by_exception() &&
+            value.index() == asc::std::variant_npos && asc::std::get_if<0>(&value) == nullptr;
+        value.emplace<0>(11);
+        return empty && !value.valueless_by_exception() && asc::std::get<0>(value) == 11;
+    }
 }
 ```
 

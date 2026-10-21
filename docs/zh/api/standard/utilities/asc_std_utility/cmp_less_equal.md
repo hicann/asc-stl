@@ -46,8 +46,8 @@ template<class T, class U> constexpr bool cmp_less_equal(T left, U right) noexce
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 左侧操作数的整数类型；须为标准整数类型或bool。 |
-| `U` | 右侧操作数的整数类型；须为标准整数类型或bool。 |
+| `T` | 左侧操作数的整数类型；须为标准有符号或无符号整数类型（不含bool、char及其他字符编码类型）。 |
+| `U` | 右侧操作数的整数类型；须为标准有符号或无符号整数类型（不含bool、char及其他字符编码类型）。 |
 
 **函数参数**
 
@@ -63,6 +63,8 @@ template<class T, class U> constexpr bool cmp_less_equal(T left, U right) noexce
 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
+
+- 类型域包括signed char、unsigned char及标准有符号/无符号整数类型；排除bool、char、wchar_t、char8_t、char16_t和char32_t。
 
 - 遵循标准整数约束。
 

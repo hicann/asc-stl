@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-#include "../semantics.h"
+#ifndef ASC_ENABLE_HOST_ASSERTIONS
+#define ASC_ENABLE_HOST_ASSERTIONS
+#endif
 
-__global__ void asc_stl_b027_cannsim_kernel(unsigned int* result)
+#include <asc/std/ranges>
+#include <asc/std/tuple>
+
+int main()
 {
-    asc_stl_b027_runtime::evaluate(result);
-}
-void launch_asc_stl_b027_cannsim(unsigned int* result, void* stream)
-{
-    asc_stl_b027_cannsim_kernel<<<1, 1, 0, stream>>>(result);
+    const asc::std::ranges::repeat_view<int, int> invalid(
+        asc::std::piecewise_construct, asc::std::tuple<int>(7), asc::std::tuple<int>(-1));
+    (void)invalid;
+    return 0;
 }

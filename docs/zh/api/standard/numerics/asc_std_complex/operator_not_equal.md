@@ -32,18 +32,32 @@
 
 ## 函数原型
 
-以下为`asc::std`命名空间中的函数模板声明；执行空间宏已省略。
+以下声明适用于C++17和C++20：
 
 ```cpp
+namespace asc::std {
 template<class T>
 constexpr bool operator!=(const complex<T>& left, const complex<T>& right) noexcept;
+}
+```
 
+以下额外声明仅在C++17中提供：
+
+```cpp
+namespace asc::std {
 template<class T>
 constexpr bool operator!=(const complex<T>& left, const T& right) noexcept;
+}
+```
 
+```cpp
+namespace asc::std {
 template<class T>
 constexpr bool operator!=(const T& left, const complex<T>& right) noexcept;
+}
 ```
+
+C++20的反向或不等比较表达式通过语言的重写候选规则获得；不要把表达式可用性等同于同名显式函数声明存在。
 
 ## 参数说明
 

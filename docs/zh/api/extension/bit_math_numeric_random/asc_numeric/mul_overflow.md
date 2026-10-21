@@ -36,16 +36,18 @@
 
 ```cpp
 namespace asc {
-template<class T> constexpr asc::overflow_result<T> mul_overflow(T left, T right) noexcept;
-} // namespace asc
+template <class T>
+constexpr asc::overflow_result<T> mul_overflow(T left, T right) noexcept;
+}  // namespace asc
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc {
-template<class T> constexpr bool mul_overflow(T left, T right, T& result) noexcept;
-} // namespace asc
+template <class T>
+constexpr bool mul_overflow(T left, T right, T& result) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -90,8 +92,10 @@ template<class T> constexpr bool mul_overflow(T left, T right, T& result) noexce
 
 ## 约束说明
 
-- T、From和To必须是不超过64位的标准非bool整数类型。
-- 所有溢出检查均不得触发有符号整数溢出的未定义行为。
+- `overflow == true`时，整数加减乘的value保存转换到目标位宽的结果；除零保存0，有符号最小值除以-1保存该最小值。`overflow_cast`保存转换后的值；不能在忽略标志的情况下把它当作精确数学结果。
+
+- 可在Host、AI Core SIMD和AI Core SIMT调用；结果按本页声明的整数类型返回。
+- `T`须为不超过64位的标准非bool整数；算术按相应检查或饱和规则处理。
 
 ## 调用示例
 

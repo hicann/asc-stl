@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::linalg::conjugated_accessor 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr const NestedAccessor& nested_accessor() const noexcept;
+constexpr const NestedAccessor& nested_accessor() const noexcept;
 ```
 
 ## 参数说明
@@ -57,16 +57,19 @@
 
 ## 调用示例
 
-以下Host片段使用具体范围或访问器演示调用；底层存储在调用期间须保持有效。
+以下Host示例给出具体输入，并在对象与底层存储仍有效时检查结果。
 
 ```cpp
 #include <asc/std/linalg>
+#include <asc/std/type_traits>
 
-decltype(auto) example()
+bool example()
 {
-    using accessor_type = asc::std::linalg::conjugated_accessor<asc::std::default_accessor<asc::std::complex<float>>>;
-    accessor_type accessor{};
-    return accessor.nested_accessor();
+    using N = asc::std::default_accessor<asc::std::complex<float>>;
+    asc::std::linalg::conjugated_accessor<N> accessor{};
+    const N& nested = accessor.nested_accessor();
+    static_assert(asc::std::is_same_v<decltype(accessor.nested_accessor()), const N&>);
+    return &nested == &accessor.nested_accessor();
 }
 ```
 

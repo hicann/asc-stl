@@ -36,6 +36,15 @@
 
 所属类型：[`asc::std::complex`](complex.md)。
 
+### 原型1：复数右操作数
+
+```cpp
+// asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
+constexpr complex<T>& operator/=(complex<T> rhs) noexcept;
+```
+
+### 原型2：标量右操作数
+
 ```cpp
 // asc::std::complex 类内的声明节选；模板形参和其他成员由所属类提供。
 constexpr complex<T>& operator/=(const T& rhs) noexcept;
@@ -47,7 +56,7 @@ constexpr complex<T>& operator/=(const T& rhs) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `rhs` | 输入 | 除法赋值的右操作数（实数标量，须非零，实部与虚部同除以该值）。 |
+| `rhs` | 输入 | 除法赋值的右操作数：原型1按值接收`complex<T>`；原型2接收实数标量，当前对象的实部与虚部同除以该值，标量须非零。 |
 
 ## 返回值说明
 

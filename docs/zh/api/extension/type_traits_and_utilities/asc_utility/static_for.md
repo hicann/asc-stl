@@ -36,32 +36,40 @@
 
 ```cpp
 namespace asc {
-template<auto Size, class Operator, class... Args> constexpr void static_for(Operator operation, Args&&... args) noexcept(noexcept(static_for<decltype(Size), Size>(operation, static_cast<Args&&>(args)...)));
-} // namespace asc
+template <auto Size, class Operator, class... Args>
+constexpr void static_for(Operator operation, Args&&... args) noexcept(
+    noexcept(static_for<decltype(Size), Size>(operation, static_cast<Args&&>(args)...)));
+}  // namespace asc
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc {
-template<auto Start, decltype(Start) End, decltype(Start) Step = decltype(Start){1}, class Operator, class... Args> constexpr void static_for(Operator operation, Args&&... args) noexcept(noexcept(static_for<decltype(Start), Start, End, Step>(operation, static_cast<Args&&>(args)...)));
-} // namespace asc
+template <auto Start, decltype(Start) End, decltype(Start) Step = decltype(Start){1}, class Operator, class... Args>
+constexpr void static_for(Operator operation, Args&&... args) noexcept(
+    noexcept(static_for<decltype(Start), Start, End, Step>(operation, static_cast<Args&&>(args)...)));
+}  // namespace asc
 ```
 
 ### 原型3
 
 ```cpp
 namespace asc {
-template<class IndexType, IndexType Start, IndexType End, IndexType Step = IndexType{1}, class Operator, class... Args> constexpr void static_for(Operator operation, Args&&... args) noexcept(noexcept(detail::static_for_invoke<IndexType, Start, Step>(operation, static_cast<Args&&>(args)...)));
-} // namespace asc
+template <class IndexType, IndexType Start, IndexType End, IndexType Step = IndexType{1}, class Operator, class... Args>
+constexpr void static_for(Operator operation, Args&&... args) noexcept(
+    noexcept(detail::static_for_range<IndexType, Start, End, Step>(operation, static_cast<Args&&>(args)...)));
+}  // namespace asc
 ```
 
 ### 原型4
 
 ```cpp
 namespace asc {
-template<class SizeType, SizeType Size, class Operator, class... Args> constexpr void static_for(Operator operation, Args&&... args) noexcept(noexcept(detail::static_for_invoke<SizeType, SizeType{0}, SizeType{1}>(operation, static_cast<Args&&>(args)...)));
-} // namespace asc
+template <class SizeType, SizeType Size, class Operator, class... Args>
+constexpr void static_for(Operator operation, Args&&... args) noexcept(
+    noexcept(detail::static_for_count<SizeType, Size>(operation, static_cast<Args&&>(args)...)));
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -146,8 +154,9 @@ template<class SizeType, SizeType Size, class Operator, class... Args> constexpr
 
 ## 约束说明
 
-- in_range的操作数必须为同一算术类型且满足first <= last。
-- static_for对半开编译期区间内的每个索引恰好调用一次可调用对象。
+- 计数形式依次展开`[0, Size)`；`Size <= 0`时不调用操作对象。
+- 范围形式使用半开区间，`Step`不得为零，索引与步长运算须可表示；方向不匹配时不调用。
+- 操作对象须能接受每个展开的编译期索引和所给参数；Device调用中的操作对象须在相同执行位置可调用。
 
 ## 调用示例
 

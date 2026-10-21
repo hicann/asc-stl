@@ -28,17 +28,20 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::constant_iterator`生成始终解引用为同一个常量值的随机访问迭代器。
+`asc::constant_iterator`生成始终解引用为同一个常量值的轻量迭代器适配器。
 
 ## 声明
 
 ```cpp
 namespace asc {
-template<class T, class Index = asc::std::ptrdiff_t> class constant_iterator;
-} // namespace asc
+template <class T, class Index = asc::std::ptrdiff_t>
+class constant_iterator;
+}  // namespace asc
 ```
 
 ## 约束说明
+
+- 此适配器仅提供本页所述轻量操作，不满足标准RandomAccessIterator的完整traits与操作集合；例如zip只支持前置递增和相等比较，不能据此用于任意要求随机访问的标准算法。
 
 - 提供惰性、非拥有的迭代器适配器及其工厂。
 - 操作数必须在当前执行位置有效。

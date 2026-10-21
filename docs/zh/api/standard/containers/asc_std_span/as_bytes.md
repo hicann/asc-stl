@@ -36,8 +36,10 @@
 
 ```cpp
 namespace asc::std {
-template<class T, size_t Extent> auto as_bytes(span<T, Extent> value) noexcept;
-} // namespace asc::std
+template<class T, size_t Extent>
+constexpr auto as_bytes(span<T, Extent> value) noexcept
+    -> span<const byte, Extent == dynamic_extent ? dynamic_extent : Extent * sizeof(T)>;
+}
 ```
 
 ## 参数说明
@@ -65,19 +67,22 @@ template<class T, size_t Extent> auto as_bytes(span<T, Extent> value) noexcept;
 
 - 支持固定或动态extent，以及指针、数组和兼容的连续范围。
 - AI Core SIMD编程 中仅当元素指针或范围可表示为标准普通指针时才可使用，不提供非标准GM/UB指针重载。
+- 返回的字节视图不拥有存储；values所代表的原范围必须覆盖视图的全部使用期。
 
 ## 调用示例
 
-以下片段用具体对象展示本页调用。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/span>
 
-decltype(auto) example()
+bool example()
 {
-    int values[2] = {1, 2};
-    asc::std::span<int> view(values, 2);
-    return asc::std::as_bytes(view);
+    int values[4] = {1, 2, 3, 4};
+    const asc::std::span<int> view(values);
+    const auto bytes = asc::std::as_bytes(view);
+    return bytes.size() == sizeof(values) && bytes.data() ==
+        reinterpret_cast<const asc::std::byte*>(values);
 }
 ```
 

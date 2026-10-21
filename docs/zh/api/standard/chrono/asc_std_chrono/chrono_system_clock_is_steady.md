@@ -34,11 +34,10 @@
 
 ## 声明
 
-所属类型：[`asc::std::chrono::system_clock`](chrono_system_clock.md)。
+所属类型为[`system_clock`](chrono_system_clock.md)。
 
 ```cpp
-// asc::std::chrono::system_clock 类内的声明节选；模板形参和其他成员由所属类提供。
-inline constexpr const bool is_steady;
+static constexpr bool is_steady = false;
 ```
 
 ## 约束说明

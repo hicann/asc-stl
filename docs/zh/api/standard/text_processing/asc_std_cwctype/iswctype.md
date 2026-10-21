@@ -59,20 +59,23 @@ int iswctype(wint_t value, wctype_t descriptor) noexcept;
 
 ## 约束说明
 
+- descriptor须来自同一区域设置下wctype成功返回的非零描述符；区域设置变更后重新取得描述符。不得把未知名称返回的0当作有效描述符。
+
 - Host行为由系统`<cwctype>`实现，受当前C语言区域设置影响。
 - Device的宽字符分类及大小写转换固定使用C locale。
 - Host提供完整接口，设备端仅提供C语言区域设置相关接口。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/std/cwctype>
 
-decltype(auto) example(asc::std::wint_t value, asc::std::wctype_t descriptor)
+bool example()
 {
-    return asc::std::iswctype(value, descriptor);
+    const auto descriptor = asc::std::wctype("alpha");
+    return descriptor != 0 && asc::std::iswctype(L'A', descriptor) != 0;
 }
 ```
 

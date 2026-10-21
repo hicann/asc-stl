@@ -46,7 +46,7 @@
 | [asc::std::counted_iterator::difference_type](counted_iterator_difference_type.md) | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::counted_iterator::iterator_type](counted_iterator_iterator_type.md) | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::counted_iterator::`operator*`](counted_iterator_operator_dereference.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::counted_iterator::`operator+`](counted_iterator_operator_plus.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::counted_iterator::`operator+`](counted_iterator_operator_plus.md) | 成员及关联非成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::counted_iterator::`operator++`](counted_iterator_operator_increment.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::counted_iterator::`operator+=`](counted_iterator_operator_plus_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::counted_iterator::`operator-`](counted_iterator_operator_minus.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -142,7 +142,7 @@
 | [asc::std::move_iterator::iterator_type](move_iterator_iterator_type.md) | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::move_iterator::move_iterator](move_iterator_move_iterator.md) | 构造函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::move_iterator::`operator*`](move_iterator_operator_dereference.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::move_iterator::`operator+`](move_iterator_operator_plus.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::move_iterator::`operator+`](move_iterator_operator_plus.md) | 成员及关联非成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::move_iterator::`operator++`](move_iterator_operator_increment.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::move_iterator::`operator+=`](move_iterator_operator_plus_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::move_iterator::`operator-`](move_iterator_operator_minus.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -160,7 +160,7 @@
 | [asc::std::move_sentinel::`operator=`](move_sentinel_operator_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::next](next.md) | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [`asc::std::operator!=`（move_iterator重载）（函数模板）](operator_not_equal.md) | 函数模板 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [`asc::std::operator-`（move_iterator/common_iterator/counted_iterator重载）（函数模板）](operator_minus.md) | 函数模板 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [`asc::std::operator-`（move_iterator/move_sentinel/common_iterator/counted_iterator/reverse_iterator重载）（函数模板）](operator_minus.md) | 函数模板 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [`asc::std::operator==`（move_iterator重载）（函数模板）](operator_equal.md) | 函数模板 | `C++17+` | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::output_iterator](output_iterator.md) | C++17：布尔变量模板；C++20+：概念 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::output_iterator_tag](output_iterator_tag.md) | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -182,7 +182,7 @@
 | [asc::std::reverse_iterator::iterator_concept](reverse_iterator_iterator_concept.md) | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::reverse_iterator::iterator_type](reverse_iterator_iterator_type.md) | 类型别名 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::reverse_iterator::`operator*`](reverse_iterator_operator_dereference.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::std::reverse_iterator::`operator+`](reverse_iterator_operator_plus.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::std::reverse_iterator::`operator+`](reverse_iterator_operator_plus.md) | 成员及关联非成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::reverse_iterator::`operator++`](reverse_iterator_operator_increment.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::reverse_iterator::`operator+=`](reverse_iterator_operator_plus_assign.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::std::reverse_iterator::`operator-`](reverse_iterator_operator_minus.md) | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |

@@ -34,8 +34,8 @@
 
 ```cpp
 namespace asc {
-inline constexpr block_level block{}
-} // namespace asc
+inline constexpr block_level block{};
+}  // namespace asc
 ```
 
 ## 约束说明

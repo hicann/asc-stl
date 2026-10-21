@@ -38,30 +38,33 @@
 
 ```cpp
 namespace asc::std {
-template<class CompletionFunction> class barrier;
+template<class CompletionFunction = __barrier_detail::__empty_completion> class barrier;
 } // namespace asc::std
 ```
 
 ## 约束说明
 
-- Host侧对象管理Ascend 950的GM状态。
+- Host对象使用本机普通内存及CPU原子操作，不管理NPU的GM状态。AI Core SIMT共享对象须位于GM，且在并发访问前完成初始化；不支持AI Core SIMD调用。
 - 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下Host示例展示具体输入、接口调用和可检查的结果。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/barrier>
-#include <asc/std/utility>
+
+struct completion {
+    int* phases;
+    void operator()() noexcept { ++*phases; }
+};
 
 bool example()
 {
-    asc::std::barrier<> barrier(1);
-    auto token = barrier.arrive();
-    barrier.wait(asc::std::move(token));
+    int phases = 0;
+    asc::std::barrier<completion> barrier(1, completion{&phases});
     barrier.arrive_and_wait();
-    return true;
+    return phases == 1;
 }
 ```
 

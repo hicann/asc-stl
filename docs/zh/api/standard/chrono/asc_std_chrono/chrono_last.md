@@ -28,9 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::last`表示某月最后一次出现的指定星期值。
-
-标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
+`asc::std::chrono::last`是[`last_spec`](chrono_last_spec.md)空标签常量，不保存具体星期值。`month / last`表示某月最后一天；`weekday[last]`表示某月最后一次出现的该星期。
 
 ## 声明
 

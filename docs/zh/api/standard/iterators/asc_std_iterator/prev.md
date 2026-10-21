@@ -67,15 +67,16 @@ template<class InputIter> constexpr InputIter prev(InputIter value, typename ite
 
 ## 调用示例
 
-以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    return asc::std::prev(values + 2, 1);
+    int values[] = {1, 2, 3, 4};
+    auto result = asc::std::prev(values + 4, 2);
+    return result == values + 2 && *result == 3;
 }
 ```
 

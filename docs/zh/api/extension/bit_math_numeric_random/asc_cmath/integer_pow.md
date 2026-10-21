@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class T, class E> constexpr T integer_pow(T base, E exponent) noexcept;
-} // namespace asc
+template <class T, class E>
+[[nodiscard]] constexpr T integer_pow(T base, E exponent) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明

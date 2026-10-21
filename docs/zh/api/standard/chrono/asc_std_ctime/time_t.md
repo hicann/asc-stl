@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/ctime>`。
 
-`asc::std::time_t`标识当前ABI对应的时间、字符转换或宽字符类型。
+`asc::std::time_t`是日历时间数值类型；Host沿用平台time.h，Device提供long long类型但不提供墙钟time()入口。
 
 标准语义参考：[cppreference `ctime`](https://en.cppreference.com/w/cpp/header/ctime)。
 

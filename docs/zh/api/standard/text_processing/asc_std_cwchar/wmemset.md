@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cwchar>`。
 
-`asc::std::wmemset`把指定数量的字节写成同一个字节值。
+`asc::std::wmemset`把指定数量的wchar_t元素写成同一个wchar_t元素值。
 
 标准语义参考：[cppreference `cwchar`](https://en.cppreference.com/w/cpp/header/cwchar)。
 
@@ -48,7 +48,7 @@ wchar_t* wmemset(wchar_t* destination, wchar_t value, size_t count) noexcept;
 | --- | --- | --- |
 | `destination` | 输出 | 用于接收结果的目标存储。本调用为同步执行，返回时写入已完成；目标存储在调用期间保持有效即可，且须为待写入内容预留足够空间。 |
 | `value` | 输入 | 填充用的宽字符。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `count` | 输入 | 写入的wchar_t元素数。 |
 
 ## 返回值说明
 

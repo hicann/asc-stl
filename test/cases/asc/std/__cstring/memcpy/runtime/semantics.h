@@ -31,6 +31,9 @@
 #include <asc/std/numbers>
 #include "../../../../../../support/b010_semantics.h"
 #include "../../../../../../support/b011_semantics.h"
+#include "../../../../../../support/bf16_cast_semantics.h"
+#include "../../../../../../support/construct_at_cardinality_semantics.h"
+#include "../../../../../../support/floating_storage_semantics.h"
 namespace asc_stl_foundation_runtime {
 struct address_probe {
     CANN_ASC_STL_API address_probe* operator&() noexcept  // NOLINT(runtime/operator)
@@ -84,7 +87,10 @@ CANN_ASC_STL_API void evaluate(asc::std::uint32_t* output) noexcept
     output[24] = 0x100BU;
     output[25] = asc::std::bit_cast<asc::std::uint32_t>(2.0f) == 0x40000000u ? 1U : 0U;
     output[26] = 0x100CU;
-    output[27] = asc::std::__fp_get_storage(4.0f) == 0x40800000u ? 1U : 0U;
+    const unsigned storage_failures = asc_stl_floating_storage_test::evaluate();
+    output[27] = asc::std::__fp_get_storage(4.0f) == 0x40800000u && storage_failures == 0 ?
+        1U :
+        (0xf0000000U | storage_failures);
     output[28] = 0x100DU;
     output[29] = asc::std::__fp_from_storage<float>(0x40800000u) == 4.0f ? 1U : 0U;
     output[30] = 0x100EU;
@@ -93,7 +99,8 @@ CANN_ASC_STL_API void evaluate(asc::std::uint32_t* output) noexcept
         1U :
         0U;
     output[32] = 0x100FU;
-    output[33] = asc_stl_b010_test::evaluate_runtime() == 0 ? 1U : 0U;
+    output[33] =
+        asc_stl_b010_test::evaluate_runtime() == 0 && asc_stl_construct_at_cardinality_test::evaluate() == 0 ? 1U : 0U;
     output[34] = 0x1010U;
     output[35] = asc::std::__uabs(-23) == 23U ? 1U : 0U;
     output[36] = 0x1011U;
@@ -104,7 +111,7 @@ CANN_ASC_STL_API void evaluate(asc::std::uint32_t* output) noexcept
     asc::std::pair<int, long> pair_value(11, 13);
     output[39] = asc::std::get<0>(pair_value) == 11 && asc::std::get<long>(pair_value) == 13 ? 1U : 0U;
     output[40] = 0x1013U;
-    output[41] = asc_stl_b011_test::evaluate_runtime_failures();
+    output[41] = asc_stl_b011_test::evaluate_runtime_failures() | asc_stl_bf16_cast_test::evaluate();
     output[42] = 0x1014U;
 #if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
     unsigned failures = 0;

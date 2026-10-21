@@ -34,10 +34,12 @@
 
 ## 声明
 
+底层类型是编译器给出的size_t类型；这是ASC-STL自身的作用域枚举。
+
 ```cpp
 namespace asc::std {
-enum align_val_t;
-} // namespace asc::std
+enum class align_val_t : __SIZE_TYPE__ {};
+}
 ```
 
 ## 约束说明

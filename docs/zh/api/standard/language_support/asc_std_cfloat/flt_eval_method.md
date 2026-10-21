@@ -34,8 +34,10 @@
 
 ## 声明
 
+本宏由平台头文件提供，公共头文件保留其拼写和值，不另造替代宏名。
+
 ```cpp
-#define FLT_EVAL_METHOD FLTEVALMETHOD
+#include <asc/std/cfloat>
 ```
 
 ## 约束说明
@@ -44,14 +46,13 @@
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/cfloat>
+#include <asc/std/type_traits>
 
-#ifndef FLT_EVAL_METHOD
-#error "FLT_EVAL_METHOD is required by this public Header"
-#endif
+static_assert(asc::std::is_same_v<decltype(FLT_EVAL_METHOD), int>);
 ```
 
 ## 关联API

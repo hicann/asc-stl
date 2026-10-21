@@ -36,11 +36,18 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-float fmaf(float x, float y, float z) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float fmaf(
+    float x, float y, float z) noexcept;
+}
 ```
+
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
 
 ## 参数说明
 
@@ -54,24 +61,22 @@ float fmaf(float x, float y, float z) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float` | 返回一次舍入的乘加结果；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+返回类型按各原型确定（`float`）。返回乘积加第三参数的结果，仅进行一次舍入。
 
 ## 约束说明
 
-- 提供float重载、标准 *f别名以及float lerp回移接口。
+- Host全整数模板按既有接口返回float；含double或long double的混合模板按原型的提升类型返回，不应假设所有整数数学函数都返回double。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float x, float y, float z)
+bool example()
 {
-    return asc::std::fmaf(x, y, z);
+    return asc::std::fmaf(2.0F, 3.0F, 1.0F) == 7.0F;
 }
 ```
 

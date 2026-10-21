@@ -15,8 +15,10 @@
  */
 
 #include "../../../../support/w09_w10_semantics.h"
+#include "support/floating_rep_semantics.h"
 
 int main()
 {
-    return asc_stl_w09_w10_test::evaluate_alignment_chrono();
+    const int existing = asc_stl_w09_w10_test::evaluate_alignment_chrono();
+    return existing == 0 ? asc_stl_chrono_trait_test::evaluate_custom_floating_rep() : existing;
 }

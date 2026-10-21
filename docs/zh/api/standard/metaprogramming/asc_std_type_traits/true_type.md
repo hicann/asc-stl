@@ -37,12 +37,12 @@
 ```cpp
 namespace asc::std {
 using true_type = integral_constant<bool, true>;
-} // namespace asc::std
+}  // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类及其对应的 _v辅助形式。
+- 此名称是`integral_constant<bool, true>`的类型别名，可通过该类型访问常量包装器的成员；`value`为`true`。
 
 ## 调用示例
 

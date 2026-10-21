@@ -37,7 +37,7 @@
 ### 原型1
 
 ```cpp
-basic_string(const Allocator& allocator) noexcept;
+explicit basic_string(const Allocator& allocator) noexcept;
 ```
 
 ### 原型2
@@ -70,6 +70,8 @@ basic_string(const CharT* pointer, const Allocator& allocator);
 无返回值。
 
 ## 约束说明
+
+- 纯SIMT使用还须遵循所属类型的[工具链验证边界](basic_string.md#simt工具链验证边界)。
 
 - basic_string<char,Traits,A>显式allocator构造。
 - plain/local字符来源的append/push_back/clear。

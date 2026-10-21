@@ -42,7 +42,7 @@ template<class ...Types> using common_reference_t = typename common_reference<Ty
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 本辅助形式与[`asc::std::common_reference`](common_reference.md)使用相同的类型前提和判定规则；结果对应特征类的`type`。
 
 ## 调用示例
 

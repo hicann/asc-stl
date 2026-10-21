@@ -28,35 +28,41 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::ranges::advance`是按给定步数或哨兵推进迭代器的定制点对象；至多n次有界循环防无限游走。
+`asc::std::ranges::advance`按指定距离或结束哨兵更新迭代器；同时给出距离与边界时，在完成距离或到达边界处停止，并返回未完成的距离。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 声明
 
+`asc::std::ranges::advance`是可调用对象。对象及其调用运算符由头文件提供，可通过公开名称查询其类型。
+
 ```cpp
 namespace asc::std::ranges {
-constexpr advance_fn advance;
-} // namespace asc::std::ranges
+using advance_object_type = decltype(::asc::std::ranges::advance);
+}
 ```
 
 ## 约束说明
 
-- 迭代器可按步数推进；指定哨兵时形成有效范围。
+- 接口可用于C++17及C++20；Device调用仍须满足所用迭代器和元素操作的调用位置要求。
+- `advance(i, n)`按有符号距离更新`i`；`advance(i, bound)`推进至哨兵。
+- `advance(i, n, bound)`在完成距离或到达边界时停止，返回未完成的距离。
+- 非负移动要求从当前位置到边界形成有效范围；负移动要求双向迭代器，带边界的负移动还要求边界与迭代器为同一类型。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
-#include <asc/std/ranges>
 
-void example()
+bool example()
 {
-    static int data[4] = {1, 2, 3, 4};
-    int* position = data;
-    asc::std::ranges::advance(position, 2);
+    int values[] = {2, 4, 6, 8};
+    int* iterator = values;
+    asc::std::ranges::advance(iterator, 2);
+    auto remaining = asc::std::ranges::advance(iterator, 3, values + 4);
+    return iterator == values + 4 && remaining == 1;
 }
 ```
 

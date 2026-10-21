@@ -29,7 +29,10 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
+#include <asc/std/__floating_point/cast.h>
 #include <asc/std/__cmath/backend.h>
+#include <asc/std/__floating_point/fp.h>
+#include <asc/std/__type_traits/conditional.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_arithmetic.h>
 #include <asc/std/__type_traits/is_extended_floating_point.h>
@@ -56,7 +59,8 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 // alias, and mixed-type promote are host-only (double is forbidden on the
 // vector cores, long double on device); extended floating point
 // (half/bfloat16/fp8 family) transits through float precision and
-// round-trips in its original format. The whole remquo family stays
+// round-trips in its original format, except nextafter, which steps in the
+// original encoding. The whole remquo family stays
 // float-precision only: the pinned contract asserts
 // decltype(remquo(1.0L, 2.0L, int*)) == float — adding double/long double
 // overloads would make that call ambiguous (two floating-point conversions
@@ -65,7 +69,7 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 // full family is defined in place.
 
 //! @brief IEEE remainder x - n*y (n is the nearest quotient, ties to even):
-//! |result| <= |y|/2, sign follows x*y.
+//! |result| <= |y|/2; the nearest-even quotient can produce either sign.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float remainder(
     float x, float y) noexcept
 {
@@ -84,11 +88,13 @@ template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp remainder(
     Tp x, Tp y) noexcept
 {
-    return static_cast<Tp>(::asc::std::remainder(static_cast<float>(x), static_cast<float>(y)));
+    return ::asc::std::__fp_cast<Tp>(
+        ::asc::std::remainder(::asc::std::__fp_cast<float>(x), ::asc::std::__fp_cast<float>(y)));
 }
 
 //! @brief Same as remainder, additionally writing the remainder of n modulo
-//! 2^3 (the low 3 bits of the quotient, sign following x/y) into
+//! a backend-defined power of two (at least three low quotient bits, with
+//! sign following x/y) into
 //! @p quotient. Returns the IEEE remainder.
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float remquo(
     float x, float y, int* quotient) noexcept
@@ -108,11 +114,12 @@ template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp remquo(
     Tp x, Tp y, int* quotient) noexcept
 {
-    return static_cast<Tp>(::asc::std::remquo(static_cast<float>(x), static_cast<float>(y), quotient));
+    return ::asc::std::__fp_cast<Tp>(
+        ::asc::std::remquo(::asc::std::__fp_cast<float>(x), ::asc::std::__fp_cast<float>(y), quotient));
 }
 
 //! @brief Next representable value in the direction of @p y (returns x when
-//! x == y).
+//! x == y; equal signed zero returns y).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float nextafter(
     float x, float y) noexcept
 {
@@ -125,13 +132,33 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(nextafterf, __builtin_nextafterf, (x, y));
 }
 
-//! @brief Extended floating point nextafter: transits through float
-//! precision, returns in the original format.
+//! @brief Step one encoding in the original format, avoiding a float step
+//! that can round back to the original half/bfloat16/fp8 value.
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp nextafter(
     Tp x, Tp y) noexcept
 {
-    return static_cast<Tp>(::asc::std::nextafter(static_cast<float>(x), static_cast<float>(y)));
+    using storage_type = __fp_storage_of_t<Tp>;
+    using comparison_type = conditional_t<(sizeof(Tp) > sizeof(float)), Tp, float>;
+    const comparison_type from = ::asc::std::__fp_cast<comparison_type>(x);
+    const comparison_type toward = ::asc::std::__fp_cast<comparison_type>(y);
+    if (from != from)
+        return x;
+    if (toward != toward || from == toward)
+        return y;
+    storage_type bits = ::asc::std::__fp_get_storage(x);
+    if constexpr (__fp_is_signed_v<__fp_format_of_v<Tp>>) {
+        const storage_type sign = bits & __fp_sign_mask_of_v<Tp>;
+        if ((bits & __fp_exp_mant_mask_of_v<Tp>) == 0) {
+            const storage_type target_sign = ::asc::std::__fp_get_storage(y) & __fp_sign_mask_of_v<Tp>;
+            return ::asc::std::__fp_from_storage<Tp>(static_cast<storage_type>(target_sign | storage_type{1}));
+        }
+        bits = static_cast<storage_type>((from < toward) == (sign == 0) ? bits + 1 : bits - 1);
+    } else {
+        // E8M0 has positive finite encodings and a NaN, with no zero/sign bit.
+        bits = static_cast<storage_type>(from < toward ? bits + 1 : bits - 1);
+    }
+    return ::asc::std::__fp_from_storage<Tp>(bits);
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()

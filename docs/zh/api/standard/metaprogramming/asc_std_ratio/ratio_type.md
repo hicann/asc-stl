@@ -44,6 +44,7 @@ using type = ratio<num, den>;
 ## 约束说明
 
 - 分母不得为零；规范化后的分子和分母必须可由`intmax_t`表示。
+- 原始模板实参的分子和分母均不得为`INTMAX_MIN`；分母必须非零，约分和符号规范化的中间结果及最终结果须能由`intmax_t`表示。
 
 ## 调用示例
 
@@ -54,7 +55,8 @@ using type = ratio<num, den>;
 
 void use_type()
 {
-    using alias_type = typename asc::std::ratio<1, 2>::type;
+    using alias_type = typename asc::std::ratio<2, 4>::type;
+    static_assert(alias_type::num == 1 && alias_type::den == 2);
 }
 ```
 

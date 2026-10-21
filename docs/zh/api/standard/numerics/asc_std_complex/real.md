@@ -34,63 +34,61 @@
 
 ## 函数原型
 
-### 原型1
+### 原型1：复数输入
 
 ```cpp
 namespace asc::std {
-template<class T> [[nodiscard]] constexpr T real(const complex<T>& value);
+template<class T> constexpr T real(const complex<T>& value) noexcept;
 } // namespace asc::std
 ```
 
-### 原型2
+### 原型2：整数输入
 
 ```cpp
 namespace asc::std {
-template<class T> [[nodiscard]] constexpr T real(T value);
+template<class T, enable_if_t<is_integral_v<T>, int> = 0>
+constexpr double real(T value) noexcept;
+} // namespace asc::std
+```
+
+### 原型3：浮点数输入
+
+```cpp
+namespace asc::std {
+template<class T, enable_if_t<is_floating_point_v<T>, int> = 0>
+constexpr T real(T value) noexcept;
 } // namespace asc::std
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 复数操作数的成分（实部与虚部）值类型，须为浮点类型。 |
+| `T` | 复数输入的成分类型，当前须为`float`；标量输入则分别为满足`is_integral_v<T>`或`is_floating_point_v<T>`的类型。 |
+
+未命名模板参数默认值为0，用于选择相应标量重载，调用方无需显式提供。
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待读取实部的复数操作数。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 实数输入的值类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 待读取实部的实数输入（按虚部为0的复数处理，原样返回该值）。 |
+| `value` | 输入 | 待读取实部的复数或标量值；标量按虚部为0处理。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `T` | 返回复数实部。 |
-| 原型2 | `T` | 返回复数实部。 |
+| 原型1 | `T` | 返回复数实部，当前为`float`。 |
+| 原型2 | `double` | 将输入转换为`double`。 |
+| 原型3 | `T` | 按原浮点类型返回输入值。 |
 
 ## 约束说明
 
-- 仅提供页面声明的float或`complex<float>`运算。
-- 接口可用性取决于相应的float数学能力。
+- `asc::std::complex`当前只支持`float`成分类型；这不限制标量重载的模板参数也只能为`float`。
+- 标量重载分别由整型和浮点型特征约束；具体标量类型仍须由目标编译模式支持。
+- 所列重载均为`constexpr`并具有`noexcept`声明，不修改输入对象。
 
 ## 调用示例
 

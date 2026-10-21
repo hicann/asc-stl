@@ -34,9 +34,12 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class Value, class Dp> inline constexpr const bool is_base_of_v;
+template<class Value, class Dp>
+inline constexpr bool is_base_of_v = is_base_of<Value, Dp>::value;
 } // namespace asc::std
 ```
 
@@ -53,7 +56,7 @@ template<class Value, class Dp> inline constexpr const bool is_base_of_v;
 
 struct sample_base {};
 struct sample_derived : sample_base {};
-inline constexpr auto example = asc::std::is_base_of_v<sample_base, sample_derived>;
+static_assert((asc::std::is_base_of_v<sample_base, sample_derived>) == true);
 ```
 
 ## 关联API

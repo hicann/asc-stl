@@ -34,11 +34,17 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-constexpr long double copysignl(long double x, long double y) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr long double copysignl(long double x, long double y) noexcept;
+}
 ```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
 ## 参数说明
 
@@ -51,24 +57,25 @@ constexpr long double copysignl(long double x, long double y) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `long double` | 大小取自第一个实参、符号取自第二个实参的值。 |
+返回类型按各原型确定（`long double`）。返回x的绝对值与y的符号组合后的数值；标准浮点保留原类型，Host整型输入返回double。
 
 ## 约束说明
+
+- Host标准整型输入提升为double；Device整型提升分支被静态断言拒绝。float、double、long double及扩展类型的实例还须由目标编译模式支持。
 
 - 把第二个参数的符号位复制到第一个参数的幅值上，返回long double结果。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(long double x, long double y)
+bool example()
 {
-    return asc::std::copysignl(x, y);
+    const auto result = asc::std::copysignl(2.0L, -1.0L);
+    return result == -2.0L;
 }
 ```
 

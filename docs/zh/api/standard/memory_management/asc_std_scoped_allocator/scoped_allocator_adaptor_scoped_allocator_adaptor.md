@@ -34,70 +34,31 @@
 
 ## 函数原型
 
+所属类型：[`scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。原型1适用于两种偏特化；2、3仅适用于没有内层分配器的偏特化；4仅适用于至少一个内层分配器的偏特化。复制/移动特殊成员遵循隐式声明规则，不提供跨外层类型的转换构造模板。
+
 ### 原型1
 
 ```cpp
-constexpr scoped_allocator_adaptor();
+constexpr scoped_allocator_adaptor() = default;
 ```
 
 ### 原型2
 
 ```cpp
-constexpr scoped_allocator_adaptor(const scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>& outer_allocator) noexcept;
+constexpr explicit scoped_allocator_adaptor(const OuterAllocator& outer) noexcept;
 ```
 
 ### 原型3
 
 ```cpp
-constexpr scoped_allocator_adaptor(const scoped_allocator_adaptor<OuterAllocator>& outer_allocator) noexcept;
+constexpr explicit scoped_allocator_adaptor(OuterAllocator&& outer) noexcept;
 ```
 
 ### 原型4
 
 ```cpp
-constexpr scoped_allocator_adaptor(scoped_allocator_adaptor<OuterAllocator, FirstInner, RestInner...>&& outer_allocator) noexcept;
-```
-
-### 原型5
-
-```cpp
-constexpr scoped_allocator_adaptor(scoped_allocator_adaptor<OuterAllocator>&& outer_allocator) noexcept;
-```
-
-### 原型6
-
-```cpp
-template<class OuterA2> constexpr scoped_allocator_adaptor(OuterA2&& outer_allocator) noexcept;
-```
-
-### 原型7
-
-```cpp
-template<class OuterA2> constexpr scoped_allocator_adaptor(OuterA2&& outer_allocator, const FirstInner& inner_allocator, const RestInner&... rest) noexcept;
-```
-
-### 原型8
-
-```cpp
-template<class OuterA2> constexpr scoped_allocator_adaptor(const scoped_allocator_adaptor<OuterA2, FirstInner, RestInner...>& outer_allocator) noexcept;
-```
-
-### 原型9
-
-```cpp
-template<class OuterA2> constexpr scoped_allocator_adaptor(const scoped_allocator_adaptor<OuterA2>& outer_allocator) noexcept;
-```
-
-### 原型10
-
-```cpp
-template<class OuterA2> constexpr scoped_allocator_adaptor(scoped_allocator_adaptor<OuterA2, FirstInner, RestInner...>&& outer_allocator) noexcept;
-```
-
-### 原型11
-
-```cpp
-template<class OuterA2> constexpr scoped_allocator_adaptor(scoped_allocator_adaptor<OuterA2>&& outer_allocator) noexcept;
+constexpr scoped_allocator_adaptor(const OuterAllocator& outer,
+    const FirstInner& first, const RestInner&... rest) noexcept;
 ```
 
 ## 参数说明
@@ -106,21 +67,13 @@ template<class OuterA2> constexpr scoped_allocator_adaptor(scoped_allocator_adap
 
 无参数。
 
-### 原型2的参数
+### 原型2、3的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `outer_allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-
-### 原型3的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `outer_allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
+| `outer` | 输入 | 用于复制或移动初始化外层基类的分配器对象；不取得其所有分配的独占所有权。 |
 
 ### 原型4的参数
 
@@ -128,101 +81,9 @@ template<class OuterA2> constexpr scoped_allocator_adaptor(scoped_allocator_adap
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `outer_allocator` | 输入/输出 | 负责对象存储分配与释放的分配器。 |
-
-### 原型5的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `outer_allocator` | 输入/输出 | 负责对象存储分配与释放的分配器。 |
-
-### 原型6的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `OuterA2` | 来源scoped_allocator_adaptor的最外层分配器类型；须支持目标转换。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `outer_allocator` | 输入/输出 | 负责对象存储分配与释放的分配器。 |
-
-### 原型7的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `OuterA2` | 来源scoped_allocator_adaptor的最外层分配器类型；须支持目标转换。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `outer_allocator` | 输入/输出 | 负责对象存储分配与释放的分配器。 |
-| `inner_allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-| `rest` | 输入 | 提供“按本页所列构造形态初始化`scoped_allocator_adaptor`对象”使用的对象引用；被引用对象须在调用期间有效。 |
-
-### 原型8的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `OuterA2` | 来源scoped_allocator_adaptor的最外层分配器类型；须支持目标转换。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `outer_allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-
-### 原型9的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `OuterA2` | 来源scoped_allocator_adaptor的最外层分配器类型；须支持目标转换。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `outer_allocator` | 输入 | 负责对象存储分配与释放的分配器。 |
-
-### 原型10的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `OuterA2` | 来源scoped_allocator_adaptor的最外层分配器类型；须支持目标转换。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `outer_allocator` | 输入/输出 | 负责对象存储分配与释放的分配器。 |
-
-### 原型11的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `OuterA2` | 来源scoped_allocator_adaptor的最外层分配器类型；须支持目标转换。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `outer_allocator` | 输入/输出 | 负责对象存储分配与释放的分配器。 |
+| `outer` | 输入 | 用于复制初始化外层分配器。 |
+| `first` | 输入 | 第一个内层分配器，用于初始化内层适配器。 |
+| `rest` | 输入 | 其余内层分配器，按顺序复制初始化。 |
 
 ## 返回值说明
 
@@ -230,37 +91,43 @@ template<class OuterA2> constexpr scoped_allocator_adaptor(scoped_allocator_adap
 
 ## 约束说明
 
-- 遵循scoped_allocator_adaptor的标准分配器传播、构造、销毁、比较和交换约束。
-- 参与操作的分配器必须在当前可用位置有效，Device侧操作不得抛出异常。
+- 默认构造及复制/移动特殊成员是否可用取决于各分配器类型。
+- 所列显式接收分配器的构造为`noexcept`；其内部复制/移动操作不得抛出异常。
+- 构造只保存分配器状态，不分配或构造元素。
 
 ## 调用示例
 
-以下Host示例展示具体输入、接口调用和可检查的结果。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
-#include <memory>
+#include <asc/std/memory>
 #include <asc/std/scoped_allocator>
+#include <memory>
+#include <limits>
 
 template<class T>
-struct ExampleAllocator : ::std::allocator<T> {
+struct example_allocator {
+    using value_type = T;
     using pointer = T*;
-    using const_pointer = const T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template<class U> struct rebind { using other = ExampleAllocator<U>; };
-    ExampleAllocator() = default;
-    template<class U> ExampleAllocator(const ExampleAllocator<U>&) noexcept {}
+    using size_type = std::size_t;
+    using difference_type = std::ptrdiff_t;
+    template<class U> struct rebind { using other = example_allocator<U>; };
+    int identity = 0;
+    T* allocate(size_type count) { return std::allocator<T>{}.allocate(count); }
+    void deallocate(T* address, size_type count) { std::allocator<T>{}.deallocate(address, count); }
+    size_type max_size() const noexcept { return std::numeric_limits<size_type>::max() / sizeof(T); }
 };
 
 bool example()
 {
-    asc::std::scoped_allocator_adaptor<ExampleAllocator<int>> allocator;
+    using adaptor = asc::std::scoped_allocator_adaptor<example_allocator<int>>;
+    adaptor allocator(example_allocator<int>{7});
     int* pointer = allocator.allocate(1);
-    allocator.construct(pointer, 7);
-    const bool passed = *pointer == 7;
+    allocator.construct(pointer, 9);
+    const bool valid = allocator.outer_allocator().identity == 7 && *pointer == 9;
     allocator.destroy(pointer);
     allocator.deallocate(pointer, 1);
-    return passed;
+    return valid;
 }
 ```
 

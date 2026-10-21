@@ -329,7 +329,10 @@ struct spin_backoff {
 
     CANN_ASC_STL_SIMT_API bool poll()
     {
-        return ++poll_count_ < 64;
+        if (poll_count_ < 64) {
+            ++poll_count_;
+        }
+        return poll_count_ < 64;
     }
 
     CANN_ASC_STL_SIMT_API void backoff() const

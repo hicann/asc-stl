@@ -32,8 +32,11 @@
 
 ## 函数原型
 
+以下为`asc::tensor_copy_descriptor<Rank>`类内声明，Rank由所属类模板提供。
+
 ```cpp
-constexpr void asc::tensor_copy_descriptor<Rank>::set_dimension(unsigned int dimension, unsigned int extent, unsigned int source_stride, unsigned int destination_stride, unsigned int left_padding, unsigned int right_padding) noexcept;
+constexpr void set_dimension(unsigned int dimension, unsigned int extent, unsigned int source_stride,
+    unsigned int destination_stride, unsigned int left_padding, unsigned int right_padding) noexcept;
 ```
 
 ## 参数说明
@@ -61,9 +64,9 @@ constexpr void asc::tensor_copy_descriptor<Rank>::set_dimension(unsigned int dim
 
 ## 约束说明
 
-- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Rank为1至5。
-- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
+- 可在Host、AI Core SIMD编程和AI Core SIMT编程中调用；本操作同步处理描述符，不启动数据搬运。
+- `dimension`应小于`Rank`；当前实现对越界索引不写入任何字段。
+- 设置仅复制给定数值，不自动执行[validate](tensor_copy_descriptor_validate.md)；实际搬运前须保证有效长度和步长非零、各侧填充不超过255，并通过大小及跨度校验。
 
 ## 调用示例
 

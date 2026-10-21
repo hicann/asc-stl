@@ -34,41 +34,16 @@
 
 ## 声明
 
-### 原型1
-
 ```cpp
 namespace asc::std {
-template<class ...T> class common_type;
-} // namespace asc::std
-```
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<class T, class U, class V, class ...Rest> struct common_type;
-} // namespace asc::std
-```
-
-### 原型3
-
-```cpp
-namespace asc::std {
-template<class T, class U> struct common_type;
-} // namespace asc::std
-```
-
-### 原型4
-
-```cpp
-namespace asc::std {
-template<class T> struct common_type;
+template<class... Types>
+struct common_type;
 } // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 结果按类型退化和条件表达式等公共类型规则确定，多参数形式逐对合并；没有可用公共类型时不提供`type`。附加的const引用推导路径按当前语言模式启用。
 
 ## 调用示例
 

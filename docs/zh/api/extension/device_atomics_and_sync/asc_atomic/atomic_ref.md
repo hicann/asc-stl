@@ -36,14 +36,19 @@
 
 ```cpp
 namespace asc {
-template<class T, asc::memory_scope Scope = asc::memory_scope::device> class atomic_ref;
-} // namespace asc
+template <class T, asc::memory_scope Scope = asc::memory_scope::device>
+class atomic_ref;
+}  // namespace asc
 ```
 
 ## 约束说明
 
+- `T`须与`asc::std::int32_t`、`uint32_t`、`int64_t`或`uint64_t`中的一种完全相同，仅位宽相同不代表类型被接受。
+- 原子单元须已初始化、自然对齐并位于所有参与者可见的GM中；参与并发访问时不得混用普通读写。
+- atomic_ref不拥有单元，其底层对象须覆盖引用的全部使用和并发操作，不仅覆盖构造调用。
+
 - 原子对象的类型、地址空间、作用域和内存序必须匹配。
-- Device作用域的64位对象位于GM，UB原子操作仅使用memory_order_relaxed。
+- 所有Device原子单元必须位于GM；UB、栈或每核私有存储不属于当前支持域。
 
 ## 调用示例
 

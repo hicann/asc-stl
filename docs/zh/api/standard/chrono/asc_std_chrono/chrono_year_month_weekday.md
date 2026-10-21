@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::year_month_weekday`表示日期、时间点或时长计算中的`year_month_weekday`值类型。
+`asc::std::chrono::year_month_weekday`表示某年某月第n次出现的指定星期；`ok()`还检查第5次出现是否落在该月内。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

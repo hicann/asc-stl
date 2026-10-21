@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::search`返回子序列在范围内首次出现的起始位置；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::search`返回子序列在范围内首次出现的起始位置；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,24 +38,29 @@
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator, class Searcher> [[nodiscard]] constexpr ForwardIterator search(ForwardIterator first, ForwardIterator last, const Searcher& searcher);
-} // namespace asc::std
+template <class ForwardIterator, class Searcher>
+constexpr ForwardIterator search(ForwardIterator first, ForwardIterator last, const Searcher& searcher);
+}  // namespace asc::std
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator1, class ForwardIterator2, class BinaryPredicate> [[nodiscard]] constexpr ForwardIterator1 search(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 pattern_first, ForwardIterator2 pattern_last, BinaryPredicate predicate);
-} // namespace asc::std
+template <class ForwardIterator1, class ForwardIterator2, class BinaryPredicate>
+constexpr ForwardIterator1 search(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 pattern_first,
+    ForwardIterator2 pattern_last, BinaryPredicate predicate);
+}  // namespace asc::std
 ```
 
 ### 原型3
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator1, class ForwardIterator2> [[nodiscard]] constexpr ForwardIterator1 search(ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 pattern_first, ForwardIterator2 pattern_last);
-} // namespace asc::std
+template <class ForwardIterator1, class ForwardIterator2>
+constexpr ForwardIterator1 search(
+    ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 pattern_first, ForwardIterator2 pattern_last);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -125,21 +130,24 @@ template<class ForwardIterator1, class ForwardIterator2> [[nodiscard]] constexpr
 
 ## 约束说明
 
+- 找不到子序列时返回last1；空子序列返回first1。
+
 - 支持当前版本列出的迭代器、哨兵和可调用对象重载。
 - 标准执行策略重载采用顺序执行。
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     int other[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    return asc::std::search(values, values + 8, other, other + 3);
+    auto result = asc::std::search(values, values + 8, other, other + 3);
+    return result == values;
 }
 ```
 

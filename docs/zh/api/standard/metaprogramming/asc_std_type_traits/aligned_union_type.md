@@ -34,16 +34,17 @@
 
 ## 声明
 
-所属类型：[`asc::std::aligned_union`](aligned_union.md)。
+`type`是满足下述大小和对齐的存储类型。通过所属类查询：
 
 ```cpp
-// asc::std::aligned_union 类内的声明节选；模板形参和其他成员由所属类提供。
-using type = typename aligned_storage<Len, alignment_value>::type;
+using storage_type = typename asc::std::aligned_union<16, int, float>::type;
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 类型参数列表必须非空，各候选类型须能用于`sizeof`和`alignof`。
+- `alignment_value`取各候选类型对齐值的最大值；存储大小至少为`Len`与各候选类型大小的最大值，并按对齐要求取整。
+- 结果是原始存储类型；使用其中存储对象前须正确建立该对象的生命周期，结束后须按其类型销毁。
 
 ## 调用示例
 

@@ -34,9 +34,12 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const size_t rank_v;
+template<class T>
+inline constexpr size_t rank_v = rank<T>::value;
 } // namespace asc::std
 ```
 
@@ -51,7 +54,8 @@ template<class T> inline constexpr const size_t rank_v;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::rank_v<int>;
+static_assert((asc::std::rank_v<int>) == 0);
+static_assert(asc::std::rank_v<int[][3]> == 2);
 ```
 
 ## 关联API

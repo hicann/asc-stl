@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::uniform_int_distribution 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr result_type a() const noexcept;
+constexpr result_type a() const noexcept;
 ```
 
 ## 参数说明

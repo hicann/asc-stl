@@ -56,11 +56,8 @@ T asc::std::atomic::operator=(T value) noexcept;
 
 ## 约束说明
 
-- 拷贝与移动赋值被删除，仅接受值赋值
-- 标准整数/字符owning atomic别名及列出自由函数
-- bool/8/16位用32位内部存储
-- 32/64位按有符号位模式分派
-- Host 和 AI Core SIMT 编程 GM
+- 原子操作可在Host和AI Core SIMT编程中调用；SIMT线程共享的原子对象须位于GM，并在并发访问前完成初始化。
+- 只接受值赋值；复制与移动赋值不可用。该操作以`memory_order_seq_cst`保存值，并返回所赋的值。
 
 ## 调用示例
 

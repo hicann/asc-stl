@@ -42,7 +42,7 @@ template<class ...Args> struct disjunction;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 各实参须提供可转换为`bool`的`value`。继承第一个为true的实参，全部为false时继承最后一个实参；空参数包为false，后续实参按短路规则处理。
 
 ## 调用示例
 

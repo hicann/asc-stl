@@ -34,26 +34,15 @@
 
 ## 声明
 
-### 原型1
-
 ```cpp
 namespace asc::std {
-template<...c...l...a...s...s...> class tuple;
-} // namespace asc::std
-```
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<class ...T> class tuple;
-} // namespace asc::std
+template<class... Types> class tuple;
+}
 ```
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
-- get<T>(tuple) 在 T 重复出现时选取首个匹配元素，为有意偏离 std 的唯一出现要求；T 未出现时编译期报错。
+- 工具本身不额外分配容器存储；元素构造、赋值、交换或传入可调用体仍可按其自身语义分配或抛出，不能据此保证整个调用不分配。
 
 ## 调用示例
 

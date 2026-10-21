@@ -34,30 +34,32 @@
 
 ## 声明
 
-所属类型：[`asc::std::iterator_traits`](iterator_traits.md)。
+普通的五成员特征分支不自动提供`iterator_concept`；显式特化可按其自身定义提供该成员。
+
+以下别名仅属于[`iterator_traits<T*>`](iterator_traits.md)的对象指针偏特化，不能推广到所有迭代器：
 
 ```cpp
-// asc::std::iterator_traits 类内的声明节选；模板形参和其他成员由所属类提供。
+// iterator_traits<T*> 的对象指针偏特化类内节选。
 using iterator_concept = contiguous_iterator_tag;
 ```
 
 ## 约束说明
 
-- 提供C++20公开迭代器概念和特征接口。
+- 成员是否存在及其类型由所选特征分支决定；自定义迭代器应提供匹配的关联类型。
 
 ## 调用示例
 
-以下Host片段用具体迭代器或容器类型实例化本页接口。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
-
 #include <asc/std/type_traits>
 
-void example()
+bool example()
 {
-    using selected = typename asc::std::iterator_traits<int*>::iterator_concept;
+    using selected = typename asc::std::iterator_traits<const int*>::iterator_concept;
     static_assert(asc::std::is_same_v<selected, asc::std::contiguous_iterator_tag>);
+    return true;
 }
 ```
 

@@ -34,27 +34,30 @@
 
 ## 声明
 
+以下用公开CPO与类型特征表达类型结果的声明摘要；R须满足range，range_size_t还须满足sized_range。
+
 ```cpp
 namespace asc::std::ranges {
-template<class Rp> using sentinel_t = decltype(::asc::std::ranges::Endcpo{}(::asc::std::declval<Rp&>()));
-} // namespace asc::std::ranges
+template<class R>
+using sentinel_t = decltype(::asc::std::ranges::end(::asc::std::declval<R&>()));
+}
 ```
 
 ## 约束说明
 
-- 支持数组和用户范围，不支持仅由花括号构成的initializer_list表达式。
+- 这是对范围左值访问所得类型的编译期查询；它不调用运行时遍历，也不延长范围或元素的生命周期。
+- `R`须满足`range`；大小类型查询还要求`ranges::size`有效。
 
 ## 调用示例
 
-以下片段选用具体模板实参展示别名类型。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/ranges>
+#include <asc/std/type_traits>
 
-void use_type()
-{
-    using selected = asc::std::ranges::sentinel_t<int (&)[4]>;
-}
+using result = asc::std::ranges::sentinel_t<int (&)[3]>;
+static_assert(asc::std::is_same_v<result, int*>);
 ```
 
 ## 关联API

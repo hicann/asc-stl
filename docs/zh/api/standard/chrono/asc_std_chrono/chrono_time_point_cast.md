@@ -54,7 +54,7 @@ template<class ToDuration, class Clock, class Duration> [[nodiscard]] constexpr 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待转换的时间点；无法精确表示时向零截断。 |
+| `value` | 输入 | 待转换的时间点；目标计数为整数时，不能表示的分数部分向零截断；浮点目标保留其可表示的分数并按浮点转换舍入。 |
 
 ## 返回值说明
 

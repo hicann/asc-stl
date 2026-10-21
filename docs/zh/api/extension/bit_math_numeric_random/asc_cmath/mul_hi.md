@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class T> constexpr T mul_hi(T left, T right) noexcept;
-} // namespace asc
+template <class T>
+[[nodiscard]] constexpr T mul_hi(T left, T right) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明

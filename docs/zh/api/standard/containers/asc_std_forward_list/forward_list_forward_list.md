@@ -39,7 +39,7 @@
 ### 原型1
 
 ```cpp
-forward_list(const Allocator& allocator) noexcept;
+explicit forward_list(const Allocator& allocator) noexcept;
 ```
 
 ### 原型2

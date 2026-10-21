@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::sort`按比较关系排序随机访问范围；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::sort`按比较关系排序随机访问范围；在调用者所在执行主体内顺序执行。
 
 适用重载的同步/并行关系：带策略原型由Host调用对应的[asc::parallel::sort](../../../extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_sort.md)前端并行执行，并同步等待该Stream完成；无策略原型为顺序执行，不涉及Device提交。带策略原型的执行策略参数[`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md)须绑定有效Stream和足够的调用方临时存储。由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用[`asc::std::terminate`](../../language_support/asc_std_exception/terminate.md)。
 
@@ -40,28 +40,20 @@
 
 ```cpp
 namespace asc::std {
-template<class Random, class Compare> void sort(asc::device_policy policy, Random first, Random last, Compare compare);
-} // namespace asc::std
+template <class RandomAccessIterator, class Com>
+constexpr void sort(RandomAccessIterator first, RandomAccessIterator last, Com compare);
+}  // namespace asc::std
 ```
 
-该原型适用于`C++17+`，可用位置为Host。
+该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class RandomAccessIterator, class Com> constexpr void sort(RandomAccessIterator first, RandomAccessIterator last, Com compare);
-} // namespace asc::std
-```
-
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
-
-### 原型3
-
-```cpp
-namespace asc::std {
-template<class RandomAccessIterator> constexpr void sort(RandomAccessIterator first, RandomAccessIterator last);
-} // namespace asc::std
+template <class RandomAccessIterator>
+constexpr void sort(RandomAccessIterator first, RandomAccessIterator last);
+}  // namespace asc::std
 ```
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
@@ -69,24 +61,6 @@ template<class RandomAccessIterator> constexpr void sort(RandomAccessIterator fi
 ## 参数说明
 
 ### 原型1的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Random` | 输入范围的随机访问迭代器类型。 |
-| `Compare` | 定义元素先后顺序的比较对象类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `compare` | 输入 | 用于确定元素顺序的比较对象。 |
-
-### 原型2的参数
 
 **模板参数**
 
@@ -103,7 +77,7 @@ template<class RandomAccessIterator> constexpr void sort(RandomAccessIterator fi
 | `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
 | `compare` | 输入 | 用于确定元素顺序的比较对象。 |
 
-### 原型3的参数
+### 原型2的参数
 
 **模板参数**
 
@@ -125,10 +99,6 @@ template<class RandomAccessIterator> constexpr void sort(RandomAccessIterator fi
 ## 约束说明
 
 - 使用C++17。
-- 该Host同步适配接口调用对应的asc::parallel前端。
-- policy必须包含有效Stream和足够的调用方临时存储。
-- 接口只等待该Stream。
-- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用asc::std::terminate。
 - sort/nth_element的sequential random-access pointer、默认比较与自定义比较核心。
 - Host、AI Core SIMD编程 和AI Core SIMT编程。
 

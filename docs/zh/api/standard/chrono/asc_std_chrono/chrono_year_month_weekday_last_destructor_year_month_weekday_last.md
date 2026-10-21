@@ -34,8 +34,10 @@
 
 ## 函数原型
 
+C++17形式如下；析构由编译器隐式生成，C++20起满足条件时可用于常量求值。
+
 ```cpp
-constexpr ~year_month_weekday_last() noexcept;
+~year_month_weekday_last() noexcept;
 ```
 
 ## 参数说明

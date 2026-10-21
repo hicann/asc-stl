@@ -39,16 +39,20 @@
 ### 原型1
 
 ```cpp
-// asc::std::counted_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class I2> constexpr counted_iterator<Iter>& operator--();
+// counted_iterator 类内声明节选。
+template<class I2 = Iter, enable_if_t<bidirectional_iterator<I2>, int> = 0>
+constexpr counted_iterator& operator--();
 ```
 
 ### 原型2
 
 ```cpp
-// asc::std::counted_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class I2> constexpr counted_iterator<Iter> operator--(int unused);
+// counted_iterator 类内声明节选。
+template<class I2 = Iter, enable_if_t<bidirectional_iterator<I2>, int> = 0>
+constexpr counted_iterator operator--(int);
 ```
+
+以上为C++17及Device选择形式；Host C++20用`requires bidirectional_iterator<I2>`表达相同条件。
 
 ## 参数说明
 
@@ -58,7 +62,7 @@ template<class I2> constexpr counted_iterator<Iter> operator--(int unused);
 
 | 参数名 | 描述 |
 | --- | --- |
-| `I2` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
+| `I2` | 成员选择类型，默认为所属类的`Iter`；须满足本原型的表达式或遍历要求。 |
 
 ### 原型2的参数
 
@@ -66,36 +70,38 @@ template<class I2> constexpr counted_iterator<Iter> operator--(int unused);
 
 | 参数名 | 描述 |
 | --- | --- |
-| `I2` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
+| `I2` | 成员选择类型，默认为所属类的`Iter`；须满足本原型的表达式或遍历要求。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `unused` | 输入 | 用于区分后置自增或后置自减形式的占位参数；调用时写作整数0。 |
+| 不具名`int` | 输入 | 区分后置形式的占位参数，通常写作`iterator--`。 |
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `counted_iterator<Iter> &` | 返回更新后的当前对象引用。 |
-| 原型2 | `counted_iterator<Iter>` | 返回更新后的迭代器或计数值。 |
+前置形式返回操作完成后当前适配器的引用；后置形式按值返回操作之前的适配器副本。计数迭代器自减会将底层位置后退一位，并将剩余计数加1。
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- `Iter`须满足本操作要求的遍历能力；适配器不拥有底层范围。
+- `count()`表示从当前位置开始剩余的元素数量；解引用及自增要求剩余数量大于0。
+- 位移后的底层位置及对应计数须有效，不得越过实际有效范围。
+- 自减成员仅在底层迭代器满足双向迭代器要求时参与重载。
 
 ## 调用示例
 
-以下Host片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void example(asc::std::counted_iterator<int*>& iterator)
+bool example()
 {
-    --iterator;
+    int values[] = {2, 4, 6, 8};
+    asc::std::counted_iterator<int*> iterator(values + 1, 3);
+    auto old = iterator--;
+    return *old == 4 && *iterator == 2;
 }
 ```
 

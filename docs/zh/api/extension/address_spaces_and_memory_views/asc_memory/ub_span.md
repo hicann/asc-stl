@@ -34,14 +34,15 @@
 
 ```cpp
 namespace asc {
-template<class T> class ub_span;
-} // namespace asc
+template <class T>
+class ub_span;
+}  // namespace asc
 ```
 
 ## 约束说明
 
 - D-SIMD下，元素下标访问返回保留UB（__ubuf__） 地址空间及元素const限定的引用；Host下为普通引用。
-- 仅可在AI Core SIMD编程中使用。
+- AI Core SIMD使用真实UB地址空间；Host可构造普通指针表示以描述或检查布局。Host表示不提供对设备物理UB的访问；AI Core SIMT不提供此类型。
 - 视图不管理存储生命周期。
 - 底层UB区域必须在视图使用期间保持有效。
 - operator[] 的索引范围由调用方保证有效；first/last/subspan 切片采用失效闭合语义，计数或偏移越出 [0, size()] 时返回空视图，不产生回绕指针。

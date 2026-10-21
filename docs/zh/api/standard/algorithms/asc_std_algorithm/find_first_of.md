@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::find_first_of`寻找范围内首个与候选集合中元素匹配的位置；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::find_first_of`寻找范围内首个与候选集合中元素匹配的位置；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,16 +38,20 @@
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator1, class ForwardIterator2, class BinaryPredicate> [[nodiscard]] constexpr ForwardIterator1 find_first_of(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2, ForwardIterator2 last2, BinaryPredicate predicate);
-} // namespace asc::std
+template <class ForwardIterator1, class ForwardIterator2, class BinaryPredicate>
+[[nodiscard]] constexpr ForwardIterator1 find_first_of(ForwardIterator1 first1, ForwardIterator1 last1,
+    ForwardIterator2 first2, ForwardIterator2 last2, BinaryPredicate predicate);
+}  // namespace asc::std
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator1, class ForwardIterator2> [[nodiscard]] constexpr ForwardIterator1 find_first_of(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2, ForwardIterator2 last2);
-} // namespace asc::std
+template <class ForwardIterator1, class ForwardIterator2>
+[[nodiscard]] constexpr ForwardIterator1 find_first_of(
+    ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2, ForwardIterator2 last2);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -104,16 +108,17 @@ template<class ForwardIterator1, class ForwardIterator2> [[nodiscard]] constexpr
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     int other[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    return asc::std::find_first_of(values, values + 8, other, other + 3);
+    auto result = asc::std::find_first_of(values, values + 8, other, other + 3);
+    return result == values;
 }
 ```
 

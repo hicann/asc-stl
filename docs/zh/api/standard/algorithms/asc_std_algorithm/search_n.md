@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::search_n`寻找连续出现指定次数的目标值；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::search_n`寻找连续出现指定次数的目标值；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,16 +38,20 @@
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator, class Size, class T, class BinaryPredicate> [[nodiscard]] constexpr ForwardIterator search_n(ForwardIterator first, ForwardIterator last, Size count, const T& value_, BinaryPredicate pred);
-} // namespace asc::std
+template <class ForwardIterator, class Size, class T, class BinaryPredicate>
+[[nodiscard]] constexpr ForwardIterator search_n(
+    ForwardIterator first, ForwardIterator last, Size count, const T& value_, BinaryPredicate pred);
+}  // namespace asc::std
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator, class Size, class T> [[nodiscard]] constexpr ForwardIterator search_n(ForwardIterator first, ForwardIterator last, Size count, const T& value_);
-} // namespace asc::std
+template <class ForwardIterator, class Size, class T>
+[[nodiscard]] constexpr ForwardIterator search_n(
+    ForwardIterator first, ForwardIterator last, Size count, const T& value_);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -106,15 +110,16 @@ template<class ForwardIterator, class Size, class T> [[nodiscard]] constexpr For
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    return asc::std::search_n(values, values + 8, 2, 3);
+    auto result = asc::std::search_n(values, values + 8, 2, 3);
+    return result == values + 8;
 }
 ```
 

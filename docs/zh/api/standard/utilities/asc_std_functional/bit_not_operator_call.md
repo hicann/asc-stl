@@ -36,25 +36,28 @@
 
 所属类型：[`asc::std::bit_not`](bit_not.md)。
 
-### 原型1
+### 原型1：指定类型形式
 
 ```cpp
-// asc::std::bit_not 类内的声明节选；模板形参和其他成员由所属类提供。
+// bit_not<T>（T非void）类内声明，T由所属类提供。
 constexpr T operator()(const T& x) const;
 ```
 
-### 原型2
+### 原型2：透明特化
 
 ```cpp
-// asc::std::bit_not 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class T> constexpr auto operator()(T&& x) const noexcept(noexcept(~ ::asc::std::forward<T>(X))) -> decltype(~ ::asc::std::forward<T>(X));
+// bit_not<void> 类内声明，模板实参由调用推导。
+template <class T1>
+constexpr auto operator()(T1&& x) const noexcept(noexcept(~::asc::std::forward<T1>(x))) -> decltype(~::asc::std::forward<T1>(x));
 ```
 
 ## 参数说明
 
 ### 原型1的参数
 
-无参数。
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `x` | 输入 | 当前运算的唯一操作数，通过const引用读取。 |
 
 ### 原型2的参数
 
@@ -62,30 +65,36 @@ template<class T> constexpr auto operator()(T&& x) const noexcept(noexcept(~ ::a
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 左侧操作数类型；须支持该函数对象执行的运算。 |
+| `T1` | 操作数的推导类型；转发引用保留输入的cv限定和值类别。 |
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `x` | 输入 | 唯一操作数；按原值类别转发给运算表达式。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `T` | 返回函数对象按所选实参调用得到的结果。 |
-| 原型2 | `decltype(~ ::asc::std::forward<T>(X))` | 返回函数对象按所选实参调用得到的结果。 |
+| 原型1 | `T` | 返回`~x`按指定类型运算得到的结果。 |
+| 原型2 | 原型尾置返回类型指定的表达式类型 | 返回转发后的同一运算表达式结果；类型由原型中的`decltype`确定。 |
 
 ## 约束说明
 
-- 同时提供指定类型形式和透明调用形式。
+- 操作数必须支持原型中的一元运算表达式，原型1的结果还须能转换为其返回类型。
+- 透明形式保留输入值类别；只有运算表达式有效时该形式才可用。
+- 透明形式的`noexcept`与相应运算表达式一致；当前指定类型形式没有声明`noexcept`。Device调用还要求相应操作可在该执行位置使用。
 
 ## 调用示例
 
-以下Host片段以具体整数实参演示函数对象调用。
+以下Host示例分别检查指定类型和透明形式的具体结果。
 
 ```cpp
 #include <asc/std/functional>
 
-decltype(auto) example()
-{
-    return asc::std::bit_not<>{}(7);
-}
+static_assert(asc::std::bit_not<int>{}(4) == (~4));
+static_assert(asc::std::bit_not<>{}(4L) == (~4));
 ```
 
 ## 关联API

@@ -59,26 +59,17 @@ constexpr explicit lane_mask(unsigned int value = 0) noexcept;
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下Host示例使用具体掩码检查位运算及返回对象；掩码值操作本身不执行Warp同步。
 
 ```cpp
 #include <asc/warp>
-
-template <class... Args>
-__aicore__ asc::lane_mask make_object(Args&&... args)
+bool example()
 {
-    return asc::lane_mask(static_cast<Args&&>(args)...);
+    asc::lane_mask empty;
+    asc::lane_mask selected(5u);
+    return empty.value() == 0u && selected.value() == 5u;
 }
 ```
-
-对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
-
-完整示例源码：
-
-- [CMakeLists.txt](../../../../examples/warp_collectives/CMakeLists.txt)
-- [warp_example.h](../../../../examples/warp_collectives/warp_example.h)
-- [kernel.asc](../../../../examples/warp_collectives/kernel.asc)
-- [main.cpp](../../../../examples/warp_collectives/main.cpp)
 
 ## 关联API
 

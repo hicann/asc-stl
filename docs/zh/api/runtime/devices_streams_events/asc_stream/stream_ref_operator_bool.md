@@ -33,7 +33,8 @@
 ## 函数原型
 
 ```cpp
-constexpr explicit asc::stream_ref::operator bool() const noexcept;
+// asc::stream_ref类内声明。
+constexpr explicit operator bool() const noexcept;
 ```
 
 ## 参数说明
@@ -44,7 +45,7 @@ constexpr explicit asc::stream_ref::operator bool() const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `explicit` | 当前对象处于有效或有值状态时返回`true`，否则返回`false`。 |
+| `bool` | 当前对象处于有效或有值状态时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
@@ -63,7 +64,8 @@ constexpr explicit asc::stream_ref::operator bool() const noexcept;
 bool resource_example()
 {
     asc::stream owner;
-    if (!asc::make_stream(owner)) return false;
+    if (!asc::make_stream(owner))
+        return false;
     asc::stream_ref view(owner.native_handle());
     const bool observed = static_cast<bool>(view) && view.native_handle() == owner.native_handle();
     const bool closed = owner.close();
@@ -72,7 +74,8 @@ bool resource_example()
 
 bool example()
 {
-    if (aclInit(nullptr) != ACL_SUCCESS) return false;
+    if (aclInit(nullptr) != ACL_SUCCESS)
+        return false;
     if (aclrtSetDevice(0) != ACL_SUCCESS) {
         const bool finalized = aclFinalize() == ACL_SUCCESS;
         return finalized && false;

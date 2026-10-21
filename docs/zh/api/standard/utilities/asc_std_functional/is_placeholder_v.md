@@ -36,8 +36,8 @@
 
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr int is_placeholder_v;
-} // namespace asc::std
+template<class T> inline constexpr int is_placeholder_v = is_placeholder<T>::value;
+}
 ```
 
 ## 约束说明
@@ -46,12 +46,17 @@ template<class T> inline constexpr int is_placeholder_v;
 
 ## 调用示例
 
-以下片段用具体模板实参读取接口值。
+以下Host示例用具体输入和可判断结果展示本接口。
 
 ```cpp
 #include <asc/std/functional>
 
-inline constexpr auto example = asc::std::is_placeholder_v<int>;
+bool example()
+{
+    static_assert(asc::std::is_placeholder_v<decltype(asc::std::placeholders::_1)> == 1);
+    static_assert(asc::std::is_placeholder_v<int> == 0);
+    return true;
+}
 ```
 
 ## 关联API

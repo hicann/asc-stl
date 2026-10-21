@@ -34,27 +34,27 @@
 
 ## 函数原型
 
+所属类型：[`view_interface<Derived>`](ranges_view_interface.md)。以下为省略SFINAE选择参数的声明摘要；两个形式分别在ranges::empty可用于Derived&和const Derived&时参与。
+
 ```cpp
-template<class D2 = _Derived> constexpr explicit asc::std::ranges::view_interface::operator bool()（含常量限定版本）;
+template<class Derived2 = Derived>
+constexpr explicit operator bool();
+
+template<class Derived2 = Derived>
+constexpr explicit operator bool() const;
 ```
 
 ## 参数说明
 
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `_Derived` | 采用CRTP继承view_interface的派生视图类型。 |
+无函数参数；Derived2默认为Derived，用于延迟检查相应const形式的empty查询。
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `bool` | 当前范围非空时为true。 |
+非空时返回true，空时返回false；转换为explicit，可用于if条件或显式static_cast<bool>。
 
 ## 约束说明
 
-- 派生视图可判空时提供：取值为判空结果的反值；转换为显式形式，须经条件语境使用。
+- 相应const形式的ranges::empty查询须有效；本转换只检查是否为空，不取得元素所有权。
 
 ## 调用示例
 

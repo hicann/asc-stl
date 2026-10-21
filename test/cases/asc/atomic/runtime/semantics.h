@@ -45,6 +45,16 @@ CANN_ASC_STL_SIMT_API void evaluate(__INT32_TYPE__* output) noexcept
     asc::atomic_thread_fence(asc::std::memory_order_relaxed, asc::memory_scope::device);
     asc::atomic_thread_fence(asc::std::memory_order_release, asc::memory_scope::block);
     output[15] = value.load(asc::std::memory_order_relaxed);
+    ::asc::detail::spin_backoff backoff;
+    bool backoff_valid = true;
+    for (unsigned index = 0; index < 63; ++index)
+        backoff_valid = backoff.poll() && backoff_valid;
+    backoff_valid = !backoff.poll() && backoff_valid;
+    backoff.poll_count_ = 2147483647;
+    for (unsigned index = 0; index < 3; ++index)
+        backoff_valid = !backoff.poll() && backoff.poll_count_ == 2147483647 && backoff_valid;
+    if (!backoff_valid)
+        output[15] = -991;
 }
 
 CANN_ASC_STL_SIMT_API void evaluate_visibility(__INT32_TYPE__* output) noexcept

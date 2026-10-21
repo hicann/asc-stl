@@ -279,12 +279,17 @@ struct proclaims_copyable_arguments {
 };
 template <class Function, class... Args>
 inline constexpr bool proclaims_copyable_arguments_v = proclaims_copyable_arguments<Function, Args...>::value;
-template <>
-struct proclaims_copyable_arguments<always_true> {
+template <class... Args>
+struct proclaims_copyable_arguments<always_true, Args...> {
     static constexpr bool value = true;
 };
-template <>
-struct proclaims_copyable_arguments<always_false> {
+template <class... Args>
+struct proclaims_copyable_arguments<always_false, Args...> {
+    static constexpr bool value = true;
+};
+
+template <class Function, class... Args>
+struct proclaims_copyable_arguments<detail::copyable_arguments_wrapper<Function>, Args...> {
     static constexpr bool value = true;
 };
 

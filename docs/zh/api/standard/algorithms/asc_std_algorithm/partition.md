@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::partition`按谓词把范围重排为两组；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::partition`按谓词把范围重排为两组；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,18 +38,9 @@
 
 ```cpp
 namespace asc::std {
-template<class Forward, class UnaryPredicate> Forward partition(asc::device_policy policy, Forward first, Forward last, UnaryPredicate predicate);
-} // namespace asc::std
-```
-
-该原型适用于`C++17+`，可用位置为Host。
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<class ForwardIterator, class Predicate> constexpr ForwardIterator partition(ForwardIterator first, ForwardIterator last, Predicate pred);
-} // namespace asc::std
+template <class ForwardIterator, class Predicate>
+constexpr ForwardIterator partition(ForwardIterator first, ForwardIterator last, Predicate pred);
+}  // namespace asc::std
 ```
 
 该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
@@ -57,24 +48,6 @@ template<class ForwardIterator, class Predicate> constexpr ForwardIterator parti
 ## 参数说明
 
 ### 原型1的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Forward` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `UnaryPredicate` | 判断元素是否满足条件的可调用对象类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `policy` | 输入 | Device执行策略，用于指定Stream、临时存储和执行要求。 |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-| `last` | 输入 | 输入范围的结束位置，不包含该位置。 |
-| `predicate` | 输入 | 用于判断元素是否满足条件的可调用对象。 |
-
-### 原型2的参数
 
 **模板参数**
 
@@ -95,34 +68,37 @@ template<class ForwardIterator, class Predicate> constexpr ForwardIterator parti
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `Forward` | 返回两组元素的分界位置。 |
-| 原型2 | `ForwardIterator` | 返回两组元素的分界位置。 |
+| 原型1 | `ForwardIterator` | 返回两组元素的分界位置。 |
 
 ## 约束说明
 
 - 使用C++17。
-- 该Host同步适配接口调用对应的asc::parallel前端。
-- policy必须包含有效Stream和足够的调用方临时存储。
-- 接口只等待该Stream。
-- 由于标准形式没有错误返回通道，参数校验、提交或同步失败时调用asc::std::terminate。
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     auto predicate = [](int value) { return value % 2 == 0; };
-    return asc::std::partition(values, values + 8, predicate);
+    auto result = asc::std::partition(values, values + 8, predicate);
+    for (int* current = values; current != result; ++current) {
+        if (*current % 2 != 0)
+            return false;
+    }
+    for (int* current = result; current != values + 8; ++current) {
+        if (*current % 2 == 0)
+            return false;
+    }
+    return result == values + 4;
 }
 ```
 
 ## 关联API
 
-- [`asc::device_policy`](../../../runtime/execution_policies_and_status/asc_execution_policy_h/device_policy.md)：指定Stream、临时存储和执行要求的Device执行策略。
+- [`asc::parallel::partition`](../../../extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_partition.md)：使用执行策略提交异步设备操作。

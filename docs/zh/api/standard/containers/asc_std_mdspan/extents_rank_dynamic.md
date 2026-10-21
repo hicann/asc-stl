@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::extents 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr rank_type rank_dynamic() noexcept;
+static constexpr rank_type rank_dynamic() noexcept;
 ```
 
 ## 参数说明

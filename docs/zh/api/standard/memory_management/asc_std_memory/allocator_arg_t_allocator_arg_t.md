@@ -34,45 +34,15 @@
 
 ## 函数原型
 
-### 原型1
+所属类型：[`allocator_arg_t`](allocator_arg_t.md)。显式默认构造的声明如下；复制和移动使用隐式特殊成员规则。
 
 ```cpp
-constexpr allocator_arg_t() noexcept;
-```
-
-### 原型2
-
-```cpp
-constexpr allocator_arg_t(allocator_arg_t&& other);
-```
-
-### 原型3
-
-```cpp
-constexpr allocator_arg_t(const allocator_arg_t& other);
+explicit constexpr allocator_arg_t() = default;
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
 无参数。
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
-
-### 原型3的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
 
 ## 返回值说明
 
@@ -80,12 +50,7 @@ constexpr allocator_arg_t(const allocator_arg_t& other);
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- 这是标识显式分配器构造形式的空标签，不保存分配器、不申请存储，也不自动选择构造函数。
 
 ## 调用示例
 

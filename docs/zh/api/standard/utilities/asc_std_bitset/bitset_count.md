@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/bitset>`。
 
-`asc::std::bitset::count`返回与键或目标值匹配的元素数量。
+`asc::std::bitset::count`返回当前bitset中置为1的位数；没有键或查找目标参数。
 
 标准语义参考：[cppreference `bitset`](https://en.cppreference.com/w/cpp/header/bitset)。
 
@@ -38,8 +38,9 @@
 
 ```cpp
 // asc::std::bitset 类内的声明节选；模板形参和其他成员由所属类提供。
-size_t count() const noexcept;
+constexpr size_t count() const noexcept;
 ```
+
 
 ## 参数说明
 
@@ -49,13 +50,11 @@ size_t count() const noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `size_t` | 返回与键或目标值匹配的元素数量。 |
+| `size_t` | 返回当前bitset中置为1的位数；没有键或查找目标参数。 |
 
 ## 约束说明
 
-- 支持默认构造和unsigned long long构造。
-- `operator[]`不进行边界检查。
-- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
+- 所属bitset的位数Size在编译期固定，操作不进行动态分配。
 
 ## 调用示例
 

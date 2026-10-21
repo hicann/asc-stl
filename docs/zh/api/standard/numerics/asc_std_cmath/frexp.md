@@ -36,41 +36,101 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-float frexp(float x, int* e) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float frexp(
+    float value, int* exponent) noexcept;
+}
 ```
 
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
+
+### 原型2
+
+```cpp
+namespace asc::std {
+template <class Tp, ::asc::std::enable_if_t<__expo_supported_extended_v<Tp>, int> = 0>
+[[nodiscard]] constexpr Tp frexp(
+    Tp value, int* exponent) noexcept;
+}
+```
+
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
+
+### 原型3
+
+```cpp
+namespace asc::std {
+[[nodiscard]] constexpr double frexp(double value, int* exponent) noexcept;
+}
+```
+
+可用位置：Host。
+
+### 原型4
+
+```cpp
+namespace asc::std {
+[[nodiscard]] constexpr long double frexp(long double value, int* exponent) noexcept;
+}
+```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
+
+### 原型5
+
+```cpp
+namespace asc::std {
+template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>
+[[nodiscard]] constexpr double frexp(Tp value, int* exponent) noexcept;
+}
+```
+
+可用位置：Host。
+
 ## 参数说明
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Tp` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。指数与缩放族的扩展浮点选择仅接受可用的half和bfloat16，不接受FP8。 |
+
+未命名的默认int模板形参用于重载选择，调用方无需提供。
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 待分解为规范化尾数与指数的输入值（无量纲）。 |
-| `e` | 输出 | 输出参数，函数将二进制指数写入该指针所指对象；指针须有效（指向可写`int`）。 |
+| `value` | 输入 | 待分解为规范化尾数与指数的输入值（无量纲）。 |
+| `exponent` | 输出 | 接收二进制指数的有效int存储。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float` | 返回输入值的规格化尾数；指数写入输出参数。 |
+返回类型按各原型确定（`float`、`Tp`、`double`、`long double`）。返回尾数并写入二进制指数；非零有限值的尾数绝对值在[0.5, 1)内。
 
 ## 约束说明
+
+- 指数和缩放族的扩展浮点模板仅接受half和bfloat16；FP8未提供该族扩展重载。
 
 - 提供float重载和标准 *f别名，底层能力由Ascend C开发套件提供。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float x, int * e)
+bool example()
 {
-    return asc::std::frexp(x, e);
+    int exponent = 0;
+    const auto fraction = asc::std::frexp(8.0F, &exponent);
+    return fraction == 0.5F && exponent == 4;
 }
 ```
 

@@ -36,8 +36,9 @@
 
 ```cpp
 namespace asc {
-template<class Index> constexpr asc::work_queue_ref<Index> make_work_queue(asc::work_cursor& cursor, Index end, Index grain_size) noexcept;
-} // namespace asc
+template <class Index>
+constexpr asc::work_queue_ref<Index> make_work_queue(asc::work_cursor& cursor, Index end, Index grain_size) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -63,6 +64,8 @@ template<class Index> constexpr asc::work_queue_ref<Index> make_work_queue(asc::
 | `asc::work_queue_ref<Index>` | 返回引用调用方工作游标的非拥有队列对象。 |
 
 ## 约束说明
+
+- Index支持uint32_t、uint64_t以及64位unsigned long long；只有位宽相同不代表其他类型自动被接受。Host可进行值操作和领取，Device参与者仍须使用共享GM cursor，SIMD使用对应的GM限定入口。
 
 游标的构造和生命周期见[`asc::work_cursor`](work_cursor.md)。
 

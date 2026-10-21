@@ -36,13 +36,14 @@
 
 ```cpp
 namespace asc::std {
-template<class, class, template<...> class, template<...> class, class> struct basic_common_reference;
-} // namespace asc::std
+template <class T, class U, template <class> class TQual, template <class> class UQual, class = void>
+struct basic_common_reference;
+}  // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 该主模板作为公共引用计算的定制点，默认不提供结果成员`type`；定制特化通过`TQual`和`UQual`表示相应引用/cv限定，并须满足公共引用语义。
 
 ## 调用示例
 
@@ -51,24 +52,29 @@ template<class, class, template<...> class, template<...> class, class> struct b
 ```cpp
 #include <asc/std/type_traits>
 
-struct Width {};
-struct Height {};
+struct Measure {};
+struct Width : Measure {};
+struct Height : Measure {};
 
-// 针对自有类型偏特化自定义点，指定公共引用类型
+// 两个自有类型共享Measure基类，定制点保留输入的引用和cv限定。
 namespace asc::std {
 template <template <class> class TQual, template <class> class UQual>
 struct basic_common_reference<Width, Height, TQual, UQual> {
-    using type = Width;
+    using type = common_reference_t<TQual<Measure>, UQual<Measure>>;
 };
+template <template <class> class TQual, template <class> class UQual>
+struct basic_common_reference<Height, Width, TQual, UQual> : basic_common_reference<Width, Height, UQual, TQual> {};
 }  // namespace asc::std
 
 void use_trait()
 {
-    // 特化生效：common_reference 命中自定义的公共引用类型
-    static_assert(asc::std::is_same_v<asc::std::common_reference_t<Width, Height>, Width>);
-    // 带左值引用限定的组合同样路由到该特化
-    static_assert(asc::std::is_same_v<asc::std::common_reference_t<Width&, Height&>, Width>);
-    // 内建类型不受该特化影响，仍按常规规则求公共引用类型
+    static_assert(asc::std::is_same_v<asc::std::common_reference_t<Width, Height>, Measure>);
+    static_assert(asc::std::is_same_v<asc::std::common_reference_t<Width&, Height&>, Measure&>);
+    static_assert(asc::std::is_same_v<asc::std::common_reference_t<const Width&, Height&>, const Measure&>);
+    static_assert(asc::std::is_same_v<asc::std::common_reference_t<Height&, Width&>, Measure&>);
+    // 双方均可转换为所选公共引用；不仅检查定制点返回了一个类型名字。
+    static_assert(asc::std::is_convertible_v<Width&, asc::std::common_reference_t<Width&, Height&>>);
+    static_assert(asc::std::is_convertible_v<Height&, asc::std::common_reference_t<Width&, Height&>>);
     static_assert(asc::std::is_same_v<asc::std::common_reference_t<int, long>, long>);
 }
 ```

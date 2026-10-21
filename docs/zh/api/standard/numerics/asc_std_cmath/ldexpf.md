@@ -36,11 +36,18 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-float ldexpf(float x, int e) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float ldexpf(
+    float value, int exponent) noexcept;
+}
 ```
+
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
 
 ## 参数说明
 
@@ -48,14 +55,12 @@ float ldexpf(float x, int e) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `x` | 输入 | 待按2的整数次幂缩放的浮点值（无量纲）。 |
-| `e` | 输入 | 以2为底的整数指数（无量纲），结果为x * 2^e。 |
+| `value` | 输入 | 待按2的整数次幂缩放的浮点值（无量纲）。 |
+| `exponent` | 输入 | 待按2的整数次幂缩放的浮点值（无量纲）。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float` | 返回按指定二进制指数缩放后的浮点值。 |
+返回类型按各原型确定（`float`）。返回输入乘以2的exponent次幂。
 
 ## 约束说明
 
@@ -63,14 +68,14 @@ float ldexpf(float x, int e) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float x, int e)
+bool example()
 {
-    return asc::std::ldexpf(x, e);
+    return asc::std::ldexpf(0.5F, 4) == 8.0F;
 }
 ```
 

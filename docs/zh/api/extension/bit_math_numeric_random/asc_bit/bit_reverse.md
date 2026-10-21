@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class T> constexpr T bit_reverse(T value) noexcept;
-} // namespace asc
+template <class T>
+constexpr T bit_reverse(T value) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -61,7 +62,7 @@ template<class T> constexpr T bit_reverse(T value) noexcept;
 ## 约束说明
 
 - T必须为uint32_t或uint64_t。
-- start和width不得为负且不得超出类型位宽，零位宽和全位宽操作不得产生未定义移位。
+- 反转整个输入类型的位序；本函数没有start或width参数。
 
 ## 调用示例
 

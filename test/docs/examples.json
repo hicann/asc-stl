@@ -516,96 +516,84 @@
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_borrowed_range.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_input_range.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_output_range.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_sized_range.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_contiguous_range.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_bidirectional_range.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_forward_range.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_common_range.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_viewable_range.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_view.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_range.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/metaprogramming/asc_std_ratio/ratio_less_equal.md": {
     "standards": [
@@ -1957,7 +1945,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/strings/asc_std_string_view/ranges_enable_view.md": {
     "standards": [
@@ -1965,7 +1953,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/numerics/asc_std_cmath/fp_llogbnan.md": {
     "standards": [
@@ -2108,248 +2096,217 @@
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/signed_integral.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/default_initializable.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/derived_from.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/assignable_from.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/same_as.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/unsigned_integral.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/predicate.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/semiregular.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/convertible_to.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/strict_weak_order.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/swappable.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/regular_invocable.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/floating_point.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/common_with.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/swappable_with.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/destructible.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/invocable.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/regular.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/equality_comparable_with.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/relation.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/totally_ordered.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/movable.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/move_constructible.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/equivalence_relation.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/constructible_from.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/integral.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/common_reference_with.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/copyable.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/totally_ordered_with.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/concepts/asc_std_concepts/equality_comparable.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": null
+    "mode": "host"
   },
   "docs/zh/api/standard/containers/asc_std_span/ranges_enable_borrowed_range.md": {
     "standards": [
@@ -2373,7 +2330,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/front_insert_iterator_reference.md": {
     "standards": [
@@ -2381,7 +2338,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_iterator_type.md": {
     "standards": [
@@ -2389,7 +2346,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_swappable.md": {
     "standards": [
@@ -2397,7 +2354,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_difference_type.md": {
     "standards": [
@@ -2413,7 +2370,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iter_difference_t.md": {
     "standards": [
@@ -2421,7 +2378,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_readable_traits_value_type.md": {
     "standards": [
@@ -2429,7 +2386,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iter_rvalue_reference_t.md": {
     "standards": [
@@ -2445,7 +2402,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_iterator_category.md": {
     "standards": [
@@ -2461,7 +2418,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/back_insert_iterator_reference.md": {
     "standards": [
@@ -2469,7 +2426,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/insert_iterator_difference_type.md": {
     "standards": [
@@ -2477,7 +2434,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/weakly_incrementable.md": {
     "standards": [
@@ -2485,7 +2442,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_iterator_concept.md": {
     "standards": [
@@ -2493,7 +2450,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_iterator_type.md": {
     "standards": [
@@ -2501,7 +2458,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirect_strict_weak_order.md": {
     "standards": [
@@ -2509,7 +2466,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_unary_invocable.md": {
     "standards": [
@@ -2517,7 +2474,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_copyable_storable.md": {
     "standards": [
@@ -2525,7 +2482,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/back_insert_iterator_iterator_category.md": {
     "standards": [
@@ -2533,7 +2490,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/contiguous_iterator.md": {
     "standards": [
@@ -2541,7 +2498,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_value_type.md": {
     "standards": [
@@ -2557,7 +2514,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/sentinel_for.md": {
     "standards": [
@@ -2565,7 +2522,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/front_insert_iterator_difference_type.md": {
     "standards": [
@@ -2573,7 +2530,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_traits_pointer.md": {
     "standards": [
@@ -2581,7 +2538,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_copyable.md": {
     "standards": [
@@ -2589,7 +2546,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_comparable.md": {
     "standards": [
@@ -2597,7 +2554,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/forward_iterator.md": {
     "standards": [
@@ -2605,7 +2562,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_movable.md": {
     "standards": [
@@ -2613,7 +2570,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/back_insert_iterator_difference_type.md": {
     "standards": [
@@ -2621,7 +2578,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iter_value_t.md": {
     "standards": [
@@ -2629,7 +2586,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirect_unary_predicate.md": {
     "standards": [
@@ -2637,7 +2594,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/front_insert_iterator_iterator_category.md": {
     "standards": [
@@ -2645,7 +2602,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/front_insert_iterator_container_type.md": {
     "standards": [
@@ -2653,7 +2610,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/back_insert_iterator_value_type.md": {
     "standards": [
@@ -2661,7 +2618,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirect_equivalence_relation.md": {
     "standards": [
@@ -2669,7 +2626,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_reference.md": {
     "standards": [
@@ -2677,7 +2634,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_iterator_category.md": {
     "standards": [
@@ -2685,7 +2642,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/mergeable.md": {
     "standards": [
@@ -2693,7 +2650,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_pointer.md": {
     "standards": [
@@ -2709,7 +2666,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_reference.md": {
     "standards": [
@@ -2717,7 +2674,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_regular_unary_invocable.md": {
     "standards": [
@@ -2725,7 +2682,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_traits_difference_type.md": {
     "standards": [
@@ -2733,7 +2690,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/front_insert_iterator_value_type.md": {
     "standards": [
@@ -2741,7 +2698,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/sized_sentinel_for.md": {
     "standards": [
@@ -2749,7 +2706,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_traits_reference.md": {
     "standards": [
@@ -2757,7 +2714,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/back_insert_iterator_pointer.md": {
     "standards": [
@@ -2765,7 +2722,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/input_iterator.md": {
     "standards": [
@@ -2773,7 +2730,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/projected.md": {
     "standards": [
@@ -2789,7 +2746,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_traits_iterator_category.md": {
     "standards": [
@@ -2797,7 +2754,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirect_result_t.md": {
     "standards": [
@@ -2813,7 +2770,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_reference.md": {
     "standards": [
@@ -2829,7 +2786,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_pointer.md": {
     "standards": [
@@ -2837,7 +2794,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/back_insert_iterator_container_type.md": {
     "standards": [
@@ -2845,7 +2802,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iterator_traits_iterator_concept.md": {
     "standards": [
@@ -2853,7 +2810,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/permutable.md": {
     "standards": [
@@ -2861,7 +2818,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/counted_iterator_difference_type.md": {
     "standards": [
@@ -2869,7 +2826,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/insert_iterator_value_type.md": {
     "standards": [
@@ -2877,7 +2834,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/insert_iterator_iterator_category.md": {
     "standards": [
@@ -2885,7 +2842,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_readable.md": {
     "standards": [
@@ -2893,7 +2850,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/insert_iterator_reference.md": {
     "standards": [
@@ -2901,7 +2858,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iter_common_reference_t.md": {
     "standards": [
@@ -2917,7 +2874,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_difference_type.md": {
     "standards": [
@@ -2925,7 +2882,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/bidirectional_iterator.md": {
     "standards": [
@@ -2933,7 +2890,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_pointer.md": {
     "standards": [
@@ -2941,7 +2898,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/input_or_output_iterator.md": {
     "standards": [
@@ -2949,7 +2906,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/output_iterator.md": {
     "standards": [
@@ -2957,7 +2914,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/indirectly_movable_storable.md": {
     "standards": [
@@ -2965,7 +2922,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/iter_reference_t.md": {
     "standards": [
@@ -2981,7 +2938,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/sortable.md": {
     "standards": [
@@ -2989,7 +2946,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/incrementable_traits_difference_type.md": {
     "standards": [
@@ -3005,7 +2962,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_value_type.md": {
     "standards": [
@@ -3013,7 +2970,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/containers/asc_std_mdspan/submdspan_mapping.md": {
     "standards": [
@@ -3813,7 +3770,7 @@
       20
     ],
     "mode": "host",
-    "expression": "example()"
+    "expression": null
   },
   "docs/zh/api/standard/utilities/asc_std_variant/variant_size.md": {
     "standards": [
@@ -7087,40 +7044,35 @@
       17,
       20
     ],
-    "mode": "host",
-    "expression": "example()"
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_empty_view_begin.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": "example()"
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_empty_view_size.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": "example()"
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_empty_view_end.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": "example()"
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_empty_view_data.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host",
-    "expression": "example()"
+    "mode": "host"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_begin.md": {
     "standards": [
@@ -8623,8 +8575,7 @@
       17,
       20
     ],
-    "mode": "host",
-    "expression": "example()"
+    "mode": "host"
   },
   "docs/zh/api/standard/chrono/asc_std_chrono/chrono_hours.md": {
     "standards": [
@@ -9084,23 +9035,19 @@
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/ranges_prev.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": "example()",
-    "header_standards": [
-      17
-    ]
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/ranges_next.md": {
     "standards": [
+      17,
       20
     ],
     "mode": "host",
-    "expression": "example()",
-    "header_standards": [
-      17
-    ]
+    "expression": "example()"
   },
   "docs/zh/api/standard/iterators/asc_std_iterator/insert_iterator_insert_iterator.md": {
     "standards": [
@@ -11935,5 +11882,6815 @@
     ],
     "mode": "host",
     "expression": null
+  },
+  "docs/zh/api/standard/containers/asc_std_array/get.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/adjacent_difference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/partial_sum.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/exclusive_scan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/inclusive_scan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/transform_exclusive_scan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/transform_inclusive_scan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/iota.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_ratio/ratio_equal_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_ratio/ratio_greater_equal_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_ratio/ratio_greater_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_ratio/ratio_less_equal_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_ratio/ratio_less_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_ratio/ratio_not_equal_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/aligned_union_alignment_value.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/alignment_of_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/conjunction_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/disjunction_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/extent_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/has_unique_object_representations_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/has_virtual_destructor_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/integral_constant_value.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_abstract_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_aggregate_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_arithmetic_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_array_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_assignable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_base_of_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_bounded_array_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_class_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_compound_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_const_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_constructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_convertible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_copy_assignable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_copy_constructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_default_constructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_destructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_empty_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_enum_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_final_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_floating_point_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_function_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_fundamental_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_integral_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_invocable_r_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_invocable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_lvalue_reference_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_member_function_pointer_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_member_object_pointer_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_member_pointer_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_move_assignable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_move_constructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_nothrow_assignable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_nothrow_constructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_nothrow_convertible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_nothrow_copy_assignable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_nothrow_copy_constructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_nothrow_default_constructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_nothrow_destructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_nothrow_invocable_r_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_nothrow_invocable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_nothrow_move_assignable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_nothrow_move_constructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_nothrow_swappable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_nothrow_swappable_with_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_null_pointer_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_object_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_pointer_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_polymorphic_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_reference_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_rvalue_reference_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_same_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_scalar_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_scoped_enum_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_signed_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_standard_layout_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_swappable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_swappable_with_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_trivial_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_trivially_assignable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_trivially_constructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_trivially_copy_assignable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_trivially_copy_constructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_trivially_copyable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_trivially_default_constructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_trivially_destructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_trivially_move_assignable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_trivially_move_constructible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_unbounded_array_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_union_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_unsigned_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_void_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_volatile_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/negation_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/rank_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_ratio/ratio_add.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_ratio/ratio_divide.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_ratio/ratio_multiply.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_ratio/ratio_subtract.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_ratio/ratio_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/is_constant_evaluated.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/plus_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/minus_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/multiplies_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/divides_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/modulus_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/negate_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/bit_and_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/bit_or_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/bit_xor_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/bit_not_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/equal_to_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/not_equal_to_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/less_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/less_equal_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/greater_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/greater_equal_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/logical_and_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/logical_or_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/logical_not_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/text_processing/asc_std_format/format_to.md": {
+    "standards": [
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_format/format_to_n.md": {
+    "standards": [
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_format/formatted_size.md": {
+    "standards": [
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_charconv/from_chars_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_charconv/from_chars_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_charconv/to_chars_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_charconv/to_chars_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_charconv/to_chars_result_operator_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_charconv/to_chars_result_operator_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_linalg/linalg_transposed.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_linalg/linalg_conjugated.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_linalg/linalg_conjugate_transposed.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_linalg/linalg_scaled_accessor_offset.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_linalg/linalg_conjugated_accessor_offset.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_linalg/linalg_conjugated_accessor_nested_accessor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/iswctype.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/towctrans.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/wctrans.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/wctype.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/isalnum.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/isalpha.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/isblank.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/iscntrl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/isdigit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/isgraph.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/islower.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/isprint.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/ispunct.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/isspace.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/isupper.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/isxdigit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/tolower.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cctype/toupper.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/iswalnum.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/iswalpha.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/iswblank.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/iswcntrl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/iswdigit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/iswgraph.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/iswlower.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/iswprint.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/iswpunct.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/iswspace.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/iswupper.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/iswxdigit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/towlower.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwctype/towupper.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/arg.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/abs.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/acos.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/acosf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/acosh.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/acoshf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/acoshl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/acosl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/asin.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/asinf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/asinh.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/asinhf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/asinhl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/asinl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/atan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/atan2.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/atan2f.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/atan2l.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/atanf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/atanh.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/atanhf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/atanhl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/atanl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/cbrt.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/cbrtf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/cbrtl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/ceil.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/ceilf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/ceill.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/copysign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/copysignf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/copysignl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/cos.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/cosf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/cosh.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/coshf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/coshl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/cosl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/erf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/erfc.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/erfcf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/erfcl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/erff.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/erfl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/exp.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/exp2.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/exp2f.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/exp2l.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/expf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/expl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/expm1.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/expm1f.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/expm1l.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fabs.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fabsf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fabsl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fdim.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fdimf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fdiml.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/floor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/floorf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/floorl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fma.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fmaf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fmal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fmax.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fmaxf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fmaxl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fmin.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fminf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fminl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fmod.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fmodf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fmodl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fpclassify.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/frexp.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/frexpf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/frexpl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/hypot.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/hypotf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/hypotl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/ilogb.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/ilogbf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/ilogbl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/isfinite.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/isgreater.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/isgreaterequal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/isinf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/isless.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/islessequal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/islessgreater.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/isnan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/isnormal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/isunordered.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/ldexp.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/ldexpf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/ldexpl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/lerp.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/lgamma.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/lgammaf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/lgammal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/llrint.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/llrintf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/llrintl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/llround.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/llroundf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/llroundl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/log.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/log10.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/log10f.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/log10l.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/log1p.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/log1pf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/log1pl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/log2.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/log2f.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/log2l.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/logb.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/logbf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/logbl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/logf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/logl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/lrint.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/lrintf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/lrintl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/lround.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/lroundf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/lroundl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/modf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/modff.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/nanf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/nearbyint.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/nearbyintf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/nearbyintl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/nextafter.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/nextafterf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/nextafterl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/nexttoward.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/nexttowardf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/nexttowardl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/pow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/powf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/powl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/remainder.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/remainderf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/remainderl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/remquo.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/remquof.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/rint.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/rintf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/rintl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/round.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/roundf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/roundl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/scalbln.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/scalblnf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/scalblnl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/scalbn.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/scalbnf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/scalbnl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/signbit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/sin.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/sinf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/sinh.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/sinhf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/sinhl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/sinl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/sqrt.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/sqrtf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/sqrtl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/tan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/tanf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/tanh.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/tanhf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/tanhl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/tanl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/tgamma.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/tgammaf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/tgammal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/trunc.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/truncf.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/truncl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_january.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_february.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_march.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_april.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_may.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_june.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_july.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_august.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_september.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_october.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_november.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_december.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_hh_mm_ss_precision.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/literals_chrono_literals_operator__h.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/literals_chrono_literals_operator__min.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/literals_chrono_literals_operator__s.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/literals_chrono_literals_operator__ms.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/literals_chrono_literals_operator__us.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/literals_chrono_literals_operator__ns.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_treat_as_floating_point_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_duration_period.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_local_time.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_sys_time.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_system_clock_duration.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_system_clock_period.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_system_clock_rep.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_system_clock_time_point.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_time_point_clock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_time_point_duration.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_time_point_period.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_time_point_rep.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_base.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_const_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_expected/expected_error_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_expected/expected_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/bit_and_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/bit_not_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/bit_or_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/bit_xor_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/divides_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/equal_to_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/greater_equal_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/greater_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/identity_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/less_equal_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/less_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/logical_and_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/logical_not_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/logical_or_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/minus_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/modulus_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/multiplies_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/negate_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/not_equal_to_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/plus_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/ranges_equal_to_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/ranges_greater_equal_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/ranges_greater_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/ranges_less_equal_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/ranges_less_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/ranges_not_equal_to_is_transparent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/reference_wrapper_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/unwrap_ref_decay_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/unwrap_reference_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/unwrap_reference_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/optional_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/tuple_element_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/index_sequence.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/index_sequence_for.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/integer_sequence_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/make_index_sequence.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/make_integer_sequence.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/pair_first_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/pair_second_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_variant/variant_alternative_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": null
+  },
+  "docs/zh/api/standard/utilities/asc_std_expected/expected_operator_arrow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_expected/expected_operator_dereference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/cref.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/identity_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/ref.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/optional_emplace.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/optional_operator_arrow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/optional_operator_dereference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/forward_as_tuple.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/tie.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_variant/get_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/hash.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/unreachable.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_barrier/barrier_arrive.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_barrier/barrier_barrier.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_barrier/barrier_wait.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_latch/latch_arrive_and_wait.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_latch/latch_count_down.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_latch/latch_latch.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_semaphore/counting_semaphore_release.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/memchr.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/memcmp.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/memcpy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/memmove.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/memset.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/strcat.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/strchr.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/strcmp.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/strcpy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/strcspn.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/strlen.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/strncat.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/strncmp.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/strncpy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/strpbrk.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/strrchr.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/strspn.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_cstring/strstr.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_allocator_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_const_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_const_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_const_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_traits_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_operator_subscript.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_reserve.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string_view/literals_string_view_literals.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/try_lock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_append.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/adjacent_find.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/copy_backward.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/copy_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/copy_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/equal_range.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/fill_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/find_end.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/find_first_of.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/find_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/find_if_not.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/for_each_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/generate_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/is_heap_until.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/is_sorted_until.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/lower_bound.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/max_element.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/merge.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/min.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/min_element.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/minmax.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/minmax_element.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/mismatch.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/move_backward.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/partial_sort_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/partition.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/partition_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/partition_point.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/remove.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/remove_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/remove_copy_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/remove_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/replace_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/replace_copy_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/reverse_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/rotate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/rotate_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/sample.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/search.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/search_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/set_difference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/set_intersection.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/set_symmetric_difference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/set_union.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/shift_left.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/shift_right.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/stable_partition.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/swap_ranges.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/transform.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/unique.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/unique_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/upper_bound.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/event_destructor_event.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "expression": "example()",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/stream_destructor_stream.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "expression": "example()",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_devices/operator_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_devices/operator_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/maximum_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/minimum_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_permutation_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_strided_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_transform_input_output_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_transform_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_transform_output_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_zip_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_zip_transform_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_constant_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_counting_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_discard_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_shuffle_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_tabulate_output_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_zip_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_lane_mask.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_bit_and.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_bit_and_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_bit_not.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_bit_or.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_bit_or_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_bit_xor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_bit_xor_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_shift_left.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_shift_left_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_shift_right.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_shift_right_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/lane_mask_operator_unsigned_int.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/warp_shuffle_down.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/warp_shuffle_idx.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/warp_shuffle_up.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/warp_shuffle_xor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/ranges_for_each_result.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/ranges_for_each_n_result.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_adjacent_difference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_adjacent_find.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_all_of.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_any_of.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_copy_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_copy_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_count.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_count_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_exclusive_scan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_fill.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_fill_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_find.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_find_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_find_if_not.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_for_each.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_for_each_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_generate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_generate_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_inclusive_scan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_heap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_heap_until.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_partitioned.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_sorted.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_sorted_until.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_max_element.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_merge.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_min_element.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_mismatch.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_none_of.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_partition.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_partition_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_reduce.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_remove.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_remove_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_remove_copy_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_remove_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_replace.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_replace_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_replace_copy_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_replace_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_reverse.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_reverse_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_rotate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_rotate_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_shift_left.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_shift_right.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_sort.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_stable_partition.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_swap_ranges.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform_exclusive_scan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform_inclusive_scan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform_reduce.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_unique.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_unique_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
+    ],
+    "include_dirs": [
+      "docs/zh/examples/parallel_algorithms"
+    ]
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/tuple_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/tuple_cat_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/bind.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/mem_fn.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/is_bind_expression_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/is_placeholder_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/placeholders_1.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/placeholders_2.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/placeholders_3.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/placeholders_4.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/placeholders_5.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/placeholders_6.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/placeholders_7.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/placeholders_8.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/placeholders_9.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/placeholders_10.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/tuple_size_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_variant/variant_size_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_variant/variant_npos.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/nullopt.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/ignore.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/apply.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/make_tuple.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/make_from_tuple.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/tuple_cat_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/metaprogramming/asc_std_type_traits/integral_constant_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_span/as_bytes.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_span/as_writable_bytes.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/diagnostics/asc_std_cassert/assert.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/diagnostics/asc_std_cerrno/errno.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstddef/operator_shift_left_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstddef/operator_shift_right_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_source_location/source_location_current.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cfloat/flt_eval_method.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_climits/char_bit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_climits/uint_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_climits/ullong_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_climits/ulong_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_climits/ushrt_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstdint/size_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_map/map_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_map/unordered_map_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_set/unordered_set_insert.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/erase.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/erase_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_erase.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_operator_subscript.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/priority_queue_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/default_accessor_offset.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/aligned_accessor_offset.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/dextents.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/layout_left_mapping_operator_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/layout_right_mapping_operator_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/layout_stride_mapping_operator_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/layout_stride_mapping_operator_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/submdspan_extents.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/extents_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/dims.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_allocate_at_least.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/uses_allocator_construction_args.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/make_obj_using_allocator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/uninitialized_construct_using_allocator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/uninitialized_default_construct_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/uninitialized_fill_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/uninitialized_move.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/uninitialized_move_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/uninitialized_value_construct_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/destroy_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/launder.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/pointer_traits_difference_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/pointer_traits_element_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/pointer_traits_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/pointer_traits_rebind.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/assume_aligned.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/is_sufficiently_aligned.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/uses_allocator_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_outer_traits.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_is_always_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_propagate_on_container_copy_assignment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_propagate_on_container_move_assignment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_propagate_on_container_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_const_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_void_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_const_void_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_select_on_container_copy_construction.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_allocate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_deallocate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_inner_allocator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_outer_allocator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_max_size.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_construct.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_iterator_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_sentinel_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_range_size_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_borrowed_iterator_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_borrowed_subrange_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_enable_borrowed_range.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_enable_view.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_disable_sized_range.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_view_interface_data.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_subrange_advance.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_subrange_next.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_subrange_prev.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_repeat_view_iterator_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_repeat_view_iterator_operator_decrement.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_repeat_view_iterator_operator_plus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_repeat_view_iterator_operator_minus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_repeat_view_iterator_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_repeat_view_iterator_operator_less.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_repeat_view_iterator_operator_less_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_repeat_view_iterator_operator_greater.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_repeat_view_iterator_operator_greater_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_repeat_view_iterator_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concepts/asc_std_concepts/ranges_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/begin.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/cbegin.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/end.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/cend.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/data.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/rbegin.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/crbegin.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/rend.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/crend.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/next.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/prev.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/make_move_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/make_reverse_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/size.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/empty.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/back_insert_iterator_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/back_insert_iterator_operator_dereference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/back_insert_iterator_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/front_insert_iterator_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/front_insert_iterator_operator_dereference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/front_insert_iterator_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/insert_iterator_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/insert_iterator_operator_dereference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/insert_iterator_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/back_inserter.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/front_inserter.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/inserter.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_operator_arrow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_operator_decrement.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_operator_dereference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_operator_minus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_operator_plus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/move_iterator_operator_subscript.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_operator_arrow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_operator_decrement.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_operator_dereference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_operator_minus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_operator_plus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/reverse_iterator_operator_subscript.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/counted_iterator_operator_arrow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/counted_iterator_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/counted_iterator_operator_decrement.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/counted_iterator_operator_dereference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/counted_iterator_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/counted_iterator_operator_minus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/counted_iterator_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/counted_iterator_operator_plus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/counted_iterator_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/counted_iterator_operator_subscript.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/common_iterator_operator_arrow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/common_iterator_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/common_iterator_operator_dereference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/common_iterator_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/move_sentinel_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/default_sentinel.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/unreachable_sentinel.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/ranges_advance.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/ranges_iter_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/disable_sized_sentinel_for.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/iter_move.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/operator_minus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
   }
 }

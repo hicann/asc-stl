@@ -137,70 +137,90 @@ public:
         return true;
     }
 
-    CANN_ASC_STL_SIMT_API T load(memory_order = memory_order_seq_cst) const noexcept
+    CANN_ASC_STL_SIMT_API T load(memory_order order = memory_order_seq_cst) const noexcept
     {
-        return static_cast<T>(::asc::detail::atomic_add(const_cast<storage_type*>(&storage_), storage_type()));
+        ::asc::detail::atomic_validate_load(order);
+        return static_cast<T>(
+            ::asc::detail::atomic_ordered_add(const_cast<storage_type*>(&storage_), storage_type(), order));
     }
 
-    CANN_ASC_STL_SIMT_API void store(T value, memory_order = memory_order_seq_cst) noexcept
+    CANN_ASC_STL_SIMT_API void store(T value, memory_order order = memory_order_seq_cst) noexcept
     {
-        (void)::asc::detail::atomic_exchange(&storage_, static_cast<storage_type>(value));
+        ::asc::detail::atomic_validate_store(order);
+        (void)::asc::detail::atomic_ordered_exchange(&storage_, static_cast<storage_type>(value), order);
     }
 
-    CANN_ASC_STL_SIMT_API T exchange(T value, memory_order = memory_order_seq_cst) noexcept
+    CANN_ASC_STL_SIMT_API T exchange(T value, memory_order order = memory_order_seq_cst) noexcept
     {
-        return static_cast<T>(::asc::detail::atomic_exchange(&storage_, static_cast<storage_type>(value)));
+        return static_cast<T>(
+            ::asc::detail::atomic_ordered_exchange(&storage_, static_cast<storage_type>(value), order));
     }
 
-    CANN_ASC_STL_SIMT_API bool compare_exchange_weak(T& expected, T desired, memory_order, memory_order) noexcept
+    CANN_ASC_STL_SIMT_API bool compare_exchange_weak(
+        T& expected, T desired, memory_order success, memory_order failure) noexcept
     {
-        return compare_exchange_strong(expected, desired, memory_order_seq_cst, memory_order_seq_cst);
+        return compare_exchange_strong(expected, desired, success, failure);
     }
 
-    CANN_ASC_STL_SIMT_API bool compare_exchange_weak(T& expected, T desired, memory_order) noexcept
+    CANN_ASC_STL_SIMT_API bool compare_exchange_weak(T& expected, T desired, memory_order order) noexcept
     {
-        return compare_exchange_strong(expected, desired, memory_order_seq_cst);
+        return compare_exchange_strong(expected, desired, order);
     }
 
-    CANN_ASC_STL_SIMT_API bool compare_exchange_strong(T& expected, T desired, memory_order, memory_order) noexcept
+    CANN_ASC_STL_SIMT_API bool compare_exchange_strong(
+        T& expected, T desired, memory_order success, memory_order failure) noexcept
     {
-        const storage_type old = ::asc::detail::atomic_compare_exchange(
-            &storage_, static_cast<storage_type>(expected), static_cast<storage_type>(desired));
-        if (old == static_cast<storage_type>(expected)) {
-            return true;
+        storage_type expected_storage = static_cast<storage_type>(expected);
+        if constexpr (sizeof(T) < sizeof(storage_type)) {
+            // Widened arithmetic can leave noncanonical upper bits. Retry a
+            // matching logical T value with its observed storage pattern.
+            while (true) {
+                const bool changed = ::asc::detail::atomic_ordered_compare_exchange(
+                    &storage_, expected_storage, static_cast<storage_type>(desired), success, failure);
+                if (changed)
+                    return true;
+                if (static_cast<T>(expected_storage) != expected) {
+                    expected = static_cast<T>(expected_storage);
+                    return false;
+                }
+            }
+        } else {
+            const bool changed = ::asc::detail::atomic_ordered_compare_exchange(
+                &storage_, expected_storage, static_cast<storage_type>(desired), success, failure);
+            if (!changed)
+                expected = static_cast<T>(expected_storage);
+            return changed;
         }
-        expected = static_cast<T>(old);
-        return false;
     }
 
-    CANN_ASC_STL_SIMT_API bool compare_exchange_strong(T& expected, T desired, memory_order) noexcept
+    CANN_ASC_STL_SIMT_API bool compare_exchange_strong(T& expected, T desired, memory_order order) noexcept
     {
-        return compare_exchange_strong(expected, desired, memory_order_seq_cst, memory_order_seq_cst);
+        return compare_exchange_strong(expected, desired, order, ::asc::detail::atomic_failure_order(order));
     }
 
-    CANN_ASC_STL_SIMT_API T fetch_add(T value, memory_order = memory_order_seq_cst) noexcept
+    CANN_ASC_STL_SIMT_API T fetch_add(T value, memory_order order = memory_order_seq_cst) noexcept
     {
-        return static_cast<T>(::asc::detail::atomic_add(&storage_, static_cast<storage_type>(value)));
+        return static_cast<T>(::asc::detail::atomic_ordered_add(&storage_, static_cast<storage_type>(value), order));
     }
 
-    CANN_ASC_STL_SIMT_API T fetch_sub(T value, memory_order = memory_order_seq_cst) noexcept
+    CANN_ASC_STL_SIMT_API T fetch_sub(T value, memory_order order = memory_order_seq_cst) noexcept
     {
-        return static_cast<T>(::asc::detail::atomic_sub(&storage_, static_cast<storage_type>(value)));
+        return static_cast<T>(::asc::detail::atomic_ordered_sub(&storage_, static_cast<storage_type>(value), order));
     }
 
-    CANN_ASC_STL_SIMT_API T fetch_and(T value, memory_order = memory_order_seq_cst) noexcept
+    CANN_ASC_STL_SIMT_API T fetch_and(T value, memory_order order = memory_order_seq_cst) noexcept
     {
-        return static_cast<T>(::asc::detail::atomic_and(&storage_, static_cast<storage_type>(value)));
+        return static_cast<T>(::asc::detail::atomic_ordered_and(&storage_, static_cast<storage_type>(value), order));
     }
 
-    CANN_ASC_STL_SIMT_API T fetch_or(T value, memory_order = memory_order_seq_cst) noexcept
+    CANN_ASC_STL_SIMT_API T fetch_or(T value, memory_order order = memory_order_seq_cst) noexcept
     {
-        return static_cast<T>(::asc::detail::atomic_or(&storage_, static_cast<storage_type>(value)));
+        return static_cast<T>(::asc::detail::atomic_ordered_or(&storage_, static_cast<storage_type>(value), order));
     }
 
-    CANN_ASC_STL_SIMT_API T fetch_xor(T value, memory_order = memory_order_seq_cst) noexcept
+    CANN_ASC_STL_SIMT_API T fetch_xor(T value, memory_order order = memory_order_seq_cst) noexcept
     {
-        return static_cast<T>(::asc::detail::atomic_xor(&storage_, static_cast<storage_type>(value)));
+        return static_cast<T>(::asc::detail::atomic_ordered_xor(&storage_, static_cast<storage_type>(value), order));
     }
 
     CANN_ASC_STL_SIMT_API T operator=(T value) noexcept
@@ -264,13 +284,27 @@ public:
     bool compare_exchange_strong(T& expected, T desired, memory_order success, memory_order failure) noexcept
     {
         storage_type expected_storage = static_cast<storage_type>(expected);
-        const bool swapped =
-            __atomic_compare_exchange_n(&storage_, &expected_storage, static_cast<storage_type>(desired), false,
-                static_cast<int>(success), static_cast<int>(::asc::detail::atomic_failure_order(failure)));
-        if (!swapped) {
-            expected = static_cast<T>(expected_storage);
+        if constexpr (sizeof(T) < sizeof(storage_type)) {
+            while (true) {
+                const bool swapped =
+                    __atomic_compare_exchange_n(&storage_, &expected_storage, static_cast<storage_type>(desired), false,
+                        static_cast<int>(success), static_cast<int>(::asc::detail::atomic_failure_order(failure)));
+                if (swapped)
+                    return true;
+                if (static_cast<T>(expected_storage) != expected) {
+                    expected = static_cast<T>(expected_storage);
+                    return false;
+                }
+            }
+        } else {
+            const bool swapped =
+                __atomic_compare_exchange_n(&storage_, &expected_storage, static_cast<storage_type>(desired), false,
+                    static_cast<int>(success), static_cast<int>(::asc::detail::atomic_failure_order(failure)));
+            if (!swapped) {
+                expected = static_cast<T>(expected_storage);
+            }
+            return swapped;
         }
-        return swapped;
     }
 
     bool compare_exchange_strong(T& expected, T desired, memory_order order) noexcept

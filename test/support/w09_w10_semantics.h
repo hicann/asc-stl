@@ -171,13 +171,8 @@ CANN_ASC_STL_API int evaluate_alignment_chrono()
     return 0;
 }
 
-CANN_ASC_STL_API int evaluate_memory_variant()
+CANN_ASC_STL_API int evaluate_variant_pair()
 {
-    alignas(int) unsigned char storage[sizeof(int)]{};
-    int* object = asc::std::construct_at(reinterpret_cast<int*>(storage), 23);
-    if (*object != 23)
-        return 20;
-    asc::std::destroy_at(object);
     asc::std::variant<int, unsigned int> value(asc::std::in_place_index<0>, 9);
     if (!asc::std::holds_alternative<int>(value) || value.index() != 0)
         return 21;
@@ -186,7 +181,48 @@ CANN_ASC_STL_API int evaluate_memory_variant()
     value.emplace<1>(11u);
     if (!asc::std::holds_alternative<unsigned int>(value))
         return 23;
+    asc::std::variant<int, unsigned int> source(asc::std::in_place_index<0>, 17);
+    value = source;
+    if (value.index() != 0 || asc::std::get<0>(value) != 17 || value.valueless_by_exception())
+        return 24;
+    source.emplace<1>(19u);
+    value = asc::std::move(source);  // NOLINT(build/include_what_you_use)
+    if (value.index() != 1 || asc::std::get<1>(value) != 19u || value.valueless_by_exception())
+        return 25;
+    value.emplace<int>(23);
+    if (value.index() != 0 || asc::std::get<0>(value) != 23 || value.valueless_by_exception())
+        return 26;
     return 0;
+}
+
+CANN_ASC_STL_API int evaluate_variant_nested()
+{
+    asc::std::variant<int, unsigned int, long> nested(asc::std::in_place_index<2>, 29L);
+    asc::std::variant<int, unsigned int, long> nested_target(asc::std::in_place_index<0>, 0);
+    nested_target = nested;
+    if (nested_target.index() != 2 || asc::std::get<2>(nested_target) != 29L)
+        return 27;
+    nested.emplace<1>(31u);
+    nested_target = asc::std::move(nested);  // NOLINT(build/include_what_you_use)
+    if (nested_target.index() != 1 || asc::std::get<1>(nested_target) != 31u)
+        return 28;
+    nested_target.emplace<2>(37L);
+    if (nested_target.index() != 2 || asc::std::get<2>(nested_target) != 37L || nested_target.valueless_by_exception())
+        return 29;
+    return 0;
+}
+
+CANN_ASC_STL_API int evaluate_memory_variant()
+{
+    alignas(int) unsigned char storage[sizeof(int)]{};
+    int* object = asc::std::construct_at(reinterpret_cast<int*>(storage), 23);
+    if (*object != 23)
+        return 20;
+    asc::std::destroy_at(object);
+    const int pair_result = evaluate_variant_pair();
+    if (pair_result != 0)
+        return pair_result;
+    return evaluate_variant_nested();
 }
 
 CANN_ASC_STL_API int evaluate_mutex()

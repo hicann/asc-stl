@@ -28,23 +28,23 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::zip_view`惰性地观察、筛选、组合或变换输入范围；底层存储仍由调用方管理。
-
-标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
+`zip_view<FirstView, SecondView>`同步遍历恰好两个底层视图，以两个元素引用组成的tuple表示当前元素；长度取两者较短者。
 
 ## 声明
 
 ```cpp
 namespace asc::std::ranges {
-template<class ...Views> class zip_view;
-} // namespace asc::std::ranges
+template<class FirstView, class SecondView>
+class zip_view;
+}
 ```
 
 ## 约束说明
 
-- 七个列出名称。
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
+- 当前只支持恰好两个随机访问且有大小的范围；不支持任意个视图包。
+- 解引用所得tuple保留底层引用，可向可写元素写回；它不复制或取得底层元素所有权。
+- const迭代要求两侧可const遍历，且各自const迭代器类型与非const形式相同。
+- 实际借用的底层存储须覆盖所有迭代访问。
 
 ## 调用示例
 

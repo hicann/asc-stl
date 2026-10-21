@@ -28,67 +28,39 @@
 
 头文件路径为：`<asc/std/inplace_vector>`。
 
-`asc::std::erase_if`按谓词从固定容量容器中移除元素并返回删除数量。
-
-该接口支持Host和Device，均限于本页列出的非抛出操作。
-
-标准语义参考：[cppreference `inplace_vector`](https://en.cppreference.com/w/cpp/header/inplace_vector)。
+`asc::std::erase_if`当前没有接受inplace_vector的自由函数重载。本页保留原入口用于兼容性说明；可用成员[`erase_if`](inplace_vector_erase_if.md)按条件移除元素。
 
 ## 函数原型
 
-```cpp
-namespace asc::std {
-template<class T, asc::std::size_t Capacity, class Predicate> typename inplace_vector<T, Capacity>::size_type erase_if(inplace_vector<T, Capacity>& values, Predicate predicate);
-} // namespace asc::std
-```
+此自由函数重载未提供。替代接口为容器的成员erase_if，其原型及条件见[成员页面](inplace_vector_erase_if.md)。
 
 ## 参数说明
 
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | inplace_vector的元素类型。 |
-| `Capacity` | inplace_vector的固定容量，编译期常量。 |
-| `Predicate` | 一元谓词类型；以元素为实参调用，返回值须可转换为bool。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `values` | 输入/输出 | 被清理的固定容量容器；使谓词为真的元素全部被移除，其余元素前移并保持相对次序。 |
-| `predicate` | 输入 | 一元谓词；对每个元素调用一次，返回true的元素被移除。 |
+本页不声明自由函数参数。示例在现有容器上调用成员erase_if。
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `typename inplace_vector<T, Capacity>::size_type` | 返回删除数量。 |
+本页不声明自由函数返回值；替代成员erase_if返回移除的元素数量。
 
 ## 约束说明
 
-- 元素保存在固定容量的对象内存中，不进行动态分配。
-- `try_`插入在容量不足时返回空结果；`unchecked_`插入要求调用前仍有容量。
-- Host提供完整接口，设备端仅提供不抛出异常的接口。
+- 替代的成员`erase_if`从C++17起提供；Host和Device使用均须满足该成员的非抛出操作条件。
+
+- 使用所链接成员的谓词、元素操作及生命周期条件；不调用不存在的自由函数。
 
 ## 调用示例
 
-以下Host片段使用具体对象展示接口调用。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/inplace_vector>
 
 bool example()
 {
-    asc::std::inplace_vector<int, 8> values;
-    const auto first = values.try_push_back(2);
-    const auto second = values.try_push_back(3);
-    if (!first || !second) {
-        return false;
-    }
-
-    const auto erased = asc::std::erase_if(values, [](int value) { return value % 2 == 0; });
-    return erased == 1 && values.size() == 1 && values[0] == 3;
+    asc::std::inplace_vector<int, 4> values;
+    if (!values.try_push_back(2) || !values.try_push_back(3)) return false;
+    const auto removed = values.erase_if([](int value) { return value % 2 == 0; });
+    return removed == 1 && values.size() == 1 && values[0] == 3;
 }
 ```
 

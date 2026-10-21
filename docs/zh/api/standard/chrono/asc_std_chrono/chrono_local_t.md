@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::local_t`表示日期、时间点或时长计算中的`local_t`值类型。
+`asc::std::chrono::local_t`是本地时间线的空标签；它与`system_clock`区分时间点类型，不查询时区，也不提供`now()`。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::partial_sort`把范围的前段排列为最小的若干个有序元素；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::partial_sort`把范围的前段排列为最小的若干个有序元素；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -38,16 +38,19 @@
 
 ```cpp
 namespace asc::std {
-template<class RandomAccessIterator, class Compare> constexpr void partial_sort(RandomAccessIterator first, RandomAccessIterator middle, RandomAccessIterator last, Compare compare);
-} // namespace asc::std
+template <class RandomAccessIterator, class Compare>
+constexpr void partial_sort(
+    RandomAccessIterator first, RandomAccessIterator middle, RandomAccessIterator last, Compare compare);
+}  // namespace asc::std
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class RandomAccessIterator> constexpr void partial_sort(RandomAccessIterator first, RandomAccessIterator middle, RandomAccessIterator last);
-} // namespace asc::std
+template <class RandomAccessIterator>
+constexpr void partial_sort(RandomAccessIterator first, RandomAccessIterator middle, RandomAccessIterator last);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -93,7 +96,6 @@ template<class RandomAccessIterator> constexpr void partial_sort(RandomAccessIte
 ## 约束说明
 
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 

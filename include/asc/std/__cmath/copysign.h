@@ -33,6 +33,7 @@
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_extended_arithmetic.h>
 #include <asc/std/__type_traits/is_integral.h>
+#include <asc/std/__type_traits/is_same.h>
 #include <asc/std/limits>
 #include <limits>
 
@@ -88,7 +89,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto copysign(Tp x, Tp y) noex
             return x;
         } else if constexpr (__fp_format_of_v<Tp> == __fp_format::__binary16 ||  // NOLINT(readability/braces)
             __fp_format_of_v<Tp> == __fp_format::__bfloat16 || __fp_format_of_v<Tp> == __fp_format::__binary32 ||
-            __fp_format_of_v<Tp> == __fp_format::__binary64) {
+            __fp_format_of_v<Tp> == __fp_format::__binary64 || __fp_format_of_v<Tp> == __fp_format::__fp8_e4m3 ||
+            __fp_format_of_v<Tp> == __fp_format::__fp8_e5m2 || __fp_format_of_v<Tp> == __fp_format::__fp8_e8m0) {
             const auto val = (::asc::std::__fp_get_storage(x) & __fp_exp_mant_mask_of_v<Tp>) |
                 (::asc::std::__fp_get_storage(y) & __fp_sign_mask_of_v<Tp>);
             return ::asc::std::__fp_from_storage<Tp>(static_cast<__fp_storage_of_t<Tp>>(val));
@@ -98,7 +100,11 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr auto copysign(Tp x, Tp y) noex
             // goes through the compiler's bit-exact copysign builtin
             // (exponent+mantissa of x, sign bit of y — the same bit-operation
             // semantics).
-            return __builtin_copysign(x, y);
+            if constexpr (is_same_v<Tp, long double>) {
+                return __builtin_copysignl(x, y);
+            } else {
+                return __builtin_copysign(x, y);
+            }
         }
     }
 }

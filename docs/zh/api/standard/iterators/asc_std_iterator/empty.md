@@ -38,7 +38,7 @@
 
 ```cpp
 namespace asc::std {
-template<class Cont> [[nodiscard]] constexpr auto empty(const Cont& c) noexcept(noexcept(c.empty())) -> decltype(c.empty());
+template<class Cont> constexpr auto empty(const Cont& c) noexcept(noexcept(c.empty())) -> decltype(c.empty());
 } // namespace asc::std
 ```
 
@@ -46,7 +46,7 @@ template<class Cont> [[nodiscard]] constexpr auto empty(const Cont& c) noexcept(
 
 ```cpp
 namespace asc::std {
-template<class T, size_t Sz> [[nodiscard]] constexpr bool empty(const T (&c)[Sz]) noexcept;
+template<class T, size_t Sz> constexpr bool empty(const T (&c)[Sz]) noexcept;
 } // namespace asc::std
 ```
 
@@ -94,15 +94,15 @@ template<class T, size_t Sz> [[nodiscard]] constexpr bool empty(const T (&c)[Sz]
 
 ## 调用示例
 
-以下Host片段使用具体数组或显式容器演示调用；迭代器须保持在有效范围内。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    return asc::std::empty(values);
+    int values[] = {2, 4};
+    return !asc::std::empty(values);
 }
 ```
 

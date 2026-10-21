@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cuchar>`、`<asc/std/cwchar>`。
 
-`asc::std::mbstate_t`标识当前ABI对应的时间、字符转换或宽字符类型。
+`asc::std::mbstate_t`保存多字节字符转换状态；Host与Device使用各自的状态表示。
 
 该接口的可用位置为Host（完整接口）、Device（C locale相关接口）。
 
@@ -36,13 +36,23 @@
 
 ## 声明
 
+Host使用系统标准库的状态类型：
+
 ```cpp
 namespace asc::std {
-using mbstate_t = ::std::mbstate_t;
-} // namespace asc::std
+using ::std::mbstate_t;
+}
 ```
 
-此原型对应头文件：`<asc/std/cuchar>`、`<asc/std/cwchar>`。
+Device使用以下独立状态类型：
+
+```cpp
+namespace asc::std {
+struct mbstate_t {
+    unsigned int state = 0;
+};
+}
+```
 
 ## 约束说明
 

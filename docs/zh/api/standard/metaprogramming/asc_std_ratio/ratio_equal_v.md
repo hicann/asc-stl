@@ -46,12 +46,12 @@ template<class R1, class R2> inline constexpr bool ratio_equal_v = ratio_equal<R
 
 ## 调用示例
 
-以下片段用具体模板实参读取接口值。
+以下片段用具体模板实参和独立预期值检查接口结果。
 
 ```cpp
 #include <asc/std/ratio>
 
-inline constexpr auto example = asc::std::ratio_equal_v<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>;
+static_assert((asc::std::ratio_equal_v<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>) == false);
 ```
 
 ## 关联API

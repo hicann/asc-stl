@@ -46,11 +46,13 @@ template<class ...MutexTypes> class scoped_lock;
 
 ```cpp
 namespace asc::std {
-template<class Mutex> class scoped_lock;
+template<class Mutex> class scoped_lock<Mutex>;
 } // namespace asc::std
 ```
 
 ## 约束说明
+
+- Device自旋等待须保证锁持有者能并发推进；不能由等待者持续占用同一调度组而阻止持有者执行。自定义Mutex须满足相应执行模型的前进保证。
 
 - lock_guard<Mutex>的普通/adopt构造、mutex_type、删除copy及析构。
 - scoped_lock<>和scoped_lock<Mutex>的普通/adopt构造、删除copy及析构。

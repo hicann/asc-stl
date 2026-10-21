@@ -54,9 +54,11 @@ wctrans_t wctrans(const char* property) noexcept;
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `wctrans_t` | 返回与指定转换或分类名称对应的描述符。 |
+| `wctrans_t` | 名称受当前区域设置支持时返回对应描述符；未知名称返回0。 |
 
 ## 约束说明
+
+- property须指向以零字符结尾的有效名称。Device中转换名称仅为tolower和toupper。
 
 - Host行为由系统`<cwctype>`实现，受当前C语言区域设置影响。
 - Device的宽字符分类及大小写转换固定使用C locale。
@@ -64,14 +66,15 @@ wctrans_t wctrans(const char* property) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/std/cwctype>
 
-decltype(auto) example(const char * property)
+bool example()
 {
-    return asc::std::wctrans(property);
+    const auto descriptor = asc::std::wctrans("tolower");
+    return descriptor != 0 && asc::std::towctrans(L'A', descriptor) == L'a';
 }
 ```
 

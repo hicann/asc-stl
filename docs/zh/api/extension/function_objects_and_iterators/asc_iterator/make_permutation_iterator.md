@@ -34,8 +34,10 @@
 
 ```cpp
 namespace asc {
-template<class Iterator, class IndexIterator> constexpr asc::permutation_iterator<Iterator, IndexIterator> make_permutation_iterator(Iterator iterator, IndexIterator index);
-} // namespace asc
+template <class Iterator, class IndexIterator>
+constexpr asc::permutation_iterator<Iterator, IndexIterator> make_permutation_iterator(
+    Iterator iterator, IndexIterator index);
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -67,16 +69,17 @@ template<class Iterator, class IndexIterator> constexpr asc::permutation_iterato
 
 ## 调用示例
 
-以下片段使用具体数组和可调用对象构造迭代器。实际使用时底层范围须保持有效。
+以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
 
-decltype(auto) example()
+bool example()
 {
     int values[4] = {1, 2, 3, 4};
     int indices[4] = {3, 2, 1, 0};
-    return asc::make_permutation_iterator(values, indices);
+    auto iterator = asc::make_permutation_iterator(values, indices);
+    return *iterator == 4;
 }
 ```
 

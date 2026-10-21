@@ -34,11 +34,14 @@
 
 ```cpp
 namespace asc {
-template<class T> class relaxed_atomic_ref;
-} // namespace asc
+template <class T>
+class relaxed_atomic_ref;
+}  // namespace asc
 ```
 
 ## 约束说明
+
+- 底层单元须位于GM，不提供UB或线程私有存储原子操作；固定relaxed内存序不承担跨对象同步。
 
 - 仅可在AI Core SIMT编程中调用。
 - T必须为准确的32位或64位有符号／无符号整数类型，底层对象必须已初始化且满足其自然对齐。

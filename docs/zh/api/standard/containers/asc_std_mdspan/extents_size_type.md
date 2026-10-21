@@ -34,29 +34,28 @@
 
 ## 声明
 
-所属类型：[`asc::std::extents`](extents.md)。
+所属类型：[`extents`](extents.md)。该类型是`index_type`对应的无符号类型，不固定为size_t。
 
 ```cpp
-// asc::std::extents 类内的声明节选；模板形参和其他成员由所属类提供。
-using size_type = size_t;
+using size_type = make_unsigned_t<index_type>;
 ```
 
 ## 约束说明
 
 - 此别名表示所属类型用于元素数量或大小的无符号整数类型；读取类型本身不分配内存，也不访问元素。
-- 构造、分配和访问的运行条件见所属类型[asc::std::extents](extents.md)。
+- 构造、分配和访问的运行条件见所属类型[asc::std::`extents`](extents.md)。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/mdspan>
+#include <asc/std/type_traits>
 
-void use_type()
-{
-    using alias_type = typename asc::std::extents<int, 2, 3>::size_type;
-}
+using shape_type = asc::std::extents<int, 2, 3>;
+static_assert(asc::std::is_same_v<shape_type::size_type, unsigned int>);
+static_assert(asc::std::is_unsigned_v<shape_type::size_type>);
 ```
 
 ## 关联API

@@ -39,7 +39,7 @@
 ### 原型1
 
 ```cpp
-unordered_map(const Allocator& allocator);
+explicit unordered_map(const Allocator& allocator);
 ```
 
 ### 原型2

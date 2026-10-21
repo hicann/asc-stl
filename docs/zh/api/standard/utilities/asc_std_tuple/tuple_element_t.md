@@ -42,18 +42,20 @@ template<size_t Index, class T> using tuple_element_t = typename tuple_element<I
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
+- 这是编译期类型或大小查询；类型须满足对应tuple-like特征，索引须在元素范围内。
 
 ## 调用示例
 
-以下片段选用具体模板实参展示别名类型。
+以下Host示例用具体类型和独立预期检查别名或标记结果。
 
 ```cpp
 #include <asc/std/tuple>
+#include <asc/std/type_traits>
 
 void use_type()
 {
     using selected = asc::std::tuple_element_t<0, asc::std::tuple<int, float>>;
+    static_assert(asc::std::is_same_v<selected, int>);
 }
 ```
 

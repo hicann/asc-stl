@@ -42,17 +42,23 @@ inline constexpr const unreachable_sentinel_t unreachable_sentinel;
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 该哨兵与适用迭代器比较时始终表示尚未到达结束位置。
+- 调用方须通过其他条件终止遍历，并保证每次解引用和递增都有效；该哨兵不检查实际边界。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-auto value = asc::std::unreachable_sentinel;
+bool example()
+{
+    int values[] = {2, 4};
+    int* iterator = values;
+    return iterator != asc::std::unreachable_sentinel &&
+           values + 2 != asc::std::unreachable_sentinel;
+}
 ```
 
 ## 关联API

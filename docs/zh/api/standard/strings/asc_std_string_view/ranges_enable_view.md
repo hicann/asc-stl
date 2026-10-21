@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/string_view>`。
 
-`asc::std::ranges::enable_view<basic_string_view<C,T>>`由`<asc/std/string_view>`提供，标准C++20：string_view为视图
+`asc::std::ranges::enable_view<basic_string_view<C,T>>`由`<asc/std/string_view>`提供，源于C++20的视图登记，ASC-STL在C++17及C++20均提供
 
 标准语义参考：[cppreference `string_view`](https://en.cppreference.com/w/cpp/header/string_view)。
 
@@ -45,17 +45,21 @@ inline constexpr bool enable_view<asc::std::basic_string_view<CharT, Traits>> = 
 
 ## 约束说明
 
-- 标准C++20：string_view为视图。
+- 源于C++20的视图登记，ASC-STL在C++17及C++20均提供。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/string_view>
 #include <asc/std/ranges>
 
-static_assert(asc::std::ranges::enable_view<asc::std::span<int>>);
+bool example()
+{
+    static_assert(asc::std::ranges::enable_view<asc::std::string_view>);
+    return true;
+}
 ```
 
 ## 关联API

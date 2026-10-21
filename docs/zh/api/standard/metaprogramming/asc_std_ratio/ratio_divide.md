@@ -43,6 +43,8 @@ using Result = asc::std::ratio_divide<asc::std::ratio<1, 2>, asc::std::ratio<1, 
 ## 约束说明
 
 - 分母不得为零；规范化后的分子和分母必须可由`intmax_t`表示。
+- 原始模板实参的分子和分母均不得为`INTMAX_MIN`；分母必须非零，约分和符号规范化的中间结果及最终结果须能由`intmax_t`表示。
+- 第二个比率的分子必须非零：除以零比率无效。比率的分母非零不能替代此条件。
 
 ## 调用示例
 
@@ -54,6 +56,7 @@ using Result = asc::std::ratio_divide<asc::std::ratio<1, 2>, asc::std::ratio<1, 
 void use_type()
 {
     using selected = asc::std::ratio_divide<asc::std::ratio<1, 2>, asc::std::ratio<1, 3>>;
+    static_assert(selected::num == 3 && selected::den == 2);
 }
 ```
 

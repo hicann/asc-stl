@@ -57,8 +57,7 @@ default_searcher(ForwardIterator first, ForwardIterator last, BinaryPredicate pr
 
 ## 约束说明
 
-- 提供标准算术类型、枚举和指针类型的hash特化。
-- default_searcher使用调用方管理的对象和存储。
+- 模式迭代器指定有效的前向范围；该范围的底层存储须在搜索器使用期间保持有效。谓词及被搜索范围须满足比较和迭代要求，用户谓词自身是否分配由其实现决定。
 
 ## 调用示例
 

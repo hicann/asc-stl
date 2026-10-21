@@ -28,34 +28,36 @@
 
 头文件路径为：`<asc/std/ranges>`。
 
-`asc::std::ranges::view`判定类型或表达式是否满足`view`的要求。
+`asc::std::ranges::view`检查以下范围条件：满足range<T>、movable<T>，且enable_view<T>为true；view身份本身不保证拥有底层元素。
 
-C++17中提供同名`inline constexpr bool`变量模板；C++20及以上提供concept。两种形式均可用于`static_assert`，C++17还可与`enable_if`配合使用。受约束模板参数、`requires`及约束偏序仍需要C++20语言支持。
+C++17中提供同名`inline constexpr bool`变量模板；启用concepts的C++20及以上提供原生concept。两种形式均可用于`static_assert`，C++17还可与`enable_if`配合使用。受约束模板参数、`requires`及约束偏序仍需要C++20语言支持。
 
 标准语义参考：[cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges)。
 
 ## 声明
 
-以下为C++20及以上的concept声明摘要；C++17变量模板具有相同的模板参数和判定条件。
+C++17中本公开名称为inline constexpr bool变量模板，启用concepts的C++20中为原生concept。以下以同一公开名称查询其布尔值，不是重新声明该接口；satisfies_view仅为示例查询名称。
 
 ```cpp
-namespace asc::std::ranges {
-template<class T> concept view;
-} // namespace asc::std::ranges
+template<class T>
+inline constexpr bool satisfies_view = asc::std::ranges::view<T>;
 ```
 
 ## 约束说明
 
-- 范围判定在C++17中作为布尔常量使用；借用、连续性和迭代器类别仍须满足各谓词的语义要求。
+- 满足range<T>、movable<T>，且enable_view<T>为true；view身份本身不保证拥有底层元素。
+- C++17的同名布尔模板可用于static_assert或SFINAE；原生concept语法及约束归约需要相应C++20语言能力。
+- 编译期条件成立仍要求使用者遵守迭代器有效期、复杂度及相应语义要求。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/ranges>
 
-static_assert(asc::std::ranges::view<asc::std::ranges::single_view<int>>);
+static_assert(asc::std::ranges::view<asc::std::ranges::ref_view<int[3]>>);
+static_assert(!asc::std::ranges::view<int[3]>);
 ```
 
 ## 关联API

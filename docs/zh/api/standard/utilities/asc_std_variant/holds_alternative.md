@@ -63,8 +63,9 @@ template<class T, class ...Types> [[nodiscard]] constexpr bool holds_alternative
 
 ## 约束说明
 
+- 对象没有活动备选项时返回`false`。
+
 - Device侧备选类型以及所选构造、赋值和交换操作必须不抛出异常。
-- index、`operator*`、emplace、swap和visit仅提供非抛出路径。
 
 ## 调用示例
 

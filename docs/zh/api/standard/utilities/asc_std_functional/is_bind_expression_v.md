@@ -36,8 +36,8 @@
 
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr bool is_bind_expression_v;
-} // namespace asc::std
+template<class T> inline constexpr bool is_bind_expression_v = is_bind_expression<T>::value;
+}
 ```
 
 ## 约束说明
@@ -46,12 +46,18 @@ template<class T> inline constexpr bool is_bind_expression_v;
 
 ## 调用示例
 
-以下片段用具体模板实参读取接口值。
+以下Host示例用具体输入和可判断结果展示本接口。
 
 ```cpp
 #include <asc/std/functional>
 
-inline constexpr auto example = asc::std::is_bind_expression_v<int>;
+bool example()
+{
+    auto bound = asc::std::bind(asc::std::plus<int>{}, asc::std::placeholders::_1, 1);
+    static_assert(asc::std::is_bind_expression_v<decltype(bound)>);
+    static_assert(!asc::std::is_bind_expression_v<int>);
+    return bound(2) == 3;
+}
 ```
 
 ## 关联API

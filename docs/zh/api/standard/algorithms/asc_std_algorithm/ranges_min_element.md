@@ -39,13 +39,13 @@
 ```cpp
 namespace asc::std::ranges {
 min_element(first, last, compare, projection);
-} // namespace asc::std::ranges
+}  // namespace asc::std::ranges
 ```
 
 ```cpp
 namespace asc::std::ranges {
 min_element(range, compare, projection);
-} // namespace asc::std::ranges
+}  // namespace asc::std::ranges
 ```
 
 ## 参数说明
@@ -57,7 +57,7 @@ min_element(range, compare, projection);
 | `first` | 输入 | 输入范围的起始迭代器。 |
 | `last` | 输入 | 输入范围的结束哨兵。 |
 | `compare` | 输入 | 确定元素先后关系的比较对象。 |
-| `projection` | 输入 | 在比较或判断前作用于元素的投影函数。 |
+| `projection` | 输入 | 在比较或判断前作用于元素的投影函数；省略时使用`asc::std::identity`。 |
 
 ### 调用形式2的参数
 
@@ -65,7 +65,7 @@ min_element(range, compare, projection);
 | --- | --- | --- |
 | `range` | 输入 | 待访问或变换的输入范围；借用结果受其生命周期约束。 |
 | `compare` | 输入 | 确定元素先后关系的比较对象。 |
-| `projection` | 输入 | 在比较或判断前作用于元素的投影函数。 |
+| `projection` | 输入 | 在比较或判断前作用于元素的投影函数；省略时使用`asc::std::identity`。 |
 
 ## 返回值说明
 
@@ -77,6 +77,8 @@ min_element(range, compare, projection);
 | 范围 | `borrowed_iterator_t<Range>` |
 
 ## 约束说明
+
+- 省略compare时使用`asc::std::ranges::less`；省略projection时使用`asc::std::identity`。
 
 - 比较器须能比较投影后的元素。
 - 输入须满足前向遍历要求。
@@ -91,7 +93,8 @@ min_element(range, compare, projection);
 bool example()
 {
     int values[] = {1, 2, 3, 4};
-    return asc::std::ranges::min_element(values, values + 4) == values && asc::std::ranges::min_element(values) == values;
+    return asc::std::ranges::min_element(values, values + 4) == values &&
+        asc::std::ranges::min_element(values) == values;
 }
 ```
 

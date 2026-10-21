@@ -29,6 +29,7 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
+#include <asc/std/__floating_point/cast.h>
 #include <asc/std/__cmath/backend.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_arithmetic.h>
@@ -83,7 +84,8 @@ template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp fdim(
     Tp x, Tp y) noexcept
 {
-    return static_cast<Tp>(::asc::std::fdim(static_cast<float>(x), static_cast<float>(y)));
+    return ::asc::std::__fp_cast<Tp>(
+        ::asc::std::fdim(::asc::std::__fp_cast<float>(x), ::asc::std::__fp_cast<float>(y)));
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()

@@ -28,17 +28,20 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::zip_iterator`把多个迭代器的同一位置组合为tuple的随机访问迭代器。
+`asc::zip_iterator`把多个迭代器的同一位置组合为引用代理的轻量迭代器适配器。
 
 ## 声明
 
 ```cpp
 namespace asc {
-template<class... Iterators> class zip_iterator;
-} // namespace asc
+template <class... Iterators>
+class zip_iterator;
+}  // namespace asc
 ```
 
 ## 约束说明
+
+- 此适配器仅提供本页所述轻量操作，不满足标准RandomAccessIterator的完整traits与操作集合；例如zip只支持前置递增和相等比较，不能据此用于任意要求随机访问的标准算法。
 
 - 提供惰性、非拥有的迭代器适配器及其工厂。
 - 操作数必须在当前执行位置有效。

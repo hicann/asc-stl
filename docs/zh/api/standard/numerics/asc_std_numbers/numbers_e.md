@@ -38,8 +38,8 @@
 
 ```cpp
 namespace asc::std::numbers {
-inline constexpr const double e;
-} // namespace asc::std::numbers
+inline constexpr double e = 0x1.5bf0a8b1457695355fb8ac404e7ap+1;
+}
 ```
 
 ## 约束说明

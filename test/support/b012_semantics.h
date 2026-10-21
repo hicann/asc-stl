@@ -23,6 +23,8 @@
 #include <asc/std/cmath>
 #include <asc/std/__type_traits/is_same.h>
 
+#include "numeric_math_review_semantics.h"
+
 namespace asc_stl_b012_test {
 
 static_assert(asc::std::is_same_v<decltype(asc::std::sin(1)), double>);
@@ -46,7 +48,11 @@ inline int evaluate_runtime()
     if (asc::std::lerp(2.0F, 6.0F, 0.5F) != 4.0F) {
         return 3;
     }
+#if !CANN_ASC_STL_DETAIL_SIMD_COMPILATION()
+    return asc_stl_numeric_math_review::evaluate() == 0 ? 0 : 4;
+#else
     return 0;
+#endif
 }
 
 }  // namespace asc_stl_b012_test

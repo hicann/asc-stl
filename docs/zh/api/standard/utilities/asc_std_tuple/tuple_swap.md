@@ -34,39 +34,17 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::tuple`](tuple.md)。
-
-### 原型1
+以下是`tuple<Types...>`类内的等价声明摘要，以公开元素特征表达异常条件；空tuple使用同一成员。
 
 ```cpp
-// asc::std::tuple 类内的声明节选；模板形参和其他成员由所属类提供。
-void swap(tuple<Types...>& other) noexcept(noexcept(this->Base.swap(T.Base)));
-```
-
-### 原型2
-
-```cpp
-// asc::std::tuple 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr void swap(tuple<>& other) noexcept;
+constexpr void swap(tuple& other) noexcept((is_nothrow_swappable_v<Types> && ...));
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入/输出 | 与当前对象交换状态的另一对象；交换后双方保存对方原有状态。 |
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `other` | 输入/输出 | 与当前对象交换状态的另一对象；交换后双方保存对方原有状态。 |
+| `other` | 输入/输出 | 另一个同类型tuple；逐项交换，两边元素须满足相应swap要求。 |
 
 ## 返回值说明
 
@@ -74,19 +52,22 @@ constexpr void swap(tuple<>& other) noexcept;
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
+- 所有对应元素须可交换；异常条件按各元素swap的noexcept合取。
+
+- 工具本身不额外分配容器存储；元素构造、赋值、交换或传入可调用体仍可按其自身语义分配或抛出，不能据此保证整个调用不分配。
 
 ## 调用示例
 
-以下Host片段使用具体数值类型演示调用；状态与参数须满足本页约束。
+以下Host示例给出具体输入，并在对象仍有效时检查结果。
 
 ```cpp
 #include <asc/std/tuple>
 
-void example()
+bool example()
 {
     asc::std::tuple<int, int> left(1, 2), right(3, 4);
     left.swap(right);
+    return asc::std::get<0>(left) == 3 && asc::std::get<1>(right) == 2;
 }
 ```
 

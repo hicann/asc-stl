@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::sys_seconds`表示日期、时间点或时长计算中的`sys_seconds`值类型。
+`asc::std::chrono::sys_seconds`是按秒计数的系统时间点，`Clock`固定为`system_clock`。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

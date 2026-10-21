@@ -34,8 +34,11 @@
 
 ## 函数原型
 
+所属类型：[`asc::std::insert_iterator`](insert_iterator.md)。
+
 ```cpp
-constexpr insert_iterator(Container& container, Insertiteratoritert<Container> container);
+// insert_iterator 类内声明节选；类模板参数和其余成员由所属类提供。
+constexpr insert_iterator(Container& container, typename Container::iterator position);
 ```
 
 ## 参数说明
@@ -45,7 +48,7 @@ constexpr insert_iterator(Container& container, Insertiteratoritert<Container> c
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `container` | 输入/输出 | 提供“按本页所列构造形态初始化`insert_iterator`对象”使用的对象引用；被引用对象须在调用期间有效。 |
-| `container` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
+| `position` | 输入 | 容器中的插入位置，须是该容器允许传给`insert`的有效迭代器。 |
 
 ## 返回值说明
 
@@ -53,12 +56,12 @@ constexpr insert_iterator(Container& container, Insertiteratoritert<Container> c
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 目标容器须支持对应的`insert(position, value)`操作；插入迭代器保存容器地址，不拥有容器。
+- 容器须在适配器使用期间有效；插入操作还须遵守目标容器自身的迭代器失效规则。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
@@ -69,7 +72,8 @@ bool example()
     ::std::vector<int> values;
     asc::std::insert_iterator<::std::vector<int>> output(values, values.begin());
     *output = 7;
-    return values.size() == 1 && values.front() == 7;
+    *output = 9;
+    return values.size() == 2 && values[0] == 7 && values[1] == 9;
 }
 ```
 

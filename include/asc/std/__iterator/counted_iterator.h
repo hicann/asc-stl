@@ -446,14 +446,14 @@ CANN_ASC_STL_API constexpr iter_difference_t<Iter> operator-(
     return -value.count();
 }
 
-// Relational comparisons order by remaining count as the standard specifies
-// (same basis as operator==, pure count semantics).
+// Positions increase as the remaining count decreases, so compare the counts
+// in reverse order. Equality still compares the counts directly.
 #define CANN_ASC_STL_DETAIL_COUNTED_ITERATOR_COMPARE(op)                              \
     template <class I1, class I2>                                                     \
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool operator op(               \
         const counted_iterator<I1>& left, const counted_iterator<I2>& right) noexcept \
     {                                                                                 \
-        return left.count() op right.count();                                         \
+        return right.count() op left.count();                                         \
     }
 
 CANN_ASC_STL_DETAIL_COUNTED_ITERATOR_COMPARE(<)  // NOLINT(whitespace/operators)

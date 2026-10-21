@@ -36,11 +36,17 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-bool isgreater(float x, float y) noexcept;
-} // namespace asc::std
+[[nodiscard]] bool isgreater(float x, float y) noexcept;
+}
 ```
+
+可用位置：Host、AI Core SIMT编程。
 
 ## 参数说明
 
@@ -53,9 +59,7 @@ bool isgreater(float x, float y) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `bool` | 条件成立时返回`true`，否则返回`false`。 |
+返回类型按各原型确定（`bool`）。两个输入有序且x > y时返回true。
 
 ## 约束说明
 
@@ -63,14 +67,15 @@ bool isgreater(float x, float y) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float x, float y)
+bool example()
 {
-    return asc::std::isgreater(x, y);
+    const auto result = asc::std::isgreater(2.0F, 1.0F);
+    return result == true;
 }
 ```
 

@@ -36,8 +36,8 @@
 
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const T inv_sqrt3_v;
-} // namespace asc::std
+template<class Tp> inline constexpr Tp inv_sqrt3_v = __numbers<Tp>::__inv_sqrt3();
+}
 ```
 
 ## 约束说明

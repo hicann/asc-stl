@@ -44,8 +44,8 @@ class atomic_flag;
 
 ## 约束说明
 
-- atomic_flag的test/test_and_set/clear成员与非volatile自由函数。
-- Host和AI Core SIMT编程GM。
+- 该类型可在Host或AI Core SIMT编程中构造和操作；SIMT线程共享的对象须位于GM。
+- 初始标志为`false`；在并发访问开始前完成初始化，复制构造和复制赋值不可用。
 
 ## 调用示例
 

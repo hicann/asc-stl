@@ -34,11 +34,10 @@
 
 ## 声明
 
-所属类型：[`asc::std::scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。
+所属类型：[`scoped_allocator_adaptor`](scoped_allocator_adaptor.md)。该成员直接取自外层分配器；OuterAllocator必须提供同名类型，不通过allocator_traits补缺。
 
 ```cpp
-// asc::std::scoped_allocator_adaptor 类内的声明节选；模板形参和其他成员由所属类提供。
-using size_type = typename outer_traits::size_type;
+using size_type = typename OuterAllocator::size_type;
 ```
 
 ## 约束说明

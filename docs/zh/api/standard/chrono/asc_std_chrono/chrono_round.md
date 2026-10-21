@@ -93,8 +93,9 @@ template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDu
 
 ## 约束说明
 
-- 提供值运算以及六个显式关系运算符。
-- 支持用户定义时钟、值运算以及六个显式关系运算符。
+- ToDuration须为duration，且其计数支持整数奇偶判定；内建浮点计数不适用。
+- 两个最近候选距离相同时选择计数为偶数的候选；输入和候选结果均须可表示。
+- 时间点形式对time_since_epoch()使用同一规则，并保留Clock。
 
 ## 调用示例
 

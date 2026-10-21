@@ -55,14 +55,21 @@ void unreachable();
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+只有能证明控制流不可达时才能调用本接口。以下Host示例的两个布尔分支已覆盖所有合法输入。
 
 ```cpp
 #include <asc/std/utility>
 
-void example()
+int choose(bool first)
 {
+    if (first) return 7;
+    if (!first) return 9;
     asc::std::unreachable();
+}
+
+bool example()
+{
+    return choose(true) == 7 && choose(false) == 9;
 }
 ```
 

@@ -36,12 +36,28 @@ C++17中提供同名`inline constexpr bool`变量模板；C++20及以上提供co
 
 ## 声明
 
-以下为C++20及以上的concept声明摘要；C++17变量模板具有相同的模板参数和判定条件。
+以下为定义节选；所引用的辅助约束由头文件提供。C++17变量模板与C++20 concept均可直接用于`static_assert`。
+
+### C++20及以上
 
 ```cpp
 namespace asc::std {
-template<class Index> concept contiguous_iterator;
-} // namespace asc::std
+template <class It>
+concept contiguous_iterator = random_access_iterator<It> && derived_from<_ITER_CONCEPT<It>, contiguous_iterator_tag> &&
+    is_lvalue_reference_v<iter_reference_t<It>> && same_as<iter_value_t<It>, remove_cvref_t<iter_reference_t<It>>> &&
+    requires(const It& value) {
+        { ::asc::std::to_address(value) } -> same_as<add_pointer_t<iter_reference_t<It>>>;
+    };
+}
+```
+
+### C++17
+
+```cpp
+namespace asc::std {
+template <class It>
+inline constexpr bool contiguous_iterator = __contiguous_iterator_impl<It>;
+}
 ```
 
 ## 约束说明
@@ -50,12 +66,17 @@ template<class Index> concept contiguous_iterator;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
+#include <asc/std/functional>
 
-static_assert(asc::std::contiguous_iterator<int*>);
+bool example()
+{
+    static_assert(asc::std::contiguous_iterator<int*>);
+    return true;
+}
 ```
 
 ## 关联API

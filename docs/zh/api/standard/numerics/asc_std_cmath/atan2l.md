@@ -34,11 +34,17 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-constexpr long double atan2l(long double y, long double x) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr long double atan2l(long double y, long double x) noexcept;
+}
 ```
+
+可用位置：Host。long double相关重载要求Host启用该类型支持。
 
 ## 参数说明
 
@@ -51,9 +57,7 @@ constexpr long double atan2l(long double y, long double x) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `long double` | 由y、x确定象限的反正切角度（弧度）。 |
+返回类型按各原型确定（`long double`）。返回根据两个输入符号确定象限的反正切，单位为弧度。
 
 ## 约束说明
 
@@ -61,14 +65,15 @@ constexpr long double atan2l(long double y, long double x) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(long double y, long double x)
+bool example()
 {
-    return asc::std::atan2l(y, x);
+    const auto result = asc::std::atan2l(0.0L, 1.0L);
+    return result == 0.0L;
 }
 ```
 

@@ -34,55 +34,45 @@
 
 ## 函数原型
 
+所属类型：[`asc::std::reverse_iterator`](reverse_iterator.md)。
+
 ### 原型1
 
 ```cpp
-constexpr reverse_iterator(Iter first) noexcept(is_nothrow_copy_constructible_v<Iter>);
+// reverse_iterator 类内声明节选。
+constexpr explicit reverse_iterator(Iter value) noexcept(is_nothrow_copy_constructible_v<Iter>);
 ```
 
 ### 原型2
 
 ```cpp
-template<class It2> constexpr reverse_iterator() noexcept(is_nothrow_default_constructible_v<It2>);
+// reverse_iterator 类内声明节选。
+template<class It = Iter, enable_if_t<is_default_constructible_v<It>, int> = 0>
+constexpr reverse_iterator() noexcept(is_nothrow_default_constructible_v<It>);
 ```
 
 ### 原型3
 
 ```cpp
-template<class U> constexpr reverse_iterator(const reverse_iterator<U>& other) noexcept(Noexceptreviterconvertible<U, Iter>);
+// reverse_iterator 类内声明节选。
+template<class Other, enable_if_t<!is_same_v<Other, Iter> && is_convertible_v<const Other&, Iter>, int> = 0>
+constexpr reverse_iterator(const reverse_iterator<Other>& other)
+    noexcept(noexcept(Iter(declval<const Other&>())));
 ```
+
+转换构造的异常条件使用公开表达式等价表示底层转换是否抛出异常。
 
 ## 参数说明
 
-### 原型1的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `first` | 输入 | 输入范围的起始迭代器或指针。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
+| 模板参数 | 描述 |
 | --- | --- |
-| `It2` | 来源迭代器的类型；须满足到当前底层迭代器类型的转换条件。 |
+| `It` | 默认构造的选择类型，默认为所属类的`Iter`，须可默认构造。 |
+| `Other` | 转换来源适配器的底层迭代器类型，须满足原型的转换条件。 |
 
-### 原型3的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `U` | 来源迭代器类型；须满足当前适配器的转换或赋值条件。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
+| 函数参数 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `other` | 输入 | 构造来源对象；本对象由其对应成员或底层状态初始化，右值形式可移动该状态。 |
+| `value` | 输入 | 包装的底层迭代器；保存的迭代器须在后续操作中保持有效。 |
+| `other` | 输入 | 转换来源适配器，从其底层迭代器构造本对象。 |
 
 ## 返回值说明
 
@@ -90,21 +80,26 @@ template<class U> constexpr reverse_iterator(const reverse_iterator<U>& other) n
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 底层迭代器须支持双向遍历；随机访问成员还要求底层支持对应位移或下标运算。
+- 反向迭代器访问`base()`之前的元素，解引用或箭头访问要求该前一位置有效。
+- 适配器不拥有底层范围；返回引用或指针的寿命受底层对象约束。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
+#include <asc/std/type_traits>
 
 bool example()
 {
     int values[] = {2, 4};
-    asc::std::reverse_iterator<int*> iterator(values + 2);
-    return *iterator == 4;
+    asc::std::reverse_iterator<int*> empty;
+    asc::std::reverse_iterator<int*> direct(values + 2);
+    asc::std::reverse_iterator<const int*> converted(direct);
+    static_assert(!asc::std::is_convertible_v<int*, asc::std::reverse_iterator<int*>>);
+    return empty.base() == nullptr && converted.base() == values + 2 && *converted == 4;
 }
 ```
 

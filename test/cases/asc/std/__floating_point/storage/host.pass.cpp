@@ -15,8 +15,9 @@
  */
 #include <asc/std/__floating_point/storage.h>
 #include "support/constructibility_semantics.h"
+#include "support/floating_storage_semantics.h"
 
 int main()
 {
-    return asc_stl_constructibility_test::evaluate();
+    return asc_stl_constructibility_test::evaluate() + static_cast<int>(asc_stl_floating_storage_test::evaluate());
 }

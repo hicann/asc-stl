@@ -28,14 +28,15 @@
 
 头文件路径为：`<asc/iterator>`。
 
-`asc::zip_function`把tuple参数展开后调用用户函数。
+`asc::zip_function`把asc::zip_iterator解引用产生的引用代理展开后调用用户函数。
 
 ## 声明
 
 ```cpp
 namespace asc {
-template<class Function> class zip_function;
-} // namespace asc
+template <class Function>
+class zip_function;
+}  // namespace asc
 ```
 
 ## 约束说明
@@ -50,14 +51,17 @@ template<class Function> class zip_function;
 ```cpp
 #include <asc/iterator>
 
-int add_values(int left, int right) { return left + right; }
+int add_values(int left, int right)
+{
+    return left + right;
+}
 
 bool example()
 {
     int left = 2;
     int right = 3;
     auto zipped = asc::make_zip_iterator(&left, &right);
-    asc::zip_function<int(*)(int, int)> add(add_values);
+    asc::zip_function<int (*)(int, int)> add(add_values);
     return add(*zipped) == 5;
 }
 ```

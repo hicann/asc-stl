@@ -65,6 +65,7 @@ iterator find(const Key& key) noexcept;
 - 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构。
 - 仅容量充足和不抛出异常域。
 - Host和AI Core SIMT编程。
+- 本操作使用容器选定的`Hash`及`Equal`定位键；等价键必须产生相同哈希，且键相关状态须保持有效。自定义键、忽略字段和对象字节回退的要求见[unordered_set约束](unordered_set.md)。
 
 ## 调用示例
 

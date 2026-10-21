@@ -42,7 +42,7 @@ template<class T> struct remove_const;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 只移除`T`的顶层`const`，不移除指针所指对象或引用目标的`const`。
 
 ## 调用示例
 

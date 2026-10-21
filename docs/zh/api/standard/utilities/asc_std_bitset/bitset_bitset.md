@@ -46,6 +46,7 @@ bitset() noexcept;
 bitset(unsigned long long value) noexcept;
 ```
 
+
 ## 参数说明
 
 ### 原型1的参数
@@ -66,9 +67,7 @@ bitset(unsigned long long value) noexcept;
 
 ## 约束说明
 
-- 支持默认构造和unsigned long long构造。
-- `operator[]`不进行边界检查。
-- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
+- 所属bitset的位数Size在编译期固定，操作不进行动态分配。默认构造所有位为0；整数构造读取输入低位并清除超出Size的位。
 
 ## 调用示例
 

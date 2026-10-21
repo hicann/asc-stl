@@ -37,7 +37,7 @@
 ### 原型1
 
 ```cpp
-shared_lock(Mutex& mutex);
+explicit shared_lock(Mutex& mutex);
 ```
 
 ### 原型2

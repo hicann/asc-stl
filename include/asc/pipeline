@@ -189,10 +189,10 @@ CANN_ASC_STL_DEVICE_API void copy_async(
 {
     static_assert(detail::is_pipeline_copy_element<T>::value,
         "copy_async supports the approved int8/uint8/int16/uint16/int32/uint32/float element set only");
-    detail::pipeline_copy_gm2ub<T>(
-        destination.data(), source.data(), static_cast<unsigned int>(destination.size_bytes()));
-    (void)pipeline;
-    (void)stage;
+    // The source determines the transfer length; extra destination capacity
+    // must not cause a read beyond the source view.
+    (void)pipeline.load_event(stage);
+    detail::pipeline_copy_gm2ub<T>(destination.data(), source.data(), static_cast<unsigned int>(source.size_bytes()));
 }
 
 template <class T>

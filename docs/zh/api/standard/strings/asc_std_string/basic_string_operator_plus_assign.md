@@ -77,6 +77,11 @@ basic_string<CharT, Traits, Allocator>& operator+=(const CharT* text);
 
 ## 约束说明
 
+- 纯SIMT使用还须遵循所属类型的[工具链验证边界](basic_string.md#simt工具链验证边界)。
+
+- 以空字符结尾的输入可以来自本对象的字符存储，包括自身完整字符串或后缀。追加在需要扩容时保留源位置，字符指针赋值先读取源长度再修改内容；操作完成后重新取得因重分配失效的外部借用指针。
+- 新长度加终止空字符所需空间必须可表示；无法表示时调用terminate，分配器操作仍须满足本类型的非抛出使用域。
+
 - basic_string<char,Traits,A>显式allocator构造。
 - plain/local字符来源的append/push_back/clear。
 - size/capacity/data/c_str/迭代/索引与析构。
@@ -84,29 +89,20 @@ basic_string<CharT, Traits, Allocator>& operator+=(const CharT* text);
 
 ## 调用示例
 
-以下Host片段使用显式提供的分配器；设备端须使用在目标执行位置可调用的分配器。
+以下Host示例使用显式分配器，并在字符串存活期间观察自身来源操作。
 
 ```cpp
-#include <asc/std/string>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
+#include <asc/std/string>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-decltype(auto) example(asc::std::basic_string<char, ::std::char_traits<char>, example_allocator<char>>& value)
+bool example()
 {
-    return (value += 'a');
+    ::std::allocator<char> allocator;
+    using S = asc::std::basic_string<char, asc::std::char_traits<char>, ::std::allocator<char>>;
+    S value("abc", allocator);
+    value += value.c_str();
+    value += '!';
+    return value.size() == 7 && value[3] == 'a' && value.back() == '!';
 }
 ```
 

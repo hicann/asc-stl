@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::month`表示日期、时间点或时长计算中的`month`值类型。
+`asc::std::chrono::month`保存月字段，1到12对应一月至十二月；默认构造保存0并使`ok()`返回false，月份算术按12个月回绕。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

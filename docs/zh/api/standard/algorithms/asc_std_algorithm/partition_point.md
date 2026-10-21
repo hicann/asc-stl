@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::partition_point`返回已分区范围的两组交界位置；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::partition_point`返回已分区范围的两组交界位置；在调用者所在执行主体内顺序执行。
 
 标准语义参考：[cppreference `algorithm`](https://en.cppreference.com/w/cpp/header/algorithm)。
 
@@ -36,8 +36,9 @@
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator, class Predicate> constexpr ForwardIterator partition_point(ForwardIterator first, ForwardIterator last, Predicate pred);
-} // namespace asc::std
+template <class ForwardIterator, class Predicate>
+[[nodiscard]] constexpr ForwardIterator partition_point(ForwardIterator first, ForwardIterator last, Predicate pred);
+}  // namespace asc::std
 ```
 
 ## 参数说明
@@ -66,20 +67,20 @@ template<class ForwardIterator, class Predicate> constexpr ForwardIterator parti
 ## 约束说明
 
 - 提供顺序执行且不进行动态内存分配的重载。
-- 标准执行策略重载采用顺序执行，并遵循标准允许的求值顺序。
 
 ## 调用示例
 
-以下Host片段使用有效整数范围和足够容量的输出缓冲区演示调用。
+以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     auto less_than_five = [](int value) { return value < 5; };
-    return asc::std::partition_point(values, values + 8, less_than_five);
+    auto result = asc::std::partition_point(values, values + 8, less_than_five);
+    return result == values + 4;
 }
 ```
 

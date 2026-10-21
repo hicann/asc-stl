@@ -40,7 +40,7 @@
 
 ```cpp
 // asc::std::counting_semaphore 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr long long max() noexcept;
+static constexpr long long max() noexcept;
 ```
 
 ## 参数说明
@@ -55,23 +55,20 @@ constexpr long long max() noexcept;
 
 ## 约束说明
 
-- Host侧对象管理Ascend 950的GM状态。
+- Host对象使用本机普通内存及CPU原子操作，不管理NPU的GM状态。AI Core SIMT共享对象须位于GM，且在并发访问前完成初始化；不支持AI Core SIMD调用。
 - 所有参与者必须能够并发推进，带等待的操作还要求完成条件可被满足。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例给出具体输入并检查结果；底层对象与存储在检查期间仍有效。
 
 ```cpp
 #include <asc/std/semaphore>
 
 bool example()
 {
-    asc::std::counting_semaphore<4> slots(1);
-    slots.acquire();
-    const bool empty = !slots.try_acquire();
-    slots.release();
-    return empty && slots.try_acquire() && slots.max() >= 1;
+    static_assert(asc::std::counting_semaphore<2>::max() == 2);
+    return true;
 }
 ```
 

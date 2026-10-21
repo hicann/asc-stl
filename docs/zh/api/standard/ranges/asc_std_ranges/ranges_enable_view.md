@@ -34,24 +34,27 @@
 
 ## 声明
 
+enable_view是已初始化的inline constexpr bool变量模板：通过公开继承view_base或匹配的view_interface识别视图，也可按允许的特化规则指定。以下查询已提供的公开变量；is_enabled_view仅为示例名称。
+
 ```cpp
-namespace asc::std::ranges {
-template<class T> inline constexpr const bool enable_view;
-} // namespace asc::std::ranges
+template<class T>
+inline constexpr bool is_enabled_view = asc::std::ranges::enable_view<T>;
 ```
 
 ## 约束说明
 
-- 提供完整的C++20 range concepts集合。
+- 通过公开且可转换的view_base继承，或可识别的view_interface派生关系启用。
+- enable_view为true仍不单独保证range和movable条件，也不保证拥有元素；view概念还检查这些条件。
 
 ## 调用示例
 
-以下片段用具体模板实参读取接口值。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/ranges>
 
-inline constexpr auto example = asc::std::ranges::enable_view<asc::std::ranges::single_view<int>>;
+static_assert(asc::std::ranges::enable_view<asc::std::ranges::single_view<int>>);
+static_assert(!asc::std::ranges::enable_view<int[3]>);
 ```
 
 ## 关联API

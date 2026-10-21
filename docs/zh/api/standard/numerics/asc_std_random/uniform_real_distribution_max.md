@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::uniform_real_distribution::max`返回该类型允许的最大值。
+`asc::std::uniform_real_distribution::max`返回当前分布参数的上界b()。实数采样区间为半开区间，不包含该上界。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
@@ -46,7 +46,7 @@ constexpr float asc::std::uniform_real_distribution<float>::max() const noexcept
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `float` | 返回该类型允许的最大值。 |
+| `float` | 返回当前分布参数的上界b()。实数采样区间为半开区间，不包含该上界。 |
 
 ## 约束说明
 

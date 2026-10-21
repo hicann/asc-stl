@@ -34,11 +34,10 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::ranges::empty_view`](ranges_empty_view.md)。
+所属类型：[`empty_view<T>`](ranges_empty_view.md)。此成员无需构造对象即可调用。
 
 ```cpp
-// asc::std::ranges::empty_view 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr T* begin() noexcept;
+static constexpr T* begin() noexcept;
 ```
 
 ## 参数说明
@@ -57,22 +56,12 @@ constexpr T* begin() noexcept;
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/ranges>
-#include <asc/std/array>
-#include <asc/std/iterator>
-#include <asc/std/tuple>
 
-bool example()
-{
-    int values[] = {1, 2, 3, 4};
-    using Base = asc::std::ranges::subrange<int*>;
-    Base base(values, values + 4);
-    asc::std::ranges::empty_view<int> view;
-    return view.begin() == view.end();
-}
+static_assert(asc::std::ranges::empty_view<int>::begin() == nullptr);
 ```
 
 ## 关联API

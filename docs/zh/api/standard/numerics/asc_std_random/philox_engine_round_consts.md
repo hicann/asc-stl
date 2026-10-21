@@ -34,11 +34,10 @@
 
 ## 声明
 
-所属类型：[`asc::std::philox_engine`](philox_engine.md)。
+以下为`philox_engine`类内的成员声明。初始化函数生成长度为WordCount / 2的数组，元素取自Constants参数包中的奇数位置。
 
 ```cpp
-// asc::std::philox_engine 类内的声明节选；模板形参和其他成员由所属类提供。
-static constexpr auto round_consts;
+static constexpr auto round_consts = make_round_consts();
 ```
 
 ## 约束说明

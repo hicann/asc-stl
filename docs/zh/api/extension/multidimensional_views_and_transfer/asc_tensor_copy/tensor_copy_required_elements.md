@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::tensor_copy_required_elements`计算Descriptor覆盖的源或目标存储元素数量上界。
+`asc::tensor_copy_required_elements`计算描述符各维填充后长度的乘积，不计入步长空隙。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
-template<unsigned Rank> constexpr unsigned long long tensor_copy_required_elements(const asc::tensor_copy_descriptor<Rank>& descriptor) noexcept;
-} // namespace asc
+template <unsigned Rank>
+[[nodiscard]] constexpr unsigned long long tensor_copy_required_elements(
+    const asc::tensor_copy_descriptor<Rank>& descriptor) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -44,7 +46,7 @@ template<unsigned Rank> constexpr unsigned long long tensor_copy_required_elemen
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Rank` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Rank` | 描述符的张量秩（维度数量），为1至5的编译期无符号整数。 |
 
 **函数参数**
 
@@ -56,13 +58,16 @@ template<unsigned Rank> constexpr unsigned long long tensor_copy_required_elemen
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `unsigned long long` | 返回描述符覆盖的元素数量。 |
+| `unsigned long long` | 返回各维填充后长度的乘积；任一填充后长度为零或乘积溢出时返回0。 |
 
 ## 约束说明
 
-- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Rank为1至5。
-- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
+- 可在Host、AI Core SIMD编程和AI Core SIMT编程中调用；本操作同步处理描述符，不启动数据搬运。
+- `Rank`须为1至5的编译期无符号整数；各维度按从外到内的顺序编号，最内维为`Rank - 1`。
+- `descriptor`须在调用期间有效；返回其[required_elements](tensor_copy_descriptor_required_elements.md)成员的结果。
+- 返回各维`extent + left_padding + right_padding`的乘积；任一填充后长度为零或乘积超出`unsigned long long`范围时返回`0`。
+- 本查询不计入步长造成的存储空隙，也不检查零步长、填充上限或实际源/目标容量；调用前需要的参数检查见[validate](tensor_copy_descriptor_validate.md)。
+- 实际搬运的视图容量按各方向的步长跨度检查；不能将此乘积当作任意步长布局的存储跨度。
 
 ## 调用示例
 

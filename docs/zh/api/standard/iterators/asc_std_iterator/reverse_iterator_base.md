@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::reverse_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr Iter base() const noexcept(is_nothrow_copy_constructible_v<Iter>);
+constexpr Iter base() const noexcept(is_nothrow_copy_constructible_v<Iter>);
 ```
 
 ## 参数说明
@@ -53,21 +53,22 @@
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 底层迭代器须支持双向遍历；随机访问成员还要求底层支持对应位移或下标运算。
+- 反向迭代器访问`base()`之前的元素，解引用或箭头访问要求该前一位置有效。
+- 适配器不拥有底层范围；返回引用或指针的寿命受底层对象约束。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
 bool example()
 {
-    int values[] = {2, 4};
-    asc::std::reverse_iterator<int*> iterator(values + 2);
-    return iterator.base() == values + 2;
+    int values[] = {2, 4, 6, 8};
+    asc::std::reverse_iterator<int*> iterator(values + 4);
+    return iterator.base() == values + 4;
 }
 ```
 

@@ -46,14 +46,16 @@ template<class T> using unwrap_reference_t = typename unwrap_reference<T>::type;
 
 ## 调用示例
 
-以下片段选用具体模板实参展示别名类型。
+以下Host示例用具体类型和独立预期检查别名或标记结果。
 
 ```cpp
 #include <asc/std/functional>
+#include <asc/std/type_traits>
 
 void use_type()
 {
     using selected = asc::std::unwrap_reference_t<int>;
+    static_assert(asc::std::is_same_v<selected, int>);
 }
 ```
 

@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::linear_congruential_engine 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr void discard(uint64_t count) noexcept;
+constexpr void discard(unsigned long long count) noexcept;
 ```
 
 ## 参数说明
@@ -47,7 +47,7 @@ constexpr void discard(uint64_t count) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `count` | 输入 | 参与操作的元素数量。 |
+| `count` | 输入 | 跳过的引擎输出步数；等效于丢弃count次生成结果。 |
 
 ## 返回值说明
 

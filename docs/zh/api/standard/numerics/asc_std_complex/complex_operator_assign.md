@@ -115,6 +115,8 @@ template<class U> complex<T>& operator=(const ::std::complex<U>& other) noexcept
 
 ## 约束说明
 
+- 原型4的系统std::complex<U>赋值仅用于Host，要求系统标准库可用；不能在Device模式调用。
+
 - 仅提供页面声明的float或`complex<float>`运算。
 - 接口可用性取决于相应的float数学能力。
 

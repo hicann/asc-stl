@@ -37,17 +37,21 @@
 所属类型：[`asc::std::reverse_iterator`](reverse_iterator.md)。
 
 ```cpp
-// asc::std::reverse_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class Iter2> constexpr pointer operator->() const;
+// reverse_iterator 类内声明节选；类模板参数和其余成员由所属类提供。
+template<class It = Iter,
+    enable_if_t<__reverse_iterator_detail::__has_const_arrow<It>, int> = 0>
+constexpr pointer operator->() const;
 ```
+
+定义节选中的辅助判定要求底层是指针或提供可在const对象上调用的箭头运算符；返回的地址对应`base()`之前的元素。
 
 ## 参数说明
 
-**模板参数**
-
-| 参数名 | 描述 |
+| 模板参数 | 描述 |
 | --- | --- |
-| `Iter2` | 用于箭头访问的底层迭代器类型；须提供指针或对应的`operator-`>。 |
+| `It` | 底层迭代器的选择类型，默认为`Iter`；须是指针或支持const箭头访问。 |
+
+无函数参数。
 
 ## 返回值说明
 
@@ -57,19 +61,23 @@ template<class Iter2> constexpr pointer operator->() const;
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 底层迭代器须支持双向遍历；随机访问成员还要求底层支持对应位移或下标运算。
+- 反向迭代器访问`base()`之前的元素，解引用或箭头访问要求该前一位置有效。
+- 适配器不拥有底层范围；返回引用或指针的寿命受底层对象约束。
 
 ## 调用示例
 
-以下Host片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-decltype(auto) example(const asc::std::reverse_iterator<int*>& iterator)
+bool example()
 {
-    return (iterator.operator->());
+    int values[] = {2, 4, 6, 8};
+    asc::std::reverse_iterator<int*> iterator(values + 4);
+    auto pointer = iterator.operator->();
+    return pointer == values + 3 && *pointer == 8;
 }
 ```
 

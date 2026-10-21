@@ -34,25 +34,16 @@
 
 ## 声明
 
-### 原型1
-
 ```cpp
 namespace asc::std {
-template<class T, size_t N> struct remove_extent;
-} // namespace asc::std
-```
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<class T> struct remove_extent;
+template<class T>
+struct remove_extent;
 } // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 仅移除数组最外层的一个维度；非数组类型保持原类型，内层维度与元素限定保留。
 
 ## 调用示例
 

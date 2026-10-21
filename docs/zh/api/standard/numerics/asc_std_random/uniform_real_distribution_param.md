@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::uniform_real_distribution::param`返回当前分布或随机引擎的参数对象。
+`asc::std::uniform_real_distribution::param`无参重载返回当前分布参数；带参数重载替换本对象保存的参数。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 
@@ -58,7 +58,7 @@ constexpr void asc::std::uniform_real_distribution<float>::param(const param_typ
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `parameters` | 输入 | 提供“查询当前分布或随机引擎的参数对象”使用的对象引用；被引用对象须在调用期间有效。 |
+| `parameters` | 输入 | 替换本对象区间参数的来源；复制其值，不借用该参数对象的存储。 |
 
 ## 返回值说明
 

@@ -77,7 +77,7 @@ constexpr month_weekday_last(month_weekday_last&& month_value);
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `month_value` | 输入/输出 | 用于移动构造的month_weekday_last对象；移动后源对象处于有效但未指定状态。 |
+| `month_value` | 输入 | 用于移动构造的month_weekday_last对象；这些标量字段的隐式移动保持来源字段值。 |
 
 ## 返回值说明
 

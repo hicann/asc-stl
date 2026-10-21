@@ -30,19 +30,47 @@
 
 `asc::std::fmin`按浮点最小值规则选择较小参数；Device侧适用范围以本页float与执行位置约束为准。
 
-该接口的可用位置为Host、AI Core SIMT编程。
+不同类型的可用位置见各原型及约束说明。
 
 标准语义参考：[cppreference `cmath`](https://en.cppreference.com/w/cpp/header/cmath)。
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-float fmin(float x, float y) noexcept;
-} // namespace asc::std
+template <class Tp, ::asc::std::enable_if_t<__is_extended_arithmetic_v<Tp>, int> = 0>
+[[nodiscard]] constexpr conditional_t<is_integral_v<Tp>, double, Tp> fmin(Tp x, Tp y) noexcept;
+}
 ```
 
+可用位置：Host、AI Core SIMD编程、AI Core SIMT编程。
+
+### 原型2
+
+```cpp
+namespace asc::std {
+template <class Tp, class Up,
+    ::asc::std::enable_if_t<::asc::std::is_floating_point_v<Tp>&& ::asc::std::is_floating_point_v<Up>, int> = 0>
+[[nodiscard]] constexpr auto fmin(Tp x, Up y) noexcept;
+}
+```
+
+可用位置：Host、AI Core SIMD编程、AI Core SIMT编程。
+
 ## 参数说明
+
+**模板参数**
+
+| 参数名 | 描述 |
+| --- | --- |
+| `Tp` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。标准整型提升到double的分支仅用于Host；Device不提供该整型提升。 |
+| `Up` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。标准整型提升到double的分支仅用于Host；Device不提供该整型提升。 |
+
+未命名的默认int模板形参用于重载选择，调用方无需提供。
 
 **函数参数**
 
@@ -53,24 +81,23 @@ float fmin(float x, float y) noexcept;
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float` | 返回按浮点比较规则选出的较大或较小值。 |
+返回类型按各原型确定（`conditional_t<is_integral_v<Tp>, double, Tp>`、`auto`）。返回两个输入中的较小值；仅一个输入为NaN时返回另一个非NaN值。
 
 ## 约束说明
 
-- 提供float重载、标准 *f别名以及float lerp回移接口。
+- Host标准整型输入提升为double；Device整型提升分支被静态断言拒绝。float、double、long double及扩展类型的实例还须由目标编译模式支持。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float x, float y)
+bool example()
 {
-    return asc::std::fmin(x, y);
+    const auto result = asc::std::fmin(2.0F, 5.0F);
+    return result == 2.0F;
 }
 ```
 

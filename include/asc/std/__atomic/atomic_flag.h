@@ -40,19 +40,21 @@ public:
 #if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
     CANN_ASC_STL_SIMT_API atomic_flag() noexcept = default;
 
-    CANN_ASC_STL_SIMT_API bool test(memory_order = memory_order_seq_cst) const noexcept
+    CANN_ASC_STL_SIMT_API bool test(memory_order order = memory_order_seq_cst) const noexcept
     {
-        return ::asc::detail::atomic_add(const_cast<unsigned int*>(&value_), 0U) != 0U;
+        ::asc::detail::atomic_validate_load(order);
+        return ::asc::detail::atomic_ordered_add(const_cast<unsigned int*>(&value_), 0U, order) != 0U;
     }
 
-    CANN_ASC_STL_SIMT_API bool test_and_set(memory_order = memory_order_seq_cst) noexcept
+    CANN_ASC_STL_SIMT_API bool test_and_set(memory_order order = memory_order_seq_cst) noexcept
     {
-        return ::asc::detail::atomic_exchange(&value_, 1U) != 0U;
+        return ::asc::detail::atomic_ordered_exchange(&value_, 1U, order) != 0U;
     }
 
-    CANN_ASC_STL_SIMT_API void clear(memory_order = memory_order_seq_cst) noexcept
+    CANN_ASC_STL_SIMT_API void clear(memory_order order = memory_order_seq_cst) noexcept
     {
-        (void)::asc::detail::atomic_exchange(&value_, 0U);
+        ::asc::detail::atomic_validate_store(order);
+        (void)::asc::detail::atomic_ordered_exchange(&value_, 0U, order);
     }
 #elif !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     atomic_flag() noexcept = default;

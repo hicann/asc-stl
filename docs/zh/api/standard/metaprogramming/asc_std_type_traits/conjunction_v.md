@@ -34,15 +34,18 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class ...Args> inline constexpr const bool conjunction_v;
+template<class ...Args>
+inline constexpr bool conjunction_v = conjunction<Args...>::value;
 } // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 本辅助形式与[`asc::std::conjunction`](conjunction.md)使用相同的类型前提和判定规则；结果对应特征类的`value`。
 
 ## 调用示例
 
@@ -51,7 +54,7 @@ template<class ...Args> inline constexpr const bool conjunction_v;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::conjunction_v<asc::std::true_type, asc::std::false_type>;
+static_assert((asc::std::conjunction_v<asc::std::true_type, asc::std::false_type>) == false);
 ```
 
 ## 关联API

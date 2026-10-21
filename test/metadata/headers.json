@@ -473,9 +473,10 @@
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
-        "hardware_runtime": false
-      }
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      },
+      "runtime_case": "asc/tensor_copy"
     },
     {
       "target": "asc/__parallel/adjacent_difference.h",
@@ -797,10 +798,10 @@
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
+        "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/__tensor_copy/descriptor.h"
+      "runtime_case": "asc/tensor_copy"
     },
     {
       "target": "asc/__tensor_copy/descriptor.h",
@@ -4186,6 +4187,7 @@
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_arithmetic.h",
         "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/is_same.h",
         "asc/std/limits"
       ],
       "applicability": {
@@ -4224,6 +4226,7 @@
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_arithmetic.h",
         "asc/std/__type_traits/is_integral.h",
+        "asc/std/__type_traits/is_same.h",
         "asc/std/limits"
       ],
       "applicability": {
@@ -4244,6 +4247,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
         "asc/std/__type_traits/is_integral.h"
@@ -4266,6 +4270,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_arithmetic.h",
         "asc/std/__type_traits/is_constant_evaluated.h",
@@ -4292,6 +4297,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_arithmetic.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
@@ -4316,6 +4322,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_arithmetic.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
@@ -4366,6 +4373,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
         "asc/std/__type_traits/is_integral.h"
@@ -4391,6 +4399,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
         "asc/std/__type_traits/is_integral.h"
@@ -4416,6 +4425,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_arithmetic.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
@@ -4440,6 +4450,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
         "asc/std/__type_traits/is_integral.h"
@@ -4465,6 +4476,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_arithmetic.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
@@ -4492,6 +4504,8 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
+        "asc/std/__cmath/fpclassify.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__floating_point/mask.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
@@ -4515,6 +4529,8 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
+        "asc/std/__cmath/fpclassify.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__floating_point/mask.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
@@ -4539,6 +4555,8 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__bit/bit_cast.h",
+        "asc/std/__cmath/fpclassify.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
         "asc/std/__type_traits/is_floating_point.h",
@@ -4562,6 +4580,7 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
+        "asc/std/__cmath/fpclassify.h",
         "asc/std/__floating_point/fp.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
@@ -4586,6 +4605,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
         "asc/std/__type_traits/is_integral.h",
@@ -4634,6 +4654,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_arithmetic.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
@@ -4675,6 +4696,9 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
+        "asc/std/__floating_point/fp.h",
+        "asc/std/__type_traits/conditional.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_arithmetic.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
@@ -4702,6 +4726,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
         "asc/std/__type_traits/is_integral.h"
@@ -4727,6 +4752,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
         "asc/std/__type_traits/is_integral.h"
@@ -4794,6 +4820,7 @@
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
         "asc/std/__cmath/backend.h",
+        "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
         "asc/std/__type_traits/is_integral.h",
@@ -6092,7 +6119,7 @@
         "cannsim_runtime": false,
         "hardware_runtime": false
       },
-      "semantic_case": "asc/std/iterator",
+      "semantic_case": "asc/std/expected",
       "negative_cases": [
         "expected_value.fail.cpp"
       ]
@@ -6228,7 +6255,8 @@
         "asc/std/__floating_point/storage.h",
         "asc/std/__type_traits/always_false.h",
         "asc/std/__type_traits/is_extended_floating_point.h",
-        "asc/std/__type_traits/is_same.h"
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/cstdint"
       ],
       "applicability": {
         "host_header": true,
@@ -15246,7 +15274,7 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/std/bitset"
     },
     {
       "target": "asc/std/unordered_set",
@@ -16013,7 +16041,7 @@
         "asc/std/__fwd/unexpected.h",
         "asc/std/version"
       ],
-      "semantic_case": "asc/random",
+      "semantic_case": "asc/std/expected",
       "applicability": {
         "host_header": true,
         "device_header": true,
@@ -17801,7 +17829,9 @@
       "runtime_case": "asc/tensor_copy",
       "additional_cases": [
         "cxx17_backports.pass.cpp",
-        "access_constraints.pass.cpp"
+        "access_constraints.pass.cpp",
+        "repeat_piecewise_assertions.pass.cpp",
+        "repeat_piecewise_negative.assert.cpp"
       ],
       "device_compile_cases": [
         "device.compile.asc",
@@ -18544,5 +18574,8 @@
       ],
       "runtime_case": "asc/std/linalg"
     }
-  ]
+  ],
+  "runtime_asset_manifests": {
+    "asc/std/bitset": "runtime/assets.json"
+  }
 }

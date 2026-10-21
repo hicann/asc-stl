@@ -39,15 +39,16 @@
 ### 原型1
 
 ```cpp
-// asc::std::counted_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr decltype(auto) operator*();
+// counted_iterator 类内声明节选。
+constexpr decltype(auto) operator*();
 ```
 
 ### 原型2
 
 ```cpp
-// asc::std::counted_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class I2> [[nodiscard]] constexpr decltype(auto) operator*() const;
+// counted_iterator 类内声明节选。
+template<class I2 = Iter>
+constexpr decltype(auto) operator*() const;
 ```
 
 ## 参数说明
@@ -62,7 +63,7 @@ template<class I2> [[nodiscard]] constexpr decltype(auto) operator*() const;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `I2` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
+| `I2` | 成员选择类型，默认为所属类的`Iter`；须满足本原型的表达式或遍历要求。 |
 
 ## 返回值说明
 
@@ -73,19 +74,22 @@ template<class I2> [[nodiscard]] constexpr decltype(auto) operator*() const;
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- `Iter`须满足本操作要求的遍历能力；适配器不拥有底层范围。
+- `count()`表示从当前位置开始剩余的元素数量；解引用及自增要求剩余数量大于0。
+- 位移后的底层位置及对应计数须有效，不得越过实际有效范围。
 
 ## 调用示例
 
-以下Host片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-decltype(auto) example(const asc::std::counted_iterator<int*>& iterator)
+bool example()
 {
-    return (*iterator);
+    int values[] = {2, 4, 6, 8};
+    asc::std::counted_iterator<int*> iterator(values, 4);
+    return *iterator == 2;
 }
 ```
 

@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::std::linalg::scaled_accessor 类内的声明节选；模板形参和其他成员由所属类提供。
-[[nodiscard]] constexpr typename offset_policy::data_handle_type offset(data_handle_type pointer, size_t index) const;
+constexpr typename offset_policy::data_handle_type offset(data_handle_type pointer, size_t index) const;
 ```
 
 ## 参数说明
@@ -54,7 +54,7 @@
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `typename offset_policy::data_handle_type` | 返回给定多维索引映射到的底层存储偏移。 |
+| `typename offset_policy::data_handle_type` | 返回经嵌套访问器前移index个元素后的数据句柄；默认访问器返回同一底层数组内的指针，存储须在使用句柄时保持有效。 |
 
 ## 约束说明
 
@@ -62,17 +62,18 @@
 
 ## 调用示例
 
-以下Host片段使用具体范围或访问器演示调用；底层存储在调用期间须保持有效。
+以下Host示例给出具体输入，并在对象与底层存储仍有效时检查结果。
 
 ```cpp
 #include <asc/std/linalg>
 
-decltype(auto) example()
+bool example()
 {
-    float values[4] = {1, 2, 3, 4};
-    using accessor_type = asc::std::linalg::scaled_accessor<float, asc::std::default_accessor<float>>;
-    accessor_type accessor{};
-    return accessor.offset(values, 0);
+    float values[2]{};
+    using A = asc::std::linalg::scaled_accessor<float, asc::std::default_accessor<float>>;
+    A accessor{};
+    const auto pointer = accessor.offset(values, 1);
+    return pointer == values + 1;
 }
 ```
 

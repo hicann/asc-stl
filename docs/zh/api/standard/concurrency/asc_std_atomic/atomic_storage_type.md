@@ -36,19 +36,16 @@
 
 ## 声明
 
-所属类型：[`asc::std::atomic`](atomic.md)。
+`storage_type`是当前整数或字符类型所用的32位或64位存储单元类型。以下通过公开别名获取`atomic<int>`对应的存储类型。
 
 ```cpp
-// asc::std::atomic 类内的声明节选；模板形参和其他成员由所属类提供。
-using storage_type = typename owned_atomic_storage<T>::type;
+using storage_type = asc::std::atomic<int>::storage_type;
 ```
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数。
-- bool/8/16位用32位内部存储。
-- 32/64位按有符号位模式分派。
-- Host和AI Core SIMT编程GM。
+- 该别名为原子对象实际使用的整数存储类型，须以[atomic](atomic.md)支持的`T`实例化。
+- `bool`及8位、16位数值使用32位存储单元；32位和64位数值使用相应位宽的存储单元。读取类型本身不执行原子操作。
 
 ## 调用示例
 

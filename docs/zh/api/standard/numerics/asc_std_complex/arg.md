@@ -36,20 +36,38 @@
 
 ## 函数原型
 
-### 原型1
+以下两种形式用于Host及AI Core SIMT编程：
 
 ```cpp
 namespace asc::std {
-float arg(float value) noexcept;
-} // namespace asc::std
+[[nodiscard]] float arg(float value) noexcept;
+}
 ```
 
-### 原型2
+```cpp
+namespace asc::std {
+template<class T> [[nodiscard]] T arg(const complex<T>& value) noexcept;
+}
+```
+
+以下标量重载仅用于Host：
 
 ```cpp
 namespace asc::std {
-template<class T> T arg(const complex<T>& value) noexcept;
-} // namespace asc::std
+[[nodiscard]] double arg(double value) noexcept;
+}
+```
+
+```cpp
+namespace asc::std {
+[[nodiscard]] long double arg(long double value) noexcept;
+}
+```
+
+```cpp
+namespace asc::std {
+template<class T> [[nodiscard]] double arg(T value) noexcept;
+}
 ```
 
 ## 参数说明
@@ -78,26 +96,24 @@ template<class T> T arg(const complex<T>& value) noexcept;
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `float` | 返回复数的幅角。 |
-| 原型2 | `T` | 返回复数的幅角。 |
+返回以弧度表示的幅角atan2(虚部, 实部)。复数输入返回T；标量float、double、long double分别返回原类型，整数返回double。标量视为虚部为正零的复数。
 
 ## 约束说明
 
-- 仅提供页面声明的float或`complex<float>`运算。
+- ASC复数输入只支持complex<float>；Host标量另外支持double、long double及整数。整数模板通过static_assert要求T为整数类型。
 - 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/std/complex>
 
-decltype(auto) example(float value)
+bool example()
 {
-    return asc::std::arg(value);
+    const asc::std::complex<float> value(1.0F, 0.0F);
+    return asc::std::arg(value) == 0.0F && asc::std::arg(2.0) == 0.0;
 }
 ```
 

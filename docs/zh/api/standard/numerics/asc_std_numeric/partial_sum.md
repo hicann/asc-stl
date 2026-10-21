@@ -97,21 +97,27 @@ template<class InputIterator, class OutputIterator> constexpr OutputIterator par
 
 ## 约束说明
 
-- 提供顺序迭代器/值重载。
-- 本族中标准定义的执行策略重载采用顺序执行语义。
+- `[first, last)`须为有效的可读输入范围；从`result`起须能写入相同数量的结果。
+- 首个输出为首个输入元素，其后依次使用`operator+`或`binary_op`合并当前累计值和输入元素。
+- 运算结果须能赋给输入元素的值类型；运算不得修改输入范围或使迭代器失效。允许`result == first`的原地计算。
 
 ## 调用示例
 
-以下片段用具体整数范围展示数值调用；输出数组具有足够容量。
+以下示例将1、2、3、4的前缀和1、3、6、10写入四个输出元素。
 
 ```cpp
 #include <asc/std/numeric>
 
-decltype(auto) example()
+bool example()
 {
     int input[4] = {1, 2, 3, 4};
     int output[4] = {};
-    return asc::std::partial_sum(input, input + 4, output);
+    const auto end = asc::std::partial_sum(input, input + 4, output);
+    return end == output + 4 &&
+        output[0] == 1 &&
+        output[1] == 3 &&
+        output[2] == 6 &&
+        output[3] == 10;
 }
 ```
 

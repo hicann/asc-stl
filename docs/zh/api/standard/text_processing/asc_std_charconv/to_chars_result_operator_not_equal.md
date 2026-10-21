@@ -38,16 +38,15 @@
 
 ```cpp
 // asc::std::to_chars_result 类内的声明节选；模板形参和其他成员由所属类提供。
-friend bool operator!=(const to_chars_result&, const to_chars_result&) noexcept;
+friend constexpr bool operator!=(const to_chars_result&, const to_chars_result&) noexcept;
 ```
 
 ## 参数说明
 
-**函数参数**
-
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `to_chars_result` | 输出 | 接收接口结果的目标对象或存储；其容量和生命周期须满足约束说明。 |
+| 左操作数 | 输入 | 被比较的转换结果，比较不修改它。 |
+| 右操作数 | 输入 | 被比较的转换结果，比较不修改它。 |
 
 ## 返回值说明
 
@@ -61,15 +60,17 @@ friend bool operator!=(const to_chars_result&, const to_chars_result&) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入，并在对象与底层存储仍有效时检查结果。
 
 ```cpp
 #include <asc/std/charconv>
 
-template <class Object, class... Args>
-decltype(auto) example(Object& object, Args&&... args)
+bool example()
 {
-    return object.operator!=(static_cast<Args&&>(args)...);
+    char output[2]{};
+    asc::std::to_chars_result left{output, asc::std::errc{}};
+    asc::std::to_chars_result right{output + 1, asc::std::errc{}};
+    return left != right;
 }
 ```
 

@@ -34,8 +34,20 @@
 
 ## 函数原型
 
+所属类型为`layout_stride`::`mapping`<`Extents`>。以下为隐藏友元的声明摘要，省略仅用于参与选择的实现参数；以运算符语法调用。
+
+### 原型1
+
 ```cpp
-template<class OtherMapping> friend bool asc::std::layout_stride::mapping<Extents>::operator!=(const OtherMapping&, const mapping<Extents>&) noexcept;
+template<class OtherMapping>
+friend constexpr bool operator!=(const mapping& left, const OtherMapping& right) noexcept;
+```
+
+### 原型2
+
+```cpp
+template<class OtherMapping>
+friend constexpr bool operator!=(const OtherMapping& left, const mapping& right) noexcept;
 ```
 
 ## 参数说明
@@ -44,36 +56,43 @@ template<class OtherMapping> friend bool asc::std::layout_stride::mapping<Extent
 
 | 参数名 | 描述 |
 | --- | --- |
-| `OtherMapping` | 用于比较的另一布局映射类型；须提供兼容extents、stride及映射属性查询。 |
+| `OtherMapping` | 另一映射类型；须满足下述布局映射条件。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `OtherMapping` | 输入 | 参与操作的对象引用；调用期间被引用对象须保持有效。 |
-| `Extents` | 输入 | 参与操作的对象引用；调用期间被引用对象须保持有效。 |
+| `left` | 输入 | 左侧布局映射；比较其维度及适用的步长信息。 |
+| `right` | 输入 | 右侧布局映射；不读取底层元素。 |
 
 ## 返回值说明
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `按声明确定` | 对应的相等／顺序比较表达式成立时为true，否则为false。 |
+| `bool` | 两映射不等时返回`true`。 |
 
 ## 约束说明
 
-- 结果为相等比较的取反，恒不抛出。
+- `OtherMapping`须符合布局映射要求、秩相同且`is_always_strided()`为true。交换方向的显式形式仅在C++17提供，且`OtherMapping`不能为`layout_stride`自身映射。
+- 上述显式不等函数仅在C++17提供；C++20由相等运算符重写不等调用。
+- 比较维度及对应的布局信息，不访问或比较底层元素。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/mdspan>
+#include <asc/std/array>
 
-template <class Object, class... Args>
-decltype(auto) example(Object& object, Args&&... args)
+bool example()
 {
-    return object.operator!=(static_cast<Args&&>(args)...);
+    using shape_type = asc::std::extents<asc::std::size_t, 2, 3>;
+    using mapping_type = asc::std::layout_stride::mapping<shape_type>;
+    const asc::std::array<asc::std::size_t, 2> strides{{3, 1}};
+    const mapping_type first(shape_type{}, strides);
+    const mapping_type second(shape_type{}, strides);
+    return !(first != second);
 }
 ```
 

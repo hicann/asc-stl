@@ -29,6 +29,8 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
+#include <asc/std/__cmath/fpclassify.h>
+#include <asc/std/__floating_point/cast.h>
 #include <asc/std/__bit/bit_cast.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_extended_floating_point.h>
@@ -114,7 +116,13 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool isnan(__float128 x) noexc
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr bool isnan(Tp x) noexcept
 {
-    return ::asc::std::isnan(static_cast<float>(x));
+    if constexpr (__fp_format_of_v<Tp> == __fp_format::__fp8_e4m3 || __fp_format_of_v<Tp> == __fp_format::__fp8_e5m2 ||
+        __fp_format_of_v<Tp> == __fp_format::__fp8_e8m0) {
+        const int classification = ::asc::std::__fpclassify_impl(x);
+        return classification == 0;
+    } else {
+        return ::asc::std::isnan(::asc::std::__fp_cast<float>(x));
+    }
 }
 
 template <class Tp, ::asc::std::enable_if_t<is_integral_v<Tp>, int> = 0>

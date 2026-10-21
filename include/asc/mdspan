@@ -341,13 +341,65 @@ CANN_ASC_STL_HOST constexpr __PTRDIFF_TYPE__ dlpack_stride(
     return result;
 }
 
+// Validate signed reach before building a mapping. Rebasing the handle by
+// origin keeps every mapped index nonnegative for the standard accessor.
+template <class Extents>
+CANN_ASC_STL_HOST constexpr bool dlpack_mapping_origin(
+    const Extents& extents, const DLTensor& tensor, __PTRDIFF_TYPE__& origin) noexcept
+{
+    unsigned long long below = 0;
+    unsigned long long above = 0;
+    for (__SIZE_TYPE__ i = 0; i < Extents::rank(); ++i) {
+        if (tensor.strides == nullptr) {
+            unsigned long long stride = 1;
+            for (__SIZE_TYPE__ j = Extents::rank(); j > i + 1; --j) {
+                const auto extent = static_cast<unsigned long long>(extents.extent(j - 1));
+                if (stride != 0 && extent > static_cast<unsigned long long>(__PTRDIFF_MAX__) / stride)
+                    return false;
+                stride *= extent;
+            }
+        } else if (tensor.strides[i] > __PTRDIFF_MAX__ || tensor.strides[i] < -__PTRDIFF_MAX__ - 1) {
+            return false;
+        }
+        const __PTRDIFF_TYPE__ stride = dlpack_stride(extents, tensor, i);
+        const unsigned long long magnitude =
+            stride < 0 ? static_cast<unsigned long long>(-(stride + 1)) + 1 : static_cast<unsigned long long>(stride);
+        const unsigned long long reach =
+            extents.extent(i) == 0 ? 0 : static_cast<unsigned long long>(extents.extent(i) - 1);
+        if (magnitude != 0 && reach > static_cast<unsigned long long>(__PTRDIFF_MAX__) / magnitude)
+            return false;
+        const unsigned long long contribution = reach * magnitude;
+        if (contribution > static_cast<unsigned long long>(__PTRDIFF_MAX__) - below - above)
+            return false;
+        if (stride < 0)
+            below += contribution;
+        else
+            above += contribution;
+    }
+    origin = static_cast<__PTRDIFF_TYPE__>(below);
+    return true;
+}
+
+template <class Mapping>
+CANN_ASC_STL_HOST constexpr auto mdspan_origin_offset(
+    const Mapping& mapping, int) noexcept -> decltype(mapping.offset())
+{
+    return mapping.offset();
+}
+
+template <class Mapping>
+CANN_ASC_STL_HOST constexpr __PTRDIFF_TYPE__ mdspan_origin_offset(const Mapping&, long) noexcept
+{
+    return 0;
+}
+
 template <class Extents, __SIZE_TYPE__... I>
 CANN_ASC_STL_HOST constexpr auto make_dlpack_mapping(
-    const Extents& extents, const DLTensor& tensor, asc::std::index_sequence<I...>) noexcept
+    const Extents& extents, const DLTensor& tensor, __PTRDIFF_TYPE__ origin, asc::std::index_sequence<I...>) noexcept
 {
     using stride_type = asc::steps<Extents::rank()>;
     return asc::layout_stride_relaxed::mapping<Extents, stride_type>(
-        extents, stride_type(dlpack_stride(extents, tensor, I)...), 0);
+        extents, stride_type(dlpack_stride(extents, tensor, I)...), origin);
 }
 
 }  // namespace detail
@@ -385,9 +437,14 @@ CANN_ASC_STL_HOST bool to_host_mdspan(
     }
     using extents_type = asc::std::dextents<asc::std::size_t, Rank>;
     const extents_type converted_extents(extents);
-    const auto mapping = detail::make_dlpack_mapping(converted_extents, tensor, asc::std::make_index_sequence<Rank>{});
-    auto* data = static_cast<unsigned char*>(tensor.data) + tensor.byte_offset;
-    output = host_mdspan<Element, extents_type, Layout>(reinterpret_cast<Element*>(data), mapping);
+    __PTRDIFF_TYPE__ origin = 0;
+    if (!detail::dlpack_mapping_origin(converted_extents, tensor, origin) ||
+        tensor.byte_offset > static_cast<unsigned long long>(__PTRDIFF_MAX__))
+        return false;
+    const auto mapping =
+        detail::make_dlpack_mapping(converted_extents, tensor, origin, asc::std::make_index_sequence<Rank>{});
+    auto* data = reinterpret_cast<Element*>(static_cast<unsigned char*>(tensor.data) + tensor.byte_offset) - origin;
+    output = host_mdspan<Element, extents_type, Layout>(data, mapping);
     return true;
 }
 
@@ -408,9 +465,14 @@ CANN_ASC_STL_HOST bool to_gm_mdspan(
     }
     using extents_type = asc::std::dextents<asc::std::size_t, Rank>;
     const extents_type converted_extents(extents);
-    const auto mapping = detail::make_dlpack_mapping(converted_extents, tensor, asc::std::make_index_sequence<Rank>{});
-    auto* data = static_cast<unsigned char*>(tensor.data) + tensor.byte_offset;
-    output = gm_mdspan<Element, extents_type, Layout>(reinterpret_cast<Element*>(data), mapping);
+    __PTRDIFF_TYPE__ origin = 0;
+    if (!detail::dlpack_mapping_origin(converted_extents, tensor, origin) ||
+        tensor.byte_offset > static_cast<unsigned long long>(__PTRDIFF_MAX__))
+        return false;
+    const auto mapping =
+        detail::make_dlpack_mapping(converted_extents, tensor, origin, asc::std::make_index_sequence<Rank>{});
+    auto* data = reinterpret_cast<Element*>(static_cast<unsigned char*>(tensor.data) + tensor.byte_offset) - origin;
+    output = gm_mdspan<Element, extents_type, Layout>(data, mapping);
     return true;
 }
 
@@ -421,7 +483,10 @@ CANN_ASC_STL_HOST bool to_dlpack_tensor(const asc::std::mdspan<Element, Extents,
     if (!detail::dlpack_dtype_supported<Element> || view.data_handle() == nullptr ||
         (device_type != kDLCPU && device_type != kDLExtDev))
         return false;
-    output.tensor_.data = const_cast<void*>(static_cast<const void*>(view.data_handle()));
+    // DLPack data denotes logical index zero, including a relaxed mapping's
+    // origin. Its shape/strides continue to borrow only the holder metadata.
+    output.tensor_.data = const_cast<void*>(
+        static_cast<const void*>(view.data_handle() + detail::mdspan_origin_offset(view.mapping(), 0)));
     output.tensor_.device = DLDevice{device_type, device_id};
     output.tensor_.ndim = static_cast<int>(Extents::rank());
     output.tensor_.dtype = detail::dlpack_dtype<Element>();

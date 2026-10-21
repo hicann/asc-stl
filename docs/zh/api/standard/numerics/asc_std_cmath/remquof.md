@@ -36,11 +36,18 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
+### 原型1
+
 ```cpp
 namespace asc::std {
-float remquof(float x, float y, int* quotient) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float remquof(
+    float x, float y, int* quotient) noexcept;
+}
 ```
+
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
 
 ## 参数说明
 
@@ -50,28 +57,28 @@ float remquof(float x, float y, int* quotient) noexcept;
 | --- | --- | --- |
 | `x` | 输入 | IEEE余数运算的被除数（无量纲）。 |
 | `y` | 输入 | IEEE余数运算的除数（无量纲，须非零；为0时返回NaN）。 |
-| `quotient` | 输出 | 输出指针：写入商对2^3的余数（商的低3位，符号随x/y的商）；存储由调用方提供。 |
+| `quotient` | 输出 | 输出指针：写入带符号的商低位信息；至少保留3个低位，具体位数由后端决定，符号随商；存储由调用方提供。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `float` | 返回浮点余数；商的低位信息写入输出参数。 |
+返回类型按各原型确定（`float`）。返回IEEE余数，并通过quotient写入商的符号及至少3个低位。
 
 ## 约束说明
 
-- 提供float重载、标准 *f别名以及float lerp回移接口。
+- 调用方仅依赖商的符号及至少3个低位，不应假设返回的商信息恰好只有3位。quotient须指向有效且可写的int对象。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float x, float y, int * quotient)
+bool example()
 {
-    return asc::std::remquof(x, y, quotient);
+    int quotient = 0;
+    const auto remainder = asc::std::remquof(5.0F, 2.0F, &quotient);
+    return remainder == 1.0F && quotient > 0 && (quotient & 7) == 2;
 }
 ```
 

@@ -53,11 +53,8 @@ allocator_type get_allocator() const noexcept;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 返回所保存分配器的副本，不分配元素存储；分配器复制操作须不抛出异常。
+- 在Device侧调用时，分配器复制操作须可用于相应编程模式。
 
 ## 调用示例
 

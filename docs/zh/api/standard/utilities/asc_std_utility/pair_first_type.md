@@ -48,14 +48,16 @@ using first_type = T1;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例用具体类型和独立预期检查别名或标记结果。
 
 ```cpp
 #include <asc/std/utility>
+#include <asc/std/type_traits>
 
 void use_type()
 {
     using alias_type = typename asc::std::pair<int, int>::first_type;
+    static_assert(asc::std::is_same_v<alias_type, int>);
 }
 ```
 

@@ -47,7 +47,7 @@ template<class ForwardIterator, class T> constexpr void iota(ForwardIterator fir
 | 参数名 | 描述 |
 | --- | --- |
 | `ForwardIterator` | 待填充范围的迭代器类型；须可写入所指元素并向后遍历。 |
-| `T` | 填充起始值与范围元素的类型；须支持 ++ 自增。 |
+| `T` | 填充起始值的类型；递增后须能赋值给范围元素，二者类型可以不同；须支持 ++ 自增。 |
 
 **函数参数**
 
@@ -63,20 +63,21 @@ template<class ForwardIterator, class T> constexpr void iota(ForwardIterator fir
 
 ## 约束说明
 
-- 提供顺序迭代器/值重载。
-- 本族中标准定义的执行策略重载采用顺序执行语义。
+- `[first, last)`须为有效的可写前向迭代范围。
+- 每次将当前`value`赋给一个元素后执行`++value`；类型须支持赋值和前置递增，所需递增操作须有效。
 
 ## 调用示例
 
-以下片段用具体整数范围展示数值调用；输出数组具有足够容量。
+以下示例将四个输出元素依次填为1、2、3、4。
 
 ```cpp
 #include <asc/std/numeric>
 
-void example()
+bool example()
 {
     int output[4] = {};
     asc::std::iota(output, output + 4, 1);
+    return output[0] == 1 && output[1] == 2 && output[2] == 3 && output[3] == 4;
 }
 ```
 

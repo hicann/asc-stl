@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/cwctype>`。
 
-`asc::std::towupper`按当前支持的C区域设置规则转换字符大小写。
+`asc::std::towupper`将小写字母转换为对应大写字母；无对应转换时返回原值。
 
 该接口的可用位置为Host（完整接口）、Device（C locale相关接口）。
 
@@ -64,14 +64,14 @@ wint_t towupper(wint_t value) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/std/cwctype>
 
-decltype(auto) example(asc::std::wint_t value)
+bool example()
 {
-    return asc::std::towupper(value);
+    return asc::std::towupper(L'a') == L'A';
 }
 ```
 

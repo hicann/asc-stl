@@ -34,9 +34,12 @@
 
 ## 声明
 
+以下声明摘要用公开特征类的`value`表示等价的常量值。
+
 ```cpp
 namespace asc::std {
-template<class T, unsigned int Index> inline constexpr const size_t extent_v;
+template<class T, unsigned int Index = 0>
+inline constexpr size_t extent_v = extent<T, Index>::value;
 } // namespace asc::std
 ```
 
@@ -51,7 +54,8 @@ template<class T, unsigned int Index> inline constexpr const size_t extent_v;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::extent_v<int[4], 0>;
+static_assert((asc::std::extent_v<int[4], 0>) == 4);
+static_assert(asc::std::extent_v<int[2][3], 1> == 3);
 ```
 
 ## 关联API

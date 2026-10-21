@@ -62,16 +62,17 @@ constexpr data_handle_type offset(data_handle_type pointer, size_t index) const 
 
 ## 调用示例
 
-以下Host片段使用具体类型演示调用；指针、范围和索引须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/mdspan>
 
-decltype(auto) example()
+bool example()
 {
-    alignas(16) int values[4] = {1, 2, 3, 4};
-    asc::std::default_accessor<int> accessor{};
-    return accessor.offset(values, 1);
+    int values[4] = {1, 2, 3, 4};
+    asc::std::default_accessor<int> accessor;
+    int* result = accessor.offset(values, 2);
+    return result == values + 2 && *result == 3;
 }
 ```
 

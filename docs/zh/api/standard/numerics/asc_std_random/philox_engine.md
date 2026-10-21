@@ -42,6 +42,8 @@ template<class UIntType, size_t WordSize, size_t WordCount, size_t NumRounds, UI
 
 ## 约束说明
 
+- UIntType须为无cv限定的无符号整数。WordSize仅32或64，WordCount仅2或4，Constants个数须等于WordCount，NumRounds必须大于0。
+
 - 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
 - 不提供SeedSequence、流式输入输出或共享全局状态。
 

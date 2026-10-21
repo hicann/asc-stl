@@ -34,16 +34,14 @@
 
 ## 声明
 
-所属类型：[`asc::std::integral_constant`](integral_constant.md)。
-
 ```cpp
-// asc::std::integral_constant 类内的声明节选；模板形参和其他成员由所属类提供。
-inline constexpr const T value;
+// integral_constant<T, V> 类内的声明。
+static constexpr T value = V;
 ```
 
 ## 约束说明
 
-- 提供特征类及其对应的 _v辅助形式。
+- `value`为类型`const T`的静态`constexpr`成员，其值等于当前特化的模板实参`V`。
 
 ## 调用示例
 
@@ -52,7 +50,7 @@ inline constexpr const T value;
 ```cpp
 #include <asc/std/type_traits>
 
-inline constexpr auto example = asc::std::integral_constant<int, 3>::value;
+static_assert((asc::std::integral_constant<int, 3>::value) == 3);
 ```
 
 ## 关联API

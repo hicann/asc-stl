@@ -35,10 +35,13 @@
 ```cpp
 namespace asc {
 using pipeline_event_id = unsigned int;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 约束说明
+
+- 事件编号须在`[0, 3]`内，并由调用方为整个流水线存活期独占；两级时使用四个互异编号。
+- 除每级的MTE2→S加载事件和S→MTE3存储许可事件外，协调器还使用MTE3→S排空及S→MTE2复用事件。单级从剩余编号选取；两级占满编号时分别复用load_event0和load_event1，但方向不同。不得与其他TPipe/TQue占用同一方向和编号。
 
 - 仅可在AI Core SIMD编程中调用。
 - 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明。
@@ -58,14 +61,14 @@ __global__ __vector__ void example(__gm__ unsigned int* output, __gm__ const uns
     const asc::pipeline_event_id store_event = 3;
     asc::pipeline_ref pipeline(load_event, store_event);
     pipeline.producer_acquire(0);
-    asc::copy_async(pipeline, 0, asc::ub_span<unsigned int>(buffer, 256),
-        asc::gm_span<const unsigned int>(input, 256));
+    asc::copy_async(pipeline, 0, asc::ub_span<unsigned int>(buffer, 256), asc::gm_span<const unsigned int>(input, 256));
     pipeline.producer_commit(0);
     pipeline.consumer_wait(0);
-    for (unsigned int index = 0; index < 256; ++index) buffer[index] += pipeline.stages();
+    for (unsigned int index = 0; index < 256; ++index)
+        buffer[index] += pipeline.stages();
     pipeline.consumer_release(0);
-    asc::copy_async(pipeline, 0, asc::gm_span<unsigned int>(output, 256),
-        asc::ub_span<const unsigned int>(buffer, 256));
+    asc::copy_async(
+        pipeline, 0, asc::gm_span<unsigned int>(output, 256), asc::ub_span<const unsigned int>(buffer, 256));
     pipeline.wait();
 }
 ```

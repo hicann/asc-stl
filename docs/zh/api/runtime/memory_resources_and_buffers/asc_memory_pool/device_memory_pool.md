@@ -37,12 +37,15 @@
 ```cpp
 namespace asc {
 class device_memory_pool;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供软件内存池、collect、trim、stats以及Event安全复用。
+- Host软件内存池最多登记64个同时保留的块；表满时新块请求返回insufficient_storage，与设备剩余容量无关。
+- 使用同一池分配和异步释放；释放须排在该Stream对该块的全部使用之后，只有退休Event完成后才可复用。
+- close前须归还所有in-use块；失败会保留未释放块和有效所有权，调用方须处理状态并可重试。
+- Device池操作要求当前Runtime Device与配置ordinal一致；并发操作由元数据锁保护，池及Stream须在使用期间有效。
 
 ## 调用示例
 
@@ -56,7 +59,8 @@ bool resource_example()
 {
     asc::device_memory_pool pool;
     asc::device_memory_pool_config config{};
-    if (!asc::device_memory_pool::create(pool, config).success()) return false;
+    if (!asc::device_memory_pool::create(pool, config).success())
+        return false;
     const bool ready = pool.valid() && pool.statistics().reserved_bytes() == 0;
     const bool closed = pool.close().success();
     return ready && closed && !pool.valid();
@@ -64,7 +68,8 @@ bool resource_example()
 
 bool example()
 {
-    if (aclInit(nullptr) != ACL_SUCCESS) return false;
+    if (aclInit(nullptr) != ACL_SUCCESS)
+        return false;
     if (aclrtSetDevice(0) != ACL_SUCCESS) {
         const bool finalized = aclFinalize() == ACL_SUCCESS;
         return finalized && false;

@@ -34,51 +34,27 @@
 
 ## 函数原型
 
-### 原型1
+以下为受无符号整数选择条件约束的模板声明；结果选择别名只控制合法类型的参与。
 
 ```cpp
 namespace asc::std {
-template<class T> [[nodiscard]] constexpr int countl_zero(T value) noexcept;
-} // namespace asc::std
-```
-
-### 原型2
-
-```cpp
-namespace asc::std {
-template<class T> [[nodiscard]] constexpr int countl_zero(unsigned long value) noexcept;
-} // namespace asc::std
+template<class T> constexpr __unsigned_integer_result_t<T, int> countl_zero(T value) noexcept;
+}
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 无符号整数类型。 |
+| `T` | 支持的无cv无符号整数类型；不接受bool和普通字符编码类型。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `value` | 输入 | 待统计的无符号整数值；统计从最高位起连续为0的位数，值为0时返回T的位宽。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 无符号整数类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 待统计的无符号整数值；统计从最高位起连续为0的位数，值为0时返回T的位宽。 |
+| `value` | 输入 | 被查询的无符号整数；为0时返回T的二进制位数。 |
 
 ## 返回值说明
 

@@ -37,7 +37,7 @@
 ```cpp
 namespace asc {
 bool adopt_event(asc::event_ref::native_handle_type handle, asc::event& output) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -46,7 +46,7 @@ bool adopt_event(asc::event_ref::native_handle_type handle, asc::event& output) 
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `handle` | 输入 | 用于记录或等待执行进度的Event引用。 |
+| `handle` | 输入 | Runtime原生句柄（native_handle_type，不透明void指针），不是包装器对象；adopt接管所有权，ref构造仅借用。 |
 | `output` | 输出 | 提供“把非空的Runtime Event原生句柄所有权交给空的`event`对象，不创建新的Runtime资源”使用的对象引用；被引用对象须在调用期间有效。 |
 
 ## 返回值说明

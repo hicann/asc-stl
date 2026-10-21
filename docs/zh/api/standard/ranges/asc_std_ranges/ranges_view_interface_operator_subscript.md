@@ -34,21 +34,25 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::ranges::view_interface`](ranges_view_interface.md)。
+所属类型：[`view_interface`](ranges_view_interface.md)。以下是按参与条件列出的声明摘要；保留供调用使用的模板默认值，省略仅供SFINAE的实现选择参数。涉及私有返回类型时用auto摘要表示，不承诺可直接命名该类型。
 
 ### 原型1
 
 ```cpp
-// asc::std::ranges::view_interface 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class RARange> constexpr decltype(auto) operator[](range_difference_t<RARange> index);
+template<class RARange = Derived>
+constexpr decltype(auto) operator[](range_difference_t<RARange> index);
 ```
+
+`RARange`须有随机访问迭代器。
 
 ### 原型2
 
 ```cpp
-// asc::std::ranges::view_interface 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class RARange> constexpr decltype(auto) operator[](range_difference_t<RARange> index) const;
+template<class RARange = const Derived>
+constexpr decltype(auto) operator[](range_difference_t<RARange> index) const;
 ```
+
+`RARange`须有随机访问迭代器。
 
 ## 参数说明
 
@@ -58,13 +62,13 @@ template<class RARange> constexpr decltype(auto) operator[](range_difference_t<R
 
 | 参数名 | 描述 |
 | --- | --- |
-| `RARange` | 派生自view_interface的随机访问范围/视图类型。 |
+| `RARange` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 元素下标，从0起；调用方须保证0 <= index < 范围长度，接口不检查越界。 |
+| `index` | 输入 | 从范围起点计的随机访问偏移；须非负且小于当前元素数。 |
 
 ### 原型2的参数
 
@@ -72,24 +76,26 @@ template<class RARange> constexpr decltype(auto) operator[](range_difference_t<R
 
 | 参数名 | 描述 |
 | --- | --- |
-| `RARange` | 派生自view_interface的随机访问范围/视图类型。 |
+| `RARange` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `index` | 输入 | 元素下标，从0起；调用方须保证0 <= index < 范围长度，接口不检查越界。 |
+| `index` | 输入 | 从范围起点计的随机访问偏移；须非负且小于当前元素数。 |
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `decltype(auto)` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
-| 原型2 | `decltype(auto)` | 返回指定索引处的元素引用或代理值；索引必须有效。 |
+| 原型1 | `decltype(auto)` | 返回指定偏移处元素的解引用结果，保留值类别。 |
+| 原型2 | `decltype(auto)` | 返回指定偏移处元素的解引用结果，保留值类别。 |
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- 每种形式的参与条件见原型；无实参查询一般直接调用，不需要指定模板选择类型。
+- 返回的迭代器、指针或引用以及借用范围不得超过其实际依赖的视图对象和元素存储的有效期。
+- index须处于范围的有效下标内；本接口不进行动态边界保护。
 
 ## 调用示例
 

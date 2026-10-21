@@ -36,13 +36,14 @@
 
 ```cpp
 namespace asc::std {
-template<bool B> using bool_constant = integral_constant<bool, B>;
-} // namespace asc::std
+template <bool B>
+using bool_constant = integral_constant<bool, B>;
+}  // namespace asc::std
 ```
 
 ## 约束说明
 
-- 提供特征类及其对应的 _v辅助形式。
+- 布尔模板实参`B`决定结果类型；此别名等于`integral_constant<bool, B>`，其`value`为`B`。
 
 ## 调用示例
 

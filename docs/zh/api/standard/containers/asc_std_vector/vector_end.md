@@ -69,11 +69,8 @@ iterator end() noexcept;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 返回当前元素序列的尾后迭代器，不可解引用。
+- 插入或删除元素会改变尾后位置；重新分配或释放存储后，原迭代器失效。
 
 ## 调用示例
 

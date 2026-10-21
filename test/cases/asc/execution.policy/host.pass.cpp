@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+#ifndef ASC_ENABLE_HOST_ASSERTIONS
+#define ASC_ENABLE_HOST_ASSERTIONS 1
+#endif
+
 #include "../../../support/b015_semantics.h"
 int main()
 {

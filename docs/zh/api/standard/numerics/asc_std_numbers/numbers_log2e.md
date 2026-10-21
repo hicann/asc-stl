@@ -38,8 +38,8 @@
 
 ```cpp
 namespace asc::std::numbers {
-inline constexpr const double log2e;
-} // namespace asc::std::numbers
+inline constexpr double log2e = 0x1.71547652b82fe1777d0ffda0d23ap+0;
+}
 ```
 
 ## 约束说明

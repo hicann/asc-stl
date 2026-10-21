@@ -209,7 +209,8 @@ inline constexpr bool __fp_has_nan_v<__fp_format::__fp6_e3m2> = false;
 template <>
 inline constexpr bool __fp_has_nan_v<__fp_format::__fp4_e2m1> = false;
 
-// __fp_has_nans_v
+// __fp_has_nans_v: signaling-NaN capability, distinct from quiet NaNs.
+// E4M3 and E8M0 have a NaN encoding but no distinct signaling encoding.
 
 template <__fp_format Fmt>
 inline constexpr bool __fp_has_nans_v = true;

@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<class T> struct bit_or;
+template<class T = void> struct bit_or;
 } // namespace asc::std
 ```
 

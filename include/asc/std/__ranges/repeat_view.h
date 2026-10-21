@@ -282,7 +282,7 @@ public:
     {
         if constexpr (!is_same_v<Bound, unreachable_sentinel_t> && is_signed_v<Bound>) {
             CANN_ASC_STL_DETAIL_ASSERT(
-                bound_, "The behavior is undefined if Bound is not unreachable_sentinel_t and bound is negative");
+                bound_ >= 0, "The behavior is undefined if Bound is not unreachable_sentinel_t and bound is negative");
         }
     }
 

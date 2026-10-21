@@ -29,6 +29,7 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
+#include <asc/std/__floating_point/cast.h>
 #include <asc/std/__cmath/backend.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_extended_floating_point.h>
@@ -115,7 +116,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
         return ::hlog(value);
     } else  // NOLINT(readability/braces)
 #endif
-        return static_cast<Tp>(::asc::std::log(static_cast<float>(value)));
+        return ::asc::std::__fp_cast<Tp>(::asc::std::log(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Common (base-10) logarithm log10(@p value).
@@ -145,7 +146,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
         return ::hlog10(value);
     } else  // NOLINT(readability/braces)
 #endif
-        return static_cast<Tp>(::asc::std::log10(static_cast<float>(value)));
+        return ::asc::std::__fp_cast<Tp>(::asc::std::log10(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief log(1 + @p value); preserves precision when @p value is close to 0.
@@ -165,7 +166,7 @@ template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp log1p(
     Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::log1p(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::log1p(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Base-2 logarithm.
@@ -194,7 +195,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
         return ::hlog2(value);
     } else  // NOLINT(readability/braces)
 #endif
-        return static_cast<Tp>(::asc::std::log2(static_cast<float>(value)));
+        return ::asc::std::__fp_cast<Tp>(::asc::std::log2(::asc::std::__fp_cast<float>(value)));
 }
 
 //! @brief Normalized exponent of @p value (unbiased exponent, returned as an
@@ -221,7 +222,7 @@ template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR int ilogb(
     Tp value) noexcept
 {
-    return ::asc::std::ilogb(static_cast<float>(value));
+    return ::asc::std::ilogb(::asc::std::__fp_cast<float>(value));
 }
 
 //! @brief Normalized exponent of @p value (returned as floating point).
@@ -241,7 +242,7 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR Tp logb(Tp value) noexcept
 {
-    return static_cast<Tp>(::asc::std::logb(static_cast<float>(value)));
+    return ::asc::std::__fp_cast<Tp>(::asc::std::logb(::asc::std::__fp_cast<float>(value)));
 }
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()

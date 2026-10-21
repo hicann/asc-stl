@@ -36,84 +36,57 @@
 
 所属类型：[`asc::std::counted_iterator`](counted_iterator.md)。
 
-### 原型1
-
 ```cpp
-// asc::std::counted_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr counted_iterator<Iter>& operator++();
+// counted_iterator 类内声明节选；类模板参数和其余成员由所属类提供。
+constexpr counted_iterator& operator++();
 ```
 
-### 原型2
+后置自增只有一个成员模板，以下两个条件分支互斥：
 
 ```cpp
-// asc::std::counted_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class I2> decltype(auto) operator++(int unused);
-```
-
-### 原型3
-
-```cpp
-// asc::std::counted_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class I2> constexpr counted_iterator<Iter> operator++(int unused);
+// counted_iterator 类内声明节选。
+#if CANN_ASC_STL_DETAIL_HAS_EXCEPTIONS() && !CANN_ASC_STL_DETAIL_HAS_CXX20()
+template<class I2 = Iter>
+auto operator++(int);
+#else
+template<class I2 = Iter>
+constexpr auto operator++(int);
+#endif
 ```
 
 ## 参数说明
 
-### 原型1的参数
+前置形式无参数。后置形式的`int`为区分语法的占位参数，通常写作`iterator++`。
 
-无参数。
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
+| 模板参数 | 描述 |
 | --- | --- |
-| `I2` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `unused` | 输入 | 用于区分后置自增或后置自减形式的占位参数；调用时写作整数0。 |
-
-### 原型3的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `I2` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `unused` | 输入 | 用于区分后置自增或后置自减形式的占位参数；调用时写作整数0。 |
+| `I2` | 后置形式的选择类型，默认等于所属类的`Iter`；通常由默认值提供。 |
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `counted_iterator<Iter> &` | 返回更新后的当前对象引用。 |
-| 原型2 | `decltype(auto)` | 返回更新后的迭代器或计数值。 |
-| 原型3 | `counted_iterator<Iter>` | 返回更新后的迭代器或计数值。 |
+前置形式返回递增后当前适配器的引用。后置形式在底层满足前向迭代器要求时，返回递增前的`counted_iterator`副本；否则返回底层`current_++`的结果，其类型由底层迭代器决定。
+
+两种形式成功后都将当前位置前移一位，并将剩余计数减1。带异常支持的非前向分支在底层后置递增抛出异常时恢复原计数。
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- `Iter`须满足本操作要求的遍历能力；适配器不拥有底层范围。
+- `count()`表示从当前位置开始剩余的元素数量；解引用及自增要求剩余数量大于0。
+- 位移后的底层位置及对应计数须有效，不得越过实际有效范围。
 
 ## 调用示例
 
-以下Host片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void example(asc::std::counted_iterator<int*>& iterator)
+bool example()
 {
-    ++iterator;
+    int values[] = {2, 4, 6, 8};
+    asc::std::counted_iterator<int*> iterator(values, 4);
+    auto old = iterator++;
+    return *old == 2 && *iterator == 4;
 }
 ```
 

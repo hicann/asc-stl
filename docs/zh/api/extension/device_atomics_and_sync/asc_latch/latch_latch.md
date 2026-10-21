@@ -53,6 +53,8 @@ constexpr explicit latch(asc::std::ptrdiff_t expected) noexcept;
 
 ## 约束说明
 
+- 初始expected须在`[0, max()]`内；为0时等待立即通过。每次count_down/arrive_and_wait的update须严格大于0且不超过剩余计数。
+
 - 使用C++17。
 - 在AI Core SIMT编程 中操作调用方管理的GM状态。
 - Scope必须为asc::memory_scope::block或asc::memory_scope::device。

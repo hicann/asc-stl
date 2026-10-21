@@ -35,14 +35,16 @@
 ```cpp
 namespace asc {
 struct layout_stride_relaxed;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供Host和GM视图以及AI Core SIMD编程UB视图。
-- 允许有符号步长。
-- 可选的Host DLPack桥接不抛出异常。
+- 映射不拥有数据；坐标须在extents内，有符号步长和origin的乘加须可表示，映射覆盖的所有位置须属于有效存储。零步长可产生重复地址，不能默认假定is_unique为true。
+
+- 默认及Host/GM/UB访问器使用非负元素偏移；手动使用负步长时须通过mapping origin保证所有有效坐标的偏移非负且仍在存储内。
+- DLPack导入保留有符号步长，通过重定位句柄并设置非负origin表达反向视图；无法表示的步长跨度返回false且输出不变。
+
 
 ## 调用示例
 

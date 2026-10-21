@@ -34,28 +34,16 @@
 
 ## 声明
 
-### 原型1
-
 ```cpp
 namespace asc::std::numbers {
-e_v :;
-} // namespace asc::std::numbers
+template<class Tp> inline constexpr Tp e_v = __numbers<Tp>::__e();
+}
 ```
-
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
-
-### 原型2
-
-```cpp
-template <class Tp> constexpr Tp e_v = __numbers<Tp>::__e();
-```
-
-该原型适用于`C++17+`，可用位置为Host、AI Core SIMD编程、AI Core SIMT编程。
 
 ## 约束说明
 
 - 提供float变量模板。
-- 数学常量e的变量模板（标准[math.constants] 位形），float实例可用，double/long double实例仍按冻结核对静态断言拒绝。
+- 模板参数Tp当前仅支持float；其他类型的实例化会被静态断言拒绝。
 
 ## 调用示例
 

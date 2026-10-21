@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/algorithm>`。
 
-`asc::std::inplace_merge`在原范围中合并相邻的两个已排序子范围；无策略形式在调用者所在执行主体内顺序执行。
+`asc::std::inplace_merge`在原范围中合并相邻的两个已排序子范围；在调用者所在执行主体内顺序执行。
 
 该接口的可用位置为Host、AI Core SIMD编程。
 
@@ -40,16 +40,19 @@
 
 ```cpp
 namespace asc::std {
-template<class BidirectionalIterator, class Compare> void inplace_merge(BidirectionalIterator first, BidirectionalIterator middle, BidirectionalIterator last, Compare compare);
-} // namespace asc::std
+template <class BidirectionalIterator, class Compare>
+constexpr void inplace_merge(
+    BidirectionalIterator first, BidirectionalIterator middle, BidirectionalIterator last, Compare compare);
+}  // namespace asc::std
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class BidirectionalIterator> void inplace_merge(BidirectionalIterator first, BidirectionalIterator middle, BidirectionalIterator last);
-} // namespace asc::std
+template <class BidirectionalIterator>
+constexpr void inplace_merge(BidirectionalIterator first, BidirectionalIterator middle, BidirectionalIterator last);
+}  // namespace asc::std
 ```
 
 ## 参数说明

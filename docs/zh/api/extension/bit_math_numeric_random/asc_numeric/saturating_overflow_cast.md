@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class To, class From> constexpr To saturating_overflow_cast(From value) noexcept;
-} // namespace asc
+template <class To, class From>
+constexpr To saturating_overflow_cast(From value) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -61,8 +62,8 @@ template<class To, class From> constexpr To saturating_overflow_cast(From value)
 
 ## 约束说明
 
-- T、From和To必须是不超过64位的标准非bool整数类型。
-- 所有溢出检查均不得触发有符号整数溢出的未定义行为。
+- 可在Host、AI Core SIMD和AI Core SIMT调用；结果按本页声明的整数类型返回。
+- `To`和`From`须为不超过64位的标准非bool整数；检查或饱和语义见本页返回值。
 
 ## 调用示例
 

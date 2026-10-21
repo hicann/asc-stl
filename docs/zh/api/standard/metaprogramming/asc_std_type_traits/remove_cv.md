@@ -42,7 +42,7 @@ template<class T> struct remove_cv;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 只移除`T`的顶层`const`和`volatile`；引用及指针所指对象的限定不受影响。
 
 ## 调用示例
 

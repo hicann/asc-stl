@@ -36,15 +36,20 @@
 
 ```cpp
 namespace asc::std {
-template<class Element, class Extents, class Layout, class Accessor> class mdspan;
-} // namespace asc::std
+template<class Element, class Extents, class Layout = layout_right,
+    class Accessor = default_accessor<Element>>
+class mdspan;
+}
 ```
 
 ## 约束说明
 
-- C++17起提供一维`operator[]`及以array/span保存索引的访问形式；多参数`operator[]`要求编译器支持C++23多维下标语法。
+- `Element`须为非数组、非抽象类型，并与`Accessor::element_type`一致；`Extents`须为`extents`特化。
+- `Layout`须为所选维度提供`mapping`类型；访问器决定数据句柄、引用和访问规则。
+- C++17起提供一维`operator[]`及以`array`/`span`保存索引的访问形式；多参数`operator[]`仅在语言模式高于C++20且`__cpp_multidimensional_subscript >= 202110L`时开放。
 - C++17和C++20可使用`operator()`扩展按逐维下标访问；该形式的下标数量须等于维数。
-- Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
+- 视图不取得存储所有权。访问期间存储须有效并覆盖布局映射及访问器要求的范围；带间隙的布局可需要多于逻辑元素数的存储。
+- Host、AI Core SIMD编程和AI Core SIMT编程支持普通指针；其它地址空间和句柄的有效性由访问器约定。
 
 ## 调用示例
 

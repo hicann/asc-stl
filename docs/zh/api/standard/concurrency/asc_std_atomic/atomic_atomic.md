@@ -68,10 +68,9 @@ constexpr atomic(T value) noexcept;
 
 ## 约束说明
 
-- 标准整数/字符owning atomic别名及列出自由函数。
-- bool/8/16位用32位内部存储。
-- 32/64位按有符号位模式分派。
-- Host和AI Core SIMT编程GM。
+- `T`须为[atomic](atomic.md)支持的整数或字符类型，包括`bool`；复制构造已删除。
+- 构造须在Host或AI Core SIMT编程中进行；SIMT线程共享的原子对象须位于GM，并在并发访问开始前完成构造。
+- 默认构造将存储初始化为零；带值构造保存传入值。构造本身不为其他线程建立同步。
 
 ## 调用示例
 

@@ -28,17 +28,18 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::hh_mm_ss::precision`表示日期、时间点或时长计算中的`precision`值类型。
+`hh_mm_ss<Duration>::precision`是时分秒分解所用的秒以下精度类型。它是duration，计数类型为`common_type_t<Duration, seconds>::rep`，周期为1 / 10^fractional_width秒。
 
-标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
+fractional_width的计算规则见[`fractional_width`](chrono_hh_mm_ss_fractional_width.md)。
 
 ## 声明
 
-所属类型：[`asc::std::chrono::hh_mm_ss`](chrono_hh_mm_ss.md)。
+precision是hh_mm_ss的公开成员类型；上述别名仅演示如何查询它。
 
 ```cpp
-// asc::std::chrono::hh_mm_ss 类内的声明节选；模板形参和其他成员由所属类提供。
-using precision = duration<typename Commontype::rep, ratio<1, Pow10(fractional_width)>>;
+template<class Duration>
+using hh_mm_ss_precision_t =
+    typename asc::std::chrono::hh_mm_ss<Duration>::precision;
 ```
 
 ## 约束说明
@@ -47,15 +48,14 @@ using precision = duration<typename Commontype::rep, ratio<1, Pow10(fractional_w
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/chrono>
+#include <asc/std/type_traits>
 
-void use_type()
-{
-    using alias_type = typename asc::std::chrono::hh_mm_ss<asc::std::chrono::seconds>::precision;
-}
+using split_type = asc::std::chrono::hh_mm_ss<asc::std::chrono::milliseconds>;
+static_assert(asc::std::is_same_v<typename split_type::precision, asc::std::chrono::milliseconds>);
 ```
 
 ## 关联API

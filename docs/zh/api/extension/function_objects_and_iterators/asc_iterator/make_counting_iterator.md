@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class Start> constexpr asc::counting_iterator<Start> make_counting_iterator(Start start);
-} // namespace asc
+template <class Start>
+constexpr asc::counting_iterator<Start> make_counting_iterator(Start start);
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -56,7 +57,7 @@ template<class Start> constexpr asc::counting_iterator<Start> make_counting_iter
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `asc::counting_iterator<Start>` | 返回保存调用方参数的迭代器适配器；底层范围须在使用期间保持有效。 |
+| `asc::counting_iterator<Start>` | 返回保存调用方参数的迭代器适配器；所保存函数对象若捕获外部引用，该引用须在使用期间有效。 |
 
 ## 约束说明
 
@@ -65,16 +66,15 @@ template<class Start> constexpr asc::counting_iterator<Start> make_counting_iter
 
 ## 调用示例
 
-以下片段使用具体数组和可调用对象构造迭代器。实际使用时底层范围须保持有效。
+以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
-
-decltype(auto) example()
+bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    return asc::make_counting_iterator(0);
+    auto iterator = asc::make_counting_iterator(3);
+    ++iterator;
+    return *iterator == 4;
 }
 ```
 

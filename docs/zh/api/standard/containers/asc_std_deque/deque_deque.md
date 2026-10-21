@@ -35,7 +35,7 @@
 ## 函数原型
 
 ```cpp
-deque(const Allocator& allocator) noexcept;
+explicit deque(const Allocator& allocator) noexcept;
 ```
 
 ## 参数说明

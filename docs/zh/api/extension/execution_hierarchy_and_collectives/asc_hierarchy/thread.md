@@ -34,8 +34,8 @@
 
 ```cpp
 namespace asc {
-inline constexpr thread_level thread{}
-} // namespace asc
+inline constexpr thread_level thread{};
+}  // namespace asc
 ```
 
 ## 约束说明

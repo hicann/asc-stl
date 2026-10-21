@@ -75,14 +75,10 @@ CANN_ASC_STL_API constexpr T __fp_abs(T value) noexcept
 template <class T>
 CANN_ASC_STL_API constexpr enable_if_t<is_floating_point_v<T>, T> midpoint(T left, T right) noexcept
 {
-#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    // numeric_limits extremes are unavailable on the device side; use compiler builtin constants instead
-    constexpr T low = static_cast<T>(__DBL_MIN__) * 2;
-    constexpr T high = static_cast<T>(__DBL_MAX__) / 2;
-#else
+    // Select extremes in T's own format; converting double extremes to float
+    // would produce zero/infinity and defeat the overflow-safe branches.
     constexpr T low = ::asc::std::numeric_limits<T>::min() * 2;
     constexpr T high = ::asc::std::numeric_limits<T>::max() / 2;
-#endif
     return ::asc::std::__fp_abs(left) <= high && ::asc::std::__fp_abs(right) <= high ?
         // typical case: overflow is impossible
         (left + right) / 2 :

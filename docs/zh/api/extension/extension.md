@@ -449,7 +449,9 @@
 | [asc::warp_shuffle_result::valid](execution_hierarchy_and_collectives/asc_warp/warp_shuffle_result_valid.md) | asc/warp | 变量 | C++17+ | AI Core SIMT编程 | Ascend 950 |
 | [asc::warp_shuffle_up](execution_hierarchy_and_collectives/asc_warp/warp_shuffle_up.md) | asc/warp | 函数模板 | C++17+ | AI Core SIMT编程 | Ascend 950 |
 | [asc::warp_shuffle_xor](execution_hierarchy_and_collectives/asc_warp/warp_shuffle_xor.md) | asc/warp | 函数模板 | C++17+ | AI Core SIMT编程 | Ascend 950 |
-| [asc::acquire_work](execution_hierarchy_and_collectives/asc_work_queue/acquire_work.md) | asc/work_queue | 函数模板 | C++17+ | AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::make_work_queue](execution_hierarchy_and_collectives/asc_work_queue/make_work_queue.md) | asc/work_queue | 函数模板 | C++17+ | AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::work_chunk](execution_hierarchy_and_collectives/asc_work_queue/work_chunk.md) | asc/work_queue | 类模板 | C++17+ | AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::work_queue_ref](execution_hierarchy_and_collectives/asc_work_queue/work_queue_ref.md) | asc/work_queue | 类模板 | C++17+ | AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::acquire_work](execution_hierarchy_and_collectives/asc_work_queue/acquire_work.md) | asc/work_queue | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::make_work_queue](execution_hierarchy_and_collectives/asc_work_queue/make_work_queue.md) | asc/work_queue | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::work_chunk](execution_hierarchy_and_collectives/asc_work_queue/work_chunk.md) | asc/work_queue | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::work_queue_ref](execution_hierarchy_and_collectives/asc_work_queue/work_queue_ref.md) | asc/work_queue | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::tensor_store_async](multidimensional_views_and_transfer/asc_tensor_copy/tensor_store_async.md) | asc/tensor_copy | 函数模板 | C++17+ | AI Core SIMD编程 | Ascend 950 |
+| [asc::work_cursor](execution_hierarchy_and_collectives/asc_work_queue/work_cursor.md) | asc/work_queue | 类型别名 | C++17+ | 见各成员或重载说明 | Ascend 950 |

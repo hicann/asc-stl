@@ -34,108 +34,49 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::expected`](expected.md)。
-
-### 原型1
+以下位于`expected<Value, Error>`类内。返回类型由function的调用结果及本操作的值/错误传播规则决定。
 
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class Fun, class Tp2> constexpr auto transform_error(Fun&& function)&;
+template<class Fun>
+constexpr auto transform_error(Fun&& function) &;
 ```
 
-### 原型2
-
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class Fun, class Tp2> constexpr auto transform_error(Fun&& function)&&;
+template<class Fun>
+constexpr auto transform_error(Fun&& function) const&;
 ```
 
-### 原型3
-
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class Fun, class Tp2> constexpr auto transform_error(Fun&& function) const&;
+template<class Fun>
+constexpr auto transform_error(Fun&& function) &&;
 ```
 
-### 原型4
-
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class Fun, class Tp2> constexpr auto transform_error(Fun&& function) const&&;
+template<class Fun>
+constexpr auto transform_error(Fun&& function) const&&;
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Fun` | 对输入值执行本页操作的可调用对象类型。 |
-| `Tp2` | 来源expected的成功值类型；该重载要求相应的成功值构造或传播可行。 |
+| `Fun` | 接受相应cv/ref限定的错误的可调用对象类型；变换后的错误类型包装为expected。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `function` | 输入/输出 | 提供“在保存错误时变换错误对象，并保留成功值”使用的对象引用；被引用对象须在调用期间有效。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Fun` | 对输入值执行本页操作的可调用对象类型。 |
-| `Tp2` | 来源expected的成功值类型；该重载要求相应的成功值构造或传播可行。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `function` | 输入/输出 | 提供“在保存错误时变换错误对象，并保留成功值”使用的对象引用；被引用对象须在调用期间有效。 |
-
-### 原型3的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Fun` | 对输入值执行本页操作的可调用对象类型。 |
-| `Tp2` | 来源expected的成功值类型；该重载要求相应的成功值构造或传播可行。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `function` | 输入/输出 | 提供“在保存错误时变换错误对象，并保留成功值”使用的对象引用；被引用对象须在调用期间有效。 |
-
-### 原型4的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Fun` | 对输入值执行本页操作的可调用对象类型。 |
-| `Tp2` | 来源expected的成功值类型；该重载要求相应的成功值构造或传播可行。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `function` | 输入/输出 | 提供“在保存错误时变换错误对象，并保留成功值”使用的对象引用；被引用对象须在调用期间有效。 |
+| `function` | 输入/输出 | 仅当对象处于错误态时以该错误调用；按本对象的&、const&、&&或const&&形态传递实参。 |
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `auto` | 返回按当前值或错误状态变换后形成的新状态对象。 |
-| 原型2 | `auto` | 返回按当前值或错误状态变换后形成的新状态对象。 |
-| 原型3 | `auto` | 返回按当前值或错误状态变换后形成的新状态对象。 |
-| 原型4 | `auto` | 返回按当前值或错误状态变换后形成的新状态对象。 |
+返回一个expected状态对象：调用分支使用变换后的错误类型包装为expected；未调用分支传播原来的成功值。左值形式从相应左值传播，右值形式可以移动；返回类型由可调用结果及对应状态类型确定。
 
 ## 约束说明
+
+- 仅有Fun这一个成员模板参数；调用方不提供额外的成功值或错误模板参数。可调用结果和未调用分支的状态须满足构造及类型匹配要求。
 
 - 支持所有cv/ref限定形式。
 - Device侧可调用对象及结果构造必须不抛出异常。

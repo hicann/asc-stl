@@ -47,11 +47,21 @@ W13_W14_CASE_ROOT="$ROOT/test/cases/asc/std/linalg/runtime/hardware"
 BUILD_ROOT="${ASC_STL_HARDWARE_BUILD_DIR:-$ROOT/build/hardware}"
 RUNS="${ASC_STL_HARDWARE_RUNS:-3}"
 BUILD_JOBS="${CMAKE_BUILD_PARALLEL_LEVEL:-2}"
+CASE_TIMEOUT="${ASC_STL_HARDWARE_CASE_TIMEOUT_SECONDS:-120}"
+CLEANUP_GRACE="${ASC_STL_HARDWARE_CLEANUP_GRACE_SECONDS:-20}"
 CASE_RESULTS="$BUILD_ROOT/hardware-case-results.csv"
 HW1_RESULTS="$BUILD_ROOT/hw1-passed-cases.txt"
 mkdir -p "$BUILD_ROOT"
 : >"$CASE_RESULTS"
 : >"$HW1_RESULTS"
+
+run_bounded_hardware() {
+    local label="$1"
+    shift
+    python3 "$ROOT/scripts/run_hardware_case.py" \
+        --timeout "$CASE_TIMEOUT" --grace "$CLEANUP_GRACE" \
+        --log "$BUILD_ROOT/logs/$label.log" "$@"
+}
 
 run_hardware_case() {
     local runtime_case="$1"
@@ -59,8 +69,16 @@ run_hardware_case() {
     local mode="$3"
     local run_index="$4"
     shift 4
-    "$@"
-    printf '%s,%s,%s,%s,PASS\n' "$runtime_case" "$standard" "$mode" "$run_index" >>"$CASE_RESULTS"
+    local label="cxx$standard-${runtime_case//\//_}-$mode-$run_index"
+    local status=0
+    if run_bounded_hardware "$label" -- "$@"; then
+        printf '%s,%s,%s,%s,PASS\n' "$runtime_case" "$standard" "$mode" "$run_index" >>"$CASE_RESULTS"
+    else
+        status=$?
+        printf '%s,%s,%s,%s,FAIL\n' "$runtime_case" "$standard" "$mode" "$run_index" >>"$CASE_RESULTS"
+        echo "FAIL: hardware suite stopped after $label (exit=$status); verify device health before retrying." >&2
+        return "$status"
+    fi
 }
 for standard in 17 20; do
     SOURCE_BUILD_DIR="$BUILD_ROOT/cxx$standard/source-location"
@@ -166,22 +184,21 @@ for standard in 17 20; do
         echo "C++$standard algorithm runtime hardware run $run_index/$RUNS: D-SIMT"
         run_hardware_case "asc/__algorithm/frontend.h" "$standard" simt "$run_index" "$B019_BUILD_DIR/asc_stl_b019_simt"
         echo "C++$standard batch 22 atomic and rotate hardware run $run_index/$RUNS: D-SIMD"
-        "$B022_BUILD_DIR/asc_stl_b022_simd"
+        run_bounded_hardware "cxx$standard-b022-simd-$run_index" -- "$B022_BUILD_DIR/asc_stl_b022_simd"
         echo "C++$standard batch 22 atomic and rotate hardware run $run_index/$RUNS: D-SIMT"
         run_hardware_case "asc/std/atomic" "$standard" simt "$run_index" "$B022_BUILD_DIR/asc_stl_b022_simt"
         echo "C++$standard warp hardware run $run_index/$RUNS: D-SIMT"
         run_hardware_case "asc/warp" "$standard" simt "$run_index" "$B017_WARP_BUILD_DIR/asc_stl_b017_simt"
         echo "C++$standard warp failure-injection run $run_index/$RUNS: D-SIMT"
-        if ASC_STL_WARP_INJECT_FAILURE=1 "$B017_WARP_BUILD_DIR/asc_stl_b017_simt"; then
-            echo "FAIL: injected non-final lane failure was not propagated" >&2
-            exit 1
-        fi
+        ASC_STL_WARP_INJECT_FAILURE=1 run_bounded_hardware "cxx$standard-warp-injection-$run_index" \
+            --expected-exit 42 --expected-marker ASC_STL_EXPECTED_WARP_FAILURE_VERIFIED \
+            -- "$B017_WARP_BUILD_DIR/asc_stl_b017_simt"
         echo "C++$standard collectives hardware run $run_index/$RUNS: D-SIMD"
         run_hardware_case "asc/__collectives/block.h" "$standard" simd "$run_index" "$B018_COLLECTIVES_BUILD_DIR/asc_stl_b018_simd"
         echo "C++$standard collectives hardware run $run_index/$RUNS: D-SIMT"
         run_hardware_case "asc/__collectives/block.h" "$standard" simt "$run_index" "$B018_COLLECTIVES_BUILD_DIR/asc_stl_b018_simt"
         echo "C++$standard scoped atomic hardware run $run_index/$RUNS: D-SIMD"
-        "$B013_SCOPED_ATOMIC_BUILD_DIR/asc_stl_atomic_simd"
+        run_bounded_hardware "cxx$standard-atomic-simd-$run_index" -- "$B013_SCOPED_ATOMIC_BUILD_DIR/asc_stl_atomic_simd"
         echo "C++$standard scoped atomic hardware run $run_index/$RUNS: D-SIMT"
         run_hardware_case "asc/atomic" "$standard" simt "$run_index" "$B013_SCOPED_ATOMIC_BUILD_DIR/asc_stl_atomic_simt"
         echo "C++$standard complex logarithms hardware run $run_index/$RUNS: D-SIMD"
@@ -201,7 +218,7 @@ for standard in 17 20; do
         echo "C++$standard batch 23 string-view comparison hardware run $run_index/$RUNS: D-SIMT"
         run_hardware_case "asc/algorithm" "$standard" simt "$run_index" "$B023_BUILD_DIR/asc_stl_b023_simt"
         echo "C++$standard batch 25 memory-pool lifecycle hardware run $run_index/$RUNS: Host+CANN"
-        "$B025_MEMORY_POOL_BUILD_DIR/asc_stl_b025_memory_pool"
+        run_bounded_hardware "cxx$standard-memory-pool-$run_index" -- "$B025_MEMORY_POOL_BUILD_DIR/asc_stl_b025_memory_pool"
         echo "C++$standard work queue hardware run $run_index/$RUNS: D-SIMD"
         run_hardware_case "asc/work_queue" "$standard" simd "$run_index" "$B026_WORK_QUEUE_BUILD_DIR/asc_stl_b026_work_queue_simd"
         echo "C++$standard work queue hardware run $run_index/$RUNS: D-SIMT"
@@ -223,7 +240,7 @@ for standard in 17 20; do
         echo "C++$standard batch 28 list/map hardware run $run_index/$RUNS: D-SIMT"
         run_hardware_case "asc/std/list" "$standard" simt "$run_index" "$B028_LIST_BUILD_DIR/asc_stl_b028_simt"
         echo "C++$standard batch 28 foundation hardware run $run_index/$RUNS: D-SIMD"
-        "$B028_LIST_BUILD_DIR/asc_stl_b028_simd"
+        run_bounded_hardware "cxx$standard-b028-simd-$run_index" -- "$B028_LIST_BUILD_DIR/asc_stl_b028_simd"
         echo "C++$standard W08/W09/W10/W11/W12 hardware run $run_index/$RUNS: D-SIMD"
         run_hardware_case "asc/tensor_copy" "$standard" simd "$run_index" "$W08_BUILD_DIR/asc_stl_w08_simd"
         echo "C++$standard W08/W09/W10/W11/W12 hardware run $run_index/$RUNS: D-SIMT"

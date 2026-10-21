@@ -56,13 +56,8 @@ template<class... T, class Allocator> struct uses_allocator<asc::std::tuple<T...
 
 ## 约束说明
 
-- 构造、赋值、交换及相关自由函数均不进行动态内存分配。
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- 有`T::allocator_type`且来源分配器可转换为该类型时，普通主模板取`true`；否则取`false`。
+- `tuple`的公开特化取`true`；这个类型特征不实际构造对象或保证某个构造函数可用。
 
 ## 调用示例
 

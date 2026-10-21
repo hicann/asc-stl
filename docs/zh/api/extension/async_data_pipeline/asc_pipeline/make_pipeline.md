@@ -37,15 +37,16 @@
 ```cpp
 namespace asc {
 asc::pipeline_ref make_pipeline(asc::pipeline_event_id load_event, asc::pipeline_event_id store_event) noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc {
-asc::pipeline_ref make_pipeline(asc::pipeline_event_id load_event0, asc::pipeline_event_id store_event0, asc::pipeline_event_id load_event1, asc::pipeline_event_id store_event1) noexcept;
-} // namespace asc
+asc::pipeline_ref make_pipeline(asc::pipeline_event_id load_event0, asc::pipeline_event_id store_event0,
+    asc::pipeline_event_id load_event1, asc::pipeline_event_id store_event1) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -57,7 +58,7 @@ asc::pipeline_ref make_pipeline(asc::pipeline_event_id load_event0, asc::pipelin
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `load_event` | 输入 | 单级流水线的Load事件ID（pipeline_event_id）：MTE2 GM→UB搬入完成事件的编号；由调用方提供并在流水线有效期内独占。 |
-| `store_event` | 输入 | 单级流水线的Store事件ID（pipeline_event_id）：MTE3 UB→GM搬出排空事件的编号；由调用方提供并在流水线有效期内独占。 |
+| `store_event` | 输入 | 单级流水线的Store事件ID（pipeline_event_id）：S→MTE3搬出许可事件的编号；由调用方提供并在流水线有效期内独占。 |
 
 ### 原型2的参数
 
@@ -66,9 +67,9 @@ asc::pipeline_ref make_pipeline(asc::pipeline_event_id load_event0, asc::pipelin
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
 | `load_event0` | 输入 | 两级流水线第0级的Load事件ID（pipeline_event_id）：MTE2 GM→UB搬入完成事件的编号；与另一级不同且在流水线有效期内独占。 |
-| `store_event0` | 输入 | 两级流水线第0级的Store事件ID（pipeline_event_id）：MTE3 UB→GM搬出排空事件的编号；与另一级不同且在流水线有效期内独占。 |
+| `store_event0` | 输入 | 两级流水线第0级的Store事件ID（pipeline_event_id）：S→MTE3搬出许可事件的编号；与另一级不同且在流水线有效期内独占。 |
 | `load_event1` | 输入 | 两级流水线第1级的Load事件ID（pipeline_event_id）：MTE2 GM→UB搬入完成事件的编号；与另一级不同且在流水线有效期内独占。 |
-| `store_event1` | 输入 | 两级流水线第1级的Store事件ID（pipeline_event_id）：MTE3 UB→GM搬出排空事件的编号；与另一级不同且在流水线有效期内独占。 |
+| `store_event1` | 输入 | 两级流水线第1级的Store事件ID（pipeline_event_id）：S→MTE3搬出许可事件的编号；与另一级不同且在流水线有效期内独占。 |
 
 ## 返回值说明
 
@@ -78,6 +79,9 @@ asc::pipeline_ref make_pipeline(asc::pipeline_event_id load_event0, asc::pipelin
 | 原型2 | `asc::pipeline_ref` | 返回绑定调用方提供事件的非拥有流水线引用。 |
 
 ## 约束说明
+
+- 事件编号须在`[0, 3]`内，并由调用方为整个流水线存活期独占；两级时使用四个互异编号。
+- 除每级的MTE2→S加载事件和S→MTE3存储许可事件外，协调器还使用MTE3→S排空及S→MTE2复用事件。单级从剩余编号选取；两级占满编号时分别复用load_event0和load_event1，但方向不同。不得与其他TPipe/TQue占用同一方向和编号。
 
 - 仅可在AI Core SIMD编程中调用。
 - 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明。

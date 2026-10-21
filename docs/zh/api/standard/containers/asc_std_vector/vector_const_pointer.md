@@ -43,11 +43,8 @@ using const_pointer = const T*;
 
 ## 约束说明
 
-- vector<T,A>显式allocator构造。
-- empty/size/capacity/data/begin/end/`operator[]`/front/back。
-- reserve与容量内push_back/emplace_back/pop_back/clear。
-- 同allocator或允许传播域的移动构造/赋值与析构。
-- 仅A为Device可调、容量充足、元素和allocator操作不抛出异常的域。
+- 该别名为`const T*`，不能通过它修改元素，且指针本身不拥有容器存储。
+- 仅可解引用有效元素地址；重新分配存储、释放存储或销毁对应元素后，不得继续访问原地址。
 
 ## 调用示例
 

@@ -36,8 +36,9 @@
 
 ```cpp
 namespace asc::std::ranges {
-template<class Iter, class Func> using for_each_n_result = in_fun_result<Iter, Func>;
-} // namespace asc::std::ranges
+template <class Iter, class Func>
+using for_each_n_result = in_fun_result<Iter, Func>;
+}  // namespace asc::std::ranges
 ```
 
 ## 约束说明
@@ -52,9 +53,11 @@ template<class Iter, class Func> using for_each_n_result = in_fun_result<Iter, F
 ```cpp
 #include <asc/std/algorithm>
 
-void use_type()
+bool example()
 {
-    using selected = asc::std::ranges::for_each_n_result<int*, void (*)(int)>;
+    int values[] = {2, 4};
+    asc::std::ranges::for_each_n_result<int*, void (*)(int)> result{values + 1, [](int) {}};
+    return *result.in == 4;
 }
 ```
 

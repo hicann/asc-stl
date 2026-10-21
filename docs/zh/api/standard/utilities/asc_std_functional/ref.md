@@ -90,18 +90,21 @@ template<class T> [[nodiscard]] constexpr reference_wrapper<T> ref(reference_wra
 ## 约束说明
 
 - 支持标准可调用对象和成员指针形式。
+- 返回的引用、指针或非拥有包装器不延长被引用对象的生命周期。使用时须保证该对象仍存活；对象销毁或其值存储生命周期结束后不得继续访问。
 
 ## 调用示例
 
-以下Host片段使用具体对象展示接口调用。
+以下Host示例在被引用对象仍存活时检查结果。
 
 ```cpp
 #include <asc/std/functional>
 
-decltype(auto) example()
+bool example()
 {
-    int value = 3;
-    return asc::std::ref(value);
+    int value = 7;
+    auto selected = asc::std::ref(value);
+    selected.get() = 9;
+    return value == 9 && &selected.get() == &value;
 }
 ```
 

@@ -38,7 +38,7 @@
 
 ```cpp
 namespace asc::std {
-template<class T> [[nodiscard]] constexpr T norm(const complex<T>& value);
+template<class T> constexpr T norm(const complex<T>& value) noexcept;
 } // namespace asc::std
 ```
 
@@ -46,7 +46,7 @@ template<class T> [[nodiscard]] constexpr T norm(const complex<T>& value);
 
 ```cpp
 namespace asc::std {
-template<class T> [[nodiscard]] constexpr T norm(T value);
+template<class T> [[nodiscard]] constexpr T norm(T value) noexcept;
 } // namespace asc::std
 ```
 
@@ -58,7 +58,7 @@ template<class T> [[nodiscard]] constexpr T norm(T value);
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 复数操作数的成分（实部与虚部）值类型，须为浮点类型。 |
+| `T` | 复数操作数的成分类型，当前须为`float`。 |
 
 **函数参数**
 
@@ -89,8 +89,9 @@ template<class T> [[nodiscard]] constexpr T norm(T value);
 
 ## 约束说明
 
-- 仅提供页面声明的float或`complex<float>`运算。
-- 接口可用性取决于相应的float数学能力。
+- 复数重载当前仅接受`complex<float>`；标量重载直接计算`value * value`并按`T`返回，不构造复数。
+- 标量类型须支持该乘法表达式及结果到`T`的转换，并满足目标编译模式的类型能力。
+- 两个重载均具有`noexcept`声明。
 
 ## 调用示例
 

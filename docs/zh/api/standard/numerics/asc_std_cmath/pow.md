@@ -36,96 +36,122 @@
 
 ## 函数原型
 
+各重载自C++17起提供。执行位置限定按下列原型分别说明；执行位置宏已省略。
+
 ### 原型1
 
 ```cpp
 namespace asc::std {
-float pow(float base, float exponent) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr float pow(
+    float base, float exponent) noexcept;
+}
 ```
 
-此原型对应头文件：`<asc/std/cmath>`。
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
 
 ### 原型2
 
 ```cpp
 namespace asc::std {
-template<class T, class U> complex<common_type_t<T, U>> pow(const T& base, const complex<U>& exponent) noexcept;
-} // namespace asc::std
+template <class Tp, ::asc::std::enable_if_t<__expo_supported_extended_v<Tp>, int> = 0>
+[[nodiscard]] constexpr Tp pow(
+    Tp base, Tp exponent) noexcept;
+}
 ```
 
-此原型对应头文件：`<asc/std/complex>`。
+可用位置：Host、AI Core SIMT编程。以下constexpr适用于Host；Device声明不带constexpr，调用在运行期执行。
 
 ### 原型3
 
 ```cpp
 namespace asc::std {
-template<class T, class U> complex<common_type_t<T, U>> pow(const complex<T>& base, const U& exponent) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr double pow(double base, double exponent) noexcept;
+}
 ```
 
-此原型对应头文件：`<asc/std/complex>`。
+可用位置：Host。
 
 ### 原型4
 
 ```cpp
 namespace asc::std {
-template<class T> complex<T> pow(const complex<T>& base, const complex<T>& exponent) noexcept;
-} // namespace asc::std
+[[nodiscard]] constexpr long double pow(long double base, long double exponent) noexcept;
+}
 ```
 
-此原型对应头文件：`<asc/std/complex>`。
+可用位置：Host。long double相关重载要求Host启用该类型支持。
+
+### 原型5
+
+```cpp
+namespace asc::std {
+template <class Tp, class Up, ::asc::std::enable_if_t<is_arithmetic_v<Tp> && is_arithmetic_v<Up>, int> = 0>
+[[nodiscard]] constexpr __promote_t<Tp, Up> pow(Tp base, Up exponent) noexcept;
+}
+```
+
+可用位置：Host。
+
+### 原型6
+
+```cpp
+namespace asc::std {
+template <class T>
+[[nodiscard]] complex<T> pow(
+    const complex<T>& base, const complex<T>& exponent) noexcept;
+}
+```
+
+可用位置：Host、AI Core SIMT编程。此复数重载需要包含`<asc/std/complex>`，ASC复数成分当前仅支持float。
+
+### 原型7
+
+```cpp
+namespace asc::std {
+template <class T, class U>
+[[nodiscard]] complex<common_type_t<T, U>> pow(
+    const complex<T>& base, const complex<U>& exponent) noexcept;
+}
+```
+
+可用位置：Host、AI Core SIMT编程。此复数重载需要包含`<asc/std/complex>`，ASC复数成分当前仅支持float。
+
+### 原型8
+
+```cpp
+namespace asc::std {
+template <class T, class U>
+[[nodiscard]] enable_if_t<!__is_asc_std_complex_v<U>, complex<common_type_t<T, U>>>
+pow(const complex<T>& base, const U& exponent) noexcept;
+}
+```
+
+可用位置：Host、AI Core SIMT编程。此复数重载需要包含`<asc/std/complex>`，ASC复数成分当前仅支持float。
+
+### 原型9
+
+```cpp
+namespace asc::std {
+template <class T, class U>
+[[nodiscard]] enable_if_t<!__is_asc_std_complex_v<T>, complex<common_type_t<T, U>>>
+pow(const T& base, const complex<U>& exponent) noexcept;
+}
+```
+
+可用位置：Host、AI Core SIMT编程。此复数重载需要包含`<asc/std/complex>`，ASC复数成分当前仅支持float。
 
 ## 参数说明
 
-### 原型1的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `base` | 输入 | 待求幂的底数（无量纲）。 |
-| `exponent` | 输入 | 待求幂的指数（无量纲）；上溢返回 ±inf，下溢返回 ±0，负底数配非整数指数等无法定义的情形返回NaN。 |
-
-### 原型2的参数
-
 **模板参数**
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 底数（实数标量）的值类型，与U的公共类型作为结果复数的成分类型。 |
-| `U` | 复数指数的成分（实部与虚部）值类型。 |
+| `Tp` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。指数与缩放族的扩展浮点选择仅接受可用的half和bfloat16，不接受FP8。 |
+| `Up` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。指数与缩放族的扩展浮点选择仅接受可用的half和bfloat16，不接受FP8。 |
+| `T` | 复数成分类型；ASC复数当前只支持float。指数与缩放族的扩展浮点选择仅接受可用的half和bfloat16，不接受FP8。 |
+| `U` | 数值类型；须满足对应原型中的整数、浮点或混合算术选择条件。指数与缩放族的扩展浮点选择仅接受可用的half和bfloat16，不接受FP8。 |
 
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `base` | 输入 | 待求幂的实数底数（标量，无量纲）。 |
-| `exponent` | 输入 | 待求幂的复数指数操作数。 |
-
-### 原型3的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 复数底数的成分（实部与虚部）值类型。 |
-| `U` | 指数（实数标量）的值类型，与T的公共类型作为结果复数的成分类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `base` | 输入 | 待求幂的复数底数操作数。 |
-| `exponent` | 输入 | 待求幂的实数指数（标量，无量纲）。 |
-
-### 原型4的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 复数底数与复数指数的成分（实部与虚部）值类型。 |
+未命名的默认int模板形参用于重载选择，调用方无需提供。
 
 **函数参数**
 
@@ -136,29 +162,26 @@ template<class T> complex<T> pow(const complex<T>& base, const complex<T>& expon
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `float` | 返回幂；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
-| 原型2 | `complex<common_type_t<T, U>>` | 返回幂；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
-| 原型3 | `complex<common_type_t<T, U>>` | 返回幂；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
-| 原型4 | `complex<T>` | 返回幂；Device侧适用范围以本页float与执行位置约束为准的计算结果。 |
+返回类型按各原型确定（`float`、`Tp`、`double`、`long double`、`__promote_t<Tp, Up>`、`complex<T>`、`complex<common_type_t<T, U>>`、`enable_if_t<!__is_asc_std_complex_v<U>, complex<common_type_t<T, U>>>`、`enable_if_t<!__is_asc_std_complex_v<T>, complex<common_type_t<T, U>>>`）。返回底数的指数次幂。
 
 ## 约束说明
 
-- 提供float重载、标准 *f别名以及float lerp回移接口。
-- 仅提供页面声明的float或`complex<float>`运算。
+- 指数和缩放族的扩展浮点模板仅接受half和bfloat16；FP8未提供该族扩展重载。
+
+- 标量精度与执行位置按各原型确定；复数输入仅支持complex<float>。
 - 接口可用性取决于相应的float数学能力。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例给出具体输入和预期结果。
 
 ```cpp
 #include <asc/std/cmath>
 
-decltype(auto) example(float base, float exponent)
+bool example()
 {
-    return asc::std::pow(base, exponent);
+    const auto result = asc::std::pow(2.0F, 3.0F);
+    return result == 8.0F;
 }
 ```
 

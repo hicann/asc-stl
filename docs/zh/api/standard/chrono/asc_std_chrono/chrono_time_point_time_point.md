@@ -43,7 +43,7 @@ constexpr time_point();
 ### 原型2
 
 ```cpp
-constexpr time_point(const duration& duration);
+explicit constexpr time_point(const duration& duration);
 ```
 
 ### 原型3

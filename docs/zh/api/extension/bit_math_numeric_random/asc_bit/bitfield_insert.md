@@ -34,8 +34,9 @@
 
 ```cpp
 namespace asc {
-template<class T> constexpr T bitfield_insert(T destination, T source, int start, int width) noexcept;
-} // namespace asc
+template <class T>
+constexpr T bitfield_insert(T destination, T source, int start, int width) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -63,7 +64,7 @@ template<class T> constexpr T bitfield_insert(T destination, T source, int start
 ## 约束说明
 
 - T必须为uint32_t或uint64_t。
-- start和width不得为负且不得超出类型位宽，零位宽和全位宽操作不得产生未定义移位。
+- `start`与`width`须非负，且`start <= 位宽`、`width <= 位宽 - start`；零位宽与全位宽在此窗口约束下处理。
 
 ## 调用示例
 

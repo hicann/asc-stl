@@ -40,15 +40,16 @@
 
 ```cpp
 // asc::std::bitset 类内的声明节选；模板形参和其他成员由所属类提供。
-const_reference operator[](size_t position) const;
+constexpr const_reference operator[](size_t position) const;
 ```
 
 ### 原型2
 
 ```cpp
 // asc::std::bitset 类内的声明节选；模板形参和其他成员由所属类提供。
-reference operator[](size_t position);
+constexpr reference operator[](size_t position);
 ```
+
 
 ## 参数说明
 
@@ -77,9 +78,7 @@ reference operator[](size_t position);
 
 ## 约束说明
 
-- 支持默认构造和unsigned long long构造。
-- `operator[]`不进行边界检查。
-- 提供整组set、reset、flip，位运算、移位、状态检查、计数和容量查询。
+- 所属bitset的位数Size在编译期固定，操作不进行动态分配。 下标必须小于Size；不做边界检查，代理引用依赖原bitset存储。
 
 ## 调用示例
 

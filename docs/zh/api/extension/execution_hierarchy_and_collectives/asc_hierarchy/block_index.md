@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::block_index`返回当前Block的线性索引。
+`asc::block_index`在SIMT返回blockIdx.x，在SIMD返回block_idx；SIMT三维Grid中不是完整展平索引。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
 unsigned long long block_index() noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明

@@ -36,13 +36,17 @@
 
 ```cpp
 namespace asc::std {
-enum float_round_style;
-} // namespace asc::std
+enum float_round_style {
+    round_indeterminate = -1, round_toward_zero = 0, round_to_nearest = 1,
+    round_toward_infinity = 2, round_toward_neg_infinity = 3
+};
+}
 ```
 
 ## 约束说明
 
-- 支持全部标准算术类型及其cv限定形式。
+- 这是含完整枚举值定义的非作用域枚举，枚举常量位于asc::std命名空间中。
+- numeric_limits报告所查询类型的表示或舍入特征；枚举值本身不会改变硬件浮点状态。
 
 ## 调用示例
 

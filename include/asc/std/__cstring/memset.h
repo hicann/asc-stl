@@ -56,9 +56,6 @@ namespace __memset_detail {
 // the assertion below.
 CANN_ASC_STL_API bool __is_valid_address_range(const void* pointer, size_t count) noexcept
 {
-    if (count == 0) {
-        return false;
-    }
     const uintptr_t limit = (~uintptr_t{0}) - static_cast<uintptr_t>(count);
     const uintptr_t address = reinterpret_cast<uintptr_t>(pointer);
     return pointer != nullptr && address <= limit;

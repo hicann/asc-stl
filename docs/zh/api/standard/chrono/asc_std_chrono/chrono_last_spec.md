@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/chrono>`。
 
-`asc::std::chrono::last_spec`表示日期、时间点或时长计算中的`last_spec`值类型。
+`asc::std::chrono::last_spec`是不保存数值的月末标签类型；常量`last`可与`month`或`weekday`组合，分别选择月末或最后一个指定星期。
 
 标准语义参考：[cppreference `chrono`](https://en.cppreference.com/w/cpp/header/chrono)。
 

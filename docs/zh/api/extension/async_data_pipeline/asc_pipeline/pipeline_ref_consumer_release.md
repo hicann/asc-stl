@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/pipeline>`。
 
-`asc::pipeline_ref::consumer_release`通知指定流水级的消费已经完成，可由生产者复用。
+`asc::pipeline_ref::consumer_release`通知指定流水级的标量访问已经完成，允许随后MTE3读取。
 
 ## 函数原型
 
@@ -45,7 +45,7 @@ void consumer_release(unsigned int stage) const noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `stage` | 输入 | 流水级编号，从0起且须小于构造时确定的流水级数（1或2）；本调用通知该级Store事件，表示该级已消费完毕、存储缓冲可由生产者复用。 |
+| `stage` | 输入 | 流水级编号，从0起且须小于构造时确定的流水级数（1或2）；本调用通知该级Store事件，表示标量访问已完成；后续producer_acquire仍须等待搬出排空后才能复用。 |
 
 ## 返回值说明
 

@@ -66,26 +66,27 @@ constexpr move_iterator<Iter> operator--(int unused);
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `move_iterator<Iter> &` | 返回更新后的当前对象引用。 |
-| 原型2 | `move_iterator<Iter>` | 返回更新后的迭代器或计数值。 |
+前置形式返回操作完成后当前适配器的引用；后置形式按值返回操作之前的适配器副本。
 
 ## 约束说明
 
-- 使用调用方提供的迭代器或容器。
-- pair的直接自由比较入口为`operator==`和`operator<`；其他关系辅助位于`rel_ops`。
+- 底层迭代器须支持本页操作；自减要求双向遍历，位移和下标要求相应随机访问操作。
+- 适配器不拥有底层元素；解引用通过`asc::std::iter_move`访问元素，移动后的值遵守元素类型的约定。
+- 解引用、箭头及下标访问须指向有效元素；返回引用或指针的寿命受底层对象约束。
 
 ## 调用示例
 
-以下Host片段以具体指针迭代器演示调用；调用方须保证所指范围及移动后位置有效。
+以下Host示例在对象有效期间检查调用结果。
 
 ```cpp
 #include <asc/std/iterator>
 
-void example(asc::std::move_iterator<int*>& iterator)
+bool example()
 {
-    --iterator;
+    int values[] = {2, 4, 6, 8};
+    asc::std::move_iterator<int*> iterator(values + 1);
+    auto old = iterator--;
+    return *old == 4 && *iterator == 2;
 }
 ```
 

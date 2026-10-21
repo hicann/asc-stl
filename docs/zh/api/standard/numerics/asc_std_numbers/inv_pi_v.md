@@ -36,8 +36,8 @@
 
 ```cpp
 namespace asc::std {
-template<class T> inline constexpr const T inv_pi_v;
-} // namespace asc::std
+template<class Tp> inline constexpr Tp inv_pi_v = __numbers<Tp>::__inv_pi();
+}
 ```
 
 ## 约束说明

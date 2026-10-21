@@ -28,14 +28,14 @@
 
 头文件路径为：`<asc/hierarchy>`。
 
-`asc::block_extents_3d`返回当前SIMT Block的三维线程范围。
+`asc::block_extents_3d`返回Grid内沿各轴的Block数量gridDim，不是Block内线程尺寸。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
 asc::extent3d block_extents_3d() noexcept;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 参数说明

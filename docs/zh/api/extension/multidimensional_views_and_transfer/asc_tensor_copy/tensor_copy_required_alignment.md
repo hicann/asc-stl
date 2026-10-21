@@ -28,14 +28,16 @@
 
 头文件路径为：`<asc/tensor_copy>`。
 
-`asc::tensor_copy_required_alignment`计算指定元素类型和Descriptor所需的地址对齐。
+`asc::tensor_copy_required_alignment`将描述符最内维填充后的行长度按指定元素类型换算为字节数。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
-template<class T, unsigned Rank> constexpr unsigned int tensor_copy_required_alignment(const asc::tensor_copy_descriptor<Rank>& descriptor) noexcept;
-} // namespace asc
+template <class T, unsigned Rank>
+[[nodiscard]] constexpr unsigned int tensor_copy_required_alignment(
+    const asc::tensor_copy_descriptor<Rank>& descriptor) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -45,7 +47,7 @@ template<class T, unsigned Rank> constexpr unsigned int tensor_copy_required_ali
 | 参数名 | 描述 |
 | --- | --- |
 | `T` | 参与张量搬运的元素类型，决定元素大小及搬运对齐要求。 |
-| `Rank` | 表示元素数量、维度、位宽或索引的类型或编译期值，具体由声明确定。 |
+| `Rank` | 描述符的张量秩（维度数量），为1至5的编译期无符号整数。 |
 
 **函数参数**
 
@@ -57,13 +59,15 @@ template<class T, unsigned Rank> constexpr unsigned int tensor_copy_required_ali
 
 | 返回值类型 | 含义 |
 | --- | --- |
-| `unsigned int` | 返回所需或支持的对齐字节数。 |
+| `unsigned int` | 返回最内维填充后行长度的字节数；换算乘积超出返回类型范围时返回0。 |
 
 ## 约束说明
 
-- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Rank为1至5。
-- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
+- 可在Host、AI Core SIMD编程和AI Core SIMT编程中调用；本操作同步处理描述符，不启动数据搬运。
+- `Rank`须为1至5的编译期无符号整数；各维度按从外到内的顺序编号，最内维为`Rank - 1`。
+- `T`须为可以应用`sizeof(T)`的完整类型；`descriptor`须在调用期间有效。
+- 返回[required_alignment](tensor_copy_descriptor_required_alignment.md)成员结果乘以`sizeof(T)`的字节数，乘积超出`unsigned int`范围时返回`0`。
+- 本查询不校验描述符或实际端点地址；搬运两端的32字节边界要求不能由此返回值替代。
 
 ## 调用示例
 

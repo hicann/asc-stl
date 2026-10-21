@@ -43,13 +43,14 @@ constexpr linear_congruential_engine() noexcept;
 ### 原型2
 
 ```cpp
-constexpr linear_congruential_engine(result_type seed) noexcept;
+explicit constexpr linear_congruential_engine(result_type seed) noexcept;
 ```
 
 ### 原型3
 
 ```cpp
-template<class Sseq, enable_if_t<Isseedsequence<Sseq, linear_congruential_engine<UIntType, A, C, M>>, int>> constexpr linear_congruential_engine(Sseq& seed) noexcept;
+template<class Sseq, enable_if_t<detail::__is_seed_sequence<Sseq, linear_congruential_engine>::value, int> = 0>
+explicit constexpr linear_congruential_engine(Sseq& sequence) noexcept;
 ```
 
 ## 参数说明
@@ -72,19 +73,21 @@ template<class Sseq, enable_if_t<Isseedsequence<Sseq, linear_congruential_engine
 
 | 参数名 | 描述 |
 | --- | --- |
-| `Sseq` | 种子序列类型；须提供generate操作以初始化引擎状态。 |
+| `Sseq` | 种子序列类型；须可无参调用sequence()产生无符号整数，不是标准seed_seq的generate(first, last)协议。 |
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `seed` | 输入/输出 | 用于初始化或重置伪随机数引擎状态的种子值。 |
+| `sequence` | 输入/输出 | 用于初始化或重置伪随机数引擎状态的种子值。 |
 
 ## 返回值说明
 
 无返回值。
 
 ## 约束说明
+
+- 种子对象通过无参调用取得一个整数；当模数非零时对其取模，并按增量与零状态规则归一化。该形式不接受只有generate成员的标准SeedSequence。
 
 - 提供不接收seed_seq的标准seed、discard、生成和相等比较成员。
 

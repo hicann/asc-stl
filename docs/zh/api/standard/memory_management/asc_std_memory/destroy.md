@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<class ForwardIterator> constexpr void destroy(ForwardIterator first, ForwardIterator last) noexcept;
+template<class ForwardIterator> constexpr void destroy(ForwardIterator first, ForwardIterator last);
 } // namespace asc::std
 ```
 

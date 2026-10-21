@@ -34,12 +34,10 @@
 
 ## 声明
 
-该名称是公开的常量函数对象；对象的实现类型不构成接口承诺。以下为调用形式，省略的可选参数以各原型约束为准。
+该公开名称为常量可调用对象，不是自由函数；其实现类不属于公开契约。以下仅查询对象类型，object_type是示例名称。调用形式见参数说明及示例。
 
 ```cpp
-namespace asc::std::ranges {
-size(range);
-} // namespace asc::std::ranges
+using object_type = decltype(asc::std::ranges::size);
 ```
 
 ## 参数说明
@@ -50,32 +48,32 @@ size(range);
 
 ## 返回值说明
 
-返回范围的元素数量，结果使用无符号整数类型。
-
-| 调用形式 | 返回类型 |
-| --- | --- |
-| 数组 | `size_t` |
-| 其他范围 | 成员或ADL `size()`的结果类型；差值回退使用无符号类型 |
+- 已知界限的数组返回`size_t`类型的数组长度。
+- 成员`size()`或ADL `size`路径返回该调用结果去除引用和顶层cv后的整数类型，可能是有符号类型。
+- 起止迭代器差值回退路径返回其无符号数量类型。不能统一假定所有返回值均为无符号数。
 
 ## 约束说明
 
-- 支持数组和用户范围，不支持仅由花括号构成的initializer_list表达式。
+- 依次尝试已知界限数组、可用的成员size、ADL size、最后是满足forward_iterator与sized_sentinel_for的差值。
+- disable_sized_range会屏蔽成员与ADL分支，不能简单理解为屏蔽所有大小查询。
+- 底层对象须在调用期间有效；结果是数量值，不延长元素寿命。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/ranges>
-#include <asc/std/array>
-#include <asc/std/iterator>
-#include <asc/std/tuple>
+#include <asc/std/type_traits>
+
+struct example_range { int size() const noexcept { return 3; } };
 
 bool example()
 {
-    int values[] = {1, 2, 3, 4};
-    auto result = asc::std::ranges::size(values);
-    return result == 4;
+    example_range values;
+    const auto count = asc::std::ranges::size(values);
+    static_assert(asc::std::is_same_v<asc::std::remove_cv_t<decltype(count)>, int>);
+    return count == 3;
 }
 ```
 

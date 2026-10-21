@@ -38,8 +38,8 @@
 
 ```cpp
 namespace asc::std::numbers {
-inline constexpr const double sqrt2;
-} // namespace asc::std::numbers
+inline constexpr double sqrt2 = 0x1.6a09e667f3bcc908b2fb1366ea95p+0;
+}
 ```
 
 ## 约束说明

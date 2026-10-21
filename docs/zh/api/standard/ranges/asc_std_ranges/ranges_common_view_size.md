@@ -34,21 +34,25 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::ranges::common_view`](ranges_common_view.md)。
+所属类型：[`common_view`](ranges_common_view.md)。以下是按参与条件列出的声明摘要；保留供调用使用的模板默认值，省略仅供SFINAE的实现选择参数。涉及私有返回类型时用auto摘要表示，不承诺可直接命名该类型。
 
 ### 原型1
 
 ```cpp
-// asc::std::ranges::common_view 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class View2> [[nodiscard]] constexpr auto size();
+template<class View2 = View>
+constexpr auto size();
 ```
+
+参与条件：`(sized_range<View2>)`。
 
 ### 原型2
 
 ```cpp
-// asc::std::ranges::common_view 类内的声明节选；模板形参和其他成员由所属类提供。
-template<class View2> [[nodiscard]] constexpr auto size() const;
+template<class View2 = View>
+constexpr auto size() const;
 ```
+
+参与条件：`(sized_range<const View2>)`。
 
 ## 参数说明
 
@@ -58,7 +62,9 @@ template<class View2> [[nodiscard]] constexpr auto size() const;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `View2` | 输入范围或视图的类型；须满足所选原型的遍历要求。 |
+| `View2` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
+
+无函数参数。
 
 ### 原型2的参数
 
@@ -66,18 +72,20 @@ template<class View2> [[nodiscard]] constexpr auto size() const;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `View2` | 输入范围或视图的类型；须满足所选原型的遍历要求。 |
+| `View2` | 用于延迟检查成员的所属类型或种类，默认值见原型；一般调用无需显式指定。 |
+
+无函数参数。
 
 ## 返回值说明
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `auto` | 返回当前对象包含的元素数量。 |
-| 原型2 | `auto` | 返回当前对象包含的元素数量。 |
+| 原型1 | `auto` | 返回当前范围的元素数量；auto的精确整数类型由对应大小计算决定，可通过decltype(object.size())查询。 |
+| 原型2 | `auto` | 返回当前范围的元素数量；auto的精确整数类型由对应大小计算决定，可通过decltype(object.size())查询。 |
 
 ## 约束说明
 
-- 视图的元素访问与迭代不额外分配存储；底层范围的生命周期须覆盖所有借用视图的使用。
+- 每种形式的参与条件见原型；无实参查询一般直接调用，不需要指定模板选择类型。
 
 ## 调用示例
 

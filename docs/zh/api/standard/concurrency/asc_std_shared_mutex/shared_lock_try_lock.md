@@ -53,6 +53,10 @@ bool try_lock();
 
 ## 约束说明
 
+- Device自旋等待须保证锁持有者能并发推进；不能由等待者持续占用同一调度组而阻止持有者执行。自定义Mutex须满足相应执行模型的前进保证。
+
+- 底层Mutex对象必须存活且已与包装器关联。lock或try_lock要求当前包装器尚未持有锁；默认构造或release后的空包装器不能直接加锁。
+
 - shared_lock<Mutex>的mutex_type，default/普通/defer/try/adopt构造、删除copy、move构造/赋值和析构。
 - 有效状态上的lock/try_lock/unlock/swap/release/mutex/owns_lock/operator bool及非成员swap。
 - 显式非抛Device SharedLockable域。

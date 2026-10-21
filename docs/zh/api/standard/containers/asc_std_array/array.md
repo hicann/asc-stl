@@ -36,14 +36,17 @@
 
 ```cpp
 namespace asc::std {
-template<class T, size_t Size> class array;
+template<class T, size_t Size> struct array;
+template<class T> struct array<T, 0>;
 } // namespace asc::std
 ```
 
 ## 约束说明
 
-- 支持包括零在内的所有N。
-- 成员函数和自由函数均不抛出异常。
+- `Size`是编译期元素数量，可以为0。`Size == 0`时没有可访问的元素，不能调用下标、`front`、`back`或`get`访问元素。
+- `Size > 0`时，`T`须能作为内建数组的元素类型；填充、比较和交换等操作还要求`T`支持相应的元素操作。
+- 元素存储位于`array`对象内部，不由容器动态分配；元素类型自身的资源操作仍由`T`决定。
+- 异常规格以各操作的声明为准。例如，非空数组的`fill`未声明`noexcept`，成员`swap`的`noexcept`取决于元素是否可无异常交换。Device侧使用的元素操作须不抛出异常。
 
 ## 调用示例
 

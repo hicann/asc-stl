@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/type_traits>`。
 
-`asc::std::integral_constant::value_type`标识元素或结果的值类型。
+`asc::std::integral_constant::value_type`等于模板参数`T`，表示该特化保存的编译期常量的类型。
 
 标准语义参考：[cppreference `type_traits`](https://en.cppreference.com/w/cpp/header/type_traits)。
 
@@ -43,7 +43,7 @@ using value_type = T;
 
 ## 约束说明
 
-- 提供特征类及其对应的 _v辅助形式。
+- `value_type`等于当前特化的模板参数`T`，可用于解释`value`及调用运算符的返回类型。
 
 ## 调用示例
 

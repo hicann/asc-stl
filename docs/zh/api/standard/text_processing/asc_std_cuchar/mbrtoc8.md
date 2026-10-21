@@ -59,6 +59,8 @@ size_t mbrtoc8(char8_t* output, const char* input, size_t count, mbstate_t* stat
 
 ## 约束说明
 
+- 该接口需要C++20的char8_t。Host还要求所用系统C/C++库实际提供该转换的声明和实现；库的主版本号本身不能保证可用性。
+
 - Device仅支持ASCII和空字符，不保存不完整的多字节输入。input为空时，会把非空output写为空字符，并重置非空state；不要假定这一行为与所有Host系统相同。
 - 输入和输出存储在调用期间保持有效；输入范围与输出容量符合参数说明。
 

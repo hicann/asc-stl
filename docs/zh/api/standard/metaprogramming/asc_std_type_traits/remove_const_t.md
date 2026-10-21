@@ -42,7 +42,7 @@ template<class T> using remove_const_t = typename remove_const<T>::type;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 本辅助形式与[`asc::std::remove_const`](remove_const.md)使用相同的类型前提和判定规则；结果对应特征类的`type`。
 
 ## 调用示例
 

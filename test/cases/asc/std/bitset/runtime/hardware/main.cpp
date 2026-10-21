@@ -16,36 +16,31 @@
 
 #include <acl/acl.h>
 #include <iostream>
+#include "../../../../../../support/hardware_runtime.h"
+#include "launch.h"
 
-#if defined(ASC_STL_B027_SIMD)
-void launch_asc_stl_b027_simd(unsigned int*, void*);
-#else
-void launch_asc_stl_b027_simt(unsigned int*, void*);
-#endif
 int main()
 {
+    asc_stl_test::hardware_runtime runtime;
     unsigned int* device = nullptr;
     aclrtStream stream = nullptr;
-    bool passed = aclInit(nullptr) == ACL_SUCCESS && aclrtSetDevice(0) == ACL_SUCCESS &&
+    bool passed = runtime.initialize(nullptr) == ACL_SUCCESS && runtime.set_device(0) == ACL_SUCCESS &&
         aclrtCreateStream(&stream) == ACL_SUCCESS &&
         aclrtMalloc(reinterpret_cast<void**>(&device), sizeof(unsigned int), ACL_MEM_MALLOC_HUGE_FIRST) == ACL_SUCCESS;
     unsigned int result = 1;
-    if (passed) {
-#if defined(ASC_STL_B027_SIMD)
+    if (passed && runtime.ready()) {
         launch_asc_stl_b027_simd(device, stream);
-#else
-        launch_asc_stl_b027_simt(device, stream);
-#endif
-        passed = aclrtSynchronizeStream(stream) == ACL_SUCCESS &&
+        passed = runtime.synchronize(stream) == ACL_SUCCESS &&
             aclrtMemcpy(&result, sizeof(result), device, sizeof(result), ACL_MEMCPY_DEVICE_TO_HOST) == ACL_SUCCESS &&
             result == 0;
     }
     if (device)
-        passed = aclrtFree(device) == ACL_SUCCESS && passed;
+        passed = runtime.free_device(device) == ACL_SUCCESS && passed;
     if (stream)
-        passed = aclrtDestroyStream(stream) == ACL_SUCCESS && passed;
-    passed = aclrtResetDevice(0) == ACL_SUCCESS && passed;
-    passed = aclFinalize() == ACL_SUCCESS && passed;
+        passed = runtime.destroy_stream(stream) == ACL_SUCCESS && passed;
+    passed = runtime.reset_device(0) == ACL_SUCCESS && passed;
+    passed = runtime.finalize() == ACL_SUCCESS && passed;
+    passed = runtime.finish(passed) == 0;
     if (passed)
         std::cout << "ASC_STL_B027_HARDWARE_PASS\n";
     return passed ? 0 : 1;

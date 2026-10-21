@@ -60,7 +60,7 @@ template<class InputIterator, class T> [[nodiscard]] constexpr T accumulate(Inpu
 | --- | --- |
 | `InputIterator` | 读取输入范围元素的迭代器类型；须满足原型要求的遍历能力。 |
 | `T` | 归约初值、中间累加值与返回结果的类型。 |
-| `BinaryOperation` | 逐步合并累加值的二元运算可调用对象类型：接受两个T值并返回可转换为T的结果。 |
+| `BinaryOperation` | 逐步合并累加值的二元运算可调用对象类型：接受累加值T及输入迭代器解引用所得值并返回可转换为T的结果。 |
 
 **函数参数**
 
@@ -97,12 +97,13 @@ template<class InputIterator, class T> [[nodiscard]] constexpr T accumulate(Inpu
 
 ## 约束说明
 
-- 提供顺序迭代器/值重载。
-- 本族中标准定义的执行策略重载采用顺序执行语义。
+- `[first, last)`须为有效的可读输入范围。
+- 默认重载按`init + *first`累加；自定义重载按`binary_op(init, *first)`累加，结果须可赋回`T`。
+- 输入按迭代顺序处理；累加对象按移动语义传给运算。运算不得修改输入范围或使迭代器失效。
 
 ## 调用示例
 
-以下片段用具体整数范围展示数值调用；输出数组具有足够容量。
+以下示例从0开始累加1、2、3、4，返回10。
 
 ```cpp
 #include <asc/std/numeric>

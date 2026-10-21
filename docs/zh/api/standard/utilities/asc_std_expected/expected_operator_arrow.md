@@ -34,55 +34,43 @@
 
 ## 函数原型
 
-所属类型：[`asc::std::expected`](expected.md)。
-
-### 原型1
+以下为`expected<Value, Error>`类内声明；Value和Error是所属类模板参数。
 
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr T* operator->() noexcept;
+constexpr Value* operator->() noexcept;
 ```
 
-### 原型2
-
 ```cpp
-// asc::std::expected 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr const T* operator->() const noexcept;
+constexpr const Value* operator->() const noexcept;
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
-无参数。
-
-### 原型2的参数
-
-无参数。
+无函数参数。Value与Error是所属expected类模板的参数。
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `T *` | 返回可访问当前所指对象成员的指针。 |
-| 原型2 | `const T *` | 返回可访问当前所指对象成员的指针。 |
+返回Value*或const Value*。返回活动成功值的地址；访问要求has_value()，所得指针依赖对象及当前值的生存期。
 
 ## 约束说明
 
 - 支持所有cv/ref限定形式。
 - Device侧可调用对象及结果构造必须不抛出异常。
+- 返回的引用、指针或非拥有包装器不延长被引用对象的生命周期。使用时须保证该对象仍存活；对象销毁或其值存储生命周期结束后不得继续访问。
 
 ## 调用示例
 
-以下Host片段使用具体类型演示调用；访问值前须确认对象处于有值状态。
+以下Host示例在被引用对象仍存活时检查结果。
 
 ```cpp
 #include <asc/std/expected>
 
-decltype(auto) example()
+bool example()
 {
     asc::std::expected<int, int> value(7);
-    return value.operator->();
+    int* selected = value.operator->();
+    *selected = 9;
+    return value.has_value() && *value == 9;
 }
 ```
 

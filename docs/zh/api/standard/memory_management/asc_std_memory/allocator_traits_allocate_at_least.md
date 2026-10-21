@@ -3,7 +3,7 @@
 ## 产品支持情况
 
 <!-- npu="950" id1 -->
-- Ascend 950PR&950DT系列产品：支持
+- Ascend 950PR&950DT系列产品：本页为兼容性说明，所述接口未提供
 <!-- end id1 -->
 <!-- npu="A3" id2 -->
 - Atlas A3系列产品：不支持
@@ -26,71 +26,42 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/std/memory>`。
+本页保留原入口用于兼容性说明。`allocator_traits`没有`allocate_at_least`静态成员；本页不承诺标准库同名成员的可用性。
 
-`asc::std::allocator_traits::allocate_at_least`申请不少于指定数量对象的存储并返回实际容量。
-
-标准语义参考：[cppreference `memory`](https://en.cppreference.com/w/cpp/header/memory)。
+已提供的自由函数为[`asc::std::allocate_at_least`](allocate_at_least.md)，调用形式是`asc::std::allocate_at_least(allocator, count)`。
 
 ## 函数原型
 
-所属类型：[`asc::std::allocator_traits`](allocator_traits.md)。
-
-```cpp
-// asc::std::allocator_traits 类内的声明节选；模板形参和其他成员由所属类提供。
-allocation_result<pointer, size_type> allocate_at_least(Alloc& allocator, size_type count);
-```
+当前产品不声明本页标题所示的接口。请使用下述已提供的接口。
 
 ## 参数说明
 
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `allocator` | 输入/输出 | 负责对象存储分配与释放的分配器。 |
-| `count` | 输入 | 参与操作的元素数量。 |
+本页不声明可调用的接口参数。
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `allocation_result<pointer, size_type>` | 返回实际容量。 |
+本页不声明接口返回值；替代调用的结果见调用示例。
 
 ## 约束说明
 
-- allocator_arg_t/allocator_arg。
-- uses_allocator/uses_allocator_v。
-- allocator_traits的C++20成员类型、rebind、allocate/deallocate、construct/destroy、max_size、select_on_container_copy_construction。
-- uses_allocator_construction_args/make_obj_using_allocator/uninitialized_construct_using_allocator含pair递归构造。
-- C++23 allocation_result与标准allocator_traits::allocate_at_least。
-- 均限用户显式提供且在调用执行空间有效的allocator。
+- `allocator_traits`没有`allocate_at_least`静态成员；本页不承诺标准库同名成员的可用性。
+- 已提供的自由函数为[`asc::std::allocate_at_least`](allocate_at_least.md)，调用形式是`asc::std::allocate_at_least(allocator, count)`。
 
 ## 调用示例
 
-以下Host片段使用显式提供的分配器并完整释放存储；设备端须改用目标位置可调用的分配器。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/memory>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
 
-template <class T>
-struct example_allocator : ::std::allocator<T> {
-    using value_type = T;
-    using pointer = T*;
-    using size_type = ::std::size_t;
-    using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
-};
-
-void example(example_allocator<int>& allocator)
+bool example()
 {
-    auto result = asc::std::allocator_traits<example_allocator<int>>::allocate_at_least(allocator, 1);
-    asc::std::allocator_traits<example_allocator<int>>::deallocate(allocator, result.ptr, result.count);
+    std::allocator<int> allocator;
+    const auto result = asc::std::allocate_at_least(allocator, 2);
+    const bool valid = result.ptr != nullptr && result.count >= 2;
+    allocator.deallocate(result.ptr, result.count);
+    return valid;
 }
 ```
 

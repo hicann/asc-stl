@@ -36,7 +36,7 @@
 
 ```cpp
 namespace asc::std {
-template<class T> struct greater_equal;
+template<class T = void> struct greater_equal;
 } // namespace asc::std
 ```
 

@@ -42,6 +42,8 @@ template<class Layout> class layout_transpose;
 
 ## 约束说明
 
+- 转置仅适用于rank为2的矩阵视图或映射；两个维度和对应步长互换，不提供任意阶轴重排。
+
 - 对所依赖mdspan/accessor/缩放与共轭运算已交付的有效实例为Host、AI Core SIMD编程 和AI Core SIMT编程。
 
 ## 调用示例

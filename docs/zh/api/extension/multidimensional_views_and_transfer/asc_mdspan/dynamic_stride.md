@@ -35,14 +35,13 @@
 ```cpp
 namespace asc {
 inline constexpr asc::std::ptrdiff_t dynamic_stride = (-__PTRDIFF_MAX__ - 1);
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供Host和GM视图以及AI Core SIMD编程UB视图。
-- 允许有符号步长。
-- 可选的Host DLPack桥接不抛出异常。
+- 此编译期标记等于ptrdiff_t最小值，用于标识运行期步长槽，不是一个普通的静态步长值。
+
 
 ## 调用示例
 

@@ -42,7 +42,7 @@ template<class T> struct remove_all_extents;
 
 ## 约束说明
 
-- 提供特征类以及标准的 _t、_v辅助形式。
+- 移除全部数组维度，保留最终元素类型的限定；非数组类型保持原类型。
 
 ## 调用示例
 

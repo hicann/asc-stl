@@ -43,3 +43,83 @@ const bool passed = first == 4 && current->value == 2;
 - 同环境的ASC-STL W13/W14纯SIMT硬件载荷（含本README所述运行期输入适配）通过`ASC_STL_W13_W14_HARDWARE_PASS`。
 
 结论：责任为**BiSheng/CCE 15（指纹`c4866a4d…f84c6a`）在`--enable-simt`下对常量初始化局部数组的连续逆向指针遍历生成错误代码**；模拟器忠实执行了错误代码。该问题不依赖ASC-STL：任何使用者在纯SIMT下以常量初值局部数组进行上述遍历都可能得到错误结果或向量核越界故障。ASC-STL库本身语义正确；本目录的运行期输入适配保留库行为断言并绕开该编译器缺陷，应在编译器修复并复验后移除。原始失败门禁、最小复现、模拟器与真机对照证据分别在工具仓记录，不互相替代。
+
+## B022算法回归的SIMT运行期输入
+
+B022的[共享语义载荷](../cases/asc/std/atomic/runtime/semantics.h)在纯SIMT路径
+通过[共享输入helper](b022_runtime_inputs.h)读取Host显式上传到GM的数组原值，
+再构造局部测试数组。`initialize()`准备原值与零seed，两个Host驱动均显式执行H2D
+上传，D2H回读后由`unchanged()`确认输入未被覆盖，并要求`runtime_inputs_unchanged=1`。
+输入使用64个`int`结果槽中的52至62槽，与visibility的40至45槽、窄整数CAS的
+48至51槽分开。
+Host与SIMD继续使用原常量初值。该适配保留既有算法API、调用顺序、全部比较断言、
+golden与`-O3`；模拟入口继续执行原子与算法段，真机入口继续执行main与visibility段。
+
+这项适配针对另一组独立观察：产品提交`486eb08da5712b93ab9d1aeef84600439c45a272`
+在CANN 9.2.0-beta.2、BiSheng/CCE 15（指纹`c4866a4d…f84c6a`）与Ascend950上，
+C++17完整B022模拟由CTest在1500.10秒超时判为失败。同一源码的真机main kernel
+返回507035；PID 1648125专属日志记录error 340，即VEC访问UB地址未对齐，
+kernel名及grid/block均对应main。该日志尚未提供可定位到算法源码的故障指令。
+
+保持原编译参数重编译后，linked `.text`与原真机对象逐字节一致。对应优化LLVM IR
+剩下两组`[5 x i32]`局部数组，均为`align 4`，分别从`align 4`常量源复制20字节。
+同为C++17、`-O3`的算法独立对照得到以下结果：
+
+| 输入形态 | 模拟结果 | 验证范围 |
+| --- | --- | --- |
+| 原常量初始化 | 120秒未退出 | 完整算法段，未包含原子与visibility段 |
+| 全部局部数组增加`alignas(32)` | 正常结束，`failures=3` | 对应IR的两组局部数组及常量源均为`align 32` |
+| 从Host上传的相同原值构造，诊断seed为0 | 正常结束，`failures=0` | 算法API调用顺序与全部比较断言保持不变 |
+
+这些对照将调查范围收窄到该常量初始化与组合代码形态；B022的根因和精确故障指令
+仍待定位，尚无算法源码存在未定义行为的结论。上节视图案例已有独立最小复现与
+同二进制真机证据，其编译器归因不能直接推广到本案例，也不能据此宣称所有常量
+局部数组均受影响。
+
+原始常量形态的源码、失败日志、二进制与对照结果继续保存在工具仓忽略的诊断证据中。
+运行期输入适配保留原值与行为检查，原始常量形态仍需在相关工具链修复或责任定位后
+复验。验证修正后的完整检查点时，须执行C++17/C++20 Host、O3 Device编译、cannsim，以及包含
+visibility与新增窄整数CAS边界的真机回归；算法独立对照通过不替代这些结果。
+
+## B027完整语义的SIMT分阶段夹具
+
+`b027_core_semantics.h`保存bitset、inplace_vector、default_searcher、gcd/lcm、
+整型/指针/浮点midpoint及hash的原调用与golden。Host和SIMD的`evaluate_core()`
+先执行这些检查，再执行原`string_aliasing_semantics.h`，保留原顺序和全部检查。
+
+纯SIMT的cannsim与hardware共用`bitset/runtime/staged/`中的ASC模块及`stage_table.def`。
+每个stage只有一个ASC翻译单元、一个SHARED模块，普通version script仅导出唯一
+launcher；运行程序使用`RTLD_NOW | RTLD_LOCAL`，注册符号在模块内部解析。
+完整顺序为core、长字符串构造、自追加检查1–3、reserve、后缀追加检查4–5、
+后缀赋值检查6、自赋值检查7、空串赋值检查8、长字符串析构、局部SSO检查9、
+最终计数检查10。reserve阶段保存实际的`before_append`和`data()`地址，检查4与6
+使用这个跨阶段保存的地址。
+
+长字符串的state、对象和256字节arena分别位于Host分配的GM中，placement构造后的
+对象跨kernel保持同一生命周期。预期分配大小为25、49、97字节，最终计数3:3；
+原`allocations == deallocations`谓词保留，实际大小、用量及计数通过结果包回读。
+SSO阶段另建原形状的局部arena，使用局部`abc`初值及自动对象，保留原no-allocation
+谓词；析构后的局部计数也进入最终balance检查。GM夹具与局部夹具使用不同namespace，
+避免将不同storage布局赋予同一个C++类型名。
+
+所有stage在同一进程、ACL context、stream和GM分配上运行；每次提交前显式H2D
+上传非零结果sentinel，随后同步并D2H检查，首个失败后停止后续stage。成功路径在
+字符串和state均已析构且同步完成后逐项核对`dlclose`，再释放ACL资源。同步失败时
+不卸载模块、不释放可能仍在使用的buffer或stream，仅尝试并记录context reset与
+finalize，结果保持失败。hardware使用`hardware_runtime`的10秒任务时限和10秒stream
+同步保护；外层进程时限仍是必需条件。模拟程序保留Host运行库路径，并允许cannsim
+通过其进程局部环境选择camodel，不能强制SDK的DT_RPATH覆盖模拟runtime。
+
+在CANN 9.2.0-beta.2、BiSheng 15.0.5（指纹`c4866a4d…f84c6a`）下，
+原38b9提交的C++17单kernel综合载荷已完成编译，但SIMT真机执行发生设备地址
+访问故障（设备错误355；日志记录GM地址超过48位，同步返回507035）。后续多组
+将长对象或arena移到GM的
+等价诊断候选在60秒或90秒的emit-object时限内未完成；这与原载荷的真机失败属于
+不同证据，均尚未唯一归因到某个API。不能据此宣称所有局部arena均不可用或SDK
+缺陷已经确诊。公开使用边界见[basic_string](../../docs/zh/api/standard/strings/asc_std_string/basic_string.md#simt工具链验证边界)。
+
+这是当前工具链验证夹具的内存域与模块隔离方案。ASC-STL公共Header没有因此改变，
+原单kernel中组合长字符串和局部arena的形态仍需独立复验；分阶段通过不能作为SDK
+已修复或该原形态恢复的证据。每个新产品提交均须执行完整C++17/C++20 Host、
+SIMD/SIMT O3构建、完整cannsim和有保护的真机矩阵，不能以三阶段前缀结果替代
+core、字符串1–10及局部SSO的完整结果。

@@ -34,41 +34,67 @@
 
 ## 函数原型
 
+所属迭代器类型通过`decltype(view.begin())`取得；下面在其类内上下文中使用iterator和difference_type作声明摘要。标有friend的是隐藏友元，使用运算符表达式调用。
+
+### 原型1
+
 ```cpp
-// asc::std::ranges::repeat_view::iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr auto operator+(difference_type, iterator);
+friend constexpr iterator operator+(iterator iter, difference_type value);
+```
+
+### 原型2
+
+```cpp
+friend constexpr iterator operator+(difference_type value, iterator iter);
 ```
 
 ## 参数说明
+
+### 原型1的参数
 
 **函数参数**
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| 未命名的距离实参 | 输入 | 要前进或后退的位置数，使用该迭代器的difference_type。 |
-| 未命名的迭代器实参 | 输入 | 参与距离计算或偏移操作的另一迭代器。 |
+| `iter` | 输入 | 源迭代器，按值接收。 |
+| `value` | 输入 | 有符号位置距离；负值表示反方向移动。 |
+
+### 原型2的参数
+
+**函数参数**
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| `value` | 输入 | 有符号位置距离。 |
+| `iter` | 输入 | 源迭代器，按值接收。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `auto` | 当前位置加上指定距离后的新迭代器。 |
+| 适用原型 | 返回值类型 | 含义 |
+| --- | --- | --- |
+| 原型1 | `iterator` | 返回向前偏移value后的迭代器，不改变传入的原迭代器。 |
+| 原型2 | `iterator` | 对称的距离加迭代器形式。 |
 
 ## 约束说明
 
-- 迭代器处于有效区间；双向与比较运算要求底层值支持相应运算。
+- 迭代器须关联同一重复序列；所有算术结果须可由difference_type及实际位置类型表示。
+- 有界序列的位置不得移到0之前；访问时还须位于结束位置之前。递减不得越过序列起点。
+- 迭代器保存指向view中被重复值的指针；该view及保存值须覆盖迭代器使用期。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体输入，并检查接口的可观察结果。
 
 ```cpp
 #include <asc/std/ranges>
 
-template <class Object, class... Args>
-decltype(auto) example(Object& object, Args&&... args)
+bool example()
 {
-    return object.operator+(static_cast<Args&&>(args)...);
+    auto view = asc::std::ranges::views::repeat(7, 4);
+    const auto first = view.begin();
+    const auto result = first + 2;
+    const auto symmetric = 2 + first;
+    return result == symmetric && result - first == 2 && *result == 7;
 }
 ```
 

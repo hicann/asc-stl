@@ -39,7 +39,7 @@
 ### 原型1
 
 ```cpp
-map(const Allocator& allocator);
+explicit map(const Allocator& allocator);
 ```
 
 ### 原型2

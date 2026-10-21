@@ -40,9 +40,8 @@ enum class tensor_copy_status : int;
 
 ## 约束说明
 
-- 描述符及状态类型可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Rank为1至5。
-- 维度和步长采用uint32_t，校验零维、零步长、大小溢出与对齐要求，校验本身不启动异步搬运。
+- 该枚举及其常量可在Host、AI Core SIMD编程和AI Core SIMT编程中保存和比较；读取状态值本身不进行校验或搬运。
+- 须按返回该值的接口解释状态：描述符校验只涉及数值条件，异步搬运还涉及视图容量、地址与流水级，`success`不表示异步数据已可读取。
 
 ## 调用示例
 

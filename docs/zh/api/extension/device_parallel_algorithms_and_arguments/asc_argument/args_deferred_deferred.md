@@ -38,7 +38,7 @@
 
 ```cpp
 // asc::args::deferred 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr deferred(const T* data, Bounds bounds) noexcept;
+constexpr explicit deferred(const T* data, Bounds bounds) noexcept;
 ```
 
 ### 原型2
@@ -73,9 +73,10 @@ constexpr explicit deferred(const T* data) noexcept;
 
 ## 约束说明
 
+- Bounds按值保存，可为no_bounds、static_bounds或runtime_bounds等可复制的边界值；包装不会自动证明或校验数据落在边界内。
+- 延迟数据仅借用指针，须在实际读取时可访问且存储覆盖全部使用期；sequence的size以元素计并不得超过有效范围。
+
 - 使用C++17，可在Host、AI Core SIMD编程 和AI Core SIMT编程中使用。
-- Bounds必须为asc::args::no_bounds或asc::args::static_bounds。
-- 延迟指针在使用时不得为空，调用方存储必须覆盖整个使用周期。
 
 ## 调用示例
 

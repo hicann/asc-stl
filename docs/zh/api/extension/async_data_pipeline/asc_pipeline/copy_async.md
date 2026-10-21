@@ -36,112 +36,126 @@
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<asc::std::int16_t> destination, asc::ub_span<const asc::std::int16_t> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<asc::std::int16_t> destination,
+    asc::ub_span<const asc::std::int16_t> source) noexcept;
+}  // namespace asc
 ```
 
 ### 原型2
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<asc::std::int32_t> destination, asc::ub_span<const asc::std::int32_t> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<asc::std::int32_t> destination,
+    asc::ub_span<const asc::std::int32_t> source) noexcept;
+}  // namespace asc
 ```
 
 ### 原型3
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<asc::std::int8_t> destination, asc::ub_span<const asc::std::int8_t> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<asc::std::int8_t> destination,
+    asc::ub_span<const asc::std::int8_t> source) noexcept;
+}  // namespace asc
 ```
 
 ### 原型4
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<asc::std::uint16_t> destination, asc::ub_span<const asc::std::uint16_t> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<asc::std::uint16_t> destination,
+    asc::ub_span<const asc::std::uint16_t> source) noexcept;
+}  // namespace asc
 ```
 
 ### 原型5
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<asc::std::uint32_t> destination, asc::ub_span<const asc::std::uint32_t> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<asc::std::uint32_t> destination,
+    asc::ub_span<const asc::std::uint32_t> source) noexcept;
+}  // namespace asc
 ```
 
 ### 原型6
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<asc::std::uint8_t> destination, asc::ub_span<const asc::std::uint8_t> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<asc::std::uint8_t> destination,
+    asc::ub_span<const asc::std::uint8_t> source) noexcept;
+}  // namespace asc
 ```
 
 ### 原型7
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<float> destination, asc::ub_span<const float> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<float> destination,
+    asc::ub_span<const float> source) noexcept;
+}  // namespace asc
 ```
 
 ### 原型8
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<asc::std::int16_t> destination, asc::gm_span<const asc::std::int16_t> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<asc::std::int16_t> destination,
+    asc::gm_span<const asc::std::int16_t> source) noexcept;
+}  // namespace asc
 ```
 
 ### 原型9
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<asc::std::int32_t> destination, asc::gm_span<const asc::std::int32_t> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<asc::std::int32_t> destination,
+    asc::gm_span<const asc::std::int32_t> source) noexcept;
+}  // namespace asc
 ```
 
 ### 原型10
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<asc::std::int8_t> destination, asc::gm_span<const asc::std::int8_t> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<asc::std::int8_t> destination,
+    asc::gm_span<const asc::std::int8_t> source) noexcept;
+}  // namespace asc
 ```
 
 ### 原型11
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<asc::std::uint16_t> destination, asc::gm_span<const asc::std::uint16_t> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<asc::std::uint16_t> destination,
+    asc::gm_span<const asc::std::uint16_t> source) noexcept;
+}  // namespace asc
 ```
 
 ### 原型12
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<asc::std::uint32_t> destination, asc::gm_span<const asc::std::uint32_t> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<asc::std::uint32_t> destination,
+    asc::gm_span<const asc::std::uint32_t> source) noexcept;
+}  // namespace asc
 ```
 
 ### 原型13
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<asc::std::uint8_t> destination, asc::gm_span<const asc::std::uint8_t> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<asc::std::uint8_t> destination,
+    asc::gm_span<const asc::std::uint8_t> source) noexcept;
+}  // namespace asc
 ```
 
 ### 原型14
 
 ```cpp
 namespace asc {
-void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<float> destination, asc::gm_span<const float> source) noexcept;
-} // namespace asc
+void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_span<float> destination,
+    asc::gm_span<const float> source) noexcept;
+}  // namespace asc
 ```
 
 ## 参数说明
@@ -163,25 +177,33 @@ void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_s
 
 ## 约束说明
 
+- 两端存储须32字节对齐，目标容量至少等于源容量，源字节数须能由unsigned int表示；本接口不负责分配或容量校验。
+- 每轮按producer_acquire、GM→UB copy、producer_commit、consumer_wait、计算、consumer_release、UB→GM copy排序，末轮调用wait。返回不表示数据完成；在相应等待前不得读目标或复用源。
+
 - 仅可在AI Core SIMD编程中调用。
 - 参数类型、地址空间、取值范围和对象生命周期必须满足页面声明。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以1个AI Core启动。input和output各含至少8个unsigned int，GM起始地址32字节对齐；Host同步后output[i]应等于input[i]+1。完整的阶段配对如下，UB→GM必须先consumer_release再copy_async。
+
+完整工程见[流水线搬运示例](../../../../examples/pipeline_copy/README.md)。
 
 ```cpp
 #include <asc/pipeline>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
-
-__aicore__ void example(const asc::pipeline_ref& pipeline, unsigned int stage, asc::gm_span<asc::std::int16_t> destination, asc::ub_span<const asc::std::int16_t> source)
+__global__ __vector__ void example(__gm__ unsigned int* output, __gm__ const unsigned int* input)
 {
-    asc::copy_async(pipeline, stage, destination, source);
+    alignas(32) __ubuf__ unsigned int buffer[8];
+    const auto pipeline = asc::make_pipeline(0, 1);
+    pipeline.producer_acquire(0);
+    asc::copy_async(pipeline, 0, asc::ub_span<unsigned int>(buffer, 8), asc::gm_span<const unsigned int>(input, 8));
+    pipeline.producer_commit(0);
+    pipeline.consumer_wait(0);
+    for (unsigned index = 0; index < 8; ++index)
+        buffer[index] += 1;
+    pipeline.consumer_release(0);
+    asc::copy_async(pipeline, 0, asc::gm_span<unsigned int>(output, 8), asc::ub_span<const unsigned int>(buffer, 8));
+    pipeline.wait();
 }
 ```
 
