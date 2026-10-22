@@ -136,7 +136,7 @@ struct tuple_element<1, const ranges::subrange<Iter, Sent, Kind>>;
 - `Index`从0开始，须小于相应类型的元素数量。空array、空tuple和空`integer_sequence`均没有有效元素索引。
 - `type`描述元素类型，不是一次元素访问，也不创建或复制对象；若需访问对象元素，应使用相应的`get`接口。
 - cv限定通常传播到元素类型；`const integer_sequence`和`const subrange`按上列专门偏特化处理。
-- 应包含各类型对应的公共头文件；各对象类型自身的实例化条件仍需满足，例如当前ASC复数对象只支持`complex<float>`。
+- 应包含各类型对应的公开头文件；各对象类型自身的实例化条件仍需满足，例如当前ASC复数对象只支持`complex<float>`。
 
 ## 调用示例
 

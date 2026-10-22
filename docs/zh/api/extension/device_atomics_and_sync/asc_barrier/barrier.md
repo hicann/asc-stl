@@ -51,7 +51,7 @@ template<asc::memory_scope Scope, class CompletionFunction> class barrier;
 
 ## 调用示例
 
-以下片段用于D-SIMT编译。barrier位于已初始化的共享GM存储；期望计数与本轮参与线程数一致，同一block的全部参与者必须到达。完成后才能进入下一阶段。
+以下片段按AI Core SIMT编程编译。barrier位于已初始化的共享GM存储；期望计数与本轮参与线程数一致，同一block的全部参与者必须到达。完成后才能进入下一阶段。
 
 ```cpp
 #include <asc/barrier>

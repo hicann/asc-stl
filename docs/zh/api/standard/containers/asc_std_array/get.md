@@ -323,7 +323,7 @@ constexpr decltype(auto) get(variant<Types...>& value);
 }
 ```
 
-此原型对应公共头文件：`<asc/std/variant>`。
+此原型对应公开头文件：`<asc/std/variant>`。
 
 ### 原型30
 
@@ -334,7 +334,7 @@ constexpr decltype(auto) get(const variant<Types...>& value);
 }
 ```
 
-此原型对应公共头文件：`<asc/std/variant>`。
+此原型对应公开头文件：`<asc/std/variant>`。
 
 ### 原型31
 
@@ -345,7 +345,7 @@ constexpr decltype(auto) get(variant<Types...>&& value);
 }
 ```
 
-此原型对应公共头文件：`<asc/std/variant>`。
+此原型对应公开头文件：`<asc/std/variant>`。
 
 ### 原型32
 
@@ -356,7 +356,7 @@ constexpr decltype(auto) get(const variant<Types...>&& value);
 }
 ```
 
-此原型对应公共头文件：`<asc/std/variant>`。
+此原型对应公开头文件：`<asc/std/variant>`。
 
 ### 原型33
 
@@ -367,7 +367,7 @@ constexpr decltype(auto) get(variant<Types...>& value);
 }
 ```
 
-此原型对应公共头文件：`<asc/std/variant>`。
+此原型对应公开头文件：`<asc/std/variant>`。
 
 ### 原型34
 
@@ -378,7 +378,7 @@ constexpr decltype(auto) get(const variant<Types...>& value);
 }
 ```
 
-此原型对应公共头文件：`<asc/std/variant>`。
+此原型对应公开头文件：`<asc/std/variant>`。
 
 ### 原型35
 
@@ -389,7 +389,7 @@ constexpr decltype(auto) get(variant<Types...>&& value);
 }
 ```
 
-此原型对应公共头文件：`<asc/std/variant>`。
+此原型对应公开头文件：`<asc/std/variant>`。
 
 ### 原型36
 
@@ -400,7 +400,7 @@ constexpr decltype(auto) get(const variant<Types...>&& value);
 }
 ```
 
-此原型对应公共头文件：`<asc/std/variant>`。
+此原型对应公开头文件：`<asc/std/variant>`。
 
 ## 参数说明
 
@@ -1000,7 +1000,7 @@ constexpr decltype(auto) get(const variant<Types...>&& value);
 - 返回引用保留对应原型的const限定和值类别；元素类型本身为引用时，最终类型还遵循引用折叠规则。
 - 返回右值引用本身不移动元素；是否移动由调用方对返回引用的后续使用决定。
 - 返回引用不延长源对象的生命周期；必须在源对象仍有效时使用，不能返回指向局部对象元素的引用。
-- 须包含各原型标注的公共头文件；complex对象自身仍受当前`complex<float>`支持范围限制。
+- 须包含各原型标注的公开头文件；complex对象自身仍受当前`complex<float>`支持范围限制。
 - 原型1—28声明`noexcept`；variant的8个重载没有`noexcept`声明。元素访问不执行元素构造、赋值或比较。
 
 - variant按索引访问要求Index有效且所选类型非void；按类型访问要求目标类型恰好出现一次。当前持有的索引必须匹配，否则实现直接trap；这与标准库抛出bad_variant_access的失败路径不同。需要处理不匹配时可先用holds_alternative或get_if检查。

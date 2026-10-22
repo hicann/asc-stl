@@ -41,7 +41,7 @@ class ub_span;
 
 ## 约束说明
 
-- D-SIMD下，元素下标访问返回保留UB（__ubuf__） 地址空间及元素const限定的引用；Host下为普通引用。
+- AI Core SIMD编程下，元素下标访问返回保留UB（__ubuf__） 地址空间及元素const限定的引用；Host下为普通引用。
 - AI Core SIMD使用真实UB地址空间；Host可构造普通指针表示以描述或检查布局。Host表示不提供对设备物理UB的访问；AI Core SIMT不提供此类型。
 - 视图不管理存储生命周期。
 - 底层UB区域必须在视图使用期间保持有效。
@@ -49,7 +49,7 @@ class ub_span;
 
 ## 调用示例
 
-以下片段用于D-SIMD编译。调用方提供至少4个int的有效UB区域；本视图不负责分配或释放。
+以下片段按AI Core SIMD编程编译。调用方提供至少4个int的有效UB区域；本视图不负责分配或释放。
 
 ```cpp
 #include <asc/memory>

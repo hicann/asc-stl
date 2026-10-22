@@ -48,7 +48,7 @@ template<asc::memory_scope Scope> class latch;
 
 ## 调用示例
 
-以下片段用于D-SIMT编译。latch位于已初始化的共享GM存储；期望计数等于参与线程数，每个参与者调用一次。计数归零后不可重置复用。
+以下片段按AI Core SIMT编程编译。latch位于已初始化的共享GM存储；期望计数等于参与线程数，每个参与者调用一次。计数归零后不可重置复用。
 
 ```cpp
 #include <asc/latch>

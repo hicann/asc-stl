@@ -55,7 +55,7 @@ constexpr bool operator==(asc::lane_mask other) const noexcept;
 
 ## 约束说明
 
-- 掩码值的构造、观察和位运算可用于Host、D-SIMD与D-SIMT。
+- 掩码值的构造、观察和位运算可用于Host、AI Core SIMD编程与AI Core SIMT编程。
 - 每一位对应Warp中编号0—31的一个Lane；1表示该Lane被选择。
 - 掩码值本身不执行同步；把它用于Warp操作时还须满足该操作的参与者会合要求。
 

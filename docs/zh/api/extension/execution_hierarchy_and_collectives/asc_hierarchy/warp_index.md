@@ -51,7 +51,7 @@ unsigned int warp_index() noexcept;
 ## 约束说明
 
 - 仅可在AI Core SIMT编程中调用。
-- 必须在正在执行的D-SIMT Kernel内查询；结果取自当前启动配置，本函数不执行线程同步。
+- 必须在正在执行的AI Core SIMT核函数内查询；结果取自当前启动配置，本函数不执行线程同步。
 
 ## 调用示例
 

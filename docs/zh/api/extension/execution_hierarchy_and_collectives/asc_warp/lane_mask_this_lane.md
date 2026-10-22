@@ -53,7 +53,7 @@ static asc::lane_mask this_lane() noexcept;
 
 - 仅可在AI Core SIMT编程中调用。
 - 每一位对应Warp中编号0—31的一个Lane；1表示该Lane被选择。
-- 仅在D-SIMT中查询当前Warp；活跃位集合以本次调用位置为准。
+- 仅在AI Core SIMT编程中查询当前Warp；活跃位集合以本次调用位置为准。
 - 掩码值本身不执行同步；把它用于Warp操作时还须满足该操作的参与者会合要求。
 
 ## 调用示例

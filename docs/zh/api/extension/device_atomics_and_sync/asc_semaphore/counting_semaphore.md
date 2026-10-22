@@ -48,7 +48,7 @@ template<asc::memory_scope Scope, asc::std::ptrdiff_t LeastMaxValue = 2147483647
 
 ## 调用示例
 
-以下片段用于D-SIMT编译。permits是GM中已构造的信号量，初始许可数在[0, 2] 内；示例在成功取得许可后归还。
+以下片段按AI Core SIMT编程编译。permits是GM中已构造的信号量，初始许可数在[0, 2] 内；示例在成功取得许可后归还。
 
 ```cpp
 #include <asc/semaphore>

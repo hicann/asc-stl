@@ -45,7 +45,7 @@ inline constexpr double egamma = 0x1.2788cfc6fb618f49a37c7f0202a6p-1;
 ## 约束说明
 
 - 13个标准double命名常量。
-- 可用于Host与D-SIMT；参与操作的对象及其存储须在对应执行位置有效。
+- 可用于Host与AI Core SIMT编程；参与操作的对象及其存储须在对应执行位置有效。
 - 普通AICore仅constant-fold后无runtime double的用法。
 
 ## 调用示例

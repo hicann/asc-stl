@@ -45,7 +45,7 @@ inline constexpr double pi = 0x1.921fb54442d18469898cc51701b8p+1;
 ## 约束说明
 
 - 13个标准double命名常量。
-- 可用于Host与D-SIMT；参与操作的对象及其存储须在对应执行位置有效。
+- 可用于Host与AI Core SIMT编程；参与操作的对象及其存储须在对应执行位置有效。
 - 普通AICore仅constant-fold后无runtime double的用法。
 
 ## 调用示例

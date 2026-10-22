@@ -57,7 +57,7 @@ constexpr asc::lane_mask operator<<(int shift) const noexcept;
 
 - shift须在[0, 31]内；负值或不小于32的移位不属于有效调用。
 
-- 掩码值的构造、观察和位运算可用于Host、D-SIMD与D-SIMT。
+- 掩码值的构造、观察和位运算可用于Host、AI Core SIMD编程与AI Core SIMT编程。
 - 每一位对应Warp中编号0—31的一个Lane；1表示该Lane被选择。
 - shift必须在[0, 31] 内；本值运算不执行Warp会合或内存同步。
 

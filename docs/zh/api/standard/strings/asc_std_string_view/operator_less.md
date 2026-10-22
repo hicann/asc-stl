@@ -61,7 +61,7 @@ constexpr bool operator<(type_identity_t<basic_string_view<C, T>> left, basic_st
 ## 约束说明
 
 - 视图引用的字符区间在调用期间必须可读且存活；字符串字面量转换按其终止符确定长度。
-- D-SIMD的普通字符指针适用于local或generic地址空间。
+- AI Core SIMD编程中，普通字符指针适用于local或generic地址空间。
 
 ## 调用示例
 

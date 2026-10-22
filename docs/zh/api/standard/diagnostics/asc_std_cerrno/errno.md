@@ -32,7 +32,7 @@
 
 ## 声明
 
-Host通过公共头文件取得平台`<cerrno>`的errno宏；具体展开式由平台决定，ASC-STL不定义额外的errno地址获取函数。
+Host通过公开头文件取得平台`<cerrno>`的errno宏；具体展开式由平台决定，ASC-STL不定义额外的errno地址获取函数。
 
 ```cpp
 #include <asc/std/cerrno>

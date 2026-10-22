@@ -42,7 +42,7 @@ template<class T> class gm_span;
 
 ## 约束说明
 
-- D-SIMD下，元素下标访问返回保留GM（__gm__） 地址空间及元素const限定的引用；Host下为普通引用。
+- AI Core SIMD编程下，元素下标访问返回保留GM（__gm__） 地址空间及元素const限定的引用；Host下为普通引用。
 - 视图不管理存储生命周期。
 - 底层GM区域必须在视图使用期间保持有效。
 - operator[] 的索引范围由调用方保证有效。
