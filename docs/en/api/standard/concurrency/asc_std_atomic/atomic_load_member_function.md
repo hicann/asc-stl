@@ -1,0 +1,81 @@
+# asc::std::atomic::load
+
+## Product Support
+
+<!-- npu="950" id1 -->
+- Ascend 950PR&950DT series products: Supported
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 series products: Not supported
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 series products: Not supported
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 inference products: Not supported
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas inference series products AI Core: Not supported
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas inference series products Vector Core: Not supported
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas training series products: Not supported
+<!-- end id7 -->
+
+## Description
+
+Header: `<asc/std/atomic>`.
+
+`asc::std::atomic::load` reads the current atomic value with the specified or default memory order.
+
+This interface is available in Host and AI Core SIMT programming.
+
+Standard semantics reference: [cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic).
+
+## Function Prototype
+
+Member of: [`asc::std::atomic`](atomic.md).
+
+```cpp
+// Excerpt of the declaration inside the asc::std::atomic class; template parameters and other members are provided by the enclosing class.
+T load(memory_order order = memory_order_seq_cst) const noexcept;
+```
+
+## Parameters
+
+**Function Parameters**
+
+| Parameter | Input/Output | Description |
+| --- | --- | --- |
+| `order` | Input | The value involved in this atomic read, write, or read-modify-write operation. |
+
+## Return Value
+
+| Return type | Description |
+| --- | --- |
+| `T` | Returns the current atomic value read with the selected memory order. |
+
+## Constraints
+
+- Atomic operations can be called in Host and AI Core SIMT programming; atomic objects shared by SIMT threads must be located in GM and initialized before concurrent access.
+- The memory order must be `memory_order_relaxed`, `memory_order_consume`, `memory_order_acquire`, or `memory_order_seq_cst`; `memory_order_release` and `memory_order_acq_rel` are not allowed.
+
+## Example
+
+The following Host snippet demonstrates the atomic operation; device-side objects must be placed in a valid memory space as specified on this page.
+
+```cpp
+#include <asc/std/atomic>
+
+decltype(auto) example(const asc::std::atomic<int>& value)
+{
+    return value.load(asc::std::memory_order_relaxed);
+}
+```
+
+## Related APIs
+
+- [`asc::std::atomic`](atomic.md)
+- [API list for this header](asc_std_atomic.md)

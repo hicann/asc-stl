@@ -1,0 +1,88 @@
+# asc::std::inplace_vector::try_emplace_back
+
+## Product Support
+
+<!-- npu="950" id1 -->
+- Ascend 950PR&950DT series products: Supported
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 series products: Not supported
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 series products: Not supported
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 inference products: Not supported
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas inference series products AI Core: Not supported
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas inference series products Vector Core: Not supported
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas training series products: Not supported
+<!-- end id7 -->
+
+## Description
+
+Header: `<asc/std/inplace_vector>`.
+
+`asc::std::inplace_vector::try_emplace_back` attempts to construct an element in place at the end of the fixed-capacity container and returns a reference to it on success.
+
+This interface supports both Host and the device side, both limited to the non-throwing operations listed on this page.
+
+Standard semantics reference: [cppreference `inplace_vector`](https://en.cppreference.com/w/cpp/header/inplace_vector).
+
+## Function Prototype
+
+Member of: [`inplace_vector<T, Capacity>`](inplace_vector.md). The following is the in-class declaration; type aliases and template parameters are provided by the owning class.
+
+### Prototype 1
+
+```cpp
+template<class... Args>
+constexpr optional<reference> try_emplace_back(Args&&... args);
+```
+
+## Parameters
+
+**Template Parameters**
+
+| Parameter | Description |
+| --- | --- |
+| `Args` | The pack of argument types for constructing the new element; T must be constructible with the corresponding value categories. |
+
+| Parameter | Input/Output | Description |
+| --- | --- | --- |
+| `args` | Input | The arguments forwarded to T's constructor; they must be valid during construction, and any borrows held by T must additionally satisfy their lifetimes. |
+
+## Return Value
+
+| Applicable prototype | Return type | Description |
+| --- | --- | --- |
+| Prototype 1 | `optional<reference>` | Borrows the new element when capacity is available; empty when capacity is full, without constructing or consuming the source. |
+
+## Constraints
+
+- Returns an empty optional when capacity is insufficient, without constructing a new element; returns an optional<T&> borrowing the new element when capacity is available.
+- The element borrowed by a non-empty result must remain alive; the element construction requirements must still be satisfied.
+- The corresponding construction, assignment, and destruction of elements must satisfy the non-throwing usage domain; the constexpr declaration does not guarantee constant evaluation for every T and language mode.
+
+## Example
+
+The following Host snippet demonstrates the call with a concrete capacity or dimension; the object and indices must satisfy the constraints on this page.
+
+```cpp
+#include <asc/std/inplace_vector>
+
+decltype(auto) example(asc::std::inplace_vector<int, 8>& values)
+{
+    return values.try_emplace_back(7);
+}
+```
+
+## Related APIs
+
+- [`asc::std::inplace_vector`](inplace_vector.md)
+- [API list for this header](asc_std_inplace_vector.md)

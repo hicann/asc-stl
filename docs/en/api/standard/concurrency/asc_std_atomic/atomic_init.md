@@ -1,0 +1,86 @@
+# asc::std::atomic_init
+
+## Product Support
+
+<!-- npu="950" id1 -->
+- Ascend 950PR&950DT series products: Supported
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 series products: Not supported
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 series products: Not supported
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 inference products: Not supported
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas inference series products AI Core: Not supported
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas inference series products Vector Core: Not supported
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas training series products: Not supported
+<!-- end id7 -->
+
+## Description
+
+Header: `<asc/std/atomic>`.
+
+`asc::std::atomic_init` initializes an atomic object with the given value.
+
+This interface is available in Host and AI Core SIMT programming.
+
+Standard semantics reference: [cppreference `atomic`](https://en.cppreference.com/w/cpp/header/atomic).
+
+## Function Prototype
+
+```cpp
+namespace asc::std {
+template<class T> void atomic_init(atomic<T>* object, T value) noexcept;
+} // namespace asc::std
+```
+
+## Parameters
+
+**Template Parameters**
+
+| Parameter | Description |
+| --- | --- |
+| `T` | The value type stored by the atomic object. |
+
+**Function Parameters**
+
+| Parameter | Input/Output | Description |
+| --- | --- | --- |
+| `object` | Input/Output | Pointer to the atomic object to be initialized. |
+| `value` | Input | The initial value written into the atomic object. |
+
+## Return Value
+
+No return value.
+
+## Constraints
+
+- Atomic operations can be called in Host and AI Core SIMT programming; atomic objects shared by SIMT threads must be located in GM and initialized before concurrent access.
+- `object` must point to a valid [atomic](atomic.md) object whose value type must match the template parameter `T`.
+- The current implementation stores the initial value with `memory_order_relaxed`; the call must be completed before other threads begin concurrent access.
+
+## Example
+
+The following Host snippet uses a concrete integer atomic object; device-side objects must be located in accessible global memory.
+
+```cpp
+#include <asc/std/atomic>
+
+void example()
+{
+    asc::std::atomic<int> value{1};
+    asc::std::atomic_init(&value, 2);
+}
+```
+
+## Related APIs
+
+- [API list for this header](asc_std_atomic.md)

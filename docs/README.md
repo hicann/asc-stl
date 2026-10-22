@@ -12,7 +12,7 @@ docs/
 │   ├── examples/   # API 示例源码
 │   ├── figures/    # 文档图片
 │   └── guide/      # 获取、使用、构建与测试
-├── en/             # 英文文档（建设中）
+├── en/             # 英文文档（API 参考）
 ├── README.md       # 中文文档入口
 └── README_en.md    # 英文文档入口
 ```

@@ -1,0 +1,85 @@
+# asc::std::ranges::cdata
+
+## Product Support
+
+<!-- npu="950" id1 -->
+- Ascend 950PR&950DT series products: Supported
+<!-- end id1 -->
+<!-- npu="A3" id2 -->
+- Atlas A3 series products: Not supported
+<!-- end id2 -->
+<!-- npu="910b" id3 -->
+- Atlas A2 series products: Not supported
+<!-- end id3 -->
+<!-- npu="310b" id4 -->
+- Atlas 200I/500 A2 inference products: Not supported
+<!-- end id4 -->
+<!-- npu="310p" id5 -->
+- Atlas inference series products AI Core: Not supported
+<!-- end id5 -->
+<!-- npu="310p" id6 -->
+- Atlas inference series products Vector Core: Not supported
+<!-- end id6 -->
+<!-- npu="910" id7 -->
+- Atlas training series products: Not supported
+<!-- end id7 -->
+
+## Description
+
+Header: `<asc/std/ranges>`.
+
+`asc::std::ranges::cdata` obtains the read-only address of the first element from an lvalue contiguous range; the returned pointer does not own the underlying storage.
+
+Standard semantics reference: [cppreference `ranges`](https://en.cppreference.com/w/cpp/header/ranges).
+
+## Declaration
+
+This name is a public constant function object; the object's implementation type does not constitute an interface commitment. The following is the call form; omitted optional parameters are governed by the constraints of each prototype.
+
+```cpp
+namespace asc::std::ranges {
+cdata(range);
+} // namespace asc::std::ranges
+```
+
+## Parameters
+
+| Parameter | Input/Output | Description |
+| --- | --- | --- |
+| `range` | Input | The input range to be accessed or transformed; borrowed results are bound by its lifetime. |
+
+## Return Value
+
+Returns a pointer to the first element of the contiguous range; its validity is bound by the input range.
+
+| Call form | Return type |
+| --- | --- |
+| Lvalue range | `decltype(ranges::data(static_cast<const T&>(range)))` |
+
+## Constraints
+
+- Supports arrays and user-defined ranges; does not support initializer_list expressions formed only of braces.
+- The current implementation accepts only lvalue ranges.
+- The caller must keep the underlying range valid while the result is in use.
+
+## Example
+
+The following Host example provides concrete inputs and checks the result of the call.
+
+```cpp
+#include <asc/std/ranges>
+#include <asc/std/array>
+#include <asc/std/iterator>
+#include <asc/std/tuple>
+
+bool example()
+{
+    int values[] = {1, 2, 3, 4};
+    auto result = asc::std::ranges::cdata(values);
+    return result == values && result[2] == 3;
+}
+```
+
+## Related APIs
+
+- [API list for this header](asc_std_ranges.md)
