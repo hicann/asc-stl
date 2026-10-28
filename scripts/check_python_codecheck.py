@@ -173,18 +173,22 @@ def inspect_file(path: Path) -> list[Violation]:
 
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(message)s")
+    paths = [Path(value) for value in sys.argv[1:]]
+    missing = [path for path in paths if not path.is_file()]
+    for path in missing:
+        LOGGER.error("Python source is missing or not a file: %s", path)
+    if missing:
+        return 2
     findings = [
         (path, violation)
-        for value in sys.argv[1:]
-        for path in (Path(value),)
-        if path.is_file()
+        for path in paths
         for violation in inspect_file(path)
     ]
     for path, violation in findings:
         LOGGER.error("%s:%d: %s: %s", path, violation.line, violation.rule, violation.message)
     if findings:
         return 1
-    LOGGER.info("Python CodeCheck mirror passed (%d files)", len(sys.argv) - 1)
+    LOGGER.info("Python CodeCheck mirror passed (%d files)", len(paths))
     return 0
 
 

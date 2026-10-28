@@ -46,18 +46,22 @@ def direct_print_calls(path: Path) -> list[int]:
 
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(message)s")
+    paths = [Path(value) for value in sys.argv[1:]]
+    missing = [path for path in paths if not path.is_file()]
+    for path in missing:
+        LOGGER.error("Python source is missing or not a file: %s", path)
+    if missing:
+        return 2
     violations = [
         (path, line)
-        for value in sys.argv[1:]
-        for path in (Path(value),)
-        if path.is_file()
+        for path in paths
         for line in direct_print_calls(path)
     ]
     for path, line in violations:
         LOGGER.error("%s:%d: direct print() call; use the logging module", path, line)
     if violations:
         return 1
-    LOGGER.info("Python logging check passed (%d files)", len(sys.argv) - 1)
+    LOGGER.info("Python logging check passed (%d files)", len(paths))
     return 0
 
 
