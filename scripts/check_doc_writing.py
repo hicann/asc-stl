@@ -134,7 +134,7 @@ def navigation_errors(root: Path) -> list[str]:
         if len(match[1]) // 2 + 1 > 5:
             errors.append(f"{page}:{index + 1}: navigation exceeds five levels")
         if target.is_file():
-            title = next((s[2:] for s in target.read_text().splitlines() if s.startswith("# ")), "")
+            title = next((s[2:] for s in target.read_text(encoding="utf-8").splitlines() if s.startswith("# ")), "")
             if normalized_title(title) != normalized_title(match[2]):
                 errors.append(f"{page}:{index + 1}: title differs from {match[3]}")
     return errors
