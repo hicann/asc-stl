@@ -21,7 +21,8 @@ STATE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/asc-stl-codecheck.XXXXXX")"
 STAGE_DIR="$STATE_DIR/repo"
 trap 'rm -rf -- "$STATE_DIR"' EXIT
 mkdir -p "$STAGE_DIR"
-rsync -a --exclude '/.git/' --exclude '/build/' "$ROOT/" "$STAGE_DIR/"
+# A linked worktree stores .git as a file; exclude both files and directories.
+rsync -a --exclude '/.git' --exclude '/build/' --exclude '.env' --exclude '.env.*' "$ROOT/" "$STAGE_DIR/"
 cd "$STAGE_DIR"
 git init --quiet
 git add --all
