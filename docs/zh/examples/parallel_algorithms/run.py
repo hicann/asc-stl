@@ -22,6 +22,7 @@ import argparse
 import hashlib
 import json
 import logging
+import math
 import os
 from pathlib import Path
 import signal
@@ -130,8 +131,10 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--process-timeout", type=float, default=40)
     parser.add_argument("--cleanup-grace", type=float, default=15)
     args = parser.parse_args()
-    if args.process_timeout <= 0 or args.cleanup_grace <= 0:
-        parser.error("Deadlines must be positive")
+    if not math.isfinite(args.process_timeout) or args.process_timeout <= 0:
+        parser.error("Deadlines must be finite positive numbers")
+    if not math.isfinite(args.cleanup_grace) or args.cleanup_grace <= 0:
+        parser.error("Deadlines must be finite positive numbers")
     return args
 
 

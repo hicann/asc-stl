@@ -30,6 +30,17 @@ RUNNER = ROOT / "docs/zh/examples/parallel_algorithms/run.py"
 
 
 class ParallelExampleRunnerTests(unittest.TestCase):
+    def test_nonfinite_deadlines_are_rejected(self):
+        for option, value in (("--process-timeout", "nan"), ("--process-timeout", "inf"),
+                              ("--cleanup-grace", "nan"), ("--cleanup-grace", "inf")):
+            arguments = [sys.executable, str(RUNNER), "--binary", "unused", "--report-dir", "unused",
+                         "--standard", "17",
+                         option, value]
+            with self.subTest(option=option, value=value):
+                result = subprocess.run(arguments, capture_output=True, text=True, timeout=10, check=False)
+                self.assertEqual(result.returncode, 2)
+                self.assertIn("Deadlines must be finite positive numbers", result.stderr)
+
     def invoke(self, mode, only_one=False):
         with tempfile.TemporaryDirectory() as temporary:
             directory = Path(temporary)
