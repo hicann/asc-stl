@@ -4,26 +4,27 @@
 
 简体中文 | [English](README_en.md)
 
-[📖 api文档](docs/zh/api/README.md) | [📚 路线图](docs/zh/roadmap/roadmap.md) | [🧪 快速入门](docs/zh/quick_start.md) | [📄 LICENSE](LICENSE) | [🤝 贡献指南](CONTRIBUTING.md)
+[📖 api文档](docs/zh/api/README.md) | [📚 路线图](docs/zh/roadmap/roadmap_v1_0_0.md) | [🧪 快速入门](docs/zh/quick_start.md) | [📄 LICENSE](LICENSE) | [🤝 贡献指南](CONTRIBUTING.md)
 
-## 🔥 最新动态
+## 🔥 当前可用状态
 
-**[v1.0.0 · 计划2026年10月16日发布]** 完整版本首发：`asc::std`接口层16类标准能力模块、昇腾扩展接口（9类）与Runtime接口（4类）的全部公共头同步提供，共29类能力域，Host与Device代码共用同一套公共Header组织。
+**当前可使用 `master` 开发分支中已经实现的标准层功能：`asc::std` 覆盖现有 16 类能力、74 个公共头。** 具体功能和限制见下文[标准层当前功能范围](#标准层当前功能范围)。昇腾扩展层与 Runtime 层正在持续完善。
 
-### 🚀 版本计划
+当前为 `master` 开发版，源码版本标识为 `1.0.0`。目前，仓库尚无正式 [tag](https://gitcode.com/cann/asc-stl/tags) 或 [Release](https://gitcode.com/cann/asc-stl/releases)，正式发布时间待公布。
 
-代码按周更新，版本以**双周**为节奏发布：
+### 🚀 发布与完善计划
 
-| 版本 | 发布日期 | 能力范围 |
+| 对象 | 当前状态 | 后续安排 |
 | --- | --- | --- |
-| **v1.0.0** | **2026-10-16** | 完整版本：C++ 标准库接口（16类标准能力模块）、昇腾扩展接口（9类）与Runtime接口（4类）全量提供 |
-| **v1.1.0** | **2026-10-30** | 完善计划第一批 · 质量与性能完善：测试覆盖与真机回归扩展、高频算法与数据搬运路径优化、边界用例补齐 |
-| **v1.1.1** | 待定 | 完善计划第二批 · 文档与易用性完善：API参考文档、示例工程、错误诊断与编译体验优化 |
+| `master` 开发分支 | 标准层已有功能可按文档使用；扩展层和 Runtime 层持续完善 | 持续更新实现、API 约束、示例和回归 |
+| `v1.0.0` 首个正式版本 | 尚未发布 | 发布时同步更新 tag、Release 和功能说明 |
+| 后续迭代 | 规划中 | 分批完善扩展/Runtime 能力、质量和文档 |
 
 ### 📖 文档
 
-- 产品路线图：[ASC-STL总路线图](docs/zh/roadmap/roadmap.md) · [v1.0.0细分路线图](docs/zh/roadmap/roadmap_v1_0_0.md)。
-- API参考文档：[ASC-STL API参考](docs/zh/api/README.md)（标准库、昇腾扩展与Runtime接口）。
+- [当前标准层功能范围](#标准层当前功能范围) · [标准层完整 API 支持列表](docs/zh/api/standard/standard.md)。
+- [ASC-STL v1.0.0 支持范围说明](docs/zh/roadmap/roadmap_v1_0_0.md)。
+- [API 参考文档](docs/zh/api/README.md)：各接口的语言模式、可用位置、约束和示例。
 
 ## 🚀 概述
 
@@ -37,11 +38,11 @@
 
 ### 接口组成
 
-| 接口 | 命名空间 / 包含路径 | 覆盖范围 | 随版本提供 |
+| 接口 | 命名空间 / 包含路径 | 覆盖范围 | 当前状态 |
 | --- | --- | --- | --- |
-| C++ 标准库接口 | `asc::std` · `<asc/std/...>` | 语言支持、概念、诊断、内存管理、元编程、通用工具、容器、迭代器、范围、算法、字符串、文本处理、数值、日期和时间、输入/输出、并发支持共16类 | v1.0.0 |
-| 昇腾扩展接口 | `asc` · `<asc/...>` | 设备原子操作与线程同步、异步数据搬运、地址空间与内存视图、多维数据视图与搬运、设备执行层次与集体操作、Device并行算法及设备侧数值与类型工具共9类 | v1.0.0 |
-| Runtime接口 | `asc` · `<asc/...>` | 设备/Stream/Event管理、核函数调用、Device执行策略与执行要求、内存资源/内存池/缓冲区共4类 | v1.0.0 |
+| C++ 标准库接口 | `asc::std` · `<asc/std/...>` | 语言支持、概念、诊断、内存管理、元编程、通用工具、容器、迭代器、范围、算法、字符串、文本处理、数值、日期和时间、输入/输出、并发支持共16类 | 已有功能可按文档使用 |
+| 昇腾扩展接口 | `asc` · `<asc/...>` | 设备原子操作与线程同步、异步数据搬运、地址空间与内存视图、多维数据视图与搬运、设备执行层次与集体操作、Device并行算法及设备侧数值与类型工具共9类 | 已有部分实现，持续完善 |
+| Runtime接口 | `asc` · `<asc/...>` | 设备/Stream/Event管理、核函数调用、Device执行策略与执行要求、内存资源/内存池/缓冲区共4类 | 已有部分实现，持续完善 |
 
 
 ### 整体架构
@@ -49,14 +50,14 @@
 ![图1 ASC-STL设计架构](docs/zh/figures/asc_stl_design_architecture_v3.png)
 
 - ASC-STL为纯头文件C++ 库，接口分为C++ 标准库接口、昇腾扩展接口和Runtime接口三部分；
-- 设备侧编程能力基于CANN Ascend C提供，代码由毕昇编译器（基于Clang 15.0.5）编译，运行于昇腾950PR&&DT处理器；
+- 设备侧编程能力基于CANN Ascend C提供，代码由毕昇编译器（基于Clang 15.0.5）编译，运行于昇腾 950PR / 950DT 系列处理器；
 - 运行时依赖CANN Runtime（AscendCL Runtime API）与NPU驱动，提供设备管理、核函数调用、内存管理及设备访问能力。
 
 ### 如何选择能力
 
-- 写通用的类型、算法、数值与同步逻辑 → 使用 **C++ 标准库接口**（v1.0.0提供）；
-- 操作GM/UB内存、设备原子与线程协作、Device并行算法 → 使用 **昇腾扩展接口**（v1.0.0提供）；
-- 管理设备、Stream/Event与核函数调用 → 使用 **Runtime接口**（v1.0.0提供）。
+- 写通用的类型、算法、数值与同步逻辑 → 使用 **C++ 标准库接口**（按下文标准层范围使用）；
+- 操作GM/UB内存、设备原子与线程协作、Device并行算法 → 使用 **昇腾扩展接口**（已有部分实现，持续完善）；
+- 管理设备、Stream/Event与核函数调用 → 使用 **Runtime接口**（已有部分实现，持续完善）。
 
 ## 🔍 目录结构
 
@@ -67,15 +68,15 @@ asc-stl/
 ├── include/
 │   └── asc/                         # ASC-STL 公共 Header 根目录
 │       ├── __config                 # 统一配置入口
-│       ├── std/                     # C++ 标准库接口：<asc/std/...>（v1.0.0）
+│       ├── std/                     # C++ 标准库接口：<asc/std/...>
 │       │   └── ...                  # 其余内部实现目录（__ 前缀）
-│       ├── algorithm                # Device 并行算法（v1.0.0）
-│       ├── atomic                   # 设备原子操作（v1.0.0）
-│       ├── collectives              # 线程组协作操作（v1.0.0）
-│       ├── execution                # Device 执行策略聚合入口（v1.0.0）
-│       ├── memory                   # GM、UB 和内存视图（v1.0.0）
-│       ├── stream                   # stream 和 event 管理（v1.0.0）
-│       └── ...                      # 其他设备能力公共 Header（v1.0.0）
+│       ├── algorithm                # Device 并行算法
+│       ├── atomic                   # 设备原子操作
+│       ├── collectives              # 线程组协作操作
+│       ├── execution                # Device 执行策略聚合入口
+│       ├── memory                   # GM、UB 和内存视图
+│       ├── stream                   # stream 和 event 管理
+│       └── ...                      # 其他设备能力公共 Header
 ├── docs/                            # 项目文档与产品路线图
 ├── test/                            # Host、Device 与仿真测试
 ├── cmake/                           # CMake 安装和导出配置
@@ -103,7 +104,7 @@ asc-stl/
 | 毕昇CCE / clang | 15.0.5 |
 | g++ | 产品最低使用C++17；完整Host测试同时需要C++20支持 |
 | CMake | ≥ 3.20 |
-| 处理器 | 昇腾950PR&&DT处理器 |
+| 处理器 | 昇腾 950PR / 950DT 系列处理器 |
 
 CANN同一版本的不同构建可能采用不同SDK目录布局。设备层查询会优先包含
 `c_api/utils/sys_var.h`，缺少时使用`c_api/sys_var/sys_var.h`；两者均缺少时会给出
@@ -162,36 +163,13 @@ bash scripts/ci-quick-check.sh
 cmake -B build -DBUILD_TESTING=ON && cmake --build build -j && cd build && ctest
 ```
 
-真实设备回归使用`bash scripts/ci-hardware-check.sh`，默认执行C++17/C++20
-各三轮。当前测试入口要求只暴露一个可读写的`/dev/davinci[0-9]+`计算设备节点；
-容器中的节点可能是`/dev/davinci4`等非零编号，不能把物理节点尾数当作ACL逻辑
-设备号。测试使用逻辑设备0，实际初始化和执行结果仍由运行时测试确认。无计算设备、
-权限不足或存在多个计算设备时，入口会报告`BLOCKED_ENVIRONMENT`并以状态码2
-退出；`davinci_manager`不计入计算设备。
-
-可选`ASC_STL_HARDWARE_DEVICE_NODE`用来校验预期的物理节点，不改变逻辑设备号，
-也不从多设备中选择一个。构建遵循`CMAKE_BUILD_PARALLEL_LEVEL`，未设置时保持
-两路并行；例如`CMAKE_BUILD_PARALLEL_LEVEL=8 bash scripts/ci-hardware-check.sh`。
-硬件用例不由上面的三个云端Host/Device/cannsim CI入口触发。
-
-纯SIMT测试中，视图连续逆向遍历的已知编译器缺陷与B022常量局部数组组合回归的
-独立异常，分别记录于[共享语义回归说明](test/support/README.md)。B022夹具通过
-Host上传相同原值构造运行期输入，保留Host/SIMD常量路径、算法调用顺序、断言和
-`-O3`；原始常量形态仍需复验。验证该夹具时须完整执行C++17/C++20模拟与真机回归，
-算法独立对照不能替代完整B022结果。
-
-B027的纯SIMT运行期测试采用[分阶段夹具](test/support/README.md)：每个阶段在独立ASC
-翻译单元和共享模块中编译，长字符串对象及arena位于同一上下文的GM，短字符串保持
-局部对象和局部arena。Host与SIMD保留原完整语义路径。该夹具保留core与字符串的
-全部行为断言及`-O3`，用于验证当前工具链下的内存域和模块隔离；原单kernel、局部
-长arena形态仍作为独立回归保留在诊断记录中，不能据此声称SDK问题已经修复。
-C++17/C++20的完整模拟、硬件构建和有保护的真机执行均属于持续验证要求。
+真实设备回归使用 `bash scripts/ci-hardware-check.sh`，默认执行 C++17/C++20 各三轮。
 
 ## 💻 软硬件配套说明
 
 ASC-STL 所需的软硬件环境依赖如下：
 
-- 昇腾产品：[昇腾950PR&&DT处理器](https://www.hiascend.com/hardware/processor)
+- 昇腾产品：[昇腾 950PR / 950DT 系列处理器](https://www.hiascend.com/hardware/processor)
 - CPU 架构：`aarch64` / `x86_64`
 - 系统：支持的 Linux（进行[兼容性查询](https://www.hiascend.com/hardware/compatibility)）
 - 软件依赖：
@@ -215,9 +193,9 @@ ASC-STL 所需的软硬件环境依赖如下：
   </thead>
   <tbody style="text-align: center">
       <tr>
-          <td>v1.0.0、v1.1.0、v1.1.1</td>
+          <td>master 开发分支（版本标识 1.0.0）</td>
           <td>社区版 9.2.0 及以上</td>
-          <td><a href="https://www.hiascend.com/hardware/processor">昇腾950PR&&DT处理器</a></td>
+          <td><a href="https://www.hiascend.com/hardware/processor">昇腾 950PR / 950DT 系列处理器</a></td>
       </tr>
   </tbody>
 </table>
@@ -235,23 +213,28 @@ ln -sf build/compile_commands.json .
 
 ## 📊 版本状态与功能清单
 
-当前状态：**v1.0.0（完整版本）开发中，计划于2026年10月16日发布**。
+### 标准层当前功能范围
 
-| 能力域 | 关键公共头 | 随版本提供 |
+下表列出当前标准层的全部 **74 个公共头**，沿用现有 **16 类**分类。头文件均以 `<asc/std/...>` 包含，接口位于 `asc::std`。
+
+| 现有分类 | 公共头 | 当前可使用的功能范围 |
 | --- | --- | --- |
-| 类型系统与通用工具 | `type_traits` `concepts` `tuple` `optional` `variant` `expected` `functional` `bit` … | v1.0.0 |
-| 语言支持与诊断 | `limits` `exception` `compare` `new` `version` `cassert` `system_error` … | v1.0.0 |
-| 顺序算法、迭代器与范围 | `algorithm` `iterator` `ranges` `execution` | v1.0.0 |
-| 容器与视图 | `array` `vector` `inplace_vector` `map` `set` `span` `mdspan` … | v1.0.0 |
-| 字符串与文本处理 | `string` `string_view` `charconv` `format` … | v1.0.0 |
-| 数值与时间 | `cmath` `complex` `random` `linalg` `numeric` `chrono` … | v1.0.0 |
-| 标准原子与同步 | `atomic` `barrier` `latch` `semaphore` `mutex` | v1.0.0 |
-| 内存管理 | `memory` `scoped_allocator` | v1.0.0 |
-| 设备与任务提交 | `devices` `stream` `launch` `execution.*` | v1.0.0 |
-| 内存资源与数据搬运 | `memory` `memory_resource` `memory_pool` `buffer` `mdspan` `tensor_copy` `pipeline` | v1.0.0 |
-| 设备原子与线程同步 | `atomic` `barrier` `latch` `semaphore` | v1.0.0 |
-| 设备执行层次与集体操作 | `hierarchy` `warp` `collectives` `work_queue` | v1.0.0 |
-| Device并行算法与配套组件 | `algorithm` `argument` `functional` `iterator` `bit` `cmath` `numeric` `random` `type_traits` `utility` `version` | v1.0.0 |
+| [语言支持库](docs/zh/api/standard/language_support/language_support.md) | `cfloat` `climits` `cstddef` `cstdint` `exception` `compare` `new` `limits` `source_location` `version` `ciso646` `cstdalign` `cstdbool` | 基础类型与数值宏、比较类别、源码位置、能力检测，以及终止和 placement new 等已列出的语言支持接口。 |
+| [概念库](docs/zh/api/standard/concepts/concepts.md) | `concepts` | 类型与表达式判定；C++17 提供布尔变量模板，C++20 可使用原生 concept。 |
+| [诊断库](docs/zh/api/standard/diagnostics/diagnostics.md) | `cassert` `cerrno` `system_error` | 断言、错误码宏，以及 error_code、error_condition 和错误类别。 |
+| [内存管理库](docs/zh/api/standard/memory_management/memory_management.md) | `memory` `scoped_allocator` | 指针与分配器特征、分配器协议、对象构造/销毁及未初始化内存算法。 |
+| [元编程库](docs/zh/api/standard/metaprogramming/metaprogramming.md) | `type_traits` `ratio` | 类型查询、类型变换、编译期常量与有理数运算。 |
+| [通用工具库](docs/zh/api/standard/utilities/utilities.md) | `utility` `functional` `tuple` `optional` `variant` `expected` `bit` `bitset` `cstdlib` | 移动/转发/交换、函数对象、值组合与可选值、结果与错误表示、位操作和位集合等工具。 |
+| [容器库](docs/zh/api/standard/containers/containers.md) | `array` `vector` `deque` `list` `forward_list` `inplace_vector` `map` `set` `unordered_map` `unordered_set` `queue` `stack` `span` `mdspan` | 固定容量与动态容器、关联容器、适配器及连续/多维视图，动态容器使用显式分配器。 |
+| [迭代器库](docs/zh/api/standard/iterators/iterators.md) | `iterator` | 迭代器属性、遍历辅助、插入/逆向/移动等迭代器适配。 |
+| [范围库](docs/zh/api/standard/ranges/ranges.md) | `ranges` | 范围访问与判定、范围视图及过滤、变换、截取等视图组合。 |
+| [算法库](docs/zh/api/standard/algorithms/algorithms.md) | `algorithm` `execution` | 遍历、查找、比较、复制、变换、分区、排序、二分、集合、堆与排列等算法，以及执行策略词汇。 |
+| [字符串库](docs/zh/api/standard/strings/strings.md) | `cstring` `string` `string_view` | C 字符串/字节操作、显式分配器 basic_string、字符特征及字符串视图。 |
+| [文本处理库](docs/zh/api/standard/text_processing/text_processing.md) | `cctype` `charconv` `cuchar` `cwchar` `cwctype` `format` | 字符分类、字符/数值转换、宽字符与多字节处理，以及 format_to 等格式化输出接口。 |
+| [数值库](docs/zh/api/standard/numerics/numerics.md) | `cmath` `complex` `ccomplex` `ctgmath` `numbers` `linalg` `random` `numeric` | 标量数学、复数、数学常量、随机引擎/分布、数值算法；linalg 当前提供缩放、共轭、转置等视图适配。 |
+| [日期和时间库](docs/zh/api/standard/chrono/chrono.md) | `chrono` `ctime` | 时间段、时间点、日历与转换；计时与时间转换。 |
+| [输入/输出库](docs/zh/api/standard/input_output/input_output.md) | `cinttypes` | 定宽整数格式宏与 intmax_t 相关工具。 |
+| [并发支持库](docs/zh/api/standard/concurrency/concurrency.md) | `atomic` `barrier` `latch` `semaphore` `mutex` `shared_mutex` | 原子、屏障、倒计数和信号量，以及 RAII 锁管理。 |
 
 ## 📖 相关资源
 
@@ -260,15 +243,9 @@ ln -sf build/compile_commands.json .
 | 文档 | 说明 |
 | --- | --- |
 | [快速入门](docs/zh/quick_start.md) | 环境搭建、Host/Kernel 使用方式与本地验证，含经测试验证的示例 |
-| [产品路线图](docs/zh/roadmap/roadmap.md) | 版本发布计划与各版本能力范围 |
-| [v1.0.0细分路线图](docs/zh/roadmap/roadmap_v1_0_0.md) | 完整版本的条目级说明：C++ 标准库、昇腾扩展与Runtime能力 |
+| [v1.0.0 支持范围说明](docs/zh/roadmap/roadmap_v1_0_0.md) | 当前标准层功能及扩展层、Runtime 层的完善方向 |
 | [贡献指南](CONTRIBUTING.md) | 贡献流程、贡献场景与代码/测试要求 |
 | [API参考文档](docs/zh/api/README.md) | ASC-STL公开接口的参考文档入口：标准库、昇腾扩展与Runtime |
-
-## 📌 相关规划
-
-- [ASC-STL总路线图](docs/zh/roadmap/roadmap.md)：库功能按周更新，版本自2026年10月第2周起以双周为节奏发布；10月16日发布v1.0.0完整版本（C++ 标准库接口、昇腾扩展接口与Runtime接口全量），10月30日发布v1.1.0（完善计划第一批：质量与性能完善），后续完善批次发布时间待定；
-- [v1.0.0细分路线图](docs/zh/roadmap/roadmap_v1_0_0.md)：类型系统、算法、容器视图、字符串文本、数值时间、标准同步、内存管理及昇腾扩展与Runtime能力的条目级说明。
 
 ## 👥 合作贡献者
 

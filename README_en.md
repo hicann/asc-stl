@@ -4,26 +4,27 @@ A C++ standard library for Ascend device programming — header-only, with a sin
 
 English | [简体中文](README.md)
 
-[📖 API Reference](docs/zh/api/README.md) | [📚 Roadmap](docs/zh/roadmap/roadmap.md) | [🧪 Quick Start](docs/zh/quick_start.md) | [📄 LICENSE](LICENSE) | [🤝 Contributing](CONTRIBUTING.md)
+[📖 API Reference](docs/zh/api/README.md) | [📚 Roadmap](docs/zh/roadmap/roadmap_v1_0_0.md) | [🧪 Quick Start](docs/zh/quick_start.md) | [📄 LICENSE](LICENSE) | [🤝 Contributing](CONTRIBUTING.md)
 
-## 🔥 Latest News
+## 🔥 Current Availability
 
-**[v1.0.0 · planned for October 16, 2026]** Initial full release: all public headers of the `asc::std` interface layer (16 categories of standard-library capabilities), the Ascend extension interfaces (9 categories), and the Runtime interfaces (4 categories) are provided together — 29 capability domains in total, with Host and Device code sharing a single public header organization.
+**The implemented standard-layer facilities in the `master` development branch are available for use: `asc::std` covers the existing 16 categories and 74 public headers.** See [Current Standard-Layer Scope](#current-standard-layer-scope) below. Ascend extensions and Runtime facilities remain under active development.
 
-### 🚀 Release Plan
+The current development branch is `master`, with source version identifier `1.0.0`. Currently, no formal [tag](https://gitcode.com/cann/asc-stl/tags) or [Release](https://gitcode.com/cann/asc-stl/releases) has been published; the formal release date is to be announced.
 
-Code is updated weekly, and versions are released on a **biweekly** cadence:
+### 🚀 Release and Refinement Plan
 
-| Version | Release date | Scope |
+| Target | Current status | Next steps |
 | --- | --- | --- |
-| **v1.0.0** | **2026-10-16** | Full release: the complete C++ standard library interfaces (16 categories of standard-library capabilities), Ascend extension interfaces (9 categories), and Runtime interfaces (4 categories) |
-| **v1.1.0** | **2026-10-30** | Refinement plan, batch 1 · Quality and performance: extended test coverage and on-target regression, optimization of high-frequency algorithms and data-movement paths, and additional edge-case tests |
-| **v1.1.1** | TBD | Refinement plan, batch 2 · Documentation and usability: API reference documentation, sample projects, error diagnostics, and improved build experience |
+| `master` | Implemented standard-layer facilities available as documented; extensions and Runtime in progress | Continue implementation, API constraints, examples and regression coverage |
+| First formal `v1.0.0` | Not released | Publish the tag, Release and feature notes together |
+| Later iterations | Planned | Refine extension/Runtime capabilities, quality and documentation in batches |
 
 ### 📖 Documentation
 
-- Product roadmap: [ASC-STL roadmap](docs/zh/roadmap/roadmap.md) · [v1.0.0 detailed roadmap](docs/zh/roadmap/roadmap_v1_0_0.md)
-- API reference: [ASC-STL API Reference](docs/zh/api/README.md) (standard library, Ascend extensions, and Runtime interfaces)
+- [Current standard-layer scope](#current-standard-layer-scope) · [Complete standard-layer API support list](docs/zh/api/standard/standard.md)
+- [ASC-STL v1.0.0 supported scope](docs/zh/roadmap/roadmap_v1_0_0.md)
+- [API reference](docs/zh/api/README.md): language modes, execution locations, constraints and examples
 
 ## 🚀 Overview
 
@@ -37,25 +38,25 @@ Developing compute kernels for Ascend devices requires general-purpose C++ facil
 
 ### Interface Composition
 
-| Interface | Namespace / include path | Scope | Delivered in |
+| Interface | Namespace / include path | Scope | Current status |
 | --- | --- | --- | --- |
-| C++ standard library interface | `asc::std` · `<asc/std/...>` | 16 categories: language support, concepts, diagnostics, memory management, metaprogramming, general utilities, containers, iterators, ranges, algorithms, strings, text processing, numerics, date and time, input/output, and concurrency support | v1.0.0 |
-| Ascend extension interface | `asc` · `<asc/...>` | 9 categories: device atomics and thread synchronization, asynchronous data movement, address spaces and memory views, multidimensional data views and movement, device execution hierarchy and collective operations, device parallel algorithms, and device-side numerics and type utilities | v1.0.0 |
-| Runtime interface | `asc` · `<asc/...>` | 4 categories: device/stream/event management, kernel invocation, device execution policies and execution requirements, and memory resources/memory pools/buffers | v1.0.0 |
+| C++ standard library interface | `asc::std` · `<asc/std/...>` | 16 categories: language support, concepts, diagnostics, memory management, metaprogramming, general utilities, containers, iterators, ranges, algorithms, strings, text processing, numerics, date and time, input/output, and concurrency support | Implemented facilities available as documented |
+| Ascend extension interface | `asc` · `<asc/...>` | 9 categories: device atomics and thread synchronization, asynchronous data movement, address spaces and memory views, multidimensional data views and movement, device execution hierarchy and collective operations, device parallel algorithms, and device-side numerics and type utilities | Partial implementation; ongoing refinement |
+| Runtime interface | `asc` · `<asc/...>` | 4 categories: device/stream/event management, kernel invocation, device execution policies and execution requirements, and memory resources/memory pools/buffers | Partial implementation; ongoing refinement |
 
 ### Overall Architecture
 
 ![Figure 1 ASC-STL design architecture](docs/en/figures/asc_stl_architecture_en.png)
 
 - ASC-STL is a header-only C++ library whose interfaces fall into three parts: the C++ standard library interfaces, the Ascend extension interfaces, and the Runtime interfaces;
-- Device-side programming capability builds on CANN Ascend C; code is compiled by the BiSheng compiler (based on Clang 15.0.5) and runs on the Ascend 950PR&&DT processor;
+- Device-side programming capability builds on CANN Ascend C; code is compiled by the BiSheng compiler (based on Clang 15.0.5) and runs on the Ascend 950PR / 950DT processor;
 - Runtime dependencies are the CANN Runtime (AscendCL Runtime API) and the NPU driver, which provide device management, kernel invocation, memory management, and device access.
 
 ### Choosing the Right Facilities
 
-- For general-purpose types, algorithms, numerics, and synchronization logic → use the **C++ standard library interfaces** (available since v1.0.0);
-- For GM/UB memory operations, device atomics and thread cooperation, and device parallel algorithms → use the **Ascend extension interfaces** (available since v1.0.0);
-- For managing devices, streams/events, and kernel invocation → use the **Runtime interfaces** (available since v1.0.0).
+- For general-purpose types, algorithms, numerics, and synchronization logic → use the **C++ standard library interfaces** (use the documented standard-layer subset);
+- For GM/UB memory operations, device atomics and thread cooperation, and device parallel algorithms → use the **Ascend extension interfaces** (partial implementation; ongoing refinement);
+- For managing devices, streams/events, and kernel invocation → use the **Runtime interfaces** (partial implementation; ongoing refinement).
 
 ## 🔍 Directory Layout
 
@@ -66,15 +67,15 @@ asc-stl/
 ├── include/
 │   └── asc/                         # Root of the ASC-STL public headers
 │       ├── __config                 # Unified configuration entry
-│       ├── std/                     # C++ standard library interfaces: <asc/std/...> (v1.0.0)
+│       ├── std/                     # C++ standard library interfaces: <asc/std/...>
 │       │   └── ...                  # Other internal implementation directories (__ prefix)
-│       ├── algorithm                # Device parallel algorithms (v1.0.0)
-│       ├── atomic                   # Device atomic operations (v1.0.0)
-│       ├── collectives              # Thread-group cooperative operations (v1.0.0)
-│       ├── execution                # Aggregate entry for device execution policies (v1.0.0)
-│       ├── memory                   # GM, UB, and memory views (v1.0.0)
-│       ├── stream                   # Stream and event management (v1.0.0)
-│       └── ...                      # Other device-capability public headers (v1.0.0)
+│       ├── algorithm                # Device parallel algorithms
+│       ├── atomic                   # Device atomic operations
+│       ├── collectives              # Thread-group cooperative operations
+│       ├── execution                # Aggregate entry for device execution policies
+│       ├── memory                   # GM, UB, and memory views
+│       ├── stream                   # Stream and event management
+│       └── ...                      # Other device-capability public headers
 ├── docs/                            # Project documentation and product roadmap
 ├── test/                            # Host, device, and simulation tests
 ├── cmake/                           # CMake install and export configuration
@@ -103,7 +104,7 @@ ASC-STL itself is header-only and has no separate library to build. Ordinary Hos
 | BiSheng CCE / clang | 15.0.5 |
 | g++ | C++17 as the product minimum; the full Host test suite additionally requires C++20 support |
 | CMake | ≥ 3.20 |
-| Processor | Ascend 950PR&&DT processor |
+| Processor | Ascend 950PR / 950DT processor |
 
 Different builds of the same CANN version may use different SDK directory layouts. The device-layer queries first include `c_api/utils/sys_var.h` and fall back to `c_api/sys_var/sys_var.h`; a compilation error is raised when neither is present. The 64-bit multiply-overflow check for Tensor descriptors uses 32-bit segmented arithmetic to keep older BiSheng versions from emitting a device-side `__multi3` symbol that cannot be linked on the dynamic-descriptor path; the public interfaces and status codes are unchanged.
 
@@ -150,15 +151,13 @@ bash scripts/ci-quick-check.sh
 cmake -B build -DBUILD_TESTING=ON && cmake --build build -j && cd build && ctest
 ```
 
-On-target regression uses `bash scripts/ci-hardware-check.sh`, which by default runs three rounds each in C++17 and C++20 modes. The test entry currently requires exactly one readable and writable `/dev/davinci[0-9]+` compute device node; in containers the node may carry a non-zero index such as `/dev/davinci4`, and the trailing digits of a physical node must not be treated as an ACL logical device ID. Tests use logical device 0, and actual initialization and execution results are still confirmed by the runtime tests. When no compute device is present, permissions are insufficient, or more than one compute device exists, the entry reports `BLOCKED_ENVIRONMENT` and exits with status code 2; `davinci_manager` is not counted as a compute device.
-
-The optional `ASC_STL_HARDWARE_DEVICE_NODE` validates the expected physical node; it neither changes the logical device ID nor selects among multiple devices. Builds honor `CMAKE_BUILD_PARALLEL_LEVEL` and default to two-way parallelism when it is unset; for example, `CMAKE_BUILD_PARALLEL_LEVEL=8 bash scripts/ci-hardware-check.sh`. The hardware cases are not triggered by the three cloud Host/Device/cannsim CI entries above.
+Run `bash scripts/ci-hardware-check.sh` for real-hardware regression; it runs three rounds each in C++17 and C++20 by default.
 
 ## 💻 Software/Hardware Compatibility
 
 ASC-STL requires the following software and hardware environment:
 
-- Ascend products: [Ascend 950PR&&DT processors](https://www.hiascend.com/hardware/processor)
+- Ascend products: [Ascend 950PR / 950DT processors](https://www.hiascend.com/hardware/processor)
 - CPU architecture: `aarch64` / `x86_64`
 - OS: a supported Linux (check [compatibility](https://www.hiascend.com/hardware/compatibility))
 - Software dependencies:
@@ -182,9 +181,9 @@ The hardware platforms supported by each ASC-STL release and the required [CANN]
   </thead>
   <tbody style="text-align: center">
       <tr>
-          <td>v1.0.0, v1.1.0, v1.1.1</td>
+          <td>master development branch (version identifier 1.0.0)</td>
           <td>Community 9.2.0 and later</td>
-          <td><a href="https://www.hiascend.com/hardware/processor">Ascend 950PR&&DT processors</a></td>
+          <td><a href="https://www.hiascend.com/hardware/processor">Ascend 950PR / 950DT processors</a></td>
       </tr>
   </tbody>
 </table>
@@ -202,23 +201,28 @@ Conditional-compilation macros for device-side code are injected by the CCE tool
 
 ## 📊 Version Status and Feature Inventory
 
-Current status: **v1.0.0 (full release) under development, planned for October 16, 2026**.
+### Current Standard-Layer Scope
 
-| Capability domain | Key public headers | Delivered in |
+The table lists all **74 current public standard-layer headers** in the existing **16 categories**. Include them as `<asc/std/...>` and use the `asc::std` namespace.
+
+| Category | Public headers | Currently available scope |
 | --- | --- | --- |
-| Type system and general utilities | `type_traits` `concepts` `tuple` `optional` `variant` `expected` `functional` `bit` … | v1.0.0 |
-| Language support and diagnostics | `limits` `exception` `compare` `new` `version` `cassert` `system_error` … | v1.0.0 |
-| Sequential algorithms, iterators, and ranges | `algorithm` `iterator` `ranges` `execution` | v1.0.0 |
-| Containers and views | `array` `vector` `inplace_vector` `map` `set` `span` `mdspan` … | v1.0.0 |
-| Strings and text processing | `string` `string_view` `charconv` `format` … | v1.0.0 |
-| Numerics and time | `cmath` `complex` `random` `linalg` `numeric` `chrono` … | v1.0.0 |
-| Standard atomics and synchronization | `atomic` `barrier` `latch` `semaphore` `mutex` | v1.0.0 |
-| Memory management | `memory` `scoped_allocator` | v1.0.0 |
-| Devices and task submission | `devices` `stream` `launch` `execution.*` | v1.0.0 |
-| Memory resources and data movement | `memory` `memory_resource` `memory_pool` `buffer` `mdspan` `tensor_copy` `pipeline` | v1.0.0 |
-| Device atomics and thread synchronization | `atomic` `barrier` `latch` `semaphore` | v1.0.0 |
-| Device execution hierarchy and collective operations | `hierarchy` `warp` `collectives` `work_queue` | v1.0.0 |
-| Device parallel algorithms and supporting components | `algorithm` `argument` `functional` `iterator` `bit` `cmath` `numeric` `random` `type_traits` `utility` `version` | v1.0.0 |
+| [Language support](docs/zh/api/standard/language_support/language_support.md) | `cfloat` `climits` `cstddef` `cstdint` `exception` `compare` `new` `limits` `source_location` `version` `ciso646` `cstdalign` `cstdbool` | Fundamental types and numeric macros, comparison categories, source locations, capability macros, termination and placement-new facilities. |
+| [Concepts](docs/zh/api/standard/concepts/concepts.md) | `concepts` | Type and expression predicates: Boolean variable templates in C++17 and native concepts where supported in C++20. |
+| [Diagnostics](docs/zh/api/standard/diagnostics/diagnostics.md) | `cassert` `cerrno` `system_error` | Assertions, error-number macros, error codes, error conditions and error categories. |
+| [Memory management](docs/zh/api/standard/memory_management/memory_management.md) | `memory` `scoped_allocator` | Pointer and allocator traits, allocator protocols, object lifetime and uninitialized-memory algorithms. |
+| [Metaprogramming](docs/zh/api/standard/metaprogramming/metaprogramming.md) | `type_traits` `ratio` | Type queries and transformations, compile-time constants and rational arithmetic. |
+| [General utilities](docs/zh/api/standard/utilities/utilities.md) | `utility` `functional` `tuple` `optional` `variant` `expected` `bit` `bitset` `cstdlib` | Move/forward/swap utilities, function objects, tuples, optional values, variants, expected results, bit operations and bit sets. |
+| [Containers](docs/zh/api/standard/containers/containers.md) | `array` `vector` `deque` `list` `forward_list` `inplace_vector` `map` `set` `unordered_map` `unordered_set` `queue` `stack` `span` `mdspan` | Fixed-capacity and dynamic containers, associative containers, adapters and contiguous/multidimensional views; dynamic containers use explicit allocators. |
+| [Iterators](docs/zh/api/standard/iterators/iterators.md) | `iterator` | Iterator traits, traversal helpers and insertion, reverse and move adapters. |
+| [Ranges](docs/zh/api/standard/ranges/ranges.md) | `ranges` | Range access and predicates, range views and composition such as filtering, transformation and slicing. |
+| [Algorithms](docs/zh/api/standard/algorithms/algorithms.md) | `algorithm` `execution` | Traversal, search, comparison, copying, transformation, partitioning, sorting, binary search, set, heap and permutation algorithms, plus execution-policy vocabulary. |
+| [Strings](docs/zh/api/standard/strings/strings.md) | `cstring` `string` `string_view` | C-string and byte operations, explicitly allocated basic_string, character traits and string views. |
+| [Text processing](docs/zh/api/standard/text_processing/text_processing.md) | `cctype` `charconv` `cuchar` `cwchar` `cwctype` `format` | Character classification, numeric text conversion, wide/multibyte character facilities and format_to output facilities. |
+| [Numerics](docs/zh/api/standard/numerics/numerics.md) | `cmath` `complex` `ccomplex` `ctgmath` `numbers` `linalg` `random` `numeric` | Scalar mathematics, complex numbers, constants, random engines/distributions and numeric algorithms; linalg currently supplies scaled, conjugated and transposed views. |
+| [Date and time](docs/zh/api/standard/chrono/chrono.md) | `chrono` `ctime` | Durations, time points, calendars and conversions, clock facilities and time conversion. |
+| [Input/output](docs/zh/api/standard/input_output/input_output.md) | `cinttypes` | Integer-format macros and intmax_t utilities. |
+| [Concurrency support](docs/zh/api/standard/concurrency/concurrency.md) | `atomic` `barrier` `latch` `semaphore` `mutex` `shared_mutex` | Atomics, barriers, latches and semaphores, plus RAII lock management. |
 
 ## 📖 Resources
 
@@ -227,15 +231,9 @@ Current status: **v1.0.0 (full release) under development, planned for October 1
 | Document | Description |
 | --- | --- |
 | [Quick Start](docs/zh/quick_start.md) | Environment setup, Host/Kernel usage, and local verification, with tested examples (in Chinese) |
-| [Product roadmap](docs/zh/roadmap/roadmap.md) | Release plan and per-version capability scope |
-| [v1.0.0 detailed roadmap](docs/zh/roadmap/roadmap_v1_0_0.md) | Entry-level description of the full release: C++ standard library, Ascend extensions, and Runtime capabilities |
+| [v1.0.0 supported scope](docs/zh/roadmap/roadmap_v1_0_0.md) | Current standard-layer functionality and extension/Runtime refinement directions |
 | [Contributing guide](CONTRIBUTING.md) | Contribution workflow, contribution scenarios, and code/test requirements |
 | [API reference](docs/zh/api/README.md) | Entry point to the ASC-STL public-interface reference: standard library, Ascend extensions, and Runtime |
-
-## 📌 Related Plans
-
-- [ASC-STL roadmap](docs/zh/roadmap/roadmap.md): library features are updated weekly, and versions have been released on a biweekly cadence since the second week of October 2026; the full v1.0.0 release (C++ standard library interfaces, Ascend extension interfaces, and Runtime interfaces in their entirety) ships on October 16, followed by v1.1.0 on October 30 (refinement plan, batch 1: quality and performance); dates for later refinement batches are TBD;
-- [v1.0.0 detailed roadmap](docs/zh/roadmap/roadmap_v1_0_0.md): entry-level descriptions of the type system, algorithms, containers and views, strings and text, numerics and time, standard synchronization, memory management, and the Ascend extension and Runtime capabilities.
 
 ## 👥 Collaborators
 

@@ -7,7 +7,7 @@
 参与贡献前，请先完成以下准备：
 
 - 阅读项目行为准则，完成CLA（贡献者许可协议）签署；
-- 阅读仓库[README.md](README.md)与[产品路线图](docs/zh/roadmap/roadmap.md)，了解公共接口组织、能力域划分与版本计划。
+- 阅读仓库[README.md](README.md)与[v1.0.0 支持范围说明](docs/zh/roadmap/roadmap_v1_0_0.md)，了解公共接口组织、能力域划分与版本计划。
 
 提交代码的重点要求：
 
@@ -30,8 +30,7 @@
 项目核心资料包括：
 
 - [README.md](README.md)：项目说明、能力域总览与版本状态；
-- [产品路线图](docs/zh/roadmap/roadmap.md)：2026年10月起双周发布计划与各版本能力范围；
-- [v1.0.0细分路线图](docs/zh/roadmap/roadmap_v1_0_0.md)：完整版本（C++ 标准库、昇腾扩展与Runtime能力）的条目级说明；
+- [v1.0.0 支持范围说明](docs/zh/roadmap/roadmap_v1_0_0.md)：当前版本功能范围；
 - API参考文档（待定）。
 
 欢迎对以上资料进行纠错、补充和完善。
