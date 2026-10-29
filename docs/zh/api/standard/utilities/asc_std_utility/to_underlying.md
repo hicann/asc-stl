@@ -77,6 +77,11 @@ decltype(auto) example()
     enum class code { value = 3 };
     return asc::std::to_underlying(code::value);
 }
+
+bool verify_example()
+{
+    return example() == 3;
+}
 ```
 
 ## 关联API

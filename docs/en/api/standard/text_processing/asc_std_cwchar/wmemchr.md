@@ -98,6 +98,12 @@ decltype(auto) example(const wchar_t * input, wchar_t value, asc::std::size_t co
 {
     return asc::std::wmemchr(input, value, count);
 }
+
+bool verify_example()
+{
+    const wchar_t input[] = L"aba";
+    return example(input, L'b', 3) == input + 1;
+}
 ```
 
 ## Related APIs

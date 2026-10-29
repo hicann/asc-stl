@@ -72,9 +72,10 @@ template<class Integer> [[nodiscard]] constexpr Integer byteswap(Integer value) 
 ```cpp
 #include <asc/std/bit>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::byteswap(0x1234u);
+    const asc::std::uint32_t input = 0x12345678u;
+    return asc::std::byteswap(input) == 0x78563412u;
 }
 ```
 

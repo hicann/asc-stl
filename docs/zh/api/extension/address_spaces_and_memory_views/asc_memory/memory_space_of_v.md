@@ -44,12 +44,13 @@ template<class T> inline constexpr asc::memory_space memory_space_of_v = asc::me
 
 ## 调用示例
 
-以下片段用具体模板实参读取接口值。
+以下Host示例使用具体类型或维度，检查独立的预期值；不查询正在运行的Device执行上下文。
 
 ```cpp
 #include <asc/memory>
 
-inline constexpr auto example = asc::memory_space_of_v<asc::gm_span<int>>;
+static_assert(asc::memory_space_of_v<asc::gm_span<int>> == asc::memory_space::global);
+static_assert(asc::memory_space_of_v<asc::gm_span<const int>> == asc::memory_space::global);
 ```
 
 ## 关联API

@@ -55,7 +55,8 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::phi;
+inline constexpr auto value = asc::std::numbers::phi;
+static_assert(value > 1.6180338 && value < 1.6180341);
 ```
 
 ## Related APIs

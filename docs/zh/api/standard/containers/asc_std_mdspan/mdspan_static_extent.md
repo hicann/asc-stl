@@ -67,11 +67,14 @@ static constexpr size_t static_extent(rank_type rank_index) noexcept;
 
 ```cpp
 #include <asc/std/mdspan>
-#include <asc/std/cstddef>
+#include <asc/std/array>
+#include <cstddef>
+#include <type_traits>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::mdspan<int, asc::std::extents<asc::std::size_t, 2, 3>, asc::std::layout_right, asc::std::default_accessor<int>>::static_extent(0);
+    return asc::std::mdspan<int, asc::std::extents<::std::size_t, 2, 3>>::static_extent(0) == 2 &&
+        asc::std::mdspan<int, asc::std::extents<::std::size_t, 2, 3>>::static_extent(1) == 3;
 }
 ```
 

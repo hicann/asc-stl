@@ -73,6 +73,12 @@ decltype(auto) example(function_object& function)
     asc::std::reference_wrapper<function_object> reference(function);
     return reference(7);
 }
+
+bool verify_example()
+{
+    function_object function;
+    return example(function) == 8;
+}
 ```
 
 ## Related APIs

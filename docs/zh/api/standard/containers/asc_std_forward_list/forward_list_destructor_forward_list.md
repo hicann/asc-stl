@@ -63,27 +63,53 @@
 
 ```cpp
 #include <asc/std/forward_list>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
+#include <new>
+
+struct allocation_counts {
+    int allocated = 0;
+    int released = 0;
+};
 
 template <class T>
-struct example_allocator : ::std::allocator<T> {
+struct counted_allocator {
     using value_type = T;
     using pointer = T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
-    example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    template <class U>
+    struct rebind {
+        using other = counted_allocator<U>;
+    };
+    allocation_counts* counts;
+    explicit counted_allocator(allocation_counts& value) : counts(&value)
+    {}
+    template <class U>
+    counted_allocator(const counted_allocator<U>& other) : counts(other.counts)
+    {}
+    T* allocate(::std::size_t count)
+    {
+        T* result = ::std::allocator<T>{}.allocate(count);
+        ++counts->allocated;
+        return result;
+    }
+    void deallocate(T* pointer, ::std::size_t count)
+    {
+        ::std::allocator<T>{}.deallocate(pointer, count);
+        ++counts->released;
+    }
 };
 
-using example_object = asc::std::forward_list<int, example_allocator<int>>;
-void example(example_object* object)
+bool example()
 {
-    // object 指向已构造对象；析构后不得再访问该对象。
-    object->~example_object();
+    allocation_counts counts;
+    using sequence = asc::std::forward_list<int, counted_allocator<int>>;
+    alignas(sequence) unsigned char storage[sizeof(sequence)];
+    auto* values = ::new (static_cast<void*>(storage)) sequence(counted_allocator<int>(counts));
+    values->push_front(7);
+    const bool constructed = !values->empty() && values->front() == 7 && counts.allocated > 0;
+    values->~sequence();
+    return constructed && counts.allocated == counts.released;
 }
 ```
 

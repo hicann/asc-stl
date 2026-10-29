@@ -60,14 +60,47 @@ bool current_device(asc::device_ref& output) noexcept;
 
 ## Example
 
-The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
+This complete example uses the real CANN Runtime and selects device 0, which must be available before running. Asynchronous waits are limited to 10 seconds. Failure terminates the example process to avoid releasing resources still in use; the controller must stop subsequent tasks and recheck device health. On success, work completes before resources are closed, the device is reset, and the Runtime is finalized.
 
 ```cpp
+#include <acl/acl.h>
+#include <asc/stream>
+#include <cstdlib>
+
+void check(bool condition)
+{
+    if (!condition) {
+        std::_Exit(2);
+    }
+}
+
+void finish(asc::stream_ref stream)
+{
+    check(aclrtSynchronizeStreamWithTimeout(stream.native_handle(), 10000) == ACL_SUCCESS);
+}
 #include <asc/devices>
 
-decltype(auto) example(asc::device_ref& output)
+
+void run_example()
 {
-    return asc::current_device(output);
+    asc::device_ref selected(99);
+    check(asc::current_device(selected));
+    check(selected.ordinal() == 0);
+}
+
+int main()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) {
+        return 1;
+    }
+    if (!asc::set_current_device(asc::device_ref(0))) {
+        check(aclFinalize() == ACL_SUCCESS);
+        return 1;
+    }
+    run_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return reset && finalized ? 0 : 1;
 }
 ```
 

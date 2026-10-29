@@ -70,9 +70,11 @@ T fetch_xor(T value, memory_order order = memory_order_seq_cst) noexcept;
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example(asc::std::atomic<int>& value)
+bool example()
 {
-    return value.fetch_xor(1, asc::std::memory_order_relaxed);
+    asc::std::atomic<int> value{5};
+    const auto before = value.fetch_xor(3, asc::std::memory_order_relaxed);
+    return before == 5 && value.load() == 6;
 }
 ```
 

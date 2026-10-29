@@ -78,6 +78,11 @@ decltype(auto) example()
 {
     return asc::ceil_div(5, 2);
 }
+
+bool verify_example()
+{
+    return example() == 3;
+}
 ```
 
 ## 关联API

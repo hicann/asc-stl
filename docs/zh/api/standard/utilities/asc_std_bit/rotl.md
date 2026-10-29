@@ -76,6 +76,11 @@ decltype(auto) example()
 {
     return asc::std::rotl(1u, 2);
 }
+
+bool verify_example()
+{
+    return example() == 4u;
+}
 ```
 
 ## 关联API

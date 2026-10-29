@@ -75,6 +75,12 @@ decltype(auto) example(wchar_t * destination, wchar_t value, asc::std::size_t co
 {
     return asc::std::wmemset(destination, value, count);
 }
+
+bool verify_example()
+{
+    wchar_t output[4] = {};
+    return example(output, L'x', 3) == output && output[0] == L'x' && output[1] == L'x' && output[2] == L'x' && output[3] == 0;
+}
 ```
 
 ## Related APIs

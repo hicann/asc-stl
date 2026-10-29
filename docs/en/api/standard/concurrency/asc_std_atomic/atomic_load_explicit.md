@@ -76,10 +76,10 @@ The following Host snippet uses a concrete integer atomic object; device-side ob
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::atomic<int> value{1};
-    return asc::std::atomic_load_explicit(&value, asc::std::memory_order_acquire);
+    asc::std::atomic<int> value{7};
+    return asc::std::atomic_load_explicit(&value, asc::std::memory_order_acquire) == 7;
 }
 ```
 

@@ -78,6 +78,11 @@ decltype(auto) example()
 {
     return asc::std::in_range<unsigned int>(3);
 }
+
+bool verify_example()
+{
+    return example();
+}
 ```
 
 ## Related APIs

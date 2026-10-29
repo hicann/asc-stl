@@ -77,6 +77,11 @@ decltype(auto) example()
 {
     return asc::bitfield_extract(0x3fu, 1, 3);
 }
+
+bool verify_example()
+{
+    return example() == 7u;
+}
 ```
 
 ## Related APIs

@@ -60,16 +60,26 @@ The following code is for BiSheng ASC translation units and shows the call on th
 
 ```cpp
 #include <asc/std/exception>
+#include <cstdio>
+#include <cstdlib>
+#include <exception>
 
-void host_example()
-{
-    asc::std::terminate();
-}
-
+#if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
 __aicore__ void device_example()
 {
     asc::std::terminate();
 }
+#else
+int main()
+{
+    ::std::set_terminate([] {
+        ::std::puts("ASC_STL_TERMINATE_HANDLER_PASS");
+        ::std::fflush(stdout);
+        ::std::_Exit(42);
+    });
+    asc::std::terminate();
+}
+#endif
 ```
 
 ## Related APIs

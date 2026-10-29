@@ -77,6 +77,14 @@ decltype(auto) example(char * destination, const wchar_t ** source, asc::std::si
 {
     return asc::std::wcsrtombs(destination, source, count, state);
 }
+
+bool verify_example()
+{
+    asc::std::mbstate_t state{};
+    const wchar_t* source = L"AB";
+    char output[4] = {};
+    return example(output, &source, 4, &state) == 2 && source == nullptr && output[0] == 'A' && output[1] == 'B' && output[2] == 0;
+}
 ```
 
 ## 关联API

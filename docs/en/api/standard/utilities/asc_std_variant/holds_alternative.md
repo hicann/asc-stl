@@ -79,6 +79,11 @@ decltype(auto) example()
     asc::std::variant<int, float> value{7};
     return asc::std::holds_alternative<int>(value);
 }
+
+bool verify_example()
+{
+    return example();
+}
 ```
 
 ## Related APIs

@@ -47,12 +47,19 @@ inline constexpr asc::device_policy device;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例不提交Runtime任务；以具体值检查配置或资源引用的可观察结果。
 
 ```cpp
 #include <asc/execution.policy.h>
 
-auto value = asc::execution::device;
+bool example()
+{
+    const auto policy = asc::execution::device;
+    return !policy.stream() && policy.temporary_storage().empty() &&
+        policy.requirements().determinism_value() == asc::determinism::not_guaranteed &&
+        policy.requirements().output_ordering_value() == asc::output_ordering::unsorted &&
+        policy.requirements().tie_break_value() == asc::tie_break::unspecified;
+}
 ```
 
 ## 关联API

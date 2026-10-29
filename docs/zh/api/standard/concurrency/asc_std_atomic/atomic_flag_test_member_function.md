@@ -69,9 +69,12 @@ bool test(memory_order order = memory_order_seq_cst) const noexcept;
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example(const asc::std::atomic_flag& flag)
+bool example()
 {
-    return flag.test(asc::std::memory_order_relaxed);
+    asc::std::atomic_flag flag{};
+    const bool before = flag.test(asc::std::memory_order_relaxed);
+    flag.test_and_set();
+    return !before && flag.test(asc::std::memory_order_relaxed);
 }
 ```
 

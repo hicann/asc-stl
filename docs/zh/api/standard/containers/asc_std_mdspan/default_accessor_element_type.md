@@ -51,11 +51,12 @@ using element_type = Element;
 
 ```cpp
 #include <asc/std/mdspan>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::default_accessor<int>::element_type;
-}
+using alias_type = typename asc::std::default_accessor<int>::element_type;
+static_assert(::std::is_same_v<alias_type, int>);
 ```
 
 ## 关联API

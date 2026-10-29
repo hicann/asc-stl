@@ -52,10 +52,8 @@ using selected = typename asc::std::allocator_traits<Allocator>::propagate_on_co
 
 ```cpp
 #include <asc/std/memory>
-#include <functional>
+#include <asc/std/type_traits>
 #include <memory>
-#include <string>
-#include <utility>
 
 template <class T>
 struct example_allocator : ::std::allocator<T> {
@@ -68,10 +66,9 @@ struct example_allocator : ::std::allocator<T> {
     template <class U> example_allocator(const example_allocator<U>&) noexcept {}
 };
 
-void use_type()
-{
-    using alias_type = typename asc::std::allocator_traits<example_allocator<int>>::propagate_on_container_copy_assignment;
-}
+using selected = typename asc::std::allocator_traits<example_allocator<int>>::propagate_on_container_copy_assignment;
+
+static_assert(selected::value == false);
 ```
 
 对应完整工程使用`C++17`，并通过Host编译与运行验证。

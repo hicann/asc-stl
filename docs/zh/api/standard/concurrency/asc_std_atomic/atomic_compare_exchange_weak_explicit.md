@@ -79,11 +79,13 @@ template<class T> bool atomic_compare_exchange_weak_explicit(atomic<T>* object, 
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example()
+bool example()
 {
     asc::std::atomic<int> value{1};
     int expected = 1;
-    return asc::std::atomic_compare_exchange_weak_explicit(&value, &expected, 2, asc::std::memory_order_acq_rel, asc::std::memory_order_acquire);
+    const bool changed = asc::std::atomic_compare_exchange_weak_explicit(
+        &value, &expected, 2, asc::std::memory_order_acq_rel, asc::std::memory_order_acquire);
+    return (changed && value.load() == 2 && expected == 1) || (!changed && value.load() == 1 && expected == 1);
 }
 ```
 

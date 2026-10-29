@@ -56,6 +56,7 @@
 #ifndef ERANGE
 #error "ERANGE is required by this public Header"
 #endif
+static_assert(ERANGE > 0 && ERANGE != EDOM);
 ```
 
 ## 关联API

@@ -50,6 +50,7 @@ The following snippet reads the interface value with concrete template arguments
 #include <asc/type_traits>
 
 inline constexpr auto example = asc::is_extended_floating_point_v<float>;
+static_assert(!example, "float is a standard floating-point type, not an extended type");
 ```
 
 ## Related APIs

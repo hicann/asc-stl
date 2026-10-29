@@ -67,6 +67,11 @@ decltype(auto) example()
     asc::std::minstd_rand generator{};
     return generator();
 }
+
+bool verify_example()
+{
+    return example() == 48271u;
+}
 ```
 
 ## 关联API

@@ -77,6 +77,11 @@ decltype(auto) example()
     asc::std::byte value{4};
     return asc::std::operator>>(value, 1);
 }
+
+bool verify_example()
+{
+    return asc::std::to_integer<unsigned int>(example()) == 2u;
+}
 ```
 
 ## 关联API

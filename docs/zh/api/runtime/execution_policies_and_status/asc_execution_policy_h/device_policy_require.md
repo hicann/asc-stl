@@ -61,15 +61,18 @@ constexpr asc::device_policy require(asc::execution_requirements requirements) c
 
 ## 调用示例
 
-以下Host片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host示例不提交Runtime任务；以具体值检查配置或资源引用的可观察结果。
 
 ```cpp
 #include <asc/execution.policy.h>
 
-decltype(auto) example(asc::device_policy policy, asc::execution_requirements requirements)
+bool example()
 {
-    auto configured = policy.require(requirements);
-    return configured;
+    const auto requirements = asc::require(asc::determinism::run_to_run);
+    const auto base = asc::execution::device;
+    const auto configured = base.require(requirements);
+    return configured.requirements().determinism_value() == asc::determinism::run_to_run &&
+        base.requirements().determinism_value() == asc::determinism::not_guaranteed;
 }
 ```
 

@@ -50,6 +50,7 @@
 #ifndef CANN_ASC_STL_HAS_PIPELINE
 #error "CANN_ASC_STL_HAS_PIPELINE is required by this public Header"
 #endif
+static_assert(CANN_ASC_STL_HAS_PIPELINE == 1, "documented version or capability value");
 ```
 
 ## 关联API

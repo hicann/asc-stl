@@ -52,7 +52,9 @@ not_guaranteed;
 ```cpp
 #include <asc/execution.determinism.h>
 
-auto value = asc::determinism::not_guaranteed;
+constexpr auto value = asc::determinism::not_guaranteed;
+static_assert(value != asc::determinism::device_to_device, "documented states are distinct");
+static_assert(value != asc::determinism::run_to_run, "documented states are distinct");
 ```
 
 ## 关联API

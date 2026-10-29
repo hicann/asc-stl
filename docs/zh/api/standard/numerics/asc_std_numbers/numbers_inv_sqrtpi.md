@@ -55,7 +55,8 @@ inline constexpr double inv_sqrtpi = 0x1.20dd750429b6d11ae3a914fed7fep-1;
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::inv_sqrtpi;
+inline constexpr auto value = asc::std::numbers::inv_sqrtpi;
+static_assert(value > 0.5641895 && value < 0.5641897);
 ```
 
 ## 关联API

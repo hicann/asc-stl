@@ -83,10 +83,17 @@ asc::tensor_copy_status tensor_load_async(const asc::pipeline_ref& pipeline, uns
 ```cpp
 #include <asc/tensor_copy>
 
-__aicore__ decltype(auto) example(const asc::pipeline_ref& pipeline, asc::ub_span<int> destination,
-    asc::gm_span<const int> source, const asc::tensor_copy_descriptor<2>& descriptor)
+// Endpoints contain 16 integers and each row starts on a 32-byte boundary.
+// The caller owns a valid stage zero and the matching pipeline event protocol.
+__aicore__ asc::tensor_copy_status example(const asc::pipeline_ref& pipeline,
+    __ubuf__ int* destination, __gm__ const int* source)
 {
-    return asc::tensor_load_async<int, 2>(pipeline, 0, destination, source, descriptor, 0);
+    const unsigned int extents[2] = {2, 8};
+    const unsigned int strides[2] = {8, 1};
+    const unsigned int padding[2] = {0, 0};
+    const auto descriptor = asc::make_tensor_copy_descriptor(extents, strides, strides, padding, padding);
+    return asc::tensor_load_async<int, 2>(pipeline, 0, asc::ub_span<int>(destination, 16),
+        asc::gm_span<const int>(source, 16), descriptor, 0);
 }
 ```
 

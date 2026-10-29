@@ -54,6 +54,12 @@
 #ifndef NAN
 #error "NAN is required by this public Header"
 #endif
+
+bool verify_example()
+{
+    const float value = NAN;
+    return value != value && asc::std::isnan(value);
+}
 ```
 
 ## 关联API

@@ -63,6 +63,7 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef WCHAR_MIN
 #error "WCHAR_MIN is required by this public Header"
 #endif
+static_assert(WCHAR_MIN <= 0);
 ```
 
 ## Related APIs

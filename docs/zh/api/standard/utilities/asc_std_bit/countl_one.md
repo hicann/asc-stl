@@ -75,6 +75,11 @@ decltype(auto) example()
 {
     return asc::std::countl_one(3u);
 }
+
+bool verify_example()
+{
+    return example() == 0;
+}
 ```
 
 ## 关联API

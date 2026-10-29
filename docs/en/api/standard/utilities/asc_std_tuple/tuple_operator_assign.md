@@ -95,10 +95,11 @@ The following Host snippet demonstrates the call with concrete numeric types; th
 ```cpp
 #include <asc/std/tuple>
 
-void example()
+bool example()
 {
     asc::std::tuple<int, int> target(1, 2), source(3, 4);
     target = source;
+    return asc::std::get<0>(target) == 3 && asc::std::get<1>(target) == 4;
 }
 ```
 

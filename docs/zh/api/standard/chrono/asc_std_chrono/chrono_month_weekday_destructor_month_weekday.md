@@ -58,12 +58,23 @@ C++17形式如下；析构由编译器隐式生成，C++20起满足条件时可�
 
 ```cpp
 #include <asc/std/chrono>
+#include <new>
+#include <type_traits>
 
-using example_object = asc::std::chrono::month_weekday;
-void example(example_object* object)
+bool example()
 {
-    // object 指向已构造对象；析构后不得再访问该对象。
-    object->~example_object();
+    namespace chrono = asc::std::chrono;
+    using value_type = chrono::month_weekday;
+    static_assert(::std::is_trivially_destructible_v<value_type>);
+    alignas(value_type) unsigned char storage[sizeof(value_type)];
+    auto* value =
+        ::new (static_cast<void*>(storage)) value_type(chrono::month_weekday{chrono::month{5}, chrono::weekday{3}[2]});
+    value->~value_type();
+    value =
+        ::new (static_cast<void*>(storage)) value_type(chrono::month_weekday{chrono::month{5}, chrono::weekday{3}[2]});
+    const bool restored = static_cast<unsigned>((*value).month()) == 5;
+    value->~value_type();
+    return restored;
 }
 ```
 

@@ -56,6 +56,7 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef ERANGE
 #error "ERANGE is required by this public Header"
 #endif
+static_assert(ERANGE > 0 && ERANGE != EDOM);
 ```
 
 ## Related APIs

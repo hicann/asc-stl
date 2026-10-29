@@ -76,10 +76,11 @@ constexpr T exchange(T& object, U&& new_value)
 ```cpp
 #include <asc/std/utility>
 
-decltype(auto) example()
+bool example()
 {
     int value = 3;
-    return asc::std::exchange(value, 4);
+    const int previous = asc::std::exchange(value, 4);
+    return previous == 3 && value == 4;
 }
 ```
 

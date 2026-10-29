@@ -61,16 +61,21 @@ constexpr asc::device_policy with_temporary_storage(asc::temporary_storage_ref s
 
 ## 调用示例
 
-以下Host片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host示例不提交Runtime任务；以具体值检查配置或资源引用的可观察结果。这里的local存储只用于配置检查；提交Device算法时必须改用有效的Device存储，并保持至异步工作完成。
 
 ```cpp
 #include <asc/execution.policy.h>
 
-decltype(auto) example(asc::device_policy policy, asc::temporary_storage_ref storage)
+bool example()
 {
-    // storage 所指内存在异步工作完成前必须保持有效。
-    auto configured = policy.with_temporary_storage(storage);
-    return configured;
+    alignas(32) unsigned char bytes[128]{};
+    const asc::temporary_storage_ref storage(bytes, sizeof(bytes), asc::memory_space::local);
+    const auto base = asc::execution::device;
+    const auto configured = base.with_temporary_storage(storage);
+    return configured.temporary_storage().data() == bytes &&
+        configured.temporary_storage().size_bytes() == 128 &&
+        configured.temporary_storage().space() == asc::memory_space::local &&
+        base.temporary_storage().empty();
 }
 ```
 

@@ -95,10 +95,11 @@ template<class... Other, enable_if_t<sizeof...(Other) == sizeof...(Types), int> 
 ```cpp
 #include <asc/std/tuple>
 
-void example()
+bool example()
 {
     asc::std::tuple<int, int> target(1, 2), source(3, 4);
     target = source;
+    return asc::std::get<0>(target) == 3 && asc::std::get<1>(target) == 4;
 }
 ```
 

@@ -101,10 +101,15 @@ The following Host snippet demonstrates the call with a valid integer range and 
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    int values[8] = {8, 3, 6, 1, 7, 2, 5, 4};
     asc::std::make_heap(values, values + 8);
+    for (int index = 1; index < 8; ++index) { if (values[(index - 1) / 2] < values[index]) return false; }
+    int counts[9] = {};
+    for (int value : values) { if (value < 1 || value > 8) return false; ++counts[value]; }
+    for (int value = 1; value <= 8; ++value) { if (counts[value] != 1) return false; }
+    return true;
 }
 ```
 

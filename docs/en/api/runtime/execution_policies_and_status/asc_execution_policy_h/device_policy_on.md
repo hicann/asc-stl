@@ -61,15 +61,51 @@ constexpr asc::device_policy on(asc::stream_ref stream) const noexcept;
 
 ## Example
 
-The following Host snippet demonstrates the call with concrete objects; resource operations must follow the initialization and lifetime constraints on this page.
+This complete example uses the real CANN Runtime and selects device 0, which must be available before running. Asynchronous waits are limited to 10 seconds. Failure terminates the example process to avoid releasing resources still in use; the controller must stop subsequent tasks and recheck device health. On success, work completes before resources are closed, the device is reset, and the Runtime is finalized.
 
 ```cpp
+#include <acl/acl.h>
+#include <asc/stream>
+#include <cstdlib>
+
+void check(bool condition)
+{
+    if (!condition) {
+        std::_Exit(2);
+    }
+}
+
+void finish(asc::stream_ref stream)
+{
+    check(aclrtSynchronizeStreamWithTimeout(stream.native_handle(), 10000) == ACL_SUCCESS);
+}
 #include <asc/execution.policy.h>
 
-decltype(auto) example(asc::device_policy policy, asc::stream_ref stream)
+
+void run_example()
 {
-    auto configured = policy.on(stream);
-    return configured;
+    asc::stream stream;
+    check(asc::make_stream(stream));
+    const auto base = asc::execution::device;
+    const auto configured = base.on(stream);
+    check(!base.stream() && configured.stream() == stream);
+    finish(stream);
+    check(stream.close());
+}
+
+int main()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) {
+        return 1;
+    }
+    if (!asc::set_current_device(asc::device_ref(0))) {
+        check(aclFinalize() == ACL_SUCCESS);
+        return 1;
+    }
+    run_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return reset && finalized ? 0 : 1;
 }
 ```
 

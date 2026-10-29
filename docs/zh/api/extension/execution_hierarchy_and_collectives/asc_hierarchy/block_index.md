@@ -55,14 +55,20 @@ unsigned long long block_index() noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下SIMT核函数按Grid=(2,3,4)、Block=(8,4,2)启动时，将每个线程的查询结果写入独立位置。调用方须分配至少1536个unsigned long long的有效GM输出，并在核函数完成后回读。每项为对应blockIdx.x，取值0或1；本接口不是三维Block的展平索引。文档门禁验证真实SIMT编译，不代表NPU执行通过。
 
 ```cpp
 #include <asc/hierarchy>
 
-__aicore__ decltype(auto) example()
+__global__ void example(unsigned long long* output)
 {
-    return asc::block_index();
+    const unsigned long long local = threadIdx.x +
+        static_cast<unsigned long long>(blockDim.x) * (threadIdx.y + blockDim.y * threadIdx.z);
+    const unsigned long long block = blockIdx.x +
+        static_cast<unsigned long long>(gridDim.x) * (blockIdx.y + gridDim.y * blockIdx.z);
+    const unsigned long long threads = static_cast<unsigned long long>(blockDim.x) * blockDim.y * blockDim.z;
+    const unsigned long long offset = block * threads + local;
+    output[offset] = asc::block_index();
 }
 ```
 

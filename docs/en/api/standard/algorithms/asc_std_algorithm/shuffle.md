@@ -73,13 +73,17 @@ The following Host snippet demonstrates the call with a valid integer range and 
 
 ```cpp
 #include <asc/std/algorithm>
-
 #include <asc/std/random>
-void example()
+
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    asc::std::minstd_rand random_engine(9);
-    asc::std::shuffle(values, values + 8, random_engine);
+    int values[8] = {8, 3, 6, 1, 7, 2, 5, 4};
+    asc::std::minstd_rand engine(9);
+    asc::std::shuffle(values, values + 8, engine);
+    int counts[9] = {};
+    for (int value : values) { if (value < 1 || value > 8) return false; ++counts[value]; }
+    for (int value = 1; value <= 8; ++value) { if (counts[value] != 1) return false; }
+    return true;
 }
 ```
 

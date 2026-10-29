@@ -100,6 +100,11 @@ decltype(auto) example()
     asc::std::ranges::ref_view<int[4]> view(values);
     return view.empty();
 }
+
+bool verify_example()
+{
+    return example() == false;
+}
 ```
 
 ## 关联API

@@ -53,6 +53,11 @@ decltype(auto) example()
 {
     return asc::std::chars_format();
 }
+
+bool verify_example()
+{
+    return static_cast<int>(example()) == 0;
+}
 ```
 
 ## Related APIs

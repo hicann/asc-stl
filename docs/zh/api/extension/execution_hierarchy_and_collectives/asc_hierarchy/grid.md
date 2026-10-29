@@ -46,12 +46,13 @@ inline constexpr grid_level grid{};
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体类型或维度，检查独立的预期值；不查询正在运行的Device执行上下文。
 
 ```cpp
 #include <asc/hierarchy>
+#include <asc/std/type_traits>
 
-auto value = asc::grid;
+static_assert(asc::std::is_same_v<decltype(asc::grid), const asc::grid_level>);
 ```
 
 ## 关联API

@@ -86,9 +86,14 @@ constexpr year_month_day_last& operator=(year_month_day_last&& other) noexcept;
 ```cpp
 #include <asc/std/chrono>
 
-void example(asc::std::chrono::year_month_day_last& value, const asc::std::chrono::year_month_day_last& other)
+bool example()
 {
-    value = other;
+    namespace chrono = asc::std::chrono;
+    chrono::year_month_day_last value =
+        chrono::year_month_day_last{chrono::year{2023}, chrono::month_day_last{chrono::month{4}}};
+    const auto source = chrono::year_month_day_last{chrono::year{2024}, chrono::month_day_last{chrono::month{5}}};
+    value = source;
+    return static_cast<int>(value.year()) == 2024 && static_cast<unsigned>(value.month()) == 5;
 }
 ```
 

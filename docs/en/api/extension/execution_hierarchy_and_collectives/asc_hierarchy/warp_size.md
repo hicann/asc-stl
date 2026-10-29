@@ -45,12 +45,14 @@ inline constexpr unsigned int warp_size = 32;
 
 ## Example
 
-The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
+This Host example uses concrete types or dimensions and checks independent expected values without querying a running Device context.
 
 ```cpp
 #include <asc/hierarchy>
+#include <asc/std/type_traits>
 
-auto value = asc::warp_size;
+static_assert(asc::warp_size == 32);
+static_assert(asc::std::is_same_v<decltype(asc::warp_size), const unsigned int>);
 ```
 
 ## Related APIs

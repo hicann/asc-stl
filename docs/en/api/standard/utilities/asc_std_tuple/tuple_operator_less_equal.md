@@ -75,6 +75,11 @@ decltype(auto) example()
     asc::std::tuple<int, int> left(1, 2), right(3, 4);
     return (left <= right);
 }
+
+bool verify_example()
+{
+    return example() == true;
+}
 ```
 
 ## Related APIs

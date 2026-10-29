@@ -49,8 +49,14 @@ The following snippet shows the basic call form of the interface on this page; i
 
 ```cpp
 #include <asc/mdspan>
+#include <asc/std/limits>
 
-auto value = asc::dynamic_stride;
+bool example()
+{
+    asc::strides<int, asc::dynamic_stride, 1> values(2);
+    return asc::dynamic_stride == asc::std::numeric_limits<asc::std::ptrdiff_t>::min() &&
+        values.rank_dynamic() == 1 && values.stride(0) == 2 && values.stride(1) == 1;
+}
 ```
 
 ## Related APIs

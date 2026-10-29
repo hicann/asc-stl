@@ -74,6 +74,7 @@ The following Host snippet uses an explicitly provided allocator and fully relea
 template <class T>
 struct example_allocator : ::std::allocator<T> {
     using value_type = T;
+    int identity = 0;
     using pointer = T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
@@ -85,6 +86,20 @@ struct example_allocator : ::std::allocator<T> {
 void example(asc::std::scoped_allocator_adaptor<example_allocator<int>>& target, const asc::std::scoped_allocator_adaptor<example_allocator<int>>& source)
 {
     target = source;
+}
+
+bool verify_example()
+{
+    asc::std::scoped_allocator_adaptor<example_allocator<int>> target, source;
+    source.outer_allocator().identity = 23;
+    example(target, source);
+    int* value = target.allocate(1);
+    if (value == nullptr) return false;
+    target.construct(value, 7);
+    const bool correct = *value == 7 && target.outer_allocator().identity == 23;
+    target.destroy(value);
+    target.deallocate(value, 1);
+    return correct;
 }
 ```
 

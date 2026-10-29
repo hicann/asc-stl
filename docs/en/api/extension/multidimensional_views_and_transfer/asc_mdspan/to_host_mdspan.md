@@ -82,21 +82,26 @@ The DLPack bridge interface is available only when the DLPack headers are provid
 
 ```cpp
 #include <asc/mdspan>
-#include <asc/std/cstddef>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
+#include <dlpack/dlpack.h>
 
-#if __has_include(<dlpack/dlpack.h>)
-decltype(auto) example(const DLTensor& tensor,
-    asc::host_mdspan<int, asc::std::dextents<asc::std::size_t, 2>, asc::layout_stride_relaxed>& output)
+bool example()
 {
-    return asc::to_host_mdspan<int, 2>(tensor, output);
+    int values[4] = {10, 20, 30, 40};
+    int64_t shape[2] = {2, 2};
+    int64_t strides[2] = {2, 1};
+    DLTensor tensor{};
+    tensor.data = values;
+    tensor.device = DLDevice{kDLCPU, 0};
+    tensor.ndim = 2;
+    tensor.dtype = DLDataType{kDLInt, 32, 1};
+    tensor.shape = shape;
+    tensor.strides = strides;
+    using extents_type = asc::std::dextents<asc::std::size_t, 2>;
+    asc::host_mdspan<int, extents_type, asc::layout_stride_relaxed> output;
+    if (!asc::to_host_mdspan<int, 2>(tensor, output)) return false;
+    return output.extent(0) == 2 && output.extent(1) == 2 && output.stride(0) == 2 &&
+        output.stride(1) == 1 && output.data_handle() == values && output.mapping()(1, 1) == 3 && &output(1, 1) == values + 3 && output(1, 1) == 40;
 }
-#endif
 ```
 
 ## Related APIs

@@ -67,9 +67,15 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example(asc::std::atomic_ref<int> value)
+bool example()
 {
-    return value = 1;
+    alignas(int) int storage = 5;
+    int before = 0;
+    {
+        asc::std::atomic_ref<int> value(storage);
+        before = (value = 3);
+    }
+    return before == 3 && storage == 3;
 }
 ```
 

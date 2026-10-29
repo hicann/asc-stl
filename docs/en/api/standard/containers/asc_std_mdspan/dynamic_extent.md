@@ -54,8 +54,9 @@ The following snippet demonstrates the basic call form of the interface on this 
 
 ```cpp
 #include <asc/std/mdspan>
+#include <cstddef>
 
-auto value = asc::std::dynamic_extent;
+static_assert(asc::std::dynamic_extent == static_cast<::std::size_t>(-1));
 ```
 
 ## Related APIs

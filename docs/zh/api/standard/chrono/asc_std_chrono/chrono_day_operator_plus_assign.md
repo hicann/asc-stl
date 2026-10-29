@@ -66,9 +66,12 @@ constexpr day& operator+=(const days& value) noexcept;
 ```cpp
 #include <asc/std/chrono>
 
-void example(asc::std::chrono::day& value)
+bool example()
 {
-    value += asc::std::chrono::days{1};
+    namespace chrono = asc::std::chrono;
+    chrono::day value = chrono::day{10};
+    value += chrono::days{1};
+    return static_cast<unsigned>(value) == 11;
 }
 ```
 

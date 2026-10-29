@@ -78,6 +78,11 @@ decltype(auto) example()
     auto bound = asc::std::bind_front([](int left, int right) { return left + right; }, 2);
     return bound(3);
 }
+
+bool verify_example()
+{
+    return example() == 5;
+}
 ```
 
 ## 关联API

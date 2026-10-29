@@ -59,6 +59,7 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef WEOF
 #error "WEOF is required by this public Header"
 #endif
+static_assert(WEOF != static_cast<asc::std::wint_t>(L'A'));
 ```
 
 ## Related APIs

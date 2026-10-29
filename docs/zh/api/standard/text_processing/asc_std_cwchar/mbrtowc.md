@@ -77,6 +77,13 @@ decltype(auto) example(wchar_t * output, const char * input, asc::std::size_t co
 {
     return asc::std::mbrtowc(output, input, count, state);
 }
+
+bool verify_example()
+{
+    asc::std::mbstate_t state{};
+    wchar_t output = 0;
+    return example(&output, "A", 1, &state) == 1 && output == L'A';
+}
 ```
 
 ## 关联API

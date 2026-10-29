@@ -50,12 +50,15 @@ using result_type = float;
 以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/random>
 
 void example()
 {
     using result = asc::std::uniform_real_distribution<float>::result_type;
 }
+
+static_assert(asc::std::is_same_v<asc::std::uniform_real_distribution<float>::result_type, float>);
 ```
 
 ## 关联API

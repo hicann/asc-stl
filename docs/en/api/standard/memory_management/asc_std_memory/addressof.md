@@ -76,6 +76,12 @@ decltype(auto) example(T & value)
 {
     return asc::std::addressof(value);
 }
+
+bool verify_example()
+{
+    int value = 19;
+    return example(value) == &value;
+}
 ```
 
 The corresponding complete project uses `C++17` and has been verified by Host compilation and execution.

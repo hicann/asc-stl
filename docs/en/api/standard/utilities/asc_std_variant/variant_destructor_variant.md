@@ -57,13 +57,29 @@ No return value.
 The following snippet assumes object points to a constructed object; the object must not be accessed again after explicit destruction, and releasing the storage is the caller's responsibility.
 
 ```cpp
+#include <asc/std/new>
 #include <asc/std/variant>
 
-using example_object = asc::std::variant<int, float>;
+struct example_value {
+    static inline int alive = 0;
+    example_value() { ++alive; }
+    ~example_value() { --alive; }
+};
+
+using example_object = asc::std::variant<example_value, float>;
 void example(example_object* object)
 {
-    // object points to a constructed object; do not access the object again after destruction.
+    // object 指向已构造对象；析构后不得再访问该对象。
     object->~example_object();
+}
+
+bool verify_example()
+{
+    alignas(example_object) unsigned char storage[sizeof(example_object)];
+    auto* object = ::new (static_cast<void*>(storage)) example_object();
+    const bool constructed = example_value::alive == 1;
+    example(object);
+    return constructed && example_value::alive == 0;
 }
 ```
 

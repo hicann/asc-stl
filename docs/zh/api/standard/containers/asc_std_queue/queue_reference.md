@@ -54,11 +54,12 @@ using reference = typename Container::reference;
 #include <deque>
 #include <functional>
 #include <vector>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::queue<int, ::std::deque<int>>::reference;
-}
+using alias_type = typename asc::std::queue<int, ::std::deque<int>>::reference;
+static_assert(::std::is_same_v<alias_type, int&>);
 ```
 
 ## 关联API

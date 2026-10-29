@@ -94,6 +94,12 @@ decltype(auto) example()
     auto next = value.transform_error([](int error) { return error + 1; });
     return next;
 }
+
+bool verify_example()
+{
+    const auto result = example();
+    return !result.has_value() && result.error() == 4;
+}
 ```
 
 ## 关联API

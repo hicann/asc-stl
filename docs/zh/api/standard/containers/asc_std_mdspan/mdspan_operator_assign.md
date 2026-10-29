@@ -86,11 +86,17 @@ constexpr mdspan<Element, Extents, Layout, Accessor>& operator=(mdspan<Element, 
 
 ```cpp
 #include <asc/std/mdspan>
-#include <asc/std/cstddef>
+#include <asc/std/array>
+#include <cstddef>
+#include <type_traits>
 
-void example(asc::std::mdspan<int, asc::std::extents<asc::std::size_t, 2, 3>, asc::std::layout_right, asc::std::default_accessor<int>>& target, const asc::std::mdspan<int, asc::std::extents<asc::std::size_t, 2, 3>, asc::std::layout_right, asc::std::default_accessor<int>>& source)
+bool example()
 {
+    int first[6] = {1, 2, 3, 4, 5, 6};
+    int second[6] = {7, 8, 9, 10, 11, 12};
+    asc::std::mdspan<int, asc::std::extents<::std::size_t, 2, 3>> target(first), source(second);
     target = source;
+    return target.data_handle() == second && target(1, 2) == 12;
 }
 ```
 

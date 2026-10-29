@@ -93,6 +93,12 @@ decltype(auto) example()
     auto next = value.and_then([](int input) { return asc::std::expected<int, int>(input + 1); });
     return next;
 }
+
+bool verify_example()
+{
+    const auto result = example();
+    return result.has_value() && *result == 8;
+}
 ```
 
 ## Related APIs

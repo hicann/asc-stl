@@ -49,9 +49,12 @@ inline constexpr const in_place_t in_place;
 以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/utility>
 
 auto value = asc::std::in_place;
+
+static_assert(asc::std::is_same_v<asc::std::remove_cv_t<decltype(value)>, asc::std::in_place_t>);
 ```
 
 ## 关联API

@@ -60,15 +60,21 @@ constexpr bool operator!=(const asc::device_memory_resource_ref& other) const no
 
 ## Example
 
-The following Host snippet demonstrates the call with concrete objects; resource operations must follow the initialization and lifetime constraints on this page.
+This Host example submits no Runtime work and checks configuration or resource-reference results using concrete values.
 
 ```cpp
 #include <asc/memory_resource>
 
-decltype(auto) example(const asc::device_memory_resource_ref& left, const asc::device_memory_resource_ref& right)
+bool example()
 {
-    const bool different = left != right;
-    return different;
+    asc::device_memory_resource first(0);
+    asc::device_memory_resource second(0);
+    const asc::device_memory_resource_ref a(first);
+    const asc::device_memory_resource_ref same(first);
+    const asc::device_memory_resource_ref different(second);
+    const asc::device_memory_resource_ref empty;
+    const asc::device_memory_resource_ref another_empty;
+    return !(a != same) && a != different && !(empty != another_empty);
 }
 ```
 

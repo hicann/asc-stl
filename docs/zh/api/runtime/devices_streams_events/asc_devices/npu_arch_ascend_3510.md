@@ -52,6 +52,11 @@ ascend_3510 = 3510;
 #include <asc/devices>
 
 auto value = asc::npu_arch::ascend_3510;
+
+bool verify_example()
+{
+    return static_cast<unsigned int>(value) == 3510u;
+}
 ```
 
 ## 关联API

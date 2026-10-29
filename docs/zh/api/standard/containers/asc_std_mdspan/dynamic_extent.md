@@ -54,8 +54,9 @@ inline constexpr size_t dynamic_extent = static_cast<size_t>(-1);
 
 ```cpp
 #include <asc/std/mdspan>
+#include <cstddef>
 
-auto value = asc::std::dynamic_extent;
+static_assert(asc::std::dynamic_extent == static_cast<::std::size_t>(-1));
 ```
 
 ## 关联API

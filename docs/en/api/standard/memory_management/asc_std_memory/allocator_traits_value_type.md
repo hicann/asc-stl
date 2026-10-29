@@ -52,10 +52,8 @@ The following Host snippet explicitly provides an allocator with rebind capabili
 
 ```cpp
 #include <asc/std/memory>
-#include <functional>
+#include <asc/std/type_traits>
 #include <memory>
-#include <string>
-#include <utility>
 
 template <class T>
 struct example_allocator : ::std::allocator<T> {
@@ -68,10 +66,9 @@ struct example_allocator : ::std::allocator<T> {
     template <class U> example_allocator(const example_allocator<U>&) noexcept {}
 };
 
-void use_type()
-{
-    using alias_type = typename asc::std::allocator_traits<example_allocator<int>>::value_type;
-}
+using selected = typename asc::std::allocator_traits<example_allocator<int>>::value_type;
+
+static_assert(asc::std::is_same_v<selected, int>);
 ```
 
 ## Related APIs

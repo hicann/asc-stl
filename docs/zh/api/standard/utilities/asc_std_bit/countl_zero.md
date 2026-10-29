@@ -72,11 +72,17 @@ template<class T> constexpr __unsigned_integer_result_t<T, int> countl_zero(T va
 以下片段用具体数值展示本页调用。
 
 ```cpp
+#include <asc/std/limits>
 #include <asc/std/bit>
 
 decltype(auto) example()
 {
     return asc::std::countl_zero(3u);
+}
+
+bool verify_example()
+{
+    return example() == asc::std::numeric_limits<unsigned int>::digits - 2;
 }
 ```
 

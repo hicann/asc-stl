@@ -47,11 +47,19 @@ Standard semantics reference: [cppreference `cinttypes`](https://en.cppreference
 The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
 
 ```cpp
+#include <cstdio>
 #include <asc/std/cinttypes>
 
 #ifndef PRIuMAX
 #error "PRIuMAX is required by this public Header"
 #endif
+
+bool verify_example()
+{
+    char text[32] = {};
+    const int count = ::std::snprintf(text, sizeof(text), "%" PRIuMAX, static_cast<asc::std::uintmax_t>(123));
+    return count == 3 && text[0] == '1' && text[1] == '2' && text[2] == '3' && text[3] == 0;
+}
 ```
 
 ## Related APIs

@@ -65,9 +65,10 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/chrono>
 
-decltype(auto) example(const asc::std::chrono::hours & value)
+bool example()
 {
-    return asc::std::chrono::is_am(value);
+    namespace chrono = asc::std::chrono;
+    return chrono::is_am(chrono::hours{7}) && !chrono::is_am(chrono::hours{13});
 }
 ```
 

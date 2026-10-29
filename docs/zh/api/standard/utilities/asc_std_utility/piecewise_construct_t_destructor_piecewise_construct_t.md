@@ -56,6 +56,7 @@ constexpr ~piecewise_construct_t() noexcept;
 以下片段假定object指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
 
 ```cpp
+#include <asc/std/new>
 #include <asc/std/utility>
 
 using example_object = asc::std::piecewise_construct_t;
@@ -63,6 +64,17 @@ void example(example_object* object)
 {
     // object 指向已构造对象；析构后不得再访问该对象。
     object->~example_object();
+}
+
+bool verify_example()
+{
+    alignas(example_object) unsigned char storage[sizeof(example_object)];
+    auto* first = ::new (static_cast<void*>(storage)) example_object();
+    example(first);
+    auto* second = ::new (static_cast<void*>(storage)) example_object();
+    const bool reused = static_cast<void*>(second) == static_cast<void*>(storage);
+    example(second);
+    return reused;
 }
 ```
 

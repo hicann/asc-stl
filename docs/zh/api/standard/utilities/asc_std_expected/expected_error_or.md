@@ -79,6 +79,11 @@ decltype(auto) example()
     asc::std::expected<int, int> value(asc::std::unexpect, 3);
     return static_cast<asc::std::expected<int, int>&&>(value).error_or(0);
 }
+
+bool verify_example()
+{
+    return example() == 3;
+}
 ```
 
 ## 关联API

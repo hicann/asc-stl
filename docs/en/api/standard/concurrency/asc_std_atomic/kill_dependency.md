@@ -72,9 +72,9 @@ The following Host snippet uses a concrete integer atomic object; device-side ob
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::kill_dependency(1);
+    return asc::std::kill_dependency(7) == 7;
 }
 ```
 

@@ -52,6 +52,11 @@ The following snippet demonstrates the basic call form of the interface on this 
 #include <asc/devices>
 
 auto value = asc::npu_arch::unknown;
+
+bool verify_example()
+{
+    return static_cast<unsigned int>(value) == 0u;
+}
 ```
 
 ## Related APIs

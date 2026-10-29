@@ -55,7 +55,8 @@ inline constexpr double log10e = 0x1.bcb7b1526e50e32a6ab7555f5a68p-2;
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::log10e;
+inline constexpr auto value = asc::std::numbers::log10e;
+static_assert(value > 0.4342944 && value < 0.4342946);
 ```
 
 ## 关联API

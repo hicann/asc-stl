@@ -64,13 +64,51 @@ Mutex* release() noexcept;
 
 ```cpp
 #include <asc/std/mutex>
+#include <new>
 
-#include <mutex>
+// Instrumented single-thread BasicLockable used to observe adapter ownership.
+struct example_mutex {
+    bool locked = false;
+    int unlocks = 0;
+    void lock()
+    {
+        locked = true;
+    }
+    bool try_lock()
+    {
+        if (locked)
+            return false;
+        locked = true;
+        return true;
+    }
+    void unlock()
+    {
+        locked = false;
+        ++unlocks;
+    }
+    void lock_shared()
+    {
+        lock();
+    }
+    bool try_lock_shared()
+    {
+        return try_lock();
+    }
+    void unlock_shared()
+    {
+        unlock();
+    }
+};
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::unique_lock<::std::mutex> guard{};
-    return guard.release();
+    using lock_type = asc::std::unique_lock<example_mutex>;
+    example_mutex mutex;
+    lock_type guard(mutex);
+    auto* released = guard.release();
+    const bool detached = released == &mutex && mutex.locked && !guard.owns_lock() && guard.mutex() == nullptr;
+    released->unlock();
+    return detached && !mutex.locked && mutex.unlocks == 1;
 }
 ```
 

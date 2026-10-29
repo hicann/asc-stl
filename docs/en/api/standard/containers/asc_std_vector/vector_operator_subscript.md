@@ -86,11 +86,32 @@ The following snippet focuses on calling this interface; inputs, resources, and 
 
 ```cpp
 #include <asc/std/vector>
+#include <memory>
 
-template <class Object, class... Args>
-decltype(auto) example(Object& object, Args&&... args)
+template <class T>
+struct example_allocator : ::std::allocator<T> {
+    using value_type = T;
+    using pointer = T*;
+    using size_type = ::std::size_t;
+    using difference_type = ::std::ptrdiff_t;
+    template <class U>
+    struct rebind {
+        using other = example_allocator<U>;
+    };
+    example_allocator() = default;
+    template <class U>
+    example_allocator(const example_allocator<U>&) noexcept
+    {}
+};
+
+bool example()
 {
-    return object.operator[](static_cast<Args&&>(args)...);
+    using sequence = asc::std::vector<int, example_allocator<int>>;
+    sequence values(example_allocator<int>{});
+    values.push_back(7);
+    values[0] = 9;
+    const sequence& observed = values;
+    return observed[0] == 9 && values.front() == 9;
 }
 ```
 

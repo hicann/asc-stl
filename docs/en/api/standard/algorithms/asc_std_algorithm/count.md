@@ -89,6 +89,11 @@ decltype(auto) example()
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     return asc::std::count(values, values + 8, 3);
 }
+
+bool verify_example()
+{
+    return example() == 1;
+}
 ```
 
 ## Related APIs

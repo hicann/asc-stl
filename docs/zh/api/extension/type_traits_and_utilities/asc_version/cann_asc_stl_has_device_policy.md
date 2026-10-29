@@ -50,6 +50,7 @@
 #ifndef CANN_ASC_STL_HAS_DEVICE_POLICY
 #error "CANN_ASC_STL_HAS_DEVICE_POLICY is required by this public Header"
 #endif
+static_assert(CANN_ASC_STL_HAS_DEVICE_POLICY == 1, "documented version or capability value");
 ```
 
 ## 关联API

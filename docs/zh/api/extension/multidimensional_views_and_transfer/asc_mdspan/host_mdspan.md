@@ -51,17 +51,15 @@ using host_mdspan = asc::std::mdspan<Element, Extents, Layout, asc::host_accesso
 
 ```cpp
 #include <asc/mdspan>
-#include <asc/std/cstddef>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
 
-void use_type()
+bool example()
 {
-    using selected = asc::host_mdspan<int, asc::std::extents<asc::std::size_t, 4>>;
+    int values[4] = {10, 20, 30, 40};
+    using view_type = asc::host_mdspan<int, asc::std::extents<asc::std::size_t, 4>>;
+    view_type view(values);
+    view[2] = 35;
+    return view.extent(0) == 4 && view.size() == 4 && view.data_handle() == values &&
+        &view[2] == values + 2 && values[2] == 35 && view[3] == 40;
 }
 ```
 

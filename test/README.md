@@ -38,3 +38,17 @@ source roots so unrelated infrastructure injected by formal CI is not audited.
 `scripts/ci-hardware-check.sh` is the local Ascend950 enhancement. All product
 and test compilation covers the mandatory C++17 baseline and supported C++20
 mode.
+
+## Executable documentation
+
+The Host gate executes registered API examples in C++17 and C++20. CTest reports
+core examples and optional-dependency examples separately. An unavailable optional
+dependency produces a skipped test (exit 77), never a successful example. The
+Device compile gate also compiles all registered D-SIMD and D-SIMT examples in
+both language modes; these results are compilation evidence, not device execution.
+Per-example JSON reports are written below the CMake build's `test/` directory.
+
+The documentation structure gate verifies the example registry and compares C++
+code in Chinese and English API pages, ignoring comments and whitespace outside
+literals. Its coverage inventory lists every unregistered example page. Registration
+coverage is not API semantic coverage; unregistered examples are not claimed as tested.

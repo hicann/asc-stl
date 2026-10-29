@@ -50,10 +50,16 @@ The following snippet demonstrates the basic call form of the interface on this 
 
 ```cpp
 #include <asc/random>
+#include <asc/std/cstdint>
+#include <asc/std/type_traits>
 
-void use_type()
+static_assert(asc::std::is_same_v<asc::pcg64::result_type, asc::std::uint64_t>);
+
+bool example()
 {
-    using alias_type = typename asc::pcg64::result_type;
+    asc::pcg64 generator;
+    const asc::pcg64::result_type value = generator();
+    return value == 14951315693135216709ULL;
 }
 ```
 

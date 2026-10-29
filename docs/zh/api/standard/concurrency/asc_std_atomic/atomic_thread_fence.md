@@ -65,10 +65,23 @@ void atomic_thread_fence(memory_order order) noexcept;
 
 ```cpp
 #include <asc/std/atomic>
+#include <thread>
 
-void example(asc::std::memory_order order)
+bool example()
 {
-    asc::std::atomic_thread_fence(order);
+    int payload = 0;
+    asc::std::atomic<bool> ready{false};
+    ::std::thread producer([&] {
+        payload = 42;
+        asc::std::atomic_thread_fence(asc::std::memory_order_release);
+        ready.store(true, asc::std::memory_order_relaxed);
+    });
+    while (!ready.load(asc::std::memory_order_relaxed))
+        ::std::this_thread::yield();
+    asc::std::atomic_thread_fence(asc::std::memory_order_acquire);
+    const bool observed = payload == 42;
+    producer.join();
+    return observed;
 }
 ```
 

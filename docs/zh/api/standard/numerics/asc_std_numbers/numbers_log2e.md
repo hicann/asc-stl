@@ -55,7 +55,8 @@ inline constexpr double log2e = 0x1.71547652b82fe1777d0ffda0d23ap+0;
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::log2e;
+inline constexpr auto value = asc::std::numbers::log2e;
+static_assert(value > 1.4426949 && value < 1.4426952);
 ```
 
 ## 关联API

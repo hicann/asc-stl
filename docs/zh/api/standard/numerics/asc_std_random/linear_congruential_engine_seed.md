@@ -92,10 +92,11 @@ constexpr void seed(Sseq& sequence) noexcept;
 ```cpp
 #include <asc/std/random>
 
-void example()
+bool example()
 {
-    asc::std::minstd_rand generator{};
+    asc::std::minstd_rand generator;
     generator.seed(9);
+    return generator() == 434439u;
 }
 ```
 

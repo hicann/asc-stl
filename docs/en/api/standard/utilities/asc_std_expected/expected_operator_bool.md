@@ -68,6 +68,11 @@ decltype(auto) example()
     const bool present = static_cast<bool>(value);
     return present;
 }
+
+bool verify_example()
+{
+    return example() == true;
+}
 ```
 
 ## Related APIs

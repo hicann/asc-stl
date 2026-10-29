@@ -78,6 +78,12 @@ decltype(auto) example()
 {
     return asc::overflow_cast<unsigned char>(300);
 }
+
+bool verify_example()
+{
+    const auto actual = example();
+    return actual.value == 44 && actual.overflow == true;
+}
 ```
 
 ## 关联API

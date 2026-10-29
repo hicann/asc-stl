@@ -108,6 +108,12 @@ decltype(auto) example()
 {
     return asc::add_overflow(7, 2);
 }
+
+bool verify_example()
+{
+    const auto actual = example();
+    return actual.value == 9 && actual.overflow == false;
+}
 ```
 
 ## Related APIs

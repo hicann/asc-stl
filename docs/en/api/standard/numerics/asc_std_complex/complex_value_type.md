@@ -51,12 +51,15 @@ using value_type = T;
 The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/complex>
 
 void use_type()
 {
     using alias_type = typename asc::std::complex<float>::value_type;
 }
+
+static_assert(asc::std::is_same_v<asc::std::complex<float>::value_type, float>);
 ```
 
 ## Related APIs

@@ -51,8 +51,9 @@ inline constexpr const full_extent_t full_extent;
 
 ```cpp
 #include <asc/std/mdspan>
+#include <type_traits>
 
-auto value = asc::std::full_extent;
+static_assert(::std::is_same_v<::std::remove_cv_t<decltype(asc::std::full_extent)>, asc::std::full_extent_t>);
 ```
 
 ## 关联API

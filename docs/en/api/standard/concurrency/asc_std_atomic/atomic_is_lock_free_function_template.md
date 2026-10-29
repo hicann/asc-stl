@@ -74,11 +74,13 @@ The following Host snippet uses a concrete integer atomic object; device-side ob
 
 ```cpp
 #include <asc/std/atomic>
+#include <atomic>
 
-decltype(auto) example()
+bool example()
 {
     asc::std::atomic<int> value{1};
-    return asc::std::atomic_is_lock_free(&value);
+    ::std::atomic<int> reference{1};
+    return asc::std::atomic_is_lock_free(&value) == reference.is_lock_free();
 }
 ```
 

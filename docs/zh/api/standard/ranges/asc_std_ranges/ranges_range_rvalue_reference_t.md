@@ -49,12 +49,15 @@ template<class Rp> using range_rvalue_reference_t = iter_rvalue_reference_t<iter
 以下片段选用具体模板实参展示别名类型。
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/ranges>
 
 void use_type()
 {
     using selected = asc::std::ranges::range_rvalue_reference_t<int (&)[4]>;
 }
+
+static_assert(asc::std::is_same_v<asc::std::ranges::range_rvalue_reference_t<int (&)[4]>, int&&>);
 ```
 
 ## 关联API

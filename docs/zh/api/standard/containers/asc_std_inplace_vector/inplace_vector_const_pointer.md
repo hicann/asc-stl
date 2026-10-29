@@ -54,11 +54,12 @@ using const_pointer = const T*;
 
 ```cpp
 #include <asc/std/inplace_vector>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::inplace_vector<int, 8>::const_pointer;
-}
+using alias_type = typename asc::std::inplace_vector<int, 8>::const_pointer;
+static_assert(::std::is_same_v<alias_type, const int*>);
 ```
 
 ## 关联API

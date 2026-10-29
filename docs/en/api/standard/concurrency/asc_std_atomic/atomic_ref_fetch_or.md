@@ -67,9 +67,15 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example(asc::std::atomic_ref<int> value)
+bool example()
 {
-    return value.fetch_or(1, asc::std::memory_order_relaxed);
+    alignas(int) int storage = 5;
+    int before = 0;
+    {
+        asc::std::atomic_ref<int> value(storage);
+        before = value.fetch_or(3, asc::std::memory_order_relaxed);
+    }
+    return before == 5 && storage == 7;
 }
 ```
 

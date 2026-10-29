@@ -72,13 +72,18 @@ template<class ...Args> constexpr decltype(auto) emplace(Args&&... args);
 
 ```cpp
 #include <asc/std/stack>
+#include <memory>
 #include <deque>
-#include <functional>
-#include <vector>
 
-decltype(auto) example(asc::std::stack<int, ::std::deque<int>>& object)
+bool example()
 {
-    return object.emplace(7);
+    using sequence = asc::std::stack<int, ::std::deque<int>>;
+    sequence values;
+    values.emplace(3);
+    values.emplace(7);
+    const bool first = values.size() == 2 && values.top() == 7;
+    values.pop();
+    return first && values.size() == 1 && values.top() == 3;
 }
 ```
 

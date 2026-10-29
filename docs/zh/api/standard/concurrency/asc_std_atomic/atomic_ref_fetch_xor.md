@@ -67,9 +67,15 @@ T asc::std::atomic_ref::fetch_xor(T value, asc::std::memory_order order = asc::s
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example(asc::std::atomic_ref<int> value)
+bool example()
 {
-    return value.fetch_xor(1, asc::std::memory_order_relaxed);
+    alignas(int) int storage = 5;
+    int before = 0;
+    {
+        asc::std::atomic_ref<int> value(storage);
+        before = value.fetch_xor(3, asc::std::memory_order_relaxed);
+    }
+    return before == 5 && storage == 6;
 }
 ```
 

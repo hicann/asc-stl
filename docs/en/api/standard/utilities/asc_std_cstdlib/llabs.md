@@ -69,6 +69,11 @@ decltype(auto) example(long long value)
 {
     return asc::std::llabs(value);
 }
+
+bool verify_example()
+{
+    return example(-7) == 7;
+}
 ```
 
 ## Related APIs

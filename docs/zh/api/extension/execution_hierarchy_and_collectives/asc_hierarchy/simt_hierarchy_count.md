@@ -83,15 +83,15 @@ constexpr unsigned long long count(asc::grid_level) const noexcept;
 
 ## 调用示例
 
-以下Host片段使用具体类型演示本页接口；对象和指针的有效期须满足本页约束。
+以下Host示例使用具体类型或维度，检查独立的预期值；不查询正在运行的Device执行上下文。
 
 ```cpp
 #include <asc/hierarchy>
 
-decltype(auto) example(const asc::simt_hierarchy& hierarchy)
+bool example()
 {
-    auto blocks = hierarchy.count(asc::block);
-    return blocks;
+    const auto hierarchy = asc::make_hierarchy(asc::grid_dims<2, 3, 4>(), asc::block_dims<8, 4, 2>());
+    return hierarchy.count(asc::grid) == 24 && hierarchy.count(asc::block) == 64;
 }
 ```
 

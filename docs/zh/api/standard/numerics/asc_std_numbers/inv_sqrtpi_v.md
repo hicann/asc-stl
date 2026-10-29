@@ -52,6 +52,7 @@ template<class Tp> inline constexpr Tp inv_sqrtpi_v = __numbers<Tp>::__inv_sqrtp
 #include <asc/std/numbers>
 
 inline constexpr auto example = asc::std::inv_sqrtpi_v<float>;
+static_assert(example > 0.5641895 && example < 0.5641897);
 ```
 
 ## 关联API

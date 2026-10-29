@@ -75,6 +75,11 @@ decltype(auto) example()
 {
     return asc::std::to_integer<unsigned int>(asc::std::byte{7});
 }
+
+bool verify_example()
+{
+    return example() == 7u;
+}
 ```
 
 ## Related APIs

@@ -56,6 +56,7 @@
 #ifndef EILSEQ
 #error "EILSEQ is required by this public Header"
 #endif
+static_assert(EILSEQ > 0 && EILSEQ != EDOM);
 ```
 
 ## 关联API

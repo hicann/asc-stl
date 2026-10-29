@@ -166,15 +166,67 @@ asc::execution_status make_pinned_buffer(asc::pinned_buffer<T>& output, const as
 
 ## Example
 
-The following Host snippet has the caller provide a valid memory resource and Stream; the buffer owns the allocation result.
+This complete example uses the real CANN Runtime and selects device 0, which must be available before running. Asynchronous waits are limited to 10 seconds. Failure terminates the example process to avoid releasing resources still in use; the controller must stop subsequent tasks and recheck device health. On success, work completes before resources are closed, the device is reset, and the Runtime is finalized.
 
 ```cpp
+#include <acl/acl.h>
+#include <asc/stream>
+#include <cstdlib>
+
+void check(bool condition)
+{
+    if (!condition) {
+        std::_Exit(2);
+    }
+}
+
+void finish(asc::stream_ref stream)
+{
+    check(aclrtSynchronizeStreamWithTimeout(stream.native_handle(), 10000) == ACL_SUCCESS);
+}
 #include <asc/buffer>
 
-decltype(auto) example(const asc::pinned_memory_resource_ref& resource, asc::stream_ref stream)
+
+void run_example()
 {
-    asc::pinned_buffer<int> output;
-    return asc::make_pinned_buffer(output, resource, stream, 4);
+    asc::stream stream;
+    check(asc::make_stream(stream));
+    asc::pinned_memory_resource resource;
+    const asc::pinned_memory_resource_ref reference(resource);
+    const int values[4] = {2, 4, 6, 8};
+    asc::pinned_buffer<int> buffers[4];
+    check(asc::make_pinned_buffer(buffers[0], reference, stream, 4).success());
+    for (int i = 0; i < 4; ++i) {
+        buffers[0].data()[i] = 0;
+    }
+    check(asc::make_pinned_buffer(buffers[1], reference, stream, 4, 7).success());
+    check(asc::make_pinned_buffer(buffers[2], reference, stream, values, values + 4).success());
+    check(asc::make_pinned_buffer(buffers[3], reference, stream, values, asc::std::size_t(4)).success());
+    for (int i = 0; i < 4; ++i) {
+        check(buffers[i].size() == 4 && buffers[i].size_bytes() == 4 * sizeof(int));
+        for (int j = 0; j < 4; ++j) {
+            const int expected = i == 0 ? 0 : (i == 1 ? 7 : values[j]);
+            check(buffers[i].data()[j] == expected);
+        }
+        check(buffers[i].close().success());
+    }
+    finish(stream);
+    check(stream.close());
+}
+
+int main()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) {
+        return 1;
+    }
+    if (!asc::set_current_device(asc::device_ref(0))) {
+        check(aclFinalize() == ACL_SUCCESS);
+        return 1;
+    }
+    run_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return reset && finalized ? 0 : 1;
 }
 ```
 

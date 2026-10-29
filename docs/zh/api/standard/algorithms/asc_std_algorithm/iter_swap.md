@@ -76,10 +76,11 @@ constexpr auto iter_swap(ForwardIterator1 left, ForwardIterator2 right) noexcept
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    int values[8] = {8, 3, 6, 1, 7, 2, 5, 4};
     asc::std::iter_swap(values, values + 1);
+    return values[0] == 3 && values[1] == 8 && values[2] == 6;
 }
 ```
 

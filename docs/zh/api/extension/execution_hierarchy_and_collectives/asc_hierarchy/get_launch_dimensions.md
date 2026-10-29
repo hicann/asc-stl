@@ -60,14 +60,18 @@ constexpr asc::launch_dimensions get_launch_dimensions(asc::simt_hierarchy hiera
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体类型或维度，检查独立的预期值；不查询正在运行的Device执行上下文。
 
 ```cpp
 #include <asc/hierarchy>
 
-decltype(auto) example(asc::simt_hierarchy hierarchy)
+bool example()
 {
-    return asc::get_launch_dimensions(hierarchy);
+    const auto hierarchy = asc::make_hierarchy(asc::grid_dims<2, 3, 4>(), asc::block_dims<8, 4, 2>());
+    const auto dimensions = asc::get_launch_dimensions(hierarchy);
+    return dimensions.grid.x == 2 && dimensions.grid.y == 3 && dimensions.grid.z == 4 &&
+        dimensions.block.x == 8 && dimensions.block.y == 4 && dimensions.block.z == 2 &&
+        dimensions.grid.count() == 24 && dimensions.block.count() == 64;
 }
 ```
 

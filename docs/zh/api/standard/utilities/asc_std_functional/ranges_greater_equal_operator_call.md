@@ -71,6 +71,11 @@ decltype(auto) example()
 {
     return asc::std::ranges::greater_equal{}(1, 2);
 }
+
+bool verify_example()
+{
+    return example() == false;
+}
 ```
 
 ## 关联API

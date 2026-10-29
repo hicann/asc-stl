@@ -105,6 +105,11 @@ decltype(auto) example()
     asc::std::complex<float> value{1.0f, 2.0f};
     return asc::std::norm(value);
 }
+
+bool verify_example()
+{
+    return example() == 5.0f;
+}
 ```
 
 ## 关联API

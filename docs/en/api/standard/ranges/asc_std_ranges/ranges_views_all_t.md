@@ -48,12 +48,15 @@ template<class Range> using all_t = decltype(::asc::std::ranges::views::all(decl
 The following snippet shows the alias type with concrete template arguments.
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/ranges>
 
 void use_type()
 {
     using selected = asc::std::ranges::views::all_t<int (&)[4]>;
 }
+
+static_assert(asc::std::is_same_v<asc::std::ranges::views::all_t<int (&)[4]>, asc::std::ranges::ref_view<int[4]>>);
 ```
 
 ## Related APIs

@@ -79,6 +79,11 @@ decltype(auto) example()
 {
     return asc::std::cmp_equal(1u, 1);
 }
+
+bool verify_example()
+{
+    return example();
+}
 ```
 
 ## Related APIs

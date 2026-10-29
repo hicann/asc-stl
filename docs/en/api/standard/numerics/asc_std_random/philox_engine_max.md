@@ -68,6 +68,11 @@ decltype(auto) example()
     asc::std::philox4x32 generator{};
     return asc::std::philox4x32::max();
 }
+
+bool verify_example()
+{
+    return example() == 0xffffffffu;
+}
 ```
 
 ## Related APIs

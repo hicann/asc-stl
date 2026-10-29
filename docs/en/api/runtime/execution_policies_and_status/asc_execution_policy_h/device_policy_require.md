@@ -61,15 +61,18 @@ constexpr asc::device_policy require(asc::execution_requirements requirements) c
 
 ## Example
 
-The following Host snippet demonstrates the call with concrete objects; resource operations must follow the initialization and lifetime constraints on this page.
+This Host example submits no Runtime work and checks configuration or resource-reference results using concrete values.
 
 ```cpp
 #include <asc/execution.policy.h>
 
-decltype(auto) example(asc::device_policy policy, asc::execution_requirements requirements)
+bool example()
 {
-    auto configured = policy.require(requirements);
-    return configured;
+    const auto requirements = asc::require(asc::determinism::run_to_run);
+    const auto base = asc::execution::device;
+    const auto configured = base.require(requirements);
+    return configured.requirements().determinism_value() == asc::determinism::run_to_run &&
+        base.requirements().determinism_value() == asc::determinism::not_guaranteed;
 }
 ```
 

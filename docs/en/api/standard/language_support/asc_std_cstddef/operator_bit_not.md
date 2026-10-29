@@ -69,6 +69,11 @@ decltype(auto) example(asc::std::byte value)
 {
     return asc::std::operator~(value);
 }
+
+bool verify_example()
+{
+    return asc::std::to_integer<unsigned int>(example(asc::std::byte{3})) == 252u;
+}
 ```
 
 ## Related APIs

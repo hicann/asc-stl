@@ -108,6 +108,12 @@ decltype(auto) example()
 {
     return asc::mul_overflow(7, 2);
 }
+
+bool verify_example()
+{
+    const auto actual = example();
+    return actual.value == 14 && actual.overflow == false;
+}
 ```
 
 ## Related APIs

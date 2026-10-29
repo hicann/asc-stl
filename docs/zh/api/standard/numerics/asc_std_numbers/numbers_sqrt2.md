@@ -55,7 +55,8 @@ inline constexpr double sqrt2 = 0x1.6a09e667f3bcc908b2fb1366ea95p+0;
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::sqrt2;
+inline constexpr auto value = asc::std::numbers::sqrt2;
+static_assert(value > 1.4142134 && value < 1.4142137);
 ```
 
 ## 关联API

@@ -91,14 +91,19 @@ constexpr asc::args::runtime_bounds<T> bounds(T lower, T upper) noexcept;
 
 ## 调用示例
 
-以下片段给出具体模板实参和调用对象。
+以下Host示例使用具体类型或维度，检查独立的预期值；不查询正在运行的Device执行上下文。
 
 ```cpp
 #include <asc/argument>
+#include <asc/std/type_traits>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::args::bounds<0, 10>();
+    constexpr auto fixed = asc::args::bounds<0, 10>();
+    static_assert(asc::std::is_same_v<decltype(fixed), const asc::args::static_bounds<0, 10>>);
+    static_assert(fixed.lower() == 0 && fixed.upper() == 10);
+    const auto dynamic = asc::args::bounds(0, 10);
+    return dynamic.lower() == 0 && dynamic.upper() == 10;
 }
 ```
 

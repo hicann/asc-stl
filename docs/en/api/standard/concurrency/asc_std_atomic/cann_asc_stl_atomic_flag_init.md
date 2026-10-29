@@ -52,9 +52,11 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/atomic>
 
-#ifndef CANN_ASC_STL_ATOMIC_FLAG_INIT
-#error "CANN_ASC_STL_ATOMIC_FLAG_INIT is required by this public Header"
-#endif
+bool example()
+{
+    asc::std::atomic_flag value = CANN_ASC_STL_ATOMIC_FLAG_INIT;
+    return !value.test_and_set();
+}
 ```
 
 ## Related APIs

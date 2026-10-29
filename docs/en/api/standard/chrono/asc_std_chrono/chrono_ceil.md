@@ -103,10 +103,10 @@ The following snippet demonstrates the call on this page with concrete objects.
 ```cpp
 #include <asc/std/chrono>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::chrono::milliseconds value{1500};
-    return asc::std::chrono::ceil<asc::std::chrono::seconds>(value);
+    namespace chrono = asc::std::chrono;
+    return chrono::ceil<chrono::seconds>(chrono::milliseconds{1500}).count() == 2;
 }
 ```
 

@@ -52,6 +52,7 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef PTRDIFF_MIN
 #error "PTRDIFF_MIN is required by this public Header"
 #endif
+static_assert(PTRDIFF_MIN < 0);
 ```
 
 ## Related APIs

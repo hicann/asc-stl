@@ -67,6 +67,11 @@ decltype(auto) example()
     asc::std::minstd_rand generator{};
     return asc::std::minstd_rand::max();
 }
+
+bool verify_example()
+{
+    return example() == 2147483646u;
+}
 ```
 
 ## Related APIs

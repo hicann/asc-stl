@@ -81,15 +81,18 @@ constexpr asc::extent3d extents(asc::grid_level) const noexcept;
 
 ## 调用示例
 
-以下Host片段使用具体类型演示本页接口；对象和指针的有效期须满足本页约束。
+以下Host示例使用具体类型或维度，检查独立的预期值；不查询正在运行的Device执行上下文。
 
 ```cpp
 #include <asc/hierarchy>
 
-decltype(auto) example(const asc::simt_hierarchy& hierarchy)
+bool example()
 {
-    auto dimensions = hierarchy.extents(asc::block);
-    return dimensions;
+    const auto hierarchy = asc::make_hierarchy(asc::grid_dims<2, 3, 4>(), asc::block_dims<8, 4, 2>());
+    const auto grid = hierarchy.extents(asc::grid);
+    const auto block = hierarchy.extents(asc::block);
+    return grid.x == 2 && grid.y == 3 && grid.z == 4 &&
+        block.x == 8 && block.y == 4 && block.z == 2;
 }
 ```
 

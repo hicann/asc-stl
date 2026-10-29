@@ -63,9 +63,10 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/ctime>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::clock();
+    const auto value = asc::std::clock();
+    return value != static_cast<asc::std::clock_t>(-1);
 }
 ```
 

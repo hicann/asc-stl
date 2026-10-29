@@ -79,6 +79,11 @@ decltype(auto) example()
     asc::std::bitset<8> right(5u);
     return asc::std::operator&(left, right);
 }
+
+bool verify_example()
+{
+    return example().to_ulong() == 1u;
+}
 ```
 
 ## Related APIs

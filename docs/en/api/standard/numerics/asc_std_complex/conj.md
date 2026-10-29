@@ -104,6 +104,12 @@ decltype(auto) example()
     asc::std::complex<float> value{1.0f, 2.0f};
     return asc::std::conj(value);
 }
+
+bool verify_example()
+{
+    const auto result = example();
+    return result.real() == 1.0f && result.imag() == -2.0f;
+}
 ```
 
 ## Related APIs

@@ -154,14 +154,20 @@ constexpr asc::execution_requirements require(asc::tie_break value) noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例不提交Runtime任务；以具体值检查配置或资源引用的可观察结果。这里只验证要求被记录；当前后端是否兑现要求应以对应算法的支持说明为准。
 
 ```cpp
 #include <asc/execution.require.h>
 
-decltype(auto) example(asc::determinism value)
+bool example()
 {
-    return asc::require(value);
+    const auto deterministic = asc::require(asc::determinism::run_to_run);
+    const auto ordered = asc::require(deterministic, asc::output_ordering::stable_sorted);
+    const auto selected = asc::require(ordered, asc::tie_break::prefer_smaller_index);
+    return selected.determinism_value() == asc::determinism::run_to_run &&
+        selected.output_ordering_value() == asc::output_ordering::stable_sorted &&
+        selected.tie_break_value() == asc::tie_break::prefer_smaller_index &&
+        deterministic.output_ordering_value() == asc::output_ordering::unsorted;
 }
 ```
 

@@ -51,7 +51,31 @@ The following snippet shows the basic call form of the interface on this page; i
 ```cpp
 #include <asc/tensor_copy>
 
-auto value = asc::tensor_copy_status::zero_extent;
+bool example()
+{
+    using status = asc::tensor_copy_status;
+    const status selected = status::zero_extent;
+    const status all[] = {
+        status::success,
+        status::zero_extent,
+        status::zero_stride,
+        status::size_overflow,
+        status::insufficient_source,
+        status::insufficient_destination,
+        status::invalid_stage
+    };
+    for (unsigned left = 0; left < 7; ++left) {
+        for (unsigned right = left + 1; right < 7; ++right) {
+            if (all[left] == all[right]) return false;
+        }
+    }
+    const unsigned int extents[2] = {2, 2};
+    const unsigned int strides[2] = {2, 1};
+    const unsigned int padding[2] = {0, 0};
+    auto descriptor = asc::make_tensor_copy_descriptor(extents, strides, strides, padding, padding);
+    descriptor.set_dimension(0, 0, 2, 2, 0, 0);
+    return descriptor.validate() == selected;
+}
 ```
 
 ## Related APIs

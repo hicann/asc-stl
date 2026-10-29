@@ -51,6 +51,11 @@ template<class T> inline constexpr const empty_view<T> empty;
 #include <asc/std/ranges>
 
 inline constexpr auto example = asc::std::ranges::views::empty<int>;
+
+bool verify_example()
+{
+    return example.empty() && example.size() == 0 && example.begin() == example.end();
+}
 ```
 
 ## 关联API

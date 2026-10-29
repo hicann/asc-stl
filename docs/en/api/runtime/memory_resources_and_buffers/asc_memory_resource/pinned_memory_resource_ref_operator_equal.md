@@ -60,15 +60,21 @@ constexpr bool operator==(const asc::pinned_memory_resource_ref& other) const no
 
 ## Example
 
-The following Host snippet demonstrates the call with concrete objects; resource operations must follow the initialization and lifetime constraints on this page.
+This Host example submits no Runtime work and checks configuration or resource-reference results using concrete values.
 
 ```cpp
 #include <asc/memory_resource>
 
-decltype(auto) example(const asc::pinned_memory_resource_ref& left, const asc::pinned_memory_resource_ref& right)
+bool example()
 {
-    const bool equal = left == right;
-    return equal;
+    asc::pinned_memory_resource first;
+    asc::pinned_memory_resource second;
+    const asc::pinned_memory_resource_ref a(first);
+    const asc::pinned_memory_resource_ref same(first);
+    const asc::pinned_memory_resource_ref different(second);
+    const asc::pinned_memory_resource_ref empty;
+    const asc::pinned_memory_resource_ref another_empty;
+    return a == same && !(a == different) && empty == another_empty;
 }
 ```
 

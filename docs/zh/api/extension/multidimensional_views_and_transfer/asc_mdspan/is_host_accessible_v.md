@@ -62,6 +62,7 @@ inline constexpr bool is_host_accessible_v = asc::is_host_mdspan_v<T>;
 
 inline constexpr auto example =
     asc::is_host_accessible_v<asc::host_mdspan<int, asc::std::extents<asc::std::size_t, 4>>>;
+static_assert(example, "the selected documented type has this capability");
 ```
 
 ## 关联API

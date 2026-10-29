@@ -105,10 +105,14 @@ The following Host snippet demonstrates the call with a valid integer range and 
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    int values[8] = {8, 3, 6, 1, 7, 2, 5, 4};
     asc::std::nth_element(values, values + 4, values + 8);
+    if (values[4] != 5) return false;
+    for (int index = 0; index < 4; ++index) { if (values[index] > 5) return false; }
+    for (int index = 5; index < 8; ++index) { if (values[index] < 5) return false; }
+    return true;
 }
 ```
 

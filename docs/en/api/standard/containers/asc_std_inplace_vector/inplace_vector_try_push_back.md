@@ -83,19 +83,17 @@ The following example shows both outcomes, successful insertion and exhausted ca
 
 ```cpp
 #include <asc/std/inplace_vector>
+#include <memory>
 
 bool example()
 {
-    asc::std::inplace_vector<int, 2> values;
+    using sequence = asc::std::inplace_vector<int, 8>;
+    sequence values;
     const auto first = values.try_push_back(7);
-    const auto second = values.try_push_back(9);
+    for (int index = 1; index < 8; ++index)
+        values.try_push_back(9);
     const auto overflow = values.try_push_back(11);
-
-    // The first two insertions succeed; once the fixed capacity is reached, the third insertion returns an empty result.
-    return first.has_value() && *first == 7
-        && second.has_value() && *second == 9
-        && !overflow.has_value()
-        && values.size() == 2;
+    return first.has_value() && *first == 7 && !overflow.has_value() && values.size() == 8;
 }
 ```
 

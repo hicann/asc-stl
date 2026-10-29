@@ -107,10 +107,12 @@ constexpr void inplace_merge(BidirectionalIterator first, BidirectionalIterator 
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    int values[8] = {1, 3, 5, 7, 2, 4, 6, 8};
     asc::std::inplace_merge(values, values + 4, values + 8);
+    for (int index = 0; index < 8; ++index) { if (values[index] != index + 1) return false; }
+    return true;
 }
 ```
 

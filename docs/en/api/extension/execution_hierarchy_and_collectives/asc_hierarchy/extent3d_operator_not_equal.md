@@ -61,15 +61,19 @@ constexpr bool operator!=(asc::extent3d other) const noexcept;
 
 ## Example
 
-The following Host snippet demonstrates the interface on this page with concrete types; the lifetimes of objects and pointers must satisfy the constraints on this page.
+This Host example uses concrete types or dimensions and checks independent expected values without querying a running Device context.
 
 ```cpp
 #include <asc/hierarchy>
 
-decltype(auto) example(asc::extent3d left, asc::extent3d right)
+bool example()
 {
-    const bool different = left != right;
-    return different;
+    const asc::extent3d left(2, 3, 4);
+    const asc::extent3d same(2, 3, 4);
+    const asc::extent3d changed_x(7, 3, 4);
+    const asc::extent3d changed_y(2, 7, 4);
+    const asc::extent3d changed_z(2, 3, 7);
+    return !(left != same) && left != changed_x && left != changed_y && left != changed_z;
 }
 ```
 

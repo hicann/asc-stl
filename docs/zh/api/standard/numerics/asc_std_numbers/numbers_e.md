@@ -55,7 +55,8 @@ inline constexpr double e = 0x1.5bf0a8b1457695355fb8ac404e7ap+1;
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::e;
+inline constexpr auto value = asc::std::numbers::e;
+static_assert(value > 2.7182817 && value < 2.7182819);
 ```
 
 ## 关联API

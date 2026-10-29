@@ -50,6 +50,7 @@ The following snippet reads the interface value with concrete template arguments
 #include <asc/type_traits>
 
 inline constexpr auto example = asc::is_bitwise_comparable_v<int>;
+static_assert(example, "the selected documented type has this capability");
 ```
 
 ## Related APIs

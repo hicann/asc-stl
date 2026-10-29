@@ -85,10 +85,12 @@ constexpr asc::std::optional<T&>& operator=(const asc::std::optional<T&>&) noexc
 ```cpp
 #include <asc/std/optional>
 
-void example(int& value)
+bool example()
 {
+    int value = 7;
     asc::std::optional<int&> reference(value);
     reference = asc::std::nullopt;
+    return !reference.has_value() && value == 7;
 }
 ```
 

@@ -50,9 +50,12 @@ inline constexpr const parallel_unsequenced_policy par_unseq;
 以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/execution>
 
 auto value = asc::std::execution::par_unseq;
+
+static_assert(asc::std::is_same_v<decltype(value), asc::std::execution::parallel_unsequenced_policy>);
 ```
 
 ## 关联API

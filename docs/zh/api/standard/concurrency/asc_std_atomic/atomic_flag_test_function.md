@@ -69,9 +69,12 @@ bool atomic_flag_test(const atomic_flag* object) noexcept;
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example(const asc::std::atomic_flag * object)
+bool example()
 {
-    return asc::std::atomic_flag_test(object);
+    asc::std::atomic_flag flag{};
+    const bool before = asc::std::atomic_flag_test(&flag);
+    flag.test_and_set();
+    return !before && asc::std::atomic_flag_test(&flag);
 }
 ```
 

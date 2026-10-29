@@ -65,9 +65,10 @@ namespace asc::std::chrono {
 ```cpp
 #include <asc/std/chrono>
 
-decltype(auto) example(const asc::std::chrono::hours & value)
+bool example()
 {
-    return asc::std::chrono::make12(value);
+    namespace chrono = asc::std::chrono;
+    return chrono::make12(chrono::hours{13}).count() == 1 && chrono::make12(chrono::hours{0}).count() == 12;
 }
 ```
 

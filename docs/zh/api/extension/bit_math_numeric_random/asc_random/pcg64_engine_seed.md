@@ -63,10 +63,22 @@ constexpr void seed(result_type seed = default_seed) noexcept;
 ```cpp
 #include <asc/random>
 
-void example()
+bool example()
 {
-    asc::pcg64 generator{};
+    asc::pcg64 generator;
     generator.seed(9);
+    const asc::pcg64::result_type expected[] = {
+        4176210987077628350ULL,
+        5147113462634521278ULL,
+        7929888373037025941ULL,
+        3841151875209151278ULL,
+        7941121362626835034ULL,
+        3659436080610969708ULL
+    };
+    for (auto value : expected) {
+        if (generator() != value) return false;
+    }
+    return true;
 }
 ```
 

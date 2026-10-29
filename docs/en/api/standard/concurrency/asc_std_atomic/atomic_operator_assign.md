@@ -66,9 +66,11 @@ The following Host snippet demonstrates the atomic operation; device-side object
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example(asc::std::atomic<int>& value)
+bool example()
 {
-    return value = 1;
+    asc::std::atomic<int> value{1};
+    const int assigned = (value = 7);
+    return assigned == 7 && value.load() == 7;
 }
 ```
 

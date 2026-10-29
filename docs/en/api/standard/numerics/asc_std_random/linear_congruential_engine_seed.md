@@ -92,10 +92,11 @@ The following Host snippet demonstrates the call with concrete numeric types; th
 ```cpp
 #include <asc/std/random>
 
-void example()
+bool example()
 {
-    asc::std::minstd_rand generator{};
+    asc::std::minstd_rand generator;
     generator.seed(9);
+    return generator() == 434439u;
 }
 ```
 

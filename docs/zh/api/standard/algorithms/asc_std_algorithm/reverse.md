@@ -78,10 +78,13 @@ constexpr void reverse(BidirectionalIterator first, BidirectionalIterator last);
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    int values[8] = {8, 3, 6, 1, 7, 2, 5, 4};
     asc::std::reverse(values, values + 8);
+    const int expected[8] = {4, 5, 2, 7, 1, 6, 3, 8};
+    for (int index = 0; index < 8; ++index) { if (values[index] != expected[index]) return false; }
+    return true;
 }
 ```
 

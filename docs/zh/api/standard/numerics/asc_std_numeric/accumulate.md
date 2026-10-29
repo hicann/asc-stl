@@ -113,6 +113,11 @@ decltype(auto) example()
     int input[4] = {1, 2, 3, 4};
     return asc::std::accumulate(input, input + 4, 0);
 }
+
+bool verify_example()
+{
+    return example() == 10;
+}
 ```
 
 ## 关联API

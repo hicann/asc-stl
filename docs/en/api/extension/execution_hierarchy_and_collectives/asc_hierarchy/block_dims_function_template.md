@@ -62,14 +62,18 @@ template<unsigned int X, unsigned int Y = 1, unsigned int Z = 1> constexpr asc::
 
 ## Example
 
-The following snippet provides concrete template arguments and the call target.
+This Host example uses concrete types or dimensions and checks independent expected values without querying a running Device context.
 
 ```cpp
 #include <asc/hierarchy>
+#include <asc/std/type_traits>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::block_dims<4, 1, 1>();
+    const auto dimensions = asc::block_dims<8, 4, 2>();
+    static_assert(asc::std::is_same_v<decltype(dimensions), const asc::level_dimensions<asc::block_level>>);
+    const auto extents = dimensions.extents;
+    return extents.x == 8 && extents.y == 4 && extents.z == 2 && extents.count() == 64;
 }
 ```
 

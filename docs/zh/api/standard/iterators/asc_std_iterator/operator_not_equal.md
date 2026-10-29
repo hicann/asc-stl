@@ -28,15 +28,17 @@
 
 头文件路径为：`<asc/std/iterator>`。
 
-`asc::std::operator!=(const move_sentinel<Sentinel>&, const move_iterator<Iter>&)`由`<asc/std/iterator>`提供，移动哨位与移动迭代器的反向不等比较。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
+表达式 `sentinel != iterator` 由`<asc/std/iterator>`提供，用于移动哨位与移动迭代器的反向不等比较。接口遵循对应C++ 标准设施的语义；ASC-STL的语言模式和调用位置以本页声明为准。
 
 标准语义参考：[cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator)。
 
 ## 函数原型
 
+以下显式重载用于兼容分支。C++20 Host 通过相等运算符的重写规则支持同一比较表达式。
+
 ```cpp
 namespace asc::std {
-template<class Iter, class Sentinel, asc::std::enable_if_t<__move_iter_comparable<Iter, Sentinel>, int> = 0> constexpr bool operator!=(const move_sentinel<Sentinel>& sentinel, const move_iterator<Iter>& iterator);
+template<class Iter, class Sentinel, asc::std::enable_if_t<sentinel_for<Sentinel, Iter> && __move_iter_comparable<Iter, Sentinel>, int> = 0> constexpr bool operator!=(const move_sentinel<Sentinel>& sentinel, const move_iterator<Iter>& iterator);
 } // namespace asc::std
 ```
 
@@ -64,7 +66,8 @@ template<class Iter, class Sentinel, asc::std::enable_if_t<__move_iter_comparabl
 
 ## 约束说明
 
-- 显式提供的不等重载：底层迭代器与哨位可比较时取相等判定的反值。
+- 使用 `sentinel != iterator` 调用：底层迭代器与哨位必须可比较，结果取相等判定的反值。
+- C++20 Host 不提供反向 `operator!=` 的显式函数名调用，应使用上述操作符表达式。
 
 ## 调用示例
 
@@ -76,7 +79,15 @@ template<class Iter, class Sentinel, asc::std::enable_if_t<__move_iter_comparabl
 template <class Iter, class Sentinel>
 decltype(auto) example(const asc::std::move_sentinel<Sentinel>& sentinel, const asc::std::move_iterator<Iter>& iterator)
 {
-    return asc::std::operator!=(sentinel, iterator);
+    return sentinel != iterator;
+}
+
+bool verify_example()
+{
+    int values[] = {1, 2};
+    asc::std::move_sentinel<int*> sentinel(values + 2);
+    asc::std::move_iterator<int*> iterator(values + 1);
+    return example(sentinel, iterator);
 }
 ```
 

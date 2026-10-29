@@ -66,10 +66,8 @@ The following Host snippet uses an explicitly provided allocator and fully relea
 
 ```cpp
 #include <asc/std/memory>
-#include <functional>
+#include <asc/std/type_traits>
 #include <memory>
-#include <string>
-#include <utility>
 
 template <class T>
 struct example_allocator : ::std::allocator<T> {
@@ -82,11 +80,9 @@ struct example_allocator : ::std::allocator<T> {
     template <class U> example_allocator(const example_allocator<U>&) noexcept {}
 };
 
-decltype(auto) example(const example_allocator<int>& allocator)
-{
-    auto selected = asc::std::allocator_traits<example_allocator<int>>::select_on_container_copy_construction(allocator);
-    return selected;
-}
+using selected = decltype(asc::std::allocator_traits<example_allocator<int>>::select_on_container_copy_construction(asc::std::declval<const example_allocator<int>&>()));
+
+static_assert(asc::std::is_same_v<selected, example_allocator<int>>);
 ```
 
 ## Related APIs

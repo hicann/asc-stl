@@ -51,11 +51,12 @@ using reference = Element&;
 
 ```cpp
 #include <asc/std/mdspan>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::default_accessor<int>::reference;
-}
+using alias_type = typename asc::std::default_accessor<int>::reference;
+static_assert(::std::is_same_v<alias_type, int&>);
 ```
 
 ## 关联API

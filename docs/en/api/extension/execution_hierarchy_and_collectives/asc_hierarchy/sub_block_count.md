@@ -55,14 +55,17 @@ No parameters.
 
 ## Example
 
-The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
+This SIMD kernel writes one entry for each sub-block of each AI Core block. The caller must provide valid GM output for at least the AI Core block count times the actual sub-block count unsigned int values and read it back after kernel completion. Every entry contains the sub-block count of the actual hardware and launch environment. This query is available only in SIMD; the documentation gate checks actual SIMD compilation, not successful NPU execution.
 
 ```cpp
 #include <asc/hierarchy>
 
-__aicore__ decltype(auto) example()
+__global__ __vector__ void example(__gm__ unsigned int* output)
 {
-    return asc::sub_block_count();
+    const auto block = asc::block_index();
+    const auto sub_blocks = asc::sub_block_count();
+    const auto sub_block = asc::sub_block_index();
+    output[block * sub_blocks + sub_block] = asc::sub_block_count();
 }
 ```
 

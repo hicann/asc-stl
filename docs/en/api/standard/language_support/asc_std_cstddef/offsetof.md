@@ -52,6 +52,9 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef offsetof
 #error "offsetof is required by this public Header"
 #endif
+struct record { int first; int second; };
+static_assert(offsetof(record, first) == 0);
+static_assert(offsetof(record, second) == sizeof(int));
 ```
 
 ## Related APIs

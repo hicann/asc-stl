@@ -84,13 +84,19 @@ The following Host snippet explicitly provides a standard container as the under
 
 ```cpp
 #include <asc/std/queue>
-#include <deque>
-#include <functional>
+#include <memory>
 #include <vector>
+#include <functional>
 
-void example(asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>& object)
+bool example()
 {
-    object.push(7);
+    using sequence = asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>;
+    sequence values;
+    values.push(3);
+    values.push(7);
+    const bool first = values.size() == 2 && values.top() == 7;
+    values.pop();
+    return first && values.size() == 1 && values.top() == 3;
 }
 ```
 

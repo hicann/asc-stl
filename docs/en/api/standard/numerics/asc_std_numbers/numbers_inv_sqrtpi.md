@@ -55,7 +55,8 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::inv_sqrtpi;
+inline constexpr auto value = asc::std::numbers::inv_sqrtpi;
+static_assert(value > 0.5641895 && value < 0.5641897);
 ```
 
 ## Related APIs

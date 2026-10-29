@@ -78,6 +78,11 @@ decltype(auto) example()
 {
     return asc::std::saturating_cast<unsigned char>(300);
 }
+
+bool verify_example()
+{
+    return example() == 255;
+}
 ```
 
 ## Related APIs

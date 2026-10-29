@@ -50,10 +50,22 @@ using index_type = Index;
 
 ```cpp
 #include <asc/random>
+#include <asc/std/type_traits>
 
-void use_type()
+static_assert(asc::std::is_same_v<asc::random_bijection<unsigned long long>::index_type, unsigned long long>);
+
+bool example()
 {
-    using alias_type = typename asc::random_bijection<unsigned long long>::index_type;
+    asc::pcg64 generator(9);
+    asc::random_bijection<unsigned long long> mapping(17, generator);
+    bool seen[17] = {};
+    for (asc::random_bijection<unsigned long long>::index_type index = 0; index < 17; ++index) {
+        const auto output = mapping(index);
+        if (output >= 17 || seen[output]) return false;
+        seen[output] = true;
+    }
+    for (bool present : seen) { if (!present) return false; }
+    return mapping.size() == 17;
 }
 ```
 

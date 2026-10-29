@@ -91,14 +91,19 @@ constexpr asc::args::runtime_bounds<T> bounds(T lower, T upper) noexcept;
 
 ## Example
 
-The following snippet provides concrete template arguments and the objects to call.
+This Host example uses concrete types or dimensions and checks independent expected values without querying a running Device context.
 
 ```cpp
 #include <asc/argument>
+#include <asc/std/type_traits>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::args::bounds<0, 10>();
+    constexpr auto fixed = asc::args::bounds<0, 10>();
+    static_assert(asc::std::is_same_v<decltype(fixed), const asc::args::static_bounds<0, 10>>);
+    static_assert(fixed.lower() == 0 && fixed.upper() == 10);
+    const auto dynamic = asc::args::bounds(0, 10);
+    return dynamic.lower() == 0 && dynamic.upper() == 10;
 }
 ```
 

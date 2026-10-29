@@ -56,10 +56,8 @@ The following snippet shows the alias type with concrete template arguments.
 ```cpp
 #include <asc/std/format>
 
-void use_type()
-{
-    using selected = asc::std::format_string<int>;
-}
+constexpr asc::std::format_string<int> example("{}");
+static_assert(example.size() == 2 && example.data()[0] == '{' && example.data()[1] == '}');
 ```
 
 ## Related APIs

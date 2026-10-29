@@ -75,10 +75,17 @@ constexpr size_type erase_if(Predicate predicate);
 
 ```cpp
 #include <asc/std/inplace_vector>
+#include <memory>
 
-decltype(auto) example(asc::std::inplace_vector<int, 8>& values)
+bool example()
 {
-    return values.erase_if([](int value) { return value < 0; });
+    using sequence = asc::std::inplace_vector<int, 8>;
+    sequence values;
+    values.unchecked_push_back(-1);
+    values.unchecked_push_back(7);
+    values.unchecked_push_back(-3);
+    const auto erased = values.erase_if([](int item) { return item < 0; });
+    return erased == 2 && values.size() == 1 && values[0] == 7;
 }
 ```
 

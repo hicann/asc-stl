@@ -99,6 +99,12 @@ decltype(auto) example()
     asc::std::uniform_int_distribution<int> distribution(0, 9);
     return distribution(generator);
 }
+
+bool verify_example()
+{
+    const auto result = example();
+    return result >= 0 && result <= 9;
+}
 ```
 
 ## 关联API

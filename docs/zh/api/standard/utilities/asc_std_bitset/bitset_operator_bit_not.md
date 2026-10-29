@@ -67,6 +67,12 @@ decltype(auto) example(const asc::std::bitset<8>& bits)
 {
     return (~bits);
 }
+
+bool verify_example()
+{
+    const asc::std::bitset<8> bits(3u);
+    return example(bits).to_ulong() == 252u;
+}
 ```
 
 ## 关联API

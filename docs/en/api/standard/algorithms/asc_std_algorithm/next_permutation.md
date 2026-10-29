@@ -104,10 +104,14 @@ The following Host snippet demonstrates the call with a valid integer range and 
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    return asc::std::next_permutation(values, values + 8);
+    int values[4] = {1, 2, 3, 4};
+    const bool advanced = asc::std::next_permutation(values, values + 4);
+    const int expected[4] = {1, 2, 4, 3};
+    if (advanced != true) return false;
+    for (int index = 0; index < 4; ++index) { if (values[index] != expected[index]) return false; }
+    return true;
 }
 ```
 

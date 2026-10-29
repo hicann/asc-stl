@@ -60,6 +60,7 @@ The following snippet reads the interface value with concrete template arguments
 #include <asc/std/utility>
 
 inline constexpr auto example = asc::is_ub_accessor_v<asc::ub_accessor<asc::std::default_accessor<int>>>;
+static_assert(example, "the selected documented type has this capability");
 ```
 
 ## Related APIs

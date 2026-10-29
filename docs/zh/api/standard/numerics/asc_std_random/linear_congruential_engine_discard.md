@@ -64,10 +64,11 @@ constexpr void discard(unsigned long long count) noexcept;
 ```cpp
 #include <asc/std/random>
 
-void example()
+bool example()
 {
-    asc::std::minstd_rand generator{};
+    asc::std::minstd_rand generator;
     generator.discard(4);
+    return generator() == 2078669041u;
 }
 ```
 

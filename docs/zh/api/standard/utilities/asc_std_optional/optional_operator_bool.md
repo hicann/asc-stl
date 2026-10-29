@@ -68,6 +68,11 @@ decltype(auto) example()
     asc::std::optional<int> value(7);
     return static_cast<bool>(value);
 }
+
+bool verify_example()
+{
+    return example() == true;
+}
 ```
 
 ## 关联API

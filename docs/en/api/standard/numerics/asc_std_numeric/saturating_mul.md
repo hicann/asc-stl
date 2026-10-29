@@ -78,6 +78,11 @@ decltype(auto) example()
 {
     return asc::std::saturating_mul(8, 2);
 }
+
+bool verify_example()
+{
+    return example() == 16;
+}
 ```
 
 ## Related APIs

@@ -114,6 +114,11 @@ decltype(auto) example()
     int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     return asc::std::binary_search(values, values + 8, 5);
 }
+
+bool verify_example()
+{
+    return example() == true;
+}
 ```
 
 ## Related APIs

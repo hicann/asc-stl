@@ -54,6 +54,11 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef FP_SUBNORMAL
 #error "FP_SUBNORMAL is required by this public Header"
 #endif
+
+bool verify_example()
+{
+    return asc::std::fpclassify(0x1p-149f) == FP_SUBNORMAL;
+}
 ```
 
 ## Related APIs

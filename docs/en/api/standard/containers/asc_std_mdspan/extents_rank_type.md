@@ -51,11 +51,12 @@ The following snippet demonstrates the basic call form of the interface on this 
 
 ```cpp
 #include <asc/std/mdspan>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::extents<int, 2, 3>::rank_type;
-}
+using alias_type = typename asc::std::extents<int, 2, 3>::rank_type;
+static_assert(::std::is_same_v<alias_type, ::std::size_t>);
 ```
 
 ## Related APIs

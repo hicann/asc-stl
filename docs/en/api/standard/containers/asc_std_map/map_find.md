@@ -73,9 +73,8 @@ The following Host snippet uses an explicitly provided allocator; on the device 
 
 ```cpp
 #include <asc/std/map>
-#include <functional>
 #include <memory>
-#include <string>
+#include <functional>
 #include <utility>
 
 template <class T>
@@ -84,14 +83,23 @@ struct example_allocator : ::std::allocator<T> {
     using pointer = T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
+    template <class U>
+    struct rebind {
+        using other = example_allocator<U>;
+    };
     example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    template <class U>
+    example_allocator(const example_allocator<U>&) noexcept
+    {}
 };
 
-decltype(auto) example(asc::std::map<int, int, ::std::less<int>, example_allocator<::std::pair<const int, int>>>& values)
+bool example()
 {
-    return values.find(7);
+    using sequence = asc::std::map<int, int, ::std::less<int>, example_allocator<::std::pair<const int, int>>>;
+    sequence values(example_allocator<::std::pair<const int, int>>{});
+    values.insert(typename sequence::value_type(7, 9));
+    const auto found = values.find(7);
+    return found != values.end() && found->first == 7 && found->second == 9 && values.find(8) == values.end();
 }
 ```
 

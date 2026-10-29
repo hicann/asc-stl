@@ -59,12 +59,34 @@ The following snippet assumes that object points to a constructed object; after 
 
 ```cpp
 #include <asc/std/inplace_vector>
+#include <new>
 
-using example_object = asc::std::inplace_vector<int, 8>;
-void example(example_object* object)
+struct counted_value {
+    int* live;
+    explicit counted_value(int& count) : live(&count)
+    {
+        ++*live;
+    }
+    counted_value(counted_value&& other) : live(other.live)
+    {
+        ++*live;
+    }
+    ~counted_value()
+    {
+        --*live;
+    }
+};
+
+bool example()
 {
-    // object points to a constructed object; do not access the object again after destruction.
-    object->~example_object();
+    int live = 0;
+    using sequence = asc::std::inplace_vector<counted_value, 2>;
+    alignas(sequence) unsigned char storage[sizeof(sequence)];
+    auto* values = ::new (static_cast<void*>(storage)) sequence;
+    const auto added = values->try_emplace_back(live);
+    const bool constructed = added.has_value() && live == 1;
+    values->~sequence();
+    return constructed && live == 0;
 }
 ```
 

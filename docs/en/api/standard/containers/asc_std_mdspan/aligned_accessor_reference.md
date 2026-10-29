@@ -51,11 +51,12 @@ The following snippet demonstrates the basic call form of the interface on this 
 
 ```cpp
 #include <asc/std/mdspan>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::aligned_accessor<int, 16>::reference;
-}
+using alias_type = typename asc::std::aligned_accessor<int, 16>::reference;
+static_assert(::std::is_same_v<alias_type, int&>);
 ```
 
 ## Related APIs

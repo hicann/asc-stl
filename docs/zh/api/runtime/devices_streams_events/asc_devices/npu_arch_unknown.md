@@ -52,6 +52,11 @@ unknown = 0;
 #include <asc/devices>
 
 auto value = asc::npu_arch::unknown;
+
+bool verify_example()
+{
+    return static_cast<unsigned int>(value) == 0u;
+}
 ```
 
 ## 关联API

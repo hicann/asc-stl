@@ -64,13 +64,18 @@ constexpr void swap(stack<T, Container>& other) noexcept(noexcept(this->c.swap(o
 
 ```cpp
 #include <asc/std/stack>
+#include <memory>
 #include <deque>
-#include <functional>
-#include <vector>
 
-void example(asc::std::stack<int, ::std::deque<int>>& object, asc::std::stack<int, ::std::deque<int>>& other)
+bool example()
 {
-    object.swap(other);
+    using sequence = asc::std::stack<int, ::std::deque<int>>;
+    sequence values;
+    values.push(7);
+    sequence other;
+    other.push(9);
+    values.swap(other);
+    return values.top() == 9 && other.top() == 7;
 }
 ```
 

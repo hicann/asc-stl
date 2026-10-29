@@ -52,6 +52,7 @@
 #ifndef PTRDIFF_MIN
 #error "PTRDIFF_MIN is required by this public Header"
 #endif
+static_assert(PTRDIFF_MIN < 0);
 ```
 
 ## 关联API

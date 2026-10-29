@@ -95,6 +95,12 @@ decltype(auto) example(const wchar_t * input, wchar_t value)
 {
     return asc::std::wcsrchr(input, value);
 }
+
+bool verify_example()
+{
+    const wchar_t input[] = L"aba";
+    return example(input, L'a') == input + 2;
+}
 ```
 
 ## 关联API

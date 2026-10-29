@@ -103,6 +103,12 @@ decltype(auto) example(const Pointer & pointer)
 {
     return asc::std::to_address(pointer);
 }
+
+bool verify_example()
+{
+    int value = 19;
+    return example(&value) == &value;
+}
 ```
 
 The corresponding complete project uses `C++17` and has been verified by Host compilation and execution.

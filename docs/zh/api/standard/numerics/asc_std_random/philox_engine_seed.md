@@ -65,10 +65,11 @@ constexpr void seed(UIntType value = default_seed) noexcept;
 ```cpp
 #include <asc/std/random>
 
-void example()
+bool example()
 {
-    asc::std::philox4x32 generator{};
-    generator.seed(9);
+    asc::std::philox4x32 generator;
+    generator.seed(0);
+    return generator() == 0x6627e8d5u;
 }
 ```
 

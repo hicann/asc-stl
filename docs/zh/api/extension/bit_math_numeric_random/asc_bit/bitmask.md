@@ -75,6 +75,11 @@ decltype(auto) example()
 {
     return asc::bitmask<unsigned int>(2, 3);
 }
+
+bool verify_example()
+{
+    return example() == 28u;
+}
 ```
 
 ## 关联API

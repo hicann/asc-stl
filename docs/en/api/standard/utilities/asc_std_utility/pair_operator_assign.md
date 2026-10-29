@@ -184,10 +184,11 @@ The following Host snippet demonstrates the call with concrete types; input rang
 ```cpp
 #include <asc/std/utility>
 
-void example()
+bool example()
 {
     asc::std::pair<int, int> left(1, 2), right(3, 4);
     left = right;
+    return left.first == 3 && left.second == 4;
 }
 ```
 

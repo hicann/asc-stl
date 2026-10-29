@@ -71,11 +71,13 @@ constexpr unsigned int right_padding(unsigned int dimension) const noexcept;
 ```cpp
 #include <asc/tensor_copy>
 
-decltype(auto) example(const asc::tensor_copy_descriptor<2>& descriptor)
+bool example()
 {
-    // dimension 必须小于描述符的秩。
-    auto value = descriptor.right_padding(0);
-    return value;
+    const unsigned int extents[2] = {2, 2};
+    const unsigned int strides[2] = {2, 1};
+    const unsigned int padding[2] = {0, 0};
+    auto descriptor = asc::make_tensor_copy_descriptor(extents, strides, strides, padding, padding);
+    return descriptor.right_padding(0) == 0;
 }
 ```
 

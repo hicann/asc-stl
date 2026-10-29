@@ -73,10 +73,11 @@ The following snippet uses concrete objects to show the call on this page.
 ```cpp
 #include <asc/std/chrono>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::chrono::time_point<asc::std::chrono::system_clock, asc::std::chrono::milliseconds> value{asc::std::chrono::milliseconds{1500}};
-    return asc::std::chrono::time_point_cast<asc::std::chrono::seconds>(value);
+    namespace chrono = asc::std::chrono;
+    chrono::time_point<chrono::system_clock, chrono::milliseconds> value(chrono::milliseconds{1500});
+    return chrono::time_point_cast<chrono::seconds>(value).time_since_epoch().count() == 1;
 }
 ```
 

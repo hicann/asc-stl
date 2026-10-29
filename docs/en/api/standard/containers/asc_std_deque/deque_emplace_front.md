@@ -76,10 +76,7 @@ The following Host snippet uses an explicitly provided allocator; on the device 
 
 ```cpp
 #include <asc/std/deque>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
 
 template <class T>
 struct example_allocator : ::std::allocator<T> {
@@ -87,14 +84,23 @@ struct example_allocator : ::std::allocator<T> {
     using pointer = T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
+    template <class U>
+    struct rebind {
+        using other = example_allocator<U>;
+    };
     example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    template <class U>
+    example_allocator(const example_allocator<U>&) noexcept
+    {}
 };
 
-decltype(auto) example(asc::std::deque<int, example_allocator<int>>& values)
+bool example()
 {
-    return values.emplace_front(7);
+    using sequence = asc::std::deque<int, example_allocator<int>>;
+    sequence values(example_allocator<int>{});
+    values.emplace_front(7);
+    values.emplace_front(9);
+    return values.size() == 2 && values.front() == 9 && values.back() == 7;
 }
 ```
 

@@ -72,10 +72,7 @@ The following Host snippet uses an explicitly provided allocator; on the device 
 
 ```cpp
 #include <asc/std/forward_list>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
 
 template <class T>
 struct example_allocator : ::std::allocator<T> {
@@ -83,14 +80,24 @@ struct example_allocator : ::std::allocator<T> {
     using pointer = T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
+    template <class U>
+    struct rebind {
+        using other = example_allocator<U>;
+    };
     example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    template <class U>
+    example_allocator(const example_allocator<U>&) noexcept
+    {}
 };
 
-void example(asc::std::forward_list<int, example_allocator<int>>& target, asc::std::forward_list<int, example_allocator<int>>& source)
+bool example()
 {
-    target = static_cast<asc::std::forward_list<int, example_allocator<int>>&&>(source);
+    using sequence = asc::std::forward_list<int, example_allocator<int>>;
+    sequence values(example_allocator<int>{});
+    values.push_front(7);
+    sequence target(example_allocator<int>{});
+    target = static_cast<sequence&&>(values);
+    return !target.empty() && target.front() == 7;
 }
 ```
 

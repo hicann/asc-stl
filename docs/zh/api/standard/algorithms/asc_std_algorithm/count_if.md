@@ -90,6 +90,11 @@ decltype(auto) example()
     auto predicate = [](int value) { return value % 2 == 0; };
     return asc::std::count_if(values, values + 8, predicate);
 }
+
+bool verify_example()
+{
+    return example() == 4;
+}
 ```
 
 ## 关联API

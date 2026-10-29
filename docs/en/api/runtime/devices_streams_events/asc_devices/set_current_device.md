@@ -60,14 +60,53 @@ bool set_current_device(asc::device_ref device) noexcept;
 
 ## Example
 
-The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
+This complete example uses the real CANN Runtime and selects device 0, which must be available before running. Asynchronous waits are limited to 10 seconds. Failure terminates the example process to avoid releasing resources still in use; the controller must stop subsequent tasks and recheck device health. On success, work completes before resources are closed, the device is reset, and the Runtime is finalized. Every successful device selection increments the Runtime reference count; the two additional selections below each have a matching reset, and main releases its initial selection.
 
 ```cpp
+#include <acl/acl.h>
+#include <asc/stream>
+#include <cstdlib>
+
+void check(bool condition)
+{
+    if (!condition) {
+        std::_Exit(2);
+    }
+}
+
+void finish(asc::stream_ref stream)
+{
+    check(aclrtSynchronizeStreamWithTimeout(stream.native_handle(), 10000) == ACL_SUCCESS);
+}
 #include <asc/devices>
 
-decltype(auto) example(asc::device_ref device)
+
+void run_example()
 {
-    return asc::set_current_device(device);
+    asc::device_ref previous(99);
+    check(asc::current_device(previous));
+    check(asc::set_current_device(asc::device_ref(0)));
+    asc::device_ref selected(99);
+    check(asc::current_device(selected) && selected == asc::device_ref(0));
+    check(asc::set_current_device(previous));
+    // Balance the two additional selections; main balances its initial selection.
+    check(aclrtResetDevice(static_cast<int>(previous.ordinal())) == ACL_SUCCESS);
+    check(aclrtResetDevice(0) == ACL_SUCCESS);
+}
+
+int main()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) {
+        return 1;
+    }
+    if (!asc::set_current_device(asc::device_ref(0))) {
+        check(aclFinalize() == ACL_SUCCESS);
+        return 1;
+    }
+    run_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return reset && finalized ? 0 : 1;
 }
 ```
 

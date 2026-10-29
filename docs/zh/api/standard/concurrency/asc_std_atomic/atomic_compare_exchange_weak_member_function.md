@@ -93,10 +93,13 @@ bool compare_exchange_weak(T& expected, T desired, memory_order success, memory_
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example(asc::std::atomic<int>& value)
+bool example()
 {
+    asc::std::atomic<int> value{1};
     int expected = 1;
-    return value.compare_exchange_weak(expected, 2, asc::std::memory_order_relaxed);
+    const bool changed =
+        value.compare_exchange_weak(expected, 2, asc::std::memory_order_acq_rel, asc::std::memory_order_acquire);
+    return (changed && value.load() == 2 && expected == 1) || (!changed && value.load() == 1 && expected == 1);
 }
 ```
 

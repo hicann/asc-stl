@@ -75,6 +75,11 @@ decltype(auto) example()
 {
     return asc::std::has_single_bit(4u);
 }
+
+bool verify_example()
+{
+    return example() == true;
+}
 ```
 
 ## 关联API

@@ -73,6 +73,12 @@ decltype(auto) example(const asc::std::mbstate_t * state)
 {
     return asc::std::mbsinit(state);
 }
+
+bool verify_example()
+{
+    asc::std::mbstate_t state{};
+    return example(&state) != 0;
+}
 ```
 
 ## 关联API

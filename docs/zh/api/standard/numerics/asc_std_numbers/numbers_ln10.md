@@ -55,7 +55,8 @@ inline constexpr double ln10 = 0x1.26bb1bbb5551582dd4adac5705a6p+1;
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::ln10;
+inline constexpr auto value = asc::std::numbers::ln10;
+static_assert(value > 2.3025849 && value < 2.3025852);
 ```
 
 ## 关联API

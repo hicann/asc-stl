@@ -61,6 +61,7 @@ The following snippet reads the interface value with concrete template arguments
 #include <asc/functional>
 
 inline constexpr auto example = asc::is_associative_v<asc::minimum<int>, int>;
+static_assert(example, "the selected documented type has this capability");
 ```
 
 ## Related APIs

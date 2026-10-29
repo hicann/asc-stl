@@ -108,6 +108,12 @@ decltype(auto) example()
 {
     return asc::sub_overflow(2, 8);
 }
+
+bool verify_example()
+{
+    const auto actual = example();
+    return actual.value == -6 && actual.overflow == false;
+}
 ```
 
 ## 关联API

@@ -91,7 +91,6 @@ reference operator[](size_type index) noexcept;
 
 ```cpp
 #include <asc/std/deque>
-#include <cstddef>
 #include <memory>
 
 template <class T>
@@ -100,25 +99,24 @@ struct example_allocator : ::std::allocator<T> {
     using pointer = T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
+    template <class U>
+    struct rebind {
+        using other = example_allocator<U>;
+    };
     example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    template <class U>
+    example_allocator(const example_allocator<U>&) noexcept
+    {}
 };
 
-int read_first(const asc::std::deque<int, example_allocator<int>>& values)
+bool example()
 {
-    // 先建立非空前提：空容器路径同样返回，保证每条执行路径都有返回值
-    if (values.empty()) {
-        return -1;
-    }
-    return values[0];  // 读取首元素；返回元素值的副本，不把容器内部引用传出函数
-}
-
-void write_first(asc::std::deque<int, example_allocator<int>>& values, int new_value)
-{
-    if (!values.empty()) {
-        values[0] = new_value;  // 非空前提下经非 const 下标写入
-    }
+    using sequence = asc::std::deque<int, example_allocator<int>>;
+    sequence values(example_allocator<int>{});
+    values.push_back(7);
+    values[0] = 9;
+    const sequence& observed = values;
+    return observed[0] == 9 && values.front() == 9;
 }
 ```
 

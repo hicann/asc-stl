@@ -28,15 +28,17 @@
 
 Header: `<asc/std/iterator>`.
 
-`asc::std::operator!=(const move_sentinel<Sentinel>&, const move_iterator<Iter>&)` is provided by `<asc/std/iterator>`; it is the reversed inequality comparison between a move sentinel and a move iterator. The interface follows the semantics of the corresponding C++ standard facility; ASC-STL's language modes and call positions are governed by the declaration on this page.
+The expression `sentinel != iterator` is provided by `<asc/std/iterator>`; it is the reversed inequality comparison between a move sentinel and a move iterator. The interface follows the semantics of the corresponding C++ standard facility; ASC-STL's language modes and call positions are governed by the declaration on this page.
 
 Standard semantics reference: [cppreference `iterator`](https://en.cppreference.com/w/cpp/header/iterator).
 
 ## Function Prototype
 
+The explicit overload below is used in compatibility branches. C++20 Host supports the same comparison expression through equality operator rewriting.
+
 ```cpp
 namespace asc::std {
-template<class Iter, class Sentinel, asc::std::enable_if_t<__move_iter_comparable<Iter, Sentinel>, int> = 0> constexpr bool operator!=(const move_sentinel<Sentinel>& sentinel, const move_iterator<Iter>& iterator);
+template<class Iter, class Sentinel, asc::std::enable_if_t<sentinel_for<Sentinel, Iter> && __move_iter_comparable<Iter, Sentinel>, int> = 0> constexpr bool operator!=(const move_sentinel<Sentinel>& sentinel, const move_iterator<Iter>& iterator);
 } // namespace asc::std
 ```
 
@@ -64,7 +66,8 @@ template<class Iter, class Sentinel, asc::std::enable_if_t<__move_iter_comparabl
 
 ## Constraints
 
-- The explicitly provided inequality overload: when the underlying iterator and the sentinel are comparable, it returns the negation of the equality test.
+- Use `sentinel != iterator`. The underlying iterator and sentinel must be comparable; the result negates equality.
+- C++20 Host does not expose an explicitly named reverse `operator!=` call. Use the operator expression above.
 
 ## Example
 
@@ -76,7 +79,15 @@ The following snippet demonstrates the basic call form of the interface on this 
 template <class Iter, class Sentinel>
 decltype(auto) example(const asc::std::move_sentinel<Sentinel>& sentinel, const asc::std::move_iterator<Iter>& iterator)
 {
-    return asc::std::operator!=(sentinel, iterator);
+    return sentinel != iterator;
+}
+
+bool verify_example()
+{
+    int values[] = {1, 2};
+    asc::std::move_sentinel<int*> sentinel(values + 2);
+    asc::std::move_iterator<int*> iterator(values + 1);
+    return example(sentinel, iterator);
 }
 ```
 

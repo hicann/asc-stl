@@ -52,6 +52,7 @@
 #ifndef PTRDIFF_MAX
 #error "PTRDIFF_MAX is required by this public Header"
 #endif
+static_assert(PTRDIFF_MAX > 0);
 ```
 
 ## 关联API

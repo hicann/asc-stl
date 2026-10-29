@@ -80,6 +80,11 @@ decltype(auto) example()
 {
     return asc::round_up(5u, 4u);
 }
+
+bool verify_example()
+{
+    return example() == 8u;
+}
 ```
 
 ## Related APIs

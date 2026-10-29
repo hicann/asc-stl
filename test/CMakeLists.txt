@@ -28,6 +28,7 @@ set(ASC_STL_CANNSIM_EXECUTABLE "" CACHE FILEPATH "cannsim executable")
 set(ASC_STL_CANNSIM_SOC "Ascend950" CACHE STRING "cannsim target SoC")
 set(ASC_STL_CANNSIM_CASE_TIMEOUT_SECONDS "600" CACHE STRING "Per-cannsim runtime case timeout")
 set(ASC_STL_TEST_CXX_STANDARD "17" CACHE STRING "C++ standard used by Device runtime test builds")
+set(ASC_STL_DOC_EXAMPLE_JOBS "4" CACHE STRING "Maximum concurrent API example compilers")
 
 set(ASC_STL_TEST_ROOT "${CMAKE_CURRENT_SOURCE_DIR}")
 set(ASC_STL_MANIFEST "${ASC_STL_TEST_ROOT}/metadata/headers.json")
@@ -83,6 +84,20 @@ set_tests_properties(
     PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 30)
 
 if(ASC_STL_ENABLE_HOST_TESTS)
+    foreach(standard IN ITEMS 17 20)
+        foreach(dependencies IN ITEMS core optional)
+            set(doc_test "docs.host.cxx${standard}.${dependencies}")
+            add_test(NAME "${doc_test}"
+                COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/check_api_docs.py
+                    --examples --standard ${standard} --mode host --compiler ${CMAKE_CXX_COMPILER}
+                    --dependencies ${dependencies} --require-all --jobs ${ASC_STL_DOC_EXAMPLE_JOBS}
+                    --report ${CMAKE_CURRENT_BINARY_DIR}/docs-host-cxx${standard}-${dependencies}.json)
+            set_tests_properties("${doc_test}" PROPERTIES
+                LABELS "docs-examples;docs-host;affected-regression;nightly"
+                RUN_SERIAL TRUE TIMEOUT 3600 SKIP_RETURN_CODE 77)
+        endforeach()
+    endforeach()
+
     add_test(
         NAME compatibility.hardware-timeout-safety
         COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/check_hardware_safety.py
@@ -645,6 +660,18 @@ if(ASC_STL_ENABLE_DEVICE_COMPILE_TESTS)
         --jobs ${ASC_STL_DEVICE_COMPILE_JOBS}
         --task-timeout-seconds ${ASC_STL_DEVICE_TASK_TIMEOUT_SECONDS}
         --report ${ASC_STL_DEVICE_REPORT})
+    foreach(standard IN ITEMS 17 20)
+        foreach(mode IN ITEMS simd simt)
+            set(doc_test "docs.device.cxx${standard}.${mode}")
+            add_test(NAME "${doc_test}"
+                COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/check_api_docs.py
+                    --examples --standard ${standard} --mode ${mode} --compiler bisheng
+                    --npu-arch ${ASC_STL_NPU_ARCH} --require-all --jobs ${ASC_STL_DEVICE_COMPILE_JOBS}
+                    --report ${CMAKE_CURRENT_BINARY_DIR}/docs-device-cxx${standard}-${mode}.json)
+            set_tests_properties("${doc_test}" PROPERTIES
+                LABELS "docs-examples;device-compile;nightly" RUN_SERIAL TRUE TIMEOUT 3600 SKIP_RETURN_CODE 77)
+        endforeach()
+    endforeach()
     if(ASC_STL_DEVICE_CHANGED_TARGETS_FILE)
         list(APPEND asc_stl_device_compile_command --changed-targets-file ${ASC_STL_DEVICE_CHANGED_TARGETS_FILE})
     endif()

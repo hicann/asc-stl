@@ -54,11 +54,12 @@ using value_type = typename Container::value_type;
 #include <deque>
 #include <functional>
 #include <vector>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>::value_type;
-}
+using alias_type = typename asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>::value_type;
+static_assert(::std::is_same_v<alias_type, int>);
 ```
 
 ## 关联API

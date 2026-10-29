@@ -52,6 +52,7 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef PTRDIFF_MAX
 #error "PTRDIFF_MAX is required by this public Header"
 #endif
+static_assert(PTRDIFF_MAX > 0);
 ```
 
 ## Related APIs

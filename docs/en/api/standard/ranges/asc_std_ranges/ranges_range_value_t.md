@@ -49,12 +49,15 @@ template<class Rp> using range_value_t = iter_value_t<iterator_t<Rp>>;
 The following snippet selects concrete template arguments to show the alias type.
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/ranges>
 
 void use_type()
 {
     using selected = asc::std::ranges::range_value_t<int (&)[4]>;
 }
+
+static_assert(asc::std::is_same_v<asc::std::ranges::range_value_t<int (&)[4]>, int>);
 ```
 
 ## Related APIs

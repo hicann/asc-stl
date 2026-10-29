@@ -170,10 +170,11 @@ The following Host snippet demonstrates the call with concrete types; the object
 ```cpp
 #include <asc/std/optional>
 
-void example()
+bool example()
 {
     asc::std::optional<int> value(7);
     value = asc::std::nullopt;
+    return !value.has_value();
 }
 ```
 

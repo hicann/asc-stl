@@ -65,12 +65,10 @@ The following snippet demonstrates the call with concrete types; declval is used
 
 ```cpp
 #include <asc/std/utility>
+#include <asc/std/type_traits>
 
-decltype(auto) example()
-{
-    using result = decltype(asc::std::declval<int>());
-    return sizeof(result);
-}
+using result = decltype(asc::std::declval<int>());
+static_assert(asc::std::is_same_v<result, int&&>);
 ```
 
 ## Related APIs

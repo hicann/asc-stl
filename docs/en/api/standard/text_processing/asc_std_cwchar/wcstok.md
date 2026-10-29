@@ -74,6 +74,15 @@ decltype(auto) example(wchar_t * input, const wchar_t * delimiters, wchar_t ** s
 {
     return asc::std::wcstok(input, delimiters, state);
 }
+
+bool verify_example()
+{
+    wchar_t input[] = L"ab,cd";
+    wchar_t* state = nullptr;
+    wchar_t* first = example(input, L",", &state);
+    wchar_t* second = example(nullptr, L",", &state);
+    return first == input && first[0] == L'a' && first[2] == 0 && second == input + 3 && second[0] == L'c' && example(nullptr, L",", &state) == nullptr;
+}
 ```
 
 ## Related APIs

@@ -74,10 +74,8 @@ template<class T, class ...Args> static constexpr void construct(allocator_type&
 
 ```cpp
 #include <asc/std/memory>
-#include <functional>
+#include <asc/std/type_traits>
 #include <memory>
-#include <string>
-#include <utility>
 
 template <class T>
 struct example_allocator : ::std::allocator<T> {
@@ -90,12 +88,17 @@ struct example_allocator : ::std::allocator<T> {
     template <class U> example_allocator(const example_allocator<U>&) noexcept {}
 };
 
-void example(example_allocator<int>& allocator)
+bool verify_example()
 {
-    int* pointer = asc::std::allocator_traits<example_allocator<int>>::allocate(allocator, 1);
-    asc::std::allocator_traits<example_allocator<int>>::construct(allocator, pointer, 7);
-    asc::std::allocator_traits<example_allocator<int>>::destroy(allocator, pointer);
-    asc::std::allocator_traits<example_allocator<int>>::deallocate(allocator, pointer, 1);
+    example_allocator<int> allocator;
+    using traits = asc::std::allocator_traits<example_allocator<int>>;
+    int* pointer = traits::allocate(allocator, 1);
+    if (pointer == nullptr) return false;
+    traits::construct(allocator, pointer, 7);
+    const bool correct = *pointer == 7;
+    traits::destroy(allocator, pointer);
+    traits::deallocate(allocator, pointer, 1);
+    return correct;
 }
 ```
 

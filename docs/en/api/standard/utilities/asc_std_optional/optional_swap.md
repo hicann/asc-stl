@@ -66,10 +66,11 @@ The following Host snippet demonstrates the call with concrete types; the object
 ```cpp
 #include <asc/std/optional>
 
-void example()
+bool example()
 {
     asc::std::optional<int> left(1), right(2);
     left.swap(right);
+    return *left == 2 && *right == 1;
 }
 ```
 

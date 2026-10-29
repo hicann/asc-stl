@@ -79,6 +79,12 @@ decltype(auto) example()
 {
     return asc::std::polar(1.0f, 0.5f);
 }
+
+bool verify_example()
+{
+    const auto result = example();
+    return result.real() > 0.8775f && result.real() < 0.8777f && result.imag() > 0.4793f && result.imag() < 0.4796f;
+}
 ```
 
 ## Related APIs

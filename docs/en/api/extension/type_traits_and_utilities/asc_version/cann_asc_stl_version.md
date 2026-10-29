@@ -50,6 +50,7 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef CANN_ASC_STL_VERSION
 #error "CANN_ASC_STL_VERSION is required by this public Header"
 #endif
+static_assert(CANN_ASC_STL_VERSION == 10000, "documented version or capability value");
 ```
 
 ## Related APIs

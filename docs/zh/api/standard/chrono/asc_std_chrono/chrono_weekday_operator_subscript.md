@@ -86,9 +86,12 @@
 ```cpp
 #include <asc/std/chrono>
 
-decltype(auto) example(const asc::std::chrono::weekday& value)
+bool example()
 {
-    return value[1];
+    namespace chrono = asc::std::chrono;
+    chrono::weekday value{3};
+    const auto second = value[2];
+    return second.weekday().c_encoding() == 3 && second.index() == 2;
 }
 ```
 

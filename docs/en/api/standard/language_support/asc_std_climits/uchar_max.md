@@ -54,6 +54,7 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef UCHAR_MAX
 #error "UCHAR_MAX is required by this public Header"
 #endif
+static_assert(UCHAR_MAX >= 255);
 ```
 
 ## Related APIs

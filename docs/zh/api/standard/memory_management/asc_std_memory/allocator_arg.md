@@ -49,9 +49,12 @@ inline constexpr allocator_arg_t allocator_arg{};
 以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/memory>
 
 auto value = asc::std::allocator_arg;
+
+static_assert(asc::std::is_same_v<decltype(value), asc::std::allocator_arg_t>);
 ```
 
 ## 关联API

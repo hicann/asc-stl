@@ -71,6 +71,11 @@ decltype(auto) example()
 {
     return asc::always_false{}(7);
 }
+
+bool verify_example()
+{
+    return example() == false;
+}
 ```
 
 ## 关联API

@@ -52,6 +52,7 @@ template<class Tp> inline constexpr Tp inv_pi_v = __numbers<Tp>::__inv_pi();
 #include <asc/std/numbers>
 
 inline constexpr auto example = asc::std::inv_pi_v<float>;
+static_assert(example > 0.3183098 && example < 0.3183100);
 ```
 
 ## 关联API

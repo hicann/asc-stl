@@ -62,6 +62,7 @@ The following snippet reads the interface value with concrete template arguments
 
 inline constexpr auto example =
     asc::is_device_accessible_v<asc::gm_mdspan<int, asc::std::extents<asc::std::size_t, 4>>>;
+static_assert(example, "the selected documented type has this capability");
 ```
 
 ## Related APIs

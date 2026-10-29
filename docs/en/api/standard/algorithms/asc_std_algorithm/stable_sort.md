@@ -104,10 +104,16 @@ The following Host snippet demonstrates the call with a valid integer range and 
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    asc::std::stable_sort(values, values + 8);
+    struct record { int key; int order; };
+    record values[] = {{2, 0}, {1, 1}, {2, 2}, {1, 3}};
+    asc::std::stable_sort(values, values + 4, [](const record& a, const record& b) { return a.key < b.key; });
+    const int expected_order[] = {1, 3, 0, 2};
+    for (int index = 0; index < 4; ++index) {
+        if (values[index].key != (index < 2 ? 1 : 2) || values[index].order != expected_order[index]) return false;
+    }
+    return true;
 }
 ```
 

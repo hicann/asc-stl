@@ -75,6 +75,11 @@ decltype(auto) example()
 {
     return asc::std::bit_width(5u);
 }
+
+bool verify_example()
+{
+    return example() == 3;
+}
 ```
 
 ## Related APIs

@@ -55,11 +55,12 @@ using const_reference = typename Container::const_reference;
 #include <deque>
 #include <functional>
 #include <vector>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>::const_reference;
-}
+using alias_type = typename asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>::const_reference;
+static_assert(::std::is_same_v<alias_type, const int&>);
 ```
 
 ## 关联API

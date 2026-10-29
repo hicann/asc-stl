@@ -49,9 +49,12 @@ template<size_t Idx> inline constexpr const in_place_index_t<Idx> in_place_index
 The following snippet reads the interface value with concrete template arguments.
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/utility>
 
 inline constexpr auto example = asc::std::in_place_index<0>;
+
+static_assert(asc::std::is_same_v<asc::std::remove_cv_t<decltype(example)>, asc::std::in_place_index_t<0>>);
 ```
 
 ## Related APIs

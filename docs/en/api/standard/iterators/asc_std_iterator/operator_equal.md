@@ -78,6 +78,14 @@ decltype(auto) example(const asc::std::move_sentinel<Sentinel>& sentinel, const 
 {
     return asc::std::operator==(sentinel, iterator);
 }
+
+bool verify_example()
+{
+    int values[] = {1, 2};
+    asc::std::move_sentinel<int*> sentinel(values + 2);
+    asc::std::move_iterator<int*> iterator(values + 2);
+    return example(sentinel, iterator);
+}
 ```
 
 ## Related APIs

@@ -105,6 +105,12 @@ decltype(auto) example()
 {
     return asc::std::make_optional(7);
 }
+
+bool verify_example()
+{
+    const auto result = example();
+    return result.has_value() && *result == 7;
+}
 ```
 
 ## 关联API

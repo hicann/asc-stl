@@ -66,9 +66,10 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/chrono>
 
-decltype(auto) example(const asc::std::chrono::hours & value, bool pm)
+bool example()
 {
-    return asc::std::chrono::make24(value, pm);
+    namespace chrono = asc::std::chrono;
+    return chrono::make24(chrono::hours{1}, true).count() == 13 && chrono::make24(chrono::hours{1}, false).count() == 1;
 }
 ```
 

@@ -55,7 +55,8 @@ inline constexpr double inv_sqrt3 = 0x1.279a74590331c4d218f81e4afb25p-1;
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::inv_sqrt3;
+inline constexpr auto value = asc::std::numbers::inv_sqrt3;
+static_assert(value > 0.5773502 && value < 0.5773504);
 ```
 
 ## 关联API

@@ -52,7 +52,9 @@ unspecified;
 ```cpp
 #include <asc/execution.tie_break.h>
 
-auto value = asc::tie_break::unspecified;
+constexpr auto value = asc::tie_break::unspecified;
+static_assert(value != asc::tie_break::prefer_smaller_index, "documented states are distinct");
+static_assert(value != asc::tie_break::prefer_larger_index, "documented states are distinct");
 ```
 
 ## 关联API

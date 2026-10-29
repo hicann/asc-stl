@@ -89,6 +89,11 @@ decltype(auto) example()
     auto predicate = [](int value) { return value % 2 == 0; };
     return asc::std::any_of(values, values + 8, predicate);
 }
+
+bool verify_example()
+{
+    return example() == true;
+}
 ```
 
 ## 关联API

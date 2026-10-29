@@ -79,6 +79,11 @@ decltype(auto) example()
 {
     return asc::std::cmp_less(1u, 2);
 }
+
+bool verify_example()
+{
+    return example();
+}
 ```
 
 ## 关联API

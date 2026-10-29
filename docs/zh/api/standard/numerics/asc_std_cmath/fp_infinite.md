@@ -54,6 +54,11 @@
 #ifndef FP_INFINITE
 #error "FP_INFINITE is required by this public Header"
 #endif
+
+bool verify_example()
+{
+    return asc::std::fpclassify(INFINITY) == FP_INFINITE;
+}
 ```
 
 ## 关联API

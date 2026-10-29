@@ -112,6 +112,12 @@ decltype(auto) example(int numerator, int denominator)
 {
     return asc::std::div(numerator, denominator);
 }
+
+bool verify_example()
+{
+    const auto result = example(17, 5);
+    return result.quot == 3 && result.rem == 2;
+}
 ```
 
 ## 关联API

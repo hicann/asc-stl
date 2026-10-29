@@ -75,6 +75,15 @@ decltype(auto) example(wchar_t * destination, const wchar_t * source, asc::std::
 {
     return asc::std::wcsncpy(destination, source, count);
 }
+
+bool verify_example()
+{
+    wchar_t output[8] = {};
+    const bool same = example(output, L"cd", 2) == output;
+    const wchar_t expected[] = L"cd";
+    for (unsigned index = 0; index < sizeof(expected) / sizeof(wchar_t); ++index) { if (output[index] != expected[index]) return false; }
+    return same;
+}
 ```
 
 ## 关联API

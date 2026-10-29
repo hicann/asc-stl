@@ -61,14 +61,17 @@ constexpr asc::simt_hierarchy make_hierarchy(asc::level_dimensions<asc::grid_lev
 
 ## Example
 
-The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
+This Host example uses concrete types or dimensions and checks independent expected values without querying a running Device context.
 
 ```cpp
 #include <asc/hierarchy>
 
-decltype(auto) example(asc::level_dimensions<asc::grid_level> grid, asc::level_dimensions<asc::block_level> block)
+bool example()
 {
-    return asc::make_hierarchy(grid, block);
+    const auto hierarchy = asc::make_hierarchy(asc::grid_dims<2, 3, 4>(), asc::block_dims<8, 4, 2>());
+    return hierarchy.grid_extents.x == 2 && hierarchy.grid_extents.y == 3 && hierarchy.grid_extents.z == 4 &&
+        hierarchy.block_extents.x == 8 && hierarchy.block_extents.y == 4 && hierarchy.block_extents.z == 2 &&
+        hierarchy.count(asc::grid) == 24 && hierarchy.count(asc::block) == 64;
 }
 ```
 

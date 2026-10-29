@@ -157,11 +157,17 @@ template<class OtherIndexType> constexpr reference operator[](span<OtherIndexTyp
 
 ```cpp
 #include <asc/std/mdspan>
-#include <asc/std/cstddef>
+#include <asc/std/array>
+#include <cstddef>
+#include <type_traits>
 
-decltype(auto) example(const asc::std::mdspan<int, asc::std::extents<asc::std::size_t, 4>, asc::std::layout_right, asc::std::default_accessor<int>>& view)
+bool example()
 {
-    return view[0];
+    int data[4] = {1, 2, 3, 4};
+    asc::std::mdspan<int, asc::std::extents<::std::size_t, 4>> value(data);
+    value[1] = 9;
+    const auto& observed = value;
+    return data[1] == 9 && observed[0] == 1;
 }
 ```
 

@@ -55,11 +55,12 @@ using size_type = typename Container::size_type;
 #include <deque>
 #include <functional>
 #include <vector>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>::size_type;
-}
+using alias_type = typename asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>::size_type;
+static_assert(::std::is_same_v<alias_type, ::std::size_t>);
 ```
 
 ## 关联API

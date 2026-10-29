@@ -108,6 +108,12 @@ decltype(auto) example()
 {
     return asc::div_overflow(8, 2);
 }
+
+bool verify_example()
+{
+    const auto actual = example();
+    return actual.value == 4 && actual.overflow == false;
+}
 ```
 
 ## 关联API

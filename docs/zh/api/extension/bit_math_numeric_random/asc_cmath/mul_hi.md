@@ -75,6 +75,11 @@ decltype(auto) example()
 {
     return asc::mul_hi(0x10000u, 0x10000u);
 }
+
+bool verify_example()
+{
+    return example() == 1u;
+}
 ```
 
 ## 关联API

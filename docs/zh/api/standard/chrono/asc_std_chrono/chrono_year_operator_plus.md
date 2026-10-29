@@ -62,9 +62,11 @@
 ```cpp
 #include <asc/std/chrono>
 
-decltype(auto) example(const asc::std::chrono::year& value)
+bool example()
 {
-    return (+value);
+    namespace chrono = asc::std::chrono;
+    chrono::year value{2024};
+    return static_cast<int>(+value) == 2024;
 }
 ```
 

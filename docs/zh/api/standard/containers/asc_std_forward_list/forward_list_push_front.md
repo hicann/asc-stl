@@ -89,10 +89,7 @@ void push_front(const T& value);
 
 ```cpp
 #include <asc/std/forward_list>
-#include <functional>
 #include <memory>
-#include <string>
-#include <utility>
 
 template <class T>
 struct example_allocator : ::std::allocator<T> {
@@ -100,14 +97,27 @@ struct example_allocator : ::std::allocator<T> {
     using pointer = T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
+    template <class U>
+    struct rebind {
+        using other = example_allocator<U>;
+    };
     example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    template <class U>
+    example_allocator(const example_allocator<U>&) noexcept
+    {}
 };
 
-void example(asc::std::forward_list<int, example_allocator<int>>& values)
+bool example()
 {
+    using sequence = asc::std::forward_list<int, example_allocator<int>>;
+    sequence values(example_allocator<int>{});
     values.push_front(7);
+    values.push_front(9);
+    const bool first = !values.empty() && values.front() == 9;
+    values.pop_front();
+    const bool second = !values.empty() && values.front() == 7;
+    values.pop_front();
+    return first && second && values.empty();
 }
 ```
 

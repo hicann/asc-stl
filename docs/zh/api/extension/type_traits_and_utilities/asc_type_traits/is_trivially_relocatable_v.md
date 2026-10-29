@@ -50,6 +50,7 @@ template<class T> inline constexpr bool is_trivially_relocatable_v = asc::is_tri
 #include <asc/type_traits>
 
 inline constexpr auto example = asc::is_trivially_relocatable_v<int>;
+static_assert(example, "the selected documented type has this capability");
 ```
 
 ## 关联API

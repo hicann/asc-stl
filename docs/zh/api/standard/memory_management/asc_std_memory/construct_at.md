@@ -74,11 +74,21 @@ template<class T, class ...Args> constexpr T* construct_at(T* location, Args&&..
 ```cpp
 #include <asc/std/memory>
 
-void example()
+struct example_value {
+    static inline int alive = 0;
+    int value;
+    example_value() : value(23) { ++alive; }
+    ~example_value() { --alive; }
+};
+
+bool verify_example()
 {
-    alignas(int) unsigned char storage[sizeof(int)];
-    int* value = asc::std::construct_at(reinterpret_cast<int*>(storage), 23);
-    asc::std::destroy_at(value);
+    alignas(example_value) unsigned char storage[sizeof(example_value) * 1];
+    auto* values = reinterpret_cast<example_value*>(storage);
+    for (int index = 0; index < 1; ++index) { asc::std::construct_at(values + index); }
+    const bool correct = example_value::alive == 1 && values[0].value == 23;
+    for (int index = 0; index < 1; ++index) { asc::std::destroy_at(values + index); }
+    return correct && example_value::alive == 0;
 }
 ```
 

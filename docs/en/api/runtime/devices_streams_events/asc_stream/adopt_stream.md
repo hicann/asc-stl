@@ -62,20 +62,56 @@ bool adopt_stream(asc::stream_ref::native_handle_type handle, asc::stream& outpu
 
 ## Example
 
-The following snippet focuses on calling this interface; inputs, resources, and the execution context must satisfy the constraints on this page.
+This complete example uses the real CANN Runtime and selects device 0, which must be available before running. Asynchronous waits are limited to 10 seconds. Failure terminates the example process to avoid releasing resources still in use; the controller must stop subsequent tasks and recheck device health. On success, work completes before resources are closed, the device is reset, and the Runtime is finalized.
 
 ```cpp
+#include <acl/acl.h>
 #include <asc/stream>
+#include <cstdlib>
 
-decltype(auto) example(asc::stream_ref::native_handle_type handle, asc::stream& output)
+void check(bool condition)
 {
-    return asc::adopt_stream(handle, output);
+    if (!condition) {
+        std::_Exit(2);
+    }
+}
+
+void finish(asc::stream_ref stream)
+{
+    check(aclrtSynchronizeStreamWithTimeout(stream.native_handle(), 10000) == ACL_SUCCESS);
+}
+
+
+void run_example()
+{
+    aclrtStream handle = nullptr;
+    check(aclrtCreateStreamWithConfig(&handle, 0, 0) == ACL_SUCCESS);
+    asc::stream owner;
+    if (!asc::adopt_stream(handle, owner)) {
+        check(aclrtDestroyStream(handle) == ACL_SUCCESS);
+        check(false);
+    }
+    check(owner.native_handle() == handle);
+    // Ownership now belongs to owner; do not destroy handle separately.
+    finish(owner);
+    check(owner.close() && !owner);
+}
+
+int main()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) {
+        return 1;
+    }
+    if (!asc::set_current_device(asc::device_ref(0))) {
+        check(aclFinalize() == ACL_SUCCESS);
+        return 1;
+    }
+    run_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return reset && finalized ? 0 : 1;
 }
 ```
-
-The corresponding complete project uses `C++17`; compile and run it on the target toolchain and device.
-
-Complete example source: [stream_event.cpp](../../../../../zh/examples/stream_event.cpp).
 
 ## Related APIs
 

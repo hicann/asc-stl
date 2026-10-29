@@ -52,7 +52,9 @@ device_to_device;
 ```cpp
 #include <asc/execution.determinism.h>
 
-auto value = asc::determinism::device_to_device;
+constexpr auto value = asc::determinism::device_to_device;
+static_assert(value != asc::determinism::run_to_run, "documented states are distinct");
+static_assert(value != asc::determinism::not_guaranteed, "documented states are distinct");
 ```
 
 ## 关联API

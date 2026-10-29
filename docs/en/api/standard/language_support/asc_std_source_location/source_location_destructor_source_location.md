@@ -56,13 +56,25 @@ No return value.
 The following snippet assumes that object points to a constructed object; after explicit destruction the object must not be accessed again, and releasing the storage is the caller's responsibility.
 
 ```cpp
+#include <asc/std/new>
 #include <asc/std/source_location>
 
 using example_object = asc::std::source_location;
 void example(example_object* object)
 {
-    // object points to a constructed object; the object must not be accessed again after destruction.
+    // object 指向已构造对象；析构后不得再访问该对象。
     object->~example_object();
+}
+
+bool verify_example()
+{
+    alignas(example_object) unsigned char storage[sizeof(example_object)];
+    auto* first = ::new (static_cast<void*>(storage)) example_object();
+    example(first);
+    auto* second = ::new (static_cast<void*>(storage)) example_object();
+    const bool reused = static_cast<void*>(second) == static_cast<void*>(storage);
+    example(second);
+    return reused;
 }
 ```
 

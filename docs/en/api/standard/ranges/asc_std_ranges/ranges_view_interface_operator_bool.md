@@ -68,6 +68,13 @@ decltype(auto) example(Object& object, Args&&... args)
 {
     return object.operator bool(static_cast<Args&&>(args)...);
 }
+
+bool verify_example()
+{
+    int values[] = {1, 2};
+    asc::std::ranges::ref_view<int[2]> view(values);
+    return example(view);
+}
 ```
 
 ## Related APIs

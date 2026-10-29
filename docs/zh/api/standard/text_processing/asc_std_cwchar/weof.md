@@ -59,6 +59,7 @@ Host定义来自系统标准库，具体展开形式随实现而异；不要依�
 #ifndef WEOF
 #error "WEOF is required by this public Header"
 #endif
+static_assert(WEOF != static_cast<asc::std::wint_t>(L'A'));
 ```
 
 ## 关联API

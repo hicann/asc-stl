@@ -52,6 +52,7 @@ template<class Tp> inline constexpr Tp ln10_v = __numbers<Tp>::__ln10();
 #include <asc/std/numbers>
 
 inline constexpr auto example = asc::std::ln10_v<float>;
+static_assert(example > 2.3025849 && example < 2.3025852);
 ```
 
 ## 关联API

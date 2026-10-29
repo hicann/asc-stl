@@ -66,10 +66,11 @@ constexpr void swap(asc::std::optional& other) noexcept(is_nothrow_move_construc
 ```cpp
 #include <asc/std/optional>
 
-void example()
+bool example()
 {
     asc::std::optional<int> left(1), right(2);
     left.swap(right);
+    return *left == 2 && *right == 1;
 }
 ```
 

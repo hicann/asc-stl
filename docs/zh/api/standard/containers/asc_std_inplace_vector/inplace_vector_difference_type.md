@@ -52,11 +52,12 @@ using difference_type = ptrdiff_t;
 
 ```cpp
 #include <asc/std/inplace_vector>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::inplace_vector<int, 8>::difference_type;
-}
+using alias_type = typename asc::std::inplace_vector<int, 8>::difference_type;
+static_assert(::std::is_same_v<alias_type, ::std::ptrdiff_t>);
 ```
 
 ## 关联API

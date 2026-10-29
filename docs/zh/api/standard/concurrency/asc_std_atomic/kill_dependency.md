@@ -72,9 +72,9 @@ template<class T> constexpr T kill_dependency(T value) noexcept;
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::kill_dependency(1);
+    return asc::std::kill_dependency(7) == 7;
 }
 ```
 

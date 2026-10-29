@@ -94,6 +94,12 @@ decltype(auto) example()
     auto next = value.or_else([](int) { return asc::std::expected<int, int>(7); });
     return next;
 }
+
+bool verify_example()
+{
+    const auto result = example();
+    return result.has_value() && *result == 7;
+}
 ```
 
 ## Related APIs

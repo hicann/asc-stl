@@ -61,10 +61,21 @@ constexpr result_type operator()() noexcept;
 ```cpp
 #include <asc/random>
 
-decltype(auto) example()
+bool example()
 {
-    asc::pcg64 generator{};
-    return generator();
+    asc::pcg64 generator;
+    const asc::pcg64::result_type expected[] = {
+        14951315693135216709ULL,
+        1541401459199960700ULL,
+        3670514919227316241ULL,
+        11007308355854268502ULL,
+        523514384104871782ULL,
+        18368464326245194742ULL
+    };
+    for (auto value : expected) {
+        if (generator() != value) return false;
+    }
+    return true;
 }
 ```
 

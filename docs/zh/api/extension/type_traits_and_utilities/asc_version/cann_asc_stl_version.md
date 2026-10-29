@@ -50,6 +50,7 @@
 #ifndef CANN_ASC_STL_VERSION
 #error "CANN_ASC_STL_VERSION is required by this public Header"
 #endif
+static_assert(CANN_ASC_STL_VERSION == 10000, "documented version or capability value");
 ```
 
 ## 关联API

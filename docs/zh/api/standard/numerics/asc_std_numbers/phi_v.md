@@ -52,6 +52,7 @@ template<class Tp> inline constexpr Tp phi_v = __numbers<Tp>::__phi();
 #include <asc/std/numbers>
 
 inline constexpr auto example = asc::std::phi_v<float>;
+static_assert(example > 1.6180338 && example < 1.6180341);
 ```
 
 ## 关联API

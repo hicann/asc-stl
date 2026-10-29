@@ -72,11 +72,12 @@ The following snippet provides concrete template arguments and call objects.
 ```cpp
 #include <asc/random>
 
-decltype(auto) example()
+bool example()
 {
-    asc::pcg64 left;
-    asc::pcg64 right;
-    return asc::operator!=(left, right);
+    asc::pcg64 left(9), right(9);
+    if (asc::operator!=(left, right) != false) return false;
+    right.discard(1);
+    return asc::operator!=(left, right) == true;
 }
 ```
 

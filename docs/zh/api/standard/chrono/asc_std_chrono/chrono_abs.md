@@ -74,10 +74,10 @@ template<class Rep, class Period> [[nodiscard]] constexpr duration<Rep, Period> 
 ```cpp
 #include <asc/std/chrono>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::chrono::seconds value{-3};
-    return asc::std::chrono::abs(value);
+    namespace chrono = asc::std::chrono;
+    return chrono::abs(chrono::seconds{-3}).count() == 3;
 }
 ```
 

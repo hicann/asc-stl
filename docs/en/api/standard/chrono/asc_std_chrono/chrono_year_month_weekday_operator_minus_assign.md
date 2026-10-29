@@ -87,9 +87,13 @@ The following Host snippet demonstrates the call with concrete date or time type
 ```cpp
 #include <asc/std/chrono>
 
-void example(asc::std::chrono::year_month_weekday& value)
+bool example()
 {
-    value -= asc::std::chrono::months{1};
+    namespace chrono = asc::std::chrono;
+    chrono::year_month_weekday value =
+        chrono::year_month_weekday{chrono::year{2024}, chrono::month{5}, chrono::weekday{3}[2]};
+    value -= chrono::months{1};
+    return static_cast<int>(value.year()) == 2024 && static_cast<unsigned>(value.month()) == 4;
 }
 ```
 

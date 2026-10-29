@@ -131,6 +131,12 @@ decltype(auto) example()
     asc::std::complex<float> right{2.0f, 1.0f};
     return asc::std::operator/(left, right);
 }
+
+bool verify_example()
+{
+    const auto result = example();
+    return result.real() == 0.8f && result.imag() == 0.6f;
+}
 ```
 
 ## Related APIs

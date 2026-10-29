@@ -76,6 +76,11 @@ decltype(auto) example()
 {
     return asc::saturating_overflow_cast<unsigned char>(300);
 }
+
+bool verify_example()
+{
+    return example() == 255;
+}
 ```
 
 ## 关联API

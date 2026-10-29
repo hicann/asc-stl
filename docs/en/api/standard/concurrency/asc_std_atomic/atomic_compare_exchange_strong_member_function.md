@@ -93,10 +93,13 @@ The following Host snippet demonstrates the atomic operation; device-side object
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example(asc::std::atomic<int>& value)
+bool example()
 {
+    asc::std::atomic<int> value{1};
     int expected = 1;
-    return value.compare_exchange_strong(expected, 2, asc::std::memory_order_relaxed);
+    const bool changed =
+        value.compare_exchange_strong(expected, 2, asc::std::memory_order_acq_rel, asc::std::memory_order_acquire);
+    return changed && value.load() == 2 && expected == 1;
 }
 ```
 

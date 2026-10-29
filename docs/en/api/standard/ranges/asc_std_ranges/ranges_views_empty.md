@@ -51,6 +51,11 @@ The following snippet reads the interface value with concrete template arguments
 #include <asc/std/ranges>
 
 inline constexpr auto example = asc::std::ranges::views::empty<int>;
+
+bool verify_example()
+{
+    return example.empty() && example.size() == 0 && example.begin() == example.end();
+}
 ```
 
 ## Related APIs

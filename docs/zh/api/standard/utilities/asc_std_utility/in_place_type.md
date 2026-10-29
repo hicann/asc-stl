@@ -49,9 +49,12 @@ template<class T> inline constexpr const in_place_type_t<T> in_place_type;
 以下片段用具体模板实参读取接口值。
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/utility>
 
 inline constexpr auto example = asc::std::in_place_type<int>;
+
+static_assert(asc::std::is_same_v<asc::std::remove_cv_t<decltype(example)>, asc::std::in_place_type_t<int>>);
 ```
 
 ## 关联API

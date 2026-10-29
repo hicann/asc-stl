@@ -56,10 +56,8 @@ using selected_pointer = typename asc::std::allocator_traits<Allocator>::pointer
 
 ```cpp
 #include <asc/std/memory>
-#include <functional>
+#include <asc/std/type_traits>
 #include <memory>
-#include <string>
-#include <utility>
 
 template <class T>
 struct example_allocator : ::std::allocator<T> {
@@ -72,10 +70,9 @@ struct example_allocator : ::std::allocator<T> {
     template <class U> example_allocator(const example_allocator<U>&) noexcept {}
 };
 
-void use_type()
-{
-    using alias_type = typename asc::std::allocator_traits<example_allocator<int>>::pointer;
-}
+using selected = typename asc::std::allocator_traits<example_allocator<int>>::pointer;
+
+static_assert(asc::std::is_same_v<selected, int*>);
 ```
 
 ## 关联API

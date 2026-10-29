@@ -111,6 +111,11 @@ int read_first_element()
     // 前置条件：index < size()；operator[] 不执行边界检查
     return view[0];
 }
+
+bool verify_example()
+{
+    return read_first_element() == 1;
+}
 ```
 
 ## 关联API

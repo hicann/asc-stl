@@ -76,10 +76,11 @@ The following snippet demonstrates the call on this page with concrete values.
 ```cpp
 #include <asc/std/utility>
 
-decltype(auto) example()
+bool example()
 {
     int value = 3;
-    return asc::std::exchange(value, 4);
+    const int previous = asc::std::exchange(value, 4);
+    return previous == 3 && value == 4;
 }
 ```
 

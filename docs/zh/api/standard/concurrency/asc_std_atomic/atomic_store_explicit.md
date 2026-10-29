@@ -75,10 +75,11 @@ template<class T> void atomic_store_explicit(atomic<T>* object, T value, memory_
 ```cpp
 #include <asc/std/atomic>
 
-void example()
+bool example()
 {
     asc::std::atomic<int> value{1};
-    asc::std::atomic_store_explicit(&value, 2, asc::std::memory_order_release);
+    asc::std::atomic_store_explicit(&value, 7, asc::std::memory_order_release);
+    return value.load() == 7;
 }
 ```
 

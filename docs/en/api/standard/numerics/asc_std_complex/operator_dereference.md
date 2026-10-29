@@ -109,6 +109,12 @@ decltype(auto) example(const asc::std::complex<float>& lhs, const asc::std::comp
 {
     return asc::std::operator*(lhs, rhs);
 }
+
+bool verify_example()
+{
+    const auto result = example(asc::std::complex<float>(1.0f, 2.0f), asc::std::complex<float>(2.0f, 1.0f));
+    return result.real() == 0.0f && result.imag() == 5.0f;
+}
 ```
 
 ## Related APIs

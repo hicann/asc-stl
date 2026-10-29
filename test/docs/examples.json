@@ -18692,5 +18692,6642 @@
     ],
     "mode": "host",
     "expression": "example()"
+  },
+  "docs/zh/api/extension/address_spaces_and_memory_views/asc_memory/arena_allocator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "use_arena_allocator()"
+  },
+  "docs/zh/api/extension/address_spaces_and_memory_views/asc_memory/gm_span.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "use_gm_span()"
+  },
+  "docs/zh/api/extension/address_spaces_and_memory_views/asc_memory/memory_space_of_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/async_data_pipeline/asc_pipeline/copy_async.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/async_data_pipeline/asc_pipeline/make_pipeline.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/async_data_pipeline/asc_pipeline/pipeline_ref_consumer_release.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/async_data_pipeline/asc_pipeline/pipeline_ref_consumer_wait.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/async_data_pipeline/asc_pipeline/pipeline_ref_load_event.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/async_data_pipeline/asc_pipeline/pipeline_ref_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/async_data_pipeline/asc_pipeline/pipeline_ref_producer_acquire.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/async_data_pipeline/asc_pipeline/pipeline_ref_producer_commit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/async_data_pipeline/asc_pipeline/pipeline_ref_store_event.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_bit/bit_reverse.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_bit/bitfield_extract.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_bit/bitfield_insert.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_bit/bitmask.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/ceil_div.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/floor_div.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/integer_log2.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/integer_sqrt.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/mul_hi.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/round_up.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/add_overflow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/div_overflow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/mul_overflow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/narrow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/narrow_cast.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/overflow_cast.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/saturating_div.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/saturating_mul.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/saturating_overflow_cast.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/saturating_sub.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/sub_overflow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_random/operator_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_random/operator_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_random/pcg64_engine_discard.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_random/pcg64_engine_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_random/pcg64_engine_result_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_random/pcg64_engine_seed.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_random/random_bijection_index_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_random/random_bijection_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_barrier/barrier_arrive.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_barrier/barrier_arrive_and_drop.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_barrier/barrier_arrive_and_wait.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_barrier/barrier_barrier.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_barrier/barrier_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_barrier/barrier_wait.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_barrier/init.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_latch/latch_arrive_and_wait.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_latch/latch_count_down.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_latch/latch_latch.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_latch/latch_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_latch/latch_try_wait.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_latch/latch_wait.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_semaphore/binary_semaphore.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_semaphore/counting_semaphore_acquire.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_semaphore/counting_semaphore_counting_semaphore.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_semaphore/counting_semaphore_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_semaphore/counting_semaphore_release.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_atomics_and_sync/asc_semaphore/counting_semaphore_try_acquire.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/copy_bytes.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/fill_bytes.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_argument/args_bounds.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/block_all.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/block_any.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/block_broadcast.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/block_collective_workspace.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/block_collective_workspace_bytes.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/block_collective_workspace_size.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/block_exclusive_scan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/block_inclusive_scan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/block_reduce_add.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/block_reduce_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/block_reduce_min.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/make_block_collective_workspace.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/ub_exclusive_scan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/ub_inclusive_scan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/ub_reduce_add.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/ub_reduce_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_collectives/ub_reduce_min.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/block.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/block_count.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/block_dims_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/block_dims_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/block_extents_3d.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/block_index.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/block_index_3d.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/extent3d_operator_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/extent3d_operator_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/get_launch_dimensions.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/grid.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/grid_dims_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/grid_dims_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/lane_id.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/make_hierarchy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/simt_hierarchy_count.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/simt_hierarchy_extents.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/sub_block_count.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/sub_block_index.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/thread.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/thread_count.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/thread_extents_3d.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/thread_index.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/thread_index_3d.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/warp.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/warp_count.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/warp_index.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_hierarchy/warp_size.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/active_mask.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/warp_all.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/warp_any.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/warp_ballot.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/warp_match_all.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/warp_match_any.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/warp_reduce_add.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/warp_reduce_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_warp/warp_reduce_min.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simt"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/always_false_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/always_true_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/equal_to_value_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/is_associative_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/is_commutative_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/proclaims_copyable_arguments_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/dynamic_stride.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/gm_mdspan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/host_mdspan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/is_device_accessible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/is_gm_accessor_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/is_gm_mdspan_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/is_host_accessible_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/is_host_accessor_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/is_host_mdspan_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/is_restrict_accessor_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/is_restrict_mdspan_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/is_ub_accessor_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/is_ub_mdspan_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/restrict_mdspan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/steps.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/to_dlpack_tensor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()",
+    "required_headers": [
+      "dlpack/dlpack.h"
+    ]
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/to_gm_mdspan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()",
+    "required_headers": [
+      "dlpack/dlpack.h"
+    ]
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/to_host_mdspan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()",
+    "required_headers": [
+      "dlpack/dlpack.h"
+    ]
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/ub_mdspan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_descriptor_destination_stride.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_descriptor_left_padding.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_descriptor_rank.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_descriptor_required_alignment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_descriptor_required_elements.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_descriptor_right_padding.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_descriptor_set_dimension.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_descriptor_source_stride.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_descriptor_validate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_required_alignment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_required_elements.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_status_insufficient_destination.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_status_insufficient_source.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_status_invalid_stage.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_status_size_overflow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_status_success.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_status_zero_extent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_status_zero_stride.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_load_async.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_store_async.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd"
+  },
+  "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/validate_tensor_copy_descriptor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_type_traits/is_bitwise_comparable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_type_traits/is_extended_floating_point_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_type_traits/is_trivially_relocatable_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_utility/in_range.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_has_collectives.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_has_device_policy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_has_pipeline.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_version.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_version_major.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_version_minor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_version_patch.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_devices/current_device.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_devices/device_count.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_devices/device_ref_properties.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_devices/devices.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_devices/npu_arch_ascend_2201.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_devices/npu_arch_ascend_3101.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_devices/npu_arch_ascend_3510.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_devices/npu_arch_unknown.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_devices/set_current_device.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/adopt_event.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/adopt_stream.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/elapsed_time.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/event_event.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/event_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/event_ref_event_ref.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/event_ref_is_done.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/event_ref_record.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/make_event.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/make_stream.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/stream_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/stream_ref_is_done.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/stream_ref_priority.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/stream_ref_stream_ref.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/stream_ref_wait.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/devices_streams_events/asc_stream/stream_stream.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution/execution_errc_backend_error.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution/execution_errc_insufficient_storage.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution/execution_errc_invalid_argument.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution/execution_errc_success.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_determinism_h/determinism_device_to_device.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_determinism_h/determinism_not_guaranteed.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_determinism_h/determinism_run_to_run.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_output_ordering_h/output_ordering_sorted.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_output_ordering_h/output_ordering_stable_sorted.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_output_ordering_h/output_ordering_unsorted.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_policy_h/device_policy_on.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_policy_h/device_policy_require.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_policy_h/device_policy_with_temporary_storage.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_policy_h/execution_device.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_require_h/require.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_tie_break_h/tie_break_prefer_larger_index.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_tie_break_h/tie_break_prefer_smaller_index.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/execution_policies_and_status/asc_execution_tie_break_h/tie_break_unspecified.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/runtime/kernel_launch/asc_launch/host_callback.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/kernel_launch/asc_launch/launch.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "simd",
+    "sdk": "cann",
+    "include_flags": [
+      "-DCANN_ASC_STL_USE_SIMT_LAUNCH=0"
+    ]
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_buffer/make_device_buffer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_buffer/make_pinned_buffer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "runtime",
+    "sdk": "cann"
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_memory_resource/device_memory_resource_ref_operator_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_memory_resource/device_memory_resource_ref_operator_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref_operator_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/runtime/memory_resources_and_buffers/asc_memory_resource/pinned_memory_resource_ref_operator_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/all_of.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/any_of.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/binary_search.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/clamp.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/count.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/count_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/fill.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/find.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/for_each.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/generate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/includes.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/inplace_merge.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/is_heap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/is_partitioned.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/is_permutation.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/is_sorted.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/iter_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/lexicographical_compare.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/make_heap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/move.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/next_permutation.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/none_of.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/nth_element.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/partial_sort.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/pop_heap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/prev_permutation.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/push_heap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/replace.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/replace_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/reverse.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/shuffle.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/sort.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/sort_heap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/stable_sort.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_execution/execution_par.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_execution/execution_par_unseq.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_execution/execution_seq.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_execution/execution_unseq.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_execution/is_execution_policy_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_abs.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_ceil.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_day_destructor_day.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_day_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_day_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_duration_cast.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_floor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_is_am.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_is_pm.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_last.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_make12.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_make24.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_month_day_destructor_month_day.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_month_day_last_destructor_month_day_last.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_month_operator_decrement.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_month_operator_increment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_month_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_month_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_month_weekday_destructor_month_weekday.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_month_weekday_last_destructor_month_weekday_last.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_round.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_time_point_cast.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_time_point_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_time_point_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_weekday_destructor_weekday.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_weekday_indexed_destructor_weekday_indexed.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_weekday_last_destructor_weekday_last.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_weekday_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_weekday_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_weekday_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_weekday_operator_subscript.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_destructor_year.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_day_destructor_year_month_day.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_day_last_destructor_year_month_day_last.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_day_last_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_day_last_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_day_last_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_day_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_day_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_day_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_destructor_year_month.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_weekday_destructor_year_month_weekday.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_weekday_last_destructor_year_month_weekday_last.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_weekday_last_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_weekday_last_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_weekday_last_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_weekday_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_weekday_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_month_weekday_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_operator_minus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_operator_plus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/chrono_year_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/literals_chrono_literals_operator_literal_d.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_chrono/literals_chrono_literals_operator_literal_y.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_ctime/clock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_ctime/clocks_per_sec.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/chrono/asc_std_ctime/difftime.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_ctime/time.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/chrono/asc_std_ctime/timespec_get.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_atomic.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_compare_exchange_strong_explicit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_compare_exchange_strong_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_compare_exchange_strong_member_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_compare_exchange_weak_explicit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_compare_exchange_weak_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_compare_exchange_weak_member_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_exchange_explicit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_exchange_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_exchange_member_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_add_explicit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_add_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_add_member_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_and_explicit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_and_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_and_member_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_or_explicit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_or_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_or_member_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_sub_explicit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_sub_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_sub_member_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_xor_explicit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_xor_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_fetch_xor_member_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_flag_clear_explicit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_flag_clear_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_flag_clear_member_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_flag_test_and_set_explicit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_flag_test_and_set_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_flag_test_and_set_member_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_flag_test_explicit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_flag_test_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_flag_test_member_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_init.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_is_lock_free_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_load_explicit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_load_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_load_member_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_operator_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_ref_fetch_and.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_ref_fetch_or.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_ref_fetch_xor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_ref_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_storage_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_store_explicit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_store_function_template.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_store_member_function.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_thread_fence.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()",
+    "link_flags": [
+      "-pthread"
+    ]
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/atomic_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/cann_asc_stl_atomic_bool_lock_free.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/cann_asc_stl_atomic_char16_t_lock_free.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/cann_asc_stl_atomic_char32_t_lock_free.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/cann_asc_stl_atomic_char8_t_lock_free.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/cann_asc_stl_atomic_char_lock_free.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/cann_asc_stl_atomic_flag_init.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/cann_asc_stl_atomic_int_lock_free.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/cann_asc_stl_atomic_llong_lock_free.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/cann_asc_stl_atomic_long_lock_free.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/cann_asc_stl_atomic_pointer_lock_free.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/cann_asc_stl_atomic_short_lock_free.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/cann_asc_stl_atomic_var_init.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/cann_asc_stl_atomic_wchar_t_lock_free.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/kill_dependency.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/memory_order_acq_rel.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/memory_order_acquire.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/memory_order_consume.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/memory_order_relaxed.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/memory_order_release.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_atomic/memory_order_seq_cst.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/adopt_lock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/defer_lock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/try_to_lock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/unique_lock_destructor_unique_lock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/unique_lock_lock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/unique_lock_mutex.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/unique_lock_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/unique_lock_owns_lock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/unique_lock_release.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/unique_lock_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/unique_lock_try_lock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_mutex/unique_lock_unlock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_shared_mutex/shared_lock_destructor_shared_lock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_shared_mutex/shared_lock_lock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_shared_mutex/shared_lock_mutex.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_shared_mutex/shared_lock_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_shared_mutex/shared_lock_owns_lock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_shared_mutex/shared_lock_release.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_shared_mutex/shared_lock_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_shared_mutex/shared_lock_try_lock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/concurrency/asc_std_shared_mutex/shared_lock_unlock.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_deque/deque_allocator_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_deque/deque_const_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_deque/deque_destructor_deque.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_deque/deque_difference_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_deque/deque_emplace_back.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_deque/deque_emplace_front.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_deque/deque_operator_subscript.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_deque/deque_push_back.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_deque/deque_push_front.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_deque/deque_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_deque/deque_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_deque/deque_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_forward_list/forward_list_allocator_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_forward_list/forward_list_const_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_forward_list/forward_list_destructor_forward_list.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_forward_list/forward_list_emplace_front.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_forward_list/forward_list_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_forward_list/forward_list_push_front.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_forward_list/forward_list_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_forward_list/forward_list_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_forward_list/forward_list_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_const_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_const_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_const_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_destructor_inplace_vector.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_difference_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_erase_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_try_emplace_back.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_try_push_back.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_unchecked_emplace_back.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_unchecked_push_back.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_inplace_vector/inplace_vector_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_list/list_allocator_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_list/list_const_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_list/list_destructor_list.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_list/list_emplace_back.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_list/list_emplace_front.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_list/list_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_list/list_push_back.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_list/list_push_front.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_list/list_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_list/list_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_list/list_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_map/map_count.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_map/map_find.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_map/map_insert.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_map/map_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_map/map_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_map/map_operator_subscript.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_map/map_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/aligned_accessor_access.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/aligned_accessor_data_handle_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/aligned_accessor_element_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/aligned_accessor_offset_policy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/aligned_accessor_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/default_accessor_access.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/default_accessor_data_handle_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/default_accessor_element_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/default_accessor_offset_policy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/default_accessor_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/dynamic_extent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/extents_extent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/extents_index_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/extents_rank_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/extents_static_extent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/full_extent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/layout_stride_mapping_strides.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_accessor_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_data_handle_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_element_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_extent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_extents_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_index_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_layout_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_mapping_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_operator_subscript.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_rank_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_static_extent.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_mdspan/mdspan_stride.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/priority_queue_const_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/priority_queue_container_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/priority_queue_emplace.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/priority_queue_push.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/priority_queue_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/priority_queue_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/priority_queue_value_compare.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/priority_queue_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/queue_const_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/queue_container_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/queue_emplace.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/queue_push.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/queue_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/queue_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/queue_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_queue/queue_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_set/set_count.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_set/set_find.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_set/set_insert.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_set/set_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_set/set_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_set/set_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_set/set_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_stack/stack_const_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_stack/stack_container_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_stack/stack_emplace.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_stack/stack_push.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_stack/stack_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_stack/stack_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_stack/stack_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_stack/stack_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_map/unordered_map_count.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_map/unordered_map_find.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_map/unordered_map_insert.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_map/unordered_map_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_map/unordered_map_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_map/unordered_map_operator_subscript.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_map/unordered_map_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_set/unordered_set_count.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_set/unordered_set_find.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_set/unordered_set_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_set/unordered_set_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_unordered_set/unordered_set_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_allocator_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_const_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_const_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_const_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_destructor_vector.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_difference_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_emplace_back.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_iterator.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_operator_subscript.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_push_back.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_reference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_reserve.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/containers/asc_std_vector/vector_vector.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/diagnostics/asc_std_cerrno/edom.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/diagnostics/asc_std_cerrno/eilseq.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/diagnostics/asc_std_cerrno/erange.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/input_output/asc_std_cinttypes/imaxabs.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/input_output/asc_std_cinttypes/imaxdiv.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/input_output/asc_std_cinttypes/pridmax.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/input_output/asc_std_cinttypes/priumax.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/distance.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/operator_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/operator_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/iterators/asc_std_iterator/ssize.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_climits/uchar_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_compare/compare_partial_order_fallback.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_compare/compare_strong_order_fallback.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_compare/compare_weak_order_fallback.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_compare/is_eq.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_compare/is_gt.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_compare/is_gteq.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_compare/is_lt.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_compare/is_lteq.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_compare/is_neq.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstddef/offsetof.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstddef/operator_bit_and.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstddef/operator_bit_and_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstddef/operator_bit_not.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstddef/operator_bit_or.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstddef/operator_bit_or_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstddef/operator_bit_xor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstddef/operator_bit_xor_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstddef/operator_shift_left.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstddef/operator_shift_right.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstddef/to_integer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstdint/ptrdiff_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_cstdint/ptrdiff_min.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_exception/terminate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expected_exit": 42,
+    "expected_output": "ASC_STL_TERMINATE_HANDLER_PASS"
+  },
+  "docs/zh/api/standard/language_support/asc_std_new/nothrow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/language_support/asc_std_new/operator_new.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_new/operator_new_array.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_source_location/source_location_destructor_source_location.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/addressof.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_arg.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_arg_t_destructor_allocator_arg_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_allocate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_allocator_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_const_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_const_void_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_construct.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_deallocate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_destroy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_difference_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_is_always_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_max_size.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_propagate_on_container_copy_assignment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_propagate_on_container_move_assignment.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_propagate_on_container_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_rebind_alloc.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_rebind_traits.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_select_on_container_copy_construction.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/allocator_traits_void_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/construct_at.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/destroy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/destroy_at.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/to_address.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/uninitialized_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "copy_elements()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/uninitialized_copy_n.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "copy_elements()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/uninitialized_default_construct.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/uninitialized_fill.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_memory/uninitialized_value_construct.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_destroy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_difference_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_inner_allocator_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_outer_allocator_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_pointer.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_size_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/memory_management/asc_std_scoped_allocator/scoped_allocator_adaptor_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fp_infinite.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fp_nan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fp_normal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fp_subnormal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/fp_zero.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/infinity.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_cmath/nan.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/complex_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/complex_operator_divide_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/complex_operator_minus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/complex_operator_multiply_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/complex_operator_plus_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/complex_value_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/conj.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/imag.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/literals_complex_literals_operator__if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/norm.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/operator_dereference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/operator_divide.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/operator_minus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/operator_plus.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/polar.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/proj.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_complex/real.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_linalg/linalg_scaled_accessor_nested_accessor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_linalg/linalg_scaled_accessor_scaling_factor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/e_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/egamma_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/inv_pi_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/inv_sqrt3_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/inv_sqrtpi_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/ln10_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/ln2_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/log10e_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/log2e_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/numbers_e.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/numbers_egamma.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/numbers_inv_pi.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/numbers_inv_sqrt3.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/numbers_inv_sqrtpi.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/numbers_ln10.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/numbers_ln2.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/numbers_log10e.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/numbers_log2e.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/numbers_phi.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/numbers_pi.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/numbers_sqrt2.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/numbers_sqrt3.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/phi_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/pi_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/sqrt2_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numbers/sqrt3_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/accumulate.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/gcd.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/inner_product.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/lcm.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/reduce.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/saturating_cast.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/saturating_div.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/saturating_mul.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/saturating_sub.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_numeric/transform_reduce.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/generate_canonical.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/linear_congruential_engine_discard.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/linear_congruential_engine_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/linear_congruential_engine_min.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/linear_congruential_engine_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/linear_congruential_engine_result_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/linear_congruential_engine_seed.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/philox_engine_discard.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/philox_engine_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/philox_engine_min.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/philox_engine_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/philox_engine_result_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/philox_engine_seed.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/philox_engine_set_counter.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/uniform_int_distribution_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/uniform_int_distribution_result_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/uniform_real_distribution_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/numerics/asc_std_random/uniform_real_distribution_result_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/from_range.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_owning_view_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_range_common_reference_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_range_difference_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_range_reference_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_range_rvalue_reference_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_range_value_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_view_interface_back.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_view_interface_empty.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_view_interface_front.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_view_interface_operator_bool.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_view_interface_operator_subscript.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_view_interface_size.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_views_all_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/ranges/asc_std_ranges/ranges_views_empty.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/strings/asc_std_string/basic_string_push_back.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_charconv/chars_format.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_charconv/from_chars_result_operator_bool.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_charconv/to_chars_result_operator_bool.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/btowc.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/mbrlen.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/mbrtowc.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/mbsinit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/mbsrtowcs.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/null.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wchar_max.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wchar_min.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcrtomb.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcscat.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcschr.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcscmp.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcscoll.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcscpy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcscspn.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcslen.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcsncat.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcsncmp.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcsncpy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcspbrk.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcsrchr.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcsrtombs.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcsspn.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcsstr.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcstok.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wcsxfrm.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wctob.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/weof.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wmemchr.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wmemcmp.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wmemcpy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wmemmove.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_cwchar/wmemset.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/text_processing/asc_std_format/format_string.md": {
+    "standards": [
+      20
+    ],
+    "mode": "host",
+    "header_standards": [
+      17
+    ]
+  },
+  "docs/zh/api/standard/utilities/asc_std_bit/bit_cast.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bit/bit_width.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bit/byteswap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bit/countl_one.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bit/countl_zero.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bit/countr_one.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bit/countr_zero.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bit/has_single_bit.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bit/popcount.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bit/rotl.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bit/rotr.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_operator_bit_and_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_operator_bit_not.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_operator_bit_or_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_operator_bit_xor_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_operator_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_operator_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_operator_shift_left.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_operator_shift_left_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_operator_shift_right.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_operator_shift_right_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/bitset_operator_subscript.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/operator_bit_and.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/operator_bit_or.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_bitset/operator_bit_xor.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_cstdlib/div.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_cstdlib/labs.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_cstdlib/ldiv.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_cstdlib/llabs.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_cstdlib/lldiv.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_expected/expected_and_then.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_expected/expected_destructor_expected.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_expected/expected_error_or.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_expected/expected_operator_bool.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_expected/expected_or_else.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_expected/expected_transform.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_expected/expected_transform_error.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_expected/expected_value_or.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_expected/unexpect.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/bind_front.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/default_searcher_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/invoke.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/invoke_r.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/not_fn.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/ranges_equal_to_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/ranges_greater_equal_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/ranges_greater_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/ranges_less_equal_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/ranges_less_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/ranges_not_equal_to_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_functional/reference_wrapper_operator_call.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/make_optional.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/optional_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/optional_operator_bool.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/optional_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/optional_t_operator_arrow.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/optional_t_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/optional_t_operator_bool.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/optional_t_operator_dereference.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_optional/optional_value_or.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/tuple_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/tuple_operator_greater.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/tuple_operator_greater_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/tuple_operator_less.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/tuple_operator_less_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_tuple/tuple_operator_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/cmp_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/cmp_greater.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/cmp_greater_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/cmp_less.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/cmp_less_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/cmp_not_equal.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/declval.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/exchange.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/in_place.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/in_place_index.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/in_place_type.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/in_range.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/make_pair.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/pair_operator_assign.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/pair_swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/piecewise_construct.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/piecewise_construct_t_destructor_piecewise_construct_t.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/to_underlying.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_variant/holds_alternative.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_variant/variant_destructor_variant.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
   }
 }

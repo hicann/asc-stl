@@ -62,12 +62,20 @@ constexpr Index operator()(Index index) const noexcept;
 
 ```cpp
 #include <asc/random>
+#include <asc/std/type_traits>
 
-decltype(auto) example()
+bool example()
 {
     asc::pcg64 generator(9);
     asc::random_bijection<unsigned long long> mapping(17, generator);
-    return mapping(3);
+    bool seen[17] = {};
+    for (asc::random_bijection<unsigned long long>::index_type index = 0; index < 17; ++index) {
+        const auto output = mapping(index);
+        if (output >= 17 || seen[output]) return false;
+        seen[output] = true;
+    }
+    for (bool present : seen) { if (!present) return false; }
+    return mapping.size() == 17;
 }
 ```
 

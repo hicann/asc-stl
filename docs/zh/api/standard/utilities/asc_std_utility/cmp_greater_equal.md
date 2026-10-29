@@ -79,6 +79,11 @@ decltype(auto) example()
 {
     return asc::std::cmp_greater_equal(2u, 1);
 }
+
+bool verify_example()
+{
+    return example();
+}
 ```
 
 ## 关联API

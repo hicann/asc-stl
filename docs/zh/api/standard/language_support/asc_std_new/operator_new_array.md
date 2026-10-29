@@ -69,6 +69,12 @@ decltype(auto) example(void* storage)
     void* address = ::operator new[](sizeof(int), storage);
     return address;
 }
+
+bool verify_example()
+{
+    alignas(int) unsigned char storage[sizeof(int)];
+    return example(static_cast<void*>(storage)) == static_cast<void*>(storage);
+}
 ```
 
 ## 关联API

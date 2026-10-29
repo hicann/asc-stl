@@ -80,10 +80,12 @@ constexpr void fill(ForwardIterator first, ForwardIterator last, const T& value)
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    int values[8] = {8, 3, 6, 1, 7, 2, 5, 4};
     asc::std::fill(values, values + 8, 7);
+    for (int value : values) { if (value != 7) return false; }
+    return true;
 }
 ```
 

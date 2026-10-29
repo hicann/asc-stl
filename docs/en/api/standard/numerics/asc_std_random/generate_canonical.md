@@ -79,6 +79,11 @@ decltype(auto) example()
     asc::std::minstd_rand engine;
     return asc::std::generate_canonical<float, 10>(engine);
 }
+
+bool verify_example()
+{
+    return example() > 0.00002247f && example() < 0.00002249f;
+}
 ```
 
 ## Related APIs

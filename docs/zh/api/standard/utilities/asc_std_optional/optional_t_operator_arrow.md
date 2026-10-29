@@ -66,6 +66,12 @@ decltype(auto) example(int& value)
     asc::std::optional<int&> reference(value);
     return reference.operator->();
 }
+
+bool verify_example()
+{
+    int value = 7;
+    return example(value) == &value;
+}
 ```
 
 ## 关联API

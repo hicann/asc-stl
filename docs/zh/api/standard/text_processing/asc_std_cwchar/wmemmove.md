@@ -75,6 +75,12 @@ decltype(auto) example(wchar_t * destination, const wchar_t * source, asc::std::
 {
     return asc::std::wmemmove(destination, source, count);
 }
+
+bool verify_example()
+{
+    wchar_t output[] = L"abcd";
+    return example(output + 1, output, 3) == output + 1 && output[1] == L'a' && output[2] == L'b' && output[3] == L'c';
+}
 ```
 
 ## 关联API

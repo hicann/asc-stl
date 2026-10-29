@@ -76,11 +76,12 @@ template<class T> bool atomic_compare_exchange_strong(atomic<T>* object, T* expe
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example()
+bool example()
 {
     asc::std::atomic<int> value{1};
     int expected = 1;
-    return asc::std::atomic_compare_exchange_strong(&value, &expected, 2);
+    const bool changed = asc::std::atomic_compare_exchange_strong(&value, &expected, 2);
+    return changed && value.load() == 2 && expected == 1;
 }
 ```
 

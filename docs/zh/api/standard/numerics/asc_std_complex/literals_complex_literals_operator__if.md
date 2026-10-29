@@ -82,6 +82,12 @@ decltype(auto) example(long double arg)
 {
     return asc::std::literals::complex_literals::operator""if(arg);
 }
+
+bool verify_example()
+{
+    const auto result = example(2.0L);
+    return result.real() == 0.0f && result.imag() == 2.0f;
+}
 ```
 
 ## 关联API

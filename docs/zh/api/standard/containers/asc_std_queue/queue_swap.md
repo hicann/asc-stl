@@ -64,13 +64,18 @@ constexpr void swap(queue<T, Container>& other) noexcept(noexcept(this->c.swap(o
 
 ```cpp
 #include <asc/std/queue>
+#include <memory>
 #include <deque>
-#include <functional>
-#include <vector>
 
-void example(asc::std::queue<int, ::std::deque<int>>& object, asc::std::queue<int, ::std::deque<int>>& other)
+bool example()
 {
-    object.swap(other);
+    using sequence = asc::std::queue<int, ::std::deque<int>>;
+    sequence values;
+    values.push(7);
+    sequence other;
+    other.push(9);
+    values.swap(other);
+    return values.front() == 9 && other.front() == 7;
 }
 ```
 

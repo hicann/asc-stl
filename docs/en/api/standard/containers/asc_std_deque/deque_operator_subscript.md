@@ -91,7 +91,6 @@ The following Host snippet uses an explicitly provided allocator; on the device 
 
 ```cpp
 #include <asc/std/deque>
-#include <cstddef>
 #include <memory>
 
 template <class T>
@@ -100,25 +99,24 @@ struct example_allocator : ::std::allocator<T> {
     using pointer = T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
+    template <class U>
+    struct rebind {
+        using other = example_allocator<U>;
+    };
     example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    template <class U>
+    example_allocator(const example_allocator<U>&) noexcept
+    {}
 };
 
-int read_first(const asc::std::deque<int, example_allocator<int>>& values)
+bool example()
 {
-    // Establish the non-empty precondition first: the empty-container path also returns, ensuring every execution path has a return value
-    if (values.empty()) {
-        return -1;
-    }
-    return values[0];  // Read the first element; returns a copy of the element value and does not let the container's internal reference escape the function
-}
-
-void write_first(asc::std::deque<int, example_allocator<int>>& values, int new_value)
-{
-    if (!values.empty()) {
-        values[0] = new_value;  // Write through the non-const subscript under the non-empty precondition
-    }
+    using sequence = asc::std::deque<int, example_allocator<int>>;
+    sequence values(example_allocator<int>{});
+    values.push_back(7);
+    values[0] = 9;
+    const sequence& observed = values;
+    return observed[0] == 9 && values.front() == 9;
 }
 ```
 

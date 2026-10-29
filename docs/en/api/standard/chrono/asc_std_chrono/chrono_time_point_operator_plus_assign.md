@@ -66,9 +66,12 @@ The following Host snippet demonstrates the call with concrete date or time type
 ```cpp
 #include <asc/std/chrono>
 
-void example(asc::std::chrono::time_point<asc::std::chrono::system_clock>& value)
+bool example()
 {
-    value += asc::std::chrono::system_clock::duration{1};
+    namespace chrono = asc::std::chrono;
+    chrono::time_point<chrono::system_clock> value(chrono::system_clock::duration{100});
+    value += chrono::system_clock::duration{1};
+    return value.time_since_epoch().count() == 101;
 }
 ```
 

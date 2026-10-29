@@ -69,6 +69,11 @@ decltype(auto) example(asc::std::intmax_t value)
 {
     return asc::std::imaxabs(value);
 }
+
+bool verify_example()
+{
+    return example(-7) == 7;
+}
 ```
 
 ## Related APIs

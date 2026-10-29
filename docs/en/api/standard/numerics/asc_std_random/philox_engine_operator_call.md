@@ -63,10 +63,11 @@ The following Host snippet demonstrates the call with concrete numeric types; th
 ```cpp
 #include <asc/std/random>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::philox4x32 generator{};
-    return generator();
+    asc::std::philox4x32 generator;
+    generator.seed(0);
+    return generator() == 0x6627e8d5u;
 }
 ```
 

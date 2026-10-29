@@ -62,6 +62,7 @@ inline constexpr bool is_restrict_mdspan_v = false;
 
 inline constexpr auto example =
     asc::is_restrict_mdspan_v<asc::restrict_mdspan<int, asc::std::extents<asc::std::size_t, 4>>>;
+static_assert(example, "the selected documented type has this capability");
 ```
 
 ## 关联API

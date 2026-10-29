@@ -104,6 +104,11 @@ decltype(auto) example()
     int values[4] = {1, 2, 3, 4};
     return asc::std::ssize(values);
 }
+
+bool verify_example()
+{
+    return example() == 4;
+}
 ```
 
 ## Related APIs

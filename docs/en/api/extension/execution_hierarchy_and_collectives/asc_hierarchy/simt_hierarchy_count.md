@@ -83,15 +83,15 @@ constexpr unsigned long long count(asc::grid_level) const noexcept;
 
 ## Example
 
-The following Host snippet demonstrates the interface on this page with concrete types; the lifetimes of objects and pointers must satisfy the constraints on this page.
+This Host example uses concrete types or dimensions and checks independent expected values without querying a running Device context.
 
 ```cpp
 #include <asc/hierarchy>
 
-decltype(auto) example(const asc::simt_hierarchy& hierarchy)
+bool example()
 {
-    auto blocks = hierarchy.count(asc::block);
-    return blocks;
+    const auto hierarchy = asc::make_hierarchy(asc::grid_dims<2, 3, 4>(), asc::block_dims<8, 4, 2>());
+    return hierarchy.count(asc::grid) == 24 && hierarchy.count(asc::block) == 64;
 }
 ```
 

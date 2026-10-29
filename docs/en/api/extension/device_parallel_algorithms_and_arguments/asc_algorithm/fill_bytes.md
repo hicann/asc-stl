@@ -63,21 +63,69 @@ asc::execution_status fill_bytes(asc::stream_ref stream, void* destination, unsi
 
 ## Example
 
-The following snippet demonstrates the basic call form of the interface on this page; the inputs and the execution context must satisfy the constraints on this page.
+This complete example uses the real CANN Runtime and selects device 0, which must be available before running. Asynchronous waits are limited to 10 seconds. Failure terminates the example process to avoid releasing resources still in use; the controller must stop subsequent tasks and recheck device health. On success, work completes before resources are closed, the device is reset, and the Runtime is finalized.
 
 ```cpp
-#include <asc/algorithm>
-#include <asc/std/cstddef>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
+#include <acl/acl.h>
+#include <asc/stream>
+#include <cstdlib>
 
-decltype(auto) example(asc::stream_ref stream, void* destination, unsigned char value, asc::std::size_t bytes)
+void check(bool condition)
 {
-    return asc::fill_bytes(stream, destination, value, bytes);
+    if (!condition) {
+        std::_Exit(2);
+    }
+}
+
+void finish(asc::stream_ref stream)
+{
+    check(aclrtSynchronizeStreamWithTimeout(stream.native_handle(), 10000) == ACL_SUCCESS);
+}
+#include <asc/algorithm>
+#include <asc/buffer>
+
+
+void run_example()
+{
+    asc::stream stream;
+    check(asc::make_stream(stream));
+    asc::device_memory_resource device_resource(0);
+    asc::pinned_memory_resource host_resource;
+    const asc::device_memory_resource_ref device_ref(device_resource);
+    const asc::pinned_memory_resource_ref host_ref(host_resource);
+    asc::device_buffer<unsigned char> device;
+    asc::pinned_buffer<unsigned char> input;
+    asc::pinned_buffer<unsigned char> output;
+    check(asc::make_device_buffer(device, device_ref, stream, 4).success());
+    check(asc::make_pinned_buffer(input, host_ref, stream, 4).success());
+    check(asc::make_pinned_buffer(output, host_ref, stream, 4).success());
+    const unsigned char expected[4] = {2, 4, 6, 8};
+    for (int i = 0; i < 4; ++i) {
+        input.data()[i] = expected[i];
+    }
+    check(asc::fill_bytes(stream, device.data(), 0x2A, 4).success());
+    check(asc::copy_bytes(stream, output.data(), device.data(), 4).success());
+    finish(stream);
+    for (int i = 0; i < 4; ++i) {
+        check(output.data()[i] == 0x2A);
+    }
+    check(output.close().success() && input.close().success() && device.close().success());
+    check(stream.close());
+}
+
+int main()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) {
+        return 1;
+    }
+    if (!asc::set_current_device(asc::device_ref(0))) {
+        check(aclFinalize() == ACL_SUCCESS);
+        return 1;
+    }
+    run_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return reset && finalized ? 0 : 1;
 }
 ```
 

@@ -94,6 +94,12 @@ decltype(auto) example()
     auto next = value.transform([](int input) { return input + 1; });
     return next;
 }
+
+bool verify_example()
+{
+    const auto result = example();
+    return result.has_value() && *result == 8;
+}
 ```
 
 ## 关联API

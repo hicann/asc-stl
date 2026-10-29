@@ -66,10 +66,8 @@ The following Host snippet uses an explicitly provided allocator and fully relea
 
 ```cpp
 #include <asc/std/memory>
-#include <functional>
+#include <asc/std/type_traits>
 #include <memory>
-#include <string>
-#include <utility>
 
 template <class T>
 struct example_allocator : ::std::allocator<T> {
@@ -82,9 +80,10 @@ struct example_allocator : ::std::allocator<T> {
     template <class U> example_allocator(const example_allocator<U>&) noexcept {}
 };
 
-decltype(auto) example(const example_allocator<int>& allocator)
+bool verify_example()
 {
-    return asc::std::allocator_traits<example_allocator<int>>::max_size(allocator);
+    example_allocator<int> allocator;
+    return asc::std::allocator_traits<example_allocator<int>>::max_size(allocator) >= 1;
 }
 ```
 

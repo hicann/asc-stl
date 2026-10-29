@@ -80,11 +80,30 @@ vector(vector<T, Allocator>&& other) noexcept;
 
 ```cpp
 #include <asc/std/vector>
+#include <memory>
 
-template <class T, class Allocator, class... Args>
-asc::std::vector<T, Allocator> make_object(Args&&... args)
+template <class T>
+struct example_allocator : ::std::allocator<T> {
+    using value_type = T;
+    using pointer = T*;
+    using size_type = ::std::size_t;
+    using difference_type = ::std::ptrdiff_t;
+    template <class U>
+    struct rebind {
+        using other = example_allocator<U>;
+    };
+    example_allocator() = default;
+    template <class U>
+    example_allocator(const example_allocator<U>&) noexcept
+    {}
+};
+
+bool example()
 {
-    return asc::std::vector<T, Allocator>(static_cast<Args&&>(args)...);
+    using sequence = asc::std::vector<int, example_allocator<int>>;
+    sequence values(example_allocator<int>{});
+    values.push_back(7);
+    return values.size() == 1 && values[0] == 7;
 }
 ```
 

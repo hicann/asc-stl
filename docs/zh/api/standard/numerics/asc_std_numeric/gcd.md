@@ -78,6 +78,11 @@ decltype(auto) example()
 {
     return asc::std::gcd(12, 18);
 }
+
+bool verify_example()
+{
+    return example() == 6;
+}
 ```
 
 ## 关联API

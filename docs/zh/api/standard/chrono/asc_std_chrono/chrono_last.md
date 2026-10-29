@@ -49,7 +49,12 @@ inline constexpr const last_spec last;
 ```cpp
 #include <asc/std/chrono>
 
-auto value = asc::std::chrono::last;
+bool example()
+{
+    namespace chrono = asc::std::chrono;
+    chrono::month_day_last value = chrono::month{5} / chrono::last;
+    return static_cast<unsigned>(value.month()) == 5;
+}
 ```
 
 ## 关联API

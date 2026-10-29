@@ -54,6 +54,11 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef FP_INFINITE
 #error "FP_INFINITE is required by this public Header"
 #endif
+
+bool verify_example()
+{
+    return asc::std::fpclassify(INFINITY) == FP_INFINITE;
+}
 ```
 
 ## Related APIs

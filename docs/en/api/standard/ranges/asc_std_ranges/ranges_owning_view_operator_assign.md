@@ -67,11 +67,12 @@ The following Host snippet demonstrates the call with concrete types; pointers, 
 ```cpp
 #include <asc/std/ranges>
 
-void example()
+bool example()
 {
     using view_type = asc::std::ranges::owning_view<asc::std::ranges::single_view<int>>;
-    view_type target{}, source{};
+    view_type target(asc::std::ranges::single_view<int>(1)), source(asc::std::ranges::single_view<int>(7));
     target = static_cast<view_type&&>(source);
+    return target.size() == 1 && *target.begin() == 7;
 }
 ```
 

@@ -145,6 +145,11 @@ decltype(auto) example()
     int input[4] = {1, 2, 3, 4};
     return asc::std::reduce(input, input + 4, 0);
 }
+
+bool verify_example()
+{
+    return example() == 10;
+}
 ```
 
 ## Related APIs

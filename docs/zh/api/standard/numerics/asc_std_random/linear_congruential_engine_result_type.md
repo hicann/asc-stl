@@ -50,12 +50,15 @@ using result_type = UIntType;
 以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/random>
 
 void use_type()
 {
     using alias_type = typename asc::std::minstd_rand::result_type;
 }
+
+static_assert(asc::std::is_same_v<asc::std::minstd_rand::result_type, asc::std::uint_fast32_t>);
 ```
 
 ## 关联API

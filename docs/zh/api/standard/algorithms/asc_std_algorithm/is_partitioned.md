@@ -88,6 +88,11 @@ decltype(auto) example()
     auto predicate = [](int value) { return value % 2 == 0; };
     return asc::std::is_partitioned(values, values + 8, predicate);
 }
+
+bool verify_example()
+{
+    return example() == false;
+}
 ```
 
 ## 关联API

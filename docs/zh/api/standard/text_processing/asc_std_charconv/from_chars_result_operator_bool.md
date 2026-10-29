@@ -64,6 +64,14 @@ decltype(auto) example(Object& object, Args&&... args)
 {
     return object.operator bool(static_cast<Args&&>(args)...);
 }
+
+bool verify_example()
+{
+    char storage[2] = {};
+    asc::std::from_chars_result success{storage, asc::std::errc{}};
+    asc::std::from_chars_result failure{storage, asc::std::errc::invalid_argument};
+    return example(success) && !example(failure);
+}
 ```
 
 ## 关联API

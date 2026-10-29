@@ -47,11 +47,19 @@
 以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
 
 ```cpp
+#include <cstdio>
 #include <asc/std/cinttypes>
 
 #ifndef PRIdMAX
 #error "PRIdMAX is required by this public Header"
 #endif
+
+bool verify_example()
+{
+    char text[32] = {};
+    const int count = ::std::snprintf(text, sizeof(text), "%" PRIdMAX, static_cast<asc::std::intmax_t>(123));
+    return count == 3 && text[0] == '1' && text[1] == '2' && text[2] == '3' && text[3] == 0;
+}
 ```
 
 ## 关联API

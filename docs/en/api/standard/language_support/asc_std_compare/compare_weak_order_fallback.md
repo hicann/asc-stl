@@ -28,17 +28,20 @@
 
 Header: `<asc/std/compare>`.
 
-`asc::std::compare_weak_order_fallback` is a directly callable comparison function object; it prefers an available three-way comparison, and otherwise synthesizes an `asc::std::weak_ordering` from `==` and `<`.
+`asc::std::compare_weak_order_fallback` is a comparison function object type. Its call operator prefers an available three-way comparison, and otherwise synthesizes an `asc::std::weak_ordering` from `==` and `<`.
 
 Standard semantics reference: [cppreference `compare`](https://en.cppreference.com/w/cpp/header/compare).
 
 ## Declaration
 
-This name is a public constant function object; the implementation type of the object is not part of the interface commitment. The following is the call form; for omitted optional parameters, the constraints of each prototype apply.
+The current version exposes this interface as a class type. Construct a function object before passing the two values.
 
 ```cpp
 namespace asc::std {
-compare_weak_order_fallback(left, right);
+struct compare_weak_order_fallback {
+    template <class T, class U>
+    [[nodiscard]] constexpr weak_ordering operator()(T&& left, U&& right) const;
+};
 } // namespace asc::std
 ```
 
@@ -63,12 +66,13 @@ Returns an `asc::std::weak_ordering` comparison category value.
 
 ## Example
 
-The following snippet directly compares two integers through the function object provided by the header.
+The following snippet constructs a function object and then compares two integers.
 
 ```cpp
 #include <asc/std/compare>
 
-inline constexpr auto example = asc::std::compare_weak_order_fallback(1, 2);
+inline constexpr auto example = asc::std::compare_weak_order_fallback{}(1, 2);
+static_assert(example < 0);
 ```
 
 ## Related APIs

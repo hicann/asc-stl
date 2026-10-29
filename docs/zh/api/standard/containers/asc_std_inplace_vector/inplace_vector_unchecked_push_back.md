@@ -83,11 +83,15 @@ constexpr reference unchecked_push_back(T&& value);
 
 ```cpp
 #include <asc/std/inplace_vector>
+#include <memory>
 
-decltype(auto) example(asc::std::inplace_vector<int, 8>& values)
+bool example()
 {
-    // 调用前须保证 size() < capacity()。
-    return values.unchecked_push_back(7);
+    using sequence = asc::std::inplace_vector<int, 8>;
+    sequence values;
+    values.unchecked_push_back(7);
+    values.unchecked_push_back(9);
+    return values.size() == 2 && values[0] == 7 && values[1] == 9;
 }
 ```
 

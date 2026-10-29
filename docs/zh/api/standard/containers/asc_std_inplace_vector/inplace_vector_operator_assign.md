@@ -82,10 +82,16 @@ constexpr inplace_vector& operator=(inplace_vector&& other);
 
 ```cpp
 #include <asc/std/inplace_vector>
+#include <memory>
 
-void example(asc::std::inplace_vector<int, 8>& target, const asc::std::inplace_vector<int, 8>& source)
+bool example()
 {
-    target = source;
+    using sequence = asc::std::inplace_vector<int, 8>;
+    sequence values;
+    values.unchecked_push_back(7);
+    sequence target;
+    target = values;
+    return !target.empty() && target.front() == 7;
 }
 ```
 

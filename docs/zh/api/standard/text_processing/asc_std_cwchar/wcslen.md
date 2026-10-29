@@ -72,6 +72,11 @@ decltype(auto) example(const wchar_t * input)
 {
     return asc::std::wcslen(input);
 }
+
+bool verify_example()
+{
+    return example(L"abc") == 3;
+}
 ```
 
 ## 关联API

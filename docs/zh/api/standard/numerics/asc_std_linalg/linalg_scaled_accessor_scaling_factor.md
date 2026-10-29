@@ -65,8 +65,13 @@ constexpr ScalingFactor scaling_factor() const noexcept;
 decltype(auto) example()
 {
     using accessor_type = asc::std::linalg::scaled_accessor<float, asc::std::default_accessor<float>>;
-    accessor_type accessor{};
+    accessor_type accessor(2.0f, asc::std::default_accessor<float>{});
     return accessor.scaling_factor();
+}
+
+bool verify_example()
+{
+    return example() == 2.0f;
 }
 ```
 

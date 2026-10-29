@@ -95,6 +95,12 @@ decltype(auto) example(const wchar_t * input, const wchar_t * accepted)
 {
     return asc::std::wcspbrk(input, accepted);
 }
+
+bool verify_example()
+{
+    const wchar_t input[] = L"abcdef";
+    return example(input, L"ed") == input + 3;
+}
 ```
 
 ## Related APIs

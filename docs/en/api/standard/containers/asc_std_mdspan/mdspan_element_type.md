@@ -54,11 +54,13 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/mdspan>
 #include <asc/std/cstddef>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::mdspan<int, asc::std::extents<asc::std::size_t, 2, 3>, asc::std::layout_right, asc::std::default_accessor<int>>::element_type;
-}
+using alias_type = typename asc::std::mdspan<int, asc::std::extents<asc::std::size_t, 2, 3>, asc::std::layout_right,
+    asc::std::default_accessor<int>>::element_type;
+static_assert(::std::is_same_v<alias_type, int>);
 ```
 
 ## Related APIs

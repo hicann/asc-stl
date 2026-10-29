@@ -57,7 +57,12 @@ enum memory_order {
 ```cpp
 #include <asc/std/atomic>
 
-auto value = asc::std::memory_order_acq_rel;
+bool example()
+{
+    asc::std::atomic<int> value{7};
+    const auto before = value.exchange(9, asc::std::memory_order_acq_rel);
+    return before == 7 && value.load() == 9;
+}
 ```
 
 ## 关联API

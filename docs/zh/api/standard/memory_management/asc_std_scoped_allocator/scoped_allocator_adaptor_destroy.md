@@ -70,10 +70,8 @@ template<class Type> void destroy(Type* pointer);
 
 ```cpp
 #include <asc/std/scoped_allocator>
-#include <functional>
+#include <asc/std/type_traits>
 #include <memory>
-#include <string>
-#include <utility>
 
 template <class T>
 struct example_allocator : ::std::allocator<T> {
@@ -86,12 +84,23 @@ struct example_allocator : ::std::allocator<T> {
     template <class U> example_allocator(const example_allocator<U>&) noexcept {}
 };
 
-void example(asc::std::scoped_allocator_adaptor<example_allocator<int>>& allocator)
+struct example_value {
+    static inline int alive = 0;
+    int value;
+    explicit example_value(int input) : value(input) { ++alive; }
+    ~example_value() { --alive; }
+};
+
+bool verify_example()
 {
-    int* pointer = allocator.allocate(1);
+    asc::std::scoped_allocator_adaptor<example_allocator<example_value>> allocator;
+    example_value* pointer = allocator.allocate(1);
     allocator.construct(pointer, 7);
+    const bool constructed = example_value::alive == 1 && pointer->value == 7;
     allocator.destroy(pointer);
+    const bool destroyed = example_value::alive == 0;
     allocator.deallocate(pointer, 1);
+    return constructed && destroyed;
 }
 ```
 

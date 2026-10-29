@@ -55,7 +55,8 @@ inline constexpr double phi = 0x1.9e3779b97f4a7c15f39cc0605ceep+0;
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::phi;
+inline constexpr auto value = asc::std::numbers::phi;
+static_assert(value > 1.6180338 && value < 1.6180341);
 ```
 
 ## 关联API

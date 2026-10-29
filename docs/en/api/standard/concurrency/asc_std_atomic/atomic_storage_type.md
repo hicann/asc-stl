@@ -53,11 +53,12 @@ The following snippet demonstrates the basic call form of the interface on this 
 
 ```cpp
 #include <asc/std/atomic>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::atomic<int>::storage_type;
-}
+using alias_type = typename asc::std::atomic<int>::storage_type;
+static_assert(::std::is_same_v<alias_type, __INT32_TYPE__>);
 ```
 
 ## Related APIs

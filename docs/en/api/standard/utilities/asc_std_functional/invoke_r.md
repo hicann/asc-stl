@@ -79,6 +79,11 @@ decltype(auto) example()
 {
     return asc::std::invoke_r<int>([](int value) { return value + 1; }, 3);
 }
+
+bool verify_example()
+{
+    return example() == 4;
+}
 ```
 
 ## Related APIs

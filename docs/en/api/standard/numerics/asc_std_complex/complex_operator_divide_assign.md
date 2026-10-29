@@ -80,6 +80,13 @@ void example(asc::std::complex<float>& value)
 {
     value /= 2.0f;
 }
+
+bool verify_example()
+{
+    asc::std::complex<float> value(2.0f, 4.0f);
+    example(value);
+    return value.real() == 1.0f && value.imag() == 2.0f;
+}
 ```
 
 ## Related APIs

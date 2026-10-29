@@ -48,14 +48,28 @@ template<asc::memory_scope Scope> using binary_semaphore = asc::counting_semapho
 
 ## 调用示例
 
-以下片段选用具体模板实参展示别名类型。
+以下片段在调用方提供的对齐GM存储中初始化二值信号量，再演示非阻塞获取及配对释放。初始化由指定线程完成，发布后参与线程才能访问对象。
 
 ```cpp
 #include <asc/semaphore>
+#include <asc/std/new>
 
-__aicore__ void use_type()
+using semaphore_type = asc::binary_semaphore<asc::memory_scope::device>;
+
+// A single designated thread initializes aligned GM storage before publication.
+__aicore__ void initialize(semaphore_type* gm_storage)
 {
-    using selected = asc::binary_semaphore<asc::memory_scope::device>;
+    ::new (static_cast<void*>(gm_storage)) semaphore_type(1);
+}
+
+// gm_semaphore points to an initialized GM object visible to all participants.
+__aicore__ bool example(semaphore_type* gm_semaphore)
+{
+    static_assert(semaphore_type::max() == 1);
+    const bool acquired = gm_semaphore->try_acquire();
+    if (acquired)
+        gm_semaphore->release();
+    return acquired;
 }
 ```
 

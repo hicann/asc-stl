@@ -52,6 +52,7 @@ The following snippet reads the interface value with concrete template arguments
 #include <asc/std/numbers>
 
 inline constexpr auto example = asc::std::egamma_v<float>;
+static_assert(example > 0.5772156 && example < 0.5772158);
 ```
 
 ## Related APIs

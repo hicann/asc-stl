@@ -70,6 +70,11 @@ decltype(auto) example(asc::std::byte lhs, asc::std::byte rhs)
 {
     return asc::std::operator^(lhs, rhs);
 }
+
+bool verify_example()
+{
+    return asc::std::to_integer<unsigned int>(example(asc::std::byte{3}, asc::std::byte{5})) == 6u;
+}
 ```
 
 ## 关联API

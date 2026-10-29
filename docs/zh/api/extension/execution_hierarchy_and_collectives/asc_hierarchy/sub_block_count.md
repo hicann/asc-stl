@@ -55,14 +55,17 @@ unsigned int sub_block_count() noexcept;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下SIMD核函数为每个AI Core Block中的每个Sub Block写入一项。调用方须提供至少AI Core Block数量乘以实际Sub Block数量个unsigned int的有效GM输出，并在核函数完成后回读。每项应为当前启动环境的Sub Block数量；该数量由实际硬件和启动方式决定。该查询仅在SIMD提供；文档门禁验证真实SIMD编译，不代表NPU执行通过。
 
 ```cpp
 #include <asc/hierarchy>
 
-__aicore__ decltype(auto) example()
+__global__ __vector__ void example(__gm__ unsigned int* output)
 {
-    return asc::sub_block_count();
+    const auto block = asc::block_index();
+    const auto sub_blocks = asc::sub_block_count();
+    const auto sub_block = asc::sub_block_index();
+    output[block * sub_blocks + sub_block] = asc::sub_block_count();
 }
 ```
 

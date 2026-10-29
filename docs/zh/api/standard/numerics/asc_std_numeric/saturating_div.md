@@ -79,6 +79,11 @@ decltype(auto) example()
 {
     return asc::std::saturating_div(8, 2);
 }
+
+bool verify_example()
+{
+    return example() == 4;
+}
 ```
 
 ## 关联API

@@ -67,9 +67,12 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/atomic>
 
-void example(asc::std::atomic_flag * object)
+bool example()
 {
-    asc::std::atomic_flag_clear(object);
+    asc::std::atomic_flag flag{};
+    flag.test_and_set();
+    asc::std::atomic_flag_clear(&flag);
+    return !flag.test_and_set();
 }
 ```
 

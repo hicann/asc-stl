@@ -77,6 +77,14 @@ decltype(auto) example(wchar_t * destination, const char ** source, asc::std::si
 {
     return asc::std::mbsrtowcs(destination, source, count, state);
 }
+
+bool verify_example()
+{
+    asc::std::mbstate_t state{};
+    const char* source = "AB";
+    wchar_t output[4] = {};
+    return example(output, &source, 4, &state) == 2 && source == nullptr && output[0] == L'A' && output[1] == L'B' && output[2] == 0;
+}
 ```
 
 ## 关联API

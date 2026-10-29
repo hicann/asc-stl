@@ -53,11 +53,12 @@ using storage_type = asc::std::atomic<int>::storage_type;
 
 ```cpp
 #include <asc/std/atomic>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::atomic<int>::storage_type;
-}
+using alias_type = typename asc::std::atomic<int>::storage_type;
+static_assert(::std::is_same_v<alias_type, __INT32_TYPE__>);
 ```
 
 ## 关联API

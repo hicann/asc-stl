@@ -71,12 +71,15 @@ The following Host snippet uses valid objects or aligned storage; the constructe
 ```cpp
 #include <asc/std/memory>
 
-void example()
+bool example()
 {
     alignas(int) unsigned char storage[sizeof(int) * 4];
-    int* output = reinterpret_cast<int*>(storage);
-    asc::std::uninitialized_value_construct(output, output + 4);
-    asc::std::destroy_n(output, 4);
+    int* values = reinterpret_cast<int*>(storage);
+    asc::std::uninitialized_value_construct(values, values + 4);
+    bool correct = true;
+    for (int index = 0; index < 4; ++index) { correct = correct && values[index] == 0; }
+    asc::std::destroy_n(values, 4);
+    return correct;
 }
 ```
 

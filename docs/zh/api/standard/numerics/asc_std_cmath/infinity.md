@@ -56,6 +56,12 @@
 #ifndef INFINITY
 #error "INFINITY is required by this public Header"
 #endif
+
+bool verify_example()
+{
+    const float value = INFINITY;
+    return value > 0.0f && asc::std::isinf(value);
+}
 ```
 
 ## 关联API

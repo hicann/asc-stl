@@ -104,10 +104,11 @@ The following snippet shows the call on this page with concrete objects.
 ```cpp
 #include <asc/std/chrono>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::chrono::milliseconds value{1500};
-    return asc::std::chrono::round<asc::std::chrono::seconds>(value);
+    namespace chrono = asc::std::chrono;
+    return chrono::round<chrono::seconds>(chrono::milliseconds{1500}).count() == 2 &&
+        chrono::round<chrono::seconds>(chrono::milliseconds{2500}).count() == 2;
 }
 ```
 

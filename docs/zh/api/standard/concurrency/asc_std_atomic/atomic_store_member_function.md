@@ -68,9 +68,11 @@ void store(T value, memory_order order = memory_order_seq_cst) noexcept;
 ```cpp
 #include <asc/std/atomic>
 
-void example(asc::std::atomic<int>& value)
+bool example()
 {
-    value.store(1, asc::std::memory_order_relaxed);
+    asc::std::atomic<int> value{1};
+    value.store(7, asc::std::memory_order_release);
+    return value.load() == 7;
 }
 ```
 

@@ -51,9 +51,11 @@ The following snippet shows the alias type with concrete template arguments.
 ```cpp
 #include <asc/mdspan>
 
-void use_type()
+bool example()
 {
-    using selected = asc::steps<2, int>;
+    asc::steps<2, int> values(2, 1);
+    return values.rank() == 2 && values.rank_dynamic() == 2 &&
+        values.stride(0) == 2 && values.stride(1) == 1;
 }
 ```
 

@@ -50,6 +50,7 @@
 #ifndef CANN_ASC_STL_VERSION_MINOR
 #error "CANN_ASC_STL_VERSION_MINOR is required by this public Header"
 #endif
+static_assert(CANN_ASC_STL_VERSION_MINOR == 0, "documented version or capability value");
 ```
 
 ## 关联API

@@ -103,6 +103,11 @@ int read_first_element()
     // 前置条件：视图非空（front 对空视图是未定义行为）
     return view.front();
 }
+
+bool verify_example()
+{
+    return read_first_element() == 1;
+}
 ```
 
 ## 关联API

@@ -66,9 +66,12 @@ constexpr year& operator+=(const years& value) noexcept;
 ```cpp
 #include <asc/std/chrono>
 
-void example(asc::std::chrono::year& value)
+bool example()
 {
-    value += asc::std::chrono::years{1};
+    namespace chrono = asc::std::chrono;
+    chrono::year value = chrono::year{2024};
+    value += chrono::years{1};
+    return static_cast<int>(value) == 2025;
 }
 ```
 

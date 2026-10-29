@@ -71,6 +71,11 @@ decltype(auto) example()
 {
     return asc::always_true{}(7);
 }
+
+bool verify_example()
+{
+    return example() == true;
+}
 ```
 
 ## Related APIs

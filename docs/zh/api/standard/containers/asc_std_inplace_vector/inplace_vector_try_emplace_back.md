@@ -75,10 +75,17 @@ constexpr optional<reference> try_emplace_back(Args&&... args);
 
 ```cpp
 #include <asc/std/inplace_vector>
+#include <memory>
 
-decltype(auto) example(asc::std::inplace_vector<int, 8>& values)
+bool example()
 {
-    return values.try_emplace_back(7);
+    using sequence = asc::std::inplace_vector<int, 8>;
+    sequence values;
+    const auto first = values.try_emplace_back(7);
+    for (int index = 1; index < 8; ++index)
+        values.try_emplace_back(9);
+    const auto overflow = values.try_emplace_back(11);
+    return first.has_value() && *first == 7 && !overflow.has_value() && values.size() == 8;
 }
 ```
 

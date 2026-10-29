@@ -108,18 +108,61 @@ asc::execution_status launch(asc::stream_ref stream, asc::simt_launch_config con
 
 ## Example
 
-The following snippet is used in a BiSheng ASC translation unit: the Host submits an ordinary AI Core kernel with a valid Stream, and output points to valid global memory.
+This complete example uses the real CANN Runtime and selects device 0, which must be available before running. Asynchronous waits are limited to 10 seconds. Failure terminates the example process to avoid releasing resources still in use; the controller must stop subsequent tasks and recheck device health. On success, work completes before resources are closed, the device is reset, and the Runtime is finalized. Compile this mixed Host/AI Core translation unit in BiSheng ASC mode with `-DCANN_ASC_STL_USE_SIMT_LAUNCH=0`; the documentation gate records SIMD compilation only, not successful device execution.
 
 ```cpp
+#include <acl/acl.h>
+#include <asc/stream>
+#include <cstdlib>
+
+void check(bool condition)
+{
+    if (!condition) {
+        std::_Exit(2);
+    }
+}
+
+void finish(asc::stream_ref stream)
+{
+    check(aclrtSynchronizeStreamWithTimeout(stream.native_handle(), 10000) == ACL_SUCCESS);
+}
 #include <asc/launch>
 
 extern "C" __global__ __vector__ void example_kernel(__gm__ int* output)
 {
     output[0] = 7;
 }
-decltype(auto) example(asc::stream_ref stream, int* output)
+
+void run_example()
 {
-    return asc::launch<example_kernel>(stream, asc::aicore_launch_config{1}, output);
+    asc::stream stream;
+    check(asc::make_stream(stream));
+    void* device = nullptr;
+    void* host = nullptr;
+    check(aclrtMalloc(&device, sizeof(int), ACL_MEM_MALLOC_HUGE_FIRST) == ACL_SUCCESS);
+    check(aclrtMallocHost(&host, sizeof(int)) == ACL_SUCCESS);
+    check(asc::launch<example_kernel>(stream, asc::aicore_launch_config{1}, static_cast<int*>(device)).success());
+    check(aclrtMemcpyAsync(host, sizeof(int), device, sizeof(int), ACL_MEMCPY_DEVICE_TO_HOST,
+        stream.native_handle()) == ACL_SUCCESS);
+    finish(stream);
+    check(*static_cast<int*>(host) == 7);
+    check(aclrtFreeHost(host) == ACL_SUCCESS && aclrtFree(device) == ACL_SUCCESS);
+    check(stream.close());
+}
+
+int main()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) {
+        return 1;
+    }
+    if (!asc::set_current_device(asc::device_ref(0))) {
+        check(aclFinalize() == ACL_SUCCESS);
+        return 1;
+    }
+    run_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return reset && finalized ? 0 : 1;
 }
 ```
 

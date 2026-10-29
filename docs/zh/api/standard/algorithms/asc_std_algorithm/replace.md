@@ -81,10 +81,13 @@ constexpr void replace(ForwardIterator first, ForwardIterator last, const T& old
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    int values[8] = {8, 3, 6, 1, 7, 2, 5, 4};
     asc::std::replace(values, values + 8, 3, 9);
+    const int expected[8] = {8, 9, 6, 1, 7, 2, 5, 4};
+    for (int index = 0; index < 8; ++index) { if (values[index] != expected[index]) return false; }
+    return true;
 }
 ```
 

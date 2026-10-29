@@ -154,14 +154,20 @@ constexpr asc::execution_requirements require(asc::tie_break value) noexcept;
 
 ## Example
 
-The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
+This Host example submits no Runtime work and checks configuration or resource-reference results using concrete values. This checks only that requirements are recorded; consult each algorithm for the requirements its current backend honors.
 
 ```cpp
 #include <asc/execution.require.h>
 
-decltype(auto) example(asc::determinism value)
+bool example()
 {
-    return asc::require(value);
+    const auto deterministic = asc::require(asc::determinism::run_to_run);
+    const auto ordered = asc::require(deterministic, asc::output_ordering::stable_sorted);
+    const auto selected = asc::require(ordered, asc::tie_break::prefer_smaller_index);
+    return selected.determinism_value() == asc::determinism::run_to_run &&
+        selected.output_ordering_value() == asc::output_ordering::stable_sorted &&
+        selected.tie_break_value() == asc::tie_break::prefer_smaller_index &&
+        deterministic.output_ordering_value() == asc::output_ordering::unsorted;
 }
 ```
 

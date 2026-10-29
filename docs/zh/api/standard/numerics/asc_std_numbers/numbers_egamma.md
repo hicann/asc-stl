@@ -55,7 +55,8 @@ inline constexpr double egamma = 0x1.2788cfc6fb618f49a37c7f0202a6p-1;
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::egamma;
+inline constexpr auto value = asc::std::numbers::egamma;
+static_assert(value > 0.5772156 && value < 0.5772158);
 ```
 
 ## 关联API

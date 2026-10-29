@@ -104,10 +104,14 @@ constexpr bool prev_permutation(BidirectionalIterator first, BidirectionalIterat
 ```cpp
 #include <asc/std/algorithm>
 
-decltype(auto) example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    return asc::std::prev_permutation(values, values + 8);
+    int values[4] = {1, 2, 3, 4};
+    const bool advanced = asc::std::prev_permutation(values, values + 4);
+    const int expected[4] = {4, 3, 2, 1};
+    if (advanced != false) return false;
+    for (int index = 0; index < 4; ++index) { if (values[index] != expected[index]) return false; }
+    return true;
 }
 ```
 

@@ -54,6 +54,11 @@
 #ifndef FP_NAN
 #error "FP_NAN is required by this public Header"
 #endif
+
+bool verify_example()
+{
+    return asc::std::fpclassify(NAN) == FP_NAN;
+}
 ```
 
 ## 关联API

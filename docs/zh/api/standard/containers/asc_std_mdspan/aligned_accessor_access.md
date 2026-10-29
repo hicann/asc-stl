@@ -66,14 +66,16 @@ constexpr reference access(data_handle_type pointer, size_t index) const noexcep
 
 ```cpp
 #include <asc/std/mdspan>
+#include <asc/std/array>
+#include <cstddef>
+#include <type_traits>
 
-int read_first_element()
+bool example()
 {
-    // aligned_accessor<int, 16> 要求数据指针按 16 字节对齐，故存储显式 alignas(16)
-    alignas(16) int values[4] = {1, 2, 3, 4};
-    asc::std::aligned_accessor<int, 16> accessor{};
-    // 前置条件：索引 0 < 4；access 不执行边界检查
-    return accessor.access(values, 0);
+    alignas(16) int data[4] = {1, 2, 3, 4};
+    asc::std::aligned_accessor<int, 16> accessor;
+    accessor.access(data, 1) = 9;
+    return data[1] == 9 && accessor.access(data, 0) == 1;
 }
 ```
 

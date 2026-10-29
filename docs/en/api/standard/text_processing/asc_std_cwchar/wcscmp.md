@@ -73,6 +73,11 @@ decltype(auto) example(const wchar_t * left, const wchar_t * right)
 {
     return asc::std::wcscmp(left, right);
 }
+
+bool verify_example()
+{
+    return example(L"abc", L"abd") < 0 && example(L"abc", L"abc") == 0;
+}
 ```
 
 ## Related APIs

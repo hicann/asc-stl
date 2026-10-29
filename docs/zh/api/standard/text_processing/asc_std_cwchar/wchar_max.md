@@ -59,6 +59,7 @@ Host的宏定义由系统`<cwchar>`提供。Device仅在工具链未预先定义
 #ifndef WCHAR_MAX
 #error "WCHAR_MAX is required by this public Header"
 #endif
+static_assert(WCHAR_MAX >= 32767);
 ```
 
 ## 关联API

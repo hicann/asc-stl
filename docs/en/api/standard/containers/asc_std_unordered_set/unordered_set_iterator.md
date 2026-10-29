@@ -69,15 +69,25 @@ struct example_allocator : ::std::allocator<T> {
     using pointer = T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
+    template <class U>
+    struct rebind {
+        using other = example_allocator<U>;
+    };
     example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    template <class U>
+    example_allocator(const example_allocator<U>&) noexcept
+    {}
 };
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::unordered_set<int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<int>>::iterator;
-}
+using alias_type =
+    typename asc::std::unordered_set<int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<int>>::iterator;
+static_assert(::std::is_same_v<alias_type,
+    decltype(::std::declval<
+             asc::std::unordered_set<int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<int>>&>()
+                 .begin())>);
 ```
 
 ## Related APIs

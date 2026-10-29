@@ -50,6 +50,7 @@ template<class T> inline constexpr bool is_extended_floating_point_v = asc::is_e
 #include <asc/type_traits>
 
 inline constexpr auto example = asc::is_extended_floating_point_v<float>;
+static_assert(!example, "float is a standard floating-point type, not an extended type");
 ```
 
 ## 关联API

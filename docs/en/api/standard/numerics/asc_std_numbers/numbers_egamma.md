@@ -55,7 +55,8 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::egamma;
+inline constexpr auto value = asc::std::numbers::egamma;
+static_assert(value > 0.5772156 && value < 0.5772158);
 ```
 
 ## Related APIs

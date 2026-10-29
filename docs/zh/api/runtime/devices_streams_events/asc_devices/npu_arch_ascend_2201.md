@@ -52,6 +52,11 @@ ascend_2201 = 2201;
 #include <asc/devices>
 
 auto value = asc::npu_arch::ascend_2201;
+
+bool verify_example()
+{
+    return static_cast<unsigned int>(value) == 2201u;
+}
 ```
 
 ## 关联API

@@ -70,9 +70,12 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example(asc::std::atomic_flag * object, asc::std::memory_order order)
+bool example()
 {
-    return asc::std::atomic_flag_test_and_set_explicit(object, order);
+    asc::std::atomic_flag flag{};
+    const bool before = asc::std::atomic_flag_test_and_set_explicit(&flag, asc::std::memory_order_relaxed);
+    const bool after = asc::std::atomic_flag_test_and_set_explicit(&flag, asc::std::memory_order_relaxed);
+    return !before && after;
 }
 ```
 

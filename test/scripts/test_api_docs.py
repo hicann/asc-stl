@@ -202,6 +202,36 @@ class DocumentationChecks(unittest.TestCase):
         self.assertEqual(len(calls), 1)
         self.assertIn("-E", calls[0].args[0])
 
+    def test_expected_termination_requires_exact_exit_and_complete_marker_line(self):
+        spec = {"expected_exit": 42, "expected_output": "EXPECTED_TERMINATION"}
+        cases = [(42, "EXPECTED_TERMINATION\n", "PASS"), (0, "EXPECTED_TERMINATION\n", "FAIL"),
+                 (42, "prefix EXPECTED_TERMINATION\n", "FAIL"), (-6, "EXPECTED_TERMINATION\n", "FAIL")]
+        for code, output, expected in cases:
+            with self.subTest(code=code, output=output):
+                process = subprocess.CompletedProcess([], code, stdout=output, stderr="")
+                with patch.object(DOCS.subprocess, "run", return_value=process):
+                    result = DOCS.run_example(self.root / "binary", {}, "run", spec)
+                self.assertEqual((result["status"], result["stage"]), (expected, "expected_termination"))
+                self.assertEqual(result["returncode"], code)
+
+    def test_expected_termination_registration_rejects_ambiguous_protocols(self):
+        from api_docs_inventory import registered_page_errors
+        page = "page.md"
+        self.page.write_text("example")
+        base = {"mode": "host", "standards": [17, 20], "expected_exit": 42}
+        for update in ({}, {"expected_output": ""}, {"expected_output": "one\ntwo"},
+                       {"expected_exit": 7}, {"mode": "runtime", "expected_output": "marker"}):
+            with self.subTest(update=update):
+                self.assertTrue(registered_page_errors(self.root, {page: dict(base, **update)}, {page}))
+        self.assertEqual(registered_page_errors(self.root, {page: dict(base, expected_output="marker")}, {page}), [])
+
+    def test_structure_gate_rejects_unregistered_examples(self):
+        coverage = {"errors": [], "unregistered_pages": ["docs/zh/api/missing.md"]}
+        with patch.object(DOCS, "check_writing", return_value=[]):
+            with patch.object(DOCS, "coverage_inventory", return_value=coverage):
+                errors = DOCS.check_structure(self.root)
+        self.assertTrue(any("lack validation registration: 1" in error for error in errors))
+
     def test_probe_compiler_and_runtime_exceptions_remain_failures(self):
         success = subprocess.CompletedProcess([], 0, stderr="")
         timeout = subprocess.TimeoutExpired("example", 30)
@@ -220,6 +250,69 @@ class DocumentationChecks(unittest.TestCase):
                 self.assertEqual(result["diagnostic"], str(results[-1]))
                 self.assertEqual(len(calls), len(results))
 
+
+    def write_cli_fixture(self, specs, expression="true"):
+        registry = self.root / "test/docs/examples.json"
+        registry.parent.mkdir(parents=True)
+        registry.write_text(json.dumps(specs))
+        for page in specs:
+            target = self.root / page
+            target.parent.mkdir(parents=True, exist_ok=True)
+            text = "## 调用示例\n```cpp\nbool example() { return " + expression + "; }\n```\n"
+            target.write_text(text)
+            translated = self.root / page.replace("docs/zh/api/", "docs/en/api/")
+            translated.parent.mkdir(parents=True, exist_ok=True)
+            translated.write_text(text)
+
+    def invoke_cli(self, arguments):
+        report = self.root / "report.json"
+        command = [sys.executable, str(CHECKER), "--root", str(self.root), "--examples", "--report", str(report)]
+        result = subprocess.run([*command, *arguments], capture_output=True, text=True, check=False)
+        return result.returncode, json.loads(report.read_text())
+
+    def test_cli_reports_real_failure_and_does_not_claim_pass(self):
+        page = "docs/zh/api/example.md"
+        self.write_cli_fixture({page: {"standards": [17], "mode": "host", "expression": "example()"}}, "false")
+        result, report = self.invoke_cli(["--require-all"])
+        self.assertEqual(result, 1)
+        self.assertEqual(report["status"], "FAIL")
+        self.assertEqual(report["examples"][0]["compile_returncode"], 0)
+        self.assertEqual(report["examples"][0]["returncode"], 1)
+
+    def test_cli_distinguishes_optional_skip_from_strict_partial_execution(self):
+        core = "docs/zh/api/core.md"
+        optional = "docs/zh/api/optional.md"
+        specs = {page: {"standards": [17], "mode": "host", "expression": "example()"}
+                 for page in (core, optional)}
+        specs[optional]["required_headers"] = ["asc_stl_intentionally_missing_dependency.h"]
+        self.write_cli_fixture(specs)
+        result, report = self.invoke_cli(["--dependencies", "optional", "--require-all"])
+        self.assertEqual((result, report["status"], report["passed"]), (77, "NOT_APPLICABLE", 0))
+        result, report = self.invoke_cli(["--require-all"])
+        self.assertEqual((result, report["status"], report["not_applicable"]), (2, "PARTIAL", 1))
+        result, report = self.invoke_cli(["--dependencies", "core", "--require-all"])
+        self.assertEqual((result, report["status"], report["passed"]), (0, "PASS", 1))
+
+    def test_empty_selection_and_not_run_are_not_success(self):
+        self.write_cli_fixture({"docs/zh/api/example.md": {"standards": [20], "mode": "host"}})
+        result, report = self.invoke_cli(["--standard", "17"])
+        self.assertEqual((result, report["status"]), (77, "NOT_APPLICABLE"))
+        report = DOCS.example_report([{"status": "PASS"}, {"status": "NOT_RUN"}])
+        self.assertEqual(DOCS.example_exit_code(report, False), 1)
+
+    def test_translation_checks_preserve_literal_content_and_reject_code_drift(self):
+        from api_docs_inventory import code_tokens
+        self.assertEqual(code_tokens('int x = 3; // Chinese comment'), code_tokens('int x=3; /* English */'))
+        self.assertNotEqual(code_tokens("long long value"), code_tokens("longlong value"))
+        self.assertNotEqual(code_tokens("x + + y"), code_tokens("x ++ y"))
+        self.assertNotEqual(code_tokens('"a b"'), code_tokens('"ab"'))
+        self.assertNotEqual(code_tokens('R"tag(a b)tag"'), code_tokens('R"tag(ab)tag"'))
+        page = "docs/zh/api/example.md"
+        self.write_cli_fixture({page: {"standards": [17], "mode": "host", "expression": "example()"}})
+        (self.root / "docs/en/api/example.md").write_text("## Example\n```cpp\nbool example() { return false; }\n```\n")
+        result, report = self.invoke_cli(["--require-all"])
+        self.assertEqual((result, report["status"]), (1, "FAIL"))
+        self.assertTrue(report["coverage"]["errors"])
 
     def test_dangling_local_reference_and_valid_local_check(self):
         from check_doc_writing import example_errors
@@ -268,6 +361,8 @@ class DocumentationChecks(unittest.TestCase):
         self.assertEqual(api_section_errors(self.page), [])
         self.page.write_text(self.page.read_text().replace("## 声明", "## 函数原型"))
         self.assertTrue(any("返回值说明" in error for error in api_section_errors(self.page)))
+
+
 
 
 if __name__ == "__main__":

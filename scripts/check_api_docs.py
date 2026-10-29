@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import hashlib
 import json
 import logging
 import os
@@ -26,8 +27,10 @@ import re
 import shutil
 import subprocess
 import tempfile
+import time
 
 from check_doc_writing import check_writing
+from api_docs_inventory import coverage_inventory
 
 FENCE = re.compile(r"^```")
 CPP = re.compile(r"```cpp\n(.*?)\n```", re.DOTALL)
@@ -124,6 +127,10 @@ def check_structure(root: Path) -> list[str]:
         errors.extend(structure_errors(path))
         if "api" in path.parts:
             errors.extend(content_errors(path))
+    coverage = coverage_inventory(root)
+    errors.extend(coverage["errors"])
+    if coverage["unregistered_pages"]:
+        errors.append(f"API example pages lack validation registration: {len(coverage['unregistered_pages'])}")
     return errors
 
 
@@ -176,10 +183,18 @@ def prepare_example_source(source: str, spec: dict) -> tuple[str, str]:
     return source, "compile_only"
 
 
-def run_example(binary: Path, record: dict, kind: str) -> dict:
+def run_example(binary: Path, record: dict, kind: str, spec: dict) -> dict:
     result = subprocess.run([str(binary)], capture_output=True, text=True, timeout=30, check=False)
-    status = "PASS" if result.returncode == 0 else "FAIL"
-    return dict(record, status=status, stage=kind, returncode=result.returncode, diagnostic=result.stderr)
+    expected = spec.get("expected_exit", 0)
+    marker = spec.get("expected_output", "")
+    protocol = expected == 0 or (expected == 42 and isinstance(marker, str) and bool(marker)
+                                and "\n" not in marker and spec.get("mode", "host") == "host")
+    matched = protocol and result.returncode == expected and (not marker or marker in result.stdout.splitlines())
+    stage = "expected_termination" if expected else kind
+    status = "PASS" if matched else "FAIL"
+    return dict(record, status=status, stage=stage, returncode=result.returncode,
+                expected_returncode=expected, expected_output=marker,
+                diagnostic=result.stderr or "", output=result.stdout or "")
 
 
 def compile_example(task: tuple) -> dict:
@@ -206,13 +221,15 @@ def compile_example(task: tuple) -> dict:
     binary = directory / f"example-{index}"
     source_path.write_text(source, encoding="utf-8")
     command = example_command(root, spec, standard, compiler, source_path)
+    record.update(command=command, source_sha256=hashlib.sha256(source.encode()).hexdigest())
     try:
         result = subprocess.run(command, capture_output=True, text=True, timeout=120, check=False)
+        record.update(compile_returncode=result.returncode)
         if result.returncode:
             return dict(record, status="FAIL", stage="compile", diagnostic=result.stderr)
         if not host_mode:
             return dict(record, status="PASS", stage="device_compile", command=command)
-        return run_example(binary, record, kind)
+        return run_example(binary, record, kind, spec)
     except (OSError, subprocess.TimeoutExpired) as error:
         return dict(record, status="FAIL", diagnostic=str(error))
 
@@ -249,7 +266,7 @@ def check_examples(args: argparse.Namespace) -> list[dict]:
         tasks = []
         for index, (path, spec) in enumerate(sorted(registry.items())):
             include_only = args.standard in spec.get("header_standards", [])
-            if spec.get("mode", "host") != args.mode:
+            if spec.get("mode", "host") != args.mode or not selected_dependencies(spec, args):
                 continue
             if args.standard not in spec["standards"] and not include_only:
                 continue
@@ -267,8 +284,52 @@ def check_examples(args: argparse.Namespace) -> list[dict]:
     return records
 
 
-def main() -> int:
-    logging.basicConfig(level=logging.INFO, format="%(message)s")
+def selected_dependencies(spec: dict, args: argparse.Namespace) -> bool:
+    selection = getattr(args, "dependencies", "all")
+    optional = bool(spec.get("required_headers"))
+    return selection == "all" or (selection == "optional") == optional
+
+
+def example_report(records: list[dict]) -> dict:
+    counts = {status: sum(row["status"] == status for row in records)
+              for status in ("PASS", "FAIL", "NOT_APPLICABLE", "NOT_RUN")}
+    status = "PASS"
+    if counts["FAIL"] or counts["NOT_RUN"]:
+        status = "FAIL"
+    elif not counts["PASS"]:
+        status = "NOT_APPLICABLE"
+    elif counts["NOT_APPLICABLE"]:
+        status = "PARTIAL"
+    return {"examples": records, "status": status, "passed": counts["PASS"], "failed": counts["FAIL"],
+            "not_applicable": counts["NOT_APPLICABLE"], "not_run": counts["NOT_RUN"]}
+
+
+def example_exit_code(report: dict, require_all: bool) -> int:
+    if report["status"] == "FAIL":
+        return 1
+    if report["status"] == "NOT_APPLICABLE":
+        return 77
+    if report["status"] == "PARTIAL" and require_all:
+        return 2
+    return 0
+
+
+def example_run(args: argparse.Namespace) -> tuple[dict, int]:
+    report = example_report(check_examples(args))
+    for record in report["examples"]:
+        if record["status"] != "PASS":
+            LOGGER.warning("%s: %s %s", record["status"], record["page"], record.get("diagnostic", "")[:1200])
+    LOGGER.info("%s: API examples C++%s %s: %s/%s passed, %s not applicable, %s not run",
+                report["status"], args.standard, args.mode, report["passed"], len(report["examples"]),
+                report["not_applicable"], report["not_run"])
+    report.update(standard=args.standard, mode=args.mode, dependencies=args.dependencies)
+    result = example_exit_code(report, args.require_all)
+    if result == 2:
+        LOGGER.error("BLOCKED_ENVIRONMENT: required example dependencies are unavailable")
+    return report, result
+
+
+def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--examples", action="store_true")
@@ -278,34 +339,42 @@ def main() -> int:
     parser.add_argument("--npu-arch", default="dav-3510")
     parser.add_argument("--extra-include", type=Path, action="append", default=[])
     parser.add_argument("--jobs", type=int, default=4)
+    parser.add_argument("--dependencies", choices=("all", "core", "optional"), default="all")
+    parser.add_argument("--require-all", action="store_true", help="Reject incomplete example execution")
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
     args.root = args.root.resolve()
+    extra_paths = os.environ.get("ASC_STL_DOC_EXTRA_INCLUDE_DIRS", "").split(os.pathsep)
+    args.extra_include.extend(Path(value) for value in extra_paths if value)
     if args.jobs < 1:
         parser.error("--jobs must be positive")
+    return args
+
+
+def main() -> int:
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    args = parse_arguments()
+    started = time.monotonic()
     if args.examples:
-        records = check_examples(args)
-        failed = [record for record in records if record["status"] == "FAIL"]
-        passed = sum(record["status"] == "PASS" for record in records)
-        skipped = sum(record["status"] == "NOT_APPLICABLE" for record in records)
-        not_run = sum(record["status"] == "NOT_RUN" for record in records)
-        report = {"examples": records, "passed": passed, "failed": len(failed),
-                  "not_applicable": skipped, "not_run": not_run}
-        for record in failed[:20]:
-            LOGGER.error("%s %s", record["page"], record.get("diagnostic", "")[:1200])
-        LOGGER.info("API examples C++%s %s: %s/%s passed, %s not applicable, %s not run",
-                    args.standard, args.mode, passed, len(records), skipped, not_run)
-        errors = failed
+        report, result = example_run(args)
     else:
         errors = check_structure(args.root)
-        report = {"errors": errors}
+        report = {"errors": errors, "status": "FAIL" if errors else "PASS"}
         for error in errors[:30]:
             LOGGER.error("%s", error)
         LOGGER.info("Documentation findings: %s", len(errors))
+        result = int(bool(errors))
+    coverage = coverage_inventory(args.root)
+    if coverage["errors"]:
+        report["status"] = "FAIL"
+        result = 1
+        for error in coverage["errors"][:30]:
+            LOGGER.error("%s", error)
+    report.update(schema_version=2, duration_seconds=round(time.monotonic() - started, 3), coverage=coverage)
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    return bool(errors)
+    return result
 
 
 if __name__ == "__main__":

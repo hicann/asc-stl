@@ -184,10 +184,11 @@ template<class PairLike> constexpr pair<T1, T2>& operator=(PairLike&& other);
 ```cpp
 #include <asc/std/utility>
 
-void example()
+bool example()
 {
     asc::std::pair<int, int> left(1, 2), right(3, 4);
     left = right;
+    return left.first == 3 && left.second == 4;
 }
 ```
 

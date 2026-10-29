@@ -44,12 +44,13 @@ template<class T> inline constexpr asc::memory_space memory_space_of_v = asc::me
 
 ## Example
 
-The following snippet reads the interface value with concrete template arguments.
+This Host example uses concrete types or dimensions and checks independent expected values without querying a running Device context.
 
 ```cpp
 #include <asc/memory>
 
-inline constexpr auto example = asc::memory_space_of_v<asc::gm_span<int>>;
+static_assert(asc::memory_space_of_v<asc::gm_span<int>> == asc::memory_space::global);
+static_assert(asc::memory_space_of_v<asc::gm_span<const int>> == asc::memory_space::global);
 ```
 
 ## Related APIs

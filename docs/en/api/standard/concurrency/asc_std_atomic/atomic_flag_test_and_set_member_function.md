@@ -69,9 +69,12 @@ The following Host snippet demonstrates the atomic operation; device-side object
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example(asc::std::atomic_flag& flag)
+bool example()
 {
-    return flag.test_and_set(asc::std::memory_order_relaxed);
+    asc::std::atomic_flag flag{};
+    const bool before = flag.test_and_set(asc::std::memory_order_relaxed);
+    const bool after = flag.test_and_set(asc::std::memory_order_relaxed);
+    return !before && after;
 }
 ```
 

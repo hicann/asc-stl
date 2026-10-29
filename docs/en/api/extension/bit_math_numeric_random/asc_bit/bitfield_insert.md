@@ -77,6 +77,11 @@ decltype(auto) example()
 {
     return asc::bitfield_insert(0u, 3u, 1, 2);
 }
+
+bool verify_example()
+{
+    return example() == 6u;
+}
 ```
 
 ## Related APIs

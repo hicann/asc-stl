@@ -71,6 +71,11 @@ decltype(auto) example()
 {
     return asc::std::ranges::not_equal_to{}(1, 2);
 }
+
+bool verify_example()
+{
+    return example() == true;
+}
 ```
 
 ## 关联API

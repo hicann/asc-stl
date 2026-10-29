@@ -55,13 +55,29 @@ constexpr ~expected();
 以下片段假定object指向已构造对象；显式析构后不得再次访问对象，存储释放由调用方负责。
 
 ```cpp
+#include <asc/std/new>
 #include <asc/std/expected>
 
-using example_object = asc::std::expected<int, int>;
+struct example_value {
+    static inline int alive = 0;
+    example_value() { ++alive; }
+    ~example_value() { --alive; }
+};
+
+using example_object = asc::std::expected<example_value, int>;
 void example(example_object* object)
 {
     // object 指向已构造对象；析构后不得再访问该对象。
     object->~example_object();
+}
+
+bool verify_example()
+{
+    alignas(example_object) unsigned char storage[sizeof(example_object)];
+    auto* object = ::new (static_cast<void*>(storage)) example_object();
+    const bool constructed = example_value::alive == 1;
+    example(object);
+    return constructed && example_value::alive == 0;
 }
 ```
 

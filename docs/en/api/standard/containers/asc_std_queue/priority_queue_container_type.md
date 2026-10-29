@@ -54,11 +54,12 @@ The following Host snippet explicitly provides a standard container as the under
 #include <deque>
 #include <functional>
 #include <vector>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>::container_type;
-}
+using alias_type = typename asc::std::priority_queue<int, ::std::vector<int>, ::std::less<int>>::container_type;
+static_assert(::std::is_same_v<alias_type, ::std::vector<int>>);
 ```
 
 ## Related APIs

@@ -95,6 +95,12 @@ decltype(auto) example(const wchar_t * input, const wchar_t * needle)
 {
     return asc::std::wcsstr(input, needle);
 }
+
+bool verify_example()
+{
+    const wchar_t input[] = L"abcde";
+    return example(input, L"cd") == input + 2;
+}
 ```
 
 ## Related APIs

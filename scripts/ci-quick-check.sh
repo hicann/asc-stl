@@ -21,7 +21,8 @@ BUILD_DIR="${ASC_STL_BUILD_DIR:-$ROOT/build/ci}"
 
 cd "$ROOT"
 bash scripts/check-style.sh
-cmake -S "$ROOT" -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=Release
+cmake -S "$ROOT" -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=Release \
+    -DASC_STL_DOC_EXAMPLE_JOBS="${ASC_STL_DOC_EXAMPLE_JOBS:-4}"
 cmake --build "$BUILD_DIR"
 ctest --test-dir "$BUILD_DIR" \
     -L "metadata|static-rules|header-host|semantic-host|affected-regression" \

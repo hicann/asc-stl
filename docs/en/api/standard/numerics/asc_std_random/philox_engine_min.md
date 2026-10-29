@@ -68,6 +68,11 @@ decltype(auto) example()
     asc::std::philox4x32 generator{};
     return asc::std::philox4x32::min();
 }
+
+bool verify_example()
+{
+    return example() == 0u;
+}
 ```
 
 ## Related APIs

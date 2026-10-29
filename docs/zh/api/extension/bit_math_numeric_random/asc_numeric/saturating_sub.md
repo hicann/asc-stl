@@ -76,6 +76,11 @@ decltype(auto) example()
 {
     return asc::saturating_sub(2, 8);
 }
+
+bool verify_example()
+{
+    return example() == -6;
+}
 ```
 
 ## 关联API

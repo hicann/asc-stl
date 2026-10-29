@@ -47,12 +47,19 @@ inline constexpr asc::device_policy device;
 
 ## Example
 
-The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
+This Host example submits no Runtime work and checks configuration or resource-reference results using concrete values.
 
 ```cpp
 #include <asc/execution.policy.h>
 
-auto value = asc::execution::device;
+bool example()
+{
+    const auto policy = asc::execution::device;
+    return !policy.stream() && policy.temporary_storage().empty() &&
+        policy.requirements().determinism_value() == asc::determinism::not_guaranteed &&
+        policy.requirements().output_ordering_value() == asc::output_ordering::unsorted &&
+        policy.requirements().tie_break_value() == asc::tie_break::unspecified;
+}
 ```
 
 ## Related APIs

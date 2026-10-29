@@ -79,10 +79,11 @@ constexpr atomic(T value) noexcept;
 ```cpp
 #include <asc/std/atomic>
 
-void example()
+bool example()
 {
-    asc::std::atomic<int> value{};
-    value.store(0, asc::std::memory_order_relaxed);
+    asc::std::atomic<int> zero{};
+    asc::std::atomic<int> seven{7};
+    return zero.load() == 0 && seven.load() == 7;
 }
 ```
 

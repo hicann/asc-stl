@@ -76,11 +76,12 @@ The following Host snippet uses a concrete integer atomic object; device-side ob
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example()
+bool example()
 {
     asc::std::atomic<int> value{1};
     int expected = 1;
-    return asc::std::atomic_compare_exchange_weak(&value, &expected, 2);
+    const bool changed = asc::std::atomic_compare_exchange_weak(&value, &expected, 2);
+    return (changed && value.load() == 2 && expected == 1) || (!changed && value.load() == 1 && expected == 1);
 }
 ```
 

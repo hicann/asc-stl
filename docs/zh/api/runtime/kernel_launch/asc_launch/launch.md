@@ -108,18 +108,61 @@ asc::execution_status launch(asc::stream_ref stream, asc::simt_launch_config con
 
 ## 调用示例
 
-以下片段用于毕昇ASC翻译单元：Host使用有效Stream提交普通AI Core Kernel，output指向有效全局内存。
+以下完整示例使用真实CANN Runtime，选择设备0；运行前须确认该设备可用。异步等待限于10秒，失败即终止样例进程，避免释放仍被使用的资源；控制端须停止后续任务并重新检查设备状态。成功路径先完成工作，再关闭资源、重置设备并结束Runtime。此混合Host/AI Core翻译单元需以毕昇ASC模式及`-DCANN_ASC_STL_USE_SIMT_LAUNCH=0`编译；文档门禁仅记录SIMD编译，不代表真实设备执行通过。
 
 ```cpp
+#include <acl/acl.h>
+#include <asc/stream>
+#include <cstdlib>
+
+void check(bool condition)
+{
+    if (!condition) {
+        std::_Exit(2);
+    }
+}
+
+void finish(asc::stream_ref stream)
+{
+    check(aclrtSynchronizeStreamWithTimeout(stream.native_handle(), 10000) == ACL_SUCCESS);
+}
 #include <asc/launch>
 
 extern "C" __global__ __vector__ void example_kernel(__gm__ int* output)
 {
     output[0] = 7;
 }
-decltype(auto) example(asc::stream_ref stream, int* output)
+
+void run_example()
 {
-    return asc::launch<example_kernel>(stream, asc::aicore_launch_config{1}, output);
+    asc::stream stream;
+    check(asc::make_stream(stream));
+    void* device = nullptr;
+    void* host = nullptr;
+    check(aclrtMalloc(&device, sizeof(int), ACL_MEM_MALLOC_HUGE_FIRST) == ACL_SUCCESS);
+    check(aclrtMallocHost(&host, sizeof(int)) == ACL_SUCCESS);
+    check(asc::launch<example_kernel>(stream, asc::aicore_launch_config{1}, static_cast<int*>(device)).success());
+    check(aclrtMemcpyAsync(host, sizeof(int), device, sizeof(int), ACL_MEMCPY_DEVICE_TO_HOST,
+        stream.native_handle()) == ACL_SUCCESS);
+    finish(stream);
+    check(*static_cast<int*>(host) == 7);
+    check(aclrtFreeHost(host) == ACL_SUCCESS && aclrtFree(device) == ACL_SUCCESS);
+    check(stream.close());
+}
+
+int main()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) {
+        return 1;
+    }
+    if (!asc::set_current_device(asc::device_ref(0))) {
+        check(aclFinalize() == ACL_SUCCESS);
+        return 1;
+    }
+    run_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return reset && finalized ? 0 : 1;
 }
 ```
 

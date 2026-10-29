@@ -65,10 +65,13 @@ static constexpr size_t static_extent(rank_type index) noexcept;
 
 ```cpp
 #include <asc/std/mdspan>
+#include <asc/std/array>
+#include <cstddef>
+#include <type_traits>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::extents<int, 2, 3>::static_extent(0);
+    return asc::std::extents<int, 2, 3>::static_extent(0) == 2 && asc::std::extents<int, 2, 3>::static_extent(1) == 3;
 }
 ```
 

@@ -75,6 +75,13 @@ decltype(auto) example(wchar_t * destination, const wchar_t * source, asc::std::
 {
     return asc::std::wcsxfrm(destination, source, count);
 }
+
+bool verify_example()
+{
+    wchar_t output[8] = {};
+    const auto count = example(output, L"abc", 8);
+    return count == 3 && output[0] == L'a' && output[1] == L'b' && output[2] == L'c' && output[3] == 0;
+}
 ```
 
 ## 关联API

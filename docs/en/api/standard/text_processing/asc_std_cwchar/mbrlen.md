@@ -76,6 +76,12 @@ decltype(auto) example(const char * input, asc::std::size_t count, asc::std::mbs
 {
     return asc::std::mbrlen(input, count, state);
 }
+
+bool verify_example()
+{
+    asc::std::mbstate_t state{};
+    return example("A", 1, &state) == 1;
+}
 ```
 
 ## Related APIs

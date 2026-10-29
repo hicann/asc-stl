@@ -56,6 +56,7 @@ inline constexpr bool is_commutative_v = asc::is_associative_v<Operator, T>;
 #include <asc/functional>
 
 inline constexpr auto example = asc::is_commutative_v<asc::minimum<int>, int>;
+static_assert(example, "the selected documented type has this capability");
 ```
 
 ## 关联API

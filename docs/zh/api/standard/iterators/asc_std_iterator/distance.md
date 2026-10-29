@@ -77,6 +77,11 @@ decltype(auto) example()
     int values[4] = {1, 2, 3, 4};
     return asc::std::distance(values, values + 4);
 }
+
+bool verify_example()
+{
+    return example() == 4;
+}
 ```
 
 ## 关联API

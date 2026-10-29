@@ -77,10 +77,11 @@ template<class T> T atomic_fetch_xor_explicit(atomic<T>* object, T value, memory
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::atomic<int> value{1};
-    return asc::std::atomic_fetch_xor_explicit(&value, 2, asc::std::memory_order_relaxed);
+    asc::std::atomic<int> value{5};
+    const auto before = asc::std::atomic_fetch_xor_explicit(&value, 3, asc::std::memory_order_relaxed);
+    return before == 5 && value.load() == 6;
 }
 ```
 

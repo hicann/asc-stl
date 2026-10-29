@@ -65,11 +65,12 @@ The following Host snippet demonstrates the call with concrete numeric types; th
 ```cpp
 #include <asc/std/random>
 
-void example()
+bool example()
 {
-    asc::std::philox4x32 generator{};
-    asc::std::array<asc::std::philox4x32::result_type, 4> counter{};
+    asc::std::philox4x32 generator;
+    asc::std::array<asc::std::philox4x32::result_type, 4> counter{0, 0, 0, 100};
     generator.set_counter(counter);
+    return generator() == 940657802u;
 }
 ```
 

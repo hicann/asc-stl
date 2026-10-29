@@ -52,6 +52,7 @@ The following snippet reads the interface value with concrete template arguments
 #include <asc/std/numbers>
 
 inline constexpr auto example = asc::std::sqrt2_v<float>;
+static_assert(example > 1.4142134 && example < 1.4142137);
 ```
 
 ## Related APIs

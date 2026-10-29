@@ -61,21 +61,69 @@ bool wait(asc::event_ref event) const noexcept;
 
 ## Example
 
-The following snippet focuses on calling this interface; inputs, resources, and the execution context must satisfy the constraints on this page.
+This complete example uses the real CANN Runtime and selects device 0, which must be available before running. Asynchronous waits are limited to 10 seconds. Failure terminates the example process to avoid releasing resources still in use; the controller must stop subsequent tasks and recheck device health. On success, work completes before resources are closed, the device is reset, and the Runtime is finalized.
 
 ```cpp
+#include <acl/acl.h>
 #include <asc/stream>
+#include <cstdlib>
 
-template <class Object, class... Args>
-decltype(auto) example(Object& object, Args&&... args)
+void check(bool condition)
 {
-    return object.wait(static_cast<Args&&>(args)...);
+    if (!condition) {
+        std::_Exit(2);
+    }
+}
+
+void finish(asc::stream_ref stream)
+{
+    check(aclrtSynchronizeStreamWithTimeout(stream.native_handle(), 10000) == ACL_SUCCESS);
+}
+#include <asc/algorithm>
+#include <asc/buffer>
+
+
+void run_example()
+{
+    asc::stream producer;
+    asc::stream consumer;
+    asc::event ready;
+    check(asc::make_stream(producer) && asc::make_stream(consumer));
+    check(asc::make_event(ready));
+    asc::device_memory_resource device_resource(0);
+    asc::pinned_memory_resource host_resource;
+    asc::device_buffer<unsigned char> device;
+    asc::pinned_buffer<unsigned char> output;
+    check(asc::make_device_buffer(device, asc::device_memory_resource_ref(device_resource), producer, 4).success());
+    check(asc::make_pinned_buffer(output, asc::pinned_memory_resource_ref(host_resource), consumer, 4).success());
+    check(asc::fill_bytes(producer, device.data(), 0x2A, 4).success());
+    check(ready.record(producer));
+    check(asc::stream_ref(consumer.native_handle()).wait(ready));
+    check(asc::copy_bytes(consumer, output.data(), device.data(), 4).success());
+    finish(consumer);
+    finish(producer);
+    for (int i = 0; i < 4; ++i) {
+        check(output.data()[i] == 0x2A);
+    }
+    check(output.close().success() && device.close().success());
+    check(ready.close() && consumer.close() && producer.close());
+}
+
+int main()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) {
+        return 1;
+    }
+    if (!asc::set_current_device(asc::device_ref(0))) {
+        check(aclFinalize() == ACL_SUCCESS);
+        return 1;
+    }
+    run_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return reset && finalized ? 0 : 1;
 }
 ```
-
-The corresponding complete project uses `C++17`; compile and run it on the target toolchain and device.
-
-Complete example source: [stream_event.cpp](../../../../../zh/examples/stream_event.cpp).
 
 ## Related APIs
 

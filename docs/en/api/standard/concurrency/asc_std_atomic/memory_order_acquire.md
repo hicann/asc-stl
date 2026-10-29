@@ -57,7 +57,11 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/atomic>
 
-auto value = asc::std::memory_order_acquire;
+bool example()
+{
+    asc::std::atomic<int> value{7};
+    return value.load(asc::std::memory_order_acquire) == 7;
+}
 ```
 
 ## Related APIs

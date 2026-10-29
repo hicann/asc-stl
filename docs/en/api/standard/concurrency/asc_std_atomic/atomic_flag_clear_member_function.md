@@ -67,9 +67,12 @@ The following Host snippet demonstrates the atomic operation; device-side object
 ```cpp
 #include <asc/std/atomic>
 
-void example(asc::std::atomic_flag& flag)
+bool example()
 {
+    asc::std::atomic_flag flag{};
+    flag.test_and_set();
     flag.clear(asc::std::memory_order_relaxed);
+    return !flag.test_and_set();
 }
 ```
 

@@ -76,10 +76,11 @@ template<class T> T atomic_fetch_or(atomic<T>* object, T value) noexcept;
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::atomic<int> value{1};
-    return asc::std::atomic_fetch_or(&value, 2);
+    asc::std::atomic<int> value{5};
+    const auto before = asc::std::atomic_fetch_or(&value, 3);
+    return before == 5 && value.load() == 7;
 }
 ```
 

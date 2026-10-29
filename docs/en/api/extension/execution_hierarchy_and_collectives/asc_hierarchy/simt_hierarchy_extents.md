@@ -81,15 +81,18 @@ constexpr asc::extent3d extents(asc::grid_level) const noexcept;
 
 ## Example
 
-The following Host snippet demonstrates the interface on this page with concrete types; the lifetimes of objects and pointers must satisfy the constraints on this page.
+This Host example uses concrete types or dimensions and checks independent expected values without querying a running Device context.
 
 ```cpp
 #include <asc/hierarchy>
 
-decltype(auto) example(const asc::simt_hierarchy& hierarchy)
+bool example()
 {
-    auto dimensions = hierarchy.extents(asc::block);
-    return dimensions;
+    const auto hierarchy = asc::make_hierarchy(asc::grid_dims<2, 3, 4>(), asc::block_dims<8, 4, 2>());
+    const auto grid = hierarchy.extents(asc::grid);
+    const auto block = hierarchy.extents(asc::block);
+    return grid.x == 2 && grid.y == 3 && grid.z == 4 &&
+        block.x == 8 && block.y == 4 && block.z == 2;
 }
 ```
 

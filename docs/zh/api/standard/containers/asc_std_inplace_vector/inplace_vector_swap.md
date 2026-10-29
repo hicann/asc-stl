@@ -65,10 +65,17 @@ constexpr void swap(inplace_vector& other);
 
 ```cpp
 #include <asc/std/inplace_vector>
+#include <memory>
 
-void example(asc::std::inplace_vector<int, 8>& left, asc::std::inplace_vector<int, 8>& right)
+bool example()
 {
-    left.swap(right);
+    using sequence = asc::std::inplace_vector<int, 8>;
+    sequence values;
+    values.unchecked_push_back(7);
+    sequence other;
+    other.unchecked_push_back(9);
+    values.swap(other);
+    return values[0] == 9 && other[0] == 7;
 }
 ```
 

@@ -83,13 +83,18 @@ The following Host snippet explicitly provides a standard container as the under
 
 ```cpp
 #include <asc/std/stack>
+#include <memory>
 #include <deque>
-#include <functional>
-#include <vector>
 
-void example(asc::std::stack<int, ::std::deque<int>>& object)
+bool example()
 {
-    object.push(7);
+    using sequence = asc::std::stack<int, ::std::deque<int>>;
+    sequence values;
+    values.push(3);
+    values.push(7);
+    const bool first = values.size() == 2 && values.top() == 7;
+    values.pop();
+    return first && values.size() == 1 && values.top() == 3;
 }
 ```
 

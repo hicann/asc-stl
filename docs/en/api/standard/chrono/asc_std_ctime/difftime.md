@@ -68,9 +68,9 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/ctime>
 
-decltype(auto) example(asc::std::time_t end, asc::std::time_t start)
+bool example()
 {
-    return asc::std::difftime(end, start);
+    return asc::std::difftime(static_cast<asc::std::time_t>(100), static_cast<asc::std::time_t>(40)) == 60.0;
 }
 ```
 

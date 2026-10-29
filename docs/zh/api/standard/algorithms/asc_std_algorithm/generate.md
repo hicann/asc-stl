@@ -80,11 +80,13 @@ constexpr void generate(ForwardIterator first, ForwardIterator last, Generator g
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    auto generator = []() { return 7; };
-    asc::std::generate(values, values + 8, generator);
+    int values[8] = {8, 3, 6, 1, 7, 2, 5, 4};
+    int next = 0;
+    asc::std::generate(values, values + 8, [&next] { return ++next; });
+    for (int index = 0; index < 8; ++index) { if (values[index] != index + 1) return false; }
+    return next == 8;
 }
 ```
 

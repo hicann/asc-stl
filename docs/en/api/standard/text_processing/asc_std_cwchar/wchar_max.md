@@ -59,6 +59,7 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef WCHAR_MAX
 #error "WCHAR_MAX is required by this public Header"
 #endif
+static_assert(WCHAR_MAX >= 32767);
 ```
 
 ## Related APIs

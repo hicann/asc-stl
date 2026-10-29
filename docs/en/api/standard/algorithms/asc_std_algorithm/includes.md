@@ -118,6 +118,11 @@ decltype(auto) example()
     int other[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     return asc::std::includes(values, values + 8, other, other + 8);
 }
+
+bool verify_example()
+{
+    return example() == true;
+}
 ```
 
 ## Related APIs

@@ -52,6 +52,7 @@ template<class Tp> inline constexpr Tp e_v = __numbers<Tp>::__e();
 #include <asc/std/numbers>
 
 inline constexpr auto example = asc::std::e_v<float>;
+static_assert(example > 2.7182817 && example < 2.7182819);
 ```
 
 ## 关联API

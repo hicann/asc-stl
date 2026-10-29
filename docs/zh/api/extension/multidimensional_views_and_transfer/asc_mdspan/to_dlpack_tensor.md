@@ -80,22 +80,21 @@ DLPack桥接接口仅在提供DLPack头文件时可用；以下Host片段借用�
 
 ```cpp
 #include <asc/mdspan>
-#include <asc/std/cstddef>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
+#include <dlpack/dlpack.h>
 
-#if __has_include(<dlpack/dlpack.h>)
-decltype(auto) example(
-    const asc::host_mdspan<int, asc::std::dextents<asc::std::size_t, 2>, asc::layout_stride_relaxed>& view,
-    asc::dlpack_tensor<2>& output)
+bool example()
 {
-    return asc::to_dlpack_tensor(view, kDLCPU, 0, output);
+    int values[4] = {10, 20, 30, 40};
+    using extents_type = asc::std::extents<asc::std::size_t, 2, 2>;
+    asc::host_mdspan<int, extents_type> view(values);
+    asc::dlpack_tensor<2> output;
+    if (!asc::to_dlpack_tensor(view, kDLCPU, 0, output)) return false;
+    const DLTensor tensor = output.get();
+    return tensor.data == values && tensor.device.device_type == kDLCPU && tensor.device.device_id == 0 &&
+        tensor.ndim == 2 && tensor.dtype.code == kDLInt && tensor.dtype.bits == 32 && tensor.dtype.lanes == 1 &&
+        tensor.shape[0] == 2 && tensor.shape[1] == 2 && tensor.strides[0] == 2 && tensor.strides[1] == 1 &&
+        tensor.byte_offset == 0 && static_cast<int*>(tensor.data)[3] == 40;
 }
-#endif
 ```
 
 ## 关联API

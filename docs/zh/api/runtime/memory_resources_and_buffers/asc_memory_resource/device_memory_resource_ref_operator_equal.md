@@ -60,15 +60,21 @@ constexpr bool operator==(const asc::device_memory_resource_ref& other) const no
 
 ## 调用示例
 
-以下Host片段使用具体对象演示调用；涉及资源操作时须遵守本页的初始化和生命周期约束。
+以下Host示例不提交Runtime任务；以具体值检查配置或资源引用的可观察结果。
 
 ```cpp
 #include <asc/memory_resource>
 
-decltype(auto) example(const asc::device_memory_resource_ref& left, const asc::device_memory_resource_ref& right)
+bool example()
 {
-    const bool equal = left == right;
-    return equal;
+    asc::device_memory_resource first(0);
+    asc::device_memory_resource second(0);
+    const asc::device_memory_resource_ref a(first);
+    const asc::device_memory_resource_ref same(first);
+    const asc::device_memory_resource_ref different(second);
+    const asc::device_memory_resource_ref empty;
+    const asc::device_memory_resource_ref another_empty;
+    return a == same && !(a == different) && empty == another_empty;
 }
 ```
 

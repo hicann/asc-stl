@@ -55,11 +55,12 @@ The following Host snippet explicitly provides a standard container as the under
 #include <deque>
 #include <functional>
 #include <vector>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::stack<int, ::std::deque<int>>::size_type;
-}
+using alias_type = typename asc::std::stack<int, ::std::deque<int>>::size_type;
+static_assert(::std::is_same_v<alias_type, ::std::size_t>);
 ```
 
 ## Related APIs

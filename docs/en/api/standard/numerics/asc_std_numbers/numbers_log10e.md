@@ -55,7 +55,8 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::log10e;
+inline constexpr auto value = asc::std::numbers::log10e;
+static_assert(value > 0.4342944 && value < 0.4342946);
 ```
 
 ## Related APIs

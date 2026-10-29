@@ -50,9 +50,12 @@ inline constexpr const parallel_policy par;
 The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/execution>
 
 auto value = asc::std::execution::par;
+
+static_assert(asc::std::is_same_v<decltype(value), asc::std::execution::parallel_policy>);
 ```
 
 ## Related APIs

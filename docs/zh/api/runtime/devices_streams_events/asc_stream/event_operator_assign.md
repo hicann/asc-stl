@@ -62,21 +62,58 @@ asc::event& operator=(asc::event&& other) noexcept;
 
 ## 调用示例
 
-以下片段聚焦当前接口的调用；输入、资源和执行上下文须满足本页约束。
+以下完整示例使用真实CANN Runtime，选择设备0；运行前须确认该设备可用。异步等待限于10秒，失败即终止样例进程，避免释放仍被使用的资源；控制端须停止后续任务并重新检查设备状态。成功路径先完成工作，再关闭资源、重置设备并结束Runtime。
 
 ```cpp
+#include <acl/acl.h>
 #include <asc/stream>
+#include <cstdlib>
 
-template <class Object, class... Args>
-decltype(auto) example(Object& object, Args&&... args)
+void check(bool condition)
 {
-    return object.operator=(static_cast<Args&&>(args)...);
+    if (!condition) {
+        std::_Exit(2);
+    }
+}
+
+void finish(asc::stream_ref stream)
+{
+    check(aclrtSynchronizeStreamWithTimeout(stream.native_handle(), 10000) == ACL_SUCCESS);
+}
+
+
+void run_example()
+{
+    asc::stream stream;
+    asc::event source;
+    asc::event target;
+    check(asc::make_stream(stream));
+    check(asc::make_event(source) && asc::make_event(target));
+    void* source_handle = source.native_handle();
+    void* target_handle = target.native_handle();
+    asc::event& result = (target = static_cast<asc::event&&>(source));
+    check(&result == &target && target.native_handle() == source_handle);
+    check(source.native_handle() == target_handle);
+    check(source.record(stream) && target.record(stream));
+    finish(stream);
+    check(source.close() && target.close() && stream.close());
+}
+
+int main()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) {
+        return 1;
+    }
+    if (!asc::set_current_device(asc::device_ref(0))) {
+        check(aclFinalize() == ACL_SUCCESS);
+        return 1;
+    }
+    run_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return reset && finalized ? 0 : 1;
 }
 ```
-
-对应完整工程使用`C++17`；请在目标工具链及设备上编译和运行。
-
-完整示例源码：[stream_event.cpp](../../../../examples/stream_event.cpp)。
 
 ## 关联API
 

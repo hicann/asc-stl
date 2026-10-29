@@ -62,20 +62,55 @@ bool devices(asc::device_ref* output, asc::std::uint32_t capacity, asc::std::uin
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下完整示例使用真实CANN Runtime，选择设备0；运行前须确认该设备可用。异步等待限于10秒，失败即终止样例进程，避免释放仍被使用的资源；控制端须停止后续任务并重新检查设备状态。成功路径先完成工作，再关闭资源、重置设备并结束Runtime。
 
 ```cpp
-#include <asc/devices>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
+#include <acl/acl.h>
+#include <asc/stream>
+#include <cstdlib>
 
-decltype(auto) example(asc::device_ref* output, asc::std::uint32_t capacity, asc::std::uint32_t& count)
+void check(bool condition)
 {
-    return asc::devices(output, capacity, count);
+    if (!condition) {
+        std::_Exit(2);
+    }
+}
+
+void finish(asc::stream_ref stream)
+{
+    check(aclrtSynchronizeStreamWithTimeout(stream.native_handle(), 10000) == ACL_SUCCESS);
+}
+#include <asc/devices>
+#include <vector>
+
+
+void run_example()
+{
+    asc::std::uint32_t available = 0;
+    check(asc::devices(nullptr, 0, available));
+    check(available > 0);
+    std::vector<asc::device_ref> output(available, asc::device_ref(99));
+    asc::std::uint32_t total = 0;
+    check(asc::devices(output.data(), available, total));
+    check(total == available);
+    for (asc::std::uint32_t i = 0; i < total; ++i) {
+        check(output[i].ordinal() == i);
+    }
+}
+
+int main()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) {
+        return 1;
+    }
+    if (!asc::set_current_device(asc::device_ref(0))) {
+        check(aclFinalize() == ACL_SUCCESS);
+        return 1;
+    }
+    run_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return reset && finalized ? 0 : 1;
 }
 ```
 

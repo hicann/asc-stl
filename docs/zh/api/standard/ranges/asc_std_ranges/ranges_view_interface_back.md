@@ -103,6 +103,11 @@ int read_last_element()
     // 前置条件：视图非空（back 对空视图是未定义行为）
     return view.back();
 }
+
+bool verify_example()
+{
+    return read_last_element() == 4;
+}
 ```
 
 ## 关联API

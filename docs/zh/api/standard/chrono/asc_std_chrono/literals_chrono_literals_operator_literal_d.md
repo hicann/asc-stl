@@ -64,9 +64,10 @@ constexpr chrono::day operator""d(unsigned long long value) noexcept;
 ```cpp
 #include <asc/std/chrono>
 
-decltype(auto) example(unsigned long long value)
+bool example()
 {
-    return asc::std::literals::chrono_literals::operator ""d(value);
+    namespace chrono = asc::std::chrono;
+    return static_cast<unsigned>(asc::std::literals::chrono_literals::operator""d(15)) == 15;
 }
 ```
 

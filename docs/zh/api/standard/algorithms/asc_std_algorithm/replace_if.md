@@ -82,11 +82,13 @@ constexpr void replace_if(ForwardIterator first, ForwardIterator last, Predicate
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    auto predicate = [](int value) { return value % 2 == 0; };
-    asc::std::replace_if(values, values + 8, predicate, 9);
+    int values[8] = {8, 3, 6, 1, 7, 2, 5, 4};
+    asc::std::replace_if(values, values + 8, [](int value) { return value % 2 == 0; }, 9);
+    const int expected[8] = {9, 3, 9, 1, 7, 9, 5, 9};
+    for (int index = 0; index < 8; ++index) { if (values[index] != expected[index]) return false; }
+    return true;
 }
 ```
 

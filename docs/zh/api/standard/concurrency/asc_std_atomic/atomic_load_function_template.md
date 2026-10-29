@@ -75,10 +75,10 @@ template<class T> T atomic_load(const atomic<T>* object) noexcept;
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::atomic<int> value{1};
-    return asc::std::atomic_load(&value);
+    asc::std::atomic<int> value{7};
+    return asc::std::atomic_load(&value) == 7;
 }
 ```
 

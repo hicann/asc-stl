@@ -83,11 +83,15 @@ The following Host snippet demonstrates the call with a concrete capacity or dim
 
 ```cpp
 #include <asc/std/inplace_vector>
+#include <memory>
 
-decltype(auto) example(asc::std::inplace_vector<int, 8>& values)
+bool example()
 {
-    // The caller must guarantee size() < capacity() before the call.
-    return values.unchecked_push_back(7);
+    using sequence = asc::std::inplace_vector<int, 8>;
+    sequence values;
+    values.unchecked_push_back(7);
+    values.unchecked_push_back(9);
+    return values.size() == 2 && values[0] == 7 && values[1] == 9;
 }
 ```
 

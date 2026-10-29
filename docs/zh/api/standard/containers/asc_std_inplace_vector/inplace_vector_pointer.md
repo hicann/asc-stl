@@ -54,11 +54,12 @@ using pointer = T*;
 
 ```cpp
 #include <asc/std/inplace_vector>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::inplace_vector<int, 8>::pointer;
-}
+using alias_type = typename asc::std::inplace_vector<int, 8>::pointer;
+static_assert(::std::is_same_v<alias_type, int*>);
 ```
 
 ## 关联API

@@ -60,14 +60,18 @@ constexpr asc::level_dimensions<asc::grid_level> grid_dims(asc::extent3d extents
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体类型或维度，检查独立的预期值；不查询正在运行的Device执行上下文。
 
 ```cpp
 #include <asc/hierarchy>
+#include <asc/std/type_traits>
 
-decltype(auto) example(asc::extent3d extents)
+bool example()
 {
-    return asc::grid_dims(extents);
+    const auto dimensions = asc::grid_dims(asc::extent3d(2, 3, 4));
+    static_assert(asc::std::is_same_v<decltype(dimensions), const asc::level_dimensions<asc::grid_level>>);
+    const auto extents = dimensions.extents;
+    return extents.x == 2 && extents.y == 3 && extents.z == 4 && extents.count() == 24;
 }
 ```
 

@@ -50,6 +50,7 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef CANN_ASC_STL_HAS_PIPELINE
 #error "CANN_ASC_STL_HAS_PIPELINE is required by this public Header"
 #endif
+static_assert(CANN_ASC_STL_HAS_PIPELINE == 1, "documented version or capability value");
 ```
 
 ## Related APIs

@@ -65,11 +65,14 @@ The following Host snippet demonstrates the call with concrete types; pointers, 
 
 ```cpp
 #include <asc/std/mdspan>
+#include <asc/std/array>
+#include <cstddef>
+#include <type_traits>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::extents<int, 2, 3> dimensions{};
-    return dimensions.extent(0);
+    asc::std::extents<int, 2, 3> shape;
+    return shape.extent(0) == 2 && shape.extent(1) == 3;
 }
 ```
 

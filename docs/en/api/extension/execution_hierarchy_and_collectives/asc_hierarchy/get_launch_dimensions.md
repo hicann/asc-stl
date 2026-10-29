@@ -60,14 +60,18 @@ constexpr asc::launch_dimensions get_launch_dimensions(asc::simt_hierarchy hiera
 
 ## Example
 
-The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
+This Host example uses concrete types or dimensions and checks independent expected values without querying a running Device context.
 
 ```cpp
 #include <asc/hierarchy>
 
-decltype(auto) example(asc::simt_hierarchy hierarchy)
+bool example()
 {
-    return asc::get_launch_dimensions(hierarchy);
+    const auto hierarchy = asc::make_hierarchy(asc::grid_dims<2, 3, 4>(), asc::block_dims<8, 4, 2>());
+    const auto dimensions = asc::get_launch_dimensions(hierarchy);
+    return dimensions.grid.x == 2 && dimensions.grid.y == 3 && dimensions.grid.z == 4 &&
+        dimensions.block.x == 8 && dimensions.block.y == 4 && dimensions.block.z == 2 &&
+        dimensions.grid.count() == 24 && dimensions.block.count() == 64;
 }
 ```
 

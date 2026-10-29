@@ -75,6 +75,11 @@ decltype(auto) example()
 {
     return asc::bit_reverse(0x12u);
 }
+
+bool verify_example()
+{
+    return example() == 0x48000000u;
+}
 ```
 
 ## 关联API

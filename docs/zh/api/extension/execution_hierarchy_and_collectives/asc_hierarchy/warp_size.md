@@ -45,12 +45,14 @@ inline constexpr unsigned int warp_size = 32;
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
+以下Host示例使用具体类型或维度，检查独立的预期值；不查询正在运行的Device执行上下文。
 
 ```cpp
 #include <asc/hierarchy>
+#include <asc/std/type_traits>
 
-auto value = asc::warp_size;
+static_assert(asc::warp_size == 32);
+static_assert(asc::std::is_same_v<decltype(asc::warp_size), const unsigned int>);
 ```
 
 ## 关联API

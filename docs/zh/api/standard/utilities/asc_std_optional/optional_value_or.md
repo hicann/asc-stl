@@ -105,6 +105,11 @@ decltype(auto) example()
     asc::std::optional<int> value(7);
     return static_cast<asc::std::optional<int>&&>(value).value_or(0);
 }
+
+bool verify_example()
+{
+    return example() == 7;
+}
 ```
 
 ## 关联API

@@ -71,10 +71,21 @@ template<class ForwardIterator> constexpr void destroy(ForwardIterator first, Fo
 ```cpp
 #include <asc/std/memory>
 
-void example()
+struct example_value {
+    static inline int alive = 0;
+    int value;
+    example_value() : value(23) { ++alive; }
+    ~example_value() { --alive; }
+};
+
+bool verify_example()
 {
-    int values[4] = {1, 2, 3, 4};
+    alignas(example_value) unsigned char storage[sizeof(example_value) * 4];
+    auto* values = reinterpret_cast<example_value*>(storage);
+    for (int index = 0; index < 4; ++index) { asc::std::construct_at(values + index); }
+    const bool correct = example_value::alive == 4 && values[0].value == 23;
     asc::std::destroy(values, values + 4);
+    return correct && example_value::alive == 0;
 }
 ```
 

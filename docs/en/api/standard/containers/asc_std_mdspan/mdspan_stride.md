@@ -66,11 +66,15 @@ The following Host snippet demonstrates the call with concrete capacities or dim
 
 ```cpp
 #include <asc/std/mdspan>
-#include <asc/std/cstddef>
+#include <asc/std/array>
+#include <cstddef>
+#include <type_traits>
 
-decltype(auto) example(const asc::std::mdspan<int, asc::std::extents<asc::std::size_t, 2, 3>, asc::std::layout_right, asc::std::default_accessor<int>>& view)
+bool example()
 {
-    return view.stride(0);
+    int data[6] = {};
+    asc::std::mdspan<int, asc::std::extents<::std::size_t, 2, 3>> value(data);
+    return value.stride(0) == 3 && value.stride(1) == 1;
 }
 ```
 

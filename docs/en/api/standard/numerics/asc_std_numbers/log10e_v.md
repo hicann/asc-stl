@@ -52,6 +52,7 @@ The following snippet reads the interface value with concrete template arguments
 #include <asc/std/numbers>
 
 inline constexpr auto example = asc::std::log10e_v<float>;
+static_assert(example > 0.4342944 && example < 0.4342946);
 ```
 
 ## Related APIs

@@ -55,7 +55,8 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::log2e;
+inline constexpr auto value = asc::std::numbers::log2e;
+static_assert(value > 1.4426949 && value < 1.4426952);
 ```
 
 ## Related APIs

@@ -69,6 +69,11 @@ decltype(auto) example()
     asc::equal_to_value<int> equals_seven(7);
     return equals_seven(7);
 }
+
+bool verify_example()
+{
+    return example() == true;
+}
 ```
 
 ## Related APIs

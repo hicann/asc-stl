@@ -51,9 +51,12 @@ inline constexpr const from_range_t from_range;
 The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/ranges>
 
 auto value = asc::std::from_range;
+
+static_assert(asc::std::is_same_v<decltype(value), asc::std::from_range_t>);
 ```
 
 ## Related APIs

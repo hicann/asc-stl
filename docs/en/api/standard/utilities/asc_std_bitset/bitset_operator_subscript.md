@@ -91,6 +91,12 @@ decltype(auto) example(const asc::std::bitset<8>& bits)
 {
     return bits[0];
 }
+
+bool verify_example()
+{
+    const asc::std::bitset<8> bits(3u);
+    return example(bits);
+}
 ```
 
 ## Related APIs

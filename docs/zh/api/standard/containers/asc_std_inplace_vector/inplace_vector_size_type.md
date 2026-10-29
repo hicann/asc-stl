@@ -53,11 +53,12 @@ using size_type = asc::std::size_t;
 
 ```cpp
 #include <asc/std/inplace_vector>
+#include <type_traits>
+#include <cstddef>
+#include <utility>
 
-void use_type()
-{
-    using alias_type = typename asc::std::inplace_vector<int, 8>::size_type;
-}
+using alias_type = typename asc::std::inplace_vector<int, 8>::size_type;
+static_assert(::std::is_same_v<alias_type, ::std::size_t>);
 ```
 
 ## 关联API

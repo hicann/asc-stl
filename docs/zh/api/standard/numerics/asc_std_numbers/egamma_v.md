@@ -52,6 +52,7 @@ template<class Tp> inline constexpr Tp egamma_v = __numbers<Tp>::__egamma();
 #include <asc/std/numbers>
 
 inline constexpr auto example = asc::std::egamma_v<float>;
+static_assert(example > 0.5772156 && example < 0.5772158);
 ```
 
 ## 关联API

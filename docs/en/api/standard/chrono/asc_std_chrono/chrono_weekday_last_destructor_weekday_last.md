@@ -58,12 +58,21 @@ The following snippet assumes that object points to a constructed object; after 
 
 ```cpp
 #include <asc/std/chrono>
+#include <new>
+#include <type_traits>
 
-using example_object = asc::std::chrono::weekday_last;
-void example(example_object* object)
+bool example()
 {
-    // object points to a constructed object; after destruction the object must not be accessed again.
-    object->~example_object();
+    namespace chrono = asc::std::chrono;
+    using value_type = chrono::weekday_last;
+    static_assert(::std::is_trivially_destructible_v<value_type>);
+    alignas(value_type) unsigned char storage[sizeof(value_type)];
+    auto* value = ::new (static_cast<void*>(storage)) value_type(chrono::weekday{3}[chrono::last]);
+    value->~value_type();
+    value = ::new (static_cast<void*>(storage)) value_type(chrono::weekday{3}[chrono::last]);
+    const bool restored = (*value).weekday().c_encoding() == 3;
+    value->~value_type();
+    return restored;
 }
 ```
 

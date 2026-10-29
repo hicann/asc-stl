@@ -86,6 +86,13 @@ void example(asc::std::basic_string<char, ::std::char_traits<char>, example_allo
 {
     value.push_back('a');
 }
+
+bool verify_example()
+{
+    asc::std::basic_string<char, ::std::char_traits<char>, example_allocator<char>> value(example_allocator<char>{});
+    example(value);
+    return value.size() == 1 && value[0] == 'a';
+}
 ```
 
 ## Related APIs

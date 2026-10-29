@@ -100,8 +100,13 @@ int read_last_element()
 {
     int values[4] = {1, 2, 3, 4};
     asc::std::ranges::ref_view<int[4]> view(values);
-    // Precondition: the view is non-empty (back on an empty view is undefined behavior)
+    // 前置条件：视图非空（back 对空视图是未定义行为）
     return view.back();
+}
+
+bool verify_example()
+{
+    return read_last_element() == 4;
 }
 ```
 

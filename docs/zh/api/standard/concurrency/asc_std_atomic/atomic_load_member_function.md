@@ -69,9 +69,10 @@ T load(memory_order order = memory_order_seq_cst) const noexcept;
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example(const asc::std::atomic<int>& value)
+bool example()
 {
-    return value.load(asc::std::memory_order_relaxed);
+    asc::std::atomic<int> value{7};
+    return value.load(asc::std::memory_order_acquire) == 7;
 }
 ```
 

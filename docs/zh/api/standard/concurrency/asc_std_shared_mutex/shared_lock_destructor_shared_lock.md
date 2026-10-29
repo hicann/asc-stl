@@ -59,20 +59,51 @@
 
 ```cpp
 #include <asc/std/shared_mutex>
+#include <new>
 
+// Instrumented single-thread BasicLockable used to observe adapter ownership.
 struct example_mutex {
-    void lock() {}
-    bool try_lock() { return true; }
-    void unlock() {}
-    void lock_shared() {}
-    bool try_lock_shared() { return true; }
-    void unlock_shared() {}
+    bool locked = false;
+    int unlocks = 0;
+    void lock()
+    {
+        locked = true;
+    }
+    bool try_lock()
+    {
+        if (locked)
+            return false;
+        locked = true;
+        return true;
+    }
+    void unlock()
+    {
+        locked = false;
+        ++unlocks;
+    }
+    void lock_shared()
+    {
+        lock();
+    }
+    bool try_lock_shared()
+    {
+        return try_lock();
+    }
+    void unlock_shared()
+    {
+        unlock();
+    }
 };
-using example_object = asc::std::shared_lock<example_mutex>;
-void example(example_object* object)
+
+bool example()
 {
-    // object 指向已构造的锁包装器，析构后不得访问。
-    object->~example_object();
+    using lock_type = asc::std::shared_lock<example_mutex>;
+    example_mutex mutex;
+    alignas(lock_type) unsigned char storage[sizeof(lock_type)];
+    auto* guard = ::new (static_cast<void*>(storage)) lock_type(mutex);
+    const bool held = guard->owns_lock() && mutex.locked;
+    guard->~lock_type();
+    return held && !mutex.locked && mutex.unlocks == 1;
 }
 ```
 

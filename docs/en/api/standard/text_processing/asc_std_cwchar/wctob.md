@@ -73,6 +73,11 @@ decltype(auto) example(asc::std::wint_t value)
 {
     return asc::std::wctob(value);
 }
+
+bool verify_example()
+{
+    return example(L'A') == 'A';
+}
 ```
 
 ## Related APIs

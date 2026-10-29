@@ -63,6 +63,7 @@ Host的宏定义由系统`<cwchar>`提供。Device仅在工具链未预先定义
 #ifndef WCHAR_MIN
 #error "WCHAR_MIN is required by this public Header"
 #endif
+static_assert(WCHAR_MIN <= 0);
 ```
 
 ## 关联API

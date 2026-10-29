@@ -56,6 +56,12 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef INFINITY
 #error "INFINITY is required by this public Header"
 #endif
+
+bool verify_example()
+{
+    const float value = INFINITY;
+    return value > 0.0f && asc::std::isinf(value);
+}
 ```
 
 ## Related APIs

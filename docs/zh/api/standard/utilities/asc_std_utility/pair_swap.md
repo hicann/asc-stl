@@ -65,10 +65,11 @@ constexpr void swap(pair<T1, T2>& other) noexcept(is_nothrow_swappable_v<T1>&& i
 ```cpp
 #include <asc/std/utility>
 
-void example()
+bool example()
 {
     asc::std::pair<int, int> left(1, 2), right(3, 4);
     left.swap(right);
+    return left.first == 3 && left.second == 4 && right.first == 1 && right.second == 2;
 }
 ```
 

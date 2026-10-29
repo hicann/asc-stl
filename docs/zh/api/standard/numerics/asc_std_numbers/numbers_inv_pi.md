@@ -55,7 +55,8 @@ inline constexpr double inv_pi = 0x1.45f306dc9c882a53f84eafa3ea6ap-2;
 ```cpp
 #include <asc/std/numbers>
 
-auto value = asc::std::numbers::inv_pi;
+inline constexpr auto value = asc::std::numbers::inv_pi;
+static_assert(value > 0.3183098 && value < 0.3183100);
 ```
 
 ## 关联API

@@ -52,7 +52,32 @@ The following snippet shows the basic call form of the interface on this page; i
 ```cpp
 #include <asc/tensor_copy>
 
-auto value = asc::tensor_copy_status::insufficient_source;
+bool example()
+{
+    using status = asc::tensor_copy_status;
+    const status selected = status::insufficient_source;
+    const status all[] = {
+        status::success,
+        status::zero_extent,
+        status::zero_stride,
+        status::size_overflow,
+        status::insufficient_source,
+        status::insufficient_destination,
+        status::invalid_stage
+    };
+    for (unsigned left = 0; left < 7; ++left) {
+        for (unsigned right = left + 1; right < 7; ++right) {
+            if (all[left] == all[right]) return false;
+        }
+    }
+    // These transfer-only results are distinct status tags; no transfer runs on Host.
+    return selected != status::success &&
+        selected != status::zero_extent &&
+        selected != status::zero_stride &&
+        selected != status::size_overflow &&
+        selected != status::insufficient_destination &&
+        selected != status::invalid_stage;
+}
 ```
 
 ## Related APIs

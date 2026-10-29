@@ -48,14 +48,28 @@ template<asc::memory_scope Scope> using binary_semaphore = asc::counting_semapho
 
 ## Example
 
-The following snippet shows the alias type with concrete template arguments.
+The following snippet initializes a binary semaphore in aligned GM storage supplied by the caller, then demonstrates nonblocking acquisition and its paired release. A designated thread completes initialization before publishing the object to participating threads.
 
 ```cpp
 #include <asc/semaphore>
+#include <asc/std/new>
 
-__aicore__ void use_type()
+using semaphore_type = asc::binary_semaphore<asc::memory_scope::device>;
+
+// A single designated thread initializes aligned GM storage before publication.
+__aicore__ void initialize(semaphore_type* gm_storage)
 {
-    using selected = asc::binary_semaphore<asc::memory_scope::device>;
+    ::new (static_cast<void*>(gm_storage)) semaphore_type(1);
+}
+
+// gm_semaphore points to an initialized GM object visible to all participants.
+__aicore__ bool example(semaphore_type* gm_semaphore)
+{
+    static_assert(semaphore_type::max() == 1);
+    const bool acquired = gm_semaphore->try_acquire();
+    if (acquired)
+        gm_semaphore->release();
+    return acquired;
 }
 ```
 

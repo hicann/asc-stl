@@ -76,6 +76,11 @@ decltype(auto) example()
 {
     return asc::in_range(3, 0, 10);
 }
+
+bool verify_example()
+{
+    return example() == true;
+}
 ```
 
 ## 关联API

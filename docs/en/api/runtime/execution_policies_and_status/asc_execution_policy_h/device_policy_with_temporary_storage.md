@@ -61,16 +61,21 @@ constexpr asc::device_policy with_temporary_storage(asc::temporary_storage_ref s
 
 ## Example
 
-The following Host snippet demonstrates the call with concrete objects; resource operations must follow the initialization and lifetime constraints on this page.
+This Host example submits no Runtime work and checks configuration or resource-reference results using concrete values. The local storage is used only to check configuration; submitting a Device algorithm requires valid Device storage that remains alive until asynchronous work completes.
 
 ```cpp
 #include <asc/execution.policy.h>
 
-decltype(auto) example(asc::device_policy policy, asc::temporary_storage_ref storage)
+bool example()
 {
-    // The memory pointed to by storage must remain valid until the asynchronous work completes.
-    auto configured = policy.with_temporary_storage(storage);
-    return configured;
+    alignas(32) unsigned char bytes[128]{};
+    const asc::temporary_storage_ref storage(bytes, sizeof(bytes), asc::memory_space::local);
+    const auto base = asc::execution::device;
+    const auto configured = base.with_temporary_storage(storage);
+    return configured.temporary_storage().data() == bytes &&
+        configured.temporary_storage().size_bytes() == 128 &&
+        configured.temporary_storage().space() == asc::memory_space::local &&
+        base.temporary_storage().empty();
 }
 ```
 

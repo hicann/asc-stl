@@ -82,6 +82,11 @@ decltype(auto) example()
     asc::std::expected<int, int> value(7);
     return value.value_or(0);
 }
+
+bool verify_example()
+{
+    return example() == 7;
+}
 ```
 
 ## 关联API

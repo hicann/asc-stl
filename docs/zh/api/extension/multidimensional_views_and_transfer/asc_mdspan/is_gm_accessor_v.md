@@ -60,6 +60,7 @@ inline constexpr bool is_gm_accessor_v = false;
 #include <asc/std/utility>
 
 inline constexpr auto example = asc::is_gm_accessor_v<asc::gm_accessor<asc::std::default_accessor<int>>>;
+static_assert(example, "the selected documented type has this capability");
 ```
 
 ## 关联API

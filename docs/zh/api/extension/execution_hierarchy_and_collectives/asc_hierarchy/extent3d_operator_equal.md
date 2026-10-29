@@ -61,15 +61,19 @@ constexpr bool operator==(asc::extent3d other) const noexcept;
 
 ## 调用示例
 
-以下Host片段使用具体类型演示本页接口；对象和指针的有效期须满足本页约束。
+以下Host示例使用具体类型或维度，检查独立的预期值；不查询正在运行的Device执行上下文。
 
 ```cpp
 #include <asc/hierarchy>
 
-decltype(auto) example(asc::extent3d left, asc::extent3d right)
+bool example()
 {
-    const bool equal = left == right;
-    return equal;
+    const asc::extent3d left(2, 3, 4);
+    const asc::extent3d same(2, 3, 4);
+    const asc::extent3d changed_x(7, 3, 4);
+    const asc::extent3d changed_y(2, 7, 4);
+    const asc::extent3d changed_z(2, 3, 7);
+    return left == same && !(left == changed_x) && !(left == changed_y) && !(left == changed_z);
 }
 ```
 

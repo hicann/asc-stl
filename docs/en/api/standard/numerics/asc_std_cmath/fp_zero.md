@@ -54,6 +54,11 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef FP_ZERO
 #error "FP_ZERO is required by this public Header"
 #endif
+
+bool verify_example()
+{
+    return asc::std::fpclassify(0.0f) == FP_ZERO;
+}
 ```
 
 ## Related APIs

@@ -56,6 +56,7 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef EILSEQ
 #error "EILSEQ is required by this public Header"
 #endif
+static_assert(EILSEQ > 0 && EILSEQ != EDOM);
 ```
 
 ## Related APIs

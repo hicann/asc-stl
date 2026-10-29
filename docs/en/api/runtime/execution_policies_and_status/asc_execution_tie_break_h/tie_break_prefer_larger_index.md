@@ -54,7 +54,9 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/execution.tie_break.h>
 
-auto value = asc::tie_break::prefer_larger_index;
+constexpr auto value = asc::tie_break::prefer_larger_index;
+static_assert(value != asc::tie_break::unspecified, "documented states are distinct");
+static_assert(value != asc::tie_break::prefer_smaller_index, "documented states are distinct");
 ```
 
 ## Related APIs

@@ -60,6 +60,7 @@ inline constexpr bool is_host_accessor_v = false;
 #include <asc/std/utility>
 
 inline constexpr auto example = asc::is_host_accessor_v<asc::host_accessor<asc::std::default_accessor<int>>>;
+static_assert(example, "the selected documented type has this capability");
 ```
 
 ## 关联API

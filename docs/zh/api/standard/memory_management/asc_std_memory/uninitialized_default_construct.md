@@ -71,12 +71,21 @@ template<class ForwardIterator> void uninitialized_default_construct(ForwardIter
 ```cpp
 #include <asc/std/memory>
 
-void example()
+struct example_value {
+    static inline int alive = 0;
+    int value;
+    example_value() : value(23) { ++alive; }
+    ~example_value() { --alive; }
+};
+
+bool verify_example()
 {
-    alignas(int) unsigned char storage[sizeof(int) * 4];
-    int* output = reinterpret_cast<int*>(storage);
-    asc::std::uninitialized_default_construct(output, output + 4);
-    asc::std::destroy_n(output, 4);
+    alignas(example_value) unsigned char storage[sizeof(example_value) * 4];
+    auto* values = reinterpret_cast<example_value*>(storage);
+    asc::std::uninitialized_default_construct(values, values + 4);
+    const bool correct = example_value::alive == 4 && values[0].value == 23;
+    for (int index = 0; index < 4; ++index) { asc::std::destroy_at(values + index); }
+    return correct && example_value::alive == 0;
 }
 ```
 

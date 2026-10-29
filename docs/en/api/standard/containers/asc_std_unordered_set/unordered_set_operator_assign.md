@@ -72,9 +72,8 @@ The following Host snippet uses an explicitly provided allocator; on the device 
 
 ```cpp
 #include <asc/std/unordered_set>
-#include <functional>
 #include <memory>
-#include <string>
+#include <functional>
 #include <utility>
 
 template <class T>
@@ -83,14 +82,24 @@ struct example_allocator : ::std::allocator<T> {
     using pointer = T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
+    template <class U>
+    struct rebind {
+        using other = example_allocator<U>;
+    };
     example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    template <class U>
+    example_allocator(const example_allocator<U>&) noexcept
+    {}
 };
 
-void example(asc::std::unordered_set<int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<int>>& target, asc::std::unordered_set<int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<int>>& source)
+bool example()
 {
-    target = static_cast<asc::std::unordered_set<int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<int>>&&>(source);
+    using sequence = asc::std::unordered_set<int, ::std::hash<int>, ::std::equal_to<int>, example_allocator<int>>;
+    sequence values(example_allocator<int>{});
+    values.insert(7);
+    sequence target(example_allocator<int>{});
+    target = static_cast<sequence&&>(values);
+    return target.size() == 1 && *target.find(7) == 7;
 }
 ```
 

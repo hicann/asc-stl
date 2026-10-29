@@ -76,6 +76,11 @@ decltype(auto) example()
 {
     return asc::narrow<unsigned char>(3);
 }
+
+bool verify_example()
+{
+    return example() == 3;
+}
 ```
 
 ## Related APIs

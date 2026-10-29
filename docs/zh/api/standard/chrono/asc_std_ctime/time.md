@@ -67,9 +67,11 @@ namespace asc::std {
 ```cpp
 #include <asc/std/ctime>
 
-decltype(auto) example(time_t* timer)
+bool example()
 {
-    return asc::std::time(timer);
+    asc::std::time_t stored{};
+    const auto observed = asc::std::time(&stored);
+    return observed != static_cast<asc::std::time_t>(-1) && stored == observed;
 }
 ```
 

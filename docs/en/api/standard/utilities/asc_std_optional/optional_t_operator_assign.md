@@ -85,10 +85,12 @@ The following Host snippet demonstrates the call with concrete types; the object
 ```cpp
 #include <asc/std/optional>
 
-void example(int& value)
+bool example()
 {
+    int value = 7;
     asc::std::optional<int&> reference(value);
     reference = asc::std::nullopt;
+    return !reference.has_value() && value == 7;
 }
 ```
 

@@ -157,6 +157,11 @@ decltype(auto) example()
     int input[4] = {1, 2, 3, 4};
     return asc::std::transform_reduce(input, input + 4, 0, [](int a, int b) { return a + b; }, [](int a) { return a * 2; });
 }
+
+bool verify_example()
+{
+    return example() == 20;
+}
 ```
 
 ## 关联API

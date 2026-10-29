@@ -78,6 +78,11 @@ decltype(auto) example()
 {
     return asc::floor_div(-5, 2);
 }
+
+bool verify_example()
+{
+    return example() == -3;
+}
 ```
 
 ## Related APIs

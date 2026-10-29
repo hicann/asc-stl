@@ -58,11 +58,17 @@ asc::std::array<typename asc::std::layout_stride::mapping<Extents>::index_type, 
 
 ```cpp
 #include <asc/std/mdspan>
+#include <asc/std/array>
+#include <cstddef>
+#include <type_traits>
 
-template <class Object, class... Args>
-decltype(auto) example(Object& object, Args&&... args)
+bool example()
 {
-    return object.strides(static_cast<Args&&>(args)...);
+    using shape = asc::std::extents<::std::size_t, 2, 3>;
+    const asc::std::array<::std::size_t, 2> input{4, 1};
+    asc::std::layout_stride::mapping<shape> mapping(shape{}, input);
+    const auto strides = mapping.strides();
+    return strides[0] == 4 && strides[1] == 1 && mapping(1, 2) == 6;
 }
 ```
 

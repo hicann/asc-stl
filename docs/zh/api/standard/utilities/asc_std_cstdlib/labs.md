@@ -69,6 +69,11 @@ decltype(auto) example(long value)
 {
     return asc::std::labs(value);
 }
+
+bool verify_example()
+{
+    return example(-7) == 7;
+}
 ```
 
 ## 关联API

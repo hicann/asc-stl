@@ -60,14 +60,18 @@ constexpr asc::level_dimensions<asc::block_level> block_dims(asc::extent3d exten
 
 ## Example
 
-The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
+This Host example uses concrete types or dimensions and checks independent expected values without querying a running Device context.
 
 ```cpp
 #include <asc/hierarchy>
+#include <asc/std/type_traits>
 
-decltype(auto) example(asc::extent3d extents)
+bool example()
 {
-    return asc::block_dims(extents);
+    const auto dimensions = asc::block_dims(asc::extent3d(8, 4, 2));
+    static_assert(asc::std::is_same_v<decltype(dimensions), const asc::level_dimensions<asc::block_level>>);
+    const auto extents = dimensions.extents;
+    return extents.x == 8 && extents.y == 4 && extents.z == 2 && extents.count() == 64;
 }
 ```
 

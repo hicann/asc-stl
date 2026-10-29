@@ -166,15 +166,67 @@ asc::execution_status make_pinned_buffer(asc::pinned_buffer<T>& output, const as
 
 ## 调用示例
 
-以下Host片段由调用方提供有效内存资源和Stream；缓冲区拥有分配结果。
+以下完整示例使用真实CANN Runtime，选择设备0；运行前须确认该设备可用。异步等待限于10秒，失败即终止样例进程，避免释放仍被使用的资源；控制端须停止后续任务并重新检查设备状态。成功路径先完成工作，再关闭资源、重置设备并结束Runtime。
 
 ```cpp
+#include <acl/acl.h>
+#include <asc/stream>
+#include <cstdlib>
+
+void check(bool condition)
+{
+    if (!condition) {
+        std::_Exit(2);
+    }
+}
+
+void finish(asc::stream_ref stream)
+{
+    check(aclrtSynchronizeStreamWithTimeout(stream.native_handle(), 10000) == ACL_SUCCESS);
+}
 #include <asc/buffer>
 
-decltype(auto) example(const asc::pinned_memory_resource_ref& resource, asc::stream_ref stream)
+
+void run_example()
 {
-    asc::pinned_buffer<int> output;
-    return asc::make_pinned_buffer(output, resource, stream, 4);
+    asc::stream stream;
+    check(asc::make_stream(stream));
+    asc::pinned_memory_resource resource;
+    const asc::pinned_memory_resource_ref reference(resource);
+    const int values[4] = {2, 4, 6, 8};
+    asc::pinned_buffer<int> buffers[4];
+    check(asc::make_pinned_buffer(buffers[0], reference, stream, 4).success());
+    for (int i = 0; i < 4; ++i) {
+        buffers[0].data()[i] = 0;
+    }
+    check(asc::make_pinned_buffer(buffers[1], reference, stream, 4, 7).success());
+    check(asc::make_pinned_buffer(buffers[2], reference, stream, values, values + 4).success());
+    check(asc::make_pinned_buffer(buffers[3], reference, stream, values, asc::std::size_t(4)).success());
+    for (int i = 0; i < 4; ++i) {
+        check(buffers[i].size() == 4 && buffers[i].size_bytes() == 4 * sizeof(int));
+        for (int j = 0; j < 4; ++j) {
+            const int expected = i == 0 ? 0 : (i == 1 ? 7 : values[j]);
+            check(buffers[i].data()[j] == expected);
+        }
+        check(buffers[i].close().success());
+    }
+    finish(stream);
+    check(stream.close());
+}
+
+int main()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) {
+        return 1;
+    }
+    if (!asc::set_current_device(asc::device_ref(0))) {
+        check(aclFinalize() == ACL_SUCCESS);
+        return 1;
+    }
+    run_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return reset && finalized ? 0 : 1;
 }
 ```
 

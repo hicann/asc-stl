@@ -73,10 +73,10 @@ template<class ToDuration, class Rep, class Period> [[nodiscard]] constexpr ToDu
 ```cpp
 #include <asc/std/chrono>
 
-decltype(auto) example()
+bool example()
 {
-    asc::std::chrono::milliseconds value{1500};
-    return asc::std::chrono::duration_cast<asc::std::chrono::seconds>(value);
+    namespace chrono = asc::std::chrono;
+    return chrono::duration_cast<chrono::seconds>(chrono::milliseconds{1500}).count() == 1;
 }
 ```
 

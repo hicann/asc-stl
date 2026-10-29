@@ -75,6 +75,11 @@ decltype(auto) example()
 {
     return asc::std::popcount(7u);
 }
+
+bool verify_example()
+{
+    return example() == 3;
+}
 ```
 
 ## 关联API

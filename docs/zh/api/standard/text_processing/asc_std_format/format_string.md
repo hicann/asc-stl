@@ -56,10 +56,8 @@ template<class ...Args> using format_string = basic_format_string<char, type_ide
 ```cpp
 #include <asc/std/format>
 
-void use_type()
-{
-    using selected = asc::std::format_string<int>;
-}
+constexpr asc::std::format_string<int> example("{}");
+static_assert(example.size() == 2 && example.data()[0] == '{' && example.data()[1] == '}');
 ```
 
 ## 关联API

@@ -52,7 +52,10 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/execution>
 
-auto value = asc::execution_errc::insufficient_storage;
+constexpr auto value = asc::execution_errc::insufficient_storage;
+static_assert(value != asc::execution_errc::success, "documented states are distinct");
+static_assert(value != asc::execution_errc::invalid_argument, "documented states are distinct");
+static_assert(value != asc::execution_errc::backend_error, "documented states are distinct");
 ```
 
 ## Related APIs

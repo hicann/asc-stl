@@ -78,6 +78,12 @@ decltype(auto) example()
 {
     return asc::std::make_pair(1, 2);
 }
+
+bool verify_example()
+{
+    const auto result = example();
+    return result.first == 1 && result.second == 2;
+}
 ```
 
 ## 关联API

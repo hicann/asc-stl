@@ -65,10 +65,11 @@ The following Host snippet demonstrates the call with concrete numeric types; th
 ```cpp
 #include <asc/std/random>
 
-void example()
+bool example()
 {
-    asc::std::philox4x32 generator{};
-    generator.discard(4);
+    asc::std::philox4x32 generator;
+    generator.discard(9999);
+    return generator() == 1955073260u;
 }
 ```
 

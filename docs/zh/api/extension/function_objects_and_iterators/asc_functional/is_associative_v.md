@@ -61,6 +61,7 @@ inline constexpr bool is_associative_v =
 #include <asc/functional>
 
 inline constexpr auto example = asc::is_associative_v<asc::minimum<int>, int>;
+static_assert(example, "the selected documented type has this capability");
 ```
 
 ## 关联API

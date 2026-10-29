@@ -65,8 +65,15 @@ constexpr NestedAccessor nested_accessor() const noexcept;
 decltype(auto) example()
 {
     using accessor_type = asc::std::linalg::scaled_accessor<float, asc::std::default_accessor<float>>;
-    accessor_type accessor{};
+    accessor_type accessor(2.0f, asc::std::default_accessor<float>{});
     return accessor.nested_accessor();
+}
+
+bool verify_example()
+{
+    float values[] = {3.0f, 7.0f};
+    const auto nested = example();
+    return &nested.access(values, 1) == values + 1 && nested.access(values, 1) == 7.0f;
 }
 ```
 

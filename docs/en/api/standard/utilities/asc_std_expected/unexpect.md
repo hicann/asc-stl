@@ -49,9 +49,12 @@ inline constexpr const unexpect_t unexpect;
 The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/expected>
 
 auto value = asc::std::unexpect;
+
+static_assert(asc::std::is_same_v<decltype(value), asc::std::unexpect_t>);
 ```
 
 ## Related APIs

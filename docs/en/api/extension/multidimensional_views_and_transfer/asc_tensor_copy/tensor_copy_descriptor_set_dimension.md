@@ -75,10 +75,15 @@ The following Host snippet demonstrates setting one valid dimension on a two-dim
 ```cpp
 #include <asc/tensor_copy>
 
-void example()
+bool example()
 {
-    asc::tensor_copy_descriptor<2> descriptor{};
-    descriptor.set_dimension(0, 4, 4, 4, 0, 0);
+    asc::tensor_copy_descriptor<2> descriptor;
+    descriptor.set_dimension(0, 2, 2, 2, 0, 0);
+    descriptor.set_dimension(1, 2, 1, 1, 0, 0);
+    return descriptor.extent(0) == 2 && descriptor.extent(1) == 2 &&
+        descriptor.source_stride(0) == 2 && descriptor.destination_stride(1) == 1 &&
+        descriptor.left_padding(0) == 0 && descriptor.right_padding(1) == 0 &&
+        descriptor.validate() == asc::tensor_copy_status::success;
 }
 ```
 

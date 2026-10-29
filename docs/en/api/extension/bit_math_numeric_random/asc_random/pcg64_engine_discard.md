@@ -63,10 +63,11 @@ The following Host snippet demonstrates the call with concrete values; inputs mu
 ```cpp
 #include <asc/random>
 
-void example()
+bool example()
 {
-    asc::pcg64 generator{};
+    asc::pcg64 generator;
     generator.discard(4);
+    return generator() == 523514384104871782ULL && generator() == 18368464326245194742ULL;
 }
 ```
 

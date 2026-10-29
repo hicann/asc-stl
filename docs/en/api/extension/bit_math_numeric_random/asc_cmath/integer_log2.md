@@ -75,6 +75,11 @@ decltype(auto) example()
 {
     return asc::integer_log2(8u);
 }
+
+bool verify_example()
+{
+    return example() == 3;
+}
 ```
 
 ## Related APIs

@@ -51,9 +51,12 @@ inline constexpr const from_range_t from_range;
 以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/ranges>
 
 auto value = asc::std::from_range;
+
+static_assert(asc::std::is_same_v<decltype(value), asc::std::from_range_t>);
 ```
 
 ## 关联API

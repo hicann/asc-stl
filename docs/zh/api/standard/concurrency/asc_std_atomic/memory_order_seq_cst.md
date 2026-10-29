@@ -57,7 +57,12 @@ enum memory_order {
 ```cpp
 #include <asc/std/atomic>
 
-auto value = asc::std::memory_order_seq_cst;
+bool example()
+{
+    asc::std::atomic<int> value{1};
+    value.store(7, asc::std::memory_order_seq_cst);
+    return value.load() == 7;
+}
 ```
 
 ## 关联API

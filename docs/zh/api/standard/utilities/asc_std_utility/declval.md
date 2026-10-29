@@ -65,12 +65,10 @@ template<class T> asc::std::add_rvalue_reference_t<T> declval() noexcept;
 
 ```cpp
 #include <asc/std/utility>
+#include <asc/std/type_traits>
 
-decltype(auto) example()
-{
-    using result = decltype(asc::std::declval<int>());
-    return sizeof(result);
-}
+using result = decltype(asc::std::declval<int>());
+static_assert(asc::std::is_same_v<result, int&&>);
 ```
 
 ## 关联API

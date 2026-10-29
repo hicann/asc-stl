@@ -104,10 +104,12 @@ constexpr void partial_sort(RandomAccessIterator first, RandomAccessIterator mid
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    int values[8] = {8, 3, 6, 1, 7, 2, 5, 4};
     asc::std::partial_sort(values, values + 4, values + 8);
+    for (int index = 0; index < 4; ++index) { if (values[index] != index + 1) return false; }
+    return true;
 }
 ```
 

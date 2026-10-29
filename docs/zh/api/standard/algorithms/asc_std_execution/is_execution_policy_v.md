@@ -54,6 +54,8 @@ inline constexpr const bool is_execution_policy_v = asc::std::is_execution_polic
 #include <asc/std/execution>
 
 inline constexpr auto example = asc::std::is_execution_policy_v<asc::std::execution::sequenced_policy>;
+static_assert(example);
+static_assert(!asc::std::is_execution_policy_v<int>);
 ```
 
 ## 关联API

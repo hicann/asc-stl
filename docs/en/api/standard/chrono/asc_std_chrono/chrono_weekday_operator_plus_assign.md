@@ -66,9 +66,12 @@ The following Host snippet demonstrates the call with concrete date or time type
 ```cpp
 #include <asc/std/chrono>
 
-void example(asc::std::chrono::weekday& value)
+bool example()
 {
-    value += asc::std::chrono::days{1};
+    namespace chrono = asc::std::chrono;
+    chrono::weekday value = chrono::weekday{3};
+    value += chrono::days{1};
+    return value.c_encoding() == 4;
 }
 ```
 

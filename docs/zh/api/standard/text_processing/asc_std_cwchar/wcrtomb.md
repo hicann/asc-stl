@@ -75,6 +75,13 @@ decltype(auto) example(char * output, wchar_t input, asc::std::mbstate_t * state
 {
     return asc::std::wcrtomb(output, input, state);
 }
+
+bool verify_example()
+{
+    asc::std::mbstate_t state{};
+    char output[8] = {};
+    return example(output, L'A', &state) == 1 && output[0] == 'A';
+}
 ```
 
 ## 关联API

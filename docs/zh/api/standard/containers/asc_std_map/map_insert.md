@@ -93,9 +93,8 @@ pair<iterator, bool> insert(value_type&& value);
 
 ```cpp
 #include <asc/std/map>
-#include <functional>
 #include <memory>
-#include <string>
+#include <functional>
 #include <utility>
 
 template <class T>
@@ -104,16 +103,22 @@ struct example_allocator : ::std::allocator<T> {
     using pointer = T*;
     using size_type = ::std::size_t;
     using difference_type = ::std::ptrdiff_t;
-    template <class U> struct rebind { using other = example_allocator<U>; };
+    template <class U>
+    struct rebind {
+        using other = example_allocator<U>;
+    };
     example_allocator() = default;
-    template <class U> example_allocator(const example_allocator<U>&) noexcept {}
+    template <class U>
+    example_allocator(const example_allocator<U>&) noexcept
+    {}
 };
 
-decltype(auto) example(asc::std::map<int, int, ::std::less<int>, example_allocator<::std::pair<const int, int>>>& values)
+bool example()
 {
-    using entry_type = asc::std::map<int, int, ::std::less<int>, example_allocator<::std::pair<const int, int>>>::value_type;
-    entry_type entry(7, 9);
-    return values.insert(entry);
+    using sequence = asc::std::map<int, int, ::std::less<int>, example_allocator<::std::pair<const int, int>>>;
+    sequence values(example_allocator<::std::pair<const int, int>>{});
+    values.insert(typename sequence::value_type(7, 9));
+    return values.size() == 1 && values.count(7) == 1 && values.find(7)->second == 9;
 }
 ```
 

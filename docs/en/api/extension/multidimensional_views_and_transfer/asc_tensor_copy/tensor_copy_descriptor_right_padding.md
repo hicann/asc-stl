@@ -71,11 +71,13 @@ The following Host snippet demonstrates the call with a two-dimensional descript
 ```cpp
 #include <asc/tensor_copy>
 
-decltype(auto) example(const asc::tensor_copy_descriptor<2>& descriptor)
+bool example()
 {
-    // dimension must be less than the rank of the descriptor.
-    auto value = descriptor.right_padding(0);
-    return value;
+    const unsigned int extents[2] = {2, 2};
+    const unsigned int strides[2] = {2, 1};
+    const unsigned int padding[2] = {0, 0};
+    auto descriptor = asc::make_tensor_copy_descriptor(extents, strides, strides, padding, padding);
+    return descriptor.right_padding(0) == 0;
 }
 ```
 

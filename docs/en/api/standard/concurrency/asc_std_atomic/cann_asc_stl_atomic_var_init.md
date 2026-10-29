@@ -52,9 +52,11 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/atomic>
 
-#ifndef CANN_ASC_STL_ATOMIC_VAR_INIT
-#error "CANN_ASC_STL_ATOMIC_VAR_INIT is required by this public Header"
-#endif
+bool example()
+{
+    asc::std::atomic<int> value = CANN_ASC_STL_ATOMIC_VAR_INIT(7);
+    return value.load() == 7;
+}
 ```
 
 ## Related APIs

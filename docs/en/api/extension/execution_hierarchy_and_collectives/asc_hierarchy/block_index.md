@@ -55,14 +55,20 @@ No parameters.
 
 ## Example
 
-The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
+For a SIMT launch with Grid=(2,3,4) and Block=(8,4,2), this kernel writes each thread's query result to a separate location. The caller must allocate valid GM output for at least 1536 unsigned long long values and read it back after kernel completion. Each entry equals its blockIdx.x, either 0 or 1; this query does not flatten the three-dimensional block index. The documentation gate checks actual SIMT compilation; it does not establish successful NPU execution.
 
 ```cpp
 #include <asc/hierarchy>
 
-__aicore__ decltype(auto) example()
+__global__ void example(unsigned long long* output)
 {
-    return asc::block_index();
+    const unsigned long long local = threadIdx.x +
+        static_cast<unsigned long long>(blockDim.x) * (threadIdx.y + blockDim.y * threadIdx.z);
+    const unsigned long long block = blockIdx.x +
+        static_cast<unsigned long long>(gridDim.x) * (blockIdx.y + gridDim.y * blockIdx.z);
+    const unsigned long long threads = static_cast<unsigned long long>(blockDim.x) * blockDim.y * blockDim.z;
+    const unsigned long long offset = block * threads + local;
+    output[offset] = asc::block_index();
 }
 ```
 

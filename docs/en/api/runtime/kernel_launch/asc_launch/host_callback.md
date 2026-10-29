@@ -62,14 +62,56 @@ asc::execution_status host_callback(asc::stream_ref stream, host_callback_t call
 
 ## Example
 
-The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
+This complete example uses the real CANN Runtime and selects device 0, which must be available before running. Asynchronous waits are limited to 10 seconds. Failure terminates the example process to avoid releasing resources still in use; the controller must stop subsequent tasks and recheck device health. On success, work completes before resources are closed, the device is reset, and the Runtime is finalized.
 
 ```cpp
-#include <asc/launch>
+#include <acl/acl.h>
+#include <asc/stream>
+#include <cstdlib>
 
-decltype(auto) example(asc::stream_ref stream, asc::host_callback_t callback, void* data)
+void check(bool condition)
 {
-    return asc::host_callback(stream, callback, data);
+    if (!condition) {
+        std::_Exit(2);
+    }
+}
+
+void finish(asc::stream_ref stream)
+{
+    check(aclrtSynchronizeStreamWithTimeout(stream.native_handle(), 10000) == ACL_SUCCESS);
+}
+#include <asc/launch>
+#include <atomic>
+
+void set_result(void* data)
+{
+    static_cast<std::atomic<int>*>(data)->store(7, std::memory_order_release);
+}
+
+void run_example()
+{
+    asc::stream stream;
+    check(asc::make_stream(stream));
+    std::atomic<int> result{0};
+    check(asc::host_callback(stream, set_result, &result).success());
+    finish(stream);
+    check(result.load(std::memory_order_acquire) == 7);
+    check(stream.close());
+}
+
+int main()
+{
+    if (aclInit(nullptr) != ACL_SUCCESS) {
+        return 1;
+    }
+    if (!asc::set_current_device(asc::device_ref(0))) {
+        check(aclFinalize() == ACL_SUCCESS);
+        return 1;
+    }
+    run_example();
+    const bool reset = aclrtResetDevice(0) == ACL_SUCCESS;
+    const bool finalized = aclFinalize() == ACL_SUCCESS;
+    return reset && finalized ? 0 : 1;
 }
 ```
 

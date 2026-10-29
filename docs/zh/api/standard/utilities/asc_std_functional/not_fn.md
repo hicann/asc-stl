@@ -76,6 +76,11 @@ decltype(auto) example()
     auto call = asc::std::not_fn([](int value) { return value > 0; });
     return call(-1);
 }
+
+bool verify_example()
+{
+    return example() == true;
+}
 ```
 
 ## 关联API

@@ -74,10 +74,11 @@ template<class T> void atomic_store(atomic<T>* object, T value) noexcept;
 ```cpp
 #include <asc/std/atomic>
 
-void example()
+bool example()
 {
     asc::std::atomic<int> value{1};
-    asc::std::atomic_store(&value, 2);
+    asc::std::atomic_store(&value, 7);
+    return value.load() == 7;
 }
 ```
 

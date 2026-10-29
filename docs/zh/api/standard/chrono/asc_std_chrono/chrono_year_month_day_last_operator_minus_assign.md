@@ -87,9 +87,13 @@ constexpr year_month_day_last& operator-=(const years& offset) noexcept;
 ```cpp
 #include <asc/std/chrono>
 
-void example(asc::std::chrono::year_month_day_last& value)
+bool example()
 {
-    value -= asc::std::chrono::months{1};
+    namespace chrono = asc::std::chrono;
+    chrono::year_month_day_last value =
+        chrono::year_month_day_last{chrono::year{2024}, chrono::month_day_last{chrono::month{5}}};
+    value -= chrono::months{1};
+    return static_cast<int>(value.year()) == 2024 && static_cast<unsigned>(value.month()) == 4;
 }
 ```
 

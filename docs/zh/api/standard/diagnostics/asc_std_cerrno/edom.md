@@ -56,6 +56,7 @@
 #ifndef EDOM
 #error "EDOM is required by this public Header"
 #endif
+static_assert(EDOM > 0 && EDOM != ERANGE);
 ```
 
 ## 关联API

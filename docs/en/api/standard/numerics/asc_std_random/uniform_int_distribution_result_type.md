@@ -50,12 +50,15 @@ using result_type = IntType;
 The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/random>
 
 void use_type()
 {
     using alias_type = typename asc::std::uniform_int_distribution<int>::result_type;
 }
+
+static_assert(asc::std::is_same_v<asc::std::uniform_int_distribution<int>::result_type, int>);
 ```
 
 ## Related APIs

@@ -78,6 +78,11 @@ decltype(auto) example()
 {
     return asc::std::countr_zero(3u);
 }
+
+bool verify_example()
+{
+    return example() == 0;
+}
 ```
 
 ## Related APIs

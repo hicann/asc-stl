@@ -131,6 +131,13 @@ void example(asc::std::complex<float>& target, asc::std::complex<float>& source)
 {
     target = static_cast<asc::std::complex<float>&&>(source);
 }
+
+bool verify_example()
+{
+    asc::std::complex<float> value(2.0f, 4.0f), source(3.0f, 5.0f);
+    example(value, source);
+    return value.real() == 3.0f && value.imag() == 5.0f;
+}
 ```
 
 ## Related APIs

@@ -75,6 +75,11 @@ decltype(auto) example()
 {
     return asc::integer_sqrt(9u);
 }
+
+bool verify_example()
+{
+    return example() == 3;
+}
 ```
 
 ## Related APIs

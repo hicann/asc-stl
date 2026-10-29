@@ -56,6 +56,7 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef EDOM
 #error "EDOM is required by this public Header"
 #endif
+static_assert(EDOM > 0 && EDOM != ERANGE);
 ```
 
 ## Related APIs

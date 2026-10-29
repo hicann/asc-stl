@@ -71,6 +71,14 @@ decltype(auto) example(int* pattern, int* values)
     asc::std::default_searcher<int*> searcher(pattern, pattern + 2);
     return searcher(values, values + 4);
 }
+
+bool verify_example()
+{
+    int pattern[] = {2, 3};
+    int values[] = {1, 2, 3, 4};
+    const auto result = example(pattern, values);
+    return result.first == values + 1 && result.second == values + 3;
+}
 ```
 
 ## Related APIs

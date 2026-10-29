@@ -57,7 +57,12 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/atomic>
 
-auto value = asc::std::memory_order_release;
+bool example()
+{
+    asc::std::atomic<int> value{1};
+    value.store(7, asc::std::memory_order_release);
+    return value.load() == 7;
+}
 ```
 
 ## Related APIs

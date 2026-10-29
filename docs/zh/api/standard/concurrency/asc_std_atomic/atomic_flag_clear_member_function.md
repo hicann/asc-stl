@@ -67,9 +67,12 @@ void clear(memory_order order = memory_order_seq_cst) noexcept;
 ```cpp
 #include <asc/std/atomic>
 
-void example(asc::std::atomic_flag& flag)
+bool example()
 {
+    asc::std::atomic_flag flag{};
+    flag.test_and_set();
     flag.clear(asc::std::memory_order_relaxed);
+    return !flag.test_and_set();
 }
 ```
 

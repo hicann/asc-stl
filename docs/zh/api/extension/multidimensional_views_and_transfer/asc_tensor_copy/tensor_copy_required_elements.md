@@ -76,13 +76,13 @@ template <unsigned Rank>
 ```cpp
 #include <asc/tensor_copy>
 
-decltype(auto) example()
+bool example()
 {
-    unsigned int extents[2] = {2, 2};
-    unsigned int strides[2] = {2, 1};
-    unsigned int padding[2] = {0, 0};
+    const unsigned int extents[2] = {2, 2};
+    const unsigned int strides[2] = {2, 1};
+    const unsigned int padding[2] = {0, 0};
     auto descriptor = asc::make_tensor_copy_descriptor(extents, strides, strides, padding, padding);
-    return asc::tensor_copy_required_elements(descriptor);
+    return asc::tensor_copy_required_elements(descriptor) == 4;
 }
 ```
 

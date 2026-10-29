@@ -55,9 +55,7 @@ Device未预先定义该宏时，ASC-STL提供以下缺省定义：
 ```cpp
 #include <asc/std/ctime>
 
-#ifndef CLOCKS_PER_SEC
-#error "CLOCKS_PER_SEC is required by this public Header"
-#endif
+static_assert(CLOCKS_PER_SEC > 0);
 ```
 
 ## 关联API

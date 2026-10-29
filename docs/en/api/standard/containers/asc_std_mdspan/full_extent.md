@@ -51,8 +51,9 @@ The following snippet demonstrates the basic call form of the interface on this 
 
 ```cpp
 #include <asc/std/mdspan>
+#include <type_traits>
 
-auto value = asc::std::full_extent;
+static_assert(::std::is_same_v<::std::remove_cv_t<decltype(asc::std::full_extent)>, asc::std::full_extent_t>);
 ```
 
 ## Related APIs

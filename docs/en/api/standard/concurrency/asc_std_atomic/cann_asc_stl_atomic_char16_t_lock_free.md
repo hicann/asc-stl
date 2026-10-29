@@ -50,9 +50,7 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/atomic>
 
-#ifndef CANN_ASC_STL_ATOMIC_CHAR16_T_LOCK_FREE
-#error "CANN_ASC_STL_ATOMIC_CHAR16_T_LOCK_FREE is required by this public Header"
-#endif
+static_assert(CANN_ASC_STL_ATOMIC_CHAR16_T_LOCK_FREE == 2);
 ```
 
 ## Related APIs

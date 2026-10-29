@@ -83,10 +83,17 @@ The following device-side function snippet shows an asynchronous store from UB t
 ```cpp
 #include <asc/tensor_copy>
 
-__aicore__ decltype(auto) example(const asc::pipeline_ref& pipeline, asc::gm_span<int> destination,
-    asc::ub_span<const int> source, const asc::tensor_copy_descriptor<2>& descriptor)
+// Endpoints contain 16 integers and each row starts on a 32-byte boundary.
+// The caller owns a valid stage zero and the matching pipeline event protocol.
+__aicore__ asc::tensor_copy_status example(const asc::pipeline_ref& pipeline,
+    __gm__ int* destination, __ubuf__ const int* source)
 {
-    return asc::tensor_store_async<int, 2>(pipeline, 0, destination, source, descriptor);
+    const unsigned int extents[2] = {2, 8};
+    const unsigned int strides[2] = {8, 1};
+    const unsigned int padding[2] = {0, 0};
+    const auto descriptor = asc::make_tensor_copy_descriptor(extents, strides, strides, padding, padding);
+    return asc::tensor_store_async<int, 2>(pipeline, 0, asc::gm_span<int>(destination, 16),
+        asc::ub_span<const int>(source, 16), descriptor);
 }
 ```
 

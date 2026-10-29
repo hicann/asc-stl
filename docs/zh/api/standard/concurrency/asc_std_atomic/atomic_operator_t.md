@@ -62,9 +62,11 @@ asc::std::atomic::operator T() const noexcept;
 ```cpp
 #include <asc/std/atomic>
 
-int example(asc::std::atomic<int>& value)
+bool example()
 {
-    return value;
+    asc::std::atomic<int> value{7};
+    const int observed = value;
+    return observed == 7;
 }
 ```
 

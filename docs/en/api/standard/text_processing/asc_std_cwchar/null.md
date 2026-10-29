@@ -57,6 +57,7 @@ The following snippet demonstrates the basic call form of the interface on this 
 #ifndef NULL
 #error "NULL is required by this public Header"
 #endif
+static_assert(static_cast<const void*>(NULL) == nullptr);
 ```
 
 ## Related APIs

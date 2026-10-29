@@ -83,11 +83,13 @@ constexpr Function for_each(InputIterator first, InputIterator last, Function f)
 ```cpp
 #include <asc/std/algorithm>
 
-void example()
+bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    auto action = [](int& value) { ++value; };
-    asc::std::for_each(values, values + 8, action);
+    int values[8] = {8, 3, 6, 1, 7, 2, 5, 4};
+    asc::std::for_each(values, values + 8, [](int& value) { ++value; });
+    const int expected[8] = {9, 4, 7, 2, 8, 3, 6, 5};
+    for (int index = 0; index < 8; ++index) { if (values[index] != expected[index]) return false; }
+    return true;
 }
 ```
 

@@ -73,6 +73,11 @@ decltype(auto) example(const wchar_t * input, const wchar_t * accepted)
 {
     return asc::std::wcsspn(input, accepted);
 }
+
+bool verify_example()
+{
+    return example(L"abcde", L"abc") == 3;
+}
 ```
 
 ## Related APIs

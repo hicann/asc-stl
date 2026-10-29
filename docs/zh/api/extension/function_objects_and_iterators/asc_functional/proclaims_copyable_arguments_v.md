@@ -53,6 +53,7 @@ inline constexpr bool proclaims_copyable_arguments_v = asc::proclaims_copyable_a
 #include <asc/functional>
 
 inline constexpr auto example = asc::proclaims_copyable_arguments_v<asc::always_true, int>;
+static_assert(example, "the selected documented type has this capability");
 ```
 
 ## 关联API

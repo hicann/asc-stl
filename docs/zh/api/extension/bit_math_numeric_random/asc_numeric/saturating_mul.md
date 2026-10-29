@@ -76,6 +76,11 @@ decltype(auto) example()
 {
     return asc::saturating_mul(7, 2);
 }
+
+bool verify_example()
+{
+    return example() == 14;
+}
 ```
 
 ## 关联API

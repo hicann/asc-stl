@@ -52,7 +52,9 @@ stable_sorted;
 ```cpp
 #include <asc/execution.output_ordering.h>
 
-auto value = asc::output_ordering::stable_sorted;
+constexpr auto value = asc::output_ordering::stable_sorted;
+static_assert(value != asc::output_ordering::sorted, "documented states are distinct");
+static_assert(value != asc::output_ordering::unsorted, "documented states are distinct");
 ```
 
 ## 关联API

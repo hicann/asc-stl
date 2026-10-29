@@ -50,9 +50,12 @@ inline constexpr const piecewise_construct_t piecewise_construct;
 以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
 
 ```cpp
+#include <asc/std/type_traits>
 #include <asc/std/utility>
 
 auto value = asc::std::piecewise_construct;
+
+static_assert(asc::std::is_same_v<asc::std::remove_cv_t<decltype(value)>, asc::std::piecewise_construct_t>);
 ```
 
 ## 关联API

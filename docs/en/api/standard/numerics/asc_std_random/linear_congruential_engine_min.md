@@ -67,6 +67,11 @@ decltype(auto) example()
     asc::std::minstd_rand generator{};
     return asc::std::minstd_rand::min();
 }
+
+bool verify_example()
+{
+    return example() == 1u;
+}
 ```
 
 ## Related APIs

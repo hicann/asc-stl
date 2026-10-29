@@ -72,16 +72,10 @@ template<class T> constexpr asc::std::size_t block_collective_workspace_bytes(as
 ```cpp
 #include <asc/collectives>
 #include <asc/std/cstddef>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
 
 __aicore__ asc::std::size_t example()
 {
-    // 64 个参与线程对应两个线程束的工作区。
+    // 64 participating threads form two warps and require two unsigned integers.
     return asc::block_collective_workspace_bytes<unsigned int>(64u);
 }
 ```

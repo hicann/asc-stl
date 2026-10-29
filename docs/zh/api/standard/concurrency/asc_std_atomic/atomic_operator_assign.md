@@ -66,9 +66,11 @@ T asc::std::atomic::operator=(T value) noexcept;
 ```cpp
 #include <asc/std/atomic>
 
-decltype(auto) example(asc::std::atomic<int>& value)
+bool example()
 {
-    return value = 1;
+    asc::std::atomic<int> value{1};
+    const int assigned = (value = 7);
+    return assigned == 7 && value.load() == 7;
 }
 ```
 

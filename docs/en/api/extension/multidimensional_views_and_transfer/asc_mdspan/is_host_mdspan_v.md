@@ -61,6 +61,7 @@ The following snippet reads the interface value with concrete template arguments
 #include <asc/std/utility>
 
 inline constexpr auto example = asc::is_host_mdspan_v<asc::host_mdspan<int, asc::std::extents<asc::std::size_t, 4>>>;
+static_assert(example, "the selected documented type has this capability");
 ```
 
 ## Related APIs

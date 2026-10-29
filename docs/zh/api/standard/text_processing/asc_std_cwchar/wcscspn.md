@@ -73,6 +73,11 @@ decltype(auto) example(const wchar_t * input, const wchar_t * rejected)
 {
     return asc::std::wcscspn(input, rejected);
 }
+
+bool verify_example()
+{
+    return example(L"abcdef", L"dx") == 3;
+}
 ```
 
 ## 关联API

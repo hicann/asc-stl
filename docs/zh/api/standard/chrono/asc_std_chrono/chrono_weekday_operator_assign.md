@@ -86,9 +86,13 @@ constexpr weekday& operator=(weekday&& other) noexcept;
 ```cpp
 #include <asc/std/chrono>
 
-void example(asc::std::chrono::weekday& value, const asc::std::chrono::weekday& other)
+bool example()
 {
-    value = other;
+    namespace chrono = asc::std::chrono;
+    chrono::weekday value = chrono::weekday{1};
+    const auto source = chrono::weekday{3};
+    value = source;
+    return value.c_encoding() == 3;
 }
 ```
 

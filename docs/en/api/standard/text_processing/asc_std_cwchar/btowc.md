@@ -73,6 +73,11 @@ decltype(auto) example(int value)
 {
     return asc::std::btowc(value);
 }
+
+bool verify_example()
+{
+    return example('A') == L'A';
+}
 ```
 
 ## Related APIs

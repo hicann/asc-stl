@@ -68,9 +68,11 @@ namespace asc::std {
 ```cpp
 #include <asc/std/ctime>
 
-decltype(auto) example(timespec* ts, int base)
+bool example()
 {
-    return asc::std::timespec_get(ts, base);
+    asc::std::timespec value{};
+    const int status = asc::std::timespec_get(&value, TIME_UTC);
+    return status == TIME_UTC && value.tv_nsec >= 0 && value.tv_nsec < 1000000000L;
 }
 ```
 

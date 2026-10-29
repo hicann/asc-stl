@@ -60,14 +60,18 @@ constexpr asc::level_dimensions<asc::grid_level> grid_dims(asc::extent3d extents
 
 ## Example
 
-The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
+This Host example uses concrete types or dimensions and checks independent expected values without querying a running Device context.
 
 ```cpp
 #include <asc/hierarchy>
+#include <asc/std/type_traits>
 
-decltype(auto) example(asc::extent3d extents)
+bool example()
 {
-    return asc::grid_dims(extents);
+    const auto dimensions = asc::grid_dims(asc::extent3d(2, 3, 4));
+    static_assert(asc::std::is_same_v<decltype(dimensions), const asc::level_dimensions<asc::grid_level>>);
+    const auto extents = dimensions.extents;
+    return extents.x == 2 && extents.y == 3 && extents.z == 4 && extents.count() == 24;
 }
 ```
 

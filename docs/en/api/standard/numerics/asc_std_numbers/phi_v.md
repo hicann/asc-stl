@@ -52,6 +52,7 @@ The following snippet reads the interface value with concrete template arguments
 #include <asc/std/numbers>
 
 inline constexpr auto example = asc::std::phi_v<float>;
+static_assert(example > 1.6180338 && example < 1.6180341);
 ```
 
 ## Related APIs

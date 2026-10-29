@@ -108,8 +108,13 @@ int read_first_element()
 {
     int values[4] = {1, 2, 3, 4};
     asc::std::ranges::ref_view<int[4]> view(values);
-    // Precondition: index < size(); operator[] performs no bounds checking
+    // 前置条件：index < size()；operator[] 不执行边界检查
     return view[0];
+}
+
+bool verify_example()
+{
+    return read_first_element() == 1;
 }
 ```
 

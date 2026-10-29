@@ -77,6 +77,11 @@ decltype(auto) example()
 {
     return asc::std::bit_cast<unsigned int>(1.0f);
 }
+
+bool verify_example()
+{
+    return example() == 0x3f800000u;
+}
 ```
 
 ## Related APIs

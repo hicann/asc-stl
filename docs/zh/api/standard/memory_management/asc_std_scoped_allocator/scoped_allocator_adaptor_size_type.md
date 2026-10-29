@@ -51,10 +51,8 @@ using size_type = typename OuterAllocator::size_type;
 
 ```cpp
 #include <asc/std/scoped_allocator>
-#include <functional>
+#include <asc/std/type_traits>
 #include <memory>
-#include <string>
-#include <utility>
 
 template <class T>
 struct example_allocator : ::std::allocator<T> {
@@ -67,10 +65,9 @@ struct example_allocator : ::std::allocator<T> {
     template <class U> example_allocator(const example_allocator<U>&) noexcept {}
 };
 
-void use_type()
-{
-    using alias_type = typename asc::std::scoped_allocator_adaptor<example_allocator<int>>::size_type;
-}
+using selected = typename asc::std::scoped_allocator_adaptor<example_allocator<int>>::size_type;
+
+static_assert(asc::std::is_same_v<selected, ::std::size_t>);
 ```
 
 ## 关联API

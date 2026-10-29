@@ -119,6 +119,11 @@ decltype(auto) example()
     int input[4] = {1, 2, 3, 4};
     return asc::std::inner_product(input, input + 4, input, 0);
 }
+
+bool verify_example()
+{
+    return example() == 30;
+}
 ```
 
 ## Related APIs
