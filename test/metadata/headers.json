@@ -4900,7 +4900,7 @@
       "dependencies": [
         "asc/__config"
       ],
-      "semantic_case": "asc/std/__iterator/move_iterator.h",
+      "semantic_case": "asc/std/__compare/ordering.h",
       "applicability": {
         "host_header": true,
         "device_header": true,
@@ -18407,7 +18407,7 @@
         "asc/std/__compare/compare_three_way.h",
         "asc/std/__compare/ordering.h"
       ],
-      "semantic_case": "asc/std/linalg",
+      "semantic_case": "asc/std/__compare/ordering.h",
       "applicability": {
         "host_header": true,
         "device_header": true,

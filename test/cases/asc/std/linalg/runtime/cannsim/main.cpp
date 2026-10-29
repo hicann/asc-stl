@@ -23,6 +23,10 @@ int main()
 {
     constexpr unsigned int kWords = 512;
     unsigned int initial[kWords]{};
+    const unsigned int comparison_input[11] = {0, 1, 2, 3, 0, 1, 2, 0, 1, 1, 2};
+    for (unsigned int index = 0; index < 11; ++index) {
+        initial[32 + index] = comparison_input[index];
+    }
     unsigned int result[kWords]{};
     unsigned int* device_result = nullptr;
     aclrtStream stream = nullptr;
@@ -41,7 +45,7 @@ int main()
     for (unsigned int index = 0; index < 5; ++index) {
         failures += result[index];
     }
-    passed = passed && failures == 0;
+    passed = passed && failures == 0 && result[11] == 358 && result[12] == 66;
     if (device_result != nullptr) {
         passed = aclrtFree(device_result) == ACL_SUCCESS && passed;
     }
@@ -51,6 +55,7 @@ int main()
     passed = aclrtResetDevice(0) == ACL_SUCCESS && passed;
     passed = aclFinalize() == ACL_SUCCESS && passed;
     std::cout << "w13_w14_failures=" << failures << '\n';
+    std::cout << "w13_w14_comparison_observation=" << result[11] << ',' << result[12] << '\n';
     std::cout << "w13_w14_group_failures=" << result[0] << ',' << result[1] << ',' << result[2] << ',' << result[3]
               << ',' << result[4] << '\n';
     std::cout << "w13_w14_foundation_failures=" << result[5] << ',' << result[6] << ',' << result[7] << '\n';

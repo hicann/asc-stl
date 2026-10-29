@@ -56,6 +56,8 @@ constexpr bool is_neq(partial_ordering value) noexcept;
 
 ## 约束说明
 
+- `weak_ordering`和`strong_ordering`可隐式转换后传入；对`partial_ordering::unordered`，本函数返回`true`。
+
 - 支持ASC比较类别常量、与零比较以及标准类别转换。
 
 ## 调用示例
@@ -65,9 +67,20 @@ constexpr bool is_neq(partial_ordering value) noexcept;
 ```cpp
 #include <asc/std/compare>
 
-decltype(auto) example(asc::std::partial_ordering value)
+bool example(asc::std::partial_ordering value)
 {
     return asc::std::is_neq(value);
+}
+
+bool verify_example()
+{
+    using order = asc::std::partial_ordering;
+    return example(order::less) == true &&
+        example(order::equivalent) == false &&
+        example(order::greater) == true &&
+        example(order::unordered) == true &&
+        asc::std::is_neq(asc::std::weak_ordering::equivalent) == false &&
+        asc::std::is_neq(asc::std::strong_ordering::greater) == true;
 }
 ```
 

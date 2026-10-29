@@ -56,6 +56,8 @@ constexpr bool is_lteq(partial_ordering value) noexcept;
 
 ## Constraints
 
+- `weak_ordering` and `strong_ordering` can be passed through implicit conversion. This function returns `false` for `partial_ordering::unordered`.
+
 - ASC comparison category constants, comparison with zero, and standard category conversions are supported.
 
 ## Example
@@ -65,9 +67,20 @@ The following snippet demonstrates the basic call form of the interface on this 
 ```cpp
 #include <asc/std/compare>
 
-decltype(auto) example(asc::std::partial_ordering value)
+bool example(asc::std::partial_ordering value)
 {
     return asc::std::is_lteq(value);
+}
+
+bool verify_example()
+{
+    using order = asc::std::partial_ordering;
+    return example(order::less) == true &&
+        example(order::equivalent) == true &&
+        example(order::greater) == false &&
+        example(order::unordered) == false &&
+        asc::std::is_lteq(asc::std::weak_ordering::equivalent) == true &&
+        asc::std::is_lteq(asc::std::strong_ordering::greater) == false;
 }
 ```
 
