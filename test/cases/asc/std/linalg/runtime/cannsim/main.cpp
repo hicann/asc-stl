@@ -17,12 +17,15 @@
 #include <acl/acl.h>
 #include <iostream>
 
+#include "support/bit_count_reference.h"
+
 void launch_asc_stl_w13_w14(unsigned int*, void*);
 
 int main()
 {
     constexpr unsigned int kWords = 512;
     unsigned int initial[kWords]{};
+    asc_stl_bit_count_test::initialize_runtime(initial);
     const unsigned int comparison_input[11] = {0, 1, 2, 3, 0, 1, 2, 0, 1, 1, 2};
     for (unsigned int index = 0; index < 11; ++index) {
         initial[32 + index] = comparison_input[index];
@@ -46,6 +49,10 @@ int main()
         failures += result[index];
     }
     passed = passed && failures == 0 && result[11] == 358 && result[12] == 66;
+#if !defined(ASC_STL_W13_W14_SYNC_ONLY)
+    const unsigned int bit_count_failures = asc_stl_bit_count_test::runtime_failures(result);
+    passed = passed && bit_count_failures == 0;
+#endif
     if (device_result != nullptr) {
         passed = aclrtFree(device_result) == ACL_SUCCESS && passed;
     }
@@ -55,6 +62,9 @@ int main()
     passed = aclrtResetDevice(0) == ACL_SUCCESS && passed;
     passed = aclFinalize() == ACL_SUCCESS && passed;
     std::cout << "w13_w14_failures=" << failures << '\n';
+#if !defined(ASC_STL_W13_W14_SYNC_ONLY)
+    std::cout << "w13_w14_bit_count_observation=" << result[13] << ',' << bit_count_failures << '\n';
+#endif
     std::cout << "w13_w14_comparison_observation=" << result[11] << ',' << result[12] << '\n';
     std::cout << "w13_w14_group_failures=" << result[0] << ',' << result[1] << ',' << result[2] << ',' << result[3]
               << ',' << result[4] << '\n';

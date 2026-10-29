@@ -41,6 +41,22 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 template <class T>
 CANN_ASC_STL_API constexpr __unsigned_integer_result_t<T, int> countl_zero(T value) noexcept
 {
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_clz) && \
+    CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_clzll)
+    constexpr int digits = numeric_limits<T>::digits;
+    if constexpr (digits <= numeric_limits<unsigned long long>::digits) {
+        if (value == 0) {
+            return digits;
+        }
+        // The builtins count in their argument type; undo narrow-type promotion.
+        if constexpr (digits <= numeric_limits<unsigned int>::digits) {
+            return __builtin_clz(static_cast<unsigned int>(value)) - (numeric_limits<unsigned int>::digits - digits);
+        } else {
+            return __builtin_clzll(static_cast<unsigned long long>(value)) -
+                (numeric_limits<unsigned long long>::digits - digits);
+        }
+    }
+#endif
     int result = 0;
     T mask = static_cast<T>(T{1} << (numeric_limits<T>::digits - 1));  // NOLINT(build/include_what_you_use)
     while (mask != 0 && (value & mask) == 0) {

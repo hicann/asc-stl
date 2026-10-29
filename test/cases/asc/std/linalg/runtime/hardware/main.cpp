@@ -16,6 +16,8 @@
 
 #include <acl/acl.h>
 #include <iostream>
+
+#include "support/bit_count_reference.h"
 #include "../../../../../../support/hardware_runtime.h"
 
 #include "launch.h"
@@ -59,6 +61,7 @@ int main()
     asc_stl_test::hardware_runtime runtime;
     constexpr unsigned int kWords = 512;
     unsigned int initial[kWords]{};
+    asc_stl_bit_count_test::initialize_runtime(initial);
     const unsigned int comparison_input[11] = {0, 1, 2, 3, 0, 1, 2, 0, 1, 1, 2};
     for (unsigned int index = 0; index < 11; ++index) {
         initial[32 + index] = comparison_input[index];
@@ -101,6 +104,8 @@ int main()
     passed = passed && failures == 0;
 #if !defined(ASC_STL_W13_W14_SYNC_ONLY)
     passed = passed && result[11] == 358 && result[12] == 66;
+    const unsigned int bit_count_failures = asc_stl_bit_count_test::runtime_failures(result);
+    passed = passed && bit_count_failures == 0;
 #endif
     const int free_code = device_result == nullptr ? ACL_SUCCESS : runtime.free_device(device_result);
     const int destroy_stream_code = stream == nullptr ? ACL_SUCCESS : runtime.destroy_stream(stream);
@@ -110,6 +115,9 @@ int main()
         finalize_code == ACL_SUCCESS && passed;
     passed = runtime.finish(passed) == 0;
     std::cout << "w13_w14_failures=" << failures << '\n';
+#if !defined(ASC_STL_W13_W14_SYNC_ONLY)
+    std::cout << "w13_w14_bit_count_observation=" << result[13] << ',' << bit_count_failures << '\n';
+#endif
     std::cout << "w13_w14_comparison_observation=" << result[11] << ',' << result[12] << '\n';
     std::cout << "w13_w14_group_failures=" << result[0] << ',' << result[1] << ',' << result[2] << ',' << result[3]
               << ',' << result[4] << '\n';

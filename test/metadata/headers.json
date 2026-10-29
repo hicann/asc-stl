@@ -3554,15 +3554,16 @@
         "asc/std/cstdint",
         "asc/std/limits"
       ],
-      "semantic_case": "asc/execution.policy.h",
+      "semantic_case": "asc/std/__bit/countl.h",
       "applicability": {
         "host_header": true,
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
-        "hardware_runtime": false
-      }
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      },
+      "runtime_case": "asc/std/linalg"
     },
     {
       "target": "asc/std/__bit/countr.h",
@@ -3580,15 +3581,16 @@
         "asc/std/cstdint",
         "asc/std/limits"
       ],
-      "semantic_case": "asc/execution.policy.h",
+      "semantic_case": "asc/std/__bit/countl.h",
       "applicability": {
         "host_header": true,
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
-        "hardware_runtime": false
-      }
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      },
+      "runtime_case": "asc/std/linalg"
     },
     {
       "target": "asc/std/__bit/endian.h",

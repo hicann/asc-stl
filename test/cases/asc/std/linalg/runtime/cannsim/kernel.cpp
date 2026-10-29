@@ -20,6 +20,7 @@
 
 #include "support/w13_w14_semantics.h"
 #include "support/comparison_helpers_semantics.h"
+#include "support/bit_count_semantics.h"
 
 #if defined(ASC_STL_W13_W14_SIMT)
 __global__ void asc_stl_w13_w14_utility_kernel(unsigned int* result)
@@ -30,6 +31,7 @@ __global__ void asc_stl_w13_w14_utility_kernel(unsigned int* result)
 __global__ void asc_stl_w13_w14_bit_kernel(unsigned int* result)
 {
     result[6] = asc_stl_w13_w14_test::evaluate_bit();
+    result[13] = asc_stl_bit_count_test::evaluate_runtime(result);
 }
 
 __global__ void asc_stl_w13_w14_types_kernel(unsigned int* result)
@@ -71,6 +73,7 @@ __global__ __vector__ void asc_stl_w13_w14_kernel(__gm__ unsigned int* result)
 {
     result[5] = asc_stl_w13_w14_test::evaluate_utility_cctype();
     result[6] = asc_stl_w13_w14_test::evaluate_bit();
+    result[13] = asc_stl_bit_count_test::evaluate_runtime(result);
     result[8] = asc_stl_w13_w14_test::evaluate_types();
     const auto comparison = asc_stl_comparison_helpers_test::evaluate(result + 32);
     result[8] += comparison.failures;
