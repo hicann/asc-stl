@@ -65,6 +65,7 @@ template<class ...Args> reference emplace_back(Args&&... args);
 
 - `T`须能由转发后的`Args...`构造；当前实现还要求`T`能由`T&&`构造，以满足扩容路径的编译要求，事先预留容量不免除此要求。
 - 成功构造后`size()`增加`1`并返回新元素的引用；扩容会使原指针、引用及迭代器失效。
+- 实参可以引用当前容器的元素或子对象；扩容时先构造新元素，再迁移旧元素。扩容后，原存储上的指针和引用仍然失效，包括新元素自行保存的此类指针和引用。
 - 在Device侧调用时，分配器及相关元素操作须可用于相应编程模式且不抛出异常，并须保证分配成功或事先预留足够容量。
 
 ## 调用示例
@@ -73,11 +74,31 @@ template<class ...Args> reference emplace_back(Args&&... args);
 
 ```cpp
 #include <asc/std/vector>
+#include <memory>
 
-template <class Object, class... Args>
-decltype(auto) example(Object& object, Args&&... args)
+template <class T>
+struct example_allocator : ::std::allocator<T> {
+    using value_type = T;
+    using pointer = T*;
+    using size_type = ::std::size_t;
+    using difference_type = ::std::ptrdiff_t;
+    template <class U>
+    struct rebind {
+        using other = example_allocator<U>;
+    };
+    example_allocator() = default;
+    template <class U>
+    example_allocator(const example_allocator<U>&) noexcept
+    {}
+};
+
+bool example()
 {
-    return object.emplace_back(static_cast<Args&&>(args)...);
+    using sequence = asc::std::vector<int, example_allocator<int>>;
+    sequence values(example_allocator<int>{});
+    values.emplace_back(7);
+    values.emplace_back(9);
+    return values.size() == 2 && values.front() == 7 && values.back() == 9;
 }
 ```
 

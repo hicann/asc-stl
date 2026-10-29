@@ -154,11 +154,9 @@ public:
         pointer replacement = allocator_.allocate(requested);
         if (replacement == nullptr)
             raise_allocation_failure();
-        // Two-phase migration: construct every element into the replacement
-        // buffer first and only destroy the old elements and release the old
-        // buffer afterwards, so a throwing move constructor leaves the
-        // original sequence intact.  The guard releases the half-built
-        // replacement buffer while unwinding.
+        // Retain ownership of the original buffer until migration completes.
+        // A throwing move may leave original elements moved from; the guard
+        // destroys completed replacement elements and releases their buffer.
         size_type constructed = 0;
         auto rollback = [&]() {
             while (constructed != 0) {
@@ -184,20 +182,17 @@ public:
     }
     CANN_ASC_STL_API void push_back(const T& value)
     {
-        ensure_one_more();
-        ::new (static_cast<void*>(data_ + size_)) T(value);
-        ++size_;
+        emplace_back(value);
     }
     CANN_ASC_STL_API void push_back(T&& value)
     {
-        ensure_one_more();
-        ::new (static_cast<void*>(data_ + size_)) T(static_cast<T&&>(value));
-        ++size_;
+        emplace_back(static_cast<T&&>(value));
     }
     template <class... Args>
     CANN_ASC_STL_API reference emplace_back(Args&&... args)
     {
-        ensure_one_more();
+        if (size_ == capacity_)
+            return grow_and_emplace(static_cast<Args&&>(args)...);
         ::new (static_cast<void*>(data_ + size_)) T(static_cast<Args&&>(args)...);
         return data_[size_++];
     }
@@ -235,10 +230,8 @@ private:
         ::asc::std::terminate();
 #endif
     }
-    CANN_ASC_STL_API void ensure_one_more()
+    CANN_ASC_STL_API size_type next_capacity() const
     {
-        if (size_ != capacity_)
-            return;
         const size_type requested = size_ + 1;
         const size_type doubled = capacity_ == 0 ? static_cast<size_type>(2) : capacity_ * 2;
         // If doubling wrapped around it lands below the request, so taking the
@@ -246,7 +239,42 @@ private:
         const size_type next = requested > doubled ? requested : doubled;
         if (next > max_size())
             raise_length_failure();
-        reserve(next);
+        return next;
+    }
+    template <class... Args>
+    CANN_ASC_STL_API reference grow_and_emplace(Args&&... args)
+    {
+        const size_type next = next_capacity();
+        pointer replacement = allocator_.allocate(next);
+        if (replacement == nullptr)
+            raise_allocation_failure();
+        const size_type previous_size = size_;
+        size_type constructed = 0;
+        bool appended = false;
+        auto rollback = [&]() {
+            while (constructed != 0) {
+                --constructed;
+                (replacement + constructed)->~T();
+            }
+            if (appended)
+                (replacement + previous_size)->~T();
+            allocator_.deallocate(replacement, next);
+        };
+        auto guard = ::asc::std::__make_exception_guard(rollback);
+        // Consume aliased elements and subobjects before moving or destroying
+        // their original storage. Construct directly, without a temporary T.
+        ::new (static_cast<void*>(replacement + previous_size)) T(static_cast<Args&&>(args)...);
+        appended = true;
+        for (size_type index = 0; index < previous_size; ++index) {
+            ::new (static_cast<void*>(replacement + index)) T(static_cast<T&&>(data_[index]));
+            ++constructed;
+        }
+        guard.__complete();
+        release();
+        data_ = replacement;
+        capacity_ = next;
+        size_ = previous_size + 1;
+        return data_[previous_size];
     }
     CANN_ASC_STL_API void release() noexcept
     {

@@ -65,6 +65,7 @@ template<class ...Args> reference emplace_back(Args&&... args);
 
 - `T` must be constructible from the forwarded `Args...`; the current implementation also requires `T` to be constructible from `T&&` to satisfy the compilation requirements of the capacity-growth path, and reserving capacity in advance does not waive this requirement.
 - After a successful construction, `size()` increases by `1` and a reference to the new element is returned; capacity growth invalidates the original pointers, references, and iterators.
+- Arguments may refer to elements or subobjects in this container; on growth, the new element is constructed before existing elements are moved. Pointers and references to the old storage are still invalidated, including any such pointers or references retained by the new element.
 - When called on the device side, the allocator and the related element operations must be available in the corresponding programming mode and must not throw, and allocation must be guaranteed to succeed or sufficient capacity must be reserved beforehand.
 
 ## Example
@@ -73,11 +74,31 @@ The following snippet focuses on calling this interface; inputs, resources, and 
 
 ```cpp
 #include <asc/std/vector>
+#include <memory>
 
-template <class Object, class... Args>
-decltype(auto) example(Object& object, Args&&... args)
+template <class T>
+struct example_allocator : ::std::allocator<T> {
+    using value_type = T;
+    using pointer = T*;
+    using size_type = ::std::size_t;
+    using difference_type = ::std::ptrdiff_t;
+    template <class U>
+    struct rebind {
+        using other = example_allocator<U>;
+    };
+    example_allocator() = default;
+    template <class U>
+    example_allocator(const example_allocator<U>&) noexcept
+    {}
+};
+
+bool example()
 {
-    return object.emplace_back(static_cast<Args&&>(args)...);
+    using sequence = asc::std::vector<int, example_allocator<int>>;
+    sequence values(example_allocator<int>{});
+    values.emplace_back(7);
+    values.emplace_back(9);
+    return values.size() == 2 && values.front() == 7 && values.back() == 9;
 }
 ```
 

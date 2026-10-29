@@ -15180,6 +15180,9 @@
     {
       "target": "asc/std/vector",
       "visibility": "public",
+      "additional_cases": [
+        "aliasing.pass.cpp"
+      ],
       "dependencies": [
         "asc/__config",
         "asc/std/__vector/vector.h"

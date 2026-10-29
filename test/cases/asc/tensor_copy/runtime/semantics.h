@@ -51,6 +51,7 @@
 #include "../../../../support/pair_piecewise_regression.h"
 #include "../../../../support/w11_w12_semantics.h"
 #include "../../../../support/v1_algorithm_semantics.h"
+#include "../../../../support/vector_aliasing_semantics.h"
 
 namespace asc_stl_w08_runtime {
 
@@ -292,6 +293,7 @@ CANN_ASC_STL_API unsigned int evaluate_single_thread(asc::monotonic_arena& arena
     vector.push_back(2);
     vector.emplace_back(4);
     failures += vector.size() != 2 || vector.front() != 2 || vector.back() != 4;
+    failures += asc_stl_vector_aliasing_test::evaluate() != 0;
     asc::std::basic_string<char, asc::std::arena_char_traits<char>, asc::arena_allocator<char>> text{
         asc::arena_allocator<char>(arena)};
     text += 'a';

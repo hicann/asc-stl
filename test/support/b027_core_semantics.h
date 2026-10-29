@@ -21,6 +21,8 @@
 #include <asc/std/__numeric/midpoint.h>
 #include <asc/std/bitset>
 #include <asc/std/inplace_vector>
+
+#include "vector_aliasing_semantics.h"
 namespace asc_stl_b027_core_test {
 CANN_ASC_STL_API int evaluate_inplace_search()
 {
@@ -92,7 +94,8 @@ CANN_ASC_STL_API int evaluate()
         return numeric_result;
     if (asc::std::hash<asc::std::bitset<16>>{}(mask) == asc::std::hash<asc::std::bitset<16>>{}(bits))
         return 16;
-    return 0;
+    const int vector_result = asc_stl_vector_aliasing_test::evaluate();
+    return vector_result == 0 ? 0 : 20 + vector_result;
 }
 }  // namespace asc_stl_b027_core_test
 #endif  // ASC_STL_TEST_B027_CORE_SEMANTICS_H
