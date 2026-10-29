@@ -57,6 +57,16 @@ add_test(NAME compatibility.codecheck-worktree-isolation
 set_tests_properties(compatibility.codecheck-worktree-isolation
     PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 30 SKIP_RETURN_CODE 77)
 
+add_test(NAME compatibility.user-acceptance-reporter
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/test_user_acceptance.py)
+set_tests_properties(compatibility.user-acceptance-reporter
+    PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 30)
+
+add_test(NAME compatibility.supplemental-release-checks
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/test_release_checks.py)
+set_tests_properties(compatibility.supplemental-release-checks
+    PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 30)
+
 add_test(NAME compatibility.parallel-example-runner
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/test_parallel_example_runner.py)
 set_tests_properties(compatibility.parallel-example-runner

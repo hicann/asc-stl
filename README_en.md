@@ -4,7 +4,7 @@ A C++ standard library for Ascend device programming — header-only, with a sin
 
 English | [简体中文](README.md)
 
-[📖 API Reference](docs/zh/api/README.md) | [📚 Roadmap](docs/zh/roadmap/roadmap_v1_0_0.md) | [🧪 Quick Start](docs/zh/quick_start.md) | [📄 LICENSE](LICENSE) | [🤝 Contributing](CONTRIBUTING.md)
+[📖 API Reference](docs/en/api/README.md) | [📚 Roadmap](docs/zh/roadmap/roadmap_v1_0_0.md) | [🧪 Quick Start](docs/en/quick_start.md) | [📄 LICENSE](LICENSE) | [🤝 Contributing](CONTRIBUTING.md)
 
 ## 🔥 Current Availability
 
@@ -24,7 +24,7 @@ The current development branch is `master`, with source version identifier `1.0.
 
 - [Current standard-layer scope](#current-standard-layer-scope) · [Complete standard-layer API support list](docs/zh/api/standard/standard.md)
 - [ASC-STL v1.0.0 supported scope](docs/zh/roadmap/roadmap_v1_0_0.md)
-- [API reference](docs/zh/api/README.md): language modes, execution locations, constraints and examples
+- [API reference](docs/en/api/README.md): language modes, execution locations, constraints and examples
 
 ## 🚀 Overview
 
@@ -92,7 +92,7 @@ The public headers under `include/asc/std/` provide the standard-library entry p
 
 ## ⚡️ Quick Start
 
-For a quick tour of using ASC-STL, see [Quick Start](docs/zh/quick_start.md) (in Chinese): environment setup, usage on the Host and in kernels, compiling and running, and local verification — with tested Host and Kernel examples.
+For a quick tour of using ASC-STL, see [Quick Start](docs/en/quick_start.md): environment setup, usage on the Host and in kernels, compiling and running, and local verification — with a Host program and a complete device project covering input, launch, result verification and cleanup.
 
 ASC-STL itself is header-only and has no separate library to build. Ordinary Host algorithms and type facilities can be used by including their public headers. Runtime APIs backed by AscendCL additionally require the corresponding CANN runtime, linking against `ascendcl`, and the required device/resource initialization. Host use needs a C++17 compiler and the required system libraries; kernel compilation and execution require CANN (see [Software/Hardware Compatibility](#-softwarehardware-compatibility)).
 
@@ -109,6 +109,12 @@ ASC-STL itself is header-only and has no separate library to build. Ordinary Hos
 Different builds of the same CANN version may use different SDK directory layouts. The device-layer queries first include `c_api/utils/sys_var.h` and fall back to `c_api/sys_var/sys_var.h`; a compilation error is raised when neither is present. The 64-bit multiply-overflow check for Tensor descriptors uses 32-bit segmented arithmetic to keep older BiSheng versions from emitting a device-side `__multi3` symbol that cannot be linked on the dynamic-descriptor path; the public interfaces and status codes are unchanged.
 
 The Host standard-library interfaces also depend on the accompanying C library and the C++ standard library. The C++20 `<asc/std/cuchar>` interfaces `c8rtomb` and `mbrtoc8` require the system `<cuchar>` to actually export them; on GNU/Linux this usually means glibc 2.36 or newer together with a libstdc++ built with the corresponding capabilities. Upgrading the compiler alone is therefore not sufficient — compilation, linking, and execution should be verified in the same environment. Ubuntu 24.04 with GCC 13 / glibc 2.39 provides this set of interfaces; do not inject a newer glibc globally into an older CANN environment. The full Host gate exercises both C++17 and C++20 modes and must not skip tests because system libraries are missing.
+
+### C++ Language Compatibility
+
+C++17 is the minimum and C++20 remains supported. Newer facilities that can be expressed with ordinary templates are backported as documented subsets. Predicate names are Boolean variable templates in C++17 and native concepts when the C++20 configuration supports them. Language syntax, Host/Device execution and constant evaluation are separate requirements.
+
+`<asc/std/version>` supplies `CANN_ASC_STL_HAS_*` macros with values 0 or 1. Standard-named feature macros remain under Host-library control by default; old ASC checks can use an explicit migration option. See [language modes and compatibility](docs/en/guide/cpp_compatibility.md) for the interfaces and configuration rules.
 
 ### Include Directly (Host Example)
 
@@ -153,6 +159,10 @@ cmake -B build -DBUILD_TESTING=ON && cmake --build build -j && cd build && ctest
 
 Run `bash scripts/ci-hardware-check.sh` for real-hardware regression; it runs three rounds each in C++17 and C++20 by default.
 
+### Known Device Limits
+
+The current BiSheng/CCE 15 fingerprint has a confirmed pure-SIMT miscompile for continuing reverse traversals of constant-initialized local arrays. Separate combined constant-array (B022) and long-string/local-arena (B027) original code shapes remain unresolved. Their adapted runtime/staged tests preserve behavior checks, but passing them does not prove the original shapes or SDK have recovered. See [known compatibility and execution limits](docs/en/guide/known_limitations.md) and the [detailed regression record](test/support/README.md). These limits do not mean that all arrays or strings are unavailable.
+
 ## 💻 Software/Hardware Compatibility
 
 ASC-STL requires the following software and hardware environment:
@@ -164,7 +174,7 @@ ASC-STL requires the following software and hardware environment:
   - CANN 9.2.0 or later (BiSheng CCE/clang 15.0.5 and the AscendCL Runtime ship with CANN)
   - CMake ≥ 3.20
 
-The hardware platforms supported by each ASC-STL release and the required [CANN](https://www.hiascend.com/developer/download/community/result?module=cann) versions are listed below:
+The table retains the planned compatibility targets for each version. Actual compatibility depends on the specific SDK build and validation result; the listed [CANN](https://www.hiascend.com/developer/download/community/result?module=cann) versions are not proof of support for every later package:
 
 <table style="width: 75%; margin: 0 auto;">
   <colgroup>
@@ -230,10 +240,10 @@ The table lists all **74 current public standard-layer headers** in the existing
 
 | Document | Description |
 | --- | --- |
-| [Quick Start](docs/zh/quick_start.md) | Environment setup, Host/Kernel usage, and local verification, with tested examples (in Chinese) |
+| [Quick Start](docs/en/quick_start.md) | Environment setup, Host/Kernel usage, and local verification, with tested examples (in Chinese) |
 | [v1.0.0 supported scope](docs/zh/roadmap/roadmap_v1_0_0.md) | Current standard-layer functionality and extension/Runtime refinement directions |
 | [Contributing guide](CONTRIBUTING.md) | Contribution workflow, contribution scenarios, and code/test requirements |
-| [API reference](docs/zh/api/README.md) | Entry point to the ASC-STL public-interface reference: standard library, Ascend extensions, and Runtime |
+| [API reference](docs/en/api/README.md) | Entry point to the ASC-STL public-interface reference: standard library, Ascend extensions, and Runtime |
 
 ## 👥 Collaborators
 

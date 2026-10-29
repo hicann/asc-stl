@@ -1,0 +1,111 @@
+# Language modes and compatibility
+
+[简体中文](../../zh/guide/cpp_compatibility.md)
+
+ASC-STL requires C++17 and maintains C++17 and C++20 modes. The ISO revision that
+introduced an interface, the compiler version, Host standard-library version and
+CANN package version are independent conditions. Selected newer library features
+are backported where ordinary C++17 templates can express them; API pages define
+the delivered overloads and execution locations.
+
+## Type and expression predicates
+
+Public predicate names in `<asc/std/concepts>`, `<asc/std/iterator>` and
+`<asc/std/ranges>` are `inline constexpr bool` variable templates in C++17 and
+native concepts in configurations that support concepts in C++20 or later.
+Query `CANN_ASC_STL_HAS_NATIVE_CONCEPTS` for the actual form.
+`static_assert(asc::std::integral<int>)` works in both modes; the C++17 Boolean
+result can also control `enable_if`.
+
+Constrained template parameters, `requires`, concept subsumption, `char8_t`,
+three-way comparison syntax and multidimensional subscripting require their own
+language and compiler support. The C++17 Boolean vocabulary does not provide
+those language mechanisms.
+
+## Interface availability, execution and constant evaluation
+
+Check these properties separately:
+
+- **Language mode:** selected `to_array`, contiguous-range span constructors,
+  expected, inplace_vector and Philox facilities have C++17 implementations.
+  Originating in a newer ISO standard does not automatically require its mode.
+- **Execution location:** Host, AI Core SIMD and AI Core SIMT have different
+  system-library, Runtime and address-space requirements. Host `<cuchar>` must
+  actually provide the relevant character-conversion functions.
+- **Constant evaluation:** the whole expression, object lifetimes and element
+  operations must satisfy the selected language's rules. A runtime operation or
+  a `constexpr` declaration alone does not guarantee a valid `static_assert`.
+
+`format_to_n_result` is available as an aggregate in C++17. Reusing private
+rendering code in C++17 does not expose a new runtime-formatting API; public typed
+formatting still requires C++20 and immediate `consteval` checking.
+`destroying_delete_t` and its object are vocabulary tags in C++17 and do not enable
+the compiler's destroying-delete mechanism. The two C compatibility macros from
+`cstdalign` and `cstdbool` are supplied by ASC-STL only in C++17.
+
+Some type rules deliberately differ by language mode, including parts of
+`common_type` fallback and insert-iterator `difference_type`. Some C++20 objects
+use `no_unique_address`. Use consistent modes and configuration across translation
+units that exchange such objects. View cache/storage corrections can also change
+concrete object layouts; recompile dependent components after updating. These
+types do not have a byte-level stable ABI guarantee.
+
+Interfaces originating in C++23 or C++26 are maintained as documented subsets;
+their presence does not promise complete support for either language or library
+revision.
+
+## Query ASC-STL capabilities
+
+After including `<asc/std/version>`, query the `CANN_ASC_STL_HAS_*` macros. Every
+query is defined as 0 or 1. A value of 1 still requires each API's overload, type
+and execution constraints. These macros describe ASC-STL, not Host `std`.
+
+| Macro suffix after `CANN_ASC_STL_HAS_` | Capability |
+| --- | --- |
+| `SOURCE_LOCATION`, `UNREACHABLE`, `TYPE_IDENTITY`, `ENDIAN` | Corresponding vocabulary facilities |
+| `IS_CONSTANT_EVALUATED` | Reliable compiler distinction between constant and runtime evaluation |
+| `CONCEPT_PREDICATES`, `NATIVE_CONCEPTS` | Boolean predicate vocabulary and native concept form, respectively |
+| `SPAN`, `TO_ARRAY`, `MDSPAN`, `SUBMDSPAN` | Listed view, array conversion and slicing interfaces |
+| `EXPECTED`, `OPTIONAL_REFERENCE`, `INPLACE_VECTOR` | Listed interfaces and nonthrowing domains |
+| `PHILOX`, `ALLOCATE_AT_LEAST` | Counter-based engine and allocator detection/fallback |
+| `FORMAT_TO_N_RESULT`, `FORMAT` | Result aggregate and typed formatting with immediate validation |
+
+A Host example can branch on the ASC-STL capability:
+
+```cpp
+#include <asc/std/version>
+#include <asc/std/array>
+
+#if CANN_ASC_STL_HAS_TO_ARRAY
+constexpr int input[2] = {2, 4};
+constexpr auto values = asc::std::to_array(input);
+static_assert(values[1] == 4);
+#endif
+```
+
+## Migrate old feature checks
+
+ASC-STL no longer supplies `__cpp_lib_source_location` or `__cpp_lib_unreachable`
+for itself by default. Existing Host definitions are retained. Query ASC-STL with
+`CANN_ASC_STL_HAS_SOURCE_LOCATION` and `CANN_ASC_STL_HAS_UNREACHABLE`; keep using
+Host feature macros when querying Host `std`.
+
+A temporary compatibility option must precede every ASC-STL header:
+
+```cpp
+#define CANN_ASC_STL_ENABLE_LEGACY_STD_FEATURE_MACROS 1
+#include <asc/std/version>
+```
+
+It supplies the old values only when the standard-named macros are not defined.
+Those names still do not establish that Host `std` provides the corresponding
+facilities. Remove the option after migrating the old checks.
+
+## Host system libraries
+
+The C++20 `<asc/std/cuchar>` functions `c8rtomb` and `mbrtoc8` must be exported by
+the actual system `<cuchar>`. On GNU/Linux this normally needs glibc 2.36 or later
+and a libstdc++ built with that capability. Ubuntu 24.04 with GCC 13/glibc 2.39
+provides the tested combination. Updating only the compiler is insufficient;
+compile, link and run in the same environment. Do not inject another glibc globally
+into a CANN installation. See also [known device limitations](known_limitations.md).

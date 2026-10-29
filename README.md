@@ -176,7 +176,7 @@ ASC-STL 所需的软硬件环境依赖如下：
   - CANN 9.2.0 及以上（毕昇CCE/clang 15.0.5 与 AscendCL Runtime 随 CANN 提供）
   - CMake ≥ 3.20
 
-不同 ASC-STL 版本可支持的硬件平台及所需的 [CANN](https://www.hiascend.com/developer/download/community/result?module=cann) 版本如下表：
+以下保留各版本的规划配套目标；实际兼容性须以具体SDK构建和验证结果为准。对应硬件平台及所需的 [CANN](https://www.hiascend.com/developer/download/community/result?module=cann) 版本如下表：
 
 <table style="width: 75%; margin: 0 auto;">
   <colgroup>

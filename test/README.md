@@ -39,7 +39,7 @@ source roots so unrelated infrastructure injected by formal CI is not audited.
 and test compilation covers the mandatory C++17 baseline and supported C++20
 mode.
 
-## Executable documentation
+## Executable documentation and supplemental release checks
 
 The Host gate executes registered API examples in C++17 and C++20. CTest reports
 core examples and optional-dependency examples separately. An unavailable optional
@@ -52,3 +52,54 @@ The documentation structure gate verifies the example registry and compares C++
 code in Chinese and English API pages, ignoring comments and whitespace outside
 literals. Its coverage inventory lists every unregistered example page. Registration
 coverage is not API semantic coverage; unregistered examples are not claimed as tested.
+
+Supplemental release checks require a clean, committed product checkout and write
+new logs, source identities and a summary to a fresh report directory. They supplement
+the complete Host/Device/cannsim product gate; a selected stage is not a full release
+verdict. Load the intended CANN environment before software Device checks or hardware
+checks. Supply real optional dependencies, for example DLPack:
+
+```bash
+export ASC_STL_DOC_EXTRA_INCLUDE_DIRS=/path/to/dlpack/include
+bash scripts/ci-release-check.sh --scope software --report-dir /path/to/new/software-report
+```
+
+The software scope runs all registered Host/Device documentation examples, the
+C++17/C++20 memory-safety regression and user-workload correctness/performance checks.
+It requires every selected example to complete: a missing dependency, failure, zero
+applicable cases, or unexecuted case cannot produce a passing release summary.
+`--jobs` controls concurrent example compilers; the Runtime scope remains serial.
+
+This release wrapper intentionally differs from CTest's optional-test skip policy.
+Exit 77 remains `NOT_APPLICABLE`; a nonzero exit with a `BLOCKED_ENVIRONMENT:`
+diagnostic remains `BLOCKED_ENVIRONMENT`. Neither establishes completion of a selected
+release stage. The wrapper stops at the first non-`PASS` result, records later stages
+as `NOT_RUN`, sets `passed=false`, and exits 1. These preserved stage statuses distinguish
+missing applicability or prerequisites from a product/test failure; the wrapper exit
+code means the selected release evidence is incomplete, not necessarily a product defect.
+An all-skipped run never passes. Hardware preflight must pass before Runtime execution.
+To check an independent Host workload without the Device prerequisites, use
+`--scope software --stage acceptance` in a separate report directory. This checks only
+that selected stage and does not turn the incomplete run into a full release pass.
+
+To avoid repeating an unchanged successful matrix, select the remaining supplements
+and retain the independent product gate's detailed documentation reports:
+
+```bash
+bash scripts/ci-release-check.sh --scope software --stage memory --stage acceptance \
+  --report-dir /path/to/new/supplement-report
+```
+
+Real CANN Runtime examples are deliberately excluded from cloud/software CI. On the
+validated hardware host, run the separate scope under the hardware recorder and its
+source/device checks:
+
+```bash
+bash scripts/ci-release-check.sh --scope hardware --report-dir /path/to/new/runtime-report
+```
+
+The hardware scope checks the compute-device mapping, then processes C++17 and C++20
+Runtime examples in order. It stops on the first failure and records later stages as
+`NOT_RUN`. Compile-only examples retain that classification. Hardware Runtime results,
+full product gates and software supplements must refer to the same product revision;
+one cannot replace another.
