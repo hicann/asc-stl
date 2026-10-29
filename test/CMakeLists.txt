@@ -665,6 +665,8 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
     set(atomic_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/atomic-cannsim")
     set(b014_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/std/cstdlib/runtime/cannsim")
     set(b014_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/b014-cannsim")
+    set(b015_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/std/__complex/logarithms/runtime/cannsim")
+    set(b015_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/b015-cannsim")
     set(b016_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/hierarchy/runtime/cannsim")
     set(b016_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/b016-cannsim")
     set(b017_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/warp/runtime/cannsim")
@@ -725,6 +727,13 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
             -DASC_STL_CXX_STANDARD=${ASC_STL_TEST_CXX_STANDARD}
             -DCMAKE_BUILD_TYPE=Release
         COMMAND ${CMAKE_COMMAND} --build ${b014_cannsim_build_root} --target asc_stl_b014_cannsim -j2
+        COMMAND
+            ${CMAKE_COMMAND} -S ${b015_cannsim_case_root} -B ${b015_cannsim_build_root}
+            -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
+            -DASC_STL_TARGET_SOC=${ASC_STL_TARGET_SOC}
+            -DASC_STL_CXX_STANDARD=${ASC_STL_TEST_CXX_STANDARD}
+            -DCMAKE_BUILD_TYPE=Release
+        COMMAND ${CMAKE_COMMAND} --build ${b015_cannsim_build_root} --target asc_stl_b015_cannsim -j2
         COMMAND
             ${CMAKE_COMMAND} -S ${b016_cannsim_case_root} -B ${b016_cannsim_build_root}
             -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
@@ -848,6 +857,8 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
     set(atomic_cannsim_library_dir ${atomic_cannsim_build_root})
     set(b014_cannsim_application ${b014_cannsim_build_root}/asc_stl_b014_cannsim)
     set(b014_cannsim_library_dir ${b014_cannsim_build_root})
+    set(b015_cannsim_application ${b015_cannsim_build_root}/asc_stl_b015_cannsim)
+    set(b015_cannsim_library_dir ${b015_cannsim_build_root})
     set(b016_cannsim_application ${b016_cannsim_build_root}/asc_stl_b016_cannsim)
     set(b016_cannsim_library_dir ${b016_cannsim_build_root})
     set(b017_cannsim_application ${b017_cannsim_build_root}/asc_stl_b017_cannsim)
@@ -917,6 +928,15 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
                 ${b014_cannsim_library_dir} ASC_STL_CANNSIM_B014_PASS)
     set_tests_properties(
         semantic.cannsim.asc.std.b014
+        PROPERTIES LABELS "cannsim-runtime;affected-regression;nightly"
+                   FIXTURES_REQUIRED asc_stl_cannsim_ready RUN_SERIAL TRUE)
+    add_test(
+        NAME semantic.cannsim.asc.std.b015
+        COMMAND ${cannsim_runner} ${ASC_STL_CANNSIM_EXECUTABLE} ${b015_cannsim_application}
+                ${ASC_STL_CANNSIM_SOC} ${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/b015
+                ${b015_cannsim_library_dir} ASC_STL_CANNSIM_B015_PASS)
+    set_tests_properties(
+        semantic.cannsim.asc.std.b015
         PROPERTIES LABELS "cannsim-runtime;affected-regression;nightly"
                    FIXTURES_REQUIRED asc_stl_cannsim_ready RUN_SERIAL TRUE)
     add_test(
