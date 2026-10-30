@@ -19,6 +19,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 from pathlib import Path
 
@@ -159,28 +160,35 @@ def main() -> int:
     parser.add_argument("--report-only", action="store_true")
     args = parser.parse_args()
 
-    candidates = sorted(
-        path
-        for path in args.include_root.rglob("*")
-        if path.is_file() and not path.name.startswith(".")
-    )
+    # Product headers may be extensionless; retain those listed in metadata.
+    # Also inspect newly added conventional headers before metadata is updated.
+    manifest = Path(__file__).resolve().parents[1] / "test/metadata/headers.json"
+    metadata = json.loads(manifest.read_text(encoding="utf-8"))
+    product_headers = {entry["target"] for entry in metadata["headers"]}
+    header_extensions = {".h", ".hh", ".hpp", ".hxx"}
+    candidates = []
+    for path in args.include_root.rglob("*"):
+        if not path.is_file() or path.name.startswith("."):
+            continue
+        if (path.suffix.lower() in header_extensions
+                or path.relative_to(args.include_root).as_posix() in product_headers):
+            candidates.append(path)
+    candidates.sort()
     violations: list[str] = []
     seen_guards: dict[str, Path] = {}
     for path in candidates:
         text = path.read_text(encoding="utf-8", errors="ignore")
-        if "#ifndef " not in text:
-            continue
         guard = next(
-            line.split(maxsplit=1)[1]
-            for line in text.splitlines()
-            if line.startswith("#ifndef ")
+            (line.split(maxsplit=1)[1] for line in text.splitlines() if line.startswith("#ifndef ")),
+            None,
         )
-        if guard in seen_guards:
-            violations.append(
-                f"{path}: duplicate guard also used by {seen_guards[guard]}"
-            )
-        else:
-            seen_guards[guard] = path
+        if guard is not None:
+            if guard in seen_guards:
+                violations.append(
+                    f"{path}: duplicate guard also used by {seen_guards[guard]}"
+                )
+            else:
+                seen_guards[guard] = path
         violations.extend(
             f"{path}: {message}" for message in audit(path, args.include_root)
         )

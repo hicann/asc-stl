@@ -51,6 +51,11 @@ add_test(NAME gate.api-docs-regressions
 set_tests_properties(gate.api-docs gate.api-docs-regressions
     PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 120)
 
+add_test(NAME gate.header-layout-regressions
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/test_header_layout.py)
+set_tests_properties(gate.header-layout-regressions
+    PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 120)
+
 add_test(NAME compatibility.codecheck-worktree-isolation
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/test_codecheck_worktree.py
             --allow-missing-rsync)
