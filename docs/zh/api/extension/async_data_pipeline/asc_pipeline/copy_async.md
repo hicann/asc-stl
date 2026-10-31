@@ -187,7 +187,7 @@ void copy_async(const asc::pipeline_ref& pipeline, unsigned int stage, asc::ub_s
 
 以1个AI Core启动。input和output各含至少8个unsigned int，GM起始地址32字节对齐；Host同步后output[i]应等于input[i]+1。完整的阶段配对如下，UB→GM必须先consumer_release再copy_async。
 
-完整工程见[流水线搬运示例](../../../../examples/pipeline_copy/README.md)。
+完整工程见[流水线搬运示例](../../../../../../examples/extension/pipeline_copy/README.md)。
 
 ```cpp
 #include <asc/pipeline>

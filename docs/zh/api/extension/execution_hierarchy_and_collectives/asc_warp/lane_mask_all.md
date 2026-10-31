@@ -70,7 +70,7 @@ __global__ void example(unsigned int* output)
 }
 ```
 
-完整工程及运行步骤见[《warp_collectives示例》](../../../../examples/warp_collectives/README.md)。
+完整工程及运行步骤见[《warp_collectives示例》](../../../../../../examples/extension/warp_collectives/README.md)。
 
 ## 关联API
 

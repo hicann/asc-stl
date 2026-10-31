@@ -9,7 +9,7 @@ docs/
 ├── zh/             # 中文文档
 │   ├── api/        # API 参考
 │   ├── contributing/ # 贡献指南
-│   ├── examples/   # API 示例源码
+│   ├── examples/   # 示例导航（源码位于仓库根目录examples）
 │   ├── figures/    # 文档图片
 │   └── guide/      # 获取、使用、构建与测试
 ├── en/             # 英文文档（API 参考）
@@ -23,3 +23,5 @@ docs/
 - [API参考](zh/api/README.md)
 - [贡献指南](zh/contributing/README.md)
 - [English documentation](README_en.md)
+
+完整示例工程、构建与运行说明见[examples](../examples/README.md)。

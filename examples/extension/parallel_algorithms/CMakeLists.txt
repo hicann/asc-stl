@@ -12,18 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.20)
+include(../../cmake/AscStlExample.cmake)
 set(CMAKE_ASC_ARCHITECTURES "dav-3510" CACHE STRING "NPU architecture")
 find_package(ASC REQUIRED)
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
 endif()
 project(asc_stl_parallel_algorithms LANGUAGES ASC CXX)
-set(ASC_STL_EXAMPLE_STANDARD 17 CACHE STRING "C++ standard (17 or20)")
-if(NOT ASC_STL_EXAMPLE_STANDARD MATCHES "^(17|20)$")
-    message(FATAL_ERROR "ASC_STL_EXAMPLE_STANDARD must be17 or20")
-endif()
-set(ASC_STL_INCLUDE_DIR "" CACHE PATH "ASC-STL include directory")
 # The CANN pure-SIMT runtime emits strong launch/registration definitions per TU.
 # The grouped ASC files are textual inputs of parallel_cases.asc, not separate TUs.
 add_executable(asc_stl_parallel_algorithms main.cpp parallel_cases.asc)

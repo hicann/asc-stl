@@ -70,10 +70,10 @@ __aicore__ decltype(auto) example()
 
 完整示例源码：
 
-- [CMakeLists.txt](../../../../examples/warp_collectives/CMakeLists.txt)
-- [warp_example.h](../../../../examples/warp_collectives/warp_example.h)
-- [kernel.asc](../../../../examples/warp_collectives/kernel.asc)
-- [main.cpp](../../../../examples/warp_collectives/main.cpp)
+- [CMakeLists.txt](../../../../../../examples/extension/warp_collectives/CMakeLists.txt)
+- [warp_example.h](../../../../../../examples/extension/warp_collectives/warp_example.h)
+- [kernel.asc](../../../../../../examples/extension/warp_collectives/kernel.asc)
+- [main.cpp](../../../../../../examples/extension/warp_collectives/main.cpp)
 
 ## 关联API
 

@@ -185,7 +185,7 @@ asc::warp_shuffle_result<unsigned long long> warp_shuffle_up(
 
 ## 调用示例
 
-以1个Block、32个线程收敛启动，output是至少32项的GM数组。每Lane输入为lane+1，Host同步后32项均应为1；无效来源不读取data。完整启动和读回工程见[Warp集体操作示例](../../../../examples/warp_collectives/README.md)。
+以1个Block、32个线程收敛启动，output是至少32项的GM数组。每Lane输入为lane+1，Host同步后32项均应为1；无效来源不读取data。完整启动和读回工程见[Warp集体操作示例](../../../../../../examples/extension/warp_collectives/README.md)。
 
 ```cpp
 #include <asc/warp>

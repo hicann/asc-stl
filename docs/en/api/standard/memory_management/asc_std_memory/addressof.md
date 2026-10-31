@@ -86,7 +86,7 @@ bool verify_example()
 
 The corresponding complete project uses `C++17` and has been verified by Host compilation and execution.
 
-Complete example source: [pointer_alignment.cpp](../../../../../zh/examples/pointer_alignment.cpp).
+Complete example source: [pointer_alignment.cpp](../../../../../../examples/standard/pointer_alignment/main.cpp).
 
 ## Related APIs
 

@@ -4,7 +4,7 @@ A C++ standard library for Ascend device programming — header-only, with a sin
 
 English | [简体中文](README.md)
 
-[📖 API Reference](docs/en/api/README.md) | [📚 Roadmap](docs/zh/roadmap/roadmap_v1_0_0.md) | [🧪 Quick Start](docs/en/quick_start.md) | [📄 LICENSE](LICENSE) | [🤝 Contributing](CONTRIBUTING.md)
+[📖 API Reference](docs/en/api/README.md) | [📚 Roadmap](docs/zh/roadmap/roadmap_v1_0_0.md) | [🧪 Quick Start](docs/en/quick_start.md) | [💻 Examples](examples/README_en.md) | [📄 LICENSE](LICENSE) | [🤝 Contributing](CONTRIBUTING.md)
 
 ## 🔥 Current Availability
 
@@ -76,6 +76,7 @@ asc-stl/
 │       ├── memory                   # GM, UB, and memory views
 │       ├── stream                   # Stream and event management
 │       └── ...                      # Other device-capability public headers
+├── examples/                        # Standalone examples and bilingual instructions
 ├── docs/                            # Project documentation and product roadmap
 ├── test/                            # Host, device, and simulation tests
 ├── cmake/                           # CMake install and export configuration

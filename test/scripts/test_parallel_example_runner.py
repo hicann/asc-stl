@@ -26,7 +26,7 @@ import unittest
 from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[2]
-RUNNER = ROOT / "docs/zh/examples/parallel_algorithms/run.py"
+RUNNER = ROOT / "examples/extension/parallel_algorithms/run.py"
 
 
 class ParallelExampleRunnerTests(unittest.TestCase):

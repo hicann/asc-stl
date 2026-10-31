@@ -9,7 +9,7 @@
 | 连续追加65536个元素并管理存储 | 同上 | 检查全部元素、大小及校验和；另测扩容时自引用追加 |
 | 通过二维视图更新256×256矩阵 | 同上 | 将每个元素与直接下标公式比较 |
 | 编译、启动核函数并回拷结果 | [完整快速入门](../quick_start.md) | 核函数输出必须符合Host独立预期，资源清理成功 |
-| 提交设备并行算法 | [并行算法完整工程](../examples/parallel_algorithms/README.md) | 57个案例分别检查输入、同步、结果及清理 |
+| 提交设备并行算法 | [并行算法完整工程](../../../examples/extension/parallel_algorithms/README.md) | 57个案例分别检查输入、同步、结果及清理 |
 | 管理Runtime资源 | `scripts/check_api_docs.py --examples --mode runtime` | 按登记区分实际执行与仅编译，缺依赖或未运行不算执行通过 |
 
 ## Host场景和基线

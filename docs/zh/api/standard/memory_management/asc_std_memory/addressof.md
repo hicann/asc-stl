@@ -86,7 +86,7 @@ bool verify_example()
 
 对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
-完整示例源码：[pointer_alignment.cpp](../../../../examples/pointer_alignment.cpp)。
+完整示例源码：[pointer_alignment.cpp](../../../../../../examples/standard/pointer_alignment/main.cpp)。
 
 ## 关联API
 

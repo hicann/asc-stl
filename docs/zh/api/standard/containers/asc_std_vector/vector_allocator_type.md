@@ -82,7 +82,7 @@ static_assert(::std::is_same_v<alias_type, example_allocator<int>>);
 
 对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
-完整示例源码：[explicit_allocator_vector.cpp](../../../../examples/explicit_allocator_vector.cpp)。
+完整示例源码：[explicit_allocator_vector.cpp](../../../../../../examples/standard/explicit_allocator_vector/main.cpp)。
 
 ## 关联API
 

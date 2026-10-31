@@ -79,7 +79,7 @@ __global__ __vector__ void example(__gm__ unsigned int* output, __gm__ const uns
 }
 ```
 
-完整工程及运行步骤见[《pipeline_copy示例》](../../../../examples/pipeline_copy/README.md)。
+完整工程及运行步骤见[《pipeline_copy示例》](../../../../../../examples/extension/pipeline_copy/README.md)。
 
 ## 关联API
 

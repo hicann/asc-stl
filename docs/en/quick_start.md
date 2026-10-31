@@ -82,10 +82,10 @@ cmake --build build
 
 ## Run the complete device example
 
-The [Add + ReLU project](../zh/examples/quick_start/README_en.md) has one shared
-source tree for both languages. Its [kernel](../zh/examples/quick_start/add_relu_kernel.cpp)
+The [Add + ReLU project](../../examples/quick_start/README_en.md) has one shared
+source tree for both languages. Its [kernel](../../examples/quick_start/add_relu_kernel.cpp)
 uses `asc::std::max` to compute `z = max(x + y, 0)` for 64 floats. The
-[Host program](../zh/examples/quick_start/main.cpp) allocates GM and a Stream,
+[Host program](../../examples/quick_start/main.cpp) allocates GM and a Stream,
 uploads inputs, calls the launch function declared by the CANN-generated header,
 synchronizes, downloads output and checks every value against an independent
 Host golden. Cleanup failures also make the program fail.
@@ -96,7 +96,7 @@ your supported installation:
 ```bash
 cd asc-stl
 source /usr/local/Ascend/ascend-toolkit/set_env.sh
-cmake -S docs/zh/examples/quick_start -B build/quick-start-17 \
+cmake -S examples/quick_start -B build/quick-start-17 \
   -DASC_STL_EXAMPLE_STANDARD=17 -DSOC_VERSION=Ascend950PR_9599 \
   -DCMAKE_BUILD_TYPE=Release
 cmake --build build/quick-start-17 -j2
@@ -122,8 +122,8 @@ are 10 seconds; retain the outer process timeout. After a device error or timeou
 check the environment before submitting more work.
 
 This small scalar kernel demonstrates integration, not vectorized performance.
-Continue with [GM/UB pipeline copying](../zh/examples/pipeline_copy/README.md) or
-[parallel algorithms](../zh/examples/parallel_algorithms/README.md); these project
+Continue with [GM/UB pipeline copying](../../examples/extension/pipeline_copy/README_en.md) or
+[parallel algorithms](../../examples/extension/parallel_algorithms/README_en.md); these project
 guides are currently in Chinese, with complete source files.
 
 ## Validate your checkout

@@ -10,7 +10,7 @@ they do not cover every API, input, device, or CANN version.
 | Grow a sequence to 65536 elements | Same entry | Check every value, size and checksum; separately check self-reference during reallocation |
 | Update a 256×256 matrix view | Same entry | Compare every element with the direct indexing formula |
 | Build, launch and read back a kernel | [Complete Quick Start](../quick_start.md) | Compare with an independent Host golden and check cleanup |
-| Submit device parallel algorithms | [Complete parallel example](../../zh/examples/parallel_algorithms/README.md) | Check inputs, synchronization, outputs and cleanup for 57 cases |
+| Submit device parallel algorithms | [Complete parallel example](../../../examples/extension/parallel_algorithms/README_en.md) | Check inputs, synchronization, outputs and cleanup for 57 cases |
 | Manage Runtime resources | `scripts/check_api_docs.py --examples --mode runtime` | Distinguish execution from compilation, missing dependencies and cases not run |
 
 ## Host scenarios and baselines

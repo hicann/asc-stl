@@ -62,7 +62,7 @@ __global__ void example(void* storage, unsigned int* output)
 }
 ```
 
-完整工程及运行步骤见[《atomic_operations示例》](../../../../examples/atomic_operations/README.md)。
+完整工程及运行步骤见[《atomic_operations示例》](../../../../../../examples/extension/atomic_operations/README.md)。
 
 ## 关联API
 

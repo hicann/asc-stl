@@ -5,4 +5,4 @@ ASC-STL is a header-only C++ library for Ascend C kernel development. It provide
 - [English documentation](en/README_en.md)
 - [Chinese documentation](zh/README.md)
 
-English documentation includes the [Quick Start](en/quick_start.md), [language compatibility](en/guide/cpp_compatibility.md), [known limitations](en/guide/known_limitations.md) and API reference under `docs/en/api/`. The [complete device example](zh/examples/quick_start/README_en.md) shares its source with the Chinese guide. Additional guides, examples and contribution material remain available in Chinese under `docs/zh/`.
+English documentation includes the [Quick Start](en/quick_start.md), [language compatibility](en/guide/cpp_compatibility.md), [known limitations](en/guide/known_limitations.md) and API reference under `docs/en/api/`. The [complete device example](../examples/quick_start/README_en.md) shares its source with the Chinese guide. [All example projects](../examples/README_en.md) share bilingual guides and one source tree. Additional guides and contribution material remain available in Chinese under `docs/zh/`.

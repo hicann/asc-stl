@@ -16457,7 +16457,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_adjacent_find.md": {
@@ -16471,7 +16471,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_all_of.md": {
@@ -16485,7 +16485,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_any_of.md": {
@@ -16499,7 +16499,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_copy.md": {
@@ -16513,7 +16513,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_copy_if.md": {
@@ -16527,7 +16527,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_copy_n.md": {
@@ -16541,7 +16541,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_count.md": {
@@ -16555,7 +16555,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_count_if.md": {
@@ -16569,7 +16569,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_equal.md": {
@@ -16583,7 +16583,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_exclusive_scan.md": {
@@ -16597,7 +16597,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_fill.md": {
@@ -16611,7 +16611,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_fill_n.md": {
@@ -16625,7 +16625,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_find.md": {
@@ -16639,7 +16639,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_find_if.md": {
@@ -16653,7 +16653,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_find_if_not.md": {
@@ -16667,7 +16667,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_for_each.md": {
@@ -16681,7 +16681,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_for_each_n.md": {
@@ -16695,7 +16695,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_generate.md": {
@@ -16709,7 +16709,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_generate_n.md": {
@@ -16723,7 +16723,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_inclusive_scan.md": {
@@ -16737,7 +16737,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_heap.md": {
@@ -16751,7 +16751,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_heap_until.md": {
@@ -16765,7 +16765,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_partitioned.md": {
@@ -16779,7 +16779,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_sorted.md": {
@@ -16793,7 +16793,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_is_sorted_until.md": {
@@ -16807,7 +16807,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_max_element.md": {
@@ -16821,7 +16821,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_merge.md": {
@@ -16835,7 +16835,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_min_element.md": {
@@ -16849,7 +16849,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_mismatch.md": {
@@ -16863,7 +16863,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_none_of.md": {
@@ -16877,7 +16877,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_partition.md": {
@@ -16891,7 +16891,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_partition_copy.md": {
@@ -16905,7 +16905,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_reduce.md": {
@@ -16919,7 +16919,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_remove.md": {
@@ -16933,7 +16933,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_remove_copy.md": {
@@ -16947,7 +16947,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_remove_copy_if.md": {
@@ -16961,7 +16961,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_remove_if.md": {
@@ -16975,7 +16975,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_replace.md": {
@@ -16989,7 +16989,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_replace_copy.md": {
@@ -17003,7 +17003,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_replace_copy_if.md": {
@@ -17017,7 +17017,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_replace_if.md": {
@@ -17031,7 +17031,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_reverse.md": {
@@ -17045,7 +17045,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_reverse_copy.md": {
@@ -17059,7 +17059,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_rotate.md": {
@@ -17073,7 +17073,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_rotate_copy.md": {
@@ -17087,7 +17087,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_shift_left.md": {
@@ -17101,7 +17101,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_shift_right.md": {
@@ -17115,7 +17115,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_sort.md": {
@@ -17129,7 +17129,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_stable_partition.md": {
@@ -17143,7 +17143,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_swap_ranges.md": {
@@ -17157,7 +17157,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform.md": {
@@ -17171,7 +17171,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform_exclusive_scan.md": {
@@ -17185,7 +17185,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform_inclusive_scan.md": {
@@ -17199,7 +17199,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform_reduce.md": {
@@ -17213,7 +17213,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_unique.md": {
@@ -17227,7 +17227,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_unique_copy.md": {
@@ -17241,7 +17241,7 @@
       "-DCANN_ASC_STL_USE_SIMT_LAUNCH=1"
     ],
     "include_dirs": [
-      "docs/zh/examples/parallel_algorithms"
+      "examples/extension/parallel_algorithms"
     ]
   },
   "docs/zh/api/standard/utilities/asc_std_tuple/tuple_swap.md": {

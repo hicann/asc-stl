@@ -4,7 +4,7 @@
 
 简体中文 | [English](README_en.md)
 
-[📖 api文档](docs/zh/api/README.md) | [📚 路线图](docs/zh/roadmap/roadmap_v1_0_0.md) | [🧪 快速入门](docs/zh/quick_start.md) | [📄 LICENSE](LICENSE) | [🤝 贡献指南](CONTRIBUTING.md)
+[📖 api文档](docs/zh/api/README.md) | [📚 路线图](docs/zh/roadmap/roadmap_v1_0_0.md) | [🧪 快速入门](docs/zh/quick_start.md) | [💻 示例](examples/README.md) | [📄 LICENSE](LICENSE) | [🤝 贡献指南](CONTRIBUTING.md)
 
 ## 🔥 当前可用状态
 
@@ -77,6 +77,7 @@ asc-stl/
 │       ├── memory                   # GM、UB 和内存视图
 │       ├── stream                   # stream 和 event 管理
 │       └── ...                      # 其他设备能力公共 Header
+├── examples/                        # 独立示例工程与中英文运行说明
 ├── docs/                            # 项目文档与产品路线图
 ├── test/                            # Host、Device 与仿真测试
 ├── cmake/                           # CMake 安装和导出配置

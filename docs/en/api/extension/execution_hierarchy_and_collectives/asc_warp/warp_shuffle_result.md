@@ -59,7 +59,7 @@ __global__ void example(unsigned int* output)
 }
 ```
 
-For the complete project and run steps, see the [warp_collectives example](../../../../../zh/examples/warp_collectives/README.md).
+For the complete project and run steps, see the [warp_collectives example](../../../../../../examples/extension/warp_collectives/README_en.md).
 
 ## Related APIs
 

@@ -81,7 +81,7 @@ __global__ void example(int* storage, unsigned int* output)
 }
 ```
 
-For the complete project and run steps, see the [atomic_operations example](../../../../../zh/examples/atomic_operations/README.md).
+For the complete project and run steps, see the [atomic_operations example](../../../../../../examples/extension/atomic_operations/README_en.md).
 
 ## Related APIs
 

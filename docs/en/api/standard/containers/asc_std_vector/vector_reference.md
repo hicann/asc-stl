@@ -82,7 +82,7 @@ static_assert(::std::is_same_v<alias_type, int&>);
 
 The corresponding complete project uses `C++17` and has been verified by Host compilation and execution.
 
-Complete example source: [explicit_allocator_vector.cpp](../../../../../zh/examples/explicit_allocator_vector.cpp).
+Complete example source: [explicit_allocator_vector.cpp](../../../../../../examples/standard/explicit_allocator_vector/main.cpp).
 
 ## Related APIs
 

@@ -52,6 +52,16 @@ class DocumentationChecks(unittest.TestCase):
         self.assertTrue(any("missing relative link" in error for error in errors))
         self.assertTrue(any("unclosed code fence" in error for error in errors))
 
+    def test_structure_gate_checks_root_example_links(self):
+        page = self.root / "examples/README.md"
+        page.parent.mkdir()
+        page.write_text("[missing example](missing/main.cpp)\n")
+        registry = self.root / "test/docs/examples.json"
+        registry.parent.mkdir(parents=True)
+        registry.write_text("{}")
+        errors = DOCS.check_structure(self.root)
+        self.assertTrue(any("missing relative link: missing/main.cpp" in error for error in errors))
+
     def test_cpp_example_is_isolated_from_declaration(self):
         self.page.write_text("## 声明\n```cpp\nnot source\n```\n## 调用示例\n```cpp\nint value = 3;\n```\n")
         self.assertEqual(DOCS.example_source(self.page), "int value = 3;")

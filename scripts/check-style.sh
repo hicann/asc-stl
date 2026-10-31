@@ -22,7 +22,7 @@ echo "Step 1: check canonical license headers"
 
 # Inspect only ASC-STL-owned source roots. Formal CI may inject untracked
 # top-level infrastructure (for example CI/) into its working directory.
-SOURCE_ROOTS=(CMakeLists.txt cmake docs include scripts test)
+SOURCE_ROOTS=(CMakeLists.txt cmake docs examples include scripts test)
 
 LICENSE_SOURCES="$({
     git ls-files --cached --others --exclude-standard -- "${SOURCE_ROOTS[@]}"

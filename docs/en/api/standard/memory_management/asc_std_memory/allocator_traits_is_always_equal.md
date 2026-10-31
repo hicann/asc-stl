@@ -73,7 +73,7 @@ static_assert(selected::value == true);
 
 The corresponding complete project uses `C++17` and has been verified by Host compilation and execution.
 
-Complete example source: [allocator_traits.cpp](../../../../../zh/examples/allocator_traits.cpp).
+Complete example source: [allocator_traits.cpp](../../../../../../examples/standard/allocator_traits/main.cpp).
 
 ## Related APIs
 

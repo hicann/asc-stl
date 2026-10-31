@@ -37,6 +37,11 @@ if(BUILD_TESTING)
     add_subdirectory(test)
 endif()
 
+option(ASC_STL_BUILD_EXAMPLES "Build the user examples" OFF)
+if(ASC_STL_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
 install(
     DIRECTORY include/
     DESTINATION include

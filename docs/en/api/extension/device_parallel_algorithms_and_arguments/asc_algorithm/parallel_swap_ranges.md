@@ -83,7 +83,7 @@ asc::execution_status swap_ranges(asc::device_policy policy, Forward1 first1, Fo
 
 The following snippet uses the complete project's Host resource context: initial is [1, 2, 3, 4] and the second range is [5, 6, 7, 8]; prepare synchronously uploads to GM, complete checks the submission status and waits for the stream with a bounded wait, and read reads back only after completion. The code checks each independent expected result item by item.
 
-For the complete project, task/stream/process time limits, and per-case records, see [parallel algorithm examples](../../../../../zh/examples/parallel_algorithms/README.md).
+For the complete project, task/stream/process time limits, and per-case records, see [parallel algorithm examples](../../../../../../examples/extension/parallel_algorithms/README_en.md).
 
 ```cpp
 #include <asc/algorithm>

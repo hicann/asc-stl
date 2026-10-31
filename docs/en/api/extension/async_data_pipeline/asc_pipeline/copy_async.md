@@ -187,7 +187,7 @@ No return value.
 
 Launched on 1 AI Core. input and output each contain at least 8 unsigned int elements, with GM start addresses 32-byte aligned; after Host synchronization, output[i] should equal input[i]+1. The complete stage pairing is as follows; for UB→GM, consumer_release must be called before copy_async.
 
-For the complete project, see the [pipeline copy example](../../../../../zh/examples/pipeline_copy/README.md).
+For the complete project, see the [pipeline copy example](../../../../../../examples/extension/pipeline_copy/README_en.md).
 
 ```cpp
 #include <asc/pipeline>

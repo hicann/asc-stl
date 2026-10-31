@@ -89,7 +89,7 @@ asc::execution_status reduce(
 
 以下片段使用完整工程的Host资源上下文：initial为[1, 2, 3, 4]，第二范围为[1, 2, 3, 4]；prepare同步上传到GM，complete检查提交状态并有界等待Stream，read只在完成后读回。代码逐项检查独立预期结果。
 
-完整工程、任务/流/进程时限和逐case记录见[并行算法示例](../../../../examples/parallel_algorithms/README.md)。
+完整工程、任务/流/进程时限和逐case记录见[并行算法示例](../../../../../../examples/extension/parallel_algorithms/README.md)。
 
 ```cpp
 #include <asc/algorithm>

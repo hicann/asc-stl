@@ -90,7 +90,7 @@ constexpr bool example()
 static_assert(example());
 ```
 
-Complete example source: [pointer_alignment.cpp](../../../../../zh/examples/pointer_alignment.cpp).
+Complete example source: [pointer_alignment.cpp](../../../../../../examples/standard/pointer_alignment/main.cpp).
 
 ## Related APIs
 

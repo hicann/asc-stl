@@ -123,7 +123,8 @@ def content_errors(path: Path) -> list[str]:
 
 def check_structure(root: Path) -> list[str]:
     errors = check_writing(root)
-    for path in sorted((root / "docs").rglob("*.md")):
+    pages = [*(root / "docs").rglob("*.md"), *(root / "examples").rglob("*.md")]
+    for path in sorted(pages):
         errors.extend(structure_errors(path))
         if "api" in path.parts:
             errors.extend(content_errors(path))

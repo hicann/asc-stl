@@ -73,7 +73,7 @@ static_assert(selected::value == true);
 
 对应完整工程使用`C++17`，并通过Host编译与运行验证。
 
-完整示例源码：[allocator_traits.cpp](../../../../examples/allocator_traits.cpp)。
+完整示例源码：[allocator_traits.cpp](../../../../../../examples/standard/allocator_traits/main.cpp)。
 
 ## 关联API
 

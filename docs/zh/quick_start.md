@@ -119,8 +119,8 @@ extern "C" __global__ __aicore__ void add_relu_kernel(__gm__ float* x, __gm__ fl
 
 ### 完整工程：编译、启动与校验
 
-仓库中的[完整入门工程](examples/quick_start/README.md)包含以上Kernel及
-[Host程序](examples/quick_start/main.cpp)。Host程序构造64组正、负和零值输入，
+仓库中的[完整入门工程](../../examples/quick_start/README.md)包含以上Kernel及
+[Host程序](../../examples/quick_start/main.cpp)。Host程序构造64组正、负和零值输入，
 通过AscendCL分配GM和Stream、上传输入、调用CANN生成的启动函数、同步并回拷结果。
 Host golden直接计算`sum > 0 ? sum : 0`，不调用被测的`asc::std::max`。
 它检查每个元素及资源释放的返回码，任何失败均返回非零。
@@ -130,7 +130,7 @@ Host golden直接计算`sum > 0 ? sum : 0`，不调用被测的`asc::std::max`�
 ```bash
 cd asc-stl
 source /usr/local/Ascend/ascend-toolkit/set_env.sh  # 换成实际安装路径
-cmake -S docs/zh/examples/quick_start -B build/quick-start-17 \
+cmake -S examples/quick_start -B build/quick-start-17 \
   -DASC_STL_EXAMPLE_STANDARD=17 -DSOC_VERSION=Ascend950PR_9599 \
   -DCMAKE_BUILD_TYPE=Release
 cmake --build build/quick-start-17 -j2
@@ -153,8 +153,8 @@ ASC_STL_QUICK_START_PASS
 发生设备错误或超时时先检查环境，不能通过反复重试获得通过结果。
 
 此示例展示一个小规模标量Kernel的完整接入路径，不是向量化性能示例。
-后续可继续运行[GM/UB流水拷贝](examples/pipeline_copy/README.md)和
-[并行算法](examples/parallel_algorithms/README.md)工程。
+后续可继续运行[GM/UB流水拷贝](../../examples/extension/pipeline_copy/README.md)和
+[并行算法](../../examples/extension/parallel_algorithms/README.md)工程。
 
 ## 🧪 本地验证
 

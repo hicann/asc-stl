@@ -185,7 +185,7 @@ asc::warp_shuffle_result<unsigned long long> warp_shuffle_idx(
 
 ## Example
 
-Launched converged with 1 block and 32 threads; output is a GM array of at least 32 elements. Each lane's input is lane+1; after Host synchronization all 32 elements should be 1; data is not read for invalid sources. For the complete launch and read-back project, see the [warp collectives example](../../../../../zh/examples/warp_collectives/README.md).
+Launched converged with 1 block and 32 threads; output is a GM array of at least 32 elements. Each lane's input is lane+1; after Host synchronization all 32 elements should be 1; data is not read for invalid sources. For the complete launch and read-back project, see the [warp collectives example](../../../../../../examples/extension/warp_collectives/README_en.md).
 
 ```cpp
 #include <asc/warp>

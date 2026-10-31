@@ -75,7 +75,7 @@ __global__ __vector__ void example(__gm__ unsigned int* output, __gm__ const uns
 }
 ```
 
-For the complete project and run steps, see the [pipeline_copy example](../../../../../zh/examples/pipeline_copy/README.md).
+For the complete project and run steps, see the [pipeline_copy example](../../../../../../examples/extension/pipeline_copy/README_en.md).
 
 ## Related APIs
 
