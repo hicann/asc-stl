@@ -70,3 +70,5 @@ bool example()
 ## Related APIs
 
 - [API list for this header](asc_std_mdspan.md)
+
+[Complete usage example](../../../../../../examples/standard/mdspan_matrix/README_en.md).

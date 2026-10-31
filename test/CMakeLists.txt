@@ -83,6 +83,12 @@ set_tests_properties(compatibility.examples-cmake
     PROPERTIES LABELS "examples;affected-regression;nightly" TIMEOUT 300
         ENVIRONMENT "CXX=${CMAKE_CXX_COMPILER}")
 
+add_test(NAME compatibility.example-cleanup
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/test_example_cleanup.py)
+set_tests_properties(compatibility.example-cleanup
+    PROPERTIES LABELS "examples;affected-regression;nightly" TIMEOUT 60
+        ENVIRONMENT "CXX=${CMAKE_CXX_COMPILER}")
+
 add_test(
     NAME gate.product-contract
     COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/validate_product_contract.py

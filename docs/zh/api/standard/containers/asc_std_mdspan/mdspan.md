@@ -70,3 +70,5 @@ bool example()
 ## 关联API
 
 - [本头文件的接口列表](asc_std_mdspan.md)
+
+[完整使用示例](../../../../../../examples/standard/mdspan_matrix/README.md)。

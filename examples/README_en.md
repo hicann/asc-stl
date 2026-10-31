@@ -4,13 +4,17 @@
 
 Each example has one source project shared by the Chinese and English guides.
 API pages link here for complete programs, build instructions and result checks.
-The standard examples use existing Host facilities; the other projects require CANN
-and a supported Ascend device to execute.
+Standard examples provide Host execution; the five introductory topics also provide optional SIMT execution. Runtime and Device paths require CANN and a supported Ascend device.
 
 ## Example index
 
 | Example | Main facilities | Execution |
 | --- | --- | --- |
+| [Array statistics](standard/array_statistics/README_en.md) | `array, minmax_element and accumulate` | Host / AI Core SIMT |
+| [Processing a span subrange](standard/span_subrange/README_en.md) | `span and subspan` | Host / AI Core SIMT |
+| [Two-dimensional access with mdspan](standard/mdspan_matrix/README_en.md) | `mdspan, extents, layout_right and layout_left` | Host / AI Core SIMT |
+| [Tuples and type traits](standard/tuple_traits/README_en.md) | `array, tuple, get and type_traits` | Host / AI Core SIMT |
+| [Bit flags](standard/bit_flags/README_en.md) | `cstdint, bit, popcount, bit_width and has_single_bit` | Host / AI Core SIMT |
 | [Allocator traits and nested access](standard/allocator_traits/README_en.md) | `allocator_traits / scoped_allocator_adaptor` | Host |
 | [Vector with an explicit allocator](standard/explicit_allocator_vector/README_en.md) | `vector / type_traits` | Host |
 | [Pointer traits and alignment](standard/pointer_alignment/README_en.md) | `memory / pointer_traits` | Host |
@@ -33,9 +37,9 @@ ctest --test-dir build/examples17 --output-on-failure
 ```
 
 Use `-DASC_STL_EXAMPLE_STANDARD=20` with a separate build directory for C++20.
-All three Host examples must pass. Each subdirectory also supports a standalone
+All eight Host examples must pass. Each subdirectory also supports a standalone
 CMake build; see its README. `allocator_traits` includes compile-time type checks;
-all three examples check observable results at runtime.
+all eight examples check observable results at runtime.
 
 The product's top-level CMake also accepts `-DASC_STL_BUILD_EXAMPLES=ON` (default OFF).
 `BUILD_TESTING=OFF` disables test registration when embedding the header library;

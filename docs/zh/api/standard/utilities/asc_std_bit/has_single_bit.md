@@ -85,3 +85,5 @@ bool verify_example()
 ## 关联API
 
 - [本头文件的接口列表](asc_std_bit.md)
+
+[完整使用示例](../../../../../../examples/standard/bit_flags/README.md)。

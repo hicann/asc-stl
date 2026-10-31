@@ -86,3 +86,5 @@ bool example()
 ## Related APIs
 
 - [API list for this header](asc_std_span.md)
+
+[Complete usage example](../../../../../../examples/standard/span_subrange/README_en.md).

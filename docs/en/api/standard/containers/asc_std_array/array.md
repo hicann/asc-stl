@@ -66,3 +66,5 @@ bool example()
 ## Related APIs
 
 - [API list for this header](asc_std_array.md)
+
+[Complete usage example](../../../../../../examples/standard/array_statistics/README_en.md).

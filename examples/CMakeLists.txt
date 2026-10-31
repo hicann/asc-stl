@@ -19,6 +19,10 @@ endif()
 include(CTest)
 include(cmake/AscStlExample.cmake)
 
+set(standard_topics array_statistics span_subrange mdspan_matrix tuple_traits bit_flags)
+foreach(name IN LISTS standard_topics)
+    add_subdirectory(standard/${name})
+endforeach()
 add_subdirectory(standard/allocator_traits)
 add_subdirectory(standard/explicit_allocator_vector)
 add_subdirectory(standard/pointer_alignment)
@@ -50,6 +54,22 @@ if(ASC_STL_BUILD_DEVICE_EXAMPLES)
                 "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
                 "-DCMAKE_ASC_ARCHITECTURES=${CMAKE_ASC_ARCHITECTURES}"
                 "-DSOC_VERSION=${SOC_VERSION}"
+            BUILD_ALWAYS TRUE
+            INSTALL_COMMAND ""
+            TEST_COMMAND "")
+    endforeach()
+    foreach(name IN LISTS standard_topics)
+        ExternalProject_Add(asc_stl_example_${name}
+            SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/standard/${name}"
+            BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/device/${name}"
+            CMAKE_ARGS
+                "-DASC_STL_EXAMPLE_DEVICE=ON"
+                "-DASC_STL_EXAMPLE_STANDARD=${ASC_STL_EXAMPLE_STANDARD}"
+                "-DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_DIR}"
+                "-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}"
+                "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
+                "-DCMAKE_ASC_ARCHITECTURES=${CMAKE_ASC_ARCHITECTURES}"
+            BUILD_COMMAND "${CMAKE_COMMAND}" --build <BINARY_DIR> --target asc_stl_${name}_device
             BUILD_ALWAYS TRUE
             INSTALL_COMMAND ""
             TEST_COMMAND "")

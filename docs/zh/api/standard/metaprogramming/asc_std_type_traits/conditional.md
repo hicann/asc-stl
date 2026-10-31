@@ -75,3 +75,5 @@ void use_trait()
 ## 关联API
 
 - [本头文件的接口列表](asc_std_type_traits.md)
+
+[完整使用示例](../../../../../../examples/standard/tuple_traits/README.md)。

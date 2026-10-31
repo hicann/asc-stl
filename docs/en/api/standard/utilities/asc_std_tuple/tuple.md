@@ -61,3 +61,5 @@ bool example()
 ## Related APIs
 
 - [API list for this header](asc_std_tuple.md)
+
+[Complete usage example](../../../../../../examples/standard/tuple_traits/README_en.md).

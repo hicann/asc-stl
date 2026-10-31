@@ -25,7 +25,8 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 CMAKE = shutil.which("cmake")
 CTEST = shutil.which("ctest")
-HOST_NAMES = ("allocator_traits", "explicit_allocator_vector", "pointer_alignment")
+HOST_NAMES = ("array_statistics", "span_subrange", "mdspan_matrix", "tuple_traits", "bit_flags",
+              "allocator_traits", "explicit_allocator_vector", "pointer_alignment")
 
 
 @unittest.skipUnless(CMAKE and CTEST, "CMake and CTest are required")
@@ -66,11 +67,13 @@ class ExampleBuilds(unittest.TestCase):
                 self.build_and_test(build, HOST_NAMES)
 
     def test_each_host_project_builds_independently(self):
-        for name in HOST_NAMES:
-            with self.subTest(example=name):
-                build = self.directory / name
-                self.configure(ROOT / "examples/standard" / name, build)
-                self.build_and_test(build, (name,))
+        for standard in (17, 20):
+            for name in HOST_NAMES:
+                with self.subTest(example=name, standard=standard):
+                    build = self.directory / f"{name}-{standard}"
+                    self.configure(ROOT / "examples/standard" / name, build,
+                                   [f"-DASC_STL_EXAMPLE_STANDARD={standard}"])
+                    self.build_and_test(build, (name,))
 
     def test_root_option_keeps_testing_optional(self):
         build = self.directory / "root"

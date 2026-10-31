@@ -3,12 +3,17 @@
 [English](README_en.md) | [快速入门](../docs/zh/quick_start.md)
 
 每个示例只有一份源码，中英文文档共用。API页面链接到这里，提供完整程序、构建步骤
-和结果检查。标准层示例使用已有Host能力；其余工程需要CANN及支持的昇腾设备才能执行。
+和结果检查。标准层提供Host入口，其中五个基础专题另有可选SIMT入口；Runtime和Device路径需要CANN及支持的昇腾设备。
 
 ## 示例索引
 
 | 示例 | 主要接口 | 执行位置 |
 | --- | --- | --- |
+| [数组统计](standard/array_statistics/README.md) | `array、minmax_element、accumulate` | Host / AI Core SIMT |
+| [span子区间处理](standard/span_subrange/README.md) | `span、subspan` | Host / AI Core SIMT |
+| [mdspan二维访问](standard/mdspan_matrix/README.md) | `mdspan、extents、layout_right、layout_left` | Host / AI Core SIMT |
+| [tuple与类型工具](standard/tuple_traits/README.md) | `array、tuple、get、type_traits` | Host / AI Core SIMT |
+| [位标志处理](standard/bit_flags/README.md) | `cstdint、bit、popcount、bit_width、has_single_bit` | Host / AI Core SIMT |
 | [分配器特征与内外层访问](standard/allocator_traits/README.md) | `allocator_traits / scoped_allocator_adaptor` | Host |
 | [显式分配器vector](standard/explicit_allocator_vector/README.md) | `vector / type_traits` | Host |
 | [指针特征与对齐](standard/pointer_alignment/README.md) | `memory / pointer_traits` | Host |
@@ -30,9 +35,9 @@ cmake --build build/examples17 -j2
 ctest --test-dir build/examples17 --output-on-failure
 ```
 
-C++20改用`-DASC_STL_EXAMPLE_STANDARD=20`及独立构建目录。三个Host案例都应通过。
+C++20改用`-DASC_STL_EXAMPLE_STANDARD=20`及独立构建目录。八个Host案例都应通过。
 各主题也支持单独CMake构建，具体命令见其README。allocator_traits包含编译期类型检查，
-三个案例均包含运行时结果检查。
+八个案例均包含运行时结果检查。
 
 产品顶层CMake也支持`-DASC_STL_BUILD_EXAMPLES=ON`，默认为OFF。集成头文件库时可用
 `BUILD_TESTING=OFF`关闭测试登记，显式启用的示例仍会构建。若在产品构建中只执行

@@ -20,13 +20,14 @@ C++17 and C++20 use separate builds and results.
 
 ## Build and run
 
-Run in this example directory after sourcing the installed CANN environment:
+Run from the repository root after sourcing the installed CANN environment:
 
 ```bash
 source /usr/local/Ascend/ascend-toolkit/set_env.sh
-cmake -S . -B build17 -DASC_STL_EXAMPLE_STANDARD=17 -DCMAKE_BUILD_TYPE=Release
-cmake --build build17 -j2
-python3 run.py --binary build17/asc_stl_parallel_algorithms --standard 17 --report-dir /path/to/new/results17
+cmake -S examples/extension/parallel_algorithms -B build/parallel_algorithms17 -DASC_STL_EXAMPLE_STANDARD=17 -DCMAKE_BUILD_TYPE=Release
+cmake --build build/parallel_algorithms17 -j2
+python3 examples/extension/parallel_algorithms/run.py --binary build/parallel_algorithms17/asc_stl_parallel_algorithms \
+  --standard 17 --report-dir build/parallel_algorithms17/results
 ```
 
 The headers default to this repository's include tree; override `ASC_STL_INCLUDE_DIR`

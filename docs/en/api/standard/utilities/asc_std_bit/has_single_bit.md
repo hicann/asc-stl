@@ -85,3 +85,5 @@ bool verify_example()
 ## Related APIs
 
 - [API list for this header](asc_std_bit.md)
+
+[Complete usage example](../../../../../../examples/standard/bit_flags/README_en.md).

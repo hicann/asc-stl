@@ -86,3 +86,5 @@ bool example()
 ## 关联API
 
 - [本头文件的接口列表](asc_std_span.md)
+
+[完整使用示例](../../../../../../examples/standard/span_subrange/README.md)。

@@ -16,6 +16,8 @@
 
 #include <iostream>
 
+#include "../../common/acl_cleanup.h"
+
 #include "warp_example.h"
 
 int main()
@@ -23,24 +25,26 @@ int main()
     unsigned int actual[32]{};
     unsigned int* device = nullptr;
     aclrtStream stream = nullptr;
-    bool passed = aclInit(nullptr) == ACL_SUCCESS && aclrtSetDevice(0) == ACL_SUCCESS;
+    DeviceExampleState state;
+    state.initialized = aclInit(nullptr) == ACL_SUCCESS;
+    state.selected = state.initialized && aclrtSetDevice(0) == ACL_SUCCESS;
+    bool passed = state.selected;
+    passed = passed && aclrtSetOpExecuteTimeOut(10) == ACL_SUCCESS;
     passed = passed && aclrtCreateStream(&stream) == ACL_SUCCESS;
     passed = passed &&
         aclrtMalloc(reinterpret_cast<void**>(&device), sizeof(actual), ACL_MEM_MALLOC_HUGE_FIRST) == ACL_SUCCESS;
+    passed = passed && aclrtMemset(device, sizeof(actual), 0xa5, sizeof(actual)) == ACL_SUCCESS;
     if (passed) {
+        state.pending = true;
         launch_warp_example(device, stream);
-        passed = aclrtSynchronizeStream(stream) == ACL_SUCCESS;
+        passed = aclrtSynchronizeStreamWithTimeout(stream, 10000) == ACL_SUCCESS;
+        state.pending = !passed;
         passed = passed &&
             aclrtMemcpy(actual, sizeof(actual), device, sizeof(actual), ACL_MEMCPY_DEVICE_TO_HOST) == ACL_SUCCESS;
         for (unsigned int value : actual)
             passed = passed && value == 0U;
     }
-    if (device != nullptr)
-        passed = aclrtFree(device) == ACL_SUCCESS && passed;
-    if (stream != nullptr)
-        passed = aclrtDestroyStream(stream) == ACL_SUCCESS && passed;
-    passed = aclrtResetDevice(0) == ACL_SUCCESS && passed;
-    passed = aclFinalize() == ACL_SUCCESS && passed;
+    passed = finish_device_example(state, stream, device) && passed;
     std::cout << (passed ? "PASS" : "FAIL") << ": warp collectives\n";
     return passed ? 0 : 1;
 }

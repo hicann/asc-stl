@@ -16,13 +16,14 @@
 
 ## 编译运行
 
-在本示例目录下执行；头文件默认使用本仓库include，也可显式指定：
+在仓库根目录执行；头文件默认使用本仓库include，也可显式指定：
 
 ```bash
 source /usr/local/Ascend/ascend-toolkit/set_env.sh
-cmake -S . -B build17 -DASC_STL_INCLUDE_DIR=/path/to/asc-stl/include -DASC_STL_EXAMPLE_STANDARD=17 -DCMAKE_BUILD_TYPE=Release
-cmake --build build17 -j2
-python3 run.py --binary build17/asc_stl_parallel_algorithms --standard 17 --report-dir /path/to/new/results17
+cmake -S examples/extension/parallel_algorithms -B build/parallel_algorithms17 -DASC_STL_EXAMPLE_STANDARD=17 -DCMAKE_BUILD_TYPE=Release
+cmake --build build/parallel_algorithms17 -j2
+python3 examples/extension/parallel_algorithms/run.py --binary build/parallel_algorithms17/asc_stl_parallel_algorithms \
+  --standard 17 --report-dir build/parallel_algorithms17/results
 ```
 
 将两个构建目录及语言选项改为20，独立构建和运行C++20；不要用一个模式的结果替代另一个。

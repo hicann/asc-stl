@@ -75,3 +75,5 @@ void use_trait()
 ## Related APIs
 
 - [API list for this header](asc_std_type_traits.md)
+
+[Complete usage example](../../../../../../examples/standard/tuple_traits/README_en.md).

@@ -35,3 +35,5 @@ Use standard 20 and a separate build directory for C++20.
 ## Expected result and constraints
 
 Success requires exit code 0 and `PASS: pipeline_copy`. The Host synchronizes the stream before inspecting results and releasing memory. Storage must remain valid throughout asynchronous access. This is a usage example, not a performance measurement. After a timeout or device error, check device health before running another example.
+
+Tasks have a checked 10-second execution limit and bounded 10000-millisecond stream synchronization. Output is initialized to a sentinel. Success also requires cleanup_passed=1. If synchronization fails, buffers are retained until reset/finalize and the run remains failed.
