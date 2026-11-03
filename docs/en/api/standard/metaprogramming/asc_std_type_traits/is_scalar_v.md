@@ -47,6 +47,9 @@ inline constexpr bool is_scalar_v = is_scalar<T>::value;
 
 - Provides the trait class and its corresponding _v helper form.
 
+- Scalar types include arithmetic types, enumerations, pointers, member pointers and `nullptr_t`. References, arrays, function types and class types are not scalar types.
+- Available in Host and Device compilation; `is_scalar<T>::value` and `is_scalar_v<T>` produce the same result.
+
 ## Example
 
 The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.

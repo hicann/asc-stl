@@ -43,6 +43,7 @@
 #include <asc/std/__type_traits/add_const.h>
 #include <asc/std/__type_traits/integral_constant.h>
 #include <asc/std/__type_traits/is_convertible.h>
+#include <asc/std/__type_traits/is_object.h>
 #include <asc/std/__type_traits/is_primary_template.h>
 #include <asc/std/__type_traits/remove_cv.h>
 #include <asc/std/__type_traits/remove_cvref.h>
@@ -92,7 +93,7 @@ struct iterator_traits<Iter,
 };
 
 template <class T>
-struct iterator_traits<T*, enable_if_t<is_convertible_v<T (*)[], const volatile void*>>> {  // NOLINT(whitespace/parens)
+struct iterator_traits<T*, enable_if_t<is_object_v<T>>> {  // NOLINT(whitespace/parens)
     using difference_type = ptrdiff_t;
     using value_type = remove_cv_t<T>;
     using pointer = T*;

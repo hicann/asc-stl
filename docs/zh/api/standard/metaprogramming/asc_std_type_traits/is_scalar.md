@@ -44,6 +44,9 @@ template<class T> struct is_scalar;
 
 - 提供特征类及其对应的 _v辅助形式。
 
+- 标量类型包括算术类型、枚举、指针、成员指针和 `nullptr_t`；引用、数组、函数类型和类类型不属于标量类型。
+- 可用于 Host 和 Device 编译；`is_scalar<T>::value` 与 `is_scalar_v<T>` 的结果一致。
+
 ## 调用示例
 
 以下Host片段用具体类型实参和`static_assert`验证本页类型特征的结果。

@@ -28,6 +28,8 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/cstdint>
+#include <asc/std/__type_traits/is_pointer.h>
 #include <asc/std/__algorithm/comp.h>
 #include <asc/std/__algorithm/half_positive.h>
 #include <asc/std/__algorithm/iterator_operations.h>
@@ -41,11 +43,36 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
+// Keep index arithmetic in 32 bits without backend-specific bit intrinsics.
+template <class _Iter, class _Type, class _Comp, class _Proj>
+CANN_ASC_STL_API constexpr _Iter __lower_bound_indexed(
+    _Iter __first, int32_t __length, const _Type& __value, _Comp& __comp, _Proj& __proj)
+{
+    int32_t __left = 0;
+    int32_t __right = __length;
+    while (__left < __right) {
+        const int32_t __mid = __left + (__right - __left) / 2;
+        const bool __advance = ::asc::std::invoke(__comp, ::asc::std::invoke(__proj, __first[__mid]), __value);
+        __left = __advance ? __mid + 1 : __left;
+        __right = __advance ? __right : __mid;
+    }
+    return __first + __left;
+}
+
 template <class _AlgPolicy, class _Iter, class _Sent, class _Type, class _Proj, class _Comp>
 CANN_ASC_STL_API constexpr _Iter __lower_bound(
     _Iter __first, _Sent __last, const _Type& __value, _Comp& __comp, _Proj& __proj)
 {
     auto __len = _AlgPolicy::distance(__first, __last);
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    // Keep Device pointer indices in 32 bits when the range fits.
+    // Larger ranges retain the iterator difference_type in the fallback below.
+    if constexpr (is_pointer_v<_Iter>) {
+        if (__len >= 0 && __len <= 2147483647) {
+            return ::asc::std::__lower_bound_indexed(__first, static_cast<int32_t>(__len), __value, __comp, __proj);
+        }
+    }
+#endif
 
     while (__len != 0) {
         auto __l2 = ::asc::std::__half_positive(__len);

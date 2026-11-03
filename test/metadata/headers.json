@@ -2098,7 +2098,9 @@
         "asc/std/__iterator/distance.h",
         "asc/std/__iterator/iterator_traits.h",
         "asc/std/__type_traits/is_callable.h",
-        "asc/std/__type_traits/remove_reference.h"
+        "asc/std/__type_traits/is_pointer.h",
+        "asc/std/__type_traits/remove_reference.h",
+        "asc/std/cstdint"
       ],
       "semantic_case": "asc/std/__algorithm/lower_bound.h",
       "applicability": {
@@ -2106,9 +2108,10 @@
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
-        "hardware_runtime": false
-      }
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      },
+      "runtime_case": "asc/std/__algorithm/lower_bound.h"
     },
     {
       "target": "asc/std/__algorithm/make_heap.h",
@@ -3414,7 +3417,9 @@
         "asc/std/__iterator/distance.h",
         "asc/std/__iterator/iterator_traits.h",
         "asc/std/__type_traits/is_copy_constructible.h",
-        "asc/std/__utility/move.h"
+        "asc/std/__type_traits/is_pointer.h",
+        "asc/std/__utility/move.h",
+        "asc/std/cstdint"
       ],
       "semantic_case": "asc/std/__algorithm/lower_bound.h",
       "applicability": {
@@ -3422,9 +3427,10 @@
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
-        "hardware_runtime": false
-      }
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      },
+      "runtime_case": "asc/std/__algorithm/lower_bound.h"
     },
     {
       "target": "asc/std/__atomic/atomic.h",
@@ -7746,6 +7752,7 @@
         "asc/std/__type_traits/add_const.h",
         "asc/std/__type_traits/integral_constant.h",
         "asc/std/__type_traits/is_convertible.h",
+        "asc/std/__type_traits/is_object.h",
         "asc/std/__type_traits/is_primary_template.h",
         "asc/std/__type_traits/remove_cv.h",
         "asc/std/__type_traits/remove_cvref.h",
@@ -18581,6 +18588,7 @@
     }
   ],
   "runtime_asset_manifests": {
-    "asc/std/bitset": "runtime/assets.json"
+    "asc/std/bitset": "runtime/assets.json",
+    "asc/std/__algorithm/lower_bound.h": "runtime/assets.json"
   }
 }

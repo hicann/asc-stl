@@ -102,6 +102,9 @@ template <class ForwardIterator, class T>
 
 - Provides overloads that execute sequentially and perform no dynamic memory allocation.
 
+- Accepts ordinary iterators and Device GM/UB object pointers; the returned iterator or pointer preserves the input address space.
+- Device raw-pointer ranges of at most `2147483647` elements use a converging 32-bit index loop without scalar bit-count builtins. Larger ranges and non-pointer iterators use the generic implementation, with unchanged public types and comparison rules.
+
 ## Example
 
 The following Host example checks the result and the output while the local ranges are still valid; the function returns a boolean value that can be checked independently.

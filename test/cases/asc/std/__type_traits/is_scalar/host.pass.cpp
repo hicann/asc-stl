@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#define CANN_ASC_STL_DETAIL_USE_IS_SCALAR_FALLBACK 1
 #include <asc/std/__type_traits/is_scalar.h>
+#include "support/pointer_traits_regressions.h"
 #include "support/type_transform_semantics.h"
 
 int main()

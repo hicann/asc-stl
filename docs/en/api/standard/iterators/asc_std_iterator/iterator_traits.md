@@ -46,7 +46,7 @@ The primary template allows the second template parameter to be omitted. For ite
 ```cpp
 namespace asc::std {
 template<class T>
-struct iterator_traits<T*, enable_if_t<is_convertible_v<T(*)[], const volatile void*>>> {
+struct iterator_traits<T*, enable_if_t<is_object_v<T>>> {
     using difference_type = ptrdiff_t;
     using value_type = remove_cv_t<T>;
     using pointer = T*;
@@ -56,6 +56,8 @@ struct iterator_traits<T*, enable_if_t<is_convertible_v<T(*)[], const volatile v
 };
 }
 ```
+
+The object-pointer specialization accepts ordinary pointers and Device GM/UB object pointers. `pointer` and `reference` preserve the original address space; `void*` and function pointers do not match this specialization.
 
 ## Constraints
 

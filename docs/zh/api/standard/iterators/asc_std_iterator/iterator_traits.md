@@ -46,7 +46,7 @@ struct iterator_traits;
 ```cpp
 namespace asc::std {
 template<class T>
-struct iterator_traits<T*, enable_if_t<is_convertible_v<T(*)[], const volatile void*>>> {
+struct iterator_traits<T*, enable_if_t<is_object_v<T>>> {
     using difference_type = ptrdiff_t;
     using value_type = remove_cv_t<T>;
     using pointer = T*;
@@ -56,6 +56,8 @@ struct iterator_traits<T*, enable_if_t<is_convertible_v<T(*)[], const volatile v
 };
 }
 ```
+
+对象指针特化适用于普通指针以及 Device 的 GM／UB 对象指针。`pointer` 和 `reference` 保留原地址空间；`void*` 和函数指针不匹配该特化。
 
 ## 约束说明
 

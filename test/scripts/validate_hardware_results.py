@@ -20,7 +20,14 @@ from pathlib import Path
 
 
 LOGGER = logging.getLogger(__name__)
-SIMT_ONLY_TARGETS = {"asc/atomic", "asc/std/atomic", "asc/std/iterator", "asc/std/list", "asc/warp"}
+SIMT_ONLY_TARGETS = {
+    "asc/atomic",
+    "asc/std/__algorithm/lower_bound.h",
+    "asc/std/atomic",
+    "asc/std/iterator",
+    "asc/std/list",
+    "asc/warp",
+}
 
 
 def main() -> int:

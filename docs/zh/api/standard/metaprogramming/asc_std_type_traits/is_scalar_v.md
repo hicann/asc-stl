@@ -47,6 +47,9 @@ inline constexpr bool is_scalar_v = is_scalar<T>::value;
 
 - 提供特征类及其对应的 _v辅助形式。
 
+- 标量类型包括算术类型、枚举、指针、成员指针和 `nullptr_t`；引用、数组、函数类型和类类型不属于标量类型。
+- 可用于 Host 和 Device 编译；`is_scalar<T>::value` 与 `is_scalar_v<T>` 的结果一致。
+
 ## 调用示例
 
 以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。

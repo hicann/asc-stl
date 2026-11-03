@@ -37,7 +37,10 @@
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_scalar)
+// CCE may resolve __is_scalar to a declaration from hosted headers.
+// Use the standard trait composition consistently across its compilation passes.
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__is_scalar) && !defined(CANN_ASC_STL_DETAIL_USE_IS_SCALAR_FALLBACK) && \
+    !CANN_ASC_STL_DETAIL_COMPILER_CCE
 
 template <class T>
 struct is_scalar : bool_constant<__is_scalar(T)> {};

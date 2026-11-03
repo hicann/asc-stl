@@ -44,6 +44,9 @@ template<class T> struct is_scalar;
 
 - Provides the trait class and its corresponding _v helper form.
 
+- Scalar types include arithmetic types, enumerations, pointers, member pointers and `nullptr_t`. References, arrays, function types and class types are not scalar types.
+- Available in Host and Device compilation; `is_scalar<T>::value` and `is_scalar_v<T>` produce the same result.
+
 ## Example
 
 The following Host snippet verifies the result of the type trait on this page with concrete type arguments and `static_assert`.
