@@ -25329,5 +25329,173 @@
     ],
     "mode": "host",
     "expression": "verify_example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/ranges_find.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/ranges_contains.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/ranges_sort.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/ranges_fold_left.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/ranges_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/ranges_copy_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/ranges_remove_copy_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/ranges_fill.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/ranges_transform.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/ranges_partition_copy.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/ranges_remove_if.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/in_out_result.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/in_out_out_result.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/in_in_out_result.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/copy_result.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/copy_if_result.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/remove_copy_if_result.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/unary_transform_result.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/binary_transform_result.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/algorithms/asc_std_algorithm/partition_copy_result.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/standard/utilities/asc_std_utility/swap.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
   }
 }

@@ -23,46 +23,45 @@
 #include "support/bit_count_semantics.h"
 
 #if defined(ASC_STL_W13_W14_SIMT)
-__global__ void asc_stl_w13_w14_utility_kernel(unsigned int* result)
+// Independent groups use separate blocks in one task; the next task checks four-thread synchronization.
+__global__ void asc_stl_w13_w14_values_kernel(unsigned int* result)
 {
-    result[5] = asc_stl_w13_w14_test::evaluate_utility_cctype();
-}
-
-__global__ void asc_stl_w13_w14_bit_kernel(unsigned int* result)
-{
-    result[6] = asc_stl_w13_w14_test::evaluate_bit();
-    result[13] = asc_stl_bit_count_test::evaluate_runtime(result);
-}
-
-__global__ void asc_stl_w13_w14_types_kernel(unsigned int* result)
-{
-    result[8] = asc_stl_w13_w14_test::evaluate_types();
-    const auto comparison = asc_stl_comparison_helpers_test::evaluate(result + 32);
-    result[8] += comparison.failures;
-    result[11] = comparison.signature;
-    result[12] = comparison.checks;
-    result[9] = asc_stl_w13_w14_test::evaluate_cwide();
-    result[7] = result[8] + result[9];
-    result[0] = result[5] + result[6] + result[7];
-}
-
-__global__ void asc_stl_w13_w14_linalg_kernel(unsigned int* result)
-{
-    result[1] = asc_stl_w13_w14_test::evaluate_linalg();
-}
-
-__global__ void asc_stl_w13_w14_random_kernel(unsigned int* result)
-{
-    result[2] = asc_stl_w13_w14_test::evaluate_random();
-}
-
-__global__ void asc_stl_w13_w14_numeric_kernel(unsigned int* result)
-{
-    result[3] = asc_stl_w13_w14_test::evaluate_numeric();
+    switch (blockIdx.x) {
+        case 0:
+            result[5] = asc_stl_w13_w14_test::evaluate_utility_cctype();
+            break;
+        case 1:
+            result[6] = asc_stl_w13_w14_test::evaluate_bit();
+            result[13] = asc_stl_bit_count_test::evaluate_runtime(result);
+            break;
+        case 2: {
+            result[8] = asc_stl_w13_w14_test::evaluate_types();
+            const auto comparison = asc_stl_comparison_helpers_test::evaluate(result + 32);
+            result[8] += comparison.failures;
+            result[11] = comparison.signature;
+            result[12] = comparison.checks;
+            result[9] = asc_stl_w13_w14_test::evaluate_cwide();
+            break;
+        }
+        case 3:
+            result[1] = asc_stl_w13_w14_test::evaluate_linalg();
+            break;
+        case 4:
+            result[2] = asc_stl_w13_w14_test::evaluate_random();
+            break;
+        case 5:
+            result[3] = asc_stl_w13_w14_test::evaluate_numeric();
+            break;
+    }
 }
 
 __global__ void asc_stl_w13_w14_sync_kernel(unsigned int* result)
 {
+    // The preceding task has completed every group before its totals are read.
+    if (threadIdx.x == 0) {
+        result[7] = result[8] + result[9];
+        result[0] = result[5] + result[6] + result[7];
+    }
     const unsigned int sync = asc_stl_w13_w14_test::evaluate_sync(result, 4);
     if (threadIdx.x == 0) {
         result[4] = sync;
@@ -92,12 +91,7 @@ __global__ __vector__ void asc_stl_w13_w14_kernel(__gm__ unsigned int* result)
 void launch_asc_stl_w13_w14(unsigned int* result, void* stream)
 {
 #if defined(ASC_STL_W13_W14_SIMT)
-    asc_stl_w13_w14_utility_kernel<<<1, 1, 0, stream>>>(result);
-    asc_stl_w13_w14_bit_kernel<<<1, 1, 0, stream>>>(result);
-    asc_stl_w13_w14_types_kernel<<<1, 1, 0, stream>>>(result);
-    asc_stl_w13_w14_linalg_kernel<<<1, 1, 0, stream>>>(result);
-    asc_stl_w13_w14_random_kernel<<<1, 1, 0, stream>>>(result);
-    asc_stl_w13_w14_numeric_kernel<<<1, 1, 0, stream>>>(result);
+    asc_stl_w13_w14_values_kernel<<<6, 1, 0, stream>>>(result);
     asc_stl_w13_w14_sync_kernel<<<1, 4, 0, stream>>>(result);
 #else
     asc_stl_w13_w14_kernel<<<1, nullptr, stream>>>(result);

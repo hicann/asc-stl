@@ -1,0 +1,14 @@
+{
+  "common": [
+    "config.h",
+    "launch.h",
+    "kernel.asc",
+    "main.cpp"
+  ],
+  "cannsim": [
+    "cannsim/CMakeLists.txt"
+  ],
+  "hardware": [
+    "hardware/CMakeLists.txt"
+  ]
+}

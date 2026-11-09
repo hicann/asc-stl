@@ -109,3 +109,16 @@ and a libstdc++ built with that capability. Ubuntu 24.04 with GCC 13/glibc 2.39
 provides the tested combination. Updating only the compiler is insufficient;
 compile, link and run in the same environment. Do not inject another glibc globally
 into a CANN installation. See also [known device limitations](known_limitations.md).
+
+## C++17/C++20 simulator regressions
+
+`bash scripts/ci-cannsim-check.sh` builds and runs the C++17 and C++20 suites in
+Release mode. The range-algorithm case assigns eight input lengths to disjoint
+data slices in eight blocks of one launch; every length still checks all results
+in both GM and UB. The W13/W14 SIMT case assigns six independent single-thread check groups
+to six blocks in one launch, then aggregates their results in a separate
+four-thread synchronization launch to reduce repeated simulator dispatch.
+
+The default per-case limit remains 600 seconds, and a timeout is a failure.
+Compare regression timings with the same simulator, toolchain and resources;
+a passing server run does not establish success in another CI environment.

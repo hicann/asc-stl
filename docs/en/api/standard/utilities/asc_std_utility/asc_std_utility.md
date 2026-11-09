@@ -62,3 +62,5 @@ Provides move, forward, swap, integer sequences, and general utilities
 | [asc::std::unreachable](unreachable.md) | Function | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
 | [`asc::std::operator==` (pair)](pair_operator_equal.md) | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
 | [`asc::std::operator<` (pair)](pair_operator_less.md) | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
+
+| [asc::std::swap](swap.md) | Function template | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |

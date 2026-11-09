@@ -85,6 +85,17 @@
 #include <asc/std/__algorithm/pop_heap.h>
 #include <asc/std/__algorithm/prev_permutation.h>
 #include <asc/std/__algorithm/push_heap.h>
+#include <asc/std/__algorithm/ranges_contains.h>
+#include <asc/std/__algorithm/ranges_copy.h>
+#include <asc/std/__algorithm/ranges_copy_if.h>
+#include <asc/std/__algorithm/ranges_fill.h>
+#include <asc/std/__algorithm/ranges_find.h>
+#include <asc/std/__algorithm/ranges_fold_left.h>
+#include <asc/std/__algorithm/ranges_partition_copy.h>
+#include <asc/std/__algorithm/ranges_remove_copy_if.h>
+#include <asc/std/__algorithm/ranges_remove_if.h>
+#include <asc/std/__algorithm/ranges_sort.h>
+#include <asc/std/__algorithm/ranges_transform.h>
 #include <asc/std/__algorithm/ranges_find_if.h>
 #include <asc/std/__algorithm/ranges_find_if_not.h>
 #include <asc/std/__algorithm/ranges_for_each.h>

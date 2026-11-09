@@ -109,3 +109,24 @@ Provides standard sequential algorithms such as find, comparison, copy, transfor
 | [asc::std::unique](unique.md) | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
 | [asc::std::unique_copy](unique_copy.md) | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
 | [asc::std::upper_bound](upper_bound.md) | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
+
+| [asc::std::ranges::find](ranges_find.md) | Function object | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::contains](ranges_contains.md) | Function object | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::sort](ranges_sort.md) | Function object | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::fold_left](ranges_fold_left.md) | Function object | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::copy](ranges_copy.md) | Function object | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::copy_if](ranges_copy_if.md) | Function object | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::remove_copy_if](ranges_remove_copy_if.md) | Function object | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::fill](ranges_fill.md) | Function object | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::transform](ranges_transform.md) | Function object | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::partition_copy](ranges_partition_copy.md) | Function object | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::remove_if](ranges_remove_if.md) | Function object | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::in_out_result](in_out_result.md) | Class template | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::in_out_out_result](in_out_out_result.md) | Class template | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::in_in_out_result](in_in_out_result.md) | Class template | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::copy_result](copy_result.md) | Alias template | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::copy_if_result](copy_if_result.md) | Alias template | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::remove_copy_if_result](remove_copy_if_result.md) | Alias template | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::unary_transform_result](unary_transform_result.md) | Alias template | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::binary_transform_result](binary_transform_result.md) | Alias template | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |
+| [asc::std::ranges::partition_copy_result](partition_copy_result.md) | Alias template | C++17+ | Host, AI Core SIMD, AI Core SIMT | Ascend 950 |

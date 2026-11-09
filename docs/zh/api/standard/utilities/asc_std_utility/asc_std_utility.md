@@ -62,3 +62,5 @@
 | [asc::std::unreachable](unreachable.md) | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [`asc::std::operator==`（pair）](pair_operator_equal.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [`asc::std::operator<`（pair）](pair_operator_less.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+
+| [asc::std::swap](swap.md) | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |

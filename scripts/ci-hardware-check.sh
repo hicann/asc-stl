@@ -94,6 +94,7 @@ for standard in 17 20; do
     B021_CTIME_BUILD_DIR="$BUILD_ROOT/cxx$standard/b021-ctime"
     B023_BUILD_DIR="$BUILD_ROOT/cxx$standard/b023"
     BOUNDS_BUILD_DIR="$BUILD_ROOT/cxx$standard/pointer-bounds"
+    RANGES_BUILD_DIR="$BUILD_ROOT/cxx$standard/range-algorithms"
     B025_MEMORY_POOL_BUILD_DIR="$BUILD_ROOT/cxx$standard/b025-memory-pool"
     B026_WORK_QUEUE_BUILD_DIR="$BUILD_ROOT/cxx$standard/b026-work-queue"
     B026_CMATH_BUILD_DIR="$BUILD_ROOT/cxx$standard/b026-cmath"
@@ -142,6 +143,9 @@ for standard in 17 20; do
     cmake -S "$ROOT/test/cases/asc/std/__algorithm/lower_bound/runtime/hardware" -B "$BOUNDS_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
     cmake --build "$BOUNDS_BUILD_DIR" -j"$BUILD_JOBS"
+    cmake -S "$ROOT/test/cases/asc/std/__algorithm/ranges_copy/runtime/hardware" -B "$RANGES_BUILD_DIR" \
+        -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
+    cmake --build "$RANGES_BUILD_DIR" -j"$BUILD_JOBS"
     cmake -S "$B025_MEMORY_POOL_CASE_ROOT" -B "$B025_MEMORY_POOL_BUILD_DIR" \
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
     cmake --build "$B025_MEMORY_POOL_BUILD_DIR" -j"$BUILD_JOBS"
@@ -222,6 +226,7 @@ for standard in 17 20; do
         echo "C++$standard batch 23 string-view comparison hardware run $run_index/$RUNS: D-SIMT"
         run_hardware_case "asc/algorithm" "$standard" simt "$run_index" "$B023_BUILD_DIR/asc_stl_b023_simt"
         run_hardware_case "asc/std/__algorithm/lower_bound.h" "$standard" simt "$run_index" "$BOUNDS_BUILD_DIR/asc_stl_bounds_simt"
+        run_hardware_case "asc/std/__algorithm/ranges_copy.h" "$standard" simt "$run_index" "$RANGES_BUILD_DIR/asc_stl_ranges_simt"
         echo "C++$standard batch 25 memory-pool lifecycle hardware run $run_index/$RUNS: Host+CANN"
         run_bounded_hardware "cxx$standard-memory-pool-$run_index" -- "$B025_MEMORY_POOL_BUILD_DIR/asc_stl_b025_memory_pool"
         echo "C++$standard work queue hardware run $run_index/$RUNS: D-SIMD"
@@ -266,6 +271,7 @@ printf '%s\n' \
     "asc/cmath" \
     "asc/hierarchy" \
     "asc/std/__algorithm/lower_bound.h" \
+    "asc/std/__algorithm/ranges_copy.h" \
     "asc/std/__complex/logarithms.h" \
     "asc/std/__cstring/memcpy.h" \
     "asc/std/atomic" \

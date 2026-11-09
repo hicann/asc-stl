@@ -23,6 +23,7 @@ LOGGER = logging.getLogger(__name__)
 SIMT_ONLY_TARGETS = {
     "asc/atomic",
     "asc/std/__algorithm/lower_bound.h",
+    "asc/std/__algorithm/ranges_copy.h",
     "asc/std/atomic",
     "asc/std/iterator",
     "asc/std/list",

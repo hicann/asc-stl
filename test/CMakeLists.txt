@@ -559,6 +559,7 @@ if(ASC_STL_ENABLE_HOST_TESTS)
     asc_stl_add_host_case("asc.std.cmath.acos_precision" "asc/std/cmath/acos_precision.pass.cpp")
     asc_stl_add_host_case("asc.std.__algorithm.count_if.b020" "asc/std/__algorithm/count_if/host.pass.cpp")
     asc_stl_add_host_case("asc.std.__algorithm.minmax_element.b020" "asc/std/__algorithm/minmax_element/host.pass.cpp")
+    asc_stl_add_host_case("asc.std.ranges.algorithms" "asc/std/__algorithm/ranges_copy/host.pass.cpp")
     asc_stl_add_host_case("asc.std.__algorithm.lower_bound.b020" "asc/std/__algorithm/lower_bound/host.pass.cpp")
     asc_stl_add_host_case("asc.std.__functional.bind_back.b020" "asc/std/__functional/bind_back/host.pass.cpp")
     asc_stl_add_host_case("asc.std.optional.b020" "asc/std/optional/host.pass.cpp")
@@ -739,6 +740,8 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
     set(b023_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/b023-cannsim")
     set(bounds_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/std/__algorithm/lower_bound/runtime/cannsim")
     set(bounds_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/pointer-bounds-cannsim")
+    set(ranges_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/std/__algorithm/ranges_copy/runtime/cannsim")
+    set(ranges_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/range-algorithms-cannsim")
     set(b024_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/std/iterator/runtime/cannsim")
     set(b024_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/b024-cannsim")
     set(b026_cannsim_case_root "${ASC_STL_CASES_ROOT}/asc/work_queue/runtime/cannsim")
@@ -848,6 +851,12 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
             -DCMAKE_BUILD_TYPE=Release
         COMMAND ${CMAKE_COMMAND} --build ${bounds_cannsim_build_root} --target asc_stl_bounds_cannsim -j2
         COMMAND
+            ${CMAKE_COMMAND} -S ${ranges_cannsim_case_root} -B ${ranges_cannsim_build_root}
+            -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
+            -DASC_STL_CXX_STANDARD=${ASC_STL_TEST_CXX_STANDARD}
+            -DCMAKE_BUILD_TYPE=Release
+        COMMAND ${CMAKE_COMMAND} --build ${ranges_cannsim_build_root} --target asc_stl_ranges_cannsim -j2
+        COMMAND
             ${CMAKE_COMMAND} -S ${b024_cannsim_case_root} -B ${b024_cannsim_build_root}
             -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
             -DASC_STL_TARGET_SOC=${ASC_STL_TARGET_SOC}
@@ -938,6 +947,7 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
     set(b023_cannsim_application ${b023_cannsim_build_root}/asc_stl_b023_cannsim)
     set(b023_cannsim_library_dir ${b023_cannsim_build_root})
     set(bounds_cannsim_application ${bounds_cannsim_build_root}/asc_stl_bounds_cannsim)
+    set(ranges_cannsim_application ${ranges_cannsim_build_root}/asc_stl_ranges_cannsim)
     set(b024_cannsim_application ${b024_cannsim_build_root}/asc_stl_b024_cannsim)
     set(b024_cannsim_library_dir ${b024_cannsim_build_root})
     set(b026_cannsim_application ${b026_cannsim_build_root}/asc_stl_b026_work_queue_cannsim)
@@ -1074,6 +1084,14 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
                 ${ASC_STL_CANNSIM_SOC} ${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/pointer-bounds
                 ${bounds_cannsim_build_root} ASC_STL_CANNSIM_BOUNDS_PASS)
     set_tests_properties(semantic.cannsim.asc.std.pointer-bounds PROPERTIES
+        LABELS "cannsim-runtime;affected-regression;nightly"
+        FIXTURES_REQUIRED asc_stl_cannsim_ready RUN_SERIAL TRUE)
+    add_test(
+        NAME semantic.cannsim.asc.std.range-algorithms
+        COMMAND ${cannsim_runner} ${ASC_STL_CANNSIM_EXECUTABLE} ${ranges_cannsim_application}
+                ${ASC_STL_CANNSIM_SOC} ${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/range-algorithms
+                ${ranges_cannsim_build_root} ASC_STL_CANNSIM_RANGES_PASS)
+    set_tests_properties(semantic.cannsim.asc.std.range-algorithms PROPERTIES
         LABELS "cannsim-runtime;affected-regression;nightly"
         FIXTURES_REQUIRED asc_stl_cannsim_ready RUN_SERIAL TRUE)
     add_test(

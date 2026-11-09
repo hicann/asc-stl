@@ -12643,9 +12643,10 @@
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
-        "hardware_runtime": false
-      }
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      },
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h"
     },
     {
       "target": "asc/std/__utility/to_underlying.h",
@@ -16376,12 +16377,23 @@
         "asc/std/__algorithm/pop_heap.h",
         "asc/std/__algorithm/prev_permutation.h",
         "asc/std/__algorithm/push_heap.h",
+        "asc/std/__algorithm/ranges_contains.h",
+        "asc/std/__algorithm/ranges_copy.h",
+        "asc/std/__algorithm/ranges_copy_if.h",
+        "asc/std/__algorithm/ranges_fill.h",
+        "asc/std/__algorithm/ranges_find.h",
         "asc/std/__algorithm/ranges_find_if.h",
         "asc/std/__algorithm/ranges_find_if_not.h",
+        "asc/std/__algorithm/ranges_fold_left.h",
         "asc/std/__algorithm/ranges_for_each.h",
         "asc/std/__algorithm/ranges_for_each_n.h",
         "asc/std/__algorithm/ranges_min.h",
         "asc/std/__algorithm/ranges_min_element.h",
+        "asc/std/__algorithm/ranges_partition_copy.h",
+        "asc/std/__algorithm/ranges_remove_copy_if.h",
+        "asc/std/__algorithm/ranges_remove_if.h",
+        "asc/std/__algorithm/ranges_sort.h",
+        "asc/std/__algorithm/ranges_transform.h",
         "asc/std/__algorithm/remove.h",
         "asc/std/__algorithm/remove_copy.h",
         "asc/std/__algorithm/remove_copy_if.h",
@@ -18585,10 +18597,369 @@
         "saturating_bool.fail.cpp"
       ],
       "runtime_case": "asc/std/linalg"
+    },
+    {
+      "target": "asc/std/__algorithm/in_in_out_result.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/in_out_out_result.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/in_out_result.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/ranges_contains.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__algorithm/ranges_find.h",
+        "asc/std/__functional/identity.h",
+        "asc/std/__functional/ranges_operations.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/projected.h",
+        "asc/std/__ranges/access.h",
+        "asc/std/__ranges/concepts.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/ranges_copy.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__algorithm/in_out_result.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__ranges/access.h",
+        "asc/std/__ranges/concepts.h",
+        "asc/std/__ranges/dangling.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/ranges_copy_if.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__algorithm/in_out_result.h",
+        "asc/std/__functional/identity.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/projected.h",
+        "asc/std/__ranges/access.h",
+        "asc/std/__ranges/concepts.h",
+        "asc/std/__ranges/dangling.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/ranges_fill.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__ranges/access.h",
+        "asc/std/__ranges/concepts.h",
+        "asc/std/__ranges/dangling.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/ranges_find.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__functional/identity.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__functional/ranges_operations.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/projected.h",
+        "asc/std/__ranges/access.h",
+        "asc/std/__ranges/concepts.h",
+        "asc/std/__ranges/dangling.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/ranges_fold_left.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__concepts/assignable.h",
+        "asc/std/__concepts/constructible.h",
+        "asc/std/__concepts/convertible_to.h",
+        "asc/std/__concepts/movable.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/iterator_traits.h",
+        "asc/std/__ranges/access.h",
+        "asc/std/__ranges/concepts.h",
+        "asc/std/__type_traits/decay.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/void_t.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/ranges_partition_copy.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__algorithm/in_out_out_result.h",
+        "asc/std/__functional/identity.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/projected.h",
+        "asc/std/__ranges/access.h",
+        "asc/std/__ranges/concepts.h",
+        "asc/std/__ranges/dangling.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/ranges_remove_copy_if.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__algorithm/in_out_result.h",
+        "asc/std/__functional/identity.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/projected.h",
+        "asc/std/__ranges/access.h",
+        "asc/std/__ranges/concepts.h",
+        "asc/std/__ranges/dangling.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/ranges_remove_if.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__functional/identity.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/iter_move.h",
+        "asc/std/__iterator/permutable.h",
+        "asc/std/__iterator/projected.h",
+        "asc/std/__ranges/access.h",
+        "asc/std/__ranges/concepts.h",
+        "asc/std/__ranges/dangling.h",
+        "asc/std/__ranges/subrange.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/ranges_sort.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__algorithm/make_projected.h",
+        "asc/std/__algorithm/sort.h",
+        "asc/std/__functional/identity.h",
+        "asc/std/__functional/ranges_operations.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/next.h",
+        "asc/std/__iterator/sortable.h",
+        "asc/std/__ranges/access.h",
+        "asc/std/__ranges/concepts.h",
+        "asc/std/__ranges/dangling.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/std/__algorithm/ranges_transform.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__algorithm/in_in_out_result.h",
+        "asc/std/__algorithm/in_out_result.h",
+        "asc/std/__functional/identity.h",
+        "asc/std/__functional/invoke.h",
+        "asc/std/__iterator/concepts.h",
+        "asc/std/__iterator/projected.h",
+        "asc/std/__ranges/access.h",
+        "asc/std/__ranges/concepts.h",
+        "asc/std/__ranges/dangling.h",
+        "asc/std/__utility/move.h"
+      ],
+      "semantic_case": "asc/std/__algorithm/ranges_copy.h",
+      "runtime_case": "asc/std/__algorithm/ranges_copy.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
     }
   ],
   "runtime_asset_manifests": {
     "asc/std/bitset": "runtime/assets.json",
-    "asc/std/__algorithm/lower_bound.h": "runtime/assets.json"
+    "asc/std/__algorithm/lower_bound.h": "runtime/assets.json",
+    "asc/std/__algorithm/ranges_copy.h": "runtime/assets.json"
   }
 }

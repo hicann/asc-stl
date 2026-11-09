@@ -42,7 +42,12 @@ template <class T>
 CANN_ASC_STL_API constexpr __swap_result_t<T> swap(T& left, type_identity_t<T>& right) noexcept(
     is_nothrow_move_constructible_v<T> && is_nothrow_move_assignable_v<T>)
 {
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    // Native GM/UB qualifiers must not qualify an automatic temporary.
+    auto temporary(::asc::std::move(left));
+#else
     T temporary(::asc::std::move(left));
+#endif
     left = ::asc::std::move(right);
     right = ::asc::std::move(temporary);
 }
