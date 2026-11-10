@@ -166,15 +166,20 @@ public:
         return this->template __get<0>();
     }
 
-    CANN_ASC_STL_API constexpr index_type required_span_size() const noexcept
+private:
+    template <size_t... Ranks>
+    CANN_ASC_STL_API constexpr index_type __required_span_size(index_sequence<Ranks...>) const noexcept
     {
         index_type size = 1;
-        if constexpr (extents_type::rank() > 0) {
-            for (size_t r = 0; r < extents_type::rank(); ++r) {
-                size *= extents().extent(r);
-            }
-        }
+        ((size *= extents().extent(Ranks)), ...);
         return size;
+    }
+
+public:
+    CANN_ASC_STL_API constexpr index_type required_span_size() const noexcept
+    {
+        // Statically index the extents so BiSheng can lower sliced mappings.
+        return __required_span_size(make_index_sequence<extents_type::rank()>{});
     }
 
     template <size_t... Position, class... Indices>

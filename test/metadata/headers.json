@@ -13939,6 +13939,9 @@
         "asc/std/__inplace_vector/inplace_vector.h"
       ],
       "semantic_case": "asc/std/bitset",
+      "additional_cases": [
+        "self_contained.pass.cpp"
+      ],
       "applicability": {
         "host_header": true,
         "device_header": true,

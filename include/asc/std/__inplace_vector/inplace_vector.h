@@ -32,6 +32,10 @@
 #include <asc/std/__optional/optional.h>
 #include <asc/std/__type_traits/is_trivially_destructible.h>
 
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#include <new>
+#endif
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 namespace detail {
@@ -330,21 +334,25 @@ public:
     template <class Predicate>
     CANN_ASC_STL_API constexpr size_type erase_if(Predicate predicate)
     {
-        const size_type original = size_;
-        size_type kept = 0;
-        for (size_type index = 0; index < original; ++index) {
-            if (!predicate(storage_.elements[index])) {
-                if (index != kept) {
-                    storage_.elements[kept] =
-                        ::asc::std::move(storage_.elements[index]);  // NOLINT(build/include_what_you_use)
+        if constexpr (Capacity == 0) {
+            return 0;
+        } else {
+            const size_type original = size_;
+            size_type kept = 0;
+            for (size_type index = 0; index < original; ++index) {
+                if (!predicate(storage_.elements[index])) {
+                    if (index != kept) {
+                        storage_.elements[kept] =
+                            ::asc::std::move(storage_.elements[index]);  // NOLINT(build/include_what_you_use)
+                    }
+                    ++kept;
                 }
-                ++kept;
             }
+            while (size_ > kept) {
+                pop_back();
+            }
+            return original - kept;
         }
-        while (size_ > kept) {
-            pop_back();
-        }
-        return original - kept;
     }
 
     CANN_ASC_STL_API constexpr void swap(inplace_vector& other)

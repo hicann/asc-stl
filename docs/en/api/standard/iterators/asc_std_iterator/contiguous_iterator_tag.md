@@ -34,8 +34,14 @@ Standard semantics reference: [cppreference `iterator`](https://en.cppreference.
 
 ## Declaration
 
+Host C++20 uses the system standard library `std::contiguous_iterator_tag`. C++17 and Device use the ASC-STL type derived from `asc::std::random_access_iterator_tag`.
+
 ```cpp
 namespace asc::std {
+// Host C++20
+using contiguous_iterator_tag = ::std::contiguous_iterator_tag;
+
+// C++17 or Device
 struct contiguous_iterator_tag : asc::std::random_access_iterator_tag {};
 } // namespace asc::std
 ```

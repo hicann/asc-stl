@@ -43,6 +43,7 @@ template<class Extents> class mapping;
 
 ## 约束说明
 
+- `required_span_size()` 返回各维度大小的乘积。零秩映射返回 1。
 - Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
@@ -56,7 +57,8 @@ bool example()
 {
     using shape = asc::std::extents<int, 2, 3>;
     asc::std::layout_right::mapping<shape> mapping(shape{});
-    return mapping(1, 2) == 5 && mapping.stride(0) == 3 && mapping.stride(1) == 1;
+    return mapping(1, 2) == 5 && mapping.stride(0) == 3 && mapping.stride(1) == 1 &&
+           mapping.required_span_size() == 6;
 }
 ```
 

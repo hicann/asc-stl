@@ -274,6 +274,13 @@ CANN_ASC_STL_API int evaluate_mdspan()
     subview[index] = 19;
     if (values[9] != 19 || subview.extent(0) != 3 || subview.extent(1) != 4)
         return 44;
+    const auto row = asc::std::submdspan(right, 2, asc::std::full_extent);
+    if (row.mapping().required_span_size() != 4 || row[1] != 19)
+        return 47;
+    constexpr asc::std::layout_right::mapping<asc::std::extents<int>> scalar;
+    constexpr asc::std::layout_right::mapping<asc::std::extents<int, 2, 0>> empty;
+    static_assert(scalar.required_span_size() == 1);
+    static_assert(empty.required_span_size() == 0);
     return 0;
 }
 

@@ -48,8 +48,11 @@ template<class T, size_t Extent = dynamic_extent> class span;
 - A fixed extent must match the input count. Arrays and fixed spans whose static extent does not match do not participate in construction; dynamic counts and range counts are guaranteed correct by the caller.
 - A second argument convertible to a count is treated as the count; a heterogeneous sentinel must support two-way distance operations with the iterator.
 - In AI Core SIMD programming, element pointers or ranges must be representable as standard plain pointers; this interface does not add GM/UB address-space pointer conversion.
+- Template slicing of a dynamic-extent span requires valid runtime bounds. For `first<Count>()` and `last<Count>()`, `Count` must not exceed `size()`. For `subspan<Offset, Count>()`, `Offset` must not exceed `size()`, and an explicit `Count` must not exceed `size()` minus `Offset`.
 
 ## Key Features
+
+On Host with C++20, the view can be constructed from a contiguous range from the system standard library, such as an lvalue `std::vector<T>`.
 
 Both C++17 and C++20 provide class template argument deduction. Built-in arrays and `asc::std::array` deduce a fixed extent, and generic contiguous ranges deduce a dynamic extent. When an iterator is combined with an integral-constant-class count, the constant value of the count object can be used to deduce a fixed extent; an ordinary runtime count keeps a dynamic extent. Availability of these library interfaces does not require enabling the C++26 language mode.
 
@@ -78,7 +81,8 @@ bool example()
     asc::std::span fixed(values, asc::std::integral_constant<asc::std::size_t, 4>{});
     static_assert(decltype(fixed)::extent == 4);
     view[1] = 8;
-    auto tail = view.subspan(2, 2);
+    auto tail = view.last<2>();
+    static_assert(decltype(tail)::extent == 2);
     return fixed[1] == 8 && tail.size() == 2 && tail[0] == 3;
 }
 ```

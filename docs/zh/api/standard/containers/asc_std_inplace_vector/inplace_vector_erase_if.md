@@ -65,6 +65,7 @@ constexpr size_type erase_if(Predicate predicate);
 
 ## 约束说明
 
+- 容量为 0 时，返回 0，且不调用谓词。
 - predicate逐个判断元素；为true的元素被移除，其余元素保持相对次序。
 - 谓词不得在遍历期间改变容器结构；元素移动赋值与析构须有效。
 - 元素的对应构造、赋值和析构须满足非抛出使用域；constexpr声明不保证任意T和语言模式都能常量求值。

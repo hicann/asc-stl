@@ -43,6 +43,7 @@ template<class Extents> class mapping;
 
 ## Constraints
 
+- `required_span_size()` returns the product of the extents. A rank-zero mapping returns 1.
 - Host, AI Core SIMD programming, and AI Core SIMT programming are compatible with the plain pointer domain.
 
 ## Example
@@ -56,7 +57,8 @@ bool example()
 {
     using shape = asc::std::extents<int, 2, 3>;
     asc::std::layout_right::mapping<shape> mapping(shape{});
-    return mapping(1, 2) == 5 && mapping.stride(0) == 3 && mapping.stride(1) == 1;
+    return mapping(1, 2) == 5 && mapping.stride(0) == 3 && mapping.stride(1) == 1 &&
+           mapping.required_span_size() == 6;
 }
 ```
 

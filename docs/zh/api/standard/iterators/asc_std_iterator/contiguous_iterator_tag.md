@@ -34,8 +34,14 @@
 
 ## 声明
 
+Host C++20 使用系统标准库的 `std::contiguous_iterator_tag`。C++17 和 Device 保留派生自 `asc::std::random_access_iterator_tag` 的 ASC-STL 类型。
+
 ```cpp
 namespace asc::std {
+// Host C++20
+using contiguous_iterator_tag = ::std::contiguous_iterator_tag;
+
+// C++17 或 Device
 struct contiguous_iterator_tag : asc::std::random_access_iterator_tag {};
 } // namespace asc::std
 ```

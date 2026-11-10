@@ -48,8 +48,11 @@ template<class T, size_t Extent = dynamic_extent> class span;
 - 固定extent须与输入数量一致。数组和固定span的静态extent不匹配时不参与构造；动态数量和range数量由调用方保证正确。
 - 与数量可转换的第二实参按数量处理；异型哨兵须支持与迭代器的双向距离运算。
 - AI Core SIMD编程中，元素指针或range须可表示为标准普通指针；此接口不增加GM/UB地址空间指针转换。
+- 动态 extent 的模板切片要求运行时长度满足边界。对于 `first<Count>()` 和 `last<Count>()`，`Count` 不得大于 `size()`。对于 `subspan<Offset, Count>()`，`Offset` 不得大于 `size()`，且显式指定的 `Count` 不得大于 `size()` 减去 `Offset`。
 
 ## 关键特性说明
+
+Host C++20 支持从系统标准库的连续范围构造视图，例如左值 `std::vector<T>`。
 
 C++17和C++20均提供类模板实参推导。内建数组和`asc::std::array`推导固定extent，泛型连续range推导动态extent。迭代器加整数常量类计数时，计数对象的常量值可用于推导固定extent；普通运行时数量保持动态extent。这些库接口的可用性不要求启用C++26语言模式。
 
@@ -78,7 +81,8 @@ bool example()
     asc::std::span fixed(values, asc::std::integral_constant<asc::std::size_t, 4>{});
     static_assert(decltype(fixed)::extent == 4);
     view[1] = 8;
-    auto tail = view.subspan(2, 2);
+    auto tail = view.last<2>();
+    static_assert(decltype(tail)::extent == 2);
     return fixed[1] == 8 && tail.size() == 2 && tail[0] == 3;
 }
 ```

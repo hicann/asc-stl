@@ -281,6 +281,23 @@ CANN_ASC_STL_API constexpr bool evaluate_span_constraints()
     return true;
 }
 
+CANN_ASC_STL_API constexpr bool evaluate_span_slicing(asc::std::size_t count)
+{
+    using asc::std::span;
+    int values[] = {1, 2, 3, 4};
+    span<int> view(values, count);
+    const auto head = view.first<2>();
+    const auto tail = view.last<2>();
+    const auto middle = view.subspan<1, 2>();
+    const auto suffix = view.subspan<1>();
+    const auto end = view.subspan<4, 0>();
+    static_assert(asc::std::is_same_v<decltype(view.last<2>()), span<int, 2>>);
+    static_assert(asc::std::is_same_v<decltype(view.subspan<1>()), span<int>>);
+    middle[0] = 7;
+    return head.size() == 2 && head[1] == 7 && tail.data() == values + 2 && tail[1] == 4 && middle.size() == 2 &&
+        middle[1] == 3 && suffix.size() == 3 && suffix[0] == 7 && end.empty() && end.data() == values + 4;
+}
+
 CANN_ASC_STL_API int evaluate_span_deduction()
 {
     int values[4] = {3, 5, 7, 11};
@@ -344,6 +361,9 @@ CANN_ASC_STL_API int evaluate()
     if (deduction != 0)
         return 200 + deduction;
     const int construction = evaluate_span_construction();
+    if (!evaluate_span_slicing(4)) {
+        return 400;
+    }
     return construction == 0 && evaluate_span_constraints() ? 0 : 300 + construction;
 }
 

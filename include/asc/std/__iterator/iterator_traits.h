@@ -73,7 +73,11 @@ using forward_iterator_tag = ::std::forward_iterator_tag;
 using bidirectional_iterator_tag = ::std::bidirectional_iterator_tag;
 using random_access_iterator_tag = ::std::random_access_iterator_tag;
 #endif
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && CANN_ASC_STL_DETAIL_HAS_CXX20()
+using contiguous_iterator_tag = ::std::contiguous_iterator_tag;
+#else
 struct contiguous_iterator_tag : random_access_iterator_tag {};
+#endif
 
 template <class Iter, class>
 struct iterator_traits {

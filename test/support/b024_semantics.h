@@ -442,6 +442,14 @@ CANN_ASC_STL_API int evaluate_inplace_vector()
     if (!zero.empty() || zero.try_push_back(1).has_value() || zero.data() != nullptr) {
         return 11;
     }
+    bool called = false;
+    const auto zero_removed = zero.erase_if([&called](int) {
+        called = true;
+        return true;
+    });
+    if (zero_removed != 0 || called) {
+        return 18;
+    }
     {
         int alive = 0;
         asc::std::inplace_vector<b024_counter, 2> objects;

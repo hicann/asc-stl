@@ -65,6 +65,7 @@ constexpr size_type erase_if(Predicate predicate);
 
 ## Constraints
 
+- For zero capacity, returns 0 without calling the predicate.
 - predicate is applied to elements one by one; elements for which it returns true are removed, and the remaining elements keep their relative order.
 - The predicate must not change the container structure during traversal; element move assignment and destruction must be valid.
 - The corresponding construction, assignment, and destruction of elements must satisfy the non-throwing usage domain; the constexpr declaration does not guarantee constant evaluation for every T and language mode.

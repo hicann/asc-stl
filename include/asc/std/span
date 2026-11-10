@@ -381,8 +381,7 @@ public:
     template <size_t Count>
     CANN_ASC_STL_API constexpr span<T, Count> first() const noexcept
     {
-        // 三目式避免无符号数与零的无意义比较告警。
-        static_assert(Count == 0 ? true : Count <= size(), "span<T>::first<Count>(): Count out of range");
+        CANN_ASC_STL_DETAIL_ASSERT(Count <= size(), "span<T>::first<Count>(): Count out of range");
         return {data_, Count};
     }
     CANN_ASC_STL_API constexpr span first(size_type count) const noexcept
@@ -393,8 +392,7 @@ public:
     template <size_t Count>
     CANN_ASC_STL_API constexpr span<T, Count> last() const noexcept
     {
-        // 三目式避免无符号数与零的无意义比较告警。
-        static_assert(Count == 0 ? true : Count <= size(), "span<T>::last<Count>(): Count out of range");
+        CANN_ASC_STL_DETAIL_ASSERT(Count <= size(), "span<T>::last<Count>(): Count out of range");
         return {data_ + size_ - Count, Count};
     }
     CANN_ASC_STL_API constexpr span last(size_type count) const noexcept
@@ -406,9 +404,8 @@ public:
     CANN_ASC_STL_API constexpr auto subspan() const noexcept
         -> span<T, Count == dynamic_extent ? dynamic_extent : Count>
     {
-        // 三目式避免无符号数与零的无意义比较告警。
-        static_assert(Offset == 0 ? true : Offset <= size(), "span<T>::subspan<Offset, Count>(): Offset out of range");
-        static_assert(Count == dynamic_extent || (Count == 0 ? true : Count <= size() - Offset),
+        CANN_ASC_STL_DETAIL_ASSERT(Offset <= size(), "span<T>::subspan<Offset, Count>(): Offset out of range");
+        CANN_ASC_STL_DETAIL_ASSERT(Count == dynamic_extent || Count <= size() - Offset,
             "span<T>::subspan<Offset, Count>(): Offset + Count out of range");
         return {data_ + Offset, Count == dynamic_extent ? size_ - Offset : Count};
     }
