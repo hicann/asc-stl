@@ -36,15 +36,17 @@ Standard semantics reference: [cppreference `source_location`](https://en.cppref
 
 Member of: [`source_location`](source_location.md). The following shows the configuration with built-in functions for the file, function, and line; it can be called on the class with zero arguments. Without these built-in functions, the file/line fall back to __FILE__/__LINE__ at the declaration site, and the function name falls back to an empty string.
 
+The signature below is consteval in Host C++20 with immediate-function support. C++17/Device or missing-consteval configurations retain constexpr with the same parameters. Explicit arguments must also be constant expressions on the immediate path.
+
 ```cpp
 #if __has_builtin(__builtin_COLUMN)
-[[nodiscard]] static constexpr source_location current(
+[[nodiscard]] static consteval source_location current(
     const char* file_name = __builtin_FILE(),
     const char* function_name = __builtin_FUNCTION(),
     uint_least32_t line = __builtin_LINE(),
     uint_least32_t column = __builtin_COLUMN()) noexcept;
 #else
-[[nodiscard]] static constexpr source_location current(
+[[nodiscard]] static consteval source_location current(
     const char* file_name = __builtin_FILE(),
     const char* function_name = __builtin_FUNCTION(),
     uint_least32_t line = __builtin_LINE(),

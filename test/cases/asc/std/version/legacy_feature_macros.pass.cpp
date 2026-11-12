@@ -17,10 +17,13 @@
 #define CANN_ASC_STL_ENABLE_LEGACY_STD_FEATURE_MACROS 1
 #include <asc/std/version>
 
+#if defined(__cpp_lib_source_location) || defined(__cpp_lib_unreachable)
+#error "The retired switch must not inject Host feature macros"
+#endif
+
 int main()
 {
-    static_assert(__cpp_lib_source_location == 201907L);
-    static_assert(__cpp_lib_unreachable == 202202L);
+    static_assert(CANN_ASC_STL_LIB_unreachable == 202202L);
     static_assert(CANN_ASC_STL_HAS_SOURCE_LOCATION && CANN_ASC_STL_HAS_UNREACHABLE);
     return 0;
 }

@@ -37,3 +37,9 @@
 | --- | --- | --- |
 | 昇腾扩展层（现有 9 类） | 继续完善设备原子/同步、地址空间与视图、搬运流水线、执行层次与协作、设备算法及配套数值工具 | [扩展 API](../api/extension/extension.md) |
 | Runtime 层（现有 4 类） | 继续完善设备、Stream/Event、核函数提交、执行要求、内存资源和异步回收 | [Runtime API](../api/runtime/runtime.md) |
+
+## 标准层特性检测更新
+
+新增 `CANN_ASC_STL_LIB_*` 标准修订检测，保留 HAS 子集查询，停止旧兼容开关对宿主宏的注入。
+Host C++20 的 `source_location::current` 改为立即函数，`unreachable` 补充 noexcept，
+`<asc/std/type_traits>` 补齐 unwrap_reference 系列的公开入口。详见[特性清单](../guide/std_feature_test.md)。

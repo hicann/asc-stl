@@ -25497,5 +25497,12 @@
     ],
     "mode": "host",
     "expression": "example()"
+  },
+  "docs/zh/api/standard/language_support/asc_std_version/feature_test_macros.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host"
   }
 }

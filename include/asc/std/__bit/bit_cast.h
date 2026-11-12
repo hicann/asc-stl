@@ -31,18 +31,7 @@
 #include <asc/std/__cstring/memcpy.h>
 #include <asc/std/__type_traits/is_default_constructible.h>
 #include <asc/std/__type_traits/is_trivially_copyable.h>
-
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_bit_cast)
-#define CANN_ASC_STL_DETAIL_BUILTIN_BIT_CAST(...) __builtin_bit_cast(__VA_ARGS__)
-#endif
-
-#if defined(CANN_ASC_STL_DETAIL_BUILTIN_BIT_CAST)
-#define CANN_ASC_STL_DETAIL_CONSTEXPR_BIT_CAST constexpr
-#define CANN_ASC_STL_DETAIL_HAS_CONSTEXPR_BIT_CAST() 1
-#else
-#define CANN_ASC_STL_DETAIL_CONSTEXPR_BIT_CAST
-#define CANN_ASC_STL_DETAIL_HAS_CONSTEXPR_BIT_CAST() 0
-#endif
+#include <asc/std/__version/features.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 

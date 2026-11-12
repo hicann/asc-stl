@@ -46,7 +46,7 @@ private:
     {}
 
 public:
-    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API static constexpr source_location current(
+    CANN_ASC_STL_NODISCARD CANN_ASC_STL_API static CANN_ASC_STL_DETAIL_SOURCE_LOCATION_CURRENT source_location current(
         const char* file_name = CANN_ASC_STL_DETAIL_BUILTIN_FILE(),
         const char* function_name = CANN_ASC_STL_DETAIL_BUILTIN_FUNCTION(),
         uint_least32_t line = CANN_ASC_STL_DETAIL_BUILTIN_LINE(),

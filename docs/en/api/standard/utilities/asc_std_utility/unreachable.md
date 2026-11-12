@@ -36,7 +36,7 @@ Standard semantics reference: [cppreference `utility`](https://en.cppreference.c
 
 ```cpp
 namespace asc::std {
-void unreachable();
+void unreachable() noexcept;
 } // namespace asc::std
 ```
 

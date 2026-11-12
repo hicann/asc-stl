@@ -28,5 +28,6 @@
 #endif
 
 #include <asc/std/__new/nonallocating_new.h>
+#include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_STD_NEW

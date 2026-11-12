@@ -27,54 +27,9 @@
 #pragma system_header
 #endif
 
-// These capabilities describe ASC-STL's selected interface subsets in the
-// current supported configuration. They do not describe the Host std library
-// or claim full conformance to an entire ISO library revision.
-#define CANN_ASC_STL_HAS_SOURCE_LOCATION 1
-#define CANN_ASC_STL_HAS_UNREACHABLE 1
-#define CANN_ASC_STL_HAS_TYPE_IDENTITY 1
-#define CANN_ASC_STL_HAS_ENDIAN 1
-#define CANN_ASC_STL_HAS_CONCEPT_PREDICATES 1
-#define CANN_ASC_STL_HAS_NATIVE_CONCEPTS CANN_ASC_STL_DETAIL_HAS_CONCEPTS()
-#define CANN_ASC_STL_HAS_SPAN 1
-#define CANN_ASC_STL_HAS_TO_ARRAY 1
-#define CANN_ASC_STL_HAS_MDSPAN 1
-#define CANN_ASC_STL_HAS_SUBMDSPAN 1
-#define CANN_ASC_STL_HAS_EXPECTED 1
-#define CANN_ASC_STL_HAS_OPTIONAL_REFERENCE 1
-#define CANN_ASC_STL_HAS_INPLACE_VECTOR 1
-#define CANN_ASC_STL_HAS_PHILOX 1
-#define CANN_ASC_STL_HAS_ALLOCATE_AT_LEAST 1
-#define CANN_ASC_STL_HAS_FORMAT_TO_N_RESULT 1
-#define CANN_ASC_STL_HAS_FORMAT CANN_ASC_STL_DETAIL_HAS_CONSTEVAL()
+#include <asc/std/__version/features.h>
 
-#if defined(CANN_ASC_STL_DETAIL_BUILTIN_IS_CONSTANT_EVALUATED) ||       \
-    CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_is_constant_evaluated) || \
-    (defined(__GNUC__) && !defined(__clang__) && __GNUC__ >= 9)
-#define CANN_ASC_STL_HAS_IS_CONSTANT_EVALUATED 1
-#define CANN_ASC_STL_DETAIL_LIB_is_constant_evaluated 201811L
-#else
-#define CANN_ASC_STL_HAS_IS_CONSTANT_EVALUATED 0
-#endif
-
-// Preserve the existing internal date vocabulary for its real backports.
-#define CANN_ASC_STL_DETAIL_LIB_bool_constant 201505L
-#define CANN_ASC_STL_DETAIL_LIB_integral_constant_callable 201304L
-#define CANN_ASC_STL_DETAIL_LIB_void_t 201411L
-#define CANN_ASC_STL_DETAIL_LIB_endian 201907L
-#define CANN_ASC_STL_DETAIL_LIB_type_identity 201806L
-#define CANN_ASC_STL_DETAIL_LIB_unreachable 202202L
-
-// Transitional opt-in for consumers of the old ASC feature names. These names
-// describe ASC facilities only in this mode; they must not be used as evidence
-// for the Host std namespace. The default leaves Host library macros untouched.
-#if defined(CANN_ASC_STL_ENABLE_LEGACY_STD_FEATURE_MACROS) && CANN_ASC_STL_ENABLE_LEGACY_STD_FEATURE_MACROS
-#ifndef __cpp_lib_source_location
-#define __cpp_lib_source_location 201907L
-#endif
-#ifndef __cpp_lib_unreachable
-#define __cpp_lib_unreachable 202202L
-#endif
-#endif
+// CANN_ASC_STL_ENABLE_LEGACY_STD_FEATURE_MACROS is retained as an inert
+// migration switch. ASC-STL never defines the Host library's __cpp_lib_* names.
 
 #endif  // CANN_ASC_STL_STD_VERSION

@@ -134,6 +134,7 @@
 #include <asc/std/__algorithm/unique_copy.h>
 #include <asc/std/__algorithm/upper_bound.h>
 #include <asc/std/__string/char_traits.h>
+#include <asc/std/version>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 

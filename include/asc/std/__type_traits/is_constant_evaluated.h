@@ -28,13 +28,7 @@
 #endif
 
 #include <asc/__detail/attributes.h>
-
-#ifndef CANN_ASC_STL_DETAIL_BUILTIN_IS_CONSTANT_EVALUATED
-#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_is_constant_evaluated) || \
-    (defined(__GNUC__) && !defined(__clang__) && __GNUC__ >= 9)
-#define CANN_ASC_STL_DETAIL_BUILTIN_IS_CONSTANT_EVALUATED(...) __builtin_is_constant_evaluated(__VA_ARGS__)
-#endif
-#endif
+#include <asc/std/__version/features.h>
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 

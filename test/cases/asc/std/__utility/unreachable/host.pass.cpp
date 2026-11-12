@@ -20,6 +20,6 @@
 
 int main()
 {
-    static_assert(std::is_same_v<decltype(&asc::std::unreachable), void (*)()>);
+    static_assert(std::is_same_v<decltype(&asc::std::unreachable), void (*)() noexcept>);
     return 0;
 }

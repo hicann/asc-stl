@@ -35,6 +35,32 @@ set(ASC_STL_MANIFEST "${ASC_STL_TEST_ROOT}/metadata/headers.json")
 set(ASC_STL_INCLUDE_ROOT "${PROJECT_SOURCE_DIR}/include")
 set(ASC_STL_CASES_ROOT "${ASC_STL_TEST_ROOT}/cases")
 
+if(ASC_STL_ENABLE_HOST_TESTS)
+    add_test(NAME compatibility.std-version.host
+        COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/test_std_version.py
+                --compiler ${CMAKE_CXX_COMPILER}
+                --report ${CMAKE_CURRENT_BINARY_DIR}/std-version-host.json)
+    set_tests_properties(compatibility.std-version.host
+        PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 300)
+endif()
+
+add_test(NAME compatibility.std-version.regressions
+    COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/test_std_version_runner.py)
+set_tests_properties(compatibility.std-version.regressions
+    PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 30)
+
+if(ASC_STL_ENABLE_DEVICE_COMPILE_TESTS)
+    foreach(mode IN ITEMS simd simt)
+        add_test(NAME compatibility.std-version.${mode}
+            COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/test_std_version.py
+                    --compiler bisheng --mode ${mode}
+                    --npu-arch ${ASC_STL_NPU_ARCH}
+                    --report ${CMAKE_CURRENT_BINARY_DIR}/std-version-${mode}.json)
+        set_tests_properties(compatibility.std-version.${mode}
+            PROPERTIES LABELS "header-device;device-compile;affected-regression;nightly" TIMEOUT 300)
+    endforeach()
+endif()
+
 add_test(
     NAME gate.metadata
     COMMAND

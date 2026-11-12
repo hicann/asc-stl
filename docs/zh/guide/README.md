@@ -4,3 +4,5 @@
 - [构建与测试](building_and_testing.md)
 
 - [语言模式与兼容性](cpp_compatibility.md)
+
+[标准库特性修订检测](std_feature_test.md)

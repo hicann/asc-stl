@@ -20,6 +20,8 @@
 #include <asc/std/bit>
 #include <asc/std/utility>
 
+#include "support/std_feature_semantics.h"
+
 int main()
 {
     static_assert(CANN_ASC_STL_HAS_SOURCE_LOCATION && CANN_ASC_STL_HAS_UNREACHABLE);
@@ -35,5 +37,10 @@ int main()
 #endif
     const auto unavailable = &asc::std::unreachable;
     (void)unavailable;
-    return 0;
+    static_assert(std_feature_tests::semantics());
+    static_assert(std_feature_tests::numeric_semantics());
+    return std_feature_tests::semantics() && std_feature_tests::numeric_semantics() &&
+            std_feature_tests::storage_semantics() ?
+        0 :
+        1;
 }

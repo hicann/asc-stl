@@ -36,15 +36,17 @@
 
 所属类型：[`source_location`](source_location.md)。以下展示提供文件、函数和行号内建函数的配置；可零实参按类调用。没有这些内建函数时，文件/行号退回声明处的__FILE__/__LINE__，函数名退回空字符串。
 
+Host C++20 且支持立即函数时使用以下 consteval 声明；C++17/Device 或无 consteval 时相同参数的入口为 constexpr。显式实参在立即函数路径上也必须是常量表达式。
+
 ```cpp
 #if __has_builtin(__builtin_COLUMN)
-[[nodiscard]] static constexpr source_location current(
+[[nodiscard]] static consteval source_location current(
     const char* file_name = __builtin_FILE(),
     const char* function_name = __builtin_FUNCTION(),
     uint_least32_t line = __builtin_LINE(),
     uint_least32_t column = __builtin_COLUMN()) noexcept;
 #else
-[[nodiscard]] static constexpr source_location current(
+[[nodiscard]] static consteval source_location current(
     const char* file_name = __builtin_FILE(),
     const char* function_name = __builtin_FUNCTION(),
     uint_least32_t line = __builtin_LINE(),

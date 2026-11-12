@@ -3534,7 +3534,8 @@
         "asc/std/__concepts/concept_macros.h",
         "asc/std/__cstring/memcpy.h",
         "asc/std/__type_traits/is_default_constructible.h",
-        "asc/std/__type_traits/is_trivially_copyable.h"
+        "asc/std/__type_traits/is_trivially_copyable.h",
+        "asc/std/__version/features.h"
       ],
       "applicability": {
         "host_header": true,
@@ -10603,7 +10604,8 @@
       "visibility": "private",
       "dependencies": [
         "asc/__config",
-        "asc/__detail/attributes.h"
+        "asc/__detail/attributes.h",
+        "asc/std/__version/features.h"
       ],
       "applicability": {
         "host_header": true,
@@ -13845,16 +13847,33 @@
       }
     },
     {
+      "target": "asc/std/__version/features.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config"
+      ],
+      "semantic_case": "asc/std/version",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
       "target": "asc/std/version",
       "visibility": "public",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__version/features.h"
       ],
       "applicability": {
         "host_header": true,
         "device_header": true,
         "host_semantic": true,
-        "device_compile": false,
+        "device_compile": true,
         "cannsim_runtime": false,
         "hardware_runtime": false
       },
@@ -16428,7 +16447,8 @@
         "asc/std/__algorithm/unique.h",
         "asc/std/__algorithm/unique_copy.h",
         "asc/std/__algorithm/upper_bound.h",
-        "asc/std/__string/char_traits.h"
+        "asc/std/__string/char_traits.h",
+        "asc/std/version"
       ],
       "semantic_case": "asc/std/algorithm",
       "negative_cases": [
@@ -16518,7 +16538,8 @@
       "visibility": "public",
       "dependencies": [
         "asc/__config",
-        "asc/std/__new/nonallocating_new.h"
+        "asc/std/__new/nonallocating_new.h",
+        "asc/std/version"
       ],
       "semantic_case": "asc/argument",
       "applicability": {
@@ -18259,6 +18280,7 @@
       "dependencies": [
         "asc/__config",
         "asc/std/__functional/invoke.h",
+        "asc/std/__functional/unwrap_ref.h",
         "asc/std/__type_traits/add_const.h",
         "asc/std/__type_traits/add_cv.h",
         "asc/std/__type_traits/add_lvalue_reference.h",

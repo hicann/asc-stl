@@ -64,18 +64,27 @@ static_assert(values[1] == 4);
 #endif
 ```
 
-## 迁移旧的特性宏判断
+## 标准特性版本与旧宏迁移
 
-默认情况下，ASC-STL不再为自身设施补充`__cpp_lib_source_location`或`__cpp_lib_unreachable`。Host标准库已经定义的宏保持原样。查询ASC接口的旧代码应改用`CANN_ASC_STL_HAS_SOURCE_LOCATION`和`CANN_ASC_STL_HAS_UNREACHABLE`；查询Host `std`时继续使用Host自己的特性宏。
-
-确需过渡时，可在任何ASC头文件之前显式启用兼容开关：
+完整标准特性用 `CANN_ASC_STL_LIB_x >= YYYYMML` 查询；不完整特性不定义版本宏。
+名称映射、版本与支持边界见[特性清单](std_feature_test.md)。HAS 仍用于已列接口子集。
 
 ```cpp
-#define CANN_ASC_STL_ENABLE_LEGACY_STD_FEATURE_MACROS 1
 #include <asc/std/version>
+#include <asc/std/array>
+
+#if defined(CANN_ASC_STL_LIB_to_array) && CANN_ASC_STL_LIB_to_array >= 201907L
+constexpr auto values = asc::std::to_array({2, 4});
+static_assert(values[1] == 4);
+#endif
 ```
 
-此开关仅在标准名宏尚未定义时补充旧值，供旧的ASC能力判断迁移使用。开启后，这两个名字仍不能证明Host `std`具有对应设施。完成迁移后可移除兼容开关。
+旧的 `CANN_ASC_STL_ENABLE_LEGACY_STD_FEATURE_MACROS` 开关现在不产生作用。
+把本库的旧标准名判断迁移到 `CANN_ASC_STL_LIB_source_location`、
+`CANN_ASC_STL_LIB_unreachable`，或用 HAS 查询原有子集。宿主 `__cpp_lib_*` 仅描述宿主 std。
+
+`source_location::current` 在支持立即函数的 Host C++20 中为 consteval，显式实参也须满足
+常量表达式要求；其 C++17/Device constexpr 子集保持。`unreachable` 明确为 noexcept。
 
 ## C++17/C++20 仿真回归
 

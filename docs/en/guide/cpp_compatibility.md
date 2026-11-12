@@ -85,21 +85,27 @@ static_assert(values[1] == 4);
 
 ## Migrate old feature checks
 
-ASC-STL no longer supplies `__cpp_lib_source_location` or `__cpp_lib_unreachable`
-for itself by default. Existing Host definitions are retained. Query ASC-STL with
-`CANN_ASC_STL_HAS_SOURCE_LOCATION` and `CANN_ASC_STL_HAS_UNREACHABLE`; keep using
-Host feature macros when querying Host `std`.
-
-A temporary compatibility option must precede every ASC-STL header:
+Use CANN_ASC_STL_LIB_x >= YYYYMML for complete standard features. Partial features
+have no revision macro. See the [feature inventory](std_feature_test.md) for the
+mapping, requirements and conditions; HAS queries retain their subset meaning.
 
 ```cpp
-#define CANN_ASC_STL_ENABLE_LEGACY_STD_FEATURE_MACROS 1
 #include <asc/std/version>
+#include <asc/std/array>
+
+#if defined(CANN_ASC_STL_LIB_to_array) && CANN_ASC_STL_LIB_to_array >= 201907L
+constexpr auto values = asc::std::to_array({2, 4});
+static_assert(values[1] == 4);
+#endif
 ```
 
-It supplies the old values only when the standard-named macros are not defined.
-Those names still do not establish that Host `std` provides the corresponding
-facilities. Remove the option after migrating the old checks.
+CANN_ASC_STL_ENABLE_LEGACY_STD_FEATURE_MACROS is now inert. Migrate old ASC checks
+to CANN_ASC_STL_LIB_source_location / CANN_ASC_STL_LIB_unreachable, or retain HAS
+queries for the original subsets. Host __cpp_lib_* describes Host std only.
+
+Host C++20 source_location::current is consteval when immediate functions are
+supported, so explicit arguments must satisfy constant-expression requirements.
+Its C++17/Device constexpr subset remains. unreachable is explicitly noexcept.
 
 ## Host system libraries
 
