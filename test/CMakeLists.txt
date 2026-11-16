@@ -93,6 +93,11 @@ add_test(NAME compatibility.user-acceptance-reporter
 set_tests_properties(compatibility.user-acceptance-reporter
     PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 30)
 
+add_test(NAME compatibility.build-script-arguments
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/test_build_arguments.py)
+set_tests_properties(compatibility.build-script-arguments
+    PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 30)
+
 add_test(NAME compatibility.supplemental-release-checks
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/test_release_checks.py)
 set_tests_properties(compatibility.supplemental-release-checks

@@ -165,6 +165,12 @@ while true; do
     esac
 done
 
+if [ "$#" -gt 0 ]; then
+    log "Unexpected positional argument: $1"
+    usage
+    exit 1
+fi
+
 if [ "${MAKE_CLEAN}" = "true" ]; then
     log "Removing build directory: ${BUILD_DIR}"
     rm -rf "${BUILD_DIR}"
