@@ -156,7 +156,7 @@ CANN_ASC_STL_API CANN_ASC_STL_DETAIL_NO_INLINE unsigned int evaluate_ranges_and_
     failures += zipped.size() != 2;
     asc::args::immediate<int> immediate(4);
     failures += immediate.value() != 4 || asc::maximum<int>{}(2, 5) != 5;
-    failures += !asc::is_bitwise_comparable_v<int> || CANN_ASC_STL_VERSION != 10000;
+    failures += !asc::is_bitwise_comparable_v<int> || CANN_ASC_STL < 10000101 || CANN_ASC_STL > 99991231;
     failures += !asc::std::iswalpha(L'Q') || !asc::std::iswalnum(L'7') || !asc::std::iswblank(L' ') ||
         !asc::std::iswcntrl(L'\n') || !asc::std::iswdigit(L'4') || !asc::std::iswgraph(L'!') ||
         !asc::std::iswlower(L'a') || !asc::std::iswprint(L' ') || !asc::std::iswpunct(L'!') ||

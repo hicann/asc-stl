@@ -15,20 +15,12 @@
  */
 #include <asc/__version/product.h>
 
-#include <cassert>
+static_assert(CANN_ASC_STL == 20261023);
+static_assert(CANN_ASC_STL_HAS_PIPELINE == 0);
+static_assert(CANN_ASC_STL_HAS_NUMERIC_TYPES == 0);
+static_assert(CANN_ASC_STL_HAS_CACHE == 0);
 
 int main()
 {
-    static_assert(CANN_ASC_STL_VERSION_MAJOR == 1);
-    static_assert(CANN_ASC_STL_VERSION_MINOR == 0);
-    static_assert(CANN_ASC_STL_VERSION_PATCH == 0);
-    static_assert(CANN_ASC_STL_VERSION == 10000);
-
-    // Capability macros are defined only while the complete promised contract
-    // of each capability is locally delivered.
-    static_assert(CANN_ASC_STL_HAS_DEVICE_POLICY == 1);
-    static_assert(CANN_ASC_STL_HAS_PIPELINE == 1);
-    static_assert(CANN_ASC_STL_HAS_COLLECTIVES == 1);
-    assert(CANN_ASC_STL_VERSION_MAJOR >= 0);
     return 0;
 }

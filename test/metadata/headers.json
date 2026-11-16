@@ -17334,7 +17334,7 @@
         "asc/__version/product.h",
         "asc/std/version"
       ],
-      "semantic_case": "asc/argument",
+      "semantic_case": "asc/version",
       "applicability": {
         "host_header": true,
         "device_header": true,

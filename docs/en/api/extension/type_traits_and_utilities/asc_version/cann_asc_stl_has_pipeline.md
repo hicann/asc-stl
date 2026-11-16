@@ -1,58 +1,37 @@
 # CANN_ASC_STL_HAS_PIPELINE
 
-## Product Support
+## 产品支持情况
 
-<!-- npu="950" id1 -->
-- Ascend 950PR&950DT series products: Supported
-<!-- end id1 -->
-<!-- npu="A3" id2 -->
-- Atlas A3 series products: Not supported
-<!-- end id2 -->
-<!-- npu="910b" id3 -->
-- Atlas A2 series products: Not supported
-<!-- end id3 -->
-<!-- npu="310b" id4 -->
-- Atlas 200I/500 A2 inference products: Not supported
-<!-- end id4 -->
-<!-- npu="310p" id5 -->
-- Atlas inference series products AI Core: Not supported
-<!-- end id5 -->
-<!-- npu="310p" id6 -->
-- Atlas inference series products Vector Core: Not supported
-<!-- end id6 -->
-<!-- npu="910" id7 -->
-- Atlas training series products: Not supported
-<!-- end id7 -->
+Requires C++17 and also supports C++20. The header is independently includable in Host, SIMD and SIMT compilation. Macro values are independent of the chip.
 
-## Description
+## 功能说明
 
-Header: `<asc/version>`.
+`<asc/version>`：Reports delivery of the baseline SIMT thread-group pipeline API described in [Issue #105](https://gitcode.com/cann/asc-stl/issues/105). The current value is `0`.
 
-`CANN_ASC_STL_HAS_PIPELINE` is defined as 1, indicating that the current version provides the two-stage producer/consumer pipeline interfaces.
-
-## Declaration
+## 声明
 
 ```cpp
-#define CANN_ASC_STL_HAS_PIPELINE 1
+#define CANN_ASC_STL_HAS_PIPELINE 0
 ```
 
-## Constraints
+## 约束说明
 
-- Provides the product version and delivered-capability macros.
+The macro is always defined as `0` or `1`. A value of `1` requires the complete baseline API and its applicable acceptance; otherwise it is `0`. Test its value with `#if`. Consult the module for operation-specific chip, type, address-space and execution-mode requirements.
 
-## Example
-
-The following snippet demonstrates the basic call form of the interface on this page; inputs and the execution context must satisfy the constraints on this page.
+## 调用示例
 
 ```cpp
 #include <asc/version>
 
-#ifndef CANN_ASC_STL_HAS_PIPELINE
-#error "CANN_ASC_STL_HAS_PIPELINE is required by this public Header"
+#if CANN_ASC_STL_HAS_PIPELINE
+constexpr bool use_extension = true;
+#else
+constexpr bool use_extension = false;
 #endif
-static_assert(CANN_ASC_STL_HAS_PIPELINE == 1, "documented version or capability value");
+static_assert(use_extension == (CANN_ASC_STL_HAS_PIPELINE == 1));
 ```
 
-## Related APIs
+## 关联API
 
-- [API list for this header](asc_version.md)
+- [<asc/version>](asc_version.md)
+- [Maintenance and delivery records](../../../../guide/product_version.md)

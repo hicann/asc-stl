@@ -19947,14 +19947,7 @@
     "mode": "host",
     "expression": "verify_example()"
   },
-  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_has_collectives.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host"
-  },
-  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_has_device_policy.md": {
+  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl.md": {
     "standards": [
       17,
       20
@@ -19968,28 +19961,14 @@
     ],
     "mode": "host"
   },
-  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_version.md": {
+  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_has_numeric_types.md": {
     "standards": [
       17,
       20
     ],
     "mode": "host"
   },
-  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_version_major.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host"
-  },
-  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_version_minor.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host"
-  },
-  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_version_patch.md": {
+  "docs/zh/api/extension/type_traits_and_utilities/asc_version/cann_asc_stl_has_cache.md": {
     "standards": [
       17,
       20

@@ -46,6 +46,9 @@ install(
     DIRECTORY include/
     DESTINATION include
     PATTERN ".*" EXCLUDE)
+install(DIRECTORY docs/release/ DESTINATION share/asc_stl/docs/release)
+install(FILES docs/zh/guide/product_version.md DESTINATION share/asc_stl/docs/zh/guide)
+install(FILES docs/en/guide/product_version.md DESTINATION share/asc_stl/docs/en/guide)
 install(TARGETS asc_stl EXPORT asc_stlTargets)
 install(
     EXPORT asc_stlTargets

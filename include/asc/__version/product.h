@@ -27,30 +27,15 @@
 #pragma system_header
 #endif
 
-// Product version and exact delivered-capability macros. A capability macro is
-// defined only while its complete promised contract is locally delivered. The
-// public <asc/version> facade exports exactly these product roots; the
-// standard feature-test vocabulary (__cpp_lib_* macros) is delivered
-// separately through <asc/std/version> and is intentionally NOT aggregated
-// here.
-#define CANN_ASC_STL_VERSION_MAJOR 1
-#define CANN_ASC_STL_VERSION_MINOR 0
-#define CANN_ASC_STL_VERSION_PATCH 0
-// Single source of truth: derived from the components so a bump of
-// MAJOR/MINOR/PATCH can never leave the packed integer stale.
-#define CANN_ASC_STL_VERSION \
-    (CANN_ASC_STL_VERSION_MAJOR * 10000 + CANN_ASC_STL_VERSION_MINOR * 100 + CANN_ASC_STL_VERSION_PATCH)
+// Fixed Gregorian release date (YYYYMMDD), maintained by the release process.
+// Keep these four definitions in sync with docs/release/extension_features.json.
+#define CANN_ASC_STL 20261023
 
-// The device policy and immutable execution-requirement vocabulary are
-// delivered with their complete promised contract.
-#define CANN_ASC_STL_HAS_DEVICE_POLICY 1
-
-// The two-stage producer/consumer pipeline transfer with its exact
-// borrowed coordinator surface is delivered.
-#define CANN_ASC_STL_HAS_PIPELINE 1
-
-// The D-SIMT block and D-SIMD UB-range collectives are delivered through
-// the public <asc/collectives> facade.
-#define CANN_ASC_STL_HAS_COLLECTIVES 1
+// Package delivery flags, identical in Host, SIMD and SIMT compilation.
+// Set to 1 only after the registered baseline API and its acceptance are delivered.
+// Operation-specific hardware and compilation requirements belong to each API.
+#define CANN_ASC_STL_HAS_PIPELINE 0
+#define CANN_ASC_STL_HAS_NUMERIC_TYPES 0
+#define CANN_ASC_STL_HAS_CACHE 0
 
 #endif  // CANN_ASC_STL_ASC___VERSION_PRODUCT_H

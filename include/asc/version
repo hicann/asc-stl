@@ -28,6 +28,7 @@
 #endif
 
 #include <asc/__version/product.h>
+// Standard feature revisions retain their separate CANN_ASC_STL_LIB_* names.
 #include <asc/std/version>
 
 #endif  // CANN_ASC_STL_ASC_VERSION

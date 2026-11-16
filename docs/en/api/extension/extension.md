@@ -400,13 +400,10 @@ The Ascend extension interfaces provide capabilities such as address spaces, the
 | [asc::is_trivially_relocatable_v](type_traits_and_utilities/asc_type_traits/is_trivially_relocatable_v.md) | asc/type_traits | Variable template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
 | [asc::in_range](type_traits_and_utilities/asc_utility/in_range.md) | asc/utility | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
 | [asc::static_for](type_traits_and_utilities/asc_utility/static_for.md) | asc/utility | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [CANN_ASC_STL_HAS_COLLECTIVES](type_traits_and_utilities/asc_version/cann_asc_stl_has_collectives.md) | asc/version | Macro | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [CANN_ASC_STL_HAS_DEVICE_POLICY](type_traits_and_utilities/asc_version/cann_asc_stl_has_device_policy.md) | asc/version | Macro | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [CANN_ASC_STL_HAS_PIPELINE](type_traits_and_utilities/asc_version/cann_asc_stl_has_pipeline.md) | asc/version | Macro | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [CANN_ASC_STL_VERSION](type_traits_and_utilities/asc_version/cann_asc_stl_version.md) | asc/version | Macro | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [CANN_ASC_STL_VERSION_MAJOR](type_traits_and_utilities/asc_version/cann_asc_stl_version_major.md) | asc/version | Macro | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [CANN_ASC_STL_VERSION_MINOR](type_traits_and_utilities/asc_version/cann_asc_stl_version_minor.md) | asc/version | Macro | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [CANN_ASC_STL_VERSION_PATCH](type_traits_and_utilities/asc_version/cann_asc_stl_version_patch.md) | asc/version | Macro | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
+| [CANN_ASC_STL](type_traits_and_utilities/asc_version/cann_asc_stl.md) | asc/version | Macro | C++17/C++20 | Host, SIMD, SIMT | Chip independent |
+| [CANN_ASC_STL_HAS_PIPELINE](type_traits_and_utilities/asc_version/cann_asc_stl_has_pipeline.md) | asc/version | Macro | C++17/C++20 | Host, SIMD, SIMT | Chip independent |
+| [CANN_ASC_STL_HAS_NUMERIC_TYPES](type_traits_and_utilities/asc_version/cann_asc_stl_has_numeric_types.md) | asc/version | Macro | C++17/C++20 | Host, SIMD, SIMT | Chip independent |
+| [CANN_ASC_STL_HAS_CACHE](type_traits_and_utilities/asc_version/cann_asc_stl_has_cache.md) | asc/version | Macro | C++17/C++20 | Host, SIMD, SIMT | Chip independent |
 | [asc::active_mask](execution_hierarchy_and_collectives/asc_warp/active_mask.md) | asc/warp | Function | C++17+ | AI Core SIMT programming | Ascend 950 |
 | [asc::lane_mask](execution_hierarchy_and_collectives/asc_warp/lane_mask.md) | asc/warp | Class | C++17+ | AI Core SIMT programming | Ascend 950 |
 | [asc::lane_mask::all](execution_hierarchy_and_collectives/asc_warp/lane_mask_all.md) | asc/warp | Member function | C++17+ | AI Core SIMT programming | Ascend 950 |

@@ -400,13 +400,10 @@
 | [asc::is_trivially_relocatable_v](type_traits_and_utilities/asc_type_traits/is_trivially_relocatable_v.md) | asc/type_traits | 变量模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::in_range](type_traits_and_utilities/asc_utility/in_range.md) | asc/utility | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::static_for](type_traits_and_utilities/asc_utility/static_for.md) | asc/utility | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [CANN_ASC_STL_HAS_COLLECTIVES](type_traits_and_utilities/asc_version/cann_asc_stl_has_collectives.md) | asc/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [CANN_ASC_STL_HAS_DEVICE_POLICY](type_traits_and_utilities/asc_version/cann_asc_stl_has_device_policy.md) | asc/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [CANN_ASC_STL_HAS_PIPELINE](type_traits_and_utilities/asc_version/cann_asc_stl_has_pipeline.md) | asc/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [CANN_ASC_STL_VERSION](type_traits_and_utilities/asc_version/cann_asc_stl_version.md) | asc/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [CANN_ASC_STL_VERSION_MAJOR](type_traits_and_utilities/asc_version/cann_asc_stl_version_major.md) | asc/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [CANN_ASC_STL_VERSION_MINOR](type_traits_and_utilities/asc_version/cann_asc_stl_version_minor.md) | asc/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [CANN_ASC_STL_VERSION_PATCH](type_traits_and_utilities/asc_version/cann_asc_stl_version_patch.md) | asc/version | 宏 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [CANN_ASC_STL](type_traits_and_utilities/asc_version/cann_asc_stl.md) | asc/version | 宏 | C++17/C++20 | Host、SIMD、SIMT | 与芯片无关 |
+| [CANN_ASC_STL_HAS_PIPELINE](type_traits_and_utilities/asc_version/cann_asc_stl_has_pipeline.md) | asc/version | 宏 | C++17/C++20 | Host、SIMD、SIMT | 与芯片无关 |
+| [CANN_ASC_STL_HAS_NUMERIC_TYPES](type_traits_and_utilities/asc_version/cann_asc_stl_has_numeric_types.md) | asc/version | 宏 | C++17/C++20 | Host、SIMD、SIMT | 与芯片无关 |
+| [CANN_ASC_STL_HAS_CACHE](type_traits_and_utilities/asc_version/cann_asc_stl_has_cache.md) | asc/version | 宏 | C++17/C++20 | Host、SIMD、SIMT | 与芯片无关 |
 | [asc::active_mask](execution_hierarchy_and_collectives/asc_warp/active_mask.md) | asc/warp | 函数 | C++17+ | AI Core SIMT编程 | Ascend 950 |
 | [asc::lane_mask](execution_hierarchy_and_collectives/asc_warp/lane_mask.md) | asc/warp | 类 | C++17+ | AI Core SIMT编程 | Ascend 950 |
 | [asc::lane_mask::all](execution_hierarchy_and_collectives/asc_warp/lane_mask_all.md) | asc/warp | 成员函数 | C++17+ | AI Core SIMT编程 | Ascend 950 |

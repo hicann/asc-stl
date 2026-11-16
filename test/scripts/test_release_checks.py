@@ -88,6 +88,22 @@ class SupplementalReleaseChecks(unittest.TestCase):
                         self.assertRaisesRegex(FileNotFoundError, "Git executable is unavailable"):
                     runner.source_identity(self.args.root)
 
+    def test_version_check_precedes_every_release_stage(self):
+        for stage in ("version", "memory", "acceptance"):
+            self.args.stage = [stage]
+            commands = self.runner.stage_commands(self.args)
+            self.assertEqual(commands[0][0], "product-version")
+            self.assertEqual(commands[0][1][-2:], ["--root", str(self.args.root)])
+            if stage == "version":
+                self.assertEqual(len(commands), 1)
+
+    def test_version_stage_is_accepted_by_the_cli(self):
+        arguments = ["run_release_checks.py", "--scope", "software", "--stage", "version",
+                     "--report-dir", str(self.args.report_dir)]
+        with patch.object(sys, "argv", arguments):
+            args = self.runner.parse_arguments()
+        self.assertEqual(args.stage, ["version"])
+
 
 
 if __name__ == "__main__":

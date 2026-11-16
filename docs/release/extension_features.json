@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "release_date": 20261023,
+  "features": {
+    "CANN_ASC_STL_HAS_PIPELINE": {
+      "value": 0,
+      "issue": "https://gitcode.com/cann/asc-stl/issues/105",
+      "baseline": null,
+      "implementation_commit": null,
+      "acceptance": null,
+      "first_release_date": null,
+      "reason": "SIMT线程组流水线基础接口尚未完成交付与适用验收。"
+    },
+    "CANN_ASC_STL_HAS_NUMERIC_TYPES": {
+      "value": 0,
+      "issue": "https://gitcode.com/cann/asc-stl/issues/85",
+      "baseline": null,
+      "implementation_commit": null,
+      "acceptance": null,
+      "first_release_date": null,
+      "reason": "扩展数值类型与标量转换基础接口尚未完成交付与适用验收。"
+    },
+    "CANN_ASC_STL_HAS_CACHE": {
+      "value": 0,
+      "issue": "https://gitcode.com/cann/asc-stl/issues/99",
+      "baseline": null,
+      "implementation_commit": null,
+      "acceptance": null,
+      "first_release_date": null,
+      "reason": "缓存控制基础接口尚未完成交付与适用验收。"
+    }
+  }
+}

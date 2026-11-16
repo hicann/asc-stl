@@ -52,7 +52,7 @@ int main()
     static_assert(asc::is_bitwise_comparable_v<int>);
     static_assert(asc::is_trivially_relocatable_v<int>);
     static_assert(!asc::is_extended_floating_point_v<float>);
-    if (CANN_ASC_STL_VERSION != 10000 || CANN_ASC_STL_VERSION_MAJOR != 1)
+    if (CANN_ASC_STL < 10000101 || CANN_ASC_STL > 99991231)
         return 6;
     if (!asc::std::iswalpha(L'A') || asc::std::towlower(L'Q') != L'q')
         return 7;

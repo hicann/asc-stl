@@ -58,7 +58,8 @@ def docs_commands(args: argparse.Namespace, modes: tuple[str, ...]) -> list[tupl
 
 
 def stage_commands(args: argparse.Namespace) -> list[tuple]:
-    commands = []
+    commands = [("product-version", [sys.executable, str(args.root / "scripts/check_product_version.py"),
+                                    "--root", str(args.root)])]
     if "docs" in args.stage:
         commands.append(("docs-structure", [sys.executable, str(args.root / "scripts/check_api_docs.py"),
                                            "--report", str(args.report_dir / "docs-structure.json")]))
@@ -119,7 +120,7 @@ def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--scope", choices=("software", "hardware"), required=True)
-    parser.add_argument("--stage", choices=("docs", "memory", "acceptance", "runtime"), action="append")
+    parser.add_argument("--stage", choices=("version", "docs", "memory", "acceptance", "runtime"), action="append")
     parser.add_argument("--report-dir", type=Path, required=True)
     parser.add_argument("--compiler", default=os.environ.get("CXX", "c++"))
     parser.add_argument("--device-compiler", default="bisheng")
@@ -130,7 +131,8 @@ def parse_arguments() -> argparse.Namespace:
     args.report_dir = args.report_dir.resolve()
     allowed = ("docs", "memory", "acceptance") if args.scope == "software" else ("runtime",)
     args.stage = list(dict.fromkeys(args.stage or allowed))
-    if args.jobs < 1 or any(stage not in allowed for stage in args.stage):
+    valid_stages = ("version", *allowed)
+    if args.jobs < 1 or any(stage not in valid_stages for stage in args.stage):
         parser.error("positive --jobs and stages matching --scope are required")
     return args
 

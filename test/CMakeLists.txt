@@ -35,6 +35,33 @@ set(ASC_STL_MANIFEST "${ASC_STL_TEST_ROOT}/metadata/headers.json")
 set(ASC_STL_INCLUDE_ROOT "${PROJECT_SOURCE_DIR}/include")
 set(ASC_STL_CASES_ROOT "${ASC_STL_TEST_ROOT}/cases")
 
+add_test(NAME gate.product-version
+    COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/check_product_version.py)
+add_test(NAME compatibility.product-version.records
+    COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/test_product_version_records.py)
+set_tests_properties(gate.product-version compatibility.product-version.records
+    PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 30)
+
+if(ASC_STL_ENABLE_HOST_TESTS)
+    add_test(NAME compatibility.product-version.host
+        COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/test_product_version.py
+                --compiler ${CMAKE_CXX_COMPILER}
+                --report ${CMAKE_CURRENT_BINARY_DIR}/product-version-host.json)
+    set_tests_properties(compatibility.product-version.host
+        PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 120)
+endif()
+
+if(ASC_STL_ENABLE_DEVICE_COMPILE_TESTS)
+    foreach(mode IN ITEMS simd simt)
+        add_test(NAME compatibility.product-version.${mode}
+            COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/test_product_version.py
+                    --compiler bisheng --mode ${mode} --npu-arch ${ASC_STL_NPU_ARCH}
+                    --report ${CMAKE_CURRENT_BINARY_DIR}/product-version-${mode}.json)
+        set_tests_properties(compatibility.product-version.${mode}
+            PROPERTIES LABELS "header-device;device-compile;affected-regression;nightly" TIMEOUT 120)
+    endforeach()
+endif()
+
 if(ASC_STL_ENABLE_HOST_TESTS)
     add_test(NAME compatibility.std-version.host
         COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/test_std_version.py
@@ -616,6 +643,7 @@ if(ASC_STL_ENABLE_HOST_TESTS)
     asc_stl_add_host_case("asc.std.format-numeric.w11" "asc/std/format/host.pass.cpp")
     asc_stl_add_host_case("asc.std.ranges.w12" "asc/std/ranges/host.pass.cpp")
     asc_stl_add_host_case("asc.argument-functional.w12" "asc/argument/host.pass.cpp")
+    asc_stl_add_host_case("asc.version" "asc/version/host.pass.cpp")
     asc_stl_add_host_case("asc.functional.properties" "asc/functional/host.pass.cpp")
     asc_stl_add_host_case("asc.std.array.shared" "asc/std/array/host.pass.cpp")
     asc_stl_add_host_case("asc.collectives.shared" "asc/__collectives/block/host.pass.cpp")
