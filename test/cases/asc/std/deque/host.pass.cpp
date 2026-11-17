@@ -17,6 +17,26 @@
 #include <asc/memory>
 #include <asc/std/deque>
 #include <asc/std/queue>
+#include <asc/std/stack>
+
+template <bool NoThrow>
+struct AdaptorSwapProbe {
+    using value_type = int;
+    using size_type = unsigned;
+    using reference = int&;
+    using const_reference = const int&;
+    void swap(AdaptorSwapProbe&) noexcept(NoThrow)
+    {}  // NOLINT(build/include_what_you_use)
+};
+
+template <bool NoThrow>
+using ProbeQueue = asc::std::queue<int, AdaptorSwapProbe<NoThrow>>;
+template <bool NoThrow>
+using ProbeStack = asc::std::stack<int, AdaptorSwapProbe<NoThrow>>;
+static_assert(noexcept(asc::std::declval<ProbeQueue<true>&>().swap(asc::std::declval<ProbeQueue<true>&>())));
+static_assert(!noexcept(asc::std::declval<ProbeQueue<false>&>().swap(asc::std::declval<ProbeQueue<false>&>())));
+static_assert(noexcept(asc::std::declval<ProbeStack<true>&>().swap(asc::std::declval<ProbeStack<true>&>())));
+static_assert(!noexcept(asc::std::declval<ProbeStack<false>&>().swap(asc::std::declval<ProbeStack<false>&>())));
 
 template <class T>
 class fixed_sequence {

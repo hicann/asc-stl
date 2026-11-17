@@ -109,6 +109,24 @@ Its C++17/Device constexpr subset remains. unreachable is explicitly noexcept.
 
 ## Host system libraries
 
+The duplicate-key lookup, complex frequency-response and padded tensor-view
+usage paths have been checked in C++17 with GCC 9.5 as well as GCC 13. This does
+not establish support for every header on every GCC release. Type identity checks
+in these dependencies use ASC-STL traits rather than requiring the newer
+`__is_same` builtin. The trivial-destructor trait uses GCC's legacy
+`__has_trivial_destructor` when builtin feature detection is unavailable.
+On a compiler without `__builtin_bit_cast`, floating-point codecs remain usable
+at runtime, but conversions requiring that operation are not constant expressions.
+Check whether `CANN_ASC_STL_LIB_bit_cast` is defined before requiring constexpr
+bit casts. Pair-like constructor constraints reject non-tuple-like sources before
+attempting element access; this also permits reference tuples used by slicing.
+
+Custom lookup for `ranges::iter_swap` also supports GCC 9/11 Host builds.
+An iterator may provide a two-argument `iter_swap` as a hidden friend or in its
+associated namespace. A valid customization remains usable when dereferencing
+the iterator returns a read-only reference. Without such a customization,
+availability still follows element swapping or the move-exchange fallback.
+
 The C++20 `<asc/std/cuchar>` functions `c8rtomb` and `mbrtoc8` must be exported by
 the actual system `<cuchar>`. On GNU/Linux this normally needs glibc 2.36 or later
 and a libstdc++ built with that capability. Ubuntu 24.04 with GCC 13/glibc 2.39

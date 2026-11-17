@@ -42,7 +42,8 @@
 // - half/bfloat16_t: native conversion where supported; ordinary AICore BF16
 //   conversions use a storage codec because that backend has no scalar cast;
 // - fp8 (e4m3/e5m2/e8m0): software bit-level codec (__detail::__fp8_encode/
-//   __fp8_decode), identical code on host and device, constexpr, bit-exact:
+//   __fp8_decode), identical code on host and device, bit-exact and constexpr
+//   when the compiler provides constexpr bit_cast:
 //   decoding is a pure bit expansion; encoding is RN-even (e4m3/e5m2 NOSAT
 //   semantics: e4m3 overflow -> NaN, e5m2 overflow -> Inf; e8m0 encodes by
 //   truncation).
@@ -59,12 +60,14 @@ namespace __detail {
 // Exact BF16 expansion and round-to-nearest-even binary32 narrowing. These
 // helpers use no BF16 scalar conversion instructions. Narrowing quiets NaNs,
 // preserves their sign and retained payload bits, and never maps a NaN to Inf.
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr float __bf16_decode(uint16_t bits) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_BIT_CAST float __bf16_decode(
+    uint16_t bits) noexcept
 {
     return ::asc::std::bit_cast<float>(static_cast<uint32_t>(bits) << 16);
 }
 
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr uint16_t __bf16_encode(float value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_BIT_CAST uint16_t __bf16_encode(
+    float value) noexcept
 {
     const uint32_t bits = ::asc::std::bit_cast<uint32_t>(value);
     const uint32_t magnitude = bits & 0x7fffffffu;
@@ -78,12 +81,12 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr uint16_t __bf16_encode(float v
     return static_cast<uint16_t>((bits + 0x7fffu + tie_to_even) >> 16);
 }
 
-// fp8 bit pattern -> float (exact bit expansion; constexpr, identical code on
-// host and device).
+// fp8 bit pattern -> float (exact bit expansion; identical code on host and
+// device, constexpr when bit_cast is constexpr).
 // ebits/mbits are the fp8 format's field widths; fn_no_inf selects the e4m3
 // no-Inf variant (exponent all ones with the largest mantissa -> NaN, otherwise
 // the largest finite value on the 448 scale).
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr float __fp8_decode(
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_BIT_CAST float __fp8_decode(
     unsigned char bits, int ebits, int mbits, bool fn_no_inf) noexcept
 {
     const unsigned int sign = (static_cast<unsigned int>(bits) >> (ebits + mbits)) & 1u;
@@ -135,8 +138,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr float __fp8_decode(
         out | (static_cast<unsigned int>(float_exponent) << 23) | (mant << (23 - mbits)));
 }
 
-// float -> fp8 bit pattern (RN-even; NOSAT semantics). constexpr.
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned char __fp8_encode(
+// float -> fp8 bit pattern (RN-even; NOSAT semantics). constexpr when bit_cast is constexpr.
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_BIT_CAST unsigned char __fp8_encode(
     float value, int ebits, int mbits, bool fn_no_inf) noexcept
 {
     const unsigned int float_bits = ::asc::std::bit_cast<unsigned int>(value);
@@ -230,7 +233,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned char __fp8_encode(
 }
 
 // e8m0 encoding (exponent-only format, truncation semantics): value -> 2^(floor(log2|v|)).
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned char __e8m0_encode(float value) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_BIT_CAST unsigned char __e8m0_encode(
+    float value) noexcept
 {
     const unsigned int float_bits = ::asc::std::bit_cast<unsigned int>(value);
     const unsigned int float_abs = float_bits & 0x7fffffffu;
@@ -255,7 +259,8 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr unsigned char __e8m0_encode(fl
 
 // Exponent-only E8M0 has finite values 2^(field-127), including field zero.
 // Its minimum 2^-127 is a binary32 subnormal, not a numerical zero.
-CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr float __e8m0_decode(unsigned char field) noexcept
+CANN_ASC_STL_NODISCARD CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_BIT_CAST float __e8m0_decode(
+    unsigned char field) noexcept
 {
     const unsigned int bits =
         field == 0xffu ? 0x7fc00000u : (field == 0u ? 0x00400000u : static_cast<unsigned int>(field) << 23);

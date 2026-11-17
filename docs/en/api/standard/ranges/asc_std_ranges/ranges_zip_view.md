@@ -42,7 +42,8 @@ class zip_view;
 ## Constraints
 
 - Currently only exactly two random-access and sized ranges are supported; arbitrary view packs are not supported.
-- The tuple obtained by dereferencing keeps the underlying references and allows writing back to writable elements; it does not copy or take ownership of the underlying elements.
+- Each tuple element preserves its underlying dereference type: references permit write-back to writable elements, while value-returning transformations store values in the corresponding tuple elements. Ownership of borrowed storage is not transferred.
+- Modern traversal capability and the legacy iterator category are preserved separately; a value-returning random-access transform view is a valid input. Default-constructible iterators satisfy the sentinel requirements of range algorithms, so zip can be consumed by algorithms such as `ranges::transform`.
 - Const iteration requires both sides to be const-traversable, with each const iterator type identical to its non-const form.
 - The actually borrowed underlying storage must cover all iteration accesses.
 

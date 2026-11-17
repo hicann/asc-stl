@@ -27,6 +27,8 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__utility/declval.h>
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class T, class Container>
@@ -85,7 +87,7 @@ public:
         c.pop_front();
     }
     CANN_ASC_STL_API constexpr void swap(queue& other) noexcept(  // NOLINT(build/include_what_you_use)
-        noexcept(c.swap(other.c)))
+        noexcept(::asc::std::declval<Container&>().swap(::asc::std::declval<Container&>())))
     {
         c.swap(other.c);
     }

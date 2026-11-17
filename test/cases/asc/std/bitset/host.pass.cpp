@@ -15,8 +15,12 @@
  */
 
 #include "../../../../support/b027_semantics.h"
+#include "../../../../support/bitmap_mask_semantics.h"
 
 int main()
 {
+    if (asc_stl_bitmap_mask_test::evaluate() != 0) {
+        return 101;
+    }
     return asc_stl_b027_test::evaluate_host();
 }

@@ -93,3 +93,5 @@ bool example()
 
 - [submdspan_mapping](submdspan_mapping.md): the slice forms and layout computation rules.
 - [mdspan](mdspan.md): a borrowing multidimensional data view.
+
+[Complete padded batch crop and transpose example](../../../../../../examples/standard/mdspan_matrix/README_en.md): preserve row and batch strides while composing range and strided slices, then write a transposed output.

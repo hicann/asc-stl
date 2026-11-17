@@ -95,8 +95,12 @@ template <class ForwardIterator, class T>
 
 | Applicable prototype | Return type | Description |
 | --- | --- | --- |
-| Prototype 1 | `ForwardIterator` | Returns the position of the element satisfying the condition; returns the end position of the input range when none is found. |
-| Prototype 2 | `ForwardIterator` | Returns the position of the element satisfying the condition; returns the end position of the input range when none is found. |
+| Prototype 1 | `ForwardIterator` | Returns the first position where `comp(value, element)` is true, or `last` if it is false for every element. |
+| Prototype 2 | `ForwardIterator` | Returns the first position where `value < element` is true, or `last` if it is false for every element. |
+
+The returned boundary is after all elements equivalent to the query. With no
+equivalent element, it equals `lower_bound`, and can be inside the range. Use
+[`equal_range`](equal_range.md) to obtain both boundaries in one call.
 
 ## Constraints
 

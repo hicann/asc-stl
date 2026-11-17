@@ -99,22 +99,39 @@ template <class ForwardIterator, class T>
 | 原型1 | `pair<ForwardIterator, ForwardIterator>` | 返回与目标值等价的半开子区间。 |
 | 原型2 | `pair<ForwardIterator, ForwardIterator>` | 返回与目标值等价的半开子区间。 |
 
+等价由 `!compare(element, value) && !compare(value, element)` 定义，不要求
+`element == value`。没有等价元素时，两个迭代器都指向插入位置，该位置可能位于输入范围内部。
+输入为空时，两者都是 `first`。对于随机访问迭代器，两个返回迭代器之差就是候选数量，
+无需逐个扫描等价元素。
+
 ## 约束说明
 
 - 提供顺序执行且不进行动态内存分配的重载。
 
 ## 调用示例
 
-以下Host示例在局部范围仍有效时检查结果和输出；函数返回可独立判断的布尔值。
+以下 Host 示例在按键排序的表中为一批查询定位候选行。每个返回区间包含全部匹配行，
+包括重复键；未命中的键在其插入位置得到零个候选。SIMT 算子可以让每个线程处理一个查询，
+`equal_range` 本身仍在线程内部顺序执行。
 
 ```cpp
 #include <asc/std/algorithm>
 
 bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    auto result = asc::std::equal_range(values, values + 8, 5);
-    return result.first == values + 4 && result.second == values + 5;
+    int row_keys[6] = {2, 2, 2, 5, 5, 9};
+    int queries[4] = {2, 4, 9, 10};
+    int begins[4] = {}, ends[4] = {}, counts[4] = {};
+    for (int i = 0; i < 4; ++i) {
+        const auto rows = asc::std::equal_range(row_keys, row_keys + 6, queries[i]);
+        begins[i] = static_cast<int>(rows.first - row_keys);
+        ends[i] = static_cast<int>(rows.second - row_keys);
+        counts[i] = ends[i] - begins[i];
+    }
+    return begins[0] == 0 && ends[0] == 3 && counts[0] == 3 &&
+        begins[1] == 3 && ends[1] == 3 && counts[1] == 0 &&
+        begins[2] == 5 && ends[2] == 6 && counts[2] == 1 &&
+        begins[3] == 6 && ends[3] == 6 && counts[3] == 0;
 }
 ```
 

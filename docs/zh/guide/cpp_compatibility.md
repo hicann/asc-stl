@@ -86,6 +86,14 @@ static_assert(values[1] == 4);
 `source_location::current` 在支持立即函数的 Host C++20 中为 consteval，显式实参也须满足
 常量表达式要求；其 C++17/Device constexpr 子集保持。`unreachable` 明确为 noexcept。
 
+## Host编译器能力
+
+重复键查找、复数频响和带padding的张量视图使用路径已在GCC 9.5与GCC 13的C++17模式验证；这不代表所有头文件在所有GCC版本均受支持。这些依赖中的类型相等判定使用ASC-STL类型特征，不要求较新的`__is_same`内建函数。编译器没有内建函数能力检测时，平凡析构判定使用GCC已有的`__has_trivial_destructor`。
+
+缺少`__builtin_bit_cast`时，浮点编解码仍可在运行期调用，但需要该操作的转换不能常量求值。要求constexpr位转换前，应检查是否定义`CANN_ASC_STL_LIB_bit_cast`。pair-like构造约束先排除非tuple-like来源，再尝试访问元素，因此切片内部使用的引用tuple也能正常构造。
+
+`ranges::iter_swap`的自定义交换查找支持GCC 9/11的Host模式。迭代器可通过隐藏友元或关联命名空间中的二参数`iter_swap`定制交换；即使解引用返回只读引用，只要自定义交换有效，也不应退化为不可交换。没有适用的自定义函数时，仍按元素交换或移动交换路径判断可用性。
+
 ## C++17/C++20 仿真回归
 
 `bash scripts/ci-cannsim-check.sh` 分别以 Release 模式构建、运行 C++17 和 C++20 测试。范围算法将八种输入长度分配到独立的数据切片，由一次启动的八个 block 完成；每种长度仍检查 GM/UB 两条路径的全部结果。W13/W14 SIMT 将六组独立的单线程检查分配到一次启动的六个 block，完成后再汇总结果并单独执行四线程同步检查，以减少重复仿真调度。

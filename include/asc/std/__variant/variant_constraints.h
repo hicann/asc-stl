@@ -39,6 +39,7 @@
 #include <asc/std/__type_traits/is_nothrow_assignable.h>
 #include <asc/std/__type_traits/is_nothrow_constructible.h>
 #include <asc/std/__type_traits/is_nothrow_move_constructible.h>
+#include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/is_swappable.h>
 #include <asc/std/__variant/variant_match.h>
 
@@ -50,7 +51,7 @@ template <class T>
 struct __variant_type_count<T> : integral_constant<__SIZE_TYPE__, 0> {};
 template <class T, class Head, class... Tail>
 struct __variant_type_count<T, Head, Tail...>
-    : integral_constant<__SIZE_TYPE__, (__is_same(T, Head) ? 1 : 0) + __variant_type_count<T, Tail...>::value> {};
+    : integral_constant<__SIZE_TYPE__, (is_same_v<T, Head> ? 1 : 0) + __variant_type_count<T, Tail...>::value> {};
 template <class T, class... Types>
 inline constexpr __SIZE_TYPE__ __variant_type_count_v = __variant_type_count<T, Types...>::value;
 template <class T, class... Types>

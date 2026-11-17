@@ -71,21 +71,36 @@ template<class ElementType, class Extents, class Layout, class Accessor> constex
 
 ## 调用示例
 
-以下Host示例给出具体输入，并在对象与底层存储仍有效时检查结果。
+以下Host示例计算两个传感器、两个采样时刻的复数协方差 `R = AᴴA / 2`。`scaled`与`conjugate_transposed`组合消除了显式共轭转置临时矩阵；矩阵乘法的归约循环仍由调用方实现。输入未中心化，因此此处为零均值信号的协方差（一般信号的二阶矩）。
 
 ```cpp
 #include <asc/std/linalg>
 
 bool example()
 {
-    int values[6] = {1, 2, 3, 4, 5, 6};
-    using E = asc::std::extents<int, 2, 3>;
-    asc::std::mdspan<int, E> view(values);
-    const auto result = asc::std::linalg::conjugate_transposed(view);
-    return result.extent(0) == 3 && result.extent(1) == 2 &&
-        result.accessor().access(result.data_handle(), result.mapping()(2, 1)) == 6;
+    using Complex = asc::std::complex<float>;
+    Complex values[4] = {{1.0f, 1.0f}, {2.0f, 0.0f}, {0.0f, 0.0f}, {1.0f, -1.0f}};
+    using E = asc::std::extents<int, 2, 2>;
+    asc::std::mdspan<Complex, E> samples(values);
+    // 归一化共轭转置是借用视图，values须在整个归约期间有效。
+    const auto adjoint = asc::std::linalg::scaled(
+        0.5f, asc::std::linalg::conjugate_transposed(samples));
+    Complex covariance[4]{};
+    for (int j = 0; j < 2; ++j) {
+        for (int k = 0; k < 2; ++k) {
+            for (int r = 0; r < 2; ++r) {
+                covariance[j * 2 + k] += adjoint(j, r) * samples(r, k);
+            }
+        }
+    }
+    return covariance[0] == Complex(1.0f, 0.0f) &&
+        covariance[1] == Complex(1.0f, -1.0f) &&
+        covariance[2] == Complex(1.0f, 1.0f) &&
+        covariance[3] == Complex(3.0f, 0.0f) && values[0] == Complex(1.0f, 1.0f);
 }
 ```
+
+本例使用`complex<float>`及只读视图访问。返回的视图不会复制输入，也不会修改底层元素；同时修改输入会影响后续读取。此Host示例不承诺任意复数类型或访问器的设备支持。
 
 ## 关联API
 

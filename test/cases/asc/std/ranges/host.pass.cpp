@@ -20,6 +20,7 @@
 #include <asc/std/__type_traits/is_same.h>
 
 #include "support/repeat_piecewise_semantics.h"
+#include "support/zip_pipeline_semantics.h"
 
 struct movable_range {
     int* first;
@@ -103,6 +104,8 @@ constexpr bool same_type(T, T)
 
 int main()
 {
+    if (asc_stl_zip_pipeline_test::evaluate() != 0)
+        return 102;
     if (asc_stl_repeat_piecewise_test::evaluate() != 0)
         return 101;
     int values[] = {1, 2, 3, 4, 5, 6};

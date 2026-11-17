@@ -60,6 +60,8 @@ constexpr void swap(queue<T, Container>& other) noexcept(noexcept(this->c.swap(o
 
 ## 调用示例
 
+泛型代码可用`noexcept(a.swap(b))`检查异常规格而不执行交换；结果跟随底层容器，包括GCC 9的C++17模式，不应一律假设为true。图的广度优先遍历可在当前层队列处理完后，与下一层队列交换，避免逐个复制待处理顶点。
+
 以下Host片段显式提供标准容器作为底层存储；设备端须提供可在目标位置调用的容器。
 
 ```cpp

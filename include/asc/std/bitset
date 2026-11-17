@@ -272,7 +272,9 @@ public:
 private:
     CANN_ASC_STL_API constexpr void clear_unused_bits() noexcept
     {
-        if constexpr (word_count != 0 && Size % word_bits != 0) {
+        if constexpr (word_count == 0) {
+            this->words_[0] = 0;
+        } else if constexpr (Size % word_bits != 0) {
             this->words_[word_count - 1] &= (1ULL << (Size % word_bits)) - 1;
         }
     }

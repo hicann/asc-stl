@@ -65,6 +65,16 @@ T fetch_add(T value, memory_order order = memory_order_seq_cst) noexcept;
 
 ## Example
 
+For a parallel bucket scatter, initialize each bucket counter to zero before
+workers start. Each valid item reserves a distinct slot using
+`slot = counters[bucket].fetch_add(1, memory_order_relaxed)` and writes its index
+to that bucket's preallocated output window. Ensure enough capacity and avoid
+counter overflow. The returned slot does not publish the later payload write:
+consume the output only after thread joins or kernel/stream completion, or use a
+separate correctly synchronized publication protocol. Arrival order within a
+bucket is unspecified. An independent check should compare each bucket's count
+and item multiset rather than require stable input order.
+
 The following Host snippet demonstrates the atomic operation; device-side objects must be placed in a valid memory space as specified on this page.
 
 ```cpp

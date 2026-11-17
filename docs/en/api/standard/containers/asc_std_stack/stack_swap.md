@@ -60,6 +60,12 @@ No return value.
 
 ## Example
 
+Generic code may inspect `noexcept(a.swap(b))` without executing a swap. The
+result follows the underlying container, including C++17 on GCC 9; an underlying
+potentially throwing swap must not be reported as nonthrowing. This allows a
+graph traversal to exchange deferred work stacks while retaining its container's
+exception guarantees.
+
 The following Host snippet explicitly provides a standard container as the underlying storage; on the device side, a container callable at the target location must be provided.
 
 ```cpp

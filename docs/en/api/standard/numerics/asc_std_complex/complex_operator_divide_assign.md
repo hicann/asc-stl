@@ -68,6 +68,7 @@ constexpr complex<T>& operator/=(const T& rhs) noexcept;
 
 - Only the float or `complex<float>` operations declared on this page are provided.
 - Interface availability depends on the corresponding float math capability.
+- With a complex right operand, `value /= rhs` uses the same numerical path as `value = value / rhs`; the scaled finite-input overflow recovery and frequency-response example are described under [`operator/`](operator_divide.md). A scalar right operand divides the two components independently.
 
 ## Example
 

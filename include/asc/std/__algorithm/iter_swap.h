@@ -57,7 +57,9 @@ CANN_ASC_STL_API constexpr auto iter_swap(ForwardIterator1 left, ForwardIterator
 namespace ranges {
 namespace __iter_swap {
 
-void iter_swap() = delete;
+// Stop ordinary lookup without rejecting dependent ADL probes on GCC 9/11.
+// This zero-argument declaration cannot match the two-argument calls below.
+void iter_swap();
 
 template <class _ForwardIterator1, class _ForwardIterator2, class = void>
 inline constexpr bool __unqualified_iter_swap = false;

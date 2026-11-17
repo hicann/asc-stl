@@ -93,3 +93,5 @@ bool example()
 
 - [submdspan_mapping](submdspan_mapping.md)：各切片形式和布局计算规则。
 - [mdspan](mdspan.md)：借用式多维数据视图。
+
+[带padding的批量裁剪与转置完整示例](../../../../../../examples/standard/mdspan_matrix/README.md)：组合区间切片与步进切片并保留行和批次跨步，再写出转置结果。

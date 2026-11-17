@@ -60,12 +60,11 @@ template<class T> [[nodiscard]] constexpr __unsigned_integer_result_t<T, int> co
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `int` | 返回对应前导位、尾随位或全部置位位的数量。 |
-| 原型2 | `int` | 返回对应前导位、尾随位或全部置位位的数量。 |
+| 本函数 | `int` | 从最低位开始连续0位的数量；输入为0时返回T的位数。 |
 
 ## 约束说明
 
-- 遵循标准无符号整数类型约束。
+- 遵循标准无符号整数类型约束。把返回值用作稀疏掩码的位索引时，应先检查输入非零；输入为0时的返回值是位数，不是有效索引。
 
 ## 调用示例
 
@@ -74,14 +73,16 @@ template<class T> [[nodiscard]] constexpr __unsigned_integer_result_t<T, int> co
 ```cpp
 #include <asc/std/bit>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::countr_zero(3u);
-}
-
-bool verify_example()
-{
-    return example() == 0;
+    unsigned long long mask = (1ULL << 31) | (1ULL << 63);
+    unsigned positions[2] = {};
+    unsigned count = 0;
+    while (mask != 0) {
+        positions[count++] = asc::std::countr_zero(mask);
+        mask &= mask - 1;
+    }
+    return count == 2 && positions[0] == 31 && positions[1] == 63;
 }
 ```
 

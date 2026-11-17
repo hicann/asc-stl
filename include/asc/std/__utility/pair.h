@@ -136,8 +136,8 @@ struct pair {
     {}
 
     template <class PairLike,
-        enable_if_t<__tuple_like_ext<remove_cvref_t<PairLike>> && !__is_pair<remove_cvref_t<PairLike>>::value &&
-                is_constructible_v<T1, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))> &&
+        enable_if_t<__tuple_like_ext<remove_cvref_t<PairLike>> && !__is_pair<remove_cvref_t<PairLike>>::value, int> = 0,
+        enable_if_t<is_constructible_v<T1, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))> &&
                 is_constructible_v<T2, decltype(::asc::std::__adl_get<1>(::asc::std::declval<PairLike>()))>,
             int> = 0>
     CANN_ASC_STL_API constexpr pair(PairLike&& other) noexcept(
@@ -207,8 +207,8 @@ struct pair {
     }
 
     template <class PairLike,
-        enable_if_t<__tuple_like_ext<remove_cvref_t<PairLike>> && !__is_pair<remove_cvref_t<PairLike>>::value &&
-                is_assignable_v<T1&, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))> &&
+        enable_if_t<__tuple_like_ext<remove_cvref_t<PairLike>> && !__is_pair<remove_cvref_t<PairLike>>::value, int> = 0,
+        enable_if_t<is_assignable_v<T1&, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))> &&
                 is_assignable_v<T2&, decltype(::asc::std::__adl_get<1>(::asc::std::declval<PairLike>()))>,
             int> = 0>
     CANN_ASC_STL_API constexpr pair& operator=(PairLike&& other)

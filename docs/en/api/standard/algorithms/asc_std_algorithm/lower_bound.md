@@ -95,8 +95,12 @@ template <class ForwardIterator, class T>
 
 | Applicable prototype | Return type | Description |
 | --- | --- | --- |
-| Prototype 1 | `ForwardIterator` | Returns the position of the element that satisfies the condition; returns the end position of the input range when not found. |
-| Prototype 2 | `ForwardIterator` | Returns the position of the element that satisfies the condition; returns the end position of the input range when not found. |
+| Prototype 1 | `ForwardIterator` | Returns the first position where `comp(element, value)` is false, or `last` if it is true for every element. |
+| Prototype 2 | `ForwardIterator` | Returns the first position where `element < value` is false, or `last` if it is true for every element. |
+
+The returned boundary is an insertion position, not a successful-match indicator.
+For example, querying `4` in `{2, 2, 5}` returns the position of `5`. Use
+[`equal_range`](equal_range.md) when both the candidate interval and its count are needed.
 
 ## Constraints
 

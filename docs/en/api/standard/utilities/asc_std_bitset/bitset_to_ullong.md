@@ -61,6 +61,8 @@ No function parameters.
 
 - The default Width equals `Size`, and `Size` must not exceed the number of binary digits of the target unsigned integer type; the range is limited by the bit count, not merely by the currently set bit values. This subset does not provide the runtime overflow_error conversion.
 
+- When Size is 0, the result is 0 regardless of the value supplied to the integer constructor.
+
 ## Example
 
 The following Host example provides concrete inputs and checks the result of the call.
@@ -71,7 +73,8 @@ The following Host example provides concrete inputs and checks the result of the
 bool example()
 {
     asc::std::bitset<8> bits(5);
-    return bits.to_ullong() == 5;
+    asc::std::bitset<0> empty(~0ULL);
+    return bits.to_ullong() == 5 && empty.to_ullong() == 0;
 }
 ```
 

@@ -81,6 +81,8 @@ constexpr to_chars_result to_chars(char* first, char* last, unsigned char value,
 ## Constraints
 
 - Supports all standard signed/unsigned integer types and bases 2 through 36.
+- When normalizing an integer tensor into decimal strings, successful output occupies `[first, result.ptr)` and its length excludes a null terminator. Negative values also need a character for the sign. If a later interface requires a C string, reserve and write an additional `'\0'` separately.
+- On insufficient capacity, `ec` is `value_too_large` and `ptr` is `last`; the characters within the output range are unspecified and must not be published as a valid partial result. No character outside the valid buffer may be written. Check the error code before publishing the output length and contents.
 - In AI Core SIMD programming, the buffer must be a plain char pointer in the local or generic address space.
 
 ## Example

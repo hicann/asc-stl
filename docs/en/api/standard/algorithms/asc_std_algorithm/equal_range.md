@@ -99,22 +99,42 @@ template <class ForwardIterator, class T>
 | Prototype 1 | `pair<ForwardIterator, ForwardIterator>` | Returns the half-open subrange equivalent to the target value. |
 | Prototype 2 | `pair<ForwardIterator, ForwardIterator>` | Returns the half-open subrange equivalent to the target value. |
 
+Equivalence is defined by `!compare(element, value) && !compare(value, element)`;
+it does not require `element == value`. With no equivalent element, both iterators
+point to the insertion position, which can be inside the input range. For an empty
+input, both are `first`. For random-access iterators, subtracting the returned
+iterators gives the candidate count without scanning the equivalent elements.
+
 ## Constraints
 
 - Provides overloads that execute sequentially and perform no dynamic memory allocation.
 
 ## Example
 
-The following Host example checks the result and output while the local range is still valid; the function returns a boolean value that can be evaluated independently.
+This Host example locates candidate rows in a key-sorted table for a batch of
+queries. Each returned interval identifies all matching rows, including repeated
+keys. A missing key produces a zero count at its insertion position. A SIMT
+operator can assign one query to each thread; `equal_range` itself remains
+sequential within that thread.
 
 ```cpp
 #include <asc/std/algorithm>
 
 bool example()
 {
-    int values[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    auto result = asc::std::equal_range(values, values + 8, 5);
-    return result.first == values + 4 && result.second == values + 5;
+    int row_keys[6] = {2, 2, 2, 5, 5, 9};
+    int queries[4] = {2, 4, 9, 10};
+    int begins[4] = {}, ends[4] = {}, counts[4] = {};
+    for (int i = 0; i < 4; ++i) {
+        const auto rows = asc::std::equal_range(row_keys, row_keys + 6, queries[i]);
+        begins[i] = static_cast<int>(rows.first - row_keys);
+        ends[i] = static_cast<int>(rows.second - row_keys);
+        counts[i] = ends[i] - begins[i];
+    }
+    return begins[0] == 0 && ends[0] == 3 && counts[0] == 3 &&
+        begins[1] == 3 && ends[1] == 3 && counts[1] == 0 &&
+        begins[2] == 5 && ends[2] == 6 && counts[2] == 1 &&
+        begins[3] == 6 && ends[3] == 6 && counts[3] == 0;
 }
 ```
 

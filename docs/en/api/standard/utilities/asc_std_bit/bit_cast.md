@@ -65,6 +65,7 @@ template<class To, class From> [[nodiscard]] constexpr To bit_cast(const From& f
 
 - `To` and `From` must satisfy `sizeof(To) == sizeof(From)` and both must be trivially copyable types.
 - When the compiler provides `__builtin_bit_cast`, the call can be used in constant expressions; otherwise it is implemented via a `memcpy` fallback, in which case `To` must be default constructible.
+- The prototype's `constexpr` qualifier is conditional on that compiler capability. Without it, runtime calls remain available, including the floating-point codecs used by `<asc/std/cmath>` and `<asc/std/complex>`; do not use such calls in a `static_assert`.
 
 ## Example
 

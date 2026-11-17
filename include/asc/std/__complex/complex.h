@@ -318,6 +318,26 @@ CANN_ASC_STL_API constexpr complex<T> operator*(const complex<T>& left, const co
     return {x, y};
 }
 
+// Retry a nonfinite component with the numerator combined before division.
+// Halving each finite term prevents an avoidable addition overflow, while
+// 2 / denominator is in [1, 2] and is applied only after the division. Keep
+// ordinary results unchanged, including their existing rounding behavior.
+template <class T>
+CANN_ASC_STL_API constexpr T __complex_divide_component(
+    T value, T first, T second, T ratio, T divisor, T denominator) noexcept
+{
+    if ((!::asc::std::isinf(value) && !::asc::std::isnan(value)) || ::asc::std::isinf(first) ||
+        ::asc::std::isinf(second) || ::asc::std::isnan(first) || ::asc::std::isnan(second) ||
+        ::asc::std::isnan(ratio)) {
+        return value;
+    }
+    if (ratio == T(0)) {
+        return first / divisor;
+    }
+    const T half_sum = first * T(0.5) + (second * T(0.5)) * ratio;
+    return (half_sum / divisor) * (T(2) / denominator);
+}
+
 // Smith's ratio scaling: dividing by the larger-magnitude component first
 // avoids forming c*c + d*d (which overflows for finite large operands) and
 // keeps the infinite/zero divisor special values exact.
@@ -339,13 +359,15 @@ CANN_ASC_STL_API constexpr complex<T> operator/(const complex<T>& left, const co
         const T ac = a / c;
         const T bc = b / c;
         const T den = T(1) + r * r;
-        return {(ac + bc * r) / den, (bc - ac * r) / den};
+        return {__complex_divide_component((ac + bc * r) / den, a, b, r, c, den),
+            __complex_divide_component((bc - ac * r) / den, b, -a, r, c, den)};
     }
     const T r = c / d;
     const T ad = a / d;
     const T bd = b / d;
     const T den = T(1) + r * r;
-    return {(ad * r + bd) / den, (bd * r - ad) / den};
+    return {__complex_divide_component((ad * r + bd) / den, b, a, r, d, den),
+        __complex_divide_component((bd * r - ad) / den, -a, b, r, d, den)};
 }
 
 template <class T>

@@ -68,6 +68,7 @@ constexpr complex<T>& operator/=(const T& rhs) noexcept;
 
 - 仅提供页面声明的float或`complex<float>`运算。
 - 接口可用性取决于相应的float数学能力。
+- 右操作数为复数时，`value /= rhs` 与 `value = value / rhs` 使用相同的数值计算路径；有限输入的缩放溢出恢复和频率响应示例见 [`operator/`](operator_divide.md)。右操作数为实数时，分别对实部和虚部做除法。
 
 ## 调用示例
 

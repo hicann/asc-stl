@@ -58,14 +58,13 @@ template<class T> [[nodiscard]] constexpr __unsigned_integer_result_t<T, int> co
 
 ## Return Value
 
-| Applicable prototype | Return type | Description |
-| --- | --- | --- |
-| Prototype 1 | `int` | Returns the count of the corresponding leading bits, trailing bits, or all set bits. |
-| Prototype 2 | `int` | Returns the count of the corresponding leading bits, trailing bits, or all set bits. |
+| Type | Meaning |
+| --- | --- |
+| `int` | Number of consecutive zero bits starting from the least significant bit; the number of bits in T when the input is 0. |
 
 ## Constraints
 
-- Follows the standard unsigned integer type constraints.
+- The standard unsigned integer type requirements apply. When using the result as a sparse-mask bit index, first check that the input is nonzero: the result for zero is the bit width, not a valid index.
 
 ## Example
 
@@ -74,14 +73,16 @@ The following snippet shows the call on this page with concrete values.
 ```cpp
 #include <asc/std/bit>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::std::countr_zero(3u);
-}
-
-bool verify_example()
-{
-    return example() == 0;
+    unsigned long long mask = (1ULL << 31) | (1ULL << 63);
+    unsigned positions[2] = {};
+    unsigned count = 0;
+    while (mask != 0) {
+        positions[count++] = asc::std::countr_zero(mask);
+        mask &= mask - 1;
+    }
+    return count == 2 && positions[0] == 31 && positions[1] == 63;
 }
 ```
 

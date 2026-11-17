@@ -60,17 +60,31 @@ No return value.
 
 ## Example
 
-The following Host snippet demonstrates the call with concrete numeric types; the state and parameters must satisfy the constraints on this page.
+The counter selects an output block, not one output word. `philox4x32` produces
+four 32-bit outputs per block: to locate output `i`, set block counter `i/4`
+and then call `discard(i%4)`. Counter words are supplied most significant first;
+a block index `b` in the low 64 bits is `{0,0,b>>32,b&0xffffffff}`.
+`set_counter` invalidates the current within-block position and preserves the
+seed-derived key.
+
+The following Host snippet models the random-stream position of a tiled Dropout
+operator: a later tile resumes at global sample 5 rather than restarting at 0.
+Assign an explicit global index to each element or tile in a batch.
 
 ```cpp
 #include <asc/std/random>
 
 bool example()
 {
-    asc::std::philox4x32 generator;
-    asc::std::array<asc::std::philox4x32::result_type, 4> counter{0, 0, 0, 100};
-    generator.set_counter(counter);
-    return generator() == 940657802u;
+    asc::std::philox4x32 whole(7), tile(7);
+    asc::std::uniform_real_distribution<float> uniform;
+    whole.discard(5);
+    tile.set_counter({0, 0, 0, 1});
+    tile.discard(1);
+    for (int i = 0; i < 7; ++i) {
+        if (uniform(whole) != uniform(tile)) return false;
+    }
+    return true;
 }
 ```
 

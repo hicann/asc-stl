@@ -24681,7 +24681,7 @@
       20
     ],
     "mode": "host",
-    "expression": "verify_example()"
+    "expression": "example()"
   },
   "docs/zh/api/standard/utilities/asc_std_bit/has_single_bit.md": {
     "standards": [

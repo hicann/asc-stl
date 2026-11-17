@@ -135,6 +135,7 @@ No return value.
 
 - The number of arguments must match the number of Types... and each element must be constructible from the corresponding source; the non-explicit form is used when all corresponding conversions can be done implicitly, otherwise the explicit form is used. Heterogeneous tuple conversion also excludes cases that should be handled by the single-element construction or the copy/move forms. The allocator_arg forms pass the allocator according to each element's uses_allocator rules; whether construction, copying, or user element operations allocate is determined by those operations.
 - User-provided construction, allocation, and callable operations must be valid at the selected execution location; Device instances must suit the non-throwing target environment.
+- Heterogeneous converting constructors have the same participation conditions on Host and Device. For example, when the elements can be implicitly copied, `tuple<int, int&>` converts to `tuple<int, int>`, materializing reference elements from views such as zip. Referenced objects must remain valid while read.
 
 ## Example
 
@@ -148,9 +149,14 @@ bool example()
 {
     asc::std::tuple<int, int> values(2, 3);
     asc::std::tuple<long, long> converted = values;
+    int score = 7;
+    asc::std::tuple<int, int&> row(2, score);
+    asc::std::tuple<int, int> snapshot = asc::std::move(row);
+    score = 9;
     ::std::allocator<int> allocator;
     asc::std::tuple<int, int> allocated(asc::std::allocator_arg, allocator, 4, 5);
-    return asc::std::get<0>(converted) == 2 && asc::std::get<1>(allocated) == 5;
+    return asc::std::get<0>(converted) == 2 && asc::std::get<1>(allocated) == 5 &&
+        asc::std::get<1>(snapshot) == 7;
 }
 ```
 

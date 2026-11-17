@@ -179,6 +179,11 @@ The selection parameters omitted from the summary have been turned into the publ
 
 ## Example
 
+The pair-like overload checks the tuple-like requirement before element
+assignability. Non-tuple-like sources do not participate, so
+`is_assignable_v<pair<int, int>&, int>` is false without instantiating `get` on
+the invalid source. Ordinary pair copy and move assignment remain available.
+
 The following Host snippet demonstrates the call with concrete types; input ranges and objects must remain valid during use.
 
 ```cpp

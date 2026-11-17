@@ -81,6 +81,8 @@ constexpr from_chars_result from_chars(const char* first, const char* last, unsi
 ## Constraints
 
 - Supports all standard signed/unsigned integer types and bases 2 through 36.
+- Leading whitespace and `+` are not accepted; only signed destinations accept `-`. A `0x` prefix is not skipped automatically, even when `base` is 16.
+- In a string-tensor-to-integer operator, `ec == errc{}` only means that a numeric prefix was parsed successfully. To accept an entire field, also require `ptr == last`: `"42x"` parses 42 successfully and stops at `x`. Any whitespace trimming is an explicit caller policy. On failure, do not reuse the old `value` as this row's output.
 - In AI Core SIMD programming, the buffer must be a plain char pointer in the local or generic address space.
 
 ## Example
@@ -95,7 +97,13 @@ bool example()
     const char input[] = "42";
     int value = 0;
     const auto result = asc::std::from_chars(input, input + 2, value);
-    return result.ptr == input + 2 && result.ec == asc::std::errc{} && value == 42;
+    if (result.ptr != input + 2 || result.ec != asc::std::errc{} || value != 42) {
+        return false;
+    }
+    const char partial[] = "42x";
+    const auto prefix = asc::std::from_chars(partial, partial + 3, value);
+    const bool whole_field = prefix.ec == asc::std::errc{} && prefix.ptr == partial + 3;
+    return prefix.ec == asc::std::errc{} && prefix.ptr == partial + 2 && !whole_field;
 }
 ```
 

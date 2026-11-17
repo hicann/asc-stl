@@ -44,6 +44,8 @@ template<class T> struct is_trivially_destructible;
 
 - 提供特征类和 _v辅助形式。
 
+实现优先使用`__is_trivially_destructible`；否则GCC可通过已有的`__has_trivial_destructor`结合可析构判定实现，包括缺少`__has_builtin`的GCC版本。析构函数被删除时结果仍为false。
+
 ## 调用示例
 
 以下Host片段用具体类型实参和`static_assert`验证本页类型特征的结果。

@@ -43,6 +43,7 @@ template<class CharT, class Traits = char_traits<CharT>> class basic_string_view
 ## Constraints
 
 - This type does not own the character storage. The storage of the original character array or string must cover the entire period of use of the view, pointers, and iterators; after the original storage is destroyed or invalidated by reallocation, it must not be accessed further through the view.
+- For string tensors with separate lengths, construct a view from a pointer and a count; no terminating `'\0'` is required, and an embedded null character remains part of the data. `find_first_not_of`/`find_last_not_of` with `remove_prefix`/`remove_suffix` can trim whitespace without copying. Handle an all-whitespace field, for which the search returns `npos`, before computing removal counts; never remove more than the current `size()`.
 
 - Provides construction, iteration, and access interfaces other than at, plus remove_prefix, remove_suffix, swap, data, size, starts_with, ends_with, and non-throwing compare/find interfaces.
 - AI Core SIMD programming supports only plain character pointers in the local or generic address space.

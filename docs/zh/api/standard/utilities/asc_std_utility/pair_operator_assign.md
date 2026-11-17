@@ -179,6 +179,8 @@ template<class PairLike> constexpr pair<T1, T2>& operator=(PairLike&& other);
 
 ## 调用示例
 
+pair-like重载先检查tuple-like要求，再检查元素可赋值性。非tuple-like来源不参与该重载，因此`is_assignable_v<pair<int, int>&, int>`为false，不会对无效来源实例化`get`。普通pair的复制和移动赋值仍可使用。
+
 以下Host片段使用具体类型演示调用；输入范围和对象须在使用期间有效。
 
 ```cpp

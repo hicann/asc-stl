@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/mdspan>`。
 
-`asc::std::strided_slice`表示多维切片、维度范围或布局适配方式。
+`asc::std::strided_slice`用于`submdspan`，描述源张量某一维上等间隔采样的区间。其成员为`offset`（首个源索引）、`extent`（覆盖的源区间长度）和`stride`（采样步长）。
 
 标准语义参考：[cppreference `mdspan`](https://en.cppreference.com/w/cpp/header/mdspan)。
 
@@ -42,23 +42,32 @@ template<class OffsetType, class ExtentType, class StrideType> struct strided_sl
 
 ## 约束说明
 
-- 全部有效整数降rank/full/pair-like/strided slice组合，零与任意rank、静态/动态/混合/空extent、layout_left/layout_right/layout_stride源及标准布局保持或layout_stride回退。
+- 成员类型为有符号／无符号整数类型或支持的integral-constant-like类型；整数值及生成的映射须能由源索引类型表示。
+- 使用`0 <= offset <= source.extent(d)`、`0 <= extent <= source.extent(d) - offset`及正的`stride`；被选中的源索引为`offset + j * stride`，其中`0 <= j < count`。
+- `extent`是覆盖的源区间长度，不是选出的元素个数。结果维度为`count = extent == 0 ? 0 : 1 + (extent - 1) / stride`。例如`{1, 5, 2}`选择索引1、3、5，共三个元素；对长度为6的一维源，`{6, 0, 2}`得到空切片。
+- 切片保留该维，与源映射共同决定结果跨步；非空切片的步长大于1时可能得到不连续的子视图。视图不复制或拥有元素。
 - Host、AI Core SIMD编程 和AI Core SIMT编程兼容plain pointer域。
 
 ## 调用示例
 
-以下Host示例展示具体输入、接口调用和可检查的结果。
+以下Host示例每隔一个元素采样一次，并检查结果维度和元素值。
 
 ```cpp
 #include <asc/std/mdspan>
 
 bool example()
 {
-    asc::std::strided_slice<int, int, int> slice{1, 5, 2};
-    return slice.offset == 1 && slice.extent == 5 && slice.stride == 2;
+    int values[6] = {10, 11, 12, 13, 14, 15};
+    asc::std::mdspan<int, asc::std::extents<int, 6>> source(values);
+    auto sampled = asc::std::submdspan(source, asc::std::strided_slice<int, int, int>{1, 5, 2});
+    auto empty = asc::std::submdspan(source, asc::std::strided_slice<int, int, int>{6, 0, 2});
+    return sampled.extent(0) == 3 && sampled(0) == 11 && sampled(1) == 13 &&
+        sampled(2) == 15 && sampled.stride(0) == 2 && empty.empty();
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_std_mdspan.md)
+- [submdspan](submdspan.md)：构造借用式子视图。
+- [submdspan_mapping](submdspan_mapping.md)：将切片与源布局组合。
+- [带padding的裁剪与转置示例](../../../../../../examples/standard/mdspan_matrix/README.md)。

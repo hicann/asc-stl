@@ -259,6 +259,8 @@ template<class... Args1, class... Args2> constexpr pair(piecewise_construct_t, t
 
 ## 调用示例
 
+pair-like重载先判断来源是否为tuple-like，再检查元素类型。`int`等非tuple-like来源不参与该重载；`is_constructible_v<pair<int, int>, int>`为false，不会产生元素访问错误。复制pair或将pair引用保存在tuple中仍选择对应的普通构造函数，张量切片辅助逻辑依赖这一行为。
+
 以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp

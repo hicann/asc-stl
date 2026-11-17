@@ -29,6 +29,7 @@
 
 #include <asc/std/__exception/terminate.h>
 #include <asc/std/__atomic/memory_order.h>
+#include <asc/std/__type_traits/is_same.h>
 
 #if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
 #include <simt_api/device_atomic_functions.h>
@@ -49,8 +50,8 @@ namespace detail {
 // A software path for local-memory atomics is a CANN backend follow-up.
 
 template <class T>
-inline constexpr bool is_scoped_atomic_integer_v = __is_same(T, __INT32_TYPE__) || __is_same(T, __UINT32_TYPE__) ||
-    __is_same(T, __INT64_TYPE__) || __is_same(T, __UINT64_TYPE__);
+inline constexpr bool is_scoped_atomic_integer_v = std::is_same_v<T, __INT32_TYPE__> ||
+    std::is_same_v<T, __UINT32_TYPE__> || std::is_same_v<T, __INT64_TYPE__> || std::is_same_v<T, __UINT64_TYPE__>;
 
 CANN_ASC_STL_API constexpr std::memory_order atomic_failure_order(std::memory_order order) noexcept
 {

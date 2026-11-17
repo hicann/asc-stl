@@ -117,25 +117,37 @@ template<class T> constexpr complex<T> operator/(const complex<T>& lhs, const co
 
 - Only the float or `complex<float>` operations declared on this page are provided.
 - Interface availability depends on the corresponding float math capability.
+- Complex division uses ratio scaling. For finite inputs, an overflowing intermediate component is retried with a scaled numerator; for example, `(max + max*i) / (1 + i)` returns `(max, 0)`, where `max` is the largest finite float. This remains float arithmetic: rounding, underflow, and a mathematically unrepresentable result are still possible.
+- In frequency-response estimation, exclude or separately handle excitation bins equal to zero before calling this interface.
+- On the validated CANN 9.2.0-beta.2 / Ascend 950 SIMT configuration, `(1 + i) / (max + max*i)` returns zero instead of the subnormal real result approximately `2.93873588e-39`. A direct `1.0f / max` probe also returns zero, while `min_normal * 0.5f`, subnormal bit construction, and load/store preserve their subnormal values. This is an observed limitation of that division path, not a statement that all device arithmetic flushes subnormals. The complex division implementation does not currently recover this result; validate underflow boundaries on the actual toolchain and device.
 
 ## Example
 
-The following Host snippet demonstrates the interface call with concrete objects.
+The following Host example estimates a batch of frequency-response bins. The second bin exercises large, finite spectrum values without manually splitting complex arithmetic into real and imaginary expressions.
 
 ```cpp
 #include <asc/std/complex>
+#include <asc/std/limits>
 
-decltype(auto) example()
+using Complex = asc::std::complex<float>;
+
+// Frequency response H[k] = Y[k] / X[k]; each excitation bin is nonzero.
+void example(const Complex* measured, const Complex* excitation, Complex* response, int bins)
 {
-    asc::std::complex<float> left{1.0f, 2.0f};
-    asc::std::complex<float> right{2.0f, 1.0f};
-    return asc::std::operator/(left, right);
+    for (int k = 0; k < bins; ++k) {
+        response[k] = measured[k] / excitation[k];
+    }
 }
 
 bool verify_example()
 {
-    const auto result = example();
-    return result.real() == 0.8f && result.imag() == 0.6f;
+    const float large = asc::std::numeric_limits<float>::max();
+    const Complex measured[] = {{1.0f, 2.0f}, {large, large}};
+    const Complex excitation[] = {{2.0f, 1.0f}, {1.0f, 1.0f}};
+    Complex response[2];
+    example(measured, excitation, response, 2);
+    return response[0].real() == 0.8f && response[0].imag() == 0.6f &&
+        response[1].real() == large && response[1].imag() == 0.0f;
 }
 ```
 

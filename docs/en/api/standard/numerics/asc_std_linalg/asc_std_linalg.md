@@ -1,6 +1,8 @@
 # Header asc/std/linalg
 
-Provides linear algebra algorithms for vector and matrix views.
+Provides non-owning vector and matrix view transformations: scaling, conjugation, transposition, and conjugate transposition. The delivered subset does not include matrix multiplication, matrix-vector multiplication, inner-product, or norm-reduction algorithms; callers implement those computations.
+
+Composed views apply transformations when elements are read, without allocating or filling a transformed temporary matrix. For example, the [conjugate-transpose covariance example](linalg_conjugate_transposed.md) uses `scaled(1/N, conjugate_transposed(A))` to express `Aᴴ/N`, then computes `AᴴA/N` with explicit reduction loops. Views borrow the original storage and must be used while that storage remains valid. Execution-space support for a composed call also depends on its element type, accessor, and any mathematical functions it calls.
 
 ## Usage
 

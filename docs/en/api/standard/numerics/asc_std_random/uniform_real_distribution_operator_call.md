@@ -77,6 +77,17 @@ Prototype 1 uses the parameters currently saved in the object.
 
 ## Example
 
+If floating-point rounding makes the affine result equal to the upper endpoint,
+the implementation returns its representable predecessor, bounded below by the
+lower endpoint. This correction uses ASC-STL `bit_cast`: Host compilers without
+`__builtin_bit_cast` retain the runtime fallback, but calls requiring the
+correction cannot be constant-evaluated in that configuration.
+
+With `philox4x32` and the default `[0,1)` distribution, each sample consumes one
+32-bit engine output. Tensor partitions must retain the seed and global output
+offset rather than restart from the same seed for each tile. Check consumption
+separately when using another engine or distribution.
+
 The following Host snippet demonstrates the call with concrete types; pointers, ranges, and indices must satisfy the constraints on this page.
 
 ```cpp

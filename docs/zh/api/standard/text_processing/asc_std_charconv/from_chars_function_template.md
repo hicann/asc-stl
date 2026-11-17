@@ -81,6 +81,8 @@ constexpr from_chars_result from_chars(const char* first, const char* last, unsi
 ## 约束说明
 
 - 支持所有标准有符号/无符号整数类型以及2至36进制。
+- 不跳过前导空白，不接受前导`+`；仅有符号目标接受`-`。即使`base`为16，也不会自动跳过`0x`前缀。
+- 字符串张量转整数时，`ec == errc{}`只表示成功解析了数值前缀。若业务要求整个字段都是整数，还须检查`ptr == last`；例如`"42x"`会成功解析42，但停止于`x`。空白裁剪应由调用方明确完成，失败时不可使用旧的`value`作为本行输出。
 - AI Core SIMD编程 缓冲区必须是local或generic地址空间的普通char指针。
 
 ## 调用示例
@@ -95,7 +97,13 @@ bool example()
     const char input[] = "42";
     int value = 0;
     const auto result = asc::std::from_chars(input, input + 2, value);
-    return result.ptr == input + 2 && result.ec == asc::std::errc{} && value == 42;
+    if (result.ptr != input + 2 || result.ec != asc::std::errc{} || value != 42) {
+        return false;
+    }
+    const char partial[] = "42x";
+    const auto prefix = asc::std::from_chars(partial, partial + 3, value);
+    const bool whole_field = prefix.ec == asc::std::errc{} && prefix.ptr == partial + 3;
+    return prefix.ec == asc::std::errc{} && prefix.ptr == partial + 2 && !whole_field;
 }
 ```
 

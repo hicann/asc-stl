@@ -81,6 +81,8 @@ constexpr to_chars_result to_chars(char* first, char* last, unsigned char value,
 ## 约束说明
 
 - 支持所有标准有符号/无符号整数类型以及2至36进制。
+- 在整数张量规范化为十进制字符串的场景中，成功输出范围为`[first, result.ptr)`，其长度不含终止空字符。负数还需要为符号预留一个字符；若后续接口要求C字符串，须另外预留并写入`'\0'`。
+- 容量不足时`ec`为`value_too_large`、`ptr`为`last`，范围内的字符内容未指定，不能把部分写出的字符作为有效结果；有效缓冲区之外不得写入。调用方应先检查错误码，再发布输出长度及内容。
 - AI Core SIMD编程 缓冲区必须是local或generic地址空间的普通char指针。
 
 ## 调用示例

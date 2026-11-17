@@ -28,6 +28,7 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__bit/bit_cast.h>
 #include <asc/std/__limits/numeric_limits.h>
 #include <asc/std/__random/generate_canonical.h>
 #include <asc/std/__random/is_valid.h>
@@ -104,10 +105,10 @@ public:
         const result_type result = (parameters.b() - parameters.a()) * canonical + parameters.a();
         if (result < parameters.b())
             return result;
-        const __UINT32_TYPE__ bits = __builtin_bit_cast(__UINT32_TYPE__, parameters.b());
+        const __UINT32_TYPE__ bits = ::asc::std::bit_cast<__UINT32_TYPE__>(parameters.b());
         const __UINT32_TYPE__ previous_bits =
             bits == 0U ? 0x80000001U : (parameters.b() > 0.0F ? bits - 1U : bits + 1U);
-        const result_type previous = __builtin_bit_cast(result_type, previous_bits);
+        const result_type previous = ::asc::std::bit_cast<result_type>(previous_bits);
         return previous < parameters.a() ? parameters.a() : previous;
     }
 

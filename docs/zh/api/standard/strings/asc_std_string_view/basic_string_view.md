@@ -43,6 +43,7 @@ template<class CharT, class Traits = char_traits<CharT>> class basic_string_view
 ## 约束说明
 
 - 本类型不拥有字符存储。原字符数组或字符串的存储须覆盖视图、指针和迭代器的全部使用期间；原存储销毁或因重分配失效后，不能继续通过视图访问。
+- 对长度单独存储的字符串张量，应使用指针加长度构造，不要求输入以`'\0'`结束；范围内的嵌入空字符仍是数据。`find_first_not_of`/`find_last_not_of`与`remove_prefix`/`remove_suffix`可用于无复制地裁剪空白。须先处理查找返回`npos`的全空白情况，且移除数量不得超过当前`size()`。
 
 - 提供构造、迭代和除at外的访问接口，以及remove_prefix、remove_suffix、swap、data、size、starts_with、ends_with和非抛出的比较/查找接口。
 - AI Core SIMD编程 仅支持local或generic地址空间的普通字符指针。

@@ -3496,7 +3496,8 @@
       "dependencies": [
         "asc/__config",
         "asc/std/__atomic/memory_order.h",
-        "asc/std/__exception/terminate.h"
+        "asc/std/__exception/terminate.h",
+        "asc/std/__type_traits/is_same.h"
       ],
       "semantic_case": "asc/atomic",
       "applicability": {
@@ -6276,7 +6277,10 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/std/__cstring/memcpy.h"
+      "runtime_case": "asc/std/__cstring/memcpy.h",
+      "additional_cases": [
+        "fallback.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/__floating_point/common_type.h",
@@ -6820,6 +6824,7 @@
         "asc/std/__fwd/reference_wrapper.h",
         "asc/std/__memory/addressof.h",
         "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_same.h",
         "asc/std/__type_traits/remove_cvref.h",
         "asc/std/__utility/declval.h",
         "asc/std/__utility/forward.h"
@@ -12918,6 +12923,7 @@
         "asc/std/__type_traits/is_nothrow_assignable.h",
         "asc/std/__type_traits/is_nothrow_constructible.h",
         "asc/std/__type_traits/is_nothrow_move_constructible.h",
+        "asc/std/__type_traits/is_same.h",
         "asc/std/__type_traits/is_swappable.h",
         "asc/std/__variant/variant_match.h"
       ],
@@ -14050,7 +14056,8 @@
       "target": "asc/std/__container_adaptor/queue.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__utility/declval.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14067,7 +14074,8 @@
       "target": "asc/std/__container_adaptor/stack.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__utility/declval.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -18475,6 +18483,7 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__bit/bit_cast.h",
         "asc/std/__limits/numeric_limits.h",
         "asc/std/__random/generate_canonical.h",
         "asc/std/__random/is_valid.h"
@@ -18488,7 +18497,10 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/std/linalg"
+      "runtime_case": "asc/std/linalg",
+      "additional_cases": [
+        "fallback.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/__random/philox_engine.h",

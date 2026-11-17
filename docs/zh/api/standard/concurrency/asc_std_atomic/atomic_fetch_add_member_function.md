@@ -65,6 +65,8 @@ T fetch_add(T value, memory_order order = memory_order_seq_cst) noexcept;
 
 ## 调用示例
 
+并行分桶scatter可在工作线程启动前将每个桶的计数器初始化为0。每个有效元素通过`slot = counters[bucket].fetch_add(1, memory_order_relaxed)`预留唯一位置，再将自身索引写入该桶预分配的输出窗口。须保证容量足够且计数器不溢出。返回的位置不构成对随后payload写入的发布：应在线程join或kernel/stream完成后消费输出，或另建正确的发布同步协议。桶内到达顺序不确定，独立校验应比较每桶计数及元素多重集，而不要求保持输入顺序。
+
 以下Host片段演示原子操作；设备端对象须放在本页规定的有效内存空间。
 
 ```cpp

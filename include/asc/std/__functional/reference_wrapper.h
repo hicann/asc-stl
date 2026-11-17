@@ -33,6 +33,7 @@
 #include <asc/std/__fwd/reference_wrapper.h>
 #include <asc/std/__memory/addressof.h>
 #include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/remove_cvref.h>
 #include <asc/std/__utility/declval.h>
 #include <asc/std/__utility/forward.h>
@@ -44,7 +45,7 @@ class reference_wrapper : public __weak_result_type<T> {
 public:
     using type = T;
 
-    template <class U, class = enable_if_t<!__is_same(remove_cvref_t<U>, reference_wrapper)>>
+    template <class U, class = enable_if_t<!is_same_v<remove_cvref_t<U>, reference_wrapper>>>
     CANN_ASC_STL_API constexpr reference_wrapper(U&& value) noexcept(
         noexcept(reference_wrapper::__accept(::asc::std::forward<U>(value))))
         : pointer_(::asc::std::addressof(__accept(::asc::std::forward<U>(value))))

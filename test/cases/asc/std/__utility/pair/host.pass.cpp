@@ -15,8 +15,19 @@
  */
 
 #include <asc/std/utility>
+#include <asc/std/type_traits>
 #include "support/b010_semantics.h"
 #include "support/pair_piecewise_regression.h"
+
+struct NonTupleSource {};
+using IntPair = asc::std::pair<int, int>;
+static_assert(!asc::std::is_constructible_v<IntPair, int>);
+static_assert(!asc::std::is_constructible_v<IntPair, NonTupleSource>);
+static_assert(!asc::std::is_assignable_v<IntPair&, int>);
+static_assert(!asc::std::is_assignable_v<IntPair&, NonTupleSource>);
+static_assert(asc::std::is_constructible_v<IntPair, const IntPair&>);
+static_assert(asc::std::is_constructible_v<IntPair, asc::std::tuple<int, int>>);
+static_assert(asc::std::is_assignable_v<IntPair&, asc::std::tuple<int, int>>);
 
 int main()
 {

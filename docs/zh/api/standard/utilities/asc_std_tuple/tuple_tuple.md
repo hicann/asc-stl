@@ -135,6 +135,7 @@ constexpr tuple(allocator_arg_t, const Alloc& alloc, const tuple<UTypes...>& oth
 
 - 参数个数须与Types...个数一致且各元素可从对应来源构造；全部对应转换可隐式进行时采用不带explicit的形式，否则采用explicit形式。异类型tuple转换还排除应由单元素构造或复制/移动形态处理的情况。allocator_arg形式按各元素的uses_allocator规则传递分配器，构造、复制或用户元素操作是否分配由这些操作决定。
 - 用户提供的构造、分配及可调用操作须在所选执行位置有效；Device实例须适用于目标的非抛出环境。
+- 异类型转换构造的参与条件在Host与Device一致。例如，元素可隐式复制时，`tuple<int, int&>`可转换为`tuple<int, int>`，将zip等视图产生的引用项物化为值；所引用对象须在读取期间有效。
 
 ## 调用示例
 
@@ -148,9 +149,14 @@ bool example()
 {
     asc::std::tuple<int, int> values(2, 3);
     asc::std::tuple<long, long> converted = values;
+    int score = 7;
+    asc::std::tuple<int, int&> row(2, score);
+    asc::std::tuple<int, int> snapshot = asc::std::move(row);
+    score = 9;
     ::std::allocator<int> allocator;
     asc::std::tuple<int, int> allocated(asc::std::allocator_arg, allocator, 4, 5);
-    return asc::std::get<0>(converted) == 2 && asc::std::get<1>(allocated) == 5;
+    return asc::std::get<0>(converted) == 2 && asc::std::get<1>(allocated) == 5 &&
+        asc::std::get<1>(snapshot) == 7;
 }
 ```
 

@@ -259,6 +259,12 @@ No return value.
 
 ## Example
 
+The pair-like overload first checks that the source is tuple-like before
+examining its elements. Non-tuple-like sources such as `int` do not participate;
+`is_constructible_v<pair<int, int>, int>` is false without an element-access error.
+Copying a pair or storing a pair reference in a tuple still uses the appropriate
+ordinary constructors, as required by tensor slicing helpers.
+
 The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp

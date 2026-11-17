@@ -71,21 +71,36 @@ template<class ElementType, class Extents, class Layout, class Accessor> constex
 
 ## Example
 
-The following Host example provides concrete inputs and checks the results while the object and the underlying storage are still valid.
+The following Host example computes the complex covariance `R = AᴴA / 2` for two sensors and two sampling instants. Composing `scaled` and `conjugate_transposed` removes an explicitly materialized conjugate-transpose matrix; the caller still supplies the matrix-product reduction loops. The inputs are not centered, so this is covariance for zero-mean signals (the second moment for general signals).
 
 ```cpp
 #include <asc/std/linalg>
 
 bool example()
 {
-    int values[6] = {1, 2, 3, 4, 5, 6};
-    using E = asc::std::extents<int, 2, 3>;
-    asc::std::mdspan<int, E> view(values);
-    const auto result = asc::std::linalg::conjugate_transposed(view);
-    return result.extent(0) == 3 && result.extent(1) == 2 &&
-        result.accessor().access(result.data_handle(), result.mapping()(2, 1)) == 6;
+    using Complex = asc::std::complex<float>;
+    Complex values[4] = {{1.0f, 1.0f}, {2.0f, 0.0f}, {0.0f, 0.0f}, {1.0f, -1.0f}};
+    using E = asc::std::extents<int, 2, 2>;
+    asc::std::mdspan<Complex, E> samples(values);
+    // The normalized adjoint borrows values, which must remain alive during the reduction.
+    const auto adjoint = asc::std::linalg::scaled(
+        0.5f, asc::std::linalg::conjugate_transposed(samples));
+    Complex covariance[4]{};
+    for (int j = 0; j < 2; ++j) {
+        for (int k = 0; k < 2; ++k) {
+            for (int r = 0; r < 2; ++r) {
+                covariance[j * 2 + k] += adjoint(j, r) * samples(r, k);
+            }
+        }
+    }
+    return covariance[0] == Complex(1.0f, 0.0f) &&
+        covariance[1] == Complex(1.0f, -1.0f) &&
+        covariance[2] == Complex(1.0f, 1.0f) &&
+        covariance[3] == Complex(3.0f, 0.0f) && values[0] == Complex(1.0f, 1.0f);
 }
 ```
+
+This example uses `complex<float>` and read-only view access. The returned view neither copies the input nor modifies its elements; changing the input affects subsequent reads. This Host example does not establish Device support for arbitrary complex types or accessors.
 
 ## Related APIs
 

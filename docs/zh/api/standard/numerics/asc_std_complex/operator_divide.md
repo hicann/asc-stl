@@ -117,25 +117,37 @@ template<class T> constexpr complex<T> operator/(const complex<T>& lhs, const co
 
 - 仅提供页面声明的float或`complex<float>`运算。
 - 接口可用性取决于相应的float数学能力。
+- 复数除法采用比值缩放。对于有限输入，若中间分量发生溢出，会使用缩放后的分子重新求值；例如，`(max + max*i) / (1 + i)` 返回 `(max, 0)`，其中 `max` 是最大有限float值。计算仍使用float精度，仍可能发生舍入、下溢或数学结果超出表示范围。
+- 估计频率响应时，应在调用本接口前剔除或单独处理激励值为零的频点。
+- 在已验证的 CANN 9.2.0-beta.2 / Ascend 950 SIMT 配置中，`(1 + i) / (max + max*i)` 返回零，而数学结果的实部约为次正规值 `2.93873588e-39`。直接执行 `1.0f / max` 也返回零，但 `min_normal * 0.5f`、按位构造和读写均保留相应的次正规值。这是该配置除法路径的实测限制，不能据此推断所有设备算术都会将次正规值清零。本复数除法实现尚未恢复该结果；下溢边界应在实际工具链和设备上验证。
 
 ## 调用示例
 
-以下Host片段使用具体对象展示接口调用。
+以下Host示例批量估计频率响应。第二个频点覆盖大幅值的有限频谱数据，使用复数除法表达计算，无须手工展开实部与虚部公式。
 
 ```cpp
 #include <asc/std/complex>
+#include <asc/std/limits>
 
-decltype(auto) example()
+using Complex = asc::std::complex<float>;
+
+// Frequency response H[k] = Y[k] / X[k]; each excitation bin is nonzero.
+void example(const Complex* measured, const Complex* excitation, Complex* response, int bins)
 {
-    asc::std::complex<float> left{1.0f, 2.0f};
-    asc::std::complex<float> right{2.0f, 1.0f};
-    return asc::std::operator/(left, right);
+    for (int k = 0; k < bins; ++k) {
+        response[k] = measured[k] / excitation[k];
+    }
 }
 
 bool verify_example()
 {
-    const auto result = example();
-    return result.real() == 0.8f && result.imag() == 0.6f;
+    const float large = asc::std::numeric_limits<float>::max();
+    const Complex measured[] = {{1.0f, 2.0f}, {large, large}};
+    const Complex excitation[] = {{2.0f, 1.0f}, {1.0f, 1.0f}};
+    Complex response[2];
+    example(measured, excitation, response, 2);
+    return response[0].real() == 0.8f && response[0].imag() == 0.6f &&
+        response[1].real() == large && response[1].imag() == 0.0f;
 }
 ```
 

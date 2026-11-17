@@ -50,7 +50,7 @@ struct __variant_find_exact<T> : integral_constant<__SIZE_TYPE__, static_cast<__
 template <class T, class Head, class... Tail>
 struct __variant_find_exact<T, Head, Tail...>
     : integral_constant<__SIZE_TYPE__,
-          __is_same(T, Head) ? 0 :
+          is_same_v<T, Head> ? 0 :
                                (__variant_find_exact<T, Tail...>::value == static_cast<__SIZE_TYPE__>(-1) ?
                                        static_cast<__SIZE_TYPE__>(-1) :
                                        1 + __variant_find_exact<T, Tail...>::value)> {};
@@ -106,7 +106,7 @@ struct __variant_overload {
 template <class T, __SIZE_TYPE__>
 struct __variant_overload_bool {
     template <class Source, class Arg = remove_cvref_t<Source>>
-    CANN_ASC_STL_API auto operator()(bool, Source&&) const -> enable_if_t<__is_same(Arg, bool), type_identity<T>>;
+    CANN_ASC_STL_API auto operator()(bool, Source&&) const -> enable_if_t<is_same_v<Arg, bool>, type_identity<T>>;
 };
 
 template <__SIZE_TYPE__ Index>

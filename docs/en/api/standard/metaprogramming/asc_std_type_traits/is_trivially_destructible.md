@@ -43,6 +43,7 @@ template<class T> struct is_trivially_destructible;
 ## Constraints
 
 - Provides the trait class and the _v helper form.
+- Uses `__is_trivially_destructible` when available; otherwise GCC can use its legacy `__has_trivial_destructor` together with the destructibility check, including GCC versions without `__has_builtin`. A deleted destructor still makes the result false.
 
 ## Example
 

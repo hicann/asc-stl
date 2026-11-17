@@ -57,20 +57,26 @@ constexpr void set_counter(const asc::std::array<UIntType, WordCount>& counter) 
 
 - 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
 - 不提供SeedSequence、流式输入输出或共享全局状态。
+- 计数器定位的是输出块，而不是单个输出字。`philox4x32`每块产生4个32位输出；定位第`i`个输出时先设置块计数器`i/4`，再`discard(i%4)`。计数器数组按高位字在前传入，低64位块编号`b`对应`{0,0,b>>32,b&0xffffffff}`。`set_counter`丢弃已有块内缓存位置并保留种子产生的key。
 
 ## 调用示例
 
-以下Host片段使用具体数值类型演示调用；状态与参数须满足本页约束。
+以下Host片段模拟Dropout算子分块时的随机流定位：后续分块从全局第5个随机样本开始，而不是重新从第0个开始。真实批量用法需让每个元素或分块具有明确的全局索引。
 
 ```cpp
 #include <asc/std/random>
 
 bool example()
 {
-    asc::std::philox4x32 generator;
-    asc::std::array<asc::std::philox4x32::result_type, 4> counter{0, 0, 0, 100};
-    generator.set_counter(counter);
-    return generator() == 940657802u;
+    asc::std::philox4x32 whole(7), tile(7);
+    asc::std::uniform_real_distribution<float> uniform;
+    whole.discard(5);
+    tile.set_counter({0, 0, 0, 1});
+    tile.discard(1);
+    for (int i = 0; i < 7; ++i) {
+        if (uniform(whole) != uniform(tile)) return false;
+    }
+    return true;
 }
 ```
 

@@ -58,27 +58,33 @@ Returns a view that traverses the two input ranges in lockstep, with the length 
 
 ## Constraints
 
-- Seven names are listed.
-- Bounded repeat, two-way random-access+sized zip reference write-back, single range|closure.
-- Host, AI Core SIMD programming, and AI Core SIMT programming.
-- This release supports only two ranges with random-access capability and determinable size.
-- References of the resulting view must not outlive either input range.
+- This release supports exactly two random-access, sized ranges on Host and in device SIMD and SIMT programming.
+- Traversal capability follows the modern `iterator_concept`. A value-returning `transform_view` can retain random-access traversal and participate in zip even when its legacy `iterator_category` is an input-iterator tag.
+- Each tuple element preserves the corresponding underlying dereference type: references permit write-back to writable elements, while value-returning transformations produce stored values. Borrowed storage must remain valid throughout access.
+- Iterators support default construction and composition with constrained `ranges` algorithms. The caller still provides output storage; zip does not allocate an output buffer.
+- Const iteration requires both sides to be const-iterable with iterator types identical to their non-const forms.
 
 ## Example
 
-The following Host example provides concrete inputs and checks the result of the call.
+This Host example calibrates candidate scores: lazily scale each score, pair it with its correction, and write calibrated scores for subsequent threshold filtering. Unequal lengths stop at the shorter input, without reading absent corrections or overwriting the output tail.
 
 ```cpp
 #include <asc/std/ranges>
-#include <asc/std/array>
-#include <asc/std/iterator>
+#include <asc/std/algorithm>
 #include <asc/std/tuple>
 
 bool example()
 {
-    int values[] = {1, 2, 3, 4};
-    auto view = asc::std::ranges::views::zip(values, values);
-    return asc::std::get<0>(*view.begin()) == 1;
+    int scores[] = {1, 6, -4, 3, 8};
+    int correction[] = {0, -2, 7, 0};
+    int calibrated[5] = {-99, -99, -99, -99, -99};
+    auto scaled = scores | asc::std::ranges::views::transform([](int value) { return value * 2; });
+    auto paired = asc::std::ranges::views::zip(scaled, correction);
+    auto result = asc::std::ranges::transform(paired, calibrated, [](auto values) {
+        return asc::std::get<0>(values) + asc::std::get<1>(values);
+    });
+    return result.out == calibrated + 4 && calibrated[0] == 2 && calibrated[1] == 10 &&
+        calibrated[2] == -1 && calibrated[3] == 6 && calibrated[4] == -99;
 }
 ```
 

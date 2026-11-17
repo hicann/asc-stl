@@ -38,12 +38,14 @@ Member of: [`asc::std::ranges::zip_view`](ranges_zip_view.md). The following are
 
 ```cpp
 constexpr asc::std::size_t size()
-    noexcept(noexcept(asc::std::ranges::size(first_)) && noexcept(asc::std::ranges::size(second_)));
+    noexcept(noexcept(asc::std::ranges::size(asc::std::declval<FirstView&>())) &&
+        noexcept(asc::std::ranges::size(asc::std::declval<SecondView&>())));
 ```
 
 ```cpp
 constexpr asc::std::size_t size() const
-    noexcept(noexcept(asc::std::ranges::size(first_)) && noexcept(asc::std::ranges::size(second_)));
+    noexcept(noexcept(asc::std::ranges::size(asc::std::declval<const FirstView&>())) &&
+        noexcept(asc::std::ranges::size(asc::std::declval<const SecondView&>())));
 ```
 
 ## Parameters

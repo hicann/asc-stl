@@ -63,6 +63,15 @@ struct __iterator_category_of<Iter, void_t<typename iterator_traits<Iter>::itera
 template <class Iter>
 using __iterator_category_of_t = typename __iterator_category_of<Iter>::type;
 
+// A transform view returning values retains random-access traversal even
+// though its legacy iterator_category is input_iterator_tag.
+template <class Iter, class = void>
+struct __iterator_concept_of : __iterator_category_of<Iter> {};
+template <class Iter>
+struct __iterator_concept_of<Iter, void_t<_ITER_CONCEPT<Iter>>> {
+    using type = _ITER_CONCEPT<Iter>;
+};
+
 // The weaker of two tag types: Left converts to Right exactly when Left is the
 // more derived (stronger) tag, so the weaker one is Right in that case.
 template <class Left, class Right>
@@ -75,6 +84,11 @@ template <class First, class Second>
 using __zip_category =
     __weaker_category<__weaker_category<__iterator_category_of_t<First>, __iterator_category_of_t<Second>>,
         random_access_iterator_tag>;
+
+template <class First, class Second>
+using __zip_concept = __weaker_category<
+    __weaker_category<typename __iterator_concept_of<First>::type, typename __iterator_concept_of<Second>::type>,
+    random_access_iterator_tag>;
 
 // Sized-range probe backing the registered contract checks in the members.
 template <class View, class = void>
@@ -102,8 +116,9 @@ class zip_view : public view_interface<zip_view<FirstView, SecondView>> {
         using value_type = ::asc::std::tuple<remove_cvref_t<decltype(*::asc::std::declval<const first_iterator&>())>,
             remove_cvref_t<decltype(*::asc::std::declval<const second_iterator&>())>>;
         using pointer = void;
-        using iterator_concept = __zip_detail::__zip_category<first_iterator, second_iterator>;
-        using iterator_category = iterator_concept;
+        using iterator_concept = __zip_detail::__zip_concept<first_iterator, second_iterator>;
+        using iterator_category = __zip_detail::__zip_category<first_iterator, second_iterator>;
+        CANN_ASC_STL_API constexpr iterator() = default;
         CANN_ASC_STL_API constexpr iterator(first_iterator first, second_iterator second)
             : first_(first), second_(second)
         {}
@@ -202,8 +217,8 @@ class zip_view : public view_interface<zip_view<FirstView, SecondView>> {
         }
 
     private:
-        first_iterator first_;
-        second_iterator second_;
+        first_iterator first_{};
+        second_iterator second_{};
     };
 
 public:
@@ -213,7 +228,7 @@ public:
     {}
     CANN_ASC_STL_API constexpr iterator begin()
     {
-        static_assert(is_convertible<__zip_detail::__zip_category<first_iterator, second_iterator>,
+        static_assert(is_convertible<__zip_detail::__zip_concept<first_iterator, second_iterator>,
                           random_access_iterator_tag>::value,
             "asc::std::ranges::zip_view requires random-access underlying iterators "
             "(registered contract: two-way random-access zip)");
@@ -221,7 +236,7 @@ public:
     }
     CANN_ASC_STL_API constexpr iterator begin() const
     {
-        static_assert(is_convertible<__zip_detail::__zip_category<first_iterator, second_iterator>,
+        static_assert(is_convertible<__zip_detail::__zip_concept<first_iterator, second_iterator>,
                           random_access_iterator_tag>::value,
             "asc::std::ranges::zip_view requires random-access underlying iterators "
             "(registered contract: two-way random-access zip)");
@@ -247,14 +262,16 @@ public:
         return begin() + static_cast<__PTRDIFF_TYPE__>(size());
     }
     CANN_ASC_STL_API constexpr __SIZE_TYPE__ size() noexcept(
-        noexcept(ranges::size(first_)) && noexcept(ranges::size(second_)))
+        noexcept(ranges::size(::asc::std::declval<FirstView&>())) &&
+        noexcept(ranges::size(::asc::std::declval<SecondView&>())))
     {
         const auto left = ranges::size(first_);
         const auto right = ranges::size(second_);
         return left < right ? left : right;
     }
     CANN_ASC_STL_API constexpr __SIZE_TYPE__ size() const
-        noexcept(noexcept(ranges::size(first_)) && noexcept(ranges::size(second_)))
+        noexcept(noexcept(ranges::size(::asc::std::declval<const FirstView&>())) &&
+            noexcept(ranges::size(::asc::std::declval<const SecondView&>())))
     {
         const auto left = ranges::size(first_);
         const auto right = ranges::size(second_);

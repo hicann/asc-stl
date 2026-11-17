@@ -148,7 +148,7 @@ private:
     // the whole source tuple; a source of the same tuple type always loses to
     // the copy/move constructors.
     template <class SourceTuple>
-    static constexpr bool __tuple_use_other_ctor()
+    CANN_ASC_STL_API static constexpr bool __tuple_use_other_ctor()
     {
         if constexpr (sizeof...(Types) != 1) {
             return false;

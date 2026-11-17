@@ -37,13 +37,13 @@ Standard semantics reference: [cppreference `bitset`](https://en.cppreference.co
 ### Prototype 1
 
 ```cpp
-bitset() noexcept;
+constexpr bitset() noexcept;
 ```
 
 ### Prototype 2
 
 ```cpp
-bitset(unsigned long long value) noexcept;
+constexpr bitset(unsigned long long value) noexcept;
 ```
 
 
@@ -69,6 +69,8 @@ No return value.
 
 - The number of bits `Size` of the owning bitset is fixed at compile time; the operation performs no dynamic allocation. Default construction sets all bits to 0; integer construction reads the low bits of the input and clears the bits beyond `Size`.
 
+- For an empty bitmap with Size equal to 0, integer construction discards every input bit: count() is 0, both none() and all() are true, and to_ulong()/to_ullong() return 0. Empty tiles can therefore use the same packed-word import/export path.
+
 ## Example
 
 The following Host example provides concrete inputs and checks the result of the call.
@@ -79,7 +81,8 @@ The following Host example provides concrete inputs and checks the result of the
 bool example()
 {
     asc::std::bitset<8> bits(5);
-    return bits.size() == 8 && bits.count() == 2;
+    asc::std::bitset<0> empty(~0ULL);
+    return bits.size() == 8 && bits.count() == 2 && empty.none() && empty.to_ullong() == 0;
 }
 ```
 

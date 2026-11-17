@@ -18,14 +18,29 @@
 #define ASC_STL_EXAMPLES_MDSPAN_MATRIX_TYPES_H
 
 namespace example {
+inline constexpr int kCropCaseCount = 8;
+inline constexpr int kCropCapacity = 12;
+struct Crop {
+    int batch;
+    int row_first;
+    int row_last;
+    int column_offset;
+    int column_extent;
+    int column_stride;
+};
 struct Input {
     int values[6];
+    int padded[42];
+    Crop crops[kCropCaseCount];
 };
 struct Result {
     int row_sums[2];
     int column_sums[2];
     int storage_value;
     int column_value;
+    int cropped[kCropCaseCount * kCropCapacity];
+    int crop_rows[kCropCaseCount];
+    int crop_columns[kCropCaseCount];
 };
 }  // namespace example
 

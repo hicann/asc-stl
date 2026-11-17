@@ -37,7 +37,9 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 template <class T>
 inline constexpr bool is_trivially_destructible_v = __is_trivially_destructible(T);
 
-#elif CANN_ASC_STL_DETAIL_HAS_BUILTIN(__has_trivial_destructor)
+#elif CANN_ASC_STL_DETAIL_HAS_BUILTIN(__has_trivial_destructor) || CANN_ASC_STL_DETAIL_COMPILER_GCC
+
+// GCC releases without __has_builtin still provide __has_trivial_destructor.
 
 template <class T>
 inline constexpr bool is_trivially_destructible_v = is_destructible_v<T> && __has_trivial_destructor(T);

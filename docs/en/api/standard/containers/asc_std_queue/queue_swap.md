@@ -56,6 +56,7 @@ No return value.
 ## Constraints
 
 - Container must support swap; the exception specification matches the swap of the selected Container.
+- Generic code may inspect `noexcept(a.swap(b))` without executing a swap. The result follows the underlying container even in C++17 on GCC 9; it must not always be assumed true. For a breadth-first graph traversal, swapping an emptied current frontier with the next frontier avoids copying the queued vertices.
 - For device-side use, the Container, element operations, and Compare must be callable at the corresponding execution location and satisfy its non-throwing requirements; the exception behavior on Host follows the objects being called, and freedom from throwing is not promised unless noexcept is additionally declared.
 
 ## Example

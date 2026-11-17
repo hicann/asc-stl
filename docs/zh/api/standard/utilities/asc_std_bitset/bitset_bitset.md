@@ -37,13 +37,13 @@
 ### 原型1
 
 ```cpp
-bitset() noexcept;
+constexpr bitset() noexcept;
 ```
 
 ### 原型2
 
 ```cpp
-bitset(unsigned long long value) noexcept;
+constexpr bitset(unsigned long long value) noexcept;
 ```
 
 
@@ -69,6 +69,8 @@ bitset(unsigned long long value) noexcept;
 
 - 所属bitset的位数Size在编译期固定，操作不进行动态分配。默认构造所有位为0；整数构造读取输入低位并清除超出Size的位。
 
+- 对于Size为0的空位图，整数构造忽略输入的全部位；count()为0，none()和all()都为true，to_ulong()和to_ullong()都返回0。这允许空分块复用相同的打包字导入/导出流程。
+
 ## 调用示例
 
 以下Host示例给出具体输入，并检查调用结果。
@@ -79,7 +81,8 @@ bitset(unsigned long long value) noexcept;
 bool example()
 {
     asc::std::bitset<8> bits(5);
-    return bits.size() == 8 && bits.count() == 2;
+    asc::std::bitset<0> empty(~0ULL);
+    return bits.size() == 8 && bits.count() == 2 && empty.none() && empty.to_ullong() == 0;
 }
 ```
 

@@ -95,8 +95,11 @@ template <class ForwardIterator, class T>
 
 | 适用原型 | 返回值类型 | 含义 |
 | --- | --- | --- |
-| 原型1 | `ForwardIterator` | 返回符合条件的元素位置；未找到时返回输入范围的结束位置。 |
-| 原型2 | `ForwardIterator` | 返回符合条件的元素位置；未找到时返回输入范围的结束位置。 |
+| 原型1 | `ForwardIterator` | 返回首个 `comp(element, value)` 为假的位置；所有元素均满足该表达式时返回 `last`。 |
+| 原型2 | `ForwardIterator` | 返回首个 `element < value` 为假的位置；所有元素均满足该表达式时返回 `last`。 |
+
+返回的边界是插入位置，不代表查找命中。例如在 `{2, 2, 5}` 中查询 `4`，返回的是 `5` 的位置。
+需要同时获得候选区间及其数量时，可以使用 [`equal_range`](equal_range.md)。
 
 ## 约束说明
 

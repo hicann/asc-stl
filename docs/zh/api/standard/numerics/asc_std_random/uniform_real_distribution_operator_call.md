@@ -74,6 +74,8 @@ template<class URng> constexpr float asc::std::uniform_real_distribution<float>:
 
 - 仅提供uniform_real_distribution<float>。
 - 结果位于指定的半开区间内，不提供double、long double及其他统计分布。
+- 浮点舍入可能使仿射变换的中间结果等于上界，此时返回上界的前一个可表示值（且不低于下界）。此端点修正使用本库`bit_cast`：没有`__builtin_bit_cast`的Host编译器仍可经运行期回退使用；需要该修正的调用不能在该配置下常量求值。
+- `philox4x32`配合默认`[0,1)`分布时，每个样本消费一个32位引擎输出。按张量元素索引划分随机流时应保持种子和全局输出偏移，不能在每个分块从同一种子重新开始；其他引擎或分布的消费数量应另行确认。
 
 ## 调用示例
 

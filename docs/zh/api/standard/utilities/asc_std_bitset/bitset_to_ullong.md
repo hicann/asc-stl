@@ -61,6 +61,8 @@ constexpr unsigned long long to_ullong() const noexcept;
 
 - 默认Width等于Size，Size须不超过目标无符号整数类型的二进制位数；范围按位数限定，不是只看当前置位值。该子集不提供运行期overflow_error转换。
 
+- Size为0时返回0，不受整数构造时输入值的影响。
+
 ## 调用示例
 
 以下Host示例给出具体输入，并检查调用结果。
@@ -71,7 +73,8 @@ constexpr unsigned long long to_ullong() const noexcept;
 bool example()
 {
     asc::std::bitset<8> bits(5);
-    return bits.to_ullong() == 5;
+    asc::std::bitset<0> empty(~0ULL);
+    return bits.to_ullong() == 5 && empty.to_ullong() == 0;
 }
 ```
 

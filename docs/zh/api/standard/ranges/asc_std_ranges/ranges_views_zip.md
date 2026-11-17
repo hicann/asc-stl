@@ -58,27 +58,33 @@ zip(first_range, second_range);
 
 ## 约束说明
 
-- 七个列出名称。
-- 有限repeat、两路random-access+sized zip引用写回、单次range|closure。
-- Host、AI Core SIMD编程 和AI Core SIMT编程。
-- 本期只支持两个具备随机访问能力且可确定大小的范围。
-- 所得视图的引用不得超过任一输入范围的有效期。
+- 本期支持恰好两个随机访问且有大小的范围，可在Host以及设备侧SIMD和SIMT编程中使用。
+- 随机访问能力按迭代器的现代`iterator_concept`判定；值返回的`transform_view`即使传统`iterator_category`为输入迭代器标签，仍可保留随机访问遍历能力并参与zip。
+- 解引用所得tuple逐项保留底层解引用类型：引用可向可写元素写回，按值返回的变换结果则存为值。借用的底层存储须覆盖全部访问期。
+- 迭代器支持默认构造，可与符合约束的`ranges`算法组合；输出空间仍由调用者提供，zip不分配输出缓冲区。
+- const迭代要求两侧可const遍历，且各自const迭代器类型与非const形式相同。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
+以下Host示例实现候选分数校正：先惰性缩放score，再与correction按位置配对，写出校正分数供后续阈值筛选。两路长度不等时只处理较短的一路，不读取缺失的correction，也不覆盖输出尾部。
 
 ```cpp
 #include <asc/std/ranges>
-#include <asc/std/array>
-#include <asc/std/iterator>
+#include <asc/std/algorithm>
 #include <asc/std/tuple>
 
 bool example()
 {
-    int values[] = {1, 2, 3, 4};
-    auto view = asc::std::ranges::views::zip(values, values);
-    return asc::std::get<0>(*view.begin()) == 1;
+    int scores[] = {1, 6, -4, 3, 8};
+    int correction[] = {0, -2, 7, 0};
+    int calibrated[5] = {-99, -99, -99, -99, -99};
+    auto scaled = scores | asc::std::ranges::views::transform([](int value) { return value * 2; });
+    auto paired = asc::std::ranges::views::zip(scaled, correction);
+    auto result = asc::std::ranges::transform(paired, calibrated, [](auto values) {
+        return asc::std::get<0>(values) + asc::std::get<1>(values);
+    });
+    return result.out == calibrated + 4 && calibrated[0] == 2 && calibrated[1] == 10 &&
+        calibrated[2] == -1 && calibrated[3] == 6 && calibrated[4] == -99;
 }
 ```
 
