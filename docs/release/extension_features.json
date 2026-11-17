@@ -12,13 +12,19 @@
       "reason": "SIMT线程组流水线基础接口尚未完成交付与适用验收。"
     },
     "CANN_ASC_STL_HAS_NUMERIC_TYPES": {
-      "value": 0,
+      "value": 1,
       "issue": "https://gitcode.com/cann/asc-stl/issues/85",
-      "baseline": null,
-      "implementation_commit": null,
-      "acceptance": null,
-      "first_release_date": null,
-      "reason": "扩展数值类型与标量转换基础接口尚未完成交付与适用验收。"
+      "baseline": {
+        "path": "numeric_types_baseline.md",
+        "sha256": "cf3e84a61d9f710b1422f89cd90e28fea5a6711ec0d3d958bce1b956ac5fcfd2"
+      },
+      "implementation_commit": "d8860372d706eb747ad9a86e3d47f02e89381365",
+      "acceptance": {
+        "path": "numeric_types_acceptance.json",
+        "sha256": "4536af8d6d825c60765714f188b9f309d57b81516669f2f9a47ec1d189de5fac"
+      },
+      "first_release_date": 20261023,
+      "reason": "Issue85基础接口与适用功能验收已交付；具体操作由模块支持查询约束。"
     },
     "CANN_ASC_STL_HAS_CACHE": {
       "value": 0,

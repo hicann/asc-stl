@@ -47,14 +47,14 @@ Device operations follow their supported Device compilation modes.
 ## Current delivery records
 
 [extension_features.json](../../release/extension_features.json) records the macro
-values and their delivery evidence. All three flags are currently zero because
-their baseline APIs and applicable acceptance remain incomplete. Existing headers,
-declarations and partial older implementations alone do not establish delivery.
+values and their delivery evidence. The numeric_types baseline API and applicable
+acceptance are delivered, so its flag is one. The pipeline and cache baselines
+continue under their respective module Issues.
 
 | Macro | Baseline API and module Issue | Value |
 | --- | --- | --- |
 | `CANN_ASC_STL_HAS_PIPELINE` | [#105](https://gitcode.com/cann/asc-stl/issues/105): SIMT thread-group pipelines | `0` |
-| `CANN_ASC_STL_HAS_NUMERIC_TYPES` | [#85](https://gitcode.com/cann/asc-stl/issues/85): extended numeric types and scalar conversions | `0` |
+| `CANN_ASC_STL_HAS_NUMERIC_TYPES` | [#85](https://gitcode.com/cann/asc-stl/issues/85): extended numeric types and scalar conversions | `1` |
 | `CANN_ASC_STL_HAS_CACHE` | [#99](https://gitcode.com/cann/asc-stl/issues/99): cache control | `0` |
 
 This change replaces the component version macros and the device-policy and

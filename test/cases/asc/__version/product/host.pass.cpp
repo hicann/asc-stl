@@ -17,7 +17,7 @@
 
 static_assert(CANN_ASC_STL == 20261023);
 static_assert(CANN_ASC_STL_HAS_PIPELINE == 0);
-static_assert(CANN_ASC_STL_HAS_NUMERIC_TYPES == 0);
+static_assert(CANN_ASC_STL_HAS_NUMERIC_TYPES == 1);
 static_assert(CANN_ASC_STL_HAS_CACHE == 0);
 
 int main()

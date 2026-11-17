@@ -55,12 +55,23 @@ int main()
     static_assert(!asc::is_bitwise_comparable_v<Trivial>);
     static_assert(asc::is_bitwise_comparable<int>::value);
 
-    // No extended floating-point type exists in the delivered surface yet.
+    // Standard arithmetic types remain outside the extension wrapper classification.
     static_assert(!asc::is_extended_floating_point_v<float>);
     static_assert(!asc::is_extended_floating_point_v<double>);
     static_assert(!asc::is_extended_floating_point_v<long double>);
     static_assert(!asc::is_extended_floating_point_v<int>);
     static_assert(!asc::is_extended_floating_point<float>::value);
+
+    static_assert(asc::is_extended_floating_point_v<asc::float16>);
+    static_assert(asc::is_extended_floating_point_v<asc::bfloat16>);
+    static_assert(asc::is_extended_floating_point_v<asc::float8_e4m3fn>);
+    static_assert(asc::is_extended_floating_point_v<asc::float8_e5m2>);
+    static_assert(asc::is_extended_floating_point_v<asc::hifloat8>);
+    static_assert(!asc::is_extended_floating_point_v<asc::float8_e8m0>);
+    static_assert(!asc::is_extended_floating_point_v<asc::float4_e2m1x2>);
+    static_assert(!asc::is_extended_floating_point_v<asc::int4>);
+    static_assert(!asc::is_bitwise_comparable_v<asc::float16>);
+    static_assert(asc::is_trivially_relocatable_v<asc::float16>);
 
     // Trivially copyable types are trivially relocatable; a documented user
     // specialization extends the classification without touching the default.

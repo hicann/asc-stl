@@ -43,13 +43,13 @@ Device 操作按其支持的 Device 模式调用。
 ## 当前交付记录
 
 随源码提供的 [extension_features.json](../../release/extension_features.json) 是宏值与
-交付依据的登记表。当前三个模块尚未完成以下基础接口及其适用验收，宏均取 `0`。
-头文件、声明或部分旧实现的存在仅能说明源码中有相应内容。
+交付依据的登记表。当前 numeric_types 已交付基础接口并完成适用验收，标识为 `1`；
+pipeline 和 cache 的基础接口继续按各自 Issue 推进。
 
 | 宏 | 基础接口与模块 Issue | 当前值 |
 | --- | --- | --- |
 | `CANN_ASC_STL_HAS_PIPELINE` | [#105](https://gitcode.com/cann/asc-stl/issues/105)：SIMT 线程组流水线 | `0` |
-| `CANN_ASC_STL_HAS_NUMERIC_TYPES` | [#85](https://gitcode.com/cann/asc-stl/issues/85)：扩展数值类型与标量转换 | `0` |
+| `CANN_ASC_STL_HAS_NUMERIC_TYPES` | [#85](https://gitcode.com/cann/asc-stl/issues/85)：扩展数值类型与标量转换 | `1` |
 | `CANN_ASC_STL_HAS_CACHE` | [#99](https://gitcode.com/cann/asc-stl/issues/99)：缓存控制 | `0` |
 
 本次将产品宏统一为上述日期宏和三个交付标识，替换旧分段版本宏及设备策略、

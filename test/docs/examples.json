@@ -25483,5 +25483,12 @@
       20
     ],
     "mode": "host"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric_types/asc_numeric_types.md": {
+    "mode": "host",
+    "standards": [
+      17,
+      20
+    ]
   }
 }

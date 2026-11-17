@@ -17,6 +17,7 @@
 import hashlib
 import json
 from pathlib import Path
+import shutil
 import sys
 import tempfile
 import unittest
@@ -33,6 +34,12 @@ class ProductVersionRecords(unittest.TestCase):
         product = Path(__file__).resolve().parents[2]
         self.header = product.joinpath("include/asc/__version/product.h").read_text(encoding="utf-8")
         self.registry = json.loads(product.joinpath("docs/release/extension_features.json").read_text(encoding="utf-8"))
+        shutil.copytree(product / "docs/release", self.root / "docs/release")
+        for name, row in self.registry["features"].items():
+            if row["value"] == 1:
+                header = Path("include/asc") / name.removeprefix("CANN_ASC_STL_HAS_").lower()
+                (self.root / header).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(product / header, self.root / header)
         self.name = "CANN_ASC_STL_HAS_PIPELINE"
         self.row = self.registry["features"][self.name]
         self.write()

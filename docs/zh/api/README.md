@@ -3327,3 +3327,5 @@
       - [asc::make_device_buffer](runtime/memory_resources_and_buffers/asc_buffer/make_device_buffer.md)
       - [asc::make_pinned_buffer](runtime/memory_resources_and_buffers/asc_buffer/make_pinned_buffer.md)
       - [asc::pinned_buffer](runtime/memory_resources_and_buffers/asc_buffer/pinned_buffer.md)
+
+- [`<asc/numeric_types>`：低精度数值格式](extension/bit_math_numeric_random/asc_numeric_types/asc_numeric_types.md)

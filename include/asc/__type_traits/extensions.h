@@ -27,6 +27,8 @@
 #pragma system_header
 #endif
 
+#include <asc/__numeric_types/storage.h>
+
 // Extension trait vocabulary for the later public <asc/type_traits>.  The
 // traits are documented customization points: a user specialization must keep
 // the documented semantic precondition, and the value vocabulary stays
@@ -76,12 +78,17 @@ struct is_bitwise_comparable<volatile T> : is_bitwise_comparable<T> {};
 template <class T>
 struct is_bitwise_comparable<const volatile T> : is_bitwise_comparable<T> {};
 
-// True for extended floating-point types beyond the three standard ones.  No
-// such type is part of the delivered public surface yet; low-precision types
-// opt in when their public contract is approved.
+// True for the scalar floating formats registered by numeric_types. E8M0
+// is a scale encoding; packed formats and int4 are distinct categories.
 template <class T>
 struct is_extended_floating_point {
     static constexpr bool value = false;
+};
+
+template <numeric_format F>
+struct is_extended_floating_point<detail::numeric_storage<F>> {
+    static constexpr bool value = F == numeric_format::fp16 || F == numeric_format::bf16 ||
+        F == numeric_format::fp8_e4m3fn || F == numeric_format::fp8_e5m2 || F == numeric_format::hif8;
 };
 
 template <class T>

@@ -823,7 +823,8 @@
       "target": "asc/__type_traits/extensions.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/__numeric_types/storage.h"
       ],
       "applicability": {
         "host_header": true,
@@ -18980,11 +18981,154 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       }
+    },
+    {
+      "target": "asc/__numeric_types/bits.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__numeric_types/traits.h",
+        "asc/std/__exception/terminate.h",
+        "asc/std/__type_traits/enable_if.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      },
+      "semantic_case": "asc/numeric_types",
+      "runtime_case": "asc/numeric_types"
+    },
+    {
+      "target": "asc/__numeric_types/conversion.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__numeric_types/bits.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/cfloat"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      },
+      "semantic_case": "asc/numeric_types",
+      "runtime_case": "asc/numeric_types"
+    },
+    {
+      "target": "asc/__numeric_types/native.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__numeric_types/bits.h",
+        "asc/std/__bit/bit_cast.h",
+        "asc/std/__type_traits/is_trivially_copyable.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      },
+      "semantic_case": "asc/numeric_types",
+      "runtime_case": "asc/numeric_types"
+    },
+    {
+      "target": "asc/__numeric_types/storage.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/cstdint"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      },
+      "semantic_case": "asc/numeric_types",
+      "runtime_case": "asc/numeric_types"
+    },
+    {
+      "target": "asc/__numeric_types/traits.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__numeric_types/storage.h",
+        "asc/std/__type_traits/is_constructible.h",
+        "asc/std/__type_traits/is_member_object_pointer.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/void_t.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      },
+      "semantic_case": "asc/numeric_types",
+      "runtime_case": "asc/numeric_types"
+    },
+    {
+      "target": "asc/numeric_types",
+      "visibility": "public",
+      "dependencies": [
+        "asc/__config",
+        "asc/__numeric_types/conversion.h",
+        "asc/__numeric_types/native.h"
+      ],
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      },
+      "negative_cases": [
+        "invalid_index.fail.asc",
+        "invalid_index.fail.cpp",
+        "invalid_int4.fail.asc",
+        "invalid_int4.fail.cpp",
+        "invalid_pack.fail.asc",
+        "invalid_pack.fail.cpp",
+        "ordinary_integer.fail.asc",
+        "ordinary_integer.fail.cpp",
+        "scalar_pack.fail.asc",
+        "scalar_pack.fail.cpp",
+        "unchecked_int4.fail.asc",
+        "unchecked_int4.fail.cpp",
+        "unsupported.fail.asc",
+        "unsupported.fail.cpp"
+      ],
+      "additional_cases": [
+        "reference.h",
+        "invalid_runtime.cpp",
+        "host_native.fail.cpp"
+      ],
+      "device_compile_cases": [
+        "device.compile.asc",
+        "address_space.compile.asc"
+      ]
     }
   ],
   "runtime_asset_manifests": {
     "asc/std/bitset": "runtime/assets.json",
     "asc/std/__algorithm/lower_bound.h": "runtime/assets.json",
-    "asc/std/__algorithm/ranges_copy.h": "runtime/assets.json"
+    "asc/std/__algorithm/ranges_copy.h": "runtime/assets.json",
+    "asc/numeric_types": "runtime/assets.json"
   }
 }

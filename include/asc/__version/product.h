@@ -35,7 +35,7 @@
 // Set to 1 only after the registered baseline API and its acceptance are delivered.
 // Operation-specific hardware and compilation requirements belong to each API.
 #define CANN_ASC_STL_HAS_PIPELINE 0
-#define CANN_ASC_STL_HAS_NUMERIC_TYPES 0
+#define CANN_ASC_STL_HAS_NUMERIC_TYPES 1
 #define CANN_ASC_STL_HAS_CACHE 0
 
 #endif  // CANN_ASC_STL_ASC___VERSION_PRODUCT_H

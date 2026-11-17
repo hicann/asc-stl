@@ -98,6 +98,14 @@ int main() {
 
 
 COMPILE_FAILURE_CASES = (
+    ("cases/asc/numeric_types/invalid_int4.fail.cpp", "terminate"),
+    ("cases/asc/numeric_types/invalid_pack.fail.cpp", "terminate"),
+    ("cases/asc/numeric_types/invalid_index.fail.cpp", "terminate"),
+    ("cases/asc/numeric_types/ordinary_integer.fail.cpp", "no matching function"),
+    ("cases/asc/numeric_types/scalar_pack.fail.cpp", "no matching function"),
+    ("cases/asc/numeric_types/unchecked_int4.fail.cpp", "no matching function"),
+    ("cases/asc/numeric_types/unsupported.fail.cpp", "no matching function"),
+    ("cases/asc/numeric_types/host_native.fail.cpp", "native_type"),
     ("cases/asc/random/seed_sequence.fail.cpp", "cannot convert"),
     ("cases/asc/std/expected/value.fail.cpp", "deleted"),
     ("cases/asc/std/expected/void.fail.cpp", "incomplete type"),

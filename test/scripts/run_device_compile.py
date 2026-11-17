@@ -260,6 +260,20 @@ NEGATIVE_DIAGNOSTIC_OVERRIDES = {
     ("asc/iterator", "address_space_erasure.fail.asc"): ("cannot initialize",),
     ("asc/mdspan", "ub_dsimt.fail.asc"): ("no template named", "no member named"),
     ("asc/std/random", "seed_sequence.fail.cpp"): ("no matching constructor",),
+    ("asc/numeric_types", "invalid_int4.fail.cpp"): ("constant expression",),
+    ("asc/numeric_types", "invalid_int4.fail.asc"): ("constant expression",),
+    ("asc/numeric_types", "invalid_pack.fail.cpp"): ("constant expression",),
+    ("asc/numeric_types", "invalid_pack.fail.asc"): ("constant expression",),
+    ("asc/numeric_types", "invalid_index.fail.cpp"): ("constant expression",),
+    ("asc/numeric_types", "invalid_index.fail.asc"): ("constant expression",),
+    ("asc/numeric_types", "ordinary_integer.fail.cpp"): ("no matching function",),
+    ("asc/numeric_types", "ordinary_integer.fail.asc"): ("no matching function",),
+    ("asc/numeric_types", "scalar_pack.fail.cpp"): ("no matching function",),
+    ("asc/numeric_types", "scalar_pack.fail.asc"): ("no matching function",),
+    ("asc/numeric_types", "unchecked_int4.fail.cpp"): ("no matching function",),
+    ("asc/numeric_types", "unchecked_int4.fail.asc"): ("no matching function",),
+    ("asc/numeric_types", "unsupported.fail.cpp"): ("no matching function",),
+    ("asc/numeric_types", "unsupported.fail.asc"): ("no matching function",),
 }
 
 COMPLEX_SCALAR_NEGATIVE_CASES = {

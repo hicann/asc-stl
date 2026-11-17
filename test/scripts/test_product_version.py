@@ -84,17 +84,18 @@ def check_date_and_host(matrix, standard, expected):
                        standard, Options(preprocess=False))
 
 
-def check_one_branch(matrix, standard, expected):
-    # A private test fixture exercises #if's true branches without claiming module delivery.
+def check_opposite_branches(matrix, standard, expected):
+    # Exercise the opposite #if branch for every delivered and undelivered module.
     header = (matrix.root / "include/asc/__version/product.h").read_text(encoding="utf-8")
-    fixture = matrix.directory / "product-true.h"
-    enabled = dict(expected)
+    fixture = matrix.directory / "product-opposite.h"
+    opposite = dict(expected)
     for name in NAMES[1:]:
-        header = header.replace(f"#define {name} {expected[name]}", f"#define {name} 1")
-        enabled[name] = "1"
+        value = "0" if expected[name] == "1" else "1"
+        header = header.replace(f"#define {name} {expected[name]}", f"#define {name} {value}")
+        opposite[name] = value
     fixture.write_text(header, encoding="utf-8")
     options = Options(preprocess=False, flags=("-include", str(fixture)))
-    matrix.run("true-branches-fixture", contract_source(enabled), standard, options)
+    matrix.run("opposite-branches-fixture", contract_source(opposite), standard, options)
 
 
 def parse_arguments():
@@ -120,7 +121,7 @@ def main():
             for standard in (17, 20):
                 check_includes(matrix, standard, expected)
                 check_date_and_host(matrix, standard, expected)
-                check_one_branch(matrix, standard, expected)
+                check_opposite_branches(matrix, standard, expected)
             diagnostic = matrix.run("requires-cxx17", includes(["asc/version"]), 14,
                                     Options(preprocess=False, failure=True))
             assert "ASC-STL requires C++17 or newer" in diagnostic

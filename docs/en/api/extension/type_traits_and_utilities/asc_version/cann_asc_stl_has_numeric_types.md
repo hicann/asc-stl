@@ -6,12 +6,12 @@ Requires C++17 and also supports C++20. The header is independently includable i
 
 ## 功能说明
 
-`<asc/version>`：Reports delivery of the baseline extended numeric types and scalar conversions described in [Issue #85](https://gitcode.com/cann/asc-stl/issues/85). The current value is `0`.
+`<asc/version>`：Reports delivery of the baseline extended numeric types and scalar conversions described in [Issue #85](https://gitcode.com/cann/asc-stl/issues/85). The current value is `1`.
 
 ## 声明
 
 ```cpp
-#define CANN_ASC_STL_HAS_NUMERIC_TYPES 0
+#define CANN_ASC_STL_HAS_NUMERIC_TYPES 1
 ```
 
 ## 约束说明

@@ -18,8 +18,8 @@
 #if CANN_ASC_STL < 20261023
 #error "This test requires the 20261023 release or newer"
 #endif
-#if CANN_ASC_STL_HAS_PIPELINE || CANN_ASC_STL_HAS_NUMERIC_TYPES || CANN_ASC_STL_HAS_CACHE
-#error "The baseline extension APIs have not yet completed delivery and acceptance"
+#if CANN_ASC_STL_HAS_PIPELINE || CANN_ASC_STL_HAS_CACHE || CANN_ASC_STL_HAS_NUMERIC_TYPES != 1
+#error "Unexpected extension delivery flags"
 #endif
 static_assert(CANN_ASC_STL == 20261023);
 static_assert(CANN_ASC_STL_LIB_type_identity == 201806L);

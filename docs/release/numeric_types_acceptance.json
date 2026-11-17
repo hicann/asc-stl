@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "implementation_commit": "d8860372d706eb747ad9a86e3d47f02e89381365",
+  "issue": "https://gitcode.com/cann/asc-stl/issues/85",
+  "acceptance_date": "2026-11-16",
+  "package_release_date": 20261023,
+  "cases": [
+    {
+      "name": "host-cxx17-cxx20",
+      "status": "PASS",
+      "returncode": 0,
+      "source_commit": "19f9faf53fc3b51160b0385dcd632bebcfd3730e",
+      "record": {
+        "name": "ctest-host-hostfix.log",
+        "sha256": "49d653502bf8696951f9f9f2afc189f997463685315b2d219b35d2c0dbb31f2b"
+      },
+      "entrypoint": "ctest: semantic.host.cxx17.asc.numeric_types, semantic.host.cxx20.asc.numeric_types, compatibility.numeric-types.host",
+      "comparisons_per_standard": 6469728
+    },
+    {
+      "name": "device-compile-and-rejection",
+      "status": "PASS",
+      "returncode": 0,
+      "source_commit": "f734b7a1d3a9da811383162386f60a9d80186ee5",
+      "record": {
+        "name": "device-report-sdkabi.json",
+        "sha256": "88258200b6544522437a64623da79674eb81e701b9816de09b8e26ae42d5961b"
+      },
+      "entrypoint": "test/scripts/run_device_compile.py",
+      "checks": 112,
+      "scope": "C++17/C++20; SIMD/SIMT; headers, instantiation, expected rejection"
+    },
+    {
+      "name": "asc-host-preparation",
+      "status": "PASS",
+      "returncode": 0,
+      "source_commit": "19f9faf53fc3b51160b0385dcd632bebcfd3730e",
+      "record": {
+        "name": "asc-host-execution.json",
+        "sha256": "6556434a0771bfcf77db20be5d66049a36717ea83cb6cd2e830d821d5024d37a"
+      },
+      "configurations": 4
+    },
+    {
+      "name": "cannsim-cxx17-simd",
+      "status": "PASS",
+      "returncode": 0,
+      "source_commit": "d122f4f7f265a416a5f73af4a137f6848718478e",
+      "record": {
+        "name": "cannsim-cxx17-simd-final.log",
+        "sha256": "d06e89b4d1b59ac29e1a757da45f03eb74e0e38cb42f400dd5c9dd4d075e1bea"
+      },
+      "entrypoint": "test/scripts/run_cannsim_test.sh",
+      "comparisons": 8112
+    },
+    {
+      "name": "cannsim-cxx17-simt",
+      "status": "PASS",
+      "returncode": 0,
+      "source_commit": "d122f4f7f265a416a5f73af4a137f6848718478e",
+      "record": {
+        "name": "cannsim-cxx17-simt-final.log",
+        "sha256": "2851eacb1223a40942322356a88027bc8adfe22c66357d8835da0058796cfc66"
+      },
+      "entrypoint": "test/scripts/run_cannsim_test.sh",
+      "comparisons": 8112
+    },
+    {
+      "name": "cannsim-cxx20-simd",
+      "status": "PASS",
+      "returncode": 0,
+      "source_commit": "d122f4f7f265a416a5f73af4a137f6848718478e",
+      "record": {
+        "name": "cannsim-cxx20-simd-final.log",
+        "sha256": "e7a3c8e6fc7c56faf4585e3254619a5deb88db57580c180fd3596a4912dc4e29"
+      },
+      "entrypoint": "test/scripts/run_cannsim_test.sh",
+      "comparisons": 8112
+    },
+    {
+      "name": "cannsim-cxx20-simt",
+      "status": "PASS",
+      "returncode": 0,
+      "source_commit": "d122f4f7f265a416a5f73af4a137f6848718478e",
+      "record": {
+        "name": "cannsim-cxx20-simt-final.log",
+        "sha256": "12bae63a5fb65f0dfaf2c85630c09134855127ea5cac80d233dbd5050ced2cb8"
+      },
+      "entrypoint": "test/scripts/run_cannsim_test.sh",
+      "comparisons": 8112
+    },
+    {
+      "name": "ascend950-cxx17-cxx20-simd-simt",
+      "status": "PASS",
+      "returncode": 0,
+      "source_commit": "19f9faf53fc3b51160b0385dcd632bebcfd3730e",
+      "record": {
+        "name": "report.json",
+        "sha256": "099f406c202c6d46ccdd540010127bb60e4c21c831c962d05e1d4973928953b6"
+      },
+      "entrypoint": "test/cases/asc/numeric_types/runtime",
+      "runs": 12,
+      "comparisons_per_run": 79680,
+      "source_digest": "7113c63005a305d47391268e25abae5f3b9cd148a182c0834c788b0a7c2ebbf1",
+      "runtime_log_sha256": "f5f99c78239d78fa9f8be7d85ceed095403d7689be66b3a425e951326a8025fc"
+    },
+    {
+      "name": "official-ci74-UT_Test_quick",
+      "status": "PASS",
+      "returncode": 0,
+      "source_commit": "d8860372d706eb747ad9a86e3d47f02e89381365",
+      "entrypoint": ".gitcode/workflows/asc-stl_actions.yml",
+      "run_url": "https://gitcode.com/cann/asc-stl/actions/runs/756bb5e4e60645c5b5d3ec1473f8e288",
+      "result_comment_id": 201063757
+    },
+    {
+      "name": "official-ci74-UT_Test_device",
+      "status": "PASS",
+      "returncode": 0,
+      "source_commit": "d8860372d706eb747ad9a86e3d47f02e89381365",
+      "entrypoint": ".gitcode/workflows/asc-stl_actions.yml",
+      "run_url": "https://gitcode.com/cann/asc-stl/actions/runs/756bb5e4e60645c5b5d3ec1473f8e288",
+      "result_comment_id": 201063757
+    },
+    {
+      "name": "official-ci74-UT_Test_cannsim",
+      "status": "PASS",
+      "returncode": 0,
+      "source_commit": "d8860372d706eb747ad9a86e3d47f02e89381365",
+      "entrypoint": ".gitcode/workflows/asc-stl_actions.yml",
+      "run_url": "https://gitcode.com/cann/asc-stl/actions/runs/756bb5e4e60645c5b5d3ec1473f8e288",
+      "result_comment_id": 201063757
+    }
+  ],
+  "environments": {
+    "host": "GCC 13.3; IEEE binary32; strict floating-point configuration",
+    "local_sdk": "CANN 9.2.0-beta.2; component 20260820_145626756; BiSheng 15.0.5; dav-3510",
+    "ascend950_sdk": "CANN 9.2.0-beta.2; component 20260826_163105218; BiSheng 15.0.5",
+    "official_ci": "CANN 9.3.0; BiSheng 15"
+  },
+  "reuse": {
+    "policy": "Each case retains its original source commit. SDK9.2 simulation reuse is based on complete Device image equality; source changes and official CI results are recorded separately.",
+    "images": [
+      {
+        "standard": 17,
+        "mode": "simd",
+        "identical_to_validated_sdk92": true,
+        "sha256": "9f35f54530ffdfa5f375768a75a03ed35a38a2d21c9ae256fec7dfeef8cf263a"
+      },
+      {
+        "standard": 17,
+        "mode": "simt",
+        "identical_to_validated_sdk92": true,
+        "sha256": "7750c28bba5e08f01e61cc8f6ffd32f623e0adf4489b32d1798389ce0f1a5c00"
+      },
+      {
+        "standard": 20,
+        "mode": "simd",
+        "identical_to_validated_sdk92": true,
+        "sha256": "9f35f54530ffdfa5f375768a75a03ed35a38a2d21c9ae256fec7dfeef8cf263a"
+      },
+      {
+        "standard": 20,
+        "mode": "simt",
+        "identical_to_validated_sdk92": true,
+        "sha256": "7750c28bba5e08f01e61cc8f6ffd32f623e0adf4489b32d1798389ce0f1a5c00"
+      }
+    ],
+    "hostfix_image_record_sha256": "1cafd8b3ba02ff9a782aca403ed02bcf91bf4e3c1de71f3c875ae1ce6dbb98f0",
+    "sdkabi_image_record_sha256": "92831810385a6c3e5439537f37b465edd6dc173d9096fd6f1bd4b2f980c32630"
+  },
+  "implementation_headers": [
+    {
+      "path": "include/asc/numeric_types",
+      "sha256": "81c722ab2d8e887dee63187941417cfc2f8b53c59b973ec56823ba4f878943e9"
+    },
+    {
+      "path": "include/asc/__numeric_types/bits.h",
+      "sha256": "8fc14e7eeaf0f2578ddba767839faf06d0fdae74c583a8a92ae4b4a6f8f216f1"
+    },
+    {
+      "path": "include/asc/__numeric_types/conversion.h",
+      "sha256": "da4ee02beb77b1b12bb9ecc8e428594713fa39fa85050318f56560e2deca20d0"
+    },
+    {
+      "path": "include/asc/__numeric_types/native.h",
+      "sha256": "2b6c2e80e4c5057816d9f396573b20ac84c6440ab9344accfea3e3ea403119eb"
+    },
+    {
+      "path": "include/asc/__numeric_types/storage.h",
+      "sha256": "99036267b8eec4801886b586d1ac253124605f8f64fabf89388b39d86db0ad0a"
+    },
+    {
+      "path": "include/asc/__numeric_types/traits.h",
+      "sha256": "e9bd1d73997d59b1a3d3258b703daa023447452825faa24d6df4e6ed49a11f09"
+    }
+  ],
+  "review_status": "PR135 pending; CI74 functional stages passed, while CodeCheck reported the two memcpy calls. The current PR change replaces those calls; its new CI result is separate."
+}

@@ -6,12 +6,12 @@ C++17 为最低要求，同时支持 C++20；Host、SIMD、SIMT 可独立包含�
 
 ## 功能说明
 
-`<asc/version>`：标识是否交付 [Issue #85](https://gitcode.com/cann/asc-stl/issues/85) 约定的扩展数值类型与标量转换基础接口。当前为 `0`。
+`<asc/version>`：标识是否交付 [Issue #85](https://gitcode.com/cann/asc-stl/issues/85) 约定的扩展数值类型与标量转换基础接口。当前为 `1`。
 
 ## 声明
 
 ```cpp
-#define CANN_ASC_STL_HAS_NUMERIC_TYPES 0
+#define CANN_ASC_STL_HAS_NUMERIC_TYPES 1
 ```
 
 ## 约束说明

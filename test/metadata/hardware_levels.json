@@ -8,6 +8,7 @@
     "asc/atomic": "HW1",
     "asc/cmath": "HW1",
     "asc/hierarchy": "HW1",
+    "asc/numeric_types": "HW1",
     "asc/std/__algorithm/lower_bound.h": "HW1",
     "asc/std/__algorithm/ranges_copy.h": "HW1",
     "asc/std/__complex/logarithms.h": "HW1",
