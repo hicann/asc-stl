@@ -53,7 +53,7 @@ No parameters.
 
 ## Constraints
 
-- Returns `true` after a failed new construction while switching alternatives or in `emplace` on the Host; in that case `index()` is `variant_npos` and `get_if` returns a null pointer.
+- On Host, a failure after the old alternative has been destroyed leaves `index() == variant_npos` and `get_if` returns a null pointer. When copy assignment prepares the new value before destroying the old one, a failed copy preserves the old index.
 - An object with no active alternative can be destroyed and recovered through a successful construction or assignment; the presence of the corresponding active value must be confirmed before reading the value or calling `visit`.
 
 - Alternative types on the device side and the selected construction, assignment, and swap operations must not throw.

@@ -81,7 +81,7 @@ Returns a reference to the current `variant` object, i.e. `*this`.
 
 ## Constraints
 
-- On the Host, when switching alternatives or calling `emplace`, the old value is destroyed first; if the construction of the new alternative throws, the object has no active alternative, `index()` is `variant_npos`, and `valueless_by_exception()` is `true`. The object can still be safely destroyed and recovered through a successful `emplace` or assignment.
+- On Host, copy assignment to a different alternative preserves the old value if copying the new alternative throws and moving it is nonthrowing. In other cases that construct the new alternative in place, a construction failure leaves the object valueless.
 - A failed construction while switching alternatives does not preserve the old value; this implementation does not promise to preserve the old alternative through an extra temporary copy.
 - A failed assignment to the same active alternative does not end the object's lifetime; the index stays unchanged and the state of the value is determined by that alternative type's assignment operation.
 - After copy or move assignment from a source with no active alternative, the target likewise has no active alternative.

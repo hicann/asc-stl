@@ -97,7 +97,7 @@ Returns a reference to the newly constructed alternative object; `T&` for the by
 
 ## Constraints
 
-- On the Host, when switching alternatives or calling `emplace`, the old value is destroyed first; if the construction of the new alternative throws, the object has no active alternative, `index()` is `variant_npos`, and `valueless_by_exception()` is `true`. The object can still be safely destroyed and recovered through a successful `emplace` or assignment.
+- On Host, `emplace` destroys the old value before constructing the new one. If construction throws, `index()` returns `variant_npos` and `valueless_by_exception()` returns `true`. A later successful `emplace` or assignment restores an active value.
 - The new active index is published only after successful construction; on failure the old alternative value is not preserved.
 
 - The object holds one active alternative value at a time; the selected alternative must be confirmed through `index()` before reading.

@@ -83,7 +83,7 @@ Documented subsets remain usable under their API contracts. This table does not 
 | `span` | 202002; 202311 | Static-extent iterator/count and dynamic-to-static span conversions lack required explicitness; newer at is absent |
 | `mdspan, submdspan` | 202207/202406; 202306/202411 | C++17/20 use operator(); standard multidimensional operator[] requires native language support, and slicing/layouts remain subsets |
 | `expected` | 202202; 202211 | bad_expected_access exception interface is absent; monadic methods do not imply full support |
-| `optional` | 201606; 202106; 202110; 202506 | optional<int> copy construction lacks required triviality; newer constexpr/reference APIs do not repair the base revision |
+| `optional` | 201606; 202106; 202110; 202506 | Checked access through `value()` and the `bad_optional_access` exception are absent |
 | `variant` | 201606; 202102; 202106 | No bad_variant_access; invalid access traps |
 | `inplace_vector` | 202406 | Fixed-capacity subset lacks insert and the full standard exception surface |
 | `allocate_at_least` | 202302 | Free-function backport lacks the standard allocator_traits member and standard allocator |

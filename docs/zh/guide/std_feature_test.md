@@ -79,7 +79,7 @@ C++17/C++20 的 Host、AI Core SIMD/SIMT 中均可查询。Host 支持不推导 
 | `span` | 202002; 202311 | 静态 extent 的 iterator/count 及 dynamic→static span 转换缺少标准要求的 explicit；较新 at 也缺失 |
 | `mdspan, submdspan` | 202207/202406; 202306/202411 | C++17/20 使用 operator()；标准多参数 operator[] 依赖原生语言支持，切片/布局也是选定子集 |
 | `expected` | 202202; 202211 | 没有 bad_expected_access 异常接口；不能由已提供的 monadic 方法推导完整支持 |
-| `optional` | 201606; 202106; 202110; 202506 | optional<int> 的复制构造不满足要求的平凡性；较新 constexpr/引用接口不补足基础修订 |
+| `optional` | 201606; 202106; 202110; 202506 | 缺少 `value()` 检查访问接口及 `bad_optional_access` 异常类型 |
 | `variant` | 201606; 202102; 202106 | 没有 bad_variant_access，错误访问采用 trap |
 | `inplace_vector` | 202406 | 提供固定容量子集，insert/完整异常协议等标准入口未齐 |
 | `allocate_at_least` | 202302 | 提供自由函数回移；缺少 allocator_traits::allocate_at_least 标准成员及标准 allocator |

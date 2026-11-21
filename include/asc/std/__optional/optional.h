@@ -101,18 +101,9 @@ public:
     CANN_ASC_STL_API constexpr optional(nullopt_t) noexcept
     {}
 
-    CANN_ASC_STL_API constexpr optional(const optional& other)
-    {
-        if (other.engaged_) {
-            this->construct(other.storage_.value_);
-        }
-    }
-    CANN_ASC_STL_API constexpr optional(optional&& other) noexcept(is_nothrow_move_constructible_v<T>)
-    {
-        if (other.engaged_) {
-            this->construct(::asc::std::move(other.storage_.value_));
-        }
-    }
+    CANN_ASC_STL_API constexpr optional(const optional&) = default;
+    CANN_ASC_STL_API constexpr optional(optional&&) = default;
+
     // Converting construction splits on convertibility: implicitly convertible
     // combinations support copy initialization; the rest stay explicit.
     template <class U,
@@ -171,17 +162,9 @@ public:
         reset();
         return *this;
     }
-    CANN_ASC_STL_API constexpr optional& operator=(const optional& other)
-    {
-        assign(other);
-        return *this;
-    }
-    CANN_ASC_STL_API constexpr optional& operator=(optional&& other) noexcept(
-        is_nothrow_move_constructible_v<T> && is_nothrow_move_assignable_v<T>)
-    {
-        assign(::asc::std::move(other));
-        return *this;
-    }
+    CANN_ASC_STL_API constexpr optional& operator=(const optional&) = default;
+    CANN_ASC_STL_API constexpr optional& operator=(optional&&) = default;
+
     template <class U, enable_if_t<!__is_asc_std_optional_v<remove_cvref_t<U>>, int> = 0>
     CANN_ASC_STL_API constexpr optional& operator=(U&& value)
     {
@@ -192,13 +175,13 @@ public:
         }
         return *this;
     }
-    template <class U>
+    template <class U, enable_if_t<!is_same_v<U, T>, int> = 0>
     CANN_ASC_STL_API constexpr optional& operator=(const optional<U>& other)
     {
         assign(other);
         return *this;
     }
-    template <class U>
+    template <class U, enable_if_t<!is_same_v<U, T>, int> = 0>
     CANN_ASC_STL_API constexpr optional& operator=(optional<U>&& other)
     {
         assign(::asc::std::move(other));

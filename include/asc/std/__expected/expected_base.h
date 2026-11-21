@@ -84,9 +84,29 @@ struct __expected_construct_from_invoke_tag {
     explicit __expected_construct_from_invoke_tag() = default;
 };
 
+// Construct the selected member while the union itself is being initialized. If
+// construction throws, the enclosing destructor has no active member to release.
+template <class Destination, class Source>
+CANN_ASC_STL_API constexpr void __expected_construct_active(Destination& destination, bool has_value, Source&& source)
+{
+    if (has_value) {
+        ::asc::std::__construct_at(
+            ::asc::std::addressof(destination.__val_), ::asc::std::forward<Source>(source).__val_);
+    } else {
+        ::asc::std::__construct_at(
+            ::asc::std::addressof(destination.__unex_), ::asc::std::forward<Source>(source).__unex_);
+    }
+}
+
 template <class T, class E, bool = is_trivially_destructible_v<T> && is_trivially_destructible_v<E>>
 union __expected_union_t {
     struct __empty_cpo {};
+    template <class Source>
+    CANN_ASC_STL_API constexpr __expected_union_t(bool has_value, Source&& source) : __empty_{}
+    {
+        ::asc::std::__expected_construct_active(*this, has_value, ::asc::std::forward<Source>(source));
+    }
+
     template <class T2 = T, enable_if_t<is_default_constructible_v<T2>, int> = 0>
     CANN_ASC_STL_API constexpr __expected_union_t() noexcept(is_nothrow_default_constructible_v<T2>) : __val_()
     {}
@@ -126,6 +146,12 @@ union __expected_union_t {
 template <class T, class E>
 union __expected_union_t<T, E, true> {
     struct __empty_cpo {};
+    template <class Source>
+    CANN_ASC_STL_API constexpr __expected_union_t(bool has_value, Source&& source) : __empty_{}
+    {
+        ::asc::std::__expected_construct_active(*this, has_value, ::asc::std::forward<Source>(source));
+    }
+
     template <class T2 = T, enable_if_t<is_default_constructible_v<T2>, int> = 0>
     CANN_ASC_STL_API constexpr __expected_union_t() noexcept(is_nothrow_default_constructible_v<T2>) : __val_()
     {}
@@ -168,8 +194,9 @@ struct __expected_destruct<T, E, false, false> {
 
     CANN_ASC_STL_DETAIL_HIDE_FROM_ABI constexpr __expected_destruct() = default;
 
-    CANN_ASC_STL_API constexpr __expected_destruct(const bool __has_val) noexcept(is_nothrow_default_constructible_v<T>)
-        : __has_val_(__has_val)
+    template <class Source>
+    CANN_ASC_STL_API constexpr __expected_destruct(bool has_value, Source&& source)
+        : __union_(has_value, ::asc::std::forward<Source>(source)), __has_val_(has_value)
     {}
 
     template <class... Args>
@@ -215,8 +242,9 @@ struct __expected_destruct<T, E, true, false> {
 
     CANN_ASC_STL_DETAIL_HIDE_FROM_ABI constexpr __expected_destruct() = default;
 
-    CANN_ASC_STL_API constexpr __expected_destruct(const bool __has_val) noexcept(is_nothrow_default_constructible_v<T>)
-        : __has_val_(__has_val)
+    template <class Source>
+    CANN_ASC_STL_API constexpr __expected_destruct(bool has_value, Source&& source)
+        : __union_(has_value, ::asc::std::forward<Source>(source)), __has_val_(has_value)
     {}
 
     template <class... Args>
@@ -260,8 +288,9 @@ struct __expected_destruct<T, E, false, true> {
 
     CANN_ASC_STL_DETAIL_HIDE_FROM_ABI constexpr __expected_destruct() = default;
 
-    CANN_ASC_STL_API constexpr __expected_destruct(const bool __has_val) noexcept(is_nothrow_default_constructible_v<T>)
-        : __has_val_(__has_val)
+    template <class Source>
+    CANN_ASC_STL_API constexpr __expected_destruct(bool has_value, Source&& source)
+        : __union_(has_value, ::asc::std::forward<Source>(source)), __has_val_(has_value)
     {}
 
     template <class... Args>
@@ -305,8 +334,9 @@ struct __expected_destruct<T, E, true, true> {
 
     CANN_ASC_STL_DETAIL_HIDE_FROM_ABI constexpr __expected_destruct() = default;
 
-    CANN_ASC_STL_API constexpr __expected_destruct(const bool __has_val) noexcept(is_nothrow_default_constructible_v<T>)
-        : __has_val_(__has_val)
+    template <class Source>
+    CANN_ASC_STL_API constexpr __expected_destruct(bool has_value, Source&& source)
+        : __union_(has_value, ::asc::std::forward<Source>(source)), __has_val_(has_value)
     {}
 
     template <class... Args>
@@ -445,14 +475,8 @@ struct __expected_copy<T, E, __smf_availability::__available> : __expected_stora
 
     CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 __expected_copy(const __expected_copy& other) noexcept(
         is_nothrow_copy_constructible_v<T> && is_nothrow_copy_constructible_v<E>)
-        : __base(other.__has_val_)
-    {
-        if (other.__has_val_) {
-            ::asc::std::__construct_at(::asc::std::addressof(this->__union_.__val_), other.__union_.__val_);
-        } else {
-            ::asc::std::__construct_at(::asc::std::addressof(this->__union_.__unex_), other.__union_.__unex_);
-        }
-    }
+        : __base(other.__has_val_, other.__union_)
+    {}
 
     CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __expected_copy(__expected_copy&&) = default;
     CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __expected_copy& operator=(const __expected_copy&) = default;
@@ -489,16 +513,8 @@ struct __expected_move<T, E, __smf_availability::__available> : __expected_copy<
 
     CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 __expected_move(__expected_move&& other) noexcept(
         is_nothrow_move_constructible_v<T> && is_nothrow_move_constructible_v<E>)
-        : __base(other.__has_val_)
-    {
-        if (other.__has_val_) {
-            ::asc::std::__construct_at(
-                ::asc::std::addressof(this->__union_.__val_), ::asc::std::move(other.__union_.__val_));
-        } else {
-            ::asc::std::__construct_at(
-                ::asc::std::addressof(this->__union_.__unex_), ::asc::std::move(other.__union_.__unex_));
-        }
-    }
+        : __base(other.__has_val_, ::asc::std::move(other.__union_))
+    {}
 
     CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __expected_move& operator=(const __expected_move&) = default;
     CANN_ASC_STL_DETAIL_HIDE_FROM_ABI __expected_move& operator=(__expected_move&&) = default;

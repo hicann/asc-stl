@@ -97,7 +97,7 @@ constexpr T& emplace(::std::initializer_list<Up> list, Args&&... args);
 
 ## 约束说明
 
-- Host切换备选项或调用`emplace`时先销毁旧值；若新备选项构造抛出异常，对象没有活动备选项，`index()`为`variant_npos`且`valueless_by_exception()`为`true`。对象仍可安全析构，并可通过成功的`emplace`或赋值恢复。
+- Host 上，`emplace` 先销毁旧值再构造新值。构造抛出异常时，`index()` 返回 `variant_npos`，`valueless_by_exception()` 返回 `true`。后续成功的 `emplace` 或赋值可恢复活动值。
 - 成功构造后才公布新的活动索引；失败时不会保留旧备选值。
 
 - 对象一次保存一个活动备选值，读取前须通过`index()`确认所选备选项。

@@ -46,6 +46,7 @@
 #include <asc/std/__type_traits/is_nothrow_move_assignable.h>
 #include <asc/std/__type_traits/is_nothrow_move_constructible.h>
 #include <asc/std/__type_traits/is_reference.h>
+#include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/is_void.h>
 #include <asc/std/__type_traits/remove_cvref.h>
 #include <asc/std/__utility/forward.h>
@@ -55,6 +56,7 @@
 #include <asc/std/__variant/variant_base.h>
 #include <asc/std/__variant/variant_constraints.h>
 #include <asc/std/__variant/variant_match.h>
+#include <asc/std/__variant/variant_traits.h>
 #include <asc/std/__variant/variant_visit.h>
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 // Brace-list constructor/emplace overloads go through the host initializer_list
@@ -65,36 +67,32 @@
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class... Types>
-class variant {
+class variant : private __variant_base<Types...>::type {
     static_assert(sizeof...(Types) > 0, "variant must have an alternative");
     static_assert((!is_array_v<Types> && ...), "variant cannot contain arrays");
     static_assert((!is_reference_v<Types> && ...), "variant cannot contain references");
     static_assert((!is_void_v<Types> && ...), "variant cannot contain void");
-    using storage_type = __variant_storage<0, Types...>;
+    using base = typename __variant_base<Types...>::type;
+    using base::index_;
+    using base::storage_;
 
 public:
     template <class First = variant_alternative_t<0, variant>, enable_if_t<is_default_constructible_v<First>, int> = 0>
-    CANN_ASC_STL_API constexpr variant() noexcept(is_nothrow_default_constructible_v<First>)
-        : storage_(in_place_index<0>), index_(0)
+    CANN_ASC_STL_API constexpr variant() noexcept(is_nothrow_default_constructible_v<First>) : base(in_place_index<0>)
     {}
-    CANN_ASC_STL_API constexpr variant(const variant& other) : storage_(), index_(other.index_)
-    {
-        __variant_storage_copy_construct(index_, storage_, other.storage_);
-    }
-    CANN_ASC_STL_API constexpr variant(variant&& other) : storage_(), index_(other.index_)
-    {
-        __variant_storage_move_construct(index_, storage_, other.storage_);
-    }
-    template <class T, __SIZE_TYPE__ Index = __variant_best_match<remove_cvref_t<T>, void, Types...>::value,
+    CANN_ASC_STL_API constexpr variant(const variant&) = default;
+    CANN_ASC_STL_API constexpr variant(variant&&) = default;
+    template <class T, enable_if_t<!is_same_v<remove_cvref_t<T>, variant>, int> = 0,
+        __SIZE_TYPE__ Index = __variant_best_match<remove_cvref_t<T>, void, Types...>::value,
         enable_if_t<Index != variant_npos && is_constructible_v<variant_alternative_t<Index, variant>, T>, int> = 0>
     CANN_ASC_STL_API constexpr variant(T&& value) noexcept(
         is_nothrow_constructible_v<variant_alternative_t<Index, variant>, T>)
-        : storage_(in_place_index<Index>, ::asc::std::forward<T>(value)), index_(Index)
+        : base(in_place_index<Index>, ::asc::std::forward<T>(value))
     {}
     template <size_t Index, class... Args, enable_if_t<(Index < sizeof...(Types)), int> = 0>
     CANN_ASC_STL_API constexpr explicit variant(in_place_index_t<Index>, Args&&... args) noexcept(
         is_nothrow_constructible_v<variant_alternative_t<Index, variant>, Args...>)
-        : storage_(in_place_index<Index>, ::asc::std::forward<Args>(args)...), index_(Index)
+        : base(in_place_index<Index>, ::asc::std::forward<Args>(args)...)
     {}
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     template <size_t Index, class Up, class... Args,
@@ -104,14 +102,14 @@ public:
     CANN_ASC_STL_API constexpr explicit variant(in_place_index_t<Index>, ::std::initializer_list<Up> list,
         Args&&... args) noexcept(is_nothrow_constructible_v<variant_alternative_t<Index, variant>,
         ::std::initializer_list<Up>&, Args...>)
-        : storage_(in_place_index<Index>, list, ::asc::std::forward<Args>(args)...), index_(Index)
+        : base(in_place_index<Index>, list, ::asc::std::forward<Args>(args)...)
     {}
 #endif
     template <class T, class... Args, __SIZE_TYPE__ Index = __variant_index_v<T, Types...>,
         enable_if_t<Index != variant_npos && __variant_type_count_v<T, Types...> == 1, int> = 0>
     CANN_ASC_STL_API constexpr explicit variant(in_place_type_t<T>, Args&&... args) noexcept(
         is_nothrow_constructible_v<T, Args...>)
-        : storage_(in_place_index<Index>, ::asc::std::forward<Args>(args)...), index_(Index)
+        : base(in_place_index<Index>, ::asc::std::forward<Args>(args)...)
     {}
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     template <class T, class Up, class... Args, __SIZE_TYPE__ Index = __variant_index_v<T, Types...>,
@@ -120,45 +118,15 @@ public:
             int> = 0>
     CANN_ASC_STL_API constexpr explicit variant(in_place_type_t<T>, ::std::initializer_list<Up> list,
         Args&&... args) noexcept(is_nothrow_constructible_v<T, ::std::initializer_list<Up>&, Args...>)
-        : storage_(in_place_index<Index>, list, ::asc::std::forward<Args>(args)...), index_(Index)
+        : base(in_place_index<Index>, list, ::asc::std::forward<Args>(args)...)
     {}
 #endif
-    CANN_ASC_STL_API ~variant()
-    {
-        __variant_storage_destroy(index_, storage_);
-    }
-    CANN_ASC_STL_API constexpr variant& operator=(const variant& other)
-    {
-        if (this == &other) {
-            return *this;
-        }
-        if (index_ == other.index_) {
-            __variant_storage_copy_assign(index_, storage_, other.storage_);
-        } else {
-            __variant_storage_destroy(index_, storage_);
-            // Construction may throw on Host; publish an active index only after it succeeds.
-            index_ = variant_npos;
-            __variant_storage_copy_construct(other.index_, storage_, other.storage_);
-            index_ = other.index_;
-        }
-        return *this;
-    }
-    CANN_ASC_STL_API constexpr variant& operator=(variant&& other)
-    {
-        if (this == &other) {
-            return *this;
-        }
-        if (index_ == other.index_) {
-            __variant_storage_move_assign(index_, storage_, other.storage_);
-        } else {
-            __variant_storage_destroy(index_, storage_);
-            index_ = variant_npos;
-            __variant_storage_move_construct(other.index_, storage_, other.storage_);
-            index_ = other.index_;
-        }
-        return *this;
-    }
-    template <class T, __SIZE_TYPE__ Index = __variant_best_match<remove_cvref_t<T>, void, Types...>::value,
+    CANN_ASC_STL_API ~variant() = default;
+    CANN_ASC_STL_API constexpr variant& operator=(const variant&) = default;
+    CANN_ASC_STL_API constexpr variant& operator=(variant&&) = default;
+
+    template <class T, enable_if_t<!is_same_v<remove_cvref_t<T>, variant>, int> = 0,
+        __SIZE_TYPE__ Index = __variant_best_match<remove_cvref_t<T>, void, Types...>::value,
         enable_if_t<Index != variant_npos &&
                 (is_assignable_v<variant_alternative_t<Index, variant>&, T> ||
                     is_constructible_v<variant_alternative_t<Index, variant>, T>),
@@ -176,11 +144,7 @@ public:
     CANN_ASC_STL_API constexpr variant_alternative_t<Index, variant>& emplace(Args&&... args)
     {
         static_assert(Index < sizeof...(Types), "variant index out of range");
-        __variant_storage_destroy(index_, storage_);
-        index_ = variant_npos;
-        __variant_storage_construct<Index>(storage_, ::asc::std::forward<Args>(args)...);
-        index_ = Index;
-        return __variant_storage_get<Index>(storage_);
+        return this->template __emplace<Index>(::asc::std::forward<Args>(args)...);
     }
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
     template <size_t Index, class Up, class... Args,
@@ -191,11 +155,7 @@ public:
         ::std::initializer_list<Up> list, Args&&... args)
     {
         static_assert(Index < sizeof...(Types), "variant index out of range");
-        __variant_storage_destroy(index_, storage_);
-        index_ = variant_npos;
-        __variant_storage_construct<Index>(storage_, list, ::asc::std::forward<Args>(args)...);
-        index_ = Index;
-        return __variant_storage_get<Index>(storage_);
+        return this->template __emplace<Index>(list, ::asc::std::forward<Args>(args)...);
     }
 #endif
     template <class T, class... Args, __SIZE_TYPE__ Index = __variant_index_v<T, Types...>,
@@ -212,11 +172,7 @@ public:
     CANN_ASC_STL_API constexpr T& emplace(::std::initializer_list<Up> list, Args&&... args)
     {
         static_assert(Index < sizeof...(Types), "variant index out of range");
-        __variant_storage_destroy(index_, storage_);
-        index_ = variant_npos;
-        __variant_storage_construct<Index>(storage_, list, ::asc::std::forward<Args>(args)...);
-        index_ = Index;
-        return __variant_storage_get<Index>(storage_);
+        return this->template __emplace<Index>(list, ::asc::std::forward<Args>(args)...);
     }
 #endif
     CANN_ASC_STL_NODISCARD CANN_ASC_STL_API constexpr __SIZE_TYPE__ index() const noexcept
@@ -254,10 +210,6 @@ public:
         other = ::asc::std::move(*this);
         *this = ::asc::std::move(temporary);  // NOLINT(build/include_what_you_use)
     }
-
-private:
-    storage_type storage_;
-    __SIZE_TYPE__ index_ = variant_npos;
 };
 
 // Free-function form of member swap: both ADL and unqualified swap call sites resolve to this overload.

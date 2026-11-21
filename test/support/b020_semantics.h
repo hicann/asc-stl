@@ -39,6 +39,9 @@
 #include <asc/std/__functional/bind_back.h>
 #include <asc/std/__functional/compose.h>
 #include <asc/std/optional>
+#include <asc/std/utility>
+
+#include "vocabulary_copy_test.h"
 
 namespace asc_stl_b020_test {
 
@@ -191,11 +194,44 @@ CANN_ASC_STL_API constexpr int evaluate_functional() noexcept
     return (bound(2) != 9) + (composed(3) != 8);
 }
 
+static_assert(asc_stl_copy_test::check_traits<asc::std::optional>());
+static_assert(asc::std::is_trivially_copyable_v<asc::std::optional<asc_stl_copy_test::move_only&>>);
+
+CANN_ASC_STL_API int evaluate_optional_copy(int input)
+{
+    using asc_stl_copy_test::payload;
+    using optional = asc::std::optional<payload>;
+    asc_stl_copy_test::counts calls;
+    int failures = 0;
+    {
+        const optional empty;
+        const optional source(asc::std::in_place, calls, input);
+        optional target(empty);
+        optional copied(source);
+        failures += target.has_value() || !copied || copied->value != input;
+        target = source;
+        copied = target;
+        target = empty;
+        target = empty;
+        failures += target.has_value() || !copied || copied->value != input || calls.live != 2;
+    }
+    using move_optional = asc::std::optional<asc_stl_copy_test::move_only>;
+    move_optional move_source(asc::std::in_place, input);
+    move_optional moved(asc::std::move(move_source));
+    move_optional assigned;
+    assigned = asc::std::move(moved);  // NOLINT(build/include_what_you_use)
+    failures += !assigned || assigned->value != input;
+    asc_stl_copy_test::move_only object(input);
+    asc::std::optional<asc_stl_copy_test::move_only&> binding(object);
+    auto alias = binding;
+    return failures + (&*alias != &object) + (calls.live != 0 || calls.copies != 2 || calls.assignments != 1);
+}
+
 CANN_ASC_STL_API int evaluate_optional() noexcept
 {
     asc::std::optional<int> empty;
     asc::std::optional<int> value(4);
-    int failures = empty.has_value();
+    int failures = evaluate_optional_copy(13) + empty.has_value();
     failures += !value || *value != 4 || value.value_or(9) != 4;
     failures += empty.value_or(9) != 9;
     failures += !(value > asc::std::nullopt) || !(asc::std::nullopt < value);

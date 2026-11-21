@@ -52,6 +52,7 @@ template<class T> class optional<T&>;
 
 ## Constraints
 
+- For object types, copy construction requires a copy-constructible `T`. Copy assignment also requires a copy-assignable `T`. A trivial copy constructor is preserved. Assignment is trivial when construction, assignment, and destruction are all trivial. Copying `optional<T&>` copies the binding.
 - T must be an ordinary non-reference object type.
 - Host follows the valid C++17 operations.
 - The operations that construction, assignment, invocation, and swap rely on must not throw on the device side.

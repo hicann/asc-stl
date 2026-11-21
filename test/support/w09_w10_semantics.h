@@ -26,6 +26,7 @@
 #include <asc/std/mutex>
 #include <asc/std/variant>
 #include "mdspan_slice_regression.h"
+#include "vocabulary_copy_test.h"
 
 namespace asc_stl_w09_w10_test {
 
@@ -171,6 +172,37 @@ CANN_ASC_STL_API int evaluate_alignment_chrono()
     return 0;
 }
 
+template <class T>
+using variant_with_int = asc::std::variant<int, T>;
+static_assert(asc_stl_copy_test::check_traits<variant_with_int>());
+
+CANN_ASC_STL_API int evaluate_variant_copy(int input)
+{
+    using asc_stl_copy_test::payload;
+    using variant = asc::std::variant<int, long, payload>;
+    asc_stl_copy_test::counts calls;
+    int failures = 0;
+    {
+        const variant source(asc::std::in_place_index<2>, calls, input);
+        const variant first(asc::std::in_place_index<0>, input + 1);
+        variant copied(source);
+        variant target(first);
+        target = source;
+        copied = target;
+        failures += target.index() != 2 || asc::std::get<2>(target).value != input;
+        failures += copied.index() != 2 || asc::std::get<2>(copied).value != input;
+        target = first;
+        failures += target.index() != 0 || asc::std::get<0>(target) != input + 1 || calls.live != 2;
+    }
+    using move_variant = variant_with_int<asc_stl_copy_test::move_only>;
+    move_variant move_source(asc::std::in_place_index<1>, input);
+    move_variant moved(asc::std::move(move_source));
+    move_variant assigned(asc::std::in_place_index<0>, 0);
+    assigned = asc::std::move(moved);
+    failures += assigned.index() != 1 || asc::std::get<1>(assigned).value != input;
+    return failures + (calls.live != 0 || calls.copies != 2 || calls.assignments != 1);
+}
+
 CANN_ASC_STL_API int evaluate_variant_pair()
 {
     asc::std::variant<int, unsigned int> value(asc::std::in_place_index<0>, 9);
@@ -222,7 +254,7 @@ CANN_ASC_STL_API int evaluate_memory_variant()
     const int pair_result = evaluate_variant_pair();
     if (pair_result != 0)
         return pair_result;
-    return evaluate_variant_nested();
+    return evaluate_variant_nested() + evaluate_variant_copy(23);
 }
 
 CANN_ASC_STL_API int evaluate_mutex()

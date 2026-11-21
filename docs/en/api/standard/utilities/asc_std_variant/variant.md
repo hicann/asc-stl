@@ -42,7 +42,8 @@ template<class ...Types> class variant;
 
 ## Constraints
 
-- On the Host, when switching alternatives or calling `emplace`, the old value is destroyed first; if the construction of the new alternative throws, the object has no active alternative, `index()` is `variant_npos`, and `valueless_by_exception()` is `true`. The object can still be safely destroyed and recovered through a successful `emplace` or assignment.
+- Copy construction requires every alternative to be copy-constructible. Copy assignment also requires every alternative to be copy-assignable. The copy constructor is trivial when all copy constructors are trivial. Copy assignment is trivial when every alternative also has trivial copy assignment and destruction.
+- On Host, copy assignment to a different alternative preserves the old value if copying the new alternative throws and moving it is nonthrowing. In other cases that construct the new alternative in place, a construction failure leaves the object valueless.
 - When an assignment to the same active alternative throws, the active index stays unchanged and the state of the value is determined by that alternative type's assignment operation.
 
 - Alternative types on the device side and the selected construction, assignment, and swap operations must not throw.

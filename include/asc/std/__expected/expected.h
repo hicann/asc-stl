@@ -110,7 +110,7 @@ public:
     using unexpected_type = unexpected<Error>;
 
     template <class Value2 = Value, enable_if_t<is_default_constructible_v<Value2>, int> = 0>
-    CANN_ASC_STL_API constexpr expected() noexcept(is_nothrow_default_constructible_v<Value2>) : base(true)
+    CANN_ASC_STL_API constexpr expected() noexcept(is_nothrow_default_constructible_v<Value2>) : base(in_place)
     {}
 
     CANN_ASC_STL_API constexpr expected(const Value& value) : base(in_place, value)
@@ -119,12 +119,7 @@ public:
     {}
     CANN_ASC_STL_API constexpr expected(unexpect_t, const Error& error) : base(unexpect, error)
     {}
-    CANN_ASC_STL_API constexpr expected(const expected& other) : base(static_cast<const base&>(other))
-    {}
-    // Move construction/move assignment propagate automatically through the
-    // layered (available/deleted) dispatch: the member is deleted when either
-    // the value or the error is not movable, matching the [expected.object]
-    // special-member constraints.
+    CANN_ASC_STL_API constexpr expected(const expected&) = default;
     CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 expected(expected&&) = default;
     CANN_ASC_STL_API ~expected() = default;
 
@@ -153,14 +148,8 @@ public:
             int> = 0>
     CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 expected(const expected<Up, OtherErr>& other) noexcept(
         is_nothrow_constructible_v<Value, const Up&> && is_nothrow_constructible_v<Error, const OtherErr&>)
-        : base(other.__has_val_)
-    {
-        if (other.__has_val_) {
-            ::asc::std::__construct_at(::asc::std::addressof(this->__value()), other.__value());
-        } else {
-            ::asc::std::__construct_at(::asc::std::addressof(this->__error()), other.__error());
-        }
-    }
+        : base(other.__has_val_, other.__union_)
+    {}
 
     template <class Up, class OtherErr,
         enable_if_t<__can_convert<Up, OtherErr, const Up&, const OtherErr&> &&
@@ -169,14 +158,8 @@ public:
     CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 explicit expected(
         const expected<Up, OtherErr>& other) noexcept(is_nothrow_constructible_v<Value, const Up&> &&
         is_nothrow_constructible_v<Error, const OtherErr&>)
-        : base(other.__has_val_)
-    {
-        if (other.__has_val_) {
-            ::asc::std::__construct_at(::asc::std::addressof(this->__value()), other.__value());
-        } else {
-            ::asc::std::__construct_at(::asc::std::addressof(this->__error()), other.__error());
-        }
-    }
+        : base(other.__has_val_, other.__union_)
+    {}
 
     template <class Up, class OtherErr,
         enable_if_t<__can_convert<Up, OtherErr, Up, OtherErr> && is_convertible_v<Up, Value> &&
@@ -184,14 +167,8 @@ public:
             int> = 0>
     CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 expected(expected<Up, OtherErr>&& other) noexcept(
         is_nothrow_constructible_v<Value, Up> && is_nothrow_constructible_v<Error, OtherErr>)
-        : base(other.__has_val_)
-    {
-        if (other.__has_val_) {
-            ::asc::std::__construct_at(::asc::std::addressof(this->__value()), ::asc::std::move(other.__value()));
-        } else {
-            ::asc::std::__construct_at(::asc::std::addressof(this->__error()), ::asc::std::move(other.__error()));
-        }
-    }
+        : base(other.__has_val_, ::asc::std::move(other.__union_))
+    {}
 
     template <class Up, class OtherErr,
         enable_if_t<__can_convert<Up, OtherErr, Up, OtherErr> &&
@@ -199,14 +176,8 @@ public:
             int> = 0>
     CANN_ASC_STL_API CANN_ASC_STL_DETAIL_CONSTEXPR_CXX20 explicit expected(expected<Up, OtherErr>&& other) noexcept(
         is_nothrow_constructible_v<Value, Up> && is_nothrow_constructible_v<Error, OtherErr>)
-        : base(other.__has_val_)
-    {
-        if (other.__has_val_) {
-            ::asc::std::__construct_at(::asc::std::addressof(this->__value()), ::asc::std::move(other.__value()));
-        } else {
-            ::asc::std::__construct_at(::asc::std::addressof(this->__error()), ::asc::std::move(other.__error()));
-        }
-    }
+        : base(other.__has_val_, ::asc::std::move(other.__union_))
+    {}
 
     template <class Up = Value,
         enable_if_t<!is_same_v<remove_cvref_t<Up>, in_place_t> && !is_same_v<remove_cvref_t<Up>, expected> &&

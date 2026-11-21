@@ -42,6 +42,7 @@ template<class Value, class Error> class expected;
 
 ## Constraints
 
+- Copy construction requires both the value and error types to be copy-constructible. Copy assignment also requires both to be copy-assignable and at least one to be nothrow move-constructible. The copy constructor is trivial when both copy constructors are trivial. If both types also have trivial copy assignment and destruction, an available copy assignment is trivial.
 - T must be a non-void type, and E must be an object type.
 - The applicable operations must not throw exceptions.
 - Provides construction, assignment, emplace, and swap.

@@ -220,8 +220,35 @@ bool assignment_from_valueless()
     return observed && lifetimes_balanced();
 }
 
+struct nothrow_movable : throwing_value {
+    using throwing_value::throwing_value;
+    nothrow_movable(const nothrow_movable&) = default;
+    nothrow_movable(nothrow_movable&&) noexcept = default;
+    nothrow_movable& operator=(const nothrow_movable&) = default;
+    nothrow_movable& operator=(nothrow_movable&&) = default;
+};
+
+bool throwing_copy_preserves_old_alternative()
+{
+    using variant = asc::std::variant<int, nothrow_movable>;
+    variant target(17);
+    const variant source(asc::std::in_place_index<1>, 23);
+    throwing_value::fail_copy = true;
+    bool preserved = false;
+    try {
+        target = source;
+    } catch (const construction_failure&) {
+        preserved = target.index() == 0 && asc::std::get<0>(target) == 17 && source.index() == 1;
+    }
+    throwing_value::fail_copy = false;
+    target = source;
+    return preserved && target.index() == 1 && asc::std::get<1>(target).value == 23;
+}
+
 int evaluate_exception_state()
 {
+    if (!throwing_copy_preserves_old_alternative() || !lifetimes_balanced())
+        return 117;
     if (!assignment_changes_alternative(false))
         return 101;
     if (!assignment_changes_alternative(true))
