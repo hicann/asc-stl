@@ -81,7 +81,8 @@ constexpr void seed(Sseq& sequence) noexcept;
 
 ## 约束说明
 
-- 种子对象通过无参调用取得一个整数；当模数非零时对其取模，并按增量与零状态规则归一化。该形式不接受只有generate成员的标准SeedSequence。
+- 两种重载都先将种子整数对引擎的实际模数取余。`M` 为零时保留 `result_type` 的低位。若 `C` 为零且余数为零，初始状态取 1，否则取该余数。
+- 种子对象通过无参调用 `sequence()` 提供一个整数。
 
 - 提供不接收seed_seq的标准seed、discard、生成和相等比较成员。
 

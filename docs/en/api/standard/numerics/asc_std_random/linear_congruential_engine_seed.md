@@ -81,7 +81,8 @@ No return value.
 
 ## Constraints
 
-- The seed object yields one integer through a no-argument call; when the modulus is non-zero, the integer is reduced modulo it and normalized according to the increment and zero-state rules. This form does not accept a standard SeedSequence that only has a generate member.
+- Both overloads reduce the seed integer modulo the effective modulus. When `M` is zero, this keeps the low bits representable in `result_type`. If `C` and the remainder are both zero, the initial state is 1. Otherwise the remainder is the initial state.
+- A seed object supplies one integer through the call `sequence()`.
 
 - Provides the standard seed, discard, generation, and equality comparison members that do not accept a seed_seq.
 

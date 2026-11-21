@@ -32,10 +32,10 @@
 #include <asc/std/__numeric/iota.h>
 #include <asc/std/__numeric/transform_exclusive_scan.h>
 #include <asc/std/__optional/optional.h>
-#include <asc/std/__random/linear_congruential_engine.h>
 #include <asc/std/__type_traits/is_non_narrowing_convertible.h>
 #include <asc/std/__variant/comparison.h>
 #include <asc/std/iterator>
+#include <asc/std/random>
 #include <asc/std/ranges>
 #include <asc/__cmath/operations.h>
 #include <asc/__iterator/adaptors.h>
@@ -487,6 +487,40 @@ CANN_ASC_STL_API int evaluate_inplace_vector()
     return 0;
 }
 
+CANN_ASC_STL_API constexpr int evaluate_lcg_recurrence()
+{
+    using word = unsigned long long;
+    asc::std::linear_congruential_engine<word, 3, 1, 10> exact(3);
+    if (exact() != 0 || exact() != 1) {
+        return 1;
+    }
+
+    asc::std::linear_congruential_engine<unsigned, 5, 0, 0> multiplicative(0);
+    if (multiplicative() != 5) {
+        return 2;
+    }
+    multiplicative.seed(0);
+    if (multiplicative() != 5) {
+        return 3;
+    }
+
+    // Modulo m the first step is (-5) * (-7) - 3 = 32, then -163, then 812.
+    constexpr word m = 0xffffffffffffffc5ULL;
+    asc::std::linear_congruential_engine<word, m - 5, m - 3, m> wide(m - 7);
+    if (wide() != 32 || wide() != m - 163 || wide() != 812) {
+        return 4;
+    }
+    asc::std::linear_congruential_engine<unsigned short, 65535, 65535, 0> narrow(65535);
+    if (narrow() != 0 || narrow() != 65535) {
+        return 5;
+    }
+    asc::std::linear_congruential_engine<word, 0, 3, 10> constant(9);
+    if (constant() != 3) {
+        return 6;
+    }
+    return 0;
+}
+
 CANN_ASC_STL_API int evaluate_random_and_traits()
 {
     asc::std::minstd_rand0 engine;
@@ -511,7 +545,8 @@ CANN_ASC_STL_API int evaluate_random_and_traits()
     }
     b024_seed_sequence sequence;
     asc::std::linear_congruential_engine<unsigned, 48271u, 0u, 2147483647u> seeded(sequence);
-    if (seeded() != (48271ull * 123456789ull) % 2147483647ull) {
+    asc::std::linear_congruential_engine<unsigned char, 1, 0, 251> narrow_seed(sequence);
+    if (seeded() != (48271ull * 123456789ull) % 2147483647ull || narrow_seed() != 123456789u % 251u) {
         return 6;
     }
     asc::detail::pcg64_engine pcg_a;
@@ -718,7 +753,7 @@ CANN_ASC_STL_API int evaluate_variant_comparison()
 
 CANN_ASC_STL_API int evaluate()
 {
-    const int results[8] = {
+    const int results[] = {
         evaluate_algorithms(),
         evaluate_ranges_for_each(),
         evaluate_chrono(),
@@ -727,8 +762,9 @@ CANN_ASC_STL_API int evaluate()
         evaluate_random_and_traits(),
         evaluate_memory_and_support(),
         evaluate_iterator_facade(),
+        evaluate_lcg_recurrence(),
     };
-    for (int index = 0; index < 8; ++index) {
+    for (int index = 0; index < static_cast<int>(sizeof(results) / sizeof(results[0])); ++index) {
         if (results[index] != 0) {
             return 100 + index * 100 + results[index];
         }

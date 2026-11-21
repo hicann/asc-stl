@@ -28,7 +28,7 @@
 
 Header: `<asc/std/random>`.
 
-`asc::std::linear_congruential_engine::operator()` processes the current object and operands according to the operator rules available for `linear_congruential_engine`.
+Advances the current state `x` to `(A × x + C) mod m`, stores the remainder, and returns it. The modulus `m` equals `M` when `M` is nonzero. When `M` is zero, `m` is one greater than the maximum value of `result_type`.
 
 Standard semantics reference: [cppreference `random`](https://en.cppreference.com/w/cpp/header/random).
 

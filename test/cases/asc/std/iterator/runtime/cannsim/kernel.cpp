@@ -14,14 +14,25 @@
  * limitations under the License.
  */
 
+#include <asc/std/random>
+
 #include "../semantics.h"
 
-__global__ void asc_stl_b024_cannsim_kernel(__INT32_TYPE__* output, asc::detail::work_cursor* cursor)
+__global__ void asc_stl_b024_cannsim_kernel(unsigned long long* output, asc::detail::work_cursor* cursor)
 {
     asc_stl_b024_runtime::evaluate(output, cursor);
+
+    // The host supplies the seeds in GM and checks the full-width draws after launch.
+    constexpr unsigned long long modulus = 0xffffffffffffffc5ULL;
+    asc::std::linear_congruential_engine<unsigned long long, 3, 1, 10> exact(output[2]);
+    asc::std::linear_congruential_engine<unsigned, 5, 0, 0> zero(static_cast<unsigned>(output[3]));
+    asc::std::linear_congruential_engine<unsigned long long, modulus - 5, modulus - 3, modulus> wide(output[4]);
+    output[2] = exact();
+    output[3] = zero();
+    output[4] = wide();
 }
 
-void launch_asc_stl_b024_cannsim(__INT32_TYPE__* output, asc::detail::work_cursor* cursor, void* stream)
+void launch_asc_stl_b024_cannsim(unsigned long long* output, asc::detail::work_cursor* cursor, void* stream)
 {
     asc_stl_b024_cannsim_kernel<<<1, 1, 0, stream>>>(output, cursor);
 }

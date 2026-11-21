@@ -14,9 +14,20 @@
  * limitations under the License.
  */
 
+#include <asc/std/random>
+
 #include "../../../../support/b024_semantics.h"
+
+static_assert(asc_stl_b024_test::evaluate_lcg_recurrence() == 0);
 
 int main()
 {
+    asc::std::minstd_rand0 minstd0;
+    asc::std::minstd_rand minstd;
+    minstd0.discard(9999);
+    minstd.discard(9999);
+    if (minstd0() != 1043618065u || minstd() != 399268537u) {
+        return 1;
+    }
     return asc_stl_b024_test::evaluate();
 }

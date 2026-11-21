@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/random>`。
 
-`asc::std::linear_congruential_engine::operator()`按`linear_congruential_engine`的可用运算符规则处理当前对象及操作数。
+以当前状态 `x` 计算 `(A × x + C) mod m`，保存并返回余数。`M` 非零时，`m = M`。`M` 为零时，`m` 为 `result_type` 最大值加一。
 
 标准语义参考：[cppreference `random`](https://en.cppreference.com/w/cpp/header/random)。
 

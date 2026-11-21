@@ -88,69 +88,37 @@ public:
 
     CANN_ASC_STL_API constexpr void seed(result_type seed_value) noexcept
     {
-        // [rand.eng.lcong]: x = s mod m; if c mod m == 0 and x == 0, x = 1.
-        if (__M == 0) {
-            value_ = seed_value;
-            return;
-        }
-        value_ = static_cast<result_type>(seed_value % __M);
-        if (__C % __M == 0 && value_ == 0) {
-            value_ = 1u;
-        }
+        seed_from_value(seed_value);
     }
     template <class _Sseq, enable_if_t<detail::__is_seed_sequence<_Sseq, linear_congruential_engine>::value, int> = 0>
     CANN_ASC_STL_API constexpr void seed(_Sseq& sequence) noexcept
     {
-        // [rand.eng.lcong]: x = (sum_{j<k} g_j * 2^(32j)) mod m with
-        // k = max(1, ceil(bits(m) / 32)).  The delivered parameter sets have
-        // modulus below 2^32, so one draw reduced modulo m is exact.
-        if (__M == 0) {
-            value_ = static_cast<result_type>(sequence());
-        } else {
-            value_ = static_cast<result_type>(sequence() % __M);
-        }
-        if (__M != 0 && __C % __M == 0 && value_ == 0) {
-            value_ = 1u;
-        }
+        seed_from_value(sequence());
     }
 
     CANN_ASC_STL_API constexpr result_type operator()() noexcept
     {
-        if (__M == 0) {
-            value_ = static_cast<result_type>(__A * value_ + __C);
-            return value_;
-        }
-        if (__A == 0) {
-            value_ = static_cast<result_type>(__C % __M);
-            return value_;
-        }
-        constexpr bool wide_intermediate = sizeof(_UIntType) * 2 <= sizeof(__UINT64_TYPE__) && __M <= (__M / 2 + 1) * 2;
-        if constexpr (wide_intermediate) {
-            using __wide = __UINT64_TYPE__;
-            value_ = static_cast<result_type>(
-                (static_cast<__wide>(__A) * static_cast<__wide>(value_) + static_cast<__wide>(__C)) % __M);
-            return value_;
+        // Keep arithmetic unsigned even when a narrow result_type promotes to int.
+        using wide_type = decltype(result_type{} + uint64_t{});
+        constexpr wide_type multiplier = __A;
+        constexpr wide_type wide_max = ~wide_type{0};
+        if constexpr (__M == 0) {
+            value_ = static_cast<result_type>(multiplier * value_ + __C);
+        } else if constexpr (__A <= (wide_max - __C) / (__M - 1u)) {
+            // Every reachable state is at most M - 1, so the multiply-add fits.
+            value_ = static_cast<result_type>((multiplier * value_ + __C) % __M);
         } else {
-            // Schrage: a*x mod m = q*(x mod m) + r*(x div m) with q = m/a, r = m%a.
-            constexpr _UIntType __q = __M / __A;
-            constexpr _UIntType __r = __M % __A;
-            const _UIntType current = value_;
-            _UIntType high = static_cast<_UIntType>(__A * (current % __q));
-            const _UIntType low = static_cast<_UIntType>(__r * (current / __q));
-            if (low > high) {
-                high = static_cast<_UIntType>(high + (__M - low));
-            } else {
-                high = static_cast<_UIntType>(high - low);
+            result_type sum = __C;
+            result_type term = value_;
+            for (result_type factor = __A; factor != 0; factor >>= 1) {
+                if ((factor & 1u) != 0) {
+                    sum = add_mod(sum, term);
+                }
+                term = add_mod(term, term);
             }
-            if (__C == 0) {
-                value_ = high;
-            } else if (__C <= __M - high) {
-                value_ = static_cast<_UIntType>(high + __C);
-            } else {
-                value_ = static_cast<_UIntType>(high - (__M - __C));
-            }
-            return value_;
+            value_ = sum;
         }
+        return value_;
     }
 
     CANN_ASC_STL_API static constexpr result_type min() noexcept
@@ -177,6 +145,26 @@ public:
     }
 
 private:
+    template <class Seed>
+    CANN_ASC_STL_API constexpr void seed_from_value(Seed value) noexcept
+    {
+        if constexpr (__M == 0) {
+            value_ = static_cast<result_type>(value);
+        } else {
+            value_ = static_cast<result_type>(value % __M);
+        }
+        if (__C == 0 && value_ == 0) {
+            value_ = 1;
+        }
+    }
+
+    CANN_ASC_STL_API static constexpr result_type add_mod(result_type left, result_type right) noexcept
+    {
+        // Both operands are below M. Subtract the distance to M when the sum would reach it.
+        const result_type gap = __M - right;
+        return left >= gap ? left - gap : left + right;
+    }
+
     result_type value_{default_seed};
 };
 

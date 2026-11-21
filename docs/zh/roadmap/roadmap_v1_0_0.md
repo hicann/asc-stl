@@ -43,3 +43,7 @@
 新增 `CANN_ASC_STL_LIB_*` 标准修订检测，保留 HAS 子集查询，停止旧兼容开关对宿主宏的注入。
 Host C++20 的 `source_location::current` 改为立即函数，`unreachable` 补充 noexcept，
 `<asc/std/type_traits>` 补齐 unwrap_reference 系列的公开入口。详见[特性清单](../guide/std_feature_test.md)。
+
+## 线性同余随机引擎修复
+
+`<asc/std/random>` 的 `linear_congruential_engine` 已修正零模数乘法引擎的零种子处理，以及乘加达到模数或超出中间整数宽度时的状态递推。使用这些参数的程序将得到修正后的随机序列。[生成规则](../api/standard/numerics/asc_std_random/linear_congruential_engine_operator_call.md)
