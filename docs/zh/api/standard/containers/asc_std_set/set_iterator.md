@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/set>`。
 
-`asc::std::set::iterator`标识可变迭代器类型。
+`asc::std::set::iterator` 可递增以遍历集合。`begin()`、`find()` 和 `insert()` 返回的迭代器都以只读方式访问键。`*it` 返回 `const Key&`，`it.operator->()` 返回 `const Key*`。
 
 该接口的可用位置为Host、AI Core SIMT编程。
 

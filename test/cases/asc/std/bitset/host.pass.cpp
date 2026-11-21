@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+// Exercise the unordered_set-first include order. The Device compile case includes unordered_map first.
+#include <asc/std/unordered_set>
+
 #include "../../../../support/b027_semantics.h"
 #include "../../../../support/bitmap_mask_semantics.h"
 

@@ -14022,7 +14022,10 @@
       "target": "asc/std/__unordered_set/unordered_set.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/is_same.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14252,7 +14255,10 @@
         "asc/std/__cstddef/types.h",
         "asc/std/__exception/terminate.h",
         "asc/std/__iterator/iterator_traits.h",
-        "asc/std/__memory/allocator_traits.h"
+        "asc/std/__memory/addressof.h",
+        "asc/std/__memory/allocator_traits.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/is_same.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14307,7 +14313,10 @@
       "target": "asc/std/__hash_table/hash_table.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__memory/addressof.h",
+        "asc/std/__type_traits/conditional.h",
+        "asc/std/__type_traits/is_same.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {

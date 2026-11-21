@@ -28,7 +28,7 @@
 
 Header: `<asc/std/set>`.
 
-`asc::std::set::iterator` denotes the mutable iterator type.
+An `asc::std::set::iterator` can be incremented to traverse the container. Iterators obtained from `begin()`, `find()` and the result of `insert()` provide read-only access to the key. `*it` returns `const Key&` and `it.operator->()` returns `const Key*`.
 
 This interface is available in Host and AI Core SIMT programming.
 

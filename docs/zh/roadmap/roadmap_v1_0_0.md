@@ -31,6 +31,10 @@
 | [输入/输出库](../api/standard/input_output/input_output.md) | `cinttypes` | 定宽整数格式宏与 intmax_t 相关工具。 |
 | [并发支持库](../api/standard/concurrency/concurrency.md) | `atomic` `barrier` `latch` `semaphore` `mutex` `shared_mutex` | 原子、屏障、倒计数和信号量，以及 RAII 锁管理。 |
 
+## 集合迭代器的键访问
+
+`set` 和 `unordered_set` 的迭代器通过常量引用和常量指针访问键。直接给 `*it` 赋值或通过 `it->` 修改键的普通数据成员会在编译期被拒绝。`map` 和 `unordered_map` 的迭代器仍可写入 `second`。[有序集合迭代器](../api/standard/containers/asc_std_set/set_iterator.md) · [无序集合迭代器](../api/standard/containers/asc_std_unordered_set/unordered_set_iterator.md)
+
 ## 扩展层与 Runtime 层
 
 | 接口层 | 当前方向 | API 文档 |

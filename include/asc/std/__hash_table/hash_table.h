@@ -27,6 +27,10 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__memory/addressof.h>
+#include <asc/std/__type_traits/conditional.h>
+#include <asc/std/__type_traits/is_same.h>
+
 namespace asc::std {
 
 #ifndef CANN_ASC_STL_DETAIL_ARENA_ASSOCIATIVE_SHARED
@@ -85,17 +89,20 @@ public:
     using size_type = __SIZE_TYPE__;
 
     class iterator {
+        // A set stores the key itself. A map stores a pair with a const key.
+        using element_type = conditional_t<is_same_v<Key, Value>, const Value, Value>;
+
     public:
         CANN_ASC_STL_API iterator() = default;
         CANN_ASC_STL_API explicit iterator(node* current) : current_(current)
         {}
-        CANN_ASC_STL_API Value& operator*() const
+        CANN_ASC_STL_API element_type& operator*() const
         {
             return current_->value;
         }
-        CANN_ASC_STL_API Value* operator->() const
+        CANN_ASC_STL_API element_type* operator->() const
         {
-            return &current_->value;
+            return ::asc::std::addressof(current_->value);
         }
         CANN_ASC_STL_API iterator& operator++()
         {

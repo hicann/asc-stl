@@ -208,6 +208,7 @@ CANN_ASC_STL_HOST_SIMT_API int evaluate_containers(StoragePointer storage, __SIZ
         const auto inserted = values.insert(pair_type(2, 20));
         if (!inserted.second || inserted.first->second != 20)
             return 31;
+        inserted.first->second = 21;
         if (values.insert(pair_type(2, 99)).second || values.size() != 1)
             return 32;
         values[1] = 10;
@@ -218,7 +219,7 @@ CANN_ASC_STL_HOST_SIMT_API int evaluate_containers(StoragePointer storage, __SIZ
         if (iterator->first != 1 || (++iterator)->first != 2 || (++iterator)->first != 3)
             return 34;
         map_type moved{static_cast<map_type&&>(values)};
-        if (!values.empty() || moved.find(2)->second != 20)
+        if (!values.empty() || moved.find(2)->second != 21)
             return 35;
         values = static_cast<map_type&&>(moved);
         if (!moved.empty() || values.size() != 3)

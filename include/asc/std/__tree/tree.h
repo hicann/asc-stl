@@ -30,7 +30,10 @@
 #include <asc/std/__cstddef/types.h>
 #include <asc/std/__exception/terminate.h>
 #include <asc/std/__iterator/iterator_traits.h>
+#include <asc/std/__memory/addressof.h>
 #include <asc/std/__memory/allocator_traits.h>
+#include <asc/std/__type_traits/conditional.h>
+#include <asc/std/__type_traits/is_same.h>
 
 namespace asc::std {
 
@@ -95,22 +98,25 @@ public:
     using size_type = __SIZE_TYPE__;
 
     class iterator {
+        // A set stores the key itself. A map stores a pair with a const key.
+        using element_type = conditional_t<is_same_v<Key, Value>, const Value, Value>;
+
     public:
         using iterator_category = forward_iterator_tag;
         using value_type = Value;
         using difference_type = ptrdiff_t;
-        using pointer = Value*;
-        using reference = Value&;
+        using pointer = element_type*;
+        using reference = element_type&;
         CANN_ASC_STL_API iterator() = default;
         CANN_ASC_STL_API explicit iterator(node* current) : current_(current)
         {}
-        CANN_ASC_STL_API Value& operator*() const
+        CANN_ASC_STL_API reference operator*() const
         {
             return current_->value;
         }
-        CANN_ASC_STL_API Value* operator->() const
+        CANN_ASC_STL_API pointer operator->() const
         {
-            return &current_->value;
+            return ::asc::std::addressof(current_->value);
         }
         CANN_ASC_STL_API iterator& operator++()
         {

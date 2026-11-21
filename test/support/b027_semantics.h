@@ -41,8 +41,13 @@
 #include <asc/std/unordered_set>
 #include <asc/std/vector>
 
+#include "associative_iterator_checks.h"
 #include "b027_core_semantics.h"
 #include "string_aliasing_semantics.h"
+
+#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#include "foundation_semantics.h"
+#endif
 
 namespace asc_stl_b027_test {
 
@@ -125,6 +130,18 @@ struct hash_int {
     }
 };
 
+// These type checks run in both Host and Device translation units.
+using set_iterator = asc::std::set<int, less_int, arena_allocator<int>>::iterator;
+using unordered_set_iterator = asc::std::unordered_set<int, hash_int, equal_int, arena_allocator<int>>::iterator;
+using mapped_pair = asc::std::__arena_pair<const int, int>;
+using map_iterator = asc::std::map<int, int, less_int, arena_allocator<mapped_pair>>::iterator;
+using unordered_map_iterator =
+    asc::std::unordered_map<int, int, hash_int, equal_int, arena_allocator<mapped_pair>>::iterator;
+static_assert(asc_stl_associative_iterator_test::exposes_element<set_iterator, const int>);
+static_assert(asc_stl_associative_iterator_test::exposes_element<unordered_set_iterator, const int>);
+static_assert(asc_stl_associative_iterator_test::exposes_element<map_iterator, mapped_pair>);
+static_assert(asc_stl_associative_iterator_test::exposes_element<unordered_map_iterator, mapped_pair>);
+
 template <class T, __SIZE_TYPE__ Capacity>
 class fixed_sequence {
 public:
@@ -201,6 +218,17 @@ private:
 };
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+// The inherited operator& returns null. Iterator arrow must return the stored key's address.
+struct iterator_key : asc_stl_foundation_test::address_probe {
+    int value;
+    explicit constexpr iterator_key(int input) noexcept : value(input)
+    {}
+    constexpr operator int() const noexcept
+    {
+        return value;
+    }
+};
+
 CANN_ASC_STL_HOST_API int evaluate_host()
 {
     const int core = evaluate_core();
@@ -249,12 +277,15 @@ CANN_ASC_STL_HOST_API int evaluate_host()
             return 24;
     }
     {
-        using set_type = asc::std::set<int, less_int, allocator>;
-        set_type values{allocator(&state)};
-        values.insert(3);
-        values.insert(1);
-        values.insert(3);
-        if (values.size() != 2 || *values.begin() != 1)
+        using key_allocator = arena_allocator<iterator_key>;
+        using set_type = asc::std::set<iterator_key, less_int, key_allocator>;
+        static_assert(asc::std::is_same_v<typename set_type::iterator::value_type, iterator_key>);
+        static_assert(asc::std::is_same_v<typename set_type::iterator::reference, const iterator_key&>);
+        static_assert(asc::std::is_same_v<typename set_type::iterator::pointer, const iterator_key*>);
+        set_type values{key_allocator(&state)};
+        values.insert(iterator_key{3});
+        if (!asc_stl_associative_iterator_test::check_key(values, iterator_key{1}) || values.size() != 2 ||
+            values.begin()->value != 1)
             return 25;
     }
     {
@@ -263,17 +294,24 @@ CANN_ASC_STL_HOST_API int evaluate_host()
         using value_type = typename map_type::value_type;
         map_type values{arena_allocator<value_type>(&state)};
         values[value_type(2, 7).first] = 7;
-        if (values[2] != 7)
+        if (values[2] != 7 || !asc_stl_associative_iterator_test::update_mapped(values, 2, 9))
             return 26;
     }
     {
-        using unordered_type = asc::std::unordered_set<int, hash_int, equal_int, allocator>;
-        unordered_type values{allocator(&state)};
-        values.insert(1);
-        values.insert(9);
-        values.insert(1);
-        if (values.size() != 2 || values.bucket_count() != 8)
+        using key_allocator = arena_allocator<iterator_key>;
+        using unordered_type = asc::std::unordered_set<iterator_key, hash_int, equal_int, key_allocator>;
+        unordered_type values{key_allocator(&state)};
+        values.insert(iterator_key{9});
+        if (!asc_stl_associative_iterator_test::check_key(values, iterator_key{1}) || values.size() != 2 ||
+            values.bucket_count() != 8)
             return 27;
+    }
+    {
+        using pair_allocator = arena_allocator<mapped_pair>;
+        asc::std::unordered_map<int, int, hash_int, equal_int, pair_allocator> values{pair_allocator(&state)};
+        values[2] = 7;
+        if (!asc_stl_associative_iterator_test::update_mapped(values, 2, 9))
+            return 31;
     }
     {
         using sequence = fixed_sequence<int, 8>;
