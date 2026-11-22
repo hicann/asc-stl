@@ -38,13 +38,18 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
         COMMAND ${CMAKE_COMMAND} --build "${numeric_types_build}" -j2)
     add_dependencies(asc_stl_cannsim_tests asc_stl_numeric_types_runtime)
     foreach(mode IN ITEMS simd simt)
+        set(numeric_types_timeout ${ASC_STL_CANNSIM_CASE_TIMEOUT_SECONDS})
+        if(mode STREQUAL "simt")
+            # The SIMT conversion matrix can exceed the base budget on slower simulators.
+            math(EXPR numeric_types_timeout "${ASC_STL_CANNSIM_CASE_TIMEOUT_SECONDS} * 3 / 2")
+        endif()
         add_test(NAME runtime.cannsim.numeric-types.${mode}
             COMMAND bash "${ASC_STL_TEST_ROOT}/scripts/run_cannsim_test.sh"
                     "${ASC_STL_CANNSIM_EXECUTABLE}" "${numeric_types_build}/asc_stl_numeric_types_${mode}"
                     "${ASC_STL_CANNSIM_SOC}" "${CMAKE_CURRENT_BINARY_DIR}/numeric-types-${mode}-results"
                     "${ASC_STL_CANN_PACKAGE_PATH}/lib64" "ASC_STL_NUMERIC_TYPES_RUNTIME_PASS")
         set_tests_properties(runtime.cannsim.numeric-types.${mode}
-            PROPERTIES LABELS "cannsim-runtime;affected-regression;nightly" TIMEOUT 600
+            PROPERTIES LABELS "cannsim-runtime;affected-regression;nightly" TIMEOUT ${numeric_types_timeout}
                        FIXTURES_REQUIRED asc_stl_cannsim_ready RUN_SERIAL TRUE)
     endforeach()
 endif()

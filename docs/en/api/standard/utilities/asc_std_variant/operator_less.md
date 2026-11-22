@@ -28,7 +28,7 @@
 
 Header: `<asc/std/variant>`.
 
-Equality comparison requires both sides to have the same active alternative index and equal corresponding values. Order comparison compares the indices first and the values when the indices are equal; the valueless state precedes any state holding a value.
+A valueless left operand is less than any operand holding a value. A valueless right operand gives `false`, including when both operands are valueless. When both operands hold a value, the comparison uses their active indices first and their stored values when the indices match.
 
 ## Function Prototype
 

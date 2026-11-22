@@ -51,3 +51,7 @@ Host C++20 的 `source_location::current` 改为立即函数，`unreachable` 补
 ## 线性同余随机引擎修复
 
 `<asc/std/random>` 的 `linear_congruential_engine` 已修正零模数乘法引擎的零种子处理，以及乘加达到模数或超出中间整数宽度时的状态递推。使用这些参数的程序将得到修正后的随机序列。[生成规则](../api/standard/numerics/asc_std_random/linear_congruential_engine_operator_call.md)
+
+## variant 无值状态比较
+
+两个无值的 `variant` 对象比较相等，无值对象排在任意含值对象之前。这一顺序适用于六个相等与关系运算符。[相等比较](../api/standard/utilities/asc_std_variant/operator_equal.md) · [小于比较](../api/standard/utilities/asc_std_variant/operator_less.md)

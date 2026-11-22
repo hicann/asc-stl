@@ -242,7 +242,7 @@ CANN_ASC_STL_API constexpr bool __variant_less_at(const variant<Types...>& left,
 template <class... Types>
 CANN_ASC_STL_API constexpr bool operator==(const variant<Types...>& left, const variant<Types...>& right)
 {
-    return left.index() == right.index() && __variant_equal_at<0>(left, right);
+    return left.index() == right.index() && (left.valueless_by_exception() || __variant_equal_at<0>(left, right));
 }
 template <class... Types>
 CANN_ASC_STL_API constexpr bool operator!=(const variant<Types...>& left, const variant<Types...>& right)
@@ -252,6 +252,12 @@ CANN_ASC_STL_API constexpr bool operator!=(const variant<Types...>& left, const 
 template <class... Types>
 CANN_ASC_STL_API constexpr bool operator<(const variant<Types...>& left, const variant<Types...>& right)
 {
+    if (right.valueless_by_exception()) {
+        return false;
+    }
+    if (left.valueless_by_exception()) {
+        return true;
+    }
     return left.index() == right.index() ? __variant_less_at<0>(left, right) : left.index() < right.index();
 }
 template <class... Types>

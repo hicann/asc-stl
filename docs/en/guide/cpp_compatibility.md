@@ -143,6 +143,8 @@ in both GM and UB. The W13/W14 SIMT case assigns six independent single-thread c
 to six blocks in one launch, then aggregates their results in a separate
 four-thread synchronization launch to reduce repeated simulator dispatch.
 
-The default per-case limit remains 600 seconds, and a timeout is a failure.
+`ASC_STL_CANNSIM_CASE_TIMEOUT_SECONDS` sets the base timeout for simulator regression
+tests and defaults to 600 seconds. `runtime.cannsim.numeric-types.simt` uses 1.5 times
+the base timeout, or 900 seconds by default. A timeout counts as a failure.
 Compare regression timings with the same simulator, toolchain and resources;
 a passing server run does not establish success in another CI environment.

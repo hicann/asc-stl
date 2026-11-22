@@ -15,6 +15,7 @@
  */
 
 #include <initializer_list>
+#include <utility>
 
 #include "../../../../support/w09_w10_semantics.h"
 
@@ -245,8 +246,56 @@ bool throwing_copy_preserves_old_alternative()
     return preserved && target.index() == 1 && asc::std::get<1>(target).value == 23;
 }
 
+struct comparison_probe {
+    inline static int value_reads = 0;
+    comparison_probe() = default;
+    comparison_probe(comparison_probe&&)
+    {
+        throw construction_failure{};
+    }
+    comparison_probe& operator=(comparison_probe&&) = default;
+    operator int() const
+    {
+        ++value_reads;
+        return 0;
+    }
+};
+using compared_variant = asc::std::variant<int, comparison_probe>;
+
+bool make_valueless(compared_variant& target, compared_variant& source)
+{
+    try {
+        target = std::move(source);
+    } catch (const construction_failure&) {
+        return target.valueless_by_exception();
+    }
+    return false;
+}
+
+bool compares_as(const compared_variant& left, const compared_variant& right, int order)
+{
+    return (left == right) == (order == 0) && (left != right) == (order != 0) && (left < right) == (order < 0) &&
+        (left <= right) == (order <= 0) && (left > right) == (order > 0) && (left >= right) == (order >= 0);
+}
+
+bool valueless_comparisons()
+{
+    compared_variant left(1), right(2);
+    const compared_variant first(7);
+    compared_variant second(asc::std::in_place_index<1>);
+    if (!make_valueless(left, second) || !make_valueless(right, second))
+        return false;
+
+    comparison_probe::value_reads = 0;
+    return compares_as(left, right, 0) && compares_as(left, left, 0) && compares_as(left, first, -1) &&
+        compares_as(first, left, 1) && compares_as(right, second, -1) && compares_as(second, right, 1) &&
+        comparison_probe::value_reads == 0;
+}
+
 int evaluate_exception_state()
 {
+    if (!valueless_comparisons())
+        return 118;
     if (!throwing_copy_preserves_old_alternative() || !lifetimes_balanced())
         return 117;
     if (!assignment_changes_alternative(false))
