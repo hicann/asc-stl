@@ -98,6 +98,7 @@ int main() {
 
 
 COMPILE_FAILURE_CASES = (
+    ("cases/asc/utility/zero_step.fail.cpp", "static_for step must be nonzero"),
     ("cases/asc/numeric_types/invalid_int4.fail.cpp", "terminate"),
     ("cases/asc/numeric_types/invalid_pack.fail.cpp", "terminate"),
     ("cases/asc/numeric_types/invalid_index.fail.cpp", "terminate"),

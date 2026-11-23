@@ -880,7 +880,14 @@
       "target": "asc/__utility/static_for.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/make_unsigned.h",
+        "asc/std/__utility/integer_sequence.h",
+        "asc/std/climits",
+        "asc/std/cstdint"
       ],
       "applicability": {
         "host_header": true,
@@ -18007,9 +18014,11 @@
       "visibility": "public",
       "dependencies": [
         "asc/__config",
-        "asc/__utility/static_for.h"
+        "asc/__utility/static_for.h",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/remove_cv.h"
       ],
-      "semantic_case": "asc/std/linalg",
+      "semantic_case": "asc/utility",
       "applicability": {
         "host_header": true,
         "device_header": true,
@@ -18018,7 +18027,10 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/std/linalg"
+      "runtime_case": "asc/std/linalg",
+      "negative_cases": [
+        "zero_step.fail.cpp"
+      ]
     },
     {
       "target": "asc/std/__linalg/conj_if_needed.h",

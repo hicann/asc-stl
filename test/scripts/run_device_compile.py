@@ -253,6 +253,7 @@ NEGATIVE_DIAGNOSTIC_MARKERS = {
 }
 
 NEGATIVE_DIAGNOSTIC_OVERRIDES = {
+    ("asc/utility", "zero_step.fail.cpp"): ("static_for step must be nonzero",),
     ("asc/__atomic/scoped_atomic.h", "unsupported_type.fail.asc"): ("supports exactly",),
     ("asc/collectives", "simd_excluded.fail.asc"): ("no member named 'block_reduce_add'",),
     ("asc/collectives", "ub_span_dsimt.fail.asc"): ("no member named 'ub_reduce_add'",),

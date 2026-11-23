@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/utility>`。
 
-`asc::in_range`判断`value`是否位于包含两端点的闭区间`[first, last]`内。
+检查 `value` 是否位于包含两端点的数值闭区间 `[first, last]`。标准 `asc::std::in_range<R>(value)` 判断整数能否由类型 `R` 表示，两者用途不同。
 
 ## 函数原型
 
@@ -41,45 +41,32 @@ constexpr bool in_range(T value, T first, T last) noexcept;
 
 ## 参数说明
 
-**模板参数**
-
-| 参数名 | 描述 |
+| 参数 | 含义 |
 | --- | --- |
-| `T` | 三个操作数共用的算术类型；value、first、last须为同一类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 待判断的值；位于闭区间[first, last] 内（含两端）时返回true。 |
-| `first` | 输入 | 闭区间的下端点（含）；须满足first <= last。 |
-| `last` | 输入 | 闭区间的上端点（含）；须满足first <= last。 |
+| `T` | 三参数推导为相同的受支持数值类型，不进行公共类型推导。 |
+| `value` | 待检查的数值，按值传入。 |
+| `first`、`last` | 包含在区间内的下、上端点；顺序颠倒时返回 false。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `bool` | 条件成立时返回`true`，否则返回`false`。 |
+先比较 `first <= value`，为 true 时再比较 `value <= last`。返回 `bool`，不进行减法或区间外的整数转换。端点相等时只接受该值；`first > last` 返回 false。
+
+任一浮点输入为 NaN 时返回 false；无穷按正常顺序比较；正负零相等。编译选项须保留这些浮点比较语义。内建比较不抛 C++ 异常，因此本接口无条件 `noexcept`；满足语言规则时可常量求值。
 
 ## 约束说明
 
-- `value`、`first`和`last`使用同一类型，须支持`>=`与`<=`比较；当`first > last`时没有值满足闭区间条件。
+- 最低 C++17，支持 C++20。整数仅包括 `signed char`、`short`、`int`、`long`、`long long` 及其无符号对应类型。Host 还支持 `float`、`double`、`long double`，Device 浮点只支持 `float`。
+- 普通 `char`、`bool`、字符专用类型、枚举、指针、用户比较类型及扩展整型不参与重载。参数推导忽略顶层 cv；显式指定 `T` 时由调用方负责普通参数转换的精度、可表示性及异常。
+- Host 独立包含无需 CANN SDK。Device 用于受支持的 SIMT 或 SIMD 标量上下文；类型及浮点比较须在该位置有效，无异常恢复。
 
 ## 调用示例
-
-以下片段给出具体模板实参和调用对象。
 
 ```cpp
 #include <asc/utility>
 
-decltype(auto) example()
-{
-    return asc::in_range(3, 0, 10);
-}
-
 bool verify_example()
 {
-    return example() == true;
+    return asc::in_range(4, 1, 4) && !asc::in_range(4, 5, 1) && !asc::in_range(8, 1, 4);
 }
 ```
 

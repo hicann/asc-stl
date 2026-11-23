@@ -28,39 +28,49 @@
 #endif
 
 #include <asc/__utility/static_for.h>
+#include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/remove_cv.h>
 
 namespace asc {
 
 template <class T>
-CANN_ASC_STL_API constexpr bool in_range(T value, T first, T last) noexcept
+CANN_ASC_STL_NODISCARD
+    CANN_ASC_STL_API constexpr asc::std::enable_if_t<detail::utility_range_type_v<asc::std::remove_cv_t<T>>, bool>
+    in_range(T value, T first, T last) noexcept
 {
-    return value >= first && value <= last;
+    return first <= value && value <= last;
 }
 
 template <class SizeType, SizeType Size, class Operator, class... Args>
-CANN_ASC_STL_API constexpr void static_for(Operator operation, Args&&... args) noexcept(
-    noexcept(detail::static_for_count<SizeType, Size>(operation, static_cast<Args&&>(args)...)))
+CANN_ASC_STL_API constexpr asc::std::enable_if_t<detail::utility_index_type_v<SizeType>, void> static_for(
+    Operator&& operation, Args&&... args) noexcept(noexcept(detail::static_for_count<SizeType, Size>(operation,
+    static_cast<Args&&>(args)...)))
 {
     detail::static_for_count<SizeType, Size>(operation, static_cast<Args&&>(args)...);
 }
 
 template <class IndexType, IndexType Start, IndexType End, IndexType Step = IndexType{1}, class Operator, class... Args>
-CANN_ASC_STL_API constexpr void static_for(Operator operation, Args&&... args) noexcept(
-    noexcept(detail::static_for_range<IndexType, Start, End, Step>(operation, static_cast<Args&&>(args)...)))
+CANN_ASC_STL_API constexpr asc::std::enable_if_t<detail::utility_index_type_v<IndexType>, void> static_for(
+    Operator&& operation,
+    Args&&... args) noexcept(noexcept(detail::static_for_range<IndexType, Start, End, Step>(operation,
+    static_cast<Args&&>(args)...)))
 {
     detail::static_for_range<IndexType, Start, End, Step>(operation, static_cast<Args&&>(args)...);
 }
 
 template <auto Size, class Operator, class... Args>
-CANN_ASC_STL_API constexpr void static_for(Operator operation, Args&&... args) noexcept(
-    noexcept(asc::static_for<decltype(Size), Size>(operation, static_cast<Args&&>(args)...)))
+CANN_ASC_STL_API constexpr asc::std::enable_if_t<detail::utility_index_type_v<decltype(Size)>, void> static_for(
+    Operator&& operation,
+    Args&&... args) noexcept(noexcept(asc::static_for<decltype(Size), Size>(operation, static_cast<Args&&>(args)...)))
 {
     asc::static_for<decltype(Size), Size>(operation, static_cast<Args&&>(args)...);
 }
 
 template <auto Start, decltype(Start) End, decltype(Start) Step = decltype(Start){1}, class Operator, class... Args>
-CANN_ASC_STL_API constexpr void static_for(Operator operation, Args&&... args) noexcept(
-    noexcept(asc::static_for<decltype(Start), Start, End, Step>(operation, static_cast<Args&&>(args)...)))
+CANN_ASC_STL_API constexpr asc::std::enable_if_t<detail::utility_index_type_v<decltype(Start)>, void> static_for(
+    Operator&& operation,
+    Args&&... args) noexcept(noexcept(asc::static_for<decltype(Start), Start, End, Step>(operation,
+    static_cast<Args&&>(args)...)))
 {
     asc::static_for<decltype(Start), Start, End, Step>(operation, static_cast<Args&&>(args)...);
 }

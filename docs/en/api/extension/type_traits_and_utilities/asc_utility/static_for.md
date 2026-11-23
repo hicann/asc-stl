@@ -28,7 +28,9 @@
 
 Header: `<asc/utility>`.
 
-`asc::static_for` unrolls a zero-based count range or a stepped half-open range at compile time and invokes the callable object once per index, without producing runtime loop dispatch.
+`static_for` generates an ordered sequence of calls. Each call receives an `asc::std::integral_constant<IndexType, I>` whose `value` can be a template argument. Standard integer sequences represent indices; a runtime loop variable cannot supply this template argument.
+
+The indices are determined at compile time, while callbacks may execute at runtime. A call can also be constant-evaluated when it satisfies the C++17/C++20 constant-expression rules. No instruction shape or performance improvement is guaranteed.
 
 ## Function Prototype
 
@@ -37,7 +39,7 @@ Header: `<asc/utility>`.
 ```cpp
 namespace asc {
 template <auto Size, class Operator, class... Args>
-constexpr void static_for(Operator operation, Args&&... args) noexcept(
+constexpr void static_for(Operator&& operation, Args&&... args) noexcept(
     noexcept(static_for<decltype(Size), Size>(operation, static_cast<Args&&>(args)...)));
 }  // namespace asc
 ```
@@ -47,7 +49,7 @@ constexpr void static_for(Operator operation, Args&&... args) noexcept(
 ```cpp
 namespace asc {
 template <auto Start, decltype(Start) End, decltype(Start) Step = decltype(Start){1}, class Operator, class... Args>
-constexpr void static_for(Operator operation, Args&&... args) noexcept(
+constexpr void static_for(Operator&& operation, Args&&... args) noexcept(
     noexcept(static_for<decltype(Start), Start, End, Step>(operation, static_cast<Args&&>(args)...)));
 }  // namespace asc
 ```
@@ -57,7 +59,7 @@ constexpr void static_for(Operator operation, Args&&... args) noexcept(
 ```cpp
 namespace asc {
 template <class IndexType, IndexType Start, IndexType End, IndexType Step = IndexType{1}, class Operator, class... Args>
-constexpr void static_for(Operator operation, Args&&... args) noexcept(
+constexpr void static_for(Operator&& operation, Args&&... args) noexcept(
     noexcept(detail::static_for_range<IndexType, Start, End, Step>(operation, static_cast<Args&&>(args)...)));
 }  // namespace asc
 ```
@@ -67,112 +69,57 @@ constexpr void static_for(Operator operation, Args&&... args) noexcept(
 ```cpp
 namespace asc {
 template <class SizeType, SizeType Size, class Operator, class... Args>
-constexpr void static_for(Operator operation, Args&&... args) noexcept(
+constexpr void static_for(Operator&& operation, Args&&... args) noexcept(
     noexcept(detail::static_for_count<SizeType, Size>(operation, static_cast<Args&&>(args)...)));
 }  // namespace asc
 ```
 
 ## Parameters
 
-### Parameters of Prototype 1
-
-**Template Parameters**
-
-| Parameter | Description |
+| Parameter | Meaning |
 | --- | --- |
-| `Size` | Iteration count of the zero-based unroll (compile-time value); invokes operation exactly once for each index from 0 to Size-1 in order, and performs no invocation when it is non-positive. |
-| `Operator` | Type of the callable object operation; must be callable with the compile-time index constant as the first argument, followed by the forwarded args. |
-| `Args` | Pack of argument types forwarded to operation at each index invocation (corresponding to the function parameter Args&&...). |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `operation` | Input | Callable object invoked exactly once at each compile-time index; receives the index constant (in integral_constant form, implicitly convertible to the index type) as the first argument, followed by the forwarded args. When used on the device side, its execution space attributes must match those of the caller. |
-| `args` | Input/Output | Pack of arguments received by forwarding reference and forwarded as-is to operation at each index invocation; rvalue arguments remain movable, and a moved-from argument is left in a valid but unspecified state. |
-
-### Parameters of Prototype 2
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Start` | Starting index of the half-open iteration range (compile-time value, endpoint included). |
-| `End` | Ending index of the half-open iteration range (compile-time value, endpoint excluded). |
-| `Step` | Index step (compile-time value, default 1), which must be non-zero; a negative value unrolls in reverse order. |
-| `Operator` | Type of the callable object operation; must be callable with the compile-time index constant as the first argument, followed by the forwarded args. |
-| `Args` | Pack of argument types forwarded to operation at each index invocation (corresponding to the function parameter Args&&...). |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `operation` | Input | Callable object invoked exactly once at each compile-time index; receives the index constant (in integral_constant form, implicitly convertible to the index type) as the first argument, followed by the forwarded args. When used on the device side, its execution space attributes must match those of the caller. |
-| `args` | Input/Output | Pack of arguments received by forwarding reference and forwarded as-is to operation at each index invocation; rvalue arguments remain movable, and a moved-from argument is left in a valid but unspecified state. |
-
-### Parameters of Prototype 3
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `IndexType` | Integer type of the iteration indices; Start, End, and Step are all compile-time values of this type. |
-| `Start` | Starting index of the half-open iteration range (compile-time value, endpoint included). |
-| `End` | Ending index of the half-open iteration range (compile-time value, endpoint excluded). |
-| `Step` | Index step (compile-time value, default 1), which must be non-zero; a negative value unrolls in reverse order. |
-| `Operator` | Type of the callable object operation; must be callable with the compile-time index constant as the first argument, followed by the forwarded args. |
-| `Args` | Pack of argument types forwarded to operation at each index invocation (corresponding to the function parameter Args&&...). |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `operation` | Input | Callable object invoked exactly once at each compile-time index; receives the index constant (in integral_constant form, implicitly convertible to the index type) as the first argument, followed by the forwarded args. When used on the device side, its execution space attributes must match those of the caller. |
-| `args` | Input/Output | Pack of arguments received by forwarding reference and forwarded as-is to operation at each index invocation; rvalue arguments remain movable, and a moved-from argument is left in a valid but unspecified state. |
-
-### Parameters of Prototype 4
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `SizeType` | Integer type of the iteration indices; Size is a compile-time value of this type. |
-| `Size` | Iteration count of the zero-based unroll (compile-time value); invokes operation exactly once for each index from 0 to Size-1 in order, and performs no invocation when it is non-positive. |
-| `Operator` | Type of the callable object operation; must be callable with the compile-time index constant as the first argument, followed by the forwarded args. |
-| `Args` | Pack of argument types forwarded to operation at each index invocation (corresponding to the function parameter Args&&...). |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `operation` | Input | Callable object invoked exactly once at each compile-time index; receives the index constant (in integral_constant form, implicitly convertible to the index type) as the first argument, followed by the forwarded args. When used on the device side, its execution space attributes must match those of the caller. |
-| `args` | Input/Output | Pack of arguments received by forwarding reference and forwarded as-is to operation at each index invocation; rvalue arguments remain movable, and a moved-from argument is left in a valid but unspecified state. |
+| `Size` | Count endpoint: visit `[0, Size)`; a nonpositive count is empty. |
+| `Start`, `End`, `Step` | Included start, excluded endpoint, and step, defaulting to 1. |
+| `IndexType` / `SizeType` | Explicit index type; automatic forms deduce it from `Start` / `Size`. |
+| `operation` | Borrowed callable, invoked repeatedly as the same lvalue. |
+| `args...` | Additional arguments passed as `Args&&` on every call; the library neither copies nor retains them. |
 
 ## Return Value
 
-No return value.
+Returns `void` and discards callback results. Each call and destruction of its temporary result finish before the next call. The function is `noexcept(true)` exactly when all visited call expressions, including argument construction and temporary-result destruction, are nonthrowing. An empty sequence is nonthrowing. Host exceptions propagate and prevent later calls.
 
 ## Constraints
 
-- The count form unrolls `[0, Size)` in order; the operation object is not invoked when `Size <= 0`.
-- The range form uses a half-open range; `Step` must not be zero, and the index and step arithmetic must be representable; no invocation happens when the direction does not match.
-- The operation object must be able to accept each unrolled compile-time index and the given arguments; the operation object in a device-side call must be callable at the same execution location.
+- Requires C++17 and supports C++20. Indices are unqualified `signed char`, `short`, `int`, `long`, `long long`, or their unsigned counterparts, including aliases such as `size_t`. Plain `char`, `bool`, character types, enums, floating-point types, and extended integers are excluded from overload resolution.
+- `End` and `Step` have the index type and must satisfy converted constant-expression rules. Unsigned indices cannot express a negative step; use a signed index for descending ranges.
+- A positive step visits indices `< End`; a negative step visits indices `> End`, starting at `Start`. For example, `<1, 8, 3>` visits `1, 4, 7`, and `<5, 0, -2>` visits `5, 3, 1`. Equal endpoints or a mismatched direction produce an empty sequence. A zero step is always diagnosed.
+- Only visited indices are formed. The mathematical successor after the last call need not be representable. Distance and minimum-negative-step calculations avoid signed overflow. Sequence length must fit `size_t` and compiler resource limits.
+- The callable is borrowed without copying or moving and is invoked as an lvalue. A callable with only `operator() &&` requires an adapter. Calls use direct function-call syntax rather than member-pointer `invoke` semantics.
+- The same rvalue argument is forwarded repeatedly. If a callback moves from it, later calls observe that moved-from state. Pass an lvalue or accept a const reference for repeated reads; construct a fresh value inside the callback when required.
+- An empty sequence does not instantiate a callback expression or require a callable. Argument expressions and caller-owned temporary construction/destruction still occur normally.
+- Host inclusion needs no SDK. SIMT and scalar SIMD calls require the callback, arguments, and storage accesses to be valid in that execution context. Device exception recovery and inter-thread synchronization are not provided.
 
 ## Example
 
-The following Host example provides concrete inputs and checks the result of the call.
+This Host example uses each constant index as a `get<I>` template argument and checks runtime writes.
 
 ```cpp
 #include <asc/utility>
+#include <asc/std/tuple>
 
 bool example()
 {
-    int sum = 0;
-    asc::static_for<4>([&](auto index) { sum += index; });
-    return sum == 6;
+    asc::std::tuple<int, float, long> fields{1, 2.0f, 3L};
+    asc::static_for<3>([&](auto index) {
+        asc::std::get<decltype(index)::value>(fields) = 0;
+    });
+    int sequence = 0;
+    asc::static_for<1, 8, 3>([&](auto index) { sequence = sequence * 10 + index.value; });
+    return asc::std::get<0>(fields) == 0 && asc::std::get<1>(fields) == 0.0f &&
+        asc::std::get<2>(fields) == 0L && sequence == 147;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_utility.md)
+- [Header API list](asc_utility.md)

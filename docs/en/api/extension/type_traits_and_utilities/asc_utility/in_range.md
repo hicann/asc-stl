@@ -28,7 +28,7 @@
 
 Header: `<asc/utility>`.
 
-`asc::in_range` determines whether `value` lies within the closed interval `[first, last]`, including both endpoints.
+Checks whether `value` lies in the inclusive numeric interval `[first, last]`. Standard `asc::std::in_range<R>(value)` instead checks whether an integer is representable by type `R`.
 
 ## Function Prototype
 
@@ -41,48 +41,35 @@ constexpr bool in_range(T value, T first, T last) noexcept;
 
 ## Parameters
 
-**Template Parameters**
-
-| Parameter | Description |
+| Parameter | Meaning |
 | --- | --- |
-| `T` | Arithmetic type shared by the three operands; value, first, and last must be of the same type. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `value` | Input | Value to check; returns true when it lies within the closed interval [first, last] (both endpoints included). |
-| `first` | Input | Lower endpoint of the closed interval (inclusive); must satisfy first <= last. |
-| `last` | Input | Upper endpoint of the closed interval (inclusive); must satisfy first <= last. |
+| `T` | One supported numeric type deduced for all three parameters; no common-type deduction. |
+| `value` | Value to check, passed by value. |
+| `first`, `last` | Included lower and upper bounds; reversed bounds return false. |
 
 ## Return Value
 
-| Return type | Description |
-| --- | --- |
-| `bool` | Returns `true` when the condition holds, and `false` otherwise. |
+First evaluates `first <= value`, then evaluates `value <= last` only if the first comparison is true. Returns `bool` without subtraction or mixed-type integer conversions. Equal bounds accept that value; `first > last` returns false.
+
+Any NaN input returns false. Infinities follow ordinary ordering, and positive and negative zero compare equal. Compiler options must preserve these floating-point semantics. Built-in comparisons cannot throw C++ exceptions, so the function is unconditionally `noexcept`; it supports constant evaluation when permitted by the language rules.
 
 ## Constraints
 
-- `value`, `first`, and `last` use the same type and must support `>=` and `<=` comparisons; when `first > last`, no value satisfies the closed-interval condition.
+- Requires C++17 and supports C++20. Integer types are `signed char`, `short`, `int`, `long`, `long long`, and their unsigned counterparts. Host also supports `float`, `double`, and `long double`; Device floating-point support is limited to `float`.
+- Plain `char`, `bool`, character types, enums, pointers, user-defined comparison types, and extended integers are excluded from overload resolution. Deduction ignores top-level cv. An explicit `T` uses ordinary argument conversions, whose precision, representability, and exceptions remain the caller's responsibility.
+- Host inclusion requires no CANN SDK. Device calls use supported SIMT or scalar SIMD contexts with valid types and floating-point comparisons, without exception recovery.
 
 ## Example
-
-The following snippet provides concrete template arguments and the entity being called.
 
 ```cpp
 #include <asc/utility>
 
-decltype(auto) example()
-{
-    return asc::in_range(3, 0, 10);
-}
-
 bool verify_example()
 {
-    return example() == true;
+    return asc::in_range(4, 1, 4) && !asc::in_range(4, 5, 1) && !asc::in_range(8, 1, 4);
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_utility.md)
+- [Header API list](asc_utility.md)
