@@ -6,6 +6,7 @@
     "asc/__tensor_copy/descriptor.h": "HW1",
     "asc/algorithm": "HW0",
     "asc/atomic": "HW1",
+    "asc/bit": "HW0",
     "asc/cmath": "HW1",
     "asc/hierarchy": "HW1",
     "asc/numeric_types": "HW1",

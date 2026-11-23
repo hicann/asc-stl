@@ -107,7 +107,7 @@
       "visibility": "private",
       "dependencies": [
         "asc/__config",
-        "asc/std/cassert"
+        "asc/std/climits"
       ],
       "applicability": {
         "host_header": true,
@@ -18662,9 +18662,12 @@
       "visibility": "public",
       "dependencies": [
         "asc/__bit/operations.h",
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/cstdint"
       ],
-      "semantic_case": "asc/std/linalg",
+      "semantic_case": "asc/bit",
       "applicability": {
         "host_header": true,
         "device_header": true,
@@ -18676,7 +18679,7 @@
       "negative_cases": [
         "unsupported_width.fail.cpp"
       ],
-      "runtime_case": "asc/std/linalg"
+      "runtime_case": "asc/bit"
     },
     {
       "target": "asc/std/numeric",
@@ -19223,6 +19226,7 @@
     "asc/std/bitset": "runtime/assets.json",
     "asc/std/__algorithm/lower_bound.h": "runtime/assets.json",
     "asc/std/__algorithm/ranges_copy.h": "runtime/assets.json",
-    "asc/numeric_types": "runtime/assets.json"
+    "asc/numeric_types": "runtime/assets.json",
+    "asc/bit": "runtime/assets.json"
   }
 }

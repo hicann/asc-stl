@@ -45,7 +45,7 @@ constexpr T bit_reverse(T value) noexcept;
 
 | Parameter | Description |
 | --- | --- |
-| `T` | Unsigned integer type; must be uint32_t or uint64_t. |
+| `T` | The same type as `asc::std::uint32_t` or `asc::std::uint64_t`. |
 
 **Function Parameters**
 
@@ -61,24 +61,25 @@ constexpr T bit_reverse(T value) noexcept;
 
 ## Constraints
 
-- T must be uint32_t or uint64_t.
-- Reverses the bit order of the entire input type; this function has no start or width parameters.
+- `T` must be the same type as `asc::std::uint32_t` or `asc::std::uint64_t`. Equivalent aliases match; a different type with the same width does not. Unsupported types are excluded from overload resolution.
+- Value deduction removes top-level cv qualifiers; an explicitly specified cv/ref type is excluded.
+- Supports C++17/C++20, Host, SIMT threads, and ordinary scalar code in SIMD kernels. Constant evaluation and runtime calls have identical results and do not throw.
+- For width `W`, result bit `W - 1 - i` equals input bit `i`. Zero and all-one values are unchanged.
+- Reversal mirrors individual bits; byte swapping reorders bytes, while rotation preserves cyclic bit order.
 
 ## Example
 
-The following snippet demonstrates the interface call with concrete integer arguments.
-
 ```cpp
 #include <asc/bit>
+#include <asc/std/cstdint>
 
-decltype(auto) example()
-{
-    return asc::bit_reverse(0x12u);
-}
+using u32 = asc::std::uint32_t;
+using u64 = asc::std::uint64_t;
+static_assert(asc::bit_reverse(u32{0x0000000D}) == u32{0xB0000000});
 
 bool verify_example()
 {
-    return example() == 0x48000000u;
+    return asc::bit_reverse(u64{1}) == u64{0x8000000000000000};
 }
 ```
 

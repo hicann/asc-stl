@@ -231,7 +231,7 @@ COMPILE_FAILURE_CASES = (
     ("cases/asc/std/vector/copy_assign.fail.cpp", "deleted"),
     ("cases/asc/std/vector/copy_construct.fail.cpp", "deleted"),
     ("cases/asc/std/vector/default_allocator.fail.cpp", "wrong number"),
-    ("cases/asc/bit/unsupported_width.fail.cpp", "static assertion"),
+    ("cases/asc/bit/unsupported_width.fail.cpp", "no matching"),
     ("cases/asc/std/bit/byteswap_bool.fail.cpp", "static assertion"),
     ("cases/asc/std/compare/strong_order.fail.cpp", "not a member"),
     ("cases/asc/std/exception/exception_ptr.fail.cpp", "does not name"),

@@ -44,14 +44,14 @@ template<class T = asc::std::uint32_t> constexpr T bitmask(int start, int width)
 
 | Parameter | Description |
 | --- | --- |
-| `T` | Unsigned integer type of the mask; must be uint32_t or uint64_t, and defaults to uint32_t when omitted. |
+| `T` | The same type as `asc::std::uint32_t` or `asc::std::uint64_t`; defaults to `asc::std::uint32_t`. |
 
 **Function Parameters**
 
 | Parameter | Input/Output | Description |
 | --- | --- | --- |
-| `start` | Input | Bit index of the start of the mask (the lowest bit is bit 0); must not be negative. |
-| `width` | Input | Number of consecutive bits set to 1 in the mask, extending from bit `start` toward higher bits; must not be negative. |
+| `start` | Input | Bit index of the start of the mask (the lowest bit is bit 0); invalid parameters follow the rules below. |
+| `width` | Input | Number of consecutive bits set to 1 in the mask, extending from bit `start` toward higher bits; invalid parameters follow the rules below. |
 
 ## Return Value
 
@@ -61,24 +61,29 @@ template<class T = asc::std::uint32_t> constexpr T bitmask(int start, int width)
 
 ## Constraints
 
-- T must be uint32_t or uint64_t.
-- When start/width is out of range (negative, exceeding the bit width, or start+width extending past the type's bit-width window), the result is clamped to T{0} instead of causing undefined behavior; zero width likewise returns T{0}, a full-width window normally generates an all-ones mask, and no valid input produces an undefined shift.
+- `T` must be the same type as `asc::std::uint32_t` or `asc::std::uint64_t`. Equivalent aliases match; a different type with the same width does not. Unsupported types are excluded from overload resolution.
+- Value deduction removes top-level cv qualifiers; an explicitly specified cv/ref type is excluded.
+- Supports C++17/C++20, Host, SIMT threads, and ordinary scalar code in SIMD kernels. Constant evaluation and runtime calls have identical results and do not throw.
+- `T` defaults to `asc::std::uint32_t`; specify `asc::std::uint64_t` explicitly for a 64-bit result.
+- Bit 0 is the least significant bit. Numbering describes the integer value, independently of memory byte order or C++ bit-field layout.
+- For width `W`, a valid window satisfies `0 <= start && start <= W && 0 <= width && width <= W - start`.
+- Bits in `[start, start + width)` are one; all other bits are zero.
+- Zero width (including `(W, 0)`) or an invalid window returns `T{0}`; `(0, W)` returns all `W` bits set.
+- Negative, oversized, and crossing windows, including any extreme `int` parameters, follow the invalid-window rule. Windows are neither shortened nor reduced modulo the width.
 
 ## Example
 
-The following snippet demonstrates the interface call with concrete integer arguments.
-
 ```cpp
 #include <asc/bit>
+#include <asc/std/cstdint>
 
-decltype(auto) example()
-{
-    return asc::bitmask<unsigned int>(2, 3);
-}
+using u64 = asc::std::uint64_t;
+static_assert(asc::bitmask(4, 8) == asc::std::uint32_t{0xFF0});
+static_assert(asc::bitmask<u64>(0, 64) == u64{0xFFFFFFFFFFFFFFFF});
 
 bool verify_example()
 {
-    return example() == 28u;
+    return asc::bitmask<u64>(64, 0) == u64{0} && asc::bitmask(-1, 4) == asc::std::uint32_t{0};
 }
 ```
 

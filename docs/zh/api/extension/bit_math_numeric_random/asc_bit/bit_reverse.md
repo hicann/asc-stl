@@ -45,7 +45,7 @@ constexpr T bit_reverse(T value) noexcept;
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 无符号整数类型；须为uint32_t或uint64_t。 |
+| `T` | 与 `asc::std::uint32_t` 或 `asc::std::uint64_t` 相同的类型。 |
 
 **函数参数**
 
@@ -61,24 +61,25 @@ constexpr T bit_reverse(T value) noexcept;
 
 ## 约束说明
 
-- T必须为uint32_t或uint64_t。
-- 反转整个输入类型的位序；本函数没有start或width参数。
+- `T` 必须与 `asc::std::uint32_t` 或 `asc::std::uint64_t` 为同一类型；同型别名可匹配，仅位宽相同的另一种类型不自动匹配。不满足条件时不参与重载决议。
+- 按值推导去掉实参的顶层 cv 限定；显式指定 cv/ref 类型不满足类型约束。
+- 支持 C++17/C++20、Host、SIMT 线程和 SIMD 核内的普通标量代码。常量求值与运行时结果一致，函数不抛出异常。
+- 设位宽为 `W`，结果第 `W - 1 - i` 位等于输入第 `i` 位。零和全一保持原值。
+- 全位反转镜像每个位的位置；字节交换按字节排列，循环移位保持位的循环次序。
 
 ## 调用示例
 
-以下片段选用具体整数实参展示接口调用。
-
 ```cpp
 #include <asc/bit>
+#include <asc/std/cstdint>
 
-decltype(auto) example()
-{
-    return asc::bit_reverse(0x12u);
-}
+using u32 = asc::std::uint32_t;
+using u64 = asc::std::uint64_t;
+static_assert(asc::bit_reverse(u32{0x0000000D}) == u32{0xB0000000});
 
 bool verify_example()
 {
-    return example() == 0x48000000u;
+    return asc::bit_reverse(u64{1}) == u64{0x8000000000000000};
 }
 ```
 

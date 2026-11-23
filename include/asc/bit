@@ -28,50 +28,44 @@
 #endif
 
 #include <asc/__bit/operations.h>
+#include <asc/std/__type_traits/enable_if.h>
+#include <asc/std/__type_traits/is_same.h>
+#include <asc/std/cstdint>
 
 namespace asc {
 namespace detail {
+
 template <class T>
-inline constexpr bool is_public_bit_type_v = __is_same(T, __UINT32_TYPE__) || __is_same(T, __UINT64_TYPE__);
+inline constexpr bool is_public_bit_type_v = std::is_same_v<T, std::uint32_t> || std::is_same_v<T, std::uint64_t>;
+
+template <class T>
+using bit_result_t = std::enable_if_t<is_public_bit_type_v<T>, T>;
+
 }  // namespace detail
 
 template <class T>
-CANN_ASC_STL_API constexpr T bit_reverse(T value) noexcept
+CANN_ASC_STL_API constexpr detail::bit_result_t<T> bit_reverse(T value) noexcept
 {
-    static_assert(detail::is_public_bit_type_v<T>, "bit_reverse requires uint32_t or uint64_t");
     return detail::bit_reverse_impl(value);
 }
 
-// Parameter vocabulary note: the window arguments are (position, width)
-// throughout this facade, matching the detail layer in asc/__bit/operations.h
-// (bitmask_low_impl and the bitfield_* helpers). The T default exists only on
-// bitmask - its historical zero-argument call sites read the u32 pattern -
-// while the bit_reverse/bitfield_* family keeps T explicit because their
-// result width always mirrors the argument width the caller names.
-template <class T = __UINT32_TYPE__>
-CANN_ASC_STL_API constexpr T bitmask(int position, int width) noexcept
+template <class T = std::uint32_t>
+CANN_ASC_STL_API constexpr detail::bit_result_t<T> bitmask(int start, int width) noexcept
 {
-    static_assert(detail::is_public_bit_type_v<T>, "bitmask requires uint32_t or uint64_t");
-    const int digits = static_cast<int>(sizeof(T)) * 8;
-    // Full window validation: a position/width pair reaching outside the
-    // digit range clamps to zero instead of shifting by a negative or
-    // oversized count, mirroring the bitfield_* helpers below.
-    const bool valid = position >= 0 && width >= 0 && position <= digits && width <= digits - position;
-    return !valid || width == 0 ? T{0} : static_cast<T>(detail::bitmask_low_impl<T>(width) << position);
+    return detail::bitmask_impl<T>(start, width);
 }
 
 template <class T>
-CANN_ASC_STL_API constexpr T bitfield_extract(T value, int position, int width) noexcept
+CANN_ASC_STL_API constexpr detail::bit_result_t<T> bitfield_extract(T value, int start, int width) noexcept
 {
-    static_assert(detail::is_public_bit_type_v<T>, "bitfield_extract requires uint32_t or uint64_t");
-    return detail::bitfield_extract_impl(value, position, width);
+    return detail::bitfield_extract_impl(value, start, width);
 }
 
 template <class T>
-CANN_ASC_STL_API constexpr T bitfield_insert(T destination, T source, int position, int width) noexcept
+CANN_ASC_STL_API constexpr detail::bit_result_t<T> bitfield_insert(
+    T destination, T source, int start, int width) noexcept
 {
-    static_assert(detail::is_public_bit_type_v<T>, "bitfield_insert requires uint32_t or uint64_t");
-    return detail::bitfield_insert_impl(destination, source, position, width);
+    return detail::bitfield_insert_impl(destination, source, start, width);
 }
 
 }  // namespace asc

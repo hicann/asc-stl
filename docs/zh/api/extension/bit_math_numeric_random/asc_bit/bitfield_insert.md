@@ -45,7 +45,7 @@ constexpr T bitfield_insert(T destination, T source, int start, int width) noexc
 
 | 参数名 | 描述 |
 | --- | --- |
-| `T` | 无符号整数类型；须为uint32_t或uint64_t。 |
+| `T` | 与 `asc::std::uint32_t` 或 `asc::std::uint64_t` 相同的类型。 |
 
 **函数参数**
 
@@ -53,8 +53,9 @@ constexpr T bitfield_insert(T destination, T source, int start, int width) noexc
 | --- | --- | --- |
 | `destination` | 输入 | 提供被替换位域所在的目标整数值；按值传入，替换结果经返回值给出，不涉及存储生命周期。 |
 | `source` | 输入 | 提供用于替换位域的源整数值；按值传入，不涉及存储生命周期。 |
-| `start` | 输入 | `destination`中被替换位域的起始位编号（最低位为第0位）；不得为负。 |
-| `width` | 输入 | 被替换位域的位数；不得为负。 |
+| `start` | 输入 | `destination`中被替换位域的起始位编号（最低位为第0位）；非法参数结果见约束说明。 |
+| `width` | 输入 | 被替换位域的位数；非法参数结果见约束说明。 |
+
 ## 返回值说明
 
 | 返回值类型 | 含义 |
@@ -63,24 +64,30 @@ constexpr T bitfield_insert(T destination, T source, int start, int width) noexc
 
 ## 约束说明
 
-- T必须为uint32_t或uint64_t。
-- `start`与`width`须非负，且`start <= 位宽`、`width <= 位宽 - start`；零位宽与全位宽在此窗口约束下处理。
+- `T` 必须与 `asc::std::uint32_t` 或 `asc::std::uint64_t` 为同一类型；同型别名可匹配，仅位宽相同的另一种类型不自动匹配。不满足条件时不参与重载决议。
+- 按值推导去掉实参的顶层 cv 限定；显式指定 cv/ref 类型不满足类型约束。
+- 支持 C++17/C++20、Host、SIMT 线程和 SIMD 核内的普通标量代码。常量求值与运行时结果一致，函数不抛出异常。
+- 两个值参数共同推导同一 `T`；显式指定支持的 `T` 时按普通 C++ 值参数规则转换。
+- 最低有效位为第 0 位，区间按整数值编号，与内存字节序或 C++ 位域成员布局无关。
+- 设位宽为 `W`，合法区间满足 `0 <= start && start <= W && 0 <= width && width <= W - start`。
+- 源的低第 `j` 位替换目标第 `start + j` 位，其余源位忽略；区间外目标位保留，返回新值。
+- 零宽（包括 `(W, 0)`）或非法区间返回 `destination`；`(0, W)` 返回 `source`。最高位窗口 `(W - 1, 1)` 合法。
+- 负数、参数超过位宽或区间越界均按非法区间处理，包括任意 `int` 极值；不截短区间或对参数取模。
 
 ## 调用示例
 
-以下片段选用具体整数实参展示接口调用。
-
 ```cpp
 #include <asc/bit>
+#include <asc/std/cstdint>
 
-decltype(auto) example()
-{
-    return asc::bitfield_insert(0u, 3u, 1, 2);
-}
+using u32 = asc::std::uint32_t;
+constexpr auto word = asc::bitfield_insert(u32{0xA5A50000}, u32{0x1AB}, 4, 8);
+static_assert(word == u32{0xA5A50AB0});
+static_assert(asc::bitfield_insert(u32{7}, u32{0}, 32, 0) == u32{7});
 
 bool verify_example()
 {
-    return example() == 6u;
+    return asc::bitfield_insert(u32{7}, u32{0}, 31, 2) == u32{7};
 }
 ```
 

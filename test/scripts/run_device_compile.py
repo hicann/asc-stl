@@ -209,7 +209,7 @@ NEGATIVE_DIAGNOSTIC_MARKERS = {
     "reset.fail.asc": "no member named",
     "timed_wait.fail.asc": "no member named",
     "scoped_sync_simd.fail.asc": "deleted",
-    "unsupported_width.fail.cpp": "static assertion",
+    "unsupported_width.fail.cpp": "no matching function",
     "byteswap_bool.fail.cpp": "static assertion",
     "strong_order.fail.cpp": "no member named",
     "exception_ptr.fail.cpp": "no type named",

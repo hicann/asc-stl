@@ -27,86 +27,71 @@
 #pragma system_header
 #endif
 
-// Host debug builds surface out-of-domain arguments through assert; device
-// and release builds keep the silent clamp documented below.
-#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-#include <asc/std/cassert>
-#endif
+#include <asc/std/climits>
 
-// Bit extension backend for the later public <asc/bit> facade. The four
-// primitives accept the supported unsigned integer types, are implemented
-// with standard bit operations, and run in Host, ordinary AICore and pure
-// SIMT. The public semantics do not depend on any single device instruction;
-// a compiler may optimize them onto equivalents when available.
+// Portable unsigned arithmetic shared by Host, constant evaluation, SIMD
+// scalar code and SIMT. Public operations use the 32/64-bit unsigned types.
 namespace asc::detail {
 
-// The shift-loop is the deliberately portable default.  The dev-side
-// reference additionally gates a hardware __brev path (pure SIMT on 950PR/DT
-// with devkit >= 90200000, mixed vector cores always fall back), but that
-// gate stays dark on every released devkit because the __brev lowering is
-// still broken there, and this tree carries no 950-arch/devkit capability
-// vocabulary to express it safely.  Wiring the intrinsic path requires the
-// capability macros plus on-target CCE validation first; until then the loop
-// below is the single implementation for every execution space.
+// A high-rank unsigned working type avoids signed integer promotion even for
+// the narrow types used by private helper tests.
 template <class T>
 CANN_ASC_STL_API constexpr T bit_reverse_impl(T value) noexcept
 {
-    T result = 0;
-    for (int index = 0; index < static_cast<int>(sizeof(T)) * 8; ++index) {
-        result = static_cast<T>(result << 1);
-        result = static_cast<T>(result | (value & T{1}));
-        value = static_cast<T>(value >> 1);
+    unsigned long long input = value;
+    unsigned long long result = 0;
+    for (int index = 0; index < static_cast<int>(sizeof(T)) * CHAR_BIT; ++index) {
+        result = (result << 1) | (input & 1ULL);
+        input >>= 1;
     }
-    return result;
+    return static_cast<T>(result);
 }
 
 template <class T>
 CANN_ASC_STL_API constexpr T bitmask_low_impl(int bits) noexcept
 {
-    return bits <= 0 ? T{0} :
-                       static_cast<T>(bits >= static_cast<int>(sizeof(T)) * 8 ? static_cast<T>(~T{0}) :
-                                                                                static_cast<T>((T{1} << bits) - 1));
+    const int digits = static_cast<int>(sizeof(T)) * CHAR_BIT;
+    return bits <= 0 ? T{0} : bits >= digits ? static_cast<T>(~T{0}) : static_cast<T>((1ULL << bits) - 1ULL);
 }
 
 template <class T>
-CANN_ASC_STL_API constexpr T bitfield_extract_impl(T value, int position, int width) noexcept
+CANN_ASC_STL_API constexpr bool bit_window_is_valid(int start, int width) noexcept
 {
-    const int total = static_cast<int>(sizeof(T)) * 8;
-#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    // The clamps below are a release/device safety net, not part of the
-    // documented domain: debug Host builds fail fast on out-of-domain
-    // arguments instead of silently returning a zero field.
-    assert(width >= 0);
-    assert(position >= 0 && position < total);
-    assert(width <= total - position);
-#endif
-    if (width <= 0 || position < 0 || position >= total) {
+    const int digits = static_cast<int>(sizeof(T)) * CHAR_BIT;
+    // Check the start before subtracting; start + width could overflow int.
+    return start >= 0 && start <= digits && width >= 0 && width <= digits - start;
+}
+
+template <class T>
+CANN_ASC_STL_API constexpr T bitmask_impl(int start, int width) noexcept
+{
+    if (!bit_window_is_valid<T>(start, width) || width == 0) {
         return T{0};
     }
-    if (position + width > total) {
-        width = total - position;
-    }
-    return static_cast<T>((value >> position) & bitmask_low_impl<T>(width));
+    const auto low = static_cast<unsigned long long>(bitmask_low_impl<T>(width));
+    return static_cast<T>(low << start);
 }
 
 template <class T>
-CANN_ASC_STL_API constexpr T bitfield_insert_impl(T destination, T source, int position, int width) noexcept
+CANN_ASC_STL_API constexpr T bitfield_extract_impl(T value, int start, int width) noexcept
 {
-    const int total = static_cast<int>(sizeof(T)) * 8;
-#if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-    // Same debug fail-fast contract as bitfield_extract_impl.
-    assert(width >= 0);
-    assert(position >= 0 && position < total);
-    assert(width <= total - position);
-#endif
-    if (width <= 0 || position < 0 || position >= total) {
+    if (!bit_window_is_valid<T>(start, width) || width == 0) {
+        return T{0};
+    }
+    const auto input = static_cast<unsigned long long>(value);
+    return static_cast<T>((input >> start) & bitmask_low_impl<T>(width));
+}
+
+template <class T>
+CANN_ASC_STL_API constexpr T bitfield_insert_impl(T destination, T source, int start, int width) noexcept
+{
+    if (!bit_window_is_valid<T>(start, width) || width == 0) {
         return destination;
     }
-    if (position + width > total) {
-        width = total - position;
-    }
-    const T mask = static_cast<T>(bitmask_low_impl<T>(width) << position);
-    return static_cast<T>((destination & static_cast<T>(~mask)) | static_cast<T>((source << position) & mask));
+    const auto low = static_cast<unsigned long long>(bitmask_low_impl<T>(width));
+    const auto mask = low << start;
+    return static_cast<T>((static_cast<unsigned long long>(destination) & ~mask) |
+        ((static_cast<unsigned long long>(source) & low) << start));
 }
 
 }  // namespace asc::detail
