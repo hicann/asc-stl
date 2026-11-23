@@ -24,11 +24,12 @@
 - Atlas训练系列产品：不支持
 <!-- end id7 -->
 
+
 ## 功能说明
 
-头文件路径为：`<asc/type_traits>`。
+`<asc/type_traits>`
 
-`asc::is_bitwise_comparable<T>`判断按字节比较`T`的对象表示是否与`operator==`的值比较等价；标准整数类型默认为true，浮点类型默认为false。
+查询对象字节相等能否替代const同类型左值的相等比较。默认仅考虑bool以外、可平凡复制且表示唯一的标准整数。volatile、引用、数组、浮点、枚举、指针、无相等运算及一般类默认false。
 
 ## 声明
 
@@ -40,19 +41,17 @@ template<class T> struct is_bitwise_comparable;
 
 ## 约束说明
 
-- 该接口是单类型定制点。
-- 用户特化必须满足页面声明的语义前置条件。
+最低C++17，同时支持C++20；完整类型、cv/ref、特化及编译条件见[本头约定](asc_type_traits.md)。
 
 ## 调用示例
-
-以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/type_traits>
 
 bool example()
 {
-    static_assert(asc::is_bitwise_comparable<int>::value);
+    static_assert(asc::is_bitwise_comparable<unsigned char>::value);
+    static_assert(!asc::is_bitwise_comparable<bool>::value);
     static_assert(!asc::is_bitwise_comparable<float>::value);
     return true;
 }
@@ -60,4 +59,4 @@ bool example()
 
 ## 关联API
 
-- [本头文件的接口列表](asc_type_traits.md)
+- [asc/type_traits](asc_type_traits.md)

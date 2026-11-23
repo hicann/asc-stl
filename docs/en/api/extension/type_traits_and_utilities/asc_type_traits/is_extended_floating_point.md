@@ -24,11 +24,12 @@
 - Atlas training series products: Not supported
 <!-- end id7 -->
 
+
 ## Description
 
-Header: `<asc/type_traits>`.
+`<asc/type_traits>`
 
-`asc::is_extended_floating_point<T>` determines whether `T` is an extended floating-point type other than `float`, `double`, and `long double`; no extended type is currently delivered, and the default returns false.
+Identifies registered scalar extended floating-point formats: FP16, BF16, E4M3FN, E5M2 and HiFloat8 are true; E8M0, int4, packed formats and standard arithmetic are false.
 
 ## Declaration
 
@@ -40,24 +41,22 @@ template<class T> struct is_extended_floating_point;
 
 ## Constraints
 
-- This interface is a single-type customization point.
-- User specializations must satisfy the semantic preconditions declared on this page.
+C++17 minimum and C++20 are supported. Completeness, cv/ref, specialization and frontend requirements are specified in the [header contract](asc_type_traits.md).
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/type_traits>
 
 bool example()
 {
+    static_assert(asc::is_extended_floating_point<asc::float16>::value);
+    static_assert(!asc::is_extended_floating_point<asc::float8_e8m0>::value);
     static_assert(!asc::is_extended_floating_point<float>::value);
-    static_assert(!asc::is_extended_floating_point<int>::value);
     return true;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_type_traits.md)
+- [asc/type_traits](asc_type_traits.md)

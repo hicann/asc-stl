@@ -24,35 +24,39 @@
 - Atlas training series products: Not supported
 <!-- end id7 -->
 
+
 ## Description
 
-Header: `<asc/type_traits>`.
+`<asc/type_traits>`
 
-`asc::is_extended_floating_point_v<T>` is a bool variable template shorthand for `is_extended_floating_point<T>::value`.
+`asc::is_extended_floating_point_v<T>` is exactly `asc::is_extended_floating_point<T>::value`.
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template<class T> inline constexpr bool is_extended_floating_point_v = asc::is_extended_floating_point<T>::value;
+template<class T> inline constexpr bool is_extended_floating_point_v = is_extended_floating_point<T>::value;
 } // namespace asc
 ```
 
 ## Constraints
 
-- The result is an exact bool projection of the corresponding customization point's value.
+C++17 minimum and C++20 are supported. Completeness, cv/ref, specialization and frontend requirements are specified in the [header contract](asc_type_traits.md).
 
 ## Example
-
-The following snippet reads the interface value with concrete template arguments.
 
 ```cpp
 #include <asc/type_traits>
 
-inline constexpr auto example = asc::is_extended_floating_point_v<float>;
-static_assert(!example, "float is a standard floating-point type, not an extended type");
+bool example()
+{
+    static_assert(asc::is_extended_floating_point_v<asc::float16>);
+    static_assert(!asc::is_extended_floating_point_v<asc::float8_e8m0>);
+    static_assert(!asc::is_extended_floating_point_v<float>);
+    return true;
+}
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_type_traits.md)
+- [asc/type_traits](asc_type_traits.md)

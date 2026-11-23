@@ -24,35 +24,39 @@
 - Atlas训练系列产品：不支持
 <!-- end id7 -->
 
+
 ## 功能说明
 
-头文件路径为：`<asc/type_traits>`。
+`<asc/type_traits>`
 
-`asc::is_bitwise_comparable_v<T>`是`is_bitwise_comparable<T>::value`的bool变量模板简写。
+`asc::is_bitwise_comparable_v<T>`等于`asc::is_bitwise_comparable<T>::value`。
 
 ## 声明
 
 ```cpp
 namespace asc {
-template<class T> inline constexpr bool is_bitwise_comparable_v = asc::is_bitwise_comparable<T>::value;
+template<class T> inline constexpr bool is_bitwise_comparable_v = is_bitwise_comparable<T>::value;
 } // namespace asc
 ```
 
 ## 约束说明
 
-- 结果是对应定制点返回值的精确bool投影。
+最低C++17，同时支持C++20；完整类型、cv/ref、特化及编译条件见[本头约定](asc_type_traits.md)。
 
 ## 调用示例
-
-以下片段用具体模板实参读取接口值。
 
 ```cpp
 #include <asc/type_traits>
 
-inline constexpr auto example = asc::is_bitwise_comparable_v<int>;
-static_assert(example, "the selected documented type has this capability");
+bool example()
+{
+    static_assert(asc::is_bitwise_comparable_v<unsigned char>);
+    static_assert(!asc::is_bitwise_comparable_v<bool>);
+    static_assert(!asc::is_bitwise_comparable_v<float>);
+    return true;
+}
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_type_traits.md)
+- [asc/type_traits](asc_type_traits.md)

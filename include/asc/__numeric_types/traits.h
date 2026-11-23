@@ -51,6 +51,18 @@ struct numeric_native_byte_member<Native,
         asc::std::is_constructible_v<Native> && asc::std::is_constructible_v<Native, Native&>;
 };
 
+// Shared type identity for format metadata and extension queries. The registry
+// contains no conversion implementation and is complete before public queries.
+template <class T>
+struct numeric_type_registration {
+    static constexpr bool value = false;
+};
+
+template <numeric_format F>
+struct numeric_type_registration<numeric_storage<F>> : numeric_descriptor<F> {
+    static constexpr bool value = true;
+};
+
 template <class T>
 struct numeric_native_mapping {
     static constexpr bool has_native_type = false;
@@ -76,7 +88,9 @@ struct numeric_native_registration<Native, true> {
         : numeric_native_registration<NATIVE,                                                                       \
               sizeof(TYPE) == sizeof(NATIVE) && alignof(TYPE) == alignof(NATIVE) && __is_standard_layout(NATIVE) && \
                   (__is_trivially_copyable(NATIVE) ||                                                               \
-                      (!(REQUIRE_TRIVIAL) && numeric_native_byte_member<NATIVE>::value))> {};
+                      (!(REQUIRE_TRIVIAL) && numeric_native_byte_member<NATIVE>::value))> {};                       \
+    template <>                                                                                                     \
+    struct numeric_type_registration<NATIVE> : numeric_type_registration<TYPE> {};
 CANN_ASC_STL_DETAIL_NUMERIC_NATIVE(float16, ::half, true)
 CANN_ASC_STL_DETAIL_NUMERIC_NATIVE(bfloat16, ::bfloat16_t, true)
 CANN_ASC_STL_DETAIL_NUMERIC_NATIVE(float8_e4m3fn, ::float8_e4m3_t, true)

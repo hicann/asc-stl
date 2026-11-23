@@ -14,70 +14,70 @@
  * limitations under the License.
  */
 
-#include <asc/__type_traits/extensions.h>
+#include <asc/type_traits>
 
 #include <cassert>
-#include <cstdint>
+#include <cstring>
+#include <limits>
+#include <new>
 
-enum Enum { A };
-struct Trivial {
-    int value;
-};
-struct NonTrivial {
-    ~NonTrivial();
-    int value;
-};
-struct BitwiseRelocatable {
-    BitwiseRelocatable() = default;
-    BitwiseRelocatable(const BitwiseRelocatable&) = default;
-    BitwiseRelocatable& operator=(const BitwiseRelocatable&) = default;
-    ~BitwiseRelocatable() = default;
-    int value;
-};
+#include "support/extension_type_traits_semantics.h"
 
-// A user specialization opts a memcpy-safe custom type in.
-template <>
-struct asc::is_trivially_relocatable<NonTrivial> {
-    static constexpr bool value = true;
+namespace {
+struct Parity {
+    unsigned value;
+    friend bool operator==(const Parity& a, const Parity& b) noexcept
+    {
+        return a.value % 2 == b.value % 2;
+    }
 };
+struct Counted {
+    unsigned value;
+    static unsigned calls;
+    friend bool operator==(const Counted& a, const Counted& b) noexcept
+    {
+        ++calls;
+        return a.value == b.value;
+    }
+};
+unsigned Counted::calls = 0;
+
+template <class T>
+bool equal_value(const T& a, const T& b)
+{
+    if constexpr (asc::is_bitwise_comparable_v<T>) {
+        return std::memcmp(&a, &b, sizeof(T)) == 0;
+    } else {
+        return a == b;
+    }
+}
+}  // namespace
 
 int main()
 {
-    // Standard integer types are bitwise comparable; floats and composites
-    // are not classified by the product.
-    static_assert(asc::is_bitwise_comparable_v<int>);
-    static_assert(asc::is_bitwise_comparable_v<std::uint64_t>);
-    static_assert(asc::is_bitwise_comparable_v<bool>);
-    static_assert(asc::is_bitwise_comparable_v<char>);
-    static_assert(!asc::is_bitwise_comparable_v<float>);
-    static_assert(!asc::is_bitwise_comparable_v<double>);
-    static_assert(!asc::is_bitwise_comparable_v<Enum>);
-    static_assert(!asc::is_bitwise_comparable_v<Trivial>);
-    static_assert(asc::is_bitwise_comparable<int>::value);
-
-    // Standard arithmetic types remain outside the extension wrapper classification.
-    static_assert(!asc::is_extended_floating_point_v<float>);
-    static_assert(!asc::is_extended_floating_point_v<double>);
-    static_assert(!asc::is_extended_floating_point_v<long double>);
-    static_assert(!asc::is_extended_floating_point_v<int>);
-    static_assert(!asc::is_extended_floating_point<float>::value);
-
-    static_assert(asc::is_extended_floating_point_v<asc::float16>);
-    static_assert(asc::is_extended_floating_point_v<asc::bfloat16>);
-    static_assert(asc::is_extended_floating_point_v<asc::float8_e4m3fn>);
-    static_assert(asc::is_extended_floating_point_v<asc::float8_e5m2>);
-    static_assert(asc::is_extended_floating_point_v<asc::hifloat8>);
-    static_assert(!asc::is_extended_floating_point_v<asc::float8_e8m0>);
-    static_assert(!asc::is_extended_floating_point_v<asc::float4_e2m1x2>);
-    static_assert(!asc::is_extended_floating_point_v<asc::int4>);
-    static_assert(!asc::is_bitwise_comparable_v<asc::float16>);
-    static_assert(asc::is_trivially_relocatable_v<asc::float16>);
-
-    // Trivially copyable types are trivially relocatable; a documented user
-    // specialization extends the classification without touching the default.
-    static_assert(asc::is_trivially_relocatable_v<Trivial>);
-    static_assert(asc::is_trivially_relocatable_v<int>);
-    static_assert(!asc::is_trivially_relocatable_v<BitwiseRelocatable&>);
-    static_assert(asc::is_trivially_relocatable<NonTrivial>::value);
-    return 0;
+    static_assert(asc::std::is_trivially_copyable_v<Parity>);
+    static_assert(asc::std::has_unique_object_representations_v<Parity>);
+    static_assert(!asc::is_bitwise_comparable_v<Parity>);
+    const Parity one{1}, three{3};
+    assert(equal_value(one, three));
+    assert(std::memcmp(&one, &three, sizeof(Parity)) != 0);
+    assert(equal_value(Counted{7}, Counted{7}) && Counted::calls == 1);
+    const float positive = 0.0f, negative = -0.0f;
+    assert(equal_value(positive, negative));
+    assert(std::memcmp(&positive, &negative, sizeof(float)) != 0);
+    const float nan = std::numeric_limits<float>::quiet_NaN();
+    const float same_nan = __builtin_bit_cast(float, nan);
+    assert(!equal_value(nan, same_nan) && std::memcmp(&nan, &same_nan, sizeof(nan)) == 0);
+    assert(equal_value(123u, 123u) && !equal_value(123u, 124u));
+    traits_test::SelfReference source, copied(source);
+    assert(copied.self == &source.value && copied.self != &copied.value);
+    // Legal C++17 relocation route: construct, then release source storage.
+    using Value = traits_test::UserValue;
+    void* old_storage = ::operator new(sizeof(Value));
+    auto* old_value = ::new (old_storage) Value{41};
+    void* new_storage = ::operator new(sizeof(Value));
+    auto* new_value = ::new (new_storage) Value(static_cast<Value&&>(*old_value));
+    ::operator delete(old_storage);
+    assert(new_value->value == 41);
+    ::operator delete(new_storage);
 }

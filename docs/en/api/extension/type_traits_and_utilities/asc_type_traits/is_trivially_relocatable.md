@@ -24,11 +24,12 @@
 - Atlas training series products: Not supported
 <!-- end id7 -->
 
+
 ## Description
 
-Header: `<asc/type_traits>`.
+`<asc/type_traits>`
 
-`asc::is_trivially_relocatable<T>` determines whether an object can be relocated by copying it byte by byte to a new address and ending the lifetime of the source object; trivially copyable types satisfy this condition by default.
+Queries type conditions for relocation. Non-cv standard scalars and registered numeric formats qualify only with trivial copying, rvalue construction and destruction. Ordinary classes, arrays and references default to false.
 
 ## Declaration
 
@@ -40,23 +41,23 @@ template<class T> struct is_trivially_relocatable;
 
 ## Constraints
 
-- This interface is a single-type customization point.
-- User specializations must satisfy the semantic preconditions declared on this page.
+C++17 minimum and C++20 are supported. Completeness, cv/ref, specialization and frontend requirements are specified in the [header contract](asc_type_traits.md).
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/type_traits>
 
 bool example()
 {
+    struct Value { int value; };
     static_assert(asc::is_trivially_relocatable<int>::value);
+    static_assert(!asc::is_trivially_relocatable<const int>::value);
+    static_assert(!asc::is_trivially_relocatable<Value>::value);
     return true;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_type_traits.md)
+- [asc/type_traits](asc_type_traits.md)

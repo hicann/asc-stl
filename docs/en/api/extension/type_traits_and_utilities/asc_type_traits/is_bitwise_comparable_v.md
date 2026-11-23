@@ -24,35 +24,39 @@
 - Atlas training series products: Not supported
 <!-- end id7 -->
 
+
 ## Description
 
-Header: `<asc/type_traits>`.
+`<asc/type_traits>`
 
-`asc::is_bitwise_comparable_v<T>` is a bool variable template shorthand for `is_bitwise_comparable<T>::value`.
+`asc::is_bitwise_comparable_v<T>` is exactly `asc::is_bitwise_comparable<T>::value`.
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template<class T> inline constexpr bool is_bitwise_comparable_v = asc::is_bitwise_comparable<T>::value;
+template<class T> inline constexpr bool is_bitwise_comparable_v = is_bitwise_comparable<T>::value;
 } // namespace asc
 ```
 
 ## Constraints
 
-- The result is an exact bool projection of the corresponding customization point's value.
+C++17 minimum and C++20 are supported. Completeness, cv/ref, specialization and frontend requirements are specified in the [header contract](asc_type_traits.md).
 
 ## Example
-
-The following snippet reads the interface value with concrete template arguments.
 
 ```cpp
 #include <asc/type_traits>
 
-inline constexpr auto example = asc::is_bitwise_comparable_v<int>;
-static_assert(example, "the selected documented type has this capability");
+bool example()
+{
+    static_assert(asc::is_bitwise_comparable_v<unsigned char>);
+    static_assert(!asc::is_bitwise_comparable_v<bool>);
+    static_assert(!asc::is_bitwise_comparable_v<float>);
+    return true;
+}
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_type_traits.md)
+- [asc/type_traits](asc_type_traits.md)

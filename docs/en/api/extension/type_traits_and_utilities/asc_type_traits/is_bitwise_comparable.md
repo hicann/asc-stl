@@ -24,11 +24,12 @@
 - Atlas training series products: Not supported
 <!-- end id7 -->
 
+
 ## Description
 
-Header: `<asc/type_traits>`.
+`<asc/type_traits>`
 
-`asc::is_bitwise_comparable<T>` determines whether comparing the object representation of `T` byte by byte is equivalent to the value comparison of `operator==`; standard integer types default to true, and floating-point types default to false.
+Queries whether byte equality can replace const-lvalue equality of the same type. Only standard integers other than bool, with trivial copying and unique representations, qualify by default. Volatile, references, arrays, floating-point, enum, pointer and ordinary class types default to false.
 
 ## Declaration
 
@@ -40,19 +41,17 @@ template<class T> struct is_bitwise_comparable;
 
 ## Constraints
 
-- This interface is a single-type customization point.
-- User specializations must satisfy the semantic preconditions declared on this page.
+C++17 minimum and C++20 are supported. Completeness, cv/ref, specialization and frontend requirements are specified in the [header contract](asc_type_traits.md).
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/type_traits>
 
 bool example()
 {
-    static_assert(asc::is_bitwise_comparable<int>::value);
+    static_assert(asc::is_bitwise_comparable<unsigned char>::value);
+    static_assert(!asc::is_bitwise_comparable<bool>::value);
     static_assert(!asc::is_bitwise_comparable<float>::value);
     return true;
 }
@@ -60,4 +59,4 @@ bool example()
 
 ## Related APIs
 
-- [API list for this header](asc_type_traits.md)
+- [asc/type_traits](asc_type_traits.md)

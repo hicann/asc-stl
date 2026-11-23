@@ -19923,21 +19923,24 @@
       17,
       20
     ],
-    "mode": "host"
+    "mode": "host",
+    "expression": "example()"
   },
   "docs/zh/api/extension/type_traits_and_utilities/asc_type_traits/is_extended_floating_point_v.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host"
+    "mode": "host",
+    "expression": "example()"
   },
   "docs/zh/api/extension/type_traits_and_utilities/asc_type_traits/is_trivially_relocatable_v.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host"
+    "mode": "host",
+    "expression": "example()"
   },
   "docs/zh/api/extension/type_traits_and_utilities/asc_utility/in_range.md": {
     "standards": [
@@ -25490,5 +25493,53 @@
       17,
       20
     ]
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_type_traits/is_low_precision.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_type_traits/is_low_precision_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_type_traits/is_packed_numeric.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_type_traits/is_packed_numeric_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_type_traits/is_address_space_qualified.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/type_traits_and_utilities/asc_type_traits/is_address_space_qualified_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
   }
 }

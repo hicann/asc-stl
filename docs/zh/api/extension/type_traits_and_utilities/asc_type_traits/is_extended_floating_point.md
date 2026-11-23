@@ -24,11 +24,12 @@
 - Atlas训练系列产品：不支持
 <!-- end id7 -->
 
+
 ## 功能说明
 
-头文件路径为：`<asc/type_traits>`。
+`<asc/type_traits>`
 
-`asc::is_extended_floating_point<T>`判断`T`是否为`float`、`double`和`long double`之外的扩展浮点类型；当前未交付扩展类型默认返回false。
+识别登记的扩展单元素浮点格式：FP16、BF16、E4M3FN、E5M2和HiFloat8为true；E8M0、int4、packed和标准算术类型为false。
 
 ## 声明
 
@@ -40,24 +41,22 @@ template<class T> struct is_extended_floating_point;
 
 ## 约束说明
 
-- 该接口是单类型定制点。
-- 用户特化必须满足页面声明的语义前置条件。
+最低C++17，同时支持C++20；完整类型、cv/ref、特化及编译条件见[本头约定](asc_type_traits.md)。
 
 ## 调用示例
-
-以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/type_traits>
 
 bool example()
 {
+    static_assert(asc::is_extended_floating_point<asc::float16>::value);
+    static_assert(!asc::is_extended_floating_point<asc::float8_e8m0>::value);
     static_assert(!asc::is_extended_floating_point<float>::value);
-    static_assert(!asc::is_extended_floating_point<int>::value);
     return true;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_type_traits.md)
+- [asc/type_traits](asc_type_traits.md)

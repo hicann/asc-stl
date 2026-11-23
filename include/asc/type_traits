@@ -28,9 +28,6 @@
 #endif
 
 #include <asc/__type_traits/extensions.h>
-// 与源实现一致：asc 侧扩展 trait 之外同步聚合标准 trait 面（asc/std/type_traits）。
-// dev 聚合的 7 个 asc 侧专用头（vector 三件套/scalar_type/vector_size/is_floating_point/
-// is_trivially_copyable）在基座树为孤儿（无对应文件且无产品 CSV 合同），本批不引入。
 #include <asc/std/type_traits>
 
 #endif  // CANN_ASC_STL_ASC_TYPE_TRAITS

@@ -24,35 +24,40 @@
 - Atlas training series products: Not supported
 <!-- end id7 -->
 
+
 ## Description
 
-Header: `<asc/type_traits>`.
+`<asc/type_traits>`
 
-`asc::is_trivially_relocatable_v<T>` is a bool variable template shorthand for `is_trivially_relocatable<T>::value`.
+`asc::is_trivially_relocatable_v<T>` is exactly `asc::is_trivially_relocatable<T>::value`.
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template<class T> inline constexpr bool is_trivially_relocatable_v = asc::is_trivially_relocatable<T>::value;
+template<class T> inline constexpr bool is_trivially_relocatable_v = is_trivially_relocatable<T>::value;
 } // namespace asc
 ```
 
 ## Constraints
 
-- The result is an exact bool projection of the corresponding customization point's value.
+C++17 minimum and C++20 are supported. Completeness, cv/ref, specialization and frontend requirements are specified in the [header contract](asc_type_traits.md).
 
 ## Example
-
-The following snippet reads the interface value with concrete template arguments.
 
 ```cpp
 #include <asc/type_traits>
 
-inline constexpr auto example = asc::is_trivially_relocatable_v<int>;
-static_assert(example, "the selected documented type has this capability");
+bool example()
+{
+    struct Value { int value; };
+    static_assert(asc::is_trivially_relocatable_v<int>);
+    static_assert(!asc::is_trivially_relocatable_v<const int>);
+    static_assert(!asc::is_trivially_relocatable_v<Value>);
+    return true;
+}
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_type_traits.md)
+- [asc/type_traits](asc_type_traits.md)

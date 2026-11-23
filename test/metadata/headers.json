@@ -820,11 +820,48 @@
       "runtime_case": "asc/__tensor_copy/descriptor.h"
     },
     {
+      "target": "asc/__type_traits/address_space.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/remove_reference.h"
+      ],
+      "semantic_case": "asc/__type_traits/extensions.h",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
       "target": "asc/__type_traits/extensions.h",
       "visibility": "private",
       "dependencies": [
         "asc/__config",
-        "asc/__numeric_types/storage.h"
+        "asc/__numeric_types/traits.h",
+        "asc/__type_traits/address_space.h",
+        "asc/std/__type_traits/has_unique_object_representation.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_array.h",
+        "asc/std/__type_traits/is_class.h",
+        "asc/std/__type_traits/is_const.h",
+        "asc/std/__type_traits/is_enum.h",
+        "asc/std/__type_traits/is_member_pointer.h",
+        "asc/std/__type_traits/is_null_pointer.h",
+        "asc/std/__type_traits/is_pointer.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/is_trivially_copyable.h",
+        "asc/std/__type_traits/is_trivially_destructible.h",
+        "asc/std/__type_traits/is_trivially_move_constructible.h",
+        "asc/std/__type_traits/is_union.h",
+        "asc/std/__type_traits/is_volatile.h",
+        "asc/std/__type_traits/remove_cv.h",
+        "asc/std/__type_traits/void_t.h"
       ],
       "applicability": {
         "host_header": true,
@@ -16551,7 +16588,7 @@
         "asc/__type_traits/extensions.h",
         "asc/std/type_traits"
       ],
-      "semantic_case": "asc/argument",
+      "semantic_case": "asc/__type_traits/extensions.h",
       "applicability": {
         "host_header": true,
         "device_header": true,
