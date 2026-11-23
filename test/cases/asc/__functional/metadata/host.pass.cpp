@@ -13,52 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <asc/__functional/metadata.h>
 
-#include <cassert>
+#include <asc/__functional/metadata.h>
 
 int main()
 {
-    using asc::detail::add_op;
-    using asc::detail::bitwise_and_op;
-    using asc::detail::bitwise_or_op;
-    using asc::detail::bitwise_xor_op;
-    using asc::detail::logical_and_op;
-    using asc::detail::logical_or_op;
-    using asc::detail::maximum_op;
-    using asc::detail::minimum_op;
-    using asc::detail::multiply_op;
-
-    static_assert(asc::detail::is_associative_op<add_op>::value);
-    static_assert(asc::detail::is_associative_op<multiply_op>::value);
-    static_assert(asc::detail::is_associative_op<logical_and_op>::value);
-    static_assert(asc::detail::is_associative_op<bitwise_xor_op>::value);
-    static_assert(asc::detail::is_associative_op<minimum_op>::value);
-    static_assert(asc::detail::is_associative_op<maximum_op>::value);
-    static_assert(!asc::detail::is_associative_op<int>::value);
-
-    static_assert(asc::detail::is_commutative_op<add_op>::value);
-    static_assert(!asc::detail::is_commutative_op<int>::value);
-
-    static_assert(asc::detail::identity_element_op<add_op, int>::has_value);
-    static_assert(asc::detail::identity_element_op<add_op, int>::value == 0);
-    static_assert(asc::detail::identity_element_op<multiply_op, int>::value == 1);
-    static_assert(asc::detail::identity_element_op<logical_and_op, bool>::value);
-    static_assert(!asc::detail::identity_element_op<logical_or_op, bool>::value);
-    static_assert(asc::detail::identity_element_op<bitwise_and_op, unsigned>::value == ~0u);
-    static_assert(asc::detail::identity_element_op<bitwise_or_op, unsigned>::value == 0u);
-    static_assert(asc::detail::identity_element_op<maximum_op, int>::has_value == false);
-
-    static_assert(asc::detail::absorbing_element_op<multiply_op, int>::has_value);
-    static_assert(asc::detail::absorbing_element_op<multiply_op, int>::value == 0);
-    static_assert(!asc::detail::absorbing_element_op<add_op, int>::has_value);
-    static_assert(!asc::detail::absorbing_element_op<bitwise_or_op, int>::has_value);
-
-    static_assert(asc::detail::always_true_op{}());
-    static_assert(!asc::detail::always_false_op{}());
-    assert(asc::detail::equal_to_value_op<int>{42}(42));
-    assert(!asc::detail::equal_to_value_op<int>{42}(41));
-    static_assert(asc::detail::maximum_op_of<int>{}(3, 9) == 9);
-    static_assert(asc::detail::minimum_op_of<int>{}(3, 9) == 3);
+    using Associative = asc::detail::functional_property_flags<true, false, false, false>;
+    using Commutative = asc::detail::functional_property_flags<false, true, false, false>;
+    static_assert(Associative::associative && !Associative::commutative);
+    static_assert(!Commutative::associative && Commutative::commutative);
     return 0;
 }

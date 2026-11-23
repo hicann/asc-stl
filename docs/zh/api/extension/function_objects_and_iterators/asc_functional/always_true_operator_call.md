@@ -1,4 +1,4 @@
-# asc::always_true::`operator()`
+# asc::always_true::operator()
 
 ## 产品支持情况
 
@@ -26,59 +26,34 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/functional>`。
+头文件：`<asc/functional>`。接受零个或多个实参并返回true。
 
-`asc::always_true::operator()`忽略全部参数并返回true。
-
-## 函数原型
-
-所属类型：[`asc::always_true`](always_true.md)。
+## 声明
 
 ```cpp
-// asc::always_true 类内的声明节选；模板形参和其他成员由所属类提供。
-template <class... Args>
+template<class... Args>
 constexpr bool operator()(Args&&...) const noexcept;
 ```
 
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Args` | 传递给构造函数或可调用对象的实参类型列表。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `bool` | 条件成立时返回`true`，否则返回`false`。 |
-
 ## 约束说明
 
-- 本页对象只执行所述谓词、比较或编译期属性查询，不进行Runtime提交。
-- 比较操作数须支持相应运算；透明min/max可能返回引用，选中对象须在使用期间有效。
-- 复制参数声明只表明调用方的复制承诺，不延长捕获引用的生命周期，也不代替可调用性检查。
+无状态，调用无条件noexcept，函数体不读取、复制或保存参数。调用方实参表达式仍会求值，可能产生副作用或抛异常。
+
+C++17和C++20均支持。Host、SIMT、SIMD标量调用须满足当前调用域的比较、转换、构造和析构要求；Device调用遵守无异常执行约定。
 
 ## 调用示例
-
-以下Host片段以具体值演示调用；输入须满足本页约束。
 
 ```cpp
 #include <asc/functional>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::always_true{}(7);
-}
-
-bool verify_example()
-{
-    return example() == true;
+    int evaluations = 0;
+    const bool result = asc::always_true{}(++evaluations);
+    return result && evaluations == 1;
 }
 ```
 
 ## 关联API
 
-- [`asc::always_true`](always_true.md)
-- [本头文件的接口列表](asc_functional.md)
+- [本头文件的接口列表与运算支持表](asc_functional.md)

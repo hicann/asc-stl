@@ -26,57 +26,37 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/functional>`。
+头文件：`<asc/functional>`。返回已登记的双侧吸收元，类型为T。
 
-`asc::absorbing_element`返回已登记运算及值类型的吸收元；未登记组合不能调用。
-
-## 函数原型
+## 声明
 
 ```cpp
 namespace asc {
-template<class Operator, class T> constexpr T absorbing_element() noexcept;
-} // namespace asc
+template<class Operator, class T,
+    asc::std::enable_if_t<has_absorbing_element_v<Operator, T>, int> = 0>
+constexpr T absorbing_element() noexcept;
+}  // namespace asc
 ```
-
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Operator` | 已登记的`asc::std`标准函数对象类型。 |
-| `T` | 与该运算匹配的值类型。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `T` | 返回已登记运算及值类型的吸收元。 |
 
 ## 约束说明
 
-- 仅接受已登记的整数算术、布尔逻辑或无符号整数位运算组合。
-- 浮点加法未登记。
+has_absorbing_element_v为true时才参与重载，false时表达式检测亦不可调用。单位元满足F(e,x)=F(x,e)=x，吸收元满足F(z,x)=F(x,z)=z，其中F在每个节点转换回T。仅保证数值结果，不改变实参求值及副作用规则。
+
+C++17和C++20均支持。Host、SIMT、SIMD标量调用须满足当前调用域的比较、转换、构造和析构要求；Device调用遵守无异常执行约定。
 
 ## 调用示例
 
-以下片段使用已登记的标准函数对象与具体整数类型。
-
 ```cpp
 #include <asc/functional>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    static_assert(asc::absorbing_element<asc::std::multiplies<int>, int>() == 0);
+    return asc::absorbing_element<asc::maximum<int>, int>() ==
+        (asc::std::numeric_limits<int>::max)();
 }
 ```
 
 ## 关联API
 
-- [asc::has_absorbing_element_v](has_absorbing_element_v.md)
+- [本头文件的接口列表与运算支持表](asc_functional.md)

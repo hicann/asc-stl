@@ -1,4 +1,4 @@
-# asc::maximum::`operator()`
+# asc::maximum::operator()
 
 ## Product Support
 
@@ -26,62 +26,46 @@
 
 ## Description
 
-Header: `<asc/functional>`.
+Header: `<asc/functional>`. Compare once, prefer the left operand on equivalence, and construct the larger value result.
 
-`asc::maximum::operator()` compares two inputs and returns the larger value.
-
-## Function Prototype
-
-In-class declaration of the primary template `asc::maximum<T>`:
+## Declaration
 
 ```cpp
-constexpr T operator()(const T& left, const T& right) const noexcept(noexcept(left < right));
-```
+// Inside the typed form; declaration constraints are omitted.
+constexpr T operator()(const T& left, const T& right) const
+    noexcept(/* comparison, bool conversion, and both result constructions */);
 
-In-class declaration of the transparent specialization `asc::maximum<void>`:
-
-```cpp
-template <class Left, class Right>
+// Inside the void specialization.
+template<class Left, class Right>
 constexpr auto operator()(Left&& left, Right&& right) const
-    noexcept(noexcept(left < right)) -> decltype(left < right ? right : left);
+    noexcept(/* comparison, bool conversion, and both result constructions */)
+    -> asc::std::common_type_t<asc::std::decay_t<Left>, asc::std::decay_t<Right>>;
 ```
-
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Left` | The type of the left comparison operand. |
-| `Right` | The type of the right comparison operand. |
-
-## Return Value
-
-- The primary template returns a copy of the T value.
-- The void specialization returns the actual type of the conditional expression, which may be a reference; the selected operand must stay alive while the returned reference is in use.
 
 ## Constraints
 
-- The object on this page only performs the described predicate, comparison, or compile-time property query; it does not perform any Runtime submission.
-- Comparison operands must support the corresponding operation; transparent min/max may return a reference, and the selected object must remain valid for the duration of use.
-- A copyable-arguments declaration only states the caller's copying promise; it does not extend the lifetime of captured references and does not replace callability checks.
+The comparison is static_cast<bool>(left < right): true selects right, otherwise left. Transparent calls compare const lvalues of the original types, then forward only the selected argument. Typed calls construct from const T&. Both constructions must be valid; invalid comparisons, bool conversions, or constructions exclude the overload. noexcept also accounts for relevant temporary destruction.
+
+The result is a complete, unqualified non-array value type. Transparent argument types must be complete non-volatile non-array objects after removing references. Temporary arguments are supported; pointer/view results keep their own borrowing requirements. Heterogeneous comparisons use ordinary C++ conversions. With strict floating-point semantics, an unordered NaN comparison selects left and equivalent signed zeros retain the left sign; fmin/fmax rules are not used.
+
+C++17 and C++20 are supported. Host, SIMT, and SIMD scalar calls require comparison, conversion, construction, and destruction in the current execution domain. Device calls follow the no-exception execution contract.
 
 ## Example
 
-The following Host example uses concrete inputs and checks the result within the object's lifetime.
-
 ```cpp
 #include <asc/functional>
+#include <asc/std/type_traits>
+
 bool example()
 {
-    int left = 1;
-    int right = 2;
-    const int& result = asc::maximum<>{}(left, right);
-    return &result == &right && result == 2;
+    int left = 3;
+    int right = 7;
+    auto result = asc::maximum<>{}(left, right);
+    static_assert(asc::std::is_same_v<decltype(result), int>);
+    return result == 7 && &result != &left && &result != &right;
 }
 ```
 
 ## Related APIs
 
-- [`asc::maximum`](maximum.md)
-- [API list for this header](asc_functional.md)
+- [Header API list and operation support table](asc_functional.md)

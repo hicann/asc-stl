@@ -26,9 +26,7 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/functional>`。
-
-`asc::always_false`提供对任意参数都返回false的无状态谓词。
+头文件：`<asc/functional>`。接受零个或多个实参并返回false。
 
 ## 声明
 
@@ -40,23 +38,23 @@ struct always_false;
 
 ## 约束说明
 
-- 本页对象只执行所述谓词、比较或编译期属性查询，不进行Runtime提交。
-- 比较操作数须支持相应运算；透明min/max可能返回引用，选中对象须在使用期间有效。
-- 复制参数声明只表明调用方的复制承诺，不延长捕获引用的生命周期，也不代替可调用性检查。
+无状态，调用无条件noexcept，函数体不读取、复制或保存参数。调用方实参表达式仍会求值，可能产生副作用或抛异常。
+
+C++17和C++20均支持。Host、SIMT、SIMD标量调用须满足当前调用域的比较、转换、构造和析构要求；Device调用遵守无异常执行约定。
 
 ## 调用示例
-
-以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
 #include <asc/functional>
 
 bool example()
 {
-    return !asc::always_false{}(7);
+    int evaluations = 0;
+    const bool result = asc::always_false{}(++evaluations);
+    return !result && evaluations == 1;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_functional.md)
+- [本头文件的接口列表与运算支持表](asc_functional.md)

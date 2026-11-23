@@ -26,39 +26,34 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/functional>`。
-
-`asc::equal_to_value`保存一个值并判断输入是否与该值相等。
+头文件：`<asc/functional>`。保存一个值，作为与输入比较的目标。
 
 ## 声明
 
 ```cpp
 namespace asc {
-template <class T>
-class equal_to_value;
+template<class T> class equal_to_value;
 }  // namespace asc
 ```
 
 ## 约束说明
 
-- 本页对象只执行所述谓词、比较或编译期属性查询，不进行Runtime提交。
-- 比较操作数须支持相应运算；透明min/max可能返回引用，选中对象须在使用期间有效。
-- 复制参数声明只表明调用方的复制承诺，不延长捕获引用的生命周期，也不代替可调用性检查。
+T为完整、可析构、无顶层cv的非数组对象类型，不接受引用类型。复制/移动能力及异常规格随T。保存指针、视图或reference_wrapper时保持其借用关系；字符数组推导为指针，按指针相等比较。
+
+C++17和C++20均支持。Host、SIMT、SIMD标量调用须满足当前调用域的比较、转换、构造和析构要求；Device调用遵守无异常执行约定。
 
 ## 调用示例
-
-以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/functional>
 
 bool example()
 {
-    asc::equal_to_value<int> is_seven(7);
-    return is_seven(7) && !is_seven(3);
+    auto equal = asc::equal_to_value{7};
+    return equal(7L) && !equal(8);
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_functional.md)
+- [本头文件的接口列表与运算支持表](asc_functional.md)

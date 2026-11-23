@@ -1,4 +1,4 @@
-# asc::always_true::`operator()`
+# asc::always_true::operator()
 
 ## Product Support
 
@@ -26,59 +26,34 @@
 
 ## Description
 
-Header: `<asc/functional>`.
+Header: `<asc/functional>`. Accept zero or more arguments and return true.
 
-`asc::always_true::operator()` ignores all arguments and returns true.
-
-## Function Prototype
-
-Member of: [`asc::always_true`](always_true.md).
+## Declaration
 
 ```cpp
-// Excerpt of the declaration inside asc::always_true; template parameters and other members are provided by the enclosing class.
-template <class... Args>
+template<class... Args>
 constexpr bool operator()(Args&&...) const noexcept;
 ```
 
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Args` | The list of argument types passed to the constructor or callable object. |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `bool` | Returns `true` when the condition holds, and `false` otherwise. |
-
 ## Constraints
 
-- The object on this page only performs the described predicate, comparison, or compile-time property query; it does not perform any Runtime submission.
-- Comparison operands must support the corresponding operation; transparent min/max may return a reference, and the selected object must remain valid for the duration of use.
-- A copyable-arguments declaration only states the caller's copying promise; it does not extend the lifetime of captured references and does not replace callability checks.
+The object is stateless and its call is unconditionally noexcept. The body does not read, copy, or retain arguments. Caller argument expressions are still evaluated and can have effects or throw.
+
+C++17 and C++20 are supported. Host, SIMT, and SIMD scalar calls require comparison, conversion, construction, and destruction in the current execution domain. Device calls follow the no-exception execution contract.
 
 ## Example
-
-The following Host snippet demonstrates the call with concrete values; inputs must satisfy the constraints on this page.
 
 ```cpp
 #include <asc/functional>
 
-decltype(auto) example()
+bool example()
 {
-    return asc::always_true{}(7);
-}
-
-bool verify_example()
-{
-    return example() == true;
+    int evaluations = 0;
+    const bool result = asc::always_true{}(++evaluations);
+    return result && evaluations == 1;
 }
 ```
 
 ## Related APIs
 
-- [`asc::always_true`](always_true.md)
-- [API list for this header](asc_functional.md)
+- [Header API list and operation support table](asc_functional.md)

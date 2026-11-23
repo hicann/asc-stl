@@ -1,4 +1,4 @@
-# asc::equal_to_value::`operator()`
+# asc::equal_to_value::operator()
 
 ## 产品支持情况
 
@@ -26,57 +26,35 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/functional>`。
+头文件：`<asc/functional>`。按输入在左、保存值在右的方向比较，返回bool。
 
-`asc::equal_to_value::operator()`比较输入值与对象保存的值是否相等。
-
-## 函数原型
-
-所属类型：[`asc::equal_to_value`](equal_to_value.md)。
+## 声明
 
 ```cpp
-// asc::equal_to_value 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr bool operator()(const T& value) const noexcept(noexcept(value == value_));
+// Inside equal_to_value<T>; declaration constraints are omitted.
+template<class U>
+constexpr bool operator()(const U& input) const
+    noexcept(noexcept(static_cast<bool>(input == value_)));
 ```
-
-## 参数说明
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 与对象保存值比较的操作数；须可进行相等比较。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 本页对象只执行所述谓词、比较或编译期属性查询，不进行Runtime提交。
-- 比较操作数须支持相应运算；透明min/max可能返回引用，选中对象须在使用期间有效。
-- 复制参数声明只表明调用方的复制承诺，不延长捕获引用的生命周期，也不代替可调用性检查。
+支持异型const左值比较，使用static_cast<bool>(input == value_)，不消耗保存值。比较或显式bool转换无效时排除调用；noexcept覆盖比较、转换及相关临时析构。C++20比较重写候选按语言规则处理。
+
+C++17和C++20均支持。Host、SIMT、SIMD标量调用须满足当前调用域的比较、转换、构造和析构要求；Device调用遵守无异常执行约定。
 
 ## 调用示例
-
-以下Host片段以具体值演示调用；输入须满足本页约束。
 
 ```cpp
 #include <asc/functional>
 
-decltype(auto) example()
+bool example()
 {
-    asc::equal_to_value<int> equals_seven(7);
-    return equals_seven(7);
-}
-
-bool verify_example()
-{
-    return example() == true;
+    const asc::equal_to_value<int> equal(7);
+    return equal(7L) && !equal(8L);
 }
 ```
 
 ## 关联API
 
-- [`asc::equal_to_value`](equal_to_value.md)
-- [本头文件的接口列表](asc_functional.md)
+- [本头文件的接口列表与运算支持表](asc_functional.md)

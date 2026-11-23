@@ -26,9 +26,7 @@
 
 ## Description
 
-Header: `<asc/functional>`.
-
-`asc::always_false` provides a stateless predicate that returns false for any arguments.
+Header: `<asc/functional>`. Accept zero or more arguments and return false.
 
 ## Declaration
 
@@ -40,23 +38,23 @@ struct always_false;
 
 ## Constraints
 
-- The object on this page only performs the described predicate, comparison, or compile-time property query; it does not perform any Runtime submission.
-- Comparison operands must support the corresponding operation; transparent min/max may return a reference, and the selected object must remain valid for the duration of use.
-- A copyable-arguments declaration only states the caller's copying promise; it does not extend the lifetime of captured references and does not replace callability checks.
+The object is stateless and its call is unconditionally noexcept. The body does not read, copy, or retain arguments. Caller argument expressions are still evaluated and can have effects or throw.
+
+C++17 and C++20 are supported. Host, SIMT, and SIMD scalar calls require comparison, conversion, construction, and destruction in the current execution domain. Device calls follow the no-exception execution contract.
 
 ## Example
-
-The following Host example provides concrete inputs and checks the result of the call.
 
 ```cpp
 #include <asc/functional>
 
 bool example()
 {
-    return !asc::always_false{}(7);
+    int evaluations = 0;
+    const bool result = asc::always_false{}(++evaluations);
+    return !result && evaluations == 1;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_functional.md)
+- [Header API list and operation support table](asc_functional.md)

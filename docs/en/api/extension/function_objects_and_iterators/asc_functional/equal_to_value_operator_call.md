@@ -1,4 +1,4 @@
-# asc::equal_to_value::`operator()`
+# asc::equal_to_value::operator()
 
 ## Product Support
 
@@ -26,57 +26,35 @@
 
 ## Description
 
-Header: `<asc/functional>`.
+Header: `<asc/functional>`. Compare the input on the left with the stored value on the right and return bool.
 
-`asc::equal_to_value::operator()` compares the input value with the value stored in the object for equality.
-
-## Function Prototype
-
-Member of: [`asc::equal_to_value`](equal_to_value.md).
+## Declaration
 
 ```cpp
-// Excerpt of the declaration inside asc::equal_to_value; template parameters and other members are provided by the enclosing class.
-constexpr bool operator()(const T& value) const noexcept(noexcept(value == value_));
+// Inside equal_to_value<T>; declaration constraints are omitted.
+template<class U>
+constexpr bool operator()(const U& input) const
+    noexcept(noexcept(static_cast<bool>(input == value_)));
 ```
-
-## Parameters
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `value` | Input | The operand compared against the value stored in the object; it must support equality comparison. |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `bool` | Returns `true` when the condition holds, and `false` otherwise. |
 
 ## Constraints
 
-- The object on this page only performs the described predicate, comparison, or compile-time property query; it does not perform any Runtime submission.
-- Comparison operands must support the corresponding operation; transparent min/max may return a reference, and the selected object must remain valid for the duration of use.
-- A copyable-arguments declaration only states the caller's copying promise; it does not extend the lifetime of captured references and does not replace callability checks.
+Heterogeneous const-lvalue comparisons use static_cast<bool>(input == value_) without consuming the stored value. Invalid equality or explicit bool conversion excludes the call. noexcept covers comparison, conversion, and temporary destruction. C++20 rewritten candidates follow the language rules.
+
+C++17 and C++20 are supported. Host, SIMT, and SIMD scalar calls require comparison, conversion, construction, and destruction in the current execution domain. Device calls follow the no-exception execution contract.
 
 ## Example
-
-The following Host snippet demonstrates the call with concrete values; inputs must satisfy the constraints on this page.
 
 ```cpp
 #include <asc/functional>
 
-decltype(auto) example()
+bool example()
 {
-    asc::equal_to_value<int> equals_seven(7);
-    return equals_seven(7);
-}
-
-bool verify_example()
-{
-    return example() == true;
+    const asc::equal_to_value<int> equal(7);
+    return equal(7L) && !equal(8L);
 }
 ```
 
 ## Related APIs
 
-- [`asc::equal_to_value`](equal_to_value.md)
-- [API list for this header](asc_functional.md)
+- [Header API list and operation support table](asc_functional.md)

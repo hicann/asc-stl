@@ -26,46 +26,36 @@
 
 ## Description
 
-Header: `<asc/functional>`.
-
-`asc::has_identity_element_v` indicates whether an identity element is registered for the given operator and value type.
+Header: `<asc/functional>`. Whether the operation/value-type pair has a registered two-sided identity.
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template <class Operator, class T>
-inline constexpr bool has_identity_element_v = detail::metadata_elements<Operator, T>::has_identity;
+template<class Operator, class T>
+inline constexpr bool has_identity_element_v = /* library registration */;
 }  // namespace asc
 ```
 
 ## Constraints
 
-- Standard operators register only matching `Operator<T>`/`T` combinations or the transparent `Operator<void>`; unmatched value types return false.
-- For integer addition the identity element is 0; for multiplication the identity element is 1 and the absorbing element is 0. Logical operations register only bool; bitwise operations register only unsigned integers.
-- Arithmetic associativity is registered for unsigned types; multiplication is further limited to unsigned int, unsigned long, and unsigned long long to avoid signed overflow after narrow-integer promotion. Floating-point addition/multiplication is not registered.
-- The existing registrations for minimum/maximum require the caller to use a value domain satisfying a total order; NaN and non-total-order custom comparisons must not be assumed safe for regrouping on this basis.
+Operator and T are exact unqualified non-reference types. Invoke on const T lvalues and convert every binary node back to T; equivalence is built-in value equality over the full T domain. Associativity and commutativity are registered separately. false means no guarantee, including all unregistered pairs. See the header overview for the complete table.
+
+C++17 and C++20 are supported. Host, SIMT, and SIMD scalar calls require comparison, conversion, construction, and destruction in the current execution domain. Device calls follow the no-exception execution contract.
 
 ## Example
 
-The following snippet checks a registered combination and an unregistered combination respectively.
-
 ```cpp
 #include <asc/functional>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
 
-void example()
+bool example()
 {
-    static_assert(asc::has_identity_element_v<asc::std::plus<int>, int>);
-    static_assert(!asc::has_identity_element_v<asc::std::plus<float>, float>);
+    static_assert(asc::has_identity_element_v<asc::maximum<unsigned>, unsigned>);
+    static_assert(!asc::has_identity_element_v<asc::maximum<float>, float>);
+    return true;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_functional.md)
+- [Header API list and operation support table](asc_functional.md)

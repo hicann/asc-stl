@@ -1,4 +1,4 @@
-# asc::minimum::`operator()`
+# asc::minimum::operator()
 
 ## 产品支持情况
 
@@ -26,62 +26,46 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/functional>`。
+头文件：`<asc/functional>`。比较一次，比较等价时选左侧，再构造较小值结果。
 
-`asc::minimum::operator()`比较两个输入并返回较小值。
-
-## 函数原型
-
-主模板`asc::minimum<T>`的类内声明：
+## 声明
 
 ```cpp
-constexpr T operator()(const T& left, const T& right) const noexcept(noexcept(right < left));
-```
+// Inside the typed form; declaration constraints are omitted.
+constexpr T operator()(const T& left, const T& right) const
+    noexcept(/* comparison, bool conversion, and both result constructions */);
 
-透明特化`asc::minimum<void>`的类内声明：
-
-```cpp
-template <class Left, class Right>
+// Inside the void specialization.
+template<class Left, class Right>
 constexpr auto operator()(Left&& left, Right&& right) const
-    noexcept(noexcept(right < left)) -> decltype(right < left ? right : left);
+    noexcept(/* comparison, bool conversion, and both result constructions */)
+    -> asc::std::common_type_t<asc::std::decay_t<Left>, asc::std::decay_t<Right>>;
 ```
-
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Left` | 左侧比较操作数的类型。 |
-| `Right` | 右侧比较操作数的类型。 |
-
-## 返回值说明
-
-- 主模板返回T值副本。
-- void特化返回条件表达式的实际类型，可能为引用；被选操作数必须在返回引用使用期间存活。
 
 ## 约束说明
 
-- 本页对象只执行所述谓词、比较或编译期属性查询，不进行Runtime提交。
-- 比较操作数须支持相应运算；透明min/max可能返回引用，选中对象须在使用期间有效。
-- 复制参数声明只表明调用方的复制承诺，不延长捕获引用的生命周期，也不代替可调用性检查。
+比较表达式为static_cast<bool>(right < left)，真时选右，否则选左。透明版以原类型const左值比较，仅在选中后转发构造结果；指定类型版从const T&构造。两侧结果构造均须有效，比较/布尔转换或构造无效时排除重载。noexcept还计入相关临时析构。
+
+结果为完整、无顶层cv的非数组值类型；透明实参去引用后须为完整、非volatile的非数组对象。临时实参可直接传入，结果若含指针/视图仍按自身规则借用。异型比较遵循普通C++转换。严格浮点配置下，NaN导致比较假并取左，同类型正负零取左侧符号；不使用fmin/fmax规则。
+
+C++17和C++20均支持。Host、SIMT、SIMD标量调用须满足当前调用域的比较、转换、构造和析构要求；Device调用遵守无异常执行约定。
 
 ## 调用示例
 
-以下Host示例使用具体输入，在对象存活期内检查结果。
-
 ```cpp
 #include <asc/functional>
+#include <asc/std/type_traits>
+
 bool example()
 {
-    int left = 1;
-    int right = 2;
-    const int& result = asc::minimum<>{}(left, right);
-    return &result == &left && result == 1;
+    int left = 3;
+    int right = 7;
+    auto result = asc::minimum<>{}(left, right);
+    static_assert(asc::std::is_same_v<decltype(result), int>);
+    return result == 3 && &result != &left && &result != &right;
 }
 ```
 
 ## 关联API
 
-- [`asc::minimum`](minimum.md)
-- [本头文件的接口列表](asc_functional.md)
+- [本头文件的接口列表与运算支持表](asc_functional.md)

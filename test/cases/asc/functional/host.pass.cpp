@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include "../../../support/functional_objects.h"
 #include "../../../support/functional_properties.h"
 
 int main()

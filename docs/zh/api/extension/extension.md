@@ -182,6 +182,7 @@
 | [asc::always_true](function_objects_and_iterators/asc_functional/always_true.md) | asc/functional | 类 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::always_true::`operator()`](function_objects_and_iterators/asc_functional/always_true_operator_call.md) | asc/functional | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::equal_to_value](function_objects_and_iterators/asc_functional/equal_to_value.md) | asc/functional | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
+| [asc::equal_to_value::equal_to_value](function_objects_and_iterators/asc_functional/equal_to_value_equal_to_value.md) | asc/functional | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::equal_to_value::`operator()`](function_objects_and_iterators/asc_functional/equal_to_value_operator_call.md) | asc/functional | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::has_absorbing_element_v](function_objects_and_iterators/asc_functional/has_absorbing_element_v.md) | asc/functional | 变量模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::has_identity_element_v](function_objects_and_iterators/asc_functional/has_identity_element_v.md) | asc/functional | 变量模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
@@ -192,10 +193,6 @@
 | [asc::maximum::`operator()`](function_objects_and_iterators/asc_functional/maximum_operator_call.md) | asc/functional | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::minimum](function_objects_and_iterators/asc_functional/minimum.md) | asc/functional | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::minimum::`operator()`](function_objects_and_iterators/asc_functional/minimum_operator_call.md) | asc/functional | 成员函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::proclaim_copyable_arguments](function_objects_and_iterators/asc_functional/proclaim_copyable_arguments.md) | asc/functional | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::proclaim_return_type](function_objects_and_iterators/asc_functional/proclaim_return_type.md) | asc/functional | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::proclaims_copyable_arguments](function_objects_and_iterators/asc_functional/proclaims_copyable_arguments.md) | asc/functional | 类模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
-| [asc::proclaims_copyable_arguments_v](function_objects_and_iterators/asc_functional/proclaims_copyable_arguments_v.md) | asc/functional | 变量模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::block](execution_hierarchy_and_collectives/asc_hierarchy/block.md) | asc/hierarchy | 变量 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::block_count](execution_hierarchy_and_collectives/asc_hierarchy/block_count.md) | asc/hierarchy | 函数 | C++17+ | AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::block_dims（函数）](execution_hierarchy_and_collectives/asc_hierarchy/block_dims_function.md) | asc/hierarchy | 函数 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |

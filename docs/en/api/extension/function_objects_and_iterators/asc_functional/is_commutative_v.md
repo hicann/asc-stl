@@ -26,39 +26,36 @@
 
 ## Description
 
-Header: `<asc/functional>`.
-
-`asc::is_commutative_v` indicates whether the given operator is commutative on the given type.
+Header: `<asc/functional>`. Whether the library separately guarantees commutativity for the operation/value-type pair.
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template <class Operator, class T>
-inline constexpr bool is_commutative_v = asc::is_associative_v<Operator, T>;
+template<class Operator, class T>
+inline constexpr bool is_commutative_v = /* library registration */;
 }  // namespace asc
 ```
 
 ## Constraints
 
-- The declaration shows the primary template; there are separate specializations that are true for Boolean-logic combinations over bool and for minimum<T>/maximum<T> over value domains satisfying a total order.
+Operator and T are exact unqualified non-reference types. Invoke on const T lvalues and convert every binary node back to T; equivalence is built-in value equality over the full T domain. Associativity and commutativity are registered separately. false means no guarantee, including all unregistered pairs. See the header overview for the complete table.
 
-- Standard operators register only matching `Operator<T>`/`T` combinations or the transparent `Operator<void>`; unmatched value types return false.
-- For integer addition the identity element is 0; for multiplication the identity element is 1 and the absorbing element is 0. Logical operations register only bool; bitwise operations register only unsigned integers.
-- Arithmetic associativity is registered for unsigned types; multiplication is further limited to unsigned int, unsigned long, and unsigned long long to avoid signed overflow after narrow-integer promotion. Floating-point addition/multiplication is not registered.
-- The existing registrations for minimum/maximum require the caller to use a value domain satisfying a total order; NaN and non-total-order custom comparisons must not be assumed safe for regrouping on this basis.
+C++17 and C++20 are supported. Host, SIMT, and SIMD scalar calls require comparison, conversion, construction, and destruction in the current execution domain. Device calls follow the no-exception execution contract.
 
 ## Example
-
-The following snippet reads the interface value with concrete template arguments.
 
 ```cpp
 #include <asc/functional>
 
-inline constexpr auto example = asc::is_commutative_v<asc::minimum<int>, int>;
-static_assert(example, "the selected documented type has this capability");
+bool example()
+{
+    static_assert(asc::is_commutative_v<asc::std::bit_or<unsigned>, unsigned>);
+    static_assert(!asc::is_commutative_v<asc::std::multiplies<int>, int>);
+    return true;
+}
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_functional.md)
+- [Header API list and operation support table](asc_functional.md)

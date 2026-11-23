@@ -26,57 +26,37 @@
 
 ## Description
 
-Header: `<asc/functional>`.
+Header: `<asc/functional>`. Return the registered two-sided identity as T.
 
-`asc::identity_element` returns the identity element registered for the given operator and value type; unregistered combinations must not be called.
-
-## Function Prototype
+## Declaration
 
 ```cpp
 namespace asc {
-template<class Operator, class T> constexpr T identity_element() noexcept;
-} // namespace asc
+template<class Operator, class T,
+    asc::std::enable_if_t<has_identity_element_v<Operator, T>, int> = 0>
+constexpr T identity_element() noexcept;
+}  // namespace asc
 ```
-
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Operator` | A registered `asc::std` standard function object type. |
-| `T` | The value type matching the operator. |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `T` | Returns the identity element registered for the given operator and value type. |
 
 ## Constraints
 
-- Only registered combinations of integer arithmetic, Boolean logic, or unsigned-integer bitwise operations are accepted.
-- Floating-point addition is not registered.
+The overload participates only when has_identity_element_v is true, and detection must reject false cases. An identity satisfies F(e,x)=F(x,e)=x; an absorbing element satisfies F(z,x)=F(x,z)=z. F converts every node back to T. The guarantee covers values and does not change argument evaluation or effect requirements.
+
+C++17 and C++20 are supported. Host, SIMT, and SIMD scalar calls require comparison, conversion, construction, and destruction in the current execution domain. Device calls follow the no-exception execution contract.
 
 ## Example
 
-The following snippet uses registered standard function objects and concrete integer types.
-
 ```cpp
 #include <asc/functional>
-#include <asc/std/array>
-#include <asc/std/cstddef>
-#include <asc/std/cstdint>
-#include <asc/std/iterator>
-#include <asc/std/type_traits>
-#include <asc/std/utility>
+#include <asc/std/limits>
 
-void example()
+bool example()
 {
-    static_assert(asc::identity_element<asc::std::plus<int>, int>() == 0);
+    return asc::identity_element<asc::maximum<int>, int>() ==
+        (asc::std::numeric_limits<int>::lowest)();
 }
 ```
 
 ## Related APIs
 
-- [asc::has_identity_element_v](has_identity_element_v.md)
+- [Header API list and operation support table](asc_functional.md)

@@ -46,8 +46,7 @@ int main()
         return 3;
     if (!asc::equal_to_value<int>(4)(4) || asc::minimum<int>{}(5, 2) != 2 || asc::maximum<int>{}(5, 2) != 5)
         return 4;
-    auto proclaimed = asc::proclaim_return_type<int>(plus_one{});
-    if (proclaimed(8) != 9 || !asc::is_associative_v<asc::minimum<int>, int>)
+    if (plus_one{}(8) != 9 || !asc::is_associative_v<asc::minimum<int>, int>)
         return 5;
     static_assert(asc::is_bitwise_comparable_v<int>);
     static_assert(asc::is_trivially_relocatable_v<int>);

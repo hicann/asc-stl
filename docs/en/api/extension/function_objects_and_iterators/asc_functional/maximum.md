@@ -26,38 +26,33 @@
 
 ## Description
 
-Header: `<asc/functional>`.
-
-`asc::maximum` provides a transparent function object that returns the larger of two inputs.
+Header: `<asc/functional>`. Compare two operands and return the larger value.
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template <class T = void>
-struct maximum;
+template<class T = void> struct maximum;
 }  // namespace asc
 ```
 
 ## Constraints
 
-- The object on this page only performs the described predicate, comparison, or compile-time property query; it does not perform any Runtime submission.
-- Comparison operands must support the corresponding operation; transparent min/max may return a reference, and the selected object must remain valid for the duration of use.
-- A copyable-arguments declaration only states the caller's copying promise; it does not extend the lifetime of captured references and does not replace callability checks.
+T defaults to void for transparent heterogeneous calls. The typed form returns T; neither form returns a parameter reference.
+
+C++17 and C++20 are supported. Host, SIMT, and SIMD scalar calls require comparison, conversion, construction, and destruction in the current execution domain. Device calls follow the no-exception execution contract.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/functional>
 
 bool example()
 {
-    return asc::maximum<int>{}(3, 7) == 7;
+    return asc::maximum<>{}(3, 7L) == 7;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_functional.md)
+- [Header API list and operation support table](asc_functional.md)

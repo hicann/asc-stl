@@ -26,39 +26,36 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/functional>`。
-
-`asc::is_commutative_v`表示指定运算在该类型上是否满足交换律。
+头文件：`<asc/functional>`。库是否独立保证该运算和值类型组合满足交换律。
 
 ## 声明
 
 ```cpp
 namespace asc {
-template <class Operator, class T>
-inline constexpr bool is_commutative_v = asc::is_associative_v<Operator, T>;
+template<class Operator, class T>
+inline constexpr bool is_commutative_v = /* library registration */;
 }  // namespace asc
 ```
 
 ## 约束说明
 
-- 声明代码展示主模板；bool逻辑组合与满足全序值域的minimum<T>/maximum<T>另有为true的特化。
+Operator和T使用精确无cv/ref类型。对const T左值调用运算，每个二元节点将结果转换回T；以T全值域上的内建数值==为等价关系。结合律与交换律分别登记。false表示未提供保证，表外组合均为false。完整支持表见本头总览。
 
-- 标准运算仅登记匹配的`Operator<T>`／`T`组合或透明`Operator<void>`；不匹配的值类型返回false。
-- 整数加法单位元为0，乘法单位元为1、吸收元为0；逻辑运算只登记bool；位运算只登记无符号整数。
-- 算术结合律登记无符号类型；乘法进一步限unsigned int、unsigned long、unsigned long long，避免窄整数提升后发生有符号溢出。浮点加法／乘法不作此登记。
-- minimum／maximum的已有登记要求调用方使用满足全序的值域；NaN和非全序自定义比较不能据此认定重新分组安全。
+C++17和C++20均支持。Host、SIMT、SIMD标量调用须满足当前调用域的比较、转换、构造和析构要求；Device调用遵守无异常执行约定。
 
 ## 调用示例
-
-以下片段用具体模板实参读取接口值。
 
 ```cpp
 #include <asc/functional>
 
-inline constexpr auto example = asc::is_commutative_v<asc::minimum<int>, int>;
-static_assert(example, "the selected documented type has this capability");
+bool example()
+{
+    static_assert(asc::is_commutative_v<asc::std::bit_or<unsigned>, unsigned>);
+    static_assert(!asc::is_commutative_v<asc::std::multiplies<int>, int>);
+    return true;
+}
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_functional.md)
+- [本头文件的接口列表与运算支持表](asc_functional.md)

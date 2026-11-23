@@ -485,7 +485,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/absorbing_element.md": {
     "standards": [
@@ -493,7 +493,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/identity_element.md": {
     "standards": [
@@ -501,7 +501,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/has_absorbing_element_v.md": {
     "standards": [
@@ -509,7 +509,7 @@
       20
     ],
     "mode": "host",
-    "expression": null
+    "expression": "example()"
   },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_random_access_range.md": {
     "standards": [
@@ -3181,14 +3181,6 @@
     "expression": "example()"
   },
   "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/zip_transform_iterator.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "example()"
-  },
-  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/proclaims_copyable_arguments.md": {
     "standards": [
       17,
       20
@@ -11664,22 +11656,6 @@
     "mode": "host",
     "expression": "example()"
   },
-  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/proclaim_return_type.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "example()"
-  },
-  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/proclaim_copyable_arguments.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "example()"
-  },
   "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_work_queue/acquire_work.md": {
     "standards": [
       17,
@@ -19562,7 +19538,7 @@
       20
     ],
     "mode": "host",
-    "expression": "verify_example()"
+    "expression": "example()"
   },
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/always_true_operator_call.md": {
     "standards": [
@@ -19570,7 +19546,7 @@
       20
     ],
     "mode": "host",
-    "expression": "verify_example()"
+    "expression": "example()"
   },
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/equal_to_value_operator_call.md": {
     "standards": [
@@ -19578,28 +19554,23 @@
       20
     ],
     "mode": "host",
-    "expression": "verify_example()"
+    "expression": "example()"
   },
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/is_associative_v.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host"
+    "mode": "host",
+    "expression": "example()"
   },
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/is_commutative_v.md": {
     "standards": [
       17,
       20
     ],
-    "mode": "host"
-  },
-  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/proclaims_copyable_arguments_v.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host"
+    "mode": "host",
+    "expression": "example()"
   },
   "docs/zh/api/extension/multidimensional_views_and_transfer/asc_mdspan/dynamic_stride.md": {
     "standards": [
@@ -25535,6 +25506,14 @@
     "expression": "example()"
   },
   "docs/zh/api/extension/type_traits_and_utilities/asc_type_traits/is_address_space_qualified_v.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/equal_to_value_equal_to_value.md": {
     "standards": [
       17,
       20

@@ -26,38 +26,33 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/functional>`。
-
-`asc::maximum`提供返回两个输入中较大值的透明函数对象。
+头文件：`<asc/functional>`。比较两个输入并按值返回较大者。
 
 ## 声明
 
 ```cpp
 namespace asc {
-template <class T = void>
-struct maximum;
+template<class T = void> struct maximum;
 }  // namespace asc
 ```
 
 ## 约束说明
 
-- 本页对象只执行所述谓词、比较或编译期属性查询，不进行Runtime提交。
-- 比较操作数须支持相应运算；透明min/max可能返回引用，选中对象须在使用期间有效。
-- 复制参数声明只表明调用方的复制承诺，不延长捕获引用的生命周期，也不代替可调用性检查。
+默认T为void，提供透明异型调用；指定类型版本返回T。两个版本均不返回形参引用。
+
+C++17和C++20均支持。Host、SIMT、SIMD标量调用须满足当前调用域的比较、转换、构造和析构要求；Device调用遵守无异常执行约定。
 
 ## 调用示例
-
-以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/functional>
 
 bool example()
 {
-    return asc::maximum<int>{}(3, 7) == 7;
+    return asc::maximum<>{}(3, 7L) == 7;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_functional.md)
+- [本头文件的接口列表与运算支持表](asc_functional.md)

@@ -344,7 +344,11 @@
       "target": "asc/__functional/metadata.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/functional",
+        "asc/std/limits",
+        "asc/std/type_traits",
+        "asc/std/utility"
       ],
       "applicability": {
         "host_header": true,
@@ -17044,7 +17048,17 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "device_compile_cases": [
+        "device.compile.asc",
+        "include_order.compile.asc",
+        "include_order_reverse.compile.asc"
+      ],
+      "additional_cases": [
+        "exceptions.pass.cpp",
+        "include_order.pass.cpp",
+        "include_order_reverse.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/cinttypes",

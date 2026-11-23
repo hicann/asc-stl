@@ -109,7 +109,6 @@
   "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/make_strided_iterator.md",
   "docs/zh/api/extension/function_objects_and_iterators/asc_iterator/transform_iterator.md",
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/has_identity_element_v.md",
-  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/proclaim_return_type.md",
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/always_true_operator_call.md",
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/maximum.md",
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/minimum.md",
@@ -120,14 +119,11 @@
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/always_false_operator_call.md",
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/equal_to_value_operator_call.md",
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/equal_to_value.md",
-  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/proclaims_copyable_arguments.md",
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/has_absorbing_element_v.md",
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/always_false.md",
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/is_associative_v.md",
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/is_commutative_v.md",
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/minimum_operator_call.md",
-  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/proclaims_copyable_arguments_v.md",
-  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/proclaim_copyable_arguments.md",
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_transform_reduce.md",
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_inclusive_scan.md",
   "docs/zh/api/extension/device_parallel_algorithms_and_arguments/asc_algorithm/parallel_fill_n.md",
@@ -2843,5 +2839,6 @@
   "docs/zh/api/standard/iterators/asc_std_iterator/crbegin.md",
   "docs/zh/api/standard/iterators/asc_std_iterator/insert_iterator_operator_dereference.md",
   "docs/zh/api/standard/iterators/asc_std_iterator/counted_iterator_count.md",
-  "docs/zh/api/standard/iterators/asc_std_iterator/prev.md"
+  "docs/zh/api/standard/iterators/asc_std_iterator/prev.md",
+  "docs/zh/api/extension/function_objects_and_iterators/asc_functional/equal_to_value_equal_to_value.md"
 ]

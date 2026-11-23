@@ -26,39 +26,34 @@
 
 ## Description
 
-Header: `<asc/functional>`.
-
-`asc::equal_to_value` stores a value and tests whether the input is equal to that value.
+Header: `<asc/functional>`. Own a value used as the target of equality comparisons.
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template <class T>
-class equal_to_value;
+template<class T> class equal_to_value;
 }  // namespace asc
 ```
 
 ## Constraints
 
-- The object on this page only performs the described predicate, comparison, or compile-time property query; it does not perform any Runtime submission.
-- Comparison operands must support the corresponding operation; transparent min/max may return a reference, and the selected object must remain valid for the duration of use.
-- A copyable-arguments declaration only states the caller's copying promise; it does not extend the lifetime of captured references and does not replace callability checks.
+T is a complete, destructible, unqualified non-array object type, excluding references. Copy/move support and exception specifications follow T. Stored pointers, views, and reference_wrapper objects keep their borrowing semantics. Character arrays deduce a pointer type and use pointer equality.
+
+C++17 and C++20 are supported. Host, SIMT, and SIMD scalar calls require comparison, conversion, construction, and destruction in the current execution domain. Device calls follow the no-exception execution contract.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/functional>
 
 bool example()
 {
-    asc::equal_to_value<int> is_seven(7);
-    return is_seven(7) && !is_seven(3);
+    auto equal = asc::equal_to_value{7};
+    return equal(7L) && !equal(8);
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_functional.md)
+- [Header API list and operation support table](asc_functional.md)
