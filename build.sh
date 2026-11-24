@@ -107,8 +107,7 @@ function apply_cann_path() {
     export ASC_STL_CANN_PACKAGE_PATH="${CANN_PATH}"
 }
 
-ARGS=$(getopt -o hj:tp: -l help,test,device-compile,cannsim,hardware,make_clean,prefix:,cann_path: -- "$@")
-if [ $? -ne 0 ]; then
+if ! ARGS=$(getopt -o hj:tp: -l help,test,device-compile,cannsim,hardware,make_clean,prefix:,cann_path: -- "$@"); then
     usage
     exit 1
 fi
