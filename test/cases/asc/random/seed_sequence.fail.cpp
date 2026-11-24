@@ -19,7 +19,7 @@ struct seed_sequence {
     void generate(unsigned int*, unsigned int*)
     {}
 };
-void rejected_random_seed_sequence()
+CANN_ASC_STL_API void rejected_random_seed_sequence()
 {
     asc::pcg64 engine;
     seed_sequence sequence;

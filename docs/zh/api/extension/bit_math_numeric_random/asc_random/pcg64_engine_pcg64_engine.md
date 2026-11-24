@@ -1,4 +1,4 @@
-# asc::pcg64_engine::pcg64_engine
+# asc::pcg64::pcg64
 
 ## 产品支持情况
 
@@ -28,67 +28,38 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::pcg64_engine::pcg64_engine`使用调用方提供的参数初始化`asc::pcg64_engine`对象。
+默认、整数种子或完整状态复制构造。
 
-## 函数原型
+## 声明
 
-所属类型：[`asc::pcg64_engine`](pcg64_engine.md)。
-
-### 原型1
+成员属于 [`asc::pcg64`](pcg64.md)，以下为类内声明。
 
 ```cpp
-// asc::pcg64_engine 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr pcg64_engine() noexcept;
+constexpr pcg64() noexcept;
+constexpr explicit pcg64(result_type seed) noexcept;
+constexpr pcg64(const pcg64&) noexcept = default;
 ```
-
-### 原型2
-
-```cpp
-// asc::pcg64_engine 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr explicit pcg64_engine(result_type seed) noexcept;
-```
-
-## 参数说明
-
-### 原型1的参数
-
-无参数。
-
-### 原型2的参数
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `seed` | 输入 | 用于初始化或重置伪随机数引擎状态的种子值。 |
-
-## 返回值说明
-
-无返回值。
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
-- 不提供SeedSequence、流式输入输出或共享全局状态。
+支持 C++17/C++20 的 Host、Ascend 950 SIMT 和 SIMD 核普通整数标量代码；所有操作 constexpr、noexcept。
+
+完整算法、播种、比较和推进规则见 [pcg64](pcg64.md)。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
-
 ```cpp
 #include <asc/random>
-#include <asc/std/limits>
 
 bool example()
 {
-    asc::pcg64 engine(7);
-    const auto first = engine();
-    engine.seed(7);
-    return engine() == first;
+    asc::pcg64 a;
+    asc::pcg64 b(asc::pcg64::default_seed);
+    asc::pcg64 copy(a);
+    return a == b && a == copy;
 }
 ```
 
 ## 关联API
 
-- [`asc::pcg64_engine`](pcg64_engine.md)
 - [本头文件的接口列表](asc_random.md)

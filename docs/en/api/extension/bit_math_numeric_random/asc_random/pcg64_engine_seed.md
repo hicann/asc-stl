@@ -1,4 +1,4 @@
-# asc::pcg64_engine::seed
+# asc::pcg64::seed
 
 ## Product Support
 
@@ -28,61 +28,38 @@
 
 Header: `<asc/random>`.
 
-`asc::pcg64_engine::seed` resets the state of the pseudorandom number engine with the specified seed.
+Restart at the first result for the seed; zero and the maximum seed are valid.
 
-## Function Prototype
+## Declaration
 
-Member of: [`asc::pcg64_engine`](pcg64_engine.md).
+Member of [`asc::pcg64`](pcg64.md); the declaration is in class context.
 
 ```cpp
-// Excerpt of the declaration inside the asc::pcg64_engine class; template parameters and other members are provided by the enclosing class.
 constexpr void seed(result_type seed = default_seed) noexcept;
 ```
 
-## Parameters
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `seed` | Input | Seed value used to initialize or reset the state of the pseudorandom number engine. |
-
-## Return Value
-
-No return value.
-
 ## Constraints
 
-- The random number engine supports only the unsigned integer state, seed, and counter forms declared on this page.
-- No SeedSequence, streaming input/output, or shared global state is provided.
+Available in C++17/C++20 on Host and Ascend 950 SIMT / ordinary SIMD scalar code. All operations are constexpr and noexcept.
+
+See [pcg64](pcg64.md) for the algorithm, seed mapping, comparison and advancement rules.
 
 ## Example
-
-The following Host snippet demonstrates the call with concrete values; inputs must satisfy the constraints on this page.
 
 ```cpp
 #include <asc/random>
 
 bool example()
 {
-    asc::pcg64 generator;
-    generator.seed(9);
-    const asc::pcg64::result_type expected[] = {
-        4176210987077628350ULL,
-        5147113462634521278ULL,
-        7929888373037025941ULL,
-        3841151875209151278ULL,
-        7941121362626835034ULL,
-        3659436080610969708ULL
-    };
-    for (auto value : expected) {
-        if (generator() != value) return false;
-    }
-    return true;
+    asc::pcg64 engine(42);
+    const auto before = engine();
+    engine.seed(0);
+    const auto zero = engine();
+    engine.seed(18446744073709551615ULL);
+    return before == 0x287472e87ff5705aULL && zero == 0x01070196e695f8f1ULL && engine() == 0x3b17d015242767f3ULL;
 }
 ```
 
 ## Related APIs
 
-- [`asc::pcg64_engine`](pcg64_engine.md)
-- [API list for this header](asc_random.md)
+- [Header API list](asc_random.md)

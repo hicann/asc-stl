@@ -253,6 +253,16 @@ NEGATIVE_DIAGNOSTIC_MARKERS = {
 }
 
 NEGATIVE_DIAGNOSTIC_OVERRIDES = {
+    ("asc/random", "custom_parameters.fail.cpp"): ("no member named 'pcg64_engine'",),
+    ("asc/random", "custom_parameters.fail.asc"): ("no member named 'pcg64_engine'",),
+    ("asc/random", "equal_state.fail.cpp"): ("no member named 'equal_state'",),
+    ("asc/random", "equal_state.fail.asc"): ("no member named 'equal_state'",),
+    ("asc/random", "random_bijection.fail.cpp"): ("no member named 'random_bijection'",),
+    ("asc/random", "random_bijection.fail.asc"): ("no member named 'random_bijection'",),
+    ("asc/random", "seed_sequence_constructor.fail.cpp"): ("no matching constructor",),
+    ("asc/random", "seed_sequence_constructor.fail.asc"): ("no matching constructor",),
+    ("asc/random", "seed_sequence.fail.cpp"): ("no viable conversion",),
+    ("asc/random", "seed_sequence.fail.asc"): ("no viable conversion",),
     ("asc/cmath", "int128_excluded.fail.asc"): ("no matching function",),
     ("asc/cmath", "integer_log2_removed.fail.asc"): ("no member named 'integer_log2'",),
     ("asc/cmath", "divide_zero.fail.asc"): ("__builtin_unreachable",),

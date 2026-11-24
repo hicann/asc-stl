@@ -1,4 +1,4 @@
-# asc::pcg64_engine::`operator()`
+# asc::pcg64::operator()
 
 ## Product Support
 
@@ -28,58 +28,36 @@
 
 Header: `<asc/random>`.
 
-`asc::pcg64_engine::operator()` advances the engine state and generates the next 64-bit pseudorandom number.
+Advance the state, then return one 64-bit result.
 
-## Function Prototype
+## Declaration
 
-Member of: [`asc::pcg64_engine`](pcg64_engine.md).
+Member of [`asc::pcg64`](pcg64.md); the declaration is in class context.
 
 ```cpp
-// Excerpt of the declaration inside the asc::pcg64_engine class; template parameters and other members are provided by the enclosing class.
 constexpr result_type operator()() noexcept;
 ```
 
-## Parameters
-
-No parameters.
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `result_type` | Returns the next random value produced after advancing the random engine. |
-
 ## Constraints
 
-- The random number engine supports only the unsigned integer state, seed, and counter forms declared on this page.
-- No SeedSequence, streaming input/output, or shared global state is provided.
+Available in C++17/C++20 on Host and Ascend 950 SIMT / ordinary SIMD scalar code. All operations are constexpr and noexcept.
+
+See [pcg64](pcg64.md) for the algorithm, seed mapping, comparison and advancement rules.
 
 ## Example
-
-The following Host snippet demonstrates the call with concrete values; inputs must satisfy the constraints on this page.
 
 ```cpp
 #include <asc/random>
 
 bool example()
 {
-    asc::pcg64 generator;
-    const asc::pcg64::result_type expected[] = {
-        14951315693135216709ULL,
-        1541401459199960700ULL,
-        3670514919227316241ULL,
-        11007308355854268502ULL,
-        523514384104871782ULL,
-        18368464326245194742ULL
-    };
-    for (auto value : expected) {
-        if (generator() != value) return false;
-    }
-    return true;
+    asc::pcg64 engine(0);
+    const auto first = engine();
+    const auto second = engine();
+    return first == 0x01070196e695f8f1ULL && second == 0x703ec840c59f4493ULL;
 }
 ```
 
 ## Related APIs
 
-- [`asc::pcg64_engine`](pcg64_engine.md)
-- [API list for this header](asc_random.md)
+- [Header API list](asc_random.md)

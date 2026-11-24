@@ -38,6 +38,7 @@ B023_CASE_ROOT="$ROOT/test/cases/asc/algorithm/runtime/hardware"
 B025_MEMORY_POOL_CASE_ROOT="$ROOT/scripts/hardware-cases/memory_pool"
 B026_WORK_QUEUE_CASE_ROOT="$ROOT/test/cases/asc/work_queue/runtime/hardware"
 NUMERIC_TYPES_CASE_ROOT="$ROOT/test/cases/asc/numeric_types/runtime"
+RANDOM_CASE_ROOT="$ROOT/test/cases/asc/random/runtime"
 B026_CMATH_CASE_ROOT="$ROOT/test/cases/asc/cmath/runtime/hardware"
 B026_TENSOR_COPY_CASE_ROOT="$ROOT/test/cases/asc/__tensor_copy/descriptor/runtime/hardware"
 B024_ITERATOR_CASE_ROOT="$ROOT/test/cases/asc/std/iterator/runtime/hardware"
@@ -99,6 +100,7 @@ for standard in 17 20; do
     B025_MEMORY_POOL_BUILD_DIR="$BUILD_ROOT/cxx$standard/b025-memory-pool"
     B026_WORK_QUEUE_BUILD_DIR="$BUILD_ROOT/cxx$standard/b026-work-queue"
     NUMERIC_TYPES_BUILD_DIR="$BUILD_ROOT/cxx$standard/numeric-types"
+    RANDOM_BUILD_DIR="$BUILD_ROOT/cxx$standard-random"
     B026_CMATH_BUILD_DIR="$BUILD_ROOT/cxx$standard/b026-cmath"
     B026_TENSOR_COPY_BUILD_DIR="$BUILD_ROOT/cxx$standard/b026-tensor-copy"
     B024_ITERATOR_BUILD_DIR="$BUILD_ROOT/cxx$standard/b024-iterator"
@@ -179,6 +181,10 @@ for standard in 17 20; do
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
     cmake --build "$W13_W14_BUILD_DIR" -j"$BUILD_JOBS"
 
+    cmake -S "$RANDOM_CASE_ROOT" -B "$RANDOM_BUILD_DIR" \
+        -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
+    cmake --build "$RANDOM_BUILD_DIR" -j "$BUILD_JOBS"
+
     for run_index in $(seq 1 "$RUNS"); do
         echo "C++$standard source_location hardware run $run_index/$RUNS: D-SIMD"
         run_hardware_case "asc/std/source_location" "$standard" simd "$run_index" "$SOURCE_BUILD_DIR/asc_stl_source_location_simd"
@@ -240,6 +246,8 @@ for standard in 17 20; do
         run_hardware_case "asc/work_queue" "$standard" simt "$run_index" "$B026_WORK_QUEUE_BUILD_DIR/asc_stl_b026_work_queue_simt"
         run_hardware_case "asc/numeric_types" "$standard" simd "$run_index" "$NUMERIC_TYPES_BUILD_DIR/asc_stl_numeric_types_simd"
         run_hardware_case "asc/numeric_types" "$standard" simt "$run_index" "$NUMERIC_TYPES_BUILD_DIR/asc_stl_numeric_types_simt"
+        run_hardware_case "asc/random" "$standard" simd "$run_index" "$RANDOM_BUILD_DIR/asc_stl_random_simd"
+        run_hardware_case "asc/random" "$standard" simt "$run_index" "$RANDOM_BUILD_DIR/asc_stl_random_simt"
         echo "C++$standard cmath hardware run $run_index/$RUNS: D-SIMD"
         run_hardware_case "asc/cmath" "$standard" simd "$run_index" "$B026_CMATH_BUILD_DIR/asc_stl_b026_cmath_simd"
         echo "C++$standard cmath hardware run $run_index/$RUNS: D-SIMT"
@@ -277,6 +285,7 @@ printf '%s\n' \
     "asc/atomic" \
     "asc/cmath" \
     "asc/numeric_types" \
+    "asc/random" \
     "asc/hierarchy" \
     "asc/std/__algorithm/lower_bound.h" \
     "asc/std/__algorithm/ranges_copy.h" \

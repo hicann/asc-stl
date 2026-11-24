@@ -1,4 +1,4 @@
-# asc::pcg64_engine::pcg64_engine
+# asc::pcg64::pcg64
 
 ## Product Support
 
@@ -28,67 +28,38 @@
 
 Header: `<asc/random>`.
 
-`asc::pcg64_engine::pcg64_engine` initializes an `asc::pcg64_engine` object with caller-provided parameters.
+Construct from the default seed, an explicit integer seed, or a copied state.
 
-## Function Prototype
+## Declaration
 
-Member of: [`asc::pcg64_engine`](pcg64_engine.md).
-
-### Prototype 1
+Member of [`asc::pcg64`](pcg64.md); the declaration is in class context.
 
 ```cpp
-// Excerpt of the declaration inside the asc::pcg64_engine class; template parameters and other members are provided by the enclosing class.
-constexpr pcg64_engine() noexcept;
+constexpr pcg64() noexcept;
+constexpr explicit pcg64(result_type seed) noexcept;
+constexpr pcg64(const pcg64&) noexcept = default;
 ```
-
-### Prototype 2
-
-```cpp
-// Excerpt of the declaration inside the asc::pcg64_engine class; template parameters and other members are provided by the enclosing class.
-constexpr explicit pcg64_engine(result_type seed) noexcept;
-```
-
-## Parameters
-
-### Parameters of Prototype 1
-
-No parameters.
-
-### Parameters of Prototype 2
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `seed` | Input | Seed value used to initialize or reset the state of the pseudorandom number engine. |
-
-## Return Value
-
-No return value.
 
 ## Constraints
 
-- The random number engine supports only the unsigned integer state, seed, and counter forms declared on this page.
-- No SeedSequence, streaming input/output, or shared global state is provided.
+Available in C++17/C++20 on Host and Ascend 950 SIMT / ordinary SIMD scalar code. All operations are constexpr and noexcept.
+
+See [pcg64](pcg64.md) for the algorithm, seed mapping, comparison and advancement rules.
 
 ## Example
 
-The following Host example provides concrete inputs and checks the result of the call.
-
 ```cpp
 #include <asc/random>
-#include <asc/std/limits>
 
 bool example()
 {
-    asc::pcg64 engine(7);
-    const auto first = engine();
-    engine.seed(7);
-    return engine() == first;
+    asc::pcg64 a;
+    asc::pcg64 b(asc::pcg64::default_seed);
+    asc::pcg64 copy(a);
+    return a == b && a == copy;
 }
 ```
 
 ## Related APIs
 
-- [`asc::pcg64_engine`](pcg64_engine.md)
-- [API list for this header](asc_random.md)
+- [Header API list](asc_random.md)

@@ -1,4 +1,4 @@
-# asc::pcg64_engine::discard
+# asc::pcg64::discard
 
 ## 产品支持情况
 
@@ -28,50 +28,35 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::pcg64_engine::discard`推进引擎状态并丢弃指定数量的伪随机结果。
+以对数时间推进原始序列，等价于取数 count 次并丢弃结果。
 
-## 函数原型
+## 声明
 
-所属类型：[`asc::pcg64_engine`](pcg64_engine.md)。
+成员属于 [`asc::pcg64`](pcg64.md)，以下为类内声明。
 
 ```cpp
-// asc::pcg64_engine 类内的声明节选；模板形参和其他成员由所属类提供。
 constexpr void discard(unsigned long long count) noexcept;
 ```
 
-## 参数说明
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `count` | 输入 | 参与操作的元素数量。 |
-
-## 返回值说明
-
-无返回值。
-
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
-- 不提供SeedSequence、流式输入输出或共享全局状态。
+支持 C++17/C++20 的 Host、Ascend 950 SIMT 和 SIMD 核普通整数标量代码；所有操作 constexpr、noexcept。
+
+完整算法、播种、比较和推进规则见 [pcg64](pcg64.md)。
 
 ## 调用示例
-
-以下Host片段以具体值演示调用；输入须满足本页约束。
 
 ```cpp
 #include <asc/random>
 
 bool example()
 {
-    asc::pcg64 generator;
-    generator.discard(4);
-    return generator() == 523514384104871782ULL && generator() == 18368464326245194742ULL;
+    asc::pcg64 engine(42);
+    engine.discard(1ULL << 63);
+    return engine() == 17290396888909922309ULL;
 }
 ```
 
 ## 关联API
 
-- [`asc::pcg64_engine`](pcg64_engine.md)
 - [本头文件的接口列表](asc_random.md)

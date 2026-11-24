@@ -1,4 +1,4 @@
-# asc::pcg64_engine::default_seed
+# asc::pcg64::default_seed
 
 ## Product Support
 
@@ -28,41 +28,33 @@
 
 Header: `<asc/random>`.
 
-`asc::pcg64_engine::default_seed` defines the default 64-bit seed of the PCG64 engine.
+The default 64-bit seed is 0xcafef00dd15ea5e5ULL.
 
 ## Declaration
 
-Member of: [`asc::pcg64_engine`](pcg64_engine.md).
+Member of [`asc::pcg64`](pcg64.md); the declaration is in class context.
 
 ```cpp
-// Excerpt of the declaration inside the asc::pcg64_engine class; template parameters and other members are provided by the enclosing class.
-static constexpr asc::std::uint64_t default_seed = 0xcafef00dd15ea5e5ULL;
+static constexpr result_type default_seed = 0xcafef00dd15ea5e5ULL;
 ```
 
 ## Constraints
 
-- The type, alias, or field on this page only describes the stored random state or permutation information; observing it invokes no runtime and accesses no shared global state.
-- Mapping calls must use a non-empty finite domain and in-domain indices; for the seed and counter requirements of generator calls, see their member pages.
+Available in C++17/C++20 on Host and Ascend 950 SIMT / ordinary SIMD scalar code. All operations are constexpr and noexcept.
+
+See [pcg64](pcg64.md) for the algorithm, seed mapping, comparison and advancement rules.
 
 ## Example
 
-The following Host example provides concrete inputs and checks the result of the call.
-
 ```cpp
 #include <asc/random>
-#include <asc/std/limits>
 
 bool example()
 {
-    static_assert(asc::pcg64::default_seed == 0xcafef00dd15ea5e5ULL);
-    asc::pcg64 engine(7);
-    const auto first = engine();
-    engine.seed(7);
-    return engine() == first;
+    return asc::pcg64::default_seed == 0xcafef00dd15ea5e5ULL;
 }
 ```
 
 ## Related APIs
 
-- [`asc::pcg64_engine`](pcg64_engine.md)
-- [API list for this header](asc_random.md)
+- [Header API list](asc_random.md)

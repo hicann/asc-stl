@@ -1,4 +1,4 @@
-# asc::pcg64_engine::`operator()`
+# asc::pcg64::operator()
 
 ## 产品支持情况
 
@@ -28,58 +28,36 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::pcg64_engine::operator()`推进引擎状态并生成下一个64位伪随机数。
+先更新状态，再产生一个 64 位结果。
 
-## 函数原型
+## 声明
 
-所属类型：[`asc::pcg64_engine`](pcg64_engine.md)。
+成员属于 [`asc::pcg64`](pcg64.md)，以下为类内声明。
 
 ```cpp
-// asc::pcg64_engine 类内的声明节选；模板形参和其他成员由所属类提供。
 constexpr result_type operator()() noexcept;
 ```
 
-## 参数说明
-
-无参数。
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `result_type` | 返回推进随机引擎后产生的下一个随机值。 |
-
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
-- 不提供SeedSequence、流式输入输出或共享全局状态。
+支持 C++17/C++20 的 Host、Ascend 950 SIMT 和 SIMD 核普通整数标量代码；所有操作 constexpr、noexcept。
+
+完整算法、播种、比较和推进规则见 [pcg64](pcg64.md)。
 
 ## 调用示例
-
-以下Host片段以具体值演示调用；输入须满足本页约束。
 
 ```cpp
 #include <asc/random>
 
 bool example()
 {
-    asc::pcg64 generator;
-    const asc::pcg64::result_type expected[] = {
-        14951315693135216709ULL,
-        1541401459199960700ULL,
-        3670514919227316241ULL,
-        11007308355854268502ULL,
-        523514384104871782ULL,
-        18368464326245194742ULL
-    };
-    for (auto value : expected) {
-        if (generator() != value) return false;
-    }
-    return true;
+    asc::pcg64 engine(0);
+    const auto first = engine();
+    const auto second = engine();
+    return first == 0x01070196e695f8f1ULL && second == 0x703ec840c59f4493ULL;
 }
 ```
 
 ## 关联API
 
-- [`asc::pcg64_engine`](pcg64_engine.md)
 - [本头文件的接口列表](asc_random.md)

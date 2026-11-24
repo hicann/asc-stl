@@ -1282,6 +1282,7 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
 endif()
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/numeric_types.cmake")
+include("${CMAKE_CURRENT_SOURCE_DIR}/random.cmake")
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/extension_type_traits.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/bit.cmake")

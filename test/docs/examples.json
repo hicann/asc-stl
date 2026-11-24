@@ -3284,22 +3284,6 @@
     "mode": "host",
     "expression": "example()"
   },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_random/pcg64_engine.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "example()"
-  },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_random/random_bijection.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "example()"
-  },
   "docs/zh/api/standard/ranges/asc_std_ranges/ranges_drop_view.md": {
     "standards": [
       17,
@@ -8881,14 +8865,6 @@
     "mode": "host",
     "expression": "example()"
   },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_random/random_bijection_size.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "example()"
-  },
   "docs/zh/api/extension/bit_math_numeric_random/asc_random/pcg64_engine_pcg64_engine.md": {
     "standards": [
       17,
@@ -8906,14 +8882,6 @@
     "expression": "example()"
   },
   "docs/zh/api/extension/bit_math_numeric_random/asc_random/pcg64.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "example()"
-  },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_random/random_bijection_random_bijection.md": {
     "standards": [
       17,
       20
@@ -18963,22 +18931,6 @@
     "mode": "host",
     "expression": "example()"
   },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_random/random_bijection_index_type.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "example()"
-  },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_random/random_bijection_operator_call.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "example()"
-  },
   "docs/zh/api/extension/device_atomics_and_sync/asc_barrier/barrier_arrive.md": {
     "standards": [
       17,
@@ -25506,6 +25458,14 @@
     "expression": "example()"
   },
   "docs/zh/api/extension/function_objects_and_iterators/asc_functional/equal_to_value_equal_to_value.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_random/pcg64_copy.md": {
     "standards": [
       17,
       20

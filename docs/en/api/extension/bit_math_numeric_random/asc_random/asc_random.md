@@ -1,31 +1,20 @@
-# Header asc/random
+# `<asc/random>`
 
-Provides the deterministic PCG64 pseudorandom number engine, and `random_bijection`, a deterministic bijection over a finite integer domain
+A fixed PCG XSL-RR 128/64 oneseq engine.
 
-## Usage
+| API | Purpose |
+| --- | --- |
+| [asc::pcg64](pcg64.md) | A fixed PCG XSL-RR 128/64 oneseq engine. |
+| [asc::pcg64::default_seed](pcg64_engine_default_seed.md) | The default 64-bit seed is 0xcafef00dd15ea5e5ULL. |
+| [asc::pcg64::discard](pcg64_engine_discard.md) | Advance in logarithmic time, equivalently discarding count raw results. |
+| [asc::pcg64::max](pcg64_engine_max.md) | Return the exact upper bound 18446744073709551615. |
+| [asc::pcg64::min](pcg64_engine_min.md) | Return the exact lower bound zero. |
+| [asc::pcg64::operator()](pcg64_engine_operator_call.md) | Advance the state, then return one 64-bit result. |
+| [asc::pcg64::pcg64](pcg64_engine_pcg64_engine.md) | Construct from the default seed, an explicit integer seed, or a copied state. |
+| [asc::pcg64::result_type](pcg64_engine_result_type.md) | The exact unsigned 64-bit result and integer seed type. |
+| [asc::pcg64::seed](pcg64_engine_seed.md) | Restart at the first result for the seed; zero and the maximum seed are valid. |
+| [asc::pcg64::operator=](pcg64_copy.md) | Assign all 128 state bits and return a reference to this object. |
+| [asc::operator==](operator_equal.md) | Compare the complete engine states. |
+| [asc::operator!=](operator_not_equal.md) | Return the logical negation of complete state equality. |
 
-```cpp
-#include <asc/random>
-```
-
-## API List
-
-| API | Kind | C++ Mode | Availability | Product Support |
-| --- | --- | --- | --- | --- |
-| [`asc::operator!=` (Function template)](operator_not_equal.md) | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [`asc::operator==` (Function template)](operator_equal.md) | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::pcg64](pcg64.md) | Type alias | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::pcg64_engine](pcg64_engine.md) | Class template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::pcg64_engine::default_seed](pcg64_engine_default_seed.md) | Variable | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::pcg64_engine::discard](pcg64_engine_discard.md) | Member function | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::pcg64_engine::max](pcg64_engine_max.md) | Member function | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::pcg64_engine::min](pcg64_engine_min.md) | Member function | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::pcg64_engine::`operator()`](pcg64_engine_operator_call.md) | Member function | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::pcg64_engine::pcg64_engine](pcg64_engine_pcg64_engine.md) | Constructor | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::pcg64_engine::result_type](pcg64_engine_result_type.md) | Type alias | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::pcg64_engine::seed](pcg64_engine_seed.md) | Member function | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::random_bijection](random_bijection.md) | Class template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::random_bijection::index_type](random_bijection_index_type.md) | Type alias | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::random_bijection::`operator()`](random_bijection_operator_call.md) | Member function | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::random_bijection::random_bijection](random_bijection_random_bijection.md) | Constructor | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::random_bijection::size](random_bijection_size.md) | Member function | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
+[Previous interface migration](pcg64_engine.md)

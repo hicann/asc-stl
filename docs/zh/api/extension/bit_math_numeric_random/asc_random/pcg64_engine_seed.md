@@ -1,4 +1,4 @@
-# asc::pcg64_engine::seed
+# asc::pcg64::seed
 
 ## 产品支持情况
 
@@ -28,61 +28,38 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::pcg64_engine::seed`使用指定种子重置伪随机数引擎状态。
+重播种并从该种子的首个结果重新开始，0 与最大种子均有效。
 
-## 函数原型
+## 声明
 
-所属类型：[`asc::pcg64_engine`](pcg64_engine.md)。
+成员属于 [`asc::pcg64`](pcg64.md)，以下为类内声明。
 
 ```cpp
-// asc::pcg64_engine 类内的声明节选；模板形参和其他成员由所属类提供。
 constexpr void seed(result_type seed = default_seed) noexcept;
 ```
 
-## 参数说明
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `seed` | 输入 | 用于初始化或重置伪随机数引擎状态的种子值。 |
-
-## 返回值说明
-
-无返回值。
-
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
-- 不提供SeedSequence、流式输入输出或共享全局状态。
+支持 C++17/C++20 的 Host、Ascend 950 SIMT 和 SIMD 核普通整数标量代码；所有操作 constexpr、noexcept。
+
+完整算法、播种、比较和推进规则见 [pcg64](pcg64.md)。
 
 ## 调用示例
-
-以下Host片段以具体值演示调用；输入须满足本页约束。
 
 ```cpp
 #include <asc/random>
 
 bool example()
 {
-    asc::pcg64 generator;
-    generator.seed(9);
-    const asc::pcg64::result_type expected[] = {
-        4176210987077628350ULL,
-        5147113462634521278ULL,
-        7929888373037025941ULL,
-        3841151875209151278ULL,
-        7941121362626835034ULL,
-        3659436080610969708ULL
-    };
-    for (auto value : expected) {
-        if (generator() != value) return false;
-    }
-    return true;
+    asc::pcg64 engine(42);
+    const auto before = engine();
+    engine.seed(0);
+    const auto zero = engine();
+    engine.seed(18446744073709551615ULL);
+    return before == 0x287472e87ff5705aULL && zero == 0x01070196e695f8f1ULL && engine() == 0x3b17d015242767f3ULL;
 }
 ```
 
 ## 关联API
 
-- [`asc::pcg64_engine`](pcg64_engine.md)
 - [本头文件的接口列表](asc_random.md)

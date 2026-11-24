@@ -1,4 +1,4 @@
-# `asc::operator==`（函数模板）
+# asc::operator==
 
 ## 产品支持情况
 
@@ -28,56 +28,29 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::operator==`比较两个相同参数的PCG64引擎当前状态是否相等。
+比较全部状态位，不根据单个输出判断。
 
-## 函数原型
+## 声明
 
 ```cpp
-template<asc::std::uint64_t AHigh, asc::std::uint64_t ALow, asc::std::uint64_t CHigh, asc::std::uint64_t CLow> constexpr bool asc::operator==(const asc::pcg64_engine<AHigh, ALow, CHigh, CLow>& left, const asc::pcg64_engine<AHigh, ALow, CHigh, CLow>& right) noexcept;
+constexpr bool operator==(const pcg64& left, const pcg64& right) noexcept;
 ```
-
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `AHigh` | PCG64状态递推乘数A的高64位，编译期无符号整数常量。 |
-| `ALow` | PCG64状态递推乘数A的低64位，编译期无符号整数常量。 |
-| `CHigh` | PCG64状态递推增量C的高64位，编译期无符号整数常量。 |
-| `CLow` | PCG64状态递推增量C的低64位，编译期无符号整数常量。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left` | 输入 | 参与相等比较的左侧PCG64引擎；比较其当前状态。 |
-| `right` | 输入 | 参与相等比较的右侧PCG64引擎；比较其当前状态。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `bool` | 条件成立时返回`true`，否则返回`false`。 |
 
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
-- 不提供SeedSequence、流式输入输出或共享全局状态。
+支持 C++17/C++20 的 Host、Ascend 950 SIMT 和 SIMD 核普通整数标量代码；所有操作 constexpr、noexcept。
+
+完整算法、播种、比较和推进规则见 [pcg64](pcg64.md)。
 
 ## 调用示例
-
-以下片段给出具体模板实参和调用对象。
 
 ```cpp
 #include <asc/random>
 
 bool example()
 {
-    asc::pcg64 left(9), right(9);
-    if (asc::operator==(left, right) != true) return false;
-    right.discard(1);
-    return asc::operator==(left, right) == false;
+    asc::pcg64 a(42), b(a);
+    return asc::operator==(a, b);
 }
 ```
 

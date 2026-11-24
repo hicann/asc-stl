@@ -728,7 +728,9 @@
       "target": "asc/__random/pcg64.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/cstdint"
       ],
       "applicability": {
         "host_header": true,
@@ -738,7 +740,7 @@
         "cannsim_runtime": false,
         "hardware_runtime": false
       },
-      "semantic_case": "asc/std/iterator"
+      "semantic_case": "asc/random"
     },
     {
       "target": "asc/__runtime/devices.h",
@@ -16210,8 +16212,7 @@
       "visibility": "public",
       "dependencies": [
         "asc/__config",
-        "asc/__random/pcg64.h",
-        "asc/std/random"
+        "asc/__random/pcg64.h"
       ],
       "semantic_case": "asc/random",
       "applicability": {
@@ -16223,9 +16224,21 @@
         "hardware_runtime": true
       },
       "negative_cases": [
-        "seed_sequence.fail.cpp"
+        "custom_parameters.fail.asc",
+        "custom_parameters.fail.cpp",
+        "equal_state.fail.asc",
+        "equal_state.fail.cpp",
+        "random_bijection.fail.asc",
+        "random_bijection.fail.cpp",
+        "seed_sequence.fail.asc",
+        "seed_sequence.fail.cpp",
+        "seed_sequence_constructor.fail.asc",
+        "seed_sequence_constructor.fail.cpp"
       ],
-      "runtime_case": "asc/tensor_copy"
+      "additional_cases": [
+        "oracle.cpp",
+        "reference.py"
+      ]
     },
     {
       "target": "asc/std/__algorithm/inplace_merge.h",
@@ -19266,6 +19279,7 @@
     "asc/std/__algorithm/ranges_copy.h": "runtime/assets.json",
     "asc/numeric_types": "runtime/assets.json",
     "asc/bit": "runtime/assets.json",
-    "asc/cmath": "runtime/assets.json"
+    "asc/cmath": "runtime/assets.json",
+    "asc/random": "runtime/assets.json"
   }
 }

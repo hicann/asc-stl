@@ -1,4 +1,4 @@
-# `asc::operator!=` (Function template)
+# asc::operator!=
 
 ## Product Support
 
@@ -28,59 +28,33 @@
 
 Header: `<asc/random>`.
 
-`asc::operator!=` compares whether the current states of two PCG64 engines with the same parameters differ.
+Return the logical negation of complete state equality.
 
-## Function Prototype
+## Declaration
 
 ```cpp
-template<asc::std::uint64_t AHigh, asc::std::uint64_t ALow, asc::std::uint64_t CHigh, asc::std::uint64_t CLow> constexpr bool asc::operator!=(const asc::pcg64_engine<AHigh, ALow, CHigh, CLow>& left, const asc::pcg64_engine<AHigh, ALow, CHigh, CLow>& right) noexcept;
+constexpr bool operator!=(const pcg64& left, const pcg64& right) noexcept;
 ```
-
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `AHigh` | High 64 bits of the PCG64 state transition multiplier A, a compile-time unsigned integer constant. |
-| `ALow` | Low 64 bits of the PCG64 state transition multiplier A, a compile-time unsigned integer constant. |
-| `CHigh` | High 64 bits of the PCG64 state transition increment C, a compile-time unsigned integer constant. |
-| `CLow` | Low 64 bits of the PCG64 state transition increment C, a compile-time unsigned integer constant. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `left` | Input | Left PCG64 engine in the inequality comparison; its current state is compared. |
-| `right` | Input | Right PCG64 engine in the inequality comparison; its current state is compared. |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `bool` | Returns `true` when the condition holds, otherwise `false`. |
 
 ## Constraints
 
-- The random number engine supports only the unsigned integer state, seed, and counter forms declared on this page.
-- No SeedSequence, streaming input/output, or shared global state is provided.
+Available in C++17/C++20 on Host and Ascend 950 SIMT / ordinary SIMD scalar code. All operations are constexpr and noexcept.
+
+See [pcg64](pcg64.md) for the algorithm, seed mapping, comparison and advancement rules.
 
 ## Example
-
-The following snippet provides concrete template arguments and call objects.
 
 ```cpp
 #include <asc/random>
 
 bool example()
 {
-    asc::pcg64 left(9), right(9);
-    if (asc::operator!=(left, right) != false) return false;
-    right.discard(1);
-    return asc::operator!=(left, right) == true;
+    asc::pcg64 a(42), b(a);
+    b.discard(1);
+    return asc::operator!=(a, b);
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_random.md)
+- [Header API list](asc_random.md)

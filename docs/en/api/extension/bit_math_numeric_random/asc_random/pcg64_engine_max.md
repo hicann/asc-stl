@@ -1,4 +1,4 @@
-# asc::pcg64_engine::max
+# asc::pcg64::max
 
 ## Product Support
 
@@ -28,47 +28,33 @@
 
 Header: `<asc/random>`.
 
-`asc::pcg64_engine::max` returns the largest result value the PCG64 engine can generate.
+Return the exact upper bound 18446744073709551615.
 
-## Function Prototype
+## Declaration
 
-Member of: [`asc::pcg64_engine`](pcg64_engine.md).
+Member of [`asc::pcg64`](pcg64.md); the declaration is in class context.
 
 ```cpp
-// Excerpt of the declaration inside the asc::pcg64_engine class; template parameters and other members are provided by the enclosing class.
 static constexpr result_type max() noexcept;
 ```
 
-## Parameters
-
-No parameters.
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `result_type` | Returns the largest result value the PCG64 engine can generate. |
-
 ## Constraints
 
-- The random number engine supports only the unsigned integer state, seed, and counter forms declared on this page.
-- No SeedSequence, streaming input/output, or shared global state is provided.
+Available in C++17/C++20 on Host and Ascend 950 SIMT / ordinary SIMD scalar code. All operations are constexpr and noexcept.
+
+See [pcg64](pcg64.md) for the algorithm, seed mapping, comparison and advancement rules.
 
 ## Example
 
-The following Host example provides concrete inputs and checks the result of the call.
-
 ```cpp
 #include <asc/random>
-#include <asc/std/limits>
 
 bool example()
 {
-    return asc::pcg64::max() == asc::std::numeric_limits<asc::pcg64::result_type>::max();
+    return asc::pcg64::max() == 18446744073709551615ULL;
 }
 ```
 
 ## Related APIs
 
-- [`asc::pcg64_engine`](pcg64_engine.md)
-- [API list for this header](asc_random.md)
+- [Header API list](asc_random.md)

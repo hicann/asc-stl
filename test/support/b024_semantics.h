@@ -40,7 +40,7 @@
 #include <asc/__cmath/operations.h>
 #include <asc/__iterator/adaptors.h>
 #include <asc/__memory/buffers.h>
-#include <asc/__random/pcg64.h>
+#include <asc/random>
 #include <asc/__work_queue/cursor.h>
 
 namespace asc_stl_b024_test {
@@ -549,12 +549,12 @@ CANN_ASC_STL_API int evaluate_random_and_traits()
     if (seeded() != (48271ull * 123456789ull) % 2147483647ull || narrow_seed() != 123456789u % 251u) {
         return 6;
     }
-    asc::detail::pcg64_engine pcg_a;
-    asc::detail::pcg64_engine pcg_b;
+    asc::pcg64 pcg_a;
+    asc::pcg64 pcg_b;
     const auto pcg_first = pcg_a();
     pcg_b.discard(1);
     const auto pcg_second = pcg_a();
-    if (pcg_second != pcg_b() || pcg_first == pcg_second || !pcg_a.equal(pcg_b)) {
+    if (pcg_second != pcg_b() || pcg_first == pcg_second || pcg_a != pcg_b) {
         return 7;
     }
     if (!asc::std::__asc_internal::__is_non_narrowing_convertible<long, int>::value) {

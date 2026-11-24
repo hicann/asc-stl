@@ -27,9 +27,12 @@
 #pragma system_header
 #endif
 
+#include <asc/__detail/attributes.h>
+#include <asc/std/cstdint>
+
 namespace asc::detail {
 
-using random_uint64 = __UINT64_TYPE__;
+using random_uint64 = ::asc::std::uint64_t;
 
 struct random_uint128 {
     random_uint64 high;
@@ -37,20 +40,24 @@ struct random_uint128 {
 
     CANN_ASC_STL_API constexpr random_uint128(random_uint64 value = 0) noexcept : high(0), low(value)
     {}
-    CANN_ASC_STL_API constexpr random_uint128(random_uint64 high_value, random_uint64 low_value) noexcept
-        : high(high_value), low(low_value)
+    CANN_ASC_STL_API constexpr random_uint128(random_uint64 upper, random_uint64 lower) noexcept
+        : high(upper), low(lower)
     {}
 };
 
+// Compute the carry from 32-bit limbs, avoiding a full-width comparison on
+// AICore scalar backends. All arithmetic is unsigned and modulo 2^128.
 CANN_ASC_STL_API constexpr random_uint128 add(random_uint128 left, random_uint128 right) noexcept
 {
-    const random_uint64 low = left.low + right.low;
-    return {left.high + right.high + (low < left.low ? 1U : 0U), low};
+    constexpr random_uint64 mask = 0xffffffffULL;
+    const random_uint64 lower = (left.low & mask) + (right.low & mask);
+    const random_uint64 upper = (left.low >> 32U) + (right.low >> 32U) + (lower >> 32U);
+    return {left.high + right.high + (upper >> 32U), (upper << 32U) | (lower & mask)};
 }
 
 CANN_ASC_STL_API constexpr random_uint64 multiply_high(random_uint64 left, random_uint64 right) noexcept
 {
-    const random_uint64 mask = 0xffffffffULL;
+    constexpr random_uint64 mask = 0xffffffffULL;
     const random_uint64 left_low = left & mask;
     const random_uint64 left_high = left >> 32U;
     const random_uint64 right_low = right & mask;
@@ -62,125 +69,102 @@ CANN_ASC_STL_API constexpr random_uint64 multiply_high(random_uint64 left, rando
 
 CANN_ASC_STL_API constexpr random_uint128 multiply(random_uint128 left, random_uint128 right) noexcept
 {
+    // The high-by-high term is a multiple of 2^128 and is discarded.
     return {multiply_high(left.low, right.low) + left.high * right.low + left.low * right.high, left.low * right.low};
 }
 
-CANN_ASC_STL_API constexpr bool equal(random_uint128 left, random_uint128 right) noexcept
+CANN_ASC_STL_API constexpr random_uint64 rotate_right(random_uint64 value, unsigned count) noexcept
 {
-    return left.high == right.high && left.low == right.low;
+    const unsigned rotation = count & 63U;
+    return (value >> rotation) | (value << ((64U - rotation) & 63U));
 }
-
-CANN_ASC_STL_API constexpr random_uint64 rotate_right(random_uint64 value, unsigned int count) noexcept
-{
-    const unsigned int normalized = count & 63U;
-    return normalized == 0 ? value : (value >> normalized) | (value << (64U - normalized));
-}
-
-// 24-round Feistel network over the power-of-two domain covering the
-// requested size: a genuine pseudo-random permutation, unlike the affine
-// multiplier it replaces (which was linearly predictable from two probes).
-// Each round splits the index into left/right halves, mixes the left half
-// through a product with the 64-bit constant below (its high half feeds a
-// keyed xor, its low half feeds the right-half rotation), and swaps; the
-// network is invertible for any round keys because the odd constant makes
-// the low bits of the product a bijection of the left half. Round keys are
-// drawn from the caller supplied generator at construction time; evaluation
-// is pure arithmetic, so it stays usable in constexpr contexts and device
-// kernels. Expected generator contract: a uniform random bit source whose
-// outputs are convertible to 64 bits (high 32 bits are used per key).
-template <class Index>
-class feistel_bijection {
-public:
-    using index_type = Index;
-
-    CANN_ASC_STL_API constexpr feistel_bijection() noexcept
-        : left_bits_(0), right_bits_(0), left_mask_(0), right_mask_(0), keys_()
-    {}
-
-    template <class RNG>
-    CANN_ASC_STL_API constexpr feistel_bijection(Index size, RNG&& generator) noexcept
-        : left_bits_(0), right_bits_(0), left_mask_(0), right_mask_(0), keys_()
-    {
-        // Bits needed for size - 1, clamped so that even size 0/1 keeps the
-        // minimum 4+4 bit split usable by the network.
-        const random_uint64 highest = static_cast<random_uint64>(size) > 0 ? static_cast<random_uint64>(size) - 1 : 0;
-        random_uint64 total_bits = 8;
-        while (total_bits != 64 && (random_uint64{1} << total_bits) <= highest) {
-            ++total_bits;
-        }
-        left_bits_ = static_cast<unsigned int>(total_bits / 2);
-        right_bits_ = static_cast<unsigned int>(total_bits - total_bits / 2);
-        left_mask_ = (random_uint64{1} << left_bits_) - 1;
-        right_mask_ = (random_uint64{1} << right_bits_) - 1;
-        for (unsigned int round = 0; round != round_count; ++round) {
-            keys_[round] = static_cast<unsigned int>(static_cast<random_uint64>(generator()) >> 32U);
-        }
-    }
-
-    CANN_ASC_STL_API constexpr Index operator()(Index value) const noexcept
-    {
-        const random_uint64 input = static_cast<random_uint64>(value);
-        unsigned int left = static_cast<unsigned int>(input >> right_bits_);
-        unsigned int right = static_cast<unsigned int>(input & right_mask_);
-        for (unsigned int round = 0; round != round_count; ++round) {
-            const random_uint64 product = round_constant * left;
-            const unsigned int keyed = static_cast<unsigned int>(product >> 32U) ^ keys_[round];
-            const unsigned int carried = static_cast<unsigned int>(product);
-            const unsigned int next_left = keyed ^ right;
-            const unsigned int next_right =
-                static_cast<unsigned int>(((static_cast<random_uint64>(carried) << (right_bits_ - left_bits_)) |
-                                              (static_cast<random_uint64>(right) >> left_bits_)) &
-                    right_mask_);
-            left = next_left & static_cast<unsigned int>(left_mask_);
-            right = next_right;
-        }
-        return static_cast<Index>((static_cast<random_uint64>(left) << right_bits_) | right);
-    }
-
-private:
-    static constexpr unsigned int round_count = 24;
-    static constexpr random_uint64 round_constant = 0xD2B74407B1CE6E93ULL;
-
-    unsigned int left_bits_{};
-    unsigned int right_bits_{};
-    random_uint64 left_mask_{};
-    random_uint64 right_mask_{};
-    unsigned int keys_[round_count]{};
-};
-
-// Legacy single-word linear congruential engine retained only because the
-// delivered semantics payload (test/support/b024_semantics.h) still refers to
-// it by its detail name. It is NOT a PCG64: no 128-bit multiplier/increment
-// state and no output permutation, so its raw LCG stream is linearly related
-// across seeds. It has no users inside the library itself - <asc/random>
-// builds the public engine on the 128-bit state helpers above. Do not add
-// new uses; retire it together with the semantics payload that pins it.
-class pcg64_engine {
-public:
-    using result_type = random_uint64;
-    static constexpr result_type default_seed = 0x853c49e6748fea9bULL;
-    CANN_ASC_STL_API constexpr pcg64_engine() noexcept : state_(default_seed)
-    {}
-    CANN_ASC_STL_API constexpr result_type operator()() noexcept
-    {
-        state_ = state_ * 6364136223846793005ULL + 1442695040888963407ULL;
-        return state_;
-    }
-    CANN_ASC_STL_API constexpr void discard(unsigned long long count) noexcept
-    {
-        for (unsigned long long discarded = 0; discarded < count; ++discarded) {
-            (void)(*this)();
-        }
-    }
-    CANN_ASC_STL_API constexpr bool equal(const pcg64_engine& other) const noexcept
-    {
-        return state_ == other.state_;
-    }
-
-private:
-    result_type state_;
-};
 
 }  // namespace asc::detail
+
+namespace asc {
+
+// PCG XSL-RR 128/64 oneseq, matching the author's pcg64_oneseq variant.
+// The two-word path is also the constexpr path; no native 128-bit type is needed.
+class pcg64 {
+public:
+    using result_type = ::asc::std::uint64_t;
+    static constexpr result_type default_seed = 0xcafef00dd15ea5e5ULL;
+
+    CANN_ASC_STL_API constexpr pcg64() noexcept : pcg64(default_seed)
+    {}
+    CANN_ASC_STL_API constexpr explicit pcg64(result_type value) noexcept
+    {
+        seed(value);
+    }
+    CANN_ASC_STL_API constexpr pcg64(const pcg64&) noexcept = default;
+    CANN_ASC_STL_API constexpr pcg64& operator=(const pcg64&) noexcept = default;
+
+    CANN_ASC_STL_API static constexpr result_type min() noexcept
+    {
+        return 0;
+    }
+    CANN_ASC_STL_API static constexpr result_type max() noexcept
+    {
+        return ~result_type{0};
+    }
+
+    CANN_ASC_STL_API constexpr void seed(result_type value = default_seed) noexcept
+    {
+        state_ = detail::add(
+            detail::multiply(detail::add(detail::random_uint128(value), increment()), multiplier()), increment());
+    }
+
+    CANN_ASC_STL_API constexpr result_type operator()() noexcept
+    {
+        state_ = detail::add(detail::multiply(state_, multiplier()), increment());
+        return detail::rotate_right(state_.low ^ state_.high, static_cast<unsigned>(state_.high >> 58U));
+    }
+
+    CANN_ASC_STL_API constexpr void discard(unsigned long long count) noexcept
+    {
+        detail::random_uint128 accumulated_multiplier(1);
+        detail::random_uint128 accumulated_increment(0);
+        detail::random_uint128 current_multiplier = multiplier();
+        detail::random_uint128 current_increment = increment();
+        while (count != 0) {
+            if ((count & 1U) != 0) {
+                accumulated_multiplier = detail::multiply(accumulated_multiplier, current_multiplier);
+                accumulated_increment =
+                    detail::add(detail::multiply(accumulated_increment, current_multiplier), current_increment);
+            }
+            current_increment =
+                detail::multiply(detail::add(current_multiplier, detail::random_uint128(1)), current_increment);
+            current_multiplier = detail::multiply(current_multiplier, current_multiplier);
+            count >>= 1U;
+        }
+        state_ = detail::add(detail::multiply(state_, accumulated_multiplier), accumulated_increment);
+    }
+
+    CANN_ASC_STL_API friend constexpr bool operator==(const pcg64& left, const pcg64& right) noexcept;
+
+private:
+    CANN_ASC_STL_API static constexpr detail::random_uint128 multiplier() noexcept
+    {
+        return {2549297995355413924ULL, 4865540595714422341ULL};
+    }
+    CANN_ASC_STL_API static constexpr detail::random_uint128 increment() noexcept
+    {
+        return {6364136223846793005ULL, 1442695040888963407ULL};
+    }
+
+    detail::random_uint128 state_{};
+};
+
+CANN_ASC_STL_API constexpr bool operator==(const pcg64& left, const pcg64& right) noexcept
+{
+    return left.state_.high == right.state_.high && left.state_.low == right.state_.low;
+}
+
+CANN_ASC_STL_API constexpr bool operator!=(const pcg64& left, const pcg64& right) noexcept
+{
+    return !(left == right);
+}
+
+}  // namespace asc
 
 #endif  // CANN_ASC_STL_ASC___RANDOM_PCG64_H

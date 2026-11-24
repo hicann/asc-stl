@@ -1,4 +1,4 @@
-# asc::pcg64_engine::min
+# asc::pcg64::min
 
 ## 产品支持情况
 
@@ -28,39 +28,26 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::pcg64_engine::min`返回PCG64引擎可生成的最小结果值。
+返回精确下界 0。
 
-## 函数原型
+## 声明
 
-所属类型：[`asc::pcg64_engine`](pcg64_engine.md)。
+成员属于 [`asc::pcg64`](pcg64.md)，以下为类内声明。
 
 ```cpp
-// asc::pcg64_engine 类内的声明节选；模板形参和其他成员由所属类提供。
 static constexpr result_type min() noexcept;
 ```
 
-## 参数说明
-
-无参数。
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `result_type` | 返回PCG64引擎可生成的最小结果值。 |
-
 ## 约束说明
 
-- 随机数引擎仅支持页面声明的无符号整数状态、种子和计数器形式。
-- 不提供SeedSequence、流式输入输出或共享全局状态。
+支持 C++17/C++20 的 Host、Ascend 950 SIMT 和 SIMD 核普通整数标量代码；所有操作 constexpr、noexcept。
+
+完整算法、播种、比较和推进规则见 [pcg64](pcg64.md)。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
-
 ```cpp
 #include <asc/random>
-#include <asc/std/limits>
 
 bool example()
 {
@@ -70,5 +57,4 @@ bool example()
 
 ## 关联API
 
-- [`asc::pcg64_engine`](pcg64_engine.md)
 - [本头文件的接口列表](asc_random.md)

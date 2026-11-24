@@ -1,4 +1,4 @@
-# asc::pcg64_engine::result_type
+# asc::pcg64::result_type
 
 ## 产品支持情况
 
@@ -28,42 +28,35 @@
 
 头文件路径为：`<asc/random>`。
 
-`asc::pcg64_engine::result_type`表示PCG64引擎生成的64位无符号结果类型。
+结果与整数种子的精确 64 位无符号类型。
 
 ## 声明
 
-所属类型：[`asc::pcg64_engine`](pcg64_engine.md)。
+成员属于 [`asc::pcg64`](pcg64.md)，以下为类内声明。
 
 ```cpp
-// asc::pcg64_engine 类内的声明节选；模板形参和其他成员由所属类提供。
 using result_type = asc::std::uint64_t;
 ```
 
 ## 约束说明
 
-- 本页类型、别名或字段只描述所保存的随机状态或置换信息；观察它不调用Runtime、不访问共享全局状态。
-- 映射调用须使用非空有限域和域内索引；生成器调用的种子、计数器要求见其成员页。
+支持 C++17/C++20 的 Host、Ascend 950 SIMT 和 SIMD 核普通整数标量代码；所有操作 constexpr、noexcept。
+
+完整算法、播种、比较和推进规则见 [pcg64](pcg64.md)。
 
 ## 调用示例
 
-以下片段演示本页接口的基本调用形式；输入和执行上下文须满足本页约束。
-
 ```cpp
 #include <asc/random>
-#include <asc/std/cstdint>
-#include <asc/std/type_traits>
-
-static_assert(asc::std::is_same_v<asc::pcg64::result_type, asc::std::uint64_t>);
 
 bool example()
 {
-    asc::pcg64 generator;
-    const asc::pcg64::result_type value = generator();
-    return value == 14951315693135216709ULL;
+    asc::pcg64::result_type seed = 42;
+    asc::pcg64 engine(seed);
+    return engine() == 0x287472e87ff5705aULL;
 }
 ```
 
 ## 关联API
 
-- [`asc::pcg64_engine`](pcg64_engine.md)
 - [本头文件的接口列表](asc_random.md)

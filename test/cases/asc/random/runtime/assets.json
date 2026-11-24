@@ -1,0 +1,18 @@
+{
+  "common": [
+    "CMakeLists.txt",
+    "launch.h",
+    "main.cpp",
+    "semantics.h",
+    "simulation_runtime.h",
+    "vectors.h"
+  ],
+  "cannsim": [
+    "kernel_simd.asc",
+    "kernel_simt.asc"
+  ],
+  "hardware": [
+    "kernel_simd.asc",
+    "kernel_simt.asc"
+  ]
+}

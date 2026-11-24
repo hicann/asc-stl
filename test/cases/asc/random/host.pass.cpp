@@ -16,6 +16,11 @@
 
 #include <asc/random>
 #include <asc/std/expected>
+#if __cplusplus >= 202002L
+#include <random>
+static_assert(std::uniform_random_bit_generator<asc::pcg64>);
+#endif
+#include "../../../support/random_semantics.h"
 
 struct tracker {
     int value;
@@ -28,6 +33,12 @@ struct tracker {
 
 int main()
 {
+    if (!asc_stl_random_test::state_contracts() || !asc_stl_random_test::large_discard())
+        return 10;
+    for (unsigned i = 0; i != 128; ++i) {
+        if (!asc_stl_random_test::composition(i) || !asc_stl_random_test::short_discard(i, i))
+            return 11;
+    }
     asc::pcg64 engine;
     unsigned long long value = 0;
     for (int index = 0; index < 10000; ++index)
@@ -41,15 +52,6 @@ int main()
         stepped();
     if (advanced != stepped || asc::pcg64::min() != 0 || asc::pcg64::max() != ~0ULL)
         return 2;
-    asc::pcg64 seed(9);
-    asc::random_bijection<unsigned long long> bijection(17, seed);
-    bool seen[17] = {};
-    for (unsigned long long index = 0; index < 17; ++index) {
-        const auto mapped = bijection(index);
-        if (mapped >= 17 || seen[mapped])
-            return 3;
-        seen[mapped] = true;
-    }
     asc::std::expected<tracker, int> result(tracker{7});
     if (!result || result->value != 7 || (*result).value != 7)
         return 4;
