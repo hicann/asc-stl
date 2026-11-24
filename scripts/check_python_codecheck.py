@@ -163,7 +163,8 @@ def line_length_violations(text: str) -> list[Violation]:
 
 
 def inspect_file(path: Path) -> list[Violation]:
-    text = path.read_text(encoding="utf-8")
+    with tokenize.open(path) as source:
+        text = source.read()
     return sorted(
         ast_violations(text, path)
         + slice_spacing_violations(text)

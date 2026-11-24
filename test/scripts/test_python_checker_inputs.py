@@ -13,11 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Reject explicitly requested Python sources that do not exist."""
+"""Check Python source input handling for both local style mirrors."""
 
 from pathlib import Path
 import subprocess
 import sys
+import tempfile
 import unittest
 
 
@@ -36,6 +37,25 @@ class PythonCheckerInputTests(unittest.TestCase):
                 )
                 self.assertEqual(result.returncode, 2)
                 self.assertIn("missing or not a file", result.stderr)
+
+    def test_python_source_encoding_is_honored(self):
+        fixtures = {
+            "bom.py": "label = 'café'\n".encode("utf-8-sig"),
+            "latin1.py": "# coding: latin-1\nlabel = 'café'\n".encode("latin-1"),
+            "utf8.py": "label = 'café'\n".encode("utf-8"),
+        }
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        for filename, content in fixtures.items():
+            path = Path(directory.name) / filename
+            path.write_bytes(content)
+            for name in ("check_python_codecheck.py", "check_python_logging.py"):
+                with self.subTest(source=filename, name=name):
+                    result = subprocess.run(
+                        [sys.executable, str(SCRIPTS / name), str(path)],
+                        capture_output=True, text=True, check=False,
+                    )
+                    self.assertEqual(result.returncode, 0, result.stderr)
 
 
 if __name__ == "__main__":

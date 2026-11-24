@@ -21,6 +21,7 @@ from __future__ import annotations
 import ast
 import logging
 import sys
+import tokenize
 from pathlib import Path
 
 
@@ -28,7 +29,8 @@ LOGGER = logging.getLogger(__name__)
 
 
 def direct_print_calls(path: Path) -> list[int]:
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    with tokenize.open(path) as source:
+        tree = ast.parse(source.read(), filename=str(path))
     return sorted(
         node.lineno
         for node in ast.walk(tree)
