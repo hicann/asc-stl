@@ -64,8 +64,8 @@ constexpr bool mul_overflow(T left, T right, T& result) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 检查溢出的整数乘法左操作数。
-| `right` | 输入 | 检查溢出的整数乘法右操作数。
+| `left` | 输入 | 检查溢出的整数乘法左操作数。 |
+| `right` | 输入 | 检查溢出的整数乘法右操作数。 |
 
 ### 原型2的参数
 
@@ -79,8 +79,8 @@ constexpr bool mul_overflow(T left, T right, T& result) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 检查溢出的整数乘法左操作数。
-| `right` | 输入 | 检查溢出的整数乘法右操作数。
+| `left` | 输入 | 检查溢出的整数乘法左操作数。 |
+| `right` | 输入 | 检查溢出的整数乘法右操作数。 |
 | `result` | 输出 | 写出运算结果的引用；返回true表示发生溢出。 |
 
 ## 返回值说明

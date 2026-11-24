@@ -64,8 +64,8 @@ constexpr bool div_overflow(T left, T right, T& result) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 检查除零或越界的整数除法左操作数。
-| `right` | 输入 | 检查除零或越界的整数除法右操作数；为0时返回value为0且overflow为true。
+| `left` | 输入 | 检查除零或越界的整数除法左操作数。 |
+| `right` | 输入 | 检查除零或越界的整数除法右操作数；为0时返回value为0且overflow为true。 |
 
 ### 原型2的参数
 
@@ -79,8 +79,8 @@ constexpr bool div_overflow(T left, T right, T& result) noexcept;
 
 | 参数名 | 输入/输出 | 描述 |
 | --- | --- | --- |
-| `left` | 输入 | 检查除零或越界的整数除法左操作数。
-| `right` | 输入 | 检查除零或越界的整数除法右操作数；为0时返回value为0且overflow为true。
+| `left` | 输入 | 检查除零或越界的整数除法左操作数。 |
+| `right` | 输入 | 检查除零或越界的整数除法右操作数；为0时返回value为0且overflow为true。 |
 | `result` | 输出 | 写出除法结果的引用；返回true表示除零或结果越界。 |
 
 ## 返回值说明
