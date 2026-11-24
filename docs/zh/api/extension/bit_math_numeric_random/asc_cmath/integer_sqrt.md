@@ -28,57 +28,41 @@
 
 头文件路径为：`<asc/cmath>`。
 
-`asc::integer_sqrt`返回满足`r * r <= value`的最大整数`r`。
+精确返回非负整数平方根向下取整的 T 值 r，满足无界数学关系 r² <= value < (r+1)²。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
-template <class T>
-[[nodiscard]] constexpr auto integer_sqrt(T value) noexcept;
-}  // namespace asc
+template<class T>
+[[nodiscard]] constexpr T integer_sqrt(T value) noexcept;
+}
 ```
 
 ## 参数说明
 
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 输入的整数或枚举类型（不含bool）；枚举按底层整数运算，返回该底层整数类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `value` | 输入 | 待求整数平方根的整数值；有符号类型时不得为负。 |
+参数名与类型顺序见上述原型。T 为输入及返回的整数类型；E 仅表示指数类型，不与底数做通常算术转换。
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `auto` | 返回满足`r * r <= value`的最大整数`r`。 |
+`T` — 精确返回非负整数平方根向下取整的 T 值 r，满足无界数学关系 r² <= value < (r+1)²。
 
 ## 约束说明
 
-- T必须为非bool的整数或枚举类型。
-- 有符号类型的value不得为负数。
+输入非负。0和1返回自身；类型最大值也有精确整数结果。定义中的平方不要求由 T 存储；实现不依赖浮点平方根后截断。
+
+整数模板仅支持不超过64位的 signed char、short、int、long、long long 及五种对应无符号类型；别名按实际类型判定。bool、普通char、其他字符、枚举、浮点和低精度包装不参与重载。二元参数同T，混合类型先由调用方确认值可表示再统一转换。
+
+违反数值前提时，运行期行为未定义；此类调用不是核心常量表达式，要求常量结果时诊断。支持C++17/20的constexpr、noexcept；返回T不随整数提升变化。适用于Host、950PR/950DT的SIMT及普通SIMD标量控制代码。
 
 ## 调用示例
-
-以下片段选用具体整数实参展示接口调用。
 
 ```cpp
 #include <asc/cmath>
 
-decltype(auto) example()
+constexpr bool verify_example()
 {
-    return asc::integer_sqrt(9u);
-}
-
-bool verify_example()
-{
-    return example() == 3;
+    return asc::integer_sqrt(~0ULL) == 4294967295ULL && asc::integer_sqrt(80u) == 8u;
 }
 ```
 

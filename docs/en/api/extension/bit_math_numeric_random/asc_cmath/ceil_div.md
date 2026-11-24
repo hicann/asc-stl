@@ -28,63 +28,44 @@
 
 Header: `<asc/cmath>`.
 
-`asc::ceil_div` computes the integer quotient rounded toward positive infinity, that is, the smallest integer not less than `a / b`.
+Returns the exact integer quotient rounded toward positive infinity, for all signed operand combinations.
 
 ## Function Prototype
 
 ```cpp
 namespace asc {
-template <class T, class U>
-[[nodiscard]] constexpr auto ceil_div(T a, U b) noexcept;
-}  // namespace asc
+template<class T>
+[[nodiscard]] constexpr T ceil_div(T a, T b) noexcept;
+}
 ```
 
 ## Parameters
 
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `T` | Integer or enumeration type of the dividend. |
-| `U` | Integer or enumeration type of the divisor. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `a` | Input | Dividend of the integer quotient. |
-| `b` | Input | Divisor of the integer quotient; must not be 0. |
+Parameter names, types and order are shown in the prototype. T is the integer input/result type; E is an independently selected exponent type, without usual arithmetic conversion with the base.
 
 ## Return Value
 
-| Return type | Description |
-| --- | --- |
-| `auto` | Returns the computed integer quotient rounded toward positive infinity, that is, the smallest integer not less than `a / b`. |
+`T` — Returns the exact integer quotient rounded toward positive infinity, for all signed operand combinations.
 
 ## Constraints
 
-- T and U must be integer or enumeration types other than bool.
-- b must be positive.
-- a of a signed type must not be negative.
+The divisor is nonzero and the final result is representable in T. An unrepresentable minimum/-1 quotient violates the precondition. Zero divided by a nonzero value is zero. A representable result does not require a+b-1 to be representable.
+
+Integer templates accept only signed char, short, int, long, long long and their five unsigned counterparts, with at most 64 value/sign bits. Aliases follow their actual type. bool, plain/other character types, enums, floating types and low-precision wrappers are excluded by substitution. Binary operands have the same T; explicitly unify representable values before calling.
+
+A violated numerical precondition has undefined runtime behavior and cannot form a core constant expression. C++17/20 constexpr and noexcept are supported. Integer promotion does not change the T result. Available on Host, 950PR/950DT SIMT and ordinary SIMD scalar control code.
 
 ## Example
-
-The following snippet demonstrates the interface call with concrete integer arguments.
 
 ```cpp
 #include <asc/cmath>
 
-decltype(auto) example()
+constexpr bool verify_example()
 {
-    return asc::ceil_div(5, 2);
-}
-
-bool verify_example()
-{
-    return example() == 3;
+    return asc::ceil_div(-7, 3) == -2 && asc::ceil_div(7, -3) == -2;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_cmath.md)
+- [Header API list](asc_cmath.md)

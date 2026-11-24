@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include <asc/cmath>
+#include <asc/std/bit>
 #include <asc/work_queue>
 
 int asc_stl_b026_consumer_b()
@@ -21,7 +22,7 @@ int asc_stl_b026_consumer_b()
     // The same inline entities are defined in both translation units; the
     // ODR link check relies on the vocabulary staying constexpr/inline.
     static_assert(asc::floor_div(-7, 3) == -3);
-    static_assert(asc::integer_log2(255) == 7);
+    static_assert((asc::std::bit_width(255u) - 1) == 7);
     constexpr asc::work_chunk<unsigned long long> wide{0, 1ull << 32};
     static_assert(wide.size() == 1ull << 32);
     double sine = 1.0;

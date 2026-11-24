@@ -3107,7 +3107,6 @@
     - [头文件asc/cmath](extension/bit_math_numeric_random/asc_cmath/asc_cmath.md)
       - [asc::ceil_div](extension/bit_math_numeric_random/asc_cmath/ceil_div.md)
       - [asc::floor_div](extension/bit_math_numeric_random/asc_cmath/floor_div.md)
-      - [asc::integer_log2](extension/bit_math_numeric_random/asc_cmath/integer_log2.md)
       - [asc::integer_pow](extension/bit_math_numeric_random/asc_cmath/integer_pow.md)
       - [asc::integer_sqrt](extension/bit_math_numeric_random/asc_cmath/integer_sqrt.md)
       - [asc::mul_hi](extension/bit_math_numeric_random/asc_cmath/mul_hi.md)

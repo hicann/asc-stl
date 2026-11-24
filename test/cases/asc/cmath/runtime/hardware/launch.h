@@ -20,7 +20,9 @@
 #include <acl/acl.h>
 #include <cstdint>
 
-void launch_asc_stl_b026_cmath_simd(std::uint32_t*, void*);
-void launch_asc_stl_b026_cmath_simt(std::uint32_t*, void*);
+void launch_asc_stl_b026_cmath_simd(float*, const unsigned long long*, const float*, unsigned, void*);
+void launch_asc_stl_b026_cmath_simt(float*, const unsigned long long*, const float*, unsigned, void*);
+
+void launch_asc_stl_cmath_trig(float*, const float*, unsigned, void*);
 
 #endif  // ASC_STL_TEST_HARDWARE_LAUNCH_F0B1A7B438F3_H

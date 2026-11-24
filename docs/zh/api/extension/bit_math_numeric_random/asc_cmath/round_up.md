@@ -28,62 +28,41 @@
 
 头文件路径为：`<asc/cmath>`。
 
-`asc::round_up`将整数`a`向上舍入到不小于它的最小`b`的整数倍。
+返回不小于非负整数 a 的最小正整数 b 的倍数。b 可以是任意正整数。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
-template <class T, class U>
-[[nodiscard]] constexpr auto round_up(T a, U b) noexcept;
-}  // namespace asc
+template<class T>
+[[nodiscard]] constexpr T round_up(T a, T b) noexcept;
+}
 ```
 
 ## 参数说明
 
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 被舍入值的整数或枚举类型。 |
-| `U` | 舍入粒度的整数或枚举类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `a` | 输入 | 待向上取整的被舍入值。 |
-| `b` | 输入 | 舍入粒度（对齐步长）；不得为0。 |
+参数名与类型顺序见上述原型。T 为输入及返回的整数类型；E 仅表示指数类型，不与底数做通常算术转换。
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `auto` | 返回输入值按接口规定运算后的数值结果。 |
+`T` — 返回不小于非负整数 a 的最小正整数 b 的倍数。b 可以是任意正整数。
 
 ## 约束说明
 
-- 有符号输入须满足`a >= 0`且`b > 0`；中间乘法及结果须可表示。本接口不承诺负被除数的数学向上取整。
+a 非负、b 为正且最终结果可表示。a 为0时返回0，已为倍数时保持原值；不要求 b 为二的幂，也不要求 a+b-1 可表示。
 
-- T和U必须为非bool的整数或枚举类型。
-- b必须为正数。
-- 结果必须可表示。
+整数模板仅支持不超过64位的 signed char、short、int、long、long long 及五种对应无符号类型；别名按实际类型判定。bool、普通char、其他字符、枚举、浮点和低精度包装不参与重载。二元参数同T，混合类型先由调用方确认值可表示再统一转换。
+
+违反数值前提时，运行期行为未定义；此类调用不是核心常量表达式，要求常量结果时诊断。支持C++17/20的constexpr、noexcept；返回T不随整数提升变化。适用于Host、950PR/950DT的SIMT及普通SIMD标量控制代码。
 
 ## 调用示例
-
-以下片段选用具体整数实参展示接口调用。
 
 ```cpp
 #include <asc/cmath>
 
-decltype(auto) example()
+constexpr bool verify_example()
 {
-    return asc::round_up(5u, 4u);
-}
-
-bool verify_example()
-{
-    return example() == 8u;
+    return asc::round_up(1000u, 192u) == 1152u && asc::round_up(0u, 7u) == 0u;
 }
 ```
 

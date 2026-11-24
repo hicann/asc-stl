@@ -28,57 +28,41 @@
 
 头文件路径为：`<asc/cmath>`。
 
-`asc::mul_hi`返回两个同类型无符号整数乘积的高半部分。
+令 W 为 T 的无符号值位数，返回完整数学乘积 floor(left*right/2^W)，即乘积的高 W 位。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
-template <class T>
+template<class T>
 [[nodiscard]] constexpr T mul_hi(T left, T right) noexcept;
-}  // namespace asc
+}
 ```
 
 ## 参数说明
 
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 无符号整数类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left` | 输入 | 参与乘法的无符号整数左操作数。 |
-| `right` | 输入 | 参与乘法的无符号整数右操作数。 |
+参数名与类型顺序见上述原型。T 为输入及返回的整数类型；E 仅表示指数类型，不与底数做通常算术转换。
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `T` | 返回两个同类型无符号整数乘积的高半部分。 |
+`T` — 令 W 为 T 的无符号值位数，返回完整数学乘积 floor(left*right/2^W)，即乘积的高 W 位。
 
 ## 约束说明
 
-- T必须为非bool的无符号整数类型，两个操作数类型必须相同。
+T 限五种受支持的标准无符号整数，两个操作数同类型。完整乘积可占2W位，无须放入 T；无需 Device 128位整数。窄整数按原类型的 W 定义高半部分。
+
+整数模板仅支持不超过64位的 signed char、short、int、long、long long 及五种对应无符号类型；别名按实际类型判定。bool、普通char、其他字符、枚举、浮点和低精度包装不参与重载。二元参数同T，混合类型先由调用方确认值可表示再统一转换。
+
+违反数值前提时，运行期行为未定义；此类调用不是核心常量表达式，要求常量结果时诊断。支持C++17/20的constexpr、noexcept；返回T不随整数提升变化。适用于Host、950PR/950DT的SIMT及普通SIMD标量控制代码。
 
 ## 调用示例
-
-以下片段选用具体整数实参展示接口调用。
 
 ```cpp
 #include <asc/cmath>
 
-decltype(auto) example()
+constexpr bool verify_example()
 {
-    return asc::mul_hi(0x10000u, 0x10000u);
-}
-
-bool verify_example()
-{
-    return example() == 1u;
+    return asc::mul_hi(~0ULL, ~0ULL) == ~0ULL - 1;
 }
 ```
 

@@ -11279,7 +11279,7 @@
       20
     ],
     "mode": "host",
-    "expression": "example()"
+    "expression": "verify_example()"
   },
   "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/saturating_add.md": {
     "standards": [
@@ -11438,7 +11438,7 @@
       20
     ],
     "mode": "host",
-    "expression": "example()"
+    "expression": "verify_example()"
   },
   "docs/zh/api/runtime/memory_resources_and_buffers/asc_memory_resource/device_memory_resource_allocate.md": {
     "standards": [
@@ -18796,14 +18796,6 @@
     "expression": "verify_example()"
   },
   "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/floor_div.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "verify_example()"
-  },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/integer_log2.md": {
     "standards": [
       17,
       20

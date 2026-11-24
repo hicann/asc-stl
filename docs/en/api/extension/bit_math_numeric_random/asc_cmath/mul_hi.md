@@ -28,60 +28,44 @@
 
 Header: `<asc/cmath>`.
 
-`asc::mul_hi` returns the high half of the product of two unsigned integers of the same type.
+For W unsigned value bits of T, returns floor(left*right/2^W), the high W bits of the full mathematical product.
 
 ## Function Prototype
 
 ```cpp
 namespace asc {
-template <class T>
+template<class T>
 [[nodiscard]] constexpr T mul_hi(T left, T right) noexcept;
-}  // namespace asc
+}
 ```
 
 ## Parameters
 
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `T` | Unsigned integer type. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `left` | Input | Unsigned integer left operand of the multiplication. |
-| `right` | Input | Unsigned integer right operand of the multiplication. |
+Parameter names, types and order are shown in the prototype. T is the integer input/result type; E is an independently selected exponent type, without usual arithmetic conversion with the base.
 
 ## Return Value
 
-| Return type | Description |
-| --- | --- |
-| `T` | Returns the high half of the product of two unsigned integers of the same type. |
+`T` — For W unsigned value bits of T, returns floor(left*right/2^W), the high W bits of the full mathematical product.
 
 ## Constraints
 
-- T must be an unsigned integer type other than bool, and the two operands must have the same type.
+Both inputs have the same supported standard unsigned integer type. The complete product may use 2W bits and need not fit T. Device 128-bit integers are not required. Narrow inputs use their original width W.
+
+Integer templates accept only signed char, short, int, long, long long and their five unsigned counterparts, with at most 64 value/sign bits. Aliases follow their actual type. bool, plain/other character types, enums, floating types and low-precision wrappers are excluded by substitution. Binary operands have the same T; explicitly unify representable values before calling.
+
+A violated numerical precondition has undefined runtime behavior and cannot form a core constant expression. C++17/20 constexpr and noexcept are supported. Integer promotion does not change the T result. Available on Host, 950PR/950DT SIMT and ordinary SIMD scalar control code.
 
 ## Example
-
-The following snippet demonstrates the interface call with concrete integer arguments.
 
 ```cpp
 #include <asc/cmath>
 
-decltype(auto) example()
+constexpr bool verify_example()
 {
-    return asc::mul_hi(0x10000u, 0x10000u);
-}
-
-bool verify_example()
-{
-    return example() == 1u;
+    return asc::mul_hi(~0ULL, ~0ULL) == ~0ULL - 1;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_cmath.md)
+- [Header API list](asc_cmath.md)

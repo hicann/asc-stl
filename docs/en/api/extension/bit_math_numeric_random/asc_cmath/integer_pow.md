@@ -28,59 +28,44 @@
 
 Header: `<asc/cmath>`.
 
-`asc::integer_pow` computes `base` raised to the power of `exponent` using integer arithmetic.
+Computes an exact nonnegative integer power, returning the base type T.
 
 ## Function Prototype
 
 ```cpp
 namespace asc {
-template <class T, class E>
+template<class T, class E>
 [[nodiscard]] constexpr T integer_pow(T base, E exponent) noexcept;
-}  // namespace asc
+}
 ```
 
 ## Parameters
 
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `T` | Integer or enumeration type of the base and the power result. |
-| `E` | Integer or enumeration type of the exponent. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `base` | Input | Base of the integer power operation. |
-| `exponent` | Input | Exponent of the integer power operation; takes a non-negative integer. |
+Parameter names, types and order are shown in the prototype. T is the integer input/result type; E is an independently selected exponent type, without usual arithmetic conversion with the base.
 
 ## Return Value
 
-| Return type | Description |
-| --- | --- |
-| `T` | Returns the numeric result of the operation on the input values as specified by this interface. |
+`T` — Computes an exact nonnegative integer power, returning the base type T.
 
 ## Constraints
 
-- T and E must be integer or enumeration types other than bool.
-- A signed exponent must not be negative.
-- The result must be representable.
+E is nonnegative and the final mathematical result is representable in T. Exponent zero returns one, including 0^0; positive powers of zero return zero. Base one stays one and base minus one follows exponent parity. Negative exponents and overflow violate the preconditions, including unsigned overflow. No unused final square invalidates an otherwise valid result.
+
+Integer templates accept only signed char, short, int, long, long long and their five unsigned counterparts, with at most 64 value/sign bits. Aliases follow their actual type. bool, plain/other character types, enums, floating types and low-precision wrappers are excluded by substitution. Binary operands have the same T; explicitly unify representable values before calling.
+
+A violated numerical precondition has undefined runtime behavior and cannot form a core constant expression. C++17/20 constexpr and noexcept are supported. Integer promotion does not change the T result. Available on Host, 950PR/950DT SIMT and ordinary SIMD scalar control code.
 
 ## Example
-
-The following Host example uses concrete inputs and checks the result.
 
 ```cpp
 #include <asc/cmath>
 
-bool example()
+constexpr bool verify_example()
 {
-    const auto result = asc::integer_pow(2, 3);
-    return result == 8;
+    return asc::integer_pow(-2, 7u) == -128 && asc::integer_pow(0, 0) == 1;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_cmath.md)
+- [Header API list](asc_cmath.md)

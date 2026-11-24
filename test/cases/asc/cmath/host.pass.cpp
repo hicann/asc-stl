@@ -14,119 +14,178 @@
  * limitations under the License.
  */
 
-#include <asc/cmath>
+#include <asc/std/bit>
+#include <asc/std/cmath>
 
-#include <cassert>
+#include <climits>
+#include <cmath>
 #include <cstdint>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
 #include <limits>
+#include <string>
+#include <type_traits>
+#include <utility>
+
+#include "../../../support/cmath_contracts.h"
+
+namespace p = asc;
+enum number { one = 1 };
+enum class scoped_number : unsigned { one = 1 };
+template <class A, class B, class = void>
+struct can_divide : std::false_type {};
+template <class A, class B>
+struct can_divide<A, B, std::void_t<decltype(p::ceil_div(std::declval<A>(), std::declval<B>()))>> : std::true_type {};
+static_assert(can_divide<int, int>::value);
+static_assert(!can_divide<int, unsigned>::value);
+static_assert(!can_divide<short, int>::value);
+static_assert(!can_divide<bool, bool>::value);
+static_assert(!can_divide<char, char>::value);
+static_assert(!can_divide<wchar_t, wchar_t>::value);
+static_assert(!can_divide<number, number>::value);
+static_assert(!can_divide<scoped_number, scoped_number>::value);
+static_assert(!can_divide<float, float>::value);
+static_assert(std::is_same_v<decltype(p::ceil_div(short{}, short{1})), short>);
+static_assert(std::is_same_v<decltype(p::integer_sqrt(1ULL)), unsigned long long>);
+static_assert(p::ceil_div(-7, 3) == -2 && p::floor_div(-7, 3) == -3);
+static_assert(p::ceil_div(7, -3) == -2 && p::floor_div(7, -3) == -3);
+static_assert(p::ceil_div(-7, -3) == 3 && p::floor_div(-7, -3) == 2);
+static_assert(p::ceil_div(ULLONG_MAX, 2ULL) == (1ULL << 63));
+static_assert(p::round_up(ULLONG_MAX - 1, 2ULL) == ULLONG_MAX - 1);
+static_assert(p::round_up(17, 6) == 18);
+static_assert(p::integer_pow(0, 0) == 1 && p::integer_pow(0, 4U) == 0);
+static_assert(p::integer_pow(-1, ULLONG_MAX) == -1);
+static_assert(p::integer_pow(LLONG_MIN, 1) == LLONG_MIN);
+static_assert(p::integer_pow(-2LL, 63U) == LLONG_MIN);
+static_assert(p::integer_pow<signed char>(-2, static_cast<unsigned short>(7)) == -128);
+static_assert(p::integer_sqrt(ULLONG_MAX) == 4294967295ULL);
+static_assert(p::integer_sqrt(18446744065119617025ULL) == 4294967295ULL);
+static_assert(p::integer_sqrt(18446744065119617024ULL) == 4294967294ULL);
+static_assert(p::mul_hi(ULLONG_MAX, ULLONG_MAX) == ULLONG_MAX - 1);
+static_assert(p::mul_hi(static_cast<unsigned char>(255), static_cast<unsigned char>(255)) == 254);
+static_assert(asc::std::bit_width(0ULL) == 0);
+static_assert(asc::std::bit_width(ULLONG_MAX) == 64);
+static_assert(std::is_same_v<decltype(asc::std::bit_width(1ULL)), int>);
+static_assert(std::is_same_v<decltype(asc::std::sqrt(1)), double>);
+static_assert(std::is_same_v<decltype(asc::std::pow(2, 3)), double>);
+static_assert(std::is_same_v<decltype(asc::std::ceil(1.0F)), float>);
+
+// Observe normal language conversion of the three proposed non-template forms.
+template <class V, class = void>
+struct can_use_double_output : std::false_type {};
+template <class V>
+struct can_use_double_output<V,
+    std::void_t<decltype(asc::sincos(std::declval<V>(), static_cast<double*>(nullptr), static_cast<double*>(nullptr)))>>
+    : std::true_type {};
+static_assert(can_use_double_output<int>::value && can_use_double_output<bool>::value);
+static_assert(can_use_double_output<number>::value && !can_use_double_output<scoped_number>::value);
+
+template <class T>
+T read_integer(const std::string& s)
+{
+    if constexpr (std::is_signed_v<T>)
+        return static_cast<T>(std::stoll(s));
+    else
+        return static_cast<T>(std::stoull(s));
+}
+template <class T>
+bool check(char op, const std::string& as, const std::string& bs, const std::string& expected)
+{
+    const T a = read_integer<T>(as), e = read_integer<T>(expected);
+    const T b = (op == 'p' || op == 's') ? T{0} : read_integer<T>(bs);
+    T actual{};
+    switch (op) {
+        case 'c':
+            actual = p::ceil_div(a, b);
+            break;
+        case 'f':
+            actual = p::floor_div(a, b);
+            break;
+        case 'r':
+            actual = p::round_up(a, b);
+            break;
+        case 'p':
+            actual = p::integer_pow(a, std::stoull(bs));
+            break;
+        case 's':
+            actual = p::integer_sqrt(a);
+            break;
+        case 'm':
+            if constexpr (std::is_unsigned_v<T>)
+                actual = p::mul_hi(a, b);
+            break;
+    }
+    return actual == e;
+}
+
+template <class T>
+bool check_floating()
+{
+    const T inputs[] = {T{0}, -T{0}, T{0.5}, T{1}, T{-1}, T{71476.0625}, std::numeric_limits<T>::max(),
+        std::numeric_limits<T>::infinity(), -std::numeric_limits<T>::infinity(), std::numeric_limits<T>::quiet_NaN()};
+    for (T value : inputs) {
+        T sine{}, cosine{};
+        asc::sincos(value, &sine, &cosine);
+        if (!std::isfinite(value)) {
+            if (!std::isnan(sine) || !std::isnan(cosine))
+                return false;
+        } else if (value == T{0}) {
+            if (sine != T{0} || std::signbit(sine) != std::signbit(value) || cosine != T{1})
+                return false;
+        } else {
+            const T tolerance = 8 * std::numeric_limits<T>::epsilon();
+            if (std::abs(sine - std::sin(value)) > tolerance || std::abs(cosine - std::cos(value)) > tolerance)
+                return false;
+        }
+    }
+    return true;
+}
+bool floating_contracts()
+{
+    float sine{}, cosine{};
+    asc::sincos(true, &sine, &cosine);
+    if (sine != std::sin(1.0F) || cosine != std::cos(1.0F))
+        return false;
+    return check_floating<float>() && check_floating<double>() && check_floating<long double>();
+}
 
 int main()
 {
-    // ceil_div: positive operands round towards positive infinity.
-    assert(asc::ceil_div(7, 3) == 3);
-    assert(asc::ceil_div(6, 3) == 2);
-    assert(asc::ceil_div(0, 5) == 0);
-    assert(asc::ceil_div(1, 5) == 1);
-    assert(asc::ceil_div(7u, 2u) == 4u);
-    assert(asc::ceil_div(std::uint64_t{0xFFFFFFFFFFFFFFF5ull}, std::uint64_t{10ull}) ==
-        std::uint64_t{0x1999999999999999ull});
-    assert(asc::ceil_div(std::numeric_limits<std::int64_t>::max(), std::int64_t{1}) ==
-        std::numeric_limits<std::int64_t>::max());
-
-    // Enumerations mix with integers through their underlying value.
-    enum Color : unsigned int { RED = 7 };
-    enum Level : int { LOW = 3 };
-    assert(asc::ceil_div(RED, LOW) == 3);
-    assert(asc::ceil_div(7, LOW) == 3);
-    assert(asc::ceil_div(RED, 3) == 3);
-
-    // floor_div: truncation rounds towards negative infinity.
-    assert(asc::floor_div(7, 3) == 2);
-    assert(asc::floor_div(-7, 3) == -3);
-    assert(asc::floor_div(6, 3) == 2);
-    assert(asc::floor_div(-6, 3) == -2);
-    assert(asc::floor_div(std::int64_t{-1}, std::int64_t{1}) == std::int64_t{-1});
-    assert(asc::floor_div(7u, 3u) == 2u);
-
-    // round_up: smallest multiple of b not below a.
-    assert(asc::round_up(7, 3) == 9);
-    assert(asc::round_up(6, 3) == 6);
-    assert(asc::round_up(0, 4) == 0);
-    assert(asc::round_up(1, 4) == 4);
-    assert(asc::round_up(std::uint64_t{1000}, std::uint64_t{256}) == std::uint64_t{1024});
-
-    // integer_log2: floor of the base-2 logarithm.
-    assert(asc::integer_log2(1) == 0);
-    assert(asc::integer_log2(2) == 1);
-    assert(asc::integer_log2(3) == 1);
-    assert(asc::integer_log2(4) == 2);
-    assert(asc::integer_log2(255) == 7);
-    assert(asc::integer_log2(std::uint64_t{1ull << 63}) == 63);
-    assert(asc::integer_log2(std::numeric_limits<std::uint32_t>::max()) == 31);
-
-    // integer_sqrt: the largest r with r * r <= value.
-    assert(asc::integer_sqrt(0) == 0);
-    assert(asc::integer_sqrt(1) == 1);
-    assert(asc::integer_sqrt(3) == 1);
-    assert(asc::integer_sqrt(4) == 2);
-    assert(asc::integer_sqrt(24) == 4);
-    assert(asc::integer_sqrt(25) == 5);
-    const std::uint64_t root = asc::integer_sqrt(std::numeric_limits<std::uint64_t>::max());
-    assert(root == 0xFFFFFFFFull);
-    assert(root * root <= std::numeric_limits<std::uint64_t>::max());
-
-    // integer_pow: base raised to a non-negative exponent.
-    assert(asc::integer_pow(2, 10) == 1024);
-    assert(asc::integer_pow(3, 0) == 1);
-    assert(asc::integer_pow(0, 0) == 1);
-    assert(asc::integer_pow(5u, 3u) == 125u);
-    assert(asc::integer_pow(std::int64_t{-2}, 3) == -8);
-    assert(asc::integer_pow(std::int64_t{-2}, 4) == 16);
-    static_assert(asc::integer_pow<int>(50000, 1) == 50000);
-
-    // mul_hi: high half of the unsigned product, no __int128 involved.
-    assert(asc::mul_hi(std::uint32_t{0xFFFFFFFFu}, std::uint32_t{0xFFFFFFFFu}) == std::uint32_t{0xFFFFFFFEu});
-    assert(asc::mul_hi(std::uint32_t{0xFFFFFFFFu}, std::uint32_t{1u}) == 0u);
-    assert(asc::mul_hi(std::uint64_t{0xFFFFFFFFFFFFFFFFull}, std::uint64_t{0xFFFFFFFFFFFFFFFFull}) ==
-        std::uint64_t{0xFFFFFFFFFFFFFFFEull});
-    assert(asc::mul_hi(std::uint64_t{0x100000000ull}, std::uint64_t{0x100000000ull}) == std::uint64_t{1ull});
-    assert(asc::mul_hi(std::uint8_t{0xFFu}, std::uint8_t{0xFFu}) == std::uint8_t{0xFEu});
-
-    // sincos writes both results through output pointers on Host.
-    float sine_f = 0.0f;
-    float cosine_f = 0.0f;
-    asc::sincos(0.0f, &sine_f, &cosine_f);
-    assert(sine_f == 0.0f && cosine_f == 1.0f);
-    asc::sincos(3.14159265f / 2.0f, &sine_f, &cosine_f);
-    assert(sine_f > 0.999f && sine_f < 1.001f);
-    assert(cosine_f > -0.001f && cosine_f < 0.001f);
-
-    double sine_d = 0.0;
-    double cosine_d = 0.0;
-    asc::sincos(1.0, &sine_d, &cosine_d);
-    assert(sine_d > 0.841 && sine_d < 0.842);
-    assert(cosine_d > 0.540 && cosine_d < 0.541);
-
-    long double sine_l = 0.0L;
-    long double cosine_l = 0.0L;
-    asc::sincos(0.5L, &sine_l, &cosine_l);
-    assert(sine_l > 0.479L && sine_l < 0.480L);
-    assert(cosine_l > 0.877L && cosine_l < 0.878L);
-
-    // The integer convenience overload converts through double on Host only.
-    double sine_i = 0.0;
-    double cosine_i = 0.0;
-    asc::sincos(1, &sine_i, &cosine_i);
-    assert(sine_i > 0.841 && sine_i < 0.842);
-    assert(cosine_i > 0.540 && cosine_i < 0.541);
-
-    // Every integer tool stays a constant expression.
-    static_assert(asc::ceil_div(7, 3) == 3);
-    static_assert(asc::floor_div(-7, 3) == -3);
-    static_assert(asc::round_up(7, 4) == 8);
-    static_assert(asc::integer_log2(255) == 7);
-    static_assert(asc::integer_sqrt(24) == 4);
-    static_assert(asc::integer_pow(2, 10) == 1024);
-    static_assert(asc::mul_hi(std::uint8_t{0xFF}, std::uint8_t{0xFF}) == std::uint8_t{0xFE});
-    return 0;
+    if (asc_stl_cmath_test::evaluate(~0ULL, -7) != 0)
+        return 1;
+    if (!floating_contracts())
+        return 1;
+    const std::string source = __FILE__;
+    std::ifstream input(source.substr(0, source.find_last_of("/\\")) + "/integer-goldens.txt");
+    if (!input)
+        return 1;
+    std::string type, a, b, expected;
+    char op;
+    std::size_t count = 0;
+    while (input >> type >> op >> a >> b >> expected) {
+        bool ok = false;
+#define CMATH_CASE(KEY, T)                 \
+    if (type == KEY) {                     \
+        ok = check<T>(op, a, b, expected); \
+    }
+        CMATH_CASE("i8", signed char);
+        CMATH_CASE("u8", unsigned char);
+        CMATH_CASE("i16", short);
+        CMATH_CASE("u16", unsigned short);
+        CMATH_CASE("i32", int);
+        CMATH_CASE("u32", unsigned int);
+        CMATH_CASE("il", long);
+        CMATH_CASE("ul", unsigned long);
+        CMATH_CASE("ill", long long);
+        CMATH_CASE("ull", unsigned long long);
+#undef CMATH_CASE
+        if (!ok) {
+            std::cerr << type << ' ' << op << ' ' << a << ' ' << b << '\n';
+            return 1;
+        }
+        ++count;
+    }
+    std::cout << "Exact integer oracle cases: " << count << '\n';
+    return count >= 1000 ? 0 : 1;
 }

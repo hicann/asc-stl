@@ -35,6 +35,12 @@ set(ASC_STL_MANIFEST "${ASC_STL_TEST_ROOT}/metadata/headers.json")
 set(ASC_STL_INCLUDE_ROOT "${PROJECT_SOURCE_DIR}/include")
 set(ASC_STL_CASES_ROOT "${ASC_STL_TEST_ROOT}/cases")
 
+add_test(NAME compatibility.cmath.references
+    COMMAND ${Python3_EXECUTABLE} ${ASC_STL_TEST_ROOT}/scripts/verify_cmath_goldens.py
+        --root ${PROJECT_SOURCE_DIR})
+set_tests_properties(compatibility.cmath.references
+    PROPERTIES LABELS "static-rules;affected-regression;nightly" TIMEOUT 30)
+
 add_test(NAME gate.product-version
     COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/check_product_version.py)
 add_test(NAME compatibility.product-version.records
@@ -1028,6 +1034,23 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
     set(w08_simt_cannsim_application ${w08_simt_cannsim_build_root}/asc_stl_w08_cannsim)
     set(w13_w14_simd_cannsim_application ${w13_w14_simd_cannsim_build_root}/asc_stl_w13_w14_cannsim)
     set(w13_w14_simt_cannsim_application ${w13_w14_simt_cannsim_build_root}/asc_stl_w13_w14_cannsim)
+    foreach(cmath_mode IN ITEMS simd simt)
+        set(cmath_build "${CMAKE_CURRENT_BINARY_DIR}/cmath-${cmath_mode}-cannsim")
+        add_custom_target(asc_stl_cmath_${cmath_mode}_cannsim_build
+            COMMAND ${CMAKE_COMMAND} -S "${ASC_STL_CASES_ROOT}/asc/cmath/runtime/cannsim" -B ${cmath_build}
+                -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
+                -DASC_STL_CXX_STANDARD=${ASC_STL_TEST_CXX_STANDARD}
+                -DASC_STL_CMATH_MODE=${cmath_mode} -DCMAKE_BUILD_TYPE=Release
+            COMMAND ${CMAKE_COMMAND} --build ${cmath_build} --target asc_stl_cmath_cannsim -j2)
+        add_dependencies(asc_stl_cannsim_tests asc_stl_cmath_${cmath_mode}_cannsim_build)
+        add_test(NAME semantic.cannsim.asc.cmath.${cmath_mode}
+            COMMAND ${cannsim_runner} ${ASC_STL_CANNSIM_EXECUTABLE} ${cmath_build}/asc_stl_cmath_cannsim
+                ${ASC_STL_CANNSIM_SOC} ${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/cmath-${cmath_mode}
+                ${cmath_build} ASC_STL_B026_CMATH_HARDWARE_PASS)
+        set_tests_properties(semantic.cannsim.asc.cmath.${cmath_mode}
+            PROPERTIES LABELS "cannsim-runtime;affected-regression;nightly"
+                FIXTURES_REQUIRED asc_stl_cannsim_ready RUN_SERIAL TRUE)
+    endforeach()
     add_test(
         NAME cannsim.smoke
         COMMAND ${cannsim_runner} ${ASC_STL_CANNSIM_EXECUTABLE} ${cannsim_application}

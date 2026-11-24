@@ -28,60 +28,44 @@
 
 Header: `<asc/cmath>`.
 
-`asc::integer_sqrt` returns the largest integer `r` satisfying `r * r <= value`.
+Returns the exact floor square root r in T, satisfying the unbounded mathematical relation r² <= value < (r+1)².
 
 ## Function Prototype
 
 ```cpp
 namespace asc {
-template <class T>
-[[nodiscard]] constexpr auto integer_sqrt(T value) noexcept;
-}  // namespace asc
+template<class T>
+[[nodiscard]] constexpr T integer_sqrt(T value) noexcept;
+}
 ```
 
 ## Parameters
 
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `T` | Integer or enumeration type of the input (excluding bool); an enumeration is operated on as its underlying integer, and that underlying integer type is returned. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `value` | Input | Integer value whose integer square root is to be computed; must not be negative for signed types. |
+Parameter names, types and order are shown in the prototype. T is the integer input/result type; E is an independently selected exponent type, without usual arithmetic conversion with the base.
 
 ## Return Value
 
-| Return type | Description |
-| --- | --- |
-| `auto` | Returns the largest integer `r` satisfying `r * r <= value`. |
+`T` — Returns the exact floor square root r in T, satisfying the unbounded mathematical relation r² <= value < (r+1)².
 
 ## Constraints
 
-- T must be an integer or enumeration type other than bool.
-- value of a signed type must not be negative.
+The input is nonnegative. Zero and one return themselves. The maximum input has an exact integer result; neither square in the definition must fit in T. Floating-point sqrt followed by truncation is not the implementation contract.
+
+Integer templates accept only signed char, short, int, long, long long and their five unsigned counterparts, with at most 64 value/sign bits. Aliases follow their actual type. bool, plain/other character types, enums, floating types and low-precision wrappers are excluded by substitution. Binary operands have the same T; explicitly unify representable values before calling.
+
+A violated numerical precondition has undefined runtime behavior and cannot form a core constant expression. C++17/20 constexpr and noexcept are supported. Integer promotion does not change the T result. Available on Host, 950PR/950DT SIMT and ordinary SIMD scalar control code.
 
 ## Example
-
-The following snippet demonstrates the interface call with concrete integer arguments.
 
 ```cpp
 #include <asc/cmath>
 
-decltype(auto) example()
+constexpr bool verify_example()
 {
-    return asc::integer_sqrt(9u);
-}
-
-bool verify_example()
-{
-    return example() == 3;
+    return asc::integer_sqrt(~0ULL) == 4294967295ULL && asc::integer_sqrt(80u) == 8u;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_cmath.md)
+- [Header API list](asc_cmath.md)

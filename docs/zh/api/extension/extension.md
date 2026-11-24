@@ -153,12 +153,11 @@
 | [asc::bitmask](bit_math_numeric_random/asc_bit/bitmask.md) | asc/bit | 函数模板 | C++17+ | Host、AI Core SIMD编程、AI Core SIMT编程 | Ascend 950 |
 | [asc::ceil_div](bit_math_numeric_random/asc_cmath/ceil_div.md) | asc/cmath | 函数模板 | C++17+ | 见各成员或重载说明 | Ascend 950 |
 | [asc::floor_div](bit_math_numeric_random/asc_cmath/floor_div.md) | asc/cmath | 函数模板 | C++17+ | 见各成员或重载说明 | Ascend 950 |
-| [asc::integer_log2](bit_math_numeric_random/asc_cmath/integer_log2.md) | asc/cmath | 函数模板 | C++17+ | 见各成员或重载说明 | Ascend 950 |
 | [asc::integer_pow](bit_math_numeric_random/asc_cmath/integer_pow.md) | asc/cmath | 函数模板 | C++17+ | 见各成员或重载说明 | Ascend 950 |
 | [asc::integer_sqrt](bit_math_numeric_random/asc_cmath/integer_sqrt.md) | asc/cmath | 函数模板 | C++17+ | 见各成员或重载说明 | Ascend 950 |
 | [asc::mul_hi](bit_math_numeric_random/asc_cmath/mul_hi.md) | asc/cmath | 函数模板 | C++17+ | 见各成员或重载说明 | Ascend 950 |
 | [asc::round_up](bit_math_numeric_random/asc_cmath/round_up.md) | asc/cmath | 函数模板 | C++17+ | 见各成员或重载说明 | Ascend 950 |
-| [asc::sincos](bit_math_numeric_random/asc_cmath/sincos.md) | asc/cmath | 函数模板 | C++17+ | 见各成员或重载说明 | Ascend 950 |
+| [asc::sincos](bit_math_numeric_random/asc_cmath/sincos.md) | asc/cmath | 函数重载 | C++17+ | 见各成员或重载说明 | Ascend 950 |
 | [asc::block_all](execution_hierarchy_and_collectives/asc_collectives/block_all.md) | asc/collectives | 函数 | C++17+ | AI Core SIMT编程 | Ascend 950 |
 | [asc::block_any](execution_hierarchy_and_collectives/asc_collectives/block_any.md) | asc/collectives | 函数 | C++17+ | AI Core SIMT编程 | Ascend 950 |
 | [asc::block_broadcast](execution_hierarchy_and_collectives/asc_collectives/block_broadcast.md) | asc/collectives | 函数 | C++17+ | AI Core SIMT编程 | Ascend 950 |

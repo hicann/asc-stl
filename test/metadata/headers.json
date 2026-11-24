@@ -1029,9 +1029,33 @@
       ]
     },
     {
+      "target": "asc/__cmath/integer.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_constant_evaluated.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/is_signed.h",
+        "asc/std/__type_traits/is_unsigned.h",
+        "asc/std/__type_traits/make_unsigned.h",
+        "asc/std/limits"
+      ],
+      "semantic_case": "asc/cmath",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
       "target": "asc/cmath",
       "visibility": "public",
       "dependencies": [
+        "asc/__cmath/integer.h",
         "asc/__cmath/operations.h",
         "asc/__config",
         "asc/std/__cmath/backend.h",
@@ -1040,17 +1064,31 @@
       "negative_cases": [
         "int128_excluded.fail.asc",
         "simd_scalar_sincos.fail.asc",
-        "simt_double_sincos.fail.asc"
+        "simt_double_sincos.fail.asc",
+        "integer_log2_removed.fail.asc",
+        "divide_zero.fail.asc",
+        "divide_min.fail.asc",
+        "round_overflow.fail.asc",
+        "negative_exponent.fail.asc",
+        "power_overflow.fail.asc",
+        "negative_root.fail.asc"
       ],
       "additional_cases": [
-        "int128_excluded.fail.cpp"
+        "int128_excluded.fail.cpp",
+        "integer_log2_removed.fail.cpp",
+        "divide_zero.fail.cpp",
+        "divide_min.fail.cpp",
+        "round_overflow.fail.cpp",
+        "negative_exponent.fail.cpp",
+        "power_overflow.fail.cpp",
+        "negative_root.fail.cpp"
       ],
       "applicability": {
         "host_header": true,
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
+        "cannsim_runtime": true,
         "hardware_runtime": true
       },
       "runtime_case": "asc/cmath"
@@ -19227,6 +19265,7 @@
     "asc/std/__algorithm/lower_bound.h": "runtime/assets.json",
     "asc/std/__algorithm/ranges_copy.h": "runtime/assets.json",
     "asc/numeric_types": "runtime/assets.json",
-    "asc/bit": "runtime/assets.json"
+    "asc/bit": "runtime/assets.json",
+    "asc/cmath": "runtime/assets.json"
   }
 }

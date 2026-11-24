@@ -1,0 +1,15 @@
+{
+  "common": [
+    "hardware/main.cpp",
+    "hardware/kernel_simd.asc",
+    "hardware/kernel_simt.asc",
+    "hardware/launch.h",
+    "hardware/kernel_simt_trig.asc"
+  ],
+  "cannsim": [
+    "cannsim/CMakeLists.txt"
+  ],
+  "hardware": [
+    "hardware/CMakeLists.txt"
+  ]
+}

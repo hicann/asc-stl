@@ -28,119 +28,49 @@
 
 Header: `<asc/cmath>`.
 
-`asc::sincos` computes the sine and cosine of the input value in a single call and writes them to two output pointers respectively.
+Takes an angle in radians, writes its sine to sin_out and cosine to cos_out, and returns void.
 
 ## Function Prototype
-
-### Prototype 1
 
 ```cpp
 namespace asc {
 void sincos(float value, float* sin_out, float* cos_out) noexcept;
-} // namespace asc
-```
-
-### Prototype 2
-
-```cpp
-namespace asc {
 void sincos(double value, double* sin_out, double* cos_out) noexcept;
-} // namespace asc
-```
-
-### Prototype 3
-
-```cpp
-namespace asc {
 void sincos(long double value, long double* sin_out, long double* cos_out) noexcept;
-} // namespace asc
-```
-
-### Prototype 4
-
-```cpp
-namespace asc {
-template<class T> void sincos(T value, double* sin_out, double* cos_out) noexcept;
-} // namespace asc
+}
 ```
 
 ## Parameters
 
-### Parameters of Prototype 1
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `value` | Input | Angle expressed in radians, of type `float`; the sine and cosine of this angle are computed respectively. |
-| `sin_out` | Output | Output parameter that receives the sine of the input value; the pointer must be valid (pointing to a writable `float`). |
-| `cos_out` | Output | Output parameter that receives the cosine of the input value; the pointer must be valid (pointing to a writable `float`). |
-
-### Parameters of Prototype 2
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `value` | Input | Angle expressed in radians, of type `double`; the sine and cosine of this angle are computed respectively. |
-| `sin_out` | Output | Output parameter that receives the sine of the input value; the pointer must be valid (pointing to a writable `double`). |
-| `cos_out` | Output | Output parameter that receives the cosine of the input value; the pointer must be valid (pointing to a writable `double`). |
-
-### Parameters of Prototype 3
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `value` | Input | Angle expressed in radians, of type `long double`; the sine and cosine of this angle are computed respectively. |
-| `sin_out` | Output | Output parameter that receives the sine of the input value; the pointer must be valid (pointing to a writable `long double`). |
-| `cos_out` | Output | Output parameter that receives the cosine of the input value; the pointer must be valid (pointing to a writable `long double`). |
-
-### Parameters of Prototype 4
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `T` | Type of the integer input value; must be an integer or enumeration type. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `value` | Input | Integer value whose sine and cosine are to be computed; converted to double internally before computation. |
-| `sin_out` | Output | Output parameter that receives the sine of the input value; the pointer must be valid (pointing to a writable `double`). |
-| `cos_out` | Output | Output parameter that receives the cosine of the input value; the pointer must be valid (pointing to a writable `double`). |
+`value` is in radians; sin_out and cos_out point to the sine and cosine objects.
 
 ## Return Value
 
-No return value.
+`void` — Takes an angle in radians, writes its sine to sin_out and cosine to cos_out, and returns void.
 
 ## Constraints
 
-- sin_out and cos_out must not be null.
-- The float overload can be called in Host and AI Core SIMT programming; the other overloads can only be called on the Host.
-- The template overload requires T to be an integer or enumeration type.
+Both pointers are nonnull and aligned, referring to live writable objects accessible in the calling execution space. The complete output storage regions do not overlap. SIMT outputs may reside in accessible GM, UB, or thread stack storage; the caller coordinates concurrent access.
+
+Signed zero is preserved for sine, with cosine one. NaN or either infinity produces two NaNs without a payload guarantee. All finite angles, including large values, follow the same-type sin/cos backend accuracy under identical environment and math options. No uniform ULP bound, bitwise equality, or correct rounding is promised. Special values require a configuration preserving NaNs, infinities and signed zero; relaxed math follows the compiler documentation. No common errno or floating-exception behavior is specified. The overloads are not constexpr, and a single call promises neither one instruction nor a speedup.
+
+There is no integer/enum template. Ordinary conversions select the floating overload through the output pointer types; integer conversions may round, bool means zero or one radian, and scoped enums require explicit conversion. Convert low-precision formats explicitly first.
+
+float: Host and 950 SIMT with CANN simt_api/math_functions.h providing sincosf; double: Host only; long double: only when enabled by the Host/standard-layer configuration. No scalar sincos is provided in ordinary SIMD control code.
 
 ## Example
-
-The following Host example uses a concrete object and checks the result of the call.
 
 ```cpp
 #include <asc/cmath>
 
-bool example()
+bool verify_example()
 {
-    float sf = 1.0F, cf = 0.0F;
-    double sd = 1.0, cd = 0.0;
-    long double sl = 1.0L, cl = 0.0L;
-    asc::sincos(0.0F, &sf, &cf);
-    asc::sincos(0.0, &sd, &cd);
-    asc::sincos(0.0L, &sl, &cl);
-    return sf == 0.0F && cf == 1.0F && sd == 0.0 && cd == 1.0 && sl == 0.0L && cl == 1.0L;
+    float sine{}, cosine{};
+    asc::sincos(-0.0F, &sine, &cosine);
+    return sine == 0.0F && asc::std::signbit(sine) && cosine == 1.0F;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_cmath.md)
+- [Header API list](asc_cmath.md)

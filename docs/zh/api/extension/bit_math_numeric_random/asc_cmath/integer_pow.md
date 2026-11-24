@@ -28,56 +28,41 @@
 
 头文件路径为：`<asc/cmath>`。
 
-`asc::integer_pow`使用整数运算计算`base`的`exponent`次幂。
+精确计算整数底数的非负整数次幂，返回底数类型 T。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
-template <class T, class E>
+template<class T, class E>
 [[nodiscard]] constexpr T integer_pow(T base, E exponent) noexcept;
-}  // namespace asc
+}
 ```
 
 ## 参数说明
 
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 底数与幂结果的整数或枚举类型。 |
-| `E` | 指数的整数或枚举类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `base` | 输入 | 整数幂运算的底数。 |
-| `exponent` | 输入 | 整数幂运算的指数；取非负整数。 |
+参数名与类型顺序见上述原型。T 为输入及返回的整数类型；E 仅表示指数类型，不与底数做通常算术转换。
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `T` | 返回输入值按接口规定运算后的数值结果。 |
+`T` — 精确计算整数底数的非负整数次幂，返回底数类型 T。
 
 ## 约束说明
 
-- T和E必须为非bool的整数或枚举类型。
-- 有符号指数不得为负数。
-- 结果必须可表示。
+指数 E 非负，最终数学结果可由 T 表示。指数为0时返回1，包括0^0；底数0的正次幂为0；1恒为1，-1按奇偶返回±1。负指数和越界违例，不按无符号回绕定义结果。最终无用平方不会使合法结果失败。
+
+整数模板仅支持不超过64位的 signed char、short、int、long、long long 及五种对应无符号类型；别名按实际类型判定。bool、普通char、其他字符、枚举、浮点和低精度包装不参与重载。二元参数同T，混合类型先由调用方确认值可表示再统一转换。
+
+违反数值前提时，运行期行为未定义；此类调用不是核心常量表达式，要求常量结果时诊断。支持C++17/20的constexpr、noexcept；返回T不随整数提升变化。适用于Host、950PR/950DT的SIMT及普通SIMD标量控制代码。
 
 ## 调用示例
-
-以下Host示例使用具体输入，并检查结果。
 
 ```cpp
 #include <asc/cmath>
 
-bool example()
+constexpr bool verify_example()
 {
-    const auto result = asc::integer_pow(2, 3);
-    return result == 8;
+    return asc::integer_pow(-2, 7u) == -128 && asc::integer_pow(0, 0) == 1;
 }
 ```
 

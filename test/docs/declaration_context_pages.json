@@ -61,7 +61,6 @@
   "docs/zh/api/extension/bit_math_numeric_random/asc_bit/bitfield_extract.md",
   "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/sincos.md",
   "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/integer_pow.md",
-  "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/integer_log2.md",
   "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/round_up.md",
   "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/floor_div.md",
   "docs/zh/api/extension/bit_math_numeric_random/asc_cmath/mul_hi.md",

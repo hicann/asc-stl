@@ -28,65 +28,44 @@
 
 Header: `<asc/cmath>`.
 
-`asc::round_up` rounds the integer `a` up to the smallest multiple of `b` that is not less than it.
+Returns the smallest multiple of a positive integer b that is not less than nonnegative a.
 
 ## Function Prototype
 
 ```cpp
 namespace asc {
-template <class T, class U>
-[[nodiscard]] constexpr auto round_up(T a, U b) noexcept;
-}  // namespace asc
+template<class T>
+[[nodiscard]] constexpr T round_up(T a, T b) noexcept;
+}
 ```
 
 ## Parameters
 
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `T` | Integer or enumeration type of the value to round. |
-| `U` | Integer or enumeration type of the rounding granularity. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `a` | Input | Value to round up. |
-| `b` | Input | Rounding granularity (alignment step); must not be 0. |
+Parameter names, types and order are shown in the prototype. T is the integer input/result type; E is an independently selected exponent type, without usual arithmetic conversion with the base.
 
 ## Return Value
 
-| Return type | Description |
-| --- | --- |
-| `auto` | Returns the numeric result of the operation on the input values as specified by this interface. |
+`T` — Returns the smallest multiple of a positive integer b that is not less than nonnegative a.
 
 ## Constraints
 
-- Signed inputs must satisfy `a >= 0` and `b > 0`; the intermediate multiplication and the result must be representable. This interface does not promise mathematical round-up for a negative dividend.
+a is nonnegative, b is positive, and the final result is representable. Zero stays zero and an exact multiple is unchanged. Any positive b is supported; neither a power-of-two restriction nor representability of a+b-1 is imposed.
 
-- T and U must be integer or enumeration types other than bool.
-- b must be positive.
-- The result must be representable.
+Integer templates accept only signed char, short, int, long, long long and their five unsigned counterparts, with at most 64 value/sign bits. Aliases follow their actual type. bool, plain/other character types, enums, floating types and low-precision wrappers are excluded by substitution. Binary operands have the same T; explicitly unify representable values before calling.
+
+A violated numerical precondition has undefined runtime behavior and cannot form a core constant expression. C++17/20 constexpr and noexcept are supported. Integer promotion does not change the T result. Available on Host, 950PR/950DT SIMT and ordinary SIMD scalar control code.
 
 ## Example
-
-The following snippet demonstrates the interface call with concrete integer arguments.
 
 ```cpp
 #include <asc/cmath>
 
-decltype(auto) example()
+constexpr bool verify_example()
 {
-    return asc::round_up(5u, 4u);
-}
-
-bool verify_example()
-{
-    return example() == 8u;
+    return asc::round_up(1000u, 192u) == 1152u && asc::round_up(0u, 7u) == 0u;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_cmath.md)
+- [Header API list](asc_cmath.md)

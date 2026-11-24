@@ -253,6 +253,14 @@ NEGATIVE_DIAGNOSTIC_MARKERS = {
 }
 
 NEGATIVE_DIAGNOSTIC_OVERRIDES = {
+    ("asc/cmath", "int128_excluded.fail.asc"): ("no matching function",),
+    ("asc/cmath", "integer_log2_removed.fail.asc"): ("no member named 'integer_log2'",),
+    ("asc/cmath", "divide_zero.fail.asc"): ("__builtin_unreachable",),
+    ("asc/cmath", "divide_min.fail.asc"): ("__builtin_unreachable",),
+    ("asc/cmath", "round_overflow.fail.asc"): ("__builtin_unreachable",),
+    ("asc/cmath", "negative_exponent.fail.asc"): ("__builtin_unreachable",),
+    ("asc/cmath", "power_overflow.fail.asc"): ("__builtin_unreachable",),
+    ("asc/cmath", "negative_root.fail.asc"): ("__builtin_unreachable",),
     ("asc/utility", "zero_step.fail.cpp"): ("static_for step must be nonzero",),
     ("asc/__atomic/scoped_atomic.h", "unsupported_type.fail.asc"): ("supports exactly",),
     ("asc/collectives", "simd_excluded.fail.asc"): ("no member named 'block_reduce_add'",),

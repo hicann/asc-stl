@@ -28,60 +28,41 @@
 
 头文件路径为：`<asc/cmath>`。
 
-`asc::ceil_div`计算向正无穷方向取整的整数商，即满足结果不小于`a / b`的最小整数。
+返回精确整数商向正无穷取整的值；正负操作数组合均适用。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
-template <class T, class U>
-[[nodiscard]] constexpr auto ceil_div(T a, U b) noexcept;
-}  // namespace asc
+template<class T>
+[[nodiscard]] constexpr T ceil_div(T a, T b) noexcept;
+}
 ```
 
 ## 参数说明
 
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 被除数的整数或枚举类型。 |
-| `U` | 除数的整数或枚举类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `a` | 输入 | 整数商的被除数。 |
-| `b` | 输入 | 整数商的除数；不得为0。 |
+参数名与类型顺序见上述原型。T 为输入及返回的整数类型；E 仅表示指数类型，不与底数做通常算术转换。
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `auto` | 返回向正无穷方向取整的整数商，即满足结果不小于`a / b`的最小整数的计算结果。 |
+`T` — 返回精确整数商向正无穷取整的值；正负操作数组合均适用。
 
 ## 约束说明
 
-- T和U必须为非bool的整数或枚举类型。
-- b必须为正数。
-- 有符号类型的a不得为负数。
+除数非零，最终结果可由 T 表示。最小有符号值除以 -1 在结果不可表示时违例；0 除以非零数为0，整除不作调整。数学结果可表示时，不要求 a+b-1 可表示。
+
+整数模板仅支持不超过64位的 signed char、short、int、long、long long 及五种对应无符号类型；别名按实际类型判定。bool、普通char、其他字符、枚举、浮点和低精度包装不参与重载。二元参数同T，混合类型先由调用方确认值可表示再统一转换。
+
+违反数值前提时，运行期行为未定义；此类调用不是核心常量表达式，要求常量结果时诊断。支持C++17/20的constexpr、noexcept；返回T不随整数提升变化。适用于Host、950PR/950DT的SIMT及普通SIMD标量控制代码。
 
 ## 调用示例
-
-以下片段选用具体整数实参展示接口调用。
 
 ```cpp
 #include <asc/cmath>
 
-decltype(auto) example()
+constexpr bool verify_example()
 {
-    return asc::ceil_div(5, 2);
-}
-
-bool verify_example()
-{
-    return example() == 3;
+    return asc::ceil_div(-7, 3) == -2 && asc::ceil_div(7, -3) == -2;
 }
 ```
 
