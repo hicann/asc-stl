@@ -28,94 +28,55 @@
 
 Header: `<asc/numeric>`.
 
-`asc::div_overflow` computes integer division and reports division by zero or an out-of-range result.
+Computes the integer quotient rounded toward zero and checks for division by zero or an unrepresentable quotient.
 
 ## Function Prototype
 
-### Prototype 1
-
 ```cpp
 namespace asc {
 template <class T>
-constexpr asc::overflow_result<T> div_overflow(T left, T right) noexcept;
-}  // namespace asc
-```
-
-### Prototype 2
-
-```cpp
-namespace asc {
+[[nodiscard]] constexpr checked_result<T> div_overflow(T left, T right) noexcept;
 template <class T>
-constexpr bool div_overflow(T left, T right, T& result) noexcept;
+[[nodiscard]] constexpr bool div_overflow(T left, T right, T& result) noexcept;
 }  // namespace asc
 ```
 
 ## Parameters
 
-### Parameters of Prototype 1
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `T` | Standard integer type participating in the checked division (not bool, no more than 64 bits). |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
+| Parameter | Kind | Description |
 | --- | --- | --- |
-| `left` | Input | Left operand of the integer division checked for division by zero or out-of-range results. |
-| `right` | Input | Right operand of the integer division checked for division by zero or out-of-range results; when it is 0, the returned value is 0 and overflow is true. |
-
-### Parameters of Prototype 2
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `T` | Standard integer type participating in the checked division (not bool, no more than 64 bits). |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `left` | Input | Left operand of the integer division checked for division by zero or out-of-range results. |
-| `right` | Input | Right operand of the integer division checked for division by zero or out-of-range results; when it is 0, the returned value is 0 and overflow is true. |
-| `result` | Output | Reference to which the division result is written; a return value of true indicates division by zero or an out-of-range result. |
+| `T` | Template | The common supported integer type. |
+| `left` | Input | Left operand passed by value. |
+| `right` | Input | Right operand passed by value. |
+| `result` | Output | Present only in the output-reference form; always written on success or failure. |
 
 ## Return Value
 
-| Applicable prototype | Return type | Description |
-| --- | --- | --- |
-| Prototype 1 | `asc::overflow_result<T>` | Returns the computed result of the integer division and reports division by zero or an out-of-range result. |
-| Prototype 2 | `bool` | Returns `true` when the condition holds, otherwise `false`. |
+Success stores the specified value with failed=false; failure stores zero in the destination type with failed=true. Output-reference forms always write back and return true on failure, with the same value and flag as object forms. Output may alias an input variable; computation uses the prior input values. Functions are constexpr, noexcept and [[nodiscard]]; constant evaluation reports failure using the same flag, without throwing or terminating.
 
 ## Constraints
 
-- When `overflow == true`, the value of integer addition, subtraction, and multiplication stores the result converted to the target bit width; division by zero stores 0, and a signed minimum value divided by -1 stores that minimum value. `overflow_cast` stores the converted value; it must not be treated as an exact mathematical result while ignoring the flag.
+A zero divisor fails. A signed minimum divided by -1 fails when the quotient is unrepresentable. For example, -7 divided by 3 succeeds with -2.
 
-- Can be called in Host, AI Core SIMD, and AI Core SIMT; the result is returned according to the integer type declared on this page.
-- `T` must be a standard non-bool integer of no more than 64 bits; arithmetic is handled according to the corresponding checked or saturating rules.
+- T, To and From are unqualified signed char, short, int, long, long long or their five unsigned counterparts, with at most 64 value-plus-sign bits. Fixed-width and size aliases follow their underlying types.
+- bool, plain/wide/UTF characters, enums, floating-point, extended integers and low-precision wrappers do not participate in function overloads. Invalid checked_result<T> instantiations are diagnosed.
+- Arithmetic deduces one common T. Ordinary argument conversions before a call with explicit T are outside the check; use overflow_cast first when needed.
+- C++17 and C++20 share the same contract. Pure Host usage needs no SDK. Initial Device support covers corresponding scalar integer operations on Ascend950PR/950DT CANN/BiSheng SIMT and ordinary SIMD scalar code.
 
 ## Example
-
-The following snippet demonstrates the interface call with concrete integer arguments.
 
 ```cpp
 #include <asc/numeric>
 
-decltype(auto) example()
-{
-    return asc::div_overflow(8, 2);
-}
-
 bool verify_example()
 {
-    const auto actual = example();
-    return actual.value == 4 && actual.overflow == false;
+    const auto quotient = asc::div_overflow(-7, 3);
+    int value = 9;
+    const bool failed = asc::div_overflow(value, 0, value);
+    return !quotient.failed && quotient.value == -2 && failed && value == 0;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_numeric.md)
+- [<asc/numeric>](asc_numeric.md)

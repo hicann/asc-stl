@@ -310,20 +310,13 @@ The Ascend extension interfaces provide capabilities such as address spaces, the
 | [asc::temporary_storage_ref](address_spaces_and_memory_views/asc_memory/temporary_storage_ref.md) | asc/memory | Class | C++17+ | See individual members or overloads | Ascend 950 |
 | [asc::ub_span](address_spaces_and_memory_views/asc_memory/ub_span.md) | asc/memory | Class template | C++17+ | See individual members or overloads | Ascend 950 |
 | [asc::add_overflow](bit_math_numeric_random/asc_numeric/add_overflow.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::div_overflow](bit_math_numeric_random/asc_numeric/div_overflow.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::mul_overflow](bit_math_numeric_random/asc_numeric/mul_overflow.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::narrow](bit_math_numeric_random/asc_numeric/narrow.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::narrow_cast](bit_math_numeric_random/asc_numeric/narrow_cast.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::overflow_cast](bit_math_numeric_random/asc_numeric/overflow_cast.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::overflow_result](bit_math_numeric_random/asc_numeric/overflow_result.md) | asc/numeric | Class template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::overflow_result::overflow](bit_math_numeric_random/asc_numeric/overflow_result_overflow.md) | asc/numeric | Variable | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::overflow_result::value](bit_math_numeric_random/asc_numeric/overflow_result_value.md) | asc/numeric | Variable | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::saturating_add](bit_math_numeric_random/asc_numeric/saturating_add.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::saturating_div](bit_math_numeric_random/asc_numeric/saturating_div.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::saturating_mul](bit_math_numeric_random/asc_numeric/saturating_mul.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::saturating_overflow_cast](bit_math_numeric_random/asc_numeric/saturating_overflow_cast.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
-| [asc::saturating_sub](bit_math_numeric_random/asc_numeric/saturating_sub.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
 | [asc::sub_overflow](bit_math_numeric_random/asc_numeric/sub_overflow.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
+| [asc::mul_overflow](bit_math_numeric_random/asc_numeric/mul_overflow.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
+| [asc::div_overflow](bit_math_numeric_random/asc_numeric/div_overflow.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
+| [asc::overflow_cast](bit_math_numeric_random/asc_numeric/overflow_cast.md) | asc/numeric | Function template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
+| [asc::checked_result](bit_math_numeric_random/asc_numeric/checked_result.md) | asc/numeric | Class template | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
+| [asc::checked_result::value](bit_math_numeric_random/asc_numeric/checked_result_value.md) | asc/numeric | Variable | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
+| [asc::checked_result::failed](bit_math_numeric_random/asc_numeric/checked_result_failed.md) | asc/numeric | Variable | C++17+ | Host, AI Core SIMD programming, AI Core SIMT programming | Ascend 950 |
 | [asc::copy_async](async_data_pipeline/asc_pipeline/copy_async.md) | asc/pipeline | Function | C++17+ | AI Core SIMD programming | Ascend 950 |
 | [asc::make_pipeline](async_data_pipeline/asc_pipeline/make_pipeline.md) | asc/pipeline | Function | C++17+ | AI Core SIMD programming | Ascend 950 |
 | [asc::pipeline_event_id](async_data_pipeline/asc_pipeline/pipeline_event_id.md) | asc/pipeline | Type alias | C++17+ | AI Core SIMD programming | Ascend 950 |

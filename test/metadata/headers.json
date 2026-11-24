@@ -484,6 +484,29 @@
       "runtime_case": "asc/tensor_copy"
     },
     {
+      "target": "asc/__numeric/checked_arithmetic.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/disjunction.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__utility/cmp.h",
+        "asc/std/limits"
+      ],
+      "semantic_case": "asc/numeric",
+      "runtime_case": "asc/numeric",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
       "target": "asc/__parallel/adjacent_difference.h",
       "visibility": "private",
       "dependencies": [
@@ -16754,9 +16777,11 @@
       "visibility": "public",
       "dependencies": [
         "asc/__config",
-        "asc/__numeric/checked.h"
+        "asc/__detail/attributes.h",
+        "asc/__numeric/checked_arithmetic.h",
+        "asc/std/__type_traits/enable_if.h"
       ],
-      "semantic_case": "asc/std/format",
+      "semantic_case": "asc/numeric",
       "applicability": {
         "host_header": true,
         "device_header": true,
@@ -16767,9 +16792,13 @@
       },
       "negative_cases": [
         "bool.fail.cpp",
-        "floating.fail.cpp"
+        "floating.fail.cpp",
+        "excluded_types.fail.cpp",
+        "result_type.fail.cpp",
+        "removed.fail.cpp",
+        "low_precision.fail.cpp"
       ],
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/numeric"
     },
     {
       "target": "asc/std/cuchar",
@@ -19280,6 +19309,7 @@
     "asc/std/__algorithm/lower_bound.h": "runtime/assets.json",
     "asc/std/__algorithm/ranges_copy.h": "runtime/assets.json",
     "asc/numeric_types": "runtime/assets.json",
+    "asc/numeric": "runtime/assets.json",
     "asc/bit": "runtime/assets.json",
     "asc/cmath": "runtime/assets.json",
     "asc/random": "runtime/assets.json"

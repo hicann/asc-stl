@@ -31,6 +31,7 @@
 #include <asc/std/cwctype>
 #include <asc/std/expected>
 #include <asc/std/format>
+#include <asc/std/numeric>
 #include <asc/std/ranges>
 
 #include "expected_monad_regression.h"
@@ -87,10 +88,11 @@ CANN_ASC_STL_API CANN_ASC_STL_DETAIL_NO_INLINE unsigned int evaluate_foundation(
     asc::std::expected<int, int> expected(7);
     failures += !expected || *expected != 7;
     failures += asc_stl_expected_monad_test::evaluate();
-    failures += asc::saturating_add(2147483647, 1) != 2147483647;
-    failures += !asc::add_overflow(2147483647, 1).overflow;
-    failures += asc::saturating_sub(0U, 1U) != 0U || asc::saturating_mul(~0U, 2U) != ~0U;
-    failures += asc::mul_overflow(0x80000000U, 1U).overflow || asc::div_overflow(0x80000000U, ~0U).overflow;
+    failures += asc::std::saturating_add(2147483647, 1) != 2147483647;
+    const auto sum = asc::add_overflow(2147483647, 1);
+    failures += !sum.failed || sum.value != 0;
+    failures += asc::std::saturating_sub(0U, 1U) != 0U || asc::std::saturating_mul(~0U, 2U) != ~0U;
+    failures += asc::mul_overflow(0x80000000U, 1U).failed || asc::div_overflow(0x80000000U, ~0U).failed;
 #if CANN_ASC_STL_DETAIL_HAS_CONSTEVAL()
     char text[16]{};
     auto* text_end = asc::std::format_to(text, "{:x}", 255);

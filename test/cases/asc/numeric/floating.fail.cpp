@@ -15,4 +15,4 @@
  */
 
 #include <asc/numeric>
-auto rejected_floating_numeric = asc::saturating_add(1.0F, 2.0F);
+auto rejected_floating_numeric = asc::add_overflow(1.0F, 2.0F);

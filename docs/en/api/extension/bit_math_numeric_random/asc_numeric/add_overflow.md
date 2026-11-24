@@ -28,94 +28,56 @@
 
 Header: `<asc/numeric>`.
 
-`asc::add_overflow` computes integer addition and reports whether the result is outside the range of the target type.
+Computes the exact sum of two same-type integers and checks representability in T.
 
 ## Function Prototype
 
-### Prototype 1
-
 ```cpp
 namespace asc {
 template <class T>
-constexpr asc::overflow_result<T> add_overflow(T left, T right) noexcept;
-}  // namespace asc
-```
-
-### Prototype 2
-
-```cpp
-namespace asc {
+[[nodiscard]] constexpr checked_result<T> add_overflow(T left, T right) noexcept;
 template <class T>
-constexpr bool add_overflow(T left, T right, T& result) noexcept;
+[[nodiscard]] constexpr bool add_overflow(T left, T right, T& result) noexcept;
 }  // namespace asc
 ```
 
 ## Parameters
 
-### Parameters of Prototype 1
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `T` | Standard integer type participating in the checked addition (not bool, no more than 64 bits). |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
+| Parameter | Kind | Description |
 | --- | --- | --- |
-| `left` | Input | Left operand of the overflow-checked integer addition. |
-| `right` | Input | Right operand of the overflow-checked integer addition. |
-
-### Parameters of Prototype 2
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `T` | Standard integer type participating in the checked addition (not bool, no more than 64 bits). |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `left` | Input | Left operand of the overflow-checked integer addition. |
-| `right` | Input | Right operand of the overflow-checked integer addition. |
-| `result` | Output | Reference to which the operation result is written; a return value of true indicates that an overflow occurred. |
+| `T` | Template | The common supported integer type. |
+| `left` | Input | Left operand passed by value. |
+| `right` | Input | Right operand passed by value. |
+| `result` | Output | Present only in the output-reference form; always written on success or failure. |
 
 ## Return Value
 
-| Applicable prototype | Return type | Description |
-| --- | --- | --- |
-| Prototype 1 | `asc::overflow_result<T>` | Returns the computed result of the integer addition and reports whether the result is outside the range of the target type. |
-| Prototype 2 | `bool` | Returns `true` when the condition holds, otherwise `false`. |
+Success stores the specified value with failed=false; failure stores zero in the destination type with failed=true. Output-reference forms always write back and return true on failure, with the same value and flag as object forms. Output may alias an input variable; computation uses the prior input values. Functions are constexpr, noexcept and [[nodiscard]]; constant evaluation reports failure using the same flag, without throwing or terminating.
 
 ## Constraints
 
-- When `overflow == true`, the value of integer addition, subtraction, and multiplication stores the result converted to the target bit width; division by zero stores 0, and a signed minimum value divided by -1 stores that minimum value. `overflow_cast` stores the converted value; it must not be treated as an exact mathematical result while ignoring the flag.
+A sum outside the range of T fails. Integral promotion does not change the checked target type.
 
-- Can be called in Host, AI Core SIMD, and AI Core SIMT; the result is returned according to the integer type declared on this page.
-- `T` must be a standard non-bool integer of no more than 64 bits; arithmetic is handled according to the corresponding checked or saturating rules.
+- T, To and From are unqualified signed char, short, int, long, long long or their five unsigned counterparts, with at most 64 value-plus-sign bits. Fixed-width and size aliases follow their underlying types.
+- bool, plain/wide/UTF characters, enums, floating-point, extended integers and low-precision wrappers do not participate in function overloads. Invalid checked_result<T> instantiations are diagnosed.
+- Arithmetic deduces one common T. Ordinary argument conversions before a call with explicit T are outside the check; use overflow_cast first when needed.
+- C++17 and C++20 share the same contract. Pure Host usage needs no SDK. Initial Device support covers corresponding scalar integer operations on Ascend950PR/950DT CANN/BiSheng SIMT and ordinary SIMD scalar code.
 
 ## Example
 
-The following snippet demonstrates the interface call with concrete integer arguments.
-
 ```cpp
 #include <asc/numeric>
-
-decltype(auto) example()
-{
-    return asc::add_overflow(7, 2);
-}
+#include <asc/std/limits>
 
 bool verify_example()
 {
-    const auto actual = example();
-    return actual.value == 9 && actual.overflow == false;
+    const auto sum = asc::add_overflow(7, 2);
+    int output = asc::std::numeric_limits<int>::max();
+    const bool failed = asc::add_overflow(output, 1, output);
+    return !sum.failed && sum.value == 9 && failed && output == 0;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_numeric.md)
+- [<asc/numeric>](asc_numeric.md)

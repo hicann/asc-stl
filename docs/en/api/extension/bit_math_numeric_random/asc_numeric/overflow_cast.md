@@ -28,64 +28,51 @@
 
 Header: `<asc/numeric>`.
 
-`asc::overflow_cast` converts between integer types and returns both the result and the out-of-range flag.
+Checks whether the original integer is representable in To and preserves its value on success.
 
 ## Function Prototype
 
 ```cpp
 namespace asc {
 template <class To, class From>
-constexpr asc::overflow_result<To> overflow_cast(From value) noexcept;
+[[nodiscard]] constexpr checked_result<To> overflow_cast(From value) noexcept;
 }  // namespace asc
 ```
 
 ## Parameters
 
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `To` | Target integer type of the conversion. |
-| `From` | Source integer type of the conversion. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
+| Parameter | Kind | Description |
 | --- | --- | --- |
-| `value` | Input | Integer value to convert; the result is returned together with whether it is out of range (including a sign change or an inconsistent round trip). |
+| `To` | Template | Destination integer type. |
+| `From` | Template | Source integer type deduced from the argument. |
+| `value` | Input | Original integer value to check. |
 
 ## Return Value
 
-| Return type | Description |
-| --- | --- |
-| `asc::overflow_result<To>` | Returns the result and the out-of-range flag. |
+Success stores the specified value with failed=false; failure stores zero in the destination type with failed=true. Output-reference forms always write back and return true on failure, with the same value and flag as object forms. Output may alias an input variable; computation uses the prior input values. Functions are constexpr, noexcept and [[nodiscard]]; constant evaluation reports failure using the same flag, without throwing or terminating.
 
 ## Constraints
 
-- When `overflow == true`, the value of integer addition, subtraction, and multiplication stores the result converted to the target bit width; division by zero stores 0, and a signed minimum value divided by -1 stores that minimum value. `overflow_cast` stores the converted value; it must not be treated as an exact mathematical result while ignoring the flag.
+Check the original value against the minimum and maximum of To. Negative-to-unsigned conversions fail; round-trip equality is not a representability test.
 
-- Can be called in Host, AI Core SIMD, and AI Core SIMT; the result is returned according to the integer type declared on this page.
-- `To` and `From` must be standard non-bool integers of no more than 64 bits; for checking or saturating semantics, see the return value on this page.
+- T, To and From are unqualified signed char, short, int, long, long long or their five unsigned counterparts, with at most 64 value-plus-sign bits. Fixed-width and size aliases follow their underlying types.
+- bool, plain/wide/UTF characters, enums, floating-point, extended integers and low-precision wrappers do not participate in function overloads. Invalid checked_result<T> instantiations are diagnosed.
+- Arithmetic deduces one common T. Ordinary argument conversions before a call with explicit T are outside the check; use overflow_cast first when needed.
+- C++17 and C++20 share the same contract. Pure Host usage needs no SDK. Initial Device support covers corresponding scalar integer operations on Ascend950PR/950DT CANN/BiSheng SIMT and ordinary SIMD scalar code.
 
 ## Example
-
-The following snippet demonstrates the interface call with concrete integer arguments.
 
 ```cpp
 #include <asc/numeric>
 
-decltype(auto) example()
-{
-    return asc::overflow_cast<unsigned char>(300);
-}
-
 bool verify_example()
 {
-    const auto actual = example();
-    return actual.value == 44 && actual.overflow == true;
+    const auto valid = asc::overflow_cast<unsigned char>(42);
+    const auto invalid = asc::overflow_cast<unsigned>(-1);
+    return !valid.failed && valid.value == 42 && invalid.failed && invalid.value == 0;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_numeric.md)
+- [<asc/numeric>](asc_numeric.md)

@@ -28,64 +28,51 @@
 
 头文件路径为：`<asc/numeric>`。
 
-`asc::overflow_cast`转换整数类型并同时返回结果和越界标志。
+检查原整数值能否由目标类型To表示，并在成功时保持其数值。
 
 ## 函数原型
 
 ```cpp
 namespace asc {
 template <class To, class From>
-constexpr asc::overflow_result<To> overflow_cast(From value) noexcept;
+[[nodiscard]] constexpr checked_result<To> overflow_cast(From value) noexcept;
 }  // namespace asc
 ```
 
 ## 参数说明
 
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `To` | 转换的目标整数类型。 |
-| `From` | 转换的源整数类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
+| 参数 | 类别 | 说明 |
 | --- | --- | --- |
-| `value` | 输入 | 待转换的整数值；结果连同是否越界（含符号改变或往返不一致）一并返回。 |
+| `To` | 模板参数 | 目标整数类型。 |
+| `From` | 模板参数 | 由实参推导的源整数类型。 |
+| `value` | 输入 | 待检查的原整数值。 |
 
 ## 返回值说明
 
-| 返回值类型 | 含义 |
-| --- | --- |
-| `asc::overflow_result<To>` | 返回结果和越界标志。 |
+成功保存规定的数值并置failed为false；失败统一保存目标类型的零并置failed为true。输出引用形式总是写回，并以true返回失败；其数值和标志与对象形式一致。允许输出别名输入变量，运算使用写回前的值。函数为constexpr、noexcept并标注[[nodiscard]]，常量求值的失败也返回标志，不抛异常或终止。
 
 ## 约束说明
 
-- `overflow == true`时，整数加减乘的value保存转换到目标位宽的结果；除零保存0，有符号最小值除以-1保存该最小值。`overflow_cast`保存转换后的值；不能在忽略标志的情况下把它当作精确数学结果。
+按原值与To的最小/最大值判断可表示性；负数转无符号类型失败。不能以转换后的往返相等代替检查。
 
-- 可在Host、AI Core SIMD和AI Core SIMT调用；结果按本页声明的整数类型返回。
-- `To`和`From`须为不超过64位的标准非bool整数；检查或饱和语义见本页返回值。
+- `T`、`To`、`From`仅支持无cv的signed char、short、int、long、long long及五种无符号对应类型，数值位加符号位不超过64位。固定宽整数及size_t等别名按真实类型适用。
+- bool、普通/宽/UTF字符、枚举、浮点、扩展整数和低精度包装不参与函数重载。非法checked_result<T>实例须编译诊断。
+- 四则运算共同推导同一T；显式T时进入函数前的普通参数转换不属于检查范围，必要时先用overflow_cast检查原值。
+- C++17和C++20采用同一契约；纯Host不依赖SDK。Device首批适用于支持相应标量整数运算的Ascend950PR/950DT CANN/BiSheng SIMT或普通SIMD标量代码。
 
 ## 调用示例
-
-以下片段选用具体整数实参展示接口调用。
 
 ```cpp
 #include <asc/numeric>
 
-decltype(auto) example()
-{
-    return asc::overflow_cast<unsigned char>(300);
-}
-
 bool verify_example()
 {
-    const auto actual = example();
-    return actual.value == 44 && actual.overflow == true;
+    const auto valid = asc::overflow_cast<unsigned char>(42);
+    const auto invalid = asc::overflow_cast<unsigned>(-1);
+    return !valid.failed && valid.value == 42 && invalid.failed && invalid.value == 0;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_numeric.md)
+- [<asc/numeric>](asc_numeric.md)

@@ -253,6 +253,12 @@ NEGATIVE_DIAGNOSTIC_MARKERS = {
 }
 
 NEGATIVE_DIAGNOSTIC_OVERRIDES = {
+    ("asc/numeric", "bool.fail.cpp"): ("no matching function for call to 'add_overflow'",),
+    ("asc/numeric", "floating.fail.cpp"): ("no matching function for call to 'add_overflow'",),
+    ("asc/numeric", "excluded_types.fail.cpp"): ("no matching function for call to 'add_overflow'",),
+    ("asc/numeric", "low_precision.fail.cpp"): ("no matching function for call to 'add_overflow'",),
+    ("asc/numeric", "result_type.fail.cpp"): ("checked_result requires a standard integer of at most 64 bits",),
+    ("asc/numeric", "removed.fail.cpp"): ("no member named 'narrow' in namespace 'asc'",),
     ("asc/random", "custom_parameters.fail.cpp"): ("no member named 'pcg64_engine'",),
     ("asc/random", "custom_parameters.fail.asc"): ("no member named 'pcg64_engine'",),
     ("asc/random", "equal_state.fail.cpp"): ("no member named 'equal_state'",),

@@ -20,6 +20,7 @@
 #include <asc/numeric>
 #include <asc/utility>
 #include <asc/std/algorithm>
+#include <asc/std/numeric>
 
 namespace asc_stl_runtime_review {
 struct count_static_calls {
@@ -48,8 +49,8 @@ CANN_ASC_STL_API bool checked_narrow_product()
 {
     const auto overflow = asc::mul_overflow<unsigned short>(65535u, 65535u);
     const auto exact = asc::mul_overflow<unsigned short>(255u, 257u);
-    return nonpositive_counts() && overflow.overflow && overflow.value == 1u && !exact.overflow &&
-        exact.value == 65535u && asc::saturating_mul<unsigned short>(65535u, 65535u) == 65535u;
+    return nonpositive_counts() && overflow.failed && overflow.value == 0u && !exact.failed && exact.value == 65535u &&
+        asc::std::saturating_mul<unsigned short>(65535u, 65535u) == 65535u;
 }
 }  // namespace asc_stl_runtime_review
 

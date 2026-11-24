@@ -28,94 +28,56 @@
 
 头文件路径为：`<asc/numeric>`。
 
-`asc::mul_overflow`计算整数乘法并报告结果是否超出目标类型范围。
+计算同类型整数的精确积并检查是否可由T表示。
 
 ## 函数原型
 
-### 原型1
-
 ```cpp
 namespace asc {
 template <class T>
-constexpr asc::overflow_result<T> mul_overflow(T left, T right) noexcept;
-}  // namespace asc
-```
-
-### 原型2
-
-```cpp
-namespace asc {
+[[nodiscard]] constexpr checked_result<T> mul_overflow(T left, T right) noexcept;
 template <class T>
-constexpr bool mul_overflow(T left, T right, T& result) noexcept;
+[[nodiscard]] constexpr bool mul_overflow(T left, T right, T& result) noexcept;
 }  // namespace asc
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 参与检查式乘法的标准整数类型（非bool，不超过64位）。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
+| 参数 | 类别 | 说明 |
 | --- | --- | --- |
-| `left` | 输入 | 检查溢出的整数乘法左操作数。 |
-| `right` | 输入 | 检查溢出的整数乘法右操作数。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 参与检查式乘法的标准整数类型（非bool，不超过64位）。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left` | 输入 | 检查溢出的整数乘法左操作数。 |
-| `right` | 输入 | 检查溢出的整数乘法右操作数。 |
-| `result` | 输出 | 写出运算结果的引用；返回true表示发生溢出。 |
+| `T` | 模板参数 | 共同的支持整数类型。 |
+| `left` | 输入 | 左操作数，按值接收。 |
+| `right` | 输入 | 右操作数，按值接收。 |
+| `result` | 输出 | 仅输出引用形式提供；成功或失败均写回。 |
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `asc::overflow_result<T>` | 返回整数乘法并报告结果是否超出目标类型范围的计算结果。 |
-| 原型2 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
+成功保存规定的数值并置failed为false；失败统一保存目标类型的零并置failed为true。输出引用形式总是写回，并以true返回失败；其数值和标志与对象形式一致。允许输出别名输入变量，运算使用写回前的值。函数为constexpr、noexcept并标注[[nodiscard]]，常量求值的失败也返回标志，不抛异常或终止。
 
 ## 约束说明
 
-- `overflow == true`时，整数加减乘的value保存转换到目标位宽的结果；除零保存0，有符号最小值除以-1保存该最小值。`overflow_cast`保存转换后的值；不能在忽略标志的情况下把它当作精确数学结果。
+数学积超出T的可表示范围时失败。64位检查不要求设备提供更宽整数。
 
-- 可在Host、AI Core SIMD和AI Core SIMT调用；结果按本页声明的整数类型返回。
-- `T`须为不超过64位的标准非bool整数；算术按相应检查或饱和规则处理。
+- `T`、`To`、`From`仅支持无cv的signed char、short、int、long、long long及五种无符号对应类型，数值位加符号位不超过64位。固定宽整数及size_t等别名按真实类型适用。
+- bool、普通/宽/UTF字符、枚举、浮点、扩展整数和低精度包装不参与函数重载。非法checked_result<T>实例须编译诊断。
+- 四则运算共同推导同一T；显式T时进入函数前的普通参数转换不属于检查范围，必要时先用overflow_cast检查原值。
+- C++17和C++20采用同一契约；纯Host不依赖SDK。Device首批适用于支持相应标量整数运算的Ascend950PR/950DT CANN/BiSheng SIMT或普通SIMD标量代码。
 
 ## 调用示例
 
-以下片段选用具体整数实参展示接口调用。
-
 ```cpp
 #include <asc/numeric>
-
-decltype(auto) example()
-{
-    return asc::mul_overflow(7, 2);
-}
+#include <asc/std/limits>
 
 bool verify_example()
 {
-    const auto actual = example();
-    return actual.value == 14 && actual.overflow == false;
+    const auto product = asc::mul_overflow(asc::std::numeric_limits<unsigned long long>::max(), 2ULL);
+    int value = 3;
+    const bool failed = asc::mul_overflow(value, value, value);
+    return product.failed && product.value == 0ULL && !failed && value == 9;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_numeric.md)
+- [<asc/numeric>](asc_numeric.md)

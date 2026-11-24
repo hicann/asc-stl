@@ -3220,14 +3220,6 @@
     "mode": "host",
     "expression": "example()"
   },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/overflow_result.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "example()"
-  },
   "docs/zh/api/standard/utilities/asc_std_utility/integer_sequence.md": {
     "standards": [
       17,
@@ -10257,22 +10249,6 @@
     "mode": "host",
     "expression": "example()"
   },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/overflow_result_overflow.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "example()"
-  },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/overflow_result_value.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "example()"
-  },
   "docs/zh/api/extension/multidimensional_views_and_transfer/asc_tensor_copy/tensor_copy_descriptor_tensor_copy_descriptor.md": {
     "standards": [
       17,
@@ -11248,14 +11224,6 @@
     ],
     "mode": "host",
     "expression": "verify_example()"
-  },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/saturating_add.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "example()"
   },
   "docs/zh/api/extension/execution_hierarchy_and_collectives/asc_work_queue/make_work_queue.md": {
     "standards": [
@@ -18819,55 +18787,7 @@
     "mode": "host",
     "expression": "verify_example()"
   },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/narrow.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "verify_example()"
-  },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/narrow_cast.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "verify_example()"
-  },
   "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/overflow_cast.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "verify_example()"
-  },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/saturating_div.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "verify_example()"
-  },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/saturating_mul.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "verify_example()"
-  },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/saturating_overflow_cast.md": {
-    "standards": [
-      17,
-      20
-    ],
-    "mode": "host",
-    "expression": "verify_example()"
-  },
-  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/saturating_sub.md": {
     "standards": [
       17,
       20
@@ -25408,6 +25328,30 @@
       17,
       20
     ]
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/checked_result.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/checked_result_value.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
+  },
+  "docs/zh/api/extension/bit_math_numeric_random/asc_numeric/checked_result_failed.md": {
+    "standards": [
+      17,
+      20
+    ],
+    "mode": "host",
+    "expression": "verify_example()"
   },
   "docs/zh/api/extension/type_traits_and_utilities/asc_type_traits/is_low_precision.md": {
     "standards": [

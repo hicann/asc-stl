@@ -28,94 +28,55 @@
 
 头文件路径为：`<asc/numeric>`。
 
-`asc::div_overflow`计算整数除法并报告除零或结果越界。
+计算同类型整数向零取整的商，并报告除零或商不可表示。
 
 ## 函数原型
 
-### 原型1
-
 ```cpp
 namespace asc {
 template <class T>
-constexpr asc::overflow_result<T> div_overflow(T left, T right) noexcept;
-}  // namespace asc
-```
-
-### 原型2
-
-```cpp
-namespace asc {
+[[nodiscard]] constexpr checked_result<T> div_overflow(T left, T right) noexcept;
 template <class T>
-constexpr bool div_overflow(T left, T right, T& result) noexcept;
+[[nodiscard]] constexpr bool div_overflow(T left, T right, T& result) noexcept;
 }  // namespace asc
 ```
 
 ## 参数说明
 
-### 原型1的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 参与检查式除法的标准整数类型（非bool，不超过64位）。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
+| 参数 | 类别 | 说明 |
 | --- | --- | --- |
-| `left` | 输入 | 检查除零或越界的整数除法左操作数。 |
-| `right` | 输入 | 检查除零或越界的整数除法右操作数；为0时返回value为0且overflow为true。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `T` | 参与检查式除法的标准整数类型（非bool，不超过64位）。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `left` | 输入 | 检查除零或越界的整数除法左操作数。 |
-| `right` | 输入 | 检查除零或越界的整数除法右操作数；为0时返回value为0且overflow为true。 |
-| `result` | 输出 | 写出除法结果的引用；返回true表示除零或结果越界。 |
+| `T` | 模板参数 | 共同的支持整数类型。 |
+| `left` | 输入 | 左操作数，按值接收。 |
+| `right` | 输入 | 右操作数，按值接收。 |
+| `result` | 输出 | 仅输出引用形式提供；成功或失败均写回。 |
 
 ## 返回值说明
 
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `asc::overflow_result<T>` | 返回整数除法并报告除零或结果越界的计算结果。 |
-| 原型2 | `bool` | 条件成立时返回`true`，否则返回`false`。 |
+成功保存规定的数值并置failed为false；失败统一保存目标类型的零并置failed为true。输出引用形式总是写回，并以true返回失败；其数值和标志与对象形式一致。允许输出别名输入变量，运算使用写回前的值。函数为constexpr、noexcept并标注[[nodiscard]]，常量求值的失败也返回标志，不抛异常或终止。
 
 ## 约束说明
 
-- `overflow == true`时，整数加减乘的value保存转换到目标位宽的结果；除零保存0，有符号最小值除以-1保存该最小值。`overflow_cast`保存转换后的值；不能在忽略标志的情况下把它当作精确数学结果。
+除数为零时失败；有符号最小值除以-1且商不可表示时也失败。例如-7除以3的成功商为-2。
 
-- 可在Host、AI Core SIMD和AI Core SIMT调用；结果按本页声明的整数类型返回。
-- `T`须为不超过64位的标准非bool整数；算术按相应检查或饱和规则处理。
+- `T`、`To`、`From`仅支持无cv的signed char、short、int、long、long long及五种无符号对应类型，数值位加符号位不超过64位。固定宽整数及size_t等别名按真实类型适用。
+- bool、普通/宽/UTF字符、枚举、浮点、扩展整数和低精度包装不参与函数重载。非法checked_result<T>实例须编译诊断。
+- 四则运算共同推导同一T；显式T时进入函数前的普通参数转换不属于检查范围，必要时先用overflow_cast检查原值。
+- C++17和C++20采用同一契约；纯Host不依赖SDK。Device首批适用于支持相应标量整数运算的Ascend950PR/950DT CANN/BiSheng SIMT或普通SIMD标量代码。
 
 ## 调用示例
-
-以下片段选用具体整数实参展示接口调用。
 
 ```cpp
 #include <asc/numeric>
 
-decltype(auto) example()
-{
-    return asc::div_overflow(8, 2);
-}
-
 bool verify_example()
 {
-    const auto actual = example();
-    return actual.value == 4 && actual.overflow == false;
+    const auto quotient = asc::div_overflow(-7, 3);
+    int value = 9;
+    const bool failed = asc::div_overflow(value, 0, value);
+    return !quotient.failed && quotient.value == -2 && failed && value == 0;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_numeric.md)
+- [<asc/numeric>](asc_numeric.md)

@@ -19,6 +19,7 @@
 #include <asc/std/cinttypes>
 #include <asc/std/cuchar>
 #include <asc/std/format>
+#include <asc/std/numeric>
 #include <asc/std/version>
 
 int main()
@@ -57,20 +58,20 @@ int main()
     static_assert(!CANN_ASC_STL_HAS_FORMAT);
 #endif
     int sum = 0;
-    if (!asc::add_overflow(2147483647, 1, sum) || sum != static_cast<int>(0x80000000U))
+    if (!asc::add_overflow(2147483647, 1, sum) || sum != 0)
         return 4;
-    if (asc::saturating_add(2147483647, 1) != 2147483647)
+    if (asc::std::saturating_add(2147483647, 1) != 2147483647)
         return 5;
-    if (asc::saturating_sub(-2147483647 - 1, 1) != -2147483647 - 1)
+    if (asc::std::saturating_sub(-2147483647 - 1, 1) != -2147483647 - 1)
         return 6;
-    if (asc::saturating_mul(100000, 100000) != 2147483647)
+    if (asc::std::saturating_mul(100000, 100000) != 2147483647)
         return 7;
-    if (asc::overflow_cast<unsigned char>(300).overflow == false)
+    if (asc::overflow_cast<unsigned char>(300).failed == false)
         return 8;
     const auto unsigned_product = asc::mul_overflow(0x80000000U, 1U);
-    if (unsigned_product.overflow || unsigned_product.value != 0x80000000U || !asc::mul_overflow(~0U, 2U).overflow ||
-        asc::saturating_mul(~0U, 2U) != ~0U || asc::saturating_sub(0U, 1U) != 0U ||
-        asc::div_overflow(0x80000000U, ~0U).overflow)
+    if (unsigned_product.failed || unsigned_product.value != 0x80000000U || !asc::mul_overflow(~0U, 2U).failed ||
+        asc::std::saturating_mul(~0U, 2U) != ~0U || asc::std::saturating_sub(0U, 1U) != 0U ||
+        asc::div_overflow(0x80000000U, ~0U).failed)
         return 19;
     char digits[24] = {};
     const auto converted = asc::std::to_chars(digits, digits + 24, -255, 16);
