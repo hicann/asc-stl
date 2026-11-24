@@ -81,6 +81,8 @@ kernel名及grid/block均对应main。该日志尚未提供可定位到算法源
 复验。验证修正后的完整检查点时，须执行C++17/C++20 Host、O3 Device编译、cannsim，以及包含
 visibility与新增窄整数CAS边界的真机回归；算法独立对照通过不替代这些结果。
 
+<a id="b027-simt-phased-fixtures-for-full-semantics"></a>
+
 ## B027完整语义的SIMT分阶段夹具
 
 `b027_core_semantics.h`保存bitset、inplace_vector、default_searcher、gcd/lcm、
