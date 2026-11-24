@@ -64,8 +64,8 @@ constexpr bool div_overflow(T left, T right, T& result) noexcept;
 
 | Parameter | Input/Output | Description |
 | --- | --- | --- |
-| `left` | Input | Left operand of the integer division checked for division by zero or out-of-range results.
-| `right` | Input | Right operand of the integer division checked for division by zero or out-of-range results; when it is 0, the returned value is 0 and overflow is true.
+| `left` | Input | Left operand of the integer division checked for division by zero or out-of-range results. |
+| `right` | Input | Right operand of the integer division checked for division by zero or out-of-range results; when it is 0, the returned value is 0 and overflow is true. |
 
 ### Parameters of Prototype 2
 
@@ -79,8 +79,8 @@ constexpr bool div_overflow(T left, T right, T& result) noexcept;
 
 | Parameter | Input/Output | Description |
 | --- | --- | --- |
-| `left` | Input | Left operand of the integer division checked for division by zero or out-of-range results.
-| `right` | Input | Right operand of the integer division checked for division by zero or out-of-range results; when it is 0, the returned value is 0 and overflow is true.
+| `left` | Input | Left operand of the integer division checked for division by zero or out-of-range results. |
+| `right` | Input | Right operand of the integer division checked for division by zero or out-of-range results; when it is 0, the returned value is 0 and overflow is true. |
 | `result` | Output | Reference to which the division result is written; a return value of true indicates division by zero or an out-of-range result. |
 
 ## Return Value

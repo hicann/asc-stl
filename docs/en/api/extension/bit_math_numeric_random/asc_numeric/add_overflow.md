@@ -64,8 +64,8 @@ constexpr bool add_overflow(T left, T right, T& result) noexcept;
 
 | Parameter | Input/Output | Description |
 | --- | --- | --- |
-| `left` | Input | Left operand of the overflow-checked integer addition.
-| `right` | Input | Right operand of the overflow-checked integer addition.
+| `left` | Input | Left operand of the overflow-checked integer addition. |
+| `right` | Input | Right operand of the overflow-checked integer addition. |
 
 ### Parameters of Prototype 2
 
@@ -79,8 +79,8 @@ constexpr bool add_overflow(T left, T right, T& result) noexcept;
 
 | Parameter | Input/Output | Description |
 | --- | --- | --- |
-| `left` | Input | Left operand of the overflow-checked integer addition.
-| `right` | Input | Right operand of the overflow-checked integer addition.
+| `left` | Input | Left operand of the overflow-checked integer addition. |
+| `right` | Input | Right operand of the overflow-checked integer addition. |
 | `result` | Output | Reference to which the operation result is written; a return value of true indicates that an overflow occurred. |
 
 ## Return Value

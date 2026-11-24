@@ -64,8 +64,8 @@ constexpr bool mul_overflow(T left, T right, T& result) noexcept;
 
 | Parameter | Input/Output | Description |
 | --- | --- | --- |
-| `left` | Input | Left operand of the overflow-checked integer multiplication.
-| `right` | Input | Right operand of the overflow-checked integer multiplication.
+| `left` | Input | Left operand of the overflow-checked integer multiplication. |
+| `right` | Input | Right operand of the overflow-checked integer multiplication. |
 
 ### Parameters of Prototype 2
 
@@ -79,8 +79,8 @@ constexpr bool mul_overflow(T left, T right, T& result) noexcept;
 
 | Parameter | Input/Output | Description |
 | --- | --- | --- |
-| `left` | Input | Left operand of the overflow-checked integer multiplication.
-| `right` | Input | Right operand of the overflow-checked integer multiplication.
+| `left` | Input | Left operand of the overflow-checked integer multiplication. |
+| `right` | Input | Right operand of the overflow-checked integer multiplication. |
 | `result` | Output | Reference to which the operation result is written; a return value of true indicates that an overflow occurred. |
 
 ## Return Value
