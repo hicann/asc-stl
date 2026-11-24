@@ -22,7 +22,7 @@ The current development branch is `master`, with source version identifier `1.0.
 
 ### 📖 Documentation
 
-- [Current standard-layer scope](#current-standard-layer-scope) · [Complete standard-layer API support list](docs/zh/api/standard/standard.md)
+- [Current standard-layer scope](#current-standard-layer-scope) · [Complete standard-layer API support list](docs/en/api/standard/standard.md)
 - [ASC-STL v1.0.0 supported scope](docs/zh/roadmap/roadmap_v1_0_0.md)
 - [API reference](docs/en/api/README.md): language modes, execution locations, constraints and examples
 
@@ -218,22 +218,22 @@ The table lists all **74 current public standard-layer headers** in the existing
 
 | Category | Public headers | Currently available scope |
 | --- | --- | --- |
-| [Language support](docs/zh/api/standard/language_support/language_support.md) | `cfloat` `climits` `cstddef` `cstdint` `exception` `compare` `new` `limits` `source_location` `version` `ciso646` `cstdalign` `cstdbool` | Fundamental types and numeric macros, comparison categories, source locations, capability macros, termination and placement-new facilities. |
-| [Concepts](docs/zh/api/standard/concepts/concepts.md) | `concepts` | Type and expression predicates: Boolean variable templates in C++17 and native concepts where supported in C++20. |
-| [Diagnostics](docs/zh/api/standard/diagnostics/diagnostics.md) | `cassert` `cerrno` `system_error` | Assertions, error-number macros, error codes, error conditions and error categories. |
-| [Memory management](docs/zh/api/standard/memory_management/memory_management.md) | `memory` `scoped_allocator` | Pointer and allocator traits, allocator protocols, object lifetime and uninitialized-memory algorithms. |
-| [Metaprogramming](docs/zh/api/standard/metaprogramming/metaprogramming.md) | `type_traits` `ratio` | Type queries and transformations, compile-time constants and rational arithmetic. |
-| [General utilities](docs/zh/api/standard/utilities/utilities.md) | `utility` `functional` `tuple` `optional` `variant` `expected` `bit` `bitset` `cstdlib` | Move/forward/swap utilities, function objects, tuples, optional values, variants, expected results, bit operations and bit sets. |
-| [Containers](docs/zh/api/standard/containers/containers.md) | `array` `vector` `deque` `list` `forward_list` `inplace_vector` `map` `set` `unordered_map` `unordered_set` `queue` `stack` `span` `mdspan` | Fixed-capacity and dynamic containers, associative containers, adapters and contiguous/multidimensional views; dynamic containers use explicit allocators. |
-| [Iterators](docs/zh/api/standard/iterators/iterators.md) | `iterator` | Iterator traits, traversal helpers and insertion, reverse and move adapters. |
-| [Ranges](docs/zh/api/standard/ranges/ranges.md) | `ranges` | Range access and predicates, range views and composition such as filtering, transformation and slicing. |
-| [Algorithms](docs/zh/api/standard/algorithms/algorithms.md) | `algorithm` `execution` | Traversal, search, comparison, copying, transformation, partitioning, sorting, binary search, set, heap and permutation algorithms, plus execution-policy vocabulary. |
-| [Strings](docs/zh/api/standard/strings/strings.md) | `cstring` `string` `string_view` | C-string and byte operations, explicitly allocated basic_string, character traits and string views. |
-| [Text processing](docs/zh/api/standard/text_processing/text_processing.md) | `cctype` `charconv` `cuchar` `cwchar` `cwctype` `format` | Character classification, numeric text conversion, wide/multibyte character facilities and format_to output facilities. |
-| [Numerics](docs/zh/api/standard/numerics/numerics.md) | `cmath` `complex` `ccomplex` `ctgmath` `numbers` `linalg` `random` `numeric` | Scalar mathematics, complex numbers, constants, random engines/distributions and numeric algorithms; linalg currently supplies scaled, conjugated and transposed views. |
-| [Date and time](docs/zh/api/standard/chrono/chrono.md) | `chrono` `ctime` | Durations, time points, calendars and conversions, clock facilities and time conversion. |
-| [Input/output](docs/zh/api/standard/input_output/input_output.md) | `cinttypes` | Integer-format macros and intmax_t utilities. |
-| [Concurrency support](docs/zh/api/standard/concurrency/concurrency.md) | `atomic` `barrier` `latch` `semaphore` `mutex` `shared_mutex` | Atomics, barriers, latches and semaphores, plus RAII lock management. |
+| [Language support](docs/en/api/standard/language_support/language_support.md) | `cfloat` `climits` `cstddef` `cstdint` `exception` `compare` `new` `limits` `source_location` `version` `ciso646` `cstdalign` `cstdbool` | Fundamental types and numeric macros, comparison categories, source locations, capability macros, termination and placement-new facilities. |
+| [Concepts](docs/en/api/standard/concepts/concepts.md) | `concepts` | Type and expression predicates: Boolean variable templates in C++17 and native concepts where supported in C++20. |
+| [Diagnostics](docs/en/api/standard/diagnostics/diagnostics.md) | `cassert` `cerrno` `system_error` | Assertions, error-number macros, error codes, error conditions and error categories. |
+| [Memory management](docs/en/api/standard/memory_management/memory_management.md) | `memory` `scoped_allocator` | Pointer and allocator traits, allocator protocols, object lifetime and uninitialized-memory algorithms. |
+| [Metaprogramming](docs/en/api/standard/metaprogramming/metaprogramming.md) | `type_traits` `ratio` | Type queries and transformations, compile-time constants and rational arithmetic. |
+| [General utilities](docs/en/api/standard/utilities/utilities.md) | `utility` `functional` `tuple` `optional` `variant` `expected` `bit` `bitset` `cstdlib` | Move/forward/swap utilities, function objects, tuples, optional values, variants, expected results, bit operations and bit sets. |
+| [Containers](docs/en/api/standard/containers/containers.md) | `array` `vector` `deque` `list` `forward_list` `inplace_vector` `map` `set` `unordered_map` `unordered_set` `queue` `stack` `span` `mdspan` | Fixed-capacity and dynamic containers, associative containers, adapters and contiguous/multidimensional views; dynamic containers use explicit allocators. |
+| [Iterators](docs/en/api/standard/iterators/iterators.md) | `iterator` | Iterator traits, traversal helpers and insertion, reverse and move adapters. |
+| [Ranges](docs/en/api/standard/ranges/ranges.md) | `ranges` | Range access and predicates, range views and composition such as filtering, transformation and slicing. |
+| [Algorithms](docs/en/api/standard/algorithms/algorithms.md) | `algorithm` `execution` | Traversal, search, comparison, copying, transformation, partitioning, sorting, binary search, set, heap and permutation algorithms, plus execution-policy vocabulary. |
+| [Strings](docs/en/api/standard/strings/strings.md) | `cstring` `string` `string_view` | C-string and byte operations, explicitly allocated basic_string, character traits and string views. |
+| [Text processing](docs/en/api/standard/text_processing/text_processing.md) | `cctype` `charconv` `cuchar` `cwchar` `cwctype` `format` | Character classification, numeric text conversion, wide/multibyte character facilities and format_to output facilities. |
+| [Numerics](docs/en/api/standard/numerics/numerics.md) | `cmath` `complex` `ccomplex` `ctgmath` `numbers` `linalg` `random` `numeric` | Scalar mathematics, complex numbers, constants, random engines/distributions and numeric algorithms; linalg currently supplies scaled, conjugated and transposed views. |
+| [Date and time](docs/en/api/standard/chrono/chrono.md) | `chrono` `ctime` | Durations, time points, calendars and conversions, clock facilities and time conversion. |
+| [Input/output](docs/en/api/standard/input_output/input_output.md) | `cinttypes` | Integer-format macros and intmax_t utilities. |
+| [Concurrency support](docs/en/api/standard/concurrency/concurrency.md) | `atomic` `barrier` `latch` `semaphore` `mutex` `shared_mutex` | Atomics, barriers, latches and semaphores, plus RAII lock management. |
 
 ## 📖 Resources
 
@@ -241,7 +241,7 @@ The table lists all **74 current public standard-layer headers** in the existing
 
 | Document | Description |
 | --- | --- |
-| [Quick Start](docs/en/quick_start.md) | Environment setup, Host/Kernel usage, and local verification, with tested examples (in Chinese) |
+| [Quick Start](docs/en/quick_start.md) | Environment setup, Host/Kernel usage, and local verification, with tested examples |
 | [v1.0.0 supported scope](docs/zh/roadmap/roadmap_v1_0_0.md) | Current standard-layer functionality and extension/Runtime refinement directions |
 | [Contributing guide](CONTRIBUTING.md) | Contribution workflow, contribution scenarios, and code/test requirements |
 | [API reference](docs/en/api/README.md) | Entry point to the ASC-STL public-interface reference: standard library, Ascend extensions, and Runtime |

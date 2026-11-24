@@ -87,8 +87,8 @@ Documented subsets remain usable under their API contracts. This table does not 
 | `variant` | 201606; 202102; 202106 | No bad_variant_access; invalid access traps |
 | `inplace_vector` | 202406 | Fixed-capacity subset lacks insert and the full standard exception surface |
 | `allocate_at_least` | 202302 | Free-function backport lacks the standard allocator_traits member and standard allocator |
-| `format` | 201907 及后续 | Selected formatting facilities do not cover format/wformat, locales and the full formatter protocol |
-| `ranges` | 201911 及后续 | Views and selected ranges algorithms do not constitute the complete algorithm/protocol set |
+| `format` | 201907 and later | Selected formatting facilities do not cover format/wformat, locales and the full formatter protocol |
+| `ranges` | 201911 and later | Views and selected ranges algorithms do not constitute the complete algorithm/protocol set |
 | `philox_engine` | 202406 | Missing SeedSequence construction/seeding and stream I/O requirements |
 | `math_constants` | 201907 | Variable templates specialize only float, not double/long double |
 | `concepts` | 202002; 202207 | C++17 uses Boolean predicates; C++20 same_as lacks standard symmetric subsumption |
@@ -100,9 +100,9 @@ Documented subsets remain usable under their API contracts. This table does not 
 | `destroying_delete` | 201806 | Library tag alone does not enable the language mechanism for std::destroying_delete_t |
 | `allocator_traits_is_always_equal` | 201411 | Explicit allocators and container propagation/exception contracts are subsets; vector move assignment is unconditionally noexcept |
 | `scoped_lock, shared_mutex, shared_timed_mutex` | 201703; 201505; 201402 | Nonthrowing lock subsets/wrappers; scoped_lock terminates on try_lock exceptions, and full standard mutex types are absent |
-| `atomic_*, barrier, latch, semaphore` | 各宏的标准修订 | Execution, type, waiting and scheduling adaptations remain subsets; no full-standard claim is added |
+| `atomic_*, barrier, latch, semaphore` | Per-macro standard revisions | Execution, type, waiting and scheduling adaptations remain subsets; no full-standard claim is added |
 | `execution, parallel_algorithm` | 201603/201902; 201603 | Execution-policy vocabulary does not establish all standard parallel algorithm overloads |
-| `chrono, string_view, to_chars 及其他家族` | 各宏的标准修订 | chrono and text/allocator interfaces are restricted; character conversion, associative-container and other revision-wide claims remain unestablished and undefined |
+| `chrono, string_view, to_chars, and other families` | Per-macro standard revisions | chrono and text/allocator interfaces are restricted; character conversion, associative-container and other revision-wide claims remain unestablished and undefined |
 
 ## Sources and maintenance
 
