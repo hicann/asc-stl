@@ -44,6 +44,7 @@ template<class CharT> class char_traits;
 
 - 提供字符类型及整数表示类型，以及assign、eq、lt、compare、length、find、move、copy等静态字符操作；它本身不保存字符串视图或拥有字符存储。
 - AI Core SIMD编程 仅支持local或generic地址空间的普通字符指针。
+- `compare` 按顺序最多比较 `count` 个码元。首个不同码元按 `lt` 决定顺序，全部相等时返回零。对于 `char16_t` 和 `char32_t`，`0x00FF` 排在 `0x0100` 之前。对于 `wchar_t`，按 `wchar_t` 的值比较。
 
 ## 调用示例
 
@@ -55,7 +56,8 @@ template<class CharT> class char_traits;
 bool example()
 {
     using T = asc::std::char_traits<char>;
-    return T::length("abc") == 3 && T::eq('a', 'a') && T::lt('a', 'b');
+    return T::length("abc") == 3 && T::eq('a', 'a') && T::lt('a', 'b') &&
+        asc::std::char_traits<char16_t>::compare(u"\u00FF", u"\u0100", 1) < 0;
 }
 ```
 

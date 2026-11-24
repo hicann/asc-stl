@@ -305,6 +305,12 @@ CANN_ASC_STL_HOST_API int evaluate_host()
         if (!asc_stl_associative_iterator_test::check_key(values, iterator_key{1}) || values.size() != 2 ||
             values.bucket_count() != 8)
             return 27;
+        values.insert(iterator_key{-7});
+        for (int key = 2; key <= 7; ++key)
+            values.insert(iterator_key{key});
+        if (values.bucket_count() <= 8 || values.count(iterator_key{9}) != 1 || values.count(iterator_key{-7}) != 1 ||
+            values.insert(iterator_key{1}).second || values.size() != 9)
+            return 32;
     }
     {
         using pair_allocator = arena_allocator<mapped_pair>;

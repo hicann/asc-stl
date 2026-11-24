@@ -28,7 +28,7 @@
 
 Header: `<asc/std/map>`.
 
-`asc::std::map::iterator` designates the mutable iterator type.
+`asc::std::map::iterator` is a forward iterator that visits entries in key comparator order. For a dereferenceable iterator, `it++` returns a copy of the previous position and advances `it` to the next entry or to `end()`. The key (`it->first`) is read-only. The mapped value (`it->second`) is writable.
 
 This interface is available in Host and AI Core SIMT programming.
 

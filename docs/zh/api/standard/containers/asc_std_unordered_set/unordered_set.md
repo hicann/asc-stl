@@ -46,7 +46,7 @@ template<class Key, class Hash, class Equal, class Allocator> class unordered_se
 
 - Host及AI Core SIMT编程下unordered_set<Key,Hash,Equal,A>显式GM arena。
 - empty/size/bucket_count/begin/end/insert/find/count/clear。
-- allocator回绑桶数组并在默认负载阈值上自动rehash。
+- 容器用重绑定的分配器分配桶数组，并在超过默认负载阈值时扩桶。多个键落入同一个桶时，查找可能需要多次调用 `Equal`。
 - 碰撞链、重复键拒绝、rehash节点地址稳定、移动后旧迭代器有效与析构。
 - 仅容量充足和不抛出异常域。
 - Host和AI Core SIMT编程。

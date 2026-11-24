@@ -39,8 +39,8 @@
 namespace asc::std {
 
 // Fixed-capacity deque over a finite block map: block_count blocks of
-// elements_per_block elements each (16 element slots), anchored at
-// initial_position so both ends can grow before reallocating blocks.  The
+// elements_per_block elements each (16 element slots). End positions wrap
+// over the same blocks so that slots freed at either end can be reused. The
 // block table itself lives in detail::deque_block_map.  Growth beyond the
 // block map and block allocation failure are rejected with a diagnostic
 // instead of indexing out of bounds.
@@ -96,12 +96,13 @@ public:
         }
         CANN_ASC_STL_API iterator& operator+=(difference_type offset)
         {
-            position_ = static_cast<size_type>(static_cast<difference_type>(position_) + offset);
+            position_ += static_cast<size_type>(offset);
             return *this;
         }
         CANN_ASC_STL_API iterator& operator-=(difference_type offset)
         {
-            return *this += -offset;
+            position_ -= static_cast<size_type>(offset);
+            return *this;
         }
         CANN_ASC_STL_API reference operator[](difference_type offset) const
         {
@@ -121,7 +122,11 @@ public:
         }
         friend CANN_ASC_STL_API difference_type operator-(iterator left, iterator right)
         {
-            return static_cast<difference_type>(left.position_) - static_cast<difference_type>(right.position_);
+            // Valid iterators are at most one deque capacity apart, even when
+            // their unsigned positions straddle zero.
+            const size_type forward = left.position_ - right.position_;
+            return forward <= element_capacity ? static_cast<difference_type>(forward) :
+                                                 -static_cast<difference_type>(right.position_ - left.position_);
         }
         friend CANN_ASC_STL_API bool operator==(iterator left, iterator right)
         {
@@ -133,7 +138,7 @@ public:
         }
         friend CANN_ASC_STL_API bool operator<(iterator left, iterator right)
         {
-            return left.position_ < right.position_;
+            return left - right < 0;
         }
         friend CANN_ASC_STL_API bool operator>(iterator left, iterator right)
         {
@@ -223,17 +228,18 @@ public:
     template <class... Args>
     CANN_ASC_STL_API reference emplace_front(Args&&... args)
     {
-        if (begin_ == 0)
+        if (size() == element_capacity)
             raise_capacity_overflow();
-        --begin_;
-        T* address = address_at(begin_, true);
+        const size_type position = begin_ - 1;
+        T* address = address_at(position, true);
         ::new (static_cast<void*>(address)) T(static_cast<Args&&>(args)...);
+        begin_ = position;
         return *address;
     }
     template <class... Args>
     CANN_ASC_STL_API reference emplace_back(Args&&... args)
     {
-        if (end_ == element_capacity)
+        if (size() == element_capacity)
             raise_capacity_overflow();
         T* address = address_at(end_, true);
         ::new (static_cast<void*>(address)) T(static_cast<Args&&>(args)...);
@@ -275,9 +281,7 @@ private:
     }
     CANN_ASC_STL_API T* address_at(size_type position, bool create)
     {
-        const size_type block_index = position / elements_per_block;
-        if (block_index >= block_count)
-            raise_capacity_overflow();
+        const size_type block_index = (position / elements_per_block) % block_count;
         block* target = create ? blocks_.ensure_allocated(block_index) : blocks_.at(block_index);
         if (create && target == nullptr)
             raise_allocation_failure();
@@ -286,9 +290,7 @@ private:
     }
     CANN_ASC_STL_API const T* address_at(size_type position, bool) const
     {
-        const size_type block_index = position / elements_per_block;
-        if (block_index >= block_count)
-            raise_capacity_overflow();
+        const size_type block_index = (position / elements_per_block) % block_count;
         const unsigned char* bytes = blocks_.at(block_index)->storage;
         return reinterpret_cast<const T*>(bytes) + position % elements_per_block;
     }

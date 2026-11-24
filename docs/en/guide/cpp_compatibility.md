@@ -115,6 +115,10 @@ not establish support for every header on every GCC release. Type identity check
 in these dependencies use ASC-STL traits rather than requiring the newer
 `__is_same` builtin. The trivial-destructor trait uses GCC's legacy
 `__has_trivial_destructor` when builtin feature detection is unavailable.
+GCC 9.5 in Host C++17 mode can include `<asc/std/algorithm>` and use
+`ranges::find` with `asc::std::set` and `asc::std::map` iterators. The scoped
+atomic declarations included by this header use `asc::std::is_same_v` to check
+the four supported integer types.
 On a compiler without `__builtin_bit_cast`, floating-point codecs remain usable
 at runtime, but conversions requiring that operation are not constant expressions.
 Check whether `CANN_ASC_STL_LIB_bit_cast` is defined before requiring constexpr

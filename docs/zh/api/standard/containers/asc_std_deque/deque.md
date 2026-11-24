@@ -43,7 +43,7 @@ template<class T, class Allocator> class deque;
 ## 约束说明
 
 - deque<T,A>显式allocator构造。
-- 有限块映射内的push/emplace/pop_front/back。
+- 当前实现最多可同时保存 16 个元素。从任一端移除元素后，后续在任一端的插入都可复用空出的槽位。队列已满时再次插入，Host 抛出 `std::length_error`，设备端调用 `asc::std::terminate()`。
 - empty/size/front/back/`operator[]`/随机访问迭代核心。
 - 新端块分配时已有元素引用稳定。
 - clear/析构。

@@ -19,6 +19,8 @@
 #include <asc/std/queue>
 #include <asc/std/stack>
 
+#include <stdexcept>
+
 template <bool NoThrow>
 struct AdaptorSwapProbe {
     using value_type = int;
@@ -114,8 +116,85 @@ private:
     size_type size_ = 0;
 };
 
+struct DequeElement {
+    int value;
+    int* live;
+
+    DequeElement(int v, int& count) : value(v), live(&count)
+    {
+        ++*live;
+    }
+    DequeElement(const DequeElement&) = delete;
+    DequeElement& operator=(const DequeElement&) = delete;
+    ~DequeElement()
+    {
+        --*live;
+    }
+};
+
+bool test_deque_slot_reuse(bool insert_front, int& live)
+{
+    constexpr int capacity = 16;
+    alignas(32) unsigned char storage[512]{};
+    asc::monotonic_arena arena(storage, sizeof(storage));
+    asc::std::deque<DequeElement, asc::arena_allocator<DequeElement>> values{asc::arena_allocator<DequeElement>{arena}};
+    auto append = [&](int key) -> DequeElement& {
+        return insert_front ? values.emplace_front(key, live) : values.emplace_back(key, live);
+    };
+
+    DequeElement& first = append(0);
+    for (int key = 1; key < capacity; ++key)
+        append(key);
+    if (&first != &(insert_front ? values.back() : values.front()))
+        return false;
+    for (int side = 0; side < 2; ++side) {
+        try {
+            if (side == 0)
+                values.emplace_front(99, live);
+            else
+                values.emplace_back(99, live);
+            return false;
+        } catch (const std::length_error&) {
+        }
+    }
+    const auto allocated = arena.used();
+    for (int key = capacity; key < 5 * capacity; ++key) {
+        DequeElement* retained = &values[capacity / 2];
+        if (insert_front)
+            values.pop_back();
+        else
+            values.pop_front();
+        append(key);
+        if (retained != &values[insert_front ? capacity / 2 + 1 : capacity / 2 - 1])
+            return false;
+        auto begin = values.begin();
+        auto end = values.end();
+        if (live != capacity || values.size() != capacity || end - begin != capacity || begin - end != -capacity ||
+            !(begin < end) || begin + capacity != end || end - capacity != begin || allocated != arena.used())
+            return false;
+        const auto& view = values;
+        for (int pos = 0; pos < capacity; ++pos) {
+            const int expected = insert_front ? key - pos : key + pos + 1 - capacity;
+            if (view[pos].value != expected || begin[pos].value != expected)
+                return false;
+        }
+    }
+    values.clear();
+    if (!values.empty() || live != 0)
+        return false;
+    append(42);
+    return values.front().value == 42;
+}
+
 int main()
 {
+    int live = 0;
+    try {
+        if (!test_deque_slot_reuse(false, live) || live != 0 || !test_deque_slot_reuse(true, live) || live != 0)
+            return 6;
+    } catch (const std::length_error&) {
+        return 7;
+    }
     unsigned char storage[2048]{};
     asc::monotonic_arena arena(storage, sizeof(storage));
     asc::std::deque<int, asc::arena_allocator<int>> values{asc::arena_allocator<int>(arena)};

@@ -92,7 +92,17 @@ struct __asc_char_traits_impl {
             CANN_ASC_STL_DETAIL_ASSERT(__lhs != nullptr, "char_traits::compare: lhs pointer is null");
             CANN_ASC_STL_DETAIL_ASSERT(__rhs != nullptr, "char_traits::compare: rhs pointer is null");
         }
-        return ::asc::std::__asc_memcmp(__lhs, __rhs, __count);
+        if constexpr (sizeof(char_type) == 1) {
+            return ::asc::std::__asc_memcmp(__lhs, __rhs, __count);
+        } else {
+            // Bytewise comparison can order multi-byte code units differently from lt.
+            for (size_t __i = 0; __i < __count; ++__i) {
+                if (!eq(__lhs[__i], __rhs[__i])) {
+                    return lt(__lhs[__i], __rhs[__i]) ? -1 : 1;
+                }
+            }
+            return 0;
+        }
     }
 
     [[nodiscard]] CANN_ASC_STL_API static constexpr size_t length(const char_type* __s) noexcept

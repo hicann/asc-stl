@@ -180,7 +180,8 @@ public:
         if (buckets_count_ == 0 && !initialize_buckets(8)) {
             return __arena_pair<iterator, bool>(end(), false);
         }
-        size_type bucket = hash_(key) % buckets_count_;
+        const size_type hash = hash_(key);
+        size_type bucket = bucket_index(hash, buckets_count_);
         node* current = buckets_[bucket];
         while (current != nullptr) {
             if (equal_(key_of_(current->value), key)) {
@@ -192,7 +193,7 @@ public:
             if (!rehash_to(buckets_count_ * 2)) {
                 return __arena_pair<iterator, bool>(end(), false);
             }
-            bucket = hash_(key) % buckets_count_;
+            bucket = bucket_index(hash, buckets_count_);
         }
         node_allocator nodes(allocator_);
         node* created = nodes.allocate(1);
@@ -206,7 +207,7 @@ public:
     {
         if (buckets_count_ == 0)
             return end();
-        const size_type bucket = hash_(key) % buckets_count_;
+        const size_type bucket = bucket_index(hash_(key), buckets_count_);
         node* current = buckets_[bucket];
         while (current != nullptr) {
             if (equal_(key_of_(current->value), key)) {
@@ -238,6 +239,12 @@ public:
     }
 
 private:
+    CANN_ASC_STL_API static constexpr size_type bucket_index(size_type hash, size_type count) noexcept
+    {
+        // The first allocation has eight buckets and each rehash doubles that count, so count is a power of two.
+        return hash & (count - 1);
+    }
+
     CANN_ASC_STL_API bool initialize_buckets(size_type count)
     {
         bucket_allocator bucket_nodes(allocator_);
@@ -264,7 +271,7 @@ private:
             replacement[bucket] = nullptr;
         node* current = iteration_head_;
         while (current != nullptr) {
-            const size_type bucket = hash_(key_of_(current->value)) % count;
+            const size_type bucket = bucket_index(hash_(key_of_(current->value)), count);
             current->next = replacement[bucket];
             replacement[bucket] = current;
             current = current->iteration_next;

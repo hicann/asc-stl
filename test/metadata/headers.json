@@ -82,7 +82,8 @@
       "dependencies": [
         "asc/__config",
         "asc/std/__atomic/backend.h",
-        "asc/std/__atomic/memory_order.h"
+        "asc/std/__atomic/memory_order.h",
+        "asc/std/__type_traits/is_same.h"
       ],
       "semantic_case": "asc/atomic",
       "negative_cases": [
@@ -14121,9 +14122,7 @@
       "visibility": "private",
       "dependencies": [
         "asc/__config",
-        "asc/std/__memory/addressof.h",
-        "asc/std/__type_traits/conditional.h",
-        "asc/std/__type_traits/is_same.h"
+        "asc/std/__hash_table/hash_table.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14579,6 +14578,9 @@
         "hardware_runtime": true
       },
       "runtime_case": "asc/std/list",
+      "additional_cases": [
+        "ordered_iterator.pass.cpp"
+      ],
       "negative_cases": [
         "copy_construct.fail.cpp",
         "copy_assign.fail.cpp",

@@ -89,6 +89,7 @@ static_assert(values[1] == 4);
 ## Host编译器能力
 
 重复键查找、复数频响和带padding的张量视图使用路径已在GCC 9.5与GCC 13的C++17模式验证；这不代表所有头文件在所有GCC版本均受支持。这些依赖中的类型相等判定使用ASC-STL类型特征，不要求较新的`__is_same`内建函数。编译器没有内建函数能力检测时，平凡析构判定使用GCC已有的`__has_trivial_destructor`。
+GCC 9.5 的 Host C++17 代码可以包含 `<asc/std/algorithm>`，并对 `asc::std::set` 和 `asc::std::map` 的迭代器使用 `ranges::find`。该头文件包含的作用域原子声明使用 `asc::std::is_same_v` 检查四种受支持的整数类型。
 
 缺少`__builtin_bit_cast`时，浮点编解码仍可在运行期调用，但需要该操作的转换不能常量求值。要求constexpr位转换前，应检查是否定义`CANN_ASC_STL_LIB_bit_cast`。pair-like构造约束先排除非tuple-like来源，再尝试访问元素，因此切片内部使用的引用tuple也能正常构造。
 

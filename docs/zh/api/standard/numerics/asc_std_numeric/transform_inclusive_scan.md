@@ -113,26 +113,23 @@ template<class InputIterator, class OutputIterator, class T, class BinaryO, clas
 
 - `[first, last)`须为有效的可读输入范围；从`result`起须能写入相同数量的结果。
 - 先调用`unary_op`变换输入，再调用`binary_op`归约；每个输出都包含当前位置的变换结果。
-- 有初值时先合并`init`，无初值时以首个变换结果开始；归约结果须可赋回累加类型。
+- 原型1以第一个变换结果初始化累加值，并使用输入迭代器的值类型保存它。原型2使用 `init` 的值和类型开始累加。需要更宽的累加类型时，可传入相应类型的初值，例如求和时传入 `int{0}`。每一步的归约结果均须可赋给累加值。
 - 运算不得修改输入范围或使迭代器失效；允许`result == first`的原地计算。
 
 ## 调用示例
 
-以下示例先将各输入乘以2，再将包含当前项的前缀和2、6、12、20写入输出。
+以下示例将字节值转换为 `int`，并写出前缀和 200、300、360。
 
 ```cpp
 #include <asc/std/numeric>
 
 bool example()
 {
-    int input[4] = {1, 2, 3, 4};
-    int output[4] = {};
-    const auto end = asc::std::transform_inclusive_scan(input, input + 4, output, [](int a, int b) { return a + b; }, [](int a) { return a * 2; });
-    return end == output + 4 &&
-        output[0] == 2 &&
-        output[1] == 6 &&
-        output[2] == 12 &&
-        output[3] == 20;
+    const unsigned char input[] = {200, 100, 60};
+    int output[3] = {};
+    const auto end = asc::std::transform_inclusive_scan(input, input + 3, output,
+        [](int a, int b) { return a + b; }, [](unsigned char value) { return static_cast<int>(value); }, int{0});
+    return end == output + 3 && output[0] == 200 && output[1] == 300 && output[2] == 360;
 }
 ```
 

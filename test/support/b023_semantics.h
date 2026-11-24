@@ -145,6 +145,16 @@ CANN_ASC_STL_API constexpr int evaluate_core()
     failures += text.find({needle, 3}) != 4 || text.rfind('e') != 13;
     failures += text.find_first_of({first_set, 5}) != 3 || text.find_first_not_of({prefix_set, 4}) != 5;
     failures += text.find_last_of('s') != 4 || text.find_last_not_of({suffix, 6}) != 7;
+    const char16_t before[] = {0x41, 0x00ff};
+    const char16_t after[] = {0x41, 0x0100};
+    const asc::std::u16string_view first_word(before, 2), second_word(after, 2);
+    failures += first_word.compare(second_word) >= 0 || second_word.compare(first_word) <= 0;
+    failures += first_word.compare(first_word) != 0 || asc::std::char_traits<char16_t>::compare(before, after, 1) != 0;
+    constexpr char32_t first_unit[] = {0x10000}, second_unit[] = {0xffff};
+    failures += asc::std::char_traits<char32_t>::compare(first_unit, second_unit, 1) <= 0;
+    constexpr wchar_t wide_first[] = {static_cast<wchar_t>(-2)}, wide_second[] = {1};
+    using wide_traits = asc::std::char_traits<wchar_t>;
+    static_assert((wide_traits::compare(wide_first, wide_second, 1) < 0) == wide_traits::lt(wide_first[0], 1));
     text.remove_prefix(4);
     text.remove_suffix(7);
     failures += text != asc::std::string_view(needle, 3);

@@ -104,6 +104,9 @@ it does not require `element == value`. With no equivalent element, both iterato
 point to the insertion position, which can be inside the input range. For an empty
 input, both are `first`. For random-access iterators, subtracting the returned
 iterators gives the candidate count without scanning the equivalent elements.
+With forward iterators, the number of comparisons is logarithmic, but the number
+of iterator increments can be linear. On a filtered view, those increments may
+evaluate the filter predicate.
 
 ## Constraints
 

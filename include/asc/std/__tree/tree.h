@@ -99,14 +99,15 @@ public:
 
     class iterator {
         // A set stores the key itself. A map stores a pair with a const key.
-        using element_type = conditional_t<is_same_v<Key, Value>, const Value, Value>;
+        // A private element_type interferes with value_type deduction on GCC 9.
+        using qualified_value_type = conditional_t<is_same_v<Key, Value>, const Value, Value>;
 
     public:
         using iterator_category = forward_iterator_tag;
         using value_type = Value;
         using difference_type = ptrdiff_t;
-        using pointer = element_type*;
-        using reference = element_type&;
+        using pointer = qualified_value_type*;
+        using reference = qualified_value_type&;
         CANN_ASC_STL_API iterator() = default;
         CANN_ASC_STL_API explicit iterator(node* current) : current_(current)
         {}
@@ -131,6 +132,12 @@ public:
                 }
             }
             return *this;
+        }
+        CANN_ASC_STL_API iterator operator++(int)
+        {
+            iterator previous = *this;
+            ++*this;
+            return previous;
         }
         friend CANN_ASC_STL_API bool operator==(iterator left, iterator right)
         {

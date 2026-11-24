@@ -43,7 +43,7 @@ template<class T, class Allocator> class deque;
 ## Constraints
 
 - Explicit-allocator construction of deque<T,A>.
-- push/emplace/pop_front/back within a bounded block map.
+- The current implementation holds up to 16 elements. Popping at either end makes a slot available for insertion at either end. Inserting into a full deque throws `std::length_error` on the Host and calls `asc::std::terminate()` on the device.
 - empty/size/front/back/`operator[]` and the random-access iteration core.
 - References to existing elements remain stable when a new end block is allocated.
 - clear/destruction.

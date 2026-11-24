@@ -113,26 +113,23 @@ This prototype applies to `C++17+`, with availability in Host, AI Core SIMD prog
 
 - `[first, last)` must be a valid readable input range; starting from `result`, the same number of results must be writable.
 - `unary_op` is called first to transform the inputs, then `binary_op` is called to reduce; every output includes the transformation result at the current position.
-- When an initial value is present, `init` is merged first; when absent, the reduction starts from the first transformation result; the reduction results must be assignable back to the accumulation type.
+- Prototype 1 initializes the accumulator with the first transformed element and stores it in the input iterator’s value type. In prototype 2, `init` supplies the starting value and the accumulator type. To accumulate in a wider type, pass an initial value of that type, such as `int{0}` for a sum. Each reduction result must be assignable to the accumulator.
 - The operations must not modify the input range or invalidate iterators; in-place computation with `result == first` is allowed.
 
 ## Example
 
-The following example first multiplies each input by 2, then writes the prefix sums 2, 6, 12, 20 including the current item to the output.
+The example converts byte values to `int` and writes their prefix sums 200, 300 and 360.
 
 ```cpp
 #include <asc/std/numeric>
 
 bool example()
 {
-    int input[4] = {1, 2, 3, 4};
-    int output[4] = {};
-    const auto end = asc::std::transform_inclusive_scan(input, input + 4, output, [](int a, int b) { return a + b; }, [](int a) { return a * 2; });
-    return end == output + 4 &&
-        output[0] == 2 &&
-        output[1] == 6 &&
-        output[2] == 12 &&
-        output[3] == 20;
+    const unsigned char input[] = {200, 100, 60};
+    int output[3] = {};
+    const auto end = asc::std::transform_inclusive_scan(input, input + 3, output,
+        [](int a, int b) { return a + b; }, [](unsigned char value) { return static_cast<int>(value); }, int{0});
+    return end == output + 3 && output[0] == 200 && output[1] == 300 && output[2] == 360;
 }
 ```
 

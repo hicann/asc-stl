@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <asc/std/__functional/operations.h>
 #include <asc/std/__numeric/adjacent_difference.h>
 #include <asc/std/__numeric/device_policy.h>
 #include <asc/std/__numeric/inclusive_scan.h>
@@ -71,6 +72,12 @@ int main()
                data, data + 4, scanned, [](int total, int value) { return total + value; },
                [](int value) { return value * 2; }, 10) == scanned + 4);
     assert(scanned[0] == 12 && scanned[1] == 16 && scanned[2] == 22 && scanned[3] == 30);
+
+    const unsigned char bytes[]{200, 100, 60};
+    assert(asc::std::transform_inclusive_scan(
+               bytes, bytes + 3, scanned, asc::std::plus<int>{},
+               [](unsigned char value) { return static_cast<int>(value); }, int{0}) == scanned + 3);
+    assert(scanned[0] == 200 && scanned[1] == 300 && scanned[2] == 360);
 
     // partial_sum keeps the classic prefix behaviour.
     assert(asc::std::partial_sum(data, data, scanned) == scanned);

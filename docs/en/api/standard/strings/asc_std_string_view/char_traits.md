@@ -44,6 +44,7 @@ template<class CharT> class char_traits;
 
 - Provides the character type and its integer representation type, plus static character operations such as assign, eq, lt, compare, length, find, move, and copy; it does not itself hold a string view or own character storage.
 - AI Core SIMD programming supports only plain character pointers in the local or generic address space.
+- `compare` compares up to `count` code units in order. The first unequal pair is ordered by `lt`. If all pairs are equal, the result is zero. For `char16_t` and `char32_t`, `0x00FF` precedes `0x0100`. For `wchar_t`, the order follows the values of that type.
 
 ## Example
 
@@ -55,7 +56,8 @@ The following Host example provides concrete inputs and checks the result; the u
 bool example()
 {
     using T = asc::std::char_traits<char>;
-    return T::length("abc") == 3 && T::eq('a', 'a') && T::lt('a', 'b');
+    return T::length("abc") == 3 && T::eq('a', 'a') && T::lt('a', 'b') &&
+        asc::std::char_traits<char16_t>::compare(u"\u00FF", u"\u0100", 1) < 0;
 }
 ```
 

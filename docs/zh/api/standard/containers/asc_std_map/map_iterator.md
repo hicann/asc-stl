@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/map>`。
 
-`asc::std::map::iterator`标识可变迭代器类型。
+`asc::std::map::iterator` 是前向迭代器，按键比较器确定的顺序遍历键值对。当 `it` 可解引用时，`it++` 返回递增前的迭代器副本，并将 `it` 移到下一项或 `end()`。键（`it->first`）只读，映射值（`it->second`）可修改。
 
 该接口的可用位置为Host、AI Core SIMT编程。
 

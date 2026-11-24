@@ -46,7 +46,7 @@ template<class Key, class T, class Hash, class Equal, class Allocator> class uno
 
 - In Host and AI Core SIMT programming, unordered_map<Key,T,Hash,Equal,A> requires an explicit GM arena.
 - empty/size/bucket_count/begin/end/insert/find/count/`operator[]`/clear.
-- The allocator rebinds for the bucket array and automatically rehashes at the default load-factor threshold.
+- The container uses a rebound allocator for the bucket array and grows it when the default load-factor threshold is exceeded. If several keys share a bucket, a lookup may call `Equal` more than once.
 - Collision chains, duplicate-key rejection, stable node addresses across rehash, old iterators remaining valid after move, and destruction.
 - Only in domains with sufficient capacity and no exceptions thrown.
 - Host and AI Core SIMT programming.

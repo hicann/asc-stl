@@ -29,6 +29,7 @@
 
 #include <asc/std/__atomic/backend.h>
 #include <asc/std/__atomic/memory_order.h>
+#include <asc/std/__type_traits/is_same.h>
 
 namespace asc {
 
@@ -36,9 +37,10 @@ enum class memory_scope { block, device };
 
 namespace detail {
 
+// Use the library trait so Host compilers without __is_same can parse this header.
 template <class T>
-inline constexpr bool is_exact_scoped_atomic_integer_v = __is_same(T, __INT32_TYPE__) ||
-    __is_same(T, __UINT32_TYPE__) || __is_same(T, __INT64_TYPE__) || __is_same(T, __UINT64_TYPE__);
+inline constexpr bool is_exact_scoped_atomic_integer_v = std::is_same_v<T, __INT32_TYPE__> ||
+    std::is_same_v<T, __UINT32_TYPE__> || std::is_same_v<T, __INT64_TYPE__> || std::is_same_v<T, __UINT64_TYPE__>;
 
 #if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
 

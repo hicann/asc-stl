@@ -52,7 +52,7 @@ CANN_ASC_STL_API constexpr pair<_Iter, _Iter> __equal_range(
     _Iter __first, _Sent __last, const _Tp& __value, _Compare&& __comp, _Proj&& __proj)
 {
     auto __len = ::asc::std::distance(__first, __last);
-    _Iter __end = ::asc::std::next(__first, __len);
+    _Iter __end = _AlgPolicy::next(__first, __last);
     while (__len != 0) {
         auto __half_len = ::asc::std::__half_positive(__len);
         _Iter __mid = ::asc::std::next(__first, __half_len);

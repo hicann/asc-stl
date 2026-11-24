@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <asc/std/__algorithm/equal_range.h>
+#include <asc/std/ranges>
+
 #include <algorithm>
 #include <forward_list>
 
@@ -58,6 +61,20 @@ bool check_large_indexed_ranges()
     }
     return true;
 }
+
+bool check_filtered_equal_range()
+{
+    constexpr int length = 64;
+    int keys[length]{};
+    int visits = 0;
+    auto active = keys | asc::std::ranges::views::filter([&visits](int) {
+        ++visits;
+        return true;
+    });
+    const auto bounds = asc::std::equal_range(active.begin(), active.end(), 1);
+    // A key above the row needs one length pass and at most one forward search pass.
+    return bounds.first == active.end() && bounds.second == active.end() && visits <= 2 * length;
+}
 }  // namespace
 
 int main()
@@ -86,5 +103,5 @@ int main()
             return 3;
         }
     }
-    return check_large_indexed_ranges() ? 0 : 4;
+    return check_large_indexed_ranges() && check_filtered_equal_range() ? 0 : 4;
 }

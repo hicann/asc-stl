@@ -28,7 +28,7 @@
 
 Header: `<asc/std/set>`.
 
-An `asc::std::set::iterator` can be incremented to traverse the container. Iterators obtained from `begin()`, `find()` and the result of `insert()` provide read-only access to the key. `*it` returns `const Key&` and `it.operator->()` returns `const Key*`.
+`asc::std::set::iterator` is a forward iterator that visits keys in comparator order. For a dereferenceable iterator, `it++` returns a copy of the previous position and advances `it` to the next key or to `end()`. Iterators obtained from `begin()`, `find()` and the result of `insert()` provide read-only access to the key. `*it` returns `const Key&` and `it.operator->()` returns `const Key*`.
 
 This interface is available in Host and AI Core SIMT programming.
 
