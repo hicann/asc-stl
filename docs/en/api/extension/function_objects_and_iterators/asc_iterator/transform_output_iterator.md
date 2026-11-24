@@ -26,41 +26,41 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Returns a write proxy owning position and callable snapshots. Assignment forwards the argument, transforms once and stores once.
 
-`asc::transform_output_iterator` is an output iterator that transforms the value before writing it to the underlying iterator.
+`<asc/iterator>`
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template<class Function, class Iterator> class transform_output_iterator;
-} // namespace asc
+template <class Function, class Iterator>
+class transform_output_iterator;
+}  // namespace asc
 ```
 
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+Const data is not writable. A const proxy can assign and survive its temporary adaptor while borrowed targets remain valid. Postincrement retains the old target for *it++ = value. Callable snapshots may have side effects.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/iterator>
 
-int twice(int value) { return 2 * value; }
-
 bool example()
 {
-    int values[2] = {};
-    asc::transform_output_iterator<int(*)(int), int*> iterator(values, twice);
-    *iterator = 3;
-    return values[0] == 6;
+    int data[2] = {};
+    auto f = [](int x) { return x * 2; };
+    asc::transform_output_iterator<decltype(f), int*> it(data, f);
+    *it++ = 3;
+    *it = 4;
+    return data[0] == 6 && data[1] == 8;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

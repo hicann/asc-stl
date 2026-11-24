@@ -26,42 +26,38 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Owns a copyable constant and returns T by value without exposing an internal reference.
 
-`asc::constant_iterator` produces a lightweight iterator adaptor that always dereferences to the same constant value.
+`<asc/iterator>`
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template <class T, class Index = asc::std::ptrdiff_t>
+template <class T, class Difference = asc::std::ptrdiff_t>
 class constant_iterator;
 }  // namespace asc
 ```
 
 ## Constraints
 
-- This adaptor provides only the lightweight operations described on this page and does not satisfy the complete set of traits and operations of the standard RandomAccessIterator; for example, zip supports only pre-increment and equality comparison, and must not be assumed usable for arbitrary standard algorithms requiring random access.
+T is a complete unqualified non-array object. Difference is signed. The legacy category is input; the C++20 concept can be random access.
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    asc::constant_iterator<int> iterator(7);
-    const bool first = *iterator == 7;
-    ++iterator;
-    return first && *iterator == 7;
+    asc::constant_iterator<int> it(7);
+    it += 2;
+    return it[1] == 7 && it.index() == 2;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

@@ -26,9 +26,9 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+保存初值和独立的有符号逻辑位置，解引用返回数学上的初值加位置。
 
-`asc::counting_iterator`生成按步进规则递增的轻量迭代器适配器。
+`<asc/iterator>`
 
 ## 声明
 
@@ -41,27 +41,23 @@ class counting_iterator;
 
 ## 约束说明
 
-- 此适配器仅提供本页所述轻量操作，不满足标准RandomAccessIterator的完整traits与操作集合；例如zip只支持前置递增和相等比较，不能据此用于任意要求随机访问的标准算法。
+Start 为 bool 以外的标准整数。读取结果及算术须可表示，不回绕。虚拟终点可以没有可读值；index() 返回位置。
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    asc::counting_iterator<int> iterator(3);
-    const bool first = *iterator == 3;
-    ++iterator;
-    return first && *iterator == 4;
+    asc::counting_iterator<int> it(3);
+    it += 2;
+    return *it == 5 && it.index() == 2;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

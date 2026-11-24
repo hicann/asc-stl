@@ -26,9 +26,9 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Stores a callable and expands a standard-layer tuple, pair, array or zip proxy into its arguments.
 
-`asc::zip_function` expands the reference proxy produced by dereferencing an asc::zip_iterator and then invokes the user function.
+`<asc/iterator>`
 
 ## Declaration
 
@@ -41,31 +41,23 @@ class zip_function;
 
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+All four cv/ref overloads preserve callable and element value categories and return decltype(auto). Read adaptation additionally requires a copyable stable const callable.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/iterator>
 
-int add_values(int left, int right)
-{
-    return left + right;
-}
-
 bool example()
 {
-    int left = 2;
-    int right = 3;
-    auto zipped = asc::make_zip_iterator(&left, &right);
-    asc::zip_function<int (*)(int, int)> add(add_values);
-    return add(*zipped) == 5;
+    auto f = [](int a, int b) { return a + b; };
+    asc::zip_function<decltype(f)> it(f);
+    return it(asc::std::tuple<int, int>{3, 7}) == 10;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

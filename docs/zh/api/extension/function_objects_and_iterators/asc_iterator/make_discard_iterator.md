@@ -26,59 +26,38 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+创建对应适配器，推导并按值保存所需状态。丢弃赋值，不读取、移动或转换实参；右侧表达式仍正常求值。
 
-`asc::make_discard_iterator`创建丢弃写入值的discard_iterator。
+`<asc/iterator>`
 
-## 函数原型
+## 声明
 
 ```cpp
 namespace asc {
-template <class Integer = asc::std::ptrdiff_t>
-constexpr asc::discard_iterator make_discard_iterator(Integer index = 0);
+constexpr discard_iterator make_discard_iterator(asc::std::ptrdiff_t position = 0) noexcept;
 }  // namespace asc
 ```
 
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Integer` | 索引类型，默认ptrdiff_t。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `index` | 输入 | 初始索引，默认0：写入被丢弃，索引仅用于位置计数与迭代器差值。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `asc::discard_iterator` | 返回保存调用方参数的迭代器适配器；所保存函数对象若捕获外部引用，该引用须在使用期间有效。 |
-
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+默认位置0有效，位置类型为有符号 ptrdiff_t。输出协议和额外位置算术不使其成为可读迭代器。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
 
-以下Host示例使用具体输入，在对象存活期内检查结果。
-
 ```cpp
 #include <asc/iterator>
+
 bool example()
 {
-    auto iterator = asc::make_discard_iterator(0);
-    *iterator = 7;
-    ++iterator;
-    return iterator.index() == 1;
+    int evaluated = 0;
+    auto it = asc::make_discard_iterator();
+    *it++ = ++evaluated;
+    return evaluated == 1 && it.index() == 1;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

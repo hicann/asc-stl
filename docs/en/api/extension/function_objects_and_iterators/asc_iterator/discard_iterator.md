@@ -26,43 +26,38 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Discards assignment without reading, moving or converting the argument; its expression is still evaluated.
 
-`asc::discard_iterator` is an output iterator that accepts writes but discards the assignment results.
+`<asc/iterator>`
 
 ## Declaration
 
 ```cpp
 namespace asc {
 class discard_iterator;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+The default position0 is valid and uses signed ptrdiff_t. Output and extra navigation operations do not provide readability.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
 
-The following Host example provides concrete inputs and checks the result of the call.
-
 ```cpp
 #include <asc/iterator>
-#include <asc/std/algorithm>
-#include <asc/std/type_traits>
 
 bool example()
 {
-    int values[] = {2, 4};
-    asc::discard_iterator output;
-    auto result = asc::std::copy(values, values + 2, output);
-    static_assert(asc::std::is_same_v<decltype(result), asc::discard_iterator>);
-    // Discarding output does not modify the input.
-    return values[0] == 2 && values[1] == 4;
+    int evaluated = 0;
+    asc::discard_iterator it;
+    *it++ = ++evaluated;
+    return evaluated == 1 && it.index() == 1;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

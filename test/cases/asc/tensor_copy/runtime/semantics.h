@@ -307,7 +307,7 @@ CANN_ASC_STL_API unsigned int evaluate_single_thread(asc::monotonic_arena& arena
 
     auto counting = asc::make_counting_iterator(3);
     failures += *counting != 3 || counting[4] != 7;
-    auto strided = asc::make_strided_iterator(result, 2);
+    auto strided = asc::make_strided_iterator(result, 4, 2);
     failures += strided.base() != result || strided.stride() != 2;
     using extents_type = asc::std::extents<__SIZE_TYPE__, 2, asc::std::dynamic_extent>;
     const extents_type extents(3);

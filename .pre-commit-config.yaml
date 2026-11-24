@@ -27,7 +27,10 @@ repos:
       - id: asc-stl-style-check
         name: asc-stl code style check
         entry: bash scripts/check-style.sh
-        language: system
+        language: python
+        additional_dependencies:
+          - clang-format==18.1.8
+          - cpplint==2.0.2
         pass_filenames: false
         always_run: true
         stages: [pre-commit]

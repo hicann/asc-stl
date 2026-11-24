@@ -26,60 +26,38 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Constructs the adaptor, deducing and owning its state. Stores a callable and expands a standard-layer tuple, pair, array or zip proxy into its arguments.
 
-`asc::make_zip_function` creates an adaptor that expands the reference proxy produced by dereferencing an asc::zip_iterator and then invokes the target function.
+`<asc/iterator>`
 
-## Function Prototype
+## Declaration
 
 ```cpp
 namespace asc {
-template <class Function>
-constexpr asc::zip_function<Function> make_zip_function(Function function);
+template <class F>
+constexpr zip_function<asc::std::decay_t<F>> make_zip_function(F&& function);
 }  // namespace asc
 ```
 
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Function` | The type of the callable object that performs this page's operation on the input values. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `function` | Input | The target function object to be adapted: when it receives an asc::zip_iterator's reference proxy, it expands all the proxy's elements and invokes function(elements...). |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `asc::zip_function<Function>` | Returns an adaptor that expands the reference proxy produced by dereferencing an asc::zip_iterator and then invokes the target function. |
-
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+All four cv/ref overloads preserve callable and element value categories and return decltype(auto). Read adaptation additionally requires a copyable stable const callable.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
 
-The following Host example uses concrete inputs and checks the result within the object's lifetime.
-
 ```cpp
 #include <asc/iterator>
+
 bool example()
 {
-    int left = 2;
-    int right = 3;
-    const auto callable = asc::make_zip_function([](int a, int b) { return a + b; });
-    const auto iterator = asc::make_zip_iterator(&left, &right);
-    return callable(*iterator) == 5;
+    auto f = [](int a, int b) { return a + b; };
+    auto it = asc::make_zip_function(f);
+    return it(asc::std::tuple<int, int>{3, 7}) == 10;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

@@ -26,46 +26,41 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Each assignment invokes function(first+position,value) once and discards the result.
 
-`asc::tabulate_output_iterator` is an output iterator that passes the written index and value to a user function.
+`<asc/iterator>`
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template<class Function, class Index = asc::std::ptrdiff_t> class tabulate_output_iterator;
-} // namespace asc
+template <class Function, class Index = asc::std::ptrdiff_t, class Difference = asc::std::ptrdiff_t>
+class tabulate_output_iterator;
+}  // namespace asc
 ```
 
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+Index is separate from the signed difference. Dereference and movement do not invoke the callback. Proxies retain the old index; explicitly capture any state shared across callable snapshots.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/iterator>
 
-struct write_at {
-    int* values;
-    void operator()(int index, int value) const { values[index] = value; }
-};
-
 bool example()
 {
-    int values[2] = {};
-    asc::tabulate_output_iterator<write_at> iterator(write_at{values});
-    *iterator = 3;
-    ++iterator;
-    *iterator = 7;
-    return values[0] == 3 && values[1] == 7;
+    int data[2] = {};
+    auto f = [&](asc::std::ptrdiff_t n, int x) { data[n] = x; };
+    asc::tabulate_output_iterator<decltype(f)> it(f);
+    *it++ = 3;
+    *it = 5;
+    return data[0] == 3 && data[1] == 5;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

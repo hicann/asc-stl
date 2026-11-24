@@ -26,67 +26,42 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+创建对应适配器，推导并按值保存所需状态。读写代理分别通过输入和输出函数读取及存储逻辑值。
 
-`asc::make_transform_input_output_iterator`创建同时具有输入和输出变换的迭代器。
+`<asc/iterator>`
 
-## 函数原型
+## 声明
 
 ```cpp
 namespace asc {
-template <class Iterator, class InputFunction, class OutputFunction>
-constexpr asc::transform_input_output_iterator<InputFunction, OutputFunction, Iterator>
-make_transform_input_output_iterator(Iterator iterator, InputFunction input_function, OutputFunction output_function);
+template <class I, class In, class Out>
+constexpr transform_input_output_iterator<asc::std::decay_t<In>, asc::std::decay_t<Out>, I>
+make_transform_input_output_iterator(I current, In&& input, Out&& output);
 }  // namespace asc
 ```
 
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Iterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `InputFunction` | 读取变换的可调用对象类型：读取时按input_function(*底层迭代器)变换。 |
-| `OutputFunction` | 写入变换的可调用对象类型：写入时先经output_function变换再存入底层迭代器。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `iterator` | 输入 | 被包装的底层迭代器：读写实际作用于该迭代器所指位置。 |
-| `input_function` | 输入 | 读取变换对象：解引用读取结果为input_function(*底层迭代器)。 |
-| `output_function` | 输入 | 写入变换对象：赋给本迭代器的值先经output_function变换再写入底层位置。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `asc::transform_input_output_iterator<InputFunction, OutputFunction, Iterator>` | 返回保存调用方参数的迭代器适配器；底层范围须在使用期间保持有效。 |
-
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+底层至少前向，读函数 const 可调用且结果稳定。在有效定义域内写后须读回同一逻辑值；有损转换应使用两个单向适配器。移动和交换仅在间接移动存储及写回语义成立时开放。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    auto iterator = asc::make_transform_input_output_iterator(
-        values, [](int value) { return value; }, [](int value) { return value; });
-    *iterator = 9;
-    return (*iterator).read() == 9 && values[0] == 9;
+    unsigned stored = 0;
+    auto f = [](unsigned x) { return x ^ 0x80u; };
+    auto it = asc::make_transform_input_output_iterator(&stored, f, f);
+    *it = 7u;
+    unsigned value = *it;
+    return stored == 135u && value == 7u;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

@@ -26,41 +26,40 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Accesses random-access data through readable indices, retaining references, proxies and constness.
 
-`asc::permutation_iterator` uses an index iterator to permute access to the elements of a data iterator.
+`<asc/iterator>`
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template<class Iterator, class IndexIterator = Iterator> class permutation_iterator;
-} // namespace asc
+template <class Iterator, class IndexIterator>
+class permutation_iterator;
+}  // namespace asc
 ```
 
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+Indices must be nonnegative, representable and in range. Repeats support gather and ordered writes. Rearrangement requires independent targets; the caller prevents write races. Positions follow the index iterator.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[3] = {10, 20, 30};
+    int data[3] = {10, 20, 30};
     int indices[2] = {2, 0};
-    asc::permutation_iterator<int*, int*> iterator(values, indices);
-    const bool first = *iterator == 30;
-    ++iterator;
-    return first && *iterator == 10;
+    asc::permutation_iterator<int*, int*> it(data, indices);
+    it[1] = 7;
+    return *it == 30 && data[0] == 7;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

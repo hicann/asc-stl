@@ -26,64 +26,41 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Constructs the adaptor, deducing and owning its state. Returns a write proxy owning position and callable snapshots. Assignment forwards the argument, transforms once and stores once.
 
-`asc::make_transform_output_iterator` creates an output iterator that applies a transform before writing.
+`<asc/iterator>`
 
-## Function Prototype
+## Declaration
 
 ```cpp
 namespace asc {
-template <class Iterator, class Function>
-constexpr asc::transform_output_iterator<Function, Iterator> make_transform_output_iterator(
-    Iterator iterator, Function function);
+template <class I, class F>
+constexpr transform_output_iterator<asc::std::decay_t<F>, I> make_transform_output_iterator(I current, F&& function);
 }  // namespace asc
 ```
 
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Iterator` | The type of iterator used to traverse the input range; it must satisfy the traversal capability required by the prototype. |
-| `Function` | The type of the callable object that performs this page's operation on the input values. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `iterator` | Input | The underlying output iterator to be wrapped: transformed values are written to the position this iterator points to. |
-| `function` | Input | The write transform object: values assigned to this iterator are first transformed by function and then written to the underlying iterator. |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `asc::transform_output_iterator<Function, Iterator>` | Returns an iterator adaptor storing the caller's arguments; the underlying range must remain valid during use. |
-
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+Const data is not writable. A const proxy can assign and survive its temporary adaptor while borrowed targets remain valid. Postincrement retains the old target for *it++ = value. Callable snapshots may have side effects.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example uses concrete inputs and checks the result within the object's lifetime.
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    auto iterator = asc::make_transform_output_iterator(values, [](int value) { return value + 1; });
-    *iterator = 5;
-    return values[0] == 6;
+    int data[2] = {};
+    auto f = [](int x) { return x * 2; };
+    auto it = asc::make_transform_output_iterator(data, f);
+    *it++ = 3;
+    *it = 4;
+    return data[0] == 6 && data[1] == 8;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

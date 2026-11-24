@@ -26,41 +26,38 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Stores a physical anchor, extent, signed stride and logical position. Positive strides start at the first element; negative strides start at the last.
 
-`asc::strided_iterator` is a fixed-stride adaptor that borrows an underlying random access iterator. It supports the full set of random access operations for positive or negative non-zero strides, including bidirectional movement, subscripting, order comparison, iterator distance, and the standard iterator traits; a single movement corresponds to moving the underlying iterator by one stride.
+`<asc/iterator>`
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template<class Iterator, class Stride = asc::std::ptrdiff_t> class strided_iterator;
-} // namespace asc
+template <class Iterator>
+class strided_iterator;
+}  // namespace asc
 ```
 
 ## Constraints
 
-- The stride must be non-zero.
-- Iterators participating in distance or order comparison must use the same stride, and their underlying positions must be aligned by the stride.
-- The iterator and its underlying range must remain valid during use.
+The base is readable and random access. Extent is nonnegative and stride nonzero. Extent5 with strides2/-2 selects0,2,4 /4,2,0. count() is3. Ends never form invalid physical pointers; base() always returns the anchor.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    asc::strided_iterator<int*> iterator(values, 2);
-    const bool first = *iterator == 1;
-    ++iterator;
-    return first && *iterator == 3;
+    int data[5] = {1, 2, 3, 4, 5};
+    asc::strided_iterator<int*> it(data, 5, -2);
+    return it.count() == 3 && it[1] == 3 && (it + 3).base() == data;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

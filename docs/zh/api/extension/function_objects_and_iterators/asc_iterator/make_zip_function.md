@@ -26,60 +26,38 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+创建对应适配器，推导并按值保存所需状态。保存函数，将标准层 tuple、pair、array 或 zip 代理中的各项展开为参数。
 
-`asc::make_zip_function`创建把asc::zip_iterator解引用产生的引用代理展开后调用目标函数的适配器。
+`<asc/iterator>`
 
-## 函数原型
+## 声明
 
 ```cpp
 namespace asc {
-template <class Function>
-constexpr asc::zip_function<Function> make_zip_function(Function function);
+template <class F>
+constexpr zip_function<asc::std::decay_t<F>> make_zip_function(F&& function);
 }  // namespace asc
 ```
 
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Function` | 对输入值执行本页操作的可调用对象类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `function` | 输入 | 被适配的目标函数对象：收到asc::zip_iterator的引用代理时展开其全部元素并按function(元素…)调用。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `asc::zip_function<Function>` | 返回把asc::zip_iterator解引用产生的引用代理展开后调用目标函数的适配器。 |
-
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+四种 cv/ref 调用保持函数和元素的值类别并返回 decltype(auto)。作为读迭代器的函数时，另须可复制、const 可调用且结果稳定。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
 
-以下Host示例使用具体输入，在对象存活期内检查结果。
-
 ```cpp
 #include <asc/iterator>
+
 bool example()
 {
-    int left = 2;
-    int right = 3;
-    const auto callable = asc::make_zip_function([](int a, int b) { return a + b; });
-    const auto iterator = asc::make_zip_iterator(&left, &right);
-    return callable(*iterator) == 5;
+    auto f = [](int a, int b) { return a + b; };
+    auto it = asc::make_zip_function(f);
+    return it(asc::std::tuple<int, int>{3, 7}) == 10;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

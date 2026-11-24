@@ -26,63 +26,40 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Constructs the adaptor, deducing and owning its state. Accesses random-access data through readable indices, retaining references, proxies and constness.
 
-`asc::make_permutation_iterator` creates a permutation_iterator that accesses data following an index sequence.
+`<asc/iterator>`
 
-## Function Prototype
+## Declaration
 
 ```cpp
 namespace asc {
-template <class Iterator, class IndexIterator>
-constexpr asc::permutation_iterator<Iterator, IndexIterator> make_permutation_iterator(
-    Iterator iterator, IndexIterator index);
+template <class I, class J>
+constexpr permutation_iterator<I, J> make_permutation_iterator(I data_first, J index_current);
 }  // namespace asc
 ```
 
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Iterator` | The type of iterator used to traverse the input range; it must satisfy the traversal capability required by the prototype. |
-| `IndexIterator` | The type of iterator used to traverse the input range; it must satisfy the traversal capability required by the prototype. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `iterator` | Input | The iterator pointing to the position of this operation; the range it points to must remain valid during the call. |
-| `index` | Input | The iterator pointing to the position of this operation; the range it points to must remain valid during the call. |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `asc::permutation_iterator<Iterator, IndexIterator>` | Returns an iterator adaptor storing the caller's arguments; the underlying range must remain valid during use. |
-
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+Indices must be nonnegative, representable and in range. Repeats support gather and ordered writes. Rearrangement requires independent targets; the caller prevents write races. Positions follow the index iterator.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example uses concrete inputs and checks the result within the object's lifetime.
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    auto iterator = asc::make_permutation_iterator(values, indices);
-    return *iterator == 4;
+    int data[3] = {10, 20, 30};
+    int indices[2] = {2, 0};
+    auto it = asc::make_permutation_iterator(data, indices);
+    it[1] = 7;
+    return *it == 30 && data[0] == 7;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

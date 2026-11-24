@@ -26,63 +26,39 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Constructs the adaptor, deducing and owning its state. The alias transform_iterator<zip_function<F>,zip_iterator<I...>> reads components and expands them into the callable.
 
-`asc::make_zip_transform_iterator` creates a zip_transform_iterator that invokes a function on multiple inputs at dereference.
+`<asc/iterator>`
 
-## Function Prototype
+## Declaration
 
 ```cpp
 namespace asc {
-template <class Function, class... Iterators>
-constexpr asc::zip_transform_iterator<Function, Iterators...> make_zip_transform_iterator(
-    Function function, Iterators... iterators);
+template <class F, class... I>
+constexpr zip_transform_iterator<asc::std::decay_t<F>, I...> make_zip_transform_iterator(F&& function, I... current);
 }  // namespace asc
 ```
 
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Function` | The type of the callable object that performs this page's operation on the input values. |
-| `Iterators` | The type of iterator used to traverse the input range; it must satisfy the traversal capability required by the prototype. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `function` | Input | The combining function object: on dereference it expands the references of the underlying iterators and evaluates function(*it0, *it1, ...). |
-| `iterators` | Input | The underlying iterators to be zipped (zero or more): they advance in lockstep in zip-iterator fashion. |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `asc::zip_transform_iterator<Function, Iterators...>` | Returns an iterator adaptor storing the caller's arguments; the underlying range must remain valid during use. |
-
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+All components are readable. Position, end, movement and result rules are shared with the component adaptors. References cannot escape temporary value components.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example uses concrete inputs and checks the result within the object's lifetime.
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    auto iterator = asc::make_zip_transform_iterator([](int left, int right) { return left + right; }, values, indices);
-    return *iterator == 4;
+    int a[2] = {1, 2}, b[2] = {10, 20};
+    auto f = [](int x, int y) { return x + y; };
+    auto it = asc::make_zip_transform_iterator(f, a, b);
+    return *it == 11 && it[1] == 22;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

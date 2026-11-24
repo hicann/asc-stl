@@ -26,46 +26,41 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+每次赋值调用一次 function(first+position,value)，回调返回值丢弃。
 
-`asc::tabulate_output_iterator`把写入的索引和值交给用户函数处理的输出迭代器。
+`<asc/iterator>`
 
 ## 声明
 
 ```cpp
 namespace asc {
-template<class Function, class Index = asc::std::ptrdiff_t> class tabulate_output_iterator;
-} // namespace asc
+template <class Function, class Index = asc::std::ptrdiff_t, class Difference = asc::std::ptrdiff_t>
+class tabulate_output_iterator;
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+索引与有符号差值分开。解引用和位置运算不调用回调；代理保存旧索引，函数副本可以有副作用，跨代理共享状态须显式捕获。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
-struct write_at {
-    int* values;
-    void operator()(int index, int value) const { values[index] = value; }
-};
-
 bool example()
 {
-    int values[2] = {};
-    asc::tabulate_output_iterator<write_at> iterator(write_at{values});
-    *iterator = 3;
-    ++iterator;
-    *iterator = 7;
-    return values[0] == 3 && values[1] == 7;
+    int data[2] = {};
+    auto f = [&](asc::std::ptrdiff_t n, int x) { data[n] = x; };
+    asc::tabulate_output_iterator<decltype(f)> it(f);
+    *it++ = 3;
+    *it = 5;
+    return data[0] == 3 && data[1] == 5;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

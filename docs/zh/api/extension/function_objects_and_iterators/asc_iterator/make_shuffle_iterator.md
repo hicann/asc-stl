@@ -26,60 +26,39 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+创建对应适配器，推导并按值保存所需状态。每次读取调用一次确定的索引映射，位置移动不调用映射。
 
-`asc::make_shuffle_iterator`创建按确定性映射重排访问顺序的shuffle_iterator。
+`<asc/iterator>`
 
-## 函数原型
+## 声明
 
 ```cpp
 namespace asc {
-template <class Bijection, class Index = asc::std::size_t>
-constexpr asc::shuffle_iterator<Index, Bijection> make_shuffle_iterator(Bijection bijection, Index start = 0);
+template <class D = asc::std::ptrdiff_t, class F, class Index = asc::std::size_t>
+constexpr shuffle_iterator<Index, asc::std::decay_t<F>, D> make_shuffle_iterator(
+    F&& mapping, Index first = 0, D position = 0);
 }  // namespace asc
 ```
 
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Bijection` | 确定性映射对象类型：以当前索引为输入计算重排后的访问结果。 |
-| `Index` | 迭代器内部游标的索引类型，默认size_t。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `bijection` | 输入 | 确定性映射对象：解引用与下标结果为bijection(当前索引)。 |
-| `start` | 输入 | 游标起始索引，默认0：随迭代递增并作为bijection的输入。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `asc::shuffle_iterator<Index, Bijection>` | 返回保存调用方参数的迭代器适配器；所保存函数对象若捕获外部引用，该引用须在使用期间有效。 |
-
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+映射是指定有限索引域上的双射，返回相同 Index 值类型。Index 与有符号 Difference 分开；这不是 Warp 交换或随机打乱算法。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
 
-以下Host示例使用具体输入，在对象存活期内检查结果。
-
 ```cpp
 #include <asc/iterator>
+
 bool example()
 {
-    auto iterator = asc::make_shuffle_iterator([](unsigned index) { return index + 1; }, 0u);
-    ++iterator;
-    return *iterator == 2u;
+    auto mapping = [](asc::std::size_t n) { return asc::std::size_t{3} - n; };
+    auto it = asc::make_shuffle_iterator(mapping);
+    return *it == 3 && it[2] == 1;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

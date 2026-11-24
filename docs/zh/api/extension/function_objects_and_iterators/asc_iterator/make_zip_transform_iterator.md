@@ -26,63 +26,39 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+创建对应适配器，推导并按值保存所需状态。组合别名 transform_iterator<zip_function<F>,zip_iterator<I...>>，同时读取并展开各分量给函数。
 
-`asc::make_zip_transform_iterator`创建解引用时对多个输入执行函数的zip_transform_iterator。
+`<asc/iterator>`
 
-## 函数原型
+## 声明
 
 ```cpp
 namespace asc {
-template <class Function, class... Iterators>
-constexpr asc::zip_transform_iterator<Function, Iterators...> make_zip_transform_iterator(
-    Function function, Iterators... iterators);
+template <class F, class... I>
+constexpr zip_transform_iterator<asc::std::decay_t<F>, I...> make_zip_transform_iterator(F&& function, I... current);
 }  // namespace asc
 ```
 
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Function` | 对输入值执行本页操作的可调用对象类型。 |
-| `Iterators` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `function` | 输入 | 合并函数对象：解引用时展开各底层迭代器的引用，并按function(*it0, *it1, ...)求值。 |
-| `iterators` | 输入 | 被打包的各底层迭代器（零个或多个）：以zip迭代器方式同步前进。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `asc::zip_transform_iterator<Function, Iterators...>` | 返回保存调用方参数的迭代器适配器；底层范围须在使用期间保持有效。 |
-
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+全部分量可读，复用组合位置、终点、移动和返回规则。返回引用不能指向临时组合代理中的按值分量。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    auto iterator = asc::make_zip_transform_iterator([](int left, int right) { return left + right; }, values, indices);
-    return *iterator == 4;
+    int a[2] = {1, 2}, b[2] = {10, 20};
+    auto f = [](int x, int y) { return x + y; };
+    auto it = asc::make_zip_transform_iterator(f, a, b);
+    return *it == 11 && it[1] == 22;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

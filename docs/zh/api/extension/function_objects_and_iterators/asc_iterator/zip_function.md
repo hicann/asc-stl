@@ -26,9 +26,9 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+保存函数，将标准层 tuple、pair、array 或 zip 代理中的各项展开为参数。
 
-`asc::zip_function`把asc::zip_iterator解引用产生的引用代理展开后调用用户函数。
+`<asc/iterator>`
 
 ## 声明
 
@@ -41,31 +41,23 @@ class zip_function;
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+四种 cv/ref 调用保持函数和元素的值类别并返回 decltype(auto)。作为读迭代器的函数时，另须可复制、const 可调用且结果稳定。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
-int add_values(int left, int right)
-{
-    return left + right;
-}
-
 bool example()
 {
-    int left = 2;
-    int right = 3;
-    auto zipped = asc::make_zip_iterator(&left, &right);
-    asc::zip_function<int (*)(int, int)> add(add_values);
-    return add(*zipped) == 5;
+    auto f = [](int a, int b) { return a + b; };
+    asc::zip_function<decltype(f)> it(f);
+    return it(asc::std::tuple<int, int>{3, 7}) == 10;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

@@ -26,43 +26,41 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+读写代理分别通过输入和输出函数读取及存储逻辑值。
 
-`asc::transform_input_output_iterator`读取时执行输入变换、写入时执行输出变换的迭代器适配器。
+`<asc/iterator>`
 
 ## 声明
 
 ```cpp
 namespace asc {
-template<class InputFunction, class OutputFunction, class Iterator> class transform_input_output_iterator;
-} // namespace asc
+template <class InputFunction, class OutputFunction, class Iterator>
+class transform_input_output_iterator;
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+底层至少前向，读函数 const 可调用且结果稳定。在有效定义域内写后须读回同一逻辑值；有损转换应使用两个单向适配器。移动和交换仅在间接移动存储及写回语义成立时开放。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
-int twice(int value) { return 2 * value; }
-int half(int value) { return value / 2; }
-
 bool example()
 {
-    int value = 3;
-    asc::transform_input_output_iterator<int(*)(int), int(*)(int), int*> iterator(&value, twice, half);
-    const bool read = (*iterator).read() == 6;
-    *iterator = 10;
-    return read && value == 5;
+    unsigned stored = 0;
+    auto f = [](unsigned x) { return x ^ 0x80u; };
+    asc::transform_input_output_iterator<decltype(f), decltype(f), unsigned*> it(&stored, f, f);
+    *it = 7u;
+    unsigned value = *it;
+    return stored == 135u && value == 7u;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

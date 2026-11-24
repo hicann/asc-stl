@@ -26,62 +26,39 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Constructs the adaptor, deducing and owning its state. Returns the exact value or reference produced by invoking the const callable on the base reference.
 
-`asc::make_transform_iterator` creates an input iterator that applies a transform on dereference.
+`<asc/iterator>`
 
-## Function Prototype
+## Declaration
 
 ```cpp
 namespace asc {
-template <class Iterator, class Function>
-constexpr asc::transform_iterator<Function, Iterator> make_transform_iterator(Iterator iterator, Function function);
+template <class I, class F>
+constexpr transform_iterator<asc::std::decay_t<F>, I> make_transform_iterator(I current, F&& function);
 }  // namespace asc
 ```
 
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Iterator` | The type of iterator used to traverse the input range; it must satisfy the traversal capability required by the prototype. |
-| `Function` | The type of the callable object that performs this page's operation on the input values. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `iterator` | Input | The underlying iterator to be wrapped: its dereference result is passed to function for transformation. |
-| `function` | Input | The transform object: dereference and subscript yield function(*underlying iterator). |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `asc::transform_iterator<Function, Iterator>` | Returns an iterator adaptor storing the caller's arguments; the underlying range must remain valid during use. |
-
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+Reads are stable and do not consume the callable or input. Referents must remain valid. Navigation follows the base; the legacy category stays input, independently of the C++20 concept.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example uses concrete inputs and checks the result within the object's lifetime.
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    auto iterator = asc::make_transform_iterator(values, [](int value) { return value + 1; });
-    return *iterator == 2;
+    int data[2] = {3, 5};
+    auto f = [](int x) { return x * 2; };
+    auto it = asc::make_transform_iterator(data, f);
+    return *it == 6 && it[1] == 10;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

@@ -26,60 +26,39 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Constructs the adaptor, deducing and owning its state. Invokes the deterministic index mapping once per read, never for movement.
 
-`asc::make_shuffle_iterator` creates a shuffle_iterator that permutes the access order according to a deterministic mapping.
+`<asc/iterator>`
 
-## Function Prototype
+## Declaration
 
 ```cpp
 namespace asc {
-template <class Bijection, class Index = asc::std::size_t>
-constexpr asc::shuffle_iterator<Index, Bijection> make_shuffle_iterator(Bijection bijection, Index start = 0);
+template <class D = asc::std::ptrdiff_t, class F, class Index = asc::std::size_t>
+constexpr shuffle_iterator<Index, asc::std::decay_t<F>, D> make_shuffle_iterator(
+    F&& mapping, Index first = 0, D position = 0);
 }  // namespace asc
 ```
 
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Bijection` | The type of the deterministic mapping object: it takes the current index as input and computes the permuted access result. |
-| `Index` | The index type of the iterator's internal cursor, defaulting to size_t. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `bijection` | Input | The deterministic mapping object: dereference and subscript yield bijection(current index). |
-| `start` | Input | The cursor's starting index, defaulting to 0: it increments as iteration advances and is the input to bijection. |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `asc::shuffle_iterator<Index, Bijection>` | Returns an iterator adaptor storing the caller's arguments; if the stored function object captures external references, those references must remain valid during use. |
-
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+The mapping is a bijection on a caller-defined finite domain and returns Index. Difference is separately signed. This is neither a Warp operation nor a random shuffle algorithm.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
 
-The following Host example uses concrete inputs and checks the result within the object's lifetime.
-
 ```cpp
 #include <asc/iterator>
+
 bool example()
 {
-    auto iterator = asc::make_shuffle_iterator([](unsigned index) { return index + 1; }, 0u);
-    ++iterator;
-    return *iterator == 2u;
+    auto mapping = [](asc::std::size_t n) { return asc::std::size_t{3} - n; };
+    auto it = asc::make_shuffle_iterator(mapping);
+    return *it == 3 && it[2] == 1;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

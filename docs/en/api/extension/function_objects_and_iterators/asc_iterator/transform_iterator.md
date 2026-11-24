@@ -26,42 +26,39 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Returns the exact value or reference produced by invoking the const callable on the base reference.
 
-`asc::transform_iterator` is an input iterator that applies a transform to the underlying iterator's element on dereference.
+`<asc/iterator>`
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template<class Function, class Iterator> class transform_iterator;
-} // namespace asc
+template <class Function, class Iterator>
+class transform_iterator;
+}  // namespace asc
 ```
 
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+Reads are stable and do not consume the callable or input. Referents must remain valid. Navigation follows the base; the legacy category stays input, independently of the C++20 concept.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/iterator>
 
-int twice(int value) { return 2 * value; }
-
 bool example()
 {
-    int values[2] = {2, 3};
-    asc::transform_iterator<int(*)(int), int*> iterator(values, twice);
-    const bool first = *iterator == 4;
-    ++iterator;
-    return first && *iterator == 6;
+    int data[2] = {3, 5};
+    auto f = [](int x) { return x * 2; };
+    asc::transform_iterator<decltype(f), int*> it(data, f);
+    return *it == 6 && it[1] == 10;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

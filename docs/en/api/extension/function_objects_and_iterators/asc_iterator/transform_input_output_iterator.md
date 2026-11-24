@@ -26,43 +26,41 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+A proxy reads and stores logical values through separate input and output transformations.
 
-`asc::transform_input_output_iterator` is an iterator adaptor that applies an input transform on reads and an output transform on writes.
+`<asc/iterator>`
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template<class InputFunction, class OutputFunction, class Iterator> class transform_input_output_iterator;
-} // namespace asc
+template <class InputFunction, class OutputFunction, class Iterator>
+class transform_input_output_iterator;
+}  // namespace asc
 ```
 
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+The base is at least forward; the read callable is stable and const-callable. A write must read back the same logical value. Use directional adaptors for lossy conversion. Movement and swapping require the appropriate logical writeback laws.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/iterator>
 
-int twice(int value) { return 2 * value; }
-int half(int value) { return value / 2; }
-
 bool example()
 {
-    int value = 3;
-    asc::transform_input_output_iterator<int(*)(int), int(*)(int), int*> iterator(&value, twice, half);
-    const bool read = (*iterator).read() == 6;
-    *iterator = 10;
-    return read && value == 5;
+    unsigned stored = 0;
+    auto f = [](unsigned x) { return x ^ 0x80u; };
+    asc::transform_input_output_iterator<decltype(f), decltype(f), unsigned*> it(&stored, f, f);
+    *it = 7u;
+    unsigned value = *it;
+    return stored == 135u && value == 7u;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

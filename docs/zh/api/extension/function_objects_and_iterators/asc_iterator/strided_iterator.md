@@ -26,41 +26,38 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+保存物理起点、范围长度、有符号步长和逻辑位置；正步长从首项开始，负步长从末项开始。
 
-`asc::strided_iterator`是借用底层随机访问迭代器的定步长适配器。支持正、负非零步长的完整随机访问操作，包括双向移动、下标、顺序比较、迭代器距离及标准迭代器traits；单次移动对应底层移动一个步长。
+`<asc/iterator>`
 
 ## 声明
 
 ```cpp
 namespace asc {
-template<class Iterator, class Stride = asc::std::ptrdiff_t> class strided_iterator;
-} // namespace asc
+template <class Iterator>
+class strided_iterator;
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 步长必须非零。
-- 参与距离或顺序比较的迭代器须使用相同步长，底层位置须按步长对齐。
-- 迭代器及其底层范围在使用期间必须有效。
+底层可读且随机访问；extent 非负、stride 非零。长度5和步长±2分别选择0/2/4与4/2/0，count() 为3。形成终点不形成越界指针，base() 始终返回物理起点。extent()/stride()/count()/index() 观察状态。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    asc::strided_iterator<int*> iterator(values, 2);
-    const bool first = *iterator == 1;
-    ++iterator;
-    return first && *iterator == 3;
+    int data[5] = {1, 2, 3, 4, 5};
+    asc::strided_iterator<int*> it(data, 5, -2);
+    return it.count() == 3 && it[1] == 3 && (it + 3).base() == data;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

@@ -484,29 +484,6 @@
       "runtime_case": "asc/tensor_copy"
     },
     {
-      "target": "asc/__numeric/checked_arithmetic.h",
-      "visibility": "private",
-      "dependencies": [
-        "asc/__config",
-        "asc/__detail/attributes.h",
-        "asc/std/__type_traits/disjunction.h",
-        "asc/std/__type_traits/integral_constant.h",
-        "asc/std/__type_traits/is_same.h",
-        "asc/std/__utility/cmp.h",
-        "asc/std/limits"
-      ],
-      "semantic_case": "asc/numeric",
-      "runtime_case": "asc/numeric",
-      "applicability": {
-        "host_header": true,
-        "device_header": true,
-        "host_semantic": true,
-        "device_compile": true,
-        "cannsim_runtime": true,
-        "hardware_runtime": true
-      }
-    },
-    {
       "target": "asc/__parallel/adjacent_difference.h",
       "visibility": "private",
       "dependencies": [
@@ -1053,29 +1030,6 @@
       "negative_cases": [
         "nontrivial_element.fail.cpp"
       ]
-    },
-    {
-      "target": "asc/__cmath/integer.h",
-      "visibility": "private",
-      "dependencies": [
-        "asc/__config",
-        "asc/std/__type_traits/enable_if.h",
-        "asc/std/__type_traits/is_constant_evaluated.h",
-        "asc/std/__type_traits/is_same.h",
-        "asc/std/__type_traits/is_signed.h",
-        "asc/std/__type_traits/is_unsigned.h",
-        "asc/std/__type_traits/make_unsigned.h",
-        "asc/std/limits"
-      ],
-      "semantic_case": "asc/cmath",
-      "applicability": {
-        "host_header": true,
-        "device_header": true,
-        "host_semantic": true,
-        "device_compile": true,
-        "cannsim_runtime": false,
-        "hardware_runtime": false
-      }
     },
     {
       "target": "asc/cmath",
@@ -15480,12 +15434,20 @@
       "target": "asc/iterator",
       "visibility": "public",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/__iterator/values.h",
+        "asc/__iterator/zip.h"
       ],
       "semantic_case": "asc/iterator",
       "negative_cases": [
         "address_space_erasure.fail.asc",
-        "owning_range.fail.cpp"
+        "owning_range.fail.cpp",
+        "counter_bool.fail.cpp",
+        "counter_float.fail.cpp",
+        "zero_stride.fail.cpp",
+        "negative_extent.fail.cpp",
+        "readonly_write.fail.cpp",
+        "zip_arity.fail.cpp"
       ],
       "applicability": {
         "host_header": true,
@@ -15495,7 +15457,14 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/iterator",
+      "device_compile_cases": [
+        "device.compile.asc",
+        "contracts.compile.asc"
+      ],
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/chrono",
@@ -19302,6 +19271,213 @@
         "device.compile.asc",
         "address_space.compile.asc"
       ]
+    },
+    {
+      "target": "asc/__iterator/support.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/functional",
+        "asc/std/iterator",
+        "asc/std/limits",
+        "asc/std/optional",
+        "asc/std/tuple",
+        "asc/std/type_traits",
+        "asc/std/utility"
+      ],
+      "semantic_case": "asc/iterator",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__iterator/values.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__iterator/support.h"
+      ],
+      "semantic_case": "asc/iterator",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__iterator/access.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__iterator/cursor.h"
+      ],
+      "semantic_case": "asc/iterator",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__iterator/output.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__iterator/access.h",
+        "asc/__iterator/cursor.h"
+      ],
+      "semantic_case": "asc/iterator",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__iterator/zip.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__iterator/zip_iterator.h",
+        "asc/__iterator/zip_function.h"
+      ],
+      "semantic_case": "asc/iterator",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__iterator/cursor.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__iterator/support.h"
+      ],
+      "semantic_case": "asc/iterator",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__iterator/zip_reference.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__iterator/output.h"
+      ],
+      "semantic_case": "asc/iterator",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__iterator/zip_iterator.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__iterator/zip_reference.h"
+      ],
+      "semantic_case": "asc/iterator",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__iterator/zip_function.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__iterator/zip_iterator.h"
+      ],
+      "semantic_case": "asc/iterator",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
+    },
+    {
+      "target": "asc/__numeric/checked_arithmetic.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/__detail/attributes.h",
+        "asc/std/__type_traits/disjunction.h",
+        "asc/std/__type_traits/integral_constant.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__utility/cmp.h",
+        "asc/std/limits"
+      ],
+      "semantic_case": "asc/numeric",
+      "runtime_case": "asc/numeric",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": true,
+        "hardware_runtime": true
+      }
+    },
+    {
+      "target": "asc/__cmath/integer.h",
+      "visibility": "private",
+      "dependencies": [
+        "asc/__config",
+        "asc/std/__type_traits/enable_if.h",
+        "asc/std/__type_traits/is_constant_evaluated.h",
+        "asc/std/__type_traits/is_same.h",
+        "asc/std/__type_traits/is_signed.h",
+        "asc/std/__type_traits/is_unsigned.h",
+        "asc/std/__type_traits/make_unsigned.h",
+        "asc/std/limits"
+      ],
+      "semantic_case": "asc/cmath",
+      "applicability": {
+        "host_header": true,
+        "device_header": true,
+        "host_semantic": true,
+        "device_compile": true,
+        "cannsim_runtime": false,
+        "hardware_runtime": false
+      }
     }
   ],
   "runtime_asset_manifests": {
@@ -19309,8 +19485,9 @@
     "asc/std/__algorithm/lower_bound.h": "runtime/assets.json",
     "asc/std/__algorithm/ranges_copy.h": "runtime/assets.json",
     "asc/numeric_types": "runtime/assets.json",
-    "asc/numeric": "runtime/assets.json",
+    "asc/iterator": "runtime/assets.json",
     "asc/bit": "runtime/assets.json",
+    "asc/numeric": "runtime/assets.json",
     "asc/cmath": "runtime/assets.json",
     "asc/random": "runtime/assets.json"
   }

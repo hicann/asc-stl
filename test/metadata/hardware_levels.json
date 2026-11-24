@@ -9,6 +9,7 @@
     "asc/bit": "HW0",
     "asc/cmath": "HW1",
     "asc/hierarchy": "HW1",
+    "asc/iterator": "HW1",
     "asc/numeric": "HW1",
     "asc/numeric_types": "HW1",
     "asc/random": "HW1",

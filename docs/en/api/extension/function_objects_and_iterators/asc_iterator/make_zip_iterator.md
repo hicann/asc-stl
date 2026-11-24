@@ -26,60 +26,39 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Constructs the adaptor, deducing and owning its state. Combines one or more positions into an unspecified tuple-protocol proxy with bindings, ADL get, value conversion and const assignment.
 
-`asc::make_zip_iterator` creates a zip_iterator that advances multiple underlying iterators in parallel.
+`<asc/iterator>`
 
-## Function Prototype
+## Declaration
 
 ```cpp
 namespace asc {
-template <class... Iterators>
-constexpr asc::zip_iterator<Iterators...> make_zip_iterator(Iterators... iterators);
+template <class... I>
+constexpr zip_iterator<I...> make_zip_iterator(I... current);
 }  // namespace asc
 ```
 
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Iterators` | The type of iterator used to traverse the input range; it must satisfy the traversal capability required by the prototype. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `iterators` | Input | The iterators pointing to the positions of this operation; the ranges they point to must remain valid during the call. |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `asc::zip_iterator<Iterators...>` | Returns an iterator adaptor storing the caller's arguments; the underlying range must remain valid during use. |
-
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+Navigation follows the weakest component; a whole-tuple write requires all targets writable. Equality checks all positions and distances agree. The caller supplies a common length; physical ends of unequal ranges cannot be combined.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example uses concrete inputs and checks the result within the object's lifetime.
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    auto iterator = asc::make_zip_iterator(values, indices);
-    return (*iterator).get<0>() == 1 && (*iterator).get<1>() == 3;
+    int a[2] = {1, 2}, b[2] = {10, 20};
+    auto it = asc::make_zip_iterator(a, b);
+    *it = asc::std::tuple<int, int>{3, 30};
+    return a[0] == 3 && b[0] == 30;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

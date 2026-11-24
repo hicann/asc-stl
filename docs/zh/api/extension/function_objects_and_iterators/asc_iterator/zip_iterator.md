@@ -26,9 +26,9 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+组合一个或多个位置，返回支持结构化绑定、ADL get、值转换和 const 赋值的未指定 tuple 协议代理。
 
-`asc::zip_iterator`把多个迭代器的同一位置组合为引用代理的轻量迭代器适配器。
+`<asc/iterator>`
 
 ## 声明
 
@@ -41,30 +41,24 @@ class zip_iterator;
 
 ## 约束说明
 
-- 此适配器仅提供本页所述轻量操作，不满足标准RandomAccessIterator的完整traits与操作集合；例如zip只支持前置递增和相等比较，不能据此用于任意要求随机访问的标准算法。
+能力取最弱分量，整体写入要求每项可写。判等须全部位置相等，距离须全部位移一致。调用方指定共同长度，不自动最短终止，不能拼接不等长各自末尾。仅移动值按引用/移动路径支持。
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int left[2] = {1, 2};
-    int right[2] = {3, 4};
-    asc::zip_iterator<int*, int*> iterator(left, right);
-    auto pair = *iterator;
-    pair.get<0>() = 7;
-    ++iterator;
-    return left[0] == 7 && (*iterator).get<0>() == 2 && (*iterator).get<1>() == 4;
+    int a[2] = {1, 2}, b[2] = {10, 20};
+    asc::zip_iterator<int*, int*> it(a, b);
+    *it = asc::std::tuple<int, int>{3, 30};
+    return a[0] == 3 && b[0] == 30;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

@@ -26,63 +26,40 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+创建对应适配器，推导并按值保存所需状态。按索引访问随机访问数据，保持引用、代理和值的 const。
 
-`asc::make_permutation_iterator`创建按索引序列访问数据的permutation_iterator。
+`<asc/iterator>`
 
-## 函数原型
+## 声明
 
 ```cpp
 namespace asc {
-template <class Iterator, class IndexIterator>
-constexpr asc::permutation_iterator<Iterator, IndexIterator> make_permutation_iterator(
-    Iterator iterator, IndexIterator index);
+template <class I, class J>
+constexpr permutation_iterator<I, J> make_permutation_iterator(I data_first, J index_current);
 }  // namespace asc
 ```
 
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Iterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `IndexIterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `iterator` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
-| `index` | 输入 | 指向本次操作位置的迭代器；所指范围须在调用期间有效。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `asc::permutation_iterator<Iterator, IndexIterator>` | 返回保存调用方参数的迭代器适配器；底层范围须在使用期间保持有效。 |
-
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+索引须非负、可表示且在范围内。允许重复索引读取，顺序重复写最后成功写入生效；重排要求独立目标，并发写入须避免冲突。位置比较使用索引位置。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    auto iterator = asc::make_permutation_iterator(values, indices);
-    return *iterator == 4;
+    int data[3] = {10, 20, 30};
+    int indices[2] = {2, 0};
+    auto it = asc::make_permutation_iterator(data, indices);
+    it[1] = 7;
+    return *it == 30 && data[0] == 7;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

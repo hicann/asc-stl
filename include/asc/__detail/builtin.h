@@ -38,6 +38,17 @@ extern "C" void abort();
 #define CANN_ASC_STL_DETAIL_BUILTIN_TRAP() abort()
 #endif
 
+// A violated precondition need not report a Device error. In particular, CCE
+// can lower a trap to an unavailable Host abort symbol. This marker retains
+// rejection during constant evaluation without adding that runtime call.
+#if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_unreachable) || defined(__GNUC__) || defined(__clang__)
+#define CANN_ASC_STL_DETAIL_BUILTIN_ASSUME_UNREACHABLE() __builtin_unreachable()
+#elif defined(_MSC_VER)
+#define CANN_ASC_STL_DETAIL_BUILTIN_ASSUME_UNREACHABLE() __assume(0)
+#else
+#define CANN_ASC_STL_DETAIL_BUILTIN_ASSUME_UNREACHABLE() CANN_ASC_STL_DETAIL_BUILTIN_TRAP()
+#endif
+
 #if CANN_ASC_STL_DETAIL_HAS_BUILTIN(__builtin_trap) || defined(__GNUC__)
 #define CANN_ASC_STL_DETAIL_BUILTIN_UNREACHABLE() \
     do {                                          \

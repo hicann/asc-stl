@@ -26,42 +26,39 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+返回 const 函数对象作用于底层解引用结果的值或引用，保持返回值类别。
 
-`asc::transform_iterator`解引用时对底层迭代器元素执行变换的输入迭代器。
+`<asc/iterator>`
 
 ## 声明
 
 ```cpp
 namespace asc {
-template<class Function, class Iterator> class transform_iterator;
-} // namespace asc
+template <class Function, class Iterator>
+class transform_iterator;
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+读取结果须稳定，不消耗函数或输入状态。引用对象须保持有效。操作能力随底层；C++17 类别保持输入，C++20 按实际协议提供概念。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
-int twice(int value) { return 2 * value; }
-
 bool example()
 {
-    int values[2] = {2, 3};
-    asc::transform_iterator<int(*)(int), int*> iterator(values, twice);
-    const bool first = *iterator == 4;
-    ++iterator;
-    return first && *iterator == 6;
+    int data[2] = {3, 5};
+    auto f = [](int x) { return x * 2; };
+    asc::transform_iterator<decltype(f), int*> it(data, f);
+    return *it == 6 && it[1] == 10;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

@@ -26,58 +26,38 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Constructs the adaptor, deducing and owning its state. Stores an initial integer and a separate signed logical position; reads their mathematical sum.
 
-`asc::make_counting_iterator` creates a counting_iterator starting from the given initial value.
+`<asc/iterator>`
 
-## Function Prototype
+## Declaration
 
 ```cpp
 namespace asc {
-template <class Start>
-constexpr asc::counting_iterator<Start> make_counting_iterator(Start start);
+template <class D = asc::std::ptrdiff_t, class Start>
+constexpr counting_iterator<Start, D> make_counting_iterator(Start first, D position = 0) noexcept;
 }  // namespace asc
 ```
 
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Start` | The type of the values the counter produces: dereference and subscript return a count of this type. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `start` | Input | The starting count: dereference produces this value, and it increments step by step as the iterator advances. |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `asc::counting_iterator<Start>` | Returns an iterator adaptor storing the caller's arguments; if the stored function object captures external references, those references must remain valid during use. |
-
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+Start is a standard integer other than bool. Results and arithmetic must be representable. Virtual ends need not be readable; index() returns the position.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
 
-The following Host example uses concrete inputs and checks the result within the object's lifetime.
-
 ```cpp
 #include <asc/iterator>
+
 bool example()
 {
-    auto iterator = asc::make_counting_iterator(3);
-    ++iterator;
-    return *iterator == 4;
+    auto it = asc::make_counting_iterator(3);
+    it += 2;
+    return *it == 5 && it.index() == 2;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

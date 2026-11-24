@@ -77,7 +77,7 @@ CANN_ASC_STL_API int evaluate_iterator()
     auto constant = asc::make_constant_iterator(7);
     auto counting = asc::make_counting_iterator(3);
     auto permutation = asc::make_permutation_iterator(values, indices);
-    auto strided = asc::make_strided_iterator(values, 2);
+    auto strided = asc::make_strided_iterator(values, 6, 2);
     auto shuffled = asc::make_shuffle_iterator(reverse_four{}, static_cast<__SIZE_TYPE__>(0));
     auto transformed = asc::make_transform_iterator(values, times_two{});
     if (*constant != 7 || constant[9] != 7 || counting[4] != 7)
@@ -110,7 +110,7 @@ CANN_ASC_STL_API int evaluate_iterator()
     forward -= 1;
     if (*forward != 6 || forward - strided != 1)
         return 9;
-    auto reverse = asc::make_strided_iterator(values + 5, -2);
+    auto reverse = asc::make_strided_iterator(values, 6, -2);
     auto reverse_end = reverse + 2;
     if (*reverse != 12 || reverse[1] != 8 || *reverse_end != 4 || reverse_end - reverse != 2 ||
         !(reverse < reverse_end) || !(reverse_end > reverse))

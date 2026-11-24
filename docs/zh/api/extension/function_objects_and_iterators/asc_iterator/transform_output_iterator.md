@@ -26,41 +26,41 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+解引用生成保存位置和函数副本的只写代理；赋值时转发实参，调用一次函数并写入一次。
 
-`asc::transform_output_iterator`写入时先变换值再写到底层迭代器的输出迭代器。
+`<asc/iterator>`
 
 ## 声明
 
 ```cpp
 namespace asc {
-template<class Function, class Iterator> class transform_output_iterator;
-} // namespace asc
+template <class Function, class Iterator>
+class transform_output_iterator;
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+const 目标不可写。const 代理可赋值，临时适配器销毁后仍可在底层目标和捕获对象有效时使用。后置操作保留旧目标，支持 *it++ = value；输出函数副本允许副作用。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
-int twice(int value) { return 2 * value; }
-
 bool example()
 {
-    int values[2] = {};
-    asc::transform_output_iterator<int(*)(int), int*> iterator(values, twice);
-    *iterator = 3;
-    return values[0] == 6;
+    int data[2] = {};
+    auto f = [](int x) { return x * 2; };
+    asc::transform_output_iterator<decltype(f), int*> it(data, f);
+    *it++ = 3;
+    *it = 4;
+    return data[0] == 6 && data[1] == 8;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

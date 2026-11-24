@@ -26,62 +26,42 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+创建对应适配器，推导并按值保存所需状态。每次赋值调用一次 function(first+position,value)，回调返回值丢弃。
 
-`asc::make_tabulate_output_iterator`创建把索引和值交给函数处理的输出迭代器。
+`<asc/iterator>`
 
-## 函数原型
+## 声明
 
 ```cpp
 namespace asc {
-template <class Function, class Integer = asc::std::ptrdiff_t>
-constexpr asc::tabulate_output_iterator<Function, Integer> make_tabulate_output_iterator(
-    Function function, Integer index = 0);
+template <class D = asc::std::ptrdiff_t, class F, class Index = D>
+constexpr tabulate_output_iterator<asc::std::decay_t<F>, Index, D> make_tabulate_output_iterator(
+    F&& function, Index first = 0, D position = 0);
 }  // namespace asc
 ```
 
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Function` | 对输入值执行本页操作的可调用对象类型。 |
-| `Integer` | 索引类型，默认ptrdiff_t：随迭代递增并传给function。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `function` | 输入 | 输出函数对象：对本迭代器赋值时按function(当前索引, 写入值)调用。 |
-| `index` | 输入 | 起始索引，默认0：随迭代器递增并作为function的第一个参数。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `asc::tabulate_output_iterator<Function, Integer>` | 返回保存调用方参数的迭代器适配器；所保存函数对象若捕获外部引用，该引用须在使用期间有效。 |
-
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+索引与有符号差值分开。解引用和位置运算不调用回调；代理保存旧索引，函数副本可以有副作用，跨代理共享状态须显式捕获。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
 
-以下Host示例使用具体输入，在对象存活期内检查结果。
-
 ```cpp
 #include <asc/iterator>
+
 bool example()
 {
-    int values[2] = {};
-    auto iterator = asc::make_tabulate_output_iterator([&values](int i, int value) { values[i] = value; }, 0);
-    *iterator = 7;
-    return values[0] == 7;
+    int data[2] = {};
+    auto f = [&](asc::std::ptrdiff_t n, int x) { data[n] = x; };
+    auto it = asc::make_tabulate_output_iterator(f);
+    *it++ = 3;
+    *it = 5;
+    return data[0] == 3 && data[1] == 5;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

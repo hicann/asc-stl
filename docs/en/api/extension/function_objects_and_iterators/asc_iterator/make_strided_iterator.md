@@ -26,92 +26,39 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Constructs the adaptor, deducing and owning its state. Stores a physical anchor, extent, signed stride and logical position. Positive strides start at the first element; negative strides start at the last.
 
-`asc::make_strided_iterator` constructs a fixed-stride adaptor from an underlying random access iterator; the single-argument overload uses stride 1, and the two-argument overload uses the given positive or negative non-zero stride.
+`<asc/iterator>`
 
-## Function Prototype
-
-### Prototype 1
+## Declaration
 
 ```cpp
 namespace asc {
-template <class Iterator, class Stride>
-constexpr asc::strided_iterator<Iterator, Stride> make_strided_iterator(Iterator iterator, Stride stride);
+template <class I>
+constexpr strided_iterator<I> make_strided_iterator(
+    I first, asc::std::iter_difference_t<I> extent, asc::std::iter_difference_t<I> stride = 1);
 }  // namespace asc
 ```
-
-### Prototype 2
-
-```cpp
-namespace asc {
-template <class Iterator>
-constexpr asc::strided_iterator<Iterator> make_strided_iterator(Iterator iterator);
-}  // namespace asc
-```
-
-## Parameters
-
-### Parameters of Prototype 1
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Iterator` | The type of iterator used to traverse the input range; it must satisfy the traversal capability required by the prototype. |
-| `Stride` | The stride type (an integer type). |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `iterator` | Input | The underlying iterator to be wrapped: each time this iterator advances 1 step, the underlying iterator advances stride positions. |
-| `stride` | Input | The number of underlying elements spanned per step: advancing/retreating 1 step moves the underlying iterator by stride positions; it must be non-zero. |
-
-### Parameters of Prototype 2
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Iterator` | The type of iterator used to traverse the input range; it must satisfy the traversal capability required by the prototype. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `iterator` | Input | The underlying iterator to be wrapped: this prototype is the degenerate form with stride 1 and accesses with unit stride. |
-
-## Return Value
-
-| Applicable prototype | Return type | Description |
-| --- | --- | --- |
-| Prototype 1 | `asc::strided_iterator<Iterator, Stride>` | Returns an iterator adaptor storing the caller's arguments; the underlying range must remain valid during use. |
-| Prototype 2 | `asc::strided_iterator<Iterator>` | Returns an iterator adaptor storing the caller's arguments; the underlying range must remain valid during use. |
 
 ## Constraints
 
-- The underlying iterator must support random access, and the stride must be a non-zero integer.
-- The returned object does not own the underlying range.
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+The base is readable and random access. Extent is nonnegative and stride nonzero. Extent5 with strides2/-2 selects0,2,4 /4,2,0. count() is3. Ends never form invalid physical pointers; base() always returns the anchor.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example uses concrete inputs and checks the result within the object's lifetime.
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    auto iterator = asc::make_strided_iterator(values, 2);
-    return *iterator == 1 && iterator[1] == 3;
+    int data[5] = {1, 2, 3, 4, 5};
+    auto it = asc::make_strided_iterator(data, 5, -2);
+    return it.count() == 3 && it[1] == 3 && (it + 3).base() == data;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

@@ -26,43 +26,38 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+丢弃赋值，不读取、移动或转换实参；右侧表达式仍正常求值。
 
-`asc::discard_iterator`接收写入但丢弃赋值结果的输出迭代器。
+`<asc/iterator>`
 
 ## 声明
 
 ```cpp
 namespace asc {
 class discard_iterator;
-} // namespace asc
+}  // namespace asc
 ```
 
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+默认位置0有效，位置类型为有符号 ptrdiff_t。输出协议和额外位置算术不使其成为可读迭代器。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
 
-以下Host示例给出具体输入，并检查调用结果。
-
 ```cpp
 #include <asc/iterator>
-#include <asc/std/algorithm>
-#include <asc/std/type_traits>
 
 bool example()
 {
-    int values[] = {2, 4};
-    asc::discard_iterator output;
-    auto result = asc::std::copy(values, values + 2, output);
-    static_assert(asc::std::is_same_v<decltype(result), asc::discard_iterator>);
-    // 丢弃输出不会修改输入。
-    return values[0] == 2 && values[1] == 4;
+    int evaluated = 0;
+    asc::discard_iterator it;
+    *it++ = ++evaluated;
+    return evaluated == 1 && it.index() == 1;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

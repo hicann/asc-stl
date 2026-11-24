@@ -26,9 +26,9 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Combines one or more positions into an unspecified tuple-protocol proxy with bindings, ADL get, value conversion and const assignment.
 
-`asc::zip_iterator` is a lightweight iterator adaptor that combines the same position of multiple iterators into a reference proxy.
+`<asc/iterator>`
 
 ## Declaration
 
@@ -41,30 +41,24 @@ class zip_iterator;
 
 ## Constraints
 
-- This adaptor provides only the lightweight operations described on this page and does not satisfy the complete set of traits and operations of the standard RandomAccessIterator; for example, zip supports only pre-increment and equality comparison, and must not be assumed usable for arbitrary standard algorithms requiring random access.
+Navigation follows the weakest component; a whole-tuple write requires all targets writable. Equality checks all positions and distances agree. The caller supplies a common length; physical ends of unequal ranges cannot be combined.
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int left[2] = {1, 2};
-    int right[2] = {3, 4};
-    asc::zip_iterator<int*, int*> iterator(left, right);
-    auto pair = *iterator;
-    pair.get<0>() = 7;
-    ++iterator;
-    return left[0] == 7 && (*iterator).get<0>() == 2 && (*iterator).get<1>() == 4;
+    int a[2] = {1, 2}, b[2] = {10, 20};
+    asc::zip_iterator<int*, int*> it(a, b);
+    *it = asc::std::tuple<int, int>{3, 30};
+    return a[0] == 3 && b[0] == 30;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

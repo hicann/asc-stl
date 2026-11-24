@@ -26,67 +26,42 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Constructs the adaptor, deducing and owning its state. A proxy reads and stores logical values through separate input and output transformations.
 
-`asc::make_transform_input_output_iterator` creates an iterator with both an input transform and an output transform.
+`<asc/iterator>`
 
-## Function Prototype
+## Declaration
 
 ```cpp
 namespace asc {
-template <class Iterator, class InputFunction, class OutputFunction>
-constexpr asc::transform_input_output_iterator<InputFunction, OutputFunction, Iterator>
-make_transform_input_output_iterator(Iterator iterator, InputFunction input_function, OutputFunction output_function);
+template <class I, class In, class Out>
+constexpr transform_input_output_iterator<asc::std::decay_t<In>, asc::std::decay_t<Out>, I>
+make_transform_input_output_iterator(I current, In&& input, Out&& output);
 }  // namespace asc
 ```
 
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Iterator` | The type of iterator used to traverse the input range; it must satisfy the traversal capability required by the prototype. |
-| `InputFunction` | The type of the callable read-transform object: reads are transformed as input_function(*underlying iterator). |
-| `OutputFunction` | The type of the callable write-transform object: writes are first transformed by output_function and then stored into the underlying iterator. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `iterator` | Input | The underlying iterator to be wrapped: reads and writes actually act on the position this iterator points to. |
-| `input_function` | Input | The read transform object: the dereference read result is input_function(*underlying iterator). |
-| `output_function` | Input | The write transform object: values assigned to this iterator are first transformed by output_function and then written to the underlying position. |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `asc::transform_input_output_iterator<InputFunction, OutputFunction, Iterator>` | Returns an iterator adaptor storing the caller's arguments; the underlying range must remain valid during use. |
-
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+The base is at least forward; the read callable is stable and const-callable. A write must read back the same logical value. Use directional adaptors for lossy conversion. Movement and swapping require the appropriate logical writeback laws.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example uses concrete inputs and checks the result within the object's lifetime.
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    auto iterator = asc::make_transform_input_output_iterator(
-        values, [](int value) { return value; }, [](int value) { return value; });
-    *iterator = 9;
-    return (*iterator).read() == 9 && values[0] == 9;
+    unsigned stored = 0;
+    auto f = [](unsigned x) { return x ^ 0x80u; };
+    auto it = asc::make_transform_input_output_iterator(&stored, f, f);
+    *it = 7u;
+    unsigned value = *it;
+    return stored == 135u && value == 7u;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

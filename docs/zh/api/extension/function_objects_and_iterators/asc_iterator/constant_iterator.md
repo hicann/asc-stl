@@ -26,42 +26,38 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+按值拥有可复制的常量，每次解引用返回 T 值，不暴露迭代器内部引用。
 
-`asc::constant_iterator`生成始终解引用为同一个常量值的轻量迭代器适配器。
+`<asc/iterator>`
 
 ## 声明
 
 ```cpp
 namespace asc {
-template <class T, class Index = asc::std::ptrdiff_t>
+template <class T, class Difference = asc::std::ptrdiff_t>
 class constant_iterator;
 }  // namespace asc
 ```
 
 ## 约束说明
 
-- 此适配器仅提供本页所述轻量操作，不满足标准RandomAccessIterator的完整traits与操作集合；例如zip只支持前置递增和相等比较，不能据此用于任意要求随机访问的标准算法。
+T 是完整、无顶层 cv 的非数组对象；Difference 必须有符号。C++17 类别为输入，C++20 可满足随机访问概念。
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例展示具体输入、接口调用和可检查的结果。
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    asc::constant_iterator<int> iterator(7);
-    const bool first = *iterator == 7;
-    ++iterator;
-    return first && *iterator == 7;
+    asc::constant_iterator<int> it(7);
+    it += 2;
+    return it[1] == 7 && it.index() == 2;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

@@ -26,9 +26,9 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Stores an initial integer and a separate signed logical position; reads their mathematical sum.
 
-`asc::counting_iterator` produces a lightweight iterator adaptor that increments according to a stepping rule.
+`<asc/iterator>`
 
 ## Declaration
 
@@ -41,27 +41,23 @@ class counting_iterator;
 
 ## Constraints
 
-- This adaptor provides only the lightweight operations described on this page and does not satisfy the complete set of traits and operations of the standard RandomAccessIterator; for example, zip supports only pre-increment and equality comparison, and must not be assumed usable for arbitrary standard algorithms requiring random access.
+Start is a standard integer other than bool. Results and arithmetic must be representable. Virtual ends need not be readable; index() returns the position.
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    asc::counting_iterator<int> iterator(3);
-    const bool first = *iterator == 3;
-    ++iterator;
-    return first && *iterator == 4;
+    asc::counting_iterator<int> it(3);
+    it += 2;
+    return *it == 5 && it.index() == 2;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

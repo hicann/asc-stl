@@ -26,62 +26,39 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+创建对应适配器，推导并按值保存所需状态。返回 const 函数对象作用于底层解引用结果的值或引用，保持返回值类别。
 
-`asc::make_transform_iterator`创建解引用时执行变换的输入迭代器。
+`<asc/iterator>`
 
-## 函数原型
+## 声明
 
 ```cpp
 namespace asc {
-template <class Iterator, class Function>
-constexpr asc::transform_iterator<Function, Iterator> make_transform_iterator(Iterator iterator, Function function);
+template <class I, class F>
+constexpr transform_iterator<asc::std::decay_t<F>, I> make_transform_iterator(I current, F&& function);
 }  // namespace asc
 ```
 
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Iterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `Function` | 对输入值执行本页操作的可调用对象类型。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `iterator` | 输入 | 被包装的底层迭代器：其解引用结果交给function变换。 |
-| `function` | 输入 | 变换对象：解引用与下标结果为function(*底层迭代器)。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `asc::transform_iterator<Function, Iterator>` | 返回保存调用方参数的迭代器适配器；底层范围须在使用期间保持有效。 |
-
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+读取结果须稳定，不消耗函数或输入状态。引用对象须保持有效。操作能力随底层；C++17 类别保持输入，C++20 按实际协议提供概念。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    auto iterator = asc::make_transform_iterator(values, [](int value) { return value + 1; });
-    return *iterator == 2;
+    int data[2] = {3, 5};
+    auto f = [](int x) { return x * 2; };
+    auto it = asc::make_transform_iterator(data, f);
+    return *it == 6 && it[1] == 10;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

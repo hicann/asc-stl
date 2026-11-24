@@ -26,62 +26,42 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Constructs the adaptor, deducing and owning its state. Each assignment invokes function(first+position,value) once and discards the result.
 
-`asc::make_tabulate_output_iterator` creates an output iterator that passes the index and value to a function.
+`<asc/iterator>`
 
-## Function Prototype
+## Declaration
 
 ```cpp
 namespace asc {
-template <class Function, class Integer = asc::std::ptrdiff_t>
-constexpr asc::tabulate_output_iterator<Function, Integer> make_tabulate_output_iterator(
-    Function function, Integer index = 0);
+template <class D = asc::std::ptrdiff_t, class F, class Index = D>
+constexpr tabulate_output_iterator<asc::std::decay_t<F>, Index, D> make_tabulate_output_iterator(
+    F&& function, Index first = 0, D position = 0);
 }  // namespace asc
 ```
 
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Function` | The type of the callable object that performs this page's operation on the input values. |
-| `Integer` | The index type, defaulting to ptrdiff_t: it increments as iteration advances and is passed to function. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `function` | Input | The output function object: assignment to this iterator invokes function(current index, written value). |
-| `index` | Input | The starting index, defaulting to 0: it increments with the iterator and serves as the first argument of function. |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `asc::tabulate_output_iterator<Function, Integer>` | Returns an iterator adaptor storing the caller's arguments; if the stored function object captures external references, those references must remain valid during use. |
-
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+Index is separate from the signed difference. Dereference and movement do not invoke the callback. Proxies retain the old index; explicitly capture any state shared across callable snapshots.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
 
-The following Host example uses concrete inputs and checks the result within the object's lifetime.
-
 ```cpp
 #include <asc/iterator>
+
 bool example()
 {
-    int values[2] = {};
-    auto iterator = asc::make_tabulate_output_iterator([&values](int i, int value) { values[i] = value; }, 0);
-    *iterator = 7;
-    return values[0] == 7;
+    int data[2] = {};
+    auto f = [&](asc::std::ptrdiff_t n, int x) { data[n] = x; };
+    auto it = asc::make_tabulate_output_iterator(f);
+    *it++ = 3;
+    *it = 5;
+    return data[0] == 3 && data[1] == 5;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

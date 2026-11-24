@@ -26,92 +26,39 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+创建对应适配器，推导并按值保存所需状态。保存物理起点、范围长度、有符号步长和逻辑位置；正步长从首项开始，负步长从末项开始。
 
-`asc::make_strided_iterator`从底层随机访问迭代器构造定步长适配器；单参数重载使用步长1，双参数重载使用给定的正或负非零步长。
+`<asc/iterator>`
 
-## 函数原型
-
-### 原型1
+## 声明
 
 ```cpp
 namespace asc {
-template <class Iterator, class Stride>
-constexpr asc::strided_iterator<Iterator, Stride> make_strided_iterator(Iterator iterator, Stride stride);
+template <class I>
+constexpr strided_iterator<I> make_strided_iterator(
+    I first, asc::std::iter_difference_t<I> extent, asc::std::iter_difference_t<I> stride = 1);
 }  // namespace asc
 ```
-
-### 原型2
-
-```cpp
-namespace asc {
-template <class Iterator>
-constexpr asc::strided_iterator<Iterator> make_strided_iterator(Iterator iterator);
-}  // namespace asc
-```
-
-## 参数说明
-
-### 原型1的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Iterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-| `Stride` | 步长类型（整数）。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `iterator` | 输入 | 被包装的底层迭代器：本迭代器每前进1步，底层迭代器前进stride个位置。 |
-| `stride` | 输入 | 每步跨越的底层元素个数：前进/后退1步对应底层迭代器移动stride个位置，须非零。 |
-
-### 原型2的参数
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Iterator` | 遍历输入范围所使用的迭代器类型；须满足原型要求的遍历能力。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `iterator` | 输入 | 被包装的底层迭代器：该原型为步长1的退化形式，按单位步长访问。 |
-
-## 返回值说明
-
-| 适用原型 | 返回值类型 | 含义 |
-| --- | --- | --- |
-| 原型1 | `asc::strided_iterator<Iterator, Stride>` | 返回保存调用方参数的迭代器适配器；底层范围须在使用期间保持有效。 |
-| 原型2 | `asc::strided_iterator<Iterator>` | 返回保存调用方参数的迭代器适配器；底层范围须在使用期间保持有效。 |
 
 ## 约束说明
 
-- 底层迭代器须支持随机访问，步长须为非零整数。
-- 返回对象不拥有底层范围。
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+底层可读且随机访问；extent 非负、stride 非零。长度5和步长±2分别选择0/2/4与4/2/0，count() 为3。形成终点不形成越界指针，base() 始终返回物理起点。extent()/stride()/count()/index() 观察状态。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
-
-以下Host示例使用具体输入，在对象存活期内检查结果。
 
 ```cpp
 #include <asc/iterator>
 
 bool example()
 {
-    int values[4] = {1, 2, 3, 4};
-    int indices[4] = {3, 2, 1, 0};
-    auto iterator = asc::make_strided_iterator(values, 2);
-    return *iterator == 1 && iterator[1] == 3;
+    int data[5] = {1, 2, 3, 4, 5};
+    auto it = asc::make_strided_iterator(data, 5, -2);
+    return it.count() == 3 && it[1] == 3 && (it + 3).base() == data;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

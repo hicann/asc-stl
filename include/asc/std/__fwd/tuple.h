@@ -39,6 +39,18 @@
 
 // std:: forward declarations
 
+// The language's tuple binding protocol names ::std even in a freestanding
+// Device translation unit. Keep its primary declarations in this one owner;
+// extension proxies provide only their own specializations.
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+namespace std {
+template <class>
+struct tuple_size;
+template <__SIZE_TYPE__, class>
+struct tuple_element;
+}  // namespace std
+#endif
+
 #if CANN_ASC_STL_DETAIL_HAS_HOST_STD_LIB()
 namespace std {
 template <class...>

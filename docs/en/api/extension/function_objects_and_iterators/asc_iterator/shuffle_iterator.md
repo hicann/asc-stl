@@ -26,45 +26,38 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Invokes the deterministic index mapping once per read, never for movement.
 
-`asc::shuffle_iterator` stores a mapping object and an index, and returns bijection(current index) on dereference; combine it with permutation_iterator when data needs to be read through the result.
+`<asc/iterator>`
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template <class Index, class Bijection>
+template <class Index, class Bijection, class Difference = asc::std::ptrdiff_t>
 class shuffle_iterator;
 }  // namespace asc
 ```
 
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+The mapping is a bijection on a caller-defined finite domain and returns Index. Difference is separately signed. This is neither a Warp operation nor a random shuffle algorithm.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/iterator>
 
-int reverse_three(int index)
-{
-    return 2 - index;
-}
-
 bool example()
 {
-    asc::shuffle_iterator<int, int (*)(int)> iterator(reverse_three, 0);
-    const bool first = *iterator == 2;
-    ++iterator;
-    return first && *iterator == 1;
+    auto mapping = [](asc::std::size_t n) { return asc::std::size_t{3} - n; };
+    asc::shuffle_iterator<asc::std::size_t, decltype(mapping)> it(mapping);
+    return *it == 3 && it[2] == 1;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

@@ -26,43 +26,39 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+The alias transform_iterator<zip_function<F>,zip_iterator<I...>> reads components and expands them into the callable.
 
-`asc::zip_transform_iterator` combines multiple iterators and invokes the transform function on dereference.
+`<asc/iterator>`
 
 ## Declaration
 
 ```cpp
 namespace asc {
-template<class Function, class... Iterators> class zip_transform_iterator;
-} // namespace asc
+template <class Function, class... Iterators>
+using zip_transform_iterator = transform_iterator<zip_function<Function>, zip_iterator<Iterators...>>;
+}  // namespace asc
 ```
 
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+All components are readable. Position, end, movement and result rules are shared with the component adaptors. References cannot escape temporary value components.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
-
-The following Host example shows concrete inputs, the interface call, and a checkable result.
 
 ```cpp
 #include <asc/iterator>
 
-int add_values(int left, int right) { return left + right; }
-
 bool example()
 {
-    int left[2] = {1, 2};
-    int right[2] = {3, 4};
-    asc::zip_transform_iterator<int(*)(int, int), int*, int*> iterator(add_values, left, right);
-    const bool first = *iterator == 4;
-    ++iterator;
-    return first && *iterator == 6;
+    int a[2] = {1, 2}, b[2] = {10, 20};
+    auto f = [](int x, int y) { return x + y; };
+    asc::zip_transform_iterator<decltype(f), int*, int*> it(asc::make_zip_iterator(a, b), asc::make_zip_function(f));
+    return *it == 11 && it[1] == 22;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

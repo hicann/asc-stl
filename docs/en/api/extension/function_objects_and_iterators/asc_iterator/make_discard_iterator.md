@@ -26,59 +26,38 @@
 
 ## Description
 
-Header: `<asc/iterator>`.
+Constructs the adaptor, deducing and owning its state. Discards assignment without reading, moving or converting the argument; its expression is still evaluated.
 
-`asc::make_discard_iterator` creates a discard_iterator that discards written values.
+`<asc/iterator>`
 
-## Function Prototype
+## Declaration
 
 ```cpp
 namespace asc {
-template <class Integer = asc::std::ptrdiff_t>
-constexpr asc::discard_iterator make_discard_iterator(Integer index = 0);
+constexpr discard_iterator make_discard_iterator(asc::std::ptrdiff_t position = 0) noexcept;
 }  // namespace asc
 ```
 
-## Parameters
-
-**Template Parameters**
-
-| Parameter | Description |
-| --- | --- |
-| `Integer` | The index type, defaulting to ptrdiff_t. |
-
-**Function Parameters**
-
-| Parameter | Input/Output | Description |
-| --- | --- | --- |
-| `index` | Input | The initial index, defaulting to 0: writes are discarded, and the index is used only for position counting and iterator differences. |
-
-## Return Value
-
-| Return type | Description |
-| --- | --- |
-| `asc::discard_iterator` | Returns an iterator adaptor storing the caller's arguments; if the stored function object captures external references, those references must remain valid during use. |
-
 ## Constraints
 
-- Provides lazy, non-owning iterator adaptors and their factories.
-- Operands must be valid at the current execution location.
+The default position0 is valid and uses signed ptrdiff_t. Output and extra navigation operations do not provide readability.
+
+Supports C++17 and C++20. Stored callables are copyable; borrowed objects remain alive. Compare positions only in the same logical sequence. constexpr and conditional noexcept follow actual operations; internal constraint parameters and conditional exception specifications are omitted below.
 
 ## Example
 
-The following Host example uses concrete inputs and checks the result within the object's lifetime.
-
 ```cpp
 #include <asc/iterator>
+
 bool example()
 {
-    auto iterator = asc::make_discard_iterator(0);
-    *iterator = 7;
-    ++iterator;
-    return iterator.index() == 1;
+    int evaluated = 0;
+    auto it = asc::make_discard_iterator();
+    *it++ = ++evaluated;
+    return evaluated == 1 && it.index() == 1;
 }
 ```
 
 ## Related APIs
 
-- [API list for this header](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)

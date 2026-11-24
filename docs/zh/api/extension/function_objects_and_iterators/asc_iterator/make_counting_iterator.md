@@ -26,58 +26,38 @@
 
 ## 功能说明
 
-头文件路径为：`<asc/iterator>`。
+创建对应适配器，推导并按值保存所需状态。保存初值和独立的有符号逻辑位置，解引用返回数学上的初值加位置。
 
-`asc::make_counting_iterator`创建从指定初值开始的counting_iterator。
+`<asc/iterator>`
 
-## 函数原型
+## 声明
 
 ```cpp
 namespace asc {
-template <class Start>
-constexpr asc::counting_iterator<Start> make_counting_iterator(Start start);
+template <class D = asc::std::ptrdiff_t, class Start>
+constexpr counting_iterator<Start, D> make_counting_iterator(Start first, D position = 0) noexcept;
 }  // namespace asc
 ```
 
-## 参数说明
-
-**模板参数**
-
-| 参数名 | 描述 |
-| --- | --- |
-| `Start` | 计数器产生值的类型：解引用与下标返回该类型的计数值。 |
-
-**函数参数**
-
-| 参数名 | 输入/输出 | 描述 |
-| --- | --- | --- |
-| `start` | 输入 | 计数起始值：解引用产生该值，迭代前进时逐次递增。 |
-
-## 返回值说明
-
-| 返回值类型 | 含义 |
-| --- | --- |
-| `asc::counting_iterator<Start>` | 返回保存调用方参数的迭代器适配器；所保存函数对象若捕获外部引用，该引用须在使用期间有效。 |
-
 ## 约束说明
 
-- 提供惰性、非拥有的迭代器适配器及其工厂。
-- 操作数必须在当前执行位置有效。
+Start 为 bool 以外的标准整数。读取结果及算术须可表示，不回绕。虚拟终点可以没有可读值；index() 返回位置。
+
+最低 C++17，同时支持 C++20。函数按值保存并须可复制，借用对象在使用期间有效。比较和距离用于同一逻辑序列。构造和操作的 constexpr 及条件 noexcept 取决于实际步骤；下列原型省略内部约束参数和条件异常规格。
 
 ## 调用示例
 
-以下Host示例使用具体输入，在对象存活期内检查结果。
-
 ```cpp
 #include <asc/iterator>
+
 bool example()
 {
-    auto iterator = asc::make_counting_iterator(3);
-    ++iterator;
-    return *iterator == 4;
+    auto it = asc::make_counting_iterator(3);
+    it += 2;
+    return *it == 5 && it.index() == 2;
 }
 ```
 
 ## 关联API
 
-- [本头文件的接口列表](asc_iterator.md)
+- [<asc/iterator>](asc_iterator.md)
