@@ -1,4 +1,4 @@
-# Headerasc/version
+# Header asc/version
 
 Provides the ASC-STL release date and three extension API delivery flags, and includes the standard-layer `CANN_ASC_STL_LIB_*` feature macros. The four product macros have identical values across Host, SIMD, SIMT and C++17/C++20 compilation for a given package.
 

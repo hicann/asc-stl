@@ -4,11 +4,11 @@ This header provides storage wrappers, encoded bit access, native-value bridges 
 It supports C++17 and C++20. Host inclusion requires no CANN SDK. The wrappers are class types; standard integral,
 floating_point and arithmetic traits remain false.
 
-## 产品支持情况
+## Product Support
 
 Host: no SDK. Device: BiSheng 15, dav-3510, strict floating configuration.
 
-## 功能说明
+## Description
 
 Storage, encoded bit access, native bridges and explicit conversions.
 
@@ -121,11 +121,11 @@ Canonical NaNs: FP16 0x7e00, BF16 0x7fc0, E4M3FN 0x7f, E5M2 0x7e, float 0x7fc000
 Integer bit operations implement conversions independently of rounding, saturation and FTZ state. Floating exception
 flags are unspecified.
 
-## 约束说明
+## Constraints
 
 Calls must satisfy the format, index, conversion and compilation conditions above.
 
-## 调用示例
+## Example
 
 ```cpp
 #include <asc/numeric_types>
@@ -154,6 +154,6 @@ Design: [Issue #85](https://gitcode.com/cann/asc-stl/issues/85).
 Formats: [Ascend SIMD types](https://asc.gitcode.com/api/SIMD-API/basic_api/data_structures/builtin_data_types.html),
 [OCP MX v1.0](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf).
 
-## 关联 API
+## Related APIs
 
 [type_traits](../../type_traits_and_utilities/asc_type_traits/asc_type_traits.md), [numeric](../asc_numeric/asc_numeric.md).

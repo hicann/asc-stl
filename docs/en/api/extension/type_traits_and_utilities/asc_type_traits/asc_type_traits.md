@@ -1,4 +1,4 @@
-# Headerasc/type_traits
+# Header asc/type_traits
 
 Six Boolean trait families identify formats, equality/relocation conditions and native pointee qualifiers. Standard classification remains in asc::std.
 
