@@ -51,5 +51,5 @@ static_assert(CANN_ASC_STL_HAS_TO_ARRAY == 0 || CANN_ASC_STL_HAS_TO_ARRAY == 1);
 
 ## Related APIs
 
-- [Language Modes and Compatibility](../../../../../zh/guide/cpp_compatibility.md)
+- [Language Modes and Compatibility](../../../../guide/cpp_compatibility.md)
 - [API list for this header](asc_std_version.md)
