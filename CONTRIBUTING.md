@@ -31,7 +31,7 @@
 
 - [README.md](README.md)：项目说明、能力域总览与版本状态；
 - [v1.0.0 支持范围说明](docs/zh/roadmap/roadmap_v1_0_0.md)：当前版本功能范围；
-- API参考文档（待定）。
+- [API参考文档](docs/zh/api/README.md)：公开接口参考文档入口。
 
 欢迎对以上资料进行纠错、补充和完善。
 
@@ -110,5 +110,5 @@ PR至少应包含：
 ## 相关信息
 
 - **行为准则 / CLA签署**：待定；
-- **安全声明**：待定；
-- **许可证**：待定。
+- **安全声明**：[SECURITY.md](SECURITY.md)；
+- **许可证**：[Apache License 2.0](LICENSE)。
