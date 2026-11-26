@@ -28,7 +28,7 @@
 
 Header: `<asc/std/compare>`.
 
-`asc::std::compare_three_way` compares two values with the comparison strength specified by the name and returns an ASC comparison category.
+`asc::std::compare_three_way` evaluates the operands’ three-way comparison. Built-in arithmetic comparisons return the native comparison category on a Host with standard comparison support. On Device, integral operands return ASC strong ordering and floating-point operands return ASC partial ordering.
 
 This interface is provided starting from C++20+ mode.
 
@@ -51,7 +51,6 @@ struct compare_three_way;
 The following Host example provides concrete inputs and checks the result of the call.
 
 ```cpp
-#include <compare>
 #include <asc/std/compare>
 
 bool example()

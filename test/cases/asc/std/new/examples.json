@@ -1,0 +1,60 @@
+{
+  "directory": "docs/zh/api/standard/language_support/asc_std_new",
+  "examples": {
+    "align_val_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "destroying_delete.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "destroying_delete_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "nothrow.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "nothrow_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "operator_new.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "operator_new_array.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    }
+  }
+}

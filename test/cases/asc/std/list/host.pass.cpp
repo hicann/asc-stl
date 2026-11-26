@@ -18,6 +18,6 @@
 
 int main()
 {
-    alignas(16) unsigned char storage[8192]{};
+    alignas(asc_stl_test::inline_arena) unsigned char storage[8192]{};
     return asc_stl_b028_test::evaluate_device(storage, sizeof(storage));
 }

@@ -20,7 +20,7 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
-#include "../../../../../support/cmath_runtime.h"
+#include "../../../../../support/device_runtime.h"
 #include "../../../../../support/cmath_trig_goldens.h"
 #include "launch.h"
 
@@ -64,7 +64,7 @@ bool select_vectors(unsigned total, unsigned& first, unsigned& count)
 
 int main()
 {
-    asc_stl_cmath_test::runtime runtime;
+    asc_stl_test::device_runtime runtime;
     float* result = nullptr;
     unsigned long long* inputs = nullptr;
     float* trig = nullptr;

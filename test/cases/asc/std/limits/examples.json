@@ -1,0 +1,29 @@
+{
+  "directory": "docs/zh/api/standard/language_support/asc_std_limits",
+  "examples": {
+    "float_denorm_style.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "float_round_style.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "numeric_limits.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    }
+  }
+}

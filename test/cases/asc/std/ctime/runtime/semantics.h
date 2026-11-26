@@ -15,6 +15,7 @@
  */
 
 #include <asc/std/ctime>
+#include "time_fields.h"
 
 namespace asc_stl_b021_runtime {
 template <class OutputPointer>
@@ -22,6 +23,7 @@ CANN_ASC_STL_API void evaluate(OutputPointer output)
 {
     const auto before = asc::std::clock();
     const auto after = asc::std::clock();
+    asc_stl_time_fields_test::write_fields(output, before);
     output[0] = (before == static_cast<asc::std::clock_t>(-1) ? 1 : 0) | (after < before ? 2 : 0) |
         (CLOCKS_PER_SEC != 1000000000L ? 4 : 0);
 }

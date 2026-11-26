@@ -1,0 +1,293 @@
+{
+  "directory": "docs/zh/api/standard/metaprogramming/asc_std_ratio",
+  "examples": {
+    "atto.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "centi.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "deca.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "deci.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "exa.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "femto.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "giga.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "hecto.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "kilo.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mega.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "micro.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "milli.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "nano.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "peta.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "pico.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "ratio.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_add.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_den.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "ratio_divide.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_equal_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_greater.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_greater_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_greater_equal_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_greater_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_less.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_less_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_less_equal_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_less_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_multiply.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_not_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_not_equal_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_num.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "ratio_subtract.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ratio_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "tera.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    }
+  }
+}

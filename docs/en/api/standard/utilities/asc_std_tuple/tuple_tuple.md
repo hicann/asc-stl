@@ -37,7 +37,8 @@ Standard semantics reference: [cppreference `tuple`](https://en.cppreference.com
 The following is a **call-form summary** inside the owning class. The SFINAE selection parameters used by the implementation are omitted; the implicit and explicit forms of the same shape are selected by the constructibility and convertibility conditions below, and the summary must not be copied as a set of unconditional overload definitions.
 
 ```cpp
-constexpr tuple() = default;
+constexpr tuple();
+constexpr explicit tuple();
 ```
 
 ```cpp
@@ -130,6 +131,8 @@ constexpr tuple(allocator_arg_t, const Alloc& alloc, const tuple<UTypes...>& oth
 No return value.
 
 ## Constraints
+
+Default construction requires every element to be default-constructible and value-initializes each element. The constructor is explicit if any element requires explicit default construction. The empty tuple has a trivial default constructor.
 
 - The const Types&... element construction is for non-empty tuples only. The implicit and explicit summaries of the same shape are selected respectively by the element-wise implicitly convertible condition and the at-least-one-explicit-conversion condition.
 

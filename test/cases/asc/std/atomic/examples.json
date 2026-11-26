@@ -1,0 +1,1005 @@
+{
+  "directory": "docs/zh/api/standard/concurrency/asc_std_atomic",
+  "examples": {
+    "atomic.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_atomic.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_bool.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_char.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_char16_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_char32_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_char8_t.md": {
+      "standards": [
+        20
+      ],
+      "mode": "host",
+      "expression": "example()",
+      "header_standards": [
+        17
+      ]
+    },
+    "atomic_compare_exchange_strong_explicit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_compare_exchange_strong_function_template.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_compare_exchange_strong_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_compare_exchange_weak_explicit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_compare_exchange_weak_function_template.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_compare_exchange_weak_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_exchange_explicit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_exchange_function_template.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_exchange_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_add_explicit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_add_function_template.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_add_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_and_explicit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_and_function_template.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_and_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_or_explicit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_or_function_template.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_or_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_sub_explicit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_sub_function_template.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_sub_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_xor_explicit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_xor_function_template.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_fetch_xor_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_flag.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_flag_atomic_flag.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_flag_clear_explicit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_flag_clear_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_flag_clear_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_flag_test_and_set_explicit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_flag_test_and_set_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_flag_test_and_set_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_flag_test_explicit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_flag_test_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_flag_test_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_init.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_int.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_int16_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_int32_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_int64_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_int8_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_int_fast16_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_int_fast32_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_int_fast64_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_int_fast8_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_int_least16_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_int_least32_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_int_least64_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_int_least8_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_intmax_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_intptr_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_is_always_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_is_lock_free_function_template.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_is_lock_free_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_llong.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_load_explicit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_load_function_template.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_load_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_long.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_operator_assign.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_operator_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_ptrdiff_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_ref.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_ref_fetch_and.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_ref_fetch_or.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_ref_fetch_xor.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_ref_operator_assign.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_schar.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_short.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_signed_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_size_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_storage_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "atomic_store_explicit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_store_function_template.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_store_member_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_thread_fence.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()",
+      "link_flags": [
+        "-pthread"
+      ]
+    },
+    "atomic_uchar.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uint.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uint16_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uint32_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uint64_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uint8_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uint_fast16_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uint_fast32_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uint_fast64_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uint_fast8_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uint_least16_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uint_least32_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uint_least64_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uint_least8_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uintmax_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_uintptr_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_ullong.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_ulong.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_unsigned_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_ushort.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "atomic_value_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "atomic_wchar_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "cann_asc_stl_atomic_bool_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "cann_asc_stl_atomic_char16_t_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "cann_asc_stl_atomic_char32_t_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "cann_asc_stl_atomic_char8_t_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "cann_asc_stl_atomic_char_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "cann_asc_stl_atomic_flag_init.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "cann_asc_stl_atomic_int_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "cann_asc_stl_atomic_llong_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "cann_asc_stl_atomic_long_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "cann_asc_stl_atomic_pointer_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "cann_asc_stl_atomic_short_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "cann_asc_stl_atomic_var_init.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "cann_asc_stl_atomic_wchar_t_lock_free.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "kill_dependency.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "memory_order.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "memory_order_acq_rel.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "memory_order_acquire.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "memory_order_consume.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "memory_order_relaxed.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "memory_order_release.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "memory_order_seq_cst.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    }
+  }
+}

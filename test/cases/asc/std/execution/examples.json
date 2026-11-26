@@ -1,0 +1,80 @@
+{
+  "directory": "docs/zh/api/standard/algorithms/asc_std_execution",
+  "examples": {
+    "execution_par.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "execution_par_unseq.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "execution_parallel_policy.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "execution_parallel_unsequenced_policy.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "execution_seq.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "execution_sequenced_policy.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "execution_unseq.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "execution_unsequenced_policy.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "is_execution_policy.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "is_execution_policy_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    }
+  }
+}

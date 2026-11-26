@@ -22,6 +22,51 @@
 #include <asc/std/numeric>
 #include <asc/std/version>
 
+namespace {
+
+int check_charconv_integer_limits()
+{
+    constexpr long long minimum = -9223372036854775807LL - 1;
+    constexpr unsigned long long maximum = 18446744073709551615ULL;
+
+    const char min_text[] = "-9223372036854775808";
+    char min_output[sizeof(min_text)]{};
+    min_output[sizeof(min_text) - 1] = '!';
+    const auto min_conversion = asc::std::to_chars(min_output, min_output + sizeof(min_text) - 1, minimum);
+    if (min_conversion.ec != asc::std::errc{} || min_conversion.ptr != min_output + sizeof(min_text) - 1 ||
+        min_output[sizeof(min_text) - 1] != '!') {
+        return 20;
+    }
+    for (unsigned int index = 0; index + 1 < sizeof(min_text); ++index) {
+        if (min_output[index] != min_text[index]) {
+            return 21;
+        }
+    }
+    long long parsed_min = 0;
+    const auto min_parse = asc::std::from_chars(min_text, min_text + sizeof(min_text) - 1, parsed_min);
+    if (min_parse.ec != asc::std::errc{} || min_parse.ptr != min_text + sizeof(min_text) - 1 || parsed_min != minimum) {
+        return 22;
+    }
+
+    const char below_min[] = "-9223372036854775809x";
+    long long unchanged = 17;
+    const auto out_of_range = asc::std::from_chars(below_min, below_min + sizeof(below_min) - 1, unchanged);
+    if (out_of_range.ec != asc::std::errc::result_out_of_range ||
+        out_of_range.ptr != below_min + sizeof(below_min) - 2 || unchanged != 17) {
+        return 23;
+    }
+
+    const char base36[] = "3W5E11264SGSF?";
+    unsigned long long parsed_max = 0;
+    const auto max_parse = asc::std::from_chars(base36, base36 + sizeof(base36) - 1, parsed_max, 36);
+    if (max_parse.ec != asc::std::errc{} || max_parse.ptr != base36 + sizeof(base36) - 2 || parsed_max != maximum) {
+        return 24;
+    }
+    return 0;
+}
+
+}  // namespace
+
 int main()
 {
 #if CANN_ASC_STL_DETAIL_HAS_CXX20()
@@ -95,6 +140,9 @@ int main()
     if (overflow_result.ptr != overflow + 10 || overflow_result.ec != asc::std::errc::result_out_of_range ||
         unchanged != 7)
         return 18;
+    const int charconv_limits = check_charconv_integer_limits();
+    if (charconv_limits != 0)
+        return charconv_limits;
     if (asc::std::imaxabs(-9) != 9 || asc::std::imaxdiv(17, 5).rem != 2)
         return 11;
     return 0;

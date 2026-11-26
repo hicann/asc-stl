@@ -17,7 +17,7 @@
 #include <acl/acl.h>
 #include <iostream>
 
-#include "support/bit_count_reference.h"
+#include "../../../bit/support/bit_count_reference.h"
 #include "../../../../../../support/hardware_runtime.h"
 
 #include "launch.h"

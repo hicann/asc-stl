@@ -1,0 +1,472 @@
+{
+  "directory": "docs/zh/api/standard/memory_management/asc_std_memory",
+  "examples": {
+    "addressof.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "align.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "allocate_at_least.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "allocation_result.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "allocation_result_count.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "allocation_result_ptr.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "allocator_arg.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_arg_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "allocator_arg_t_allocator_arg_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "allocator_arg_t_destructor_allocator_arg_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "allocator_traits.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "allocator_traits_allocate.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "allocator_traits_allocate_at_least.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "allocator_traits_allocator_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_const_pointer.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_const_void_pointer.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_construct.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "allocator_traits_deallocate.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "allocator_traits_destroy.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "allocator_traits_difference_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_is_always_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_max_size.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "allocator_traits_pointer.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_propagate_on_container_copy_assignment.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_propagate_on_container_move_assignment.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_propagate_on_container_swap.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_rebind_alloc.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_rebind_traits.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_select_on_container_copy_construction.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_size_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_value_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "allocator_traits_void_pointer.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "assume_aligned.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "construct_at.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "destroy.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "destroy_at.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "destroy_n.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "is_sufficiently_aligned.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "launder.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "make_obj_using_allocator.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "pointer_traits.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "pointer_traits_difference_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "pointer_traits_element_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "pointer_traits_pointer.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "pointer_traits_pointer_to.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "pointer_traits_rebind.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "to_address.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "uninitialized_construct_using_allocator.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "uninitialized_copy.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "copy_elements()"
+    },
+    "uninitialized_copy_n.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "copy_elements()"
+    },
+    "uninitialized_default_construct.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "uninitialized_default_construct_n.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "uninitialized_fill.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "uninitialized_fill_n.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "uninitialized_move.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "uninitialized_move_n.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "uninitialized_value_construct.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "uninitialized_value_construct_n.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "uses_allocator.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "uses_allocator_construction_args.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "uses_allocator_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    }
+  }
+}

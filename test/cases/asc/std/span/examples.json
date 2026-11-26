@@ -1,0 +1,45 @@
+{
+  "directory": "docs/zh/api/standard/containers/asc_std_span",
+  "examples": {
+    "as_bytes.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "as_writable_bytes.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "ranges_enable_borrowed_range.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "ranges_enable_view.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "span.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    }
+  }
+}

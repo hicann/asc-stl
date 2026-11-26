@@ -1,0 +1,173 @@
+{
+  "directory": "docs/zh/api/standard/utilities/asc_std_tuple",
+  "examples": {
+    "apply.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "forward_as_tuple.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "ignore.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "make_from_tuple.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "make_tuple.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "tie.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "tuple.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "tuple_cat_function.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "tuple_cat_function_template.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "tuple_element_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "tuple_element_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "tuple_operator_assign.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "tuple_operator_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "tuple_operator_greater.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "tuple_operator_greater_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "tuple_operator_less.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "tuple_operator_less_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "tuple_operator_not_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "tuple_size_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "tuple_swap.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "tuple_tuple.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    }
+  }
+}

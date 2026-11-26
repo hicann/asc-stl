@@ -47,7 +47,7 @@ constexpr insert_iterator<Container>& operator++() noexcept;
 
 ```cpp
 // Excerpt of the declaration inside asc::std::insert_iterator; template parameters and other members are provided by the enclosing class.
-constexpr insert_iterator<Container> operator++(int unused) noexcept;
+constexpr insert_iterator<Container>& operator++(int unused) noexcept;
 ```
 
 ## Parameters
@@ -66,7 +66,7 @@ No parameters.
 
 ## Return Value
 
-The prefix form returns a reference to the current adaptor; the postfix form returns a copy of the adaptor by value. Neither form inserts an element or changes the stored insertion position.
+Both forms return a reference to the current adaptor. Increment preserves the stored insertion position. Assignment inserts the element.
 
 ## Constraints
 
@@ -87,10 +87,11 @@ bool example()
     ::std::vector<int> values;
     asc::std::insert_iterator<::std::vector<int>> output(values, values.begin());
     auto& prefix = ++output;
-    auto postfix = output++;
-    bool unchanged = &prefix == &output && values.empty();
-    *postfix = 7;
-    return unchanged && values.size() == 1 && values.front() == 7;
+    auto& postfix = output++;
+    bool unchanged = &prefix == &output && &postfix == &output && values.empty();
+    *output++ = 7;
+    *output++ = 3;
+    return unchanged && values.size() == 2 && values.front() == 7 && values.back() == 3;
 }
 ```
 

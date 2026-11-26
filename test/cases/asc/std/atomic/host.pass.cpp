@@ -34,6 +34,7 @@ int main()
 {
     static_assert(CANN_ASC_STL_ATOMIC_BOOL_LOCK_FREE == 2);
     static_assert(CANN_ASC_STL_ATOMIC_CHAR_LOCK_FREE == 2);
+    static_assert(CANN_ASC_STL_ATOMIC_CHAR8_T_LOCK_FREE == 2);
     static_assert(CANN_ASC_STL_ATOMIC_CHAR16_T_LOCK_FREE == 2);
     static_assert(CANN_ASC_STL_ATOMIC_CHAR32_T_LOCK_FREE == 2);
     static_assert(CANN_ASC_STL_ATOMIC_WCHAR_T_LOCK_FREE == 2);

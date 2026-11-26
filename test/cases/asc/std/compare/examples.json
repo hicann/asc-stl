@@ -1,0 +1,114 @@
+{
+  "directory": "docs/zh/api/standard/language_support/asc_std_compare",
+  "examples": {
+    "compare_partial_order_fallback.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "compare_strong_order_fallback.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "compare_three_way.md": {
+      "standards": [
+        20
+      ],
+      "mode": "host",
+      "expression": "example()",
+      "header_standards": [
+        17
+      ]
+    },
+    "compare_weak_order_fallback.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "is_eq.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "is_gt.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "is_gteq.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "is_lt.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "is_lteq.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "is_neq.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "partial_ordering.md": {
+      "standards": [
+        20
+      ],
+      "mode": "host",
+      "expression": "example()",
+      "header_standards": [
+        17
+      ]
+    },
+    "strong_ordering.md": {
+      "standards": [
+        20
+      ],
+      "mode": "host",
+      "expression": "example()",
+      "header_standards": [
+        17
+      ]
+    },
+    "weak_ordering.md": {
+      "standards": [
+        20
+      ],
+      "mode": "host",
+      "expression": "example()",
+      "header_standards": [
+        17
+      ]
+    }
+  }
+}

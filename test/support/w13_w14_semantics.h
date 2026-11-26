@@ -37,7 +37,7 @@
 
 #include "cxx17_foundation_semantics.h"
 #include "cxx17_container_semantics.h"
-#include "cxx17_views_semantics.h"
+#include "../cases/asc/std/ranges/support/cxx17_views_semantics.h"
 
 namespace asc_stl_w13_w14_test {
 
@@ -182,6 +182,15 @@ CANN_ASC_STL_API CANN_ASC_STL_DETAIL_NO_INLINE unsigned int evaluate_random()
     counter_engine.set_counter(counter);
     discard_engine.discard(400);
     failures += counter_engine != discard_engine || counter_engine() != 940657802U;
+    using philox = asc::std::philox4x32;
+    const auto max_word = philox::max();
+    philox wrap(7), restarted(7);
+    wrap.set_counter({max_word, max_word, max_word, max_word});
+    wrap.discard(5);
+    (void)restarted();
+    failures += wrap != restarted || wrap() != restarted() || philox::min() != 0 || max_word != 0xffffffffU;
+    wrap.seed(7);
+    failures += wrap != philox(7);
     asc::std::uniform_real_distribution<float> distribution(2.0F, 5.0F);
     const auto parameters = distribution.param();
     failures += parameters.a() != 2.0F || parameters.b() != 5.0F;

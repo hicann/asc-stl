@@ -913,6 +913,11 @@ CANN_ASC_STL_API constexpr void sort(RandomAccessIterator first, RandomAccessIte
     if (count < 2) {
         return;
     }
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+    // BiSheng can generate misaligned UB accesses when it unrolls these
+    // heap loops over naturally aligned SIMT lane-private arrays.
+#pragma clang loop unroll(disable)
+#endif
     for (difference_type root = (count - 2) / 2;; --root) {
         auto parent = root;
         while (parent * 2 + 1 < count) {
@@ -930,6 +935,9 @@ CANN_ASC_STL_API constexpr void sort(RandomAccessIterator first, RandomAccessIte
             break;
         }
     }
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+#pragma clang loop unroll(disable)
+#endif
     for (auto remaining = count; remaining > 1; --remaining) {
         ::asc::std::iter_swap(first, first + remaining - 1);
         difference_type parent = 0;

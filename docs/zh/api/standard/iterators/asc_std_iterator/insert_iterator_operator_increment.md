@@ -47,7 +47,7 @@ constexpr insert_iterator<Container>& operator++() noexcept;
 
 ```cpp
 // asc::std::insert_iterator 类内的声明节选；模板形参和其他成员由所属类提供。
-constexpr insert_iterator<Container> operator++(int unused) noexcept;
+constexpr insert_iterator<Container>& operator++(int unused) noexcept;
 ```
 
 ## 参数说明
@@ -66,7 +66,7 @@ constexpr insert_iterator<Container> operator++(int unused) noexcept;
 
 ## 返回值说明
 
-前置形式返回当前适配器的引用；后置形式按值返回适配器副本。两种形式都不插入元素，也不改变保存的插入位置。
+前置和后置自增都返回当前适配器的引用，并保留插入位置。赋值时才插入元素。
 
 ## 约束说明
 
@@ -87,10 +87,11 @@ bool example()
     ::std::vector<int> values;
     asc::std::insert_iterator<::std::vector<int>> output(values, values.begin());
     auto& prefix = ++output;
-    auto postfix = output++;
-    bool unchanged = &prefix == &output && values.empty();
-    *postfix = 7;
-    return unchanged && values.size() == 1 && values.front() == 7;
+    auto& postfix = output++;
+    bool unchanged = &prefix == &output && &postfix == &output && values.empty();
+    *output++ = 7;
+    *output++ = 3;
+    return unchanged && values.size() == 2 && values.front() == 7 && values.back() == 3;
 }
 ```
 

@@ -44,6 +44,8 @@
 #include <asc/std/__type_traits/is_convertible.h>
 #include <asc/std/__type_traits/is_copy_assignable.h>
 #include <asc/std/__type_traits/is_copy_constructible.h>
+#include <asc/std/__type_traits/is_default_constructible.h>
+#include <asc/std/__type_traits/is_implicitly_default_constructible.h>
 #include <asc/std/__type_traits/is_move_assignable.h>
 #include <asc/std/__type_traits/is_nothrow_assignable.h>
 #include <asc/std/__type_traits/is_nothrow_constructible.h>
@@ -161,7 +163,14 @@ private:
     }
 
 public:
-    CANN_ASC_STL_API constexpr tuple() = default;
+    template <bool Enable = (is_default_constructible_v<Types> && ...),
+        enable_if_t<Enable && (__is_implicitly_default_constructible<Types>::value && ...), int> = 0>
+    CANN_ASC_STL_API constexpr tuple() noexcept((is_nothrow_default_constructible_v<Types> && ...)) : base()
+    {}
+    template <bool Enable = (is_default_constructible_v<Types> && ...),
+        enable_if_t<Enable && !(__is_implicitly_default_constructible<Types>::value && ...), int> = 0>
+    CANN_ASC_STL_API constexpr explicit tuple() noexcept((is_nothrow_default_constructible_v<Types> && ...)) : base()
+    {}
     CANN_ASC_STL_API tuple(const tuple&) = default;
     CANN_ASC_STL_API tuple(tuple&&) = default;
 
@@ -299,7 +308,7 @@ public:
     {
         return static_cast<const base&&>(*this).template __get<Index>();
     }
-    CANN_ASC_STL_API constexpr void swap(tuple& other) noexcept(noexcept(base::swap(other)))
+    CANN_ASC_STL_API constexpr void swap(tuple& other) noexcept(noexcept(static_cast<base&>(*this).swap(other)))
     {
         base::swap(other);
     }
@@ -341,6 +350,23 @@ private:
     {
         ((this->template __get<Indices_>() = ::asc::std::forward<Other>(other).template __get<Indices_>()), ...);
     }
+};
+// The empty tuple retains a trivial default constructor and accepts an allocator.
+template <>
+class tuple<> : public __tuple_impl<__tuple_indices<>> {
+public:
+    CANN_ASC_STL_API constexpr tuple() = default;
+    template <class Alloc>
+    CANN_ASC_STL_API constexpr tuple(allocator_arg_t, const Alloc&) noexcept
+    {}
+    template <class Alloc>
+    CANN_ASC_STL_API constexpr tuple(allocator_arg_t, const Alloc&, const tuple&) noexcept
+    {}
+    template <class Alloc>
+    CANN_ASC_STL_API constexpr tuple(allocator_arg_t, const Alloc&, tuple&&) noexcept
+    {}
+    CANN_ASC_STL_API constexpr void swap(tuple&) noexcept
+    {}
 };
 template <class... Types>
 struct tuple_size<tuple<Types...>> : integral_constant<size_t, sizeof...(Types)> {};

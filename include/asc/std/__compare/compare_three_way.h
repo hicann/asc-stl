@@ -27,7 +27,17 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__compare/compare_fallback.h>
 #include <asc/std/__compare/ordering.h>
+#include <asc/std/__type_traits/is_arithmetic.h>
+#include <asc/std/__type_traits/is_floating_point.h>
+#include <asc/std/__type_traits/remove_cvref.h>
+
+#if CANN_ASC_STL_DETAIL_HAS_THREE_WAY_COMPARISON() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#if __has_include(<compare>)
+#include <compare>
+#endif
+#endif
 
 CANN_ASC_STL_BEGIN_NAMESPACE
 
@@ -40,7 +50,21 @@ struct compare_three_way {
     template <class T, class U>
     CANN_ASC_STL_API constexpr auto operator()(T&& left, U&& right) const
     {
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() || !defined(__cpp_lib_three_way_comparison)
+        // Built-in <=> requires the native standard library's comparison categories.
+        // The device library supplies its own categories for arithmetic operands.
+        if constexpr (is_arithmetic_v<remove_cvref_t<T>> && is_arithmetic_v<remove_cvref_t<U>>) {
+            if constexpr (is_floating_point_v<remove_cvref_t<T>> || is_floating_point_v<remove_cvref_t<U>>) {
+                return detail::partial_synthesize(left, right);
+            } else {
+                return detail::strong_synthesize(left, right);
+            }
+        } else {
+            return static_cast<T&&>(left) <=> static_cast<U&&>(right);
+        }
+#else
         return static_cast<T&&>(left) <=> static_cast<U&&>(right);
+#endif
     }
 };
 #endif

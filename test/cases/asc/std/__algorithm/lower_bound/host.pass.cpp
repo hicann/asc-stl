@@ -20,7 +20,7 @@
 #include <forward_list>
 
 #include "../../../../../support/b020_semantics.h"
-#include "support/binary_search_regressions.h"
+#include "../../algorithm/support/binary_search_regressions.h"
 
 namespace {
 struct CountingRange {

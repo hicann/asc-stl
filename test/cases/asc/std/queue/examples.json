@@ -1,0 +1,234 @@
+{
+  "directory": "docs/zh/api/standard/containers/asc_std_queue",
+  "examples": {
+    "priority_queue.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "priority_queue_const_reference.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "priority_queue_container_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "priority_queue_emplace.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "priority_queue_empty.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "priority_queue_pop.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "priority_queue_priority_queue.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "priority_queue_push.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "priority_queue_reference.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "priority_queue_size.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "priority_queue_size_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "priority_queue_swap.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "priority_queue_top.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "priority_queue_value_compare.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "priority_queue_value_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "queue.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "queue_back.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "queue_const_reference.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "queue_container_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "queue_emplace.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "queue_empty.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "queue_front.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "queue_pop.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "queue_push.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "queue_queue.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "queue_reference.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "queue_size.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "queue_size_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "queue_swap.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "queue_value_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    }
+  }
+}

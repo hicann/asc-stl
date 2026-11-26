@@ -2,7 +2,7 @@
 
 ## SIMT视图测试的运行期输入
 
-`cxx17_views_semantics.h`的`evaluate_filter_transform()`在纯SIMT路径通过一次volatile读取构造数值为1、2、3、4的测试数组。Host和SIMD保留常量初值。两条路径使用相同的bool标志、迭代器操作、接口调用和期望值；正向、反向遍历以及transform的所有断言均保留。测试和库的优化级别没有降低。
+[cxx17_views_semantics.h](../cases/asc/std/ranges/support/cxx17_views_semantics.h)的`evaluate_filter_transform()`在纯SIMT路径通过一次volatile读取构造数值为1、2、3、4的测试数组。Host和SIMD保留常量初值。两条路径使用相同的bool标志、迭代器操作、接口调用和期望值；正向、反向遍历以及transform的所有断言均保留。测试和库的优化级别没有降低。
 
 该输入适配针对CANN 9.2.0-beta.2、BiSheng/CCE 15与Ascend950PR_9589模拟器组合中观察到的限制：具有常量初值的局部数组连续进行两次逆向查找，在纯SIMT的高优化构建中可能得到错误结果。C++17和C++20的原始`-O3`回归均复现，C++17定向`-O2`构建也复现。C++17的无ASC-STL头文件对照可以用普通指针和直接成员访问复现，其内核内的关键片段如下：
 
@@ -87,7 +87,7 @@ visibility与新增窄整数CAS边界的真机回归；算法独立对照通过�
 
 `b027_core_semantics.h`保存bitset、inplace_vector、default_searcher、gcd/lcm、
 整型/指针/浮点midpoint及hash的原调用与golden。Host和SIMD的`evaluate_core()`
-先执行这些检查，再执行原`string_aliasing_semantics.h`，保留原顺序和全部检查。
+先执行这些检查，再执行原[string_aliasing_semantics.h](../cases/asc/std/string/support/string_aliasing_semantics.h)，保留原顺序和全部检查。
 
 纯SIMT的cannsim与hardware共用`bitset/runtime/staged/`中的ASC模块及`stage_table.def`。
 每个stage只有一个ASC翻译单元、一个SHARED模块，普通version script仅导出唯一

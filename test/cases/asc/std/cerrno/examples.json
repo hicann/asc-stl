@@ -1,0 +1,34 @@
+{
+  "directory": "docs/zh/api/standard/diagnostics/asc_std_cerrno",
+  "examples": {
+    "edom.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "eilseq.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "erange.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "errno.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    }
+  }
+}

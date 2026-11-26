@@ -1,0 +1,621 @@
+{
+  "directory": "docs/zh/api/standard/containers/asc_std_mdspan",
+  "examples": {
+    "aligned_accessor.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "aligned_accessor_access.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "aligned_accessor_aligned_accessor.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "aligned_accessor_byte_alignment.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "aligned_accessor_data_handle_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "aligned_accessor_element_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "aligned_accessor_offset.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "aligned_accessor_offset_policy.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "aligned_accessor_reference.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "default_accessor.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "default_accessor_access.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "default_accessor_data_handle_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "default_accessor_default_accessor.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "default_accessor_element_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "default_accessor_offset.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "default_accessor_offset_policy.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "default_accessor_reference.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "dextents.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "dims.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "dynamic_extent.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "extents.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "extents_extent.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "extents_extents.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "extents_index_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "extents_rank.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "extents_rank_dynamic.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "extents_rank_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "extents_size_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "extents_static_extent.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "full_extent.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "full_extent_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "layout_left.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "layout_left_mapping.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "layout_left_mapping_operator_not_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "layout_right.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "layout_right_mapping.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "layout_right_mapping_operator_not_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "layout_stride.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "layout_stride_mapping.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "layout_stride_mapping_operator_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "layout_stride_mapping_operator_not_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "layout_stride_mapping_strides.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_accessor.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_accessor_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "mdspan_data_handle.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_data_handle_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "mdspan_element_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "mdspan_empty.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_extent.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_extents.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_extents_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "mdspan_index_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "mdspan_is_always_exhaustive.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_is_always_strided.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_is_always_unique.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_is_exhaustive.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_is_strided.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_is_unique.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_layout_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "mdspan_mapping.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_mapping_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "mdspan_mdspan.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_operator_assign.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_operator_call.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_operator_subscript.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_rank.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_rank_dynamic.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_rank_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "mdspan_reference.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "mdspan_size.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_size_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "mdspan_static_extent.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_stride.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mdspan_value_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "strided_slice.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "submdspan.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "submdspan_extents.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "submdspan_mapping.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "submdspan_mapping_result.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    }
+  }
+}

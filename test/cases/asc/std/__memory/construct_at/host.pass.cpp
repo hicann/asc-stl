@@ -16,7 +16,7 @@
 
 #include <asc/std/__memory/construct_at.h>
 #include "support/b010_semantics.h"
-#include "support/construct_at_cardinality_semantics.h"
+#include "../../memory/support/construct_at_cardinality_semantics.h"
 
 int main()
 {

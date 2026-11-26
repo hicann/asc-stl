@@ -20,5 +20,9 @@
 
 int main()
 {
-    return asc_stl_b012_test::evaluate_runtime();
+    volatile float zero = 0.0F;
+    volatile float nan = NAN;
+    return asc_stl_b012_test::evaluate_runtime() || asc::std::fpclassify(INFINITY) != FP_INFINITE ||
+        asc::std::fpclassify(nan) != FP_NAN || asc::std::ilogb(nan) != FP_ILOGBNAN ||
+        asc::std::ilogb(zero) != FP_ILOGB0;
 }

@@ -1,0 +1,15 @@
+{
+  "directory": "docs/zh/api/standard/language_support/asc_std_cstdbool",
+  "examples": {
+    "bool_true_false_are_defined.md": {
+      "standards": [
+        17
+      ],
+      "mode": "host",
+      "expression": null,
+      "header_standards": [
+        20
+      ]
+    }
+  }
+}

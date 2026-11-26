@@ -1,0 +1,65 @@
+{
+  "directory": "docs/zh/api/standard/text_processing/asc_std_cuchar",
+  "examples": {
+    "c16rtomb.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "c32rtomb.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "c8rtomb.md": {
+      "standards": [
+        20
+      ],
+      "mode": "host",
+      "expression": "example()",
+      "header_standards": [
+        17
+      ]
+    },
+    "mbrtoc16.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mbrtoc32.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "mbrtoc8.md": {
+      "standards": [
+        20
+      ],
+      "mode": "host",
+      "expression": "example()",
+      "header_standards": [
+        17
+      ]
+    },
+    "mbstate_t.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    }
+  }
+}

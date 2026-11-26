@@ -40,6 +40,24 @@ class DocumentationChecks(unittest.TestCase):
         self.root = Path(self.directory.name)
         self.page = self.root / "page.md"
 
+    def test_std_header_registry_joins_pages_and_rejects_duplicate_ownership(self):
+        shared = self.root / "test/docs/examples.json"
+        shared.parent.mkdir(parents=True)
+        shared.write_text("{}")
+        registry = self.root / "test/cases/asc/std/array/examples.json"
+        registry.parent.mkdir(parents=True)
+        directory = "docs/zh/api/standard/containers/asc_std_array"
+        spec = {"standards": [17, 20], "expression": "example()", "mode": "host"}
+        registry.write_text(json.dumps({"directory": directory, "examples": {"array.md": spec}}))
+        expected = {f"{directory}/array.md": spec}
+        self.assertEqual(DOCS.example_registry(self.root), expected)
+        shared.write_text(json.dumps(expected))
+        with self.assertRaisesRegex(ValueError, "Duplicate"):
+            DOCS.example_registry(self.root)
+        registry.unlink()
+        with self.assertRaisesRegex(ValueError, "under their public header"):
+            DOCS.example_registry(self.root)
+
     def test_table_columns_and_escaped_operator(self):
         self.page.write_text("| API | Value |\n| --- | --- |\n| operator\\| | 2 |\n")
         self.assertEqual(DOCS.structure_errors(self.page), [])

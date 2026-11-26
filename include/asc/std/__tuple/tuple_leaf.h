@@ -104,13 +104,14 @@ public:
     CANN_ASC_STL_API constexpr __tuple_leaf(integral_constant<int, 0>, const Alloc&, U&& value)
         : value_(::asc::std::forward<U>(value))
     {}
-    template <class Alloc, class U, enable_if_t<is_constructible_v<T, allocator_arg_t, Alloc, U&&>, int> = 0>
-    CANN_ASC_STL_API constexpr __tuple_leaf(integral_constant<int, 1>, const Alloc& alloc, U&& value)
-        : value_(allocator_arg, alloc, ::asc::std::forward<U>(value))
+    template <class Alloc, class... Args,
+        enable_if_t<is_constructible_v<T, allocator_arg_t, const Alloc&, Args&&...>, int> = 0>
+    CANN_ASC_STL_API constexpr __tuple_leaf(integral_constant<int, 1>, const Alloc& alloc, Args&&... args)
+        : value_(allocator_arg, alloc, ::asc::std::forward<Args>(args)...)
     {}
-    template <class Alloc, class U, enable_if_t<is_constructible_v<T, U&&, Alloc>, int> = 0>
-    CANN_ASC_STL_API constexpr __tuple_leaf(integral_constant<int, 2>, const Alloc& alloc, U&& value)
-        : value_(::asc::std::forward<U>(value), alloc)
+    template <class Alloc, class... Args, enable_if_t<is_constructible_v<T, Args&&..., const Alloc&>, int> = 0>
+    CANN_ASC_STL_API constexpr __tuple_leaf(integral_constant<int, 2>, const Alloc& alloc, Args&&... args)
+        : value_(::asc::std::forward<Args>(args)..., alloc)
     {}
 
     CANN_ASC_STL_API constexpr T& __get() & noexcept
@@ -136,7 +137,7 @@ public:
     }
 
 private:
-    T value_;
+    T value_{};
 };
 
 // Rebinding storage for reference (and similar) element types: access keeps
@@ -233,6 +234,16 @@ public:
     template <class Alloc, class U, enable_if_t<is_constructible_v<storage, U&&>, int> = 0>
     CANN_ASC_STL_API constexpr __tuple_leaf(integral_constant<int, 0>, const Alloc&, U&& value)
         : storage(::asc::std::forward<U>(value))
+    {}
+
+    template <class Alloc, class... Args,
+        enable_if_t<is_constructible_v<storage, allocator_arg_t, const Alloc&, Args&&...>, int> = 0>
+    CANN_ASC_STL_API constexpr __tuple_leaf(integral_constant<int, 1>, const Alloc& alloc, Args&&... args)
+        : storage(allocator_arg, alloc, ::asc::std::forward<Args>(args)...)
+    {}
+    template <class Alloc, class... Args, enable_if_t<is_constructible_v<storage, Args&&..., const Alloc&>, int> = 0>
+    CANN_ASC_STL_API constexpr __tuple_leaf(integral_constant<int, 2>, const Alloc& alloc, Args&&... args)
+        : storage(::asc::std::forward<Args>(args)..., alloc)
     {}
 
     CANN_ASC_STL_API constexpr T& __get() & noexcept

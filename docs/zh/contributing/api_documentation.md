@@ -20,7 +20,7 @@ python scripts/check_api_docs.py --examples --mode simd --standard 17 --compiler
 python scripts/check_api_docs.py --examples --mode simt --standard 20 --compiler bisheng
 ```
 
-Device示例还应分别覆盖其适用的C++17/C++20模式。结构检查及其回归已进入CTest；示例登记在`test/docs/examples.json`，每页单独编译，不靠其他示例的include掩盖依赖。
+Device示例还应分别覆盖其适用的C++17/C++20模式。结构检查及其回归已进入CTest；标准侧示例按头文件登记在 `test/cases/asc/std/<header>/examples.json`，扩展示例登记在 `test/docs/examples.json`，每页单独编译，不靠其他示例的include掩盖依赖。
 
 Host检查区分运行、静态断言与低语言模式的头文件解析；Device编译成功不代表设备执行成功。真实运行应使用产品仿真或硬件用例并记录对应提交。DLPack等外部依赖缺失时明确记录不适用，不计为通过；使用真实依赖时可通过`--extra-include`显式指定头文件根目录。
 

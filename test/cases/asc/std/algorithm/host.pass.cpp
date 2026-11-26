@@ -16,7 +16,7 @@
 
 #include <asc/std/algorithm>
 
-#include "../../../../support/v1_algorithm_semantics.h"
+#include "support/v1_algorithm_semantics.h"
 
 struct record {
     int key;

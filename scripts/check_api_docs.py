@@ -30,7 +30,7 @@ import tempfile
 import time
 
 from check_doc_writing import check_writing
-from api_docs_inventory import coverage_inventory
+from api_docs_inventory import coverage_inventory, example_registry
 
 FENCE = re.compile(r"^```")
 CPP = re.compile(r"```cpp\n(.*?)\n```", re.DOTALL)
@@ -261,11 +261,15 @@ def check_runtime_examples(tasks: list[tuple]) -> list[dict]:
 
 
 def check_examples(args: argparse.Namespace) -> list[dict]:
-    registry = json.loads((args.root / "test/docs/examples.json").read_text(encoding="utf-8"))
+    registry = example_registry(args.root)
     records = []
     with tempfile.TemporaryDirectory(prefix="asc-stl-doc-examples-") as temporary:
         tasks = []
         for index, (path, spec) in enumerate(sorted(registry.items())):
+            if getattr(args, "std_only", False) and not path.startswith("docs/zh/api/standard/"):
+                continue
+            if getattr(args, "std_header", None) and Path(path).parent.name != f"asc_std_{args.std_header}":
+                continue
             include_only = args.standard in spec.get("header_standards", [])
             if spec.get("mode", "host") != args.mode or not selected_dependencies(spec, args):
                 continue
@@ -334,6 +338,8 @@ def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--examples", action="store_true")
+    parser.add_argument("--std-only", action="store_true", help="Run examples from the standard API")
+    parser.add_argument("--std-header", metavar="NAME", help="Run examples from one public asc/std header")
     parser.add_argument("--standard", type=int, choices=(17, 20, 23), default=17)
     parser.add_argument("--compiler", default=os.environ.get("CXX", "c++"))
     parser.add_argument("--mode", choices=("host", "runtime", "simd", "simt"), default="host")
@@ -345,6 +351,11 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
     args.root = args.root.resolve()
+    if (args.std_only or args.std_header) and not args.examples:
+        parser.error("--std-only and --std-header require --examples")
+    if args.std_header and (not re.fullmatch(r"[a-z][a-z_0-9]*", args.std_header)
+                            or not (args.root / "include/asc/std" / args.std_header).is_file()):
+        parser.error(f"unknown public standard header {args.std_header!r}")
     extra_paths = os.environ.get("ASC_STL_DOC_EXTRA_INCLUDE_DIRS", "").split(os.pathsep)
     args.extra_include.extend(Path(value) for value in extra_paths if value)
     if args.jobs < 1:

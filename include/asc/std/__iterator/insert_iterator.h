@@ -106,7 +106,7 @@ public:
         return *this;
     }
 
-    CANN_ASC_STL_API constexpr insert_iterator operator++(int) noexcept
+    CANN_ASC_STL_API constexpr insert_iterator& operator++(int) noexcept
     {
         return *this;
     }

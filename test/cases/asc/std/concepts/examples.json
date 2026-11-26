@@ -1,0 +1,238 @@
+{
+  "directory": "docs/zh/api/standard/concepts/asc_std_concepts",
+  "examples": {
+    "assignable_from.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "common_reference_with.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "common_with.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "constructible_from.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "convertible_to.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "copy_constructible.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "copyable.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "default_initializable.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "derived_from.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "destructible.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "different_from.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "equality_comparable.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "equality_comparable_with.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "equivalence_relation.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "floating_point.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "integral.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "invocable.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "movable.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "move_constructible.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "predicate.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "ranges_swap.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "regular.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "regular_invocable.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "relation.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "same_as.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "semiregular.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "signed_integral.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "strict_weak_order.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "swappable.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "swappable_with.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "totally_ordered.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "totally_ordered_with.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "unsigned_integral.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    }
+  }
+}

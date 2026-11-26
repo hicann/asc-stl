@@ -14,7 +14,21 @@
  * limitations under the License.
  */
 #include <asc/std/cstddef>
+#include <cstddef>
+#include <type_traits>
 #include "support/core_semantics.h"
+
+static_assert(std::is_same_v<asc::std::max_align_t, std::max_align_t>);
+static_assert(std::is_same_v<asc::std::ptrdiff_t, std::ptrdiff_t>);
+static_assert(std::is_same_v<asc::std::size_t, std::size_t>);
+static_assert(std::is_same_v<asc::std::nullptr_t, decltype(nullptr)>);
+static_assert(alignof(asc::std::max_align_t) >= alignof(long double));
+struct offset_pair {
+    char first;
+    long second;
+};
+static_assert(offsetof(offset_pair, first) == 0 && offsetof(offset_pair, second) % alignof(long) == 0);
+static_assert(NULL == nullptr);
 
 int main()
 {

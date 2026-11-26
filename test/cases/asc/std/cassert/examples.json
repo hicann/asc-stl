@@ -1,0 +1,13 @@
+{
+  "directory": "docs/zh/api/standard/diagnostics/asc_std_cassert",
+  "examples": {
+    "assert.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    }
+  }
+}

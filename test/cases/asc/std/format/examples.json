@@ -1,0 +1,53 @@
+{
+  "directory": "docs/zh/api/standard/text_processing/asc_std_format",
+  "examples": {
+    "basic_format_string.md": {
+      "standards": [
+        20
+      ],
+      "mode": "host",
+      "expression": "example()",
+      "header_standards": [
+        17
+      ]
+    },
+    "format_string.md": {
+      "standards": [
+        20
+      ],
+      "mode": "host",
+      "header_standards": [
+        17
+      ]
+    },
+    "format_to.md": {
+      "standards": [
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "format_to_n.md": {
+      "standards": [
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "format_to_n_result.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "formatted_size.md": {
+      "standards": [
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    }
+  }
+}

@@ -25,7 +25,7 @@
 #include <asc/std/memory>
 #include <asc/std/mutex>
 #include <asc/std/variant>
-#include "mdspan_slice_regression.h"
+#include "../cases/asc/std/mdspan/support/mdspan_slice_regression.h"
 #include "vocabulary_copy_test.h"
 
 namespace asc_stl_w09_w10_test {
@@ -118,6 +118,46 @@ CANN_ASC_STL_API int evaluate_iterator()
     return 0;
 }
 
+CANN_ASC_STL_API int evaluate_calendar_boundaries()
+{
+    namespace ch = asc::std::chrono;
+    if (ch::year{1900}.is_leap() || !ch::year{2000}.is_leap() || ch::year{2100}.is_leap()) {
+        return 27;
+    }
+    const auto start = ch::year{1999} / ch::December / ch::last;
+    auto end_of_month = start;
+    end_of_month += ch::months{2};
+    if (!end_of_month.ok() || end_of_month.year() != ch::year{2000} || end_of_month.month() != ch::February ||
+        end_of_month.month_day_last().month() != ch::February || end_of_month.day() != ch::day{29} ||
+        (ch::year{1900} / ch::February / ch::last).day() != ch::day{28}) {
+        return 28;
+    }
+    end_of_month -= ch::months{2};
+    if (end_of_month.year() != start.year() || end_of_month.month() != start.month() ||
+        end_of_month.day() != ch::day{31}) {
+        return 29;
+    }
+
+    auto leap_day = ch::year{2000} / ch::February / ch::day{29};
+    leap_day += ch::years{1};
+    if (leap_day.ok() || leap_day.year() != ch::year{2001} || leap_day.month() != ch::February ||
+        leap_day.day() != ch::day{29}) {
+        return 30;
+    }
+    leap_day -= ch::years{1};
+    if (!leap_day.ok()) {
+        return 31;
+    }
+
+    const ch::year_month_day pre_epoch{ch::sys_days{ch::days{-1}}};
+    if (!pre_epoch.ok() || pre_epoch.year() != ch::year{1969} || pre_epoch.month() != ch::December ||
+        pre_epoch.day() != ch::day{31} || static_cast<ch::sys_days>(pre_epoch).time_since_epoch().count() != -1 ||
+        static_cast<ch::local_days>(pre_epoch).time_since_epoch().count() != -1) {
+        return 32;
+    }
+    return 0;
+}
+
 CANN_ASC_STL_API int evaluate_alignment_chrono()
 {
     alignas(16) unsigned char storage[64]{};
@@ -169,7 +209,7 @@ CANN_ASC_STL_API int evaluate_alignment_chrono()
     const ch::month_weekday_last last_friday{ch::October, ch::Friday[ch::last]};
     if (!last_friday.ok() || last_friday.month() != ch::October || last_friday.weekday_last().weekday() != ch::Friday)
         return 26;
-    return 0;
+    return evaluate_calendar_boundaries();
 }
 
 template <class T>

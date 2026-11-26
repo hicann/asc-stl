@@ -17,7 +17,7 @@
 #include <asc/std/utility>
 #include <asc/std/type_traits>
 #include "support/b010_semantics.h"
-#include "support/pair_piecewise_regression.h"
+#include "../../utility/support/pair_piecewise_regression.h"
 
 struct NonTupleSource {};
 using IntPair = asc::std::pair<int, int>;

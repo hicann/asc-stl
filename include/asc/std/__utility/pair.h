@@ -73,6 +73,10 @@ struct __is_pair : false_type {};
 template <class T1, class T2>
 struct __is_pair<pair<T1, T2>> : true_type {};
 
+template <class T>
+inline constexpr bool __use_pair_like_overload =
+    __tuple_like_ext<T> && !__is_pair<T>::value && !__is_asc_std_ranges_subrange_v<T>;
+
 template <class T1, class T2>
 struct pair {
     using first_type = T1;
@@ -135,8 +139,7 @@ struct pair {
         : first(::asc::std::move(other.first)), second(::asc::std::move(other.second))
     {}
 
-    template <class PairLike,
-        enable_if_t<__tuple_like_ext<remove_cvref_t<PairLike>> && !__is_pair<remove_cvref_t<PairLike>>::value, int> = 0,
+    template <class PairLike, enable_if_t<__use_pair_like_overload<remove_cvref_t<PairLike>>, int> = 0,
         enable_if_t<is_constructible_v<T1, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))> &&
                 is_constructible_v<T2, decltype(::asc::std::__adl_get<1>(::asc::std::declval<PairLike>()))>,
             int> = 0>
@@ -206,8 +209,7 @@ struct pair {
         return *this;
     }
 
-    template <class PairLike,
-        enable_if_t<__tuple_like_ext<remove_cvref_t<PairLike>> && !__is_pair<remove_cvref_t<PairLike>>::value, int> = 0,
+    template <class PairLike, enable_if_t<__use_pair_like_overload<remove_cvref_t<PairLike>>, int> = 0,
         enable_if_t<is_assignable_v<T1&, decltype(::asc::std::__adl_get<0>(::asc::std::declval<PairLike>()))> &&
                 is_assignable_v<T2&, decltype(::asc::std::__adl_get<1>(::asc::std::declval<PairLike>()))>,
             int> = 0>

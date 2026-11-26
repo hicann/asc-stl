@@ -108,6 +108,13 @@ COMPILE_FAILURE_CASES = (
     ("cases/asc/numeric_types/unsupported.fail.cpp", "no matching function"),
     ("cases/asc/numeric_types/host_native.fail.cpp", "native_type"),
     ("cases/asc/random/seed_sequence.fail.cpp", "cannot convert"),
+    ("cases/asc/std/string_view/string_view_substr.fail.cpp", "no member named"),
+    ("cases/asc/std/string_view/string_view_at.fail.cpp", "no member named"),
+    ("cases/asc/std/bitset/oversized_conversion.fail.cpp", "no matching function"),
+    ("cases/asc/std/bitset/position_access.fail.cpp", "no matching function"),
+    ("cases/asc/std/bitset/string_constructor.fail.cpp", "conversion"),
+    ("cases/asc/std/__numeric/saturating_cast/saturating_float.fail.cpp", "saturating_cast requires integer types"),
+    ("cases/asc/std/__ranges/access/initializer_list_excluded.fail.cpp", "no match for call"),
     ("cases/asc/std/expected/value.fail.cpp", "deleted"),
     ("cases/asc/std/expected/void.fail.cpp", "incomplete type"),
     ("cases/asc/numeric/bool.fail.cpp", "no matching function"),
@@ -287,6 +294,18 @@ COMPILE_FAILURE_CASES = (
 
 def validate_compile_failures(compiler: str, include: Path, test_root: Path, temporary: Path) -> None:
     cases = COMPILE_FAILURE_CASES
+    registered = {path for path, _ in cases}
+    # These language-specific and runtime failures have dedicated tests.
+    registered.update({
+        "cases/asc/std/format/cxx17_absent.fail.cpp",
+        "cases/asc/std/compare/compare_cxx17_absent.fail.cpp",
+        "cases/asc/std/cassert/failure.fail.cpp",
+    })
+    standard_failures = {path.relative_to(test_root).as_posix()
+                         for path in (test_root / "cases/asc/std").rglob("*.fail.cpp")}
+    missing = sorted(standard_failures - registered)
+    if missing:
+        raise RuntimeError(f"Standard-header negative cases missing a Host check: {missing}")
     cxx20_only = {
         "cases/asc/std/format/format_float_host.fail.cpp",
         "cases/asc/std/format/invalid_spec.fail.cpp",

@@ -109,31 +109,36 @@ public:
 
     CANN_ASC_STL_API constexpr inplace_vector(const inplace_vector& other) : size_(0)
     {
-        while (size_ < other.size_) {
-            unchecked_emplace_back(other.storage_.elements[size_]);
+        if constexpr (Capacity != 0) {
+            while (size_ < other.size_) {
+                unchecked_emplace_back(other[size_]);
+            }
         }
     }
 
     CANN_ASC_STL_API constexpr inplace_vector(inplace_vector&& other) : size_(0)
     {
-        while (size_ < other.size_) {
-            unchecked_emplace_back(
-                ::asc::std::move(other.storage_.elements[size_]));  // NOLINT(build/include_what_you_use)
+        if constexpr (Capacity != 0) {
+            while (size_ < other.size_) {
+                unchecked_emplace_back(::asc::std::move(other[size_]));  // NOLINT(build/include_what_you_use)
+            }
         }
     }
 
     CANN_ASC_STL_API constexpr inplace_vector& operator=(const inplace_vector& other)
     {
-        if (this != &other) {
-            const size_type common = size_ < other.size_ ? size_ : other.size_;
-            for (size_type index = 0; index < common; ++index) {
-                storage_.elements[index] = other.storage_.elements[index];
-            }
-            while (size_ > other.size_) {
-                pop_back();
-            }
-            while (size_ < other.size_) {
-                unchecked_emplace_back(other.storage_.elements[size_]);
+        if constexpr (Capacity != 0) {
+            if (this != &other) {
+                const size_type common = size_ < other.size_ ? size_ : other.size_;
+                for (size_type index = 0; index < common; ++index) {
+                    (*this)[index] = other[index];
+                }
+                while (size_ > other.size_) {
+                    pop_back();
+                }
+                while (size_ < other.size_) {
+                    unchecked_emplace_back(other[size_]);
+                }
             }
         }
         return *this;
@@ -141,18 +146,18 @@ public:
 
     CANN_ASC_STL_API constexpr inplace_vector& operator=(inplace_vector&& other)
     {
-        if (this != &other) {
-            const size_type common = size_ < other.size_ ? size_ : other.size_;
-            for (size_type index = 0; index < common; ++index) {
-                storage_.elements[index] =
-                    ::asc::std::move(other.storage_.elements[index]);  // NOLINT(build/include_what_you_use)
-            }
-            while (size_ > other.size_) {
-                pop_back();
-            }
-            while (size_ < other.size_) {
-                unchecked_emplace_back(
-                    ::asc::std::move(other.storage_.elements[size_]));  // NOLINT(build/include_what_you_use)
+        if constexpr (Capacity != 0) {
+            if (this != &other) {
+                const size_type common = size_ < other.size_ ? size_ : other.size_;
+                for (size_type index = 0; index < common; ++index) {
+                    (*this)[index] = ::asc::std::move(other[index]);  // NOLINT(build/include_what_you_use)
+                }
+                while (size_ > other.size_) {
+                    pop_back();
+                }
+                while (size_ < other.size_) {
+                    unchecked_emplace_back(::asc::std::move(other[size_]));  // NOLINT(build/include_what_you_use)
+                }
             }
         }
         return *this;
@@ -335,6 +340,7 @@ public:
     CANN_ASC_STL_API constexpr size_type erase_if(Predicate predicate)
     {
         if constexpr (Capacity == 0) {
+            (void)predicate;
             return 0;
         } else {
             const size_type original = size_;
@@ -357,25 +363,25 @@ public:
 
     CANN_ASC_STL_API constexpr void swap(inplace_vector& other)
     {
-        if (this == &other) {
-            return;
-        }
-        const size_type common = size_ < other.size_ ? size_ : other.size_;
-        for (size_type index = 0; index < common; ++index) {
-            T temporary = ::asc::std::move(storage_.elements[index]);  // NOLINT(build/include_what_you_use)
-            storage_.elements[index] =
-                ::asc::std::move(other.storage_.elements[index]);          // NOLINT(build/include_what_you_use)
-            other.storage_.elements[index] = ::asc::std::move(temporary);  // NOLINT(build/include_what_you_use)
-        }
-        inplace_vector& smaller = size_ < other.size_ ? *this : other;
-        inplace_vector& larger = size_ < other.size_ ? other : *this;
-        const size_type smaller_original = smaller.size_;
-        for (size_type index = smaller_original; index < larger.size_; ++index) {
-            smaller.unchecked_emplace_back(
-                ::asc::std::move(larger.storage_.elements[index]));  // NOLINT(build/include_what_you_use)
-        }
-        while (larger.size_ > smaller_original) {
-            larger.pop_back();
+        if constexpr (Capacity != 0) {
+            if (this == &other) {
+                return;
+            }
+            const size_type common = size_ < other.size_ ? size_ : other.size_;
+            for (size_type index = 0; index < common; ++index) {
+                T temporary = ::asc::std::move((*this)[index]);   // NOLINT(build/include_what_you_use)
+                (*this)[index] = ::asc::std::move(other[index]);  // NOLINT(build/include_what_you_use)
+                other[index] = ::asc::std::move(temporary);       // NOLINT(build/include_what_you_use)
+            }
+            inplace_vector& smaller = size_ < other.size_ ? *this : other;
+            inplace_vector& larger = size_ < other.size_ ? other : *this;
+            const size_type smaller_original = smaller.size_;
+            for (size_type index = smaller_original; index < larger.size_; ++index) {
+                smaller.unchecked_emplace_back(::asc::std::move(larger[index]));  // NOLINT(build/include_what_you_use)
+            }
+            while (larger.size_ > smaller_original) {
+                larger.pop_back();
+            }
         }
     }
 

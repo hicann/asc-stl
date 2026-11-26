@@ -16,7 +16,7 @@
 
 #include <asc/std/__iterator/iterator_traits.h>
 #include "support/b009_semantics.h"
-#include "support/pointer_traits_regressions.h"
+#include "../../memory/support/pointer_traits_regressions.h"
 
 int main()
 {

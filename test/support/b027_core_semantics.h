@@ -22,7 +22,7 @@
 #include <asc/std/bitset>
 #include <asc/std/inplace_vector>
 
-#include "vector_aliasing_semantics.h"
+#include "../cases/asc/std/vector/support/vector_aliasing_semantics.h"
 namespace asc_stl_b027_core_test {
 CANN_ASC_STL_API int evaluate_inplace_search()
 {
@@ -58,6 +58,74 @@ CANN_ASC_STL_API int evaluate_numeric()
     return 0;
 }
 
+CANN_ASC_STL_API int evaluate_bitset_word_boundaries()
+{
+    using bits_type = asc::std::bitset<65>;
+    const bits_type low(1);
+    const auto high = low << 64;
+    if (high.count() != 1 || !high[64] || high[0] || (high >> 64) != low || (high << 65).any() || (high >> 65).any()) {
+        return 1;
+    }
+    auto shifted = low;
+    shifted <<= 63;
+    if (!shifted[63] || shifted[64]) {
+        return 2;
+    }
+    shifted <<= 1;
+    if (!(shifted == high) || shifted == low) {
+        return 3;
+    }
+    shifted >>= 1;
+    if (!shifted[63] || shifted[64]) {
+        return 4;
+    }
+    shifted >>= 63;
+    if (shifted != low) {
+        return 5;
+    }
+    shifted <<= 65;
+    if (shifted.any()) {
+        return 6;
+    }
+    shifted = high;
+    shifted >>= 65;
+    if (shifted.any()) {
+        return 7;
+    }
+
+    auto combined = low;
+    combined |= high;
+    if (combined.count() != 2 || !combined[0] || !combined[64] || combined != (low | high)) {
+        return 8;
+    }
+    const auto inverted = ~combined;
+    if (inverted.count() != 63 || inverted[0] || inverted[64] || (~inverted) != combined) {
+        return 9;
+    }
+    auto intersection = combined;
+    intersection &= high;
+    if (intersection != high || (combined & high) != high) {
+        return 10;
+    }
+    auto difference = combined;
+    difference ^= high;
+    if (difference != low || (combined ^ high) != low || !combined[64]) {
+        return 11;
+    }
+    asc::std::bitset<129> three_words;
+    three_words[0] = true;
+    three_words[64] = true;
+    const auto crossed = three_words << 64;
+    if (!crossed[64] || !crossed[128] || crossed.count() != 2 || crossed[0])
+        return 12;
+    const auto crossed_again = crossed << 1;
+    if (crossed_again.count() != 1 || !crossed_again[65])
+        return 13;
+    if ((crossed >> 64) != three_words || (crossed >> 128).count() != 1 || (crossed >> 129).any())
+        return 14;
+    return 0;
+}
+
 CANN_ASC_STL_API int evaluate()
 {
     asc::std::bitset<16> bits(0x1234u);
@@ -86,6 +154,9 @@ CANN_ASC_STL_API int evaluate()
     if (!bits.all() || bits.size() != 16)
         return 9;
 
+    const int bitset_result = evaluate_bitset_word_boundaries();
+    if (bitset_result != 0)
+        return 80 + bitset_result;
     const int inplace_result = evaluate_inplace_search();
     if (inplace_result != 0)
         return inplace_result;

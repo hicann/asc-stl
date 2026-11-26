@@ -18,10 +18,15 @@
 #include <asc/std/unordered_set>
 
 #include "../../../../support/b027_semantics.h"
-#include "../../../../support/bitmap_mask_semantics.h"
+#include "support/bitmap_mask_semantics.h"
+
+static_assert(std::is_same_v<asc::std::bitset<65>::base::const_reference, bool>);
 
 int main()
 {
+    const asc::std::bitset<65> initial;
+    if (!initial.none() || initial.count() != 0)
+        return 102;
     if (asc_stl_bitmap_mask_test::evaluate() != 0) {
         return 101;
     }

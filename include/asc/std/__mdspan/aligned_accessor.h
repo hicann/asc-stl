@@ -71,7 +71,7 @@ public:
     CANN_ASC_STL_API constexpr explicit aligned_accessor(default_accessor<OtherElement>) noexcept
     {}
 
-    template <class OtherElement, enable_if_t<__pointer_arrays_convertible_v<OtherElement, Element>, int> = 0>
+    template <class OtherElement, enable_if_t<__pointer_arrays_convertible_v<Element, OtherElement>, int> = 0>
     CANN_ASC_STL_API constexpr operator default_accessor<OtherElement>() const noexcept
     {
         return {};

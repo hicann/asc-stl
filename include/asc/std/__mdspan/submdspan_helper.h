@@ -103,7 +103,8 @@ struct strided_slice {
 };
 
 template <class OffsetType, class ExtentType, class StrideType>
-strided_slice(OffsetType, ExtentType, StrideType) -> strided_slice<OffsetType, ExtentType, StrideType>;
+CANN_ASC_STL_HOST_DEVICE strided_slice(
+    OffsetType, ExtentType, StrideType) -> strided_slice<OffsetType, ExtentType, StrideType>;
 
 template <class T>
 inline constexpr bool __is_strided_slice = false;

@@ -22,9 +22,9 @@
 #include <cassert>
 #include <random>
 #include <vector>
-#include "support/ranges_find_tests.h"
-#include "support/ranges_fold_tests.h"
-#include "support/ranges_sequence_tests.h"
+#include "../../algorithm/support/ranges_find_tests.h"
+#include "../../algorithm/support/ranges_fold_tests.h"
+#include "../../algorithm/support/ranges_sequence_tests.h"
 
 namespace {
 struct Record {

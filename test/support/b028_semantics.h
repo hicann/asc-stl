@@ -33,6 +33,7 @@
 #include <asc/std/map>
 
 #include "b028_allocator.h"
+#include "inline_arena_allocator.h"
 
 namespace asc_stl_b028_test {
 
@@ -166,8 +167,10 @@ CANN_ASC_STL_API int evaluate_foundation()
 template <class StoragePointer>
 CANN_ASC_STL_HOST_SIMT_API int evaluate_containers(StoragePointer storage, __SIZE_TYPE__ capacity)
 {
-    arena_state state{storage, capacity, 0, 0, 0};
-    using int_allocator = arena_allocator<int>;
+    if (capacity < sizeof(asc_stl_test::inline_arena))
+        return 19;
+    auto& state = asc_stl_test::start_inline_arena(storage);
+    using int_allocator = asc_stl_test::inline_arena_allocator<int>;
     {
         asc::std::list<int, int_allocator> values{int_allocator(&state)};
         if (!values.empty() || values.size() != 0)
@@ -199,7 +202,7 @@ CANN_ASC_STL_HOST_SIMT_API int evaluate_containers(StoragePointer storage, __SIZ
         return 27;
 
     using pair_type = asc::std::__arena_pair<const int, int>;
-    using pair_allocator = arena_allocator<pair_type>;
+    using pair_allocator = asc_stl_test::inline_arena_allocator<pair_type>;
     {
         using map_type = asc::std::map<int, int, less_int, pair_allocator>;  // NOLINT(build/include_what_you_use)
         map_type values{less_int{}, pair_allocator(&state)};

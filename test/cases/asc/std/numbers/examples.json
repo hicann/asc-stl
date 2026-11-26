@@ -1,0 +1,291 @@
+{
+  "directory": "docs/zh/api/standard/numerics/asc_std_numbers",
+  "examples": {
+    "e_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "egamma_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "inv_pi_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "inv_sqrt3_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "inv_sqrtpi_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "ln10_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "ln2_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "log10e_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "log2e_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_e.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_e_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "numbers_egamma.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_egamma_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "numbers_inv_pi.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_inv_pi_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "numbers_inv_sqrt3.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_inv_sqrt3_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "numbers_inv_sqrtpi.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_inv_sqrtpi_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "numbers_ln10.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_ln10_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "numbers_ln2.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_ln2_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "numbers_log10e.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_log10e_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "numbers_log2e.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_log2e_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "numbers_phi.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_phi_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "numbers_pi.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_pi_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "numbers_sqrt2.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_sqrt2_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "numbers_sqrt3.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "numbers_sqrt3_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": null
+    },
+    "phi_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "pi_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "sqrt2_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "sqrt3_v.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    }
+  }
+}

@@ -38,7 +38,8 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 // types (half, bfloat16_t and the fp8 spellings) are AI-core builtin types
 // gated by the capability macros inlined in
 // __type_traits/is_extended_floating_point.h; the facets materialize their
-// values from the raw bit patterns via bit_cast.
+// values from their raw bit encodings. FP8 uses the device storage accessor
+// because BiSheng cannot lower immediate floating-point bit casts for those types.
 
 // ASC half
 
@@ -226,15 +227,15 @@ public:
     static constexpr int max_digits10 = 3;
     CANN_ASC_STL_API static constexpr _Tp min() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x08u));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x08u));
     }
     CANN_ASC_STL_API static constexpr _Tp max() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x7eu));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x7eu));
     }
     CANN_ASC_STL_API static constexpr _Tp lowest() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0xfeu));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0xfeu));
     }
 
     static constexpr bool is_integer = false;
@@ -242,16 +243,16 @@ public:
     static constexpr int radix = FLT_RADIX;
     CANN_ASC_STL_API static constexpr _Tp epsilon() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x20u));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x20u));
     }
     CANN_ASC_STL_API static constexpr _Tp round_error() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x30u));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x30u));
     }
 
-    static constexpr int min_exponent = -6;
-    static constexpr int min_exponent10 = -2;
-    static constexpr int max_exponent = 8;
+    static constexpr int min_exponent = -5;
+    static constexpr int min_exponent10 = -1;
+    static constexpr int max_exponent = 9;
     static constexpr int max_exponent10 = 2;
 
     static constexpr bool has_infinity = false;
@@ -261,19 +262,19 @@ public:
     static constexpr bool has_denorm_loss = false;
     CANN_ASC_STL_API static constexpr _Tp infinity() noexcept
     {
-        return _Tp{};
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t{0});
     }
     CANN_ASC_STL_API static constexpr _Tp quiet_NaN() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x7fu));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x7fu));
     }
     CANN_ASC_STL_API static constexpr _Tp signaling_NaN() noexcept
     {
-        return _Tp{};
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t{0});
     }
     CANN_ASC_STL_API static constexpr _Tp denorm_min() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x01u));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x01u));
     }
 
     static constexpr bool is_iec559 = false;
@@ -302,15 +303,15 @@ public:
     static constexpr int max_digits10 = 2;
     CANN_ASC_STL_API static constexpr _Tp min() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x04u));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x04u));
     }
     CANN_ASC_STL_API static constexpr _Tp max() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x7bu));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x7bu));
     }
     CANN_ASC_STL_API static constexpr _Tp lowest() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0xfbu));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0xfbu));
     }
 
     static constexpr bool is_integer = false;
@@ -318,16 +319,16 @@ public:
     static constexpr int radix = FLT_RADIX;
     CANN_ASC_STL_API static constexpr _Tp epsilon() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x34u));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x34u));
     }
     CANN_ASC_STL_API static constexpr _Tp round_error() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x38u));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x38u));
     }
 
-    static constexpr int min_exponent = -15;
-    static constexpr int min_exponent10 = -5;
-    static constexpr int max_exponent = 15;
+    static constexpr int min_exponent = -13;
+    static constexpr int min_exponent10 = -4;
+    static constexpr int max_exponent = 16;
     static constexpr int max_exponent10 = 4;
 
     static constexpr bool has_infinity = true;
@@ -337,19 +338,19 @@ public:
     static constexpr bool has_denorm_loss = false;
     CANN_ASC_STL_API static constexpr _Tp infinity() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x7cu));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x7cu));
     }
     CANN_ASC_STL_API static constexpr _Tp quiet_NaN() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x7eu));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x7eu));
     }
     CANN_ASC_STL_API static constexpr _Tp signaling_NaN() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x7du));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x7du));
     }
     CANN_ASC_STL_API static constexpr _Tp denorm_min() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x01u));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x01u));
     }
 
     static constexpr bool is_iec559 = false;
@@ -378,15 +379,15 @@ public:
     static constexpr int max_digits10 = 2;
     CANN_ASC_STL_API static constexpr _Tp min() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x00u));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x00u));
     }
     CANN_ASC_STL_API static constexpr _Tp max() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0xfeu));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0xfeu));
     }
     CANN_ASC_STL_API static constexpr _Tp lowest() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x00u));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x00u));
     }
 
     static constexpr bool is_integer = false;
@@ -394,16 +395,16 @@ public:
     static constexpr int radix = FLT_RADIX;
     CANN_ASC_STL_API static constexpr _Tp epsilon() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x7fu));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x7fu));
     }
     CANN_ASC_STL_API static constexpr _Tp round_error() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0x7fu));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0x7fu));
     }
 
-    static constexpr int min_exponent = -127;
-    static constexpr int min_exponent10 = -39;
-    static constexpr int max_exponent = 127;
+    static constexpr int min_exponent = -126;
+    static constexpr int min_exponent10 = -38;
+    static constexpr int max_exponent = 128;
     static constexpr int max_exponent10 = 38;
 
     static constexpr bool has_infinity = false;
@@ -413,19 +414,19 @@ public:
     static constexpr bool has_denorm_loss = false;
     CANN_ASC_STL_API static constexpr _Tp infinity() noexcept
     {
-        return _Tp{};
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t{0});
     }
     CANN_ASC_STL_API static constexpr _Tp quiet_NaN() noexcept
     {
-        return ::asc::std::bit_cast<_Tp>(uint8_t(0xffu));
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t(0xffu));
     }
     CANN_ASC_STL_API static constexpr _Tp signaling_NaN() noexcept
     {
-        return _Tp{};
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t{0});
     }
     CANN_ASC_STL_API static constexpr _Tp denorm_min() noexcept
     {
-        return _Tp{};
+        return ::asc::std::__fp_from_storage<_Tp>(uint8_t{0});
     }
 
     static constexpr bool is_iec559 = false;

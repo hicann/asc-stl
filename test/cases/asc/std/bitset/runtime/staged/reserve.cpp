@@ -26,6 +26,10 @@ __global__ void asc_stl_b027_reserve_kernel(
     storage& memory = *reinterpret_cast<storage*>(state_packet);
     string_type& text = *reinterpret_cast<string_type*>(string_packet);
     text.reserve(96);
+    if (text.get_allocator().state != &memory) {
+        result->code = 1;
+        return;
+    }
     memory.before_append = memory.allocations;
     memory.address = text.data();
     result->code = 0;

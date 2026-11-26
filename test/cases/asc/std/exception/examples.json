@@ -1,0 +1,14 @@
+{
+  "directory": "docs/zh/api/standard/language_support/asc_std_exception",
+  "examples": {
+    "terminate.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expected_exit": 42,
+      "expected_output": "ASC_STL_TERMINATE_HANDLER_PASS"
+    }
+  }
+}

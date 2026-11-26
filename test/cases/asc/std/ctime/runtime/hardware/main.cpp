@@ -16,13 +16,14 @@
 
 #include <acl/acl.h>
 #include <iostream>
+#include "../time_fields.h"
 #include "../../../../../../support/hardware_runtime.h"
 #include "launch.h"
 
 int main()
 {
     asc_stl_test::hardware_runtime runtime;
-    int actual = -1;
+    int actual[4] = {-1, -1, -1, -1};
     int* device = nullptr;
     aclrtStream stream = nullptr;
     bool passed = runtime.initialize(nullptr) == ACL_SUCCESS && runtime.set_device(0) == ACL_SUCCESS &&
@@ -31,8 +32,8 @@ int main()
     if (passed && runtime.ready()) {
         launch_asc_stl_b021(device, stream);
         passed = runtime.synchronize(stream) == ACL_SUCCESS &&
-            aclrtMemcpy(&actual, sizeof(actual), device, sizeof(actual), ACL_MEMCPY_DEVICE_TO_HOST) == ACL_SUCCESS &&
-            actual == 0;
+            aclrtMemcpy(actual, sizeof(actual), device, sizeof(actual), ACL_MEMCPY_DEVICE_TO_HOST) == ACL_SUCCESS &&
+            asc_stl_time_fields_test::matches(actual);
     }
     if (device)
         passed = runtime.free_device(device) == ACL_SUCCESS && passed;
@@ -41,6 +42,7 @@ int main()
     passed = runtime.reset_device(0) == ACL_SUCCESS && passed;
     passed = runtime.finalize() == ACL_SUCCESS && passed;
     passed = runtime.finish(passed) == 0;
-    std::cout << (passed ? "PASS" : "FAIL") << ": B021 Device semantics (result=" << actual << ")\n";
+    std::cout << (passed ? "PASS" : "FAIL") << ": B021 Device semantics (result=" << actual[0] << ", sec=" << actual[2]
+              << ", nsec=" << actual[3] << ")\n";
     return passed ? 0 : 1;
 }

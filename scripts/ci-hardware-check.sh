@@ -84,6 +84,7 @@ run_hardware_case() {
     fi
 }
 for standard in 17 20; do
+    STD_RUNTIME_BUILD_DIR="$BUILD_ROOT/cxx$standard/std-runtime"
     SOURCE_BUILD_DIR="$BUILD_ROOT/cxx$standard/source-location"
     FOUNDATION_BUILD_DIR="$BUILD_ROOT/cxx$standard/foundation"
     B016_BUILD_DIR="$BUILD_ROOT/cxx$standard/b016"
@@ -190,11 +191,32 @@ for standard in 17 20; do
         -DASC_STL_INCLUDE_DIR="$ROOT/include" -DASC_STL_CXX_STANDARD="$standard" -DCMAKE_BUILD_TYPE=Release
     cmake --build "$RANDOM_BUILD_DIR" -j "$BUILD_JOBS"
 
+    groups_file="$STD_RUNTIME_BUILD_DIR/groups.txt"
+    mkdir -p "$STD_RUNTIME_BUILD_DIR"
+    python3 "$ROOT/test/scripts/std_runtime_groups.py" >"$groups_file"
+    std_runtime_programs=()
+    while IFS=: read -r label selection; do
+        group_build="$STD_RUNTIME_BUILD_DIR/simt-$label"
+        cmake -S "$ROOT/test/support/std_runtime" -B "$group_build" \
+            -DASC_STL_CXX_STANDARD="$standard" -DASC_STL_STD_MODE=simt \
+            -DASC_STL_STD_HEADERS="$selection" -DCMAKE_BUILD_TYPE=Release
+        cmake --build "$group_build" -j"$BUILD_JOBS"
+        std_runtime_programs+=("$group_build/asc_stl_std_runtime")
+    done <"$groups_file"
+    cmake -S "$ROOT/test/support/std_runtime" -B "$STD_RUNTIME_BUILD_DIR/simd" \
+        -DASC_STL_CXX_STANDARD="$standard" -DASC_STL_STD_MODE=simd -DCMAKE_BUILD_TYPE=Release
+    cmake --build "$STD_RUNTIME_BUILD_DIR/simd" -j"$BUILD_JOBS"
+    std_runtime_programs+=("$STD_RUNTIME_BUILD_DIR/simd/asc_stl_std_runtime")
+
     for run_index in $(seq 1 "$RUNS"); do
         echo "C++$standard source_location hardware run $run_index/$RUNS: D-SIMD"
         run_hardware_case "asc/std/source_location" "$standard" simd "$run_index" "$SOURCE_BUILD_DIR/asc_stl_source_location_simd"
         echo "C++$standard source_location hardware run $run_index/$RUNS: D-SIMT"
         run_hardware_case "asc/std/source_location" "$standard" simt "$run_index" "$SOURCE_BUILD_DIR/asc_stl_source_location_simt"
+        for program in "${std_runtime_programs[@]}"; do
+            group="${program%/*}"
+            run_bounded_hardware "cxx$standard-std-per-header-${group##*/}-$run_index" -- "$program"
+        done
         echo "C++$standard foundation runtime hardware run $run_index/$RUNS: D-SIMD"
         run_hardware_case "asc/std/__cstring/memcpy.h" "$standard" simd "$run_index" "$FOUNDATION_BUILD_DIR/asc_stl_foundation_simd"
         echo "C++$standard foundation runtime hardware run $run_index/$RUNS: D-SIMT"

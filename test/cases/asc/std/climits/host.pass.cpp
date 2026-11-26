@@ -16,6 +16,24 @@
 
 #include <asc/std/climits>
 
+#include <limits>
+
+#define CHECK_WIDTH(bound, T)                                    \
+    static_assert(bound##_MIN == std::numeric_limits<T>::min()); \
+    static_assert(bound##_MAX == std::numeric_limits<T>::max())
+CHECK_WIDTH(CHAR, char);
+CHECK_WIDTH(SCHAR, signed char);
+CHECK_WIDTH(SHRT, short);
+CHECK_WIDTH(INT, int);
+CHECK_WIDTH(LONG, long);
+CHECK_WIDTH(LLONG, long long);
+static_assert(UCHAR_MAX == std::numeric_limits<unsigned char>::max());
+static_assert(USHRT_MAX == std::numeric_limits<unsigned short>::max());
+static_assert(UINT_MAX == std::numeric_limits<unsigned int>::max());
+static_assert(ULONG_MAX == std::numeric_limits<unsigned long>::max());
+static_assert(ULLONG_MAX == std::numeric_limits<unsigned long long>::max());
+static_assert(MB_LEN_MAX >= 1);
+
 int main()
 {
     static_assert(CHAR_BIT == 8);

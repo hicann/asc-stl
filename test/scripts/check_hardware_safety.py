@@ -127,10 +127,12 @@ class HardwareSafetyTests(unittest.TestCase):
         for name in ("ci-hardware-check.sh", "cann-env.sh", "run_hardware_case.py"):
             shutil.copyfile(ROOT / "scripts" / name, scripts / name)
         (scripts / "hardware_device.py").write_text("# Explicit CPU-only preflight fixture.\n", encoding="utf-8")
+        # Use the same read-only header discovery and metadata as the real suite.
+        (suite / "test").symlink_to(ROOT / "test", target_is_directory=True)
         commands = self.directory / "bin"
         commands.mkdir()
         (commands / "bisheng").write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
-        binaries = sorted(set(re.findall(r'\$[A-Z0-9_]*BUILD_DIR/([^" ]+)',
+        binaries = sorted(set(re.findall(r'/(asc_stl_[a-zA-Z0-9_]+)"',
                                          (scripts / "ci-hardware-check.sh").read_text(encoding="utf-8"))))
         cmake = (f"#!{sys.executable}\nimport sys,pathlib,os\n"
                  "if '--build' in sys.argv:\n"

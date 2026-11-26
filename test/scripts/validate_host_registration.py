@@ -42,12 +42,21 @@ def main() -> int:
         for row in rows
         if row["applicability"]["host_semantic"]
     }
+    public_headers = [row["target"] for row in rows if row["visibility"] == "public"
+                      and row["target"].startswith("asc/std/") and row["target"].count("/") == 2]
+    missing_local = []
+    for target in public_headers:
+        sources = sorted((args.test_root / "cases" / target).glob("*.pass.cpp"))
+        if not sources:
+            missing_local.append(target)
+        expected.update(f"{target}/{source.name}" for source in sources)
     missing_files = sorted(source for source in expected if not (args.test_root / "cases" / source).is_file())
     missing_registration = sorted(expected - registered)
     extra_registration = sorted(registered - expected)
-    if missing_files or missing_registration:
+    if missing_files or missing_registration or missing_local:
         LOGGER.error(json.dumps({
             "missing_files": missing_files,
+            "public_headers_without_local_tests": missing_local,
             "missing_registration": missing_registration,
             "extra_registration": extra_registration,
         }, indent=2))

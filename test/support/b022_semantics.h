@@ -45,7 +45,7 @@
 #include <asc/std/__algorithm/transform.h>
 #include <asc/std/__semaphore/counting_semaphore.h>
 
-#include "narrow_atomic_cas_semantics.h"
+#include "../cases/asc/std/atomic/support/narrow_atomic_cas_semantics.h"
 
 namespace asc_stl_b022_test {
 

@@ -245,6 +245,8 @@ if(ASC_STL_ENABLE_HOST_TESTS)
             --compiler ${CMAKE_CXX_COMPILER})
     set_tests_properties(boundary.host PROPERTIES LABELS "negative-boundary;static-rules;affected-regression;nightly")
 
+    find_package(Threads REQUIRED)
+
     function(asc_stl_add_host_case case_id source)
         set_property(GLOBAL APPEND PROPERTY ASC_STL_REGISTERED_HOST_CASE_SOURCES "${source}")
         set(case_standards 17 20)
@@ -257,6 +259,9 @@ if(ASC_STL_ENABLE_HOST_TESTS)
             set(target "asc_stl_host_${target_suffix}")
             add_executable("${target}" "${ASC_STL_CASES_ROOT}/${source}")
             target_link_libraries("${target}" PRIVATE asc_stl::asc_stl)
+            if(source MATCHES "/concurrency[.]pass[.]cpp$" OR source STREQUAL "asc/std/semaphore/host.pass.cpp")
+                target_link_libraries("${target}" PRIVATE Threads::Threads)
+            endif()
             set_target_properties(
                 "${target}"
                 PROPERTIES CXX_STANDARD "${standard}" CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
@@ -266,6 +271,16 @@ if(ASC_STL_ENABLE_HOST_TESTS)
             set_tests_properties(
                 "semantic.host.cxx${standard}.${case_id}"
                 PROPERTIES LABELS "semantic-host;cxx${standard};affected-regression;nightly")
+            if(source MATCHES "^asc/std/([a-z][a-z_0-9]*)/")
+                set_property(TEST "semantic.host.cxx${standard}.${case_id}"
+                    APPEND PROPERTY LABELS "std-api;std-header-${CMAKE_MATCH_1};std-header-local")
+            elseif(source MATCHES "^asc/std/__([a-z][a-z_0-9]*)/")
+                set(family "${CMAKE_MATCH_1}")
+                set_property(TEST "semantic.host.cxx${standard}.${case_id}" APPEND PROPERTY LABELS "std-api;std-internal")
+                if(EXISTS "${ASC_STL_INCLUDE_ROOT}/asc/std/${family}")
+                    set_property(TEST "semantic.host.cxx${standard}.${case_id}" APPEND PROPERTY LABELS "std-header-${family}")
+                endif()
+            endif()
         endforeach()
     endfunction()
 
@@ -316,6 +331,7 @@ if(ASC_STL_ENABLE_HOST_TESTS)
     asc_stl_add_host_case("asc.std.__utility.declval" "asc/std/__utility/declval/host.pass.cpp")
     asc_stl_add_host_case("asc.std.__tuple.tuple_element" "asc/std/__tuple/tuple_element/host.pass.cpp")
     asc_stl_add_host_case("asc.std.__cstring.memcpy" "asc/std/__cstring/memcpy/host.pass.cpp")
+    asc_stl_add_host_case("asc.std.cstring.memory_boundaries" "asc/std/cstring/memory_boundaries.pass.cpp")
     asc_stl_add_host_case("asc.std.__cstring.memset" "asc/std/__cstring/memset/host.pass.cpp")
     asc_stl_add_host_case("asc.atomic.b013" "asc/atomic/host.pass.cpp")
     asc_stl_add_host_case("asc.stream.b014" "asc/stream/host.pass.cpp")
@@ -357,6 +373,7 @@ if(ASC_STL_ENABLE_HOST_TESTS)
     asc_stl_add_host_case("asc.std.__numeric.reduce.b026" "asc/std/__numeric/reduce/host.pass.cpp")
     asc_stl_add_host_case("asc.std.__numeric.saturating_add.b026" "asc/std/__numeric/saturating_add/host.pass.cpp")
     asc_stl_add_host_case("asc.std.__charconv.from_chars.b026" "asc/std/__charconv/from_chars/host.pass.cpp")
+    asc_stl_add_host_case("asc.std.charconv.integer_boundaries" "asc/std/charconv/integer_boundaries.pass.cpp")
     asc_stl_add_host_case("asc.std.__bit.endian.b026" "asc/std/__bit/endian/host.pass.cpp")
     asc_stl_add_host_case("asc.std.__bit.rotate.b026" "asc/std/__bit/rotate/host.pass.cpp")
     asc_stl_add_host_case("asc.std.__bit.countl" "asc/std/__bit/countl/host.pass.cpp")
@@ -629,21 +646,49 @@ if(ASC_STL_ENABLE_HOST_TESTS)
     asc_stl_add_host_case("asc.std.cmath" "asc/std/cmath/host.pass.cpp")
     asc_stl_add_host_case("asc.std.cmath.acos_precision" "asc/std/cmath/acos_precision.pass.cpp")
     asc_stl_add_host_case("asc.std.__algorithm.count_if.b020" "asc/std/__algorithm/count_if/host.pass.cpp")
+    asc_stl_add_host_case("asc.std.algorithm.range_boundaries" "asc/std/algorithm/range_boundaries.pass.cpp")
     asc_stl_add_host_case("asc.std.__algorithm.minmax_element.b020" "asc/std/__algorithm/minmax_element/host.pass.cpp")
     asc_stl_add_host_case("asc.std.ranges.algorithms" "asc/std/__algorithm/ranges_copy/host.pass.cpp")
     asc_stl_add_host_case("asc.std.__algorithm.lower_bound.b020" "asc/std/__algorithm/lower_bound/host.pass.cpp")
     asc_stl_add_host_case("asc.std.__functional.bind_back.b020" "asc/std/__functional/bind_back/host.pass.cpp")
+    asc_stl_add_host_case("asc.std.atomic.operations" "asc/std/atomic/operations.pass.cpp")
+    asc_stl_add_host_case("asc.std.ratio.ordering" "asc/std/ratio/ordering.pass.cpp")
+    asc_stl_add_host_case("asc.std.type_traits.trait_combinations" "asc/std/type_traits/trait_combinations.pass.cpp")
+    asc_stl_add_host_case("asc.std.chrono.calendar" "asc/std/chrono/calendar.pass.cpp")
+    asc_stl_add_host_case("asc.std.cmath.function_boundaries" "asc/std/cmath/function_boundaries.pass.cpp")
+    asc_stl_add_host_case("asc.std.mdspan.layouts" "asc/std/mdspan/layouts.pass.cpp")
+    asc_stl_add_host_case("asc.std.mdspan.layout_indexing" "asc/std/mdspan/layout_indexing.pass.cpp")
+    asc_stl_add_host_case("asc.std.functional.function_objects" "asc/std/functional/function_objects.pass.cpp")
+    asc_stl_add_host_case("asc.std.iterator.adaptors" "asc/std/iterator/adaptors.pass.cpp")
+    asc_stl_add_host_case("asc.std.ranges.views" "asc/std/ranges/views.pass.cpp")
+    asc_stl_add_host_case("asc.std.cstddef.byte_operations" "asc/std/cstddef/byte_operations.pass.cpp")
+    asc_stl_add_host_case("asc.std.array.comparisons" "asc/std/array/comparisons.pass.cpp")
+    asc_stl_add_host_case("asc.std.utility.tuple_and_result" "asc/std/utility/tuple_and_result.pass.cpp")
+    asc_stl_add_host_case("asc.std.vector.container_operations" "asc/std/vector/container_operations.pass.cpp")
+    asc_stl_add_host_case("asc.std.vector.ownership_and_rollback" "asc/std/vector/ownership_and_rollback.pass.cpp")
+    asc_stl_add_host_case("asc.std.queue.adaptors" "asc/std/queue/adaptors.pass.cpp")
+    asc_stl_add_host_case("asc.std.string.text_operations" "asc/std/string/text_operations.pass.cpp")
+    asc_stl_add_host_case("asc.std.memory.allocation_and_lifetime" "asc/std/memory/allocation_and_lifetime.pass.cpp")
+    asc_stl_add_host_case("asc.std.iterator.insert_postincrement" "asc/std/iterator/insert_postincrement.pass.cpp")
+    asc_stl_add_host_case("asc.std.random.distributions" "asc/std/random/distributions.pass.cpp")
+    asc_stl_add_host_case("asc.std.random.engine_sequences" "asc/std/random/engine_sequences.pass.cpp")
+    asc_stl_add_host_case("asc.std.linalg.accessors" "asc/std/linalg/accessors.pass.cpp")
+    asc_stl_add_host_case("asc.std.cstddef.platform_interfaces" "asc/std/cstddef/platform_interfaces.pass.cpp")
+    asc_stl_add_host_case("asc.std.mutex.synchronization" "asc/std/mutex/synchronization.pass.cpp")
     asc_stl_add_host_case("asc.std.optional.b020" "asc/std/optional/host.pass.cpp")
     asc_stl_add_host_case("asc.std.optional.excluded_members" "asc/std/optional/excluded_members.absence.pass.cpp")
     asc_stl_add_host_case("asc.std.__ranges.movable_box.b020" "asc/std/__ranges/movable_box/host.pass.cpp")
     asc_stl_add_host_case("asc.std.bitset.b027" "asc/std/bitset/host.pass.cpp")
+    asc_stl_add_host_case("asc.std.bitset.word_boundaries" "asc/std/bitset/word_boundaries.pass.cpp")
     asc_stl_add_host_case("asc.std.map.ordered_iterator" "asc/std/map/ordered_iterator.pass.cpp")
+    asc_stl_add_host_case("asc.std.map.associative_lifetime" "asc/std/map/associative_lifetime.pass.cpp")
     asc_stl_add_host_case("asc.std.vector.aliasing" "asc/std/vector/aliasing.pass.cpp")
     asc_stl_add_host_case("asc.std.list-map.b028" "asc/std/list/host.pass.cpp")
     asc_stl_add_host_case("asc.tensor-copy-execution.b029" "asc/tensor_copy/host.pass.cpp")
     asc_stl_add_host_case("asc.std.functional-semaphore.b030" "asc/std/semaphore/host.pass.cpp")
     asc_stl_add_host_case("asc.std.latch-shared-lock.b031" "asc/std/latch/host.pass.cpp")
     asc_stl_add_host_case("asc.std.deque-queue.b032" "asc/std/deque/host.pass.cpp")
+    asc_stl_add_host_case("asc.std.deque.block_boundaries" "asc/std/deque/block_boundaries.pass.cpp")
     asc_stl_add_host_case("asc.std.barrier-mutex.b036" "asc/std/barrier/host.pass.cpp")
     asc_stl_add_host_case("asc.iterator.b038" "asc/iterator/host.pass.cpp")
     asc_stl_add_host_case("asc.iterator.contracts" "asc/iterator/contracts.pass.cpp")
@@ -683,6 +728,19 @@ if(ASC_STL_ENABLE_HOST_TESTS)
     asc_stl_add_host_case("asc.std.format.portable-renderer" "asc/std/format/portable_renderer.pass.cpp")
     asc_stl_add_host_case("asc.numeric" "asc/numeric/host.pass.cpp")
     asc_stl_add_host_case("asc.numeric_types" "asc/numeric_types/host.pass.cpp")
+    # Public std case directories own their positive Host tests. Preserve the existing test
+    # names and special build modes for sources registered above.
+    get_property(registered_host_sources GLOBAL PROPERTY ASC_STL_REGISTERED_HOST_CASE_SOURCES)
+    file(GLOB std_host_sources CONFIGURE_DEPENDS RELATIVE "${ASC_STL_CASES_ROOT}"
+        "${ASC_STL_CASES_ROOT}/asc/std/*/*.pass.cpp")
+    foreach(source IN LISTS std_host_sources)
+        if(source MATCHES "^asc/std/([a-z][a-z_0-9]*)/([^.]+.*)[.]pass[.]cpp$"
+           AND NOT source IN_LIST registered_host_sources AND NOT source STREQUAL "asc/std/cassert/ndebug.pass.cpp")
+            asc_stl_add_host_case("asc.std.${CMAKE_MATCH_1}.${CMAKE_MATCH_2}" "${source}")
+        endif()
+    endforeach()
+    # This case supplies its own NDEBUG flags and registration below.
+    set_property(GLOBAL APPEND PROPERTY ASC_STL_REGISTERED_HOST_CASE_SOURCES "asc/std/cassert/ndebug.pass.cpp")
     get_property(asc_stl_registered_host_sources GLOBAL PROPERTY ASC_STL_REGISTERED_HOST_CASE_SOURCES)
     string(JOIN "\n" asc_stl_registered_host_sources_text ${asc_stl_registered_host_sources})
     set(asc_stl_registered_host_sources_file "${CMAKE_CURRENT_BINARY_DIR}/registered-host-cases.txt")
@@ -715,7 +773,7 @@ if(ASC_STL_ENABLE_HOST_TESTS)
             COMMAND asc_stl_host_cassert_ndebug_cxx${standard})
         set_tests_properties(
             semantic.host.cxx${standard}.asc.std.cassert.ndebug
-            PROPERTIES LABELS "semantic-host;cxx${standard};negative-boundary;affected-regression;nightly")
+            PROPERTIES LABELS "semantic-host;cxx${standard};negative-boundary;affected-regression;nightly;std-api;std-header-cassert;std-header-local")
 
         add_executable(
             asc_stl_host_cassert_failure_cxx${standard}
@@ -732,7 +790,7 @@ if(ASC_STL_ENABLE_HOST_TESTS)
                     $<TARGET_FILE:asc_stl_host_cassert_failure_cxx${standard}>)
         set_tests_properties(
             semantic.host.cxx${standard}.asc.std.cassert.failure
-            PROPERTIES LABELS "semantic-host;cxx${standard};negative-boundary;affected-regression;nightly")
+            PROPERTIES LABELS "semantic-host;cxx${standard};negative-boundary;affected-regression;nightly;std-api;std-header-cassert;std-header-local")
         add_executable(
             asc_stl_host_repeat_piecewise_negative_cxx${standard}
             ${ASC_STL_CASES_ROOT}/asc/std/ranges/repeat_piecewise_negative.assert.cpp)
@@ -748,7 +806,7 @@ if(ASC_STL_ENABLE_HOST_TESTS)
                     $<TARGET_FILE:asc_stl_host_repeat_piecewise_negative_cxx${standard}>)
         set_tests_properties(
             semantic.host.cxx${standard}.asc.std.ranges.repeat-piecewise-negative
-            PROPERTIES LABELS "semantic-host;cxx${standard};negative-boundary;affected-regression;nightly" TIMEOUT 15)
+            PROPERTIES LABELS "semantic-host;cxx${standard};negative-boundary;affected-regression;nightly;std-api;std-header-ranges;std-header-local" TIMEOUT 15)
     endforeach()
 endif()
 
@@ -768,6 +826,16 @@ if(ASC_STL_ENABLE_DEVICE_COMPILE_TESTS)
         --report ${ASC_STL_DEVICE_REPORT})
     foreach(standard IN ITEMS 17 20)
         foreach(mode IN ITEMS simd simt)
+            set(termination_test "semantic.device.cxx${standard}.asc.std.exception.terminate-codegen.${mode}")
+            add_test(NAME "${termination_test}"
+                COMMAND ${Python3_EXECUTABLE} ${ASC_STL_CASES_ROOT}/asc/std/exception/verify_device_codegen.py
+                    --package ${ASC_STL_CANN_PACKAGE_PATH}
+                    --source ${ASC_STL_CASES_ROOT}/asc/std/__exception/terminate/device.compile.asc
+                    --include ${ASC_STL_INCLUDE_ROOT}
+                    --output ${CMAKE_CURRENT_BINARY_DIR}/termination-codegen-cxx${standard}-${mode}
+                    --standard ${standard} --mode ${mode} --arch ${ASC_STL_NPU_ARCH})
+            set_tests_properties("${termination_test}" PROPERTIES
+                LABELS "device-compile;std-api;std-header-exception;affected-regression;nightly" TIMEOUT 120)
             set(doc_test "docs.device.cxx${standard}.${mode}")
             add_test(NAME "${doc_test}"
                 COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/check_api_docs.py
@@ -834,7 +902,7 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
     set(w13_w14_simd_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/w13-w14-simd-cannsim")
     set(w13_w14_simt_cannsim_build_root "${CMAKE_CURRENT_BINARY_DIR}/w13-w14-simt-cannsim")
     add_custom_target(
-        asc_stl_cannsim_tests
+        asc_stl_cannsim_shared_cases
         COMMAND
             ${CMAKE_COMMAND} -S ${cannsim_case_root} -B ${cannsim_build_root}
             -DASC_STL_INCLUDE_DIR=${ASC_STL_INCLUDE_ROOT}
@@ -1037,6 +1105,46 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
     set(w08_simt_cannsim_application ${w08_simt_cannsim_build_root}/asc_stl_w08_cannsim)
     set(w13_w14_simd_cannsim_application ${w13_w14_simd_cannsim_build_root}/asc_stl_w13_w14_cannsim)
     set(w13_w14_simt_cannsim_application ${w13_w14_simt_cannsim_build_root}/asc_stl_w13_w14_cannsim)
+    add_custom_target(asc_stl_cannsim_tests DEPENDS asc_stl_cannsim_shared_cases)
+    function(asc_stl_register_std_cannsim mode label selection)
+        set(group_target "asc_stl_std_${mode}_${label}_cannsim_build")
+        set(group_build "${CMAKE_CURRENT_BINARY_DIR}/std-runtime-${mode}-${label}-cannsim")
+        add_custom_target(${group_target}
+            COMMAND ${CMAKE_COMMAND} -S "${CMAKE_CURRENT_SOURCE_DIR}/support/std_runtime" -B ${group_build}
+                -DASC_STL_CXX_STANDARD=${ASC_STL_TEST_CXX_STANDARD} -DCMAKE_BUILD_TYPE=Release
+                -DASC_STL_TEST_CANNSIM=ON -DASC_STL_STD_MODE=${mode} "-DASC_STL_STD_HEADERS=${selection}"
+            COMMAND ${CMAKE_COMMAND} --build ${group_build} --target asc_stl_std_runtime -j2
+            VERBATIM)
+        add_dependencies(asc_stl_std_${mode}_runtime_cannsim_build ${group_target})
+        set(std_test "semantic.cannsim.asc.std.per-header.${mode}.${label}")
+        add_test(NAME ${std_test}
+            COMMAND ${cannsim_runner} ${ASC_STL_CANNSIM_EXECUTABLE} ${group_build}/asc_stl_std_runtime
+                ${ASC_STL_CANNSIM_SOC} ${CMAKE_CURRENT_BINARY_DIR}/cannsim-results/std-runtime-${mode}/${label}
+                ${group_build} ASC_STL_STD_RUNTIME_PASS)
+        set_tests_properties(${std_test} PROPERTIES LABELS "cannsim-runtime;affected-regression;nightly"
+            FIXTURES_REQUIRED asc_stl_cannsim_ready RUN_SERIAL TRUE)
+    endfunction()
+
+    foreach(mode IN ITEMS simt simd)
+        add_custom_target(asc_stl_std_${mode}_runtime_cannsim_build)
+        add_dependencies(asc_stl_cannsim_tests asc_stl_std_${mode}_runtime_cannsim_build)
+    endforeach()
+    asc_stl_register_std_cannsim(simd all "")
+    file(GLOB std_contracts CONFIGURE_DEPENDS "${ASC_STL_CASES_ROOT}/asc/std/*/device_checks.h")
+    set(group_script "${CMAKE_CURRENT_SOURCE_DIR}/scripts/std_runtime_groups.py")
+    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${group_script}")
+    execute_process(COMMAND ${Python3_EXECUTABLE} "${group_script}" OUTPUT_VARIABLE std_groups
+        OUTPUT_STRIP_TRAILING_WHITESPACE RESULT_VARIABLE groups_status)
+    if(NOT groups_status EQUAL 0)
+        message(FATAL_ERROR "Could not discover standard-library runtime groups")
+    endif()
+    string(REPLACE "\n" ";" std_groups "${std_groups}")
+    foreach(group IN LISTS std_groups)
+        string(REPLACE ":" ";" fields "${group}")
+        list(GET fields 0 label)
+        list(GET fields 1 selection)
+        asc_stl_register_std_cannsim(simt "${label}" "${selection}")
+    endforeach()
     foreach(cmath_mode IN ITEMS simd simt)
         set(cmath_build "${CMAKE_CURRENT_BINARY_DIR}/cmath-${cmath_mode}-cannsim")
         add_custom_target(asc_stl_cmath_${cmath_mode}_cannsim_build
@@ -1284,6 +1392,7 @@ if(ASC_STL_ENABLE_CANNSIM_TESTS)
     endforeach()
 endif()
 
+include("${CMAKE_CURRENT_SOURCE_DIR}/standard_runtime.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/numeric_types.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/random.cmake")
 

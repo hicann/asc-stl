@@ -28,7 +28,7 @@
 
 头文件路径为：`<asc/std/compare>`。
 
-`asc::std::compare_three_way`按名称指定的比较强度比较两个值，并返回ASC比较类别。
+`asc::std::compare_three_way`对两个操作数执行三路比较。具有标准比较库的 Host 对算术类型返回原生比较类别。Device 对整数返回 ASC 强序，对浮点数返回 ASC 偏序。
 
 该接口自C++20+ 模式起提供。
 
@@ -51,7 +51,6 @@ struct compare_three_way;
 以下Host示例给出具体输入，并检查调用结果。
 
 ```cpp
-#include <compare>
 #include <asc/std/compare>
 
 bool example()

@@ -15,6 +15,10 @@
  */
 
 #include <asc/std/cstdint>
+#include <cstddef>
+#include <csignal>
+#include <cwchar>
+#include "integer_limits.h"
 
 int main()
 {
@@ -28,7 +32,14 @@ int main()
     static_assert(sizeof(asc::std::uint64_t) == 8);
     static_assert(asc::std::int8_t(-1) < 0);
     static_assert(asc::std::uint8_t(-1) > 0);
-    static_assert(PTRDIFF_MIN < 0 && PTRDIFF_MAX > 0);
-    static_assert(SIZE_MAX > 0);
+    static_assert(PTRDIFF_MIN == asc::std::numeric_limits<std::ptrdiff_t>::min());
+    static_assert(PTRDIFF_MAX == asc::std::numeric_limits<std::ptrdiff_t>::max());
+    static_assert(SIZE_MAX == asc::std::numeric_limits<std::size_t>::max());
+    static_assert(SIG_ATOMIC_MIN == asc::std::numeric_limits<std::sig_atomic_t>::min());
+    static_assert(SIG_ATOMIC_MAX == asc::std::numeric_limits<std::sig_atomic_t>::max());
+    static_assert(WINT_MIN == asc::std::numeric_limits<std::wint_t>::min());
+    static_assert(WINT_MAX == asc::std::numeric_limits<std::wint_t>::max());
+    static_assert(WCHAR_MIN == asc::std::numeric_limits<wchar_t>::min());
+    static_assert(WCHAR_MAX == asc::std::numeric_limits<wchar_t>::max());
     return 0;
 }

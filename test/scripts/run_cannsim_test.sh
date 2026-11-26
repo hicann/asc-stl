@@ -38,10 +38,11 @@ mkdir -p "$RESULT_ROOT" || exit 2
 RESULT_DIR="$(mktemp -d "$RESULT_ROOT/run.XXXXXX")" || exit 2
 COMMAND_LOG="$RESULT_DIR/cannsim-command.log"
 
+# Keep progress visible even if thousands of model warnings precede a timeout.
+# Validate the result against the complete recording.
 "$CANNSIM_EXECUTABLE" record -o "$RESULT_DIR/output" -s "$SIMULATOR_SOC" "$APPLICATION" \
-    >"$COMMAND_LOG" 2>&1
+    2>&1 | tee "$COMMAND_LOG" | sed -Eun '1,320{p;d;}; /\[(phase|heartbeat)\]/p'
 CANNSIM_STATUS=$?
-sed -n '1,320p' "$COMMAND_LOG"
 if [ "$CANNSIM_STATUS" -ne 0 ]; then
     echo "cannsim record failed with status $CANNSIM_STATUS; results preserved at $RESULT_DIR" >&2
     exit 1

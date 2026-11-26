@@ -16,7 +16,7 @@
 
 #include "stage_api.h"
 #include "types.h"
-#include "../../../../../../support/string_arena_test_allocator.h"
+#include "../../../string/support/string_arena_test_allocator.h"
 namespace asc_stl_b027_sso {
 struct storage {
     char bytes[256];
@@ -44,6 +44,19 @@ __global__ void asc_stl_b027_sso_kernel(
         small = small.data() + 1;
         if (small.size() != 5 || small[0] != 'b' || small[4] != 'c' || memory.allocations != before) {
             result->code = 9;
+            return;
+        }
+        const auto capacity = small.capacity();
+        small += 'x';
+        small.push_back('y');
+        if (small.length() != 7 || small.front() != 'b' || small[5] != 'x' || small[6] != 'y' ||
+            small.c_str()[7] != '\0' || small.end() - small.begin() != 7 || small.capacity() != capacity) {
+            result->code = 10;
+            return;
+        }
+        small.clear();
+        if (!small.empty() || small.length() != 0 || small.c_str()[0] != '\0' || small.begin() != small.end()) {
+            result->code = 11;
             return;
         }
     }

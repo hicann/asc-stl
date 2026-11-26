@@ -22,6 +22,21 @@
 
 #include "support/std_feature_semantics.h"
 
+static_assert(CANN_ASC_STL_HAS_CONCEPT_PREDICATES && CANN_ASC_STL_HAS_SPAN && CANN_ASC_STL_HAS_TO_ARRAY);
+static_assert(CANN_ASC_STL_HAS_MDSPAN && CANN_ASC_STL_HAS_SUBMDSPAN && CANN_ASC_STL_HAS_EXPECTED);
+static_assert(CANN_ASC_STL_HAS_OPTIONAL_REFERENCE && CANN_ASC_STL_HAS_INPLACE_VECTOR && CANN_ASC_STL_HAS_PHILOX);
+static_assert(CANN_ASC_STL_HAS_ALLOCATE_AT_LEAST && CANN_ASC_STL_HAS_FORMAT_TO_N_RESULT);
+#if defined(__cpp_concepts) && __cpp_concepts >= 201907L
+static_assert(CANN_ASC_STL_HAS_NATIVE_CONCEPTS);
+#else
+static_assert(!CANN_ASC_STL_HAS_NATIVE_CONCEPTS);
+#endif
+#if defined(__cpp_consteval)
+static_assert(CANN_ASC_STL_HAS_FORMAT);
+#else
+static_assert(!CANN_ASC_STL_HAS_FORMAT);
+#endif
+
 int main()
 {
     static_assert(CANN_ASC_STL_HAS_SOURCE_LOCATION && CANN_ASC_STL_HAS_UNREACHABLE);

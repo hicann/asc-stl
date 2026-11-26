@@ -51,7 +51,7 @@ CANN_ASC_STL_API void* align(size_t alignment, size_t size, void*& pointer, size
     if (adjustment > space - size) {
         return nullptr;
     }
-    pointer = reinterpret_cast<void*>(aligned_address);  // NOLINT(performance-no-int-to-ptr)
+    pointer = static_cast<unsigned char*>(pointer) + adjustment;
     space -= adjustment;
     return __runtime_assume_aligned(pointer, alignment);
 }

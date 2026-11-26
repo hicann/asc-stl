@@ -292,8 +292,31 @@ bool valueless_comparisons()
         comparison_probe::value_reads == 0;
 }
 
+bool check_variant_swaps()
+{
+    using variant_type = asc::std::variant<int, long>;
+    static_assert(asc::std::variant_size<const variant_type>::value == 2);
+    static_assert(asc::std::is_same_v<asc::std::variant_alternative<0, variant_type>::type, int>);
+    static_assert(asc::std::is_same_v<asc::std::variant_alternative<1, const variant_type>::type, const long>);
+    variant_type left(3);
+    variant_type right(7);
+    left.swap(right);
+    if (left.index() != 0 || asc::std::get<0>(left) != 7 || right.index() != 0 || asc::std::get<0>(right) != 3) {
+        return false;
+    }
+    right.emplace<1>(11L);
+    left.swap(right);
+    if (left.index() != 1 || asc::std::get<1>(left) != 11L || right.index() != 0 || asc::std::get<0>(right) != 7) {
+        return false;
+    }
+    asc::std::swap(left, right);
+    return left.index() == 0 && asc::std::get<0>(left) == 7 && right.index() == 1 && asc::std::get<1>(right) == 11L;
+}
+
 int evaluate_exception_state()
 {
+    if (!check_variant_swaps())
+        return 119;
     if (!valueless_comparisons())
         return 118;
     if (!throwing_copy_preserves_old_alternative() || !lifetimes_balanced())

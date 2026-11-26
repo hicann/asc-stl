@@ -37,7 +37,7 @@ Standard semantics reference: [cppreference `bitset`](https://en.cppreference.co
 The following is the declaration inside class `bitset<Size>`.
 
 ```cpp
-template<size_t Width = Size, enable_if_t<(Width <= sizeof(unsigned long) * CHAR_BIT), int> = 0>
+template<size_t Width = Size, enable_if_t<(Size <= sizeof(unsigned long) * CHAR_BIT && Width <= sizeof(unsigned long) * CHAR_BIT), int> = 0>
 constexpr unsigned long to_ulong() const noexcept;
 ```
 

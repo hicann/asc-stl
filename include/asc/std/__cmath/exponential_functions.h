@@ -182,13 +182,32 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float modf(
     float value, float* integer_part) noexcept
 {
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+    // Split binary32 directly. The device runtime has no modff symbol.
+    const auto bits = ::asc::std::__fp_get_storage(value);
+    const auto magnitude = bits & 0x7fffffffU;
+    const auto signed_zero = ::asc::std::__fp_from_storage<float>(bits & 0x80000000U);
+    if (magnitude < 0x3f800000U) {
+        *integer_part = signed_zero;
+        return value;
+    }
+    if (magnitude >= 0x4b000000U) {
+        *integer_part = value;
+        return magnitude > 0x7f800000U ? value : signed_zero;
+    }
+    const unsigned exponent = magnitude >> 23;
+    const unsigned fraction_mask = (1U << (150U - exponent)) - 1U;
+    *integer_part = ::asc::std::__fp_from_storage<float>(bits & ~fraction_mask);
+    return (bits & fraction_mask) == 0 ? signed_zero : value - *integer_part;
+#else
     return __builtin_modff(value, integer_part);
+#endif
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float modff(
     float value, float* integer_part) noexcept
 {
-    return __builtin_modff(value, integer_part);
+    return ::asc::std::modf(value, integer_part);
 }
 
 //! @brief @p value * FLT_RADIX^@p exponent (FLT_RADIX = 2).

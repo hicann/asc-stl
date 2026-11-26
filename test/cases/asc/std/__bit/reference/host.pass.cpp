@@ -120,8 +120,8 @@ int main()
         assert(aligned.at(index) == (index % 3 == 0));
     }
     BoolVector unaligned(130);
-    asc::std::copy(source.begin() + 5, source.end(), unaligned.begin() + 7);
-    for (std::size_t index = 5; index < 130; ++index) {
+    asc::std::copy(source.begin() + 5, source.end() - 2, unaligned.begin() + 7);
+    for (std::size_t index = 5; index < 128; ++index) {
         assert(unaligned.at(index - 5 + 7) == (index % 3 == 0));
     }
 
@@ -149,6 +149,17 @@ int main()
     asc::std::move(source.begin(), source.end(), moved.begin());
     for (std::size_t index = 0; index < 130; ++index) {
         assert(moved.at(index) == (index % 3 == 0));
+    }
+
+    // Overlapping backward movement spans three storage words and preserves both sentinels.
+    const auto destination = asc::std::move_backward(moved.begin() + 1, moved.end() - 3, moved.end() - 1);
+    if (destination != moved.begin() + 3 ||
+        asc::std::move_backward(moved.begin(), moved.begin(), moved.end()) != moved.end())
+        return 1;
+    for (std::size_t index = 0; index < 130; ++index) {
+        const auto original = index >= 3 && index < 129 ? index - 2 : index;
+        if (moved.at(index) != (original % 3 == 0))
+            return 2;
     }
 
     // rotate moves a prefix to the back.

@@ -37,7 +37,8 @@
 以下为所属类内的**调用形态摘要**。省略实现使用的SFINAE选择参数；同形的隐式与explicit形式分别受下面的可构造性、可转换性条件选择，不能将摘要复制为一组无条件重载定义。
 
 ```cpp
-constexpr tuple() = default;
+constexpr tuple();
+constexpr explicit tuple();
 ```
 
 ```cpp
@@ -130,6 +131,8 @@ constexpr tuple(allocator_arg_t, const Alloc& alloc, const tuple<UTypes...>& oth
 无返回值。
 
 ## 约束说明
+
+无参构造要求各元素均可默认构造，并对每个元素执行值初始化。若有元素只能显式默认构造，则元组的无参构造也为显式。空元组的默认构造是平凡的。
 
 - const Types&...元素构造仅用于非空tuple。同形的implicit和explicit摘要分别受逐元素可隐式转换与至少一个显式转换条件选择。
 

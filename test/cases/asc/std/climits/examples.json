@@ -1,0 +1,47 @@
+{
+  "directory": "docs/zh/api/standard/language_support/asc_std_climits",
+  "examples": {
+    "char_bit.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "uchar_max.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "uint_max.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "ullong_max.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "ulong_max.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "ushrt_max.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    }
+  }
+}

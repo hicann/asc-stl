@@ -207,13 +207,13 @@ public:
         template <class OtherExtents>
         CANN_ASC_STL_API friend constexpr bool operator==(const mapping& lhs, const mapping<OtherExtents>& rhs) noexcept
         {
-            return lhs.nested_mapping_ == rhs.nested_mapping_;
+            return lhs.nested_mapping() == rhs.nested_mapping();
         }
 
         template <class OtherExtents>
         CANN_ASC_STL_API friend constexpr bool operator!=(const mapping& lhs, const mapping<OtherExtents>& rhs) noexcept
         {
-            return lhs.nested_mapping_ != rhs.nested_mapping_;
+            return !(lhs == rhs);
         }
 
     private:

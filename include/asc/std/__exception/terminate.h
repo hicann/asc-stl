@@ -56,7 +56,10 @@ CANN_ASC_STL_NORETURN __aicore__ CANN_ASC_STL_DETAIL_VISIBILITY_HIDDEN inline vo
 #else
     trap();
 #endif
-    for (;;) {
+    // BiSheng may discard even the fault when it proves that a kernel never
+    // returns. Keep the fallback condition observable to its optimizer.
+    volatile int __halt = 1;
+    while (__halt != 0) {
     }
 }
 #else

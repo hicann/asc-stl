@@ -15,7 +15,7 @@
  */
 
 #include "../../../support/b016_semantics.h"
-#include "../../../support/counted_order_semantics.h"
+#include "../std/iterator/support/counted_order_semantics.h"
 int main()
 {
     const int order_result = asc_stl_counted_order_test::evaluate();

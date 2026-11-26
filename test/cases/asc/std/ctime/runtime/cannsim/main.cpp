@@ -16,12 +16,13 @@
 
 #include <acl/acl.h>
 #include <iostream>
+#include "../time_fields.h"
 
 void launch_asc_stl_b021_cannsim(int*, aclrtStream);
 
 int main()
 {
-    int actual = -1;
+    int actual[4] = {-1, -1, -1, -1};
     int* device = nullptr;
     aclrtStream stream = nullptr;
     bool passed = aclInit(nullptr) == ACL_SUCCESS && aclrtSetDevice(0) == ACL_SUCCESS &&
@@ -30,8 +31,8 @@ int main()
     if (passed) {
         launch_asc_stl_b021_cannsim(device, stream);
         passed = aclrtSynchronizeStream(stream) == ACL_SUCCESS &&
-            aclrtMemcpy(&actual, sizeof(actual), device, sizeof(actual), ACL_MEMCPY_DEVICE_TO_HOST) == ACL_SUCCESS &&
-            actual == 0;
+            aclrtMemcpy(actual, sizeof(actual), device, sizeof(actual), ACL_MEMCPY_DEVICE_TO_HOST) == ACL_SUCCESS &&
+            asc_stl_time_fields_test::matches(actual);
     }
     if (device)
         passed = aclrtFree(device) == ACL_SUCCESS && passed;

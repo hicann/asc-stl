@@ -410,6 +410,9 @@ template <class _Tp>
 template <class _Tp>
 [[nodiscard]] CANN_ASC_STL_API constexpr _Tp* __asc_memchr(_Tp* __ptr, remove_const_t<_Tp> __c, size_t __n) noexcept
 {
+    if (__n == 0) {
+        return nullptr;
+    }
     CANN_ASC_STL_DETAIL_IF_NOT_CONSTEVAL_DEFAULT
     {
 #if CANN_ASC_STL_DETAIL_HOSTED() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
@@ -453,6 +456,9 @@ template <class _Tp>
 template <class _Tp>
 CANN_ASC_STL_API constexpr _Tp* __asc_memmove(_Tp* __dst, const _Tp* __src, size_t __n) noexcept
 {
+    if (__n == 0) {
+        return __dst;
+    }
     CANN_ASC_STL_DETAIL_IF_NOT_CONSTEVAL_DEFAULT
     {
 #if (defined(__GNUC__) || defined(__clang__)) && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
@@ -503,6 +509,9 @@ template <class _Tp>
 template <class _Tp>
 [[nodiscard]] CANN_ASC_STL_API constexpr int __asc_memcmp(const _Tp* __lhs, const _Tp* __rhs, size_t __n) noexcept
 {
+    if (__n == 0) {
+        return 0;
+    }
     CANN_ASC_STL_DETAIL_IF_NOT_CONSTEVAL_DEFAULT
     {
 #if (defined(__GNUC__) || defined(__clang__)) && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
@@ -543,6 +552,9 @@ template <class _Tp>
 CANN_ASC_STL_API constexpr _Tp* __asc_memcpy(
     _Tp* CANN_ASC_STL_DETAIL_RESTRICT __dst, const _Tp* CANN_ASC_STL_DETAIL_RESTRICT __src, size_t __n) noexcept
 {
+    if (__n == 0) {
+        return __dst;
+    }
     CANN_ASC_STL_DETAIL_IF_NOT_CONSTEVAL_DEFAULT
     {
 #if CANN_ASC_STL_DETAIL_HOSTED() && !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
@@ -580,6 +592,9 @@ template <class _Tp>
 template <class _Tp>
 CANN_ASC_STL_API constexpr _Tp* __asc_memset(_Tp* __ptr, _Tp __c, size_t __n) noexcept
 {
+    if (__n == 0) {
+        return __ptr;
+    }
     // Byte-wise fill is only equivalent to the element-wise loop for
     // one-byte element types; wider elements keep the portable loop.
     CANN_ASC_STL_DETAIL_IF_NOT_CONSTEVAL_DEFAULT

@@ -34,7 +34,8 @@
 #include <asc/std/numeric>
 #include <asc/std/ranges>
 
-#include "expected_monad_regression.h"
+#include "../cases/asc/std/algorithm/support/private_sort.h"
+#include "../cases/asc/std/expected/support/expected_monad_regression.h"
 
 namespace asc_stl_w11_w12_test {
 
@@ -51,11 +52,20 @@ struct times_two {
     }
 };
 
+CANN_ASC_STL_API unsigned int evaluate_sort(int (&values)[5])
+{
+    values[0] = 5;
+    values[1] = 1;
+    values[2] = 4;
+    values[3] = 2;
+    values[4] = 3;
+    asc::std::sort(values, values + 5);  // NOLINT(build/include_what_you_use)
+    return values[0] != 1 || values[1] != 2 || values[2] != 3 || values[3] != 4 || values[4] != 5;
+}
+
 CANN_ASC_STL_API CANN_ASC_STL_DETAIL_NO_INLINE unsigned int evaluate_sort()
 {
-    int values[] = {5, 1, 4, 2, 3};
-    asc::std::sort(values, values + 5);  // NOLINT(build/include_what_you_use)
-    return values[0] != 1 || values[4] != 5;
+    return asc_stl_private_sort_test::constant_five();
 }
 
 CANN_ASC_STL_API CANN_ASC_STL_DETAIL_NO_INLINE unsigned int evaluate_nth_and_stable()

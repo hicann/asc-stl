@@ -25,7 +25,7 @@ set_target_properties(asc_stl_cmath_cannsim PROPERTIES LINKER_LANGUAGE ASC)
 target_compile_features(asc_stl_cmath_cannsim PRIVATE cxx_std_${ASC_STL_CXX_STANDARD})
 target_compile_options(asc_stl_cmath_cannsim PRIVATE
     $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=${CMAKE_ASC_ARCHITECTURES} -std=c++${ASC_STL_CXX_STANDARD} -Werror>)
-target_compile_definitions(asc_stl_cmath_cannsim PRIVATE ASC_STL_CMATH_CANNSIM=1)
+target_compile_definitions(asc_stl_cmath_cannsim PRIVATE ASC_STL_TEST_CANNSIM=1)
 if(ASC_STL_CMATH_MODE STREQUAL "simt")
     target_compile_options(asc_stl_cmath_cannsim PRIVATE $<$<COMPILE_LANGUAGE:ASC>:--enable-simt -Wno-error=ignored-attributes>)
     target_compile_definitions(asc_stl_cmath_cannsim PRIVATE ASC_STL_B026_SIMT=1)

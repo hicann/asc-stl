@@ -19,8 +19,8 @@
 #endif
 
 #include "support/w13_w14_semantics.h"
-#include "support/comparison_helpers_semantics.h"
-#include "support/bit_count_semantics.h"
+#include "../../../compare/support/comparison_helpers_semantics.h"
+#include "../../../bit/support/bit_count_semantics.h"
 
 #if defined(ASC_STL_W13_W14_SIMT)
 // Independent groups use separate blocks in one task; the next task checks four-thread synchronization.

@@ -73,10 +73,34 @@ def registered_page_errors(root: Path, registry: dict, example_pages: set[str]) 
     return errors
 
 
+def example_registry(root: Path) -> dict:
+    """Load the shared examples and each public std header's local registrations."""
+    shared = root / "test/docs/examples.json"
+    entries = json.loads(shared.read_text(encoding="utf-8"))
+    misplaced = [page for page in entries if page.startswith("docs/zh/api/standard/")]
+    cases = root / "test/cases/asc/std"
+    for registry in sorted(cases.glob("*/examples.json")):
+        data = json.loads(registry.read_text(encoding="utf-8"))
+        header = registry.parent.name
+        directory = Path(data["directory"])
+        if (directory.parts[:4] != ("docs", "zh", "api", "standard") or ".." in directory.parts
+                or directory.name != f"asc_std_{header}"):
+            raise ValueError(f"{registry}: incorrect API directory for <asc/std/{header}>")
+        for filename, spec in data["examples"].items():
+            if Path(filename).name != filename or not filename.endswith(".md"):
+                raise ValueError(f"{registry}: invalid API page {filename}")
+            page = (directory / filename).as_posix()
+            if page in entries:
+                raise ValueError(f"Duplicate API example registration: {page}")
+            entries[page] = spec
+    if misplaced:
+        raise ValueError(f"Register standard API pages under their public header: {misplaced[0]}")
+    return entries
+
+
 def coverage_inventory(root: Path) -> dict:
-    registry_path = root / "test/docs/examples.json"
-    registry_bytes = registry_path.read_bytes()
-    registry = json.loads(registry_bytes)
+    registry = example_registry(root)
+    registry_bytes = json.dumps(registry, sort_keys=True, separators=(",", ":")).encode("utf-8")
     source_pages = sorted((root / "docs/zh/api").rglob("*.md"))
     example_pages = {path.relative_to(root).as_posix() for path in source_pages
                      if "## 调用示例" in path.read_text(encoding="utf-8")}

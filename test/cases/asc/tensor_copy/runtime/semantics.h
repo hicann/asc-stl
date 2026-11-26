@@ -48,12 +48,31 @@
 #include "../../../../support/w09_w10_semantics.h"
 #include "../../../../support/functional_properties.h"
 #include "../../../../support/runtime_review_regression.h"
-#include "../../../../support/pair_piecewise_regression.h"
+#include "../../std/utility/support/pair_piecewise_regression.h"
 #include "../../../../support/w11_w12_semantics.h"
-#include "../../../../support/v1_algorithm_semantics.h"
-#include "../../../../support/vector_aliasing_semantics.h"
+#include "../../std/algorithm/support/v1_algorithm_semantics.h"
+#include "../../std/vector/support/vector_aliasing_semantics.h"
 
 namespace asc_stl_w08_runtime {
+
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+// The result buffer reserves words [128, 480) for scratch. Word 480 starts
+// the per-group results. Out-of-line allocator calls need their state in GM.
+constexpr unsigned int scratch_word = 128;
+constexpr unsigned int first_group_word = 480;
+constexpr unsigned int first_private_sort_word = 504;
+struct simt_scratch {
+    alignas(16) unsigned char sequence_storage[384];
+    alignas(16) unsigned char node_storage[928];
+    int sort_values[5];
+    asc::monotonic_arena sequences;
+    asc_stl_b028_test::arena_state nodes;
+    CANN_ASC_STL_SIMT_API simt_scratch()
+        : sequences(sequence_storage, sizeof(sequence_storage)), nodes{node_storage, sizeof(node_storage), 0, 0, 0}
+    {}
+};
+static_assert(sizeof(simt_scratch) <= (first_group_word - scratch_word) * sizeof(unsigned int));
+#endif
 
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 template <class ResultPointer>
@@ -344,7 +363,7 @@ CANN_ASC_STL_API unsigned int evaluate_single_thread(asc::monotonic_arena& arena
 #endif
 
 #if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
-    asc_stl_b028_test::arena_state node_state{reinterpret_cast<unsigned char*>(result + 128), 1536, 0, 0, 0};
+    auto& node_state = reinterpret_cast<simt_scratch*>(result + scratch_word)->nodes;
     using node_allocator = asc_stl_b028_test::arena_allocator<int>;
     asc::std::forward_list<int, node_allocator> forward{node_allocator(&node_state)};
     forward.push_front(3);
@@ -373,6 +392,7 @@ CANN_ASC_STL_API unsigned int evaluate_single_thread(asc::monotonic_arena& arena
 template <class ResultPointer>
 CANN_ASC_STL_SIMT_API void evaluate_simt(ResultPointer result, unsigned int thread_count)
 {
+    result[first_private_sort_word + threadIdx.x] = asc_stl_private_sort_test::check(static_cast<int>(threadIdx.x));
     auto& semaphore = *reinterpret_cast<asc::std::counting_semaphore<1024>*>(&result[8]);
     auto& completion = *reinterpret_cast<asc::std::latch*>(&result[12]);
     auto& phases = *reinterpret_cast<asc::std::barrier<>*>(&result[16]);
@@ -402,16 +422,16 @@ CANN_ASC_STL_SIMT_API void evaluate_simt(ResultPointer result, unsigned int thre
     (void)completed.fetch_add(1, asc::std::memory_order_relaxed);
     asc_syncthreads();
     if (threadIdx.x == 0) {
-        result[480] = asc_stl_w11_w12_test::evaluate_sort();
-        result[481] = asc_stl_w11_w12_test::evaluate_nth_and_stable();
-        result[482] = asc_stl_w11_w12_test::evaluate_foundation();
-        result[483] = asc_stl_w11_w12_test::evaluate_ranges_and_vocabulary();
+        auto* scratch = ::new (static_cast<void*>(result + scratch_word)) simt_scratch;
+        result[first_group_word] = asc_stl_w11_w12_test::evaluate_sort(scratch->sort_values);
+        result[first_group_word + 1] = asc_stl_w11_w12_test::evaluate_nth_and_stable();
+        result[first_group_word + 2] = asc_stl_w11_w12_test::evaluate_foundation();
+        result[first_group_word + 3] = asc_stl_w11_w12_test::evaluate_ranges_and_vocabulary();
         result[1] = completed.load(asc::std::memory_order_acquire) == thread_count && result[3] == 0 ? 0u : 1u;
-        asc::monotonic_arena arena(reinterpret_cast<unsigned char*>(&result[32]), 896);
-        result[2] = evaluate_single_thread(arena, result);
+        result[2] = evaluate_single_thread(scratch->sequences, result);
         unsigned int w11_w12_failures = 0;
         for (unsigned int group = 0; group < thread_count; ++group)
-            w11_w12_failures += result[480 + group];
+            w11_w12_failures += result[first_group_word + group] + result[first_private_sort_word + group];
         result[61] = w11_w12_failures;
         result[2] += w11_w12_failures != 0;
     }

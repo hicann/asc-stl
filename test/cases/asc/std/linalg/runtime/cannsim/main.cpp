@@ -17,7 +17,7 @@
 #include <acl/acl.h>
 #include <iostream>
 
-#include "support/bit_count_reference.h"
+#include "../../../bit/support/bit_count_reference.h"
 
 void launch_asc_stl_w13_w14(unsigned int*, void*);
 

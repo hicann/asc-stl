@@ -1,0 +1,19 @@
+{
+  "directory": "docs/zh/api/standard/language_support/asc_std_cfloat",
+  "examples": {
+    "decimal_dig.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "flt_eval_method.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    }
+  }
+}

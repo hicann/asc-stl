@@ -18,7 +18,7 @@
 #define ASC_STL_TEST_B027_STAGED_TYPES_H
 #include <asc/std/string>
 #include <asc/std/new>
-#include "../../../../../../support/string_arena_test_allocator.h"
+#include "../../../string/support/string_arena_test_allocator.h"
 namespace asc_stl_b027_staged {
 struct storage {
     char* bytes;

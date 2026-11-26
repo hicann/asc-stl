@@ -43,7 +43,8 @@
 
 #include "associative_iterator_checks.h"
 #include "b027_core_semantics.h"
-#include "string_aliasing_semantics.h"
+#include "fixed_sequence.h"
+#include "../cases/asc/std/string/support/string_aliasing_semantics.h"
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 #include "foundation_semantics.h"
@@ -141,81 +142,6 @@ static_assert(asc_stl_associative_iterator_test::exposes_element<set_iterator, c
 static_assert(asc_stl_associative_iterator_test::exposes_element<unordered_set_iterator, const int>);
 static_assert(asc_stl_associative_iterator_test::exposes_element<map_iterator, mapped_pair>);
 static_assert(asc_stl_associative_iterator_test::exposes_element<unordered_map_iterator, mapped_pair>);
-
-template <class T, __SIZE_TYPE__ Capacity>
-class fixed_sequence {
-public:
-    using value_type = T;
-    using size_type = __SIZE_TYPE__;
-    using reference = T&;
-    using const_reference = const T&;
-    CANN_ASC_STL_API bool empty() const
-    {
-        return size_ == 0;
-    }
-    CANN_ASC_STL_API size_type size() const
-    {
-        return size_;
-    }
-    CANN_ASC_STL_API reference front()
-    {
-        return values_[0];
-    }
-    CANN_ASC_STL_API const_reference front() const
-    {
-        return values_[0];
-    }
-    CANN_ASC_STL_API reference back()
-    {
-        return values_[size_ - 1];
-    }
-    CANN_ASC_STL_API const_reference back() const
-    {
-        return values_[size_ - 1];
-    }
-    CANN_ASC_STL_API reference operator[](size_type index)
-    {
-        return values_[index];
-    }
-    CANN_ASC_STL_API const_reference operator[](size_type index) const
-    {
-        return values_[index];
-    }
-    CANN_ASC_STL_API void push_back(const T& value)
-    {
-        values_[size_++] = value;
-    }
-    CANN_ASC_STL_API void push_back(T&& value)
-    {
-        values_[size_++] = static_cast<T&&>(value);
-    }
-    template <class... Args>
-    CANN_ASC_STL_API reference emplace_back(Args&&... args)
-    {
-        values_[size_] = T(static_cast<Args&&>(args)...);
-        return values_[size_++];
-    }
-    CANN_ASC_STL_API void pop_back()
-    {
-        --size_;
-    }
-    CANN_ASC_STL_API void pop_front()
-    {
-        for (size_type index = 1; index < size_; ++index)
-            values_[index - 1] = values_[index];
-        --size_;
-    }
-    CANN_ASC_STL_API void swap(fixed_sequence& other)  // NOLINT(build/include_what_you_use)
-    {
-        fixed_sequence temporary(*this);
-        *this = other;
-        other = temporary;
-    }
-
-private:
-    T values_[Capacity]{};
-    size_type size_ = 0;
-};
 
 #if !CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
 // The inherited operator& returns null. Iterator arrow must return the stored key's address.
@@ -320,7 +246,7 @@ CANN_ASC_STL_HOST_API int evaluate_host()
             return 31;
     }
     {
-        using sequence = fixed_sequence<int, 8>;
+        using sequence = asc_stl_test::fixed_sequence<int, 8>;
         asc::std::stack<int, sequence> stack;
         asc::std::queue<int, sequence> queue;
         asc::std::priority_queue<int, sequence> priority;

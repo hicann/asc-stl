@@ -29,14 +29,16 @@
 
 #include <asc/__detail/attributes.h>
 #include <asc/__detail/execution_space.h>
-#include <asc/std/__floating_point/cast.h>
+#include <asc/std/__bit/bit_cast.h>
 #include <asc/std/__cmath/backend.h>
+#include <asc/std/__floating_point/cast.h>
 #include <asc/std/__type_traits/enable_if.h>
 #include <asc/std/__type_traits/is_arithmetic.h>
 #include <asc/std/__type_traits/is_extended_floating_point.h>
 #include <asc/std/__type_traits/is_integral.h>
 #include <asc/std/__type_traits/is_same.h>
 #include <asc/std/__type_traits/promote.h>
+#include <asc/std/numbers>
 
 // Inline definition of the CANN_ASC_STL_DETAIL_HAS_LONG_DOUBLE() gate (the
 // config does not provide it): long double is host-only — AI-core compilation
@@ -53,9 +55,8 @@ CANN_ASC_STL_BEGIN_NAMESPACE
 
 // Inverse trigonometric family, three-layer dispatch: the primary float name
 // and the suffix aliases route through the backend — pure SIMT TUs go to the
-// simt_api scalar library (reachable from __aicore__; atan2 uses native
-// atan2f, keeping its signed-zero quadrant semantics instead of rebuilding
-// atan(y/x)), everything else uses the compiler builtins; double/long
+// simt_api scalar library (reachable from __aicore__), with a direct signed-
+// zero path for atan2. Other targets use the compiler builtins; double/long
 // double/integral promotion and the l-suffix alias are host-only (the vector
 // cores have no double-precision arithmetic, and long double is forbidden on
 // device); extended floating point transits through float precision and
@@ -121,18 +122,40 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 }
 
 //! @brief Inverse tangent of @p y / @p x, quadrant determined by the signs of
-//! both arguments (range [-π, π]; the quadrant contract for ±0 and infinities
-//! is carried by native atan2f).
+//! both arguments (range [-π, π]).
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float atan2(
     float y, float x) noexcept
 {
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+    // BiSheng cannot select the native atan2f sign operation for a constant zero ordinate.
+    // Inspect the binary32 magnitude so flush-to-zero cannot classify a subnormal as zero.
+    const unsigned y_bits = ::asc::std::bit_cast<unsigned>(y);
+    const unsigned x_bits = ::asc::std::bit_cast<unsigned>(x);
+    if ((y_bits & 0x7fffffffU) == 0) {
+        if ((x_bits & 0x7fffffffU) > 0x7f800000U) {
+            return ::asc::std::bit_cast<float>(x_bits | 0x00400000U);
+        }
+        if ((x_bits >> 31) != 0) {
+            return ::asc::std::bit_cast<float>(y_bits | ::asc::std::bit_cast<unsigned>(numbers::pi_v<float>));
+        }
+        return y;
+    }
+    // A nonzero ordinate on the imaginary axis has an exact quadrant even when SIMT flushes tiny ratios.
+    if ((x_bits & 0x7fffffffU) == 0) {
+        if ((y_bits & 0x7fffffffU) > 0x7f800000U) {
+            return ::asc::std::bit_cast<float>(y_bits | 0x00400000U);
+        }
+        constexpr unsigned half_pi = ::asc::std::bit_cast<unsigned>(numbers::pi_v<float> * 0.5F);
+        return ::asc::std::bit_cast<float>(half_pi | (y_bits & 0x80000000U));
+    }
+#endif
     return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(atan2f, __builtin_atan2f, (y, x));
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float atan2f(
     float y, float x) noexcept
 {
-    return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(atan2f, __builtin_atan2f, (y, x));
+    return ::asc::std::atan2(y, x);
 }
 
 template <class Tp, ::asc::std::enable_if_t<__is_extended_floating_point_v<Tp>, int> = 0>

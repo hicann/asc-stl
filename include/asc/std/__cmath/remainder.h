@@ -92,6 +92,74 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
         ::asc::std::remainder(::asc::std::__fp_cast<float>(x), ::asc::std::__fp_cast<float>(y)));
 }
 
+namespace __cmath_backend {
+// Return a 24-bit normalized significand and its unbiased base-two exponent.
+CANN_ASC_STL_API constexpr unsigned __remquo_normalize(unsigned magnitude, int& exponent) noexcept
+{
+    const unsigned biased = magnitude >> 23;
+    if (biased != 0) {
+        exponent = static_cast<int>(biased) - 127;
+        return (magnitude & 0x7fffffU) | 0x800000U;
+    }
+    const int shift = __builtin_clz(magnitude) - 8;
+    exponent = -126 - shift;
+    return magnitude << shift;
+}
+
+// Integer long division preserves the required quotient bits for exact
+// powers of two, large exponent differences, and subnormal inputs.
+CANN_ASC_STL_API constexpr float __remquo_binary32(float x, float y, int* quotient) noexcept
+{
+    const unsigned xbits = ::asc::std::__fp_get_storage(x);
+    const unsigned ybits = ::asc::std::__fp_get_storage(y);
+    const unsigned mx = xbits & 0x7fffffffU, my = ybits & 0x7fffffffU;
+    const unsigned sign = xbits & 0x80000000U;
+    *quotient = 0;
+    if (mx >= 0x7f800000U || my > 0x7f800000U || my == 0)
+        return ::asc::std::__fp_from_storage<float>(0x7fc00000U);
+    if (mx == 0 || my == 0x7f800000U)
+        return x;
+
+    int ex = 0, ey = 0;
+    unsigned rem = __remquo_normalize(mx, ex);
+    const unsigned divisor = __remquo_normalize(my, ey);
+    unsigned q = 0, result_sign = sign;
+    if (ex < ey) {
+        if (ex < ey - 1 || rem <= divisor)
+            return x;
+        // The ratio lies strictly between 1/2 and 1. Round it to 1.
+        rem = 2 * divisor - rem;
+        result_sign ^= 0x80000000U;
+        q = 1;
+    } else {
+        for (int bit = ex; bit >= ey; --bit) {
+            const unsigned digit = rem >= divisor;
+            q = ((q << 1) | digit) & 7U;
+            if (digit)
+                rem -= divisor;
+            if (bit != ey)
+                rem <<= 1;
+        }
+        // At a tie, choose the even quotient.
+        if (2 * rem > divisor || (2 * rem == divisor && (q & 1U))) {
+            rem = divisor - rem;
+            result_sign ^= 0x80000000U;
+            q = (q + 1) & 7U;
+        }
+        ex = ey;
+    }
+    *quotient = ((xbits ^ ybits) >> 31) ? -static_cast<int>(q) : static_cast<int>(q);
+    if (rem == 0)
+        return ::asc::std::__fp_from_storage<float>(sign);
+    const int shift = __builtin_clz(rem) - 8;
+    rem <<= shift;
+    ex -= shift;
+    const unsigned encoded =
+        ex < -126 ? rem >> (-126 - ex) : ((static_cast<unsigned>(ex + 127) << 23) | (rem & 0x7fffffU));
+    return ::asc::std::__fp_from_storage<float>(result_sign | encoded);
+}
+}  // namespace __cmath_backend
+
 //! @brief Same as remainder, additionally writing the remainder of n modulo
 //! a backend-defined power of two (at least three low quotient bits, with
 //! sign following x/y) into
@@ -99,13 +167,17 @@ CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNT
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float remquo(
     float x, float y, int* quotient) noexcept
 {
-    return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(remquof, __builtin_remquof, (x, y, quotient));
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+    return __cmath_backend::__remquo_binary32(x, y, quotient);
+#else
+    return __builtin_remquof(x, y, quotient);
+#endif
 }
 
 CANN_ASC_STL_NODISCARD CANN_ASC_STL_HOST_SIMT_API CANN_ASC_STL_DETAIL_CMATH_RUNTIME_CONSTEXPR float remquof(
     float x, float y, int* quotient) noexcept
 {
-    return CANN_ASC_STL_DETAIL_FLOAT_MATH_CALL(remquof, __builtin_remquof, (x, y, quotient));
+    return ::asc::std::remquo(x, y, quotient);
 }
 
 //! @brief Extended floating point remquo: transits through float precision,

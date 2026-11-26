@@ -442,6 +442,16 @@ CANN_ASC_STL_API int evaluate_inplace_vector()
     if (!zero.empty() || zero.try_push_back(1).has_value() || zero.data() != nullptr) {
         return 11;
     }
+    using empty_vector = decltype(zero);
+    empty_vector empty_copy(zero);
+    empty_vector empty_move(static_cast<empty_vector&&>(empty_copy));
+    empty_copy = zero;
+    empty_move = static_cast<empty_vector&&>(empty_copy);
+    empty_move.swap(zero);
+    if (!empty_move.empty() || !empty_copy.empty() || !zero.empty() || empty_move.begin() != empty_move.end() ||
+        empty_move.data() != nullptr) {
+        return 19;
+    }
     bool called = false;
     const auto zero_removed = zero.erase_if([&called](int) {
         called = true;

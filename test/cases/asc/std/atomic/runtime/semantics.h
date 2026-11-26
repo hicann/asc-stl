@@ -31,7 +31,8 @@
 #include <asc/std/__semaphore/counting_semaphore.h>
 
 #include "../../../../../support/b022_runtime_inputs.h"
-#include "../../../../../support/narrow_atomic_cas_semantics.h"
+#include "../support/narrow_atomic_cas_semantics.h"
+#include "native_overloads.h"
 
 namespace asc_stl_b022_runtime {
 
@@ -39,7 +40,7 @@ namespace asc_stl_b022_runtime {
 template <class OutputPointer>
 CANN_ASC_STL_SIMT_API void asc_stl_b022_device_semantics(OutputPointer output)
 {
-    int failures = 0;
+    int failures = asc_stl_native_atomic_test::check(output + 4, output[asc_stl_b022_runtime_inputs::seed_slot] + 7);
 
     auto* shared = reinterpret_cast<asc::std::atomic<__INT32_TYPE__>*>(&output[0]);
     shared->store(0, asc::std::memory_order_relaxed);

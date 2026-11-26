@@ -4552,6 +4552,7 @@
         "asc/__config",
         "asc/__detail/attributes.h",
         "asc/__detail/execution_space.h",
+        "asc/std/__bit/bit_cast.h",
         "asc/std/__cmath/backend.h",
         "asc/std/__floating_point/cast.h",
         "asc/std/__type_traits/enable_if.h",
@@ -4559,7 +4560,8 @@
         "asc/std/__type_traits/is_extended_floating_point.h",
         "asc/std/__type_traits/is_integral.h",
         "asc/std/__type_traits/is_same.h",
-        "asc/std/__type_traits/promote.h"
+        "asc/std/__type_traits/promote.h",
+        "asc/std/numbers"
       ],
       "applicability": {
         "host_header": true,
@@ -4959,7 +4961,11 @@
       "visibility": "private",
       "dependencies": [
         "asc/__config",
-        "asc/std/__compare/ordering.h"
+        "asc/std/__compare/compare_fallback.h",
+        "asc/std/__compare/ordering.h",
+        "asc/std/__type_traits/is_arithmetic.h",
+        "asc/std/__type_traits/is_floating_point.h",
+        "asc/std/__type_traits/remove_cvref.h"
       ],
       "applicability": {
         "host_header": true,
@@ -6733,6 +6739,7 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__bit/bit_cast.h",
         "asc/std/__functional/invoke.h",
         "asc/std/__fwd/hash.h",
         "asc/std/__type_traits/enable_if.h",
@@ -9771,6 +9778,8 @@
         "asc/std/__type_traits/is_convertible.h",
         "asc/std/__type_traits/is_copy_assignable.h",
         "asc/std/__type_traits/is_copy_constructible.h",
+        "asc/std/__type_traits/is_default_constructible.h",
+        "asc/std/__type_traits/is_implicitly_default_constructible.h",
         "asc/std/__type_traits/is_move_assignable.h",
         "asc/std/__type_traits/is_nothrow_assignable.h",
         "asc/std/__type_traits/is_nothrow_constructible.h",
@@ -13180,14 +13189,18 @@
       "semantic_case": "asc/std/array",
       "additional_cases": [
         "get_out_of_bounds.fail.cpp",
-        "at_excluded.fail.cpp"
+        "at_excluded.fail.cpp",
+        "contracts.pass.cpp",
+        "types.pass.cpp",
+        "deduction_guides.pass.cpp",
+        "comparisons.pass.cpp"
       ],
       "applicability": {
         "host_header": true,
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
+        "cannsim_runtime": true,
         "hardware_runtime": false
       }
     },
@@ -13219,6 +13232,12 @@
         "copy_assign.fail.cpp",
         "flag_copy_construct.fail.cpp",
         "flag_copy_assign.fail.cpp"
+      ],
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "concurrency.pass.cpp",
+        "types.pass.cpp",
+        "operations.pass.cpp"
       ]
     },
     {
@@ -13256,7 +13275,10 @@
         "device_compile": true,
         "cannsim_runtime": true,
         "hardware_runtime": true
-      }
+      },
+      "additional_cases": [
+        "forwarding.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/cfloat",
@@ -13268,7 +13290,7 @@
         "host_header": true,
         "device_header": true,
         "host_semantic": true,
-        "device_compile": false,
+        "device_compile": true,
         "cannsim_runtime": false,
         "hardware_runtime": false
       }
@@ -13286,7 +13308,10 @@
         "device_compile": false,
         "cannsim_runtime": false,
         "hardware_runtime": false
-      }
+      },
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/climits",
@@ -13298,7 +13323,7 @@
         "host_header": true,
         "device_header": true,
         "host_semantic": true,
-        "device_compile": false,
+        "device_compile": true,
         "cannsim_runtime": false,
         "hardware_runtime": false
       }
@@ -13307,7 +13332,10 @@
       "target": "asc/std/cmath",
       "visibility": "public",
       "additional_cases": [
-        "acos_precision.pass.cpp"
+        "acos_precision.pass.cpp",
+        "overloads.pass.cpp",
+        "simd_contracts.pass.cpp",
+        "function_boundaries.pass.cpp"
       ],
       "dependencies": [
         "asc/__config",
@@ -13384,7 +13412,10 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/warp"
+      "runtime_case": "asc/warp",
+      "additional_cases": [
+        "overloads.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/concepts",
@@ -13443,10 +13474,13 @@
         "host_header": true,
         "device_header": true,
         "host_semantic": false,
-        "device_compile": false,
+        "device_compile": true,
         "cannsim_runtime": false,
         "hardware_runtime": false
-      }
+      },
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/cstdbool",
@@ -13458,10 +13492,13 @@
         "host_header": true,
         "device_header": true,
         "host_semantic": false,
-        "device_compile": false,
+        "device_compile": true,
         "cannsim_runtime": false,
         "hardware_runtime": false
-      }
+      },
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/cstddef",
@@ -13477,12 +13514,15 @@
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
+        "cannsim_runtime": true,
         "hardware_runtime": false
       },
       "additional_cases": [
-        "deprecated_names.absence.pass.cpp"
-      ]
+        "deprecated_names.absence.pass.cpp",
+        "byte_operations.pass.cpp",
+        "platform_interfaces.pass.cpp"
+      ],
+      "runtime_case": "asc/std/array"
     },
     {
       "target": "asc/std/cstdint",
@@ -13522,7 +13562,11 @@
         "device_compile": true,
         "cannsim_runtime": true,
         "hardware_runtime": true
-      }
+      },
+      "additional_cases": [
+        "integer_overloads.pass.cpp",
+        "device_contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/cstring",
@@ -13540,9 +13584,14 @@
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
+        "cannsim_runtime": true,
         "hardware_runtime": false
-      }
+      },
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "memory_boundaries.pass.cpp"
+      ],
+      "runtime_case": "asc/std/array"
     },
     {
       "target": "asc/std/ctgmath",
@@ -13561,7 +13610,10 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/warp"
+      "runtime_case": "asc/warp",
+      "additional_cases": [
+        "forwarding.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/ctime",
@@ -13569,6 +13621,8 @@
       "dependencies": [
         "asc/__config",
         "asc/__detail/attributes.h",
+        "asc/std/__bit/bit_cast.h",
+        "asc/std/__bit/countl.h",
         "asc/std/__ctime/time_vocabulary.h"
       ],
       "semantic_case": "asc/memory_resource",
@@ -13580,7 +13634,10 @@
         "device_compile": true,
         "cannsim_runtime": true,
         "hardware_runtime": true
-      }
+      },
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/iterator",
@@ -13642,6 +13699,15 @@
         "initializer_list_advance.fail.cpp",
         "back_insert_iterator_spaceship.fail.cpp",
         "iter_const_reference.fail.cpp"
+      ],
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "adaptor_conversion.pass.cpp",
+        "wrapped_iterator.pass.cpp",
+        "types.pass.cpp",
+        "deduction_guides.pass.cpp",
+        "adaptors.pass.cpp",
+        "insert_postincrement.pass.cpp"
       ]
     },
     {
@@ -13660,7 +13726,10 @@
         "device_compile": true,
         "cannsim_runtime": false,
         "hardware_runtime": false
-      }
+      },
+      "additional_cases": [
+        "native_facets.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/numbers",
@@ -13688,7 +13757,8 @@
       ],
       "additional_cases": [
         "e_v_double_excluded.fail.cpp",
-        "e_v_long_double_excluded.fail.cpp"
+        "e_v_long_double_excluded.fail.cpp",
+        "constants.pass.cpp"
       ]
     },
     {
@@ -13723,16 +13793,20 @@
         "value_const_rvalue.fail.cpp"
       ],
       "additional_cases": [
-        "excluded_members.absence.pass.cpp"
+        "excluded_members.absence.pass.cpp",
+        "contracts.pass.cpp",
+        "construction.pass.cpp",
+        "types.pass.cpp"
       ],
       "applicability": {
         "host_header": true,
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
+        "cannsim_runtime": true,
         "hardware_runtime": false
-      }
+      },
+      "runtime_case": "asc/std/array"
     },
     {
       "target": "asc/std/ratio",
@@ -13751,7 +13825,11 @@
         "device_compile": true,
         "cannsim_runtime": false,
         "hardware_runtime": false
-      }
+      },
+      "additional_cases": [
+        "arithmetic.pass.cpp",
+        "ordering.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/source_location",
@@ -13772,6 +13850,9 @@
       },
       "negative_cases": [
         "device.fail.string_literal.asc"
+      ],
+      "additional_cases": [
+        "device_contracts.pass.cpp"
       ]
     },
     {
@@ -13826,20 +13907,24 @@
         "fixed_extent_mismatch.fail.cpp",
         "at_excluded.fail.cpp",
         "fixed_default.fail.cpp",
-        "cxx17_backports.pass.cpp"
+        "cxx17_backports.pass.cpp",
+        "contracts.pass.cpp",
+        "types.pass.cpp",
+        "deduction_guides.pass.cpp"
       ],
       "applicability": {
         "host_header": true,
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
+        "cannsim_runtime": true,
         "hardware_runtime": false
       },
       "device_compile_cases": [
         "device.compile.asc",
         "cxx17_backports.compile.asc"
-      ]
+      ],
+      "runtime_case": "asc/std/array"
     },
     {
       "target": "asc/std/string_view",
@@ -13894,7 +13979,11 @@
       "runtime_case": "asc/algorithm",
       "additional_cases": [
         "string_view_at.fail.cpp",
-        "string_view_substr.fail.cpp"
+        "string_view_substr.fail.cpp",
+        "contracts.pass.cpp",
+        "differential_search.pass.cpp",
+        "empty_regions.pass.cpp",
+        "types.pass.cpp"
       ]
     },
     {
@@ -13925,9 +14014,16 @@
         "device_header": true,
         "host_semantic": true,
         "device_compile": true,
-        "cannsim_runtime": false,
+        "cannsim_runtime": true,
         "hardware_runtime": false
-      }
+      },
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "construction.pass.cpp",
+        "types.pass.cpp",
+        "deduction_guides.pass.cpp"
+      ],
+      "runtime_case": "asc/std/array"
     },
     {
       "target": "asc/std/__version/features.h",
@@ -14042,7 +14138,9 @@
       ],
       "semantic_case": "asc/std/bitset",
       "additional_cases": [
-        "self_contained.pass.cpp"
+        "self_contained.pass.cpp",
+        "contracts.pass.cpp",
+        "types.pass.cpp"
       ],
       "applicability": {
         "host_header": true,
@@ -14092,6 +14190,11 @@
         "flip_position.fail.cpp",
         "test_position.fail.cpp",
         "to_ulong_overflow.fail.cpp"
+      ],
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "conversion_widths.pass.cpp",
+        "word_boundaries.pass.cpp"
       ]
     },
     {
@@ -14389,6 +14492,7 @@
       "dependencies": [
         "asc/__config",
         "asc/std/__memory/addressof.h",
+        "asc/std/__new/nonallocating_new.h",
         "asc/std/__type_traits/conditional.h",
         "asc/std/__type_traits/is_same.h"
       ],
@@ -14426,7 +14530,8 @@
       "target": "asc/std/__memory/scoped_allocator_adaptor.h",
       "visibility": "private",
       "dependencies": [
-        "asc/__config"
+        "asc/__config",
+        "asc/std/__new/nonallocating_new.h"
       ],
       "semantic_case": "asc/std/bitset",
       "applicability": {
@@ -14556,7 +14661,10 @@
       },
       "runtime_case": "asc/std/list",
       "additional_cases": [
-        "ordered_iterator.pass.cpp"
+        "ordered_iterator.pass.cpp",
+        "contracts.pass.cpp",
+        "types.pass.cpp",
+        "associative_lifetime.pass.cpp"
       ],
       "negative_cases": [
         "copy_construct.fail.cpp",
@@ -14587,6 +14695,10 @@
         "copy_assign.fail.cpp",
         "excluded_surface.fail.cpp",
         "simd_excluded.fail.asc"
+      ],
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "types.pass.cpp"
       ]
     },
     {
@@ -14875,7 +14987,10 @@
         "device_compile": true,
         "cannsim_runtime": false,
         "hardware_runtime": false
-      }
+      },
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/semaphore",
@@ -14897,7 +15012,12 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "concurrency.pass.cpp",
+        "types.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/functional",
@@ -14941,7 +15061,14 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "hash_bind.pass.cpp",
+        "constraints.pass.cpp",
+        "deduction_guides.pass.cpp",
+        "function_objects.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/__mutex/lock_guard.h",
@@ -15116,7 +15243,12 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "concurrency.pass.cpp",
+        "types.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/shared_mutex",
@@ -15139,7 +15271,11 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "types.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/queue",
@@ -15162,7 +15298,12 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "types.pass.cpp",
+        "adaptors.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/deque",
@@ -15187,7 +15328,12 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "types.pass.cpp",
+        "block_boundaries.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/forward_list",
@@ -15211,7 +15357,11 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "types.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/set",
@@ -15235,7 +15385,11 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "types.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/unordered_map",
@@ -15260,7 +15414,11 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "types.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/stack",
@@ -15281,7 +15439,11 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "types.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/scoped_allocator",
@@ -15302,13 +15464,21 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "types.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/vector",
       "visibility": "public",
       "additional_cases": [
-        "aliasing.pass.cpp"
+        "aliasing.pass.cpp",
+        "contracts.pass.cpp",
+        "types.pass.cpp",
+        "container_operations.pass.cpp",
+        "ownership_and_rollback.pass.cpp"
       ],
       "dependencies": [
         "asc/__config",
@@ -15356,7 +15526,12 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "types.pass.cpp",
+        "synchronization.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/barrier",
@@ -15379,7 +15554,12 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "concurrency.pass.cpp",
+        "types.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/string",
@@ -15404,7 +15584,12 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/std/bitset"
+      "runtime_case": "asc/std/bitset",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "types.pass.cpp",
+        "text_operations.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/unordered_set",
@@ -15428,7 +15613,11 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "types.pass.cpp"
+      ]
     },
     {
       "target": "asc/iterator",
@@ -15507,7 +15696,13 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "calendar_cycle.pass.cpp",
+        "conversions.pass.cpp",
+        "calendar_conversions.h",
+        "calendar.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/__memory/is_valid_alignment.h",
@@ -15605,7 +15800,16 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "allocator_traits.pass.cpp",
+        "construction_rollback.pass.cpp",
+        "types.pass.cpp",
+        "constraints.pass.cpp",
+        "deduction_guides.pass.cpp",
+        "allocation_and_lifetime.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/variant",
@@ -15645,7 +15849,12 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "construction.pass.cpp",
+        "types.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/__mdspan/concepts.h",
@@ -16148,7 +16357,16 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "host.pass.cpp",
+        "scalar_and_strided.pass.cpp",
+        "types.pass.cpp",
+        "deduction_guides.pass.cpp",
+        "layouts.pass.cpp",
+        "layout_indexing.pass.cpp"
+      ]
     },
     {
       "target": "asc/mdspan",
@@ -16199,7 +16417,15 @@
         "value.fail.cpp",
         "void.fail.cpp"
       ],
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "construction.pass.cpp",
+        "comparison.pass.cpp",
+        "types.pass.cpp",
+        "constraints.pass.cpp",
+        "deduction_guides.pass.cpp"
+      ]
     },
     {
       "target": "asc/random",
@@ -16588,7 +16814,14 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "differential.pass.cpp",
+        "ranges_first.pass.cpp",
+        "custom_swap.pass.cpp",
+        "result_conversions.pass.cpp",
+        "range_boundaries.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/utility",
@@ -16634,7 +16867,15 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "pair_overloads.pass.cpp",
+        "types.pass.cpp",
+        "constraints.pass.cpp",
+        "deduction_guides.pass.cpp",
+        "tuple_and_result.pass.cpp"
+      ]
     },
     {
       "target": "asc/type_traits",
@@ -16670,7 +16911,10 @@
         "device_compile": true,
         "cannsim_runtime": false,
         "hardware_runtime": false
-      }
+      },
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/__ranges/range_adaptor.h",
@@ -16785,7 +17029,10 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/__format/format_integral.h",
@@ -17060,7 +17307,8 @@
       "additional_cases": [
         "format_float_host.fail.cpp",
         "invalid_spec.fail.cpp",
-        "portable_renderer.pass.cpp"
+        "portable_renderer.pass.cpp",
+        "device_contracts.pass.cpp"
       ],
       "runtime_case": "asc/tensor_copy"
     },
@@ -17087,7 +17335,13 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "device_contracts.pass.cpp",
+        "constraints.pass.cpp",
+        "integer_boundaries.pass.cpp"
+      ]
     },
     {
       "target": "asc/functional",
@@ -17134,7 +17388,10 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/__iterator/iota_iterator.h",
@@ -18016,7 +18273,13 @@
         "cxx17_backports.pass.cpp",
         "access_constraints.pass.cpp",
         "repeat_piecewise_assertions.pass.cpp",
-        "repeat_piecewise_negative.assert.cpp"
+        "repeat_piecewise_negative.assert.cpp",
+        "contracts.pass.cpp",
+        "view_constructors.pass.cpp",
+        "types.pass.cpp",
+        "cpo_overloads.pass.cpp",
+        "deduction_guides.pass.cpp",
+        "views.pass.cpp"
       ],
       "device_compile_cases": [
         "device.compile.asc",
@@ -18040,7 +18303,10 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/tensor_copy"
+      "runtime_case": "asc/tensor_copy",
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/cctype",
@@ -18058,7 +18324,10 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/std/linalg"
+      "runtime_case": "asc/std/linalg",
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/utility",
@@ -18218,7 +18487,11 @@
       "negative_cases": [
         "error_code.fail.cpp"
       ],
-      "runtime_case": "asc/std/linalg"
+      "runtime_case": "asc/std/linalg",
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "device_contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/linalg",
@@ -18244,7 +18517,11 @@
       "negative_cases": [
         "blas_algorithm.fail.cpp"
       ],
-      "runtime_case": "asc/std/linalg"
+      "runtime_case": "asc/std/linalg",
+      "additional_cases": [
+        "view_boundaries.pass.cpp",
+        "accessors.pass.cpp"
+      ]
     },
     {
       "target": "asc/__synchronization/barrier.h",
@@ -18315,6 +18592,11 @@
       },
       "negative_cases": [
         "exception_ptr.fail.cpp"
+      ],
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "termination_reference.h",
+        "verify_device_codegen.py"
       ]
     },
     {
@@ -18345,7 +18627,10 @@
       "negative_cases": [
         "byteswap_bool.fail.cpp"
       ],
-      "runtime_case": "asc/std/linalg"
+      "runtime_case": "asc/std/linalg",
+      "additional_cases": [
+        "boundaries.pass.cpp"
+      ]
     },
     {
       "target": "asc/latch",
@@ -18566,6 +18851,12 @@
       },
       "negative_cases": [
         "layout_compatible.fail.cpp"
+      ],
+      "additional_cases": [
+        "contracts.pass.cpp",
+        "specializations.pass.cpp",
+        "compiler_traits.h",
+        "trait_combinations.pass.cpp"
       ]
     },
     {
@@ -18584,7 +18875,10 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/std/linalg"
+      "runtime_case": "asc/std/linalg",
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/compare",
@@ -18608,7 +18902,10 @@
         "strong_order.fail.cpp",
         "compare_cxx17_absent.fail.cpp"
       ],
-      "runtime_case": "asc/std/linalg"
+      "runtime_case": "asc/std/linalg",
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/__random/uniform_real_distribution.h",
@@ -18678,7 +18975,10 @@
         "cannsim_runtime": true,
         "hardware_runtime": true
       },
-      "runtime_case": "asc/std/linalg"
+      "runtime_case": "asc/std/linalg",
+      "additional_cases": [
+        "contracts.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/random",
@@ -18706,7 +19006,12 @@
         "uniform_double.fail.cpp",
         "random_device.fail.cpp"
       ],
-      "runtime_case": "asc/std/linalg"
+      "runtime_case": "asc/std/linalg",
+      "additional_cases": [
+        "boundaries.pass.cpp",
+        "distributions.pass.cpp",
+        "engine_sequences.pass.cpp"
+      ]
     },
     {
       "target": "asc/bit",
@@ -18770,7 +19075,10 @@
       "negative_cases": [
         "saturating_bool.fail.cpp"
       ],
-      "runtime_case": "asc/std/linalg"
+      "runtime_case": "asc/std/linalg",
+      "additional_cases": [
+        "boundaries.pass.cpp"
+      ]
     },
     {
       "target": "asc/std/__algorithm/in_in_out_result.h",
@@ -19489,6 +19797,8 @@
     "asc/bit": "runtime/assets.json",
     "asc/numeric": "runtime/assets.json",
     "asc/cmath": "runtime/assets.json",
-    "asc/random": "runtime/assets.json"
+    "asc/random": "runtime/assets.json",
+    "asc/std/atomic": "runtime/assets.json",
+    "asc/std/ctime": "runtime/assets.json"
   }
 }

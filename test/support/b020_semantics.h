@@ -227,6 +227,22 @@ CANN_ASC_STL_API int evaluate_optional_copy(int input)
     return failures + (&*alias != &object) + (calls.live != 0 || calls.copies != 2 || calls.assignments != 1);
 }
 
+CANN_ASC_STL_API constexpr bool check_optional_comparisons() noexcept
+{
+    const asc::std::optional<int> empty;
+    const asc::std::optional<long> also_empty;
+    const asc::std::optional<int> smaller(-2);
+    const asc::std::optional<long> equal(-2);
+    const asc::std::optional<long> larger(3);
+    return empty == also_empty && !(empty != also_empty) && empty <= also_empty && empty >= also_empty &&
+        empty < smaller && smaller > empty && !(smaller <= empty) && !(empty >= smaller) && smaller == equal &&
+        !(smaller != equal) && smaller <= equal && smaller >= equal && smaller < larger && larger > smaller &&
+        smaller != larger && !(larger <= smaller) && empty == asc::std::nullopt && asc::std::nullopt < smaller &&
+        smaller > asc::std::nullopt;
+}
+
+static_assert(check_optional_comparisons());
+
 CANN_ASC_STL_API int evaluate_optional() noexcept
 {
     asc::std::optional<int> empty;

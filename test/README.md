@@ -39,6 +39,87 @@ source roots so unrelated infrastructure injected by formal CI is not audited.
 and test compilation covers the mandatory C++17 baseline and supported C++20
 mode.
 
+## Working on a standard header
+
+Use `test/cases/asc/std/<header>/` for each public header. Keep domain-specific
+fixtures in its `support/` subdirectory. The shared support directory holds
+fixtures used by several headers and the CANN launch and result-checking code.
+
+| Asset below the header directory | Purpose |
+| --- | --- |
+| `*.pass.cpp` | Host runtime assertions and compile-time contracts. CMake discovers positive cases and labels them by header. |
+| `*.fail.cpp`, `*.fail.asc` | Unsupported or ill-formed uses. Register the expected negative case in the header metadata. |
+| `device.compile.asc` | Device overload and type instantiation. Shared semantic cases can also be selected by header metadata. |
+| `device_checks.h`, `simd_checks.h` | Executable device contracts. The common runner reports a result for each header and fails if any selected contract fails. |
+| `examples.json` | Language modes and expected outcomes for that header's executable API pages. Headers that only forward or declare no API can have no registry. |
+
+For a new positive file, register its basename in the header's
+`additional_cases` in `test/metadata/headers.json` unless it is already the
+primary `host.pass.cpp`. Use a named CMake registration if the case needs a
+special language restriction, compile definition or link dependency. Host
+compile-fail cases belong next to the header's positive cases. Record the
+expected diagnostic in `test/scripts/validate_negative_boundaries.py` so the
+`boundary.host` gate can verify the reason for rejection.
+
+From the checkout root, these commands run the standard-header Host cases,
+select just the `optional` cases, and execute that header's C++20 API examples.
+
+```bash
+cmake -S . -B build/std-host -DCMAKE_CXX_COMPILER=g++-13 -DCMAKE_BUILD_TYPE=Release
+cmake --build build/std-host --parallel
+ctest --test-dir build/std-host -L '^std-api$' --output-on-failure
+ctest --test-dir build/std-host -L '^std-header-optional$' --output-on-failure
+python3 scripts/check_api_docs.py --examples --std-header optional --standard 20 --compiler g++-13 --require-all
+```
+
+The `std-api` label also runs the existing standard-library implementation
+tests. Use `std-header-local` for just the public header folders. A
+`std-header-<name>` label runs that header's own tests and the tests in
+its matching implementation family (for example, `__algorithm`).
+
+Use `--std-only` in place of `--std-header optional` for the complete
+standard-side example registry. Set `--standard 17` to check the baseline.
+The JSON report's `stage` field distinguishes executed examples, static
+assertions, expected termination and lower-language header parsing.
+
+With the CANN environment loaded, the following runs the `array` and `span`
+header checks on a device. Select a fresh build directory when changing the
+language mode or simulator setting. The formal simulator and hardware gates
+use the same header checks alongside their existing cross-header workloads.
+
+```bash
+cmake -S test/support/std_runtime -B build/std-950-cxx17 \
+  -DASC_STL_CXX_STANDARD=17 '-DASC_STL_STD_HEADERS=array;span' -DCMAKE_BUILD_TYPE=Release
+cmake --build build/std-950-cxx17 --parallel
+python3 scripts/run_hardware_case.py --timeout 120 --log build/std-950-cxx17/hardware.log -- \
+  "$PWD/build/std-950-cxx17/asc_stl_std_runtime"
+```
+
+Select `-DASC_STL_STD_MODE=simd` to run the D-SIMD contracts for `bit`, `cmath`,
+`compare` and `ctime`. Omitting the mode selects D-SIMT. For either mode,
+omitting `ASC_STL_STD_HEADERS` runs every registered check for that mode. The
+hardware and Cannsim gates compile D-SIMT in batches of up to eight headers.
+Each batch has its own executable and log, with a separate result for each header.
+The D-SIMT `bitset` check distributes shift counts across 32 lanes and
+compares every output bit for every shift from zero through the width plus one.
+
+To simulate one header with the same launcher and result checks, select it
+when configuring the build and pass the executable to the simulator runner.
+
+```bash
+sim_build="$PWD/build/std-sim-cxx20"
+cmake -S test/support/std_runtime -B "$sim_build" -DCMAKE_BUILD_TYPE=Release \
+  -DASC_STL_CXX_STANDARD=20 -DASC_STL_STD_HEADERS=span -DASC_STL_TEST_CANNSIM=ON
+cmake --build "$sim_build" --parallel
+test/scripts/run_cannsim_test.sh "$(command -v cannsim)" "$sim_build/asc_stl_std_runtime" \
+  Ascend950 "$sim_build/results" "$sim_build" ASC_STL_STD_RUNTIME_PASS
+```
+
+A header comprised of aliases, concepts or macro constants can be verified
+with type, value and availability checks at compile time. A device kernel
+that only includes the header establishes self-containment. Use result checks
+for device operations whose observable behavior depends on runtime inputs.
+
 ## Executable documentation and supplemental release checks
 
 The Host gate executes registered API examples in C++17 and C++20. CTest reports

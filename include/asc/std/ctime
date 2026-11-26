@@ -31,6 +31,8 @@
 #include <time.h>
 #endif
 #include <asc/__detail/attributes.h>
+#include <asc/std/__bit/bit_cast.h>
+#include <asc/std/__bit/countl.h>
 #include <asc/std/__ctime/time_vocabulary.h>
 
 #if defined(__CCE__) || defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)
@@ -72,7 +74,35 @@ CANN_ASC_STL_API clock_t clock() noexcept
 
 CANN_ASC_STL_API constexpr double difftime(time_t end, time_t start) noexcept
 {
-    return static_cast<double>(end - start);
+    // Subtract the integer magnitudes before conversion to preserve single ticks
+    // near the limits of time_t without overflowing signed arithmetic.
+    const auto last = static_cast<__UINTMAX_TYPE__>(end);
+    const auto first = static_cast<__UINTMAX_TYPE__>(start);
+    const bool negative = end < start;
+    const auto delta = negative ? first - last : last - first;
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+    // AI Core can transport binary64 but has no integer-to-double runtime conversion.
+    // Form the sign, biased exponent and significand with round-to-nearest, ties-to-even.
+    if (delta == 0) {
+        return 0.0;
+    }
+    const int exponent = 63 - ::asc::std::countl_zero(static_cast<__UINT64_TYPE__>(delta));
+    __UINT64_TYPE__ significand = delta;
+    if (exponent <= 52) {
+        significand <<= 52 - exponent;
+    } else {
+        const int shift = exponent - 52;
+        const auto halfway = static_cast<__UINT64_TYPE__>(1) << (shift - 1);
+        const auto discarded = delta & ((halfway << 1) - 1);
+        significand >>= shift;
+        significand += discarded > halfway || (discarded == halfway && (significand & 1));
+    }
+    // Adding the implicit leading bit also carries into the exponent on rounding overflow.
+    const auto magnitude = (static_cast<__UINT64_TYPE__>(exponent + 1022) << 52) + significand;
+    return ::asc::std::bit_cast<double>(magnitude | (static_cast<__UINT64_TYPE__>(negative) << 63));
+#else
+    return negative ? -static_cast<double>(delta) : static_cast<double>(delta);
+#endif
 }
 
 #if !defined(__CCE__) && !defined(__NPU_COMPILER_INTERNAL_PURE_SIMT__)

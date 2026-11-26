@@ -1,0 +1,21 @@
+{
+  "directory": "docs/zh/api/standard/diagnostics/asc_std_system_error",
+  "examples": {
+    "is_error_code_enum.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "is_error_condition_enum.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    }
+  }
+}

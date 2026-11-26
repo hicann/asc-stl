@@ -531,7 +531,7 @@ private:
     // precondition).
     template <class OtherElementType, class OtherExtents, class OtherLayoutPolicy, class OtherAccessor>
     CANN_ASC_STL_API constexpr void __assert_slices_match(
-        const mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, OtherAccessor>& other) const
+        [[maybe_unused]] const mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, OtherAccessor>& other) const
     {
         if constexpr (__mdspan_detail::__has_detect_invalidity<accessor_type>) {
             [[maybe_unused]] const auto& tmp = mapping();  // silence unused-result warnings

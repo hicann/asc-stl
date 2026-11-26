@@ -37,6 +37,7 @@ printf '%s\n' \
     '  mismatch) echo "Mismatch at 3"; echo "ASC_STL_CANNSIM_SMOKE_PASS" ;;' \
     '  no_dispatch) echo "ASC_STL_CANNSIM_SMOKE_PASS" ;;' \
     '  duplicate) echo "Simulation SUCCESS ASC_STL_CANNSIM_SMOKE_PASS ASC_STL_CANNSIM_SMOKE_PASS" ;;' \
+    '  stall) for ((i=0; i<325; i++)); do echo "warning $i"; done; echo "[heartbeat] waiting for dispatch"; sleep 30 ;;' \
     '  pass) echo "Simulation SUCCESS"; echo "ASC_STL_CANNSIM_SMOKE_PASS" ;;' \
     'esac' >"$FAKE_CANNSIM"
 chmod +x "$FAKE_CANNSIM"
@@ -55,6 +56,14 @@ expect_failure no_marker
 expect_failure mismatch
 expect_failure no_dispatch
 expect_failure duplicate
+timeout_status=0
+FAKE_CANNSIM_MODE=stall timeout 2 "$RUNNER" "$FAKE_CANNSIM" "$FAKE_APPLICATION" Ascend950 \
+    "$TEST_ROOT/stall" "$FAKE_RUNTIME" ASC_STL_CANNSIM_SMOKE_PASS >"$TEST_ROOT/timeout.log" 2>&1 || timeout_status=$?
+if [ "$timeout_status" -ne 124 ] || ! grep -Fxq '[heartbeat] waiting for dispatch' "$TEST_ROOT/timeout.log" || \
+    grep -Fxq 'warning 324' "$TEST_ROOT/timeout.log"; then
+    echo "The simulator timeout did not preserve the dispatch diagnostic" >&2
+    exit 1
+fi
 FAKE_CANNSIM_MODE=pass "$RUNNER" "$FAKE_CANNSIM" "$FAKE_APPLICATION" Ascend950 \
     "$TEST_ROOT/pass" "$FAKE_RUNTIME" ASC_STL_CANNSIM_SMOKE_PASS >/dev/null
 echo "ASC_STL_CANNSIM_RUNNER_SELF_TEST_PASS"

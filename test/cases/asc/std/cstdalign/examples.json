@@ -1,0 +1,15 @@
+{
+  "directory": "docs/zh/api/standard/language_support/asc_std_cstdalign",
+  "examples": {
+    "alignas_is_defined.md": {
+      "standards": [
+        17
+      ],
+      "mode": "host",
+      "expression": null,
+      "header_standards": [
+        20
+      ]
+    }
+  }
+}

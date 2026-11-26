@@ -1,0 +1,215 @@
+{
+  "directory": "docs/zh/api/standard/memory_management/asc_std_scoped_allocator",
+  "examples": {
+    "operator_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "operator_not_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "scoped_allocator_adaptor.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "scoped_allocator_adaptor_allocate.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "scoped_allocator_adaptor_const_pointer.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "scoped_allocator_adaptor_const_void_pointer.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "scoped_allocator_adaptor_construct.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "scoped_allocator_adaptor_deallocate.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "scoped_allocator_adaptor_destroy.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "scoped_allocator_adaptor_difference_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "scoped_allocator_adaptor_inner_allocator.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "scoped_allocator_adaptor_inner_allocator_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "scoped_allocator_adaptor_is_always_equal.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "scoped_allocator_adaptor_max_size.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "scoped_allocator_adaptor_operator_assign.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "verify_example()"
+    },
+    "scoped_allocator_adaptor_outer_allocator.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "scoped_allocator_adaptor_outer_allocator_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "scoped_allocator_adaptor_outer_traits.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "scoped_allocator_adaptor_pointer.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "scoped_allocator_adaptor_propagate_on_container_copy_assignment.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "scoped_allocator_adaptor_propagate_on_container_move_assignment.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "scoped_allocator_adaptor_propagate_on_container_swap.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "scoped_allocator_adaptor_rebind.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "scoped_allocator_adaptor_scoped_allocator_adaptor.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "scoped_allocator_adaptor_select_on_container_copy_construction.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host",
+      "expression": "example()"
+    },
+    "scoped_allocator_adaptor_size_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "scoped_allocator_adaptor_value_type.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    },
+    "scoped_allocator_adaptor_void_pointer.md": {
+      "standards": [
+        17,
+        20
+      ],
+      "mode": "host"
+    }
+  }
+}

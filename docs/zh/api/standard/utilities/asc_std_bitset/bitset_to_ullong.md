@@ -37,7 +37,7 @@
 以下为`bitset<Size>`类内声明。
 
 ```cpp
-template<size_t Width = Size, enable_if_t<(Width <= sizeof(unsigned long long) * CHAR_BIT), int> = 0>
+template<size_t Width = Size, enable_if_t<(Size <= sizeof(unsigned long long) * CHAR_BIT && Width <= sizeof(unsigned long long) * CHAR_BIT), int> = 0>
 constexpr unsigned long long to_ullong() const noexcept;
 ```
 

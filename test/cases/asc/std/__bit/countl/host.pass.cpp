@@ -28,7 +28,7 @@
 #include <utility>
 #include <vector>
 
-#include "support/bit_count_reference.h"
+#include "../../bit/support/bit_count_reference.h"
 
 namespace {
 

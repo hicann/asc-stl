@@ -49,6 +49,11 @@ public:
     unordered_map(const unordered_map&) = delete;
     unordered_map& operator=(const unordered_map&) = delete;
     CANN_ASC_STL_API unordered_map(unordered_map&&) noexcept = default;
+    // BiSheng 9.3 can lose the size of a lane-private map when it inlines
+    // this assignment and a subsequent operator[] insertion into the same kernel.
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+    CANN_ASC_STL_DETAIL_NO_INLINE
+#endif
     CANN_ASC_STL_API unordered_map& operator=(unordered_map&&) noexcept = default;
     CANN_ASC_STL_API bool empty() const noexcept
     {

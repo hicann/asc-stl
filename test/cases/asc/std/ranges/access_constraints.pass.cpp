@@ -14,7 +14,18 @@
  * limitations under the License.
  */
 
+#include <asc/std/ranges>
 #include "support/cxx17_access_semantics.h"
+
+constexpr bool subrange_elements()
+{
+    int values[] = {1, 2};
+    const asc::std::ranges::subrange view(values, values + 2);
+    using R = asc::std::ranges::subrange<int*>;
+    return asc::std::get<0>(view) == values && asc::std::get<1>(view) == values + 2 &&
+        asc::std::get<0>(R(values, values + 1)) == values && asc::std::get<1>(R(values, values + 1)) == values + 1;
+}
+static_assert(subrange_elements());
 
 int main()
 {

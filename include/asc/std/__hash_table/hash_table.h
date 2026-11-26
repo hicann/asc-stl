@@ -28,6 +28,7 @@
 #endif
 
 #include <asc/std/__memory/addressof.h>
+#include <asc/std/__new/nonallocating_new.h>
 #include <asc/std/__type_traits/conditional.h>
 #include <asc/std/__type_traits/is_same.h>
 

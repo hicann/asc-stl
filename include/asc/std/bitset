@@ -145,12 +145,21 @@ public:
         if (shift >= Size) {
             return reset();
         }
-        for (size_t position = Size; position-- > shift;) {
-            this->reference_at(position) = this->value_at(position - shift);
+        const size_t word_shift = shift / word_bits;
+        const size_t bit_shift = shift % word_bits;
+        // Walk high to low so each source word is intact when it is read.
+        for (size_t destination = word_count; destination-- > word_shift;) {
+            const size_t source = destination - word_shift;
+            auto word = this->words_[source] << bit_shift;
+            if (bit_shift != 0 && source != 0) {
+                word |= this->words_[source - 1] >> (word_bits - bit_shift);
+            }
+            this->words_[destination] = word;
         }
-        for (size_t position = 0; position < shift; ++position) {
-            this->reference_at(position) = false;
+        for (size_t index = 0; index < word_shift; ++index) {
+            this->words_[index] = 0;
         }
+        clear_unused_bits();
         return *this;
     }
     CANN_ASC_STL_API constexpr bitset& operator>>=(size_t shift) noexcept
@@ -258,12 +267,14 @@ public:
         return Size;
     }
 
-    template <size_t Width = Size, enable_if_t<(Width <= sizeof(unsigned long) * CHAR_BIT), int> = 0>
+    template <size_t Width = Size,
+        enable_if_t<(Size <= sizeof(unsigned long) * CHAR_BIT && Width <= sizeof(unsigned long) * CHAR_BIT), int> = 0>
     CANN_ASC_STL_API constexpr unsigned long to_ulong() const noexcept
     {
         return static_cast<unsigned long>(this->words_[0]);
     }
-    template <size_t Width = Size, enable_if_t<(Width <= sizeof(unsigned long long) * CHAR_BIT), int> = 0>
+    template <size_t Width = Size,
+        enable_if_t<(Size <= sizeof(unsigned long long) * CHAR_BIT && Width <= sizeof(unsigned long long) * CHAR_BIT), int> = 0>
     CANN_ASC_STL_API constexpr unsigned long long to_ullong() const noexcept
     {
         return this->words_[0];

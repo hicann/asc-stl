@@ -1,0 +1,19 @@
+{
+  "common": [
+    "semantics.h",
+    "time_fields.h"
+  ],
+  "cannsim": [
+    "cannsim/CMakeLists.txt",
+    "cannsim/kernel.cpp",
+    "cannsim/launcher.cpp",
+    "cannsim/main.cpp"
+  ],
+  "hardware": [
+    "hardware/CMakeLists.txt",
+    "hardware/kernel_simd.asc",
+    "hardware/kernel_simt.asc",
+    "hardware/launch.h",
+    "hardware/main.cpp"
+  ]
+}

@@ -27,6 +27,8 @@
 #pragma system_header
 #endif
 
+#include <asc/std/__new/nonallocating_new.h>
+
 CANN_ASC_STL_BEGIN_NAMESPACE
 
 template <class OuterAllocator, class... InnerAllocators>

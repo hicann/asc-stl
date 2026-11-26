@@ -260,7 +260,11 @@ CANN_ASC_STL_API constexpr complex<T> operator-(const complex<T>& left, const co
 // signed units and the product is scaled back through infinity so that
 // (inf, y) * z and friends keep their signed infinite components.
 template <class T>
-CANN_ASC_STL_API constexpr complex<T> operator*(const complex<T>& left, const complex<T>& right) noexcept
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+CANN_ASC_STL_DETAIL_FORCE_INLINE
+#endif
+    CANN_ASC_STL_API constexpr complex<T>
+    operator*(const complex<T>& left, const complex<T>& right) noexcept
 {
     T a = left.real(), b = left.imag(), c = right.real(), d = right.imag();
     const auto parts = ::asc::std::__complex_calculate_partials(a, b, c, d);
@@ -340,9 +344,14 @@ CANN_ASC_STL_API constexpr T __complex_divide_component(
 
 // Smith's ratio scaling: dividing by the larger-magnitude component first
 // avoids forming c*c + d*d (which overflows for finite large operands) and
-// keeps the infinite/zero divisor special values exact.
+// keeps the infinite/zero divisor special values exact. BiSheng 9.3 cannot
+// lower the out-of-line return of this aligned two-float result in SIMT code.
 template <class T>
-CANN_ASC_STL_API constexpr complex<T> operator/(const complex<T>& left, const complex<T>& right) noexcept
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+CANN_ASC_STL_DETAIL_FORCE_INLINE
+#endif
+    CANN_ASC_STL_API constexpr complex<T>
+    operator/(const complex<T>& left, const complex<T>& right) noexcept
 {
     const T a = left.real(), b = left.imag(), c = right.real(), d = right.imag();
     if (c == T(0) && d == T(0)) {
@@ -371,7 +380,11 @@ CANN_ASC_STL_API constexpr complex<T> operator/(const complex<T>& left, const co
 }
 
 template <class T>
-CANN_ASC_STL_API constexpr complex<T>& complex<T>::operator*=(complex rhs) noexcept
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+CANN_ASC_STL_DETAIL_FORCE_INLINE
+#endif
+    CANN_ASC_STL_API constexpr complex<T>&
+    complex<T>::operator*=(complex rhs) noexcept
 {
     *this = *this * rhs;
     return *this;
@@ -419,8 +432,13 @@ CANN_ASC_STL_API constexpr complex<T> operator/(const complex<T>& left, const T&
 {
     return {left.real() / right, left.imag() / right};
 }
+// Keep the scalar numerator in the same SIMT call frame as the complex quotient.
 template <class T>
-CANN_ASC_STL_API constexpr complex<T> operator/(const T& left, const complex<T>& right) noexcept
+#if CANN_ASC_STL_DETAIL_SIMT_COMPILATION()
+CANN_ASC_STL_DETAIL_FORCE_INLINE
+#endif
+    CANN_ASC_STL_API constexpr complex<T>
+    operator/(const T& left, const complex<T>& right) noexcept
 {
     return complex<T>(left) / right;
 }
@@ -496,7 +514,7 @@ CANN_ASC_STL_API constexpr double imag(T) noexcept
     return 0;
 }
 template <class T, enable_if_t<is_floating_point_v<T>, int> = 0>
-CANN_ASC_STL_API constexpr T imag(T value) noexcept
+CANN_ASC_STL_API constexpr T imag(T) noexcept
 {
     return T(0);
 }

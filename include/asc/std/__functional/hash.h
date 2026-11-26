@@ -28,6 +28,7 @@
 #endif
 
 #include <asc/__detail/attributes.h>
+#include <asc/std/__bit/bit_cast.h>
 #include <asc/std/__functional/invoke.h>
 #include <asc/std/__fwd/hash.h>
 #include <asc/std/__type_traits/enable_if.h>
@@ -510,10 +511,10 @@ struct hash<double> : public __scalar_hash<double> {
     CANN_ASC_STL_API size_t operator()(double v) const noexcept
     {
 #if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
-        // AI Core forbids double-precision arithmetic: the ±0.0 normalization
-        // check is unavailable, so fall back to a pure bit-pattern hash
-        // (union bit copy, no floating-point arithmetic; the device side has
-        // no effective double-precision payload).
+        // Normalize either binary64 zero using integer operations on AI Core.
+        if ((::asc::std::bit_cast<__UINT64_TYPE__>(v) << 1) == 0) {
+            return 0;
+        }
         return __scalar_hash<double>::operator()(v);
 #else
         // -0.0 and 0.0 must hash the same
@@ -529,26 +530,24 @@ template <>
 struct hash<long double> : public __scalar_hash<long double> {
     CANN_ASC_STL_API size_t operator()(long double v) const noexcept
     {
-#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
+#if CANN_ASC_STL_DETAIL_DEVICE_COMPILATION() && __SIZEOF_LONG_DOUBLE__ == 8 && __LDBL_MANT_DIG__ == 53
+        return hash<double>{}(::asc::std::bit_cast<double>(v));
+#elif CANN_ASC_STL_DETAIL_DEVICE_COMPILATION()
         return __scalar_hash<long double>::operator()(v);
 #else
         // -0.0 and 0.0 must hash the same
         if (v == 0.0L) {
             return 0;
         }
-#if defined(__x86_64__) && defined(__linux__)
-        // Zero the padding bits so equal values hash the same
-        union {
-            long double t;
-            struct {
-                size_t a;
-                size_t b;
-            } s;
-        } u;
-        u.s.a = 0;
-        u.s.b = 0;
-        u.t = v;
-        return u.s.a ^ u.s.b;
+#if defined(__x86_64__) && defined(__linux__) && __LDBL_MANT_DIG__ == 64
+        // The x86 extended representation has ten value bytes and six padding bytes.
+        // Only copy the significand and the sign/exponent field.
+        uint64_t significand;
+        uint16_t sign_exponent;
+        const auto* bytes = reinterpret_cast<const unsigned char*>(&v);
+        __builtin_memcpy(&significand, bytes, sizeof(significand));
+        __builtin_memcpy(&sign_exponent, bytes + sizeof(significand), sizeof(sign_exponent));
+        return static_cast<size_t>(significand ^ sign_exponent);
 #else
         return __scalar_hash<long double>::operator()(v);
 #endif

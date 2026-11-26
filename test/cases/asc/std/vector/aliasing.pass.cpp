@@ -23,7 +23,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include "../../../../support/vector_aliasing_semantics.h"
+#include "support/vector_aliasing_semantics.h"
 
 namespace {
 
@@ -200,6 +200,38 @@ void check_relocation_failure()
         "relocation-failure test leaked objects or storage");
 }
 
+void check_pop_back_lifetime()
+{
+    counters state;
+    {
+        observed_vector values{counting_allocator<observed>{&state}};
+        values.reserve(2);
+        values.emplace_back(17, &state);
+        values.emplace_back(29, &state);
+        const auto capacity = values.capacity();
+        const auto address = values.data();
+        const auto allocations = state.allocations;
+        require(values.get_allocator().state == &state, "vector lost its allocator state");
+
+        values.pop_back();
+        require(values.size() == 1 && values.end() == values.begin() + 1 && values.back().value == 17,
+            "pop_back removed the wrong element or did not advance the end");
+        require(state.alive == 1 && values.data() == address && values.capacity() == capacity &&
+                state.allocations == allocations && state.deallocations == 0,
+            "pop_back did not destroy exactly one object or released storage");
+
+        values.pop_back();
+        require(values.empty() && values.begin() == values.end() && state.alive == 0,
+            "pop_back did not transition the last element to an empty vector");
+        require(values.data() == address && values.capacity() == capacity && state.deallocations == 0,
+            "pop_back released the last element's storage");
+        values.emplace_back(41, &state);
+        require(values.back().value == 41 && state.alive == 1 && state.allocations == allocations,
+            "vector could not reuse capacity after becoming empty");
+    }
+    require(state.alive == 0 && state.allocations == state.deallocations, "pop_back leaked objects or storage");
+}
+
 void check_allocation_failure(int mode)
 {
     counters state;
@@ -233,6 +265,7 @@ int main()
     const int alias_result = asc_stl_vector_aliasing_test::evaluate();
     require(alias_result == 0, "shared vector aliasing semantics failed");
     check_constructor_counts();
+    check_pop_back_lifetime();
     check_appended_constructor_failure();
     check_relocation_failure();
     check_allocation_failure(1);
