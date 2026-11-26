@@ -121,6 +121,11 @@ while true; do
             ;;
         -j)
             THREAD_NUM="$2"
+            if [[ ! "${THREAD_NUM}" =~ ^[1-9][0-9]*$ ]]; then
+                log "Invalid thread number for -j: '${THREAD_NUM}' (expected a positive integer)"
+                usage
+                exit 1
+            fi
             shift 2
             ;;
         -t|--test)
